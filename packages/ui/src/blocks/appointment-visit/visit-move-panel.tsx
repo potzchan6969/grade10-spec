@@ -1,11 +1,12 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import {
   BookingSlotPicker,
   type BookingSlotPickerProps,
 } from "../appointment-booking/booking-slot-picker";
-import { FactCard } from "../page-blocks/fact-card";
+import { VisitSheet } from "./visit-sheet";
+import { VISIT_INK_2 } from "./visit-tones";
 
 type VisitMovePanelCopy = {
   title: string;
@@ -18,11 +19,14 @@ type VisitMovePanelCopy = {
   keep: string;
   /** Who hears of the new time. */
   consequence: string;
+  /** The sheet's close button. */
+  close: string;
 };
 
 type VisitMovePanelProps = {
   copy: VisitMovePanelCopy;
-  /** The calendar of free times at the visit's own shop. */
+  /** The free times at the visit's own shop, as a strip of days over the
+   * picked day's times. */
   slotPicker: BookingSlotPickerProps;
   /** A new time is picked. */
   picked: boolean;
@@ -34,9 +38,9 @@ type VisitMovePanelProps = {
 };
 
 /**
- * Change time: only the free times at the visit's own shop, the new time
- * mailed. The visit's own time is never offered back to it —
- * keeping it is the panel's other button.
+ * Change time, as a sheet: only the free times at the visit's own shop, the
+ * new time mailed. The visit's own time is never offered back to it —
+ * keeping it is the sheet's other button.
  */
 function VisitMovePanel({
   copy,
@@ -48,10 +52,21 @@ function VisitMovePanel({
   onClose,
 }: VisitMovePanelProps) {
   return (
-    <FactCard
-      actions={
-        <HStack gap="sm" wrap>
+    <VisitSheet
+      copy={{
+        title: copy.title,
+        description: copy.description,
+        close: copy.close,
+      }}
+      footer={
+        <>
           <Button
+            className={cn(
+              "h-11 w-full text-[15px] font-semibold",
+              !picked &&
+                !pending &&
+                cn("bg-muted opacity-100 disabled:opacity-100", VISIT_INK_2),
+            )}
             disabled={!picked || pending}
             loading={pending}
             onClick={onConfirm}
@@ -60,24 +75,30 @@ function VisitMovePanel({
           >
             {pending ? copy.moving : copy.confirm}
           </Button>
-          <Button onClick={onClose} size="md" type="button" variant="outline">
+          <Button
+            className="h-11 w-full border-border-strong text-[15px] font-semibold"
+            onClick={onClose}
+            size="md"
+            type="button"
+            variant="outline"
+          >
             {copy.keep}
           </Button>
-        </HStack>
+        </>
       }
-      copy={{ title: copy.title, description: copy.description }}
+      onClose={onClose}
       slot="visit-move"
     >
-      <BookingSlotPicker {...slotPicker} />
-      <Text as="p" size="sm" tone="secondary">
+      <BookingSlotPicker layout="strip" {...slotPicker} />
+      <p className={cn("m-0 text-sm leading-5", VISIT_INK_2)}>
         {copy.consequence}
-      </Text>
+      </p>
       {error ? (
         <Text as="p" role="alert" size="sm" tone="error">
           {error}
         </Text>
       ) : null}
-    </FactCard>
+    </VisitSheet>
   );
 }
 

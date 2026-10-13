@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
-import { LATE_CHOICES, LATE_PANEL_COPY } from "./fixtures";
+import { expect, fn, screen, userEvent } from "storybook/test";
+import { HERE_COPY, LATE_CHOICES, LATE_PANEL_COPY } from "./fixtures";
 import { VisitLatePanel, type VisitLatePanelProps } from "./visit-late-panel";
 
 /** The panel with its pick held the way a consumer holds it. */
@@ -42,9 +42,11 @@ type Story = StoryObj<typeof meta>;
 
 /** Each pick says whether the time is still held; the button names it. */
 export const Default: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("radio", { name: /About 20 min/ }));
+  play: async ({ args }) => {
+    const canvas = screen;
+    await userEvent.click(
+      await canvas.findByRole("radio", { name: /About 20 min/ }),
+    );
     await userEvent.click(
       canvas.getByRole("button", {
         name: "Tell Hong Kong Grade10 Store: about 20 min",
@@ -56,9 +58,21 @@ export const Default: Story = {
 
 export const Sending: Story = {
   args: { pending: true },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Sending…" })).toBeDisabled();
+  play: async () => {
+    expect(
+      await screen.findByRole("button", { name: "Sending…" }),
+    ).toBeDisabled();
+  },
+};
+
+/** Already outside: I’m here tells the desk instead. */
+export const AlreadyOutside: Story = {
+  args: { here: { copy: HERE_COPY, onHere: fn() } },
+  play: async ({ args }) => {
+    await userEvent.click(
+      await screen.findByRole("button", { name: "I’m here" }),
+    );
+    expect(args.here?.onHere).toHaveBeenCalledTimes(1);
   },
 };
 

@@ -26,9 +26,27 @@ export const Default: Story = {
     expect(canvas.getByRole("heading", { name: "Upcoming" })).toBeVisible();
     expect(canvas.getByRole("heading", { name: "Past" })).toBeVisible();
     await userEvent.click(
-      canvas.getAllByRole("button", { name: "Open" }).at(0) as HTMLElement,
+      canvas
+        .getAllByRole("button", { name: /Grading Submission/ })
+        .at(0) as HTMLElement,
     );
     expect(args.onOpen).toHaveBeenCalledWith("bk_live");
+  },
+};
+
+/** A row with an address is a link to its visit. */
+export const Linked: Story = {
+  args: {
+    upcoming: UPCOMING_ROWS.map((row) => ({
+      ...row,
+      href: `#/visit/${row.id}`,
+    })),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getAllByRole("link", { name: /Grading Submission/ }).at(0),
+    ).toHaveAttribute("href", "#/visit/bk_live");
   },
 };
 

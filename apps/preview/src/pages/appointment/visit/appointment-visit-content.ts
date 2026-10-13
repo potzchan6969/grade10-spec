@@ -4,8 +4,10 @@ import type {
   VisitAct,
   VisitBodyCopy,
   VisitCancelPanelCopy,
+  VisitCancelRefund,
   VisitFact,
   VisitLateChoice,
+  VisitLateHereCopy,
   VisitLatePanelCopy,
   VisitLinkOpensNothingCopy,
   VisitMovePanelCopy,
@@ -35,7 +37,7 @@ const PASS_WORDS = {
 const PASS_LINE = `${SERVICE} · ${SHOP} · 10:15 to 10:45`;
 
 const VISIT_FACTS: readonly VisitFact[] = [
-  { label: "When", value: "Thu 3 Sep, 10:15 to 10:45", sub: "Times in HKT" },
+  { label: "When", value: "Thu 3 Sep, 10:15 to 10:45", sub: "Hong Kong time" },
   {
     label: "Where",
     value: `Grade10 ${SHOP}`,
@@ -57,9 +59,32 @@ function endedFacts(struck: boolean): readonly VisitFact[] {
   );
 }
 
+/** A paid visit: the deposit, and when it comes back. */
+const PAID_FACT: VisitFact = {
+  label: "Paid",
+  value: "HK$100.00 deposit",
+  sub: "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+};
+
+const PAID_FACTS: readonly VisitFact[] = [...VISIT_FACTS, PAID_FACT];
+
 const BEFORE_NOTES: readonly NoteListItem[] = [
   { id: "bring-0", content: "Bring each card in a penny sleeve." },
   { id: "price", content: "Fees are paid at the counter." },
+  { id: "hold", content: "We hold your time for 10 min after 10:15." },
+];
+
+/** A paid visit that is off, its time struck and the money's way back. */
+function paidOffFacts(money: VisitFact): readonly VisitFact[] {
+  return [...endedFacts(true), money];
+}
+
+const PAID_BEFORE: readonly NoteListItem[] = [
+  { id: "bring-0", content: "Bring each card in a penny sleeve." },
+  {
+    id: "price",
+    content: "Fees are paid at the counter. Your deposit counts towards them.",
+  },
   { id: "hold", content: "We hold your time for 10 min after 10:15." },
 ];
 
@@ -82,7 +107,12 @@ const BOOK_AGAIN_ACT: VisitAct = {
   primary: true,
 };
 
-const MINE_ACT: VisitAct = { key: "mine", label: "My visits", href: MINE_HREF };
+const MINE_ACT: VisitAct = {
+  key: "mine",
+  label: "My visits",
+  href: MINE_HREF,
+  wide: true,
+};
 
 const PICK_ANOTHER_ACT: VisitAct = {
   key: "another",
@@ -92,7 +122,6 @@ const PICK_ANOTHER_ACT: VisitAct = {
 };
 
 const BODY_WORDS = {
-  dismiss: "Dismiss",
   yourVisit: "Your visit",
   before: "Before you come",
   told: "What you told us",
@@ -114,10 +143,10 @@ const BOOKED_COPY: VisitBodyCopy = {
   lede: `Thu 3 Sep, 10:15 to 10:45 HKT at ${SHOP}.`,
   pass: {
     ...PASS_WORDS,
-    title: "Your pass",
+    line: `${SERVICE} · ${SHOP} · Thu 3 Sep, 10:15 to 10:45`,
     note: "At the counter, give your phone or email.",
   },
-  footNote: "You can change or cancel until 10:45 on the day.",
+  footNote: "You can change or cancel until 10:15 on the day.",
 };
 
 const TODAY_COPY: VisitBodyCopy = {
@@ -128,14 +157,14 @@ const TODAY_COPY: VisitBodyCopy = {
   lede: `${SERVICE} at ${SHOP}, ${ADDRESS}.`,
   notice: {
     text: "Signal 8 or black rain: we close while it’s up and email you.",
+    icon: "weather",
   },
   pass: {
     ...PASS_WORDS,
-    title: "Your pass",
     line: PASS_LINE,
     note: "At the counter, give your phone or email.",
   },
-  footNote: "Change or cancel until 10:45. We hold your time until 10:25.",
+  footNote: "Change or cancel until 10:15. We hold your time until 10:25.",
 };
 
 const LATE_TOLD_COPY: VisitBodyCopy = {
@@ -143,10 +172,9 @@ const LATE_TOLD_COPY: VisitBodyCopy = {
   phase: "Today",
   note: "Running late · about 10:25",
   title: "We’ll hold your time until 10:25",
-  lede: `We told ${SHOP} you’ll be about 10 min late. Show your pass when you arrive.`,
+  lede: `We told ${SHOP} you’ll be about 10 min late. When you arrive, give your phone or email at the counter.`,
   pass: {
     ...PASS_WORDS,
-    title: "Your pass",
     line: PASS_LINE,
     note: "At the counter, give your phone or email.",
   },
@@ -166,9 +194,8 @@ const CHECKED_IN_COPY: VisitBodyCopy = {
   },
   pass: {
     ...PASS_WORDS,
-    title: "Your pass",
     line: PASS_LINE,
-    note: "Show this at your counter.",
+    note: "At the counter, give your phone or email.",
   },
   footNote: "Change and cancel close once you’re checked in.",
 };
@@ -178,12 +205,12 @@ const CALLED_COPY: VisitBodyCopy = {
   phase: "Counter 3",
   note: "ready at 10:15",
   title: "Counter 3 is ready for you",
-  lede: "Go to Counter 3 now and show your pass.",
+  lede: "Go to Counter 3 now.",
   pass: {
     ...PASS_WORDS,
     title: "Counter 3",
     line: `${SERVICE} · ${SHOP} · 10:15`,
-    note: "We hold the counter for you until 10:25.",
+    note: "At the counter, give your phone or email.",
   },
 };
 
@@ -192,19 +219,13 @@ const TIME_PASSED_COPY: VisitBodyCopy = {
   phase: "Time passed",
   note: "held until 10:25",
   title: "We held your time until 10:25",
-  lede: "Come in and wait as a walk-in, or book another time.",
-  notice: {
-    title: "Walk in now: about 15 to 25 min",
-    text: `${SERVICE} at ${SHOP}. Staff check you in when you arrive.`,
-    link: "See the wait",
-  },
+  lede: "You can still come: check in when you arrive and wait for the next free counter. Or book another time.",
   pass: {
     ...PASS_WORDS,
-    title: "Your pass",
     line: PASS_LINE,
     note: "When you arrive, give your phone or email. You wait from when you check in.",
   },
-  footNote: `Change or cancel until 10:45. Or book ${SERVICE} again right away.`,
+  footNote: `Change or cancel until 10:15. Or book ${SERVICE} again right away.`,
 };
 
 const COMPLETED_COPY: VisitBodyCopy = {
@@ -230,8 +251,38 @@ const CANCELLED_YOU_COPY: VisitBodyCopy = {
   note: "Tue 1 Sep, 12:00",
   title: "You cancelled this visit",
   lede: `10:15 on Thu 3 Sep is open for others now. We emailed ${EMAIL}.`,
-  notice: { title: "Your reason", text: "I booked the wrong time" },
-  footNote: `Book again starts with ${SERVICE} at ${SHOP}, with what you told us.`,
+  notice: {
+    title: "Your reason",
+    text: "I booked the wrong time",
+    tone: "plain",
+    icon: "message",
+  },
+  footNote: `Book again starts with ${SERVICE} at ${SHOP}, PSA, sleeves and a binder.`,
+};
+
+const REFUND_NOTE = "Cards usually show a refund within 5 to 10 working days.";
+
+const REFUNDING_COPY: VisitBodyCopy = {
+  ...CANCELLED_YOU_COPY,
+  lede: `Your HK$100.00 deposit is on its way back to your card. We emailed ${EMAIL}.`,
+  notice: undefined,
+  footNote: REFUND_NOTE,
+};
+
+const REFUNDED_COPY: VisitBodyCopy = {
+  ...REFUNDING_COPY,
+  lede: `Your HK$100.00 deposit was refunded to your card. We emailed ${EMAIL}.`,
+};
+
+const REFUNDING_FACT: VisitFact = {
+  label: "Refund",
+  value: "HK$100.00, on its way back to your card",
+};
+
+const REFUNDED_FACT: VisitFact = {
+  label: "Refunded",
+  value: "HK$100.00 on Tue 1 Sep",
+  sub: "To the card you paid with",
 };
 
 const CANCELLED_SHOP_COPY: VisitBodyCopy = {
@@ -243,8 +294,60 @@ const CANCELLED_SHOP_COPY: VisitBodyCopy = {
   notice: {
     title: "Reason from the shop",
     text: "A grader is off sick.",
+    tone: "plain",
+    icon: "message",
   },
   footNote: `We emailed ${EMAIL}.`,
+};
+
+const SHOP_CLOSED_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "Shop closed today",
+  note: "Thu 3 Sep, from 08:30",
+  title: `${SHOP} is closed today`,
+  lede: `Your 10:15 visit is cancelled. We emailed ${EMAIL}.`,
+  notice: {
+    title: "Typhoon signal 8",
+    text: "We closed at 08:30 while the signal is up. Pick another time once it’s safe to travel.",
+    tone: "warn",
+    icon: "weather",
+  },
+  footNote: `Earliest at ${SHOP}: Fri 4 Sep, 10:00`,
+};
+
+const SHOP_CLOSED_REFUNDED_COPY: VisitBodyCopy = {
+  ...SHOP_CLOSED_COPY,
+  lede: `Your 10:15 visit is cancelled and your HK$100.00 deposit is on its way back to your card. We emailed ${EMAIL}.`,
+  footNote: REFUND_NOTE,
+};
+
+const TODAY_PAID_COPY: VisitBodyCopy = {
+  ...TODAY_COPY,
+  footNote:
+    "Change or cancel until 10:15. It’s less than 24 hours before, so cancelling now keeps the HK$100.00 deposit.",
+};
+
+const MISSED_PAID_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "Missed",
+  note: "Thu 3 Sep, 10:15",
+  title: "We missed you",
+  lede: `You weren’t checked in at ${SHOP} on Thu 3 Sep. A missed visit is not refunded, so the HK$100.00 deposit is kept.`,
+  footNote: `Were you there? Call ${SHOP} on +852 2345 6789.`,
+};
+
+const MISSED_PAID_FACT: VisitFact = {
+  label: "Paid",
+  value: "HK$100.00 deposit",
+  sub: "Not refunded: the visit was missed.",
+};
+
+const WITH_GRADING_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "Your cards are with grading",
+  note: "10:38",
+  title: "Grading has your 12 cards",
+  lede: `Grading will email ${EMAIL} the submission, with its reference and what happens next.`,
 };
 
 const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
@@ -262,6 +365,7 @@ const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
   keep: "Keep my visit",
   cancel: "Cancel visit",
   cancelling: "Cancelling…",
+  close: "Close",
 };
 
 const MOVE_PANEL_COPY: VisitMovePanelCopy = {
@@ -271,6 +375,7 @@ const MOVE_PANEL_COPY: VisitMovePanelCopy = {
   moving: "Moving…",
   keep: "Keep 10:15",
   consequence: `We’ll email ${EMAIL} the new time.`,
+  close: "Close",
 };
 
 const LATE_CHOICES: readonly VisitLateChoice[] = [
@@ -311,7 +416,25 @@ const LINK_OPENS_NOTHING_COPY: VisitLinkOpensNothingCopy = {
     "The email on the visit was changed, so its links went to the new address.",
   mine: "My visits",
   book: "Book a visit",
-  staff: "Staff at any shop can find your visit by your phone or email.",
+  staff: "Staff at any shop can find your visit by your phone, email or name.",
+};
+
+const HERE_COPY: VisitLateHereCopy = {
+  title: "Already outside?",
+  label: "I’m here",
+  hint: "Lets the desk know. At the counter, give your phone or email.",
+};
+
+const REFUND_DUE: VisitCancelRefund = {
+  title: "Refunded",
+  text: "Your HK$100.00 deposit goes back to your card.",
+  tone: "ok",
+};
+
+const REFUND_KEPT: VisitCancelRefund = {
+  title: "Not refunded",
+  text: "It’s less than 24 hours before your visit, so the HK$100.00 deposit is not refunded.",
+  tone: "warn",
 };
 
 const BOOKED_PASS_COPY: VisitPassCopy = {
@@ -523,6 +646,7 @@ export {
   EMAIL,
   endedFacts,
   GET_THERE_ROWS,
+  HERE_COPY,
   LATE_CHOICES,
   LATE_PANEL_COPY,
   LATE_TOLD_COPY,
@@ -530,22 +654,38 @@ export {
   MINE_ACT,
   MINE_HREF,
   MISSED_COPY,
+  MISSED_PAID_COPY,
+  MISSED_PAID_FACT,
   MOVE_PANEL_COPY,
   OTHER_SHOPS,
+  PAID_BEFORE,
+  PAID_FACT,
+  PAID_FACTS,
   PAUSED_SERVICES,
   PICK_ANOTHER_ACT,
+  paidOffFacts,
   RECONNECTING_COPY,
+  REFUND_DUE,
+  REFUND_KEPT,
+  REFUNDED_COPY,
+  REFUNDED_FACT,
+  REFUNDING_COPY,
+  REFUNDING_FACT,
   SERVICE,
   SHOP,
+  SHOP_CLOSED_COPY,
+  SHOP_CLOSED_REFUNDED_COPY,
   TICKET_COPY,
   TICKET_FACTS,
   TICKET_RECONNECTING_COPY,
   TIME_PASSED_COPY,
   TODAY_COPY,
+  TODAY_PAID_COPY,
   TOLD_ROWS,
   VISIT_FACTS,
   VISIT_NAME,
   WAIT_COPY,
   WAIT_HREF,
   WAIT_SERVICES,
+  WITH_GRADING_COPY,
 };

@@ -12,9 +12,12 @@ import type {
 } from "./types";
 import type { VisitBodyCopy } from "./visit-body";
 import type { VisitBookedPassCopy } from "./visit-booked-pass";
-import type { VisitCancelPanelCopy } from "./visit-cancel-panel";
+import type {
+  VisitCancelPanelCopy,
+  VisitCancelRefund,
+} from "./visit-cancel-panel";
 import type { VisitFullDayCopy } from "./visit-full-day";
-import type { VisitLatePanelCopy } from "./visit-late-panel";
+import type { VisitLateHereCopy, VisitLatePanelCopy } from "./visit-late-panel";
 import type { VisitLinkOpensNothingCopy } from "./visit-link-opens-nothing";
 import type { VisitListCopy } from "./visit-list";
 import type { VisitMovePanelCopy } from "./visit-move-panel";
@@ -35,15 +38,14 @@ const WAIT_HREF = "#/book/wait/causeway-bay";
 const DIRECTIONS_HREF = `https://maps.google.com/?q=${encodeURIComponent(`Grade10 ${VISIT_SHOP} ${VISIT_ADDRESS}`)}`;
 
 const VISIT_PASS_COPY: VisitPassCopy = {
-  title: "Your pass",
   nameLabel: "Booked for",
   note: "At the counter, give your phone or email.",
 };
 
 const TODAY_PASS_COPY: VisitPassCopy = {
-  title: "Your pass",
   nameLabel: "Booked for",
   line: `${VISIT_SERVICE} · ${VISIT_SHOP} · 10:15 to 10:45`,
+  note: "At the counter, give your phone or email.",
 };
 
 const CALLED_PASS_COPY: VisitPassCopy = {
@@ -78,6 +80,15 @@ const VISIT_FACTS: readonly VisitFact[] = [
     sub: `${VISIT_EMAIL} · +852 9123 4567`,
   },
   { label: "Shop phone", value: "+852 2345 6789" },
+];
+
+const PAID_FACTS: readonly VisitFact[] = [
+  ...VISIT_FACTS,
+  {
+    label: "Paid",
+    value: "HK$100.00 deposit",
+    sub: "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+  },
 ];
 
 const STRUCK_FACTS: readonly VisitFact[] = VISIT_FACTS.map((fact, index) =>
@@ -118,11 +129,10 @@ const TODAY_ACTS: readonly VisitAct[] = [
 
 const ENDED_ACTS: readonly VisitAct[] = [
   { key: "again", label: "Book again", href: BOOK_HREF, primary: true },
-  { key: "mine", label: "My visits", href: MINE_HREF },
+  { key: "mine", label: "My visits", href: MINE_HREF, wide: true },
 ];
 
 const VISIT_BODY_WORDS = {
-  dismiss: "Dismiss",
   yourVisit: "Your visit",
   before: "Before you come",
   told: "What you told us",
@@ -136,7 +146,7 @@ const BOOKED_BODY_COPY: VisitBodyCopy = {
   title: VISIT_SERVICE,
   lede: `Thu 3 Sep, 10:15 to 10:45 HKT at ${VISIT_SHOP}.`,
   pass: VISIT_PASS_COPY,
-  footNote: "You can change or cancel until 10:45 on the day.",
+  footNote: "You can change or cancel until 10:15 on the day.",
 };
 
 const TODAY_BODY_COPY: VisitBodyCopy = {
@@ -147,9 +157,10 @@ const TODAY_BODY_COPY: VisitBodyCopy = {
   lede: `${VISIT_SERVICE} at ${VISIT_SHOP}, ${VISIT_ADDRESS}.`,
   notice: {
     text: "Signal 8 or black rain: we close while it’s up and email you.",
+    icon: "weather",
   },
   pass: TODAY_PASS_COPY,
-  footNote: "Change or cancel until 10:45. We hold your time until 10:25.",
+  footNote: "Change or cancel until 10:15. We hold your time until 10:25.",
 };
 
 const CALLED_BODY_COPY: VisitBodyCopy = {
@@ -157,7 +168,7 @@ const CALLED_BODY_COPY: VisitBodyCopy = {
   phase: "Counter 3",
   note: "ready at 10:15",
   title: "Counter 3 is ready for you",
-  lede: "Go to Counter 3 now and show your pass.",
+  lede: "Go to Counter 3 now.",
   pass: CALLED_PASS_COPY,
 };
 
@@ -167,8 +178,13 @@ const CANCELLED_BODY_COPY: VisitBodyCopy = {
   note: "Tue 1 Sep, 12:00",
   title: "You cancelled this visit",
   lede: `10:15 on Thu 3 Sep is open for others now. We emailed ${VISIT_EMAIL}.`,
-  notice: { title: "Your reason", text: "I booked the wrong time" },
-  footNote: `Book again starts with ${VISIT_SERVICE} at ${VISIT_SHOP}, with what you told us.`,
+  notice: {
+    title: "Your reason",
+    text: "I booked the wrong time",
+    tone: "plain",
+    icon: "message",
+  },
+  footNote: `Book again starts with ${VISIT_SERVICE} at ${VISIT_SHOP}, PSA, sleeves and a binder.`,
 };
 
 const PASSED_BODY_COPY: VisitBodyCopy = {
@@ -176,7 +192,7 @@ const PASSED_BODY_COPY: VisitBodyCopy = {
   phase: "Time passed",
   note: "held until 10:25",
   title: "We held your time until 10:25",
-  lede: "Or book another time.",
+  lede: "You can still come: check in when you arrive and wait for the next free counter. Or book another time.",
   footNote: `Change or cancel until 10:45. Or book ${VISIT_SERVICE} again right away.`,
 };
 
@@ -190,7 +206,7 @@ const LINK_OPENS_NOTHING_COPY: VisitLinkOpensNothingCopy = {
     "The email on the visit was changed, so its links went to the new address.",
   mine: "My visits",
   book: "Book a visit",
-  staff: "Staff at any shop can find your visit by your phone or email.",
+  staff: "Staff at any shop can find your visit by your phone, email or name.",
 };
 
 const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
@@ -208,6 +224,7 @@ const CANCEL_PANEL_COPY: VisitCancelPanelCopy = {
   keep: "Keep my visit",
   cancel: "Cancel visit",
   cancelling: "Cancelling…",
+  close: "Close",
 };
 
 const LATE_CHOICES: readonly VisitLateChoice[] = [
@@ -230,6 +247,24 @@ const LATE_CHOICES: readonly VisitLateChoice[] = [
   },
 ];
 
+const HERE_COPY: VisitLateHereCopy = {
+  title: "Already outside?",
+  label: "I’m here",
+  hint: "Lets the desk know. At the counter, give your phone or email.",
+};
+
+const REFUND_DUE: VisitCancelRefund = {
+  title: "Refunded",
+  text: "Your HK$100.00 deposit goes back to your card.",
+  tone: "ok",
+};
+
+const REFUND_KEPT: VisitCancelRefund = {
+  title: "Not refunded",
+  text: "It’s less than 24 hours before your visit, so the HK$100.00 deposit is not refunded.",
+  tone: "warn",
+};
+
 const LATE_PANEL_COPY: VisitLatePanelCopy = {
   title: "Running late?",
   description: `Tell ${VISIT_SHOP} about when you’ll arrive. We hold your time until 10:25.`,
@@ -246,6 +281,7 @@ const MOVE_PANEL_COPY: VisitMovePanelCopy = {
   moving: "Moving…",
   keep: "Keep 10:15",
   consequence: `We’ll email ${VISIT_EMAIL} the new time.`,
+  close: "Close",
 };
 
 const BOOKED_PASS_COPY: Omit<VisitBookedPassCopy, "confirmation"> = {
@@ -294,7 +330,6 @@ const FULL_DAY_SHOPS: readonly VisitFullDayShop[] = [
 const LIST_COPY: VisitListCopy = {
   upcoming: "Upcoming",
   past: "Past",
-  open: "Open",
 };
 
 const UPCOMING_ROWS: readonly VisitListRow[] = [
@@ -302,15 +337,17 @@ const UPCOMING_ROWS: readonly VisitListRow[] = [
     id: "bk_live",
     service: VISIT_SERVICE,
     status: "Booked",
+    tone: "plain",
     location: VISIT_SHOP,
-    when: "3 Sep 2026, 10:15–10:45",
+    when: "Thu 3 Sep, 10:15",
   },
   {
     id: "bk_later",
     service: "Store/Auction Listing",
     status: "Booked",
+    tone: "plain",
     location: VISIT_SHOP,
-    when: "10 Sep 2026, 14:00–15:00",
+    when: "Thu 10 Sep, 14:00",
   },
 ];
 
@@ -318,16 +355,18 @@ const PAST_ROWS: readonly VisitListRow[] = [
   {
     id: "bk_done",
     service: VISIT_SERVICE,
-    status: "Completed",
+    status: "Your cards are with grading",
+    tone: "ok",
     location: VISIT_SHOP,
-    when: "24 Aug 2026, 10:00–10:30",
+    when: "Mon 24 Aug, 10:00",
   },
   {
     id: "bk_cancelled",
     service: VISIT_SERVICE,
-    status: "Cancelled by you",
+    status: "Missed",
+    tone: "warn",
     location: VISIT_SHOP,
-    when: "5 Aug 2026, 11:00–11:30",
+    when: "Wed 5 Aug, 11:00",
   },
 ];
 
@@ -462,6 +501,7 @@ export {
   FULL_DAY_COPY,
   FULL_DAY_SHOPS,
   GET_THERE_ROWS,
+  HERE_COPY,
   LATE_CHOICES,
   LATE_PANEL_COPY,
   LINK_OPENS_NOTHING_COPY,
@@ -469,10 +509,13 @@ export {
   MINE_HREF,
   MOVE_PANEL_COPY,
   OTHER_SHOPS,
+  PAID_FACTS,
   PASSED_BODY_COPY,
   PAST_ROWS,
   PAUSED_SERVICES,
   RECONNECTING_COPY,
+  REFUND_DUE,
+  REFUND_KEPT,
   STRUCK_FACTS,
   TICKET_CALLED_COPY,
   TICKET_FACTS,

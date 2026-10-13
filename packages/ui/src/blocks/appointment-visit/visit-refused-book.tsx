@@ -1,6 +1,6 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { Link } from "@grade10/design-system/components/forms/link";
+import { cn } from "@grade10/design-system/lib/utils";
+import { PILL_OUTLINE } from "../appointment-booking/booking-look";
+import { BookingNotice } from "../appointment-booking/booking-notice";
 
 /** Why a Book press was refused: too many tries today, or a visit already
  * held — shown to its signed-in owner, or only said to a signed-out one. */
@@ -20,31 +20,41 @@ type VisitRefusedBookProps = {
   actionHref?: string;
   /** What the action does, when it is a press. */
   onAction?: () => void;
+  /** Bumped on each repeat press the refusal answers again: it shakes. */
+  attempt?: number;
+  className?: string;
 };
 
-/** What a refused Book press says. Email is not identity: signed out, a held
- * visit only says its link went to that inbox. */
+/** What a refused Book press says, in the warning tone whatever the cause.
+ * Email is not identity: signed out, a held visit only says its link went to
+ * that inbox. */
 function VisitRefusedBook({
   copy,
   refusal,
   actionHref,
   onAction,
+  attempt,
+  className,
 }: VisitRefusedBookProps) {
   const action = !copy.action ? undefined : actionHref ? (
-    <Link href={actionHref}>{copy.action}</Link>
-  ) : onAction ? (
-    <Button onClick={onAction} size="sm" type="button" variant="outline">
+    <a className={cn(PILL_OUTLINE, "no-underline")} href={actionHref}>
       {copy.action}
-    </Button>
+    </a>
+  ) : onAction ? (
+    <button className={PILL_OUTLINE} onClick={onAction} type="button">
+      {copy.action}
+    </button>
   ) : undefined;
   return (
-    <Alert
-      actions={action}
-      description={copy.body}
-      role="alert"
-      status={refusal === "tries" ? "error" : "warning"}
-      title={copy.title}
-    />
+    <div className="contents" data-refusal={refusal}>
+      <BookingNotice
+        actions={action}
+        attempt={attempt}
+        body={copy.body}
+        className={className}
+        title={copy.title}
+      />
+    </div>
   );
 }
 

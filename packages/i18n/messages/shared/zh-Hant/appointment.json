@@ -34,7 +34,7 @@
       "sun": "日"
     },
     "timesIn": "時間以此時區顯示：",
-    "pickADay": "選擇日期以查看可預約的時間。",
+    "pickADay": "選擇日子以查看可預約時間。",
     "noTimes": "這一天已沒有空檔。"
   },
   "details": {
@@ -45,13 +45,13 @@
     "phoneIncomplete": "請輸入完整的電話號碼。",
     "phoneRequired": "請填寫電話號碼，店舖會在到訪前致電。",
     "phonePlaceholder": "+852 1234 5678",
-    "notes": "有什麼需要我們知道？",
+    "notes": "備註",
     "optional": "選填",
-    "nameMissing": "請填寫姓名。",
-    "emailMissing": "請填寫接收確認的電郵。",
-    "emailInvalid": "這看來不是有效的電郵地址。",
+    "nameMissing": "請輸入姓名。",
+    "emailMissing": "請輸入電郵，例如 name@example.com。",
+    "emailInvalid": "請輸入電郵，例如 name@example.com。",
     "answerMissing": "請選擇一項以繼續。",
-    "submit": "確認預約",
+    "submit": "預約",
     "choose": "請選擇",
     "bookingAs": "預約人",
     "kinds": {
@@ -61,7 +61,14 @@
       "select": "下拉選單",
       "radio": "單選",
       "checkboxes": "多選"
-    }
+    },
+    "emailHint": "確認電郵會寄到這裡。",
+    "phoneHint": "方便門市當天聯絡你。",
+    "phoneRequiredHint": "店舖會在到訪前致電。",
+    "notesHint": "有任何需要門市知道的事項。",
+    "chooseOne": "請最少選擇一項。",
+    "chooseX": "請選擇{label}。",
+    "numberRange": "請輸入 {min} 至 {max}。"
   },
   "summary": {
     "title": "你的預約",
@@ -75,7 +82,7 @@
     "service": "服務",
     "location": "門市",
     "when": "時間",
-    "manage": "更改或取消此預約",
+    "manage": "更改或取消",
     "calendar": "加入行事曆",
     "beforeYouCome": "到店前須知",
     "answers": "你提供的資料"
@@ -100,7 +107,7 @@
     "notFoundBody": "連結可能複製有誤，或它指向的預約已不存在。"
   },
   "mine": {
-    "title": "你的預約",
+    "title": "我的預約",
     "upcoming": "即將到來",
     "past": "過往",
     "emptyTitle": "尚未有預約",
@@ -108,7 +115,10 @@
     "open": "查看",
     "signInTitle": "登入以查看你的預約",
     "signInBody": "預約會按你預約時使用的電郵列出。",
-    "signIn": "登入"
+    "signIn": "登入",
+    "signedIn": "已登入：{email}",
+    "notYou": "不是你？",
+    "note": "這裡列出以 {email} 作出的所有預約。"
   },
   "state": {
     "booked": "已預約",
@@ -183,7 +193,7 @@
     "triesBody": "此電郵今天已嘗試預約 10 次。請明天再試。",
     "triesBodyCall": "此電郵今天已嘗試預約 10 次。請明天再試，或致電{shop}門市 {phone}。",
     "call": "致電 {phone}",
-    "changeRule": "你可在預約時段結束前更改或取消。",
+    "changeRule": "你可在預約時段開始前更改或取消。",
     "change": "更改",
     "changeAria": "更改{what}",
     "booked": "預約成功",
@@ -206,8 +216,58 @@
       "refundNone": "取消或缺席均不設退款。",
       "continue": "前往付款",
       "opening": "正在開啟付款頁面…",
-      "unavailable": "此服務暫時未能在網上預約，請致電店舖預約。"
-    }
+      "unavailable": "此服務暫時未能在網上預約，請致電店舖預約。",
+      "now": "現在付款",
+      "chargeDeposit": "訂金 {amount}",
+      "via": "你會在安全的 Stripe 頁面付款，完成前不會收取任何費用。",
+      "hold": "我們會為你保留此時段 {minutes} 分鐘",
+      "receipt": "已付款 {amount}。收據已隨電郵寄出。"
+    },
+    "continue": "繼續",
+    "need": {
+      "service": "請先選擇服務。",
+      "shop": "請先選擇門市。",
+      "time": "請先選擇時間。"
+    },
+    "stepsLabel": "預約步驟",
+    "stepDoneAria": "第 {n} 步：{label}，已完成。返回此步。",
+    "notChosen": "尚未選擇",
+    "forLabel": "到店人",
+    "more100": "超過 100 張卡？",
+    "messageUs": "請先聯絡我們",
+    "dayFull": "已滿",
+    "dayClosed": "休息",
+    "heads": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "stripTitle": "{from}至{to}",
+    "earlierDays": "較早日子",
+    "laterDays": "較後日子",
+    "todayDay": "今天，{day}",
+    "parts": {
+      "morning": "上午",
+      "afternoon": "下午",
+      "evening": "晚上"
+    },
+    "specialHours": "營業時間 {from} 至 {to} · {reason}",
+    "fullOn": "{shop}門市 {day}已滿。",
+    "closedOn": "{shop}門市 {day}休息。",
+    "errCount": "{count, plural, one {請檢查以上標示的欄位。} other {請檢查以上標示的 # 個欄位。}}",
+    "aboutCards": "關於你的卡",
+    "aboutItems": "關於你的物品",
+    "forOther": "我為其他人預約",
+    "otherName": "到店人姓名",
+    "otherHint": "預約憑證會寄給你，請轉發給對方。",
+    "otherMissing": "請輸入到店人姓名。",
+    "consent": "我們只會用這些資料安排你的預約，並以電郵通知你。",
+    "privacy": "私隱政策",
+    "calSaved": "已儲存日曆檔案"
   },
   "visit": {
     "mine": "我的預約",
@@ -240,7 +300,8 @@
       "bookedFor": "預約人",
       "shopPhone": "門市電話",
       "timesIn": "時間為 {zone}",
-      "whereValue": "Grade10 {shop}店"
+      "whereValue": "Grade10 {shop}店",
+      "zoneTime": "{zone, select, HKT {香港時間} other {時間為 {zone}}}"
     },
     "holdLine": "我們會在 {time} 後為你保留時段 {minutes} 分鐘。",
     "rel": "{days, plural, =0 {今天} =1 {明天} other {# 天後}}",
@@ -267,20 +328,22 @@
     },
     "booked": {
       "lede": "{when}，{shop}店。",
-      "note": "你可以在當天 {time} 前更改或取消。"
+      "note": "你可以在當天 {time} 前更改或取消。",
+      "passLine": "{service} · {shop} · {when}"
     },
     "today": {
       "title": "{time} 見",
       "lede": "{service} · {shop}店，{address}。",
       "passLine": "{service} · {shop}店 · {from} 至 {to}",
-      "note": "{end} 前可以更改或取消。我們會為你保留時段至 {held}。",
-      "noteHeld": "我們會為你保留時段至 {held}。"
+      "note": "{start} 前可以更改或取消。我們會為你保留時段至 {held}。",
+      "noteHeld": "我們會為你保留時段至 {held}。",
+      "notePaid": "{start} 前可以更改或取消。距離到訪不足 {hours} 小時，現在取消不會退回 {money}。"
     },
     "late": {
       "phaseNote": "會遲到 · 約 {time}",
       "keptTitle": "我們會為你保留時段至 {held}",
       "pastTitle": "我們只能保留時段至 {held}",
-      "keptLede": "我們已通知{shop}店你會遲大約 {minutes} 分鐘。到店時請出示二維碼。",
+      "keptLede": "我們已通知{shop}店你會遲大約 {minutes} 分鐘。到店時請在櫃檯提供你的電話或電郵。",
       "pastLede": "我們已通知{shop}店你約 {time} 到。到店報到後，請輪候下一個空出的櫃檯。",
       "keptNote": "{held} 後仍可到店：報到後輪候下一個空出的櫃檯。",
       "pastNote": "或改為預約其他時間。",
@@ -294,7 +357,11 @@
       "sending": "正在發送…",
       "sent": "已通知{shop}店：大約遲 {minutes} 分鐘。",
       "failed": "未能通知{shop}店，請再試。",
-      "tooLate": "我們已於 {held} 停止保留你的時段。到店時請報到，或選擇其他時間。"
+      "tooLate": "我們已於 {held} 停止保留你的時段。到店時請報到，或選擇其他時間。",
+      "hereTitle": "已經到了？",
+      "hereLabel": "我到了",
+      "hereHint": "會通知櫃檯。到櫃檯時提供你的電話或電郵。",
+      "hereSent": "已通知櫃檯你已到達。"
     },
     "checkedIn": {
       "title": "我們會叫你",
@@ -307,7 +374,7 @@
     "called": {
       "phaseNote": "{time} 已準備好",
       "title": "請到{counter}",
-      "lede": "請現在前往{counter}，並出示二維碼。",
+      "lede": "請現在前往{counter}。",
       "passLine": "{service} · {shop}店 · {time}",
       "held": "我們會為你保留櫃檯至 {time}。",
       "counterless": "你的櫃檯",
@@ -315,7 +382,8 @@
     },
     "grading": {
       "title": "評級部已收到你的卡",
-      "lede": "評級部會把送評申請、編號及後續安排電郵到 {email}。"
+      "lede": "評級部會把送評申請、編號及後續安排電郵到 {email}。",
+      "titleCount": "評級部已收到你的 {count} 張卡"
     },
     "vault": {
       "title": "保險庫已收到你的物品",
@@ -328,14 +396,15 @@
     "passed": {
       "phaseNote": "保留至 {held}",
       "title": "我們為你保留時段至 {held}",
-      "lede": "或預約其他時間。",
-      "note": "{end} 前可以更改或取消，或立即再預約{service}。",
+      "lede": "你仍可到店：到店報到後輪候下一個空出的櫃檯，或預約其他時間。",
+      "note": "{start} 前可以更改或取消，或立即再預約{service}。",
       "noteBook": "或立即再預約{service}。"
     },
     "missed": {
       "title": "這次未能見到你",
       "lede": "你於 {day} 未有在{shop}店報到。再次預約時，我們會預先填好你提供的資料。",
-      "call": "你當天有到店？請致電{shop}店 {phone}。"
+      "call": "你當天有到店？請致電{shop}店 {phone}。",
+      "ledePaid": "你於 {day} 未有在{shop}店報到。缺席不設退款，{money}不會退回。"
     },
     "left": {
       "title": "你在輪到你之前離開了",
@@ -353,7 +422,10 @@
       "title": "你已取消這個預約",
       "lede": "{day} {time} 已開放給其他人預約。我們已發電郵到 {email}。",
       "reason": "你的原因",
-      "note": "再次預約會預先填好：{service}、{shop}店及你提供的資料。"
+      "note": "再次預約會預先填好：{service}、{shop}店及你提供的資料。",
+      "noteWith": "再次預約會預先填好：{service}、{shop}店、{answers}。",
+      "ledeRefunding": "你的 {money}正退回你的信用卡。我們已發電郵到 {email}。",
+      "ledeRefunded": "你的 {money}已退回你的信用卡。我們已發電郵到 {email}。"
     },
     "cancelledShop": {
       "title": "{shop}店取消了你的預約",
@@ -367,7 +439,10 @@
       "lede": "你 {time} 的預約已取消。我們已發電郵到 {email}。",
       "text": "我們已於 {time} 關門。請另選合適時間。",
       "earliest": "{shop}店最早：{when}",
-      "phaseNote": "{day} {time} 起"
+      "phaseNote": "{day} {time} 起",
+      "ledeRefunding": "你 {time} 的預約已取消，{money}正退回你的信用卡。我們已發電郵到 {email}。",
+      "weatherTitle": "颱風或暴雨警告",
+      "textWeather": "風球生效期間，我們已於 {time} 關門。待出行安全後，再選擇其他時間。"
     },
     "move": {
       "title": "更改時間",
@@ -377,15 +452,16 @@
       "pick": "請選擇時間",
       "to": "改到 {when}",
       "moving": "正在更改…",
-      "moved": "已改到 {when}。我們已發電郵到 {email}。"
+      "moved": "已改到 {when}。我們已發電郵到 {email}。",
+      "earliest": "最早：{when}"
     },
     "cancelSheet": {
       "title": "取消這個預約？",
       "sub": "{service} · {when} · {shop}店",
       "free": "{day} {time} 的時段會開放給其他人預約。",
       "mail": "我們會發電郵到 {email} 確認取消。",
-      "refunded": "你的 {amount} 會退還。",
-      "notRefunded": "不予退款。",
+      "refunded": "你的 {money}會退回你的信用卡。",
+      "notRefunded": "距離到訪不足 {hours} 小時，{money}不設退款。",
       "why": "取消原因（選填）",
       "reasons": {
         "cant": "我未能出席",
@@ -395,7 +471,10 @@
       "more": "補充說明（選填）",
       "keep": "保留預約",
       "cancelling": "正在取消…",
-      "done": "預約已取消。我們已發電郵到 {email}。"
+      "done": "預約已取消。我們已發電郵到 {email}。",
+      "refundTitle": "可獲退款",
+      "noRefundTitle": "不設退款",
+      "neverRefunded": "取消時，{money}不設退款。"
     },
     "nothing": {
       "title": "這個連結未能打開預約",
@@ -403,7 +482,7 @@
       "missing": "連結不完整。請從電郵再次打開。",
       "older": "這是舊電郵中的連結。請使用最新一封預約電郵中的連結。",
       "moved": "預約上的電郵地址已更改，連結已發到新地址。",
-      "staff": "任何門市的職員都可以用你的電話或電郵找到你的預約。"
+      "staff": "任何門市的職員都可以用你的電話、電郵或姓名找到你的預約。"
     },
     "reconnecting": "重新連線中…",
     "offline": "最後更新 {time}。此頁會自動重試。",
@@ -426,8 +505,12 @@
       "refunding": "退款",
       "refundingValue": "{amount}，正退回你的信用卡",
       "refunded": "已退款",
-      "refundedValue": "{day} 退回 {amount}"
-    }
+      "refundedValue": "{day} 退回 {amount}",
+      "refundNote": "退款一般會在 5 至 10 個工作天內顯示在你的信用卡賬戶。",
+      "refundedSub": "退回你付款的信用卡",
+      "missedKept": "不設退款：預約已錯過。"
+    },
+    "calendarSaved": "已下載日曆檔案：{when}"
   },
   "ticket": {
     "yourTicket": "你的籌號",

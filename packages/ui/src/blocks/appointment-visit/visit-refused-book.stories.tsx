@@ -11,8 +11,8 @@ const meta = {
   args: {
     refusal: "held",
     copy: {
-      title: "You already have a Grading Submission.",
-      body: "Thu 3 Sep, 10:15 at Hong Kong Grade10 Store. To go at another time, change that visit.",
+      title: "You already have a Grading drop-off.",
+      body: "Thu 22 Oct, 15:00 at Central. To go at another time, change that visit.",
       action: "Open it",
     },
     actionHref: MINE_HREF,
@@ -38,7 +38,7 @@ export const HeldSignedOut: Story = {
   args: {
     refusal: "heldOut",
     copy: {
-      title: "This email already has a Grading Submission.",
+      title: "This email already has a Grading drop-off.",
       body: "We’ve sent its link there. Sign in to see it here.",
       action: "Sign in",
     },
@@ -52,15 +52,25 @@ export const HeldSignedOut: Story = {
   },
 };
 
-/** Too many tries today, with the shop's phone. */
+/** Too many tries today, with the shop's phone: still a warning, not an error. */
 export const Tries: Story = {
   args: {
     refusal: "tries",
     copy: {
       title: "Too many tries today",
-      body: "This email has tried to book 10 times today. Try again tomorrow, or call Hong Kong Grade10 Store on +852 2345 6789.",
-      action: "Call +852 2345 6789",
+      body: "This email has tried to book 10 times today. Try again tomorrow, or call Central on 2345 6789.",
+      action: "Call 2345 6789",
     },
     actionHref: "tel:+85223456789",
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent("Too many tries today");
+    expect(
+      canvas.getByRole("link", { name: "Call 2345 6789" }),
+    ).toHaveAttribute("href", "tel:+85223456789");
+  },
 };
+
+/** Pressed again: the same notice shakes. */
+export const PressedAgain: Story = { args: { attempt: 1 } };

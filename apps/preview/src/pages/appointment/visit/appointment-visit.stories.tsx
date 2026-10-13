@@ -1,22 +1,23 @@
 import { formatWeekdayMoment } from "@grade10/date";
-import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import {
   type BookingSlot,
+  type BookingSlotPickerCopy,
+  type VisitAct,
   VisitBody,
   type VisitBodyCopy,
   VisitBookedPass,
   VisitCancelPanel,
   type VisitCancelReason,
+  type VisitCancelRefund,
+  type VisitFact,
   VisitLinkOpensNothing,
   VisitMovePanel,
+  type VisitTone,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ReactNode, useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, screen, userEvent, within } from "storybook/test";
 import {
   firstAvailableVisitDay,
   SLOT_PICKER_COPY,
@@ -29,7 +30,6 @@ import {
   VISIT_TIME_ZONE,
 } from "../../vault-content";
 import { AppointmentPageShell } from "../../vault-shared";
-import { STORE_LOCATOR_HREF } from "../../workbench-story-nav";
 import {
   BEFORE_NOTES,
   BOOK_AGAIN_ACT,
@@ -51,9 +51,19 @@ import {
   MINE_HREF,
   MISSED_COPY,
   MOVE_PANEL_COPY,
+  PAID_BEFORE,
+  PAID_FACTS,
   PICK_ANOTHER_ACT,
+  paidOffFacts,
   RECONNECTING_COPY,
+  REFUND_DUE,
+  REFUND_KEPT,
+  REFUNDED_COPY,
+  REFUNDED_FACT,
+  REFUNDING_COPY,
+  REFUNDING_FACT,
   SERVICE,
+  SHOP_CLOSED_COPY,
   TOLD_ROWS,
   VISIT_FACTS,
   VISIT_NAME,
@@ -66,69 +76,110 @@ type VisitState =
   | "missed"
   | "cancelledYou"
   | "cancelledShop"
+  | "shopClosed"
   | "reconnecting"
-  | "linkOpensNothing";
+  | "linkOpensNothing"
+  | "paid"
+  | "paidRefunded";
 
 type Panel = "move" | "cancel";
+
+/** The strip and the grouped times, as the Change time sheet reads them. */
+const MOVE_SLOT_COPY: BookingSlotPickerCopy = {
+  ...SLOT_PICKER_COPY,
+  timeTitle: "Pick a time",
+  weekdays: {
+    mon: "Mon",
+    tue: "Tue",
+    wed: "Wed",
+    thu: "Thu",
+    fri: "Fri",
+    sat: "Sat",
+    sun: "Sun",
+  },
+  full: "Full",
+  closed: "Closed",
+  stripTitle: "{from} to {to}",
+  earlierDays: "Earlier days",
+  laterDays: "Later days",
+  parts: { morning: "Morning", afternoon: "Afternoon", evening: "Evening" },
+};
 
 function VisitShell({ children }: { children: ReactNode }) {
   return (
     <AppointmentPageShell>
-      <Breadcrumbs>
-        <BreadcrumbItem href={STORE_LOCATOR_HREF}>Appointment</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem href={MINE_HREF}>My visits</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem current>Visit</BreadcrumbItem>
-      </Breadcrumbs>
-      <div className="w-full max-w-2xl">{children}</div>
+      <div className="mx-auto w-full max-w-xl">{children}</div>
+      <Toast position="bottom-center" />
     </AppointmentPageShell>
   );
 }
 
-/** The booked visit, with Change time and Cancel opening their panels. */
-function BookedVisit({ offline }: { offline: boolean }) {
-  const [panel, setPanel] = useState<Panel | null>(null);
+const moment = (at: number) =>
+  formatWeekdayMoment(at, { timeZone: VISIT_TIME_ZONE });
+
+/**
+ * A visit before the day, free or paid: Change time and Cancel open their
+ * sheets, and what the collector did is toasted.
+ */
+function BookedVisit({
+  offline = false,
+  paid = false,
+  refund,
+  opened = null,
+}: {
+  offline?: boolean;
+  paid?: boolean;
+  refund?: VisitCancelRefund;
+  opened?: Panel | null;
+}) {
+  const [panel, setPanel] = useState<Panel | null>(opened);
   const [said, setSaid] = useState<string | undefined>();
+  const [cancelled, setCancelled] = useState(false);
   const [reason, setReason] = useState<VisitCancelReason | null>(null);
   const [more, setMore] = useState("");
   const [month, setMonth] = useState(VISIT_MIN_MONTH);
   const [date, setDate] = useState<string | undefined>("2026-09-03");
   const [pick, setPick] = useState<BookingSlot | undefined>();
-  const open = (next: Panel) => {
-    setSaid(undefined);
-    setPanel(next);
-  };
+
+  if (cancelled) {
+    return paid ? (
+      <VisitBody
+        acts={[BOOK_AGAIN_ACT, MINE_ACT]}
+        copy={{ ...REFUNDING_COPY, said }}
+        facts={paidOffFacts(REFUNDING_FACT)}
+        onDismiss={() => setSaid(undefined)}
+        tone="bad"
+      />
+    ) : (
+      <VisitBody
+        acts={[BOOK_AGAIN_ACT, MINE_ACT]}
+        copy={{ ...CANCELLED_YOU_COPY, said }}
+        facts={endedFacts(true)}
+        onDismiss={() => setSaid(undefined)}
+        tone="bad"
+      />
+    );
+  }
+
+  const acts: VisitAct[] = [
+    { key: "move", label: "Change time", onClick: () => setPanel("move") },
+    { key: "cancel", label: "Cancel visit", onClick: () => setPanel("cancel") },
+    {
+      key: "calendar",
+      label: "Add to calendar",
+      onClick: () => setSaid("Calendar file saved: Thu 3 Sep, 10:15 to 10:45"),
+    },
+    DIRECTIONS_ACT,
+  ];
   const copy: VisitBodyCopy = { ...BOOKED_COPY, said };
 
   return (
     <VisitBody
-      acts={
-        panel === null
-          ? [
-              {
-                key: "move",
-                label: "Change time",
-                onClick: () => open("move"),
-              },
-              {
-                key: "cancel",
-                label: "Cancel visit",
-                onClick: () => open("cancel"),
-              },
-              {
-                key: "calendar",
-                label: "Add to calendar",
-                href: "#/book/bk_vault.ics",
-              },
-              DIRECTIONS_ACT,
-            ]
-          : []
-      }
-      before={BEFORE_NOTES}
-      name={VISIT_NAME}
+      acts={acts}
+      before={paid ? PAID_BEFORE : BEFORE_NOTES}
       copy={copy}
-      facts={VISIT_FACTS}
+      facts={paid ? PAID_FACTS : VISIT_FACTS}
+      name={VISIT_NAME}
       onDismiss={() => setSaid(undefined)}
       panel={
         panel === "cancel" ? (
@@ -138,33 +189,37 @@ function BookedVisit({ offline }: { offline: boolean }) {
             onClose={() => setPanel(null)}
             onConfirm={() => {
               setPanel(null);
-              setSaid(`Visit cancelled. We emailed ${EMAIL}.`);
+              setCancelled(true);
+              setSaid(
+                paid && refund?.tone === "ok"
+                  ? "Visit cancelled. HK$100.00 is on its way back to your card."
+                  : `Visit cancelled. We emailed ${EMAIL}.`,
+              );
             }}
             onMoreChange={setMore}
             onReasonChange={setReason}
             pending={false}
             reason={reason}
+            refund={paid ? refund : undefined}
           />
         ) : panel === "move" ? (
           <VisitMovePanel
             copy={{
               ...MOVE_PANEL_COPY,
               confirm: pick
-                ? `Move to ${formatWeekdayMoment(pick.start, { timeZone: VISIT_TIME_ZONE })}`
+                ? `Move to ${moment(pick.start)}`
                 : MOVE_PANEL_COPY.confirm,
             }}
             onClose={() => setPanel(null)}
             onConfirm={() => {
               if (!pick) return;
               setPanel(null);
-              setSaid(
-                `Moved to ${formatWeekdayMoment(pick.start, { timeZone: VISIT_TIME_ZONE })}. We emailed ${EMAIL}.`,
-              );
+              setSaid(`Moved to ${moment(pick.start)}. We emailed ${EMAIL}.`);
             }}
             pending={false}
             picked={!!pick}
             slotPicker={{
-              copy: SLOT_PICKER_COPY,
+              copy: MOVE_SLOT_COPY,
               month,
               minMonth: VISIT_MIN_MONTH,
               maxMonth: VISIT_MAX_MONTH,
@@ -175,6 +230,7 @@ function BookedVisit({ offline }: { offline: boolean }) {
                 : { status: "ready", data: [] },
               selectedStart: pick?.start,
               timeZone: VISIT_TIME_ZONE,
+              today: new Date("2026-09-01T02:00:00Z"),
               onMonthChange: (next) => {
                 setMonth(next);
                 setDate(firstAvailableVisitDay(next));
@@ -195,37 +251,78 @@ function BookedVisit({ offline }: { offline: boolean }) {
           : undefined
       }
       told={TOLD_ROWS}
-      tone="info"
+      tone="plain"
     />
   );
 }
 
 const ENDED: Record<
-  "completed" | "missed" | "cancelledYou" | "cancelledShop",
+  "completed" | "missed" | "cancelledYou" | "cancelledShop" | "shopClosed",
   {
     copy: VisitBodyCopy;
-    tone: "ok" | "warn" | "plain" | "bad";
-    struck: boolean;
+    tone: VisitTone;
+    facts: readonly VisitFact[];
     told: boolean;
+    acts: readonly VisitAct[];
   }
 > = {
-  completed: { copy: COMPLETED_COPY, tone: "ok", struck: false, told: false },
-  missed: { copy: MISSED_COPY, tone: "warn", struck: false, told: false },
+  completed: {
+    copy: COMPLETED_COPY,
+    tone: "ok",
+    facts: VISIT_FACTS,
+    told: false,
+    acts: [BOOK_AGAIN_ACT, MINE_ACT],
+  },
+  missed: {
+    copy: MISSED_COPY,
+    tone: "warn",
+    facts: VISIT_FACTS,
+    told: true,
+    acts: [BOOK_AGAIN_ACT, MINE_ACT],
+  },
   cancelledYou: {
     copy: CANCELLED_YOU_COPY,
-    tone: "plain",
-    struck: true,
+    tone: "bad",
+    facts: endedFacts(true),
     told: false,
+    acts: [BOOK_AGAIN_ACT, MINE_ACT],
   },
   cancelledShop: {
     copy: CANCELLED_SHOP_COPY,
     tone: "bad",
-    struck: true,
+    facts: endedFacts(true),
     told: false,
+    acts: [
+      PICK_ANOTHER_ACT,
+      {
+        key: "call",
+        label: "Call Hong Kong Grade10 Store",
+        href: "tel:+85223456789",
+        external: true,
+        wide: true,
+      },
+    ],
+  },
+  shopClosed: {
+    copy: SHOP_CLOSED_COPY,
+    tone: "warn",
+    facts: endedFacts(true),
+    told: false,
+    acts: [PICK_ANOTHER_ACT, MINE_ACT],
   },
 };
 
-function AppointmentVisitPage({ state }: { state: VisitState }) {
+function AppointmentVisitPage({
+  state,
+  opened = null,
+  refund = "due",
+}: {
+  state: VisitState;
+  /** The sheet open when the story starts. */
+  opened?: Panel | null;
+  /** Whether a paid cancel gives the deposit back. */
+  refund?: "due" | "kept";
+}) {
   if (state === "linkOpensNothing") {
     return (
       <VisitShell>
@@ -257,7 +354,7 @@ function AppointmentVisitPage({ state }: { state: VisitState }) {
             },
             pass: BOOKED_PASS_COPY,
             directions: "Directions",
-            until: "You can change or cancel until 10:45 on Thu 3 Sep.",
+            until: "You can change or cancel until 10:15 on Thu 3 Sep.",
             before: "Before you come",
             getThere: "How to get there",
             another: "Book another visit",
@@ -269,33 +366,38 @@ function AppointmentVisitPage({ state }: { state: VisitState }) {
       </VisitShell>
     );
   }
-  if (state === "booked" || state === "reconnecting") {
+  if (state === "booked" || state === "reconnecting" || state === "paid") {
     return (
       <VisitShell>
-        <BookedVisit offline={state === "reconnecting"} />
+        <BookedVisit
+          offline={state === "reconnecting"}
+          opened={opened}
+          paid={state === "paid"}
+          refund={refund === "due" ? REFUND_DUE : REFUND_KEPT}
+        />
+      </VisitShell>
+    );
+  }
+  if (state === "paidRefunded") {
+    return (
+      <VisitShell>
+        <VisitBody
+          acts={[BOOK_AGAIN_ACT, MINE_ACT]}
+          copy={REFUNDED_COPY}
+          facts={paidOffFacts(REFUNDED_FACT)}
+          onDismiss={() => {}}
+          tone="bad"
+        />
       </VisitShell>
     );
   }
   const ended = ENDED[state];
-  const acts =
-    state === "cancelledShop"
-      ? [
-          PICK_ANOTHER_ACT,
-          {
-            key: "call",
-            label: "Call Hong Kong Grade10 Store",
-            href: "tel:+85223456789",
-            external: true,
-          },
-        ]
-      : [BOOK_AGAIN_ACT, MINE_ACT];
   return (
     <VisitShell>
       <VisitBody
-        acts={acts}
-        name={VISIT_NAME}
+        acts={ended.acts}
         copy={ended.copy}
-        facts={endedFacts(ended.struck)}
+        facts={ended.facts}
         onDismiss={() => {}}
         told={ended.told ? TOLD_ROWS : undefined}
         tone={ended.tone}
@@ -315,31 +417,41 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Before the day: the pass, Change time and Cancel open their panels in place. */
+/** Before the day: the pass and the facts; Change time and Cancel open sheets. */
 export const Booked: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { name: "Grading Submission" }),
+      canvas.getByRole("heading", { level: 1, name: "Grading Submission" }),
     ).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Cancel visit" }));
     expect(
-      canvas.getByRole("region", { name: "Cancel your visit?" }),
+      await screen.findByRole("dialog", { name: "Cancel your visit?" }),
     ).toBeVisible();
-    expect(canvas.queryByRole("link", { name: "Directions" })).toBeNull();
     await userEvent.click(
-      canvas.getByRole("button", { name: "Keep my visit" }),
+      screen.getByRole("button", { name: "Keep my visit" }),
     );
     expect(canvas.getByRole("link", { name: "Directions" })).toBeVisible();
   },
 };
 
+/** Change time: the strip of days, the times grouped by part of the day. */
+export const ChangeTime: Story = { args: { opened: "move" } };
+
+/** Cancel: what frees up, who hears of it, and an optional reason. */
+export const Cancel: Story = {
+  args: { opened: "cancel" },
+  play: async () => {
+    const sheet = within(await screen.findByRole("dialog"));
+    await userEvent.click(sheet.getByRole("button", { name: "Cancel visit" }));
+    expect(
+      await screen.findByRole("heading", { name: "You cancelled this visit" }),
+    ).toBeVisible();
+  },
+};
+
 /** Just booked: what was booked, the pass and how to get there. */
 export const JustBooked: Story = { args: { state: "justBooked" } };
-
-export const Completed: Story = { args: { state: "completed" } };
-
-export const Missed: Story = { args: { state: "missed" } };
 
 /** Cancelled by the collector: the time struck, the reason they gave. */
 export const CancelledByYou: Story = {
@@ -352,6 +464,46 @@ export const CancelledByYou: Story = {
 };
 
 export const CancelledByShop: Story = { args: { state: "cancelledShop" } };
+
+/** The shop closed for the weather: the visit is off, pick another time. */
+export const ShopClosed: Story = { args: { state: "shopClosed" } };
+
+export const Completed: Story = { args: { state: "completed" } };
+
+/** Missed: what you told us comes with Book again. */
+export const Missed: Story = {
+  args: { state: "missed" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("region", { name: "What you told us" }),
+    ).toBeVisible();
+  },
+};
+
+/** Paid: the deposit among the facts, and when it comes back. */
+export const Paid: Story = { args: { state: "paid" } };
+
+/** Paid, cancelled a day or more ahead: the deposit goes back. */
+export const PaidCancel: Story = {
+  args: { state: "paid", opened: "cancel", refund: "due" },
+  play: async () => {
+    const sheet = within(await screen.findByRole("dialog"));
+    expect(sheet.getByText("Refunded")).toBeVisible();
+    await userEvent.click(sheet.getByRole("button", { name: "Cancel visit" }));
+    expect(
+      await screen.findByText("HK$100.00, on its way back to your card"),
+    ).toBeVisible();
+  },
+};
+
+/** Paid, cancelled under a day ahead: the deposit is kept. */
+export const PaidCancelLate: Story = {
+  args: { state: "paid", opened: "cancel", refund: "kept" },
+};
+
+/** Paid and cancelled: the refund reached the card. */
+export const PaidRefunded: Story = { args: { state: "paidRefunded" } };
 
 /** Lost signal: what it last knew, with Try now. */
 export const Reconnecting: Story = { args: { state: "reconnecting" } };

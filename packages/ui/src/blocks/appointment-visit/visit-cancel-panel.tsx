@@ -3,11 +3,12 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { FactCard } from "../page-blocks/fact-card";
-import { NoteList } from "../page-blocks/note-list";
+import { cn } from "@grade10/design-system/lib/utils";
+import { CalendarX, CreditCard, EnvelopeSimple } from "@phosphor-icons/react";
+import { type ComponentType, type ReactNode, useId } from "react";
 import type { VisitCancelReason } from "./types";
+import { VisitSheet } from "./visit-sheet";
+import { VISIT_INK_2, VISIT_TINT } from "./visit-tones";
 
 const REASONS = [
   "cant",
@@ -29,6 +30,15 @@ type VisitCancelPanelCopy = {
   keep: string;
   cancel: string;
   cancelling: string;
+  /** The sheet's close button. */
+  close: string;
+};
+
+/** What a paid visit's money does on cancel: back to the card, or kept. */
+type VisitCancelRefund = {
+  title: string;
+  text: string;
+  tone: "ok" | "warn";
 };
 
 type VisitCancelPanelProps = {
@@ -36,6 +46,8 @@ type VisitCancelPanelProps = {
   reason: VisitCancelReason | null;
   /** The collector's own words, asked only for Something else. */
   more: string;
+  /** A paid visit's refund line, drawn under who hears of it. */
+  refund?: VisitCancelRefund;
   /** The cancel is under way. */
   pending: boolean;
   error?: string | null;
@@ -46,13 +58,15 @@ type VisitCancelPanelProps = {
 };
 
 /**
- * Cancel: what frees up and who hears of it, and a reason the collector may
- * skip. The reason reaches the desk in the collector's own words.
+ * Cancel, as a sheet: what frees up, who hears of it and, for a paid visit,
+ * whether the money comes back, then a reason the collector may skip. The
+ * reason reaches the desk in the collector's own words.
  */
 function VisitCancelPanel({
   copy,
   reason,
   more,
+  refund,
   pending,
   error,
   onReasonChange,
@@ -60,63 +74,116 @@ function VisitCancelPanel({
   onConfirm,
   onClose,
 }: VisitCancelPanelProps) {
+  const whyId = useId();
   return (
-    <FactCard
-      actions={
-        <HStack gap="sm" wrap>
-          <Button onClick={onClose} size="md" type="button" variant="outline">
+    <VisitSheet
+      copy={{
+        title: copy.title,
+        description: copy.description,
+        close: copy.close,
+      }}
+      footer={
+        <>
+          <Button
+            className="h-11 border-border-strong text-[15px] font-semibold"
+            onClick={onClose}
+            size="md"
+            type="button"
+            variant="outline"
+          >
             {copy.keep}
           </Button>
           <Button
+            className="h-11 text-[15px] font-semibold"
             disabled={pending}
             loading={pending}
             onClick={onConfirm}
             size="md"
             type="button"
-            variant="destructive"
           >
             {pending ? copy.cancelling : copy.cancel}
           </Button>
-        </HStack>
+        </>
       }
-      copy={{ title: copy.title, description: copy.description }}
+      footerLayout="row"
+      onClose={onClose}
       slot="visit-cancel"
     >
-      <VStack gap="md" hAlign="stretch">
-        <NoteList
-          notes={[
-            { id: "free", content: copy.free },
-            { id: "mail", content: copy.mail },
-          ]}
-        />
+      <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-sm leading-5">
+        <Consequence icon={CalendarX}>{copy.free}</Consequence>
+        <Consequence icon={EnvelopeSimple}>{copy.mail}</Consequence>
+        {refund ? (
+          <li
+            className={cn(
+              "-mx-0.5 flex items-start gap-2.5 rounded-[10px] px-3 py-2.5",
+              VISIT_TINT[refund.tone],
+            )}
+            data-slot="visit-cancel-refund"
+            data-tone={refund.tone}
+          >
+            <CreditCard
+              aria-hidden
+              className={cn("mt-0.5 size-4 shrink-0", VISIT_INK_2)}
+            />
+            <span className="flex flex-col gap-0.5">
+              <strong className="font-bold">{refund.title}</strong>
+              <span>{refund.text}</span>
+            </span>
+          </li>
+        ) : null}
+      </ul>
+      <div className="flex flex-col gap-2">
+        <span className="text-[15px] leading-5 font-bold" id={whyId}>
+          {copy.why}
+        </span>
         <RadioList
-          label={copy.why}
+          aria-labelledby={whyId}
+          className="gap-1"
           onValueChange={(value) => onReasonChange(value as VisitCancelReason)}
           value={reason ?? ""}
         >
           {REASONS.map((one) => (
-            <RadioListItem key={one} value={one}>
+            <RadioListItem
+              className="min-h-11 items-center gap-3 rounded-[10px] px-3 text-[15px] leading-5 has-[[data-checked]]:bg-muted"
+              key={one}
+              value={one}
+            >
               {copy.reasons[one]}
             </RadioListItem>
           ))}
         </RadioList>
-        {reason === "other" ? (
-          <TextInput
-            autoComplete="off"
-            label={copy.more}
-            onChange={(event) => onMoreChange(event.target.value)}
-            value={more}
-          />
-        ) : null}
-        {error ? (
-          <Text as="p" role="alert" size="sm" tone="error">
-            {error}
-          </Text>
-        ) : null}
-      </VStack>
-    </FactCard>
+      </div>
+      {reason === "other" ? (
+        <TextInput
+          autoComplete="off"
+          label={copy.more}
+          onChange={(event) => onMoreChange(event.target.value)}
+          value={more}
+        />
+      ) : null}
+      {error ? (
+        <Text as="p" role="alert" size="sm" tone="error">
+          {error}
+        </Text>
+      ) : null}
+    </VisitSheet>
   );
 }
 
-export type { VisitCancelPanelCopy, VisitCancelPanelProps };
+function Consequence({
+  icon: Icon,
+  children,
+}: {
+  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  children: ReactNode;
+}) {
+  return (
+    <li className="flex items-start gap-2.5">
+      <Icon aria-hidden className={cn("mt-0.5 size-4 shrink-0", VISIT_INK_2)} />
+      <span>{children}</span>
+    </li>
+  );
+}
+
+export type { VisitCancelPanelCopy, VisitCancelPanelProps, VisitCancelRefund };
 export { VisitCancelPanel };

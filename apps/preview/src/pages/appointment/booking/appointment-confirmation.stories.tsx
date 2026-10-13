@@ -1,110 +1,91 @@
-import { Alert } from "@grade10/design-system/components/display/alert";
-import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
-import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { BookingConfirmation } from "@grade10/ui";
-import { CalendarBlank } from "@phosphor-icons/react";
+import { VisitBookedPass } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import {
-  VAULT_MANAGE_VISIT_HREF,
-  VAULT_MY_VISITS_STORY_ID,
-  VISIT_CONFIRMATION_COPY,
-  VISIT_FIXTURE,
-  VISIT_RECORD,
-} from "../../vault-content";
-import {
-  AppointmentPageShell,
-  PageHeader,
-  ProposalBanner,
-} from "../../vault-shared";
-import { navigateToStory, STORE_LOCATOR_HREF } from "../../workbench-story-nav";
+import { AppointmentPageShell } from "../../vault-shared";
+import { BOARD_ZONE, hkSlot, ME } from "./book-visit-board";
 
-function AppointmentConfirmationPage() {
-  const { visitId, email, phone, bringTips } = VISIT_FIXTURE;
+const SLOT = hkSlot("2026-10-22", "15:00");
 
+/** Booked: the pass with its acts, and beside it what to know. */
+function AppointmentConfirmationPage({ paid = false }: { paid?: boolean }) {
   return (
     <AppointmentPageShell>
-      <Breadcrumbs>
-        <BreadcrumbItem href={STORE_LOCATOR_HREF}>Appointment</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem current>Visit booked</BreadcrumbItem>
-      </Breadcrumbs>
-
-      <Alert
-        dismissible={false}
-        status="success"
-        title="Visit booked"
-        description={`${visitId} at ${VISIT_RECORD.location}. This is a diary visit — intake starts when staff register your items at the counter.`}
-      />
-
-      <PageHeader
-        title="Visit booked"
-        description={`${email} · ${phone}`}
-        actions={
-          <Button
-            type="button"
-            leading={<CalendarBlank aria-hidden size={18} />}
-          >
-            Add to calendar
-          </Button>
+      <VisitBookedPass
+        before={[
+          "Bring the cards in sleeves.",
+          "We hold your time until 15:15. Running late? Tell us from your visit page.",
+          "Grading fees from HK$[FEE] a card · pay at the counter",
+        ]}
+        confirmation={{
+          answers: [
+            { key: "cards", label: "How many cards?", answer: "12" },
+            { key: "company", label: "Grading company", answer: "PSA" },
+            { key: "phone", label: "Phone", answer: "+852 9123 4567" },
+          ],
+          calendarHref: "data:text/calendar,BEGIN:VCALENDAR",
+          manageHref: "#manage",
+          record: {
+            id: "bk_board",
+            service: paid ? "Bulk grading drop-off" : "Grading drop-off",
+            location: "Central",
+            address: "2/F, 18 Queen’s Road Central",
+            timeZone: BOARD_ZONE,
+            start: SLOT.start,
+            end: SLOT.end,
+            state: "booked",
+          },
+        }}
+        copy={{
+          confirmation: {
+            title: "You are booked",
+            body: `We emailed ${ME.email}.`,
+            service: "Service",
+            location: "Shop",
+            when: "Time",
+            beforeYouCome: "Before you come",
+            answers: "What you told us",
+            manage: "Change or cancel",
+            calendar: "Add to calendar",
+          },
+          pass: {
+            title: "Booked",
+            nameLabel: "Booked for",
+            note: "At the counter, give your phone or email.",
+          },
+          brand: "Grade10",
+          directions: "Directions",
+          until: "You can change or cancel until 15:00 on Thu 22 Oct.",
+          before: "Before you come",
+          getThere: "How to get there",
+          another: "Book another visit",
+          calendarSaved: "Calendar file saved",
+        }}
+        directionsHref="https://maps.google.com/?q=18+Queen%27s+Road+Central+Hong+Kong"
+        getThere={[
+          { label: "Shop", value: "Central" },
+          { label: "Where", value: "2/F, 18 Queen’s Road Central" },
+          { label: "Directions", value: "MTR Central exit D2" },
+          { label: "Shop phone", value: "2345 6789" },
+        ]}
+        name={ME.name}
+        onAgain={() => undefined}
+        paid={
+          paid
+            ? {
+                label: "Paid",
+                value: "HK$100.00 deposit",
+                refund:
+                  "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+              }
+            : undefined
         }
+        receipt={
+          paid
+            ? "Paid HK$100.00 deposit. Your receipt is in that email."
+            : undefined
+        }
+        when="Thu 22 Oct, 15:00 to 15:30 HKT"
       />
-
-      <Text as="p" size="sm" tone="secondary">
-        Told the desk as a reference — not an intake record.
-      </Text>
-
-      <ProposalBanner title="Walk-in also fine">
-        No booking required. You can go straight to the Hong Kong Grade10 Store
-        in Causeway Bay and ask for vaulting — even without an account yet.
-      </ProposalBanner>
-
-      <div className="grid items-start gap-8 lg:grid-cols-2">
-        <BookingConfirmation
-          copy={VISIT_CONFIRMATION_COPY}
-          record={VISIT_RECORD}
-          manageHref={VAULT_MANAGE_VISIT_HREF}
-          calendarHref="#calendar"
-          timeZoneLabel="Asia/Hong Kong time"
-        />
-
-        <section
-          className="flex flex-col gap-5 rounded-(--radius-2xl) border border-border bg-card p-5"
-          aria-labelledby="prep-checklist"
-        >
-          <h2 className="font-heading text-xl font-medium" id="prep-checklist">
-            What to prepare
-          </h2>
-          <ol className="grid gap-3">
-            {bringTips.map((tip, index) => (
-              <li
-                key={tip}
-                className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
-              >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
-                  {index + 1}
-                </span>
-                <Text className="self-center" size="sm">
-                  {tip}
-                </Text>
-              </li>
-            ))}
-          </ol>
-        </section>
-      </div>
-
-      <Button
-        type="button"
-        variant="secondary"
-        onClick={() => navigateToStory(VAULT_MY_VISITS_STORY_ID)}
-      >
-        Appointments
-      </Button>
     </AppointmentPageShell>
   );
 }
@@ -123,13 +104,18 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Visit booked" }),
+      canvas.getByRole("heading", { level: 1, name: "You are booked" }),
     ).toBeVisible();
-    expect(canvas.getByText(/What to prepare/)).toBeVisible();
-    expect(canvas.getByText("Move or cancel this visit")).toBeVisible();
+    expect(canvas.getByText("Thu 22 Oct, 15:00 to 15:30 HKT")).toBeVisible();
     expect(
-      canvas.getByText("Told the desk as a reference — not an intake record."),
+      canvas.getByRole("link", { name: "Change or cancel" }),
     ).toBeVisible();
-    expect(canvas.queryByText("Track this visit")).not.toBeInTheDocument();
+    expect(
+      canvas.getByText("You can change or cancel until 15:00 on Thu 22 Oct."),
+    ).toBeVisible();
   },
 };
+
+export const PaidAndBooked: Story = { args: { paid: true } };
+
+export const Phone: Story = { globals: { viewport: { value: "mobile1" } } };

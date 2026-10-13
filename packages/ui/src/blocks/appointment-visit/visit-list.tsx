@@ -1,34 +1,33 @@
-import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Badge } from "@grade10/design-system/components/display/badge";
+import { cn } from "@grade10/design-system/lib/utils";
+import { CaretRight } from "@phosphor-icons/react";
+import { useId } from "react";
 import type { VisitListRow } from "./types";
+import { VISIT_INK_2, VISIT_INK_3, VISIT_TINT } from "./visit-tones";
 
 type VisitListCopy = {
   upcoming: string;
   past: string;
-  open: string;
 };
 
 type VisitListProps = {
   copy: VisitListCopy;
   upcoming: readonly VisitListRow[];
   past: readonly VisitListRow[];
-  /** Opens the page that manages one visit, by its id. */
+  /** Opens the page that manages one visit, by its id, for a row with no href. */
   onOpen: (id: string) => void;
 };
 
 /** The collector's visits split into upcoming and past, each under its
- * heading and each opening the page that manages it. An empty half draws
- * nothing. */
+ * heading and each row opening the page that manages it. An empty half
+ * draws nothing. */
 function VisitList({ copy, upcoming, past, onOpen }: VisitListProps) {
   return (
-    <>
+    <div className="flex flex-col gap-4" data-slot="booking-list-groups">
       {upcoming.length > 0 ? (
         <Section
           heading={copy.upcoming}
           onOpen={onOpen}
-          open={copy.open}
           rows={upcoming}
           slot="booking-list-upcoming"
         />
@@ -37,65 +36,89 @@ function VisitList({ copy, upcoming, past, onOpen }: VisitListProps) {
         <Section
           heading={copy.past}
           onOpen={onOpen}
-          open={copy.open}
           rows={past}
           slot="booking-list-past"
         />
       ) : null}
-    </>
+    </div>
   );
 }
 
+const ROW_CLASS =
+  "flex w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-background py-3 pr-2 pl-3.5 text-left text-foreground transition-[border-color,box-shadow] duration-100 outline-none hover:border-border-strong hover:shadow-xs focus-visible:ring-3 focus-visible:ring-ring/50";
+
 function Section({
   heading,
-  open,
   rows,
   slot,
   onOpen,
 }: {
   heading: string;
-  open: string;
   rows: readonly VisitListRow[];
   slot: string;
   onOpen: (id: string) => void;
 }) {
+  const id = useId();
   return (
-    <VStack data-slot={slot} gap="sm" hAlign="stretch">
-      <Text as="h2" size="lg" weight="medium">
+    <section
+      aria-labelledby={id}
+      className="flex flex-col gap-2"
+      data-slot={slot}
+    >
+      <h2
+        className={cn("m-0 text-[13px] leading-[18px] font-bold", VISIT_INK_2)}
+        id={id}
+      >
         {heading}
-      </Text>
-      {rows.map((row) => (
-        <div
-          className="grid w-full grid-cols-1 gap-2 border-b border-border py-4 last:border-b-0 sm:grid-cols-[minmax(12rem,1.2fr)_minmax(10rem,1fr)_minmax(14rem,1.4fr)_auto] sm:items-center sm:gap-6"
-          data-slot="booking-list-item"
-          key={row.id}
+      </h2>
+      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+        {rows.map((row) => {
+          const body = <RowBody row={row} />;
+          return (
+            <li data-slot="booking-list-item" key={row.id}>
+              {row.href ? (
+                <a className={ROW_CLASS} href={row.href}>
+                  {body}
+                </a>
+              ) : (
+                <button
+                  className={ROW_CLASS}
+                  onClick={() => onOpen(row.id)}
+                  type="button"
+                >
+                  {body}
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+function RowBody({ row }: { row: VisitListRow }) {
+  return (
+    <>
+      <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="text-[15px] leading-5 font-bold">{row.service}</span>
+        <span
+          className={cn("truncate text-sm leading-5 tabular-nums", VISIT_INK_2)}
         >
-          <HStack gap="sm" vAlign="center">
-            <Text as="span" weight="medium">
-              {row.service}
-            </Text>
-            <Text as="span" size="sm" tone="secondary">
-              {row.status}
-            </Text>
-          </HStack>
-          <Text as="span" size="sm" tone="secondary">
-            {row.location}
-          </Text>
-          <Text as="span" size="sm">
-            {row.when}
-          </Text>
-          <Button
-            className="justify-self-start sm:justify-self-end"
-            onClick={() => onOpen(row.id)}
-            size="sm"
-            type="button"
-            variant="ghost"
-          >
-            {open}
-          </Button>
-        </div>
-      ))}
-    </VStack>
+          {row.when} · {row.location}
+        </span>
+        <Badge
+          className={cn(
+            VISIT_TINT[row.tone ?? "plain"],
+            "h-[22px] px-2 text-xs font-bold",
+          )}
+          data-tone={row.tone ?? "plain"}
+        >
+          {row.status}
+        </Badge>
+      </span>
+      <CaretRight aria-hidden className={cn("size-5 shrink-0", VISIT_INK_3)} />
+    </>
   );
 }
 

@@ -3,13 +3,17 @@ import type { ReactNode } from "react";
 /** How a visit or a ticket stands, as its badge colours it. */
 type VisitTone = "plain" | "ink" | "info" | "ok" | "warn" | "bad";
 
-/** One act a page offers: a link leaves the page, a press runs here. */
+/** One act a page offers: a link leaves the page, a press runs here; a link
+ * with a press runs it as it leaves (a calendar file saved, then said). */
 type VisitAct = {
   key: string;
   label: string;
   href?: string;
   onClick?: () => void;
+  /** The page's one main act, across the whole row. */
   primary?: boolean;
+  /** A secondary act across the whole row. */
+  wide?: boolean;
   /** Opens outside the site: maps, the phone's dialler. */
   external?: boolean;
 };
@@ -33,7 +37,17 @@ type VisitListRow = {
   location: ReactNode;
   /** The visit's day and times, formatted. */
   when: string;
+  /** The status badge's colour; plain when omitted. */
+  tone?: VisitTone;
+  /** Where the row leads; without it the row is a press that opens it. */
+  href?: string;
 };
+
+/** A notice's tint: a live update, a plain word, or a warning. */
+type VisitNoticeTone = "info" | "plain" | "warn";
+
+/** The glyph a notice leads with. */
+type VisitNoticeIcon = "info" | "message" | "weather";
 
 /** One way a collector may say why they cancel. */
 type VisitCancelReason = "cant" | "wrong" | "other";
@@ -76,6 +90,8 @@ export type {
   VisitFullDayShop,
   VisitLateChoice,
   VisitListRow,
+  VisitNoticeIcon,
+  VisitNoticeTone,
   VisitTone,
   VisitWaitService,
   VisitWaitShop,

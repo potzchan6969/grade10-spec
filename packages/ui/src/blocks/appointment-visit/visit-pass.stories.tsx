@@ -14,11 +14,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Before the day: who the visit is for as large text, no code and no QR. */
+/** Before the day: a compact card, who the visit is for, no code and no QR. */
 export const Booked: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("region", { name: "Your pass" })).toBeVisible();
+    expect(canvas.getByRole("region", { name: VISIT_NAME })).toBeVisible();
     expect(canvas.getByText(VISIT_NAME)).toBeVisible();
     expect(canvas.queryByText(/BK-/)).toBeNull();
     expect(canvas.queryByText(/visit code/i)).toBeNull();
@@ -28,9 +28,21 @@ export const Booked: Story = {
   },
 };
 
-/** Called: the counter heads the pass and the hold sits under the name. */
+/** On the day: centred and large, held up at the counter. */
+export const Today: Story = {
+  args: {
+    size: "day",
+    copy: {
+      ...VISIT_PASS_COPY,
+      line: "Grading Submission · Hong Kong Grade10 Store · 10:15 to 10:45",
+    },
+  },
+};
+
+/** Called: the counter sits under the name, and the hold under the visit. */
 export const Called: Story = {
   args: {
+    size: "day",
     copy: {
       ...VISIT_PASS_COPY,
       title: "Counter 3",
@@ -40,7 +52,9 @@ export const Called: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("region", { name: "Counter 3" })).toBeVisible();
+    expect(
+      canvas.getByRole("region", { name: `${VISIT_NAME}, Counter 3` }),
+    ).toBeVisible();
     expect(canvas.getByText(VISIT_NAME)).toBeVisible();
     expect(canvas.queryByText(/BK-/)).toBeNull();
   },

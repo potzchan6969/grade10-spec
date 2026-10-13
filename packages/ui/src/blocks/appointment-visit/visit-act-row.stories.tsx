@@ -28,7 +28,19 @@ export const Booked: Story = {
 
 export const Today: Story = { args: { acts: TODAY_ACTS } };
 
-export const Ended: Story = { args: { acts: ENDED_ACTS } };
+/** The primary across the row, and a wide secondary under it. */
+export const Ended: Story = {
+  args: { acts: ENDED_ACTS },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("link", { name: "Book again" })).toHaveClass(
+      "col-span-2",
+    );
+    expect(canvas.getByRole("link", { name: "My visits" })).toHaveClass(
+      "col-span-2",
+    );
+  },
+};
 
 /** No acts draws nothing. */
 export const None: Story = {
