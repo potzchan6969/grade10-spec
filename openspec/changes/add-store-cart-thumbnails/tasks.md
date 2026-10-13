@@ -24,7 +24,7 @@ Depends on Group 2. It requires neither the shared UI nor a running frontend.
 - [ ] 3.3 Keep member and guest intent, cart persistence and mutation inputs image-free after review and edits. Confirm quote and checkout amounts and outcomes remain unchanged. `grade10-site-store-cart-drawer-SC-37`, `grade10-site-store-cart-drawer-SC-44`
 - [ ] 3.4 Verify focused cart-review, guest/member transport, quote and checkout suites with production decoders, changed backend typechecks and `pnpm run test:backend`. Review the diff for extra catalogue requests, picture persistence and money or readiness changes.
 
-## 4. Reviewed pictures in the application drawer (grade10)
+## 4. Reviewed pictures in the application drawer (grade10) (owner: @kinisworking)
 
 Depends on Group 2's contract and Group 1's merged shared work before the application selects its published main SHA. Frontend tests use decoded fixtures; they do not require a running backend or Group 3's landing.
 
