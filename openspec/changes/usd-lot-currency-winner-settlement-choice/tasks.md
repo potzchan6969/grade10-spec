@@ -62,7 +62,7 @@ Depends on the grade10-spec groups only through the submodule bump.
 - [ ] 6.9 Verify: the pricing and setup suites, a forbidden-import lint for the conversion function, and `pnpm run typecheck`
 - [ ] 6.10 At lot close, create an internal order with its billing address, HKD, `bank_transfer` and FPS in one write; leave it in Preparing Invoice with no invoice at close or setup action, then let the operator quote and send it (`grade10-admin-auction-internal-bid-SC-71`, `winner-order-SC-277`)
 
-## 7. Site and admin wiring (grade10)
+## 7. Site and admin wiring (grade10) (owner: @htonyl)
 
 Frontend work against the contracts and fixtures, never a running backend.
 
