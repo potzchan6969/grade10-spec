@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-10-13
+purpose_rewritten:
+  grade10-admin/console/daily-reminder: "widens beyond the once-a-day lists to Auction lifecycle Slack alerts and renames Still Waiting to Flagged or still waiting"
+hands:
+  pm: "@mason5991"
+  design: "@mason5991"
+  tech: "@mason5991"
+  qa: "@mason5991"
+  dev: "@mason5991"

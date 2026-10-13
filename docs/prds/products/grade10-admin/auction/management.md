@@ -274,10 +274,15 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Waited** - from when the status began, or from a flag. Setup Overdue is
   the status at the 48-hour address deadline and nothing else is marked:
   Preparing Invoice carries no mark, and no wait changes a status
-- 🚧 **Daily reminder** - an order that has waited 48 hours for an invoice,
-  a proof check or a dispatch is listed in a dialog until the operator closes
-  it for the day, and in Slack at 08:00, with the day's new listings - [Daily
-  Reminder](/p/grade10-admin/console/daily-reminder)
+- 🚧 **Daily reminder** - flagged orders and orders that have waited 48 hours
+  for an invoice, a proof check or a dispatch are listed in a dialog until the
+  operator closes it for the day, and in Slack at 08:00, with the day's new
+  listings - [Daily Reminder](/p/grade10-admin/console/daily-reminder)
+- 🚧 **Lifecycle Slack** - Auction posts once to the same Slack channel when a
+  listing goes live, ends or is extended, and when an order becomes overdue or
+  is flagged, only after that usual step completes and only when both the bot
+  token and the channel are set; otherwise the send is skipped -
+  [Daily Reminder · Lifecycle Alerts](/p/grade10-admin/console/daily-reminder#lifecycle-alerts)
 - 🚧 **Search and filters** - by the start of a listing code, any invoice ID
   the order held, the winner's email or a payment's reference; one status of
   the segment's, then a cancellation

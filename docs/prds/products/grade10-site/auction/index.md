@@ -45,7 +45,7 @@ Prices shipping and insurance for that address, adds any tax for the order, and 
 By the chosen card or bank rail, which Grade10 confirms or checks with proof;
 the winner quotes the reference for a bank payment.
 ## *Operator* — **Ships**
-🚧 Records dispatch with the tracking number, then delivery; the winner reads
+Records dispatch with the tracking number, then delivery; the winner reads
 the tracking number as the link to the carrier's tracking page when the
 operator recorded a tracker link, and as plain text when none was.
 :::
