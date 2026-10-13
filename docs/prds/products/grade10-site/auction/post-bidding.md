@@ -42,6 +42,7 @@ winner of three lots has three orders, each with its own deadlines.
 | Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address; an operator reopen starts a fresh **48 hours** |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
+| 🚧 Premium minimum | One USD amount, **0** at first, read in the bid currency and converted with the premium under HKD |
 | Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
@@ -167,8 +168,8 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| 🚧 Settlement currency | **USD** or **HKD**; lots and bids stay in USD, and the invoice is issued in the currency chosen | **HKD** |
-| 🚧 Payment method | The methods of the settlement currency below, each in a currency with a card fee rule or bank details; each choice shows its fee range | **Card** |
+| 🚧 Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | Nothing preselected |
+| 🚧 Payment method | One of the methods the settlement currency offers — [Payment Methods by Currency](#payment-methods-by-currency); card only with a card fee rule, a bank rail only where Grade10 holds its bank details; each choice shows its fee range | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -197,8 +198,8 @@ hours of the close.
 - 🚧 **Catalogue display locale** — Country/Region names follow the
   account's language, as the rest of the site does
 
-- 🚧 **Fee range wording** — card reads `Card fee about 3.4% + a fixed
-  amount`; bank transfer reads `Bank fee set on your invoice` and names no
+- 🚧 **Fee range wording** — card reads `Card fee about {percentage}% + a fixed
+  amount`, the percentage of the rule of the currency picked; bank transfer reads `Bank fee set on your invoice` and names no
   amount, because the operator sets that fee
 - 🚧 **One-time address after a reload** — an unsaved one-time address stays
   on the order after leaving and returning, until the winner confirms or the
@@ -224,13 +225,37 @@ hours of the close.
   48-hour setup deadline keeps running, and an operator reopens or records
   setup by hand
 
+### Payment Methods by Currency
+
+The methods follow the settlement currency picked, and the list changes the
+moment the winner changes it.
+
+| Settlement currency | Methods offered |
+| --- | --- |
+| 🚧 **HKD** | Card · FPS · HK Local |
+| 🚧 **USD** | Card · HK Local · International via SWIFT |
+
+- 🚧 **Card** — in both currencies, on the card fee rule of the currency picked
+- 🚧 **USD card rule** — card is offered in USD only once Finance saves a USD
+  card fee rule, as today; Finance saves it before launch, since USD becomes
+  a main path
+- 🚧 **Bank by rail** — FPS, HK Local and International via SWIFT are each a
+  choice at setup, not one bank transfer choice; HKD offers Hong Kong domestic
+  rails only, and USD offers Hong Kong domestic and overseas
+- 🚧 **The rail picked is the rail shown** — the invoice's bank details open on
+  the rail the winner chose and name no other
+- 🚧 **Currency changes the list** — a winner who switches currency before
+  confirming keeps a method only if the new currency offers it; otherwise
+  nothing is preselected again
+
 ### Address Deadline
 
 - **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
   form and only Grade10 reopens it, under Edge Cases
 - 🚧 **Locked on confirming** — the winner changes none of the three
   afterwards; an operator edits them on request before send and reissues
-  after, and the order shows what changed
+  after, and the order shows what changed. The settlement currency is edited
+  the same way
 - 🚧 **Clock** — the 48 hours count from the lot's actual close, extended
   bidding included, and a write is judged by when Grade10 receives it, however
   long the winner spent on it
@@ -238,6 +263,41 @@ hours of the close.
   new figure applies only to lots that close after it is set
 - 🚧 **Retired at send** — sending the invoice ends the address deadline; the
   order shows no deadline and no missed-deadline alert afterwards
+
+## Settling in HKD
+
+A winner who picks HKD pays a USD bid converted once, at a fixed rate. A
+winner who picks USD pays it unchanged.
+
+| Rule | Value |
+| --- | --- |
+| 🚧 Rate | **7.85** HKD to 1 USD, one rate for every order, set by Grade10 and not looked up live |
+| 🚧 Rounding | Up to the whole HK$ — any fraction rounds up, so `100.01` and `100.1` both read `101` |
+| 🚧 Never shown | The rate appears on no page, invoice, receipt or letter |
+| 🚧 Invoice and receipt | Every amount reads HKD; the USD winning bid is not printed |
+| 🚧 Fees and letters | The order total, fees, payments, refunds and order letters carry HKD |
+| 🚧 Fixed once sent | The sent invoice never re-prices, and its currency never changes |
+
+- 🚧 **Order Summary stays in USD** — its lines read USD whichever currency
+  is picked
+- 🚧 **Two total lines under HKD** — Order Total shows the USD total, then the
+  converted HKD total, which is what the invoice asks for
+- 🚧 **What the HKD total adds up from** — each line converted and rounded up,
+  then summed, so the invoice adds up line by line; the card fee is computed
+  in HKD from the HKD card rule
+- 🚧 **Lots already priced in HKD or JPY** — every one is test data and its
+  currency is overwritten to USD, amounts unchanged and nothing converted
+- 🚧 **Bank transfer fee** — the operator types it in USD, and it converts with
+  the other lines
+- 🚧 **Letters** — the won-lot letter, sent at close before any currency is
+  picked, keeps the US$ bid; every letter after the winner picks reads the
+  settlement currency only, with no USD winning bid
+- ❓ **Card fee under HKD** — the card fee comes from the rule of the currency
+  picked, so under HKD it reads in HKD, among the USD lines of the Order
+  Summary, and the USD total leaves it out. A card fee quoted in USD and
+  converted in total, like the other lines, is the alternative; PM confirms
+- ❓ **USD bank details** — HK Local and SWIFT are offered in USD only where
+  Grade10 holds their details; Finance confirms which it holds at launch
 
 ## The Invoice
 
@@ -649,6 +709,11 @@ a second payment provider, and changes to the bid-time rules.
 | Settlement currency | 🚧 In flight | Lots and bids are USD alone; a winner settles in USD or HKD, chosen at order setup. HKD settlement is new: the operator issues the invoice in HKD, so Grade10 holds no exchange rate. Chosen over a rate in Payment Settings and over converting automatically at setup, which put a rate and its rounding on Finance before launch. Any other display currency later converts from USD. | Product (@tangconst) |
 | Methods by settlement currency | 🚧 In flight | USD: card, Hong Kong bank transfer, SWIFT. HKD: card, FPS, Hong Kong bank transfer. | Product (@tangconst) |
 | Card in USD and JPY | 🚧 In flight | Card launches without a rule in USD and JPY: until Finance saves one, a winner in that currency is not offered card and reads why. Chosen over holding launch for Finance's rates and over charging no card fee. | Finance |
+| Settlement currency | 🚧 In flight | The winner picks USD or HKD at order setup, nothing preselected, fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
+| HKD conversion | 🚧 In flight | One fixed rate, 7.85 HKD to 1 USD, rounded up, never shown; the USD winning bid is not printed on an HKD invoice or receipt. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
+| Rounding | 🚧 In flight | Whole HK$, any fraction up (`100.01` and `100.1` read `101`), each line converted and rounded, then summed. Chosen over the first decimal and over converting the total once, which would leave invoice lines that do not add up. | Product |
+| Payment methods by currency | 🚧 In flight | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. Chosen over one bank transfer choice, so the currency decides which rails a winner can use. | Product |
+| Order summary under HKD | 🚧 In flight | Lines stay USD; Order Total splits into a USD total and a converted HKD total. Chosen over an all-HKD summary, which would hide the bid the winner won. | Product |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
 | No payment method in a currency | 🚧 In flight | A winner whose currency offers neither card nor bank transfer reads that payment is not yet available there, with Contact Us; the setup deadline keeps running, so the order can go Setup Overdue, and an operator reopens or records setup by hand. Chosen over pausing the deadline, which is more to build, and over holding launch for Finance's USD and JPY rules. | Product (@tangconst) |

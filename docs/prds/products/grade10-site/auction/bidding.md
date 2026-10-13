@@ -23,11 +23,33 @@ order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/interna
 | Bidding window | From the scheduled start to the recorded close |
 | Extension duration | **30 minutes** by default, set per listing; **0** turns extended bidding off |
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
-| Currencies | 🚧 **USD** only for new lots; ❓ whether the HKD and JPY schedules retire or keep governing lots already priced in them — Product confirms |
+| Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
+| 🚧 Bid currency | **USD** only, for every lot; a collector always types USD — [Currencies](#currencies) |
 | Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 5,000,000,000**, the same on every lot |
 | Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
+| 🚧 Verified bar in USD | A bid of **US$15,000** or more; replaces HKD 120,000, which read about US$15,287 at 7.85 |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
+
+### Currencies
+
+Three currencies meet in an auction, and each has one job.
+
+| | Bid currency | Preferred currency | Settlement currency |
+| --- | --- | --- | --- |
+| Also called | 🚧 Lot currency, price tag, labelled currency | Local currency | 🚧 Payment currency |
+| Which | 🚧 **USD**, the only one | The collector's own choice | 🚧 **USD** or **HKD** |
+| Chosen by | Nobody; every lot is priced in it and it never changes | The collector, for themself | The winner, once, at [Order Setup](/p/grade10-site/auction/post-bidding#order-setup) |
+| What it is for | The unit every auction is bid in; a collector always types USD | ❓ A reference price, converted live from the bid currency; not built | What the invoice, order total, fees and letters are paid in |
+| Today | Per lot: USD, HKD or JPY | Not offered | The lot's currency |
+
+- 🚧 **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
+  and the increment are all USD; no lot is priced in another currency
+- ❓ **Preferred currency** — a reference price in the collector's own
+  currency is defined here so the three are not confused; no surface shows
+  one in this change, and nothing converts a bid for display
+- 🚧 **Settlement currency** — a USD fact becomes an HKD fact only at
+  settlement, at one fixed rate — [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
 
 ### Extended Bidding
 
@@ -133,6 +155,9 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
 | USD lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
+- 🚧 **USD only** — the HKD and JPY schedules and their ceilings retire with
+  the lot currencies; the USD tiers above are the one schedule, and no
+  increment is kept per currency
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
 - **A first maximum** — must reach the opening price, and the public price it
@@ -487,6 +512,9 @@ surface.
 | Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the ceiling; never in the bidder's record. | Product and engineering |
 | An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
 | Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
+| Bid currency | 🚧 In flight | USD only, for every lot, bid and ceiling; the HKD and JPY schedules and ceilings retire. Chosen over keeping three lot currencies with a display conversion: one unit makes every bid comparable and leaves conversion to settlement. | Product |
+| Verified bar in USD | 🚧 In flight | US$15,000, restated from HKD 120,000 since a bid is no longer typed in HKD. Chosen over keeping HK$120,000 and converting each bid, which would bring conversion onto bid surfaces. | Product |
+| Lots priced in HKD or JPY | 🚧 In flight | Every existing lot is test data: its currency is overwritten to USD with the amounts unchanged, no conversion. Chosen over keeping the HKD and JPY schedules for them. | Product |
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
 | Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only. | Product |
 | Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1. Custom entry uses the currency ceiling: extra typed digits retain the prior draft, an oversized paste or replacement becomes the ceiling, and no maximum-bid message appears. Replaces the universal 9,999,999,999 field cap and restore-only rule, following [the owner's decision](https://github.com/9gag/grade10/issues/1008#issuecomment-6076137634). | Product (@tangconst) |

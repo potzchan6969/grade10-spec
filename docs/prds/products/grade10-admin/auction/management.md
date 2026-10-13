@@ -14,7 +14,8 @@ the card is in the winner's hands. The collector's half is
 
 | Rule | Value |
 | --- | --- |
-| Currency | 🚧 **USD** alone for new listings, and **USD** when omitted; ❓ whether HKD and JPY stay selectable for lots already priced in them — Product confirms |
+| Currency | **USD**, **HKD** or **JPY**, one per listing; **HKD** when omitted |
+| 🚧 Currency in the form | **USD** only, and **USD** when omitted; HKD and JPY are no longer offered, and a listing in either is refused |
 | Bid floor | The currency's price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
 | Title | Required at create; **1 to 200** characters |
 | Copy | Optional; at most **4,000** characters |
@@ -452,6 +453,9 @@ it.
 | Rule | Value |
 | --- | --- |
 | Minimum charge | One amount per currency, zero or more; **0** in USD, HKD and JPY at first |
+| 🚧 Minimum charge in USD | One USD amount, zero or more, **0** at first; HKD and JPY hold none |
+| 🚧 Card rule per settlement currency | The rule belongs to the settlement currency, USD or HKD; Finance sets its percentage, such as 3.4%, to any value in the range above |
+| 🚧 Currencies held | USD and HKD, the two settlement currencies; JPY is no longer held. The minimum charge is one USD amount, read in the bid currency |
 | 🚧 Card fee rule | One per currency: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
 | 🚧 At rollout | Nothing is stored until the first save; Finance sets HKD **3.4% + HK$2.35** |
 | 🚧 Typed as | The currency's major units, `2.35` for HK$2.35, stored as minor units |
@@ -566,6 +570,8 @@ settings.
 | House win | 🚧 In flight | Collectors read the lot as sold; its order and invoice go to the internal bidder, flagged internal, and an operator lets the invoice expire and cancels the order. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
+| Bid currency | 🚧 In flight | USD only. HKD and JPY leave the listing form, and the shared schedule is USD. Chosen over keeping a currency choice per listing, since every lot bids in one unit and the winner picks how to pay. | Product |
+| Payment Settings currencies | 🚧 In flight | A card fee rule per settlement currency, USD and HKD; JPY is dropped. The premium minimum is one USD amount. Chosen over a minimum per settlement currency, since the premium is computed on the bid. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
 | Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
 | A consigned lot | Decided | Consignment makes it as a draft with no stock hold and owns its start price, which is the consignment's floor, and its relist. | Product |
