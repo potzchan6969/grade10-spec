@@ -336,7 +336,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** Stated zones
 
-**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`, `packages/ui/src/blocks/auction-listing/auction-card.test.ts`
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-auction-bid-card.stories.tsx`, `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 

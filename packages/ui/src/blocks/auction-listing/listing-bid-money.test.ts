@@ -260,8 +260,56 @@ describe("resolveMaximumFloor", () => {
         viewerMaximumMinor: 200_000,
         standing: "leading-max",
         currentBidMinor: 120_000,
+        ceilingMinor: CURRENCY_CEILINGS.HKD,
       }),
     ).toEqual({ floorMinor: 200_100, reason: "leading-nudge" });
+  });
+
+  it("returns null when a maximum at the ceiling leaves no legal raise (shared-ui-auction-listing-SC-64)", () => {
+    expect(
+      resolveMaximumFloor({
+        minBidMinor: 1_300,
+        incrementMinor: 10_000,
+        viewerMaximumMinor: CURRENCY_CEILINGS.HKD,
+        standing: "leading-max",
+        currentBidMinor: 120_000,
+        ceilingMinor: CURRENCY_CEILINGS.HKD,
+      }),
+    ).toBeNull();
+  });
+
+  it("returns null when the minimum next bid already passes the ceiling (shared-ui-auction-listing-SC-63, shared-ui-auction-listing-SC-65)", () => {
+    expect(
+      resolveMaximumFloor({
+        minBidMinor: 8_000_005_000,
+        incrementMinor: 10_000,
+        viewerMaximumMinor: 7_999_995_000,
+        standing: "leading-max",
+        currentBidMinor: 7_999_995_000,
+        ceilingMinor: CURRENCY_CEILINGS.HKD,
+      }),
+    ).toBeNull();
+    expect(
+      resolveMaximumFloor({
+        minBidMinor: 8_000_005_000,
+        incrementMinor: 10_000,
+        standing: "none",
+        currentBidMinor: 7_999_995_000,
+        ceilingMinor: CURRENCY_CEILINGS.HKD,
+      }),
+    ).toBeNull();
+  });
+
+  it("keeps a floor exactly at the ceiling", () => {
+    expect(
+      resolveMaximumFloor({
+        minBidMinor: CURRENCY_CEILINGS.HKD,
+        incrementMinor: 10_000,
+        standing: "none",
+        currentBidMinor: 7_999_990_000,
+        ceilingMinor: CURRENCY_CEILINGS.HKD,
+      }),
+    ).toEqual({ floorMinor: 8_000_000_000, reason: "floor-bid" });
   });
 });
 
@@ -274,16 +322,20 @@ describe("quickMaximumPresetAmount", () => {
       incrementMinor: 4_000,
       currentBidMinor: 120_000,
       viewerMaximumMinor: 200_000,
+      ceilingMinor: CURRENCY_CEILINGS.HKD,
     } as const;
-    expect(quickMaximumPresetAmount({ ...leading, multiples: 1 })).toBe(
-      204_000,
-    );
-    expect(quickMaximumPresetAmount({ ...leading, multiples: 2 })).toBe(
-      208_000,
-    );
-    expect(quickMaximumPresetAmount({ ...leading, multiples: 4 })).toBe(
-      216_000,
-    );
+    expect(quickMaximumPresetAmount({ ...leading, multiples: 1 })).toEqual({
+      amountMinor: 204_000,
+      clamped: false,
+    });
+    expect(quickMaximumPresetAmount({ ...leading, multiples: 2 })).toEqual({
+      amountMinor: 208_000,
+      clamped: false,
+    });
+    expect(quickMaximumPresetAmount({ ...leading, multiples: 4 })).toEqual({
+      amountMinor: 216_000,
+      clamped: false,
+    });
   });
 
   it("adds 1× / 2× / 4× increment on the current bid when not leading", () => {
@@ -294,16 +346,20 @@ describe("quickMaximumPresetAmount", () => {
       incrementMinor: 4_000,
       currentBidMinor: 120_000,
       viewerMaximumMinor: 116_000,
+      ceilingMinor: CURRENCY_CEILINGS.HKD,
     } as const;
-    expect(quickMaximumPresetAmount({ ...challenger, multiples: 1 })).toBe(
-      124_000,
-    );
-    expect(quickMaximumPresetAmount({ ...challenger, multiples: 2 })).toBe(
-      128_000,
-    );
-    expect(quickMaximumPresetAmount({ ...challenger, multiples: 4 })).toBe(
-      136_000,
-    );
+    expect(quickMaximumPresetAmount({ ...challenger, multiples: 1 })).toEqual({
+      amountMinor: 124_000,
+      clamped: false,
+    });
+    expect(quickMaximumPresetAmount({ ...challenger, multiples: 2 })).toEqual({
+      amountMinor: 128_000,
+      clamped: false,
+    });
+    expect(quickMaximumPresetAmount({ ...challenger, multiples: 4 })).toEqual({
+      amountMinor: 136_000,
+      clamped: false,
+    });
   });
 
   it.each([
@@ -322,12 +378,38 @@ describe("quickMaximumPresetAmount", () => {
         floorMaximumMinor: openingMinor,
         incrementMinor,
         currentBidMinor: openingMinor,
+        ceilingMinor: CURRENCY_CEILINGS.HKD,
       } as const;
       expect(
-        [1, 2, 4].map((multiples) =>
-          quickMaximumPresetAmount({ ...noBids, multiples }),
+        [1, 2, 4].map(
+          (multiples) =>
+            quickMaximumPresetAmount({ ...noBids, multiples })?.amountMinor,
         ),
       ).toEqual(chips);
     },
   );
+
+  it("clamps a stepped amount above the ceiling to the ceiling (shared-ui-auction-listing-SC-61, shared-ui-auction-listing-SC-62)", () => {
+    const nearCeiling = {
+      isLeadingWithMaximum: true,
+      hasBids: true,
+      floorMaximumMinor: 7_999_980_000,
+      incrementMinor: 10_000,
+      currentBidMinor: 120_000,
+      viewerMaximumMinor: 7_999_970_000,
+      ceilingMinor: CURRENCY_CEILINGS.HKD,
+    } as const;
+    expect(quickMaximumPresetAmount({ ...nearCeiling, multiples: 1 })).toEqual({
+      amountMinor: 7_999_980_000,
+      clamped: false,
+    });
+    expect(quickMaximumPresetAmount({ ...nearCeiling, multiples: 2 })).toEqual({
+      amountMinor: 7_999_990_000,
+      clamped: false,
+    });
+    expect(quickMaximumPresetAmount({ ...nearCeiling, multiples: 4 })).toEqual({
+      amountMinor: 8_000_000_000,
+      clamped: true,
+    });
+  });
 });

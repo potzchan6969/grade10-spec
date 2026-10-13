@@ -1,7 +1,7 @@
 # shared/ui/page-blocks Test Cases
 
 **Status:** pending-review · 0/2
-**Drafts styled:** 2026-09-29, tcs-rules r4
+**Drafts styled:** 2026-10-13, tcs-rules r4
 
 ## Background
 

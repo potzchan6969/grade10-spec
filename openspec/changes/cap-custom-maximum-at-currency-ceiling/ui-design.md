@@ -2,7 +2,7 @@
 
 ### Lot Bid Card
 
-[CustomMaximumCeiling](?path=/story/auction-bidding-blocks-listingauctionbidcard--custom-maximum-ceiling) and [Leading](?path=/story/auction-bidding-blocks-listingauctionbidcard--leading) are the existing layout references. No Figma bid-panel frame exists; the archived predecessor uses these same Storybook surfaces. This change changes their interaction, not their layout.
+[CustomMaximumCeiling](?path=/story/auction-bidding-blocks-listingauctionbidcard-custom-maximum--custom-maximum-ceiling) and [Leading](?path=/story/auction-bidding-blocks-listingauctionbidcard--leading) are the existing layout references. No Figma bid-panel frame exists; the archived predecessor uses these same Storybook surfaces. This change changes their interaction, not their layout.
 
 ## Components
 

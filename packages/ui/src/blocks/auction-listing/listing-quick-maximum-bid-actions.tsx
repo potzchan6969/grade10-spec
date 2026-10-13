@@ -80,6 +80,12 @@ type ListingQuickMaximumBidActionsCopy = {
   amountAboveMaximum: string;
   /** Primary action when amount entry is locked until a card is linked. */
   linkACardToBid: string;
+  /** Line under the collapsed row when the viewer's maximum already is the ceiling. */
+  maximumAtCeiling: string;
+  /** e.g. "Bidding has reached {amount}, the highest this auction accepts." — collapsed row without a viewer maximum. */
+  biddingAtCeiling: string;
+  /** Caption on a chip offered at the ceiling, e.g. "Limit". */
+  ceilingChip: string;
 };
 
 type BidAuthorizationStatus = "idle" | "pending" | "error";
@@ -111,6 +117,35 @@ function defaultPresetKey(presets: MaximumPreset[]): string | null {
   return presets[Math.floor(presets.length / 2)]?.key ?? null;
 }
 
+/** Chips landing on the same amount — several clamped to the ceiling — merge to one. */
+function uniquePresetsByAmount(presets: MaximumPreset[]): MaximumPreset[] {
+  const seen = new Set<number>();
+  const unique: MaximumPreset[] = [];
+  for (const preset of presets) {
+    if (seen.has(preset.amountMinor)) continue;
+    seen.add(preset.amountMinor);
+    unique.push(preset);
+  }
+  return unique;
+}
+
+function PrivateMaximumInfo({ label }: { label: string }) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger
+          aria-label={label}
+          className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+          closeOnClick={false}
+        >
+          <Info aria-hidden size={12} />
+        </TooltipTrigger>
+        <TooltipContent>{label}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
 function ListingQuickMaximumBidActions({
   copy,
   view,
@@ -130,8 +165,9 @@ function ListingQuickMaximumBidActions({
     viewerMaximumMinor: view.viewerMaximumMinor,
     standing: view.standing,
     currentBidMinor: view.currentBidMinor,
+    ceilingMinor: view.ceilingMinor,
   });
-  const floorMaximumMinor = maximumFloor.floorMinor;
+  const floorMaximumMinor = maximumFloor?.floorMinor ?? null;
 
   const [selectedPresetKey, setSelectedPresetKey] = useState<string | null>(
     null,
@@ -157,15 +193,18 @@ function ListingQuickMaximumBidActions({
   }
 
   const presets = useMemo((): MaximumPreset[] => {
+    if (floorMaximumMinor == null) return [];
     const formatDelta = (deltaMinor: number) =>
       `${formatLotMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
       : copy.amountAboveCurrent;
+    const ceilingCaption = (amountMinor: number) =>
+      amountMinor >= view.ceilingMinor ? copy.ceilingChip : null;
 
     const fromCurrent = PRESET_INCREMENTS.flatMap(
       ({ multiples, captionKey }): MaximumPreset[] => {
-        const amountMinor = quickMaximumPresetAmount({
+        const preset = quickMaximumPresetAmount({
           multiples,
           isLeadingWithMaximum,
           hasBids: view.hasBids,
@@ -173,19 +212,23 @@ function ListingQuickMaximumBidActions({
           incrementMinor: view.incrementMinor,
           currentBidMinor: view.currentBidMinor,
           viewerMaximumMinor: view.viewerMaximumMinor,
+          ceilingMinor: view.ceilingMinor,
         });
-        if (amountMinor == null) return [];
-        const caption = isLeadingWithMaximum
-          ? raiseDeltaTemplate.replace(
-              "{amount}",
-              formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
-            )
-          : captionKey === "nextEligible"
-            ? copy.nextEligibleBid
-            : raiseDeltaTemplate.replace(
+        if (preset == null) return [];
+        const { amountMinor } = preset;
+        const caption =
+          ceilingCaption(amountMinor) ??
+          (isLeadingWithMaximum
+            ? raiseDeltaTemplate.replace(
                 "{amount}",
-                formatDelta(view.incrementMinor * multiples),
-              );
+                formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
+              )
+            : captionKey === "nextEligible"
+              ? copy.nextEligibleBid
+              : raiseDeltaTemplate.replace(
+                  "{amount}",
+                  formatDelta(view.incrementMinor * multiples),
+                ));
         return [
           {
             key: `current-${multiples}`,
@@ -197,38 +240,46 @@ function ListingQuickMaximumBidActions({
       },
     );
 
-    if (fromCurrent.length > 0) return fromCurrent;
+    if (fromCurrent.length > 0) return uniquePresetsByAmount(fromCurrent);
 
     // Keep the fallback resilient if a future currency schedule makes the
     // regular presets fall below the raise floor.
     const fallbackSteps = isLeadingWithMaximum ? [1, 2, 4] : [0, 2, 4];
-    return fallbackSteps.map((steps) => {
-      const amountMinor = isLeadingWithMaximum
+    const fallback = fallbackSteps.flatMap((steps): MaximumPreset[] => {
+      const stepped = isLeadingWithMaximum
         ? (view.viewerMaximumMinor ?? floorMaximumMinor) +
           view.incrementMinor * steps
         : floorMaximumMinor + view.incrementMinor * steps;
+      const amountMinor = Math.min(stepped, view.ceilingMinor);
+      if (amountMinor < floorMaximumMinor) return [];
       const deltaMinor = isLeadingWithMaximum
         ? amountMinor - (view.viewerMaximumMinor ?? 0)
         : view.incrementMinor * steps;
       const isFloor = steps === 0;
       const caption =
-        isFloor && !isLeadingWithMaximum
+        ceilingCaption(amountMinor) ??
+        (isFloor && !isLeadingWithMaximum
           ? copy.nextEligibleBid
-          : raiseDeltaTemplate.replace("{amount}", formatDelta(deltaMinor));
-      return {
-        key: `floor-${steps}`,
-        caption,
-        amountMinor,
-        immediate: isFloor && !isLeadingWithMaximum,
-      };
+          : raiseDeltaTemplate.replace("{amount}", formatDelta(deltaMinor)));
+      return [
+        {
+          key: `floor-${steps}`,
+          caption,
+          amountMinor,
+          immediate: isFloor && !isLeadingWithMaximum,
+        },
+      ];
     });
+    return uniquePresetsByAmount(fallback);
   }, [
     copy.amountAboveCurrent,
     copy.amountAboveMaximum,
+    copy.ceilingChip,
     copy.nextEligibleBid,
     floorMaximumMinor,
     isLeadingWithMaximum,
     locale,
+    view.ceilingMinor,
     view.currency,
     view.currentBidMinor,
     view.hasBids,
@@ -236,6 +287,36 @@ function ListingQuickMaximumBidActions({
     view.viewerMaximumMinor,
   ]);
 
+  if (floorMaximumMinor == null) {
+    const reachedMinor = view.viewerMaximumMinor ?? view.ceilingMinor;
+    const reachedLabel = formatLotMoney(reachedMinor, view.currency, {
+      locale,
+    });
+    return (
+      <VStack
+        className="w-full rounded-(--radius-xl) border px-4 py-3"
+        gap="xs"
+      >
+        <HStack gap="xs" vAlign="center">
+          <Text className="tabular-nums" size="sm" weight="medium">
+            {hasCommittedMaximum
+              ? copy.currentMaximum.replace("{amount}", reachedLabel)
+              : reachedLabel}
+          </Text>
+          {hasCommittedMaximum ? (
+            <PrivateMaximumInfo label={copy.privateMaximumTooltip} />
+          ) : null}
+        </HStack>
+        <Text className="text-secondary-foreground" size="xs">
+          {hasCommittedMaximum
+            ? copy.maximumAtCeiling
+            : copy.biddingAtCeiling.replace("{amount}", reachedLabel)}
+        </Text>
+      </VStack>
+    );
+  }
+
+  const floorMinor = floorMaximumMinor;
   const customActive = customDraft.trim() !== "";
   const customMinor = customActive
     ? parseExactMoneyDraftToMinor(customDraft, view.currency)
@@ -391,7 +472,7 @@ function ListingQuickMaximumBidActions({
 
   function handleUseMinimum() {
     if (amountEntryLocked) return;
-    setCustomDraft(wholeMajorDraftFromMinor(floorMaximumMinor, view.currency));
+    setCustomDraft(wholeMajorDraftFromMinor(floorMinor, view.currency));
     setSelectedPresetKey(null);
   }
 
@@ -449,18 +530,7 @@ function ListingQuickMaximumBidActions({
           >
             {heading}
           </Text>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger
-                aria-label={copy.privateMaximumTooltip}
-                className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
-                closeOnClick={false}
-              >
-                <Info aria-hidden size={12} />
-              </TooltipTrigger>
-              <TooltipContent>{copy.privateMaximumTooltip}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <PrivateMaximumInfo label={copy.privateMaximumTooltip} />
         </HStack>
         {currentMaximumLabel != null ? (
           <Text

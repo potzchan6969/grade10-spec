@@ -78,7 +78,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** Bid history
 
-**Decided by:** `packages/ui/src/blocks/auction-listing/auction-card.test.ts`
+**Decided by:** `packages/date/src/local.test.ts`
 
 **Pre-conditions:**
 
