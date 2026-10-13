@@ -44,7 +44,11 @@ function HowToPayDemo({
       </VStack>
 
       <WinnerOrderHowToPayDialog
-        amountDue={WINNER_ORDER_BANK_DETAILS.totalAmountDue}
+        amountDue={
+          settlementCurrency === "USD"
+            ? WINNER_ORDER_BANK_DETAILS.usdTotalAmountDue
+            : WINNER_ORDER_BANK_DETAILS.totalAmountDue
+        }
         invoiceId={invoiceId}
         onOpenChange={(next) => {
           setOpen(next);
@@ -187,6 +191,7 @@ export const UsdRails: Story = {
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     expect(modal.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
+    expect(modal.getByText("US$16,340.00")).toBeVisible();
     expect(
       modal.getByRole("tab", { name: "Hong Kong", selected: true }),
     ).toBeVisible();
