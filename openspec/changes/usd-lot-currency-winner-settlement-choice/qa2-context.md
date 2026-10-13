@@ -9,7 +9,7 @@ Source identities after this bounded pass:
 - **Internal-bid feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/feature-tcs.md` SHA-256 `67325c6fb94d728cb2695ba03b0b7d34686c5dc5528217268f43ae60213f94b4`
 - **Internal-bid delta spec** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/spec.md` SHA-256 `8e6fae61f3147b2d92204e56f168ea6bd2da4a480c4fcb86f7148e6b3df4e897`
 - **Internal-bid journeys** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/user-journeys.md` SHA-256 `ffd6d6bc66f359d6ab3a4904f444f1e9699f364b7de362399a0c65d6f666e2cc`
-- **Bid-payment-method feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/feature-tcs.md` SHA-256 `9e9cc88a142339d104e04a03c3fdc380d1492dee1531425cd93e0fd9d646ea49`
+- **Bid-payment-method feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/feature-tcs.md` SHA-256 `31c121b5daa319a1e5b167e2fd8323af4522c744e2939c4e89c631ab89be8e19`
 - **Bid-payment-method delta spec** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/spec.md` SHA-256 `6d09f0e6313a08e8874819095488eb93a978226edceb43ca160b2bd58ad2dec3`
 - **Bid-payment-method journeys** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/user-journeys.md` SHA-256 `da238c1b0fb5ad158ff9a4cc533dac83b0eae667c544fa45607068c7af999690`
 
@@ -209,6 +209,7 @@ Scenario count check: 76 current internal-bid scenarios; each has a feature case
 
 - **TC-lbz rev2** - Covers SC-x21. It asserts the USD bid panel shows the 20% rate without a premium amount.
 - **TC-nvs rev2** - Covers SC-oeb. It asserts the rate remains 20% for USD and no HKD or JPY rate appears. This assertion was added within the existing draft case.
+- **TC-rg2 / US1-TC7 close route** - Reread the case with Walk 1’s shared starting-state fixture. The fixture says customer A and customer B each open `<listing_8 url>` and wait on that page for close; the case uses the same listing, close and winning state. This resolves the surface ambiguity on the existing collector lot-page route. The journey and modified requirement introduce no additional route or product decision.
 - Removed the duplicated `USD | 20% of winning bid` row from Walk 2. The five unchanged linked-card actual cases remain actual; changed premium cases remain draft. The prior `Reviewed` line was marked lapsed on 2026-10-14, preserving review history.
 
 ## Remaining gaps and overclaims

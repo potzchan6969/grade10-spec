@@ -14,7 +14,7 @@
 - customer A(card linked) leads <listing_8> with maximum <user A maximum>, and is signed in.
 - customer B(card linked) holds a lower maximum on <listing_8>.
 - <listing_8>'s close is under a minute away, and no further bid will be placed.
-- ❓ The spec does not identify the surface where the tester waits for `<listing_8>` to close.
+- customer A and customer B each open `<listing_8 url>` and wait there for the lot to close.
 - customer(signed in) placed the first accepted bid on <listing_10> with <the successful Visa>, and leads it at <locked maximum>.
 - customer has also linked <the other card>.
 - customer(signed in, card linked, no bid on <listing_11>) is on <listing_11 url>.
