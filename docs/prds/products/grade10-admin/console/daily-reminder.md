@@ -109,8 +109,9 @@ read them.
   set by the taller of Needs you and an opened group
 - 🚧 **Inner groups** - What's New and Still Waiting group their rows by
   product: Auction, then Store, Consignment, Inventory and Appointments, each
-  the operator can open. Each group shows as one line with its count until
-  its chevron opens it; opening one closes the other in that column
+  the operator can open. The first with rows, Auction first, starts opened;
+  the others show as one line with their count until their chevron opens
+  them, and opening one closes the other in that column
 - 🚧 **An opened group** - fills the rest of its column, never under about
   five and a half rows, and scrolls the rest inside itself, with the edge
   that has more beyond it faded
