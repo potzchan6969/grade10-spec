@@ -66,11 +66,11 @@ export const previewLot = {
   paymentDeadline: "24 Sep 2026, 21:30 GMT+8",
   /** The operator's reason for the winner when payment proof is returned. */
   proofReturnReason: "Amount does not match",
-  currentBid: "US$12,800",
+  currentBid: "US$101.00",
   /** Hammer / winning bid at close. */
-  winningBid: "US$12,800",
+  winningBid: "US$101.00",
   /** Order Total / Invoice total on a sent invoice (includes fees). */
-  orderTotal: "HK$124,028",
+  orderTotal: "HK$1,031.00",
   /** When payment was confirmed (winner's zone). */
   paidAt: "20 Sep 2026, 14:22 GMT+8",
   /** Card: brand + masked number. Bank transfer letters use `Bank Transfer` only. */
