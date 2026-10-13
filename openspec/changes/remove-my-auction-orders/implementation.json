@@ -75,5 +75,13 @@
       }
     ]
   },
-  "repositories": []
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "36964d9ac2c2452ae0d59abfaa7fcd8bf20eaddd",
+      "components": ["storybook"],
+      "verifiedBy": "htonyl",
+      "verification": "PR #1157 passed every required check on head 28908ee45cda1eee2f8051a6aba5511b95618c53 and merged as this commit. The public export regression, retained My Auctions story walk, shared UI suite and complete cart-picture lane pass. No grade10 application source or dependency update is required; its existing pin already contains the production removal."
+    }
+  ]
 }
