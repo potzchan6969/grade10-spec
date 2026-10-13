@@ -588,4 +588,3 @@ export const WithTheVault: Story = {
     expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
   },
 };
-
