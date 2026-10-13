@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
 } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
@@ -67,7 +68,9 @@ function KycCardPrototype({ state }: KycCardPrototypeProps) {
       </aside>
       <h1 className="text-3xl font-bold text-foreground">{identity.title}</h1>
       <Card className="max-w-md">
-        <CardDescription>{identity.description}</CardDescription>
+        <CardHeader>
+          <CardDescription>{identity.description}</CardDescription>
+        </CardHeader>
         <CardContent>
           <VStack gap="md">
             {state === "verified" ? (
