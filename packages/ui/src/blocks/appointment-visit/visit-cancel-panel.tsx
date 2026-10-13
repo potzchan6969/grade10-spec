@@ -121,10 +121,12 @@ function VisitCancelPanel({
             data-slot="visit-cancel-refund"
             data-tone={refund.tone}
           >
-            <CreditCard
+            <span
               aria-hidden
-              className={cn("mt-0.5 size-4 shrink-0", VISIT_INK_2)}
-            />
+              className={cn("mt-0.5 inline-flex shrink-0", VISIT_INK_2)}
+            >
+              <CreditCard size={16} />
+            </span>
             <span className="flex flex-col gap-0.5">
               <strong className="font-bold">{refund.title}</strong>
               <span>{refund.text}</span>
@@ -174,12 +176,17 @@ function Consequence({
   icon: Icon,
   children,
 }: {
-  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  icon: ComponentType<{ size?: number }>;
   children: ReactNode;
 }) {
   return (
     <li className="flex items-start gap-2.5">
-      <Icon aria-hidden className={cn("mt-0.5 size-4 shrink-0", VISIT_INK_2)} />
+      <span
+        aria-hidden
+        className={cn("mt-0.5 inline-flex shrink-0", VISIT_INK_2)}
+      >
+        <Icon size={16} />
+      </span>
       <span>{children}</span>
     </li>
   );

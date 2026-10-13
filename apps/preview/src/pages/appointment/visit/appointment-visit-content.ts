@@ -40,7 +40,7 @@ const VISIT_FACTS: readonly VisitFact[] = [
   { label: "When", value: "Thu 3 Sep, 10:15 to 10:45", sub: "Hong Kong time" },
   {
     label: "Where",
-    value: `Grade10 ${SHOP}`,
+    value: SHOP,
     sub: `${ADDRESS} · Lift to the 2nd floor`,
   },
   { label: "Service", value: SERVICE, sub: "30 min" },

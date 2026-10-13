@@ -21,7 +21,7 @@ const meta = {
     onChangeService: fn(),
     onChangeLocation: fn(),
     notes: [
-      "Grading fees from HK$[FEE] a card · pay at the counter",
+      "Grading fees are paid at the counter",
       "Bring the cards in sleeves.",
     ],
     footer: "You can change or cancel until your visit starts.",

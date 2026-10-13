@@ -363,7 +363,7 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
                     }}
                     shops={shops.map((one) => ({
                       id: one.id,
-                      name: one.name,
+                      name: String(one.name),
                       earliest: one.earliestAt.label.replace(/^today/, "Today"),
                     }))}
                   />
@@ -580,7 +580,9 @@ function After({
           className={`grid size-10 place-items-center rounded-full ${confirming ? "bg-muted text-(--gray-700)" : "bg-warning-muted text-(--yellow-700)"}`}
         >
           {confirming ? (
-            <CircleNotch className="animate-spin" size={20} />
+            <span aria-hidden className="inline-flex animate-spin">
+              <CircleNotch size={20} />
+            </span>
           ) : (
             <Warning size={20} />
           )}
@@ -623,7 +625,7 @@ function After({
       before={[
         "Bring the cards in sleeves.",
         `We hold your time until ${timeOf(slot.start + 15 * 60_000)}. Running late? Tell us from your visit page.`,
-        "Grading fees from HK$[FEE] a card · pay at the counter",
+        "Grading fees are paid at the counter",
       ]}
       confirmation={{
         answers: [

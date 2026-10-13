@@ -489,7 +489,9 @@ function FieldError({ id, message }: { id?: string; message: string }) {
       className="flex animate-in items-start gap-1.5 text-[13px] leading-[18px] text-destructive slide-in-from-top-1 duration-200"
       id={id}
     >
-      <WarningCircle aria-hidden className="mt-0.5 shrink-0" size={14} />
+      <span aria-hidden className="mt-0.5 inline-flex shrink-0">
+        <WarningCircle size={14} />
+      </span>
       {message}
     </span>
   );

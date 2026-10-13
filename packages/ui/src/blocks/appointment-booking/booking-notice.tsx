@@ -42,7 +42,9 @@ function BookingNotice({
           "@keyframes booking-shake{0%,100%{transform:none}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}"
         }
       </style>
-      <Warning aria-hidden className="mt-px shrink-0" size={20} />
+      <span aria-hidden className="mt-px inline-flex shrink-0">
+        <Warning size={20} />
+      </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-sm leading-5 font-bold tabular-nums">
           {title}

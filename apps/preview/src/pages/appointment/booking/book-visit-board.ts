@@ -26,7 +26,7 @@ const ME = {
   phone: "+85291234567",
 };
 
-const GRADE_FEE = "Grading fees from HK$[FEE] a card · pay at the counter";
+const GRADE_FEE = "Grading fees are paid at the counter";
 const SLEEVES = "Bring the cards in sleeves.";
 const VAULT_FEE = "Vault fees: [VAULT FEE]";
 const PHOTO_ID = "Bring a photo ID.";

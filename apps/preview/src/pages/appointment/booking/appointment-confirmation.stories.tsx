@@ -14,7 +14,7 @@ function AppointmentConfirmationPage({ paid = false }: { paid?: boolean }) {
         before={[
           "Bring the cards in sleeves.",
           "We hold your time until 15:15. Running late? Tell us from your visit page.",
-          "Grading fees from HK$[FEE] a card · pay at the counter",
+          "Grading fees are paid at the counter",
         ]}
         confirmation={{
           answers: [

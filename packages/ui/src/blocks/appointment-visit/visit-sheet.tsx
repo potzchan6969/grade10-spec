@@ -86,7 +86,7 @@ function VisitSheet({
                 />
               }
             >
-              <X aria-hidden className="size-5" />
+              <X aria-hidden size={20} />
             </DrawerClose>
           </div>
           <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-4 pt-3.5 pb-4">

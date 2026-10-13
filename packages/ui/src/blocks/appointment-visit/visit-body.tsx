@@ -176,10 +176,12 @@ function VisitBody({
                   className="flex items-start gap-2.5 text-sm leading-5"
                   key={line.id}
                 >
-                  <Check
+                  <span
                     aria-hidden
-                    className={cn("mt-0.5 size-4 shrink-0", VISIT_INK_2)}
-                  />
+                    className={cn("mt-0.5 inline-flex shrink-0", VISIT_INK_2)}
+                  >
+                    <Check size={16} />
+                  </span>
                   <span>{line.content}</span>
                 </li>
               ))}
@@ -255,7 +257,9 @@ function VisitNotice({
       data-tone={tint}
       role="note"
     >
-      <Icon aria-hidden className="mt-px size-[18px] shrink-0" />
+      <span aria-hidden className="mt-px inline-flex shrink-0">
+        <Icon size={18} />
+      </span>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         {notice.title ? (
           <strong className="text-[15px] leading-5 font-bold">
@@ -272,7 +276,7 @@ function VisitNotice({
             href={href}
           >
             {notice.link}
-            <CaretRight aria-hidden className="size-3.5" />
+            <CaretRight aria-hidden size={14} />
           </a>
         ) : null}
       </div>

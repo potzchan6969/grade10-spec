@@ -39,7 +39,7 @@ function VisitLinkOpensNothing({
           VISIT_INK_2,
         )}
       >
-        <LinkBreak className="size-6" />
+        <LinkBreak size={24} />
       </span>
       <div className="flex flex-col gap-2.5">
         <h1 className="m-0 text-2xl leading-[30px] font-bold tracking-[-0.01em]">

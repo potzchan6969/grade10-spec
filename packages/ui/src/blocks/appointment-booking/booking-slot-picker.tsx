@@ -241,7 +241,7 @@ function BookingSlotPicker({
           ) : (
             <>
               <div className="flex items-baseline justify-between gap-2">
-                <span className="text-[15px] leading-5 font-bold tabular-nums">
+                <span className="text-[15px] leading-5 font-bold">
                   {dayName}
                 </span>
                 {zone}

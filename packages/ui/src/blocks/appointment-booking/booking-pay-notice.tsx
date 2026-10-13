@@ -46,11 +46,9 @@ function BookingPayNotice({
         {amount}
       </span>
       <span className={cn("flex items-start gap-2 text-sm leading-5", INK_2)}>
-        <ArrowCounterClockwise
-          aria-hidden
-          className="mt-[3px] shrink-0"
-          size={14}
-        />
+        <span aria-hidden className="mt-[3px] inline-flex shrink-0">
+          <ArrowCounterClockwise size={14} />
+        </span>
         {refund}
       </span>
       <span className="text-[13px] leading-[18px] text-secondary-foreground">

@@ -46,7 +46,9 @@ function BookingActionBar({
           className="flex animate-in items-center gap-1.5 text-[13px] leading-[18px] text-destructive slide-in-from-top-1 duration-200"
           role="alert"
         >
-          <WarningCircle aria-hidden className="shrink-0" size={14} />
+          <span aria-hidden className="inline-flex shrink-0">
+            <WarningCircle size={14} />
+          </span>
           {error}
         </span>
       ) : null}
@@ -77,7 +79,9 @@ function BookingActionBar({
             type={primary.form ? "submit" : "button"}
           >
             {busy ? (
-              <CircleNotch aria-hidden className="animate-spin" size={16} />
+              <span aria-hidden className="inline-flex animate-spin">
+                <CircleNotch size={16} />
+              </span>
             ) : null}
             {primary.label}
           </button>

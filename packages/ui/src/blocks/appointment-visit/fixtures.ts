@@ -70,7 +70,7 @@ const VISIT_FACTS: readonly VisitFact[] = [
   },
   {
     label: "Where",
-    value: `Grade10 ${VISIT_SHOP}`,
+    value: VISIT_SHOP,
     sub: `${VISIT_ADDRESS} · Lift to the 2nd floor`,
   },
   { label: "Service", value: VISIT_SERVICE, sub: "30 min" },

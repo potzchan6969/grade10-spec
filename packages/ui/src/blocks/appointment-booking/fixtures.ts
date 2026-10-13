@@ -198,7 +198,7 @@ const BOARD_NOW_MS = Date.UTC(2026, 9, 15, 6, 20);
 const BOARD_TODAY = new Date(2026, 9, 15);
 const BOARD_MONTH = "2026-10";
 
-const GRADE_FEE = "Grading fees from HK$[FEE] a card · pay at the counter";
+const GRADE_FEE = "Grading fees are paid at the counter";
 const SLEEVES = "Bring the cards in sleeves.";
 const VAULT_FEE = "Vault fees: [VAULT FEE]";
 const PHOTO_ID = "Bring a photo ID.";

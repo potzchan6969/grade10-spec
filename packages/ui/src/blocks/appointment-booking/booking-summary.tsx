@@ -287,14 +287,15 @@ function BookingSummaryBar(props: BookingSummaryBarProps) {
             {line}
           </span>
         </span>
-        <CaretDown
+        <span
           aria-hidden
           className={cn(
-            "transition-transform duration-150",
+            "inline-flex transition-transform duration-150",
             open && "rotate-180",
           )}
-          size={16}
-        />
+        >
+          <CaretDown size={16} />
+        </span>
       </button>
       {open ? (
         <div

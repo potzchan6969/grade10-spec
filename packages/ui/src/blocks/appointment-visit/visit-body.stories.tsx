@@ -34,8 +34,9 @@ const meta = {
   decorators: [
     (Story) => (
       <div className="mx-auto w-full max-w-[390px]">
-        <Story />
+        {/* Mounted first, so a toast raised as the story mounts finds it. */}
         <Toast position="bottom-center" />
+        <Story />
       </div>
     ),
   ],

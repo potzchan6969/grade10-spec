@@ -117,7 +117,9 @@ function RowBody({ row }: { row: VisitListRow }) {
           {row.status}
         </Badge>
       </span>
-      <CaretRight aria-hidden className={cn("size-5 shrink-0", VISIT_INK_3)} />
+      <span aria-hidden className={cn("inline-flex shrink-0", VISIT_INK_3)}>
+        <CaretRight size={20} />
+      </span>
     </>
   );
 }
