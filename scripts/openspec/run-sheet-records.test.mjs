@@ -595,6 +595,7 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
           ...process.env,
           GOOGLE_ACCESS_TOKEN: "test-token",
           TCS_SHEET_ID: trial.spreadsheetId,
+          TCS_SHEET_SANDBOX_ID: "sandbox-sheet",
           MOCK_SHEETS_STATE: stateFile,
         },
         stdio: ["pipe", "pipe", "pipe"],
@@ -788,6 +789,52 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     state()
       .log.slice(before)
       .every((one) => one.method === "GET"),
+  );
+  const beforeSandbox = state().log.length;
+  assert.throws(
+    () =>
+      run(["--name", "sandbox-source", ...selected, "--source-ref", "HEAD"]),
+    /only for sandbox/,
+  );
+  assert.throws(
+    () =>
+      run([
+        "--name",
+        "sandbox-source",
+        ...selected,
+        "--sandbox",
+        "--source-ref",
+        "HEAD",
+        "--sheet",
+        trial.spreadsheetId,
+      ]),
+    /never production/,
+  );
+  assert.equal(state().log.length, beforeSandbox);
+  writeFileSync(file, SUITE.replace("An open lot", "A sandbox-only lot"));
+  git(root, ["add", file]);
+  git(root, ["commit", "-m", "test: unmerged sandbox source"]);
+  const sandboxSource = git(root, ["rev-parse", "HEAD"]);
+  const sandboxArgs = [
+    "--name",
+    "sandbox-source",
+    ...selected,
+    "--sandbox",
+    "--source-ref",
+    sandboxSource,
+  ];
+  const sandboxPreview = run([...sandboxArgs, "--dry-run"]);
+  const sandboxHash = /^Fingerprint: ([a-f0-9]+)$/m.exec(sandboxPreview)[1];
+  const sandboxOutput = run([...sandboxArgs, "--confirmed", sandboxHash]);
+  assert.match(sandboxOutput, /Sandbox:/);
+  assert.ok(sandboxOutput.includes(`Source commit: ${sandboxSource}`));
+  const sandboxTab = state().sheets.find((one) =>
+    one.properties.title.endsWith("-sandbox-source"),
+  ).properties.title;
+  assert.ok(
+    state()
+      .data[sandboxTab].flat()
+      .some((cell) => String(cell).includes("A sandbox-only lot")),
   );
 });
 

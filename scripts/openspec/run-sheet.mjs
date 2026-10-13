@@ -117,7 +117,8 @@ Flags:
   --confirmed <hash>  Fingerprint a human confirmed (required to print/finalize)
   --exclusions-file <path> JSON array of {id, reason} for intentional exclusions
   --record-output <path> Write the run manifest here (CI uploads an artifact)
-  --sha <sha>         Source revision for dry-run; real writes use latest main
+  --sha <sha>         Source revision for dry-run; production writes use latest main
+  --source-ref <ref>  Sandbox-only source revision for preview and printing
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID (or sandbox)
   --dry-run           Print what would be written and touch no network
   --help              Print this help and exit
@@ -140,6 +141,7 @@ function parseArgs(argv) {
     sandbox: false,
     overwrite: null,
     sha: null,
+    sourceRef: null,
     sheet: null,
     dryRun: false,
     finalize: null,
@@ -159,6 +161,7 @@ function parseArgs(argv) {
     "--scope": "scope",
     "--changed-since": "changedSince",
     "--sha": "sha",
+    "--source-ref": "sourceRef",
     "--sheet": "sheet",
     "--overwrite": "overwrite",
     "--finalize": "finalize",
@@ -830,6 +833,9 @@ if (args.dryRun && (args.finalize || args.reopen))
 if (args.sandbox && (args.finalize || args.reopen || args.copyRun))
   die("Run finalization and copy manifests are production-sheet operations");
 if (!args.name && !args.finalize && !args.reopen) die("--name is required");
+if (args.sourceRef && !args.sandbox)
+  die("--source-ref is only for sandbox runs");
+if (args.sourceRef && args.sha) die("Use --source-ref or --sha, not both");
 if (args.sha && !args.dryRun)
   die("--sha is only for dry-run; real runs use latest main");
 if (args.cases && args.changedSince)
@@ -847,7 +853,7 @@ if (
     "--copy-run supplies the selection; do not combine it with selection filters",
   );
 
-let sha = headSha(args.sha ?? "HEAD");
+let sha = headSha(args.sourceRef ?? args.sha ?? "HEAD");
 let candidates;
 let token;
 let sheets = [];
@@ -951,13 +957,22 @@ function exportRecord(record) {
 try {
   if (!args.dryRun) {
     args.sheet = resolveSpreadsheet(args);
+    if (
+      args.sourceRef &&
+      (!process.env.TCS_SHEET_SANDBOX_ID ||
+        args.sheet !== process.env.TCS_SHEET_SANDBOX_ID ||
+        args.sheet === process.env.TCS_SHEET_ID)
+    )
+      die(
+        "--source-ref must write to the configured sandbox sheet, never production",
+      );
     token = process.env.GOOGLE_ACCESS_TOKEN;
     if (!token)
       die(
         "no GOOGLE_ACCESS_TOKEN",
         "Dispatch run-sheet.yml; CI holds the credentials.",
       );
-    sha = refreshMain(ROOT);
+    sha = args.sourceRef ? headSha(args.sourceRef) : refreshMain(ROOT);
     candidates = candidatesAt(ROOT, sha);
     const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
     sheets = meta.sheets ?? [];
