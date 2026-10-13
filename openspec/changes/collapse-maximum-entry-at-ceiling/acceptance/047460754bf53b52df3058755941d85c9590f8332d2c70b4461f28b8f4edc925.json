@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "change": "collapse-maximum-entry-at-ceiling",
+  "baseline": "7e29ff61928b1a3578eb9c9e5b784babb571faea389057d807b0f2908e68e79d",
+  "fingerprint": "047460754bf53b52df3058755941d85c9590f8332d2c70b4461f28b8f4edc925",
+  "reviewedBy": "@tangconst",
+  "acceptedAt": "2026-10-13T05:42:11.911Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/auction-listing.md#custom-maximum",
+      "sha256": "f068f71593551e34e9692852c3382a1563a239436ccabf8762c479e7c6641704",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/decisions.md",
+      "sha256": "596969bdb8bf055a86d290fe5350a1dd27148db48a5bb59d4000548b608a33a7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/proposal.md",
+      "sha256": "3e3273a73b55cc9aefba9667c9b65a890c42caa87008ea497d38ff2ffb83aeff",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "62ed8feac0d1c68cd461f6f0748bf518b36bae15daf4abf20274ecca082e483c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "f3338c09cb202041c5c82518784281edb78376753d98b007f9268996014f94b2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "a5fcb00b22dba4a66db3abf803b097fb8a802805a2c4d67628350c7fbd76fcfb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/tech-design.md",
+      "sha256": "d4dd1ca80a2a521215d14fb451bf9eee798c33bb8d815c5eed4516ce81842f72",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/ui-design.md",
+      "sha256": "f0a75feeade1468becb410d72ce681fde82a37f70f0218713c8a1aa76f4e88a7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "b63eb0a6de439c24c9ee4d68aa57001397dc33c89963807d744401da75908bd6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "558b1dfde9919ebefc6b38ac98b14bb7d1b1c364a0ec8367f35019c640fccab9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "a5fcb00b22dba4a66db3abf803b097fb8a802805a2c4d67628350c7fbd76fcfb",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/collapse-maximum-entry-at-ceiling/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A leader's typed raise floor is max plus 100 minor units",
+        "Requirement: Quick-bid chips step the listing increment",
+        "Requirement: The bid panel offers no entry when no amount is legal"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

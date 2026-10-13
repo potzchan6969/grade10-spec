@@ -33,6 +33,10 @@ const COPY: ListingQuickMaximumBidActionsCopy = {
   amountAboveCurrent: "{amount} vs current",
   amountAboveMaximum: "{amount} vs max",
   linkACardToBid: "Link a card to bid",
+  maximumAtCeiling: "This is the highest maximum this auction accepts.",
+  biddingAtCeiling:
+    "Bidding has reached {amount}, the highest this auction accepts.",
+  ceilingChip: "Limit",
 };
 
 type CeilingCase = {
@@ -74,6 +78,11 @@ const BELOW_CEILING_CASES = [
 type RenderOptions = CeilingCase & {
   standing?: ListingAuctionBidView["standing"];
   viewerMaximumMinor?: number;
+  currentBidMinor?: number;
+  minBidMinor?: number;
+  incrementMinor?: number;
+  hasBids?: boolean;
+  amountEntryLocked?: boolean;
 };
 
 const roots: Array<{ root: Root; container: HTMLDivElement }> = [];
@@ -90,6 +99,10 @@ function baseView({
   ceilingMinor,
   standing = "none",
   viewerMaximumMinor,
+  currentBidMinor = 100,
+  minBidMinor = 100,
+  incrementMinor = 100,
+  hasBids = true,
 }: RenderOptions): ListingAuctionBidView & { ceilingMinor: number } {
   return {
     currency,
@@ -98,11 +111,11 @@ function baseView({
     live: true,
     opens: false,
     closed: false,
-    hasBids: true,
+    hasBids,
     isUnsold: false,
     showBidActions: true,
     priceLabel: "Current Bid",
-    currentBidMinor: 100,
+    currentBidMinor,
     bidCount: 1,
     bidCountLabel: "1 bid",
     countdown: "5m",
@@ -113,13 +126,13 @@ function baseView({
     deadlineAtMs: null,
     standing,
     viewerMaximumMinor,
-    minBidMinor: 100,
-    incrementMinor: 100,
+    minBidMinor,
+    incrementMinor,
     suggestedMaxMinor: 500,
   };
 }
 
-function mount(options: RenderOptions) {
+function mountView(options: RenderOptions) {
   const container = document.createElement("div");
   document.body.appendChild(container);
   const root = createRoot(container);
@@ -129,6 +142,7 @@ function mount(options: RenderOptions) {
   act(() => {
     root.render(
       createElement(ListingQuickMaximumBidActions, {
+        amountEntryLocked: options.amountEntryLocked,
         copy: COPY,
         locale: "en",
         onCommitMaximum,
@@ -137,6 +151,11 @@ function mount(options: RenderOptions) {
     );
   });
 
+  return { container, onCommitMaximum };
+}
+
+function mount(options: RenderOptions) {
+  const { container, onCommitMaximum } = mountView(options);
   const field = within(container).getByRole<HTMLInputElement>("spinbutton", {
     name: /min\./i,
   });
@@ -321,5 +340,125 @@ describe("ListingQuickMaximumBidActions currency ceiling", () => {
     expect(field.value).toBe("80000000");
     expectNoFieldMessage(container, field);
     expect(within(container).queryByRole("alert")).toBeNull();
+  });
+});
+
+describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
+  function expectNoEntry(container: HTMLDivElement) {
+    expect(within(container).queryByRole("spinbutton")).toBeNull();
+    expect(
+      within(container).queryByRole("button", {
+        name: /maximum to|bid now at|maximum \$/i,
+      }),
+    ).toBeNull();
+    expect(within(container).queryByRole("group")).toBeNull();
+  }
+
+  it("collapses the entry group to a status row when the viewer's maximum is the ceiling (shared-ui-auction-listing-SC-64)", () => {
+    const { container } = mountView({
+      ...CASES[1],
+      standing: "leading-max",
+      viewerMaximumMinor: 8_000_000_000,
+      currentBidMinor: 120_000,
+    });
+
+    expectNoEntry(container);
+    expect(within(container).getByText("Max: HK$80,000,000")).not.toBeNull();
+    expect(
+      within(container).getByText(
+        "This is the highest maximum this auction accepts.",
+      ),
+    ).not.toBeNull();
+    expect(within(container).queryByText("We bid only as needed.")).toBeNull();
+  });
+
+  it("collapses when the minimum next bid passes the ceiling while the maximum sits below it (shared-ui-auction-listing-SC-63)", () => {
+    const { container } = mountView({
+      ...CASES[1],
+      standing: "leading-max",
+      viewerMaximumMinor: 7_999_995_000,
+      currentBidMinor: 7_999_995_000,
+      minBidMinor: 8_000_005_000,
+      incrementMinor: 10_000,
+    });
+
+    expectNoEntry(container);
+    expect(within(container).getByText("Max: HK$79,999,950")).not.toBeNull();
+    expect(
+      within(container).getByText(
+        "This is the highest maximum this auction accepts.",
+      ),
+    ).not.toBeNull();
+  });
+
+  it("collapses to the ceiling amount for a viewer holding no maximum (shared-ui-auction-listing-SC-65)", () => {
+    const { container } = mountView({
+      ...CASES[1],
+      standing: "none",
+      currentBidMinor: 7_999_995_000,
+      minBidMinor: 8_000_005_000,
+      incrementMinor: 10_000,
+    });
+
+    expectNoEntry(container);
+    expect(within(container).getByText("HK$80,000,000")).not.toBeNull();
+    expect(
+      within(container).getByText(
+        "Bidding has reached HK$80,000,000, the highest this auction accepts.",
+      ),
+    ).not.toBeNull();
+  });
+
+  it("renders the collapse instead of the needs-card lock (shared-ui-auction-listing-SC-66)", () => {
+    const { container } = mountView({
+      ...CASES[1],
+      standing: "leading-max",
+      viewerMaximumMinor: 8_000_000_000,
+      amountEntryLocked: true,
+    });
+
+    expectNoEntry(container);
+    expect(
+      within(container).queryByRole("button", { name: /link a card/i }),
+    ).toBeNull();
+    expect(within(container).getByText("Max: HK$80,000,000")).not.toBeNull();
+  });
+
+  it("clamps a chip above the ceiling and merges chips onto one amount (shared-ui-auction-listing-SC-61, shared-ui-auction-listing-SC-62)", () => {
+    const { container } = mountView({
+      ...CASES[1],
+      standing: "leading-max",
+      viewerMaximumMinor: 7_999_970_000,
+      currentBidMinor: 120_000,
+      incrementMinor: 10_000,
+    });
+
+    const group = within(container).getByRole("group");
+    const chips = within(group).getAllByRole("button");
+    expect(chips.map((chip) => chip.textContent)).toEqual([
+      expect.stringContaining("HK$79,999,800"),
+      expect.stringContaining("HK$79,999,900"),
+      expect.stringContaining("HK$80,000,000"),
+    ]);
+    expect(chips[2]?.textContent).toContain("Limit");
+
+    act(() => chips[2]?.click());
+    const commitButton = within(container).getByRole("button", {
+      name: /maximum to/i,
+    });
+    expect(commitButton.textContent).toContain("80,000,000");
+
+    const { container: merged } = mountView({
+      ...CASES[1],
+      standing: "leading-max",
+      viewerMaximumMinor: 7_999_990_000,
+      currentBidMinor: 120_000,
+      incrementMinor: 10_000,
+    });
+    const mergedChips = within(within(merged).getByRole("group")).getAllByRole(
+      "button",
+    );
+    expect(mergedChips).toHaveLength(1);
+    expect(mergedChips[0]?.textContent).toContain("HK$80,000,000");
   });
 });

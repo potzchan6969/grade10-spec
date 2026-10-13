@@ -31,57 +31,66 @@ export type MaximumFloor = {
   reason: MaximumFloorReason;
 };
 
-/** Lowest valid committed maximum, with the rule that drives the helper caption. */
+/**
+ * Lowest valid committed maximum, with the rule that drives the helper
+ * caption. Returns null when the floor passes the ceiling: no legal amount
+ * exists and the panel offers no entry.
+ */
 export function resolveMaximumFloor(input: {
   minBidMinor: number;
   incrementMinor: number;
   viewerMaximumMinor?: number;
   standing: ListingAuctionStanding;
   currentBidMinor: number;
-}): MaximumFloor {
+  /** Consumer-supplied listing ceiling in minor units. */
+  ceilingMinor: number;
+}): MaximumFloor | null {
   const {
     minBidMinor,
     incrementMinor,
     viewerMaximumMinor,
     standing,
     currentBidMinor,
+    ceilingMinor,
   } = input;
 
-  if (viewerMaximumMinor == null) {
-    return { floorMinor: minBidMinor, reason: "floor-bid" };
-  }
+  let floorMinor = minBidMinor;
+  let reason: MaximumFloorReason = "floor-bid";
 
-  if (standing === "outbid") {
-    return { floorMinor: minBidMinor, reason: "floor-bid" };
-  }
-
-  if (standing === "leading-max") {
+  if (viewerMaximumMinor != null && standing === "leading-max") {
     const atCap = currentBidMinor >= viewerMaximumMinor;
     if (atCap) {
       const incrementRaiseFloor = viewerMaximumMinor + incrementMinor;
-      const floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
-      const reason =
+      floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
+      reason =
         floorMinor === minBidMinor && minBidMinor > incrementRaiseFloor
           ? "floor-bid"
           : "leading-increment";
-      return { floorMinor, reason };
-    }
-    return {
-      floorMinor: Math.max(
+    } else {
+      floorMinor = Math.max(
         minBidMinor,
         viewerMaximumMinor + MINIMUM_MAXIMUM_RAISE_MINOR,
-      ),
-      reason: "leading-nudge",
-    };
+      );
+      reason = "leading-nudge";
+    }
   }
 
-  return { floorMinor: minBidMinor, reason: "floor-bid" };
+  if (floorMinor > ceilingMinor) return null;
+  return { floorMinor, reason };
 }
+
+export type QuickMaximumPresetAmount = {
+  amountMinor: number;
+  /** The stepped amount exceeded the ceiling and is offered at it. */
+  clamped: boolean;
+};
 
 /**
  * Quick-raise preset amount. 1× / 2× / 4× the listing increment on the
  * committed maximum when leading, or on the current bid otherwise. These
  * chips are not the raise floor — a leader's minimum remains max + $1.
+ * A stepped amount above the ceiling is offered at the ceiling, flagged
+ * `clamped` so the caller can caption it as the limit.
  */
 export function quickMaximumPresetAmount(input: {
   multiples: number;
@@ -91,7 +100,8 @@ export function quickMaximumPresetAmount(input: {
   incrementMinor: number;
   currentBidMinor: number;
   viewerMaximumMinor?: number;
-}): number | null {
+  ceilingMinor: number;
+}): QuickMaximumPresetAmount | null {
   const {
     multiples,
     isLeadingWithMaximum,
@@ -100,16 +110,20 @@ export function quickMaximumPresetAmount(input: {
     incrementMinor,
     currentBidMinor,
     viewerMaximumMinor,
+    ceilingMinor,
   } = input;
 
-  const amountMinor = isLeadingWithMaximum
+  const stepped = isLeadingWithMaximum
     ? (viewerMaximumMinor ?? floorMaximumMinor) + incrementMinor * multiples
     : multiples === 1 && !hasBids
       ? floorMaximumMinor
       : currentBidMinor + incrementMinor * multiples;
 
-  if (amountMinor < floorMaximumMinor) return null;
-  return amountMinor;
+  if (stepped < floorMaximumMinor) return null;
+  if (stepped > ceilingMinor) {
+    return { amountMinor: ceilingMinor, clamped: true };
+  }
+  return { amountMinor: stepped, clamped: false };
 }
 
 export type MinimumMaximumCaptionCopy = {
