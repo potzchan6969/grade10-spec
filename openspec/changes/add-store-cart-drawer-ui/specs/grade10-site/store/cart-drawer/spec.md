@@ -1,8 +1,8 @@
 ## Purpose
 
-The Grade10 Store cart drawer lets a collector review and edit the current cart
-without leaving the page they are on, then continue through an existing site
-address.
+The Grade10 Store cart drawer lets a collector recognise the products in the
+current reviewed cart without leaving the page. It lets them review and edit
+that cart, then continue through an existing site address.
 
 ## Feature set
 
