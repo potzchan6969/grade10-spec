@@ -27,7 +27,7 @@
 - [ ] 4.2 Add `StoreItemSlabs` and its types and `getStoreSlabsService()` to `@grade10/inventory-contracts/items`; export the entrypoint from `apps/backend/grade10/inventory`
 - [ ] 4.3 Verify: the inventory backend's tests and typecheck
 
-## 5. Shared store pricing and lanes (grade10)
+## 5. Shared store pricing and lanes (grade10) (owner: @ecchochan)
 
 - [ ] 5.1 Tests, in their own commit before the code: the moved `pricedVariant`, `sellableVariant` and `siteSaleOf` answer as before from `@grade10/store-contracts`; `readSiteDiscounts({ fresh: true })` reads the shop past the memo and answers a failed read as a failure; `siteGates` answers each lane's table from `@grade10/app-env`
 - [ ] 5.2 Move `sellableVariant`, `pricedVariant` and `siteSaleOf` into `@grade10/store-contracts`; `store-frontend` imports them
