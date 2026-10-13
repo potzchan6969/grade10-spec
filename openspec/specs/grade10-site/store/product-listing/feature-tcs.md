@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review · 0/38
+**Status:** pending-review · 0/36
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-listing-US1: Collector opens the listing at its own address
@@ -1121,14 +1121,14 @@ end.
 
 ---
 
-## grade10-site-store-product-listing-US12: Collector signs in to add from the listing
+## grade10-site-store-product-listing-US12: Collector adds from the listing without signing in
 
 **As a** signed-out collector on the browse listing,
-**I want** Add to cart to open sign-in instead of building a guest cart,
-**so that** I only hold lines I can take to members-only checkout.
+**I want** Add to cart to put the line in a cart this browser keeps,
+**so that** I can buy without an account, and keep the line if I sign in.
 
-<!-- trace:case id=g10.store-product-listing.TC-43d rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
-### grade10-site-store-product-listing-US12-TC1-1: Signed-out Add to cart opens sign-in
+<!-- trace:case id=g10.store-product-listing.TC-43d rev=2 covers=g10.store-product-listing.SC-dhn -->
+### grade10-site-store-product-listing-US12-TC1-2: Signed-out Add to cart adds to this browser's cart
 
 **Classification:**
 
@@ -1150,23 +1150,54 @@ end.
 
 **Steps:**
 
-1. Note the cart line count for <card_1>.
-2. Activate Add to cart on <card_1>.
-3. Check the dialog and the cart.
+1. Activate Add to cart on <card_1>.
+2. Check for a sign-in dialog.
+3. Open Cart.
 
 **Expected Results:**
 
-* The sign-in dialog opens over the listing.
-* No cart gains a line for <card_1>.
+* Step 2 finds no sign-in dialog.
+* Step 3 shows <card_1> at quantity 1.
 
-<!-- trace:case id=g10.store-product-listing.TC-1rh rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
-### grade10-site-store-product-listing-US12-TC2-1: Dismissing sign-in adds nothing
+<!-- trace:case id=g10.store-product-listing.TC-d3y rev=2 covers=g10.store-product-listing.SC-9gl -->
+### grade10-site-store-product-listing-US12-TC3-2: Signing in keeps the listing's add
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
 * **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-listing-US-12
+
+**Pre-conditions:**
+
+* customer is signed out and is on <grade10 browse listing url>.
+* This browser's cart holds <card_1>, added from the listing.
+* customer's member cart holds no lines.
+
+**Steps:**
+
+1. Sign in.
+2. Open Cart.
+
+**Expected Results:**
+
+* The member's cart holds <card_1>.
+
+<!-- trace:case id=g10.store-product-listing.TC-1rh rev=2 covers=none -->
+### grade10-site-store-product-listing-US12-TC2-2: Dismissing sign-in adds nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1191,44 +1222,6 @@ end.
 * customer remains signed out on the listing.
 * The cart is unchanged for <card_1>.
 
-<!-- trace:case id=g10.store-product-listing.TC-d3y rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
-### grade10-site-store-product-listing-US12-TC3-1: Sign-in on the listing completes the add
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-listing-US-12
-
-**Pre-conditions:**
-
-* customer is signed out and is on <grade10 browse listing url>.
-* Sign-in was opened from Add to cart on <card_1> for quantity <qty_1>.
-* Sign-in can complete without leaving the listing.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <qty_1> | 1 |
-
-**Steps:**
-
-1. Complete sign-in successfully while remaining on the listing.
-2. Check the sign-in dialog and the cart.
-
-**Expected Results:**
-
-* The sign-in dialog is closed.
-* The signed-in member cart holds <card_1> at <qty_1>.
-
 ---
 
 ## grade10-site-store-product-listing-US13: Collector sees why sign-in is asked when adding from the listing
@@ -1237,14 +1230,14 @@ end.
 **I want** the sign-in dialog to say I am signing in to add to cart,
 **so that** I know why the shop stopped the add.
 
-<!-- trace:case id=g10.store-product-listing.TC-v56 rev=1 covers=g10.store-product-listing.SC-gj6 -->
-### grade10-site-store-product-listing-US13-TC1-1: Add to cart sign-in title names why
+<!-- trace:case id=g10.store-product-listing.TC-v56 rev=2 covers=none -->
+### grade10-site-store-product-listing-US13-TC1-2: Add to cart sign-in title names why
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression

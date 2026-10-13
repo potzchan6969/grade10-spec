@@ -578,67 +578,30 @@ word.
 - **THEN** the listing says twelve cards
 - **AND** the listing lists twelve cards as they read to the end of it
 
-### Requirement: Signed-out Add to cart opens sign-in
+### Requirement: Signed-out Add to cart adds to the cart this browser holds
 
 When a collector is signed out, activating Add to cart on a listing card that
-offers a cart control SHALL open the site's sign-in dialog and SHALL NOT add
-a line to any cart. There is no guest cart from this control.
+offers a cart control SHALL add the line to the cart this browser holds and
+SHALL NOT ask for sign-in. When the collector signs in, the lines this browser
+holds SHALL move into the signed-in member's cart.
 
-When the collector dismisses the dialog without signing in, they SHALL remain
-signed out on the listing, and the cart SHALL be unchanged.
-
-When sign-in succeeds and the collector remains on the listing with the same
-intended product and quantity, the listing SHALL complete that add into the
-signed-in member cart. When sign-in takes the collector away from the listing,
-or the intended product or quantity is no longer available, the listing SHALL
-NOT invent a later add.
-
-<!-- trace:scenario id=g10.store-product-listing.SC-dhn rev=1 -->
-#### Scenario: grade10-site-store-product-listing-SC-44 - Signed-out Add to cart opens sign-in
-**Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
+<!-- trace:scenario id=g10.store-product-listing.SC-dhn rev=2 -->
+#### Scenario: grade10-site-store-product-listing-SC-44 - Signed-out Add to cart adds to this browser's cart
+**Serves:** grade10-site-store-product-listing-US-12 - Collector adds from the listing without signing in
 
 - **GIVEN** a signed-out collector on the browse listing, on a card that offers
   a cart control
 - **WHEN** they activate Add to cart
-- **THEN** the sign-in dialog opens over the listing
-- **AND** no cart gains a line for that card
+- **THEN** the cart this browser holds gains a line for that card
+- **AND** no sign-in dialog opens
 
-<!-- trace:scenario id=g10.store-product-listing.SC-xyt rev=1 -->
-#### Scenario: grade10-site-store-product-listing-SC-45 - Dismissing sign-in adds nothing
-**Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
+<!-- trace:scenario id=g10.store-product-listing.SC-9gl rev=2 -->
+#### Scenario: grade10-site-store-product-listing-SC-46 - Signing in keeps the listing's add
+**Serves:** grade10-site-store-product-listing-US-12 - Collector adds from the listing without signing in
 
-- **GIVEN** a signed-out collector who opened sign-in from Add to cart on the
-  listing
-- **WHEN** they dismiss the dialog without signing in
-- **THEN** they remain signed out on the listing
-- **AND** the cart is unchanged
-
-<!-- trace:scenario id=g10.store-product-listing.SC-9gl rev=1 -->
-#### Scenario: grade10-site-store-product-listing-SC-46 - Sign-in on the listing completes the add
-**Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
-
-- **GIVEN** a signed-out collector who opened sign-in from Add to cart for a
-  given card and quantity on the listing
-- **WHEN** they sign in successfully and remain on the listing with that same
-  intended card and quantity
-- **THEN** the signed-in member cart holds that add
-- **AND** the sign-in dialog is closed
-
-### Requirement: Add to cart sign-in title names why
-
-When a signed-out collector opens the sign-in dialog from Add to cart on a
-listing card that offers a cart control, the dialog title SHALL be
-**Sign In to Add to Cart**. The listing SHALL pass that wording through the
-sign-in surface's consumer-owned title copy.
-
-<!-- trace:scenario id=g10.store-product-listing.SC-gj6 rev=1 -->
-#### Scenario: grade10-site-store-product-listing-SC-47 - Add to cart sign-in title names why
-**Serves:** grade10-site-store-product-listing-US-13 - Collector sees why sign-in is asked when adding from the listing
-
-- **GIVEN** a signed-out collector on the browse listing, on a card that offers
-  a cart control
-- **WHEN** they activate Add to cart and the sign-in dialog opens
-- **THEN** the dialog title is **Sign In to Add to Cart**
+- **GIVEN** a signed-out collector who added a card from the listing
+- **WHEN** they sign in
+- **THEN** the signed-in member's cart holds that card
 
 ### Requirement: A card on the listing opens its own product page
 

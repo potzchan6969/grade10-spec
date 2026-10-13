@@ -47,10 +47,10 @@ none marked when no item owns it,
 ### grade10-site-site-page-shell-US-06: Collector opens their cart from the header
 
 **As a** collector,
-**I want** the Cart control to take me to my own cart, signing me in first when
-I am not,
-**so that** the cart I open is the one holding what I picked, rather than an
-empty room, from any surface once Store answers the cart drawer.
+**I want** the Cart control to open the cart holding what I picked, whether or
+not I am signed in,
+**so that** I can review it from any surface once Store answers the cart
+drawer.
 
 ### grade10-site-site-page-shell-US-07: Collector opens Help from the header
 
@@ -62,6 +62,6 @@ auction-only or full primary nav.
 
 ### grade10-site-site-page-shell-US-08: Collector sees the cart count without opening the drawer
 
-**As a** signed-in collector,
+**As a** collector,
 **I want** the header to show the same active-line count as my cart drawer as my cart changes,
 **so that** I can see how many active lines I hold from any surface without opening the drawer.
