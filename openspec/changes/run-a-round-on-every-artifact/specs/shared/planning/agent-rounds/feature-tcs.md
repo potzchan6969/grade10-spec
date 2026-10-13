@@ -1,6 +1,6 @@
 # shared/planning/agent-rounds Test Cases
 
-**Status:** pending-review · 0/79
+**Status:** pending-review · 0/81
 **Drafts styled:** 2026-09-20, tcs-rules r3.0
 **Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-25, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-109, shared-planning-agent-rounds-SC-110, shared-planning-agent-rounds-SC-111, shared-planning-agent-rounds-SC-112, shared-planning-agent-rounds-SC-113, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
 
@@ -2805,18 +2805,6 @@ Runs once per row of **Test data**.
 
 ---
 
-## Settled
-
-2026-10-05 product revision (`Q112` to `Q114`), revised 2026-10-06: the tech PIC is retired; Dev writes the tech design in the planning run, the engineer who will build the change challenges it before the plan is accepted, and a question the tech design cannot settle is a Raised row, never a dated wait. The questions its blind passes asked were already answered:
-
-- The engineer who will build the change reads and challenges the tech design's summary in the change's thread, where every round's summary and questions arrive and where the agent answers a challenge; a terminal runs the same round - the page's Round, step 5, and the requirement that a remark settles a question asked, with `Q112`.
-- A Raised row lands as a numbered decisions row, answered in the thread like any other, `Q<n>: <answer>` or `Q<n>` alone; acceptance is `pnpm run spec:accept`, refused while a row is open, and that refusal is `shared/planning/change-stages`' own - `Q10`, `Q113`, and `stage-changes-and-notify-hands`' `Q80`.
-- The summary does not state that the requirements and the suite are whole: the human who accepts the plan judges that by reading them, and the summary carries the perspectives, the findings that stood and each question with its recommendation - `Q112`, `Q9` and the round's one-reply rule.
-- The designer's dated wait for a frame nobody drew is written by the round drafting `ui-design.md`, and a behind artifact holds it no more than a tick - the requirement that a draft waits for what only its hand can give, `Q58` and `Q5`.
-- The engineer is told to challenge the tech design by the Planned Your turn message they already get, before acceptance, with no new turn or message - `Q116`, with `stage-changes-and-notify-hands`' `Q95`.
-- The product manager or the named owner accepts the plan, the Change Stages page's Stages row 5; a case names them as the human who accepts it - `Q116`.
-- The product manager answers a Raised row about a mechanism the tech design cannot settle, with the engineer - `Q116`, with `stage-changes-and-notify-hands`' `Q97`.
-
 <!-- trace:case id=g10.shared-agent-rounds.TC-b7s rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC11-1: The change page mirrors the thread and says what the hands are told
 
@@ -2853,22 +2841,6 @@ Runs once per row of **Test data**.
 
 ---
 
-## Reconciliation
-
-Run: 2026-10-06, rerun on the revised anchors (`Q112` to `Q115`): QA1, reading the isolated input the 2026-09-19 line names with this section stripped, revised `US3-TC1-1` to `US3-TC4-1` onto the journey renamed to the engineer who will build the change, added `US8-TC7-1` for a failed run-sheet row, and backticked the glyphs in `US2-TC7-1` and `US4-TC4-1`; Dev, without reading them, moved `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25`, `shared-planning-agent-rounds-SC-31` and `shared-planning-agent-rounds-SC-108` to the engineer, put the cases before the tech design in `shared-planning-agent-rounds-SC-71` and dropped the tech design from the cases' upstream, and wrote tasks 11.4 and 11.5. QA2 joined the two on anchors, folded `shared-planning-agent-rounds-SC-61a` with task 11.6, and landed QA1's three questions on `Q116`; the dispositions are marked 2026-10-06 below. No `<v>` moved: every case touched is a draft no review has read and no `trace:case` marker carries, so a rewrite is a restyle, not a behaviour change against a reviewed case.
-
-Run: 2026-10-05, revision pass for `Q112` to `Q114`: QA1 revised `US3-TC1-1` to `US3-TC4-1` over the renamed journey, recast `US3-TC4-1` from the tech PIC's dated wait to a Raised row holding acceptance, and moved `US4-TC13-1` and `US5-TC7-1` off the retired role; Dev, without reading them, revised the journey lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25` and `shared-planning-agent-rounds-SC-31`, retired shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) with the requirement that wrote the wait, and wrote `shared-planning-agent-rounds-SC-108` under task group 11. QA2 joined the two on anchors; the dispositions are marked 2026-10-05 below, and the challenger they named moved to the engineer on 2026-10-06.
-
-Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row, and widened its table on the readers' verdicts to the rows `main` holds, the walk on an earlier group, the whole read before the last group and the capability's durable journeys.
-
-Run: 2026-09-20, fix pass on the overlap rule: `shared-planning-agent-rounds-SC-80` moved to the requirement that opens a change and now serves `shared-planning-agent-rounds-US-01`, so `US7-TC4-1` moved with it as `US1-TC10-1`, tracing that journey; its expected results name the held row written in the overlapped change's `decisions.md`.
-
-Run: 2026-09-20, later that day: the wake's tests landed, so `US5-TC17-1` is automated again and names them; `US4-TC9-1` stays manual for its thread leg and names the landing's own test.
-
-Run: 2026-09-20, amendment pass over the amended requirements and `decisions.md`'s `Q52` to `Q63`, the questions the runner and the held rows settled. Wrote `US4-TC12-1` and `US4-TC13-1` for the row the round decides and the reply that overturns it; recast `US4-TC1-1` onto the held row, `US1-TC7-1` onto the cases drawn from the anchors, `US2-TC8-1` onto the writable set and a `main` that moved under the run, and `US9-TC10-1` onto the Perspectives column; named the actor and the arrival on `US4-TC10-1`, `US4-TC11-1`, `US5-TC15-1`, `US5-TC16-1` and `US5-TC17-1`, and the layer each is checked on; moved `US4-TC9-1` and `US5-TC17-1` back to manual until the tests that decide them land; dropped `US5-TC18-1`, whose scenario is out of suite above.
-
-Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Agent Rounds and Change Stages pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
-
 <!-- trace:case id=g10.shared-agent-rounds.TC-en7 rev=1 covers=g10.shared-agent-rounds.SC-14t,g10.shared-agent-rounds.SC-f9e,g10.shared-agent-rounds.SC-m18 -->
 ### shared-planning-agent-rounds-US9-TC12-1: From the day the kept skills go, a change worked outside the round is refused
 
@@ -2903,6 +2875,34 @@ Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Fe
 
 * The check refuses <change created on that day>, naming the ticked group.
 * It does not refuse <change created the day before>.
+
+## Settled
+
+2026-10-05 product revision (`Q112` to `Q114`), revised 2026-10-06: the tech PIC is retired; Dev writes the tech design in the planning run, the engineer who will build the change challenges it before the plan is accepted, and a question the tech design cannot settle is a Raised row, never a dated wait. The questions its blind passes asked were already answered:
+
+- The engineer who will build the change reads and challenges the tech design's summary in the change's thread, where every round's summary and questions arrive and where the agent answers a challenge; a terminal runs the same round - the page's Round, step 5, and the requirement that a remark settles a question asked, with `Q112`.
+- A Raised row lands as a numbered decisions row, answered in the thread like any other, `Q<n>: <answer>` or `Q<n>` alone; acceptance is `pnpm run spec:accept`, refused while a row is open, and that refusal is `shared/planning/change-stages`' own - `Q10`, `Q113`, and `stage-changes-and-notify-hands`' `Q80`.
+- The summary does not state that the requirements and the suite are whole: the human who accepts the plan judges that by reading them, and the summary carries the perspectives, the findings that stood and each question with its recommendation - `Q112`, `Q9` and the round's one-reply rule.
+- The designer's dated wait for a frame nobody drew is written by the round drafting `ui-design.md`, and a behind artifact holds it no more than a tick - the requirement that a draft waits for what only its hand can give, `Q58` and `Q5`.
+- The engineer is told to challenge the tech design by the Planned Your turn message they already get, before acceptance, with no new turn or message - `Q116`, with `stage-changes-and-notify-hands`' `Q95`.
+- The product manager or the named owner accepts the plan, the Change Stages page's Stages row 5; a case names them as the human who accepts it - `Q116`.
+- The product manager answers a Raised row about a mechanism the tech design cannot settle, with the engineer - `Q116`, with `stage-changes-and-notify-hands`' `Q97`.
+
+## Reconciliation
+
+Run: 2026-10-06, rerun on the revised anchors (`Q112` to `Q115`): QA1, reading the isolated input the 2026-09-19 line names with this section stripped, revised `US3-TC1-1` to `US3-TC4-1` onto the journey renamed to the engineer who will build the change, added `US8-TC7-1` for a failed run-sheet row, and backticked the glyphs in `US2-TC7-1` and `US4-TC4-1`; Dev, without reading them, moved `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25`, `shared-planning-agent-rounds-SC-31` and `shared-planning-agent-rounds-SC-108` to the engineer, put the cases before the tech design in `shared-planning-agent-rounds-SC-71` and dropped the tech design from the cases' upstream, and wrote tasks 11.4 and 11.5. QA2 joined the two on anchors, folded `shared-planning-agent-rounds-SC-61a` with task 11.6, and landed QA1's three questions on `Q116`; the dispositions are marked 2026-10-06 below. No `<v>` moved: every case touched is a draft no review has read and no `trace:case` marker carries, so a rewrite is a restyle, not a behaviour change against a reviewed case.
+
+Run: 2026-10-05, revision pass for `Q112` to `Q114`: QA1 revised `US3-TC1-1` to `US3-TC4-1` over the renamed journey, recast `US3-TC4-1` from the tech PIC's dated wait to a Raised row holding acceptance, and moved `US4-TC13-1` and `US5-TC7-1` off the retired role; Dev, without reading them, revised the journey lines of `shared-planning-agent-rounds-SC-03`, `shared-planning-agent-rounds-SC-13`, `shared-planning-agent-rounds-SC-25` and `shared-planning-agent-rounds-SC-31`, retired shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) with the requirement that wrote the wait, and wrote `shared-planning-agent-rounds-SC-108` under task group 11. QA2 joined the two on anchors; the dispositions are marked 2026-10-05 below, and the challenger they named moved to the engineer on 2026-10-06.
+
+Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row, and widened its table on the readers' verdicts to the rows `main` holds, the walk on an earlier group, the whole read before the last group and the capability's durable journeys.
+
+Run: 2026-09-20, fix pass on the overlap rule: `shared-planning-agent-rounds-SC-80` moved to the requirement that opens a change and now serves `shared-planning-agent-rounds-US-01`, so `US7-TC4-1` moved with it as `US1-TC10-1`, tracing that journey; its expected results name the held row written in the overlapped change's `decisions.md`.
+
+Run: 2026-09-20, later that day: the wake's tests landed, so `US5-TC17-1` is automated again and names them; `US4-TC9-1` stays manual for its thread leg and names the landing's own test.
+
+Run: 2026-09-20, amendment pass over the amended requirements and `decisions.md`'s `Q52` to `Q63`, the questions the runner and the held rows settled. Wrote `US4-TC12-1` and `US4-TC13-1` for the row the round decides and the reply that overturns it; recast `US4-TC1-1` onto the held row, `US1-TC7-1` onto the cases drawn from the anchors, `US2-TC8-1` onto the writable set and a `main` that moved under the run, and `US9-TC10-1` onto the Perspectives column; named the actor and the arrival on `US4-TC10-1`, `US4-TC11-1`, `US5-TC15-1`, `US5-TC16-1` and `US5-TC17-1`, and the layer each is checked on; moved `US4-TC9-1` and `US5-TC17-1` back to manual until the tests that decide them land; dropped `US5-TC18-1`, whose scenario is out of suite above.
+
+Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Agent Rounds and Change Stages pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
 
 ### Folded
 
