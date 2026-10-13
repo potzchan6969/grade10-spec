@@ -1,7 +1,7 @@
 # shared/ui/store-cart Test Cases
 
-**Status:** pending-review · 0/11
-**Drafts styled:** 2026-10-13, tcs-rules r5
+**Status:** pending-review · 0/12
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## shared.ui-store-cart.US2: Shopper reviews what the cart holds
 
@@ -487,6 +487,54 @@ Runs once per row of **Test data**.
 * With `<legacy_pending>`, tender actions and Checkout remain disabled.
 * Each currently permitted action invokes its callback once when activated.
 
+<!-- trace:case id=g10.shared-store-cart.TC-r4f rev=1 covers=g10.shared-store-cart.SC-2h3 -->
+### shared.ui-store-cart.US20-TC2: Omitted interaction state preserves existing consumers
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared.ui-store-cart.US20
+
+**Test data:**
+
+| interaction_pending | tender_pending | surface |
+| --- | --- | --- |
+| omitted | false | Compound drawer |
+| false | false | Compound drawer and standalone body, item, footer and promo sheet where applicable |
+| omitted | true | Compound drawer and standalone footer or promo sheet where applicable |
+| false | true | Compound drawer and standalone footer or promo sheet where applicable |
+
+**Pre-conditions:**
+
+* The consumer supplies the existing display values and applicable action callbacks.
+* Each surface is otherwise interactive, with existing loading, verification, redirecting and callback-presence guards available for the relevant rows.
+
+**Steps:**
+
+1. Render the `<surface>` with the `<interaction_pending>` and `<tender_pending>` values.
+2. Inspect the existing layout, accepted figures, entered values and action availability.
+3. Attempt item, tender, disclosure, navigation and Checkout actions that the row supports.
+4. Activate one action that remains permitted by the row's existing guards.
+5. Inspect callback records and displayed values.
+
+**Expected Results:**
+
+* Omitted or false `interactionPending` preserves the existing layout, loading presentation and callback-gated availability.
+* `tenderPending` true still disables tender actions and Checkout without newly disabling otherwise-permitted item controls.
+* Existing loading, verification, redirecting, checkout-disabled and missing-callback guards remain effective.
+* No blocked action invokes a callback, and no displayed value changes without an explicit permitted action.
+* The permitted action invokes its existing callback once.
+
 ## Reconciliation
 
 ### Pending QA2 - 2026-10-13
@@ -501,11 +549,12 @@ This dated scope supersedes earlier pending coverage claims.
 | --- | --- |
 | `shared-ui-store-cart-US19-TC1-1` / `TC-cxw` | Retain issued identity and draft lifecycle; canonical US19 Trace; exact tender-only guard |
 | `shared-ui-store-cart-US19-TC2-1` / `TC-sxg` | Retain issued identity and draft lifecycle; canonical US20 Trace; exact tender-only recovery |
-| `shared-ui-store-cart-US19-TC3-1` / `TC-swe` | Retain compatibility purpose; add all public parts, omitted/false interaction input and legacy tender true rows |
+| `shared-ui-store-cart-US19-TC3-1` / `TC-swe` | Retain the existing tender-only compatibility purpose and marker; broader `interactionPending` compatibility is covered by new US20-TC2 |
 | `shared.ui-store-cart.US19-TC4` / `TC-ja3` | Retain blind draft; sharpen compound/standalone rows and Enter, Space and input attempts |
 | `shared.ui-store-cart.US19-TC5` / `TC-cpt` | Retain blind draft; sharpen nested/standalone sheet, loyalty link and existing dismissal callback |
 | `shared.ui-store-cart.US19-TC6` / `TC-d72` | Retain blind draft; add sheet-first dismissal, collapsed proposal, focus and blocked edit/opening proposals |
 | `shared.ui-store-cart.US20-TC1` / `TC-wru` | Retain blind draft; attempt actions before clearing to observe no replay |
+| `shared.ui-store-cart.US20-TC2` / `TC-r4f` | New QA2 repair case for omitted/false `interactionPending` compatibility and legacy `tenderPending` behavior; no QA1 credit |
 | `shared.ui-store-cart.US19-TC7` / `TC-wh7` | New QA2 draft from uncovered delayed-removal THEN, allocated by trace CLI; no QA1 credit |
 
 | Source in `spec.md` | Complete asserting case |
@@ -517,13 +566,13 @@ This dated scope supersedes earlier pending coverage claims.
 | `g10.shared-store-cart.SC65` (`SC-xrx`) | `shared.ui-store-cart.US19-TC5` |
 | `g10.shared-store-cart.SC66` (`SC-mxv`) | `shared.ui-store-cart.US19-TC6` |
 | `g10.shared-store-cart.SC67` (`SC-fct`) | `shared.ui-store-cart.US20-TC1` |
-| `g10.shared-store-cart.SC68` (`SC-2h3`) | `shared-ui-store-cart-US19-TC3-1` |
+| `g10.shared-store-cart.SC68` (`SC-2h3`) | `shared.ui-store-cart.US20-TC2` |
 | `g10.shared-store-cart.SC69` (`SC-rb9`) | `shared.ui-store-cart.US19-TC7` |
 
 - **Anchor coverage** - US19 covers pending controls, retained values, delayed removal and dismissal; US20 covers recovery and compatibility. Context US04 covers dismissal. Durable order-discount US18 is unchanged.
-- **Overclaims** - The three legacy cases now link SC37, SC38 and SC39 individually; they do not each claim all three. Standalone, dismissal and delayed-removal gaps are closed above.
+- **Historical links** - The three legacy markers retain their original multi-scenario `covers` values because existing marker ids, revisions and coverage are immutable. Their case bodies remain tender-only; the new US20-TC2 is the complete assertion for SC68. The source table names one canonical asserting case per scenario without treating the historical links as evidence of the broader interaction contract.
 - **Uncovered scenarios** - None in this increment. No new product choice or contradiction remains.
-- **Lifecycle** - All 8 cases remain draft/manual; the run grants no execution or classification credit. Existing revisions and marker identities are preserved.
+- **Lifecycle** - All 9 pending cases remain draft/manual; the run grants no execution or classification credit. Existing revisions and marker identities are preserved.
 
 #### Manual
 
@@ -536,6 +585,7 @@ This dated scope supersedes earlier pending coverage claims.
 | `shared.ui-store-cart.US19-TC5` | To be walked in Cart Drawer Group 15.1 controlled compound and public-part fixtures, then Group 17.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
 | `shared.ui-store-cart.US19-TC6` | To be walked in Cart Drawer Group 15.1 controlled compound and public-part fixtures, then Group 17.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
 | `shared.ui-store-cart.US20-TC1` | To be walked in Cart Drawer Group 15.1 controlled compound and public-part fixtures, then Group 17.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
+| `shared.ui-store-cart.US20-TC2` | To be walked in Cart Drawer Group 15.1 controlled compound and public-part fixtures, then Group 17.1 pending drawer actor walk; omitted/false interaction state, tender-only blocking and callback records are required. No test or walk has executed in this planning run. |
 | `shared.ui-store-cart.US19-TC7` | To be walked in Cart Drawer Group 15.1 controlled compound and public-part fixtures, then Group 17.1 pending drawer actor walk; delayed answers and callback records are required. No test or walk has executed in this planning run. |
 
 

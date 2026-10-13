@@ -1,7 +1,5 @@
 # grade10-site/store/cart-drawer Test Cases
 
-**Status:** pending-review · 0/43
-**Drafts styled:** 2026-10-13, tcs-rules r5
 **Status:** pending-review · 0/51
 **Drafts styled:** 2026-09-29, tcs-rules r3.0
 

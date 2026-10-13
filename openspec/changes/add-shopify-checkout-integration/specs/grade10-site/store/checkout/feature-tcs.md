@@ -1,7 +1,7 @@
 # grade10-site/store/checkout Test Cases
 
 **Status:** pending-review · 0/48
-**Drafts styled:** 2026-10-13, tcs-rules r5
+**Drafts styled:** 2026-10-09, tcs-rules r4
 
 **Out of suite:** grade10-site-store-checkout-SC-08
 

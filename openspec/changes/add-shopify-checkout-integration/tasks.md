@@ -242,7 +242,7 @@ Uses draft feature cases as planning input after Group 11 lands. Planning marks 
 ## 14. Checkout pending product record (grade10-spec)
 
 Appended to preserve existing claims and addresses. The shared interaction
-contract is built by `add-store-cart-drawer-ui` Group 10, not duplicated here.
+contract is built by `add-store-cart-drawer-ui` Group 15, not duplicated here.
 
 - [ ] 14.1 Check the Checkout pending outcome and its Cart Drawer source link with the manual validator before updating the record.
 - [ ] 14.2 Keep `docs/prds/products/grade10-site/store/checkout.md` aligned with the delivered pending Pay, dismissal and recovery outcome; preserve construction marks until verified delivery.
@@ -250,11 +250,11 @@ contract is built by `add-store-cart-drawer-ui` Group 10, not duplicated here.
 
 ## 15. Pending Pay integration (grade10)
 
-Depends on this change's Group 11 and `add-store-cart-drawer-ui` Groups 10-11:
+Depends on this change's Group 11 and `add-store-cart-drawer-ui` Groups 15-16:
 the existing shared guard and host mapping are required by this request path.
 
 - [ ] 15.1 Add failing request-lifetime tests in their own commit before 15.2; tick this box last. Update the changed revisions for drawer-wide pending Pay and an externally changed cart/tender, then cover overlaps, dismissal/reopen and failure recovery: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
-- [ ] 15.2 Make those tests pass using the common `interactionPending` input and synchronous Pay guard. Hold actual Pay until settlement without canceling on close, retain external cart/member stale-answer rejection and release only currently permitted actions after failure or the last operation; start no automatic new Pay. A still-current successful hosted-invoice answer opens Shopify after plain dismissal or reopen (Checkout Q35 / Cart Drawer Q16); drawer open state does not invalidate the request: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
+- [ ] 15.2 Make those tests pass using the common `interactionPending` input and synchronous Pay guard. Hold actual Pay until settlement without canceling on close, retain external cart/member stale-answer rejection and release only currently permitted actions after failure or the last operation; start no automatic new Pay. A still-current successful hosted-invoice answer opens Shopify after plain dismissal or reopen (Checkout Q35 / Cart Drawer Q22); drawer open state does not invalidate the request: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
 - [ ] 15.3 Verify focused drawer/checkout tests, compatibility typechecks and frontend checks required by `docs/conventions/validation.md`; perform no backend, provider or production change.
 
 ## 16. The walk - pending Pay (grade10)
