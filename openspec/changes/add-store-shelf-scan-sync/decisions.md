@@ -67,3 +67,18 @@ Choices the round checked against the code, for `tech-design.md` to carry:
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/store/shelf-scanning | Blind pass: what happens to the items somebody imported into the scanner by hand before this change - does the first copy remove them, keep them beside the store's, or replace them where they match a store product? | |
+| grade10-site/store/shelf-scanning | Blind pass: when is "the next copy" for an item changed on the scanner while the shop's catalogue sits idle - does the store's 5-minute re-read put it back even when nothing in the catalogue moved, or does it wait for the next real change? | |
+| grade10-site/store/shelf-scanning | Blind pass: how many minutes is "every few minutes" for an open scanner, and is there one end-to-end bound a shopkeeper can hold - from a shop save to an open, untouched scanner showing it? | |
+| grade10-site/store/shelf-scanning | Blind pass: what does the scanner hold when one party fails during a pass - the scanner unreachable, inventory unreachable, or a photo that cannot be fetched - does it keep the last version, drop a slab's grade and cert, or alert Operations? | |
+| grade10-site/store/shelf-scanning | Blind pass: how soon does a grade or cert corrected in inventory reach the scanner when nothing about the product changes in the shop - at the 5-minute re-read, within 10 minutes, or only with the product's next change? | |
+| grade10-site/store/shelf-scanning | Blind pass: where does Operations read the alert for a slab held without a unit, and does it repeat on every pass and clear once the slab is fixed? | |
+| grade10-site/store/shelf-scanning | Blind pass: which product does the scanner name when two store products that are not slabs share the same art - two raw listings of one card, say in different languages or conditions? | |
+| grade10-site/store/shelf-scanning | Blind pass: what does the scanner name for a raw copy of a card the store sells only as a slab, whose photos show the same art - the slab's product without grade or cert, or nothing? | |
+| grade10-site/store/shelf-scanning | Blind pass: how does the store know a house-stock product is a slab when it names no item - which fact marks it graded, so that it is held without grade or cert and alerted rather than held as a raw card? | |
+| grade10-site/store/shelf-scanning | Blind pass: is a slab's cert something the store shows publicly? The scan shows grade and cert on a link that "shows only what the store shows publicly", while Q7a rejected typing certs on the product because it would make them public on the storefront. | |
+| grade10-site/store/shelf-scanning | Blind pass: what does a retired link show once the key is rotated - an error naming the link as retired, a not-found page, or the scanner refusing every scan - and how do shopkeepers learn the new link? | |
+| grade10-site/store/shelf-scanning | Blind pass: an automatic discount that starts or ends changes no product - how soon does the scanner's price follow it, and does the scan show the higher price struck through as the product page does? | |
+| grade10-site/store/shelf-scanning | Blind pass: in which language does a scan show the title - the store's default, or the locale the shopkeeper's phone or link asks for, as the store's /tc and /sc pages do? | |
+| grade10-site/store/shelf-scanning | Blind pass: what does the scanner learn from a product with more photos than an item holds - which photos, in what order, and is the rest dropped silently? | |
+| grade10-site/store/shelf-scanning | Blind pass: when the store opens on production, does the store-page link appear on production's scan without any other change, or does it need its own release step? | |
