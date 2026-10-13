@@ -15,7 +15,7 @@
 - [ ] 1.6 Add winner order stories for a USD order, an HKD order on FPS and on HK Local, a USD order on SWIFT, a currency switch that clears a method, and a USD order with no card rule (`winner-order-SC-293`, `winner-order-SC-294`, `winner-order-SC-295`, `winner-order-SC-297`)
 - [ ] 1.7 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, and the Storybook build for `apps/preview`
 
-## 2. Invoice, receipt and letter fixtures (grade10-spec)
+## 2. Invoice, receipt and letter fixtures (grade10-spec) (owner: @htonyl)
 
 - [ ] 2.1 Write the document tests first, in their own commit: an HKD invoice and receipt that print every amount in HKD, no USD winning bid and no rate (`winner-order-SC-288`, `winner-order-SC-289`, `order-mail-SC-66`)
 - [ ] 2.2 Add an HKD invoice and receipt fixture whose HKD lines are whole HK$ and sum to the order total, and hold the USD invoice fixture beside it (`winner-order-SC-285`, `winner-order-SC-288`)
