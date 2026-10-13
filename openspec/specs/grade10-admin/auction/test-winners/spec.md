@@ -15,6 +15,9 @@ link, so QA walks a winner's order by hand as a real winner would.
   - Past close: a close up to 30 days back, so an order can start already overdue
   - One per address: the same address makes one test winner, and an address holding a verified account is refused
   - Never biddable: the lot is closed from the moment it is made
+  - USD bid: the sandbox lot and winning bid use USD only
+  - Normal winner setup: the winner chooses USD or HKD and an offered payment method, with nothing preselected
+  - Atomic refusal: a non-USD bid currency refuses the action without creating an account, lot or order
 - Test winner sign-in
   - Ordinary link: the sign-in email every collector gets, sent after making and again on request, opening the order
   - Private window: the operator opens it apart from their own session
@@ -49,8 +52,8 @@ code.
 | --- | --- |
 | Email | The operator's own sign-in address with a `+` tag, checked by Grade10; `<local>+qa-<code>@<domain>` by default, `<code>` new for each test winner |
 | Name | Required; the account's name |
-| Winning bid | Above zero |
-| Currency | USD, HKD or JPY, per `grade10-admin/auction/listing` |
+| Winning bid | Whole major units in USD, above zero |
+| Currency | USD only, per `grade10-admin/auction/listing` |
 | Closed at | Now by default, or a past moment up to 30 days back |
 
 **What it makes** - One action SHALL:
@@ -71,18 +74,24 @@ nothing twice.
 **Never biddable** - The lot SHALL be closed from the moment it is made, so it
 takes no bid. It lists as any closed sandbox lot does.
 
-<!-- trace:scenario id=g10adm.auction-test-winners.SC-pxq rev=1 -->
+The successful test winner SHALL use ordinary winner setup. The order SHALL
+offer USD or HKD and the payment choices offered for that currency, with
+neither currency nor method preselected.
+
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-pxq rev=2 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-11 - One action makes a winner waiting on setup
 **Serves:** Making a test winner - from nothing to an order that waits on the winner
 
 - **GIVEN** an operator on staging holding `auction:operate` and
   `user:create`, signed in as `qa.lead@grade10.com`
 - **WHEN** they make a test winner with the default email, the name
-  "QA Winner" and a winning bid of 100000 minor units in HKD
+  "QA Winner" and a winning bid of 100000 minor units in USD
 - **THEN** an account exists at `qa.lead+qa-<code>@grade10.com` that has not
   signed in
 - **AND** it holds an auction order in Awaiting Setup for a closed sandbox lot
-  titled `Test lot <code>`, won at 100000 minor units in HKD
+  titled `Test lot <code>`, won at 100000 minor units in USD
+- **AND** order setup offers USD or HKD and the offered payment choices, with
+  neither currency nor payment method selected
 - **AND** the auction-won letter reaches that address
 
 <!-- trace:scenario id=g10adm.auction-test-winners.SC-wfn rev=1 -->
@@ -160,6 +169,26 @@ takes no bid. It lists as any closed sandbox lot does.
 - **WHEN** a collector places a bid on each
 - **THEN** Grade10 refuses both bids
 - **AND** each lot is still closed with its winning bid unchanged
+
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-bf3 rev=1 -->
+#### Scenario: grade10-admin-auction-test-winners-SC-25 - The test-winner form offers USD only
+**Serves:** Making a test winner - the form supplies the only supported bid currency
+
+- **GIVEN** an operator on staging opens the test-winner action
+- **WHEN** they enter the winning bid
+- **THEN** the currency is fixed to USD
+- **AND** the form offers no HKD or JPY choice
+
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-yx8 rev=1 -->
+#### Scenario: grade10-admin-auction-test-winners-SC-24 - A non-USD test-winner request is refused atomically
+**Serves:** Making a test winner - the action accepts only a USD bid
+
+- **GIVEN** an operator on staging holding `auction:operate` and
+  `user:create`
+- **WHEN** they request a test winner with an HKD, JPY or other non-USD
+  winning-bid currency
+- **THEN** Grade10 refuses the action
+- **AND** no account, lot or order is created
 
 ### Requirement: A test winner signs in with the ordinary link
 

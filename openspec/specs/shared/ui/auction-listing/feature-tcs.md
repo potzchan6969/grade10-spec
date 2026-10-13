@@ -1,7 +1,8 @@
 # shared/ui/auction-listing Test Cases
 
-**Status:** pending-review · 0/41
-**Drafts styled:** 2026-10-13, tcs-rules r4
+**Status:** pending-review · 0/42
+**Drafts styled:** 2026-10-13, tcs-rules r5
+**Out of suite:** shared-ui-auction-listing-SC-35, shared-ui-auction-listing-SC-36, shared-ui-auction-listing-SC-37, shared-ui-auction-listing-SC-52
 
 ## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
@@ -667,147 +668,122 @@ Runs once per row of **Test data**.
 * Step 1: the standing reads Did not win.
 * Step 2: no banner shows on the card.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### g10.shared-auction-listing.US1-TC19: Draft at the currency ceiling is accepted
+<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=4 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-q3n -->
+### g10.shared-auction-listing.US1-TC19: Draft at the USD ceiling is accepted
 
-Runs once per row of **Test data**, in both set and raise modes.
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, release
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
-* The consumer supplies the row's ceiling in minor units.
-* The floor and any committed maximum are below the ceiling.
-* The custom maximum field is empty.
+* The bid panel receives a USD ceiling of `<ceiling>` and is rendered for an open lot in the row's mode.
 
 **Test data:**
 
-| Currency | Ceiling (whole major units) | Committed amount (minor units) |
-| --- | --- | --- |
-| USD | 10000000 | 1000000000 |
-| HKD | 80000000 | 8000000000 |
-| JPY | 5000000000 | 5000000000 |
+| Mode | `<ceiling>` |
+| --- | --- |
+| Set maximum | USD10,000,000 whole major units |
+| Raise maximum | USD10,000,000 whole major units |
 
 **Steps:**
 
-1. Enter the row's ceiling into the custom maximum field.
-2. Read the displayed draft and reviewed amount.
+1. Enter `<ceiling>` in the custom maximum field.
+2. Read the field value and Place Bid state.
 3. Commit the maximum and read the callback amount.
 
 **Expected Results:**
 
-* The displayed draft equals the row's ceiling.
-* The reviewed amount agrees with the displayed draft.
-* The callback receives the row's committed amount, once.
-* No ceiling message appears.
+* The field retains `<ceiling>`.
+* Place Bid remains available.
+* The callback receives 1000000000 minor units in USD.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### g10.shared-auction-listing.US1-TC20: Typed digit past the ceiling retains the draft
-
-Runs once per row of **Test data**, in both set and raise modes.
+<!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=3 covers=g10.shared-auction-listing.SC-8ym -->
+### g10.shared-auction-listing.US1-TC20: Typing past the USD ceiling keeps the draft at its limit
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
-* The custom maximum draft equals the row's prior draft.
+* The custom maximum field uses the USD ceiling `<ceiling>`.
 
 **Test data:**
 
-| Currency | Ceiling | Prior draft |
-| --- | --- | --- |
-| USD | 10000000 | 10000000 |
-| USD | 10000000 | 9000000 |
-| HKD | 80000000 | 80000000 |
-| HKD | 80000000 | 79000000 |
-| JPY | 5000000000 | 5000000000 |
-| JPY | 5000000000 | 4900000000 |
+| Field | Value |
+| --- | --- |
+| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
+| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
 
 **Steps:**
 
-1. Put the caret at the draft's end without selecting it.
-2. Type one `1` using the native keyboard operation.
-3. Read the displayed draft and reviewed amount.
+1. Type `<over ceiling>` into the custom maximum field.
+2. Read the field value and validation message.
 
 **Expected Results:**
 
-* The displayed draft remains the row's prior draft.
-* The reviewed amount agrees with the retained draft.
-* No ceiling message appears.
+* The typed draft stops at `<ceiling>`.
+* No maximum or invalid amount message appears.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-35i rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
-### g10.shared-auction-listing.US1-TC21: Oversized paste into empty field becomes the ceiling
-
-Runs once per row of **Test data**, in both set and raise modes.
+<!-- trace:case id=g10.shared-auction-listing.TC-35i rev=3 covers=g10.shared-auction-listing.SC-wdd -->
+### g10.shared-auction-listing.US1-TC21: Pasting above the USD ceiling clamps the field
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
-* The custom maximum field is empty.
+* The custom maximum field is empty and uses the USD ceiling `<ceiling>`.
 
 **Test data:**
 
-| Currency | Paste | Ceiling |
-| --- | --- | --- |
-| USD | 10000001 | 10000000 |
-| HKD | 80000001 | 80000000 |
-| JPY | 5000000001 | 5000000000 |
+| Field | Value |
+| --- | --- |
+| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
+| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
 
 **Steps:**
 
-1. Paste the row's paste into the custom maximum field.
-2. Read the displayed draft and reviewed amount.
+1. Paste `<over ceiling>` into the custom maximum field.
+2. Read the field value.
 
 **Expected Results:**
 
-* The displayed draft equals the row's ceiling.
-* The reviewed amount agrees with the corrected draft.
-* No ceiling message appears.
+* The field value becomes `<ceiling>`.
+* The field does not display HKD or JPY cap choices.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
+<!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=3 covers=g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-qdv -->
 ### g10.shared-auction-listing.US1-TC22: Oversized replacement of a draft becomes the ceiling
 
 Runs once per row of **Test data**, in both set and raise modes.
@@ -829,7 +805,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
+* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
 * The custom maximum draft is `500`.
 
 **Test data:**
@@ -839,12 +815,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 | USD | 10000001 | Paste | 10000000 |
 | USD | 10000001 | Selected multi-character insertText | 10000000 |
 | USD | 10000001 | Fill with multi-character insertText | 10000000 |
-| HKD | 80000001 | Paste | 80000000 |
-| HKD | 80000001 | Selected multi-character insertText | 80000000 |
-| HKD | 80000001 | Fill with multi-character insertText | 80000000 |
-| JPY | 5000000001 | Paste | 5000000000 |
-| JPY | 5000000001 | Selected multi-character insertText | 5000000000 |
-| JPY | 5000000001 | Fill with multi-character insertText | 5000000000 |
 
 **Steps:**
 
@@ -854,11 +824,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Expected Results:**
 
-* The displayed draft equals the row's ceiling.
+* The displayed draft equals the USD ceiling.
 * The reviewed amount agrees with the corrected draft.
 * No ceiling message appears.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
+<!-- trace:case id=g10.shared-auction-listing.TC-bfp rev=3 covers=g10.shared-auction-listing.SC-y2e -->
 ### g10.shared-auction-listing.US1-TC23: Oversized fractional paste becomes the ceiling after cleaning
 
 Runs once per row of **Test data**, in both set and raise modes.
@@ -880,7 +850,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
+* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
 * The custom maximum draft is `500`.
 
 **Test data:**
@@ -888,11 +858,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 | Currency | Paste | Ceiling |
 | --- | --- | --- |
 | USD | 10000001.99 | 10000000 |
-| HKD | 80000001.99 | 80000000 |
-| JPY | 5000000001.99 | 5000000000 |
 | USD | 999999999999999999999999999999.99 | 10000000 |
-| HKD | 999999999999999999999999999999.99 | 80000000 |
-| JPY | 999999999999999999999999999999.99 | 5000000000 |
 
 **Steps:**
 
@@ -902,14 +868,12 @@ Runs once per row of **Test data**, in both set and raise modes.
 **Expected Results:**
 
 * The fractional suffix is discarded without rounding.
-* The displayed draft equals the row's ceiling.
+* The displayed draft equals the USD ceiling.
 * The reviewed amount agrees with the corrected draft.
 * No ceiling message appears.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
+<!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=3 covers=g10.shared-auction-listing.SC-xxl -->
 ### g10.shared-auction-listing.US1-TC24: Raise field retains typed draft and clamps replacement
-
-Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -928,17 +892,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency, in raise mode.
+* Storybook renders `ListingAuctionBidCard` in USD, in raise mode.
 * The collector leads with a committed maximum below `500`.
-* The raise custom maximum draft equals the row's ceiling.
+* The raise custom maximum draft equals the USD ceiling.
 
 **Test data:**
 
-| Currency | Ceiling | Replacement
+| Currency | Ceiling | Replacement |
 | --- | --- | --- |
 | USD | 10000000 | 10000001 |
-| HKD | 80000000 | 80000001 |
-| JPY | 5000000000 | 5000000001 |
 
 **Steps:**
 
@@ -953,16 +915,16 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the displayed draft remains the row's ceiling.
-* Step 4: the displayed draft equals the row's ceiling.
-* Steps 7 and 8: paste clamps to the row's ceiling.
+* Step 2: the displayed draft remains the USD ceiling.
+* Step 4: the displayed draft equals the USD ceiling.
+* Steps 7 and 8: paste clamps to the USD ceiling.
 * The reviewed amount agrees with every corrected draft.
 * No ceiling message appears in either mode.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
+<!-- trace:case id=g10.shared-auction-listing.TC-ftm rev=3 covers=g10.shared-auction-listing.SC-z2x -->
 ### g10.shared-auction-listing.US1-TC25: Ceiling correction shows no maximum or invalid amount message
 
-Runs once per row of **Test data**, in both set and raise modes.
+Runs once in set mode and once in raise mode.
 
 **Classification:**
 
@@ -981,7 +943,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
+* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
 * The custom maximum draft is `60500`.
 * The listing's next minimum is at or below `60500`.
 * No message appears beside the custom maximum field.
@@ -991,8 +953,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 | Currency | Paste | Ceiling |
 | --- | --- | --- |
 | USD | 10000001 | 10000000 |
-| HKD | 80000001 | 80000000 |
-| JPY | 5000000001 | 5000000000 |
 
 **Steps:**
 
@@ -1001,15 +961,15 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Expected Results:**
 
-* The displayed draft equals the row's ceiling.
+* The displayed draft equals the USD ceiling.
 * No maximum-bid, invalid-amount or below-floor message appears.
 * The reviewed amount agrees with the corrected draft.
 * No ceiling message appears.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=2 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-8ym,g10.shared-auction-listing.SC-wdd,g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-y2e,g10.shared-auction-listing.SC-xxl,g10.shared-auction-listing.SC-6n7,g10.shared-auction-listing.SC-q3n,g10.shared-auction-listing.SC-qdv,g10.shared-auction-listing.SC-2wv -->
+<!-- trace:case id=g10.shared-auction-listing.TC-g02 rev=3 covers=g10.shared-auction-listing.SC-6n7 -->
 ### g10.shared-auction-listing.US1-TC26: Fractional paste at the currency ceiling is accepted
 
-Runs once per row of **Test data**, in both set and raise modes.
+Runs once in set mode and once in raise mode.
 
 **Classification:**
 
@@ -1028,7 +988,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency and mode.
+* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
 * The custom maximum draft is `500`.
 
 **Test data:**
@@ -1036,8 +996,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 | Currency | Paste | Ceiling |
 | --- | --- | --- |
 | USD | 10000000.99 | 10000000 |
-| HKD | 80000000.99 | 80000000 |
-| JPY | 5000000000.99 | 5000000000 |
 
 **Steps:**
 
@@ -1048,7 +1006,7 @@ Runs once per row of **Test data**, in both set and raise modes.
 **Expected Results:**
 
 * The fractional suffix is discarded without rounding.
-* The displayed draft equals the row's ceiling.
+* The displayed draft equals the USD ceiling.
 * The reviewed amount agrees with the displayed draft.
 * The callback receives the ceiling in integer minor units.
 
@@ -1378,7 +1336,7 @@ Runs once per row of **Test data**.
 * Step 1: no date, clock or zone name shows beside it.
 * Step 2: the row reads 1 Sep 2026, 20:00.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-dej rev=1 covers=g10.shared-auction-listing.SC-huw -->
+<!-- trace:case id=g10.shared-auction-listing.TC-dej rev=2 covers=g10.shared-auction-listing.SC-huw -->
 ### g10.shared-auction-listing.US1-TC59: A quick bid above the ceiling is offered at the ceiling
 
 Runs once per row of **Test data**.
@@ -1398,7 +1356,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in the row's currency.
+* Storybook renders `ListingAuctionBidCard` in USD.
 * The collector leads with the row's committed maximum.
 * The row's chips hold at least one amount above the ceiling and at least one below it.
 
@@ -1406,8 +1364,8 @@ Runs once per row of **Test data**.
 
 | Currency | Ceiling (major) | Committed maximum (major) | Increment (major) | Chips offered |
 | --- | --- | --- | --- | --- |
-| HKD | 80000000 | 79999800 | 100 | 79999900, 80000000, 80000000 |
-| HKD | 80000000 | 79999700 | 100 | 79999800, 79999900, 80000000 |
+| USD | 10000000 | 9999800 | 100 | 9999900, 10000000 (the 2x and 4x amounts both land on the ceiling and merge to one chip) |
+| USD | 10000000 | 9999700 | 100 | 9999800, 9999900, 10000000 |
 
 **Steps:**
 
@@ -1422,7 +1380,7 @@ Runs once per row of **Test data**.
 * A chip at or below the ceiling keeps its stepped amount and caption.
 * Committing a clamped chip passes the ceiling in minor units.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-w4r rev=1 covers=g10.shared-auction-listing.SC-atq -->
+<!-- trace:case id=g10.shared-auction-listing.TC-w4r rev=2 covers=g10.shared-auction-listing.SC-atq -->
 ### g10.shared-auction-listing.US1-TC60: Chips clamped onto the same amount merge to one
 
 **Classification:**
@@ -1440,8 +1398,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in HKD.
-* The collector leads with a committed maximum of `79999900`, and the increment is `100`, so all three stepped amounts land at or above the `80000000` ceiling.
+* Storybook renders `ListingAuctionBidCard` in USD.
+* The collector leads with a committed maximum of `9999900`, and the increment is `100`, so all three stepped amounts land at or above the `10000000` ceiling.
 
 **Steps:**
 
@@ -1450,10 +1408,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row shows one chip at `80000000`, captioned as the limit; no duplicate amount appears twice.
-* The callback receives `8000000000` minor units.
+* The row shows one chip at `10000000`, captioned as the limit; no duplicate amount appears twice.
+* The callback receives `1000000000` minor units.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-9rx rev=1 covers=g10.shared-auction-listing.SC-1mi,g10.shared-auction-listing.SC-v6g -->
+<!-- trace:case id=g10.shared-auction-listing.TC-9rx rev=2 covers=g10.shared-auction-listing.SC-v6g,g10.shared-auction-listing.SC-1mi -->
 ### g10.shared-auction-listing.US1-TC61: A maximum at the ceiling collapses the entry group
 
 Runs once per row of **Test data**.
@@ -1473,15 +1431,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in HKD with the `80000000` ceiling.
+* Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
 * The collector leads with the row's committed maximum and current bid.
 
 **Test data:**
 
 | Committed maximum (major) | Current bid (major) | Floor driving the collapse |
 | --- | --- | --- |
-| 80000000 | 1200 | maximum plus the minimum raise |
-| 79999950 | 79999950 | minimum next bid 80000050, already above the ceiling |
+| 10000000 | 1200 | maximum plus the minimum raise |
+| 9999950 | 9999950 | minimum next bid 10000050, already above the ceiling |
 
 **Steps:**
 
@@ -1492,11 +1450,11 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No quick-bid chip, no custom maximum field and no bid action render.
-* A status row leads with `Max: 80000000` in the first row, and with `Max: 79999950` in the second.
+* A status row leads with `Max: 10000000` in the first row, and with `Max: 9999950` in the second.
 * The row carries the private-maximum explanation behind its Info tooltip and one line that the auction accepts no higher amount; the raise mechanism line does not appear.
 * The buyer-fee line still renders.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-5dh rev=1 covers=g10.shared-auction-listing.SC-cfl -->
+<!-- trace:case id=g10.shared-auction-listing.TC-5dh rev=2 covers=g10.shared-auction-listing.SC-cfl -->
 ### g10.shared-auction-listing.US1-TC62: A lot priced past the ceiling offers no entry
 
 **Classification:**
@@ -1514,7 +1472,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in HKD with the `80000000` ceiling.
+* Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
 * The lot's minimum next bid is above the ceiling.
 * The collector holds no maximum on the lot.
 
@@ -1528,7 +1486,7 @@ Runs once per row of **Test data**.
 * A status row names the ceiling amount and a line that bidding has reached the highest amount the auction accepts.
 * The buyer-fee line still renders.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-swf rev=1 covers=g10.shared-auction-listing.SC-rnz -->
+<!-- trace:case id=g10.shared-auction-listing.TC-swf rev=2 covers=g10.shared-auction-listing.SC-rnz -->
 ### g10.shared-auction-listing.US1-TC63: The collapse outranks the card setup lock
 
 **Classification:**
@@ -1547,7 +1505,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Storybook renders `ListingAuctionBidCard` under the needs-card enrollment signal.
-* The collector leads with a committed maximum at the HKD ceiling.
+* The collector leads with a committed maximum at the USD ceiling.
 
 **Steps:**
 
@@ -1556,6 +1514,40 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The collapsed status row renders; the disabled chips, custom field and link-card action do not.
+
+<!-- trace:case id=g10.shared-auction-listing.TC-oem rev=1 covers=g10.shared-auction-listing.SC-2wv -->
+### g10.shared-auction-listing.US1-TC64: A digit appended at the ceiling is kept by paste and dropped by typing
+
+Runs once in set mode and once in raise mode.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Custom maximum ceiling
+
+**Pre-conditions:**
+
+* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
+* The custom maximum draft equals the USD ceiling of `10000000` and the caret is at its end.
+
+**Steps:**
+
+1. Append `1` by paste and read the displayed draft.
+2. Set the draft to `10000000` again, append `1` by typing and read the displayed draft.
+
+**Expected Results:**
+
+* Step 1: the displayed draft reads `10000000`, the USD ceiling.
+* Step 2: the displayed draft reads `10000000`, the previous draft.
+* No ceiling message appears in either step.
 
 ## Raised
 
@@ -1596,6 +1588,7 @@ Runs once per row of **Test data**.
 - Chips step 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1.
 - Ceiling correction of a typed draft shows no maximum-bid or invalid-amount message; set and raise share the rule.
 - A lost standing on the bid card is the Did not win badge alone; that the card was not charged is said on My Auctions, never on the lot card.
+- None this run. The blind reading raised the question whether the HKD and JPY ceilings stay as dead branches; it went to `decisions.md` `## Raised` and landed as Q26.
 
 ## Reconciliation
 
@@ -1833,6 +1826,10 @@ openspec/changes/archive/.
 - **Continuity** - Unchanged cases stay in the durable suite and are retained by the acceptance fold; they are not copied into this active suite.
 - **Tasks** - Group 1 owns the shared helpers, component, catalogs, fixtures, stories and verification; group 2 owns consumer copy supply; the walk is group 3. This records planned verification, not executed test results.
 - **Questions** - None. Q1 to Q5 settle the collapse, the trigger, the fee line and the clamp.
+
+**Cases** - All 14 cases remain drafts. `TC-fb2@4` covers SC-9e0 and SC-q3n; `TC-ygd@3` SC-8ym; `TC-35i@3` SC-wdd; `TC-jr1@3` SC-z2x and SC-qdv; `TC-bfp@3` SC-y2e; `TC-hsy@3` SC-xxl; `TC-ftm@3` SC-z2x; `TC-g02@3` SC-6n7; `TC-dej@2` SC-huw; `TC-w4r@2` SC-atq; `TC-9rx@2` SC-v6g and SC-1mi; `TC-5dh@2` SC-cfl; `TC-swf@2` SC-rnz; and `TC-oem@1` SC-2wv. `TC-fb2` was repaired in place at rev4 to assert the exact 1,000,000,000 USD-minor-unit callback in both set and raise routes. No case was added.
+
+**Scenario coverage** - The 16 linked scenarios are fully asserted. `SC-7o5`, `SC-t9f`, `SC-2s5` and `SC-dv0` remain out of suite and are exercised by their existing durable cases. Those unchanged durable rows still have older HKD/JPY fixtures for archive reconciliation. Automated `Decided by` labels on draft cases are not execution evidence. `TC-19` remains a draft manual case after the callback repair. No contradictory assertion remains.
 
 ### Manual
 

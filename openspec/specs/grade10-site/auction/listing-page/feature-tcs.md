@@ -1,6 +1,6 @@
 # grade10-site/auction/listing-page Test Cases
 
-**Status:** reopened · 14/57
+**Status:** reopened · 0/57
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
@@ -314,27 +314,27 @@
 - customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<user A maximum>`, and is on its lot page.
 - customer A(signed in) leads `<listing_8>` with maximum `<user A maximum>`.
 - customer C(signed out) is on the lot page for `<listing_8>`, with the browser's network inspector recording its live connection.
-- `<listing_1>` is open in HKD, before its scheduled close, with no bid.
+- `<listing_1>` is open in USD, before its scheduled close, with no bid.
 - customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the lot page for `<listing_1>`, in English.
-- `<listing_5>` is open in HKD, before its scheduled close, with no bid.
+- `<listing_5>` is open in USD, before its scheduled close, with no bid.
 - customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the lot page for `<listing_5>`, in English.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
-| `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<bid count>` | 3 |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
-| `<listing_2>` | An open HKD listing with one accepted bid, extension duration `<extension duration>`, no cap |
+| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
-| `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
-| `<user A maximum>` | HKD5,280 (range: 400000–799999 minor units) |
-| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), above `<user A maximum>` |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
-| `<user A maximum>` | HKD9,280 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
+| `<user A maximum>` | USD5,280 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), above `<user A maximum>` |
+| `<increment>` | USD80 (fixed tier increment), the US$4,000 tier |
+| `<user A maximum>` | USD9,280 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), below `<user A maximum>` |
 | `<maximum>` | At least two increments above the opening price |
 | `<higher maximum>` | At least two increments above `<maximum>` |
 
@@ -413,16 +413,16 @@
 | Item | `<device skew>`: 4 minutes ahead |
 | Item | `<device skew>`: 4 minutes behind |
 | Item | `<device skew>`: Field; Value 2: Value |
-| Item | `<device skew>`: `<listing_3>`; Value 2: An open HKD listing, close about 12 minutes away |
-| `<listing_4>` | An open HKD listing with no bids, extension duration 1800s (30mins) |
+| Item | `<device skew>`: `<listing_3>`; Value 2: An open USD listing, close about 12 minutes away |
+| `<listing_4>` | An open USD listing with no bids, extension duration 1800s (30mins) |
 | `<last moment>` | 0.4 seconds before the close |
 | Item | `<away>`: customer A's device sleeps for 45 seconds |
 | Item | `<away>`: customer A's browser goes offline for 45 seconds, then reconnects |
 | Item | `<away>`: customer A switches to another tab for 45 seconds, then back |
 | Item | `<away>`: Field; Value 2: Value |
-| Item | `<away>`: `<listing_3>`; Value 2: An open HKD listing, close about 12 minutes away |
+| Item | `<away>`: `<listing_3>`; Value 2: An open USD listing, close about 12 minutes away |
 | Item | `<away>`: `<clock change>`; Value 2: customer A's device clock set 90 seconds ahead |
-| `<listing_3>` | An open HKD listing, close about 12 minutes away |
+| `<listing_3>` | An open USD listing, close about 12 minutes away |
 | `<correction>` | 0.6 seconds, under a second |
 
 ### Route
@@ -471,7 +471,7 @@
 - `<listing_11>` is in extended bidding, led by customer B, its recorded close under a minute away.
 - customer A is on the lot page for `<listing_11>`, with its live updates delayed by 5 seconds.
 - customer C(card linked) is signed in on a separate session, on the same lot page.
-- `<listing_2>` is live in HKD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+- `<listing_2>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
 - customer C is on the lot page for `<listing_2>`, in English.
 - `<listing_3>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
 - `<listing_4>` is past its close with no bid, its close recorded with no winner.
@@ -484,13 +484,13 @@
 | Item | `<listing_5>`: Led by customer A; `<viewer>`: customer A; `<result>`: Won |
 | Item | `<listing_5>`: Led by customer A, customer B outbid; `<viewer>`: customer B; `<result>`: Did not win |
 | Item | `<listing_5>`: Open with no accepted bid; `<viewer>`: customer A; `<result>`: Ended, with No bids under it |
-| `<listing_6>` | An HKD listing led by customer A |
-| `<listing_9>` | An HKD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
-| `<listing_10>` | An open HKD listing with no bids, starting price HKD280 (range: 1000–79999 minor units), extension duration 1800s (30mins), no cap |
-| `<bid amount>` | HKD280 (range: 1000–79999 minor units), the opening price |
-| `<listing_11>` | An HKD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
+| `<listing_6>` | A USD listing led by customer A |
+| `<listing_9>` | A USD listing in extended bidding, led by customer B, no cap |
+| `<leader price>` | USD4,960 (range: 100000–499999 minor units) |
+| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| `<listing_10>` | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap |
+| `<bid amount>` | USD280 (range: 10000–49999 minor units), the opening price |
+| `<listing_11>` | A USD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
 | `<bid amount>` | At or above the minimum next bid |
 
 ### Route
@@ -546,7 +546,7 @@
 
 **Starting state:**
 
-- `<listing_1>` is open in HKD.
+- `<listing_1>` is open in USD.
 - customer A(card linked, email `<email_ada>`) and customer B(card linked, email `<email_bob>`) each have an accepted public bid on `<listing_1>`.
 - A collector is on the lot page for `<listing_1>` in English.
 - customer A(signed in, card linked, email `<email_ada>`) has an accepted public bid on open `<listing_2>` and is on that lot page.
@@ -585,12 +585,12 @@ without waiting for a script to run.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
 
@@ -609,20 +609,20 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * URL contains <lang>.
 * Page source carries that lot's name, description, and bidding standing.
 
-<!-- trace:case id=g10.auction-listing-page.TC-82e rev=1 covers=g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-82e rev=2 -->
 ### g10.auction-listing-page.US1-TC2: Two lots answer as two pages
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01
 
 **Pre-conditions:**
@@ -638,7 +638,7 @@ The catalogue publishes two lots.
 * Each response carries its own lot's name and standing.
 * Each response carries its own title, meta description and `og:url`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-2it rev=3 covers=g10.auction-listing-page.SC-l9n -->
+<!-- trace:case id=g10.auction-listing-page.TC-2it rev=4 -->
 ### g10.auction-listing-page.US1-TC3: Reused address serves only its eligible current holder
 
 **Classification:**
@@ -701,7 +701,7 @@ The catalogue publishes two lots.
 * Step 6 keeps the same `<new_lot>`, title, description and bidding standing.
 * No placeholder, old-lot content or separate code field replaces served content.
 
-<!-- trace:case id=g10.auction-listing-page.TC-tof rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-tof rev=3 -->
 ### g10.auction-listing-page.US1-TC4: Client navigation opens the eligible replacement lot
 
 **Classification:**
@@ -761,20 +761,20 @@ The catalogue publishes two lots.
 **so that** a link I pass on names the lot it points at instead of the auction
 catalogue.
 
-<!-- trace:case id=g10.auction-listing-page.TC-89i rev=1 covers=g10.auction-listing-page.SC-mda -->
+<!-- trace:case id=g10.auction-listing-page.TC-89i rev=2 -->
 ### g10.auction-listing-page.US2-TC1: Shared lot link unfurls as that lot
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-02
 
 **Pre-conditions:**
@@ -799,19 +799,19 @@ JavaScript disabled in the browser.
 answer with the site's not-found surface,
 **so that** I am never shown an empty lot page or the catalogue in its place.
 
-<!-- trace:case id=g10.auction-listing-page.TC-3xv rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
+<!-- trace:case id=g10.auction-listing-page.TC-3xv rev=2 -->
 ### g10.auction-listing-page.US3-TC1: Unknown lot address returns not-found
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
 
@@ -829,20 +829,20 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * Response status is 404.
 * The site's not-found surface is on screen.
 
-<!-- trace:case id=g10.auction-listing-page.TC-6r8 rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
+<!-- trace:case id=g10.auction-listing-page.TC-6r8 rev=2 -->
 ### g10.auction-listing-page.US3-TC2: Published lot address returns the lot page
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03
 
 **Pre-conditions:**
@@ -858,7 +858,7 @@ The catalogue publishes <a published lot>.
 * Response status is 200.
 * The page is that lot's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=4 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-c13 -->
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=5 -->
 ### g10.auction-listing-page.US3-TC3: Unavailable original address serves Page not found
 
 **Classification:**
@@ -919,7 +919,7 @@ Runs once per row of **Test data**.
 * Step 8 does not show the called-off original in the watchlist.
 * An unpublished replacement does not appear there either.
 
-<!-- trace:case id=g10.auction-listing-page.TC-x03 rev=2 covers=g10.auction-listing-page.SC-b49,g10.auction-listing-page.SC-w3i -->
+<!-- trace:case id=g10.auction-listing-page.TC-x03 rev=3 -->
 ### g10.auction-listing-page.US3-TC4: Client navigation refuses an ineligible released address
 
 Runs once per row of **Test data**.
@@ -979,19 +979,19 @@ Runs once per row of **Test data**.
 **so that** nothing I was reading blanks into a placeholder and no value
 disagrees with what the document carried.
 
-<!-- trace:case id=g10.auction-listing-page.TC-wka rev=1 covers=g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j -->
+<!-- trace:case id=g10.auction-listing-page.TC-wka rev=2 -->
 ### g10.auction-listing-page.US4-TC1: Served lot stays on screen after scripts
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-04
 
@@ -1010,19 +1010,19 @@ disagrees with what the document carried.
 * The same lot is on screen with its served name, description and standing still present.
 * None of them is replaced by a loading placeholder.
 
-<!-- trace:case id=g10.auction-listing-page.TC-e6y rev=1 covers=g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j -->
+<!-- trace:case id=g10.auction-listing-page.TC-e6y rev=2 -->
 ### g10.auction-listing-page.US4-TC2: Clock value continues from the served document
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-04
 
@@ -1048,19 +1048,19 @@ a bidding countdown is shown on <a published lot>.
 **I want** to open a lot's own address from the catalogue without a page load,
 **so that** the lot I picked out of the list is the page I land on.
 
-<!-- trace:case id=g10.auction-listing-page.TC-fe3 rev=1 covers=g10.auction-listing-page.SC-fl9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-fe3 rev=2 -->
 ### g10.auction-listing-page.US5-TC1: Catalogue opens the lot's own address
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-05
 
@@ -1076,7 +1076,7 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 
 * The browser is on that lot's address, showing that lot's page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-edm rev=2 covers=g10.auction-listing-page.SC-aga -->
+<!-- trace:case id=g10.auction-listing-page.TC-edm rev=3 -->
 ### g10.auction-listing-page.US5-TC2: Sitemap lists each published lot
 
 **Classification:**
@@ -1115,19 +1115,19 @@ The catalogue holds `<a published lot>`.
 **I want** Watching to tell me email alerts are on and offer My Auctions,
 **so that** I know how to manage that lot without hunting for the account page.
 
-<!-- trace:case id=g10.auction-listing-page.TC-4op rev=1 covers=g10.auction-listing-page.SC-z67,g10.auction-listing-page.SC-omp -->
+<!-- trace:case id=g10.auction-listing-page.TC-4op rev=2 -->
 ### g10.auction-listing-page.US6-TC1: Watch announces alerts on and opens My Auctions
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-06
 
@@ -1155,7 +1155,7 @@ The catalogue holds `<a published lot>`.
 * Step 3: My Auctions opens and lists <lot_1> once, Your Standing `--`.
 * Step 3: <lot_1>'s email alerts switch is on.
 
-<!-- trace:case id=g10.auction-listing-page.TC-sip rev=1 covers=g10.auction-listing-page.SC-z67,g10.auction-listing-page.SC-omp -->
+<!-- trace:case id=g10.auction-listing-page.TC-sip rev=2 -->
 ### g10.auction-listing-page.US6-TC2: Signed-out viewer is offered sign-in, no watch
 
 Runs once per row of **Test data**.
@@ -1202,19 +1202,19 @@ Runs once per row of **Test data**.
 **I want** Unwatch to confirm alerts are off and let me Undo,
 **so that** a mis-tap does not force me to find the lot again.
 
-<!-- trace:case id=g10.auction-listing-page.TC-pjv rev=1 covers=g10.auction-listing-page.SC-15a -->
+<!-- trace:case id=g10.auction-listing-page.TC-pjv rev=2 -->
 ### g10.auction-listing-page.US7-TC1: Unwatch removes the lot and turns alerts off
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-07
 
@@ -1240,19 +1240,19 @@ Runs once per row of **Test data**.
 * Step 1: current bid, time left and bid panel are unchanged.
 * Step 2: <lot_2> is not listed.
 
-<!-- trace:case id=g10.auction-listing-page.TC-i5l rev=1 covers=g10.auction-listing-page.SC-15a -->
+<!-- trace:case id=g10.auction-listing-page.TC-i5l rev=2 -->
 ### g10.auction-listing-page.US7-TC2: Undo restores the watch with alerts on
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-07
 
@@ -1286,19 +1286,19 @@ Runs once per row of **Test data**.
 **I want** the watch control locked as Watching and one alerts toast when the bid bookmarks the lot,
 **so that** I am not invited to unwatch money I already put down, and I am not toasted on every revisit.
 
-<!-- trace:case id=g10.auction-listing-page.TC-jhd rev=1 covers=g10.auction-listing-page.SC-krh,g10.auction-listing-page.SC-arf,g10.auction-listing-page.SC-bs7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-jhd rev=2 -->
 ### g10.auction-listing-page.US8-TC1: First bid locks Watching and toasts alerts once
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-08
 
@@ -1326,19 +1326,19 @@ Runs once per row of **Test data**.
 * Step 2: nothing changes; no Unwatch toast.
 * Step 3: the control still reads Watching, disabled; no alerts toast.
 
-<!-- trace:case id=g10.auction-listing-page.TC-amc rev=1 covers=g10.auction-listing-page.SC-krh,g10.auction-listing-page.SC-arf,g10.auction-listing-page.SC-bs7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-amc rev=2 -->
 ### g10.auction-listing-page.US8-TC2: A second bid on the lot shows no alerts toast
 
 **Classification:**
 
 * **Severity:** minor
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-08
 
@@ -1370,7 +1370,7 @@ Runs once per row of **Test data**.
 **I want** no Watch / Watching control,
 **so that** I am not invited to watch a sale that has already ended.
 
-<!-- trace:case id=g10.auction-listing-page.TC-84a rev=1 covers=g10.auction-listing-page.SC-n70 -->
+<!-- trace:case id=g10.auction-listing-page.TC-84a rev=2 -->
 ### g10.auction-listing-page.US9-TC1: A closed lot shows no watch control
 
 Runs once per row of **Test data**.
@@ -1379,12 +1379,12 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-09
 
@@ -1421,7 +1421,7 @@ Runs once per row of **Test data**.
 **I want** to reference and share a lot by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
-<!-- trace:case id=g10.auction-listing-page.TC-nis rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-nis rev=2 -->
 ### g10.auction-listing-page.US10-TC1: Listing code absent from the response before scripts run
 
 **Classification:**
@@ -1453,7 +1453,7 @@ Runs once per row of **Test data**.
 * The source names the lot by its title.
 * The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
-<!-- trace:case id=g10.auction-listing-page.TC-87q rev=3 covers=g10.auction-listing-page.SC-57v -->
+<!-- trace:case id=g10.auction-listing-page.TC-87q rev=4 -->
 ### g10.auction-listing-page.US10-TC2: Listing code absent from the page once scripts finish running
 
 **Classification:**
@@ -1493,7 +1493,7 @@ Runs once per row of **Test data**.
 * No separate listing-code or payment-reference field appears.
 * A code occurs only within the full canonical address.
 
-<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=3 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-5rp rev=4 -->
 ### g10.auction-listing-page.US10-TC3: Listing code absent from the shared-link preview
 
 **Classification:**
@@ -1533,7 +1533,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 4 identifies the same public lot by title and description.
 * Neither document field contains a listing code or payment reference.
 
-<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=3 -->
 ### g10.auction-listing-page.US10-TC4: Listing code absent from the page title and meta description
 
 **Classification:**
@@ -1565,7 +1565,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Neither the tab title nor the meta description contains the listing code.
 * Both identify the addressed lot, never the auction catalogue.
 
-<!-- trace:case id=g10.auction-listing-page.TC-udy rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-udy rev=2 -->
 ### g10.auction-listing-page.US10-TC5: Listing code absent from the page's embedded data
 
 **Classification:**
@@ -1596,7 +1596,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No field in the embedded data carries the listing code.
 
-<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-yjo rev=2 -->
 ### g10.auction-listing-page.US10-TC6: Listing code absent from the page's own network responses
 
 **Classification:**
@@ -1627,7 +1627,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * No page response contains a separate listing-code or payment-reference field.
 
-<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-cbx rev=2 -->
 ### g10.auction-listing-page.US10-TC7: Listing code does not resolve as a lot address
 
 **Classification:**
@@ -1656,7 +1656,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The address does not resolve to that lot's page.
 * The site's not-found surface is shown, the same as for any address naming no published lot.
 
-<!-- trace:case id=g10.auction-listing-page.TC-udv rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-udv rev=2 -->
 ### g10.auction-listing-page.US10-TC8: Listing code stays absent regardless of the collector's signed-in state
 
 **Classification:**
@@ -1687,7 +1687,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix.
 * The title and address shown are identical in both views.
 
-<!-- trace:case id=g10.auction-listing-page.TC-6de rev=2 covers=g10.auction-listing-page.SC-dc3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-6de rev=3 -->
 ### g10.auction-listing-page.US10-TC9: Listing code stays absent once an order exists on the lot
 
 **Classification:**
@@ -1722,7 +1722,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Title and description contain no listing code or payment reference.
 * Embedded and network data contain no separate code or payment reference.
 
-<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=2 covers=g10.auction-listing-page.SC-suj -->
+<!-- trace:case id=g10.auction-listing-page.TC-y7l rev=3 -->
 ### g10.auction-listing-page.US10-TC10: An address naming no lot carries no listing code
 
 **Classification:**
@@ -1754,7 +1754,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * No listing code appears anywhere in the response.
 * No lot content or separate payment reference appears.
 
-<!-- trace:case id=g10.auction-listing-page.TC-90g rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-90g rev=3 -->
 ### g10.auction-listing-page.US10-TC11: Closed and settled listings retain their public addresses
 
 **Classification:**
@@ -1790,7 +1790,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
 * Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=1 covers=g10.auction-listing-page.SC-oq9 -->
+<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=2 -->
 ### g10.auction-listing-page.US10-TC12: A cached preview may persist after browse/search removal without private data
 
 **Classification:**
@@ -1831,7 +1831,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
-<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=3 covers=g10.auction-listing-page.SC-51n -->
+<!-- trace:case id=g10.auction-listing-page.TC-du4 rev=4 -->
 ### g10.auction-listing-page.US11-TC1: No listing code available on the page for the collector to send
 
 **Classification:**
@@ -1869,7 +1869,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 5 identifies the same lot by title and full address.
 * The opened public lot shows no separate code to support.
 
-<!-- trace:case id=g10.auction-listing-page.TC-wxd rev=1 covers=g10.auction-listing-page.SC-51n,g10.auction-listing-page.SC-dc3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-wxd rev=2 -->
 ### g10.auction-listing-page.US11-TC2: A listing code known from elsewhere gives no working link
 
 **Classification:**
@@ -1898,7 +1898,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The listing code does not resolve to the lot.
 * No working link to the lot can be built from the code alone.
 
-<!-- trace:case id=g10.auction-listing-page.TC-h6y rev=2 -->
+<!-- trace:case id=g10.auction-listing-page.TC-h6y rev=3 -->
 ### g10.auction-listing-page.US11-TC3: Title and address stay the collector's only reference once an order exists
 
 **Classification:**
@@ -1932,7 +1932,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 3 exposes no separate code or payment reference.
 * Step 4 finds the same lot without a code.
 
-<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=2 covers=none -->
+<!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=3 -->
 ### g10.auction-listing-page.US11-TC4: Called-off listing remains directly accessible
 
 **Classification:**
@@ -1975,7 +1975,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **I want** a bid placed on another page to show on mine with the new price and close, without a reload,
 **so that** I bid against the price that stands.
 
-<!-- trace:case id=g10.auction-listing-page.TC-3rf rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-3rf rev=2 -->
 ### g10.auction-listing-page.US12-TC1: Another session's bid shows its price and bid count without a reload
 
 Runs once per row of **Test data**.
@@ -2005,10 +2005,10 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<bid count>` | 3 |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2022,7 +2022,7 @@ Runs once per row of **Test data**.
 * Time left still counts to the scheduled close.
 * customer A's page did not reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-d35 rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-d35 rev=2 -->
 ### g10.auction-listing-page.US12-TC2: Scheduled close with a bid turns to Extended bidding without a reload
 
 Runs once per row of **Test data**.
@@ -2049,7 +2049,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_2>` | An open HKD listing with one accepted bid, extension duration `<extension duration>`, no cap |
+| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
 
 **Steps:**
@@ -2063,7 +2063,7 @@ Runs once per row of **Test data**.
 * Time left is labelled Extended bidding and counts to the scheduled close plus `<extension duration>`.
 * The page did not reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-b7y rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-b7y rev=2 -->
 ### g10.auction-listing-page.US12-TC3: A page with no live line still catches up without a reload
 
 Runs once per row of **Test data**.
@@ -2091,9 +2091,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
+| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2106,7 +2106,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-nz3 rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-nz3 rev=2 -->
 ### g10.auction-listing-page.US12-TC4: A page that lost its line catches up when it returns
 
 Runs once per row of **Test data**.
@@ -2136,9 +2136,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
+| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2152,7 +2152,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>` and the bid count includes customer B's bid.
 * customer A's page did not reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-5ps rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-5ps rev=3 covers=g10.auction-listing-page.SC-7c2 -->
 ### g10.auction-listing-page.US12-TC5: Leader's own standing turns to Outbid without a reload
 
 Runs once per row of **Test data**.
@@ -2181,11 +2181,11 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<user A maximum>` | HKD5,280 (range: 400000–799999 minor units) |
-| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), above `<user A maximum>` |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
+| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
+| `<current bid>` | USD1200 (120000 USD minor units) |
+| `<user A maximum>` | USD1275 (127500 USD minor units) |
+| `<user B maximum>` | USD1300 (130000 USD minor units), above `<user A maximum>` |
+| `<increment>` | USD25 (2500 USD minor units), the USD1000 tier increment |
 
 **Steps:**
 
@@ -2197,10 +2197,10 @@ Runs once per row of **Test data**.
 
 * Step 1 reads Leading, with Your maximum `<user A maximum>`.
 * Step 3 reads Outbid, with no reload.
-* Step 3 reads Highest bid `<user A maximum>` plus `<increment>`.
-* Step 3 shows the next valid bid, Highest bid plus its increment.
+* Step 3 reads Highest bid 130000 USD minor units, `<user A maximum>` plus `<increment>`.
+* Step 3 shows 132500 USD minor units as the minimum next valid bid.
 
-<!-- trace:case id=g10.auction-listing-page.TC-wzt rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-wzt rev=2 -->
 ### g10.auction-listing-page.US12-TC6: Live updates name no bidder and no maximum
 
 Runs once per row of **Test data**.
@@ -2230,9 +2230,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
-| `<user A maximum>` | HKD9,280 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
+| `<user A maximum>` | USD9,280 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -2245,7 +2245,7 @@ Runs once per row of **Test data**.
 * No message carries `<user A maximum>`, an account id, an email or a card detail.
 * Any bidder a message names appears only by the lot's pseudonym.
 
-<!-- trace:case id=g10.auction-listing-page.TC-0yw rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-0yw rev=2 -->
 ### g10.auction-listing-page.US12-TC7: A tied maximum that came second carries the earlier-leads tip
 
 Runs once per row of **Test data**.
@@ -2267,7 +2267,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` is open in HKD, before its scheduled close, with no bid.
+* `<listing_1>` is open in USD, before its scheduled close, with no bid.
 * customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the lot page for `<listing_1>`, in English.
 
 **Test data:**
@@ -2289,7 +2289,7 @@ Runs once per row of **Test data**.
 * Step 3: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
 * Step 4: the tip reads When maximums match, the earlier one leads.
 
-<!-- trace:case id=g10.auction-listing-page.TC-7nz rev=1 covers=g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-listing-page.TC-7nz rev=2 -->
 ### g10.auction-listing-page.US12-TC8: An older tie lower down keeps the earlier-leads tip
 
 Runs once per row of **Test data**.
@@ -2311,7 +2311,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_5>` is open in HKD, before its scheduled close, with no bid.
+* `<listing_5>` is open in USD, before its scheduled close, with no bid.
 * customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the lot page for `<listing_5>`, in English.
 
 **Test data:**
@@ -2336,7 +2336,7 @@ Runs once per row of **Test data**.
 * Step 4: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one.
 * Step 5: the tip reads When maximums match, the earlier one leads.
 
-<!-- trace:case id=g10.auction-listing-page.TC-avc rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-avc rev=2 -->
 ### g10.auction-listing-page.US12-TC9: A live bid arrives with its email avatar letter
 
 Runs once per row of **Test data**.
@@ -2387,7 +2387,7 @@ Runs once per row of **Test data**.
 **I want** the lot's countdown to agree with every other page on that lot, whatever my device's clock says,
 **so that** the time I see left is the time I have.
 
-<!-- trace:case id=g10.auction-listing-page.TC-o3v rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
+<!-- trace:case id=g10.auction-listing-page.TC-o3v rev=2 -->
 ### g10.auction-listing-page.US13-TC1: Countdown agrees across devices whose clocks disagree
 
 Runs once per row of **Test data**.
@@ -2422,7 +2422,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open HKD listing, close about 12 minutes away |
+| `<listing_3>` | An open USD listing, close about 12 minutes away |
 
 **Steps:**
 
@@ -2436,7 +2436,7 @@ Runs once per row of **Test data**.
 * Both pages read the same Time left, to the second, at step 3.
 * Neither page is off by `<device skew>`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-56e rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
+<!-- trace:case id=g10.auction-listing-page.TC-56e rev=2 -->
 ### g10.auction-listing-page.US13-TC2: Last second never reads 0 while the lot takes bids
 
 Runs once per row of **Test data**.
@@ -2465,7 +2465,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_4>` | An open HKD listing with no bids, extension duration 1800s (30mins) |
+| `<listing_4>` | An open USD listing with no bids, extension duration 1800s (30mins) |
 | `<last moment>` | 0.4 seconds before the close |
 
 **Steps:**
@@ -2480,7 +2480,7 @@ Runs once per row of **Test data**.
 * At step 2 Time left reads 1 second, never 0.
 * At step 3 Time left reads 0 or the lot reads Closed.
 
-<!-- trace:case id=g10.auction-listing-page.TC-iu2 rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
+<!-- trace:case id=g10.auction-listing-page.TC-iu2 rev=2 -->
 ### g10.auction-listing-page.US13-TC3: Countdown corrects itself after the page was away
 
 Runs once per row of **Test data**.
@@ -2516,7 +2516,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open HKD listing, close about 12 minutes away |
+| `<listing_3>` | An open USD listing, close about 12 minutes away |
 | `<clock change>` | customer A's device clock set 90 seconds ahead |
 
 **Steps:**
@@ -2529,7 +2529,7 @@ Runs once per row of **Test data**.
 
 * Both pages read the same Time left, to the second.
 
-<!-- trace:case id=g10.auction-listing-page.TC-ncg rev=1 covers=g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
+<!-- trace:case id=g10.auction-listing-page.TC-ncg rev=2 -->
 ### g10.auction-listing-page.US13-TC4: A sub-second correction never makes the countdown jump up
 
 Runs once per row of **Test data**.
@@ -2559,7 +2559,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open HKD listing, close about 12 minutes away |
+| `<listing_3>` | An open USD listing, close about 12 minutes away |
 | `<correction>` | 0.6 seconds, under a second |
 
 **Steps:**
@@ -2580,7 +2580,7 @@ Runs once per row of **Test data**.
 **I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
 **so that** I am never shown a result the auction has not decided.
 
-<!-- trace:case id=g10.auction-listing-page.TC-ffc rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-ffc rev=2 -->
 ### g10.auction-listing-page.US14-TC1: Closed shows until the close is recorded, then the result
 
 Runs once per row of **Test data**.
@@ -2623,7 +2623,7 @@ Runs once per row of **Test data**.
 * Once the close passes, the page reads Closed with no result.
 * The page then reads `<result>`, without a reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-iet rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-iet rev=2 -->
 ### g10.auction-listing-page.US14-TC2: A delayed close keeps Closed and never guesses a result
 
 Runs once per row of **Test data**.
@@ -2653,7 +2653,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | An HKD listing led by customer A |
+| `<listing_6>` | A USD listing led by customer A |
 
 **Steps:**
 
@@ -2668,50 +2668,7 @@ Runs once per row of **Test data**.
 * No step shows Won, Did not win or Ended before the close is recorded.
 * After step 4 the page reads Won, without a reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-jic rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
-### g10.auction-listing-page.US14-TC3: A bid still confirming at the close reads in existing words
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-listing-page-US-14
-
-**Pre-conditions:**
-
-* Bid-time holds are on.
-* customer B leads `<listing_7>`, its close under a minute away.
-* customer A(card linked) is signed in and on the lot page for `<listing_7>`.
-* customer A's card authorization is held until after the close.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_7>` | An HKD listing in extended bidding, led by customer B |
-| `<bid amount>` | 521000 minor units, at or above the minimum next bid |
-
-**Steps:**
-
-1. Place `<bid amount>` 5 seconds before the close.
-2. Read the bid panel.
-3. Wait until the close is recorded.
-4. Read the bid panel and the lot's state.
-
-**Expected Results:**
-
-* At step 2 the bid panel reads Authorizing….
-* At step 4 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
-* The lot reads Did not win for customer A, with customer B's price as Highest bid.
-
-<!-- trace:case id=g10.auction-listing-page.TC-51a rev=2 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-51a rev=3 -->
 ### g10.auction-listing-page.US14-TC4: A bid reaching the auction after the close reads in existing words
 
 Runs once per row of **Test data**.
@@ -2741,9 +2698,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_9>` | An HKD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| `<listing_9>` | A USD listing in extended bidding, led by customer B, no cap |
+| `<leader price>` | USD4,960 (range: 100000–499999 minor units) |
+| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2760,7 +2717,7 @@ Runs once per row of **Test data**.
 * At step 5 Highest bid reads `<leader price>`.
 * At step 5 customer A's page shows neither Won nor Did not win.
 
-<!-- trace:case id=g10.auction-listing-page.TC-1pq rev=2 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-1pq rev=3 -->
 ### g10.auction-listing-page.US14-TC5: A lone first bid refused past the close leaves the lot Ended with No bids
 
 Runs once per row of **Test data**.
@@ -2790,8 +2747,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_10>` | An open HKD listing with no bids, starting price HKD280 (range: 1000–79999 minor units), extension duration 1800s (30mins), no cap |
-| `<bid amount>` | HKD280 (range: 1000–79999 minor units), the opening price |
+| `<listing_10>` | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap |
+| `<bid amount>` | USD280 (range: 10000–49999 minor units), the opening price |
 
 **Steps:**
 
@@ -2808,7 +2765,7 @@ Runs once per row of **Test data**.
 * At step 5 the lot reads Ended, with No bids under it.
 * At step 5 the page shows neither Won nor Did not win.
 
-<!-- trace:case id=g10.auction-listing-page.TC-ecq rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-ecq rev=2 -->
 ### g10.auction-listing-page.US14-TC6: A later close turns a Closed page back to Extended bidding
 
 Runs once per row of **Test data**.
@@ -2838,7 +2795,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_11>` | An HKD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
+| `<listing_11>` | A USD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
 | `<bid amount>` | At or above the minimum next bid |
 
 **Steps:**
@@ -2854,7 +2811,7 @@ Runs once per row of **Test data**.
 * At step 3 the bid controls are enabled.
 * No step shows Won, Did not win or Ended, and the page did not reload.
 
-<!-- trace:case id=g10.auction-listing-page.TC-4ba rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-4ba rev=2 -->
 ### g10.auction-listing-page.US14-TC7: A sold lot crowns its winning bid and no other
 
 **Classification:**
@@ -2874,7 +2831,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_2>` is live in HKD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+* `<listing_2>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
 * customer C is on the lot page for `<listing_2>`, in English.
 
 **Steps:**
@@ -2889,7 +2846,7 @@ Runs once per row of **Test data**.
 * Step 3: customer A's winning row shows a crown named Winner after the amount.
 * Step 3: no other row, customer B's included, shows a crown.
 
-<!-- trace:case id=g10.auction-listing-page.TC-hqd rev=1 covers=g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-listing-page.TC-hqd rev=2 -->
 ### g10.auction-listing-page.US14-TC8: A lot without a winner crowns no bid
 
 **Classification:**
@@ -2923,6 +2880,49 @@ Runs once per row of **Test data**.
 * Step 1: the lot reads Closed and no row shows a crown.
 * Step 2: the lot reads Ended with No bids under it, Recent bids holds no row, and no crown shows.
 
+<!-- trace:case id=g10.auction-listing-page.TC-jic rev=2 -->
+### g10.auction-listing-page.US14-TC3: A bid still confirming at the close reads in existing words
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-auction-listing-page-US-14
+
+**Pre-conditions:**
+
+* Bid-time holds are on.
+* customer B leads `<listing_7>`, its close under a minute away.
+* customer A(card linked) is signed in and on the lot page for `<listing_7>`.
+* customer A's card authorization is held until after the close.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_7>` | A USD listing in extended bidding, led by customer B |
+| `<bid amount>` | 521000 minor units, at or above the minimum next bid |
+
+**Steps:**
+
+1. Place `<bid amount>` 5 seconds before the close.
+2. Read the bid panel.
+3. Wait until the close is recorded.
+4. Read the bid panel and the lot's state.
+
+**Expected Results:**
+
+* At step 2 the bid panel reads Authorizing….
+* At step 4 the bid panel reads "Your bid did not go through." alone, never "The card was not authorized."
+* The lot reads Did not win for customer A, with customer B's price as Highest bid.
+
 ---
 
 ## g10.auction-listing-page.US15: Collector tells Recent Bids rivals apart by avatar letter
@@ -2932,7 +2932,7 @@ Runs once per row of **Test data**.
 initial while the label stays Bidder N,
 **so that** I can tell who bid what without reading a name or email.
 
-<!-- trace:case id=g10.auction-listing-page.TC-ava rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-ava rev=2 -->
 ### g10.auction-listing-page.US15-TC1: Rival Recent Bids avatars show different email letters
 
 Runs once per row of **Test data**.
@@ -2952,7 +2952,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` is open in HKD.
+* `<listing_1>` is open in USD.
 * customer A(card linked, email `<email_ada>`) and customer B(card linked, email `<email_bob>`) each have an accepted public bid on `<listing_1>`.
 * A collector is on the lot page for `<listing_1>` in English.
 
@@ -2975,7 +2975,7 @@ Runs once per row of **Test data**.
 * Neither row shows an email or personal name.
 * Readable labels stay listing pseudonyms or You, not an email-prefixed form.
 
-<!-- trace:case id=g10.auction-listing-page.TC-avb rev=1 -->
+<!-- trace:case id=g10.auction-listing-page.TC-avb rev=2 -->
 ### g10.auction-listing-page.US15-TC2: The viewer row still uses the email letter under You
 
 Runs once per row of **Test data**.
@@ -3177,6 +3177,13 @@ the code must never appear on this capability's public surfaces.
 - **Decision** - None new. Q1-Q4 stay settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
 - **Walks** - Unchanged: this delta carries none, and task 1.3 repairs the durable walks through `/tcs-review`.
+
+**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
+
+- `TC-5ps` rev3 covers SC-7c2: on the live USD lot, the accepted high maximum is 130000 USD minor and the viewer's next bid is 132500 USD minor, from current 120000 USD minor and the USD increment tier.
+- The changed scenario preserves the listing journey and the universal USD bid contract. No PRD, journey, feature-root, or durable-baseline contradiction was found. The changed listing scenario does not assert the 20% premium; that behavior stays with its owning bid and post-bid suites.
+- Fourteen existing cases remain draft and are manual until automation execution proof is linked: `g10.auction-listing-page.US1-TC1`, `TC-82e`, `TC-89i`, `TC-3xv`, `TC-6r8`, `TC-wka`, `TC-e6y`, `TC-fe3`, `TC-4op`, `TC-pjv`, `TC-i5l`, `TC-jhd`, `TC-amc`, and `TC-84a`. Testability is `automation, manual`; no assertions or opaque case IDs changed.
+- The edited case remains draft. No implementation execution or human approval is claimed.
 
 ### Manual
 

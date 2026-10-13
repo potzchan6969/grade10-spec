@@ -1,7 +1,7 @@
 # grade10-site/auction/notifications-order Test Cases
 
-**Status:** pending-review · 0/12
-**Drafts styled:** 2026-10-12, tcs-rules r5
+**Status:** pending-review · 0/17
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## Walk 1: Post-close letters and adjacent checks
 
@@ -111,7 +111,8 @@
 **I want** the letters Grade10 sends about my auction order,
 **so that** I know what to do next without guessing.
 
-### g10.auction-notifications-order.US1-TC1: Winning a lot sends auction-won
+<!-- trace:case id=g10.auction-notifications-order.TC-8bw rev=3 covers=g10.auction-notifications-order.SC-pyd -->
+### g10.auction-notifications-order.US1-TC1: Auction-won letter names the USD winning bid before setup
 
 **Classification:**
 
@@ -128,26 +129,25 @@
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email.
+* A collector wins a USD lot. No settlement currency is selected yet.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot that just closed with this winner |
+| `<winning bid>` | USD101.00 (10100 minor units) |
 
 **Steps:**
 
-1. Close `<lot_1>` with this winner.
-2. Open the winner's inbox.
+1. Read the auction-won letter.
 
 **Expected Results:**
 
-* One auction-won letter names `<lot_1>` and the setup deadline.
-* It names no amount owed.
+* The letter names `<winning bid>` in USD.
+* It names no HKD amount and no conversion rate.
 
-<!-- trace:case id=g10.auction-notifications-order.TC-8bw rev=1 covers=g10.auction-notifications-order.SC-2d0,g10.auction-notifications-order.SC-kkg,g10.auction-notifications-order.SC-s24,g10.auction-notifications-order.SC-dv3,g10.auction-notifications-order.SC-nrz,g10.auction-notifications-order.SC-7jz,g10.auction-notifications-order.SC-pnf,g10.auction-notifications-order.SC-wmw,g10.auction-notifications-order.SC-y5o,g10.auction-notifications-order.SC-3di,g10.auction-notifications-order.SC-18a,g10.auction-notifications-order.SC-4u6,g10.auction-notifications-order.SC-jw9,g10.auction-notifications-order.SC-qsh,g10.auction-notifications-order.SC-qmq,g10.auction-notifications-order.SC-pqi,g10.auction-notifications-order.SC-gec,g10.auction-notifications-order.SC-kas,g10.auction-notifications-order.SC-mva,g10.auction-notifications-order.SC-7pc,g10.auction-notifications-order.SC-ek4,g10.auction-notifications-order.SC-q85,g10.auction-notifications-order.SC-n3n,g10.auction-notifications-order.SC-dnr -->
-### g10.auction-notifications-order.US1-TC2: Invoice send is the first payment reminder
+<!-- trace:case id=g10.auction-notifications-order.TC-5o0 rev=3 covers=g10.auction-notifications-order.SC-tfm,g10.auction-notifications-order.SC-3mo -->
+### g10.auction-notifications-order.US1-TC2: Payment reminder uses the chosen settlement currency
 
 **Classification:**
 
@@ -156,7 +156,7 @@
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -164,26 +164,24 @@
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has confirmed setup.
-* admin(operator) can send the invoice for `<lot_1>`.
+* A winner has chosen a settlement currency and an operator is ready to send the invoice.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order in Preparing Invoice |
-| `<total>` | HKD3,280 (fixed derived value) |
+| Settlement currency | Winning bid | Payment reminder total |
+| --- | --- | --- |
+| USD | Any USD winning bid | 312000 minor units in USD |
+| HKD | 10100 minor units in USD | 103100 minor units in HKD |
 
 **Steps:**
 
-1. admin(operator) sends the invoice for `<lot_1>` with `<total>`.
-2. Open the winner's inbox.
+1. Send the invoice and read the payment-reminder letter.
 
 **Expected Results:**
 
-* One payment-reminder letter names `<total>` and the payment deadline.
-* The deadline uses `Asia/Hong_Kong` and is labelled `GMT+8`.
-* No separate invoice-sent letter exists.
+* The amount is the row's payment-reminder total in its settlement currency.
+* The letter does not repeat the USD winning bid.
+* Under HKD settlement, the letter names no conversion rate.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-5o0 rev=1 covers=g10.auction-notifications-order.SC-2d0,g10.auction-notifications-order.SC-kkg,g10.auction-notifications-order.SC-s24,g10.auction-notifications-order.SC-dv3,g10.auction-notifications-order.SC-nrz,g10.auction-notifications-order.SC-7jz,g10.auction-notifications-order.SC-pnf,g10.auction-notifications-order.SC-wmw,g10.auction-notifications-order.SC-y5o,g10.auction-notifications-order.SC-3di,g10.auction-notifications-order.SC-18a,g10.auction-notifications-order.SC-4u6,g10.auction-notifications-order.SC-jw9,g10.auction-notifications-order.SC-qsh,g10.auction-notifications-order.SC-qmq,g10.auction-notifications-order.SC-pqi,g10.auction-notifications-order.SC-gec,g10.auction-notifications-order.SC-kas,g10.auction-notifications-order.SC-mva,g10.auction-notifications-order.SC-7pc,g10.auction-notifications-order.SC-ek4,g10.auction-notifications-order.SC-q85,g10.auction-notifications-order.SC-n3n,g10.auction-notifications-order.SC-dnr -->
 ### g10.auction-notifications-order.US1-TC3: Reissue sends payment reminder only
@@ -368,125 +366,6 @@ Runs once per row of **Test data**.
 
 * The letter body names `support@grade10.com`.
 * Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the ready email for that order.
-* The mailto is not a bare `mailto:support@grade10.com` without subject and body.
-<!-- trace:case id=g10.auction-notifications-order.TC-7nr rev=1 covers=g10.auction-notifications-order.SC-xbe -->
-### g10.auction-notifications-order.US1-TC8: Payment overdue letter Contact Us carries the ready mailto and names the address (folded into g10.auction-notifications-order.US1-TC7)
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Contact Us destination
-
-**Pre-conditions:**
-
-* customer(winner of `<lot_1>`) has a registered email.
-* The payment deadline for `<lot_1>` has just passed unpaid.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | A won lot whose payment overdue letter is due |
-| `<invoice_id>` | The issued invoice id on that order |
-
-**Steps:**
-
-1. Wait for the payment overdue letter for `<lot_1>`.
-2. Open the letter.
-3. Read the letter body and the Contact Us link.
-
-**Expected Results:**
-
-* The letter body names `support@grade10.com`.
-* Contact Us is a `mailto:` to `support@grade10.com`.
-* The mailto subject is `Auction order `<invoice_id>`: payment overdue`.
-* The mailto includes a body with the matching order facts.
-
-<!-- trace:case id=g10.auction-notifications-order.TC-l79 rev=1 covers=g10.auction-notifications-order.SC-fza -->
-### g10.auction-notifications-order.US1-TC9: Cancelled letter Contact Us carries the ready mailto and names the address (folded into g10.auction-notifications-order.US1-TC7)
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Contact Us destination
-
-**Pre-conditions:**
-
-* customer(winner of `<lot_1>`) has a registered email.
-* admin(operator) has cancelled the unpaid order for `<lot_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | A won lot whose order cancelled letter is due |
-
-**Steps:**
-
-1. Wait for the order cancelled letter for `<lot_1>`.
-2. Open the letter.
-3. Read the letter body and the Contact Us link.
-
-**Expected Results:**
-
-* The letter body names `support@grade10.com`.
-* Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the same ready email as Winner Order Contact Us for that order.
-* The mailto is not a bare `mailto:support@grade10.com` without subject and body.
-
-<!-- trace:case id=g10.auction-notifications-order.TC-wcd rev=1 covers=g10.auction-notifications-order.SC-kn8 -->
-### g10.auction-notifications-order.US1-TC10: Delivered letter Contact Us carries the ready mailto and names the address (folded into g10.auction-notifications-order.US1-TC7)
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Contact Us destination
-
-**Pre-conditions:**
-
-* customer(winner of `<lot_1>`) has a registered email.
-* The carrier has confirmed delivery for `<lot_1>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | A won lot whose delivered letter is due |
-| `<invoice_id>` | The paid invoice id on that order |
-
-**Steps:**
-
-1. Wait for the delivered letter for `<lot_1>`.
-2. Open the letter.
-3. Read the letter body and the Contact Us link.
-
-**Expected Results:**
-
-* The letter body names `support@grade10.com`.
-* Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the same ready email as Winner Order Contact Us for that order.
 * The mailto is not a bare `mailto:support@grade10.com` without subject and body.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-y9r rev=1 covers=g10.auction-notifications-order.SC-xbe -->
@@ -678,6 +557,306 @@ Runs once per row of **Test data**.
 * The tracking number reads as plain text, not a link.
 * The letter offers no track-and-trace action.
 
+<!-- trace:case id=g10.auction-notifications-order.TC-ew9 rev=1 -->
+### g10.auction-notifications-order.US1-TC56: Later payment reminder uses the settlement currency
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* A sent invoice remains unpaid; its order has the row's settlement currency.
+
+**Test data:**
+
+| Settlement currency | Reminder amount |
+| --- | --- |
+| USD | Any amount in USD |
+| HKD | 103100 minor units in HKD |
+
+**Steps:**
+
+1. Read a later payment reminder.
+
+**Expected Results:**
+
+* Any amount in the reminder uses the row's settlement currency.
+* The reminder includes no USD winning bid under HKD settlement.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-vxo rev=2 covers=g10.auction-notifications-order.SC-16k -->
+### g10.auction-notifications-order.US1-TC57: Payment received letters use the settlement currency
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* A winner has an order with the row's settlement currency and a recorded payment.
+
+**Test data:**
+
+| Settlement currency | Amount received |
+| --- | --- |
+| USD | 312000 minor units in USD |
+| HKD | 103100 minor units in HKD |
+
+**Steps:**
+
+1. Read the payment-received letter and receipt.
+
+**Expected Results:**
+
+* The received amount and receipt use the row's settlement currency.
+* Under HKD settlement, neither prints the USD winning bid or a conversion rate.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-l6s rev=2 covers=g10.auction-notifications-order.SC-0e7 -->
+### g10.auction-notifications-order.US1-TC58: A reissue after a currency change sends the reminder in the new currency
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* customer(winner of `<lot_1>`) has a pending invoice in HKD.
+* admin(operator) can reissue the invoice for `<lot_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | An order with a pending HKD invoice, for a USD lot won at `<winning bid>` |
+| `<winning bid>` | USD2,400 (range: >0 minor units) |
+| `<new invoice total>` | USD131.21 (13121 minor units) |
+
+**Steps:**
+
+1. admin(operator) changes the settlement currency of `<lot_1>` to USD and reissues the invoice.
+2. Open the winner's inbox and the send log.
+
+**Expected Results:**
+
+* One payment-reminder letter exists for the new invoice and names `<new invoice total>` in USD.
+* No amount in it reads in HKD.
+* The HKD invoice's earlier payment-reminder letter still reads its HKD amounts.
+* No invoice-reissued letter exists.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-xsq rev=2 covers=g10.auction-notifications-order.SC-7qg -->
+### g10.auction-notifications-order.US1-TC59: The payment overdue letter names the outstanding amount in the settlement currency
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* customer(winner of `<lot_1>`) has a registered email and a pending unpaid invoice in HKD, for a USD lot won at `<winning bid>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | An order with a pending HKD invoice and a known payment deadline |
+| `<winning bid>` | USD2,400 (range: >0 minor units) |
+| `<invoice total>` | HKD1,031.00 (103100 minor units) |
+
+**Steps:**
+
+1. Let the invoice's payment deadline pass so Grade10 sets it to `expired`.
+2. Open the winner's inbox and read the letter.
+
+**Expected Results:**
+
+* One payment overdue letter exists for `<lot_1>`.
+* It names `<invoice total>` as the outstanding amount in HKD.
+* It names no USD amount and no conversion rate.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-i7q rev=1 -->
+### g10.auction-notifications-order.US1-TC60: Internal bidder receives no order letters
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* An internal bidder wins and its order is created automatically at lot close.
+
+**Steps:**
+
+1. Read the internal bidder's order letter history after close.
+
+**Expected Results:**
+
+* No order letters are sent to the internal bidder.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-7nr rev=1 covers=g10.auction-notifications-order.SC-xbe -->
+### g10.auction-notifications-order.US1-TC8: Payment overdue letter Contact Us carries the ready mailto and names the address (folded into g10.auction-notifications-order.US1-TC7)
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Contact Us destination
+
+**Pre-conditions:**
+
+* customer(winner of `<lot_1>`) has a registered email.
+* The payment deadline for `<lot_1>` has just passed unpaid.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A won lot whose payment overdue letter is due |
+| `<invoice_id>` | The issued invoice id on that order |
+
+**Steps:**
+
+1. Wait for the payment overdue letter for `<lot_1>`.
+2. Open the letter.
+3. Read the letter body and the Contact Us link.
+
+**Expected Results:**
+
+* The letter body names `support@grade10.com`.
+* Contact Us is a `mailto:` to `support@grade10.com`.
+* The mailto subject is `Auction order `<invoice_id>`: payment overdue`.
+* The mailto includes a body with the matching order facts.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-l79 rev=1 covers=g10.auction-notifications-order.SC-fza -->
+### g10.auction-notifications-order.US1-TC9: Cancelled letter Contact Us carries the ready mailto and names the address (folded into g10.auction-notifications-order.US1-TC7)
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Contact Us destination
+
+**Pre-conditions:**
+
+* customer(winner of `<lot_1>`) has a registered email.
+* admin(operator) has cancelled the unpaid order for `<lot_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A won lot whose order cancelled letter is due |
+
+**Steps:**
+
+1. Wait for the order cancelled letter for `<lot_1>`.
+2. Open the letter.
+3. Read the letter body and the Contact Us link.
+
+**Expected Results:**
+
+* The letter body names `support@grade10.com`.
+* Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the same ready email as Winner Order Contact Us for that order.
+* The mailto is not a bare `mailto:support@grade10.com` without subject and body.
+
+<!-- trace:case id=g10.auction-notifications-order.TC-wcd rev=1 covers=g10.auction-notifications-order.SC-kn8 -->
+### g10.auction-notifications-order.US1-TC10: Delivered letter Contact Us carries the ready mailto and names the address (folded into g10.auction-notifications-order.US1-TC7)
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Contact Us destination
+
+**Pre-conditions:**
+
+* customer(winner of `<lot_1>`) has a registered email.
+* The carrier has confirmed delivery for `<lot_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A won lot whose delivered letter is due |
+| `<invoice_id>` | The paid invoice id on that order |
+
+**Steps:**
+
+1. Wait for the delivered letter for `<lot_1>`.
+2. Open the letter.
+3. Read the letter body and the Contact Us link.
+
+**Expected Results:**
+
+* The letter body names `support@grade10.com`.
+* Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the same ready email as Winner Order Contact Us for that order.
+* The mailto is not a bare `mailto:support@grade10.com` without subject and body.
+
 ## Settled
 
 - Cancelled and delivered subject reason fragments are `cancelled` and `delivered`
@@ -689,9 +868,15 @@ Runs once per row of **Test data**.
 - Mute applies to listing alert mail in `notifications`, not to winner order letters
 - Contact Us uses the same ready email as Winner Order: letters prefill
 `mailto:support@grade10.com` and name that address in the body
-
 - **Archived fold records — 2026-10-12 suite rewrite** —
   - **2026-09-18-add-winner-setup-overdue-mail** — `order-mail-US1-TC1-1` → `g10.auction-notifications-order.US1-TC1`; `order-mail-US1-TC2-1` → `g10.auction-notifications-order.US1-TC2`; `order-mail-US1-TC50-1` → current journey cases are the replacement record; `order-mail-US1-TC54-1` → current journey cases are the replacement record; `order-mail-US1-TC51-1` → current journey cases are the replacement record.
   - **2026-09-18-email-trigger-revision** — `order-mail-US1-TC13-1` → `g10.auction-notifications-order.US1-TC13`; `order-mail-US1-TC14-1` → `g10.auction-notifications-order.US1-TC14`; `order-mail-US1-TC15-1` → current journey cases are the replacement record; `order-mail-US1-TC16-1` → current journey cases are the replacement record; `order-mail-US1-TC17-1` → current journey cases are the replacement record; `order-mail-US1-TC18-1` → current journey cases are the replacement record; `order-mail-US1-TC19-1` → current journey cases are the replacement record.
 - `g10.auction-notifications-order.US1-TC8`, `g10.auction-notifications-order.US1-TC9` and `g10.auction-notifications-order.US1-TC10` fold into `g10.auction-notifications-order.US1-TC7`; the surviving case runs each post-close letter row.
 - **Archived replacement records — 2026-10-12 suite rewrite** — `order-mail-US1-TC3-1` → `g10.auction-notifications-order.US1-TC3`; `order-mail-US1-TC4-1` → `g10.auction-notifications-order.US1-TC4`; `order-mail-US1-TC5-1` → `g10.auction-notifications-order.US1-TC5`; `order-mail-US1-TC6-1` → `g10.auction-notifications-order.US1-TC6`; `order-mail-US1-TC7-1` → `g10.auction-notifications-order.US1-TC7`; `order-mail-US1-TC8-1` → `g10.auction-notifications-order.US1-TC7`; `order-mail-US1-TC9-1` → `g10.auction-notifications-order.US1-TC7`; `order-mail-US1-TC10-1` → `g10.auction-notifications-order.US1-TC7`; `order-mail-US1-TC11-1` → `g10.auction-notifications-order.US1-TC11`; `order-mail-US1-TC12-1` → `g10.auction-notifications-order.US1-TC12`.
+- None this run. The blind reading's question, which letters keep a USD amount, was answered by the PM as Q18 and the capability's delta as Q24; it needs no entry here.
+
+## Reconciliation
+
+**Cases** - All seven cases remain drafts. `TC-8bw@3` covers SC-pyd; `TC-5o0@3` covers SC-tfm and SC-3mo; `TC-ew9@1` remains unlinked; `TC-vxo@2` covers SC-16k; `TC-l6s@2` SC-0e7; `TC-xsq@2` SC-7qg; and `TC-i7q@1` remains unlinked. Rows use the USD schedule and winning-bid fixtures, with exact converted HKD values where required. The reissue case preserves the prior letter and asserts the payment-reminder letter.
+
+**Scenario coverage** - All six current delta scenarios are covered: SC-pyd, SC-tfm, SC-3mo, SC-16k, SC-0e7 and SC-7qg. Later reminders and the internal bidder no-letter case have no delta scenarios and remain unlinked. At invoice send and reissue, the active post-sale delta names the payment-reminder letter. The separate invoice-reissued letter was removed by product decision; the feature-set term “invoice” means the payment reminder sent with the invoice.

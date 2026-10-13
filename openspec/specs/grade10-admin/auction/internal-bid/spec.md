@@ -22,11 +22,16 @@ any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
   - Raise: any time the lot takes a bid, as a new commitment
   - Lower: only when the leader and the current bid stay the same, never below a bid already placed for the house
   - Fixed time: the commit time no longer changes
+- Internal bid amount
+  - USD facts: the starting price, house maximum, bid schedule and ceiling use USD
+  - No currency switch: the admin enters no HKD or JPY amount or schedule
 - Internal bidder win
   - Order: a lot an internal bidder leads at the close opens its order and invoice for that internal bidder, flagged internal, with the internal bidder's billing address
   - By hand: an operator sends the invoice, lets it expire and cancels the order, as for any unpaid order
   - Flag: a reserve holder reads the listing flagged as won by its internal bidder; other operators read the buyer as House
-  - No letters: no order letter goes to an internal bidder
+  - No letters: no order letter is sent to an internal bidder
+  - Automatic settlement choice: at close the order records HKD and bank transfer on FPS, without a winner or operator setup step
+  - Operator invoice: the operator still quotes and sends the invoice, then lets it expire and cancels the order
 - Internal bidders
   - Profiles: internal bidder profiles, each a name, a unique email label and a billing address, kept in auction admin with no site account behind them
   - Rename and retire: a label is fixed once the profile has bid; a profile is retired only when no Scheduled internal bid, and no Not placed internal bid on a listing before its effective close, uses it, and keeps its history
@@ -48,13 +53,13 @@ An admin holding `auction:reserve` SHALL:
    its state.
 
 A listing SHALL carry at most one internal bid, and its internal bid SHALL
-name one internal bidder. A save on a listing that has one SHALL change it
-and SHALL NOT add a second. One internal bidder MAY serve the internal bids
-of many listings.
+name one internal bidder. Every listing and internal bid uses USD only. A save
+on a listing that has one SHALL change it and SHALL NOT add a second. One
+internal bidder MAY serve the internal bids of many listings.
 
 | Field | Rule |
 | --- | --- |
-| Amount | Whole major units in the listing's currency, held as minor units; at least the listing's starting price, above 0, and at most the ceiling `grade10-site/auction/bid-increments` sets for that currency |
+| Amount | Whole major units in USD, held as minor units; at least the listing's starting price, above 0, and at most the USD ceiling `grade10-site/auction/bid-increments` sets for USD. The listing currency and amount are USD only. |
 | Internal bidder | Required. One internal bidder profile, under "An admin keeps internal bidder profiles"; one being chosen or changed is Active. It changes only while the internal bid is Scheduled or Cleared, or the listing has none; a Placed or Not placed internal bid keeps its internal bidder, retired or not |
 | Time | Required. From the listing's scheduled start to its scheduled close, both included; a time being set or changed is later than the moment of the save. A Not placed internal bid keeps its time |
 
@@ -69,7 +74,8 @@ SHALL store nothing:
 | The internal bidder is changed on a Placed or Not placed internal bid | Internal bidder is fixed |
 | The amount is not a whole number of major units | Whole amount |
 | The amount is below the starting price | Below the starting price, naming it |
-| The amount is above the ceiling | Above the ceiling, naming it |
+| The amount is above the USD ceiling | Above the ceiling, naming it |
+| The listing currency is not USD | Unsupported currency |
 | A time being set or changed is before the scheduled start or after the scheduled close | Outside the bidding window |
 | A time being set or changed is at or before the moment of the save | Time has passed |
 
@@ -86,45 +92,45 @@ A scenario of this capability that saves an internal bid without naming its
 internal bidder saves it with an Active one, and a re-save keeps the one the
 internal bid already names.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-dq6 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-dq6 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-01 - An admin sets an internal bid on a published listing
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin protects a lot before it opens
 
-- **GIVEN** a published `HKD` listing starting 2026-11-02T08:00:00Z, closing
-  2026-11-02T20:00:00Z, with a starting price of 20000 HKD minor units and no
+- **GIVEN** a published `USD` listing starting 2026-11-02T08:00:00Z, closing
+  2026-11-02T20:00:00Z, with a starting price of 20000 USD minor units and no
   bids
 - **AND** an admin holding `auction:reserve` at 2026-11-01T09:00:00Z
-- **WHEN** they save an internal bid of 50000 HKD minor units at
+- **WHEN** they save an internal bid of 50000 USD minor units at
   2026-11-02T18:00:00Z
 - **THEN** Grade10 accepts it and the listing shows the internal bid as
   Scheduled, with that amount and time
 - **AND** the listing's public facts show no bid and a starting price of
-  20000 HKD minor units
+  20000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-mxk rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-mxk rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-02 - A time outside the bidding window is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin picks a time the lot cannot reach
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+- **WHEN** the admin saves an internal bid of 50000 USD minor units at
   2026-11-02T20:00:01Z
 - **THEN** Grade10 refuses it, naming the bidding window
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-tbo rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-tbo rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-03 - A time already passed is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin sets a time on a lot already open
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`, at
   2026-11-02T12:00:00Z
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+- **WHEN** the admin saves an internal bid of 50000 USD minor units at
   2026-11-02T11:00:00Z
 - **THEN** Grade10 refuses it, naming the time
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-5x7 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-5x7 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-04 - An amount above the ceiling is refused
-**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin enters an amount the currency cannot take
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin enters an amount the USD ceiling cannot take
 
 - **GIVEN** a published `USD` listing whose scheduled close has not passed
 - **WHEN** the admin saves an internal bid of 1000000100 USD minor units
@@ -132,128 +138,128 @@ internal bid already names.
   units
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-i7f rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-i7f rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-05 - A second save changes the one internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin saves again on a protected lot
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01` with
   its Scheduled internal bid
-- **WHEN** the admin saves an internal bid of 60000 HKD minor units at
+- **WHEN** the admin saves an internal bid of 60000 USD minor units at
   2026-11-02T19:00:00Z
-- **THEN** the listing carries one internal bid, of 60000 HKD minor units at
+- **THEN** the listing carries one internal bid, of 60000 USD minor units at
   2026-11-02T19:00:00Z
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-2s1 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-2s1 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-22 - A time at the scheduled close is accepted
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin commits the house at the last moment the lot takes a bid
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+- **WHEN** the admin saves an internal bid of 50000 USD minor units at
   2026-11-02T20:00:00Z
 - **THEN** Grade10 accepts it and the internal bid reads Scheduled at
   2026-11-02T20:00:00Z
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-avn rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-avn rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-23 - An amount that is not whole is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin enters a part of a major unit
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`
-- **WHEN** the admin saves an internal bid of 50050 HKD minor units at
+- **WHEN** the admin saves an internal bid of 50050 USD minor units at
   2026-11-02T18:00:00Z
 - **THEN** Grade10 refuses it, asking for a whole amount
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9ve rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9ve rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-24 - An amount below the starting price is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin enters a floor under the opening price
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`, with a
-  starting price of 20000 HKD minor units
-- **WHEN** the admin saves an internal bid of 19900 HKD minor units at
+  starting price of 20000 USD minor units
+- **WHEN** the admin saves an internal bid of 19900 USD minor units at
   2026-11-02T18:00:00Z
-- **THEN** Grade10 refuses it, naming the starting price of 20000 HKD minor
+- **THEN** Grade10 refuses it, naming the starting price of 20000 USD minor
   units
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-urt rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-urt rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-25 - A draft listing takes no internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin tries to protect a lot still being written
 
-- **GIVEN** a `draft` `HKD` listing with a starting price of 20000 HKD minor
+- **GIVEN** a `draft` `USD` listing with a starting price of 20000 USD minor
   units, a start and a close
 - **WHEN** an admin holding `auction:reserve` saves an internal bid of 50000
-  HKD minor units at a time inside its window
+  USD minor units at a time inside its window
 - **THEN** Grade10 refuses it as not editable
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-awq rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-awq rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-26 - An admin sets an internal bid on a created listing
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin prepares the floor before publishing
 
-- **GIVEN** a `created` `HKD` listing starting 2026-11-02T08:00:00Z and
+- **GIVEN** a `created` `USD` listing starting 2026-11-02T08:00:00Z and
   closing 2026-11-02T20:00:00Z, at 2026-11-01T09:00:00Z
 - **WHEN** an admin holding `auction:reserve` saves an internal bid of 50000
-  HKD minor units at 2026-11-02T18:00:00Z
+  USD minor units at 2026-11-02T18:00:00Z
 - **THEN** Grade10 accepts it and the internal bid reads Scheduled
 - **AND** when the listing is published, the internal bid still reads
-  Scheduled at 50000 HKD minor units and 2026-11-02T18:00:00Z
+  Scheduled at 50000 USD minor units and 2026-11-02T18:00:00Z
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-otk rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-otk rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-27 - An amount below the price at Save waits for its time
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin sets a floor on a lot already running above it
 
-- **GIVEN** an open `HKD` listing closing 2026-11-02T20:00:00Z, where a
-  collector leads at 52000 HKD minor units, at 2026-11-02T12:00:00Z
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+- **GIVEN** an open `USD` listing closing 2026-11-02T20:00:00Z, where a
+  collector leads at 52000 USD minor units, at 2026-11-02T12:00:00Z
+- **WHEN** the admin saves an internal bid of 50000 USD minor units at
   2026-11-02T18:00:00Z
 - **THEN** Grade10 accepts it and the internal bid reads Scheduled
 - **AND** the listing's current bid and leader are unchanged
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-m8q rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-m8q rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-41 - A save with no time is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin leaves the commit time empty
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units with no
+- **WHEN** the admin saves an internal bid of 50000 USD minor units with no
   time
 - **THEN** Grade10 refuses it, asking for the time
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-fti rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-fti rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-48 - A lot past its scheduled close takes no new internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin tries to protect a lot already in extended bidding
 
-- **GIVEN** a published `HKD` listing whose scheduled close of
+- **GIVEN** a published `USD` listing whose scheduled close of
   2026-11-02T20:00:00Z has passed and which is in extended bidding until
   2026-11-02T20:03:00Z, with no internal bid, at 2026-11-02T20:01:00Z
 - **WHEN** an admin holding `auction:reserve` saves an internal bid of 50000
-  HKD minor units at 2026-11-02T20:02:00Z
+  USD minor units at 2026-11-02T20:02:00Z
 - **THEN** Grade10 refuses it as not editable
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ols rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ols rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-54 - A save with no internal bidder is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin leaves the internal bidder unchosen
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`, and an
   Active internal bidder named Harbour Cards
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+- **WHEN** the admin saves an internal bid of 50000 USD minor units at
   2026-11-02T18:00:00Z with no internal bidder
 - **THEN** Grade10 refuses it, asking for the internal bidder
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-1af rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-1af rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-55 - A retired internal bidder is refused
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin names an internal bidder no longer in use
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-01`, and a
   Retired internal bidder named Old Stock
-- **WHEN** the admin saves an internal bid of 50000 HKD minor units at
+- **WHEN** the admin saves an internal bid of 50000 USD minor units at
   2026-11-02T18:00:00Z as Old Stock
 - **THEN** Grade10 refuses it, saying the internal bidder is retired
 - **AND** the listing has no internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-dnq rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-dnq rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-56 - Before its time the admin changes the internal bidder
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin picks another internal bidder before the house has bid
 
@@ -262,14 +268,14 @@ internal bid already names.
   Kowloon Vault, at 2026-11-02T12:00:00Z
 - **WHEN** the admin saves the same amount and time as Kowloon Vault
 - **THEN** Grade10 accepts it and the internal bid reads Scheduled as Kowloon
-  Vault, at 50000 HKD minor units and 2026-11-02T18:00:00Z
+  Vault, at 50000 USD minor units and 2026-11-02T18:00:00Z
 - **AND** the listing's public facts are unchanged
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-i32 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-i32 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-57 - After its time the internal bidder is fixed
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin tries to change who the house bids as once its time has come
 
-- **GIVEN** two `HKD` listings, one with a Placed and one with a Not placed
+- **GIVEN** two `USD` listings, one with a Placed and one with a Not placed
   internal bid, each as Harbour Cards, and an Active internal bidder
   named Kowloon Vault
 - **WHEN** the admin saves each internal bid at its own amount as Kowloon
@@ -278,11 +284,11 @@ internal bid already names.
 - **AND** each internal bid still reads as Harbour Cards, in the state and at
   the amount it had
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzl rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-rzl rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-58 - One internal bidder serves two listings
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin protects two lots as the same internal bidder
 
-- **GIVEN** two published `HKD` listings with no internal bid, and an Active
+- **GIVEN** two published `USD` listings with no internal bid, and an Active
   internal bidder named Harbour Cards
 - **WHEN** the admin saves an internal bid on each as Harbour Cards
 - **THEN** Grade10 accepts both
@@ -300,11 +306,15 @@ internal bid outside a limit below, Grade10 SHALL:
   by a listing edit, with its amount, its internal bidder, its time and when
   it was cleared, until an admin saves a new one.
 
+Scenarios SC-35, SC-42 and SC-43 retain their historical titles and ids.
+Their bodies require refusal of a non-USD write; no currency change clears
+or re-prices an internal bid.
+
 | Edit | Clears the internal bid when |
 | --- | --- |
 | Start or scheduled close | Its time falls outside the new bidding window |
 | Starting price | Its amount is below the new starting price |
-| Currency | Its amount, kept as the same count of minor units, is below the starting price, above the ceiling `grade10-site/auction/bid-increments` sets for the new currency, or not a whole major unit of the new currency |
+| Currency | Never; the listing API refuses a non-USD write and leaves the listing and internal bid unchanged |
 
 The rule holds for a Scheduled internal bid and for one Not placed while the
 listing was still `created`. An edit that leaves every limit met SHALL keep
@@ -314,20 +324,20 @@ the internal bid unchanged.
 #### Scenario: grade10-admin-auction-internal-bid-SC-28 - A window change past the time clears the internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's window moves under a floor set before it was published
 
-- **GIVEN** a `created` `HKD` listing closing 2026-11-02T20:00:00Z, with a
-  Scheduled internal bid of 50000 HKD minor units at 2026-11-02T18:00:00Z as
+- **GIVEN** a `created` `USD` listing closing 2026-11-02T20:00:00Z, with a
+  Scheduled internal bid of 50000 USD minor units at 2026-11-02T18:00:00Z as
   Harbour Cards
 - **AND** an operator whose roles are exactly `staff`
 - **WHEN** they move its scheduled close to 2026-11-02T17:00:00Z and save
 - **THEN** Grade10 accepts the save, and its answer says nothing of an
   internal bid
 - **AND** an admin holding `auction:reserve` then sees the internal bid
-  cleared by a listing edit, with 50000 HKD minor units, Harbour Cards and
+  cleared by a listing edit, with 50000 USD minor units, Harbour Cards and
   2026-11-02T18:00:00Z
 - **AND** when 2026-11-02T18:00:00Z passes, Grade10 places no bid for the
   house on the listing
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-bjb rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-bjb rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-29 - A window change that keeps the time keeps the internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's window moves around a floor that still fits
 
@@ -335,81 +345,79 @@ the internal bid unchanged.
   the change
 - **WHEN** an operator moves its scheduled close to 2026-11-02T21:00:00Z and
   saves
-- **THEN** the internal bid still reads Scheduled at 50000 HKD minor units and
-  2026-11-02T18:00:00Z
-
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-36t rev=1 -->
-#### Scenario: grade10-admin-auction-internal-bid-SC-34 - A starting price raised over the internal bid clears it
-**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's opening price moves above a floor set before it was published
-
-- **GIVEN** two `created` `HKD` listings with a starting price of 20000 HKD
-  minor units, one with a Scheduled internal bid of 50000 HKD minor units and
-  one with none
-- **AND** an operator whose roles are exactly `staff`
-- **WHEN** they raise each starting price to 60000 HKD minor units and save
-- **THEN** Grade10 accepts both saves with the same answer
-- **AND** an admin holding `auction:reserve` sees the first listing's internal
-  bid cleared by a listing edit, with 50000 HKD minor units
-
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-wib rev=1 -->
-#### Scenario: grade10-admin-auction-internal-bid-SC-35 - A currency change past the new ceiling clears the internal bid
-**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's currency moves under a floor its new ceiling cannot hold
-
-- **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
-  units and a Scheduled internal bid of 6000000000 HKD minor units
-- **WHEN** an operator changes its currency to `USD` and saves
-- **THEN** Grade10 accepts the save, and its answer says nothing of an
-  internal bid
-- **AND** an admin holding `auction:reserve` sees the internal bid cleared by
-  a listing edit, with 6000000000 minor units
-
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9xf rev=1 -->
-#### Scenario: grade10-admin-auction-internal-bid-SC-36 - A starting price that stays under the internal bid keeps it
-**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's opening price moves under a floor that still fits
-
-- **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
-  units and a Scheduled internal bid of 50000 HKD minor units at
-  2026-11-02T18:00:00Z
-- **WHEN** an operator raises its starting price to 50000 HKD minor units and
-  saves
-- **THEN** the internal bid still reads Scheduled at 50000 HKD minor units and
-  2026-11-02T18:00:00Z
-
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-qzx rev=1 -->
-#### Scenario: grade10-admin-auction-internal-bid-SC-42 - A currency change keeps the internal bid's minor units
-**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's currency moves under a floor that still fits
-
-- **GIVEN** a `created` `HKD` listing with a starting price of 20000 HKD minor
-  units and a Scheduled internal bid of 50000 HKD minor units at
-  2026-11-02T18:00:00Z
-- **WHEN** an operator changes its currency to `USD` and saves
 - **THEN** the internal bid still reads Scheduled at 50000 USD minor units and
   2026-11-02T18:00:00Z
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ps0 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-36t rev=2 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-34 - A starting price raised over the internal bid clears it
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's opening price moves above a floor set before it was published
+
+- **GIVEN** two `created` `USD` listings with a starting price of 20000 USD
+  minor units, one with a Scheduled internal bid of 50000 USD minor units and
+  one with none
+- **AND** an operator whose roles are exactly `staff`
+- **WHEN** they raise each starting price to 60000 USD minor units and save
+- **THEN** Grade10 accepts both saves with the same answer
+- **AND** an admin holding `auction:reserve` sees the first listing's internal
+  bid cleared by a listing edit, with 50000 USD minor units
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-wib rev=2 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-35 - A currency change past the new ceiling clears the internal bid
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin protects a lot whose currency stays USD
+
+- **GIVEN** a created USD listing with a Scheduled internal bid of 50000 USD
+  minor units
+- **WHEN** an operator tries to change its currency to JPY
+- **THEN** Grade10 refuses the listing change
+- **AND** the listing remains USD and the internal bid remains Scheduled at
+  50000 USD minor units
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-9xf rev=2 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-36 - A starting price that stays under the internal bid keeps it
+**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's opening price moves under a floor that still fits
+
+- **GIVEN** a `created` `USD` listing with a starting price of 20000 USD minor
+  units and a Scheduled internal bid of 50000 USD minor units at
+  2026-11-02T18:00:00Z
+- **WHEN** an operator raises its starting price to 50000 USD minor units and
+  saves
+- **THEN** the internal bid still reads Scheduled at 50000 USD minor units and
+  2026-11-02T18:00:00Z
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-qzx rev=2 -->
+#### Scenario: grade10-admin-auction-internal-bid-SC-42 - A currency change keeps the internal bid's minor units
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin protects a lot whose currency stays USD
+
+- **GIVEN** a created USD listing with a Scheduled internal bid of 50000 USD
+  minor units
+- **WHEN** an operator tries to change its currency to HKD
+- **THEN** Grade10 refuses the listing change
+- **AND** the listing remains USD and the internal bid remains Scheduled at
+  50000 USD minor units
+
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ps0 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-43 - A currency change that leaves the amount not whole clears the internal bid
-**Serves:** grade10-admin-auction-internal-bid-US-08 - the lot's currency moves to one where the floor is not a whole amount
+**Serves:** grade10-admin-auction-internal-bid-US-01 - the admin protects a lot whose currency stays USD
 
-- **GIVEN** a `created` `JPY` listing with a starting price of 20000 JPY minor
-  units and a Scheduled internal bid of 50050 JPY minor units
-- **WHEN** an operator changes its currency to `HKD` and saves
-- **THEN** Grade10 accepts the save, and its answer says nothing of an
-  internal bid
-- **AND** an admin holding `auction:reserve` sees the internal bid cleared by
-  a listing edit, with 50050 minor units
+- **GIVEN** a created USD listing with a Scheduled internal bid of 50000 USD
+  minor units
+- **WHEN** an operator tries to change its currency to EUR
+- **THEN** Grade10 refuses the listing change
+- **AND** the listing remains USD and the internal bid remains Scheduled at
+  50000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-pzs rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-pzs rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-51 - A new save replaces a cleared internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-08 - the admin protects the lot again after a listing edit cleared its floor
 
-- **GIVEN** a `created` `HKD` listing starting 2026-11-02T08:00:00Z and
-  closing 2026-11-02T20:00:00Z, with a starting price of 60000 HKD minor
+- **GIVEN** a `created` `USD` listing starting 2026-11-02T08:00:00Z and
+  closing 2026-11-02T20:00:00Z, with a starting price of 60000 USD minor
   units, whose internal bid of 50000 a starting-price change cleared, at
   2026-11-01T09:00:00Z
 - **WHEN** an admin holding `auction:reserve` saves an internal bid of 70000
-  HKD minor units at 2026-11-02T18:00:00Z
+  USD minor units at 2026-11-02T18:00:00Z
 - **THEN** Grade10 accepts it and the internal bid reads Scheduled at 70000
-  HKD minor units and 2026-11-02T18:00:00Z
+  USD minor units and 2026-11-02T18:00:00Z
 - **AND** the admin no longer sees that a listing edit cleared it
 
 ### Requirement: Internal bid states
@@ -431,17 +439,17 @@ the listing is still `created` SHALL be Not placed, and publishing the
 listing afterwards SHALL NOT commit it. A save of a Not placed internal bid
 that Grade10 places SHALL move it to Placed.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-jtj rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-jtj rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-06 - Before its time an admin changes the amount and the time
 **Serves:** grade10-admin-auction-internal-bid-US-02 - the admin reacts before the house has bid
 
-- **GIVEN** a published `HKD` listing open since 2026-11-02T08:00:00Z and
-  closing 2026-11-02T20:00:00Z, with a Scheduled internal bid of 50000 HKD
+- **GIVEN** a published `USD` listing open since 2026-11-02T08:00:00Z and
+  closing 2026-11-02T20:00:00Z, with a Scheduled internal bid of 50000 USD
   minor units at 2026-11-02T18:00:00Z, at 2026-11-02T12:00:00Z
-- **WHEN** the admin changes it to 40000 HKD minor units at
+- **WHEN** the admin changes it to 40000 USD minor units at
   2026-11-02T17:00:00Z
 - **THEN** Grade10 accepts it and the internal bid reads Scheduled at 40000
-  HKD minor units and 2026-11-02T17:00:00Z
+  USD minor units and 2026-11-02T17:00:00Z
 - **AND** the listing's public facts are unchanged
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-1c4 rev=1 -->
@@ -455,16 +463,16 @@ that Grade10 places SHALL move it to Placed.
 - **AND** when 2026-11-02T18:00:00Z passes, Grade10 places no bid for the
   house on the listing
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-glg rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-glg rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-08 - At its time the internal bid reads Placed
 **Serves:** grade10-admin-auction-internal-bid-US-01 - the admin sees the house entered the bidding
 
-- **GIVEN** a published `HKD` listing where a collector leads at 20000 HKD
+- **GIVEN** a published `USD` listing where a collector leads at 20000 USD
   minor units with a maximum of 30000, and a Scheduled internal bid of 50000
-  HKD minor units at 2026-11-02T18:00:00Z
+  USD minor units at 2026-11-02T18:00:00Z
 - **WHEN** 2026-11-02T18:00:00Z passes with no page open on the listing
 - **THEN** the admin sees the internal bid as Placed
-- **AND** the listing's current bid is 31000 HKD minor units
+- **AND** the listing's current bid is 30500 USD minor units
 
 ### Requirement: An admin learns an internal bid came too late
 
@@ -486,50 +494,50 @@ SHALL be able to:
    collector reads.
 3. Remove it. The listing then has no internal bid.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-11v rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-11v rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-09 - An internal bid short at its time is not placed
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the price had already passed the house's amount
 
-- **GIVEN** a published `HKD` listing where a collector leads at 52000 HKD
+- **GIVEN** a published `USD` listing where a collector leads at 52000 USD
   minor units, so the minimum next bid is 53000, and a Scheduled internal bid
-  of 50000 HKD minor units at 2026-11-02T18:00:00Z
+  of 50000 USD minor units at 2026-11-02T18:00:00Z
 - **WHEN** 2026-11-02T18:00:00Z passes
-- **THEN** the admin sees the internal bid as Not placed, with 50000 HKD minor
-  units, 2026-11-02T18:00:00Z and a minimum next bid of 53000 HKD minor units
+- **THEN** the admin sees the internal bid as Not placed, with 50000 USD minor
+  units, 2026-11-02T18:00:00Z and a minimum next bid of 53000 USD minor units
 - **AND** the listing's current bid, leader and bid count are unchanged
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-quv rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-quv rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-10 - Raising a not-placed internal bid places it at once
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the admin answers a lot running hot
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-09`, where
-  the leader's maximum is 60000 HKD minor units and the internal bid is Not
+  the leader's maximum is 60000 USD minor units and the internal bid is Not
   placed
-- **WHEN** the admin raises the internal bid to 70000 HKD minor units before
+- **WHEN** the admin raises the internal bid to 70000 USD minor units before
   the listing's effective close
 - **THEN** Grade10 accepts it and the internal bid reads Placed
-- **AND** the house leads the listing at 61000 HKD minor units
+- **AND** the house leads the listing at 61000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-qom rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-qom rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-11 - A raise still short is refused
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the admin's raise does not reach the next bid
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-09` with its
   Not placed internal bid
-- **WHEN** the admin raises the internal bid to 52500 HKD minor units
-- **THEN** Grade10 refuses it, naming 53000 HKD minor units as the minimum
+- **WHEN** the admin raises the internal bid to 52500 USD minor units
+- **THEN** Grade10 refuses it, naming 53000 USD minor units as the minimum
   next bid
-- **AND** the internal bid stays Not placed at 50000 HKD minor units
+- **AND** the internal bid stays Not placed at 50000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ujg rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ujg rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-30 - A not-placed internal bid is lowered
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the admin lets the lot sell but keeps a record of the floor
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-09` with its
-  Not placed internal bid of 50000 HKD minor units
-- **WHEN** the admin lowers it to 40000 HKD minor units
+  Not placed internal bid of 50000 USD minor units
+- **WHEN** the admin lowers it to 40000 USD minor units
 - **THEN** Grade10 accepts it and the internal bid reads Not placed at 40000
-  HKD minor units
+  USD minor units
 - **AND** the listing's current bid, leader, bid count and public history are
   unchanged
 
@@ -544,54 +552,54 @@ SHALL be able to:
 - **AND** the listing's current bid, leader, bid count and public history are
   unchanged
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-oml rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-oml rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-37 - An internal bid whose time comes before publishing is not placed
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the lot was still unpublished when the house's time came
 
-- **GIVEN** a `created` `HKD` listing with no publish at, starting
-  2026-11-02T08:00:00Z with a starting price of 20000 HKD minor units, and a
-  Scheduled internal bid of 50000 HKD minor units at 2026-11-02T18:00:00Z
+- **GIVEN** a `created` `USD` listing with no publish at, starting
+  2026-11-02T08:00:00Z with a starting price of 20000 USD minor units, and a
+  Scheduled internal bid of 50000 USD minor units at 2026-11-02T18:00:00Z
 - **WHEN** 2026-11-02T18:00:00Z passes with the listing still `created`
 - **AND** an operator publishes it at 2026-11-02T18:30:00Z
-- **THEN** the admin sees the internal bid as Not placed, with 50000 HKD minor
+- **THEN** the admin sees the internal bid as Not placed, with 50000 USD minor
   units and 2026-11-02T18:00:00Z
 - **AND** the published listing has no bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-r5u rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-r5u rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-38 - A save places an internal bid not placed before publishing
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the admin puts the house in once the lot is open
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-37` before
   it is published
-- **WHEN** the admin raises the internal bid to 60000 HKD minor units
-- **THEN** Grade10 accepts it, and it stays Not placed at 60000 HKD minor
+- **WHEN** the admin raises the internal bid to 60000 USD minor units
+- **THEN** Grade10 accepts it, and it stays Not placed at 60000 USD minor
   units
 - **AND** once the listing is published and taking bids with no bid on it,
-  a save at the same 60000 HKD minor units is accepted, the internal bid
-  reads Placed and the house leads at 20000 HKD minor units
+  a save at the same 60000 USD minor units is accepted, the internal bid
+  reads Placed and the house leads at 20000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-x95 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-x95 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-52 - A re-save of a not-placed internal bid still short is refused
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the admin saves the short amount again
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-09` with its
-  Not placed internal bid of 50000 HKD minor units
-- **WHEN** the admin saves it again at 50000 HKD minor units
-- **THEN** Grade10 refuses it, naming 53000 HKD minor units as the minimum
+  Not placed internal bid of 50000 USD minor units
+- **WHEN** the admin saves it again at 50000 USD minor units
+- **THEN** Grade10 refuses it, naming 53000 USD minor units as the minimum
   next bid
-- **AND** the internal bid stays Not placed at 50000 HKD minor units
+- **AND** the internal bid stays Not placed at 50000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-tbl rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-tbl rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-53 - A lower that still reaches the minimum next bid places it
 **Serves:** grade10-admin-auction-internal-bid-US-05 - the admin loosens a floor set before publishing once the lot opens
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-38`,
   published and taking bids with no bid on it, its internal bid Not placed at
-  60000 HKD minor units
-- **WHEN** the admin lowers it to 40000 HKD minor units
-- **THEN** Grade10 accepts it and the internal bid reads Placed at 40000 HKD
+  60000 USD minor units
+- **WHEN** the admin lowers it to 40000 USD minor units
+- **THEN** Grade10 accepts it and the internal bid reads Placed at 40000 USD
   minor units
-- **AND** the house leads at 20000 HKD minor units
+- **AND** the house leads at 20000 USD minor units
 
 ### Requirement: An admin changes a placed internal bid
 
@@ -636,117 +644,118 @@ bid", with that bid.
 - **AND** the internal bid still reads Placed at its amount and
   2026-11-02T18:00:00Z
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-lqc rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-lqc rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-13 - An admin raises a placed internal bid
 **Serves:** grade10-admin-auction-internal-bid-US-03 - the lot is running hotter than expected
 
-- **GIVEN** an `HKD` listing where a collector leads at 51000 HKD minor units
+- **GIVEN** an `USD` listing where a collector leads at 51000 USD minor units
   with a maximum of 60000, over a Placed internal bid of 50000
-- **WHEN** the admin raises the internal bid to 80000 HKD minor units
-- **THEN** Grade10 accepts it and the house leads at 61000 HKD minor units
-- **AND** the internal bid reads Placed at 80000 HKD minor units
+- **WHEN** the admin raises the internal bid to 80000 USD minor units
+- **THEN** Grade10 accepts it and the house leads at 61000 USD minor units
+- **AND** the internal bid reads Placed at 80000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-spg rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-spg rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-14 - An admin lowers a placed internal bid that moves nothing
 **Serves:** grade10-admin-auction-internal-bid-US-04 - the admin loosens the floor without moving the lot
 
-- **GIVEN** an `HKD` listing where collector C leads at 41000 HKD minor units
+- **GIVEN** an `USD` listing where collector C leads at 40500 USD minor units
   with a maximum of 60000 over collector A's 40000, and a Placed internal bid
-  of 25000 whose only house bid was placed at 20000, all in HKD minor units
-- **WHEN** the admin lowers the internal bid to 21000 HKD minor units
-- **THEN** Grade10 accepts it and the internal bid reads 21000 HKD minor units
-- **AND** C still leads at 41000 HKD minor units
+  of 25000 whose only house bid was placed at 20000, all in USD minor units
+- **WHEN** the admin lowers the internal bid to 21000 USD minor units
+- **THEN** Grade10 accepts it and the internal bid reads 21000 USD minor units
+- **AND** C still leads at 40500 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-x8q rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-x8q rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-47 - A leading house lowers to its current bid
 **Serves:** grade10-admin-auction-internal-bid-US-04 - the admin loosens the floor while the house leads
 
-- **GIVEN** an `HKD` listing where the house leads at 31000 HKD minor units
+- **GIVEN** an `USD` listing where the house leads at 30500 USD minor units
   with a Placed internal bid of 50000 over collector A's maximum of 30000
-- **WHEN** the admin lowers the internal bid to 31000 HKD minor units
-- **THEN** Grade10 accepts it and the internal bid reads 31000 HKD minor units
-- **AND** the house still leads at 31000 HKD minor units, with no public bid
+- **WHEN** the admin lowers the internal bid to 30500 USD minor units
+- **THEN** Grade10 accepts it and the internal bid reads 30500 USD minor units
+- **AND** the house still leads at 30500 USD minor units, with no public bid
   record added
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-eng rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-eng rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-15 - A lower that moves the current bid is refused
 **Serves:** grade10-admin-auction-internal-bid-US-04 - the lower would change what collectors see
 
-- **GIVEN** an `HKD` listing where collector A leads at 26000 HKD minor units
-  with a maximum of 40000, priced by a Placed internal bid of 25000
-- **WHEN** the admin lowers the internal bid to 24000 HKD minor units
+- **GIVEN** an `USD` listing where collector A leads at 26000 USD minor units
+  with a maximum of 40000, after a prior public bid of 25500 USD minor units,
+  priced by a Placed internal bid of 25000 whose only house bid was at 20000
+- **WHEN** the admin lowers the internal bid to 24000 USD minor units
 - **THEN** Grade10 refuses it, saying it moves the lead or the current bid
-- **AND** A still leads at 26000 HKD minor units and the internal bid reads
+- **AND** A still leads at 26000 USD minor units and the internal bid reads
   25000
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-u2x rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-u2x rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-16 - A lower below the house's own bid is refused
 **Serves:** grade10-admin-auction-internal-bid-US-04 - the lower would go under a bid the house already placed
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-14`
-- **WHEN** the admin lowers the internal bid to 19000 HKD minor units
-- **THEN** Grade10 refuses it, naming the house's bid of 20000 HKD minor units
-- **AND** the internal bid reads 25000 HKD minor units
+- **WHEN** the admin lowers the internal bid to 19000 USD minor units
+- **THEN** Grade10 refuses it, naming the house's bid of 20000 USD minor units
+- **AND** the internal bid reads 25000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-16a rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-16a rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-50 - A lower that moves the price and goes below the house's bid names the house's bid
 **Serves:** grade10-admin-auction-internal-bid-US-04 - the admin lowers under a bid the house placed while it leads
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-47` before
-  its lower, where the house's one bid is at 31000 HKD minor units
-- **WHEN** the admin lowers the internal bid to 30500 HKD minor units
-- **THEN** Grade10 refuses it, naming the house's bid of 31000 HKD minor
+  its lower, where the house's one bid is at 30500 USD minor units
+- **WHEN** the admin lowers the internal bid to 30000 USD minor units
+- **THEN** Grade10 refuses it, naming the house's bid of 30500 USD minor
   units, and does not say it moves the lead or the current bid
-- **AND** the house still leads at 31000 HKD minor units and the internal bid
+- **AND** the house still leads at 30500 USD minor units and the internal bid
   reads 50000
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-hsd rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-hsd rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-44 - A raise of a placed internal bid still short is refused
 **Serves:** grade10-admin-auction-internal-bid-US-03 - the admin's raise does not reach the next bid
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-13` before
-  the raise, where the minimum next bid is 52000 HKD minor units
-- **WHEN** the admin raises the internal bid to 51500 HKD minor units
-- **THEN** Grade10 refuses it, naming 52000 HKD minor units as the minimum
+  the raise, where the minimum next bid is 52000 USD minor units
+- **WHEN** the admin raises the internal bid to 51500 USD minor units
+- **THEN** Grade10 refuses it, naming 52000 USD minor units as the minimum
   next bid
-- **AND** the collector still leads at 51000 HKD minor units and the internal
+- **AND** the collector still leads at 51000 USD minor units and the internal
   bid reads Placed at 50000
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6v8 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6v8 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-45 - A raise after the effective close is refused
 **Serves:** grade10-admin-auction-internal-bid-US-03 - the admin returns to a lot that has stopped taking bids
 
-- **GIVEN** an `HKD` listing past its effective close, where a collector led
-  over a Placed internal bid of 50000 HKD minor units
-- **WHEN** the admin raises the internal bid to 90000 HKD minor units
+- **GIVEN** an `USD` listing past its effective close, where a collector led
+  over a Placed internal bid of 50000 USD minor units
+- **WHEN** the admin raises the internal bid to 90000 USD minor units
 - **THEN** Grade10 refuses it, as not taking bids
-- **AND** the internal bid reads Placed at 50000 HKD minor units
+- **AND** the internal bid reads Placed at 50000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-wmp rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-wmp rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-46 - A lower after the effective close is refused
 **Serves:** grade10-admin-auction-internal-bid-US-04 - the admin returns to a lot that has stopped taking bids
 
-- **GIVEN** an `HKD` listing past its effective close, where the house led at
-  31000 HKD minor units with a Placed internal bid of 50000
-- **WHEN** the admin lowers the internal bid to 40000 HKD minor units
+- **GIVEN** an `USD` listing past its effective close, where the house led at
+  30500 USD minor units with a Placed internal bid of 50000
+- **WHEN** the admin lowers the internal bid to 40000 USD minor units
 - **THEN** Grade10 refuses it, as not taking bids
-- **AND** the internal bid reads Placed at 50000 HKD minor units
+- **AND** the internal bid reads Placed at 50000 USD minor units
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ubh rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ubh rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-59 - A placed internal bid raises as its retired internal bidder
 **Serves:** grade10-admin-auction-internal-bid-US-03 - the admin keeps protecting a lot after retiring the internal bidder it bids as
 
-- **GIVEN** an `HKD` listing where a collector leads at 51000 HKD minor units
+- **GIVEN** an `USD` listing where a collector leads at 51000 USD minor units
   with a maximum of 60000, over a Placed internal bid of 50000 as Harbour
   Cards, and Harbour Cards has since been retired
-- **WHEN** the admin raises the internal bid to 80000 HKD minor units
-- **THEN** Grade10 accepts it and the house leads at 61000 HKD minor units
-- **AND** the internal bid reads Placed at 80000 HKD minor units as Harbour
+- **WHEN** the admin raises the internal bid to 80000 USD minor units
+- **THEN** Grade10 accepts it and the house leads at 61000 USD minor units
+- **AND** the internal bid reads Placed at 80000 USD minor units as Harbour
   Cards
 
 ### Requirement: An internal bidder wins a lot the house leads at its close
 
-When a listing closes with the house leading, per
+When a USD listing closes with the house leading, per
 `grade10-site/auction/auction`, the internal bidder its internal bid names
 SHALL be the lot's winner for `grade10-site/auction/winner-order`,
 `grade10-site/auction/notifications-order` and
@@ -760,7 +769,8 @@ bidder, per `grade10-site/auction/winner-order`, flagged **internal**:
 | --- | --- |
 | Delivery address and billing address | The internal bidder's billing address as it stands at the close, kept as the order's snapshot; a later change to the profile does not rewrite the order |
 | Setup | Confirmed at the close: the order reads Preparing Invoice, never Awaiting Setup or Setup Overdue |
-| Payment method | Bank transfer |
+| Settlement currency | HKD |
+| Payment method | Bank transfer on FPS |
 | Invoice | None at the close; an operator sends it, as for any order |
 | Internal flag | Set at the close; it never changes |
 
@@ -794,18 +804,18 @@ buyer and the listing:
 A search of Orders by an email SHALL NOT match an internal bidder's email
 label, for any operator.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-nl0 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-nl0 rev=3 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-71 - A lot an internal bidder wins opens its internal order
 **Serves:** grade10-admin-auction-internal-bid-US-06 - the house's win opens an order the admin can run
 
-- **GIVEN** an `HKD` listing where the house leads at 31000 HKD minor units
-  with a Placed internal bid of 50000 as Harbour Cards, whose billing address
+- **GIVEN** a `USD` listing where the house leads at 10100 USD minor units
+  with a Placed internal bid of 10100 as Harbour Cards, whose billing address
   is in Hong Kong
 - **WHEN** the listing closes
 - **THEN** Grade10 opens one auction order for Harbour Cards, flagged
-  internal, at a winning bid of 31000 HKD minor units
+  internal, at a winning bid of 10100 USD minor units
 - **AND** the order holds Harbour Cards's billing address as its delivery and
-  billing address, with bank transfer, and reads Preparing Invoice
+  billing address, with HKD settlement and bank transfer on FPS, and reads Preparing Invoice
 - **AND** no invoice is issued and no letter is sent
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-l6i rev=1 -->
@@ -818,15 +828,18 @@ label, for any operator.
 - **AND** the order still holds the billing address Harbour Cards had at the
   close
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=3 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-73 - An operator sends the internal order's invoice and nobody is mailed
 **Serves:** grade10-admin-auction-internal-bid-US-06 - the admin sends the invoice of the house's win
 
 - **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-71`, and an
   operator holding payment-processing
-- **WHEN** they enter Shipping & Handling of 0 and a bank transfer fee of 0
-  HKD minor units and send the invoice at 2026-11-03T09:00:00Z
-- **THEN** the invoice is `pending` with a payment deadline of
+- **WHEN** they enter Shipping & Handling of USD10.01 and a bank transfer fee of 0
+  USD, then send the invoice at 2026-11-03T09:00:00Z
+- **THEN** the quote names bank transfer on FPS and reads a total of
+  103100 minor units in HKD, from the USD101 winning bid, USD20.20 premium,
+  USD10.01 shipping and USD0 bank transfer fee
+- **AND** the invoice is `pending` with a payment deadline of
   2026-11-10T09:00:00Z, and the order reads Pending Payment
 - **AND** no invoice-sent letter is sent
 
@@ -960,16 +973,16 @@ bidder, per `grade10-site/auction/notifications`.
 - **THEN** Grade10 refuses each, saying the email label is in use
 - **AND** Internal bidders lists the same two profiles as before
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ec7 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ec7 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-62 - A rename after bidding shows in the listing's bids
 **Serves:** grade10-admin-auction-internal-bid-US-09 - the admin renames an internal bidder that has already bid
 
-- **GIVEN** an internal bidder named Harbour Cards, for which a bid of 31000
-  HKD minor units has been placed on a listing
+- **GIVEN** an internal bidder named Harbour Cards, for which a bid of 30500
+  USD minor units has been placed on a listing
 - **WHEN** the admin renames it Harbour Cards Ltd
 - **THEN** Grade10 accepts it
-- **AND** an admin holding `auction:reserve` reads that listing's bid at 31000
-  HKD minor units as House, Harbour Cards Ltd
+- **AND** an admin holding `auction:reserve` reads that listing's bid at 30500
+  USD minor units as House, Harbour Cards Ltd
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-2x8 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-63 - The email label is fixed once the profile has bid
@@ -996,32 +1009,32 @@ bidder, per `grade10-site/auction/notifications`.
   naming L2
 - **AND** both stay Active
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-bio rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-bio rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-65 - A retired internal bidder keeps its history and is no longer offered
 **Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder whose lots have closed
 
 - **GIVEN** an internal bidder named Harbour Cards whose only internal bid is
-  on a listing that closed with the house leading at 31000 HKD minor units
+  on a listing that closed with the house leading at 30500 USD minor units
 - **WHEN** the admin retires Harbour Cards
 - **THEN** Grade10 accepts it and Internal bidders lists Harbour Cards as
   Retired
 - **AND** Harbour Cards is not offered when the admin sets an internal bid on
   another listing
 - **AND** an admin holding `auction:reserve` still reads the closed listing's
-  bid at 31000 HKD minor units as House, Harbour Cards
+  bid at 30500 USD minor units as House, Harbour Cards
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-uem rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-uem rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-70 - A Not placed internal bid on a closed listing does not keep its internal bidder in use
 **Serves:** grade10-admin-auction-internal-bid-US-09 - the admin retires an internal bidder whose only Not placed internal bid is on a lot that has closed
 
 - **GIVEN** an internal bidder named Kowloon Vault whose only internal bid is
-  Not placed at 50000 HKD minor units on listing L3, which closed with
-  collector A winning at 53000 HKD minor units
+  Not placed at 50000 USD minor units on listing L3, which closed with
+  collector A winning at 53000 USD minor units
 - **WHEN** the admin retires Kowloon Vault
 - **THEN** Grade10 accepts it and Internal bidders lists Kowloon Vault as
   Retired
 - **AND** an admin holding `auction:reserve` still reads L3's internal bid as
-  Not placed at 50000 HKD minor units, as Kowloon Vault
+  Not placed at 50000 USD minor units, as Kowloon Vault
 
 <!-- trace:scenario id=g10adm.auction-internal-bid.SC-tj3 rev=1 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-79 - An internal bidder with no billing address is refused
@@ -1085,11 +1098,11 @@ bidders.
 - **THEN** Grade10 refuses both
 - **AND** the internal bid is unchanged
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-53a rev=2 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-53a rev=3 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-20 - The audit trail records a set without its amount
 **Serves:** grade10-admin-auction-internal-bid-US-07 - an auditor reads who protected a lot
 
-- **GIVEN** an admin who saved an internal bid of 50000 HKD minor units at
+- **GIVEN** an admin who saved an internal bid of 50000 USD minor units at
   2026-11-02T18:00:00Z as Harbour Cards on a listing
 - **WHEN** an operator holding audit access reads the audit trail for that
   listing
@@ -1108,12 +1121,12 @@ bidders.
 - **AND** Grade10 refuses each call, and Harbour Cards is unchanged and the
   only internal bidder
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-d6h rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-d6h rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-68 - The audit trail records an internal bidder act without a listing
 **Serves:** grade10-admin-auction-internal-bid-US-09 - an auditor reads who changed the house's bidders
 
 - **GIVEN** an internal bidder named Harbour Cards, named by a Scheduled
-  internal bid of 50000 HKD minor units on a listing
+  internal bid of 50000 USD minor units on a listing
 - **WHEN** an admin holding `auction:reserve` renames it Harbour Cards Ltd,
   and an operator holding audit access reads the audit trail
 - **THEN** it shows the admin renamed the internal bidder, and when
@@ -1147,16 +1160,16 @@ maximum, and every commitment, raise and lower, per
 bidder moderation list, and a search of the Listings table by an email SHALL
 NOT match an internal bidder's email label, for any operator.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ftu rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-ftu rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-32 - Staff read the house's bids as House
 **Serves:** grade10-admin-auction-internal-bid-US-07 - an operator without secret-floor access reads a protected lot's bids
 
-- **GIVEN** an open `HKD` listing where collector A, shown to collectors as
+- **GIVEN** an open `USD` listing where collector A, shown to collectors as
   Bidder 1, bid with a maximum of 30000, and the house, shown to collectors as
-  Bidder 2, leads at 31000 HKD minor units with a maximum of 50000
+  Bidder 2, leads at 30500 USD minor units with a maximum of 50000
 - **AND** an operator whose roles are exactly `staff`
 - **WHEN** they read the listing's bid ledger and bidder summaries
-- **THEN** they see House's bid at 31000 HKD minor units with its Accepted At,
+- **THEN** they see House's bid at 30500 USD minor units with its Accepted At,
   and A's bid with A's account and maximum
 - **AND** House's rows show no account, email, name, maximum or Bidder 2
 
@@ -1181,19 +1194,19 @@ NOT match an internal bidder's email label, for any operator.
 - **THEN** they see A's bid alone, a bidder count of 1 and a bid count of 1
 - **AND** nothing names House or an internal bid
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-fs2 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-fs2 rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-40 - Staff see no row for a house raise or lower
 **Serves:** grade10-admin-auction-internal-bid-US-07 - the house's maximum moves and staff see only the bids it placed
 
 - **GIVEN** the listing of `grade10-admin-auction-internal-bid-SC-32`
-- **WHEN** the admin raises the internal bid to 70000 HKD minor units, and
+- **WHEN** the admin raises the internal bid to 70000 USD minor units, and
   then lowers it to 60000
 - **AND** an operator whose roles are exactly `staff` reads its bid ledger and
   activity
-- **THEN** they see House's one bid at 31000 HKD minor units
+- **THEN** they see House's one bid at 30500 USD minor units
 - **AND** no row shows 50000, 70000, 60000, a raise or a lower
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-epm rev=1 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-epm rev=2 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-67 - A reserve holder reads which internal bidder bid
 **Serves:** `grade10-admin-auction-internal-bid-US-09`, `grade10-site/auction/auto-bidding#grade10-site-auction-auto-bidding-US-04` - the admin traces which internal bidder the house bid as
 
@@ -1202,7 +1215,7 @@ NOT match an internal bidder's email label, for any operator.
   harbour@internal.grade10.example
 - **WHEN** an admin holding `auction:reserve` reads its bid ledger and bidder
   summaries
-- **THEN** House's bid at 31000 HKD minor units reads House, Harbour Cards,
+- **THEN** House's bid at 30500 USD minor units reads House, Harbour Cards,
   harbour@internal.grade10.example, with a maximum of 50000
 - **AND** an operator whose roles are exactly `staff` reading the same reads
   sees House with no name, email label or maximum

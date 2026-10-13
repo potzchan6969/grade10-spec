@@ -1,6 +1,6 @@
 # grade10-site/auction/account-record Test Cases
 
-**Status:** pending-review · 7/33
+**Status:** reopened · 0/33
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
 ## Walk 1: Reach My Auctions and read bidding rows — phase 1
@@ -18,7 +18,7 @@
 - customer B(signed in, enrolled to bid) is on `<lot_6 url>` in a separate session.
 - customer A(signed in) has bid on `<lot_6>` and is on `<my auctions url>`.
 - The refresh of `<lot_6>`'s bid and close is mocked to fail.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_6>` to close.
+- Open `<lot_6>`'s listing page and wait for it to close.
 - customer A(signed in) has bid on `<lot_7>`, in the state its row gives, and is on `<lot_7 url>`.
 - customer A(signed in, enrolled to bid) has neither watched nor bid on `<lot_8>`.
 
@@ -39,9 +39,9 @@
 | customer B bid | The next valid bid shown on customer B's bid panel |
 | lot_6 | An open lot taking bids, bid on by customer A |
 | Field | Value |
-| lot_7 | An open HKD lot taking bids |
+| lot_7 | An open USD lot taking bids |
 | low raise | One minor unit below the next valid bid shown on customer A's bid panel |
-| lot_8 | An open HKD lot taking bids |
+| lot_8 | An open USD lot taking bids |
 | low bid | One minor unit below the next valid bid shown on customer A's bid panel |
 
 ### Route
@@ -115,12 +115,12 @@
 
 | Item | Value |
 | --- | --- |
-| lot_6 | An open HKD lot led by customer B, closing after `<lot_7>` |
-| lot_7 | An open HKD lot customer A bid on, closing before `<lot_6>` |
-| current bid | HK$5,460 (range: 400000–799999 minor units) |
-| increment | HK$80 (fixed tier increment), the HK$4,000 tier |
-| next minimum | `<current bid>` plus `<increment>`, HK$5,540 (fixed derived value) |
-| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` |
+| lot_6 | An open USD lot led by customer B, closing after `<lot_7>` |
+| lot_7 | An open USD lot customer A bid on, closing before `<lot_6>` |
+| current bid | US$5,460 (range: 400000–799999 minor units) |
+| increment | US$80 (fixed tier increment), the US$4,000 tier |
+| next minimum | `<current bid>` plus `<increment>`, US$5,540 (fixed derived value) |
+| refused bid | US$5,460, equal to `<current bid>`, below `<next minimum>` |
 | Returned the proof | Won, Pending Payment |
 | Confirmed the payment | Won, Processing |
 | lot_12 | customer A's won lot, proof under check |
@@ -189,11 +189,11 @@
 | lot_3 | An open lot taking bids, watched by this collector, closing after `<lot_4>` |
 | lot_4 | An open lot taking bids, watch-only for this collector, closing before `<lot_3>` |
 | first bid | The next valid bid shown on `<lot_3>`'s bid panel |
-| Item | Account state: Bidding allowed; `<typed bid>`: HK$140, below `<opening price>`; The bid form says: Minimum bid is `<opening price>` |
-| Item | Account state: Bidding suspended by an operator; `<typed bid>`: HK$280, `<opening price>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
+| Item | Account state: Bidding allowed; `<typed bid>`: US$140, below `<opening price>`; The bid form says: Minimum bid is `<opening price>` |
+| Item | Account state: Bidding suspended by an operator; `<typed bid>`: US$280, `<opening price>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
 | Item | Account state: Field; `<typed bid>`: Value |
-| Item | Account state: lot_5; `<typed bid>`: An open HKD lot with no bid from anyone |
-| Item | Account state: opening price; `<typed bid>`: HK$280 (range: 1000–79999 minor units), the starting price |
+| Item | Account state: lot_5; `<typed bid>`: An open USD lot with no bid from anyone |
+| Item | Account state: opening price; `<typed bid>`: US$280 (range: 1000–79999 minor units), the starting price |
 
 ### Route
 
@@ -325,10 +325,10 @@
 
 | Item | Value |
 | --- | --- |
-| lot_2 | An HKD lot led by customer A, its close passed and not yet recorded |
-| lot_3 | An open HKD lot, its close more than an hour away |
-| customer B bid | HKD1,180 (range: 80000–399999 minor units) |
-| current bid | HKD1,300 (range: 80000–399999 minor units), above `<customer B bid>` |
+| lot_2 | A USD lot led by customer A, its close passed and not yet recorded |
+| lot_3 | An open USD lot, its close more than an hour away |
+| customer B bid | 100000 USD minor units |
+| current bid | 120000 USD minor units, above `<customer B bid>` |
 
 ### Route
 
@@ -384,7 +384,7 @@
 * Step 3: `<lot_5>` is still listed.
 * Step 4: `<lot_5 url>` opens, taking bids.
 
-<!-- trace:case id=g10.auction-account-record.TC-s25 rev=1 covers=g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-5we -->
+<!-- trace:case id=g10.auction-account-record.TC-s25 rev=2 -->
 ### g10.auction-account-record.US1-TC2: My Auctions orders bid rows, then watch-only, then closed
 
 **Classification:**
@@ -424,7 +424,7 @@
 * Rows read, top down: `<lot_b>`, `<lot_a>`, `<lot_d>`, `<lot_c>`, `<lot_e>`.
 * Each lot shows once.
 
-<!-- trace:case id=g10.auction-account-record.TC-wtn rev=1 covers=g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-5we -->
+<!-- trace:case id=g10.auction-account-record.TC-wtn rev=2 -->
 ### g10.auction-account-record.US1-TC3: Nothing bookmarked is an empty state that offers the catalogue
 
 **Classification:**
@@ -456,7 +456,7 @@
 * Step 1: the page says nothing is bookmarked; no error shows.
 * Step 2: the auction catalogue opens.
 
-<!-- trace:case id=g10.auction-account-record.TC-5jj rev=1 covers=g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-5we -->
+<!-- trace:case id=g10.auction-account-record.TC-5jj rev=2 -->
 ### g10.auction-account-record.US1-TC4: A failed read says so and retries
 
 **Classification:**
@@ -496,7 +496,7 @@
 * Step 1: no catalogue offer shows.
 * Step 2: `<lot_1>` is listed.
 
-<!-- trace:case id=g10.auction-account-record.TC-2c9 rev=1 covers=g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-5we -->
+<!-- trace:case id=g10.auction-account-record.TC-2c9 rev=2 -->
 ### g10.auction-account-record.US1-TC5: Signed-out visitor is asked to sign in and returned
 
 **Classification:**
@@ -534,7 +534,7 @@
 **I want** one place that says which of my listings I still lead and which I have lost,
 **so that** I can act on the ones that still need me before they close.
 
-<!-- trace:case id=g10.auction-account-record.TC-gj0 rev=2 covers=g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-account-record.TC-gj0 rev=3 -->
 ### g10.auction-account-record.US2-TC1: Your Standing reads each open-lot state
 
 Runs once per row of **Test data**.
@@ -576,7 +576,7 @@ Runs once per row of **Test data**.
 * Current bid reads `<lot>`'s current bid.
 * For Outbid, the next valid bid equals current bid plus its increment.
 
-<!-- trace:case id=g10.auction-account-record.TC-oi7 rev=1 covers=g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-account-record.TC-oi7 rev=2 -->
 ### g10.auction-account-record.US2-TC2: Being outbid moves the row from Leading to Outbid
 
 **Classification:**
@@ -616,7 +616,7 @@ Runs once per row of **Test data**.
 * `<lot_6>` reads Outbid, with the next valid bid.
 * Current bid reads `<customer B bid>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-nv4 rev=1 covers=g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-account-record.TC-nv4 rev=2 -->
 ### g10.auction-account-record.US2-TC3: A value that could not refresh is marked not current
 
 **Classification:**
@@ -651,7 +651,7 @@ Runs once per row of **Test data**.
 
 * `<lot_6>`'s current bid and close are shown as not current.
 
-<!-- trace:case id=g10.auction-account-record.TC-w62 rev=1 covers=g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-account-record.TC-w62 rev=3 covers=g10.auction-account-record.SC-dsc -->
 ### g10.auction-account-record.US2-TC4: A refused raise leaves the row's Standing as it was
 
 Runs once per row of **Test data**.
@@ -671,23 +671,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) has bid on `<lot_7>`, in the state its row gives, and is on `<lot_7 url>`.
+* customer A(signed in) holds the maximum and standing in the row for `<lot_7>`, and is on `<lot_7 url>`.
 
 **Test data:**
 
-| Lot state for customer A | Your Standing |
-| --- | --- |
-| Open, customer A leads | Leading |
-| Open, customer B leads | Outbid, with the next valid bid |
+| Lot state for customer A | Customer A maximum | Current bid | Minimum next bid | Refused raise | Your Standing |
+| --- | --- | --- | --- | --- | --- |
+| Open, customer B leads | 25000 USD minor units | 30000 USD minor units | 30500 USD minor units | 30300 USD minor units | Outbid, with the next valid bid |
+| Open, customer A leads at 30000 USD minor units | 30000 USD minor units | 30000 USD minor units | 30500 USD minor units | 30300 USD minor units | Leading |
 
 | Field | Value |
 | --- | --- |
-| lot_7 | An open HKD lot taking bids |
-| low raise | One minor unit below the next valid bid shown on customer A's bid panel |
+| lot_7 | An open USD lot taking bids |
 
 **Steps:**
 
-1. Place `<low raise>`.
+1. Place `<refused raise>`.
 2. Note `<lot_7>`'s current bid on its page.
 3. Navigate to `<my auctions url>`.
 4. Find `<lot_7>`'s row.
@@ -696,9 +695,9 @@ Runs once per row of **Test data**.
 
 * Step 1 shows the refusal on the bid panel.
 * Your Standing reads the row's value.
-* Current bid reads the bid noted at step 2, never `<low raise>`.
+* Current bid reads the bid noted at step 2, still 30000 USD minor units, never `<refused raise>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-na3 rev=1 covers=g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-account-record.TC-na3 rev=2 -->
 ### g10.auction-account-record.US2-TC5: A refused first bid adds no row
 
 **Classification:**
@@ -722,7 +721,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| lot_8 | An open HKD lot taking bids |
+| lot_8 | An open USD lot taking bids |
 | low bid | One minor unit below the next valid bid shown on customer A's bid panel |
 
 **Steps:**
@@ -738,7 +737,7 @@ Runs once per row of **Test data**.
 * No tab holds a row for `<lot_8>`.
 * The title count equals the count noted at step 1.
 
-<!-- trace:case id=g10.auction-account-record.TC-8mz rev=1 covers=g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-account-record.TC-8mz rev=2 -->
 ### g10.auction-account-record.US2-TC6: An Outbid bidder's refused bid leaves their row Outbid and in place
 
 **Classification:**
@@ -763,12 +762,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| lot_6 | An open HKD lot led by customer B, closing after `<lot_7>` |
-| lot_7 | An open HKD lot customer A bid on, closing before `<lot_6>` |
-| current bid | HK$5,460 (range: 400000–799999 minor units) |
-| increment | HK$80 (fixed tier increment), the HK$4,000 tier |
-| next minimum | `<current bid>` plus `<increment>`, HK$5,540 (fixed derived value) |
-| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` |
+| lot_6 | An open USD lot led by customer B, closing after `<lot_7>` |
+| lot_7 | An open USD lot customer A bid on, closing before `<lot_6>` |
+| current bid | US$5,460 (range: 400000–799999 minor units) |
+| increment | US$80 (fixed tier increment), the US$4,000 tier |
+| next minimum | `<current bid>` plus `<increment>`, US$5,540 (fixed derived value) |
+| refused bid | US$5,460, equal to `<current bid>`, below `<next minimum>` |
 
 **Steps:**
 
@@ -793,7 +792,7 @@ Runs once per row of **Test data**.
 **I want** a paid, undispatched Won row to read Preparing Shipment,
 **so that** My Auctions matches Winner Order without implying the lot shipped.
 
-<!-- trace:case id=g10.auction-account-record.TC-hj7 rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
+<!-- trace:case id=g10.auction-account-record.TC-hj7 rev=2 -->
 ### g10.auction-account-record.US3-TC2: A Won row follows the proof check's outcome
 
 Runs once per row of **Test data**.
@@ -832,7 +831,7 @@ Runs once per row of **Test data**.
 
 * Your Standing reads the row's value.
 
-<!-- trace:case id=g10.auction-account-record.TC-wt4 rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
+<!-- trace:case id=g10.auction-account-record.TC-wt4 rev=2 -->
 ### g10.auction-account-record.US3-TC4: Another collector never sees a Payment Verifying row
 
 **Classification:**
@@ -869,7 +868,7 @@ Runs once per row of **Test data**.
 
 * No `<lot_12>` row shows.
 
-<!-- trace:case id=g10.auction-account-record.TC-83f rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
+<!-- trace:case id=g10.auction-account-record.TC-83f rev=2 -->
 ### g10.auction-account-record.US3-TC5: A Won row reads its order's status
 
 Runs once per row of **Test data**.
@@ -913,7 +912,7 @@ Runs once per row of **Test data**.
 * Your Standing reads the row's value.
 * The row offers View order.
 
-<!-- trace:case id=g10.auction-account-record.TC-lvl rev=1 covers=g10.auction-account-record.SC-1lv,g10.auction-account-record.SC-pu6,g10.auction-account-record.SC-m3u,g10.auction-account-record.SC-byk,g10.auction-account-record.SC-4sy,g10.auction-account-record.SC-uh6,g10.auction-account-record.SC-ahn,g10.auction-account-record.SC-pnn,g10.auction-account-record.SC-skc,g10.auction-account-record.SC-haw,g10.auction-account-record.SC-fgb -->
+<!-- trace:case id=g10.auction-account-record.TC-lvl rev=2 -->
 ### g10.auction-account-record.US3-TC20: Won-row status follows payment and fulfilment state
 
 **Classification:**
@@ -953,7 +952,7 @@ Runs once per row of **Test data**.
 * `<won_preparing_shipment>` reads Preparing Shipment with the `default` status badge.
 * `<won_shipped>` reads Shipped with the `default` status badge.
 
-<!-- trace:case id=g10.auction-account-record.TC-now rev=1 covers=g10.auction-account-record.SC-byk -->
+<!-- trace:case id=g10.auction-account-record.TC-now rev=2 -->
 ### g10.auction-account-record.US3-TC23: Shipped Won row keeps the default badge
 
 **Classification:**
@@ -996,7 +995,7 @@ Runs once per row of **Test data**.
 **I want** to see that my card was not charged,
 **so that** I know I owe nothing for a listing I did not win.
 
-<!-- trace:case id=g10.auction-account-record.TC-rfz rev=2 covers=g10.auction-account-record.SC-n9l,g10.auction-account-record.SC-2e8 -->
+<!-- trace:case id=g10.auction-account-record.TC-rfz rev=3 -->
 ### g10.auction-account-record.US4-TC1: Didn't win says the card was not charged
 
 Runs once per row of **Test data**.
@@ -1046,7 +1045,7 @@ Runs once per row of **Test data**.
 **I want** watching a lot from its page to put it on My Auctions and tell me alerts are on,
 **so that** I can open My Auctions from the toast when I want to manage it.
 
-<!-- trace:case id=g10.auction-account-record.TC-7pb rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-ewb -->
+<!-- trace:case id=g10.auction-account-record.TC-7pb rev=2 -->
 ### g10.auction-account-record.US5-TC1: Watched lot lands on My Auctions as watch-only
 
 **Classification:**
@@ -1088,7 +1087,7 @@ Runs once per row of **Test data**.
 * Step 3: Your Standing reads `--`.
 * Step 3: Email alerts switch is on; Unwatch is offered.
 
-<!-- trace:case id=g10.auction-account-record.TC-tzp rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-ewb -->
+<!-- trace:case id=g10.auction-account-record.TC-tzp rev=2 -->
 ### g10.auction-account-record.US5-TC2: Watching from the catalogue card lands on My Auctions
 
 **Classification:**
@@ -1126,7 +1125,7 @@ Runs once per row of **Test data**.
 * Step 1: the card's control reads Watching.
 * Step 2: `<lot_1>` shows once, Your Standing `--`, email alerts on.
 
-<!-- trace:case id=g10.auction-account-record.TC-sse rev=1 covers=g10.auction-account-record.SC-vwk,g10.auction-account-record.SC-ewb -->
+<!-- trace:case id=g10.auction-account-record.TC-sse rev=2 -->
 ### g10.auction-account-record.US5-TC3: A watch is seen only by its owner
 
 **Classification:**
@@ -1175,7 +1174,7 @@ Runs once per row of **Test data**.
 **I want** my first bid on a lot to bookmark it and tell me once that alerts are on,
 **so that** I do not need a separate Watch and I am not reminded on every visit.
 
-<!-- trace:case id=g10.auction-account-record.TC-l63 rev=1 covers=g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu -->
+<!-- trace:case id=g10.auction-account-record.TC-l63 rev=2 -->
 ### g10.auction-account-record.US6-TC1: First bid puts the lot on My Auctions without a Watch
 
 **Classification:**
@@ -1217,7 +1216,7 @@ Runs once per row of **Test data**.
 * Step 3: `<lot_2>` shows once, Your Standing Leading.
 * Step 3: Email alerts switch is on; no Unwatch is offered.
 
-<!-- trace:case id=g10.auction-account-record.TC-9rb rev=1 covers=g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu -->
+<!-- trace:case id=g10.auction-account-record.TC-9rb rev=2 -->
 ### g10.auction-account-record.US6-TC2: Bidding on a watched lot keeps one row
 
 **Classification:**
@@ -1258,7 +1257,7 @@ Runs once per row of **Test data**.
 * `<lot_3>` shows once, Your Standing Leading, no Unwatch.
 * `<lot_3>` sits above `<lot_4>`: bid rows before watch-only.
 
-<!-- trace:case id=g10.auction-account-record.TC-43z rev=1 covers=g10.auction-account-record.SC-baj,g10.auction-account-record.SC-6mu -->
+<!-- trace:case id=g10.auction-account-record.TC-43z rev=2 -->
 ### g10.auction-account-record.US6-TC3: A refused first bid puts nothing on My Auctions
 
 Runs once per row of **Test data**.
@@ -1286,13 +1285,13 @@ Runs once per row of **Test data**.
 
 | Account state | `<typed bid>` | The bid form says |
 | --- | --- | --- |
-| Bidding allowed | HK$140, below `<opening price>` | Minimum bid is `<opening price>` |
-| Bidding suspended by an operator | HK$280, `<opening price>` | Bidding is suspended on this account. Contact Us to resolve it. |
+| Bidding allowed | US$140, below `<opening price>` | Minimum bid is `<opening price>` |
+| Bidding suspended by an operator | US$280, `<opening price>` | Bidding is suspended on this account. Contact Us to resolve it. |
 
 | Field | Value |
 | --- | --- |
-| lot_5 | An open HKD lot with no bid from anyone |
-| opening price | HK$280 (range: 1000–79999 minor units), the starting price |
+| lot_5 | An open USD lot with no bid from anyone |
+| opening price | US$280 (range: 1000–79999 minor units), the starting price |
 
 **Steps:**
 
@@ -1316,14 +1315,14 @@ Runs once per row of **Test data**.
 **I want** my lots split into Active, Upcoming and Ended tabs
 **so that** I see what needs me now without scrolling past closed and unopened lots.
 
-<!-- trace:case id=g10.auction-account-record.TC-91p rev=1 covers=g10.auction-account-record.SC-11c,g10.auction-account-record.SC-slt,g10.auction-account-record.SC-evx,g10.auction-account-record.SC-vlf,g10.auction-account-record.SC-doc,g10.auction-account-record.SC-r26,g10.auction-account-record.SC-we1 -->
+<!-- trace:case id=g10.auction-account-record.TC-91p rev=2 -->
 ### g10.auction-account-record.US7-TC1: Each listing sits in the tab its bidding window names
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
@@ -1358,14 +1357,14 @@ Runs once per row of **Test data**.
 * Title badge shows 3.
 * Step 2 lists only `<listing_1>`; step 3 lists only `<listing_3>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-z0b rev=1 covers=g10.auction-account-record.SC-11c,g10.auction-account-record.SC-slt,g10.auction-account-record.SC-evx,g10.auction-account-record.SC-vlf,g10.auction-account-record.SC-doc,g10.auction-account-record.SC-r26,g10.auction-account-record.SC-we1 -->
+<!-- trace:case id=g10.auction-account-record.TC-z0b rev=2 -->
 ### g10.auction-account-record.US7-TC2: A listing moves to Active when its window opens
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1391,14 +1390,14 @@ Runs once per row of **Test data**.
 * `<listing_1>` is listed in the Active tab.
 * `<listing_1>` is not listed in the Upcoming tab.
 
-<!-- trace:case id=g10.auction-account-record.TC-tbh rev=1 covers=g10.auction-account-record.SC-11c,g10.auction-account-record.SC-slt,g10.auction-account-record.SC-evx,g10.auction-account-record.SC-vlf,g10.auction-account-record.SC-doc,g10.auction-account-record.SC-r26,g10.auction-account-record.SC-we1 -->
+<!-- trace:case id=g10.auction-account-record.TC-tbh rev=2 -->
 ### g10.auction-account-record.US7-TC3: An empty tab says it has no lots
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1422,14 +1421,14 @@ Runs once per row of **Test data**.
 
 * The Upcoming tab shows its no-lots empty state.
 
-<!-- trace:case id=g10.auction-account-record.TC-tzc rev=1 covers=g10.auction-account-record.SC-11c,g10.auction-account-record.SC-slt,g10.auction-account-record.SC-evx,g10.auction-account-record.SC-vlf,g10.auction-account-record.SC-doc,g10.auction-account-record.SC-r26,g10.auction-account-record.SC-we1 -->
+<!-- trace:case id=g10.auction-account-record.TC-tzc rev=2 -->
 ### g10.auction-account-record.US7-TC4: Email alerts cannot be changed on an Ended row
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1455,14 +1454,14 @@ Runs once per row of **Test data**.
 * The Email alerts control is disabled.
 * The alert setting for `<listing_3>` is unchanged.
 
-<!-- trace:case id=g10.auction-account-record.TC-6xk rev=1 covers=g10.auction-account-record.SC-11c,g10.auction-account-record.SC-slt,g10.auction-account-record.SC-evx,g10.auction-account-record.SC-vlf,g10.auction-account-record.SC-doc,g10.auction-account-record.SC-r26,g10.auction-account-record.SC-we1 -->
+<!-- trace:case id=g10.auction-account-record.TC-6xk rev=2 -->
 ### g10.auction-account-record.US7-TC5: A Won row opens its auction order
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1495,7 +1494,7 @@ Runs once per row of **Test data**.
 **I want** My Auctions to keep the Won row linked to the order,
 **so that** I can return to the locked payment record.
 
-<!-- trace:case id=g10.auction-account-record.TC-hc2 rev=1 covers=g10.auction-account-record.SC-chv -->
+<!-- trace:case id=g10.auction-account-record.TC-hc2 rev=2 -->
 ### g10.auction-account-record.US8-TC1: A partially paid Won row opens Winner Order
 
 **Classification:**
@@ -1527,7 +1526,7 @@ Runs once per row of **Test data**.
 * The row status is Partially Paid with its warning treatment.
 * View order opens the Partially Paid Winner Order.
 
-<!-- trace:case id=g10.auction-account-record.TC-flb rev=2 covers=g10.auction-account-record.SC-chv -->
+<!-- trace:case id=g10.auction-account-record.TC-flb rev=3 -->
 ### g10.auction-account-record.US8-TC2: A Didn't win row offers no View order
 
 **Classification:**
@@ -1565,7 +1564,7 @@ Runs once per row of **Test data**.
 * Your Standing reads Didn't win, and the row says the card was not charged.
 * No View order is offered.
 
-<!-- trace:case id=g10.auction-account-record.TC-qo0 rev=1 covers=g10.auction-account-record.SC-chv -->
+<!-- trace:case id=g10.auction-account-record.TC-qo0 rev=2 -->
 ### g10.auction-account-record.US8-TC3: A Won row carries no status-specific contact helper
 
 **Classification:**
@@ -1608,7 +1607,7 @@ Runs once per row of **Test data**.
 * `<lot_11>` reads Won, Awaiting Setup, and offers View order.
 * `<lot_11>` has no confirm-address helper line on the row.
 
-<!-- trace:case id=g10.auction-account-record.TC-5uz rev=1 covers=g10.auction-account-record.SC-chv -->
+<!-- trace:case id=g10.auction-account-record.TC-5uz rev=2 -->
 ### g10.auction-account-record.US8-TC4: An Awaiting Setup row carries no confirm-address helper
 
 **Classification:**
@@ -1652,7 +1651,7 @@ Runs once per row of **Test data**.
 **I want** overdue won lots to read Setup Overdue or Payment Overdue in Status,
 **so that** I can tell closed self-service from lots still inside their window.
 
-<!-- trace:case id=g10.auction-account-record.TC-lit rev=1 covers=g10.auction-account-record.SC-zid -->
+<!-- trace:case id=g10.auction-account-record.TC-lit rev=2 -->
 ### g10.auction-account-record.US9-TC1: Overdue won lots read Setup Overdue or Payment Overdue
 
 Runs once per row of **Test data**.
@@ -1702,14 +1701,14 @@ Runs once per row of **Test data**.
 **I want** each lot I bid on to show the auction's current or final price and, once it closes, whether I won,
 **so that** I know what a lot sold for and whether I lost it without opening the lot.
 
-<!-- trace:case id=g10.auction-account-record.TC-p3p rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
+<!-- trace:case id=g10.auction-account-record.TC-p3p rev=2 -->
 ### g10.auction-account-record.US10-TC2: Row shows no result before the close is recorded
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1729,7 +1728,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| lot_2 | An HKD lot led by customer A, its close passed and not yet recorded |
+| lot_2 | A USD lot led by customer A, its close passed and not yet recorded |
 
 **Steps:**
 
@@ -1744,14 +1743,14 @@ Runs once per row of **Test data**.
 * At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win.
 * At step 5 the row is in the Ended tab and Your Standing reads Won.
 
-<!-- trace:case id=g10.auction-account-record.TC-y6p rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
+<!-- trace:case id=g10.auction-account-record.TC-y6p rev=3 covers=g10.auction-account-record.SC-fao -->
 ### g10.auction-account-record.US10-TC3: Open row shows the auction's current price, not the collector's bid
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1771,9 +1770,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| lot_3 | An open HKD lot, its close more than an hour away |
-| customer B bid | HKD1,180 (range: 80000–399999 minor units) |
-| current bid | HKD1,300 (range: 80000–399999 minor units), above `<customer B bid>` |
+| lot_3 | An open USD lot, its close more than an hour away |
+| customer B bid | 100000 USD minor units |
+| current bid | 120000 USD minor units, above `<customer B bid>` |
 
 **Steps:**
 
@@ -1782,10 +1781,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Current bid reads `<current bid>`, not `<customer B bid>`.
+* Current bid reads 120000 USD minor units, not `<customer B bid>`.
 * Your Standing reads Outbid, with the next valid bid.
 
-<!-- trace:case id=g10.auction-account-record.TC-j99 rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
+<!-- trace:case id=g10.auction-account-record.TC-j99 rev=2 -->
 ### g10.auction-account-record.US10-TC1: Ended row shows the final price and the recorded result
 
 Runs once per row of **Test data**.
@@ -1818,7 +1817,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A closed HKD lot both customers bid on |
+| `<lot_1>` | A closed USD lot both customers bid on |
 | `<final price>` | 513000 minor units, `<customer B bid>` plus its 8000 increment |
 | `<customer A maximum>` | 800000 minor units, above `<final price>` |
 | `<customer B bid>` | 505000 minor units, customer B's maximum, below `<final price>` |
@@ -1834,7 +1833,7 @@ Runs once per row of **Test data**.
 * Current bid reads `<final price>`, not `<own last bid>`.
 * Your Standing reads `<standing>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-hgl rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
+<!-- trace:case id=g10.auction-account-record.TC-hgl rev=2 -->
 ### g10.auction-account-record.US10-TC4: Lone first bid confirming after the close reads Didn't win on an unsold lot
 
 **Classification:**
@@ -1860,7 +1859,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<lot_4>` | An HKD lot with a starting price of 20000 minor units and no bid |
+| `<lot_4>` | A USD lot with a starting price of 20000 minor units and no bid |
 | `<first bid>` | 20000 minor units, the opening price |
 
 **Steps:**
@@ -1945,3 +1944,11 @@ Runs once per row of **Test data**.
 - **Raised:** none.
 
 **Run:** removal reconciliation, 2026-10-12, for `remove-my-auction-orders`, `grade10-site/auction/account-record`. The modified requirement swaps its cross-reference from `grade10-site/auction/auction-orders` to `grade10-site/auction/winner-order`; `grade10-site-auction-account-record-SC-55` is carried word for word. No case moves - the Won row's walk is unchanged.
+
+**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
+
+- `TC-w62` rev3 covers SC-dsc: both Outbid and Leading rows keep the live current price at 30000 USD minor after the refused 30300 raise; floor is 30500 USD minor.
+- `TC-y6p` rev3 covers SC-fao: the Active row shows the live current price 120000 USD minor, above customer B's 100000 USD minor bid.
+- SC-b5w has no active case: durable `TC-j99` is deprecated and remains unchanged. **Out of suite:** exact site regression is planned in `tasks.md` 7.7. No case was reactivated.
+- The delta preserves the existing account-record journeys and the product rule that rows show current/final auction price. No PRD, journey, feature-root, or durable-baseline contradiction was found. The changed account-record scenarios do not assert the 20% premium; that behavior stays with its owning bid and post-bid suites.
+- All edited cases remain draft. No implementation execution or human approval is claimed.

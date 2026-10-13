@@ -777,27 +777,27 @@ No letter SHALL say or imply that a bid, a lead or a win was the house's.
   takes the lead
 - **AND** the letter does not say the new leader is the house
 
-<!-- trace:scenario id=g10.auction-notifications.SC-xy1 rev=1 -->
+<!-- trace:scenario id=g10.auction-notifications.SC-xy1 rev=2 -->
 #### Scenario: grade10-site-auction-notifications-SC-50 - A bidder who lost to the house gets the did-not-win letter
 **Serves:** grade10-site-auction-notifications-US-06 - a collector who lost to the house hears the lot closed
 
-- **GIVEN** a collector who bid 30000 HKD minor units on a lot with email
+- **GIVEN** a collector who bid 30000 USD minor units on a lot with email
   alerts on
-- **AND** the lot closes with the house leading at 31000 HKD minor units
+- **AND** the lot closes with the house leading at 30500 USD minor units
 - **WHEN** Grade10 sends close-outcome mail for that lot
 - **THEN** it sends them the did-not-win letter (campaign
-  `lot_closed_didnt_win`), naming a winning bid of 31000 and their bid of
-  30000 HKD minor units
+  `lot_closed_didnt_win`), naming a winning bid of 30500 and their bid of
+  30000 USD minor units
 
-<!-- trace:scenario id=g10.auction-notifications.SC-14x rev=1 -->
+<!-- trace:scenario id=g10.auction-notifications.SC-14x rev=2 -->
 #### Scenario: grade10-site-auction-notifications-SC-51 - A watcher of a lot the house won gets the watched sold letter
 **Serves:** grade10-site-auction-notifications-US-07 - a watcher hears a lot the house won ended sold
 
 - **GIVEN** a collector who watches a lot with email alerts on and never bid
-- **AND** the lot closes with the house leading at 31000 HKD minor units
+- **AND** the lot closes with the house leading at 30500 USD minor units
 - **WHEN** Grade10 sends close-outcome mail for that lot
 - **THEN** it sends them the watched sold letter (campaign
-  `lot_watched_sold`) naming Sold for 31000 HKD minor units
+  `lot_watched_sold`) naming Sold for 30500 USD minor units
 - **AND** it does not send them the watched ended letter
 
 <!-- trace:scenario id=g10.auction-notifications.SC-9dh rev=1 -->

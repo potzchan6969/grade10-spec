@@ -12,3 +12,9 @@ premium for each auction currency,
 **As a** finance operator,
 **I want** to set, per currency, the card rule that prices a card invoice's processing fee,
 **so that** a card invoice's fee always covers what Stripe takes, without an operator working it out by hand.
+
+### grade10-admin-auction-payment-settings-US-03: Finance keeps one USD minimum and one card rule per settlement currency
+
+**As a** finance operator,
+**I want** one USD premium minimum and a card fee rule for USD and one for HKD,
+**so that** invoices use one bid-currency minimum and a winner can pay by card where Finance has configured its fee.

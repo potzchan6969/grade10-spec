@@ -1,8 +1,8 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** reopened · 15/63
+**Status:** reopened · 14/63
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
-**Drafts styled:** 2026-10-12, tcs-rules r5
+**Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** `grade10-site-auction-watchlist-SC-04` — signed-out watch from catalogue cards
 
 ## Walk 1: Collector browses Auction listings and adjacent checks
@@ -1611,10 +1611,8 @@ Runs once per row of **Test data**.
 **I want** to be told at once that a verified identity is needed and where to get one,
 **so that** the auction records nothing for a bid it cannot take, and I can verify and bid again before the lot closes.
 
-<!-- trace:case id=g10.auction-auction.TC-zsd rev=2 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
+<!-- trace:case id=g10.auction-auction.TC-zsd rev=3 covers=g10.auction-auction.SC-d78 -->
 ### g10.auction-auction.US4-TC1: Verified bidder's bid at the bar is forwarded as any other
-
-Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1622,7 +1620,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -1640,9 +1638,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<a verified account>` | An account whose standing is `verified` on the day of the bid |
 | `<card>` | Visa ending 4242 |
-| `<bar>` | HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
-| `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
-| `<bid at the bar>` | HKD120,000 (fixed boundary or equality), equal to `<bar>` |
+| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
+| `<listing_12>` | A live USD listing whose minimum next bid is `<bar>` |
+| `<bid at the bar>` | USD15,000 (fixed boundary or equality), equal to `<bar>` |
 
 **Steps:**
 
@@ -1656,7 +1654,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid at the bar>`, and the bid count rises by one.
 * Step 3 shows nothing held or charged on `<card>`.
 
-<!-- trace:case id=g10.auction-auction.TC-5gi rev=2 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
+<!-- trace:case id=g10.auction-auction.TC-5gi rev=3 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-l64 -->
 ### g10.auction-auction.US4-TC2: Bidder without a verified standing is held at the storefront at and above the bar
 
 Runs once per row of **Test data**.
@@ -1667,7 +1665,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -1683,16 +1681,16 @@ Runs once per row of **Test data**.
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | HKD120,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
-| `unverified` | HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>` | Refused; no bid recorded |
-| `expired` | HKD120,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
-| `expired` | HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>` | Refused; no bid recorded |
+| `unverified` | USD15,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
+| `unverified` | USD15,200 (range: >1500000 minor units), above `<bar>` | Refused; no bid recorded |
+| `expired` | USD15,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
+| `expired` | USD15,200 (range: >1500000 minor units), above `<bar>` | Refused; no bid recorded |
 
 | Field | Value |
 | --- | --- |
 | `<card>` | Visa ending 4242 |
-| `<bar>` | HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
-| `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
+| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
+| `<listing_12>` | A live USD listing whose minimum next bid is `<bar>` |
 
 **Steps:**
 
@@ -1704,12 +1702,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The bid is refused as needing a verified identity, and the refusal says where to verify from the account.
-* Highest bid and the bid count are unchanged - the auction records no bid.
+* The bid is refused as needing a verified identity, and the form says: Bids this high need a verified identity. Verify from your account, then bid again.
+* Highest bid and the bid count are unchanged; the auction records no bid.
 * Step 4 shows no row for `<listing_12>`.
 * Step 5 shows no entry for `<listing_12>`.
 
-<!-- trace:case id=g10.auction-auction.TC-49i rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
+<!-- trace:case id=g10.auction-auction.TC-49i rev=2 covers=g10.auction-auction.SC-ndj,g10.auction-auction.SC-99a -->
 ### g10.auction-auction.US4-TC3: Bid below the bar asks nothing of any bidder
 
 Runs once per row of **Test data**.
@@ -1718,29 +1716,34 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction.spec.ts`
 
 **Pre-conditions:**
 
 * The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_13>`.
-* `<listing_13>` is live, inside its window, in HKD, and its minimum next bid is at or below the bid amount the row names.
+* `<listing_13>` is live, inside its window, in USD, and its minimum next bid is at or below the bid amount the row names.
 
 **Test data:**
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `expired` | HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `verified` | HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
+| `unverified` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
+| `expired` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
+| `verified` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
+| `unverified` | USD14,999.00 (fixed boundary or equality), one dollar below `<bar>` | Forwarded; no standing read |
+| `unverified` | USD14,999.99 (fixed boundary or equality), one cent below `<bar>` | Forwarded; no standing read |
+
+| Field | Value |
+| --- | --- |
+| `<card>` | Visa ending 4242 |
+| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
 
 **Steps:**
 
@@ -1750,7 +1753,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The bid is forwarded and accepted as any other, and Highest bid reads the bid amount the row names.
+* The bid is forwarded and accepted, and Highest bid reads the bid amount the row names.
 * No standing was read.
 
 ---
@@ -3946,6 +3949,7 @@ Runs once per row of **Test data**.
 - Retired marker IDs folded here: `g10.auction-auction.TC-tmg`, `g10.auction-auction.TC-g81`, `g10.auction-auction.TC-m5k`, `g10.auction-auction.TC-9qw`, `g10.auction-auction.TC-nna`, `g10.auction-auction.TC-ghi`
 - A lot only the house bid on, its commit at or before the scheduled close, enters extended bidding and closes sold at the opening price, as any lone bid does (Q21)
 - A lot the house leads at its close is sold to its internal bidder: the close opens that internal bidder's order, flagged internal, with no invoice and no charge to any card, and sends it no letter; collectors still read the lot sold under the house's pseudonym (Q2, Q5, Q33, Q51)
+- None this run. The blind reading's one question, whether the US$15,000 figure is a requirement of this capability, went to `decisions.md` `## Raised` and landed as Q22.
 
 ## Reconciliation
 
@@ -4062,3 +4066,13 @@ Run: durable carry for add-account-identity-gate; the feature set, journey and s
 - **Raised** - none
 - **Contradicted** - none
 - **Uncovered anchors** - none
+
+**Cases** - `TC-zsd@3`, `TC-5gi@3`, and `TC-49i@2` remain drafts. `TC-49i` adds the $14,999.00 below-bar row within its existing case. No case identity changed.
+
+| Scenario | Case and disposition |
+| --- | --- |
+| SC-d78 | `TC-zsd` covers the verified bid at the threshold. |
+| SC-uhh, SC-l64 | `TC-5gi` covers the held unverified bid at or above the threshold, its form guidance, and the absence of a recorded bid. |
+| SC-ndj, SC-99a | `TC-49i` covers the below-threshold route without verification checks or standing reads. |
+
+All five scenarios on `grade10-site-auction-auction-US-04` are covered. The identity-store-absent bar requirement remains an unchanged gap. It has no scenario in this change and no durable case. The existing launch check verifies the USD 15,000 bar configuration value.

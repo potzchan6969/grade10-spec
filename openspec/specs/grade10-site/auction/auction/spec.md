@@ -26,6 +26,8 @@ card.
 - Identity bar on a bid
   - Held at the storefront: a bid at or above the bar is held before the auction hears of it
   - A verified bidder above the bar bids; another is sent to verify
+  - US$15,000 bar: a bid of US$15,000 or more is held at the storefront before the auction hears of it
+  - USD comparison: every bid and the bar use USD, so the storefront compares them without conversion
 - Closing a due lot
   - Closed at the close: a lot is settled at its deadline by whichever reaches it first - the lot's own alarm, then a read that finds it overdue
   - Sweep as the net: the five-minute sweep still settles any lot nobody reached
@@ -74,10 +76,12 @@ card.
 ### Requirement: A bid at or above the identity bar needs a verified bidder
 
 The storefront that forwards a bid SHALL compare the bid's amount to the
-brand's bar before the auction hears of it. At or above the bar it SHALL
-forward the bid only for a bidder whose standing is `verified` on the day of
-the bid, and SHALL otherwise refuse the bid naming that a verified identity is
-needed and where to verify, and the auction records nothing.
+brand's bar before the auction hears of it. The bar is US$15,000, 1500000
+minor units in USD; every bid is in USD, so the comparison converts nothing.
+At or above the bar it SHALL forward the bid only for a bidder whose standing
+is `verified` on the day of the bid, and SHALL otherwise refuse the bid naming
+that a verified identity is needed and where to verify, and the auction
+records nothing.
 Below the bar a bid SHALL ask nothing about identity. On a brand that deploys
 no identity store the bar SHALL not exist.
 
@@ -106,6 +110,23 @@ no identity store the bar SHALL not exist.
 
 - **GIVEN** any signed-in bidder
 - **WHEN** they place a bid below the bar
+- **THEN** no standing is read and the bid is forwarded as any other
+
+<!-- trace:scenario id=g10.auction-auction.SC-l64 rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-110 - A bid of exactly the bar is held
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `unverified`
+- **WHEN** they place a bid of 1500000 minor units in USD
+- **THEN** the bid is refused as needing a verified identity, and the
+  auction records no bid
+
+<!-- trace:scenario id=g10.auction-auction.SC-99a rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-111 - A bid just under the bar asks nothing
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `unverified`
+- **WHEN** they place a bid of 1499900 minor units in USD
 - **THEN** no standing is read and the bid is forwarded as any other
 
 ### Requirement: Auction listing facts are available
