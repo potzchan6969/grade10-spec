@@ -206,6 +206,26 @@ export const UsdWithoutCardRule: Story = {
     ).toBeVisible();
     expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
 
+    await userEvent.click(modal.getByRole("button", { name: "HKD" }));
+    const hkdCard = modal.getByRole("radio", { name: /^Card\b/i });
+    await waitFor(() => {
+      expect(hkdCard).toBeVisible();
+      expect(hkdCard).not.toHaveAttribute("aria-disabled", "true");
+    });
+    await userEvent.click(hkdCard);
+    expect(hkdCard).toBeChecked();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+
+    await userEvent.click(modal.getByRole("button", { name: "USD" }));
+    await waitFor(() => {
+      expect(modal.getByRole("button", { name: "USD" })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+    });
+    expect(modal.getByRole("radio", { name: /^Card\b/i })).not.toBeChecked();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+
     await userEvent.click(modal.getByRole("radio", { name: /^HK Local\b/ }));
     expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
   },
