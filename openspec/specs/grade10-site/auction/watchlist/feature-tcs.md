@@ -134,7 +134,7 @@
 * Email alerts for that listing are on.
 * The watch is still present after reload.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-eyd rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->`
+<!-- trace:case id=g10.auction-watchlist.TC-eyd rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
 ### g10.auction-watchlist.US1-TC2: Watching twice leaves the original Watched At
 
 **Classification:**
@@ -164,7 +164,7 @@
 * Exactly one watch exists for that collector and listing.
 * Watched At matches the first watch.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-jxa rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->`
+<!-- trace:case id=g10.auction-watchlist.TC-jxa rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
 ### g10.auction-watchlist.US1-TC3: Signed-out viewer is offered sign-in
 
 **Classification:**
@@ -200,7 +200,7 @@
 **I want** to remove a watch, including after the listing has closed or been called off,
 **so that** my list only holds listings I still mean to follow, and email alerts for that listing stop with the watch.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-oxt rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->`
+<!-- trace:case id=g10.auction-watchlist.TC-oxt rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
 ### g10.auction-watchlist.US2-TC1: Unwatch from the listing page clears the watch and alerts
 
 **Classification:**
@@ -230,7 +230,7 @@
 * The listing shows as not watched.
 * Email alerts for that listing are off.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-o95 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->`
+<!-- trace:case id=g10.auction-watchlist.TC-o95 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
 ### g10.auction-watchlist.US2-TC2: Unwatch from the watched list without opening the listing
 
 **Classification:**
@@ -261,7 +261,7 @@
 * Email alerts for that listing are off.
 * The listing page was not opened.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-jf6 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->`
+<!-- trace:case id=g10.auction-watchlist.TC-jf6 rev=1 covers=g10.auction-watchlist.SC-uiz,g10.auction-watchlist.SC-ozh,g10.auction-watchlist.SC-lfd -->
 ### g10.auction-watchlist.US2-TC3: Unwatch remains available on a closed listing
 
 **Classification:**
@@ -296,7 +296,7 @@
 **I want** to see the listings I watch, most recently watched first, with enough to decide whether to act,
 **so that** I can return to a listing from one place.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-5sc rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->`
+<!-- trace:case id=g10.auction-watchlist.TC-5sc rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
 ### g10.auction-watchlist.US3-TC1: Watches read newest first with bid and close
 
 **Classification:**
@@ -326,7 +326,7 @@
 * The more recently watched listing appears first.
 * Each row shows identity, current bid, and close.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-ady rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->`
+<!-- trace:case id=g10.auction-watchlist.TC-ady rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
 ### g10.auction-watchlist.US3-TC2: Watching nothing is an explained empty state
 
 **Classification:**
@@ -355,7 +355,7 @@
 * An explained empty state is shown, not an error.
 * A path to the catalogue is offered.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-a43 rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->`
+<!-- trace:case id=g10.auction-watchlist.TC-a43 rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
 ### g10.auction-watchlist.US3-TC3: A closed listing stays and is labelled closed
 
 **Classification:**
@@ -384,7 +384,7 @@
 * The listing is still listed.
 * It is shown as closed, not as open.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-cfv rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->`
+<!-- trace:case id=g10.auction-watchlist.TC-cfv rev=1 covers=g10.auction-watchlist.SC-li4,g10.auction-watchlist.SC-m4a,g10.auction-watchlist.SC-qb7,g10.auction-watchlist.SC-n7p,g10.auction-watchlist.SC-01q,g10.auction-watchlist.SC-31g -->
 ### g10.auction-watchlist.US3-TC4: A called-off listing is labelled called off
 
 **Classification:**
@@ -419,7 +419,7 @@
 **I want** to see how many collectors watch a listing, across both brands,
 **so that** I can judge interest without treating a watch as a commitment to buy.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-bma rev=1 covers=g10.auction-watchlist.SC-x1c -->`
+<!-- trace:case id=g10.auction-watchlist.TC-bma rev=1 covers=g10.auction-watchlist.SC-x1c -->
 ### g10.auction-watchlist.US4-TC1: Operator count includes both brands and no names
 
 **Classification:**
@@ -457,7 +457,7 @@
 **I want** to turn off email alerts for a listing I still watch,
 **so that** it stays on Watching without filling my inbox.
 
-`<!-- trace:case id=g10.auction-watchlist.TC-y61 rev=1 covers=g10.auction-watchlist.SC-ntf -->`
+<!-- trace:case id=g10.auction-watchlist.TC-y61 rev=1 covers=g10.auction-watchlist.SC-ntf -->
 ### g10.auction-watchlist.US5-TC1: Mute leaves the watch and turns alerts off
 
 **Classification:**

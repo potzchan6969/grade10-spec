@@ -119,7 +119,7 @@
 
 * External lot status is Ended.
 
-`<!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->`
+<!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### g10.auction-lot-status.US1-TC2: Winner sees their order status separately
 
 **Classification:**
@@ -211,7 +211,7 @@ Runs once per row of **Test data**.
 * Search does not find `<lot>`.
 * `<lot_5>` is in All auctions, status Ended.
 
-`<!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->`
+<!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 
 ### g10.auction-lot-status.US2-TC2: Called-off lot leaves the watchlist, unsold lot stays
 
@@ -251,7 +251,7 @@ Runs once per row of **Test data**.
 * `<lot_3>` is not in the list.
 * `<lot_2>` is in the list, status Ended.
 
-`<!-- trace:case id=g10.auction-lot-status.TC-k90 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->`
+<!-- trace:case id=g10.auction-lot-status.TC-k90 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 
 ### g10.auction-lot-status.US2-TC3: Listing data leaves out called-off lots
 
@@ -291,7 +291,7 @@ Runs once per row of **Test data**.
 * `<lot_3>` is not included.
 * `<lot_2>` is included, external lot status Ended.
 
-`<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->`
+<!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=1 covers=g10.auction-lot-status.SC-w9d -->
 
 <!-- trace:case id=g10.auction-lot-status.TC-7m2 rev=4 covers=g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-w9d -->
 ### g10.auction-lot-status.US2-TC4: Called-off address disappears without a code-only alternate
