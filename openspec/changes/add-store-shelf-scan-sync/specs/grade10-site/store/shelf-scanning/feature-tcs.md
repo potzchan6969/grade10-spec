@@ -53,7 +53,7 @@ current title, price and availability for it,
 **so that** I can answer a customer without looking the product up, and never
 quote a price the store has since changed.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-66n rev=3 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-66n rev=3 covers=g10.store-shelf-scanning.SC-6zi -->
 ### g10.store-shelf-scanning.US1-TC1: Scan shows the price the product page shows
 
 Runs once per row of **Test data**.
@@ -178,7 +178,7 @@ Runs once per row of **Test data**.
 
 * Step 2's item carries `<new price>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-k23 rev=2 covers=g10.store-shelf-scanning.SC-dan,g10.store-shelf-scanning.SC-icy -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-k23 rev=2 covers=g10.store-shelf-scanning.SC-dan,g10.store-shelf-scanning.SC-icy,g10.store-shelf-scanning.SC-lrl -->
 ### g10.store-shelf-scanning.US1-TC4: Every published product but gift cards is held on the scanner
 
 Runs once per row of **Test data**.
@@ -363,7 +363,7 @@ Runs once per row of **Test data**.
 * Step 2 names `<card_1>` and reads Available.
 * Step 2's title and price match step 3's.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-c6t rev=2 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-c6t rev=2 covers=g10.store-shelf-scanning.SC-wsi -->
 ### g10.store-shelf-scanning.US1-TC9: The store's product is named over the shared card catalogue
 
 Runs once per row of **Test data**.
@@ -598,7 +598,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the photo left failed, not retried every hour.
 * Step 2 shows the photo learned.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=3 covers=g10.store-shelf-scanning.SC-hdf -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=3 covers=g10.store-shelf-scanning.SC-9ha,g10.store-shelf-scanning.SC-0a3,g10.store-shelf-scanning.SC-hdf -->
 ### g10.store-shelf-scanning.US1-TC15: An open scanner picks up a change without being reopened
 
 Runs once per row of **Test data**.
@@ -683,7 +683,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the price on file.
 * Step 5 shows `<new price>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-2su rev=2 covers=g10.store-shelf-scanning.SC-92k -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-2su rev=2 covers=g10.store-shelf-scanning.SC-92k,g10.store-shelf-scanning.SC-hyo -->
 ### g10.store-shelf-scanning.US1-TC17: Two listings of one art are both offered, closest first
 
 **Classification:**
@@ -931,7 +931,7 @@ Runs once per row of **Test data**.
 * Step 3 `<outcome>`.
 * Step 4 names `<card_1>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-2z1 rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-2z1 rev=1 covers=g10.store-shelf-scanning.SC-3fz -->
 ### g10.store-shelf-scanning.US1-TC23: A scan shows the title in the store's default language
 
 Runs once per row of **Test data**.
@@ -972,7 +972,7 @@ Runs once per row of **Test data**.
 
 * Step 2's title is step 3's title.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-30a rev=2 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-30a rev=2 covers=g10.store-shelf-scanning.SC-4qs -->
 ### g10.store-shelf-scanning.US1-TC24: A raw card beside a slab of the same art offers the pick without grade or cert
 
 **Classification:**
@@ -1012,7 +1012,7 @@ Runs once per row of **Test data**.
 * No row in step 4 shows a grade or a cert.
 * Step 5 shows `<slab_1>` alone, with its title, price and availability, and no grade or cert.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-dx2 rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-dx2 rev=1 covers=g10.store-shelf-scanning.SC-fd7 -->
 ### g10.store-shelf-scanning.US1-TC25: A pass with nothing changed in the shop publishes no new catalogue
 
 **Classification:**
@@ -1256,7 +1256,7 @@ Runs once per row of **Test data**.
 * Step 2's price is `<slab_1>`'s.
 * Step 2's grade and cert match `<slab_1>`'s inventory item.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-06a rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-06a rev=1 covers=g10.store-shelf-scanning.SC-0gv -->
 ### g10.store-shelf-scanning.US3-TC2: Each grader the scanner reads names the slab's product
 
 Runs once per row of **Test data**.
@@ -1501,7 +1501,7 @@ Runs once per row of **Test data**.
 * Step 3's monitor is raised.
 * Step 4's log names `<slab_1>`'s product as held without a unit.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-hjq rev=2 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-hjq rev=2 covers=g10.store-shelf-scanning.SC-sw4 -->
 ### g10.store-shelf-scanning.US3-TC8: Two slabs of one card matched by their photos are both offered without grade or cert
 
 Runs once per row of **Test data**.
@@ -1547,7 +1547,7 @@ Runs once per row of **Test data**.
 * Step 4's first row carries step 2's title and price.
 * No row in step 4 shows a grade or a cert.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-1jq rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-1jq rev=1 covers=g10.store-shelf-scanning.SC-66m -->
 ### g10.store-shelf-scanning.US3-TC9: A graded product naming no inventory item is recognised by its photos
 
 **Classification:**
@@ -1752,7 +1752,7 @@ Runs once per row of **Test data**.
 * Step 1 opens the scanner at the site's `/scan`, with no sign-in asked.
 * Step 3 names `<card_1>` from the `<environment>` store.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-foj rev=2 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-foj rev=2 covers=g10.store-shelf-scanning.SC-0cy -->
 ### g10.store-shelf-scanning.US7-TC2: The shop's link scans but cannot add photos
 
 **Classification:**
@@ -1931,7 +1931,7 @@ shopkeeper scans that slab.
 * Step 4 names `<slab_house>`'s product.
 * Step 4 shows the grade and cert of `<slab_house>`'s inventory item.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-nhw rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-nhw rev=1 covers=g10.store-shelf-scanning.SC-6k5 -->
 ### g10.store-shelf-scanning.US6-TC2: A label code no inventory item carries leaves the slab without grade or cert
 
 **Classification:**
@@ -2020,7 +2020,7 @@ shopkeeper scans that slab.
 * Step 6's monitor is raised.
 * Step 7's log names both products as held without a unit.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-wdb rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-wdb rev=1 covers=g10.store-shelf-scanning.SC-hn6 -->
 ### g10.store-shelf-scanning.US6-TC4: Changing the label code moves the product to the new item
 
 **Classification:**
@@ -2062,7 +2062,7 @@ shopkeeper scans that slab.
 * Step 3 names `<slab_house>`'s product with `<slab_new>`'s grade and cert.
 * Step 4 does not name `<slab_house>`'s product.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-fjq rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-fjq rev=1 covers=g10.store-shelf-scanning.SC-9sn -->
 ### g10.store-shelf-scanning.US6-TC5: Correcting a label code restores grade and cert and clears the alert
 
 **Classification:**
@@ -2107,6 +2107,16 @@ shopkeeper scans that slab.
 
 ## Reconciliation
 
+**Run:** QA2 rerun on 2026-10-13, scoped, at source `63e6714dd`. Dev added
+`g10.store-shelf-scanning.SC44` to `g10.store-shelf-scanning.SC50`, stated
+`g10.store-shelf-scanning.SC31` as one outcome and named
+`g10.store-shelf-scanning.SC30` in task 8.1. A blind QA1 patch added US1-TC25,
+US1-TC26 and US3-TC9, extended US1-TC1, US1-TC4, US1-TC9, US1-TC15, US1-TC17,
+US1-TC24 and US3-TC8, and joined US7-TC3 into US7-TC2, so US7-TC3 is no
+longer issued. Read only the changed cases and scenarios, their tasks and
+`decisions.md`; unchanged dispositions stand from the run below. 41 of the 50
+cases carry `covers`. 46 of the 50 scenarios are covered and 4 are not.
+
 **Run:** QA2 on 2026-10-13, in a fresh context, at source `3d61a7c4f`
 against the anchors frozen at `1aa2f37f9`. The journeys and the domain suite
 are unchanged since the freeze. One feature-set line changed after it:
@@ -2117,77 +2127,65 @@ domain suite, `spec.md` with its 43 scenarios, `decisions.md`, `ui-design.md`,
 `tech-design.md`, `tasks.md` and the Shelf Scanning page. The scenarios
 gained their `trace:scenario` markers in this run so cases can link them.
 
-Every case traces a journey in scope, and every journey has a case. No case
-is a misreading and none is dropped. 29 cases fully assert at least one
-scenario and carry `covers`; 19 assert part of one, or behaviour no scenario
-states, and carry none. 30 scenarios are covered and 13 are not.
-
 | Case | Disposition | Scenarios |
 | --- | --- | --- |
-| US1-TC1 | Partial: no row holds a sold-out first variant and a running discount together | `g10.store-shelf-scanning.SC25` partly; the both-sold-out row is the product page's first listed variant, which no scenario states |
-| US1-TC2 | Partial: asserts the item at 6 minutes; the open scanner at 8 is US1-TC15's | `g10.store-shelf-scanning.SC8` partly |
-| US1-TC3 | Partial: asserts the item at 11 minutes; the open scanner at 13 is US1-TC15's | `g10.store-shelf-scanning.SC9` partly |
-| US1-TC4 | Covers; also asserts that drafts, other channels and the ZZZ store are not held, as the requirement states | `g10.store-shelf-scanning.SC1`, `g10.store-shelf-scanning.SC2`; `g10.store-shelf-scanning.SC18` partly, photos not asserted |
+| US1-TC1 | Covers with its fourth row; the both-sold-out row is the product page's first listed variant, which no scenario states | `g10.store-shelf-scanning.SC25` |
+| US1-TC2 | Partial: asserts the item at 6 minutes only; US1-TC15 now asserts both bounds | `g10.store-shelf-scanning.SC8` partly |
+| US1-TC3 | Partial: asserts the item at 11 minutes only; US1-TC15 now asserts both bounds | `g10.store-shelf-scanning.SC9` partly |
+| US1-TC4 | Covers; also asserts that drafts, other channels and the ZZZ store are not held. Its "each learned" for a box, comic or merch photo goes past the scenario, which holds the photos; tech design has not said the processor learns a photo with no card in it | `g10.store-shelf-scanning.SC1`, `g10.store-shelf-scanning.SC2`, `g10.store-shelf-scanning.SC18` |
 | US1-TC5 | Covers | `g10.store-shelf-scanning.SC4` |
 | US1-TC6 | Covers | `g10.store-shelf-scanning.SC6` |
-| US1-TC7 | Partial: another product changes in the same pass, so it cannot assert that no new version is published | `g10.store-shelf-scanning.SC7` partly |
-| US1-TC8 | Partial: does not assert that no store page shows | `g10.store-shelf-scanning.SC10` partly; US2-TC1 covers it |
-| US1-TC9 | Partial: does not assert the store's availability | `g10.store-shelf-scanning.SC17` partly |
+| US1-TC7 | Partial: another product changes in its pass, so it cannot assert that no new version is published; US1-TC25 does | `g10.store-shelf-scanning.SC7` partly |
+| US1-TC8 | Partial: does not assert that no store page shows; US2-TC1 covers it | `g10.store-shelf-scanning.SC10` partly |
+| US1-TC9 | Covers | `g10.store-shelf-scanning.SC17` |
 | US1-TC10 | Covers | `g10.store-shelf-scanning.SC19` |
 | US1-TC11 | Covers | `g10.store-shelf-scanning.SC20` |
 | US1-TC12 | Covers | `g10.store-shelf-scanning.SC22` |
 | US1-TC13 | Partial: asserts nothing learned or rebuilt, not that the run stops before preparing to learn | `g10.store-shelf-scanning.SC21` partly |
 | US1-TC14 | Covers | `g10.store-shelf-scanning.SC23` |
-| US1-TC15 | Covers the in-view route | `g10.store-shelf-scanning.SC29`; the open-scanner halves of `g10.store-shelf-scanning.SC8` and `g10.store-shelf-scanning.SC9` |
+| US1-TC15 | Covers both rows: the item at 6 or 11 minutes and the open scanner at 8 or 13 | `g10.store-shelf-scanning.SC8`, `g10.store-shelf-scanning.SC9`, `g10.store-shelf-scanning.SC29` |
 | US1-TC16 | Covers the return route | `g10.store-shelf-scanning.SC29` |
-| US1-TC17 | Covers; the picked view does not assert the store page link | `g10.store-shelf-scanning.SC36`; `g10.store-shelf-scanning.SC37` partly |
+| US1-TC17 | Covers | `g10.store-shelf-scanning.SC36`, `g10.store-shelf-scanning.SC37` |
 | US1-TC18 | Covers | `g10.store-shelf-scanning.SC38` |
 | US1-TC19 | Covers | `g10.store-shelf-scanning.SC35` |
 | US1-TC20 | Covers with its one-slab row; the two-slab row is Q36's pick for a raw copy | `g10.store-shelf-scanning.SC39` |
 | US1-TC21 | Covers | `g10.store-shelf-scanning.SC33` |
 | US1-TC22 | Covers | `g10.store-shelf-scanning.SC40` |
-| US1-TC23 | Real, stated by the requirement's Title row and Q24; no scenario states it | None |
-| US1-TC24 | Partial: does not assert closest first | `g10.store-shelf-scanning.SC41` partly |
+| US1-TC23 | Covers | `g10.store-shelf-scanning.SC44` |
+| US1-TC24 | Covers | `g10.store-shelf-scanning.SC41` |
+| US1-TC25 | Covers: an unchanged catalogue version shows no item was written | `g10.store-shelf-scanning.SC7` |
+| US1-TC26 | Partial: expects the run to name the mismatch, not both models | `g10.store-shelf-scanning.SC24` partly |
 | US2-TC1 | Covers, staging row and production row | `g10.store-shelf-scanning.SC10`, `g10.store-shelf-scanning.SC27`, `g10.store-shelf-scanning.SC28` |
-| US2-TC2 | Real, the store's copy decides every field; no scenario states a changed address | None |
-| US2-TC3 | Partial: asserts the picked listing's link, not its availability | `g10.store-shelf-scanning.SC37` partly |
+| US2-TC2 | Partial: asserts the link follows the new handle, not that the product keeps one item | `g10.store-shelf-scanning.SC45` partly |
+| US2-TC3 | Partial: asserts the picked listing's link, not its availability; US1-TC17 covers it | `g10.store-shelf-scanning.SC37` partly |
 | US3-TC1 | Covers with its consigned row | `g10.store-shelf-scanning.SC11` |
-| US3-TC2 | Real, stated by the requirement's Graders; no scenario names BGS, SGC or TAG | None |
+| US3-TC2 | Covers with its BGS, SGC and TAG rows | `g10.store-shelf-scanning.SC46` |
 | US3-TC3 | Covers | `g10.store-shelf-scanning.SC15` |
 | US3-TC4 | Covers the shared-cert route | `g10.store-shelf-scanning.SC16` |
 | US3-TC5 | Covers | `g10.store-shelf-scanning.SC13` |
 | US3-TC6 | Covers | `g10.store-shelf-scanning.SC43` |
 | US3-TC7 | Covers | `g10.store-shelf-scanning.SC34` |
-| US3-TC8 | Partial: does not assert closest first | `g10.store-shelf-scanning.SC42` partly |
+| US3-TC8 | Covers with its PCGS row | `g10.store-shelf-scanning.SC42` |
+| US3-TC9 | Covers | `g10.store-shelf-scanning.SC14` |
 | US4-TC1 | Covers | `g10.store-shelf-scanning.SC3` |
 | US4-TC2 | Covers with a count of 1; the return to Available is the requirement's | `g10.store-shelf-scanning.SC26` |
 | US4-TC3 | Covers | `g10.store-shelf-scanning.SC5` |
 | US7-TC1 | Covers | `g10.store-shelf-scanning.SC30` |
-| US7-TC2 | Partial: the scanner offers no way; the service's refusal is US7-TC3's | `g10.store-shelf-scanning.SC31` partly |
-| US7-TC3 | Partial: the service refuses; the scanner's controls are US7-TC2's | `g10.store-shelf-scanning.SC31` partly |
-| US7-TC4 | Real, stated by the link requirement's "shows only what the store shows publicly" and Q13; no scenario states it | None |
+| US7-TC2 | Covers, the scanner's controls and a photo sent with the link's key | `g10.store-shelf-scanning.SC31` |
+| US7-TC4 | Partial: asserts that nothing shows beyond the store page, which allows values the scenario's list does not | `g10.store-shelf-scanning.SC50` partly |
 | US7-TC5 | Covers | `g10.store-shelf-scanning.SC32` |
 | US6-TC1 | Covers, with a PSA slab for the scenario's CGC | `g10.store-shelf-scanning.SC12` |
-| US6-TC2 | Real, the No known unit row "Names no item"; its route writes an unknown code, not the graded product with none | None |
+| US6-TC2 | Covers | `g10.store-shelf-scanning.SC47` |
 | US6-TC3 | Covers the shared-item route | `g10.store-shelf-scanning.SC16` |
-| US6-TC4 | Real, the unit is the item whose code the product names; no scenario states a changed code | None |
-| US6-TC5 | Real, Q28's monitor clears once none is held; no scenario states it | None |
+| US6-TC4 | Covers | `g10.store-shelf-scanning.SC48` |
+| US6-TC5 | Covers | `g10.store-shelf-scanning.SC49` |
 
 | Scenario | Disposition |
 | --- | --- |
-| `g10.store-shelf-scanning.SC7` | Uncovered: US1-TC7 partly |
-| `g10.store-shelf-scanning.SC8` | Uncovered: split between US1-TC2 and US1-TC15 |
-| `g10.store-shelf-scanning.SC9` | Uncovered: split between US1-TC3 and US1-TC15 |
-| `g10.store-shelf-scanning.SC14` | Uncovered: no case walks a graded product that names no item (Q32) |
-| `g10.store-shelf-scanning.SC17` | Uncovered: US1-TC9 partly |
-| `g10.store-shelf-scanning.SC18` | Uncovered: US1-TC4 partly |
 | `g10.store-shelf-scanning.SC21` | Uncovered: US1-TC13 partly |
-| `g10.store-shelf-scanning.SC24` | Uncovered: no case walks a run whose model differs |
-| `g10.store-shelf-scanning.SC25` | Uncovered: US1-TC1 partly |
-| `g10.store-shelf-scanning.SC31` | Uncovered: split between US7-TC2 and US7-TC3 |
-| `g10.store-shelf-scanning.SC37` | Uncovered: split between US1-TC17 and US2-TC3 |
-| `g10.store-shelf-scanning.SC41` | Uncovered: US1-TC24 partly |
-| `g10.store-shelf-scanning.SC42` | Uncovered: US3-TC8 partly |
+| `g10.store-shelf-scanning.SC24` | Uncovered: US1-TC26 partly |
+| `g10.store-shelf-scanning.SC45` | Uncovered: US2-TC2 partly |
+| `g10.store-shelf-scanning.SC50` | Uncovered: US7-TC4 partly |
 | Every other scenario | Covered by the cases above |
 
 - **Contradiction, fixed** - `g10.store-dmn.TC-xk6` pointed the camera at a
@@ -2197,24 +2195,19 @@ states, and carry none. 30 scenarios are covered and 13 are not.
   The case moves to rev 2 and covers `g10.store-shelf-scanning.SC27`
 - **Contradictions, none open** - no other case disagrees with a scenario,
   the Shelf Scanning page, `decisions.md` or `ui-design.md`
-- **Over-claimed, none** - no case carried `covers` before this run, and
-  every link added here is fully asserted
-- **Raised, none** - every gap above is a case or scenario repair; nothing
-  waits on a decision
-- **Repairs owed to the cases** - US1-TC1 adds a running discount to the
-  first row; US1-TC7 changes no product in its pass and reads the store
-  collection's version; US1-TC9 asserts availability; US1-TC4 asserts the
-  photos of the box, comic and merch rows; US1-TC13 asserts the run stops
-  before preparing to learn; US1-TC15 reads the scanner's item at 6 and 11
-  minutes; US1-TC17 asserts the picked view's store page link; US1-TC24 and
-  US3-TC8 assert that the sheet's first row is the label's product; a case
-  walks `g10.store-shelf-scanning.SC14`, and one walks
-  `g10.store-shelf-scanning.SC24` or names its verifier as Out of suite
-- **Repairs owed to the scenarios** - `g10.store-shelf-scanning.SC31` asks
-  for a check in the scanner and one in the service; split it, or join
-  US7-TC2 and US7-TC3. Fold a scenario for each real behaviour above that
-  none states, or leave its case without `covers`
-- **Tasks** - every scenario but `g10.store-shelf-scanning.SC30` is named by
-  a tests task; task 8.1 walks US7 on a phone outside Access, which should
-  name `g10.store-shelf-scanning.SC30`. Each group has tests before code and a
+- **Over-claimed, none linked** - every `covers` link is fully asserted.
+  US1-TC4's "each learned" for a box, comic or merch photo asserts more than
+  `g10.store-shelf-scanning.SC18` states; tech design confirms whether the
+  photo processor learns a photo with no card in it or marks it failed, and
+  the case keeps "held" if it fails
+- **Raised, none** - every gap is a case repair; nothing waits on a decision
+- **Repairs owed to the cases** - US1-TC13 asserts the run stops before
+  preparing to learn; US1-TC26 expects both models named; US2-TC2 asserts
+  the label shows no chip counting matches, so the product holds one item;
+  US7-TC4 asserts the scan shows no value but the title, price, `Sale`
+  badge, availability, store page link and, for the slab, grade and cert.
+  US1-TC2, US1-TC3 and US1-TC7 now repeat part of US1-TC15 and US1-TC25;
+  join or keep them as smaller checks
+- **Tasks** - every scenario is named by a tests task, and task 8.1 names
+  `g10.store-shelf-scanning.SC30`. Each group has tests before code and a
   verify step, and group 8 is the end-to-end walk of all six journeys
