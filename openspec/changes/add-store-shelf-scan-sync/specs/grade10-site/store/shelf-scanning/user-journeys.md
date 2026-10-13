@@ -40,7 +40,7 @@ printed,
 
 ### g10.store-shelf-scanning.US6: Stock keeper names the inventory item a house-stock slab's product sells
 
-**As a** stock keeper,
+**As a** stock keeper on the shop's staff,
 **I want** to write the slab's label code on the house-stock product that
 sells it,
 **so that** the scanner names that product, with its grade and cert, when a
