@@ -15,7 +15,7 @@ This group owns the optional wire fields and the existing batched catalogue read
 - [ ] 2.3 Add optional reviewed-line image fields while keeping legacy and enriched response compatibility and invalid-type refusal. Regenerate affected API references through the existing generator. Keep stored cart and write-input contracts image-free. `grade10-site-store-cart-drawer-SC-39`, `grade10-site-store-cart-drawer-SC-40`
 - [ ] 2.4 Verify focused Shopify adapter, fixture and Store contract suites; typecheck changed contracts and consumers, inspect generated API-reference changes, and run `git diff --check`.
 
-## 3. Live review picture enrichment (grade10)
+## 3. Live review picture enrichment (grade10) (owner: @kinisworking)
 
 Depends on Group 2. It requires neither the shared UI nor a running frontend.
 
