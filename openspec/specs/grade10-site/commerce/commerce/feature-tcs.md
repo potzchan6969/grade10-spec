@@ -136,8 +136,10 @@ Runs once per row of **Test data**.
 * The checkout proceeds as any other: the browser is handed to Shopify's checkout page.
 * No standing was read.
 
-<!-- trace:case id=g10.commerce-commerce.TC-u8b rev=1 covers=g10.commerce-commerce.SC-fxd,g10.commerce-commerce.SC-pw2,g10.commerce-commerce.SC-7mb,g10.commerce-commerce.SC-ytc -->
-### grade10-site-commerce-commerce-US6-TC4-1: Guest at the bar is asked to sign in and no order is made
+<!-- trace:case id=g10.commerce-commerce.TC-u8b rev=2 covers=g10.commerce-commerce.SC-fxd,g10.commerce-commerce.SC-pw2,g10.commerce-commerce.SC-7mb,g10.commerce-commerce.SC-ytc -->
+### grade10-site-commerce-commerce-US6-TC4-2: Guest at the bar is asked to sign in and no order is made
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -164,9 +166,14 @@ Runs once per row of **Test data**.
 | `<basket at the bar>` | A basket whose goods are worth exactly `<bar>` |
 | `<a typed email>` | An email address belonging to no Grade10 account |
 
+| `<way>` |
+| --- |
+| as a guest, with the basket alone |
+| with `<a typed email>` |
+
 **Steps:**
 
-1. Request checkout for `<basket at the bar>` with `<a typed email>`, holding no session.
+1. Request checkout for `<basket at the bar>` `<way>`, holding no session.
 2. Read the checkout outcome.
 3. Read the orders the store holds for that checkout.
 

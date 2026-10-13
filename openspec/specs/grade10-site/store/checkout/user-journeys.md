@@ -20,8 +20,15 @@
 **I want** to return to Grade10 and find the order while it settles,
 **so that** I can trust the store did not lose my purchase.
 
-### grade10-site-store-checkout-US-04: Signed-out collector is asked to sign in
+### grade10-site-store-checkout-US-04: Signed-out collector checks out as a guest
 
 **As a** collector who is not signed in,
-**I want** checkout to explain the identity requirement,
-**so that** I can sign in before an order or payment is started.
+**I want** to pay for my cart without making an account,
+**so that** I can buy once without signing up.
+
+### grade10-site-store-checkout-US-09: Buyer finds a guest order again
+
+**As a** collector who checked out as a guest,
+**I want** the order link, Continue, and a later sign-in with the same address
+to lead me back to that order,
+**so that** buying without an account never loses the purchase.
