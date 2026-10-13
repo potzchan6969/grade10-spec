@@ -23,10 +23,12 @@ change.
 - **Sealed boxes are synced now** — the scanner holds them so they need no
   second pass later, though it cannot recognise a box from its product photos
   until its box detector ships
-- **A slab resolves to its own unit** — a consigned slab's product carries
-  the grader, grade and cert of the one slab it sells, so the scanner reading
-  that label names the exact product, not only the card; how a house-stock
-  slab names its unit waits on Product
+- **A slab resolves to its own unit** — a slab's product carries the grader,
+  grade and cert of the one slab it sells, so the scanner reading that label
+  names the exact product, not only the card. A consigned slab takes them from
+  its inventory item; a stock keeper writes them on a house-stock product. A
+  slab with neither is held by its card and counted
+- **Staff open the scanner from a link the store hands out**
 - **Photos are learned hourly on staging and production** — a product's new
   photos become recognisable within the hour on both, and a run with nothing
   new does nothing
@@ -60,6 +62,8 @@ None.
 - **Inventory** — the store reads a consigned slab's grader, grade and cert
   from the inventory item it sells; the store holds no binding that returns
   them today
+- **Shop** — a house-stock product gains a place for its slab's grader and
+  cert, which stock keepers fill
 - **Docs** — `docs/architecture/commerce.md` and
   `docs/architecture/multi-product.md` name the store's new binding;
   `apps/backend/grade10/tcg-ar/docs/PLATFORM.md` moves the sync from the
@@ -77,4 +81,4 @@ None.
 ## Follow-on changes
 
 - Sealed boxes recognised on the shelf once the scanner's box detector ships
-- Staff open the scanner signed in, rather than through a shared link
+- Staff open the scanner signed in, rather than through a link

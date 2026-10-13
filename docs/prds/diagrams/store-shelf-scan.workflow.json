@@ -59,7 +59,7 @@
       "col": 2,
       "type": "database",
       "label": "Slab's own unit",
-      "sublabel": "grader, grade, cert",
+      "sublabel": "inventory or shop product",
       "width": 138
     },
     {

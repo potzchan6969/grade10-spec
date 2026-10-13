@@ -1,4 +1,4 @@
 schema: grade10-planning
 created: 2026-10-13
 awaiting:
-  specs: 2026-10-13, waiting on Product for the open rows in decisions.md (Q7a, Q7-Q11) before requirements are drafted
+  specs: 2026-10-13, requirements from /planning-dev, now that every decisions.md row is settled

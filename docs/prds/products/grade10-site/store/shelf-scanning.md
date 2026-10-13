@@ -33,9 +33,8 @@ deletes leaves the scanner within 5 minutes
 🚧 **The store's catalogue wins** — an item changed on the scanner is put back
 to the store's version within 5 minutes
 
-- ❓ **Shelf products the store does not publish** — a product sold only at
-  the till never reaches the scanner. Operations confirms every shelf product
-  is published to the store
+- **Every shelf product is published** — the shop sells nothing on the shelf
+  that the store does not publish, so the scanner misses none
 
 :::flow{title="From the shop's catalogue to the shelf" diagram="assets/diagrams/store-shelf-scan.svg"}
 ## A product is published
@@ -58,26 +57,25 @@ link to its store page.
 
 ## Slabs
 
-A slab is known by its grader and cert. Only a consigned product names the
-one item it sells today; a product a stock keeper makes on the shop names no
-item.
+A slab is known by its grader and cert.
 
 | Product | How the store knows its slab |
 | --- | --- |
 | Consigned slab | the consigned item, and that item's grader, grade and cert in inventory |
-| Consigned raw card | no slab: held by its card |
-| House stock made on the shop | ❓ nothing joins it to a slab yet |
+| House-stock slab | the grader and cert the stock keeper writes on the product in the shop |
+| Raw card | no slab: held by its card |
 
 🚧 **The copy, not only the card** — a consigned slab's product carries the
 grader, grade and cert of the one slab it sells, so the scanner reading that
 slab's label names that product with its grade and cert
 
-- ❓ **House-stock slabs** — the stock keeper writes the grader and cert on the
-  product in the shop, and the store reads them from there; the alternative is
-  holding house stock by its card alone. Product confirms
-- ❓ **A slab with no known unit** — a graded product the store cannot join to
-  one slab is held by its card alone, without grade or cert, and counted so
-  the gap shows. Product confirms
+🚧 **House-stock slabs** — a stock keeper writes the slab's grader and cert on
+the product in the shop, and the scanner names that product when it reads
+that slab's label
+
+🚧 **A slab with no known unit** — a graded product the store cannot join to
+one slab is held by its card alone, without grade or cert, and counted so the
+gap shows
 
 ## Sealed Boxes
 
@@ -85,8 +83,9 @@ slab's label names that product with its grade and cert
 with their title, price and stock; the scanner does not recognise a box from
 its product photos until its box detector ships
 
-- ❓ **Scanning a box** — the scanner shows what it shows for anything it does
-  not recognise, "Not recognised yet — hold steady". Product confirms
+- **Scanning a box** — until the box detector ships, the scanner shows what
+  it shows for anything it does not recognise, "Not recognised yet — hold
+  steady"
 
 ## Photos
 
@@ -111,11 +110,11 @@ currency, its stock, and a link that opens its store page
 "Sold out", as the store reads availability —
 [Product Page](/p/grade10-site/store/product-page)
 
-- ❓ **Who opens the scanner** — shop staff open `/scan` through a link the
-  store hands out; anyone holding the link sees the same prices the store
-  shows. Product confirms
-- ❓ **ZZZ** — only grade10's store is held; ZZZ's store is not. Product
-  confirms
+🚧 **A link from the store** — shop staff open `/scan` through a link the
+store hands out; anyone holding it sees the store's public prices and nothing
+more
+
+- **Grade10's store only** — ZZZ's store is not held
 
 :::detail{title="Code map" for="engineer"}
 - **Scanner** — `apps/backend/grade10/tcg-ar`; its platform API —
@@ -136,6 +135,7 @@ and the scanner can only give it if it holds the store's catalogue.
 | Shopkeeper | A customer asks about a product on the shelf | Sees its title, price and stock, and can open its store page |
 | Shopkeeper | Holds one slab of a card the store lists several times | Sees the listing of that slab, with its grade and cert |
 | Stock keeper | Publishes, reprices or sells out a product | Sees the scanner follow within minutes |
+| Stock keeper | Lists a house-stock slab | Writes its grader and cert on the product, so the scanner names that copy |
 
 **Measurement.**
 
@@ -149,12 +149,12 @@ and the scanner can only give it if it holds the store's catalogue.
 | --- | --- | --- | --- |
 | What is held | Decided | Every published product; sold out kept and labelled — decided by the owner, 2026-10-13 | Product |
 | Sealed boxes | Decided | Held now, recognised once the box detector ships — decided by the owner, 2026-10-13 | Product |
-| Slabs | Decided | Resolved to the exact unit through the inventory item — decided by the owner, 2026-10-13 | Product |
+| Slabs | Decided | Resolved to the exact unit: a consigned slab through its inventory item, a house-stock slab through the grader and cert on its shop product — decided by the owner, 2026-10-13 | Product |
 | Freshness | Decided | Products every 5 minutes; photos hourly on staging and production; nothing new, nothing done — decided by the owner, 2026-10-13 | Product |
-| House-stock slabs | ❓ Open | Recommended: grader and cert written on the shop product by the stock keeper | Product |
-| A slab with no known unit | ❓ Open | Recommended: held by its card alone and counted | Product |
-| Scanning a sealed box | ❓ Open | Recommended: the scanner's usual "not recognised" hint | Product |
-| Who opens the scanner | ❓ Open | Recommended: shop staff, through a link the store hands out | Product |
-| ZZZ | ❓ Open | Recommended: grade10's store only | Product |
-| Till-only products | ❓ Open | Recommended: every shelf product is published to the store | Operations |
+| House-stock slabs | Decided | The stock keeper writes the grader and cert on the shop product; the store reads them — decided by the owner, 2026-10-13 | Product |
+| A slab with no known unit | Decided | Held by its card alone, without grade or cert, and counted — decided by the owner, 2026-10-13 | Product |
+| Scanning a sealed box | Decided | The scanner's usual "not recognised" hint — decided by the owner, 2026-10-13 | Product |
+| Who opens the scanner | Decided | Shop staff, through a link the store hands out; prices are public — decided by the owner, 2026-10-13 | Product |
+| ZZZ | Decided | Grade10's store only — decided by the owner, 2026-10-13 | Product |
+| Till-only products | Decided | None: every shelf product is published to the store — decided by the owner, 2026-10-13 | Operations |
 :::

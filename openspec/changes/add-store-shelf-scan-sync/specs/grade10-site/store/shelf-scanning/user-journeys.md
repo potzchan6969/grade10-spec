@@ -37,3 +37,10 @@ not know it.
 reach the scanner within minutes, and its new photos within the hour,
 **so that** the shop floor never quotes a price or a product the store no
 longer has.
+
+### g10.store-shelf-scanning.US6: Stock keeper names the slab a house-stock product sells
+
+**As a** stock keeper,
+**I want** to write a slab's grader and cert on the house-stock product that
+sells it,
+**so that** the scanner names that product when staff scan that slab.

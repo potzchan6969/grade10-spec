@@ -15,9 +15,10 @@
 - **Selling from the scanner** — the link opens the store page; the scanner
   takes no order and holds no stock.
 - **Products the store does not publish** — a product kept off the store's
-  sales channel stays off the scanner.
+  sales channel stays off the scanner; every shelf product is published.
 - **The ZZZ store** — its catalogue is not synced here.
-- **Staff sign-in on the scanner** — how staff open `/scan` is unchanged.
+- **Staff sign-in on the scanner** — staff open `/scan` through a link the
+  store hands out.
 - **Editing items in the scanner** — the store's catalogue is the only source;
   an item changed in the scanner is put back at the next pass.
 
@@ -31,12 +32,12 @@
 | Q4 | How fresh is the scanner? | Products in step every 5 minutes; photos learned hourly on staging and production; a photo run with nothing new does nothing - decided by the owner | Production photo runs only when somebody starts one by hand, which leaves new photos unrecognised there |
 | Q5 | Which service keeps the scanner in step? | The store, on its own 5-minute schedule, through a binding to the scanner - decided by the round | The inventory service, as the scanner's docs had it, which does not own the published catalogue; the shop's change reports alone, which miss what the shop never reports |
 | Q6 | What does "nothing new" compare? | Each item's synced fields and its photo list against what the scanner already holds; an item that matches is not written, so the scanner neither queues photos nor rebuilds its files - decided by the round | Rewriting every item each pass, which marks the scanner changed every 5 minutes and rebuilds its files on every scan |
-| Q7a | How does a house-stock slab, made on the shop and joined to no inventory item, name its unit? | ❓ Product - recommended: the stock keeper writes the grader and cert on the shop product, and the store reads them | Holding house stock by its card alone, which leaves Q3 true only for consigned slabs; joining house stock to inventory items, which needs inventory to own the shop's products |
-| Q7 | What does a slab with no resolvable unit do? | ❓ Product - recommended: synced at card level, without grader, grade or cert, and counted so the gap shows | Left off the scanner until its unit is known |
-| Q8 | What does the scanner show on a sealed box it cannot recognise? | ❓ Product - recommended: what it shows for any unrecognised item, "Not recognised yet — hold steady" | A box-specific hint that names the limit |
-| Q9 | Who opens the scanner on the shop floor? | ❓ Product - recommended: shop staff, through a link the store hands out | Signed-in staff only, which needs a sign-in on the scanner and is a change of its own |
-| Q10 | Is ZZZ in scope? | ❓ Product - recommended: no, grade10's store only | ZZZ's store in the same change, with its own scanner project |
-| Q11 | Are POS-only products on the shelf? | ❓ Operations - recommended: every shelf product is published to the store's channel, so none is missed | Syncing products the store does not publish, which reaches past the store's catalogue |
+| Q7a | How does a house-stock slab, made on the shop and joined to no inventory item, name its unit? | The stock keeper writes the grader and cert on the shop product, and the store reads them - decided by the owner (recommended) | Holding house stock by its card alone, which leaves Q3 true only for consigned slabs; joining house stock to inventory items, which needs inventory to own the shop's products |
+| Q7 | What does a slab with no resolvable unit do? | Held by its card alone, without grade or cert, and counted so the gap shows - decided by the owner (recommended) | Left off the scanner until its unit is known, which hides a product the store sells |
+| Q8 | What does the scanner show on a sealed box it cannot recognise? | What it shows for anything it does not recognise, "Not recognised yet — hold steady" - decided by the owner (recommended) | A box-specific hint, which the box detector makes obsolete |
+| Q9 | Who opens the scanner on the shop floor? | Shop staff, through a link the store hands out; the prices it shows are the store's public prices - decided by the owner (recommended) | Signed-in staff only, which needs a sign-in on the scanner and is a change of its own |
+| Q10 | Is ZZZ in scope? | No, grade10's store only - decided by the owner (recommended) | ZZZ's store in the same change, with its own scanner project |
+| Q11 | Are till-only products on the shelf? | No: every shelf product is published to the store's channel, so the scanner misses none - decided by Operations (recommended) | Syncing products the store does not publish, which reaches past the store's catalogue |
 
 ## Raised
 
