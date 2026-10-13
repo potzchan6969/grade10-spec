@@ -21,6 +21,6 @@ Verified on Grade10 `2ad66c014c02d8a36443c4bb8ee8e84ed3d80577` with shared pin `
 ## Walk Disposition
 
 - **Automated** - Shared custom-maximum cases TC19 to TC26 name `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`. The defensive refusal case TC-55k names the same file. Neighbor auto-bid refusal TC-dfw names `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`. Both active and durable suites carry these links.
-- **Remaining manual cases in this delivery** - None. Unrelated manual cases in the durable suites remain with their owning capabilities. Automation classification does not record a human QA verdict.
+- **Remaining manual case** - `g10.auction-auction.TC-r0p` remains manual. This delivery verified its below-minimum, suspended-account and unrecorded-close neighbors, but did not decide every row of the aggregate ordinary-refusal case. The complete case remains for human QA. Unrelated manual cases in the durable suites remain with their owning capabilities. Automation classification does not record a human QA verdict.
 - **Later contract** - `collapse-maximum-entry-at-ceiling` owns chip clamping and collapsed entry. `add-auction-internal-bid` owns the later internal-bid behavior. The implementation record acknowledges the changed target scope without claiming those later outcomes for this delivery.
 - **Product decisions** - The existing Product decisions table in Bidding Rules already preserves the currency ceilings, input correction and silent-refusal decisions. No decision needs to move.
