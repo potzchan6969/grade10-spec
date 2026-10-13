@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "a805b47e9e19c3e22774af9c1986b7061c34c9181682286747fb74e4ba057a06"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "c71fc6abfb1ddb08685be299017195a21d1a5c79",
+    "capturedAt": "2026-10-13T10:23:03.879Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-cart-thumbnails/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Reviewed picture fields are optional and compatible",
+          "Requirement: Reviewed product pictures follow the current cart"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Existing cart item picture props render supplied content"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

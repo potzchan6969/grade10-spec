@@ -1,4 +1,4 @@
-## 1. Shared cart picture coverage (grade10-spec)
+## 1. Shared cart picture coverage (grade10-spec) (owner: @kinisworking)
 
 Land controlled shared coverage before Group 4 selects the application dependency. Groups 2-3 can proceed independently.
 
