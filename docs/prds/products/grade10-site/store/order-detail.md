@@ -29,23 +29,26 @@ state and can follow a safe carrier address when one is supplied
 🚧 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address
 
-## Guest Order Link
+## Order Link
 
-A guest order opens at `grade10.com/orders/<order-id>`, from the link in
-Shopify's order confirmation email or Continue on its thank-you page. Grade10 sends
-no email of its own. The link carries its secret after `#`, so no server or
-log sees it.
+🚧 Every order, guest or member, opens at `grade10.com/orders/<order-id>`
+from the View order button in Shopify's order emails. Grade10 sends no
+store email of its own. The link carries its secret after `#`, so no server
+or log sees it.
 
-- **No account** - the link opens the order for whoever holds it; nothing
-  asks them to sign in
-- **Same page** - the same order facts, progress and tracking as a member's
-  order
-- **Wrong link** - an unknown order, a member's order or a wrong secret all
-  show not-found
+- **Signed out** - the order page opens for whoever holds the link; the
+  placed-on line names the email the receipt went to and a persistent
+  toast offers sign-in — add this order to an account on a guest's,
+  sign in to see it on a member's
+- **Owner signed in** - sent to `grade10.com/profile/orders/<order-id>`
+- **Someone else signed in** - the same public page as anyone holding the
+  link
+- **Wrong link** - an unknown order or a wrong secret shows not-found;
+  a link holder may hold no account, so the way out is the store, not
+  Your Orders
 - **Not indexed** - search engines are told not to index the address
-- **Where the link comes from** - the order carries it, and the View order
-  button in Shopify's order emails opens it. Thank you's Continue reaches it
-  through [Back From Checkout](#back-from-checkout)
+- **No account facts** - the link page shows no points, wallet or account
+  details
 
 ## Back From Checkout
 
@@ -55,6 +58,21 @@ the order this browser last sent to Shopify.
 
 - **Guest** - their private order page, link and secret included
 - **Member** - the order under their profile
+- 🚧 **Order confirmed** - the guest's page is the order page; the
+  placed-on line names the email the receipt went to — Placed on {date}.
+  Receipt sent to {email}.
+- 🚧 **Create an account** - a persistent toast on the order page asks to
+  add this order to an account — Sign in to earn points for this order —
+  with one Sign in action; closing it hides it for this order
+- 🚧 **Added** - after a sign-in that proves the order's email the order
+  joins the account and the toast says so, with a way to it. The magic
+  link proves the email, so it works on another device
+- 🚧 **Signed out only** - the email note and the toast show whenever an
+  order page is viewed signed out — this return or a link opened later;
+  signed in, neither shows
+- 🚧 **Another email** - a Google account under another email signs the
+  buyer in but does not add the order; the toast says the order was
+  placed with {email} and offers a magic link to it
 - **Nothing remembered** - a signed-in member sees their order list; anyone
   else sees the store
 - **One day** - the browser forgets the order a day after checkout, and as
@@ -76,6 +94,13 @@ where its points were debited from the rest of the applied total, because that
 figure can hold money staff took off by hand; the debit still shows as Points
 put toward a purchase — [Histories](/p/grade10-site/loyalty/profile#histories)
 
+🚧 **Points to earn** — an order that will earn shows Points to Earn until it
+completes, then Points Earned — [Points](/p/grade10-site/loyalty/points)
+
+🚧 **No points section** — an order that will not earn shows no points
+section at all: one canceled or refunded in full, a guest order linked only
+after it completed, or a guest order with no owner
+
 **Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
 except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 (`HK$1,704.50`)
@@ -87,3 +112,19 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 ::story{id="store-order-detail-blocks-orderdetails--with-points-credit" title="Points credit on the summary"}
 
 ::story{id="store-order-detail-blocks-orderdetails--no-optional-groups" title="An order with only supplied facts"}
+
+::story{id="store-order-detail-screens-order-link--just-paid" title="A guest back from checkout, with the account ask as a toast"}
+
+::story{id="store-order-detail-screens-order-link--guest-order" title="An order opened from its link"}
+
+::story{id="store-order-detail-screens-order-link--member-order-signed-out" title="A member's order link, signed out"}
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Order link for every order | Decided | Every order email's View order button carries the private link, member orders included. A forwarded email lets a holder see a member's order — accepted; the page shows no account facts. Decided 2026-10-13. | Product |
+| Post-checkout prompt | Decided | The account prompt lives on the Grade10 order page after checkout, not on a Shopify Thank-you extension. Decided 2026-10-13. | Product |
+| Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |
+| Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, linked after it completed, or a guest order with no owner — shows no points section at all. Decided 2026-10-13. | Product |
+|| Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
+:::

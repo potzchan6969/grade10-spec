@@ -17,8 +17,14 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 | **Order coupon** | A code for a fixed amount off the whole order, or off named products or variants; single use, `PREFIX-XXXXXXXX`, one member, an expiry | Operator, the store admin console | Order, or product where it names products |
 | **Product coupon** | A reward: a fixed amount, or a % with a ceiling, off its scope — [Rewards](/p/grade10-site/loyalty/rewards#reward-types) | Operator defines the reward in the loyalty admin; the member redeems it | Product, or order where its scope is the whole order |
 | **Gift** | A reward: the gift product at 100% off once the goods pass a threshold | As a product coupon | Product |
-| **Public code** | A Shopify discount code promoted elsewhere; the invoice's, not the cart's | Merchandiser, Shopify Admin | Its own |
+| **Public code** | A Shopify discount code open to everyone, not minted to a member; shown in the drawer's picker to guests and members — [Public Codes](#public-codes) | Merchandiser, Shopify Admin | Order |
 | **Points** | **$1** per point, paid against the bill — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | The member, in the cart drawer or at the till | Outside the count |
+
+### Public Codes
+
+- 🚧 **Shown in the drawer** - the picker lists public codes to guests and members - [Cart Drawer](/p/grade10-site/store/cart#promo-code)
+- **Source** - Shopify discounts tagged `public`, read by the store
+- **Order beside wallet codes** - those that fit first, soonest to expire first, across both
 
 ## Authoring Rules
 
@@ -320,7 +326,7 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
 
 ## Designs
 
-::story{id="store-cart-blocks-cartdrawerfooter--interactive-member" title="A code typed in the cart"}
+::story{id="store-cart-blocks-cartdrawerfooter-interactive--interactive-member" title="A code typed in the cart"}
 
 ::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="An order with a product coupon"}
 
@@ -370,4 +376,7 @@ price already lives.
 | A public code beside the cart's code | ❓ Open | Whether the invoice takes a second code beside the cart's, or replaces it. | Product |
 | Combining is two-sided | Settled | A site discount authored not to combine excludes at the whole cart. Both sides have to allow the other, so the automatic alone decides it and a minted code's own combine setting cannot get past one. | Engineering |
 | Order of application | Settled | The shop prices every combination its rules allow and keeps the one that takes the most off, product cuts before order cuts. The rules are read off the shop's own answers on a dev shop, never off its docs. | Engineering |
+| Public codes | Decided | A public code is a code open to everyone, listed in the drawer's picker to guests and members; a guest never sees a member's codes. Decided 2026-10-13; supersedes the cart's no-public-codes row. | Product |
+| Public code source | Decided | Shopify discounts tagged `public`, read by the store. Decided 2026-10-13. | Product |
+| Public code order | Decided | Those that fit first, soonest to expire first, across public and wallet codes. Decided 2026-10-13. | Product |
 :::

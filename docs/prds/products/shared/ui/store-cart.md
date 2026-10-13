@@ -118,7 +118,7 @@ listed apart from the ones that can, muted with its reason and no Apply.
 
 ::story{id="store-cart-blocks-cartdrawer-auto-discount--product-sale-with-order-discount" title="A site sale on one line beside an order discount"}
 
-::story{id="store-cart-blocks-cartdrawerfooter--order-discount" title="An order discount under the Subtotal"}
+::story{id="store-cart-blocks-cartdrawerfooter-checkout--order-discount" title="An order discount under the Subtotal"}
 
 ::story{id="store-cart-blocks-promoticket--not-applicable" title="A held code that cannot apply"}
 

@@ -46,7 +46,11 @@ removed from the product. The code still carries them and is to be removed.
 ## Purchases Before the Account
 
 A sale rung up at the till as a guest is not lost: it earns once it has an
-owner. An order placed through the site's guest checkout never earns -
+owner. An order placed through the site's guest checkout gets its owner when
+a member's sign-in proves the order's email — the magic link to it, or a
+Google account under it — and every past guest order under that email joins
+the account on that sign-in. One still in progress earns when it completes;
+one already Completed earns nothing -
 [Checkout](/p/grade10-site/store/checkout#guest-checkout).
 
 - **Customer on the sale** — a guest who gave the shop their email has a
