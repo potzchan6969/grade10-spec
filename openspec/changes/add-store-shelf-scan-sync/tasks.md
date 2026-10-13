@@ -57,7 +57,7 @@ Needs groups 2 and 6 deployed to the environment it acts on.
 - [ ] 7.5 On staging, then production: apply migration `0005`, set the Access Bypass for `/scan/*`, set production's `TCG_AR_ADMIN_TOKEN`, mint the public key, and record the shop's link
 - [ ] 7.6 Verify: the ops workflow test, the monitors applied with `/datadog-monitors`, a dispatched photos run on each environment
 
-## 8. The walk (grade10)
+## 8. The walk (grade10) (owner: @ecchochan)
 
 Uses draft `feature-tcs.md` as its planning input, and groups 2 to 7 landed and deployed to staging.
 
