@@ -1,6 +1,6 @@
 ## 1. Upload behavior (grade10) (owner: @htonyl)
 
-- [ ] 1.1 Add tests first for immediate add, multi-file ordering, per-file
+- [x] 1.1 Add tests first for immediate add, multi-file ordering, per-file
       refusal, and immediate replacement, covering
       `grade10-site-auction-listing-media-SC-31`,
       `grade10-site-auction-listing-media-SC-32`,
@@ -11,7 +11,7 @@
       the last gallery item, covering
       `grade10-site-auction-listing-media-SC-31` and
       `grade10-site-auction-listing-media-SC-32`.
-- [ ] 1.3 Apply the same immediate path to replacement files and preserve the
+- [x] 1.3 Apply the same immediate path to replacement files and preserve the
       existing stored item when replacement validation refuses the new file,
       covering `grade10-site-auction-listing-media-SC-33`.
 - [x] 1.4 Keep each refused file unstored and surface its type, size or cap
@@ -20,7 +20,7 @@
 
 ## 2. Gallery ordering (grade10) (owner: @htonyl)
 
-- [ ] 2.1 Add tests for direct-upload reorder persistence and staged inventory
+- [x] 2.1 Add tests for direct-upload reorder persistence and staged inventory
       reorder behavior, covering
       `grade10-site-auction-listing-media-SC-35` and
       `grade10-site-auction-listing-media-SC-36`.
@@ -37,7 +37,7 @@
 
 Uses draft `feature-tcs.md` as its planning input.
 
-- [ ] 3.1 Walk the changed listing-media cases for single upload, multi-file
+- [x] 3.1 Walk the changed listing-media cases for single upload, multi-file
       upload, replacement, refusal reasons and order persistence:
       `grade10-site-auction-listing-media-US1-TC3-2`,
       `grade10-site-auction-listing-media-US1-TC11-1`,
@@ -45,5 +45,5 @@ Uses draft `feature-tcs.md` as its planning input.
       `grade10-site-auction-listing-media-US1-TC13-1`,
       `grade10-site-auction-listing-media-US1-TC14-1`, and
       `grade10-site-auction-listing-media-US1-TC15-1`.
-- [ ] 3.2 Verify with focused tests, typecheck, lint and the listing-media
+- [x] 3.2 Verify with focused tests, typecheck, lint and the listing-media
       end-to-end lane before implementation handoff.
