@@ -2,11 +2,12 @@
 
 What one accepted amendment cost in store commands, and six proposals to cut
 that cost. The counts come from one session on 2026-10-05; every line is cited
-at store `main` `aea62226f`. No change carries the proposals yet; the accepted
-rows become one change. QA1 and QA2 isolation, fingerprints, `rounds.md`
-enforcement and immutable acceptance snapshots stay as they are.
+at store `main` `aea62226f`; the change that carries them re-cites each line at
+its own baseline. QA1 and QA2 isolation, fingerprints, `rounds.md` enforcement
+and immutable acceptance snapshots stay as they are.
 
-❓ Chloe (QA) accepts or rejects each row on its own.
+QA accepts all six rows, on 2026-10-13: each cuts store commands only, and
+QA's flow is unchanged. No change carries them yet; the six become one change.
 
 ## Cost
 
