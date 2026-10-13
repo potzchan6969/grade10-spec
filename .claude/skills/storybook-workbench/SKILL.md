@@ -12,6 +12,7 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
 - `Appointment › Booking: add a "No slots this month" state to Book Visit`
 - `Vault › Portfolio: draw the "Retrieval requested" state of the asset card from <Figma link>`
 - `Store › Cart: walk adding an item through to checkout as a flow`
+- `Grading › Drop Off: wireframe the booking screen from its journeys`
 - `Vault › Portfolio: /prototype three empty states`
 - `Show me every state of Book Visit at 375px`
 
@@ -23,9 +24,12 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    invent a domain or feature
 2. **Read what exists** — the feature's folder in `apps/preview/src/pages/`,
    its Blocks in the sidebar (`pnpm storybook`, or the Storybook MCP's
-   `get-stories-by-component`), and the change's `ui-design.md` States table
+   `get-stories-by-component`), the change's `ui-design.md` States table, the
+   `user-journeys.md` beside each spec the page names, and
+   `pnpm storybook:coverage --gaps` for what the feature still owes
 3. **Pick the kind** — a whole screen or its state is a story under `Screens`; a
-   sequence is a Flow; three directions to choose from is a Prototype; a piece
+   journey walked as a sequence is a Flow; a screen not yet designed is a
+   wireframe Prototype; three directions to choose from is a Prototype; a piece
    only this feature draws is a Part; an `@grade10/ui` export's own state is a
    Block story, beside the block. A new block, variant or token is the
    designer's call and Design Override's; say so rather than adding one
@@ -35,7 +39,11 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
 5. **Build it** — compose existing blocks and primitives; content and stand-in
    data in the feature's `*-content.ts`; screens fullscreen; a journey's
    buttons open the next screen's story through `workbench-story-nav.ts`; a
-   flow in `FlowContainer` with a `play` that walks it. A prototype runs
+   flow in `FlowContainer` with a `play` that walks it and
+   `parameters: { journeys: [...] }` naming the journey ids it walks. A
+   wireframe sits under `apps/preview/src/prototypes/<domain>/<feature>/`,
+   one story per state, with a note on what the design must settle. A
+   `/prototype` draft runs
    `/prototype` inside one `Prototypes/<Piece>` story tagged `!test` under
    `apps/preview/src/prototypes/<domain>/<feature>/`
 6. **Check it** — `pnpm storybook:check`, `pnpm --dir apps/preview exec tsc -b`,
