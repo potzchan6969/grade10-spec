@@ -16,18 +16,22 @@
 ### Requirement: Invoice fields
 
 Each invoice SHALL carry these fields. Every amount SHALL be an integer count
-of minor units paired with the lot's ISO 4217 currency code, rendered per
-`shared/money-amounts`. An invoice exists only once an operator sends it.
+of minor units paired with the order's settlement currency, `USD` or `HKD`,
+rendered per `shared/money-amounts`. An invoice exists only once an operator
+sends it. An HKD invoice SHALL carry the converted lines, per "An HKD order
+converts each USD line at a fixed rate and rounds it up".
 
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
+| Settlement currency | `USD` or `HKD`, the winner's choice at setup, per "The winner chooses a settlement currency at order setup". Every amount below is in it. A reissue carries the currency the operator chose, and the replaced invoice keeps its own |
 | Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
 | Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
-| Winning bid | The accepted bid that won the lot, excluding every other component |
+| Bank rail | On a bank transfer invoice only: FPS, HK Local or International via SWIFT, the rail the winner picked. It decides the bank details the winner reads, per "A bank transfer invoice shows how to pay" |
+| Winning bid | The accepted bid that won the lot, excluding every other component. In HKD it is the converted line, and the USD bid is not printed |
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
@@ -45,9 +49,9 @@ The payment processing fee SHALL be priced by the invoice's payment method:
 | Method | Payment processing fee |
 | --- | --- |
 | Card | The amount that leaves the subtotal whole after the card rule's fixed amount and percentage of the whole charge, computed below |
-| Bank transfer | The amount the operator entered on the quote or the reissue. Zero or more |
+| Bank transfer | The amount the operator typed in USD on the quote or the reissue, converted with the other lines under HKD. Zero or more |
 
-For card, Grade10 SHALL take the card rule for the invoice's currency from
+For card, Grade10 SHALL take the card rule for the settlement currency from
 Payment Settings, per `grade10-admin/auction/payment-settings`, at the moment
 the invoice is sent, SHALL compute the order total as the subtotal plus the
 rule's fixed amount divided by one less its percentage, SHALL round that total
@@ -157,26 +161,36 @@ historical: a manually settled order keeps its payment processing fee.
 - **AND** the Payment Processing Fee tooltip does not describe the gross-up
   formula
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-c6t rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-c6t rev=2 -->
 #### Scenario: winner-order-SC-110 - A bank transfer fee is the amount the operator entered
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an operator sent a bank transfer invoice with a subtotal of 312000
-  and a bank transfer fee of 5000 minor units in HKD
+- **GIVEN** an operator sent a bank transfer invoice in USD with a subtotal of
+  312000 and a bank transfer fee of 5000 minor units in USD
 - **WHEN** the winner reads the invoice
-- **THEN** the payment processing fee is 5000 minor units in HKD
-- **AND** the order total is 317000 minor units in HKD
+- **THEN** the payment processing fee is 5000 minor units in USD
+- **AND** the order total is 317000 minor units in USD
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-16z rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-8gv rev=1 -->
+#### Scenario: winner-order-SC-302 - An HKD order converts the bank transfer fee typed in USD
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an operator sent a bank transfer invoice in HKD whose lines total
+  103100 minor units in HKD, with a bank transfer fee of 5000 minor units in
+  USD typed on the quote
+- **WHEN** the winner reads the invoice
+- **THEN** the payment processing fee is 39300 minor units in HKD
+- **AND** the order total is 142400 minor units in HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-16z rev=2 -->
 #### Scenario: winner-order-SC-111 - A bank transfer fee of zero reads Free
 **Serves:** Invoice - Payment Processing Fee priced by method
 
 - **GIVEN** an operator sent a bank transfer invoice with a subtotal of 312000
-  and a bank transfer fee of 0 minor units in HKD
+  minor units in HKD and a bank transfer fee of 0 minor units typed in USD
 - **WHEN** the winner opens the order
 - **THEN** the Payment Processing Fee line is shown and reads Free
 - **AND** the order total is 312000 minor units in HKD
-
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-ppq rev=1 -->
 #### Scenario: winner-order-SC-215 - An invoice with no tax shows no Tax line

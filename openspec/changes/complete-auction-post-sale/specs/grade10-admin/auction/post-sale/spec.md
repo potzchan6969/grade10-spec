@@ -1030,30 +1030,35 @@ cumulative payments are below 90% of the original invoice total is refused per
 
 ### Requirement: An operator edits the address or method before send
 
-Before the invoice is sent, an operator changes the delivery address or the
-payment method for the winner, with a reason.
+Before the invoice is sent, an operator changes the delivery address, the
+settlement currency or the payment method for the winner, with a reason.
 
 **Edit before send** - Once the winner confirms, only an operator changes the
-order's delivery address or payment method before the invoice is sent, per
-`grade10-site/auction/winner-order`. An operator holding payment-processing
-SHALL be able to do so on an auction order in Preparing Invoice, on the
-winner's request:
+order's delivery address, settlement currency or payment method before the
+invoice is sent, per `grade10-site/auction/winner-order`. An operator holding
+payment-processing SHALL be able to do so on an auction order in Preparing
+Invoice, on the winner's request:
 
-1. Open the order and read the address and method the winner confirmed.
-2. Enter a new delivery address, choose the other payment method, or both.
+1. Open the order and read the address, settlement currency, method and rail
+   the winner confirmed.
+2. Enter a new delivery address, choose the other settlement currency, choose
+   another payment method or rail, or any of them.
 3. Enter a reason. It is required.
 4. Commit.
 
 | Rule | Value |
 | --- | --- |
 | Order status after the edit | Preparing Invoice |
-| Changes allowed | Delivery address, payment method, or both. At least one SHALL differ from what the order holds |
-| Bank transfer | Refused where Grade10 holds no bank details for the order's currency, per `grade10-site/auction/winner-order` |
+| Changes allowed | Delivery address, settlement currency, payment method or rail, or any of them. At least one SHALL differ from what the order holds |
+| Method after the edit | One the settlement currency after the edit offers, per `grade10-site/auction/winner-order`. A currency change that leaves the held method unoffered SHALL name another in the same edit |
+| Bank transfer | A rail the settlement currency offers and where Grade10 holds that rail's bank details; refused otherwise |
+| Card | Refused where Payment Settings holds no card fee rule for the settlement currency |
 | Invoice log entry | Order edited before send: the named operator, the reason, each part that changed, and its value before and after |
 | Preparing Invoice waiting time | Unchanged. It counts from the winner's confirmation, per "The order detail shows how long an order has waited" |
 
 **After the edit** - The order SHALL hold the new address as its snapshot and
-the new method, and Winner Order SHALL show them.
+the new settlement currency, method and rail, and Winner Order SHALL show
+them.
 
 **Refused** - Grade10 SHALL refuse an edit with no reason, and an edit that
 changes nothing.
@@ -1065,14 +1070,14 @@ change after send is a reissue, per "An operator reissues a sent invoice".
 see the edit control visible and disabled, and Grade10 SHALL refuse the same
 action on the server.
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-ys6 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-ys6 rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-135 - An edit before send is recorded with its reason
 **Serves:** Quote and send - edit before send
 
 - **GIVEN** an auction order in HKD in Preparing Invoice whose winner confirmed the home address and card
 - **AND** an operator holding payment-processing
-- **WHEN** they change the address to the work address and the method to bank transfer, with the reason "Winner asked by email"
-- **THEN** the order holds the work address and bank transfer
+- **WHEN** they change the address to the work address and the method to bank transfer on FPS, with the reason "Winner asked by email"
+- **THEN** the order holds the work address and bank transfer on FPS
 - **AND** the order is still Preparing Invoice
 - **AND** the invoice log shows an order edited before send entry naming the operator, the reason, and the address and method before and after
 
@@ -1094,12 +1099,16 @@ action on the server.
 - **THEN** the edit control is visible and disabled
 - **AND** Grade10 refuses an edit from them on the server
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-j60 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-j60 rev=2 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-138 - A USD order cannot be edited to bank transfer
 **Serves:** Quote and send - edit before send
 
+This scenario keeps its title with its id. The title is historical: a USD order
+may be edited to bank transfer on HK Local or International via SWIFT, and is
+refused only a rail USD does not offer.
+
 - **GIVEN** an auction order in USD in Preparing Invoice whose winner confirmed card
-- **WHEN** an operator holding payment-processing changes the method to bank transfer with a reason
+- **WHEN** an operator holding payment-processing changes the method to bank transfer on FPS with a reason
 - **THEN** Grade10 refuses it
 - **AND** the order still holds card
 
@@ -1112,6 +1121,42 @@ action on the server.
 - **AND** an operator opens the order at 2026-09-15T09:00:00Z
 - **THEN** the page shows it has waited 72 hours since the winner's confirmation
 - **AND** it reads Preparing Invoice with no Overdue mark
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-pp0 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-247 - An operator changes the settlement currency before send
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order in HKD in Preparing Invoice whose winner confirmed
+  bank transfer on HK Local
+- **AND** an operator holding payment-processing
+- **WHEN** they change the settlement currency to USD with the reason "Winner
+  picked the wrong currency"
+- **THEN** the order holds USD and bank transfer on HK Local, and is still
+  Preparing Invoice
+- **AND** the invoice log shows an order edited before send entry naming
+  settlement currency as a changed part, HKD before and USD after
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-xsv rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-248 - A currency change that leaves the method unoffered is refused
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order in USD in Preparing Invoice whose winner confirmed
+  bank transfer on International via SWIFT
+- **WHEN** an operator holding payment-processing changes the settlement
+  currency to HKD with a reason and names no other method
+- **THEN** Grade10 refuses it
+- **AND** the order still holds USD and International via SWIFT
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-0ew rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-249 - A USD order is edited to SWIFT
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order in USD in Preparing Invoice whose winner confirmed
+  card, where Grade10 holds SWIFT bank details
+- **WHEN** an operator holding payment-processing changes the method to bank
+  transfer on International via SWIFT with a reason
+- **THEN** the order holds bank transfer on International via SWIFT
+- **AND** the order is still Preparing Invoice
 
 ### Requirement: Operators can record one bounded refund and its stock outcome
 
