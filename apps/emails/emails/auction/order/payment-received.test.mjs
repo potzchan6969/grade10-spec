@@ -46,6 +46,17 @@ describe("auction order letter previews", () => {
     },
   );
 
+  // order-mail-SC-65 - A USD invoice's payment reminder reads USD
+  it("renders the USD payment-reminder invoice total in USD", async () => {
+    const markup = await render(
+      createElement(PaymentReminderEmail, { invoiceTotal: "US$3,120.00" }),
+    );
+
+    expect(markup).toContain("US$3,120.00");
+    expect(markup).not.toMatch(/HK\$[\d,]+(?:\.\d{2})?/);
+    expect(markup).not.toContain("7.85");
+  });
+
   // order-mail-SC-63
   it("keeps the USD winning bid on the auction-won letter", async () => {
     const markup = await render(createElement(AuctionWonEmail));

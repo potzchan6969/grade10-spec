@@ -165,6 +165,38 @@ describe("invoice PDF renderer", () => {
     }
   });
 
+  // winner-order-SC-285 - The HKD total adds up the rounded lines
+  it("sums the rounded HKD invoice lines to the supplied order total", async () => {
+    const bytes = await InvoicePdf(SAMPLE_INVOICE);
+    const strings = await drawnStrings(bytes);
+    const rows = await drawnText(bytes);
+
+    expect(793 + 159 + 79).toBe(1_031);
+    for (const amount of [
+      "HK$793.00",
+      "HK$159.00",
+      "HK$952.00",
+      "HK$79.00",
+      "HK$1,031.00",
+    ]) {
+      expect(strings).toContain(amount);
+    }
+    for (const [label, amount] of [
+      ["Shipping & Handling", "HK$79.00"],
+      ["Subtotal", "HK$1,031.00"],
+      ["Order Total", "HK$1,031.00"],
+    ] as const) {
+      const labelRow = drawnRow(rows, label);
+      expect(
+        rows.some(
+          (row) => row.text === amount && Math.abs(row.y - labelRow.y) < 0.01,
+        ),
+      ).toBe(true);
+    }
+    expect(strings.join(" ")).not.toMatch(/\bUSD\b|US\$/);
+    expect(strings.join(" ")).not.toContain("7.85");
+  });
+
   // winner-order-SC-288
   it("renders the HKD invoice fixture with every amount in HKD and no USD winning bid or rate", async () => {
     const strings = await drawnStrings(await InvoicePdf(SAMPLE_INVOICE));
