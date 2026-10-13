@@ -1,9 +1,9 @@
 # QA2 site/shared reconciliation
 
-**Change:** `usd-lot-currency-winner-settlement-choice`  
-**Run:** independent QA2, 2026-10-14  
-**QA1 input:** `/private/tmp/qa1-1155-site-output/qa1-report.md`  
-**Dev preflight:** `/private/tmp/accept-review-1155-preqa2-review.json`, source identity `8147b832...`  
+**Change:** `usd-lot-currency-winner-settlement-choice`
+**Run:** independent QA2, 2026-10-14
+**QA1 input:** `/private/tmp/qa1-1155-site-output/qa1-report.md`
+**Dev preflight:** `/private/tmp/accept-review-1155-preqa2-review.json`, source identity `8147b832...`
 **Scope:** site auction domain, site auction feature suites for auction, bid increments and notifications/order, and shared UI feature suites for auction listing and auction order. Bid-payment-method is assigned to the separate `qa2-context_r3` worker and is excluded here. Winner-order feature suite is owned by `qa2_winner`; its verified SC-fq4 amounts were cross-checked for the domain order-summary route.
 
 ## Method and evidence boundary
@@ -57,4 +57,3 @@ Eleven of 16 scenarios are covered. Five are out-of-suite, with explicit existin
 The current changed anchors in these six scopes have case coverage. The only recorded requirement-level hole is the unchanged identity-store-absent threshold behavior, which has neither a delta scenario nor a durable test case. It does not block QA2 coverage of the current changed scenarios and must not be silently presented as settled by these suites.
 
 Out-of-suite scenarios above remain out-of-suite for unchanged behavior and name another lane or durable verifier. Each marker was checked against current scenario IDs. No link was added for a case whose route and Expected Results only partially assert a scenario. Changed/repaired cases retain draft lifecycle status. No approval, automated execution, or passed-gate claim is made.
-
