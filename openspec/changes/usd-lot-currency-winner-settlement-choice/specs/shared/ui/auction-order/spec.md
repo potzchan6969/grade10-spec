@@ -22,6 +22,7 @@ consuming applications are the `grade10` site's Winner Order page and
 | `settlementCurrency` | `label`, `options` (each a `value` of `AuctionSettlementCurrency`, `USD` or `HKD`, and a `label`), `value` (an option's value or `null`), `onChange` | The settlement currency choice in the setup section, one choice per option, none selected while `value` is `null`; it reports a pick through `onChange` |
 | `paymentChoices` | `label`, `byCurrency` (for each `AuctionSettlementCurrency`, a list of `AuctionWinnerOrderPaymentChoice`), `value` (a choice's value or `null`), `onChange`, optional `none` | The choices listed for the currency `settlementCurrency.value` holds, one choice each, none selected while `value` is `null`; it reports a pick through `onChange`. With no currency picked it lists none. With no choice listed for the currency it shows `none` |
 | `summary.convertedTotal` | A `label` and a `value`, formatted | A second Order Total line below the first, when supplied |
+| `summary.convertedFee` | A `label` and a `value`, formatted | A Payment Processing Fee row after the separator, below the two total lines, when supplied |
 | `bankDetails` | An `AuctionWinnerOrderBankDetails` | The View Bank Details dialog for the one rail it carries |
 
 An `AuctionWinnerOrderPaymentChoice` carries a `value` of `card` or an
@@ -39,6 +40,10 @@ Details SHALL open it and SHALL also report through the control's callback.
 The block SHALL show the first Order Total line as supplied and, when
 `summary.convertedTotal` is supplied, the second line below it. It SHALL show
 no second line when none is supplied, and SHALL derive no amount.
+
+When `summary.convertedFee` is supplied the block SHALL show it as its own row
+after the separator, below the total lines, and SHALL NOT add it to either
+total line. It SHALL show no such row when none is supplied.
 
 <!-- trace:scenario id=g10.shared-auction-order.SC-cdc rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-21 - The settlement choice offers the options with none selected
@@ -116,6 +121,18 @@ no second line when none is supplied, and SHALL derive no amount.
 - **WHEN** it renders
 - **THEN** Order Total shows one line
 - **AND** no converted amount is derived or shown
+
+<!-- trace:scenario id=g10.shared-auction-order.SC-m7x rev=1 -->
+#### Scenario: shared-ui-auction-order-SC-30 - A converted fee renders after the separator below the totals
+**Serves:** `Order detail` - the summary renders a second total line when supplied
+
+- **GIVEN** an `AuctionWinnerOrder` whose summary total reads US$131.21, whose
+  `summary.convertedTotal` reads HK$1,031.00 and whose `summary.convertedFee`
+  reads HK$38.73
+- **WHEN** it renders
+- **THEN** Order Total shows the USD line, then the HKD line
+- **AND** the fee row shows after the separator, below both lines
+- **AND** neither total line includes the fee
 
 <!-- trace:scenario id=g10.shared-auction-order.SC-hc5 rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-29 - The bank dialog shows only the rail supplied

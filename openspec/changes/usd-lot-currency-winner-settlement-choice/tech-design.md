@@ -41,7 +41,7 @@ The specs govern the rules. These rows record how they are built.
 - **Spec governs** - "Invoice fields" and "An HKD invoice, receipt and letter carry HKD only".
 - **Persist, do not recompute** - At send the service writes one row per line holding the USD fact and the settlement amount. For a USD invoice the two are equal. A read never converts, so a later change to the figure cannot move a sent invoice.
 - **No rate on the invoice** - The figure is one constant and the lines protect the invoice. A per-invoice rate column would add a field that could leak onto a page. A reviewed change moves the constant and applies only to invoices sent or reissued after it.
-- **Card fee** - Computed in the settlement currency from that currency's rule, on the sum of the settlement lines, and stored as its own line with no USD fact.
+- **Card fee** - Computed in the settlement currency from that currency's rule, on the sum of the settlement lines, and stored as its own line with no USD fact. The Order Summary reads it from that line in HKD, after the separator below the two totals, on top of the converted HKD total; the USD total leaves it out and no USD fee shows. The winner pays the converted HKD total plus the fee, the invoice's Order Total (`decisions.md` Q17).
 - **Reissue** - Reprices from the USD facts in the currency the operator chose, which may differ from the replaced invoice's. It writes a new invoice and lines and leaves the replaced invoice and its lines untouched.
 - **Rejected: store only HKD** - The Order Summary needs the USD lines, and an audit needs the fact the conversion started from.
 
@@ -60,7 +60,7 @@ The specs govern the rules. These rows record how they are built.
 
 - **Spec governs** - "A bank transfer invoice shows how to pay".
 - **Snapshot the rail picked** - The invoice snapshot holds the details of the one rail, not all three. The dialog reads the snapshot and shows no tabs.
-- **Config stays keyed by rail** - Finance's configuration is unchanged. Whether USD and HKD share an HK Local account is a configuration fact, not a model change; see Open Questions.
+- **Config stays keyed by rail** - Finance's configuration is unchanged. Finance configures the USD and HKD bank details rail by rail, and a rail is offered once its details are held (`decisions.md` Q21). Whether USD and HKD share an HK Local account is a configuration fact, not a model change; see Open Questions.
 
 ### Bid currency, schedule and ceiling
 
@@ -92,7 +92,7 @@ The specs govern the rules. These rows record how they are built.
 
 ### Presentation in this store
 
-- **`packages/ui`** - `AuctionWinnerOrder` in `packages/ui/src/blocks/auction-order` gains the optional props `settlementCurrency`, `paymentChoices`, `summary.convertedTotal` and `bankDetails`, and the exported types `AuctionSettlementCurrency`, `AuctionPaymentRail`, `AuctionWinnerOrderPaymentChoice` and `AuctionWinnerOrderBankDetails`, per `shared/ui/auction-order`. The View Bank Details dialog that `apps/preview` assembles today moves into the block and renders the one rail supplied. `AuctionInvoicePdf` and `AuctionReceiptPdf` already print the amounts and currency they receive; they gain tests for an HKD document with no USD bid.
+- **`packages/ui`** - `AuctionWinnerOrder` in `packages/ui/src/blocks/auction-order` gains the optional props `settlementCurrency`, `paymentChoices`, `summary.convertedTotal`, `summary.convertedFee` and `bankDetails`, and the exported types `AuctionSettlementCurrency`, `AuctionPaymentRail`, `AuctionWinnerOrderPaymentChoice` and `AuctionWinnerOrderBankDetails`, per `shared/ui/auction-order`. The View Bank Details dialog that `apps/preview` assembles today moves into the block and renders the one rail supplied. `AuctionInvoicePdf` and `AuctionReceiptPdf` already print the amounts and currency they receive; they gain tests for an HKD document with no USD bid.
 - **`packages/ui` listing** - `ListingAuctionBidCard` keeps one ceiling, 1000000000 USD minor units; its stories and tests drop the HKD and JPY ceilings, per `shared/ui/auction-listing`. The ceiling already arrives on the view.
 - **`packages/i18n`** - Labels for USD, HKD and each rail, the two total lines, and the choice's helper text, in every language the catalogs hold. The rate appears in no key.
 - **`apps/preview`** - Winner order stories for a USD order, an HKD order on each rail, the currency-switch clearing a method, and a USD card rule missing. The setup dialog and the how-to-pay dialog under `apps/preview/src/pages/auction/post-bidding` pass the new props.
@@ -168,7 +168,6 @@ Rollback before step 4: restore the backup. After step 4 the check refuses non-U
 
 ## Open Questions
 
-- **Card fee row under HKD** - Held for the PM, `decisions.md` Q17. The design keeps the existing reading: the fee computed in HKD from the HKD card rule, shown among the USD lines, with the USD total the sum of the USD lines and the HKD total what the invoice asks for. Nothing here depends on the answer beyond the Order Summary's fee row.
-- **USD bank details at launch** - Held for Finance, `decisions.md` Q21: which HK Local and SWIFT details Grade10 holds for USD. Until it answers, a USD winner is offered only what is held; the launch check reports it.
+- **Where Finance configures bank details** - Held for the PM and Engineering, `decisions.md` Q28: whether the admin panel's bank-details screen exists today or is new work. This design assumes no new model and writes no requirement for the screen. If it is new, it takes its own `payment-settings` change and design.
 - **Separate USD HK Local account** - Whether USD uses the same HK Local account as HKD or a second one. It changes only Finance's configuration key, not the model or the specs.
 - **Index of overwritten lots** - Whether support wants a list of lots that were HKD or JPY. The overwrite logs ids already; a report is optional.

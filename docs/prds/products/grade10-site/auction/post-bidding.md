@@ -282,12 +282,15 @@ winner who picks USD pays it unchanged.
 - 🚧 **Letters** — the won-lot letter, sent at close before any currency is
   picked, keeps the US$ bid; every letter after the winner picks reads the
   settlement currency only, with no USD winning bid
-- ❓ **Card fee under HKD** — the card fee comes from the rule of the currency
-  picked, so under HKD it reads in HKD, among the USD lines of the Order
-  Summary, and the USD total leaves it out. A card fee quoted in USD and
-  converted in total, like the other lines, is the alternative; PM confirms
-- ❓ **USD bank details** — HK Local and SWIFT are offered in USD only where
-  Grade10 holds their details; Finance confirms which it holds at launch
+- 🚧 **Card fee under HKD** — the card fee comes from the rule of the currency
+  picked, so under HKD it reads in HKD. It sits after the separator, below
+  the two totals, and is added on top of the converted HKD total; the winner
+  pays the converted HKD total plus the fee
+- 🚧 **Bank details by currency** — Finance configures the bank details for
+  USD and HKD, rail by rail, and a rail is offered once its details are held
+- ❓ **Where Finance configures them** — the admin panel, under Payment
+  Settings; PM and Engineering confirm whether that screen exists today or is
+  new work
 
 ## The Invoice
 
