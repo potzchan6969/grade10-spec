@@ -80,15 +80,9 @@ maximum; there is no manual vs auto mode toggle.
 | Live, no bids | [Live No Bids](?path=/story/auction-bidding-blocks-listingauctionbidcard--live-no-bids) | Starting bid, empty history. |
 | Leading with a maximum | [Leading](?path=/story/auction-bidding-blocks-listingauctionbidcard--leading) | \`standing="leading-max"\`. Leading badge. Raise presets are the next action. |
 | Outbid | [Outbid](?path=/story/auction-bidding-blocks-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
-| Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-bidding-flows-bid-panel--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. |
-| Interactive enrollment | [Flows / Interactive](?path=/story/auction-bidding-flows-bid-panel--interactive) | Walks sign-in → card link → ready on one card. |
 | Closed / won / lost | [Auction Lot Details](?path=/story/auction-display-screens-lot-details--closed-won-payment-due) | Awaiting address, settled, lost, sold, and unsold on the lot page. |
 
 ## Countdown
-
-[Flows / Countdown](?path=/story/auction-bidding-flows-bid-panel--countdown)
-runs the signed-out card through countdown boundaries, unit rollovers, close,
-and already in extended bidding.
 
 \`view.extended\` switches the time label to Time left (extended).
 The Time left info tooltip explains post-close extended bidding (timer restart per bid).
