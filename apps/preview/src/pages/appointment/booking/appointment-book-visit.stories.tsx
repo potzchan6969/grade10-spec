@@ -1,3 +1,4 @@
+import { dayValue, formatTimeOfDay, formatWeekday } from "@grade10/date";
 import {
   BookingActionBar,
   BookingDetailsForm,
@@ -136,26 +137,12 @@ function preset(scenario: Scenario): Moment {
   }
 }
 
-const dayName = (date: string) =>
-  new Intl.DateTimeFormat("en-GB", {
-    timeZone: "UTC",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  })
-    .format(new Date(`${date}T12:00:00Z`))
-    .replace(",", "");
+const dayName = (date: string) => formatWeekday(date, "en");
 
 const timeOf = (at: number) =>
-  new Intl.DateTimeFormat("en-GB", {
-    timeZone: BOARD_ZONE,
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).format(at);
+  formatTimeOfDay(at, { locale: "en", timeZone: BOARD_ZONE });
 
-const dateOf = (at: number) =>
-  new Intl.DateTimeFormat("en-CA", { timeZone: BOARD_ZONE }).format(at);
+const dateOf = (at: number) => dayValue(new Date(at), BOARD_ZONE);
 
 const LINK =
   "font-semibold text-foreground underline decoration-border-strong underline-offset-[3px]";

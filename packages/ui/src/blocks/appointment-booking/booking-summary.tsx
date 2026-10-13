@@ -1,4 +1,4 @@
-import { formatTimeOfDay, formatWeekday } from "@grade10/date";
+import { dayValue, formatTimeOfDay, formatWeekday } from "@grade10/date";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
 import { type ReactNode, useId, useState } from "react";
@@ -71,15 +71,7 @@ function whenWords({
 > & { locale: string }) {
   if (start === undefined || timeZone === undefined) return undefined;
   const options = { locale, timeZone };
-  const day = formatWeekday(
-    new Intl.DateTimeFormat("en-CA", {
-      timeZone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).format(start),
-    locale,
-  );
+  const day = formatWeekday(dayValue(new Date(start), timeZone), locale);
   const from = formatTimeOfDay(start, options);
   if (end === undefined) return `${day}, ${from}`;
   const to = formatTimeOfDay(end, options);

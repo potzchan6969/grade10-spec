@@ -184,13 +184,16 @@ export const Live: Story = {
 export const Moving: Story = {
   args: { state: "moving" },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     expect(
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).not.toBeNull();
-    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
-      "3",
+    const picked = canvasElement.querySelectorAll(
+      '[data-slot="booking-slot-picker"] [aria-pressed="true"][data-day]',
     );
+    expect(picked.length).toBeGreaterThan(0);
+    for (const day of picked) {
+      expect(day).toHaveAttribute("data-day", "2026-09-03");
+    }
   },
 };
 
