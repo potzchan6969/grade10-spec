@@ -327,6 +327,7 @@ leaves written items written, and the next tick sends the rest.
 | `GET /v1/admin/queue` | `{ model, jobs: [{ seq, n, kind, need, src \| file \| crop }] }`, `failed` photos 24 hours old included |
 | `model` ≠ processor's | exit 1, nothing posted |
 | `POST /v1/admin/queue/:seq/:n` with another model's embedding | `409 { error: "model <n>: the scanner runs <m>" }` |
+| A photo with no card-shaped find (a box, comic or merch shot) | learned from the whole photo, as today (`scripts/process-photos.ts:143,272`); never failed for it |
 
 ## API Contracts
 
