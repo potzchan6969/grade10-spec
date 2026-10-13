@@ -209,6 +209,7 @@ export {
   type ReceiptPdfRenderOptions,
   receiptBreakdown,
 } from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
+export { AuctionCatalogueCardSkeleton } from "./blocks/auction-listing/auction-catalogue-card-skeleton";
 export {
   FeaturedAuctionsBanner,
   type FeaturedAuctionsBannerCopy,
