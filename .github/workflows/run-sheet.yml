@@ -14,9 +14,23 @@ name: Run sheet
 on:
   workflow_dispatch:
     inputs:
+      action:
+        description: "Print a trial, finalize it, cancel finalization, or copy a merged run"
+        type: choice
+        default: print
+        options: [print, finalize, reopen, copy]
+      run_id:
+        description: "Run id for finalize, reopen or copy"
+        type: string
+      confirmed:
+        description: "Printed fingerprint confirmed by a human"
+        type: string
+      exclusions:
+        description: 'Intentional exclusions as JSON [{"id":"...","reason":"..."}]'
+        type: string
       name:
         description: "Run name — the tab becomes <id>-<slug of this>"
-        required: true
+        required: false
         type: string
       selection:
         description: "What was asked for, recorded on the Summary row"
@@ -37,6 +51,9 @@ on:
       level:
         description: "Level filter — feature, domain, product, platform"
         required: false
+        type: string
+      changed_since:
+        description: "Select whole suites affected since this source commit"
         type: string
       scope:
         description: "Only read suites whose path contains this"
@@ -74,6 +91,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
   id-token: write
 
 # Run ids come from the Summary tab, so two runs may not interleave.
@@ -91,6 +109,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -127,10 +147,12 @@ jobs:
       - name: Collect the selection
         env:
           CASES: ${{ inputs.cases }}
+          EXCLUSIONS: ${{ inputs.exclusions }}
         run: |
           printf '%s' "$CASES" | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
             | grep -v '^$' > /tmp/cases.txt || true
           echo "picked $(wc -l < /tmp/cases.txt) explicit ids"
+          printf '%s' "$EXCLUSIONS" > /tmp/exclusions.json
 
       - name: Authenticate to Google
         if: ${{ !inputs.dry_run }}
@@ -144,16 +166,21 @@ jobs:
 
       - name: Write the run tab
         env:
+          GH_TOKEN: ${{ github.token }}
           GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
           TCS_SHEET_ID: ${{ vars.TCS_SHEET_ID }}
           TCS_SHEET_SANDBOX_ID: ${{ vars.TCS_SHEET_SANDBOX_ID }}
           RUN_NAME: ${{ inputs.name }}
+          ACTION: ${{ inputs.action }}
+          RUN_ID: ${{ inputs.run_id }}
+          CONFIRMED: ${{ inputs.confirmed }}
           SELECTION: ${{ inputs.selection }}
           RUN_ENV: ${{ inputs.env }}
           SUITES: ${{ inputs.suites }}
           PRIORITY: ${{ inputs.priority }}
           LEVEL: ${{ inputs.level }}
           SCOPE: ${{ inputs.scope }}
+          CHANGED_SINCE: ${{ inputs.changed_since }}
           INCLUDE_DRAFT: ${{ inputs.include_draft }}
           INCLUDE_AUTOMATED: ${{ inputs.include_automated }}
           SANDBOX: ${{ inputs.sandbox }}
@@ -162,7 +189,17 @@ jobs:
         run: |
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
           # test on an empty input would end the step rather than skip a flag.
-          set -- --name "$RUN_NAME" --sha "$GITHUB_SHA" --env "${RUN_ENV:-staging}"
+          set -- --env "${RUN_ENV:-staging}" --record-output .run-sheet-output/run-record.json
+          if [ -s /tmp/exclusions.json ]; then set -- "$@" --exclusions-file /tmp/exclusions.json; fi
+          if [ -n "$CHANGED_SINCE" ]; then set -- "$@" --changed-since "$CHANGED_SINCE"; fi
+          if [ -n "$RUN_NAME" ]; then set -- "$@" --name "$RUN_NAME"; fi
+          if [ -n "$CONFIRMED" ]; then set -- "$@" --confirmed "$CONFIRMED"; fi
+          case "${ACTION:-print}" in
+            print) ;;
+            finalize) set -- "$@" --finalize "$RUN_ID" ;;
+            reopen) set -- "$@" --reopen "$RUN_ID" ;;
+            copy) set -- "$@" --copy-run "$RUN_ID" ;;
+          esac
           if [ -n "$SELECTION" ]; then set -- "$@" --selection "$SELECTION"; fi
           if [ -s /tmp/cases.txt ]; then set -- "$@" --cases-file /tmp/cases.txt; fi
           if [ -n "$SUITES" ]; then set -- "$@" --suites "$SUITES"; fi
@@ -177,6 +214,14 @@ jobs:
           if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
           set -o pipefail
           node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
+
+      - name: Upload the run record
+        if: ${{ success() && !inputs.sandbox && !inputs.dry_run }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: run-record
+          path: .run-sheet-output/run-record.json
+          if-no-files-found: error
 
       - name: Summarise
         if: always()
