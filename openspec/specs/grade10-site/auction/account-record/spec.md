@@ -289,15 +289,15 @@ Active/Completed filtering.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Didn't win
 
-<!-- trace:scenario id=g10.auction-account-record.SC-b5w rev=1 -->
+<!-- trace:scenario id=g10.auction-account-record.SC-b5w rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-66 - Every bidder's row shows the final price
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
 
-- **GIVEN** a listing that closed with a winning bid of 150000 HKD minor units,
-  on which the collector's own last bid was 120000 HKD minor units
+- **GIVEN** a listing that closed with a winning bid of 150000 USD minor units,
+  on which the collector's own last bid was 120000 USD minor units
 - **WHEN** they open My Auctions
-- **THEN** that row reads Didn't win with a price of 150000 HKD minor units
-- **AND** the winner's row on their own My Auctions shows 150000 HKD minor
+- **THEN** that row reads Didn't win with a price of 150000 USD minor units
+- **AND** the winner's row on their own My Auctions shows 150000 USD minor
   units
 
 <!-- trace:scenario id=g10.auction-account-record.SC-fkr rev=1 -->
@@ -825,27 +825,27 @@ code.
 - **AND** they open My Auctions
 - **THEN** no row for that listing appears in any tab
 
-<!-- trace:scenario id=g10.auction-account-record.SC-dsc rev=1 -->
+<!-- trace:scenario id=g10.auction-account-record.SC-dsc rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-71 - An outbid collector whose raise is refused stays Outbid
 **Serves:** grade10-site-auction-account-record-US-02 - a refused raise leaves the collector reading the standing they had
 
-- **GIVEN** an open `HKD` listing on which the collector is Outbid with a
-  maximum of 25000 HKD minor units, at a current bid of 30000 HKD minor units
-  and a minimum next bid of 31000 HKD minor units
-- **WHEN** they raise their maximum to 30500 HKD minor units, and Grade10
+- **GIVEN** an open `USD` listing on which the collector is Outbid with a
+  maximum of 25000 USD minor units, at a current bid of 30000 USD minor units
+  and a minimum next bid of 30500 USD minor units
+- **WHEN** they raise their maximum to 30300 USD minor units, and Grade10
   refuses it as below the minimum
 - **AND** they open My Auctions
 - **THEN** that listing's Status is Outbid
-- **AND** the row's price is still 30000 HKD minor units
+- **AND** the row's price is still 30000 USD minor units
 
-<!-- trace:scenario id=g10.auction-account-record.SC-fao rev=1 -->
+<!-- trace:scenario id=g10.auction-account-record.SC-fao rev=2 -->
 #### Scenario: grade10-site-auction-account-record-SC-64 - An outbid row shows the auction's price
 **Serves:** grade10-site-auction-account-record-US-10 - Bidder reads each lot's price and result on My Auctions
 
-- **GIVEN** an open listing on which the collector bid 100000 HKD minor units
-  and the current bid is 120000 HKD minor units
+- **GIVEN** an open listing on which the collector bid 100000 USD minor units
+  and the current bid is 120000 USD minor units
 - **WHEN** they open My Auctions
-- **THEN** that row's price is 120000 HKD minor units
+- **THEN** that row's price is 120000 USD minor units
 
 <!-- trace:scenario id=g10.auction-account-record.SC-abi rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-65 - A lot past its close keeps its standing until the close is recorded

@@ -108,3 +108,9 @@ payments that failed,
 **As an** operator,
 **I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
 **so that** a winner who got in touch can finish the order without me cancelling the lot.
+
+### post-sale-US-20: Operator records setup given by telephone
+
+**As an** operator handling a winner who missed the setup deadline,
+**I want** to record the delivery and billing addresses, settlement currency and payment choice the winner gives me by telephone,
+**so that** I can prepare the invoice with the setup the winner confirmed.

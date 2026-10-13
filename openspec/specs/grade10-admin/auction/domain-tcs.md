@@ -3,6 +3,7 @@
 **Status:** reopened · 1/4
 **Reviewed:** 2026-10-05, tcs-rules r4, lapsed 2026-10-06
 **Drafts styled:** 2026-10-07, tcs-rules r4
+**Out of suite:** grade10-admin-auction-internal-bid-SC-74 — the no-account-suspension assertion is covered by the backend expiry check; the admin cross-feature walk checks overdue status and order letters
 
 ## grade10-admin-auction-e2e-US1: Operator announces an event and puts a lot under it
 
@@ -10,7 +11,7 @@
 **I want** a campaign cover to go public while each lot under it publishes on its own,
 **so that** the event is announced without a half-finished lot reaching a collector.
 
-<!-- trace:case id=g10adm.auction-domain.TC-y1d rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i,g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-fcs,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
+<!-- trace:case id=g10adm.auction-domain.TC-y1d rev=1 -->
 ### grade10-admin-auction-e2e-US1-TC1-1: Published cover leaves an unpublished lot off the catalogue
 
 **Classification:**
@@ -70,7 +71,7 @@
 **I want** cancelling a campaign to take its listings with it,
 **so that** a called-off event leaves nothing a collector can still reach.
 
-<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=4 covers=g10adm.auction-listing.SC-euk -->
+<!-- trace:case id=g10adm.auction-domain.TC-t49 rev=4 -->
 ### grade10-admin-auction-e2e-US2-TC1-4: Campaign cancellation releases addresses for later lots
 
 **Classification:**
@@ -154,8 +155,8 @@
 **I want** a published lot to close into a payment I can collect and ship,
 **so that** a won card leaves the sale without me leaving the admin.
 
-<!-- trace:case id=g10adm.auction-domain.TC-dly rev=2 covers=g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-8wv,g10adm.auction-post-sale.SC-ydn,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-82s,g10adm.auction-post-sale.SC-7rg -->
-### grade10-admin-auction-e2e-US3-TC1-2: A published lot closes and is collected through to delivered
+<!-- trace:case id=g10adm.auction-domain.TC-dly rev=3 -->
+### grade10-admin-auction-e2e-US3-TC1-3: A published lot closes and is collected through to delivered
 
 **Classification:**
 
@@ -173,14 +174,14 @@
 **Pre-conditions:**
 
 * <listing_5> was published with close <close>, customer A placed a bid, and that close has passed.
-* customer A confirmed a delivery address and chose bank transfer for <listing_5>'s order, which reads Preparing Invoice.
+* customer A confirmed a delivery address and chose HKD settlement and bank transfer on FPS for <listing_5>'s order, which reads Preparing Invoice.
 * admin(holds payment-processing and shipment-processing) is on <grade10 auction admin orders url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_5>` | A published listing that closed with a winner, in HKD |
+| `<listing_5>` | A published listing that closed with a winner, in USD |
 | `<close>` | 5 minutes after publish (any close after the start and after now) |
 | `<winner email>` | The winning bidder's contact address |
 | `<transfer reference>` | The bank's reference for the winner's transfer |
@@ -190,7 +191,7 @@
 
 1. Open Needs action on the Orders worklist and find <listing_5>'s order.
 2. Open the order from its row.
-3. Click Send invoice, enter Shipping & Handling and Insurance, and confirm.
+3. Click Send invoice, enter Shipping & Handling and Insurance in USD, then confirm the quote in HKD.
 4. Click Record payment and record a bank transfer settlement with <transfer reference> and one proof file.
 5. Click Dispatch and record <carrier> with <tracking number>.
 6. Click Confirm delivery and attach the carrier's proof.
@@ -200,7 +201,8 @@
 * Step 1 lists the order under Needs action as Preparing Invoice, with Send invoice as its primary action.
 * Step 2 opens the order at its own address, leading with its status, the rule behind it and one primary action.
 * Step 2 shows <winner email> as the winner's contact and no Stripe identifier.
-* Step 3 shows the payment deadline the send sets, then the order reads Pending Payment.
+* Step 2 shows the order's HKD settlement and bank transfer on FPS.
+* Step 3 takes quote amounts in USD, shows HKD invoice amounts without a conversion rate, then the order reads Pending Payment.
 * Step 4 sets the order to Preparing Shipment.
 * Step 5 sets the order to Shipped.
 * Step 6 sets the order to Delivered.
@@ -253,8 +255,8 @@
 **I want** a lot an internal bidder wins to open its internal order, which I invoice, let expire and cancel by hand,
 **so that** the card goes back to stock through the same order flow as any unpaid lot.
 
-<!-- trace:case id=g10adm.auction-dmn.TC-sjg rev=1 covers=g10adm.auction-internal-bid.SC-dq6,g10adm.auction-internal-bid.SC-nl0,g10adm.auction-internal-bid.SC-6fc,g10adm.auction-internal-bid.SC-77a,g10adm.auction-internal-bid.SC-jzh -->
-### grade10-admin-auction-e2e-US4-TC2-1: An internal bidder's win is invoiced, expires and is cancelled, and the stock comes back
+<!-- trace:case id=g10adm.auction-dmn.TC-sjg rev=5 covers=grade10-admin-auction-internal-bid-SC-71,grade10-admin-auction-internal-bid-SC-73,grade10-admin-auction-internal-bid-SC-75,g10.auction-winner-order.SC-los,grade10-admin-auction-post-sale-SC-253 -->
+### grade10-admin-auction-e2e-US4-TC2-5: An internal bidder's win is invoiced, expires and is cancelled, and the stock comes back
 
 **Classification:**
 
@@ -281,19 +283,20 @@
 
 | Field | Value |
 | --- | --- |
-| `<listing_4>` | A published HKD listing for `<product_4>`, starting price `<starting price>`, scheduled close an hour away, extension duration 1800s (30mins) |
+| `<listing_4>` | A published USD listing for `<product_4>`, starting price `<starting price>`, scheduled close an hour away, extension duration 1800s (30mins) |
 | `<product_4>` | A product with `<available before>` units available beside the hold |
 | `<held quantity>` | 2 units (any quantity from 1 to 500) |
 | `<available before>` | 3 units (any count) |
-| `<starting price>` | 400000 minor units (HK$4,000.00) |
-| `<user A maximum>` | 500000 minor units (HK$5,000.00) |
-| `<internal bidder>` | An active internal bidder profile: name "QA House Four", email label qa-house-four@internal.test |
+| `<starting price>` | 10000 minor units (US$100.00) |
+| `<user A maximum>` | 10000 minor units (US$100.00) |
+| `<internal bidder>` | An active internal bidder profile: name "Harbour Cards", email label harbour@internal.grade10.example |
 | `<house billing address>` | A Hong Kong address with every required field: name "Grade10 Stock Room", 4 Test Road, Central, Hong Kong |
-| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| `<house maximum>` | 10100 minor units (US$101.00) |
 | `<commit time>` | 10 minutes from now |
-| `<final price>` | 508000 minor units: `<user A maximum>` plus its 8000 increment |
-| `<shipping>` | 0 minor units (HK$0.00), Shipping & Handling |
-| `<transfer fee>` | 0 minor units (HK$0.00), bank transfer fee |
+| `<final price>` | 10100 minor units (US$101.00), the house maximum |
+| `<buyer's premium>` | 2020 minor units (USD20.20) |
+| `<shipping>` | 1001 minor units (USD10.01), Shipping & Handling |
+| `<transfer fee>` | 0 minor units (USD0.00), bank transfer fee |
 | `<note>` | "QA internal order, house win" |
 
 **Steps:**
@@ -310,13 +313,16 @@
 
 **Expected Results:**
 
-* Step 3 reads Did not win, the lot sold at `<final price>`.
-* Step 4: the order is flagged internal, buyer House with `<internal bidder>`, winning bid `<final price>`, Preparing Invoice, with `<house billing address>` as its delivery and billing address and bank transfer.
-* Step 5: the order reads Pending Payment, deadline 7 calendar days after the send.
+* Step 3 reads Did not win, the lot sold at `<final price>` USD.
+* Step 4: the order is flagged internal, buyer House with `<internal bidder>`, winning bid `<final price>` USD, HKD settlement, FPS and Preparing Invoice, with `<house billing address>` as its delivery and billing address.
+* At Step 4, exactly one internal order exists. Its invoice status is `not_issued`, no invoice has been issued, and its method is `bank_transfer` on `fps`.
+* The order does not enter Awaiting Setup and neither the winner nor operator chooses settlement currency or rail.
+* Step 5: the operator's quote takes USD inputs of 1001 minor units for Shipping & Handling and 0 for the transfer fee, names HKD settlement and bank transfer on FPS, and the invoice status becomes `pending`.
+* The invoice total is 103100 minor units in HKD: the USD winning bid of 10100 converts to 79300, the USD premium of 2020 converts to 15900, and USD shipping of 1001 converts to 7900. The order reads Pending Payment and its deadline is 7 calendar days after the send.
 * Step 6: the order reads Payment Overdue, the invoice Expired.
 * Step 7: the confirmation says no letter is sent, and the order then reads Cancelled.
 * Step 8 reads `<available before>` plus `<held quantity>`.
-* Step 9 holds no row addressed to `<internal bidder>`'s email label.
+* Step 9 holds no won, address, invoice, payment or other order-letter row for this order addressed to any recipient, from the close through invoice send, expiry and cancellation.
 
 <!-- trace:case id=g10adm.auction-domain.TC-98w rev=2 covers=none -->
 ### grade10-admin-auction-e2e-US4-TC1-2: A bought-in lot releases its stock and relists with no internal bid
@@ -405,3 +411,11 @@
 - **Coverage** - No uncovered scenario at this level and no over-claim. The case asserts none of the old outcome: the called-off address answers 404 before a replacement is published.
 - **Decision** - None new. Q1-Q4 stay settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+
+**Run:** Independent QA2, 2026-10-14. Reconciled the current admin domain cross-feature cases with the changed feature suites, current delta scenarios and durable baseline.
+
+- **Retained:** Existing domain case IDs, revisions and routes remain; active cases stay draft and deprecated history remains deprecated.
+- **US3:** The normal winner chooses HKD/FPS before the operator quotes in USD and sends the HKD invoice. This remains distinct from internal winner handling.
+- **US4:** The internal winner receives HKD/FPS at close without winner or operator setup. The operator still quotes and sends the invoice, waits for expiry and cancels by hand.
+- **Out of suite:** The no-suspension assertion of internal-bid `SC-74` remains assigned to the backend check. No other domain-level scenario is claimed by inference.
+- **US4-TC2:** Revision 5 uses the exact shared close fixture: the winning bid is USD 10,100; USD premium is 2,020; and USD shipping is 1,001. The invoice lines convert to HKD 79,300 + 15,900 + 7,900 = HKD 103,100. It keeps the single-order, `not_issued` at close, HKD/FPS, no-setup, operator quote/send, expiry, cancellation, and any-recipient no-letter assertions. It covers internal-bid SC-71, SC-73 and SC-75, winner-order SC-277, and post-sale SC-253. Tasks 6.10 and 11.8 remain the planned implementation verifiers.

@@ -16,6 +16,7 @@ type CompleteOrderSetupDemoProps = {
   initialNewAddressOpen?: boolean;
   initialStep?: 1 | 2 | 3;
   settlementCurrencies?: WinnerOrderSettlementCurrency[];
+  cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>;
   onConfirm?: (result: WinnerOrderSetupResult) => void;
 };
 
@@ -24,6 +25,7 @@ function CompleteOrderSetupDemo({
   initialNewAddressOpen = false,
   initialStep = 1,
   settlementCurrencies,
+  cardFeePercentages,
   onConfirm = fn(),
 }: CompleteOrderSetupDemoProps) {
   const [open, setOpen] = useState(true);
@@ -70,6 +72,7 @@ function CompleteOrderSetupDemo({
         onOpenChange={setOpen}
         open={open}
         savedAddresses={savedAddresses}
+        cardFeePercentages={cardFeePercentages}
         settlementCurrencies={settlementCurrencies}
       />
     </div>

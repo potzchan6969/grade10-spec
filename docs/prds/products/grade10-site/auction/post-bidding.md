@@ -12,9 +12,10 @@ order — set up, invoiced, paid, shipped — and the letters that carry it.
 
 Bidding stops, the result is fixed at once, and only the winner gets an order.
 
-🚧 A lot an internal bidder wins gets its order like any winner's, flagged
-internal; it takes the internal bidder's billing address and sends no letter,
-and an operator lets its invoice expire and cancels it - [Internal Bid](/p/grade10-admin/auction/internal-bid)
+🚧 A lot an internal bidder wins gets an order with HKD settlement and FPS
+set automatically, flagged internal. It has no winner setup or operator setup
+step, and sends no letters. The operator still prepares and sends its invoice
+- [Internal Bid](/p/grade10-admin/auction/internal-bid)
 
 - **Every lot reads Ended** — with or without a winner, whatever happens to
   the order afterwards — [Lot
@@ -41,7 +42,8 @@ winner of three lots has three orders, each with its own deadlines.
 | --- | --- |
 | Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address; an operator reopen starts a fresh **48 hours** |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
-| Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
+| 🚧 Buyer's premium | **20%** of the USD winning bid, rounded half up, or the one USD minimum charge when higher |
+| 🚧 Premium minimum | One USD amount, **0** at first; it applies to the premium before settlement conversion |
 | Payment proof | 🚧 **1 to 3** PDF, PNG, JPG, HEIC or HEIF files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
@@ -159,16 +161,20 @@ meaning.
   method uses that same layout. Full proof, Stripe reference and audit number
   stay with the operator; a bank refund shows its provider reference as above
 
+Internal orders use HKD settlement and FPS automatically. They have no winner
+setup page, operator setup step or auction letters. The operator still quotes
+and sends the invoice.
+
 ## Order Setup
 
-Before any invoice, the winner confirms three things on one form, inside 48
+Before any invoice, the winner confirms four things on one form, inside 48
 hours of the close.
 
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| 🚧 Settlement currency | **USD** or **HKD**; lots and bids stay in USD, and the invoice is issued in the currency chosen | **HKD** |
-| 🚧 Payment method | The methods of the settlement currency below, each in a currency with a card fee rule or bank details; each choice shows its fee range | **Card** |
+| 🚧 Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | Nothing preselected |
+| 🚧 Payment method | One of the methods or bank rails offered for the settlement currency — [Payment Methods by Currency](#payment-methods-by-currency) | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -197,32 +203,43 @@ hours of the close.
 - 🚧 **Catalogue display locale** — Country/Region names follow the
   account's language, as the rest of the site does
 
-- 🚧 **Fee range wording** — card reads `Card fee about 3.4% + a fixed
-  amount`; bank transfer reads `Bank fee set on your invoice` and names no
-  amount, because the operator sets that fee
+- 🚧 **Fee range wording** — card reads `Card fee about {configured percentage}% + a fixed
+  amount`, using the configured rule for the currency picked; bank transfer
+  reads `Bank fee set on your invoice` and names no amount, because the
+  operator sets that fee
 - 🚧 **One-time address after a reload** — an unsaved one-time address stays
   on the order after leaving and returning, until the winner confirms or the
   setup deadline passes
-- 🚧 **Settlement currency** — the winner chooses USD or HKD before the payment
-  method, HKD first, and each currency remembers the method last picked in it;
-  the winning bid stays in USD, and the operator issues the invoice in the
-  chosen currency. Grade10 holds no exchange rate, so the operator sets the
-  HKD amounts
-- 🚧 **Methods by currency** — USD offers card, Hong Kong bank transfer and
-  overseas transfer by SWIFT; HKD offers card, FPS and Hong Kong bank
-  transfer. View Bank Details shows only the rails of the order's currency
-- ❓ **Rate, rounding and disclosure** — how the operator reaches an HKD
-  amount, how it rounds, and whether the invoice prints the USD winning bid
-  beside it; Finance and Product confirm
 - 🚧 **Card where Finance set a rule** — card is offered only in a currency
-  with a card fee rule; in USD and JPY until Finance sets one, the choice
-  reads that card is not yet available, per [Auction Management · Payment
-  Settings](/p/grade10-admin/auction/management#payment-settings)
+  with a card fee rule, per [Auction Management · Payment
+  Settings](/p/grade10-admin/auction/management#payment-settings); the USD
+  card rule is required before launch
 - 🚧 **No method in the currency** - with no card fee rule and no bank details
   for the order's currency, the winner reads that payment is not yet
   available in that currency, with Contact Us, and cannot confirm; the
   48-hour setup deadline keeps running, and an operator reopens or records
   setup by hand
+
+### Payment Methods by Currency
+
+The methods follow the settlement currency picked, and the list changes the
+moment the winner changes it.
+
+| Settlement currency | Methods offered |
+| --- | --- |
+| 🚧 **HKD** | Card · FPS · HK Local |
+| 🚧 **USD** | Card · HK Local · International via SWIFT |
+
+- 🚧 **Card** — in both currencies, on the configured card fee rule for the
+  currency picked; the USD rule is in place before launch
+- 🚧 **Bank rails** — HKD offers FPS and HK Local; USD offers HK Local and
+  International via SWIFT. The winner selects one rail as the bank method
+- 🚧 **One selected rail** — the invoice snapshots and shows only the selected
+  rail. View Bank Details opens a dialog for that same rail; it has no tabs or
+  copy controls
+- 🚧 **Currency changes the list** — a winner who switches currency before
+  confirming keeps a method only if the new currency offers it; otherwise
+  nothing is preselected again
 
 ### Address Deadline
 
@@ -230,7 +247,8 @@ hours of the close.
   form and only Grade10 reopens it, under Edge Cases
 - 🚧 **Locked on confirming** — the winner changes none of the three
   afterwards; an operator edits them on request before send and reissues
-  after, and the order shows what changed
+  after, and the order shows what changed. The settlement currency is edited
+  the same way
 - 🚧 **Clock** — the 48 hours count from the lot's actual close, extended
   bidding included, and a write is judged by when Grade10 receives it, however
   long the winner spent on it
@@ -238,6 +256,43 @@ hours of the close.
   new figure applies only to lots that close after it is set
 - 🚧 **Retired at send** — sending the invoice ends the address deadline; the
   order shows no deadline and no missed-deadline alert afterwards
+
+## Settling in HKD
+
+A winner who picks HKD pays a USD bid converted once, at a fixed rate. A
+winner who picks USD pays it unchanged.
+
+| Rule | Value |
+| --- | --- |
+| 🚧 Rate | **7.85** HKD to 1 USD, one rate for every order, set by Grade10 and not looked up live |
+| 🚧 Rounding | Up to the whole HK$ — any fraction rounds up, so `100.01` and `100.1` both read `101` |
+| 🚧 Never shown | The rate appears on no page, invoice, receipt or letter |
+| 🚧 Invoice and receipt | Every amount reads HKD; the USD winning bid is not printed |
+| 🚧 Fees and letters | The order total, fees, payments, refunds and order letters carry HKD |
+| 🚧 Fixed once sent | The sent invoice never re-prices, and its currency never changes |
+
+- 🚧 **Order Summary stays in USD** — its lines read USD whichever currency
+  is picked
+- 🚧 **Two total lines under HKD** — Order Total shows the USD total, then the
+  converted HKD total, which is what the invoice asks for
+- 🚧 **What the HKD total adds up from** — each line converted and rounded up,
+  then summed, so the invoice adds up line by line; the card fee is computed
+  in HKD from the HKD card rule
+- 🚧 **Lots already priced in HKD or JPY** — every one is test data and its
+  currency is overwritten to USD, amounts unchanged and nothing converted
+- 🚧 **Bank transfer fee** — the operator types it in USD, and it converts with
+  the other lines
+- 🚧 **Letters** — the won-lot letter, sent at close before any currency is
+  picked, keeps the US$ bid; every letter after the winner picks reads the
+  settlement currency only, with no USD winning bid
+- 🚧 **Card fee under HKD** — the card fee uses the configured HKD rule. It
+  sits after the separator, below
+  the two totals, and is added on top of the converted HKD total; the winner
+  pays the converted HKD total plus the fee
+- 🚧 **Bank details by currency** — Finance configures the bank details for
+  each offered settlement rail; a rail is offered once its details are held
+- 🚧 **Where Finance configures them** — the admin panel, where the bank
+  details remain configurable for USD and HKD; nothing here moves it
 
 ## The Invoice
 
@@ -253,8 +308,8 @@ by card, reads:
 | Insurance | 500 | Optional and above zero; absent when none |
 | 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
 | Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
-| 🚧 Payment Processing Fee | 4,271.80 | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings — here 3.4% + HK$2.35, grossed up so Grade10 keeps the Subtotal whole |
-| Order Total | 125,571.80 | Subtotal plus the fee — what the winner pays |
+| 🚧 Payment Processing Fee | Calculated from configured HKD rule | Grade10's own for a card invoice, computed from the Stripe card rule in Payment Settings, grossed up so Grade10 keeps the Subtotal whole |
+| Order Total | Subtotal plus configured fee | What the winner pays |
 
 - 🚧 **Insurance on Order Summary** — before send, Insurance sits with the other
   fee rows as TBD; after send it carries a brief info tooltip (`0.9% of the
@@ -280,10 +335,10 @@ by card, reads:
   transaction metadata under `payment_reference_code`, then keeps Stripe's
   returned provider reference internal. There is no separate order ID —
   [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
-- 🚧 **Bank details** — every enabled SWIFT, FPS and HK local-transfer rail in
-  the invoice's Finance snapshot, printed below Order Total when paid by Bank
-  Transfer; the payment reference follows the enabled rails, with a reminder
-  to quote it in the bank app's memo or remarks field
+- 🚧 **Bank details** — only the selected rail from the invoice's Finance
+  snapshot, printed below Order Total when paid by Bank Transfer; the payment
+  reference follows it, with a reminder to quote it in the bank app's memo or
+  remarks field
 - 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
   sequence with at least 2 digits; it continues as `100` after `99`. A reissue
   increments the sequence, keeps the payment reference and lets the old ID
@@ -329,18 +384,12 @@ failure, and locks the form while work is in progress.
   **Submit Payment Proof** as the primary control and places **View Bank
   Details** under it; View Bank Details opens bank rails, Submit Payment
   Proof opens the proof dialog
-- **View Bank Details** — opens with the FPS tab selected. It shows amount
-  due and rail fields as detail rows (no
-  Copy); each rail tab ends with payment reference and a warning to enter it
-  in the bank memo, after the rail fields: FPS ID, account name and QR; HK
-  local bank name, bank code, branch code and full account number (bank and
-  branch code included); SWIFT beneficiary name, beneficiary address, bank
-  name, bank address, SWIFT/BIC, full account or IBAN, then payment
-  reference, then a note to choose OUR for transfer fees so Grade10
-  receives the full order total
-- **Rail tab width** — on small screens, the FPS, HK Local and
-  International tabs hug their labels and scroll horizontally so every name
-  stays readable; at wider sizes, the three tabs share the full-width track
+- **View Bank Details** — shows amount due and the one selected rail's detail
+  rows with its payment reference and a warning to enter it in the bank memo.
+  FPS shows the FPS ID, account name and QR; HK Local shows bank name, bank
+  code, branch code and full account number; International via SWIFT shows
+  beneficiary name and address, bank name and address, SWIFT/BIC, and full
+  account number or IBAN. The dialog has no tabs or copy controls
 
 #### Bank Transfer Proof
 
@@ -583,12 +632,12 @@ a second payment provider, and changes to the bid-time rules.
 | Tax line | 🚧 In flight | Tax is an amount the operator enters, shaped like Insurance. Chosen over a rate Grade10 computes, which needs a jurisdiction rule and a rate per regime nobody has written, and over a tax provider, which adds a vendor to price a number the operator already knows. Zero is refused, so "no tax" and "tax of nothing" stay distinct. Order Summary tip: `Set by Grade10 for where your order ships. Some orders have none.` What a receipt must carry beyond the amount is still the open Formal tax receipt row below. | Product (@jeffffej0909) |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
-| Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
-| Payment processing fee | 🚧 In flight | A card invoice's fee is Grade10's own: the Stripe card rule per currency in Payment Settings, a percentage and a fixed amount grossed up from the Subtotal; with no rule for the currency, the invoice cannot be sent. A bank transfer invoice's fee is the operator's own, no cap, empty read as Free. The sent invoice never re-prices. Chosen over reading the provider's live fees at send: Stripe has no pricing API, and the real fee depends on the card — domestic 3.4% + HK$2.35, more for an international card or a currency conversion — so it is known only after the charge. | Product |
+| Buyer's premium | 🚧 In flight | 20% of the USD winning bid alone, rounded half up, or the one USD minimum when higher; Grade10 computes it and discloses the rate on the bid panel only. The minimum is 0 at first and applies before settlement conversion. | Product and finance |
+| Payment processing fee | 🚧 In flight | A card invoice's fee is Grade10's own: the configured Stripe card rule for the settlement currency, grossed up from the Subtotal; a USD card rule is required at launch. A bank transfer invoice's fee is the operator's own, no cap, empty read as Free. The sent invoice never re-prices. | Product |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
-| Bank details | 🚧 In flight | Grade10 holds bank details per currency on each lane: the sample account outside production, and none in production until Finance confirms Grade10's account, so production offers card only until then. Chosen over a sample account in the site's code, which showed on every lane and on every invoice PDF, production included. | Product and Finance |
-| Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
-| Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address and method, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
+| Bank details | 🚧 In flight | Grade10 holds bank details for each supported rail. A rail is offered when Finance has configured its details, and the invoice snapshots only the selected rail. | Product and Finance |
+| Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants another method or rail. | Product (@jeffffej0909) |
+| Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address, settlement currency and method or rail, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
 | Address deadline | Decided | 48 hours from lot close. A miss hides Confirm, shows Contact Us, and the order reads Setup Overdue; no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |
 | Reopening the address form | Decided | An operator, with payment processing and a reason, reopens it once the deadline passes before an address was confirmed, for a fresh 48 hours; never on a cancelled order; no letter, the operator tells the winner. Or the operator records an address given by phone without reopening. | Product (@jeffffej0909) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
@@ -645,12 +694,17 @@ a second payment provider, and changes to the bid-time rules.
 | Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
-| Payment fee wording | 🚧 In flight | Card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. Chosen over showing no figure for either. | Product (@tangconst) |
-| Settlement currency | 🚧 In flight | Lots and bids are USD alone; a winner settles in USD or HKD, chosen at order setup. HKD settlement is new: the operator issues the invoice in HKD, so Grade10 holds no exchange rate. Chosen over a rate in Payment Settings and over converting automatically at setup, which put a rate and its rounding on Finance before launch. Any other display currency later converts from USD. | Product (@tangconst) |
-| Methods by settlement currency | 🚧 In flight | USD: card, Hong Kong bank transfer, SWIFT. HKD: card, FPS, Hong Kong bank transfer. | Product (@tangconst) |
-| Card in USD and JPY | 🚧 In flight | Card launches without a rule in USD and JPY: until Finance saves one, a winner in that currency is not offered card and reads why. Chosen over holding launch for Finance's rates and over charging no card fee. | Finance |
+| Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. | Product (@tangconst) |
+| USD card rule | 🚧 In flight | Finance configures a USD card fee rule before launch; the same configured percentage and fixed-amount rule applies to USD card invoices. | Finance |
+| Settlement currency | 🚧 In flight | The winner picks USD or HKD at order setup, nothing preselected, fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
+| HKD conversion | 🚧 In flight | One fixed rate, 7.85 HKD to 1 USD, rounded up, never shown; the USD winning bid is not printed on an HKD invoice or receipt. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
+| Rounding | 🚧 In flight | Whole HK$, any fraction up (`100.01` and `100.1` read `101`), each line converted and rounded, then summed. Chosen over the first decimal and over converting the total once, which would leave invoice lines that do not add up. | Product |
+| Payment methods by currency | 🚧 In flight | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. The winner chooses one method or rail. The invoice and bank-details dialog show only the selected rail, with no tabs or copy controls. | Product |
+| Rail-only reissue | 🚧 In flight | Changing FPS to HK Local, or USD HK Local to International via SWIFT, counts as a change by itself and allows invoice reissue. | Product |
+| Order summary under HKD | 🚧 In flight | Lines stay USD; Order Total splits into a USD total and a converted HKD total. Chosen over an all-HKD summary, which would hide the bid the winner won. | Product |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
-| No payment method in a currency | 🚧 In flight | A winner whose currency offers neither card nor bank transfer reads that payment is not yet available there, with Contact Us; the setup deadline keeps running, so the order can go Setup Overdue, and an operator reopens or records setup by hand. Chosen over pausing the deadline, which is more to build, and over holding launch for Finance's USD and JPY rules. | Product (@tangconst) |
+| Internal order setup | 🚧 In flight | An internal order has no winner setup, operator setup step or letters. It uses HKD settlement and FPS automatically. | Product |
+| No payment method in a currency | 🚧 In flight | A winner whose settlement currency offers neither card nor a bank rail reads that payment is not yet available there, with Contact Us. The setup deadline keeps running, so the order can go Setup Overdue, and an operator reopens or records setup by hand. | Product (@tangconst) |
 | Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |
 :::

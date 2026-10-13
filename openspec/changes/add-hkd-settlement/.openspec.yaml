@@ -1,6 +1,0 @@
-schema: grade10-planning
-created: 2026-10-13
-promoted_by: "@tangconst"
-depends_on:
-  - usd-lot-currency-winner-settlement-choice
-page_waived: "draft for PM confirmation - the PRD lines are marked 🚧 and ❓ on the post-bidding and management pages"

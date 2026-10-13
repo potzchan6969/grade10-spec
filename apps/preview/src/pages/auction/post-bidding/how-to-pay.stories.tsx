@@ -3,7 +3,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, waitFor, within } from "storybook/test";
 import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import {
   OUR_NOTE,
@@ -16,12 +16,14 @@ type HowToPayDemoProps = {
   onOpenChange?: (open: boolean) => void;
   invoiceId?: string;
   settlementCurrency?: "USD" | "HKD";
+  paymentRail?: "fps" | "hk_local" | "swift";
 };
 
 function HowToPayDemo({
   onOpenChange = fn(),
   invoiceId = WINNER_ORDER_INVOICE_ID,
   settlementCurrency = "HKD",
+  paymentRail = "fps",
 }: HowToPayDemoProps) {
   const [open, setOpen] = useState(true);
 
@@ -55,7 +57,7 @@ function HowToPayDemo({
           onOpenChange(next);
         }}
         open={open}
-        settlementCurrency={settlementCurrency}
+        paymentRail={paymentRail}
         transferReference={WINNER_ORDER_BANK_DETAILS.transferReference}
       />
     </div>
@@ -71,12 +73,14 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order View Bank Details — invoice ID as DialogSubtext, amount due, FPS (QR + manual fields), Hong Kong / International rails, payment reference band (listing code), OUR note on SWIFT; panels scroll inside the dialog.",
+          "Standalone Storybook preview of Winner Order View Bank Details. It shows only the rail chosen for the invoice, with the amount due, payment reference and the selected rail's details.",
       },
     },
   },
   args: {
     invoiceId: WINNER_ORDER_INVOICE_ID,
+    settlementCurrency: "HKD",
+    paymentRail: "fps",
   },
 } satisfies Meta<typeof HowToPayDemo>;
 
@@ -113,9 +117,7 @@ export const HkdFpsRail: Story = {
     expect(
       modal.queryByRole("button", { name: /Copy/i }),
     ).not.toBeInTheDocument();
-    expect(
-      modal.getByRole("tab", { name: "FPS", selected: true }),
-    ).toBeVisible();
+    expect(modal.queryByRole("tab")).not.toBeInTheDocument();
     expect(
       modal.getByRole("img", { name: "FPS QR code for Grade10" }),
     ).toBeVisible();
@@ -136,17 +138,16 @@ export const HkdFpsRail: Story = {
 /** HKD invoice — Hong Kong rail shows branch code. */
 export const HkdHongKongRail: Story = {
   name: "HKD — Hong Kong rail",
+  args: { settlementCurrency: "HKD", paymentRail: "hk_local" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
-    await userEvent.click(modal.getByRole("tab", { name: "Hong Kong" }));
-    await waitFor(() => {
-      expect(modal.getByText("Branch code")).toBeVisible();
-      expect(
-        modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
-      ).toBeVisible();
-    });
+    expect(modal.queryByRole("tab")).not.toBeInTheDocument();
+    expect(
+      modal.queryByRole("img", { name: /FPS QR/ }),
+    ).not.toBeInTheDocument();
+    expect(modal.queryByText("FPS ID")).not.toBeInTheDocument();
     expect(modal.getAllByText("Payment reference").length).toBeGreaterThan(0);
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
@@ -163,62 +164,38 @@ export const HkdHongKongRail: Story = {
   },
 };
 
-/** HKD invoice — FPS + Hong Kong, no International rail; FPS first. */
-export const HkdRails: Story = {
-  name: "HKD — FPS + Hong Kong",
-  args: { settlementCurrency: "HKD" },
-  play: async ({ canvasElement }) => {
-    const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "View Bank Details");
-    const modal = within(dialog);
-    expect(
-      modal.getByRole("tab", { name: "FPS", selected: true }),
-    ).toBeVisible();
-    expect(modal.getByRole("tab", { name: "Hong Kong" })).toBeVisible();
-    expect(
-      modal.queryByRole("tab", { name: "International" }),
-    ).not.toBeInTheDocument();
-    expect(modal.getByText("FPS ID")).toBeVisible();
-  },
-};
-
-/** USD invoice — Hong Kong + International (SWIFT), no FPS; Hong Kong first. */
+/** USD invoice — one HK Local bank rail, without FPS or SWIFT details. */
 export const UsdRails: Story = {
-  name: "USD — Hong Kong + International",
-  args: { settlementCurrency: "USD" },
+  name: "USD — HK Local rail",
+  args: { settlementCurrency: "USD", paymentRail: "hk_local" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
-    expect(modal.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
+    expect(modal.queryByRole("tab")).not.toBeInTheDocument();
     expect(modal.getByText("US$16,340.00")).toBeVisible();
-    expect(
-      modal.getByRole("tab", { name: "Hong Kong", selected: true }),
-    ).toBeVisible();
-    expect(modal.getByRole("tab", { name: "International" })).toBeVisible();
-    // Hong Kong panel shows by default; SWIFT field coverage lives in SWIFT tab.
     expect(modal.getByText("Branch code")).toBeVisible();
+    expect(modal.queryByText("SWIFT / BIC")).not.toBeInTheDocument();
+    expect(modal.queryByText("FPS ID")).not.toBeInTheDocument();
   },
 };
 
-/** USD invoice — International rail shows SWIFT fields and the OUR note. */
+/** USD invoice — the selected SWIFT rail shows only international details. */
 export const UsdInternationalRail: Story = {
   name: "USD — International rail",
-  args: { settlementCurrency: "USD" },
+  args: { settlementCurrency: "USD", paymentRail: "swift" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
-    await userEvent.click(modal.getByRole("tab", { name: "International" }));
-    await waitFor(() => {
-      expect(modal.getByRole("alert")).toBeVisible();
-      expect(
-        modal.getByText(WINNER_ORDER_BANK_DETAILS.beneficiaryAddress),
-      ).toBeVisible();
-      expect(
-        modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
-      ).toBeVisible();
-    });
+    expect(modal.queryByRole("tab")).not.toBeInTheDocument();
+    expect(modal.getByRole("alert")).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.beneficiaryAddress),
+    ).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
+    ).toBeVisible();
     expect(modal.getAllByText("Payment reference").length).toBeGreaterThan(0);
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
@@ -237,5 +214,7 @@ export const UsdInternationalRail: Story = {
       modal.getByText(WINNER_ORDER_BANK_DETAILS.accountNumber),
     ).toBeVisible();
     expect(modal.getByRole("alert")).toHaveTextContent(OUR_NOTE);
+    expect(modal.queryByText("Branch code")).not.toBeInTheDocument();
+    expect(modal.queryByText("FPS ID")).not.toBeInTheDocument();
   },
 };

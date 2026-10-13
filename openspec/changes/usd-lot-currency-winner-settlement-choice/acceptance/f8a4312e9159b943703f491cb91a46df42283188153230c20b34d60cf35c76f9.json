@@ -1,0 +1,927 @@
+{
+  "version": 2,
+  "change": "usd-lot-currency-winner-settlement-choice",
+  "baseline": "313c29bfb08b0a85b88819b17e66f32a28263098c9c71d5d7cf87b10bd616ed7",
+  "fingerprint": "f8a4312e9159b943703f491cb91a46df42283188153230c20b34d60cf35c76f9",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-13T20:40:31.159Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/internal-bid.md#internal-bid",
+      "sha256": "7bcff72b73564eddda35e02697bbe6bc6dced2790da7603427d861dd60bf4c13",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/internal-bid.md#rules",
+      "sha256": "48b0dda64b8c95485e65b2587a10d550e1acb78af7aef50249ec85b7d1b954bb",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "e4a8352c2b640ec483215554ee33feffcb2cfd279dde4394eb4ab60491f7cd83",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#payment-settings",
+      "sha256": "a840a9cfe6daadb1c8cbcecb3c820b942104204c3572e6a17b7c6ea3c0c9b29c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#test-winners",
+      "sha256": "8cd94e0a6ee741df2634018f7aff8e77564c4effb817f5ece6c91f18fe261d7f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/account.md#verified-identity",
+      "sha256": "0ed70a0389ad73a7125d2565ac7f5f2d9b586e3457f53fa468005c5c2550b3aa",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#bid-increments",
+      "sha256": "f482dfb179789da43b24cf6c6213ee61151e334cbdd2c400b4c2b9231a6f1d38",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#currencies",
+      "sha256": "e6edf03c96f8adecf5a4c02a145a03e805f503824f5b3ebdd64c801474e8271f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/index.md#chapters",
+      "sha256": "af1860d5ceb2cdc1181b555f92e12859a30cf257cd7814c9c451530017a47692",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#order-setup",
+      "sha256": "70060c332a9db52db45086e7d79edbcdec75e20cdb4a412885d900986db451bd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#payment-methods-by-currency",
+      "sha256": "2ea7a304e7be36d87c41b38591058ece6d75812ec4260452d086c2afc51a1331",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#settling-in-hkd",
+      "sha256": "b486d1a950930d301ceccfb26e513812cad3aa2296538ad7edabcc12b3dcbccd",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/decisions.md",
+      "sha256": "5ba3078ceff5ec0e495ab373677b8fecd667c90ccf942ebc1230592e8a951428",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/proposal.md",
+      "sha256": "57ff9b4a769d83cd6fbd7df2a08a60aae3ab90d803b121f260549c475caa21c9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "6f07afed30422378c74416f2689fb6412259a4d7540be12c9fa3ee2e5ab417bf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+      "sha256": "b3f86771c6a3eab594958a2230abfb8fd5b41b9e2558bd6b1cd5335b1313ed55",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/spec.md",
+      "sha256": "b9f5d782933af711ea7a2d88c713c51e632bcc25bfb944af7737ffb0fe0818b2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+      "sha256": "ffd6d6bc66f359d6ab3a4904f444f1e9699f364b7de362399a0c65d6f666e2cc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "2900fcddc76485fc2aa27e2b20756c1150eb27d90d8db259a8492d0f223245ea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "276440ef28b3d6dc42ba948cba5dd330fa604884520f236917f1d91c140d50bc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "9ac150d7743b2466f8e0aa543dbf1cc18e7d73c22fb567a7af87036c78009a88",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+      "sha256": "4d383208e4e042ce617b47fc68c242dc8ac755aec65f99cc3b99783aa0869903",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/payment-settings/spec.md",
+      "sha256": "55da9f84a11b40cf3c070d05888f9565ce64cc429d628051fa3f42732f9f8f38",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/payment-settings/user-journeys.md",
+      "sha256": "2cec20ce4664d9dfc912f1271f75b2051fab3eb517e5be9efdd89e7eda27e661",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "fd880cfe3a36cfa78909c5db20601fa69ce98cdb3b0f007e7ae4495df41ab955",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "50ee33fab41a0d47412a6b6669e08c16df184f75b3025be936b02bdb7502a188",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "74f9ee6c4decfca08cb67a6f4e60d32377d747f5ec4b7bcd41c40b20a626ffab",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+      "sha256": "961f38175f6db11ecca553f6c2fd15de7623c765eb0ef613528a6274272bebb8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/test-winners/spec.md",
+      "sha256": "4464312d61a99976ff51b2d6373502f239af66e43e64a10c0e16de0bb70e5128",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/test-winners/user-journeys.md",
+      "sha256": "af4e48e0203355ca80afbee86f2c99a903fa747fe182557d98587c9fd6306b8a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "20d8d7f7ab4e478784a52c582daaf487ce88b8d67fa637b6a88453c0ea6bf4f4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "d053fce17dcd9728ae0bf5238e1b76fffb3cff3b1447ff6b9cdcba1c50a1a042",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "5446e4c377d0ec6a5c922e101ea58294cc6948692bf3474b2b1e73b3b13db3e5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/auction/feature-tcs.md",
+      "sha256": "4e34fbda847ffbc19fdc69fb199b56f3b8e9fc3bfdecdbec78a7cf9e227985ec",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/auction/spec.md",
+      "sha256": "6d1e21bcfbda6354bbcd2e49779ca747f9199af73496e567871c82f1d26bc80d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/auction/user-journeys.md",
+      "sha256": "6e02bd568ab42d0faa003b817118ef3eae71aabdf8ac351bbba61247a9e9c445",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+      "sha256": "caed8a1e155594d2744ba5da92d2f56b58a0e5ff8a9ef0ce4a0bc38b9babea39",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/auto-bidding/spec.md",
+      "sha256": "d3aaa8412ad5fe7d625fc9413a4fd218bcfbd506f5e20d489e17245b0bf5b4e8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/auto-bidding/user-journeys.md",
+      "sha256": "0f80e8826b895ea3f03c4d5d611f1f25ee9be395853a81aae99fcaa35ed4b807",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "sha256": "be7910c26dcf319c81996d0e2f42811fd6d3393911a08612db0fd00f49eebd68",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-increments/spec.md",
+      "sha256": "1d18d74dcb37c5b12822cbdba42f55aedeaa8f71a21ea67afdcc9414c42a9420",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "sha256": "076ec4a64b6e58d966642e226f160ce50ef7962e4c8090ac89dd08d8171e5ce3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/feature-tcs.md",
+      "sha256": "4c4a9df84a4b09c56c457281da0fec20b8a86692fbee69f2a562617e7fbc125a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/spec.md",
+      "sha256": "f6c92d2f6972999c7fd8e492fc4a877c4f052ab9a12bf1d2bc5f73f6f95cf8ff",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/user-journeys.md",
+      "sha256": "da238c1b0fb5ad158ff9a4cc533dac83b0eae667c544fa45607068c7af999690",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bidder-suspension/feature-tcs.md",
+      "sha256": "79f954790032c039d142002807369454c40bf7a1e1bd219b3f8cdbb492aceea3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bidder-suspension/spec.md",
+      "sha256": "c837498440ef5ce93fb34bf12a06c643cae4622bb9cc6c67e3d41591eeeec143",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bidder-suspension/user-journeys.md",
+      "sha256": "a9ba5f1bfbda12ec7cc6ff0db5c1cbcde028bf185d02a99eb34eb9ff4c23994a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "a31bf85e5894b0735a0ecfec582625630dbe22a36cf05cd20d288a34ad94394a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "bc8d63eabc473237d6d8738c0cc48d3cf89919158694f030e1741d8bb362ffa7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "16f8ec38a3874dd91995672c0b1bc778e1192ccf2d594e26e2c2d24262b80068",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "8605df1f17285ba6ce634c359316382f8a5ac863962bc65e583dd9f82cdc5b3d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+      "sha256": "08dfdaae208b6588c336d2fce2c0eeadc889637d47cf4625b3baf395bff98311",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/notifications-order/spec.md",
+      "sha256": "994c67f432b3a7009a4a896c6a163bc0aca75db2d01ff4cf7f97ebe53f880068",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/notifications-order/user-journeys.md",
+      "sha256": "f00f5bf4095221ed45e9c930bbb51eef952decf5effbd069700e605084d0ff04",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/notifications/feature-tcs.md",
+      "sha256": "f0bfa7da16668cdc3a32dae288c865bea8e05288261fedc7f0ea230a7e859fba",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/notifications/spec.md",
+      "sha256": "a768bccebc02793ce68fc38ae70f5648e40feb4ee0ee7ca1f560b85df94b1d83",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/notifications/user-journeys.md",
+      "sha256": "095e33cd0cd106ae96c14846299d8e902742b8543e8c01382135cf36e3076f11",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "286f4c9c09dab09c06ad26111ae5858af9b292c2c9b9506956ac09b3b01331c5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "01e643666621190dbc56b4d7d400cafd5c31a00bf9cf299c7cd0074fcf23c6ab",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "8608d555d1acb36da09f5c32aacf3a5f5bc7ecabc0e3cbf71ef9b5e968c7746e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "2e00f3eda64fb56ece3ae067e232036e7dde5db8d5887a7c452298219b8ee354",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "f9040c01ca70f5e89996f17f93c6d87d2965bb17f51a568af9f39e24314f63f6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "a426875c2f04184dd152ac604b6cbfa8c1c0260f23719ba2e900ca465dc087fa",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/shared/ui/auction-order/feature-tcs.md",
+      "sha256": "d0e70fe67ca464515365480daff40337aa5b6a32c208461bf7ca18f59361fdb0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/shared/ui/auction-order/spec.md",
+      "sha256": "349ad5da48edcd14e84cd48f64ce6731c0f01e41e988c905b58093fa9d802801",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/specs/shared/ui/auction-order/user-journeys.md",
+      "sha256": "e155a9abaae2fee54c31f99b2cb30c63500623f80f3e2eb7f9bb44d9ff2037a7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/usd-lot-currency-winner-settlement-choice/tech-design.md",
+      "sha256": "ffe25d480bb30da9c17ffb05b5050e26870a08d51b905358104502278eff0c53",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "437a07034157ffa483ed738bf412ae64c41da235e8ad19e0aa65baeddd901910",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+      "sha256": "93bb8b8ebf9fe56a8dd834d07b0debd815773e512751e0e465035ba51bc3ccf6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+      "sha256": "5be2e4c04863eaf74950d47474205d67626dcda7962e884f23d7500c71da84fe",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+      "sha256": "0fe97656210f64a31fd1ea897a81f736eaf22a933921454124f462adae51fbb4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "06d9ffe461a9291d24bdd46b7bb10d2b4489e69febbfe01edab3c49bba773fbd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "b7992b81f552d9b76e96c75e37fdb1660b1382a772d666d30d904b9467549d11",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "7069b101bbd7653ec1322de8285eb53ef0a0d37bfd9643150428c8596ae62920",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+      "sha256": "2c534ee7839a806c15c5dddd10747e2a5b27479d2b6f14efc37c4936ae8d9611",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+      "sha256": "c1392a5ab9179e3b3a8946fedb2b43bd7cba73139678ed633b64751813491ccb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/payment-settings/user-journeys.md",
+      "sha256": "04876c9105a12dbf366273270d9f91738a92ae17a9c26428f2c5c405da9794ee",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "e4ebd8c321115eae91fbe0ef62be31d749b5d9ce03d8f1f6c625c37f950c6387",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "6ad195a7b5945aae003010654659aed4ad96399f83655eba2643df6dbbdca412",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "09f02a0b0f6c5ff46ce142b35ec74aae092df876c032e05c372d8f1fafee9228",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+      "sha256": "3a790dd2cc836e6d2b0aac088a6e61f86f042aec12bdc9035450f8d0b99f3c6d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+      "sha256": "a3336448c1216dcc61f37f5ab1a5eec48f17fa9b30fad389e3dd4418fd4e02ad",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+      "sha256": "8b82c54b6aa0b7e5a691ca021a4ef629f1bd0e306b1b60f8c59291a85eba9100",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "ff9ac9d32d16321c68647c75225648dc9adf2ccd4203481a7c9456f6dee098f0",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "62b1d0079b7ce0fbbffc075721418e570c4d655e32d45c382cac5c7d3b819e47",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "a4fc7585d53da0a06a0cfd89b772b16cc952563d1765d45ee1b112211767313f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+      "sha256": "7c53eca3ec54f02c380c175c61209ecbdf183903f226d550926977ce0e5a81e3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+      "sha256": "741919830660eac057b21d3b1f674a26e7059a9307d3a8600cf8ae63ad716e02",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+      "sha256": "3ba656edc3b7ea0b9cb1812d06b081478898a9ec272f206c96e7943d18416c7c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+      "sha256": "b47b1f73f2f413b15ff7ba84528e850892b7e1f6f96a7f585cfbbcd6f234ed9e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
+      "sha256": "63b8633ee6971a94056ee5e69a2641aae2eeefe219fce74518fb215b45bdcca4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auto-bidding/user-journeys.md",
+      "sha256": "c84da4e32b9c5823389962f3f5c9344efa4b657a4b2ab96acbe7d30b7b7b5b5a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "sha256": "758eed4235e265a1f18a0db190e5fb49d1fde38c66f363191b05a38a5a36b3f2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+      "sha256": "f159841f8a3da1e1cd32d53b5b7c326055d561290a31fd7de9452c01cd746aa0",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "sha256": "1918f985a1318bfb9347442e5f86c0012e78db78f5f5285f0f8b3c3d752a547c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-payment-method/feature-tcs.md",
+      "sha256": "1787d059fed78f68df2a57cfab5caabc120fd7796bc597e00bcb9f57b017c231",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-payment-method/spec.md",
+      "sha256": "1c0627482de152650f1949db587b5491d1596b1678cdc56d521e1b25efe4a425",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-payment-method/user-journeys.md",
+      "sha256": "0dc2cbc92e8b1ef0398965d590217aa6932677a1ac7dc44f134c2c4849fba4fd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidder-suspension/feature-tcs.md",
+      "sha256": "79f954790032c039d142002807369454c40bf7a1e1bd219b3f8cdbb492aceea3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidder-suspension/spec.md",
+      "sha256": "b2822a4b23852155b300c53e08c50dbbc3229e6247e641fd6aedfc2d5a8b5486",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidder-suspension/user-journeys.md",
+      "sha256": "29b7956d3a3d2750673c1a2a564b14dd0de0bbb5a6567c47b7b1d35d4a26b91f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "d9f08a500a9aba21c2c1116d6874f773d2fb20fb546fbdfbb0c7595ba41945ca",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "24b1b9e70c95ad723989c9ed67c7ea4e7c0872e9c1677ac6040ce5b7abf24628",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "3777a656218ecdaa1c5c31226183a4b0d78040e7549b3a3294e0497be25d4217",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "401e87206110bdec150b875afb513c6e780330b841370d179ee58966f45d0857",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+      "sha256": "f344af054dfef190834888ad31dd06ea1be1a05e6971aa3fbd78c2d558942957",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+      "sha256": "6ab4fd5b2109a9505d63d52edbd8d44ebc86a047e37ebbf17ac3b80c9f45fca2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+      "sha256": "32c337214216259754c82aab7a67f27f55c229006b94c8dd6b0f567a9c36f3f8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications/feature-tcs.md",
+      "sha256": "71dc7a989f7c03c2f3a9393d25fb4bea46f4e4533f18a0f4bb9841a399fa1033",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications/spec.md",
+      "sha256": "9c94246aecdb11aa0b5a279389d6aa326eaab1fd1df6eec615688546eca9b707",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications/user-journeys.md",
+      "sha256": "f885015eb7c82f4ed64b1f652fc773e4313d4b1db07576d03b93aa49cd4bc7a8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "dd2b5d738b6c64c98b1b5c6329222c9518b48eb752fd57fa2bd58e1e151fb1e6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "8c4b042b989212261f38b318c4d1d25ee511ebfa8560a0f239df71f151c7b7d8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "cdfe0188224a09cbd230596ff1d6b17f306aa191f931359d735d53c72bb58eb8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "0bde51f2b55091be19d563e55e6e07199a21728b7e7c852d2603f43dd7fa4302",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "103907ae09abd4341b81d5fa9c7a57db502f6285ed0c9b053ebbd37dea01eede",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "a5fcb00b22dba4a66db3abf803b097fb8a802805a2c4d67628350c7fbd76fcfb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+      "sha256": "d45df016cc45c27e702bdccb63cfba5c3e8789f88ee8a373494a4254c7e7a321",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/spec.md",
+      "sha256": "0ad237c6c293d4221a7b199c9c7f90e8398f5cad25240e2faa4a2530642d2ad2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+      "sha256": "814081aceef267b580e57f4a5ea1fb53eb63a8a9d5972919fca0f6209efb757b",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A listing edit clears an internal bid it leaves outside its limits",
+        "Requirement: An admin changes a placed internal bid",
+        "Requirement: An admin keeps internal bidder profiles",
+        "Requirement: An admin learns an internal bid came too late",
+        "Requirement: An admin sets an internal bid on a listing",
+        "Requirement: An internal bidder wins a lot the house leads at its close",
+        "Requirement: Internal bid states",
+        "Requirement: Only secret-floor access reaches an internal bid",
+        "Requirement: Other operators read the house's bids as House"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/internal-bid/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A listing is priced in USD and no earlier listing keeps another currency",
+        "Requirement: Create validates required fields on the form and the API",
+        "Requirement: Operator saves a listing as a draft",
+        "Requirement: Prices and window are writable before publish"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/payment-settings/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/payment-settings/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Operators manage auction currency premium minimums",
+        "Requirement: Operators manage the Stripe card fee rule",
+        "Requirement: Operators manage the auction premium minimum",
+        "Requirement: Payment Settings hold card rules for USD and HKD only"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/payment-settings/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A send or reissue carries the total the operator read",
+        "Requirement: An operator edits the address or method before send",
+        "Requirement: An operator quotes and sends the invoice",
+        "Requirement: An operator reissues a sent invoice",
+        "Requirement: An operator reopens the address form",
+        "Requirement: The order detail explains its status",
+        "Requirement: The payment processing fee follows the invoice's payment method",
+        "Requirement: The quote is typed in USD and read in the settlement currency"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An operator makes a test winner in one step"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/test-winners/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "anchors": [
+        "Requirement: An open listing reads Leading or Outbid",
+        "Requirement: The Bidding page groups by what is still owed"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A bid at or above the identity bar needs a verified bidder"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auction/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auto-bidding/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auto-bidding/spec.md",
+      "anchors": [
+        "Requirement: A committed house maximum is raised or lowered",
+        "Requirement: Maximum commitments and automatic bids take nothing from the card",
+        "Requirement: Maximum fields",
+        "Requirement: The house maximum bids as any maximum does",
+        "Requirement: The house maximum is committed at its set time",
+        "Requirement: Two-maximum rule"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/auto-bidding/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A bid never exceeds its currency's ceiling",
+        "Requirement: Every lot is bid in USD and no other currency stays",
+        "Requirement: Grade10 owns the supported-currency schedules",
+        "Requirement: The minimum uses the amount being beaten",
+        "Requirement: Unsupported currencies are refused before auctioning"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-payment-method/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-payment-method/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: The bid panel discloses the buyer-premium rate"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-payment-method/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidder-suspension/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidder-suspension/spec.md",
+      "anchors": [
+        "Requirement: Suspension stops new bids and leaves standing bids as they are"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bidder-suspension/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "anchors": [
+        "Requirement: A lot page follows the lot live"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Order letters read the currency the winner pays in"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications-order/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications/spec.md",
+      "anchors": [
+        "Requirement: The house is mailed about nothing, and its bids mail collectors as any bid does"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/notifications/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A bank transfer invoice shows how to pay",
+        "Requirement: A lot close opens an order that waits for the winner's address",
+        "Requirement: An HKD invoice, receipt and letter carry HKD only",
+        "Requirement: An HKD order converts each USD line at a fixed rate and rounds it up",
+        "Requirement: An invoice calculates the buyer's premium",
+        "Requirement: Grade10 computes the buyer's premium",
+        "Requirement: Invoice fields",
+        "Requirement: The Order Summary keeps USD lines and splits its total under HKD",
+        "Requirement: The winner chooses a payment method with the address",
+        "Requirement: The winner chooses a settlement currency at order setup"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A leader's typed raise floor is max plus 100 minor units",
+        "Requirement: Custom maximum entry respects a major-unit ceiling",
+        "Requirement: Quick-bid chips step the listing increment",
+        "Requirement: The bid panel offers no entry when no amount is legal"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The winner order takes the settlement choice, payment choices, two totals and one rail's bank details",
+        "Requirement: The winner-order surface exports"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

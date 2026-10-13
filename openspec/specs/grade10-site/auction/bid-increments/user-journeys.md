@@ -11,3 +11,9 @@
 **As a** collector,
 **I want** Grade10 to refuse an amount above the ceiling and tell me the limit,
 **so that** a mistyped bid or maximum never commits me to an amount I cannot settle.
+
+### grade10-site-auction-bid-increments-US-03: Collector bids in USD on every lot
+
+**As a** collector,
+**I want** every lot priced and bid in USD with one increment schedule,
+**so that** I compare lots and place bids in one unit.

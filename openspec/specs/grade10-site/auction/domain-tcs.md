@@ -1,8 +1,8 @@
 # g10.auction-dmn Test Cases
 
-**Status:** reopened · 11/27
+**Status:** reopened · 2/28
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
-**Drafts styled:** 2026-10-10, tcs-rules r5
+**Drafts styled:** 2026-10-14, tcs-rules r5
 
 ## Walk 1: Execute every domain case independently — phase 1
 
@@ -35,19 +35,19 @@
 | `<alt text>` | 1999 Charizard PSA 10, front, shadowless 1st edition |
 | `<listing_2>` | A published listing in Pokémon, gallery of three images |
 | `<listing_3>` | A published listing in another category, first gallery item an image |
-| `<listing_4>` | A live listing with bids, in HKD |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<listing_4>` | A live listing with bids, in USD |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | Item | `<surface>`: The auction catalogue at `<grade10 auction url>`; `<identity>`: the catalogue's own title and description; `<status>`: 200 |
 | Item | `<surface>`: `<listing_2>`'s own address; `<identity>`: `<listing_2>`'s title, description and canonical address, in `og:title`, `og:description` and `og:url`; `<status>`: 200 |
 | Item | `<surface>`: `<no lot address>`; `<identity>`: the site's not-found surface; `<status>`: 404 |
 | `<card>` | Visa ending 4242 |
-| `<listing_5>` | A live listing with no bids, several gallery images, in HKD |
-| `<starting price>` | HKD1,200 (range: 80000–399999 minor units) |
-| `<bid amount>` | HKD1,200 (fixed boundary or equality), equal to `<starting price>` |
-| `<listing_4>` | A live listing with bids from other users, in HKD, bid count `<bid count>` |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
-| `<bid amount>` | HKD5,039 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
+| `<listing_5>` | A live listing with no bids, several gallery images, in USD |
+| `<starting price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<bid amount>` | USD1,200 (fixed boundary or equality), equal to `<starting price>` |
+| `<listing_4>` | A live listing with bids from other users, in USD, bid count `<bid count>` |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
+| `<increment>` | USD25 (fixed tier increment), the USD1,000 tier |
+| `<bid amount>` | USD4,984 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
 | `<bid count>` | 2 |
 
 ### Route
@@ -124,37 +124,37 @@
 
 | Item | Value |
 | --- | --- |
-| `<listing_5>` | A live listing with no bids, in HKD |
-| `<starting price>` | HKD1,280 (range: 80000–399999 minor units) |
-| `<increment>` | HKD260 (fixed tier increment) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
-| `<user B raise>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
-| `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<listing_5>` | A live listing with no bids, in USD |
+| `<starting price>` | USD1,280 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment at the USD5,000 tier for `<user B maximum>`) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
+| `<user B raise>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
+| `<listing_6>` | A live listing led by user A, in USD |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 | `<listing_10>` | A live listing the user has bid on manually and automatically, now led by user B |
 | `<listing_7>` | A live listing with bids and a close approaching |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<time left>` | 7 minutes |
 | `<listing_9>` | A live listing with an extension cap, its close already at the cap |
 | `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
 | `<bid time>` | 3 minutes before the recorded close, inside `<extension window>` |
 | `<new time left>` | Unchanged — the close stays at the cap |
-| `<bid amount>` | HKD5,040 (range: 400000–799999 minor units), at the minimum next bid |
+| `<bid amount>` | USD4,985 (range: 100000–499999 minor units), at the minimum next bid |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<extension duration>` | 1800 seconds |
 | `<time left before bid>` | 4 minutes |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier at `<user B maximum>` |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
-| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
-| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user B maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
 | `<device skew>` | 4 minutes behind |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 
 ### Route
 
@@ -233,22 +233,22 @@
 | Item | Value |
 | --- | --- |
 | `<listing_11>` | A live listing the user holds an accepted bid on |
-| `<listing_14>` | An open HKD listing with no bids, starting price `<starting price>` |
-| `<starting price>` | HKD280 (range: 1000–79999 minor units) |
-| `<increment>` | HKD10 (fixed tier increment), the HKD step at `<user A maximum>` |
-| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
-| `<user B maximum>` | HKD920 (range: 80000–399999 minor units), above `<user A maximum>` |
+| `<listing_14>` | An open USD listing with no bids, starting price `<starting price>` |
+| `<starting price>` | USD280 (range: 10000–49999 minor units) |
+| `<increment>` | USD10 (fixed tier increment), the USD step at `<user A maximum>` |
+| `<user A maximum>` | USD560 (range: 50000–99999 minor units) |
+| `<user B maximum>` | USD920 (range: 50000–99999 minor units), above `<user A maximum>` |
 | `<price after A>` | `<starting price>` |
 | `<price after B>` | `<user A maximum>` plus `<increment>` |
 | `<no lot address>` | An address under the auction's lots naming no published lot |
 | lot_1 | A lot that was published, listed in the catalogue, then called off by an operator |
 | lot_1 address | The address of `<lot_1>` from when it was published |
-| `<listing_15>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | HKD5,780 (fixed derived value), `<user B maximum>` plus its 8000 increment |
-| `<user A maximum>` | HKD8,400 (fixed derived value), above `<final price>` |
-| `<user B maximum>` | HKD5,700 (fixed derived value), below `<final price>` |
-| `<listing_16>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | HKD5,780 (fixed derived value) |
+| `<listing_15>` | A USD listing in extended bidding, led by customer A |
+| `<final price>` | USD5,750 (fixed derived value), `<user B maximum>` plus its USD50 increment |
+| `<user A maximum>` | USD8,400 (fixed derived value), above `<final price>` |
+| `<user B maximum>` | USD5,700 (fixed derived value), below `<final price>` |
+| `<listing_16>` | A USD listing in extended bidding, led by customer A |
+| `<final price>` | USD5,750 (fixed derived value) |
 
 ### Route
 
@@ -312,12 +312,12 @@ catalogue and the listing page show,
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01, grade10-site-auction-listing-media-US-04, grade10-site-auction-listing-media-US-05
 
@@ -359,20 +359,19 @@ page,
 **so that** the card I chose, its images, and where its bidding stands are what
 I read.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-23e rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-fl9,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
+<!-- trace:case id=g10.auction-dmn.TC-23e rev=1 -->
 ### g10.auction-dmn.US2-TC1: Catalogue card opens its own lot page
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-listing-page-US-05, grade10-site-auction-listing-media-US-05
 
@@ -400,21 +399,19 @@ I read.
 * No card offers Buy Now or a stock count.
 * Step 2 opens `<listing_2>`'s own address without a page load, showing that lot.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-yqv rev=1 covers=g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9,g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
+<!-- trace:case id=g10.auction-dmn.TC-yqv rev=3 -->
 ### g10.auction-dmn.US2-TC2: Lot page answers whole before scripts run
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-01, grade10-site-auction-auction-US-01
 
@@ -427,8 +424,8 @@ I read.
 
 | Field | Value |
 | --- | --- |
-| `<listing_4>` | A live listing with bids, in HKD |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<listing_4>` | A live listing with bids, in USD |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 
 **Steps:**
 
@@ -440,9 +437,7 @@ I read.
 * `<listing_4>`'s name, description, sale and current standing are in the response HTML.
 * Money reads as minor units with its currency code, and no reserve or Buy Now price appears.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-qvl rev=2 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13,g10.auction-listing-page.SC-aga -->
+<!-- trace:case id=g10.auction-dmn.TC-qvl rev=2 -->
 ### g10.auction-dmn.US2-TC3: Each auction surface names itself and is discoverable
 
 Runs once per row of **Test data**.
@@ -498,8 +493,7 @@ Runs once per row of **Test data**.
 **I want** to study the gallery, link my card once, and bid inside the window,
 **so that** the card I looked at is the card my bid stands on, with nothing taken from it until I win.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-rl3 rev=2 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-c3a,g10.auction-bid-payment-method.SC-mlo,g10.auction-bid-payment-method.SC-l44,g10.auction-bid-payment-method.SC-o6l -->
+<!-- trace:case id=g10.auction-dmn.TC-rl3 rev=4 -->
 ### g10.auction-dmn.US3-TC1: Gallery study leads to an accepted first bid
 
 **Classification:**
@@ -511,11 +505,10 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-05, grade10-site-auction-auction-US-02, grade10-site-auction-bid-payment-method-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -528,9 +521,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<card>` | Visa ending 4242 |
-| `<listing_5>` | A live listing with no bids, several gallery images, in HKD |
-| `<starting price>` | HKD1,200 (range: 80000–399999 minor units) |
-| `<bid amount>` | HKD1,200 (fixed boundary or equality), equal to `<starting price>` |
+| `<listing_5>` | A live listing with no bids, several gallery images, in USD |
+| `<starting price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<bid amount>` | USD1,200 (fixed boundary or equality), equal to `<starting price>` |
 
 **Steps:**
 
@@ -546,9 +539,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>`, the bid count reads 1, and Recent Bids shows the user's own bid as You.
 * Step 4 shows nothing held or charged on `<card>`.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-5pk rev=2 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3,g10.auction-account-record.SC-oug,g10.auction-account-record.SC-93f,g10.auction-account-record.SC-44t,g10.auction-account-record.SC-5y1,g10.auction-account-record.SC-qmd,g10.auction-account-record.SC-ogi,g10.auction-account-record.SC-cu5,g10.auction-account-record.SC-m7p,g10.auction-account-record.SC-c2n,g10.auction-account-record.SC-1o1,g10.auction-account-record.SC-7on,g10.auction-account-record.SC-wqw,g10.auction-account-record.SC-2h8,g10.auction-account-record.SC-ana,g10.auction-account-record.SC-n1y,g10.auction-account-record.SC-8te,g10.auction-account-record.SC-dsc -->
+<!-- trace:case id=g10.auction-dmn.TC-5pk rev=4 -->
 ### g10.auction-dmn.US3-TC2: Bid below the next increment is refused on the bid form and recorded nowhere
 
 **Classification:**
@@ -560,11 +551,10 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-14, grade10-site-auction-bidding-history-US-01, grade10-site-auction-account-record-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -577,10 +567,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<card>` | Visa ending 4242 |
-| `<listing_4>` | A live listing with bids from other users, in HKD, bid count `<bid count>` |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
-| `<bid amount>` | HKD5,039 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
+| `<listing_4>` | A live listing with bids from other users, in USD, bid count `<bid count>` |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
+| `<increment>` | USD25 (fixed tier increment), the USD1,000 tier |
+| `<bid amount>` | USD4,984 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
 | `<bid count>` | 2 |
 
 **Steps:**
@@ -607,24 +597,22 @@ Runs once per row of **Test data**.
 **so that** I keep the lead without sitting on the page, and nothing is taken
 from my card until I win.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-r2v rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7,g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
+<!-- trace:case id=g10.auction-dmn.TC-r2v rev=3 -->
 ### g10.auction-dmn.US4-TC1: Two maxima settle at the second-highest plus one increment
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01, grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auction-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -635,12 +623,12 @@ from my card until I win.
 
 | Field | Value |
 | --- | --- |
-| `<listing_5>` | A live listing with no bids, in HKD |
-| `<starting price>` | HKD1,280 (range: 80000–399999 minor units) |
-| `<increment>` | HKD260 (fixed tier increment) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
-| `<user B raise>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<listing_5>` | A live listing with no bids, in USD |
+| `<starting price>` | USD1,280 (range: 100000–499999 minor units) |
+| `<increment>` | USD25 (fixed tier increment) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
+| `<user B raise>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 
 **Steps:**
 
@@ -664,8 +652,7 @@ from my card until I win.
 **I want** losing the lead to show on the lot and in my bids index,
 **so that** I can see I was outbid and what the next bid must clear.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-0cq rev=2 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
+<!-- trace:case id=g10.auction-dmn.TC-0cq rev=4 -->
 ### g10.auction-dmn.US5-TC1: Outbid standing reaches the lot page and the bids index
 
 **Classification:**
@@ -677,11 +664,10 @@ from my card until I win.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03, grade10-site-auction-auto-bidding-US-02, grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -693,11 +679,11 @@ from my card until I win.
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<listing_6>` | A live listing led by user A, in USD |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 
 **Steps:**
 
@@ -710,9 +696,7 @@ from my card until I win.
 * User A reads Outbid, with Your maximum still `<user A maximum>` and Highest bid at `<user A maximum>` plus `<increment>`.
 * `<listing_6>` appears once under Active with outbid standing, its price and currency code, and its latest activity time.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-57p rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj,g10.auction-listing-page.SC-fl9 -->
+<!-- trace:case id=g10.auction-dmn.TC-57p rev=1 -->
 ### g10.auction-dmn.US5-TC2: Outbid summary opens its explanation and its lot
 
 **Classification:**
@@ -724,7 +708,7 @@ from my card until I win.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05, grade10-site-auction-bidding-history-US-03, grade10-site-auction-listing-page-US-05
 
@@ -758,20 +742,19 @@ from my card until I win.
 **I want** a lot link I pass on to unfurl as that lot and open live,
 **so that** whoever I send it to reads the card I meant, not the catalogue.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-wrl rev=1 covers=g10.auction-listing-page.SC-mda,g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d -->
+<!-- trace:case id=g10.auction-dmn.TC-wrl rev=3 -->
 ### g10.auction-dmn.US6-TC1: Shared link unfurls as the lot and stays put on hydration
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-02, grade10-site-auction-listing-page-US-04, grade10-site-auction-auction-US-02
 
@@ -784,7 +767,7 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_7>` | A live listing with bids and a close approaching |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<time left>` | 7 minutes |
 
 **Steps:**
@@ -806,20 +789,19 @@ from my card until I win.
 **I want** a bid accepted during extended bidding to move the close on the page,
 **so that** the time I read and the time I am judged by are the same.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-5yl rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
+<!-- trace:case id=g10.auction-dmn.TC-5yl rev=2 -->
 ### g10.auction-dmn.US7-TC2: Extension cap holds while the bid is still accepted
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-03
 
@@ -837,7 +819,7 @@ from my card until I win.
 | `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
 | `<bid time>` | 3 minutes before the recorded close, inside `<extension window>` |
 | `<new time left>` | Unchanged — the close stays at the cap |
-| `<bid amount>` | HKD5,040 (range: 400000–799999 minor units), at the minimum next bid |
+| `<bid amount>` | USD4,985 (range: 100000–499999 minor units), at the minimum next bid |
 
 **Steps:**
 
@@ -853,9 +835,7 @@ from my card until I win.
 
 `<!-- archive fold: g10.auction-dmn.TC-wh3@2 (2026-09-17-revise-auction-extended-bidding) replaced the earlier extended-bidding case -->`
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-wh3 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c -->
+<!-- trace:case id=g10.auction-dmn.TC-wh3 rev=3 -->
 ### g10.auction-dmn.US7-TC3: Price-moving auto-bid in extended bidding restarts the timer on the open page
 
 **Classification:**
@@ -886,10 +866,10 @@ from my card until I win.
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<extension duration>` | 1800 seconds |
 | `<time left before bid>` | 4 minutes |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier at `<user B maximum>` |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user B maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -904,9 +884,7 @@ from my card until I win.
 * Step 3 reads Time left `<extension duration>`, labelled Extended bidding, with no reload.
 * The lot closes after step 4, and no further bid is placed.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-n2z rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-page.SC-o37,g10.auction-listing-page.SC-ohm,g10.auction-listing-page.SC-b9n,g10.auction-listing-page.SC-sux,g10.auction-listing-page.SC-2d0,g10.auction-listing-page.SC-7c2,g10.auction-listing-page.SC-c97,g10.auction-listing-page.SC-s2c,g10.auction-listing-page.SC-9c0,g10.auction-listing-page.SC-60y,g10.auction-listing-page.SC-v0i,g10.auction-listing-page.SC-7y3,g10.auction-listing-page.SC-qxe -->
+<!-- trace:case id=g10.auction-dmn.TC-n2z rev=2 -->
 ### g10.auction-dmn.US7-TC4: Catalogue card and open lot page agree after an extension
 
 **Classification:**
@@ -938,10 +916,10 @@ from my card until I win.
 | --- | --- |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<time left before bid>` | 4 minutes |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
-| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
 | `<device skew>` | 4 minutes behind |
 
 **Steps:**
@@ -966,8 +944,7 @@ from my card until I win.
 **so that** a rival, a signed-out visitor, or another storefront reads none of
 it.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-nhf rev=2 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
+<!-- trace:case id=g10.auction-dmn.TC-nhf rev=4 -->
 ### g10.auction-dmn.US8-TC1: Rival reads the price but never the leader's maximum
 
 **Classification:**
@@ -979,11 +956,10 @@ it.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02, grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -995,9 +971,9 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<listing_6>` | A live listing led by user A, in USD |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
 
 **Steps:**
 
@@ -1011,21 +987,19 @@ it.
 * Recent Bids names other users by listing pseudonym only, with no card facts.
 * The signed-out reader gets no private history and no maximum.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-n6x rev=1 covers=g10.auction-bidding-history.SC-jfn,g10.auction-bidding-history.SC-bis,g10.auction-bidding-history.SC-k1b,g10.auction-bidding-history.SC-3qb,g10.auction-bidding-history.SC-pej,g10.auction-bidding-history.SC-kcd,g10.auction-bidding-history.SC-pfa,g10.auction-bidding-history.SC-j51,g10.auction-bidding-history.SC-wrj,g10.auction-bidding-history.SC-7tw,g10.auction-bidding-history.SC-onh,g10.auction-bidding-history.SC-2pg,g10.auction-bidding-history.SC-uu5,g10.auction-bidding-history.SC-izn -->
+<!-- trace:case id=g10.auction-dmn.TC-n6x rev=1 -->
 ### g10.auction-dmn.US8-TC2: Signed-out visitor keeps their destination
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05, grade10-site-auction-bidding-history-US-04
 
@@ -1052,9 +1026,7 @@ it.
 
 `<!-- archive fold: g10.auction-dmn.TC-fp8@2 (2026-09-16-default-auction-bid-holds-off) replaced the earlier linked-card bid case -->`
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-fp8 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
+<!-- trace:case id=g10.auction-dmn.TC-fp8 rev=4 -->
 ### g10.auction-dmn.US8-TC3: A linked collector's bid stands at once on the card on file
 
 **Classification:**
@@ -1066,11 +1038,10 @@ it.
 * **Type:** integration
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bid-panel-enrollment-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1081,11 +1052,11 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_14>` | An open HKD listing with no bids, starting price `<starting price>` |
-| `<starting price>` | HKD280 (range: 1000–79999 minor units) |
-| `<increment>` | HKD10 (fixed tier increment), the HKD step at `<user A maximum>` |
-| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
-| `<user B maximum>` | HKD920 (range: 80000–399999 minor units), above `<user A maximum>` |
+| `<listing_14>` | An open USD listing with no bids, starting price `<starting price>` |
+| `<starting price>` | USD280 (range: 10000–49999 minor units) |
+| `<increment>` | USD10 (fixed tier increment), the USD step at `<user A maximum>` |
+| `<user A maximum>` | USD560 (range: 50000–99999 minor units) |
+| `<user B maximum>` | USD920 (range: 50000–99999 minor units), above `<user A maximum>` |
 | `<price after A>` | `<starting price>` |
 | `<price after B>` | `<user A maximum>` plus `<increment>` |
 
@@ -1110,20 +1081,19 @@ it.
 **I want** a dead lot address to say so plainly,
 **so that** I am never shown an empty page in place of a lot.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-0rf rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13,g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
+<!-- trace:case id=g10.auction-dmn.TC-0rf rev=1 -->
 ### g10.auction-dmn.US9-TC1: Address naming no published lot answers not found
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-03, grade10-site-auction-auction-US-01
 
@@ -1147,9 +1117,7 @@ it.
 * The response has status 404 and the site's not-found surface is shown.
 * Neither an empty lot page nor the catalogue is shown in its place.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-13a rev=1 covers=g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx,g10.auction-bidding-history.SC-sg5,g10.auction-bidding-history.SC-nt1,g10.auction-bidding-history.SC-70a,g10.auction-bidding-history.SC-cpz,g10.auction-bidding-history.SC-33x,g10.auction-bidding-history.SC-8d3 -->
+<!-- trace:case id=g10.auction-dmn.TC-13a rev=1 -->
 ### g10.auction-dmn.US9-TC2: Unavailable card capability fails the bid explicitly
 
 **Classification:**
@@ -1190,9 +1158,7 @@ it.
 * No bid, hold or fixture-backed outcome is created and Highest bid stays `<current bid>`.
 * The attempt appears as a failed event with a safe payment reason, and `<listing_12>` carries failed-only standing.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-qus rev=1 covers=g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
+<!-- trace:case id=g10.auction-dmn.TC-qus rev=1 -->
 ### g10.auction-dmn.US9-TC3: A repeated card authorization event changes the lot once
 
 **Classification:**
@@ -1239,7 +1205,7 @@ it.
 **I want** a called-off lot gone from browse and search,
 **so that** its former address answers the current lot or Page not found.
 
-<!-- trace:case id=g10.auction-dmn.TC-dw9 rev=4 covers=g10.auction-lot-status.SC-pe2 -->
+<!-- trace:case id=g10.auction-dmn.TC-dw9 rev=4 -->
 ### g10.auction-dmn.US11-TC1: Released address follows its new public holder
 
 **Classification:**
@@ -1311,8 +1277,7 @@ it.
 **I want** the lot page and My Auctions to show one final price and one result once the close is recorded,
 **so that** what I read on either is what the auction decided.
 
-
-<!-- trace:case id=g10.auction-dmn.TC-3iz rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp,g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7,g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi,g10.auction-account-record.SC-n9l,g10.auction-account-record.SC-2e8 -->
+<!-- trace:case id=g10.auction-dmn.TC-3iz rev=3 -->
 ### g10.auction-dmn.US12-TC1: Winner and losing bidder read one result on the lot and My Auctions
 
 **Classification:**
@@ -1324,11 +1289,10 @@ it.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14, grade10-site-auction-account-record-US-10, grade10-site-auction-account-record-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1341,10 +1305,10 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_15>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | HKD5,780 (fixed derived value), `<user B maximum>` plus its 8000 increment |
-| `<user A maximum>` | HKD8,400 (fixed derived value), above `<final price>` |
-| `<user B maximum>` | HKD5,700 (fixed derived value), below `<final price>` |
+| `<listing_15>` | A USD listing in extended bidding, led by customer A |
+| `<final price>` | USD5,750 (fixed derived value), `<user B maximum>` plus its USD50 increment |
+| `<user A maximum>` | USD8,400 (fixed derived value), above `<final price>` |
+| `<user B maximum>` | USD5,700 (fixed derived value), below `<final price>` |
 
 **Steps:**
 
@@ -1362,9 +1326,7 @@ it.
 * Step 5's row reads Didn't win, with Current bid `<final price>`, not `<user B maximum>`.
 * Step 5's row reads "Your card was not charged.".
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-8w7 rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp,g10.auction-listing-page.SC-rgt,g10.auction-listing-page.SC-76f,g10.auction-listing-page.SC-ygz,g10.auction-listing-page.SC-31a,g10.auction-listing-page.SC-45u,g10.auction-listing-page.SC-kwb,g10.auction-listing-page.SC-xz7 -->
+<!-- trace:case id=g10.auction-dmn.TC-8w7 rev=3 -->
 ### g10.auction-dmn.US12-TC2: Catalogue card and lot page turn at the close without a reload
 
 **Classification:**
@@ -1376,11 +1338,10 @@ it.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-01, grade10-site-auction-auction-US-11, grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1392,8 +1353,8 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_16>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | HKD5,780 (fixed derived value) |
+| `<listing_16>` | A USD listing in extended bidding, led by customer A |
+| `<final price>` | USD5,750 (fixed derived value) |
 
 **Steps:**
 
@@ -1409,6 +1370,64 @@ it.
 * Step 3's card reads Ended and names when it ended, with no watch control.
 * Neither page reloaded.
 
+<!-- trace:case id=g10.auction-domain.TC-k4p rev=3 covers=g10.auction-winner-order.SC-ug0,g10.auction-winner-order.SC-fq4 -->
+### g10.auction-dmn.US12-TC3: A winner chooses HKD and sees the card fee after both order totals
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-02, winner-order-US-01, winner-order-US-24, winner-order-US-25, winner-order-US-26
+
+**Pre-conditions:**
+
+* Customer A won `<listing_19>` at a USD winning bid and is on its order setup page.
+* HKD Card is offered, and Payment Settings holds an HKD card rule of 3.4 per cent and 235 minor units.
+* No settlement currency or payment method is preselected.
+* No invoice has been sent for `<listing_19>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_19>` | A closed USD lot won by customer A |
+| `<winning bid>` | USD101.00 (10100 minor units) |
+| `<buyer's premium>` | USD20.20 (2020 minor units) |
+| `<shipping>` | USD10.01 (1001 minor units) |
+| `<settlement currency>` | HKD, selected by customer A |
+| `<payment method>` | Card, selected by customer A |
+| `<USD total>` | USD131.21 (13121 minor units) |
+| `<HKD total>` | HKD1,031.00 (103100 minor units) |
+| `<HKD card fee>` | HKD38.73 (3873 minor units) from the gross-up rule on the HKD subtotal |
+| `<amount payable>` | HKD1,069.73 (106973 minor units) |
+
+**Steps:**
+
+1. Read the setup choices and Order Summary before making a selection.
+2. Select HKD, then Card; confirm the address and setup, then read the Order Summary before invoice send.
+3. As an operator, quote the order with Shipping & Handling of `<shipping>` and send its invoice.
+4. Reopen the winner's order and read its Pending Payment status and Order Summary, totals and fee rows.
+5. Read the invoice amount payable.
+
+**Expected Results:**
+
+* Step 1 has no preselected settlement currency or payment method, and no HKD total or fee appears before an invoice exists.
+* Step 2 commits the winner's explicit HKD settlement and Card choices.
+* Before the invoice is sent, the summary has no HKD total or fee.
+* Step 3 sends an invoice after the quote includes `<shipping>`.
+* Step 4 reads Pending Payment and lists the winning bid, buyer's premium and shipping in USD.
+* Step 4 shows `<USD total>`, then `<HKD total>`; the HKD fee of `<HKD card fee>` appears after the separator, below both totals.
+* The HKD card fee is calculated from the HKD subtotal of 103100 minor units using its 3.4 per cent plus 235 minor-unit rule. It is not included in either total, and no USD fee line appears.
+* Step 5 reads `<amount payable>` in HKD, equal to the invoice's Order Total.
+* The order summary names no USD winning bid or exchange rate under HKD settlement.
+
 ---
 
 ## g10.auction-dmn.US13: Collectors bid against a house maximum through the close
@@ -1417,7 +1436,7 @@ it.
 **I want** to compete for a lot to its close, with each bid, extension, result and letter decided by the auction rules,
 **so that** what I read, and what I am told, is what the auction decided.
 
-<!-- trace:case id=g10.auction-domain.TC-88l rev=1 covers=g10.auction-auto-bidding.SC-99a,g10.auction-notifications.SC-kl5,g10.auction-auction.SC-a4f,g10.auction-notifications.SC-xy1,g10.auction-notifications.SC-14x -->
+<!-- trace:case id=g10.auction-domain.TC-88l rev=2 -->
 ### g10.auction-dmn.US13-TC1: The house outbids a collector and the lot closes sold under its pseudonym
 
 **Classification:**
@@ -1443,11 +1462,11 @@ it.
 
 | Field | Value |
 | --- | --- |
-| <listing_17> | A published HKD listing, starting price <starting price>, extension duration <extension duration>, no cap |
-| <starting price> | 400000 minor units (HK$4,000.00) |
-| <house maximum> | 600000 minor units (HK$6,000.00) |
-| <user A maximum> | 500000 minor units (HK$5,000.00), below <house maximum> |
-| <final price> | 508000 minor units: <user A maximum> plus its 8000 increment |
+| <listing_17> | A published USD listing, starting price <starting price>, extension duration <extension duration>, no cap |
+| <starting price> | USD4,000 (400000 minor units) |
+| <house maximum> | USD6,000 (600000 minor units) |
+| <user A maximum> | USD5,000 (500000 minor units), below <house maximum> |
+| <final price> | USD5,050 (505000 minor units): <user A maximum> plus the USD50 increment at the $5,000 tier |
 | <commit time> | 5 minutes before the scheduled close |
 | <extension duration> | 1800s (30mins) |
 
@@ -1470,8 +1489,9 @@ it.
 * Step 5 reads Did not win, sold at <final price>, the crowned row the house's pseudonym.
 * Step 6's row reads Didn't win, with Current bid <final price> and "Your card was not charged."
 * Step 7: customer A gets one You did not win letter with Winning bid <final price>; customer D gets one Lot watched, sold letter with Sold for <final price>.
+* At close, the internal order is created automatically with HKD settlement and FPS bank transfer selected; no winner setup or operator setup step occurs, and no letter is sent for that internal order. The operator can send its invoice.
 
-<!-- trace:case id=g10.auction-domain.TC-su0 rev=1 covers=g10.auction-auction.SC-fec -->
+<!-- trace:case id=g10.auction-domain.TC-su0 rev=2 -->
 ### g10.auction-dmn.US13-TC2: A collector beats the house in extended bidding and wins
 
 **Classification:**
@@ -1497,12 +1517,12 @@ it.
 
 | Field | Value |
 | --- | --- |
-| <listing_18> | A published HKD listing in extended bidding, extension duration <extension duration>, no cap |
-| <house maximum> | 600000 minor units (HK$6,000.00) |
-| <user A maximum> | 500000 minor units (HK$5,000.00) |
-| <leader price> | 508000 minor units: <user A maximum> plus its 8000 increment |
-| <user B maximum> | 700000 minor units, above <house maximum> |
-| <final price> | 608000 minor units: <house maximum> plus its 8000 increment |
+| <listing_18> | A published USD listing in extended bidding, extension duration <extension duration>, no cap |
+| <house maximum> | USD6,000 (600000 minor units) |
+| <user A maximum> | USD5,000 (500000 minor units) |
+| <leader price> | USD5,050 (505000 minor units): <user A maximum> plus the USD50 increment at the $5,000 tier |
+| <user B maximum> | USD7,000 (700000 minor units), above <house maximum> |
+| <final price> | USD6,050 (605000 minor units): <house maximum> plus the USD50 increment at the $5,000 tier |
 | <extension duration> | 1800s (30mins) |
 | <time left before bid> | 5 minutes |
 
@@ -1527,19 +1547,19 @@ it.
 
 ### g10.auction-dmn.US1: Operator publishes a gallery a collector can shop
 
-<!-- trace:case id=g10.auction-dmn.TC-acb rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j,g10.auction-listing-media.SC-41j,g10.auction-listing-media.SC-j5f,g10.auction-listing-media.SC-1mk,g10.auction-listing-media.SC-su1,g10.auction-listing-media.SC-y9i,g10.auction-listing-media.SC-dva,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3 -->
+<!-- trace:case id=g10.auction-dmn.TC-acb rev=1 -->
 #### g10.auction-dmn.US1-TC2: Unsupported file never reaches the gallery or the catalogue
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-media-US-01, grade10-site-auction-listing-media-US-05
 
@@ -1570,7 +1590,7 @@ it.
 
 ### g10.auction-dmn.US4: Collector commits a maximum and is bid to the lead
 
-<!-- trace:case id=g10.auction-dmn.TC-cru rev=2 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu,g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx -->
+<!-- trace:case id=g10.auction-dmn.TC-cru rev=4 -->
 #### g10.auction-dmn.US4-TC2: Auto-bid raises the leader on their behalf, with nothing taken from the card
 
 **Classification:**
@@ -1582,11 +1602,10 @@ it.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1599,11 +1618,11 @@ it.
 | Field | Value |
 | --- | --- |
 | `<card>` | Visa ending 4242 |
-| `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier at `<user B maximum>` |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<listing_6>` | A live listing led by user A, in USD |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user B maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -1618,9 +1637,7 @@ it.
 * The bid count includes the raise, and the history shows it as placed on user A's behalf rather than as a manual bid.
 * Step 4 shows nothing held or charged on `<card>`.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-b5t rev=2 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7,g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw,g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-bidding-history.SC-st1,g10.auction-bidding-history.SC-vd5,g10.auction-bidding-history.SC-qhu,g10.auction-bidding-history.SC-qvv,g10.auction-bidding-history.SC-vwx -->
+<!-- trace:case id=g10.auction-dmn.TC-b5t rev=4 -->
 #### g10.auction-dmn.US4-TC3: Lowering a maximum is refused on the bid form and the lead holds
 
 **Classification:**
@@ -1632,11 +1649,10 @@ it.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01, grade10-site-auction-auto-bidding-US-02, grade10-site-auction-auction-US-14, grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
@@ -1647,10 +1663,10 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<lower maximum>` | HKD3,400 (range: 80000–399999 minor units), below `<user A maximum>` |
+| `<listing_6>` | A live listing led by user A, in USD |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<lower maximum>` | USD3,400 (range: 100000–499999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -1670,7 +1686,7 @@ it.
 
 ### g10.auction-dmn.US10: Exploratory passes
 
-<!-- trace:case id=g10.auction-dmn.TC-cnk rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8,g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a,g10.auction-listing-media.SC-5tk,g10.auction-listing-media.SC-cd3,g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9 -->
+<!-- trace:case id=g10.auction-dmn.TC-cnk rev=1 -->
 #### g10.auction-dmn.US10-TC1: Roam the catalogue-to-bid path for one hour
 
 **Classification:**
@@ -1707,9 +1723,7 @@ it.
 * No lot offers Buy Now, a stock count, or a reserve state.
 * Every surprise is written up with enough detail to reproduce cold.
 
----
-
-<!-- trace:case id=g10.auction-dmn.TC-6dl rev=2 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s,g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-23v,g10.auction-auction.SC-6b9,g10.auction-auction.SC-7kh,g10.auction-auction.SC-dbc,g10.auction-auction.SC-wlg,g10.auction-auction.SC-t3k,g10.auction-auction.SC-uha,g10.auction-auction.SC-xrx,g10.auction-auction.SC-s1d,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4,g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-1rj -->
+<!-- trace:case id=g10.auction-dmn.TC-6dl rev=3 -->
 #### g10.auction-dmn.US10-TC2: Roam competing maxima and the closing minutes for one hour
 
 **Classification:**
@@ -1735,8 +1749,8 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_5>` | A live listing with no bids, in HKD |
-| `<increment>` | The HKD increment at the amount being beaten |
+| `<listing_5>` | A live listing with no bids, in USD |
+| `<increment>` | The USD increment at the amount being beaten |
 | `<extension duration>` | 1800 seconds |
 
 **Steps:**
@@ -1767,6 +1781,7 @@ it.
   - **2026-09-18-add-collector-lot-status** — `grade10-site-auction-e2e-US11-TC01-1` → `g10.auction-dmn.US11-TC1`.
   - **2026-10-02-relay-auction-live-state** — `grade10-site-auction-e2e-US07-TC03-2` → `g10.auction-dmn.US7-TC3`; `grade10-site-auction-e2e-US07-TC04-1` → `g10.auction-dmn.US7-TC4`; `grade10-site-auction-e2e-US12-TC01-1` → `g10.auction-dmn.US12-TC1`; `grade10-site-auction-e2e-US12-TC02-1` → `g10.auction-dmn.US12-TC2`.
   - **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-e2e-US03-TC01-2` → `g10.auction-dmn.US3-TC1`; `grade10-site-auction-e2e-US03-TC02-2` → `g10.auction-dmn.US3-TC2`; `grade10-site-auction-e2e-US04-TC01-1` → `g10.auction-dmn.US4-TC1`; `grade10-site-auction-e2e-US04-TC02-2` → current journey cases are the replacement record; `grade10-site-auction-e2e-US04-TC03-2` → current journey cases are the replacement record; `grade10-site-auction-e2e-US05-TC01-2` → `g10.auction-dmn.US5-TC1`; `grade10-site-auction-e2e-US08-TC01-2` → `g10.auction-dmn.US8-TC1`; `grade10-site-auction-e2e-US08-TC03-2` → `g10.auction-dmn.US8-TC3`; `grade10-site-auction-e2e-US09-TC02-1` → `g10.auction-dmn.US9-TC2`; `grade10-site-auction-e2e-US09-TC03-1` → `g10.auction-dmn.US9-TC3`; `grade10-site-auction-e2e-US10-TC02-2` → current journey cases are the replacement record; `grade10-site-auction-e2e-US12-TC01-1` → `g10.auction-dmn.US12-TC1`.
+- Bid fixtures in this suite use the current USD schedule. Settlement choices and invoice facts remain in the winner-order case; TC-k4p joins the auction close to the winner setup and invoiced summary.
 
 ## Reconciliation
 
@@ -1793,3 +1808,9 @@ it.
 - **Contradictions** - None in this delta: all 3 durable walks are carried and Walk 3 steps 7-15 match TC-dw9@4. The old case title and 200 result are replaced.
 - **Decision** - None new. Q1-Q4 stay settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+
+**Current cases** - `TC-k4p@3` covers winner-order SC-ug0 and SC-fq4. Its reopened sent order shows USD lines 101.00, 20.20 and 10.01; converted HKD lines 793.00, 159.00 and 79.00; USD subtotal 131.21; HKD subtotal 1,031.00; HKD gross-up fee 38.73 outside both subtotals; and payable 1,069.73 HKD. It checks that no HKD total or fee appears before confirmation and invoice creation.
+
+`TC-wrl` remains draft with `automation, manual` testability and manual automation status. Its corrected current-bid range is 30,000 to 30,500 USD minor units. The domain cases do not claim full coverage of other site feature scenarios based on representative cases.
+
+**Planned verification** - Tasks 7.7-7.9 cover schedule outcomes and auction-history reads. Task 7.10 covers the live bid, Outbid state and 132,500 USD-minor next minimum in SC-43. Planned tasks are not execution evidence. No product test or approval is claimed.

@@ -23,11 +23,26 @@ order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/interna
 | Bidding window | From the scheduled start to the recorded close |
 | Extension duration | **30 minutes** by default, set per listing; **0** turns extended bidding off |
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
-| Currencies | 🚧 **USD** only for new lots; ❓ whether the HKD and JPY schedules retire or keep governing lots already priced in them — Product confirms |
-| Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 5,000,000,000**, the same on every lot |
-| Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
+| 🚧 Bid currency | **USD** for every lot; a collector always types USD — [Currencies](#currencies) |
+| 🚧 Bid ceiling | **USD 10,000,000** on every lot |
+| 🚧 Verified bidder | A bid of **USD 15,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
+
+### Currencies
+
+Auction bids use USD. Winners choose USD or HKD for settlement.
+
+| | Bid currency | Settlement currency |
+| --- | --- | --- |
+| Which | 🚧 **USD** | 🚧 **USD** or **HKD** |
+| Chosen by | Fixed for every lot | The winner, once, at [Order Setup](/p/grade10-site/auction/post-bidding#order-setup) |
+| What it is for | The unit of every lot, bid and maximum | What the invoice, order total, fees and letters are paid in |
+
+- 🚧 **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
+  and the increment are all USD; no lot is priced in another currency
+- 🚧 **Settlement currency** — a USD fact becomes an HKD fact only at
+  settlement, at one fixed rate — [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
 
 ### Extended Bidding
 
@@ -113,26 +128,27 @@ increment is 100:
 
 ### Bid Increments
 
-The increment is selected by the amount being beaten. A tier includes its
-lower bound, the schedules are Grade10's, and no listing overrides them.
+The increment is selected by the USD amount being beaten. A tier includes its
+lower bound. Grade10 sets one schedule, and no listing overrides it.
 
-| From | USD | From | HKD | From | JPY |
-| ---: | ---: | ---: | ---: | ---: | ---: |
-| $0 | +$1 | HK$0 | +HK$10 | ¥0 | +¥100 |
-| $100 | +$5 | HK$800 | +HK$40 | ¥15,000 | +¥500 |
-| $500 | +$10 | HK$4,000 | +HK$80 | ¥75,000 | +¥1,000 |
-| $1,000 | +$25 | HK$8,000 | +HK$200 | ¥150,000 | +¥4,000 |
-| $5,000 | +$50 | HK$40,000 | +HK$400 | ¥750,000 | +¥8,000 |
-| $10,000 | +$100 | HK$80,000 | +HK$800 | ¥1,500,000 | +¥15,000 |
+| From | Increment |
+| ---: | ---: |
+| $0 | +$1 |
+| $100 | +$5 |
+| $500 | +$10 |
+| $1,000 | +$25 |
+| $5,000 | +$50 |
+| $10,000 | +$100 |
 
 | Lot | Amount being beaten | Next minimum | Outcome |
 | --- | ---: | ---: | --- |
-| HKD lot opening at HK$200 | HK$200 | HK$200 | The first bid may stand on the starting price; HK$210 from the second |
-| HKD lot opening at HK$0 | HK$0 | HK$10 | The first bid must reach the lowest increment; a lone bidder stands at HK$10, never HK$0 |
-| USD lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
+| Lot opening at $200 | $200 | $200 | The first bid may stand on the starting price; $201 from the second |
+| Lot opening at $0 | $0 | $1 | The first bid must reach the lowest increment; a lone bidder stands at $1, never $0 |
+| Lot on a tier boundary | $100 | $105 | The $100 tier applies, not the $0 tier |
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
-| USD lot at the ceiling | $10,000,000 | — | Every further bid is refused |
+| Lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
+- 🚧 **One schedule** — the USD tiers above apply to every lot
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
 - **A first maximum** — must reach the opening price, and the public price it
@@ -150,7 +166,7 @@ any maximum.
 | Refused when | What the bid form says |
 | --- | --- |
 | Below the next minimum | **Minimum bid is** the minimum |
-| Above the currency's ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
+| Above the USD ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
 | Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
 | At or above the bar without a verified identity | Where to verify; the auction hears nothing of the bid |
 | No linked card | **Link a card to bid.** |
@@ -181,7 +197,7 @@ Blocks](/p/shared/ui/auction-listing).
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** of the winning bid, the rate only, always on; the amount first appears on the invoice |
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
-| Custom maximum | Whole major units only, up to the currency's bid ceiling; extra typed digits stop, and an oversized paste or replacement becomes the ceiling silently |
+| Custom maximum | Whole USD units only, up to the USD bid ceiling; extra typed digits stop, and an oversized paste or replacement becomes the ceiling silently |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Chips beyond the ceiling | 🚧 A quick bid above the ceiling is offered at the ceiling, captioned as the limit; duplicates collapse to one chip |
 | Nothing left to offer | 🚧 Their maximum at the ceiling, or the lot's next minimum above it, collapses the chips, custom field and bid action to the amount reached and a limit line; the buyer-fee line stays |
@@ -479,17 +495,19 @@ surface.
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; every row tied on amount with a row above it shows an Info tip in the amount tone (when maximums match, the earlier one leads), at the current price and at any older tie lower down. Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Public Recent bids avatar | Decided | Each public Recent Bids avatar shows one letter from the bidder email local part (first A-Z or 0-9, uppercased; `B` when none or the email is erased). Readable label stays Bidder N. Full email and name stay private. Separate public field from the label. | Product (@mason5991) |
 | Hidden cap, raise only | Decided | A leading maximum is not public; a collector's can go up but never down. | Product |
-| Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
-| Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 5,000,000,000. The custom field uses that same ceiling. | Product |
+| Increments | 🚧 In flight | Grade10 owns one USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
+| Bid ceiling | 🚧 In flight | USD 10,000,000 on every lot, refused above it. The custom field uses that same ceiling. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
-| A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the currency ceiling, which shows no maximum-bid message. | Product |
-| Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the ceiling; never in the bidder's record. | Product and engineering |
+| A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the USD ceiling, which shows no maximum-bid message. | Product |
+| Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the USD ceiling; never in the bidder's record. | Product and engineering |
 | An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
-| Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
+| Verified bidder | 🚧 In flight | A bid of USD 15,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
+| Bid currency | 🚧 In flight | USD is the single bid currency for every lot. Winners choose USD or HKD settlement. Chosen over per-lot bid currencies, which made bids incomparable and required separate increments and ceilings. | Product |
+| Existing lots | 🚧 In flight | Every existing lot is test data: its currency is overwritten to USD with the amounts unchanged and no conversion. | Product |
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
 | Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only. | Product |
-| Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1. Custom entry uses the currency ceiling: extra typed digits retain the prior draft, an oversized paste or replacement becomes the ceiling, and no maximum-bid message appears. Replaces the universal 9,999,999,999 field cap and restore-only rule, following [the owner's decision](https://github.com/9gag/grade10/issues/1008#issuecomment-6076137634). | Product (@tangconst) |
+| Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1. Custom entry uses the USD ceiling: extra typed digits retain the prior draft, an oversized paste or replacement becomes the ceiling, and no maximum-bid message appears. Replaces the universal 9,999,999,999 field cap and restore-only rule, following [the owner's decision](https://github.com/9gag/grade10/issues/1008#issuecomment-6076137634). | Product (@tangconst) |
 | Ceiling reached | 🚧 In flight | A quick bid computed above the ceiling is offered at the ceiling, captioned as the limit; when no legal amount remains — the collector's maximum already at it, or the lot's next minimum above it — chips, custom field and bid action collapse to the amount reached and a line that the auction accepts no higher amount, with the buyer fee still shown. Keeping the controls disabled was ruled out: every number they showed was above what the auction accepts. | Product (@tangconst) |
 | Buyer fee on the panel | Decided | The 20% rate is disclosed under the bid action, never behind a tooltip; the amount first appears on the invoice. | Product |
 | Your bidding | Decided | The lot's personal dialog: two tabs, Bid placed then Your maximums, amount and time only, owner only; the live maximum stays on the panel. | Product |

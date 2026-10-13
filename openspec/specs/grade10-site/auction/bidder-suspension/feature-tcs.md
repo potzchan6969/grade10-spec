@@ -84,21 +84,21 @@
 
 **Starting state:**
 
-- `<lot_3>` is open and led by `customer A` at HKD340 (range: 1000–79999 minor units).
-- `customer A` holds a maximum of HKD560 (range: 1000–79999 minor units) on `<lot_3>`.
+- `<lot_3>` is open and led by `customer A` at USD300 (30000 USD minor units).
+- `customer A` holds a maximum of USD500 (50000 USD minor units) on `<lot_3>`.
 - `customer A` has an auction invoice whose payment deadline is shortly due.
 - `customer B` can bid on `<lot_3>`.
 - `customer A` is suspended.
 - `customer A` holds the highest maximum on `<lot_5>`.
 - `<lot_5>` is about to close.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_5>` to close.
+- Open `<lot_5>`'s listing page and wait for it to close.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
-| Item | `<lot_3>`: Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units); Event after suspension: No new bid; Expected lot state: `customer A` still leads at the same price and history |
-| Item | `<lot_3>`: Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units); Event after suspension: `customer B` commits a maximum of HKD470 (range: 1000–79999 minor units); Expected lot state: Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
+| Item | `<lot_3>`: Open lot led by `customer A` at USD300 (30000 USD minor units); Event after suspension: No new bid; Expected lot state: `customer A` still leads at the same price and history |
+| Item | `<lot_3>`: Open lot led by `customer A` at USD300 (30000 USD minor units); Event after suspension: `customer B` commits a maximum of USD400 (40000 USD minor units); Expected lot state: Auto-bidding records the valid `customer B` bid; `customer A` still leads at USD405 (40500 USD minor units), and suspension adds no history entry |
 | Item | `<lot_5>`: Open lot whose highest standing maximum belongs to suspended `customer A` |
 
 ### Route
@@ -107,7 +107,7 @@
 2. Wait for `customer A`'s payment deadline to pass.
 3. Perform the row's `Event after suspension`.
 4. Reload `<lot_3>`.
-   - `customer A` still leads `<lot_3>` at HKD340 (fixed unchanged value). g10.auction-bidder-suspension.US2-TC1
+   - `customer A` still leads `<lot_3>` at USD340 (fixed unchanged value). g10.auction-bidder-suspension.US2-TC1
    - The leader, price and bid history match the row's `Expected lot state` value. g10.auction-bidder-suspension.US2-TC1
 5. Wait for `<lot_5>` to close.
 6. Sign in as `customer A`.
@@ -214,7 +214,7 @@ Runs once per row of **Test data**.
 * The account record shows the suspension, its reason and `<invoice_1>`.
 * The account record matches the row's `Account record` value.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-0fv rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-0fv rev=3 covers=g10.auction-bidder-suspension.SC-o11 -->
 ### g10.auction-bidder-suspension.US1-TC2: Settling an invoice does not reinstate bidding
 
 Runs once per row of **Test data**.
@@ -239,9 +239,13 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<invoice_1>` | `<lot_4>` |
+| Field | Value |
 | --- | --- |
-| Payable invoice that belongs to the suspended customer | Open lot where the customer has no standing maximum |
+| `<invoice_1>` | Payable invoice that belongs to the suspended customer |
+| `<lot_3>` | Open USD lot where the customer holds a standing maximum |
+| `<maximum_1>` | 50000 USD minor units |
+| `<raised maximum>` | 50500 USD minor units |
+| `<lot_4>` | Open USD lot where the customer has no standing maximum |
 
 **Steps:**
 
@@ -249,16 +253,18 @@ Runs once per row of **Test data**.
 2. Open the auction order for `<invoice_1>`.
 3. Pay `<invoice_1>` in full.
 4. Open <g10 auction url>.
-5. Try to commit a maximum on `<lot_4>`.
-6. Open <g10 auction account record url>.
+5. Try to raise `<maximum_1>` on `<lot_3>` to `<raised maximum>`.
+6. Try to commit a maximum on `<lot_4>`.
+7. Open <g10 auction account record url>.
 
 **Expected Results:**
 
 * The payment is accepted and the invoice becomes `paid`.
-* The maximum at step 5 is refused.
+* The raise at step 5 is refused, and `<maximum_1>` remains 50000 USD minor units.
+* The maximum at step 6 is refused.
 * The account record still shows the suspension and its reason.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-3no rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-3no rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC7: Reissuing an invoice does not reinstate bidding
 
 Runs once per row of **Test data**.
@@ -303,7 +309,7 @@ Runs once per row of **Test data**.
 * The maximum at step 5 is refused.
 * The account record still shows the suspension and its reason after the invoice is paid.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-ixs rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-ixs rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC8: Suspension leaves non-auction account access available
 
 Runs once per row of **Test data**.
@@ -350,7 +356,7 @@ Runs once per row of **Test data**.
 * The account record remains readable.
 * The maximum at step 5 is refused; the suspension does not block non-auction account access.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-kz8 rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-kz8 rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC4: A won lot remains payable after suspension
 
 Runs once per row of **Test data**.
@@ -390,7 +396,7 @@ Runs once per row of **Test data**.
 * `<won_lot_1>` is still won by `customer`.
 * Its invoice remains payable.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-m3t rev=1 covers=none -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-m3t rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC3: Standing maxima on open lots are retracted
 
 **Classification:**
@@ -421,7 +427,7 @@ A collector leading two open lots and holding a standing maximum on a third, wit
 * Each retraction is logged as a `bid_retracted_suspension` event.
 * Each lot the collector led has re-resolved to the next bidder at their own price.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-o67 rev=1 covers=none -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-o67 rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC5: Paying does not lift the suspension
 
 **Classification:**
@@ -452,7 +458,7 @@ A suspended account holding one outstanding invoice.
 * Grade10 refuses the maximum at step 2.
 * The account record still shows the suspension and its reason.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-80a rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-80a rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC6: Suspended account cannot bid or raise its maximum
 
 **Classification:**
@@ -469,14 +475,14 @@ A suspended account holding one outstanding invoice.
 * **Trace:** g10.auction-bidder-suspension.US1
 
 **Pre-conditions:**
-customer(suspended) holds a maximum of 50000 HKD minor units on <listing_1>
+customer(suspended) holds a maximum of 50000 USD minor units on <listing_1>
 and is signed in.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_1 | An open lot where the customer holds a maximum of 50000 HKD minor units |
+| listing_1 | An open lot where the customer holds a maximum of 50000 USD minor units |
 | listing_2 | A second open lot where the customer holds no bid |
 
 **Steps:**
@@ -490,7 +496,7 @@ and is signed in.
 
 * Grade10 refuses the raise at step 2.
 * Grade10 refuses the bid at step 4.
-* The maximum on <listing_1> is still 50000 HKD minor units.
+* The maximum on <listing_1> is still 50000 USD minor units.
 
 ---
 
@@ -500,7 +506,7 @@ and is signed in.
 **I want** the lot's price, leader and bid history to stay as they were,
 **so that** the bids I placed against that account still count as I made them.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-stk rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-stk rev=3 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5 -->
 ### g10.auction-bidder-suspension.US2-TC1: Suspension preserves the open lot state
 
 **Classification:**
@@ -520,8 +526,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_3>` is open and led by `customer A` at HKD340 (range: 1000–79999 minor units).
-* `customer A` holds a maximum of HKD560 (range: 1000–79999 minor units) on `<lot_3>`.
+* `<lot_3>` is open and led by `customer A` at USD300 (30000 USD minor units).
+* `customer A` holds a maximum of USD500 (50000 USD minor units) on `<lot_3>`.
 * `customer A` has an auction invoice whose payment deadline is shortly due.
 * `customer B` can bid on `<lot_3>`.
 
@@ -529,8 +535,8 @@ Runs once per row of **Test data**.
 
 | `<lot_3>` | Event after suspension | Expected lot state |
 | --- | --- | --- |
-| Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units) | No new bid | `customer A` still leads at the same price and history |
-| Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units) | `customer B` commits a maximum of HKD470 (range: 1000–79999 minor units) | Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
+| Open lot led by `customer A` at USD300 (30000 USD minor units) | No new bid | `customer A` still leads at the same price and history |
+| Open lot led by `customer A` at USD300 (30000 USD minor units) | `customer B` commits a maximum of USD400 (40000 USD minor units) | Auto-bidding records the valid `customer B` bid; `customer A` still leads at USD405 (40500 USD minor units), and suspension adds no history entry |
 
 **Steps:**
 
@@ -541,10 +547,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `customer A` still leads `<lot_3>` at HKD340 (fixed unchanged value).
+* With no new bid, `customer A` still leads `<lot_3>` at USD300 (30000 USD minor units).
 * The leader, price and bid history match the row's `Expected lot state` value.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-yp6 rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-yp6 rev=2 covers=g10.auction-bidder-suspension.SC-1wb -->
 ### g10.auction-bidder-suspension.US2-TC3: Standing maximum wins after suspension
 
 Runs once per row of **Test data**.
@@ -585,7 +591,7 @@ Runs once per row of **Test data**.
 * `customer A` wins `<lot_5>`.
 * The auction order has its own invoice and payment deadline.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-bw8 rev=1 covers=none -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-bw8 rev=2 -->
 ### g10.auction-bidder-suspension.US2-TC2: Standing maximum keeps bidding after suspension
 
 **Classification:**
@@ -603,13 +609,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is suspended and leads <listing_4> at 30000 HKD minor units with a maximum of 50000 HKD minor units.
+* customer A is suspended and leads <listing_4> at 30000 USD minor units with a maximum of 50000 USD minor units.
 * customer B is signed in.
 
 **Steps:**
 
 1. As customer B, navigate to <listing_4>.
-2. Commit a maximum of 40000 HKD minor units.
+2. Commit a maximum of 40000 USD minor units.
 3. Read the lot's leader and current price.
 
 **Expected Results:**
@@ -625,7 +631,7 @@ Runs once per row of **Test data**.
 **I want** to be told plainly that I can no longer bid and how to contact Grade10,
 **so that** I know where I stand without being refused on a lot first.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-stl rev=2 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-stl rev=3 -->
 ### g10.auction-bidder-suspension.US3-TC1: Operator suspension keeps its reason private
 
 **Classification:**
@@ -670,7 +676,7 @@ Runs once per row of **Test data**.
 * Neither collector-facing surface shows `<operator_reason>`.
 * The maximum at step 5 is refused.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-ao5 rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-ao5 rev=2 -->
 ### g10.auction-bidder-suspension.US3-TC2: A missed deadline records a second cause
 
 Runs once per row of **Test data**.
@@ -709,7 +715,7 @@ Runs once per row of **Test data**.
 * The account remains one suspension.
 * The account record shows both causes.
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-l1f rev=1 -->
+<!-- trace:case id=g10.auction-bidder-suspension.TC-l1f rev=2 -->
 ### g10.auction-bidder-suspension.US3-TC3: Operator reinstatement restores bidding
 
 Runs once per row of **Test data**.
@@ -752,3 +758,13 @@ Runs once per row of **Test data**.
 * Grade10 accepts the maximum at step 4.
 * The account record no longer blocks bidding for the reinstated account.
 * The suspension and its reason remain as history.
+
+## Reconciliation
+
+**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
+
+- `TC-0fv` rev3 covers SC-o11: payment does not lift suspension; a 50500 USD minor raise against the standing 50000 USD minor maximum is refused, the existing maximum remains, and a new maximum on another lot is refused.
+- `TC-stk` rev3 covers SC-tsa and SC-yn5: in the USD bid race, 40000 USD minor against 50000 USD minor resolves at 40500 USD minor using the USD 500 minor increment. The no-bid fixture retains its 30000 USD minor lead. This corrects the prior inconsistent 340 result.
+- `TC-yp6` rev2 covers SC-1wb: the existing account-level suspension outcome remains effective for the lot's bid path.
+- These cases preserve their existing journeys. The SC12 maximum is 50000 USD minor (USD 500), not USD 50,000. No PRD, journey, feature-root, or durable-baseline contradiction was found. The changed suspension scenarios do not assert the 20% premium; that behavior stays with its owning bid and post-bid suites.
+- All edited cases remain draft. Deprecated `TC-80a` was not changed or reactivated. No implementation execution or human approval is claimed.

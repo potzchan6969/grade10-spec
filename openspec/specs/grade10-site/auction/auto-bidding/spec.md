@@ -124,7 +124,7 @@ House, per `grade10-admin/auction/internal-bid`.
 
 | Field | Meaning |
 | --- | --- |
-| Maximum | Integer minor units in the listing's currency, with that listing's ISO 4217 code |
+| Maximum | Integer minor units in USD |
 | Accepted At | When Grade10 accepted this commitment |
 | Standing | Leading or not leading, as a fact apart from the current bid |
 
@@ -169,17 +169,17 @@ House, per `grade10-admin/auction/internal-bid`.
 - **WHEN** an authorized operator reads its bid history
 - **THEN** each commitment shows its bidder, its maximum, and its Accepted At
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-j3t rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-j3t rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-45 - A secret-floor operator traces every house commitment
 **Serves:** grade10-site-auction-auto-bidding-US-04 - Operator traces every committed maximum
 
-- **GIVEN** an `HKD` listing starting at 20000 HKD minor units, where the
+- **GIVEN** an `USD` listing starting at 20000 USD minor units, where the
   house maximum of 25000 was committed at 18:00:00 UTC and raised to 30000
   at 18:10:00 UTC while it led, collector A committed 40000 at 18:20:00 UTC
   and collector C 60000 at 18:30:00 UTC, and the house maximum was lowered to
-  21000 at 19:00:00 UTC, all in HKD minor units
+  21000 at 19:00:00 UTC, all in USD minor units
 - **WHEN** an operator holding `auction:reserve` reads its bid history
-- **THEN** it shows the house's maximum at 25000, 30000 and 21000 HKD minor
+- **THEN** it shows the house's maximum at 25000, 30000 and 21000 USD minor
   units, with Accepted At 18:00:00, 18:10:00 and 19:00:00 UTC
 - **AND** it shows A's and C's commitments, each with its maximum and
   Accepted At
@@ -222,71 +222,71 @@ history even when the challenger does not lead. The two records in the equal-
 maximum row SHALL share the resolution's timestamp group and SHALL NOT represent
 intermediate increments.
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-arz rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-arz rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-09 - A challenger below the leader's maximum raises the price only
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** an HKD listing where A leads with a maximum of 50000 minor units
+- **GIVEN** a USD listing where A leads with a maximum of 50000 minor units
 - **WHEN** B commits a maximum of 22500 minor units
 - **THEN** A still leads
-- **AND** the current bid is 23500 minor units
+- **AND** the current bid is 23000 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-5mw rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-5mw rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-11 - A challenger above the leader's maximum takes the lead
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** an HKD listing where A leads with a maximum of 800000 minor units
+- **GIVEN** a USD listing where A leads with a maximum of 800000 minor units
 - **WHEN** B commits a maximum of 900000 minor units
 - **THEN** B leads
-- **AND** the current bid is 820000 minor units
+- **AND** the current bid is 805000 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-hvc rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-hvc rev=3 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-15 - The step to lead cannot exceed the new leader's maximum
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** an HKD listing where A leads with a maximum of 800000 minor units
+- **GIVEN** a USD listing where A leads with a maximum of 800000 minor units
 - **WHEN** B commits a maximum of 810000 minor units
 - **THEN** B leads
-- **AND** the current bid is 810000 minor units
+- **AND** the current bid is 805000 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-wgx rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-wgx rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-16 - A challenge lands at the two-maximum price, not a ladder
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** an HKD listing with a starting price of 20000 minor units and A's maximum of 50000 minor units
+- **GIVEN** a USD listing with a starting price of 20000 minor units and A's maximum of 50000 minor units
 - **WHEN** B commits a maximum of 80000 minor units
 - **THEN** B leads at 51000 minor units
 - **AND** Grade10 has not accepted intermediate bids between 20000 and 51000
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-edj rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-edj rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-10 - A challenger raises again, still below
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** A leads an HKD listing at a current bid of 23500 minor units
+- **GIVEN** A leads a USD listing at a current bid of 23000 minor units
 - **WHEN** B raises their maximum from 22500 to 30000 minor units
-- **THEN** A still leads at 31000 minor units
+- **THEN** A still leads at 30500 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-bqs rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-bqs rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-12 - The first bidder is overtaken by a higher maximum
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** an HKD listing with starting price 20000 minor units and A's maximum of 22500 minor units
+- **GIVEN** a USD listing with starting price 20000 minor units and A's maximum of 22500 minor units
 - **WHEN** B commits a maximum of 50000 minor units
-- **THEN** B leads at 23500 minor units
+- **THEN** B leads at 23000 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-xwb rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-xwb rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-13 - The overtaken bidder raises but stays below
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** B leads an HKD listing with a maximum of 50000 minor units
+- **GIVEN** B leads a USD listing with a maximum of 50000 minor units
 - **WHEN** A raises their maximum to 30000 minor units
-- **THEN** B still leads at 31000 minor units
+- **THEN** B still leads at 30500 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-n5u rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-n5u rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-14 - The overtaken bidder raises past the leader
 **Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
-- **GIVEN** B leads an HKD listing with a maximum of 50000 minor units
+- **GIVEN** B leads a USD listing with a maximum of 50000 minor units
 - **WHEN** A raises their maximum to 60000 minor units
 - **THEN** A leads at 51000 minor units
 
@@ -301,35 +301,35 @@ intermediate increments.
 - **AND** the public history then records B's automatic response at 60000 minor units
 - **AND** both records belong to the same resolution timestamp group
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-eiw rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-eiw rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-18 - A tie is not a refusal
 **Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
 
-- **GIVEN** B leads an HKD listing with a maximum of 60000 minor units
+- **GIVEN** B leads a USD listing with a maximum of 60000 minor units
 - **WHEN** C commits the same maximum
 - **THEN** Grade10 accepts C's commitment and reports that C does not lead
 - **AND** the public history records C's accepted action followed by B's automatic response
 - **AND** both records show the resolved amount of 60000 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-arw rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-arw rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-30 - A lone maximum on a 0 start stands at the lowest increment
 **Serves:** grade10-site-auction-auto-bidding-US-01 - Collector opens bidding on a lot that starts at nothing
 
-- **GIVEN** an open `HKD` listing with a starting price of 0 and no bids
+- **GIVEN** an open `USD` listing with a starting price of 0 and no bids
 - **WHEN** a collector commits a maximum of 50000 minor units
 - **THEN** Grade10 accepts the commitment and that collector leads
-- **AND** the current bid is 1000 minor units, not 0
-- **AND** the public history records one bid, that collector's, at 1000 minor units
+- **AND** the current bid is 100 minor units, not 0
+- **AND** the public history records one bid, that collector's, at 100 minor units
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-qbr rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-qbr rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-30a - A second maximum on a 0 start clears one increment above the opening price
 **Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
 
-- **GIVEN** an open `HKD` listing with a starting price of 0, where A's
-  maximum of 50000 minor units stands alone at 1000 minor units
+- **GIVEN** an open `USD` listing with a starting price of 0, where A's
+  maximum of 50000 minor units stands alone at 100 minor units
 - **WHEN** B commits a maximum of 1000 minor units
-- **THEN** Grade10 refuses it and names 2000 minor units as the minimum
-- **AND** A still leads at 1000 minor units
+- **THEN** Grade10 accepts the commitment; the minimum next bid was 200 minor units
+- **AND** A still leads at a current bid of 1100 minor units
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-9mj rev=1 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-31 - A lone bidder on a 0 start never wins at 0
@@ -436,16 +436,16 @@ winner pays, under `grade10-site/auction/bid-payment-method`.
   the same answer
 - **AND** nothing is held, authorized or charged on either bidder's card
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-zw7 rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-zw7 rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-32 - A raise is judged on the auction's rules alone
 **Serves:** grade10-site-auction-auto-bidding-US-01 - a leader raises their maximum
 
-- **GIVEN** bidder A leads an `HKD` listing with a committed maximum of 50000
-  HKD minor units at a current bid of 25000 HKD minor units
-- **WHEN** A raises their maximum to 80000 HKD minor units
+- **GIVEN** bidder A leads an `USD` listing with a committed maximum of 50000
+  USD minor units at a current bid of 25000 USD minor units
+- **WHEN** A raises their maximum to 80000 USD minor units
 - **THEN** Grade10 accepts the raise in the same answer, with nothing taken
   from the card
-- **AND** when A then submits 80000 HKD minor units again, Grade10 refuses it
+- **AND** when A then submits 80000 USD minor units again, Grade10 refuses it
   and the bid form says: Your new maximum must be higher than your current
   one.
 
@@ -473,26 +473,26 @@ extended bidding.
   minimum next bid as it holds a collector's. It SHALL NOT apply the card,
   bid-panel enrollment, verified-identity or suspension checks to it.
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-99a rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-99a rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-33 - The house takes the lead under a pseudonym
 **Serves:** grade10-site-auction-auto-bidding-US-03 - a collector competes against the house without knowing it
 
-- **GIVEN** an `HKD` listing where collector A, shown as Bidder 1, leads at
-  20000 HKD minor units with a maximum of 30000
-- **WHEN** the house maximum of 50000 HKD minor units is committed
-- **THEN** the current bid is 31000 HKD minor units and Bidder 2 leads
-- **AND** the public history records one bid, Bidder 2's, at 31000 HKD minor
+- **GIVEN** an `USD` listing where collector A, shown as Bidder 1, leads at
+  20000 USD minor units with a maximum of 30000
+- **WHEN** the house maximum of 50000 USD minor units is committed
+- **THEN** the current bid is 30500 USD minor units and Bidder 2 leads
+- **AND** the public history records one bid, Bidder 2's, at 30500 USD minor
   units, and names no house
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-gct rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-gct rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-34 - An earlier collector keeps a tie against the house
 **Serves:** grade10-site-auction-auto-bidding-US-03 - the earlier commitment keeps the lead
 
-- **GIVEN** an `HKD` listing where collector A leads at 20000 HKD minor units
+- **GIVEN** an `USD` listing where collector A leads at 20000 USD minor units
   with a maximum of 50000
-- **WHEN** the house maximum of 50000 HKD minor units is committed
-- **THEN** A still leads at 50000 HKD minor units
-- **AND** the public history records the house's bid at 50000 HKD minor units,
+- **WHEN** the house maximum of 50000 USD minor units is committed
+- **THEN** A still leads at 50000 USD minor units
+- **AND** the public history records the house's bid at 50000 USD minor units,
   then A's automatic response at 50000
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-3dy rev=1 -->
@@ -504,11 +504,11 @@ extended bidding.
 - **WHEN** the house maximum is committed
 - **THEN** Grade10 accepts it and places the bid the resolution requires
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-7m7 rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-7m7 rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-47 - One internal bidder reads as each listing's own pseudonym
 **Serves:** House maximum - one internal bidder's commitments on two lots read apart
 
-- **GIVEN** two open `HKD` listings whose internal bids both name the same
+- **GIVEN** two open `USD` listings whose internal bids both name the same
   internal bidder: on the first, collectors A and B have bid as Bidder 1 and
   Bidder 2; on the second, nobody has bid
 - **WHEN** both house maximums are committed
@@ -541,38 +541,38 @@ anyone has the listing open, as follows:
 A house maximum committed at or before the scheduled close SHALL count toward
 extended bidding as any maximum committed before the close does.
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-rh7 rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-rh7 rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-36 - Before its time the house meets no collector
 **Serves:** grade10-site-auction-auto-bidding-US-03 - an early bidder competes only with collectors
 
-- **GIVEN** an open `HKD` listing starting at 20000 HKD minor units with no
+- **GIVEN** an open `USD` listing starting at 20000 USD minor units with no
   bids, and a house maximum of 50000 set for 18:00:00 UTC
-- **WHEN** collector A commits a maximum of 30000 HKD minor units at 17:00:00
+- **WHEN** collector A commits a maximum of 30000 USD minor units at 17:00:00
   UTC
-- **THEN** A leads at 20000 HKD minor units
+- **THEN** A leads at 20000 USD minor units
 - **AND** the bid count is 1
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-jd3 rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-jd3 rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-37 - A bid after the set time meets the house first
 **Serves:** grade10-site-auction-auto-bidding-US-03 - a collector bids just after the house's time
 
 - **GIVEN** the listing of `grade10-site-auction-auto-bidding-SC-36` at
-  18:00:02 UTC, with A leading at 20000 HKD minor units and no bid yet placed
+  18:00:02 UTC, with A leading at 20000 USD minor units and no bid yet placed
   for the house
-- **WHEN** collector B commits a maximum of 40000 HKD minor units
-- **THEN** the house's bid is recorded at 18:00:00 UTC at 31000 HKD minor
+- **WHEN** collector B commits a maximum of 40000 USD minor units
+- **THEN** the house's bid is recorded at 18:00:00 UTC at 30500 USD minor
   units, before B's
-- **AND** the house leads at 41000 HKD minor units, after B's bid at 40000
+- **AND** the house leads at 40500 USD minor units, after B's bid at 40000
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-rt4 rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-rt4 rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-38 - A house maximum short of the next bid is not placed
 **Serves:** House maximum - the house's time arrives after the price passed it
 
-- **GIVEN** an `HKD` listing where collector A leads at 52000 HKD minor units
+- **GIVEN** an `USD` listing where collector A leads at 52000 USD minor units
   with a maximum of 60000, so the minimum next bid is 53000
-- **WHEN** a house maximum of 50000 HKD minor units reaches its set time
+- **WHEN** a house maximum of 50000 USD minor units reaches its set time
 - **THEN** Grade10 places no bid for the house
-- **AND** A leads at 52000 HKD minor units, and the bid count and public
+- **AND** A leads at 52000 USD minor units, and the bid count and public
   history are unchanged
 
 <!-- trace:scenario id=g10.auction-auto-bidding.SC-szf rev=1 -->
@@ -585,15 +585,15 @@ extended bidding as any maximum committed before the close does.
 - **THEN** the house leads at the opening price
 - **AND** the listing enters extended bidding
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-dym rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-dym rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-46 - A house maximum whose time comes before publishing is not placed
 **Serves:** House maximum - the house's time arrives while the lot is still unpublished
 
-- **GIVEN** a `created` `HKD` listing starting at 20000 HKD minor units, with
+- **GIVEN** a `created` `USD` listing starting at 20000 USD minor units, with
   a house maximum of 50000 set for 18:00:00 UTC
 - **WHEN** 18:00:00 UTC passes, the listing is published at 18:30:00 UTC and
-  collector A commits a maximum of 30000 HKD minor units at 18:40:00 UTC
-- **THEN** A leads at 20000 HKD minor units
+  collector A commits a maximum of 30000 USD minor units at 18:40:00 UTC
+- **THEN** A leads at 20000 USD minor units
 - **AND** the bid count is 1, and the public history records no bid before
   A's
 
@@ -621,63 +621,63 @@ refused, per `grade10-admin/auction/internal-bid`.
 
 A collector's committed maximum SHALL stay raise only.
 
-Worked example. An `HKD` listing starting at 20000; every amount in HKD minor
+Worked example. An `USD` listing starting at 20000; every amount in USD minor
 units.
 
 | Step | What happens | Accepted | Leader at | Why |
 | --- | --- | --- | --- | --- |
 | 1 | The house maximum of 25000 is committed, no other bid | Yes | House at 20000 | The house's bid is placed at 20000 |
-| 2 | A commits 40000 | Yes | A at 26000 | The house's 25000 plus one increment |
-| 3 | The house is lowered to 24000 | No | A at 26000 | The current bid would become 25000 |
-| 4 | C commits 60000 | Yes | C at 41000 | A's 40000 plus one increment |
-| 5 | The house is lowered to 21000 | Yes | C at 41000 | Leader and current bid stay the same |
-| 6 | The house is lowered to 19000 | No | C at 41000 | Below the house's bid at 20000 |
+| 2 | A commits 40000 | Yes | A at 25500 | The house's 25000 plus one increment |
+| 3 | The house is lowered to 24000 | No | A at 25500 | The current bid would become 24500 |
+| 4 | C commits 60000 | Yes | C at 40500 | A's 40000 plus one increment |
+| 5 | The house is lowered to 21000 | Yes | C at 40500 | Leader and current bid stay the same |
+| 6 | The house is lowered to 19000 | No | C at 40500 | Below the house's bid at 20000 |
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-pfm rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-pfm rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-40 - A house raise in extended bidding restarts the timer
 **Serves:** grade10-site-auction-auto-bidding-US-05 - the house's raise moves the close as a bid would
 
-- **GIVEN** an `HKD` listing in extended bidding, where collector A leads at
-  51000 HKD minor units with a maximum of 60000 over a house maximum of 50000
-- **WHEN** the house maximum is raised to 80000 HKD minor units
-- **THEN** the house leads at 61000 HKD minor units
+- **GIVEN** an `USD` listing in extended bidding, where collector A leads at
+  51000 USD minor units with a maximum of 60000 over a house maximum of 50000
+- **WHEN** the house maximum is raised to 80000 USD minor units
+- **THEN** the house leads at 61000 USD minor units
 - **AND** the listing's close moves exactly as a manual bid at that moment
   would move it
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-ax3 rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-ax3 rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-41 - A leading house raises without moving the price
 **Serves:** grade10-site-auction-auto-bidding-US-03 - the house raises while it leads
 
-- **GIVEN** an `HKD` listing where the house leads at 31000 HKD minor units
+- **GIVEN** an `USD` listing where the house leads at 30500 USD minor units
   with a maximum of 50000 over collector A's 30000
-- **WHEN** the house maximum is raised to 70000 HKD minor units
-- **THEN** the house still leads at 31000 HKD minor units
+- **WHEN** the house maximum is raised to 70000 USD minor units
+- **THEN** the house still leads at 30500 USD minor units
 - **AND** no public bid record is added
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-ajh rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-ajh rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-42 - A lower that leaves the lot as it was is accepted
 **Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04 - the admin lowers the house's maximum behind a lead it does not hold
 
 - **GIVEN** the listing of the worked example after step 4
-- **WHEN** the house maximum is lowered to 21000 HKD minor units
+- **WHEN** the house maximum is lowered to 21000 USD minor units
 - **THEN** Grade10 accepts it
-- **AND** C leads at 41000 HKD minor units, with no public bid record added
+- **AND** C leads at 40500 USD minor units, with no public bid record added
   and the bid count unchanged
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-q3t rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-q3t rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-43 - A lower that would move the current bid is refused
 **Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04 - the admin lowers the house's maximum that prices the leader
 
 - **GIVEN** the listing of the worked example after step 2
-- **WHEN** the house maximum is lowered to 24000 HKD minor units
+- **WHEN** the house maximum is lowered to 24000 USD minor units
 - **THEN** Grade10 refuses it
-- **AND** A leads at 26000 HKD minor units and the house maximum stays 25000
+- **AND** A leads at 25500 USD minor units and the house maximum stays 25000
 
-<!-- trace:scenario id=g10.auction-auto-bidding.SC-ldk rev=1 -->
+<!-- trace:scenario id=g10.auction-auto-bidding.SC-ldk rev=2 -->
 #### Scenario: grade10-site-auction-auto-bidding-SC-44 - A lower below the house's own bid is refused
 **Serves:** grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04 - the admin lowers under a bid already placed for the house
 
 - **GIVEN** the listing of the worked example after step 5
-- **WHEN** the house maximum is lowered to 19000 HKD minor units
+- **WHEN** the house maximum is lowered to 19000 USD minor units
 - **THEN** Grade10 refuses it
-- **AND** the house maximum stays 21000 HKD minor units
+- **AND** the house maximum stays 21000 USD minor units

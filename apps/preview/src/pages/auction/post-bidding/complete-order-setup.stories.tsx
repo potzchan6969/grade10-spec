@@ -16,6 +16,7 @@ const meta = {
     },
   },
   args: {
+    cardFeePercentages: { USD: 4.4, HKD: 3.4 },
     initialNewAddressOpen: false,
     initialStep: 1,
   },
@@ -65,12 +66,15 @@ export const FinishSetup: Story = {
     await waitFor(() => {
       expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
-    // HKD and card are preselected — Continue is enabled immediately.
+    // The winner must select both currency and payment method.
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
     expect(modal.getByRole("button", { name: "HKD" })).toHaveAttribute(
       "aria-pressed",
-      "true",
+      "false",
     );
-    expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
+    await userEvent.click(modal.getByRole("button", { name: "HKD" }));
+    await userEvent.click(modal.getByRole("radio", { name: /^Card\b/i }));
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
       expect(modal.getByText("Step 3 of 3")).toBeVisible();

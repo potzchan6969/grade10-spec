@@ -441,16 +441,16 @@ live updates stay anonymous.
   returns
 - **THEN** the page shows the new current bid and bid count without a reload
 
-<!-- trace:scenario id=g10.auction-listing-page.SC-7c2 rev=1 -->
+<!-- trace:scenario id=g10.auction-listing-page.SC-7c2 rev=2 -->
 #### Scenario: grade10-site-auction-listing-page-SC-43 - A leader outbid from another page reads Outbid without a reload
 **Serves:** grade10-site-auction-listing-page-US-12 - Collector sees another bid on the lot without reloading
 
-- **GIVEN** a signed-in bidder leading an open `HKD` lot at 120000 minor units,
+- **GIVEN** a signed-in bidder leading an open `USD` lot at 120000 minor units,
   with its page open
 - **WHEN** another bidder's bid of 130000 minor units is accepted from another
   page
 - **THEN** the bidder's page shows the current bid 130000 minor units and their
-  standing Outbid, with 134000 minor units as the minimum next valid bid,
+  standing Outbid, with 132500 minor units as the minimum next valid bid,
   without a reload
 - **AND** the live update that reached the page names neither bidder
 

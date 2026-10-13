@@ -35,7 +35,7 @@ is still owed, a tracker, and proof of what was handed over,
 
 **As a** winner of an auction lot,
 **I want** my invoice to calculate the stated buyer premium correctly using the
-current currency minimum,
+one USD minimum,
 **so that** the amount I pay is explainable and collectible.
 
 ### winner-order-US-12: Winner confirms delivery when five addresses are already saved
@@ -127,6 +127,30 @@ current currency minimum,
 **As a** winner who missed the 48-hour address deadline,
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
 **so that** I can still settle the lot I won once I have told Grade10 where to ship it.
+
+### winner-order-US-24: Winner chooses the currency they pay in
+
+**As a** winner of a lot bid in USD,
+**I want** to settle in USD or HKD when I set the order up,
+**so that** I pay in the currency my money is already in.
+
+### winner-order-US-25: Winner picks a payment method their currency offers
+
+**As a** winner who has picked a settlement currency,
+**I want** to see only the payment methods that currency offers, with each Hong Kong and overseas bank rail named,
+**so that** I choose a way to pay that works for the account I will send it from.
+
+### winner-order-US-26: Winner who settles in HKD reads the invoice and receipt in HKD
+
+**As a** winner who picked HKD,
+**I want** every amount on my invoice, receipt and order letters in HKD,
+**so that** I pay and keep records in one currency without working out a rate.
+
+### winner-order-US-27: Winner who settles in HKD reads the order total in both currencies
+
+**As a** winner who picked HKD,
+**I want** my Order Summary to keep the lot's USD amounts and show a USD total then the HKD total I will pay,
+**so that** I see what I won and what it costs me in HKD.
 
 ## Retired
 

@@ -26,9 +26,13 @@ optional alt live in `grade10-site/auction/listing-media`.
     reconciliation reference
   - Generated slug: a saved draft starts with a distinct title-and-code address
     that an operator can replace
+- Listing currency
+  - USD only: the listing form offers no currency choice and stores USD when none is supplied
+  - Earlier lots: HKD or JPY listing currencies are overwritten to USD with amounts and history unchanged
+  - Other currencies refused: HKD, JPY or any other currency is refused on a draft, create or update, by the form and API
 - Prices and window
   - Writable before publish: starting price, close, extension duration, and cap can change until the listing is live
-  - Starting price of 0: a draft and create accept 0 in USD, HKD and JPY; a negative, non-whole or empty price is refused, and empty is never stored as 0
+  - Starting price of 0: a draft and create accept 0 in USD; a negative, non-whole or empty price is refused, and empty is never stored as 0
 - Publish
   - Now or scheduled: a created listing publishes immediately or at a set time
 - Call off
@@ -83,8 +87,8 @@ optional alt live in `grade10-site/auction/listing-media`.
 An authorized operator SHALL save an Auction listing as a draft without every
 required field. A draft save SHALL NOT require title, slug, starting price,
 currency, starts at, scheduled close at, or media. A supplied currency SHALL
-be USD, HKD, or JPY; Grade10 SHALL refuse another currency and leave the draft
-unchanged.
+be USD. Grade10 SHALL refuse another currency, HKD and JPY included, and
+leave the draft unchanged.
 
 The draft form and write contract SHALL NOT offer or accept a listing-level
 minimum increment.
@@ -148,24 +152,36 @@ minimum increment.
 - **AND** the draft reads back 0, not an empty price
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-h88 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-164 - Draft rejects HKD and JPY
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a draft listing in `USD`
+- **WHEN** an operator sets its currency to HKD, then to JPY
+- **THEN** Grade10 refuses each write
+- **AND** the currency is unchanged
+
 ### Requirement: Create validates required fields on the form and the API
 
 Create SHALL require a title, slug, starting price, starts at, scheduled close
-at, media, and one supported currency. When omitted, currency SHALL default to
-HKD. The form and API SHALL reject an unsupported currency independently.
+at, media, and a currency of USD. When omitted, currency SHALL default to USD.
+The form and API SHALL reject any other currency independently.
 
-The form SHALL present USD, HKD, and JPY as its only currency choices and
-SHALL NOT display a minimum-increment field. The selected currency's Grade10
-schedule governs the listing's bid floor.
+The form SHALL state USD and offer no currency choice, and SHALL NOT display
+a minimum-increment field. Grade10's USD schedule governs the listing's bid
+floor.
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-mmr rev=1 -->
+SC-57 retains its historical title and id. Its body requires the API to
+refuse a non-USD create; the form offers no currency control.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-mmr rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
-- **GIVEN** a complete draft with currency JPY and no minimum-increment value
+- **GIVEN** a complete draft with currency USD and no minimum-increment value
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 creates it
-- **AND** its bid floor uses the JPY schedule
+- **AND** its bid floor uses the USD schedule
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-jr4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-07 - Create without a title is refused on the form and the API
@@ -215,15 +231,23 @@ schedule governs the listing's bid floor.
 - **WHEN** an operator creates it
 - **THEN** Grade10 refuses and leaves it published
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-dal rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-dal rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
 **Serves:** Create and catalogue - create refuses an unsupported currency on the form and API
 
 - **GIVEN** a complete draft with currency EUR
 - **WHEN** an operator creates the listing
-- **THEN** the form prevents the request and names currency
-- **AND** an API create with EUR is refused
+- **THEN** the API refuses the create
 - **AND** the listing remains a draft
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ja8 rev=2 -->
+#### Scenario: grade10-admin-auction-listing-SC-165 - Create refuses HKD and JPY through the API
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a complete draft with currency HKD, and another with currency JPY
+- **WHEN** an operator creates each listing
+- **THEN** the API refuses both creates
+- **AND** each listing remains a draft
 
 ### Requirement: Catalogue fields an operator may write
 
@@ -396,9 +420,8 @@ listing's public address `/auction/listings/<slug>`.
 While a listing is `draft` or `created`, an authorized operator SHALL be able
 to set:
 
-- **Currency** — an operator chooses an ISO 4217 three-letter code from the
-  platform's supported currency list. Omitted at create SHALL store Grade10's
-  store currency (`HKD`).
+- **Currency** — `USD`, the only value accepted. Omitted at create SHALL store
+  `USD`. Any other value SHALL be refused on the form and on the API.
 - **Starting price** — integer minor units, 0 or greater, when set. 0 is a
   set starting price and satisfies create; it is not an empty one. Empty is
   allowed only while `draft`.
@@ -433,7 +456,8 @@ A listing SHALL carry no extension window, and this form SHALL NOT offer one.
 
 Scenario `grade10-admin-auction-listing-SC-27` keeps its title with its id. The
 title is historical: any extension window is now refused, with or without a
-duration.
+duration. Scenario `grade10-admin-auction-listing-SC-125a` keeps its title
+with its id too: the title is historical, and the stored currency is `USD`.
 
 A write of any of these fields on a `published`, `closed`, `settled`, or
 `canceled` listing SHALL be refused. The effective close is not an operator
@@ -444,13 +468,13 @@ test-mode payment credentials instead of live money, so the house can
 rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-rj8 rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-rj8 rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-24 - Operator corrects a created listing's starting price
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
-- **GIVEN** a created listing with starting price 100000 minor units `HKD`
+- **GIVEN** a created listing with starting price 100000 minor units `USD`
 - **WHEN** an authorized operator sets starting price to 150000 minor units
-- **THEN** Grade10 stores 150000 minor units `HKD`
+- **THEN** Grade10 stores 150000 minor units `USD`
 - **AND** the listing remains created
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-o1z rev=1 -->
@@ -507,28 +531,28 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-rhp rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-rhp rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-125 - Create accepts a starting price of 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a no-reserve lot that opens at nothing
 
-- **GIVEN** three drafts complete except for price, in `USD`, `HKD`, and `JPY`
-- **WHEN** an authorized operator sets each starting price to 0 minor units and creates each listing
-- **THEN** the form and the API accept each create
-- **AND** each listing is created with a starting price of 0 minor units in its currency
+- **GIVEN** a draft complete except for price, in `USD`
+- **WHEN** an authorized operator sets its starting price to 0 minor units and creates the listing
+- **THEN** the form and the API accept the create
+- **AND** the listing is created with a starting price of 0 minor units in `USD`
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-v2q rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-v2q rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-125a - Create with 0 and no currency stores HKD 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft complete except for price, with no currency chosen
 - **WHEN** a create is sent to the API with a starting price of 0 minor units
-- **THEN** the listing is created with a starting price of 0 minor units `HKD`
+- **THEN** the listing is created with a starting price of 0 minor units `USD`
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-hze rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-hze rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-126 - Create refuses a negative starting price on the API
 **Serves:** grade10-admin-auction-listing-US-03 - A script cannot create what the form refuses
 
-- **GIVEN** a draft complete except for price, in `HKD`
+- **GIVEN** a draft complete except for price, in `USD`
 - **WHEN** a create is sent straight to the API with a starting price of -1 minor unit
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
@@ -542,13 +566,13 @@ be refused.
 - **THEN** Grade10 refuses the create
 - **AND** the draft's starting price stays empty, not 0
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-rfu rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-rfu rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-128 - Operator lowers a created listing's starting price to 0
 **Serves:** grade10-admin-auction-listing-US-03 - Operator turns a priced lot into a no-reserve one before it goes live
 
-- **GIVEN** a created listing with a starting price of 1000000 minor units `JPY`
+- **GIVEN** a created listing with a starting price of 1000000 minor units `USD`
 - **WHEN** an authorized operator sets its starting price to 0 minor units
-- **THEN** Grade10 stores 0 minor units `JPY`
+- **THEN** Grade10 stores 0 minor units `USD`
 - **AND** the listing remains created
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-fcs rev=1 -->
@@ -2426,3 +2450,62 @@ overwriting an address they chose.
 - **GIVEN** Slug reported available on a draft and another listing later claims that slug
 - **WHEN** the operator saves the draft
 - **THEN** Grade10 refuses the Save and leaves the draft's stored slug unchanged
+
+### Requirement: A listing is priced in USD and no earlier listing keeps another currency
+
+Every Auction listing SHALL carry the currency `USD`, the bid currency. The
+listing form SHALL offer no currency choice, and the API SHALL accept no
+currency other than `USD` on a draft, a create or an update. When a write
+omits the currency, Grade10 SHALL store `USD`.
+
+Once, before this change is live, Grade10 SHALL overwrite the currency of every
+listing that holds `HKD` or `JPY` with `USD`. The overwrite SHALL leave every
+amount, bid, auto-bid maximum, status and date unchanged and SHALL convert
+nothing. Every such listing is test data.
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-zzf rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-159 - The form offers no currency choice
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** an authorized operator on a new listing
+- **WHEN** they open the listing form
+- **THEN** the form states the currency as USD and offers no other choice
+- **AND** no currency control can be changed
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-28a rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-160 - A create without a currency stores USD
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a draft complete except for currency
+- **WHEN** an authorized operator creates the listing
+- **THEN** Grade10 creates it with currency `USD`
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-et0 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-161 - An HKD or JPY write is refused by the API
+**Serves:** grade10-admin-auction-listing-US-74 - Operator prices a listing in USD
+
+- **GIVEN** a created listing in `USD`
+- **WHEN** an update sent straight to the API sets its currency to HKD, then
+  to JPY
+- **THEN** Grade10 refuses each write
+- **AND** the listing's currency and amounts are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-adx rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-162 - An earlier HKD listing is overwritten to USD with its amounts unchanged
+**Serves:** Listing currency - an earlier HKD or JPY listing is overwritten to USD with nothing converted
+
+- **GIVEN** a created listing in `HKD` with a starting price of 100000 minor
+  units
+- **AND** a published listing in `JPY` with a current bid of 150000 minor units
+- **WHEN** the one-time currency overwrite runs
+- **THEN** the first reads a starting price of 100000 minor units `USD`
+- **AND** the second reads a current bid of 150000 minor units `USD`
+- **AND** each listing's status, bids and dates are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-c58 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-163 - The overwrite touches only HKD and JPY listings
+**Serves:** Listing currency - an earlier HKD or JPY listing is overwritten to USD with nothing converted
+
+- **GIVEN** a listing in `USD` with a current bid of 20000 minor units
+- **WHEN** the one-time currency overwrite runs
+- **THEN** the listing is unchanged

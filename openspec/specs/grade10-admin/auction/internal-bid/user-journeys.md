@@ -33,8 +33,8 @@
 ### grade10-admin-auction-internal-bid-US-06: Admin settles the order of a lot an internal bidder won
 
 **As an** auction admin,
-**I want** the order and invoice of a lot an internal bidder won to be issued to that internal bidder and flagged internal,
-**so that** I can let the invoice expire and cancel the order as I do any unpaid order, while knowing it was the house's win.
+**I want** a house win to open an order with HKD settlement and bank transfer on FPS already set,
+**so that** the operator can quote and send its invoice, let it expire, and cancel it without a winner or operator choosing the currency or rail.
 
 ### grade10-admin-auction-internal-bid-US-07: Admin keeps protected lots secret from staff
 
@@ -45,7 +45,7 @@
 ### grade10-admin-auction-internal-bid-US-08: Admin learns a listing edit cleared the internal bid
 
 **As an** auction admin,
-**I want** to see that a change to a listing's window, starting price or currency cleared its internal bid,
+**I want** to see that a change to a listing's window or USD starting price cleared an internal bid left outside its limits,
 **so that** I can set a new one before the lot sells unprotected.
 
 ### grade10-admin-auction-internal-bid-US-09: Admin keeps the internal bidders an internal bid can bid as

@@ -145,6 +145,8 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   bank: "Bank",
 };
 
+const PREVIEW_CARD_FEE_PERCENTAGES = { USD: 4.4, HKD: 3.4 };
+
 type WinnerOrderPageProps = {
   status?: WinnerOrderStatus;
   content?: WinnerOrderContent;
@@ -372,7 +374,15 @@ function resolveContent(
       addressValue: setup.delivery,
       settlementCurrency: setup.settlementCurrency,
       setupPaymentMethod:
-        setup.paymentMethod === "bank_transfer" ? "Bank transfer" : "Card",
+        setup.paymentMethod === "card"
+          ? "Card"
+          : setup.paymentMethod === "fps"
+            ? "FPS"
+            : setup.paymentMethod === "hk_local"
+              ? "HK Local"
+              : "International via SWIFT",
+      paymentRail:
+        setup.paymentMethod === "card" ? undefined : setup.paymentMethod,
       billingLabel: "Billing address",
       billingValue: setup.billing,
     };
@@ -458,7 +468,7 @@ function WinnerOrderPageState({
 
   const payCta =
     content.status === "pending_payment" && !content.overdue
-      ? content.setupPaymentMethod === "Bank transfer"
+      ? content.paymentRail != null
         ? "Submit Payment Proof"
         : "Pay with Card"
       : null;
@@ -486,7 +496,7 @@ function WinnerOrderPageState({
   }
 
   function handlePayClick() {
-    if (content.setupPaymentMethod === "Bank transfer") {
+    if (content.paymentRail != null) {
       setProofDialogOpen(true);
       return;
     }
@@ -630,7 +640,7 @@ function WinnerOrderPageState({
                     onPress: handlePayClick,
                     loading: cardCheckoutPending,
                     secondary:
-                      payCta === "Submit Payment Proof"
+                      payCta === "Submit Payment Proof" && content.paymentRail
                         ? {
                             label: "View Bank Details",
                             onPress: () => setHowToPayDialogOpen(true),
@@ -647,17 +657,20 @@ function WinnerOrderPageState({
       <Toast position="bottom-right" />
 
       <WinnerOrderSetupDialog
+        cardFeePercentages={PREVIEW_CARD_FEE_PERCENTAGES}
         onConfirm={handleSetupConfirm}
         onOpenChange={setSetupDialogOpen}
         open={setupDialogOpen}
       />
-      <WinnerOrderHowToPayDialog
-        amountDue={total?.value}
-        invoiceId={content.invoiceId ?? undefined}
-        onOpenChange={setHowToPayDialogOpen}
-        open={howToPayDialogOpen}
-        settlementCurrency={content.settlementCurrency ?? "HKD"}
-      />
+      {content.paymentRail ? (
+        <WinnerOrderHowToPayDialog
+          amountDue={total?.value}
+          invoiceId={content.invoiceId ?? undefined}
+          onOpenChange={setHowToPayDialogOpen}
+          open={howToPayDialogOpen}
+          paymentRail={content.paymentRail}
+        />
+      ) : null}
       <WinnerOrderPaymentProofDialog
         onOpenChange={setProofDialogOpen}
         onSubmit={handleProofSubmit}

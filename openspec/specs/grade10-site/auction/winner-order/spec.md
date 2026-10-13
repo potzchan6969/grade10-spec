@@ -3,9 +3,10 @@
 ## Purpose
 
 What a winner is sent after a lot closes and what they do with it: one order
-per lot, a delivery address, payment method and billing address they choose, an
-operator's invoice priced for both, payment by card or by a bank transfer they
-prove, and the receipt, tracker and delivery proof the order keeps afterwards.
+per lot, a delivery address, settlement currency, payment method and billing
+address they choose, an operator's invoice priced for all of them, payment by
+card or by a bank transfer on the rail they chose and prove, and the receipt,
+tracker and delivery proof the order keeps afterwards.
 
 ## Feature set
 
@@ -23,6 +24,7 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Insurance tip copy: the Insurance tooltip reads `0.9% of the order value during transit.`
 - Premium minimum
   - Currency minimum: the current Auction Payment settings mapping sets the lower bound for the calculated premium
+  - One USD minimum: the lower bound of the calculated premium is one USD amount, converted with the premium under HKD
 - Delivery address
   - Account-wide address book: the platform keeps at most five named shipping addresses and one optional default for the account
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
@@ -55,6 +57,15 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 - Invoice and receipt addresses
   - Invoice shows Bill To and Ship To from the order snapshot
   - Receipt keeps the addresses of the invoice it pays
+- Settlement currency
+  - Winner's choice: while confirming the order the winner picks USD or HKD, nothing preselected, fixed once the invoice is sent
+  - Order in that currency: the invoice, order total, fees, payments, refunds and order letters carry the settlement currency
+  - Fixed conversion: HKD is the USD amount at 7.85, each line rounded up to a whole HK$, then summed
+  - Rate never shown: no page, invoice, receipt or letter names the rate
+  - No USD bid under HKD: an HKD invoice and receipt print no USD winning bid
+- Order summary
+  - USD lines: the summary lists the lot's USD amounts whichever currency is picked
+  - Two totals under HKD: Order Total reads the USD total, then the converted HKD total
 - Payment method
   - Chosen with the address: card or bank transfer, recorded when the winner confirms where to ship
   - Fee range at the choice: fixed text Grade10 sets, with no amount for bank transfer
@@ -64,6 +75,10 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Card not yet available: in a currency with no card fee rule, card reads that it is not yet available there and cannot be chosen
   - No method in the currency: with neither method offered, the winner reads that payment is not yet available there, with Contact Us, and cannot confirm; the setup deadline keeps running
   - Fee wording at the choice: card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`
+  - Methods by currency: HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT
+  - Rail chosen at setup: each bank rail is its own choice, not one bank transfer choice
+  - Currency change: switching currency before confirming clears a method the new currency does not offer
+  - USD card needs a rule: card is offered in USD only once Finance saves a USD card fee rule
 - Invoice
   - Fee priced by method: Payment Processing Fee is the card gross-up or the operator's bank transfer fee, never dropped
   - Identifier formats: an invoice ID and a bank reference built from the listing code, the month and the invoice count; a reissue takes new ones, and an old one still finds the order
@@ -72,6 +87,8 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Payment reference: the listing's own code, carried forward as the order's one collector-facing reference once a winner exists; there is no separate public order ID, and it never appears on the public listing page — `grade10-admin/auction/listing` allocates the code, this capability only carries it forward
   - Invoice ID: the payment reference plus a 2-digit issuance sequence; a reissue takes the next sequence and an old invoice ID still finds the order
   - Replacement invoice: a reissue's new invoice says `Replaces invoice {id}` and names the prior invoice it replaces
+- Internal bidder order
+  - Automatic settlement: an internal bidder's winning order starts in HKD on bank transfer via FPS at close, with no winner or operator setup step; the operator still sends its invoice
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote; the bank-rail presentation is governed by `add-winner-how-to-pay-rails`
   - Payment proof: one upload of 1 to 3 files (1 required) in Submit Payment Proof, behind a confirm step; proof fields and upload only (no amount or reference chrome)
@@ -79,6 +96,7 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
   - View Bank Details: Order summary secondary control opens a dialog with amount due (no Copy) and three pill tabs defaulting to FPS; each tab shows that rail’s fields then payment reference as a detail row (no Copy) with memo warning — FPS (ID, account name, QR), HK Local (bank name, bank code, branch code, full account number including bank and branch code), SWIFT (beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number or IBAN, then payment reference, then OUR charges note)
   - Two entry points: Submit Payment Proof opens the proof dialog; View Bank Details opens the rails dialog; both hide when Pay is hidden
+  - Rail picked only: the invoice's bank details open on the rail the winner picked and name no other
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
   - Receipt payment breakdown: each receipt identifies the invoice total, prior payments, the current payment and remaining amount
@@ -127,18 +145,22 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 ### Requirement: Invoice fields
 
 Each invoice SHALL carry these fields. Every amount SHALL be an integer count
-of minor units paired with the lot's ISO 4217 currency code, rendered per
-`shared/money-amounts`. An invoice exists only once an operator sends it.
+of minor units paired with the order's settlement currency, `USD` or `HKD`,
+rendered per `shared/money-amounts`. An invoice exists only once an operator
+sends it. An HKD invoice SHALL carry the converted lines, per "An HKD order
+converts each USD line at a fixed rate and rounds it up".
 
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
+| Settlement currency | `USD` or `HKD`, the winner's choice at setup, per "The winner chooses a settlement currency at order setup". Every amount below is in it. A reissue carries the currency the operator chose, and the replaced invoice keeps its own |
 | Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
 | Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
-| Winning bid | The accepted bid that won the lot, excluding every other component |
+| Bank rail | On a bank transfer invoice only: FPS, HK Local or International via SWIFT, the rail the winner picked. It decides the bank details the winner reads, per "A bank transfer invoice shows how to pay" |
+| Winning bid | The accepted bid that won the lot, excluding every other component. In HKD it is the converted line, and the USD bid is not printed |
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
@@ -156,9 +178,9 @@ The payment processing fee SHALL be priced by the invoice's payment method:
 | Method | Payment processing fee |
 | --- | --- |
 | Card | The amount that leaves the subtotal whole after the card rule's fixed amount and percentage of the whole charge, computed below |
-| Bank transfer | The amount the operator entered on the quote or the reissue. Zero or more |
+| Bank transfer | The amount the operator typed in USD on the quote or the reissue, converted with the other lines under HKD. Zero or more |
 
-For card, Grade10 SHALL take the card rule for the invoice's currency from
+For card, Grade10 SHALL take the card rule for the settlement currency from
 Payment Settings, per `grade10-admin/auction/payment-settings`, at the moment
 the invoice is sent, SHALL compute the order total as the subtotal plus the
 rule's fixed amount divided by one less its percentage, SHALL round that total
@@ -268,26 +290,36 @@ historical: a manually settled order keeps its payment processing fee.
 - **AND** the Payment Processing Fee tooltip does not describe the gross-up
   formula
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-c6t rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-c6t rev=2 -->
 #### Scenario: winner-order-SC-110 - A bank transfer fee is the amount the operator entered
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an operator sent a bank transfer invoice with a subtotal of 312000
-  and a bank transfer fee of 5000 minor units in HKD
+- **GIVEN** an operator sent a bank transfer invoice in USD with a subtotal of
+  312000 and a bank transfer fee of 5000 minor units in USD
 - **WHEN** the winner reads the invoice
-- **THEN** the payment processing fee is 5000 minor units in HKD
-- **AND** the order total is 317000 minor units in HKD
+- **THEN** the payment processing fee is 5000 minor units in USD
+- **AND** the order total is 317000 minor units in USD
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-16z rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-8gv rev=1 -->
+#### Scenario: winner-order-SC-302 - An HKD order converts the bank transfer fee typed in USD
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an operator sent a bank transfer invoice in HKD whose lines total
+  103100 minor units in HKD, with a bank transfer fee of 5000 minor units in
+  USD typed on the quote
+- **WHEN** the winner reads the invoice
+- **THEN** the payment processing fee is 39300 minor units in HKD
+- **AND** the order total is 142400 minor units in HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-16z rev=2 -->
 #### Scenario: winner-order-SC-111 - A bank transfer fee of zero reads Free
 **Serves:** Invoice - Payment Processing Fee priced by method
 
 - **GIVEN** an operator sent a bank transfer invoice with a subtotal of 312000
-  and a bank transfer fee of 0 minor units in HKD
+  minor units in HKD and a bank transfer fee of 0 minor units typed in USD
 - **WHEN** the winner opens the order
 - **THEN** the Payment Processing Fee line is shown and reads Free
 - **AND** the order total is 312000 minor units in HKD
-
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-ppq rev=1 -->
 #### Scenario: winner-order-SC-215 - An invoice with no tax shows no Tax line
@@ -373,64 +405,60 @@ invoice is sent
 
 ### Requirement: Grade10 computes the buyer's premium
 
-Grade10 SHALL compute every invoice's buyer's premium; no operator SHALL
-enter, waive or change it. The premium SHALL be the larger of:
+Grade10 SHALL compute every invoice's buyer's premium in USD, the bid
+currency; no operator SHALL enter, waive or change it. The premium SHALL be
+the larger of:
 
 1. 20% of the hammer price (read by the winner as Winning Bid) alone,
    rounded half up to the nearest minor unit, and
-2. the minimum charge for the lot's currency.
+2. the premium minimum, the one USD amount Payment Settings holds, per
+   `grade10-admin/auction/payment-settings`.
 
 Shipping, insurance and tax SHALL NOT be part of its base. The premium SHALL be
-an integer count of minor units in the lot's currency.
-
-Grade10 owns one minimum charge per supported currency:
-
-| Currency | Minimum charge (minor units) |
-| --- | --- |
-| USD | 0 |
-| HKD | 0 |
-| JPY | 0 |
+an integer count of minor units in USD. For an HKD order the premium is one
+line and converts with the others, per "An HKD order converts each USD line at
+a fixed rate and rounds it up"; there is no second minimum in HKD.
 
 A minimum of 0 SHALL mean no minimum. A changed rate or minimum SHALL apply
 to invoices sent or reissued after it takes effect; an invoice already sent
 SHALL keep its amounts.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-zhu rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-zhu rev=2 -->
 #### Scenario: winner-order-SC-40 - The premium is 20% of the winning bid
 **Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
-- **GIVEN** the HKD minimum charge is 20000 minor units
-- **AND** an auction order with a hammer price of 250000 minor units in HKD
+- **GIVEN** the premium minimum is 20000 minor units in USD
+- **AND** an auction order with a hammer price of 250000 minor units in USD
 - **WHEN** an operator sends its invoice
-- **THEN** the buyer's premium is 50000 minor units in HKD
+- **THEN** the buyer's premium is 50000 minor units in USD
 - **AND** the operator was not asked to enter it
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-b16 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-b16 rev=2 -->
 #### Scenario: winner-order-SC-41 - The minimum charge applies when it is higher
 **Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
-- **GIVEN** the HKD minimum charge is 20000 minor units
-- **AND** an auction order with a hammer price of 50000 minor units in HKD
+- **GIVEN** the premium minimum is 20000 minor units in USD
+- **AND** an auction order with a hammer price of 50000 minor units in USD
 - **WHEN** an operator sends its invoice
-- **THEN** the buyer's premium is 20000 minor units in HKD
+- **THEN** the buyer's premium is 20000 minor units in USD
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-2mz rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-2mz rev=2 -->
 #### Scenario: winner-order-SC-42 - A zero minimum leaves the rounded 20%
 **Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
-- **GIVEN** the JPY minimum charge is 0
-- **AND** an auction order with a hammer price of 1003 minor units in JPY
+- **GIVEN** the premium minimum is 0
+- **AND** an auction order with a hammer price of 1003 minor units in USD
 - **WHEN** an operator sends its invoice
-- **THEN** the buyer's premium is 201 minor units in JPY
+- **THEN** the buyer's premium is 201 minor units in USD
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-ip8 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-ip8 rev=2 -->
 #### Scenario: winner-order-SC-43 - A sent invoice keeps its premium when the minimum changes
 **Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
-- **GIVEN** an invoice sent with a hammer price of 50000 and a buyer's premium of 10000 minor units in HKD while the HKD minimum was 0
-- **WHEN** the HKD minimum changes to 20000 minor units
-- **THEN** that invoice's buyer's premium stays 10000 minor units in HKD
-- **AND** an invoice reissued for that order afterwards carries 20000 minor units in HKD
+- **GIVEN** an invoice sent with a hammer price of 50000 and a buyer's premium of 10000 minor units in USD while the premium minimum was 0
+- **WHEN** the premium minimum changes to 20000 minor units
+- **THEN** that invoice's buyer's premium stays 10000 minor units in USD
+- **AND** an invoice reissued for that order afterwards carries 20000 minor units in USD
 
 ### Requirement: One invoice and one auction order per lot
 
@@ -862,11 +890,18 @@ Grade10 SHALL create its one auction order in step 1, flagged internal, and
 SHALL, in place of step 2 and the winner's setup:
 
 - Take the internal bidder's billing address as it stands at the close as
-  the order's delivery address and billing address, and bank transfer as its
-  payment method, all confirmed at the close, so the order is ready for an
-  operator to quote and never waits on an address deadline.
+  the order's delivery address and billing address, and set settlement
+  currency to `HKD`, payment method to `bank_transfer` and rail to `fps`, all
+  at the close. The order is ready for an operator to quote and send an
+  invoice and never waits on an address deadline. The lot and its winning bid
+  remain USD, per
+  `grade10-admin/auction/internal-bid`.
 - Send no letter of `grade10-site/auction/notifications-order` for the order,
   at the close or after it, to the internal bidder or to anyone.
+
+The close SHALL write the internal order's currency and rail together with its
+confirmed address and method. It SHALL NOT leave these fields null for an
+operator to fill, and SHALL NOT issue an invoice.
 
 Order creation and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
@@ -900,19 +935,21 @@ close delivered more than once SHALL produce one auction order.
 - **THEN** the order's derived status is Preparing Invoice
 - **AND** the winner is offered no way to pay yet
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=2 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=7 -->
 #### Scenario: winner-order-SC-277 - A lot an internal bidder wins opens its order with the internal bidder's address
-**Serves:** A lot an internal bidder won - the close finds the house on top and opens the internal bidder's order
+**Serves:** `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-06`
 
-- **GIVEN** an `HKD` lot where the house leads at 31000 HKD minor units over
+- **GIVEN** a `USD` lot where the house leads at 10100 minor units over
   collector A, its internal bid naming an internal bidder whose billing
   address is in Hong Kong
 - **WHEN** the lot closes
 - **THEN** Grade10 creates one auction order for the internal bidder, flagged
-  internal, with invoice status `not_issued`
+  internal, with invoice status `not_issued` and settlement currency `HKD`
 - **AND** the order holds that billing address as its delivery and billing
-  address, with bank transfer, and derives as Preparing Invoice
-- **AND** issues no invoice and sends no won, address or other letter for it
+  address, with `bank_transfer` on `fps`, and derives as Preparing Invoice
+- **AND** the order records the lot's 10100 minor-unit winning bid in USD
+- **AND** no invoice is issued, no winner or operator setup step is required,
+  and no won, address or other letter is sent for it
 
 ### Requirement: The delivery address locks when the invoice is sent
 
@@ -1305,21 +1342,21 @@ payment, while the invoice is `payment_verifying`, and when Cancelled.
 ### Requirement: An invoice calculates the buyer's premium
 
 When Grade10 creates or reissues an auction invoice, the buyer's premium SHALL
-be the larger of 20% of the winning bid and the current minimum for the invoice
-currency. The percentage amount is rounded to the nearest minor unit with half
-values rounded up. A minimum of 0 means no minimum. The
-premium SHALL be included in the invoice final amount and in every invoice
-receipt. A bid panel SHALL disclose only the 20% rate; it SHALL not display this
+be the larger of 20% of the winning bid and the current premium minimum, one
+USD amount. The percentage amount is rounded to the nearest minor unit with
+half values rounded up. A minimum of 0 means no minimum. The premium SHALL be
+included in the invoice final amount and in every invoice receipt, converted
+with the other lines under HKD. A bid panel SHALL disclose only the 20% rate; it SHALL not display this
 calculated amount before an invoice exists.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-30s rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-30s rev=2 -->
 #### Scenario: grade10-site-auction-winner-order-SC-46 - Invoice carries 20% of the winning bid
 **Serves:** winner-order-US-08 - Winner pays an invoice with a policy premium
 
-- **GIVEN** a winning bid of 250000 HKD minor units
-- **WHEN** Grade10 creates the winner's invoice
-- **THEN** the invoice buyer's premium is 50000 HKD minor units
-- **AND** the final amount includes that 50000 HKD premium
+- **GIVEN** a winning bid of 250000 USD minor units
+- **WHEN** Grade10 creates the winner's invoice in USD
+- **THEN** the invoice buyer's premium is 50000 USD minor units
+- **AND** the final amount includes that 50000 USD premium
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-ml2 rev=1 -->
 #### Scenario: grade10-site-auction-winner-order-SC-47 - Fractional minor-unit premium rounds deterministically
@@ -1406,42 +1443,60 @@ it pays and SHALL NOT change when a saved address is edited or archived later.
 
 ### Requirement: The winner chooses a payment method with the address
 
-The winner picks card or bank transfer at the same time as the delivery
-address, and the pick locks with it.
+The winner picks a settlement currency and a payment method at the same time as
+the delivery address, and the picks lock with it.
 
 **Chosen with the address** - When the winner confirms a delivery address on
 an auction order, Winner Order SHALL also ask how they will pay:
 
-1. Choose card or bank transfer.
-2. Read the fee range Grade10 sets for each method.
-3. Confirm the address and the method together.
+1. Choose USD or HKD as the settlement currency, per "The winner chooses a
+   settlement currency at order setup".
+2. Choose a payment method that currency offers.
+3. Read the fee range Grade10 sets for each method.
+4. Confirm the address, the currency and the method together.
 
-**No preselection** - Grade10 SHALL preselect neither method and SHALL record
-the chosen method on the order.
+**No preselection** - Grade10 SHALL preselect no currency and no method, and
+SHALL record the chosen method on the order. Until the winner picks a
+currency, Winner Order SHALL offer no method.
 
-**Fee range at the choice** - The fee range for each method SHALL be fixed
-text Grade10 sets:
+**Methods by currency** - The methods follow the settlement currency picked:
+
+| Settlement currency | Methods offered |
+| --- | --- |
+| HKD | Card, FPS, HK Local |
+| USD | Card, HK Local, International via SWIFT |
+
+FPS, HK Local and International via SWIFT are bank rails. Each rail SHALL be
+its own choice at setup, and Grade10 SHALL NOT offer one bank transfer choice
+that lists the rails after the winner confirms. A rail is a bank transfer
+method, and the order SHALL record the rail the winner picked.
+
+**Fee range at the choice** - The fee range for each method SHALL be text
+Grade10 sets:
 
 | Method | Reads |
 | --- | --- |
-| Card | `Card fee about 3.4% + a fixed amount` |
-| Bank transfer | `Bank fee set on your invoice` |
+| Card | `Card fee about {percentage}% + a fixed amount` |
+| FPS, HK Local, International via SWIFT | `Bank fee set on your invoice` |
 
-The bank transfer text SHALL name no amount, since an operator sets that fee
-on the invoice.
+`{percentage}` SHALL be the percentage of the card fee rule Payment Settings
+holds for the currency picked, as Finance saved it. Finance MAY set it to any
+value Payment Settings accepts, and the text SHALL read that value, not a fixed
+figure. The bank rail text SHALL name no amount, since an operator sets that
+fee on the invoice.
 
 **Offered where Grade10 can take it** - Grade10 SHALL offer each method only
 where it can take the payment:
 
 | Method | Offered where |
 | --- | --- |
-| Card | Payment Settings holds a card fee rule for the order's currency, per `grade10-admin/auction/payment-settings` |
-| Bank transfer | Grade10 holds bank details for the order's currency |
+| Card | Payment Settings holds a card fee rule for the settlement currency, per `grade10-admin/auction/payment-settings` |
+| A bank rail | Grade10 holds that rail's bank details |
 
 | Where | Bank details Grade10 holds |
 | --- | --- |
-| Outside production | A sample HKD account |
-| Production | The HKD account Finance confirms; none until then |
+| Outside production | Sample accounts for each rail |
+| Production | The accounts Finance confirms for each rail; none until then |
 
 **Card not yet available** - In a currency with no card fee rule, the choice
 SHALL show card as not yet available in that currency, and the winner SHALL
@@ -1449,118 +1504,207 @@ NOT be able to choose it. Once Finance saves a card fee rule for the currency,
 card SHALL be offered on every order in it that the winner has not yet
 confirmed.
 
-**Neither method** - Where neither method is offered, Winner Order SHALL say
-that payment is not yet available in the order's currency and offer Contact
-Us, per "Contact Us opens a copy-first ready email", and Grade10 SHALL refuse
-a confirmation as one with no method chosen. The setup deadline SHALL keep
-running: the order reads Setup Overdue once it passes, as any unconfirmed
-order does, and an operator reopens or records setup by hand, per
-`grade10-admin/auction/post-sale`.
+**Currency change** - A winner who switches currency before confirming SHALL
+keep the method they chose only where the new currency offers it. Otherwise
+Grade10 SHALL clear the method, preselect none and refuse a confirmation until
+the winner chooses one.
+
+**Neither method** - Where the currency offers neither card nor a bank rail,
+Winner Order SHALL say that payment is not yet available in the order's
+currency and offer Contact Us, per "Contact Us opens a copy-first ready
+email", and Grade10 SHALL refuse a confirmation as one with no method chosen.
+The setup deadline SHALL keep running: the order reads Setup Overdue once it
+passes, as any unconfirmed order does, and an operator reopens or records setup
+by hand, per `grade10-admin/auction/post-sale`.
 
 **Refused** - Grade10 SHALL refuse a confirmation with no method chosen, and
-SHALL refuse a method where it is not offered. A refused confirmation SHALL
-record neither the address nor the method.
+SHALL refuse a method the settlement currency does not offer or that is not
+offered where Grade10 cannot take it. A refused confirmation SHALL record
+neither the address, the currency nor the method.
 
 **Locked on confirmation** - Until the winner confirms, they SHALL be able to
-change the method freely. Once they confirm, the method locks for the winner,
-per "The delivery address locks when the invoice is sent".
+change the currency and the method freely. Once they confirm, both lock for the
+winner, per "The delivery address locks when the invoice is sent". An operator
+MAY change either before the invoice is sent, and on a reissue after, per
+`grade10-admin/auction/post-sale`.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-v59 rev=1 -->
+Scenarios `winner-order-SC-92` and `winner-order-SC-226` keep their titles
+with their ids. The titles are historical: each rail is offered or withheld on
+its own bank details, and card on its own rule.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-oyi rev=1 -->
+#### Scenario: winner-order-SC-293 - HKD offers card, FPS and HK Local
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds an
+  HKD card fee rule and Grade10 holds FPS, HK Local and SWIFT bank details
+- **WHEN** the winner picks HKD
+- **THEN** card, FPS and HK Local are offered, each as its own choice
+- **AND** International via SWIFT is not offered
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-crs rev=1 -->
+#### Scenario: winner-order-SC-294 - USD offers card, HK Local and SWIFT
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds a
+  USD card fee rule and Grade10 holds FPS, HK Local and SWIFT bank details
+- **WHEN** the winner picks USD
+- **THEN** card, HK Local and International via SWIFT are offered, each as its
+  own choice
+- **AND** FPS is not offered
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-4lj rev=1 -->
+#### Scenario: winner-order-SC-295 - Switching currency clears a method the new currency does not offer
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD and
+  International via SWIFT, and has not confirmed
+- **WHEN** the winner switches the currency to HKD
+- **THEN** no method is selected
+- **AND** a confirmation without a new choice is refused
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-6un rev=1 -->
+#### Scenario: winner-order-SC-296 - Switching currency keeps a method both currencies offer
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD and HK
+  Local, and has not confirmed
+- **WHEN** the winner switches the currency to HKD
+- **THEN** HK Local stays selected
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-vbp rev=1 -->
+#### Scenario: winner-order-SC-297 - USD card waits for a USD card fee rule
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
+  Payment Settings holds no USD card fee rule and Grade10 holds HK Local and
+  SWIFT bank details
+- **WHEN** the winner reaches the payment method choice
+- **THEN** card reads that it is not yet available in USD and cannot be chosen
+- **AND** HK Local and International via SWIFT are offered
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-rge rev=1 -->
+#### Scenario: winner-order-SC-298 - A method the currency does not offer is refused
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD
+- **WHEN** a confirmation carrying FPS reaches Grade10
+- **THEN** Grade10 refuses it
+- **AND** the order records neither the address, the currency nor the method
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-v59 rev=2 -->
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
-  bank details
-- **WHEN** the winner confirms a delivery address and chooses bank transfer
-- **THEN** the order records bank transfer as its payment method
+- **GIVEN** an auction order in Awaiting Setup, where Grade10 holds FPS bank
+  details
+- **WHEN** the winner confirms a delivery address, picks HKD and chooses FPS
+- **THEN** the order records bank transfer as its payment method, on the FPS
+  rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-8dl rev=2 -->
 #### Scenario: winner-order-SC-91 - The choice shows a fee range and no bank transfer amount
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
-  bank details and Payment Settings holds an HKD card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, where
+  Grade10 holds FPS and HK Local bank details and Payment Settings holds an
+  HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card reads `Card fee about 3.4% + a fixed amount`
-- **AND** bank transfer reads `Bank fee set on your invoice`, naming no amount
-- **AND** neither method is selected
+- **AND** FPS and HK Local each read `Bank fee set on your invoice`, naming no
+  amount
+- **AND** no method is selected
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-1aa rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-o4y rev=1 -->
+#### Scenario: winner-order-SC-303 - The card fee range reads the percentage of the currency picked
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order in Awaiting Setup, where Payment Settings holds an
+  HKD card fee rule of 3.4 per cent and a USD card fee rule of 4.4 per cent
+- **WHEN** the winner picks USD, then switches to HKD
+- **THEN** card reads `Card fee about 4.4% + a fixed amount` under USD
+- **AND** card reads `Card fee about 3.4% + a fixed amount` under HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1aa rev=2 -->
 #### Scenario: winner-order-SC-92 - A currency with no bank details offers card only
 **Serves:** Payment method - bank transfer only where bank details are set up
 
-- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
-  holds a USD card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, where
+  Grade10 holds HK Local bank details and no FPS bank details, and Payment
+  Settings holds an HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
-- **THEN** only card is offered
-- **AND** a confirmation carrying bank transfer for that order is refused
+- **THEN** card and HK Local are offered
+- **AND** FPS is not offered
+- **AND** a confirmation carrying FPS for that order is refused
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-pt5 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-pt5 rev=2 -->
 #### Scenario: winner-order-SC-93 - The method can change until the winner confirms
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
-  bank details and Payment Settings holds an HKD card fee rule, on which the
-  winner has chosen card and not yet confirmed
-- **WHEN** the winner changes the choice to bank transfer and confirms the address
-- **THEN** the order records bank transfer
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, where
+  Grade10 holds HK Local bank details and Payment Settings holds an HKD card
+  fee rule, on which the winner has chosen card and not yet confirmed
+- **WHEN** the winner changes the choice to HK Local and confirms the address
+- **THEN** the order records bank transfer, on the HK Local rail
 - **AND** the order derives as Preparing Invoice
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-wn1 rev=2 -->
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
 
-- **GIVEN** an auction order in HKD Awaiting Setup
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD
 - **WHEN** the winner confirms a delivery address without choosing a method
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order is still Awaiting Setup
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-er5 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-er5 rev=2 -->
 #### Scenario: winner-order-SC-226 - Production offers card only until Finance confirms the account
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD Awaiting Setup in production, where
-  Grade10 holds no HKD bank details and Payment Settings holds an HKD card
-  fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD, in
+  production, where Grade10 holds no FPS and no HK Local bank details and
+  Payment Settings holds an HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** only card is offered
-- **AND** a confirmation carrying the home address and bank transfer is refused
+- **AND** a confirmation carrying the home address and FPS is refused
 - **AND** the order holds no delivery address and no method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-7y2 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-7y2 rev=2 -->
 #### Scenario: winner-order-SC-248 - A currency with no card fee rule does not offer card
 **Serves:** Payment method - card only where Finance set a card fee rule
 
-- **GIVEN** an auction order in HKD Awaiting Setup outside production, where
-  Grade10 holds the sample HKD bank details and Payment Settings holds no HKD
-  card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked HKD,
+  outside production, where Grade10 holds the sample bank details and Payment
+  Settings holds no HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card reads that it is not yet available in HKD and cannot be chosen
-- **AND** bank transfer is offered
+- **AND** FPS and HK Local are offered
 - **AND** a confirmation carrying card for that order is refused
 - **AND** the order holds no delivery address and no method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=2 -->
 #### Scenario: winner-order-SC-249 - A currency with neither method cannot confirm setup
 **Serves:** Payment method - card only where Finance set a card fee rule
 
-- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
-  holds no USD card fee rule
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
+  Payment Settings holds no USD card fee rule and Grade10 holds no HK Local
+  and no SWIFT bank details
 - **WHEN** the winner reaches the payment method choice
 - **THEN** the page says payment is not yet available in USD and offers
   Contact Us
-- **AND** neither card nor bank transfer can be chosen
+- **AND** neither card nor a bank rail can be chosen
 - **AND** Grade10 refuses a confirmation of the delivery address
 - **AND** the order is still Awaiting Setup, holding no delivery address and no
   method
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-ii6 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-ii6 rev=2 -->
 #### Scenario: winner-order-SC-257 - The setup deadline runs where no method is offered
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
-- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
-  holds no USD card fee rule, whose winner has not confirmed setup
+- **GIVEN** an auction order in Awaiting Setup whose winner picked USD, where
+  Payment Settings holds no USD card fee rule and Grade10 holds no HK Local
+  and no SWIFT bank details, whose winner has not confirmed setup
 - **WHEN** 48 hours pass from the lot's close
 - **THEN** the order reads Setup Overdue
 - **AND** an operator holding payment processing can reopen or record its
@@ -1578,41 +1722,45 @@ it. **View Bank Details** SHALL open the View Bank Details dialog. **Submit Paym
 Proof** SHALL open the Submit Payment Proof dialog. Grade10 SHALL hide both
 controls whenever Pay is hidden, including while the invoice is `payment_verifying`.
 
-**View Bank Details** - The View Bank Details dialog SHALL show the total amount due
-and three tabs with FPS selected by default. Each tab SHALL show that rail’s
-fields as labelled detail rows without copy controls, then the invoice's bank
-reference as a labelled detail row without a copy control, and a warning that
-the winner must enter the reference in the bank app's memo or remarks field.
-At `sm` and wider, the three tabs SHALL share a full-width track. Below `sm`,
-the track SHALL hug its labels and scroll horizontally so all three names stay
-readable. Live account details and the FPS QR come from Finance-owned configuration.
-Grade10 snapshots those approved instructions on the issued bank-transfer
-invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
+**View Bank Details** - The View Bank Details dialog SHALL show the total amount
+due in the invoice's currency and the details of the one rail the winner
+picked, and SHALL name no other rail and offer no tabs. It SHALL show that
+rail's fields as labelled detail rows without copy controls, then the invoice's
+bank reference as a labelled detail row without a copy control, and a warning
+that the winner must enter the reference in the bank app's memo or remarks
+field. Live account details and the FPS QR come from Finance-owned
+configuration. Grade10 snapshots the picked rail's approved instructions on
+the issued bank-transfer invoice; the preview uses Grade10 Finance Limited and
+HSBC Hong Kong samples.
 
-| Way to pay | Details shown |
+| Rail picked | Details shown |
 | --- | --- |
-| FPS (default) | FPS ID, account name, scannable FPS QR |
-| Hong Kong local bank transfer | Bank name, bank code, branch code, full account number including bank and branch code |
-| SWIFT (International) | Beneficiary name, beneficiary address, bank name, bank address (main branch address, city, country), SWIFT/BIC, full account number or IBAN; after the payment reference, a note to choose OUR for transfer fees so Grade10 receives the full order total |
+| FPS | FPS ID, account name, scannable FPS QR |
+| HK Local | Bank name, bank code, branch code, full account number including bank and branch code |
+| International via SWIFT | Beneficiary name, beneficiary address, bank name, bank address (main branch address, city, country), SWIFT/BIC, full account number or IBAN; after the payment reference, a note to choose OUR for transfer fees so Grade10 receives the full order total |
 
 **Submit Payment Proof** - Submit Payment Proof SHALL be a separate dialog
 titled Submit Payment Proof. It SHALL NOT show amount due, transfer reference,
-or the three rail tabs. Proof upload rules stay under "The winner uploads
+or any rail's details. Proof upload rules stay under "The winner uploads
 payment proof once".
 
 **No card Pay** - Grade10 SHALL offer no card Pay control on a bank transfer
 invoice and SHALL refuse a card payment attempted against one. A winner who
 wants to pay by card asks Grade10, and an operator reissues the invoice.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-bmm rev=1 -->
+Scenarios `winner-order-SC-95`, `winner-order-SC-181`, `winner-order-SC-182`
+and `winner-order-SC-183` keep their titles with their ids. The titles are
+historical: the dialog shows the one rail picked, with no tabs and no default.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-bmm rev=2 -->
 #### Scenario: winner-order-SC-95 - A bank transfer invoice shows three ways and the reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
+- **GIVEN** an auction order whose invoice was sent for bank transfer on the HK Local rail and is `pending`
 - **WHEN** the winner opens View Bank Details
-- **THEN** FPS, Hong Kong local bank transfer and SWIFT details are available as tabs with the fields above
-- **AND** the bank reference is shown at the bottom of the selected tab
-- **AND** the tab track is full-width at `sm` and wider, and hugs the labels with horizontal scrolling below `sm`
+- **THEN** the HK Local details are shown with the fields above
+- **AND** no FPS or SWIFT details and no rail tabs are shown
+- **AND** the bank reference is shown after the fields
 - **AND** no card Pay control is offered
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-dvp rev=1 -->
@@ -1635,34 +1783,34 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **AND** View Bank Details opens the View Bank Details dialog
 - **AND** Submit Payment Proof opens the Submit Payment Proof dialog
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-zx9 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-zx9 rev=2 -->
 #### Scenario: winner-order-SC-181 - View Bank Details opens on FPS
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
+- **GIVEN** an auction order whose invoice was sent for bank transfer on the FPS rail and is `pending`
 - **WHEN** the winner opens View Bank Details
-- **THEN** the FPS tab is selected
-- **AND** FPS ID, account name and an FPS QR are shown
+- **THEN** FPS ID, account name and an FPS QR are shown
+- **AND** no HK Local or SWIFT details are shown
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-tf6 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-tf6 rev=2 -->
 #### Scenario: winner-order-SC-182 - HK Local tab shows branch code
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** the View Bank Details dialog is open
-- **WHEN** the winner selects HK Local
+- **GIVEN** an auction order whose invoice was sent for bank transfer on the HK Local rail and is `pending`
+- **WHEN** the winner opens View Bank Details
 - **THEN** bank name, bank code, branch code and the full account number including bank and branch code are shown
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-oii rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-oii rev=2 -->
 #### Scenario: winner-order-SC-183 - SWIFT tab shows OUR note after payment reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** the View Bank Details dialog is open
-- **WHEN** the winner selects International (SWIFT)
+- **GIVEN** an auction order in USD whose invoice was sent for bank transfer on the International via SWIFT rail and is `pending`
+- **WHEN** the winner opens View Bank Details
 - **THEN** beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC and the full account number or IBAN are shown
 - **AND** the payment reference and memo warning are shown
 - **AND** a note after the payment reference tells the winner to choose OUR for transfer fees so Grade10 receives the full order total
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-fm9 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-fm9 rev=2 -->
 #### Scenario: winner-order-SC-184 - Submit Payment Proof is proof-only
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -1670,7 +1818,16 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **WHEN** the winner opens Submit Payment Proof from Order summary
 - **THEN** the dialog title is Submit Payment Proof
 - **AND** amount due and transfer reference are not shown
-- **AND** no FPS, HK Local or SWIFT tab is shown
+- **AND** no rail's details are shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-i03 rev=1 -->
+#### Scenario: winner-order-SC-299 - The rail picked at setup is the rail the invoice shows
+**Serves:** winner-order-US-25 - Winner picks a payment method their currency offers
+
+- **GIVEN** an auction order whose winner confirmed setup in HKD with FPS
+- **AND** an operator sent its invoice for bank transfer
+- **WHEN** the winner opens View Bank Details
+- **THEN** only the FPS details are shown
 
 ### Requirement: Invoices and receipts carry an internal audit number
 
@@ -3271,3 +3428,280 @@ the account address book or any other order.
 - **AND** an operator reopened setup after the deadline passed
 - **WHEN** the winner opens the order
 - **THEN** the address picker does not offer the one-time address
+
+### Requirement: The winner chooses a settlement currency at order setup
+
+At order setup the winner SHALL choose the order's settlement currency from
+`USD` and `HKD`, in the same step as the delivery address and the payment
+method. Grade10 SHALL preselect neither and SHALL refuse a confirmation that
+carries no currency. The lot is bid in USD whichever currency the winner picks.
+
+This choice applies to a collector winner. For an internal bidder's win,
+`grade10-admin/auction/internal-bid` sets HKD settlement, bank transfer and
+FPS at lot close; the internal order does not wait for winner setup.
+
+Until the winner confirms, they SHALL be able to change the currency freely.
+Once they confirm, the currency locks for the winner with the address and the
+method, per "The delivery address locks when the invoice is sent". An operator
+MAY change it before the invoice is sent, and on a reissue after, per
+`grade10-admin/auction/post-sale`. A sent invoice SHALL keep its own currency
+and amounts; a reissue replaces it with a new invoice in the currency the
+operator chose, and the replaced invoice keeps its own.
+
+The invoice, the order total, every fee, every payment and refund, the receipt
+and every order letter that states an amount owed or paid SHALL carry the
+settlement currency. A winning bid on the lot card SHALL stay in USD. Payment
+method availability SHALL follow the settlement currency, per "The winner
+chooses a payment method with the address".
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-o92 rev=1 -->
+#### Scenario: winner-order-SC-278 - Setup offers USD and HKD with neither picked
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order for a lot bid in `USD`, in Awaiting Setup
+- **WHEN** the winner opens the setup form
+- **THEN** the settlement currency choice offers USD and HKD
+- **AND** neither is selected
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-j1l rev=1 -->
+#### Scenario: winner-order-SC-279 - A confirmation with no currency is refused
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order in Awaiting Setup, whose winner has chosen a
+  delivery address and a billing address but no currency
+- **WHEN** the winner confirms setup
+- **THEN** Grade10 refuses the confirmation
+- **AND** the order holds no delivery address, no currency and no method, and
+  is still Awaiting Setup
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-lq9 rev=1 -->
+#### Scenario: winner-order-SC-280 - The winner confirms with the currency they picked
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order in Awaiting Setup where the winner has picked
+  HKD and a method HKD offers
+- **WHEN** the winner confirms the delivery address
+- **THEN** the order records HKD as its settlement currency
+- **AND** the order derives as Preparing Invoice
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8c6 rev=1 -->
+#### Scenario: winner-order-SC-281 - A USD order is priced in USD without conversion
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order whose winner picked USD, with a hammer price of
+  250000 minor units in USD
+- **WHEN** an operator sends its invoice
+- **THEN** the invoice's Winning Bid is 250000 minor units in USD
+- **AND** the buyer's premium is 50000 minor units in USD
+- **AND** no line is converted
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-k63 rev=1 -->
+#### Scenario: winner-order-SC-282 - A sent invoice keeps its currency
+**Serves:** winner-order-US-24 - Winner chooses the currency they pay in
+
+- **GIVEN** an auction order whose invoice was sent in HKD
+- **WHEN** a write that is not an operator's reissue sets the order's
+  settlement currency to USD
+- **THEN** Grade10 refuses the write
+- **AND** the order and its invoice still carry HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-rau rev=1 -->
+#### Scenario: winner-order-SC-300 - An operator changes the currency before the invoice is sent
+**Serves:** `winner-order-US-24`, `grade10-admin/auction/post-sale#post-sale-US-05` - the winner's pick is corrected before the quote
+
+- **GIVEN** an auction order in Preparing Invoice whose winner confirmed HKD and
+  HK Local
+- **WHEN** an operator holding payment-processing changes the settlement
+  currency to USD with a reason
+- **THEN** the order records USD, and the winner reads Winner Order in USD
+- **AND** the winner's own write to the currency is still refused
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d84 rev=1 -->
+#### Scenario: winner-order-SC-301 - A reissue carries the currency the operator chose
+**Serves:** `winner-order-US-24`, `winner-order-US-26` - the winner's currency is corrected after the invoice is sent
+
+- **GIVEN** an auction order whose invoice was sent in HKD with a Winning Bid
+  of 78500 minor units
+- **WHEN** an operator reissues it in USD
+- **THEN** the new invoice carries a Winning Bid of 10000 minor units in USD
+- **AND** the replaced invoice still reads 78500 minor units in HKD
+
+### Requirement: An HKD order converts each USD line at a fixed rate and rounds it up
+
+Grade10 SHALL price an HKD order from the order's USD amounts at one fixed rate
+of 7.85 HKD to 1 USD, the same for every order. It SHALL NOT look the rate up,
+lock a different one per order, or store one on the invoice.
+
+Grade10 SHALL convert each USD line on its own and round it up to the whole
+HK$: the converted amount is a multiple of 100 minor units in HKD. It SHALL
+then add the rounded lines. The lines it converts are the winning bid, the
+buyer's premium, Shipping & Handling, Insurance, Tax and a bank transfer fee.
+It SHALL NOT convert the USD total once.
+
+| USD amount in minor units | Converted, in HKD minor units | Read as |
+| ---: | ---: | --- |
+| 10000 | 78500 | HK$785.00 |
+| 10100 | 79300 | HK$793.00 |
+| 1001 | 7900 | HK$79.00 |
+| 1 | 100 | HK$1.00 |
+| 0 | 0 | HK$0.00 |
+
+For a card order, Grade10 SHALL take the card rule for HKD from Payment
+Settings and compute the payment processing fee in HKD on the sum of the
+rounded lines, per "Invoice fields". The fee is not converted. The order total
+is the HKD subtotal plus that fee.
+
+Grade10 SHALL fix the converted lines and the fee on the invoice when it is
+sent. A sent invoice SHALL NOT re-price, and only a reissue SHALL price it
+again. Grade10 SHALL show the rate on no page, invoice, receipt or letter.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-gc6 rev=1 -->
+#### Scenario: winner-order-SC-283 - A USD amount converts at 7.85 to an HKD amount
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an auction order whose winner picked HKD, with a hammer price of
+  10000 minor units in USD
+- **WHEN** an operator sends its invoice
+- **THEN** the invoice's Winning Bid is 78500 minor units in HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-buj rev=1 -->
+#### Scenario: winner-order-SC-284 - A fraction rounds up to the whole HK$
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an auction order whose winner picked HKD, with a hammer price of
+  10100 minor units in USD
+- **WHEN** an operator sends its invoice
+- **THEN** the invoice's Winning Bid is 79300 minor units in HKD, not 79285
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ekn rev=1 -->
+#### Scenario: winner-order-SC-285 - The HKD total adds up the rounded lines
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an auction order whose winner picked HKD and bank transfer, with a
+  hammer price of 10100, a buyer's premium of 2020 and Shipping & Handling of
+  1001 minor units in USD, and a bank transfer fee of 0 minor units in USD
+- **WHEN** an operator sends its invoice
+- **THEN** the invoice's lines are 79300, 15900 and 7900 minor units in HKD
+- **AND** the order total is 103100 minor units in HKD, the sum of the lines,
+  not 103000
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-qtr rev=1 -->
+#### Scenario: winner-order-SC-286 - A card fee on an HKD order is computed in HKD
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an auction order whose winner picked HKD and card
+- **AND** an HKD card rule in Payment Settings of 3.4 per cent and 235 minor
+  units
+- **AND** HKD lines summing to 103100 minor units
+- **WHEN** an operator sends its invoice
+- **THEN** the payment processing fee is 3873 minor units in HKD
+- **AND** the order total is 106973 minor units in HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-h1a rev=1 -->
+#### Scenario: winner-order-SC-287 - A sent HKD invoice does not re-price
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an HKD invoice sent with a Winning Bid of 78500 minor units in HKD
+- **WHEN** the winner opens the order after Grade10's conversion figure is
+  changed
+- **THEN** the invoice still reads 78500 minor units in HKD
+- **AND** a reissue made after the change is priced at the new figure
+
+### Requirement: An HKD invoice, receipt and letter carry HKD only
+
+An invoice, a receipt and every order letter sent after the winner picks the
+currency, for an HKD order, SHALL state every amount in HKD: the lines, the
+fee, the order total, each payment and each refund. They SHALL NOT print the
+USD winning bid and SHALL NOT name the conversion rate. The invoice's Winning
+Bid line SHALL read the converted HKD line. The won-lot letter, sent at the
+close before any currency is picked, is the one order letter that names the
+USD winning bid, per `grade10-site/auction/notifications-order`.
+
+An order in USD SHALL read every amount in USD on the same documents.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-tmf rev=1 -->
+#### Scenario: winner-order-SC-288 - An HKD invoice prints no USD winning bid
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an auction order whose winner picked HKD, with a hammer price of
+  10000 minor units in USD
+- **WHEN** the winner opens the sent invoice and its PDF
+- **THEN** every amount reads in HKD, with the Winning Bid at 78500 minor
+  units
+- **AND** no USD amount and no conversion rate is printed
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-vvm rev=1 -->
+#### Scenario: winner-order-SC-289 - An HKD receipt and order letter read HKD
+**Serves:** winner-order-US-26 - Winner who settles in HKD reads the invoice and receipt in HKD
+
+- **GIVEN** an HKD order whose invoice total is 103100 minor units in HKD and
+  whose payment an operator confirmed
+- **WHEN** the winner opens the receipt and reads the payment confirmed letter
+- **THEN** the order total and the payment read 103100 minor units in HKD
+- **AND** no USD winning bid and no conversion rate appears on either
+
+### Requirement: The Order Summary keeps USD lines and splits its total under HKD
+
+The Order Summary on Winner Order SHALL list the order's lines in USD whichever
+settlement currency the winner picked. For a USD order its Order Total SHALL
+be one line in USD. For an HKD order its Order Total SHALL split into two
+lines: the USD total, the sum of the order's USD lines, and below it the HKD
+total, the sum of the lines each converted and rounded up.
+
+A card order settled in HKD SHALL show the Payment Processing Fee in HKD after
+the separator, below the two totals. Grade10 computes it in HKD from the HKD
+card rule on the HKD subtotal, and it is added on top of the converted HKD
+total. The winner pays the converted HKD total plus the fee, which is the
+invoice's Order Total. The USD total SHALL leave the fee out, and no USD fee
+line shows.
+
+Before an invoice is sent the summary SHALL show no HKD total and no HKD fee.
+The lot card SHALL keep the winning bid in USD.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-kdr rev=2 -->
+#### Scenario: winner-order-SC-290 - An HKD order's summary shows a USD total then an HKD total
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+
+- **GIVEN** a Pending Payment order whose winner picked HKD and bank transfer,
+  with USD lines of 10100, 2020 and 1001 minor units
+- **WHEN** the winner opens Winner Order
+- **THEN** the Order Summary lists the three lines in USD
+- **AND** Order Total shows a USD total of 13121 minor units, then an HKD
+  total of 103100 minor units
+- **AND** the lot card shows the winning bid of 10100 minor units in USD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-fq4 rev=1 -->
+#### Scenario: winner-order-SC-304 - A card order under HKD shows the HKD fee after the two totals
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+
+- **GIVEN** a Pending Payment order whose winner picked HKD and card, with USD
+  lines of 10100, 2020 and 1001 minor units
+- **AND** an HKD card rule in Payment Settings of 3.4 per cent and 235 minor
+  units
+- **WHEN** the winner opens Winner Order
+- **THEN** the Order Summary lists the three lines in USD
+- **AND** Order Total shows a USD total of 13121 minor units, then an HKD
+  total of 103100 minor units
+- **AND** after the separator, below the two totals, the Payment Processing Fee
+  reads 3873 minor units in HKD
+- **AND** the fee is not in the USD total and no USD fee line shows
+- **AND** the amount the winner pays is 106973 minor units in HKD, the
+  invoice's Order Total
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-59h rev=1 -->
+#### Scenario: winner-order-SC-291 - A USD order's summary shows one total
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+
+- **GIVEN** a Pending Payment order whose winner picked USD
+- **WHEN** the winner opens Winner Order
+- **THEN** Order Total is one line in USD
+- **AND** no HKD amount shows
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ug0 rev=2 -->
+#### Scenario: winner-order-SC-292 - The HKD total waits for the invoice
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+
+- **GIVEN** an order whose winner picked HKD and whose invoice is not yet sent
+- **WHEN** the winner opens Winner Order
+- **THEN** the summary shows no HKD total and no HKD fee
+- **AND** the lot card shows the winning bid in USD

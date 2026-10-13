@@ -12,11 +12,12 @@ const meta = {
     docs: {
       description: {
         component:
-          "Step 2 of Complete Order Setup — the Pay in choice (USD or HKD, HKD preselected) then the payment method, card preselected. USD offers card, Hong Kong bank transfer and SWIFT; HKD offers card, FPS and Hong Kong bank transfer. Each currency remembers its method; Continue needs both.",
+          "Step 2 of Complete Order Setup. The winner chooses USD or HKD and one payment rail. USD offers Card, HK Local and International via SWIFT; HKD offers Card, FPS and HK Local. A currency switch keeps a rail only when both currencies offer it.",
       },
     },
   },
   args: {
+    cardFeePercentages: { USD: 4.4, HKD: 3.4 },
     initialStep: 2,
   },
 } satisfies Meta<typeof CompleteOrderSetupDemo>;
@@ -35,10 +36,7 @@ async function findVisibleDialog(
   });
 }
 
-/**
- * Step 2 — Pay in choice with HKD preselected; methods show immediately
- * with card preselected. Switching to USD swaps the rails.
- */
+/** Step 2 starts with no currency or payment method selected. */
 export const PaymentMethod: Story = {
   name: "Payment method",
   play: async ({ canvasElement }) => {
@@ -52,28 +50,49 @@ export const PaymentMethod: Story = {
     expect(usd).toBeVisible();
     expect(hkd).toBeVisible();
     expect(usd).toHaveAttribute("aria-pressed", "false");
-    expect(hkd).toHaveAttribute("aria-pressed", "true");
-    const card = modal.getByRole("radio", { name: /^Card\b/i });
-    expect(card).toBeVisible();
-    expect(card).toBeChecked();
-    expect(modal.getByRole("radio", { name: /Bank transfer/i })).toBeVisible();
-    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
-    // Clicking the pressed item again must not clear the choice.
+    expect(hkd).toHaveAttribute("aria-pressed", "false");
+    expect(modal.queryByRole("radio")).not.toBeInTheDocument();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+
     await userEvent.click(hkd);
     expect(hkd).toHaveAttribute("aria-pressed", "true");
-    expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
+    expect(modal.getByRole("radio", { name: /^Card\b/i })).not.toBeChecked();
+    expect(modal.getByRole("radio", { name: /^FPS\b/ })).toBeVisible();
+    expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+    await userEvent.click(modal.getByRole("radio", { name: /^FPS\b/ }));
+    expect(
+      within(modal.getByRole("radio", { name: /^FPS\b/ })).getByText(
+        "Bank fee set on your invoice",
+      ),
+    ).toBeVisible();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+    await userEvent.click(modal.getByRole("radio", { name: /^Card\b/i }));
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+
     await userEvent.click(usd);
     await waitFor(() => {
       expect(usd).toHaveAttribute("aria-pressed", "true");
     });
     expect(hkd).toHaveAttribute("aria-pressed", "false");
-    // Card stays the default under USD — Continue stays enabled.
+    expect(
+      modal.getByText("Card fee about 4.4% + a fixed amount"),
+    ).toBeVisible();
+    // Card is offered under both currencies, so the winner's pick stays.
     expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
     expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+
+    await userEvent.click(hkd);
+    await waitFor(() => {
+      expect(hkd).toHaveAttribute("aria-pressed", "true");
+    });
+    expect(
+      modal.getByText("Card fee about 3.4% + a fixed amount"),
+    ).toBeVisible();
   },
 };
 
-/** Step 2 with USD — card + bank transfer naming SWIFT, no FPS. */
+/** USD offers Card, HK Local and International via SWIFT, with no selection. */
 export const PaymentMethodUsd: Story = {
   name: "Payment method — USD",
   play: async ({ canvasElement }) => {
@@ -84,67 +103,69 @@ export const PaymentMethodUsd: Story = {
     await waitFor(() => {
       expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeVisible();
     });
-    const bankTransfer = modal.getByRole("radio", {
-      name: /Bank transfer/i,
-    });
-    expect(bankTransfer).toBeVisible();
-    expect(bankTransfer).toHaveTextContent(/Hong Kong bank transfer or SWIFT/);
-    expect(bankTransfer).not.toHaveTextContent(/FPS/);
+    expect(modal.getByRole("radio", { name: /^Card\b/i })).not.toBeChecked();
+    expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
+    expect(
+      modal.queryByRole("radio", { name: /^International via SWIFT\b/ }),
+    ).toBeVisible();
+    expect(
+      modal.queryByRole("radio", { name: /^FPS\b/ }),
+    ).not.toBeInTheDocument();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
   },
 };
 
-/** Step 2 with HKD — bank transfer names FPS. */
+/** HKD offers Card, FPS and HK Local, with no selection. */
 export const PaymentMethodHkd: Story = {
   name: "Payment method — HKD",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "Payment Method");
     const modal = within(dialog);
-    expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeVisible();
-    const bankTransfer = modal.getByRole("radio", {
-      name: /Bank transfer/i,
-    });
-    expect(bankTransfer).toBeVisible();
-    expect(bankTransfer).toHaveTextContent(/FPS or Hong Kong bank transfer/);
+    await userEvent.click(modal.getByRole("button", { name: "HKD" }));
+    expect(modal.getByRole("radio", { name: /^Card\b/i })).not.toBeChecked();
+    expect(modal.getByRole("radio", { name: /^FPS\b/ })).toBeVisible();
+    expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
+    expect(
+      modal.queryByRole("radio", { name: /^International via SWIFT\b/ }),
+    ).not.toBeInTheDocument();
   },
 };
 
-/** Each Pay in currency remembers the last method picked for it. */
-export const EachCurrencyRemembersItsMethod: Story = {
-  name: "Each currency remembers its method",
+/** A shared rail stays selected; a currency-specific rail clears on switch. */
+export const CurrencySwitchKeepsOnlyOfferedRail: Story = {
+  name: "Currency switch keeps only an offered rail",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "Payment Method");
     const modal = within(dialog);
-    // HKD is preselected; pick bank transfer for it.
-    await userEvent.click(modal.getByRole("radio", { name: /Bank transfer/i }));
-    expect(modal.getByRole("radio", { name: /Bank transfer/i })).toBeChecked();
-
-    // USD falls back to the card default.
+    await userEvent.click(modal.getByRole("button", { name: "HKD" }));
+    await userEvent.click(modal.getByRole("radio", { name: /^HK Local\b/ }));
+    expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeChecked();
     await userEvent.click(modal.getByRole("button", { name: "USD" }));
     await waitFor(() => {
-      expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
+      expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeChecked();
     });
-    expect(
-      modal.getByRole("radio", { name: /Bank transfer/i }),
-    ).not.toBeChecked();
     expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
-    expect(modal.getByText(/Hong Kong bank transfer or SWIFT/)).toBeVisible();
 
-    // Back on HKD, bank transfer is checked again.
+    await userEvent.click(
+      modal.getByRole("radio", { name: /^International via SWIFT\b/ }),
+    );
+    expect(
+      modal.getByRole("radio", { name: /^International via SWIFT\b/ }),
+    ).toBeChecked();
     await userEvent.click(modal.getByRole("button", { name: "HKD" }));
     await waitFor(() => {
-      expect(
-        modal.getByRole("radio", { name: /Bank transfer/i }),
-      ).toBeChecked();
+      expect(modal.getByRole("radio", { name: /^FPS\b/ })).not.toBeChecked();
     });
-    expect(modal.getByRole("radio", { name: /^Card\b/i })).not.toBeChecked();
-    expect(modal.getByText(/FPS or Hong Kong bank transfer/)).toBeVisible();
-    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+    expect(
+      modal.queryByRole("radio", { name: /^International via SWIFT\b/ }),
+    ).not.toBeInTheDocument();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
   },
 };
 
-/** Single settlement currency — no choice, methods shown immediately. */
+/** One offered currency is fixed, but the winner must still pick a rail. */
 export const UsdOnly: Story = {
   name: "USD only",
   args: { settlementCurrencies: ["USD"] },
@@ -153,11 +174,11 @@ export const UsdOnly: Story = {
     const dialog = await findVisibleDialog(page, "Payment Method");
     const modal = within(dialog);
     expect(modal.queryByText("Pay in")).not.toBeInTheDocument();
-    expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
-    const bankTransfer = modal.getByRole("radio", {
-      name: /Bank transfer/i,
-    });
-    expect(bankTransfer).toHaveTextContent(/Hong Kong bank transfer or SWIFT/);
-    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+    expect(modal.getByRole("radio", { name: /^Card\b/i })).not.toBeChecked();
+    expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
+    expect(
+      modal.getByRole("radio", { name: /^International via SWIFT\b/ }),
+    ).toBeVisible();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
   },
 };
