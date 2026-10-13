@@ -206,7 +206,7 @@
 
 - customer A bid on `<lot_6>`, email alerts on, and does not lead.
 - customer B leads `<lot_6>`.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_6>` to close.
+- Open `<lot_6>`'s listing page and wait for it to close.
 - customer A watched `<lot_6>`, then bid on it, email alerts on, and does not lead.
 - customer B watches `<lot_6>`, email alerts on, and leads it.
 
@@ -241,7 +241,7 @@
 
 - customer D watches `<lot_7>`, email alerts on, and never bid on it.
 - customer B leads `<lot_7>`.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_7>` to close.
+- Open `<lot_7>`'s listing page and wait for it to close.
 - customer D watches `<lot_7>`, never bid on it, with alerts as the row gives.
 
 **Shared test data:**
@@ -269,7 +269,7 @@
 **Starting state:**
 
 - customer D watches `<lot_8>`, email alerts on, and never bid on it.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_8>` to close.
+- Open `<lot_8>`'s listing page and wait for it to close.
 - customer D and customer E watch `<lot_8>`, email alerts on, and never bid on it.
 
 **Shared test data:**

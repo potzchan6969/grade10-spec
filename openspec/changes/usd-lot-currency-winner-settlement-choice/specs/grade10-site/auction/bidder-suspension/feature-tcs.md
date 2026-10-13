@@ -91,7 +91,7 @@
 - `customer A` is suspended.
 - `customer A` holds the highest maximum on `<lot_5>`.
 - `<lot_5>` is about to close.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_5>` to close.
+- Open `<lot_5>`'s listing page and wait for it to close.
 
 **Shared test data:**
 

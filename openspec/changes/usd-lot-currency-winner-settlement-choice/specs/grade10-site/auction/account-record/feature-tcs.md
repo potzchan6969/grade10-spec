@@ -18,7 +18,7 @@
 - customer B(signed in, enrolled to bid) is on `<lot_6 url>` in a separate session.
 - customer A(signed in) has bid on `<lot_6>` and is on `<my auctions url>`.
 - The refresh of `<lot_6>`'s bid and close is mocked to fail.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_6>` to close.
+- Open `<lot_6>`'s listing page and wait for it to close.
 - customer A(signed in) has bid on `<lot_7>`, in the state its row gives, and is on `<lot_7 url>`.
 - customer A(signed in, enrolled to bid) has neither watched nor bid on `<lot_8>`.
 
