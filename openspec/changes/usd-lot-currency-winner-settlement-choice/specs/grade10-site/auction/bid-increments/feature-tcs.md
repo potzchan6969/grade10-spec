@@ -491,3 +491,8 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+
+### Focused QA2 - 2026-10-14
+
+- **Feature set:** The prepared fold removes the retired USD/HKD/JPY fixed-policy schedule and per-currency ceiling. It retains one USD schedule for every lot and one USD 10,000,000 ceiling. This resolves the bid-increments feature-set finding against decision Q4 and the current PRD.
+- **Coverage:** No requirement, scenario, journey, case ID, or case text changed. The 12 active draft cases and all 16 current scenarios remain as reconciled in the existing ledger. `TC-y0l` remains intentionally unlinked because its broader exploratory route is not fully stated by one scenario; the durable suite's old JPY maximum row remains an archive reconciliation item, not a current delta-scenario gap. No wider case or coverage claim is added.

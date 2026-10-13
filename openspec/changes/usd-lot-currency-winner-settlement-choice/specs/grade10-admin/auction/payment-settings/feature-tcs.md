@@ -421,3 +421,8 @@ Runs once per row of **Test data**.
 - **Coverage:** The single USD premium minimum, the USD/HKD-only card-rule mapping and separate per-currency rules remain asserted by the retained cases. No case claims a JPY card rule or premium minimum.
 - **Out of suite:** The existing entries for permission gates, malformed rule writes and example fee calculations remain because their full THEN is not asserted by a case in this feature suite.
 - **Raised:** None. Q11 and Q13 settle the supported currencies and USD card-rule launch requirement.
+
+### Focused QA2 - 2026-10-14
+
+- **Feature set:** The prepared fold removes the retired per-currency premium minimums and legacy Stripe card-fee label. It retains one USD premium minimum, a default of USD 0, payment-processing access, and card rules for USD and HKD only. This resolves the payment-settings feature-set finding against decisions Q4, Q11 and Q13 and the current PRD.
+- **Coverage:** No requirement, scenario, journey, case ID, or case text changed. The 11 active draft cases, their existing dispositions, and the five out-of-suite entries above remain unchanged. The feature-set correction creates no new case gap and does not extend the suite's coverage claim.

@@ -9,10 +9,19 @@ settlement currency, USD and HKD, from the Auction admin section.
 ## Feature set
 
 - Payment settings
+  - Safe defaults: one USD premium minimum of 0 until a save
+  - Authorized writes: payment processing is required to read or change values
   - Premium minimum: one USD minimum, zero or more, typed and read in the bid currency
   - Currencies held: card fee rules for USD and HKD, the two settlement currencies; JPY is not held
   - Card fee rule: one rule each for USD and HKD, a percentage and a fixed amount, or no rule
   - Card at setup: a winner is offered card only in a currency with a rule; USD needs Finance's rule before launch
+
+## REMOVED Feature set
+
+- Payment settings
+  - Currency mapping: retired per-currency premium minimums
+  - Premium minimums: retired USD, HKD and JPY minimums
+  - Stripe card fee: replaced by the USD and HKD card fee rule scope
 
 ## ADDED Requirements
 

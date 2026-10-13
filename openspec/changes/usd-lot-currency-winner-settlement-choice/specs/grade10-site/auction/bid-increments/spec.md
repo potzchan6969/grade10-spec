@@ -14,6 +14,13 @@ Grade10-owned USD schedule for every auction, which bids in USD alone.
   - One USD ceiling: a single upper limit of USD 10,000,000 for every lot
   - Refusal above it: a manual bid or an auto-bid maximum above the ceiling is refused
 
+## REMOVED Feature set
+
+- Currency schedules
+  - Fixed policy: retired USD, HKD and JPY schedules
+- Bid ceiling
+  - Per-currency ceiling: replaced by the single USD ceiling
+
 ## ADDED Requirements
 
 ### Requirement: Every lot is bid in USD and no other currency stays
