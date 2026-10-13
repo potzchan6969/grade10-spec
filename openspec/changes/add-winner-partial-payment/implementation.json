@@ -1,0 +1,80 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "694486fabc3a2d1ad42901e5d956461688e0224c1abea5d7f1afdfe43b1136af"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "bd90c986be2072e835ca6265bba9601c75accbbf",
+    "capturedAt": "2026-10-13T13:42:33.332Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-winner-partial-payment/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Closing tolerance is explicit and preserves payments",
+          "Requirement: Operators can record an ordered partial-payment history",
+          "Requirement: Reissue and Cancel are refused once a payment is recorded"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: My Auctions keeps a partially paid Won row linked to the order"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Recorded money derives Partially Paid and closes self-service"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Winner Order shows a locked partially paid record"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
