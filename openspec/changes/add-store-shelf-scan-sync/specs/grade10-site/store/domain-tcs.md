@@ -11,7 +11,7 @@ same title, price and availability,
 **so that** what I tell a customer at the shelf is what the store sells them
 online.
 
-<!-- trace:case id=g10.store-dmn.TC-xk6 rev=1 -->
+<!-- trace:case id=g10.store-dmn.TC-xk6 rev=2 covers=g10.store-shelf-scanning.SC-n6w -->
 ### g10.store-dmn.US11-TC1: Scanned product opens its own page with the same answer
 
 Runs once per row of **Test data**.
@@ -45,7 +45,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Point the camera at `<product>` on the shelf.
+1. Point the camera at `<product>` on the shelf, at its label where it is a slab.
 2. Read the title, price and availability the scan shows.
 3. Open the store page link on the scan.
 4. Read the title, price and purchase area on the page.
@@ -57,3 +57,11 @@ Runs once per row of **Test data**.
 * Step 3 opens `<product>`'s own store page, not another copy's.
 * Step 4's title and price match step 2's.
 * Step 4's purchase area reads `<availability>`.
+
+## Reconciliation
+
+**Run:** QA2 on 2026-10-13. US11-TC1 moves to rev 2: its slab row now points
+the camera at the slab's label, because Q36 offers a slab whose label is not
+read in the pick, without grade or cert. It covers
+`g10.store-shelf-scanning.SC27`; the shelf-scanning suite's reconciliation
+records the rest.

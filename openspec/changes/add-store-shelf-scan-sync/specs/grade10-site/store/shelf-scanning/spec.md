@@ -94,6 +94,7 @@ written again.
 | Grade and cert | The unit's grader, grade and cert, only for a slab whose unit is known |
 | Photos | The product's first 8 photos, in the shop's order |
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-dan rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC1 - A published product becomes one item
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper scans a sealed box the shop has just listed
 
@@ -103,6 +104,7 @@ written again.
 - **THEN** the scanner holds one item for it, titled as the product, priced
   98000 HKD minor units and reading `Available`
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-icy rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC2 - A gift card is not held
 **Serves:** `Catalogue held in step` - the store copies its catalogue and passes over what is never on the shelf
 
@@ -110,6 +112,7 @@ written again.
 - **WHEN** the next copy reaches the scanner
 - **THEN** the scanner holds no item for it
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-c6s rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC3 - A sold-out product stays and reads Sold out
 **Serves:** g10.store-shelf-scanning.US4 - the shopkeeper scans a product the shop has sold out of
 
@@ -119,6 +122,7 @@ written again.
 - **THEN** the scanner still holds the item, with its title and price, and it
   reads `Sold out`
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-9kw rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC4 - A product the store drops leaves
 **Serves:** `Catalogue held in step` - the store's copy decides what the scanner holds
 
@@ -127,6 +131,7 @@ written again.
   scanner
 - **THEN** the scanner no longer holds the item or its photos
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-9xz rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC5 - A sold consigned slab leaves
 **Serves:** `Catalogue held in step` - a consigned sale takes the slab off the store and so off the scanner
 
@@ -135,6 +140,7 @@ written again.
 - **THEN** the scanner no longer holds the item, rather than reading it
   `Sold out`
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-r9i rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC6 - An item changed on the scanner is put back
 **Serves:** `Catalogue held in step` - nobody edits the store's items anywhere but the shop
 
@@ -142,6 +148,7 @@ written again.
 - **WHEN** the next copy reaches the scanner
 - **THEN** the item carries the store's title and price again
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-fd7 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC7 - An unchanged product is not written again
 **Serves:** `Catalogue held in step` - every copy reaches the scanner, and only what moved is written
 
@@ -151,6 +158,7 @@ written again.
 - **THEN** the scanner records no change to the item, queues no photo for it
   and publishes no new version of the store's items
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-9ha rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC8 - A reported change reaches the scanner within 6 minutes
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper never quotes a price the store has since changed
 
@@ -162,6 +170,7 @@ written again.
 - **AND** within 8 minutes of the save, a scanner left open and in view shows
   110000 HKD minor units
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-0a3 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC9 - A change only the re-read finds reaches the scanner within 11 minutes
 **Serves:** g10.store-shelf-scanning.US1 - a change the shop never reported still reaches the shelf
 
@@ -172,6 +181,7 @@ written again.
 - **AND** within 13 minutes of the save, a scanner left open and in view shows
   it
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-t17 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC10 - Production holds the store's products before the store opens there
 **Serves:** g10.store-shelf-scanning.US1 - the shop floor scans on production while production carries no store
 
@@ -202,6 +212,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
 | Unit carried twice | Two products name one item, or one grader and cert; neither carries it |
 | Cert not read | The item's grader is one the scanner reads, and its cert is not 4 to 24 letters, digits or hyphens |
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-qhd rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC11 - A consigned slab's label names its product
 **Serves:** g10.store-shelf-scanning.US3 - the shopkeeper scans a consigned slab of a card the store lists several times
 
@@ -211,6 +222,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
 - **THEN** the scanner names that slab's product, with its own price
 - **AND** shows grade PSA 10 and cert 126956765
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-l0k rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC12 - A house-stock slab named by its label code
 **Serves:** g10.store-shelf-scanning.US6 - the stock keeper writes the label code and the slab becomes its own listing
 
@@ -221,6 +233,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
 - **THEN** scanning that slab names the product and shows grade CGC 9.5 and
   cert 4123456001
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-y2o rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC13 - A correction in inventory reaches the scanner
 **Serves:** `Slab as its copy` - the store reads the unit's facts afresh for every copy
 
@@ -229,6 +242,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
   the scanner, the product unchanged in the shop
 - **THEN** the item shows grade 10
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-66m rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC14 - A graded product naming no item
 **Serves:** `Slab as its copy` - a slab nobody linked to inventory is still sold and still found
 
@@ -239,6 +253,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
   photos, and no grade or cert
 - **AND** Operations is alerted to a slab held without a unit
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-j9i rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC15 - A slab whose grader the scanner does not read
 **Serves:** `Slab as its copy` - a PCGS, NGC or PMG slab is found by its photos
 
@@ -248,6 +263,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
   photos
 - **AND** Operations is alerted to a slab held without a unit
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-6to rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC16 - Two products carry one cert
 **Serves:** `Slab as its copy` - a unit carried twice names no product rather than the wrong one
 
@@ -258,6 +274,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
   label names neither product by its cert
 - **AND** Operations is alerted to both
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-2ly rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC34 - A cert the scanner cannot read
 **Serves:** `Slab as its copy` - a cert in another form is held like a grader the scanner does not read
 
@@ -283,6 +300,7 @@ cannot yet recognise from its photos SHALL still be held with its title,
 price and availability, and scanning it SHALL show what the scanner shows for
 anything it does not recognise.
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-wsi rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC17 - The store product wins over the catalogue card
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper scans a raw card the store sells
 
@@ -292,6 +310,7 @@ anything it does not recognise.
 - **THEN** the scanner names the store product, with the store's title, price
   and availability, and not the catalogue card and its market price
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-lrl rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC18 - A sealed box is held before it is recognisable
 **Serves:** `Recognition order` - the store sends every kind now so the box detector needs no second sync
 
@@ -300,6 +319,7 @@ anything it does not recognise.
 - **THEN** the scanner holds each with its title, price, availability and
   photos
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-z1x rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC19 - Scanning a product the scanner cannot recognise
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper points the camera at a sealed box
 
@@ -308,6 +328,7 @@ anything it does not recognise.
 - **THEN** the scanner shows "Not recognised yet — hold steady", as for
   anything it does not recognise
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-ftn rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC35 - One close match shows directly
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a card the store lists once
 
@@ -316,6 +337,7 @@ anything it does not recognise.
 - **THEN** the scan shows that product's title, price and availability, with
   no choice to make
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-92k rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC36 - Two listings of one art are both shown
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a card the store lists twice, say in two languages
 
@@ -326,6 +348,7 @@ anything it does not recognise.
 - **AND** opening it lists both listings, closest first, each with its title,
   price and availability
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-hyo rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC37 - The shopkeeper picks one listing
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper chooses the listing in their hand
 
@@ -334,6 +357,7 @@ anything it does not recognise.
 - **THEN** the scan shows that listing's title, price, availability and, in a
   build that carries the store, its store page link
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-egb rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC38 - The shopkeeper dismisses the list
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper goes back to scanning without choosing
 
@@ -341,6 +365,7 @@ anything it does not recognise.
 - **WHEN** the shopkeeper dismisses the list
 - **THEN** the camera view returns with no listing chosen
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-jar rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC39 - A raw copy of a card sold only as a slab
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a raw card the store sells only graded
 
@@ -351,6 +376,7 @@ anything it does not recognise.
   availability, with no choice to make
 - **AND** shows no grade and no cert
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-4qs rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC41 - A raw card beside a slab of its art offers the pick
 **Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - a raw card never shows a slab's price without a choice
 
@@ -361,6 +387,7 @@ anything it does not recognise.
 - **AND** opening it lists both, closest first, each with its title, price
   and availability, and neither with a grade or cert
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-sw4 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC42 - Two slabs of one card with no label read
 **Serves:** `g10.store-shelf-scanning.US3`, `Recognition order` - a slab whose label is not read is picked like any other listing
 
@@ -371,6 +398,7 @@ anything it does not recognise.
 - **AND** opening it lists both slabs' products, closest first, with no
   grade or cert
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-owc rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC43 - A read label names its slab alone
 **Serves:** `g10.store-shelf-scanning.US3`, `Recognition order` - a cert names one unit, so there is nothing to pick
 
@@ -392,6 +420,7 @@ staging and on production, with the model the deployed scanner runs.
 | A photo that could not be learned | Tried again 24 hours after the failure |
 | The run's model differs from the scanner's | Nothing learned; the run fails |
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-s7a rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC20 - A new photo is learned within the hour on production
 **Serves:** `Hourly photo learning` - the store adds a photo and the shelf recognises it
 
@@ -400,6 +429,7 @@ staging and on production, with the model the deployed scanner runs.
 - **THEN** within the hour after, the scanner recognises the product from
   that photo
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-i2s rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC21 - An hour with nothing new does no work
 **Serves:** `Hourly photo learning` - the hourly run checks and stops
 
@@ -407,6 +437,7 @@ staging and on production, with the model the deployed scanner runs.
 - **WHEN** the hourly run starts
 - **THEN** it checks once and stops without preparing to learn anything
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-c8l rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC22 - A replaced photo is learned again and a dropped one leaves
 **Serves:** `Hourly photo learning` - the scanner follows the product's photos
 
@@ -416,6 +447,7 @@ staging and on production, with the model the deployed scanner runs.
 - **THEN** the removed photo no longer recognises the product
 - **AND** the new photo is learned at the next hourly run
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-j8j rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC40 - A product with more than 8 photos
 **Serves:** `Hourly photo learning` - the scanner learns what an item can hold
 
@@ -424,6 +456,7 @@ staging and on production, with the model the deployed scanner runs.
 - **THEN** the scanner recognises the product from its first 8 photos in the
   shop's order, and not from the last 2
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-cz6 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC23 - A photo that failed is tried again after 24 hours
 **Serves:** `Hourly photo learning` - a photo that could not be fetched once is not lost for good
 
@@ -431,6 +464,7 @@ staging and on production, with the model the deployed scanner runs.
 - **WHEN** 24 hours have passed since the failure
 - **THEN** the next hourly run tries it again
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-a43 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC24 - A run with another model learns nothing
 **Serves:** `Hourly photo learning` - a run never relearns the same photos every hour
 
@@ -451,6 +485,7 @@ and at once when the shopkeeper returns to it, so it shows a change the shop
 reports within 8 minutes of the save, and one only the re-read finds within
 13.
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-6zi rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC25 - The price is the product page's
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper quotes what a customer pays online
 
@@ -461,6 +496,7 @@ reports within 8 minutes of the save, and one only the re-read finds within
 - **THEN** the scanner shows 108000 HKD minor units, a `Sale` badge and
   `Available`
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-2r0 rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC26 - No count is shown
 **Serves:** g10.store-shelf-scanning.US4 - the shopkeeper reads whether the product can be bought, not how many are left
 
@@ -468,6 +504,7 @@ reports within 8 minutes of the save, and one only the re-read finds within
 - **WHEN** the shopkeeper scans it
 - **THEN** the scanner shows `Available` and no number of units
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-n6w rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC27 - The link opens the store page
 **Serves:** g10.store-shelf-scanning.US2 - the shopkeeper shows the customer the product online
 
@@ -475,6 +512,7 @@ reports within 8 minutes of the save, and one only the re-read finds within
 - **WHEN** the shopkeeper scans a product and opens its link
 - **THEN** the product's store page opens
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-nae rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC28 - No link where the store is not carried
 **Serves:** g10.store-shelf-scanning.US2 - the shopkeeper is never sent to a page the build does not have
 
@@ -482,6 +520,7 @@ reports within 8 minutes of the save, and one only the re-read finds within
 - **WHEN** the shopkeeper scans a product
 - **THEN** the scanner shows its title, price and availability and no link
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-hdf rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC29 - An open scanner reads its catalogue again
 **Serves:** g10.store-shelf-scanning.US1 - a scanner left open all day never shows an old price for long
 
@@ -493,6 +532,7 @@ reports within 8 minutes of the save, and one only the re-read finds within
 - **THEN** scanning the product shows the new price, without reopening the
   link
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-eqw rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC33 - A discount that starts reaches the scan
 **Serves:** g10.store-shelf-scanning.US1 - a sale the shop starts shows on the shelf without any product changing
 
@@ -513,6 +553,7 @@ items. It SHALL open without signing in, from outside the company's access
 wall, SHALL scan only, adding no photos, and SHALL stop working when its key
 is rotated.
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-jxn rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC30 - The link opens the scanner without sign-in
 **Serves:** g10.store-shelf-scanning.US7 - the shopkeeper opens the bookmarked link on a shop phone
 
@@ -521,6 +562,7 @@ is rotated.
 - **WHEN** the shopkeeper opens the shop's scanner link
 - **THEN** the scanner opens and names the store's products
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-0cy rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC31 - The link adds no photos
 **Serves:** g10.store-shelf-scanning.US7 - the link can only scan
 
@@ -529,6 +571,7 @@ is rotated.
 - **THEN** the scanner offers no way to, and the service refuses a photo sent
   with the link's key
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-3yv rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC32 - Rotating the key retires the link
 **Serves:** g10.store-shelf-scanning.US7 - the shop replaces a link that has leaked
 
