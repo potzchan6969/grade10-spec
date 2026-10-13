@@ -3,7 +3,7 @@
 ### grade10-site-store-cart-drawer-US-01: Signed-in collector opens the current cart over the page
 
 **As a** signed-in collector,
-**I want** my current cart to open over the page I am on with current facts and recognisable product pictures,
+**I want** my current cart to open over the page I am on with current facts,
 **so that** I can review what the shop can sell without losing my place.
 
 ### grade10-site-store-cart-drawer-US-02: Signed-in collector edits the reviewed cart

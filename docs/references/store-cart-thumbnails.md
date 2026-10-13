@@ -1,6 +1,6 @@
 # Store Cart Thumbnails
 
-The approved implementation brief, read on 2026-10-13, supports the picture extension in [Add Store Cart Drawer UI](../../openspec/changes/add-store-cart-drawer-ui/proposal.md).
+The approved implementation brief, read on 2026-10-13, supports the picture extension in [Add Store Cart Thumbnails](../../openspec/changes/add-store-cart-thumbnails/proposal.md).
 
 ## Source
 
@@ -22,6 +22,6 @@ The approved implementation brief, read on 2026-10-13, supports the picture exte
 
 ## Planning Ownership
 
-- **Change** - [Add Store Cart Drawer UI](../../openspec/changes/add-store-cart-drawer-ui/proposal.md) owns the not-yet-durable Grade10 drawer capability
-- **Signed-out policy** - the transport compatibility checks do not change the settled member-only cart journey
+- **Change** - [Add Store Cart Thumbnails](../../openspec/changes/add-store-cart-thumbnails/proposal.md) owns the picture extension; [Add Store Cart Drawer UI](../../openspec/changes/add-store-cart-drawer-ui/proposal.md) retains the other drawer and pending-operation work
+- **Signed-out policy** - transport compatibility checks do not change the existing member and guest cart journeys
 - **Contract gap** - the shared renderer supports pictures, but its durable specification does not state that contract; the application change also excludes image enrichment. This spec extension makes the approved behavior explicit before implementation

@@ -61,21 +61,6 @@ States combine this change's Grade10 scenarios with durable
 Browse More is out of scope for this host: the shared surface no longer exposes
 slot or empty-state browse actions (`cart-drawer-empty-state`).
 
-### Product Pictures
-
-The [CartItem Default story](https://storybook.grade10-stg.com/?path=/story/store-cart-blocks-cartitem--default) and existing `CartItem` thumbnail frame are the design reference. `CartItemSummary.imageSrc` and `imageAlt` already exist in [types](../../../packages/ui/src/blocks/store-cart/types.ts); the [renderer](../../../packages/ui/src/blocks/store-cart/cart-drawer.tsx) already supplies the picture, item-name alt fallback and no-picture placeholder. No primitive, token, message key, export or layout change is required. Shared picture stories and controlled assets are missing coverage to add in grade10-spec.
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Reviewed product with picture | Current first product picture in the existing thumbnail frame | `grade10-site-store-cart-drawer-SC-34`, `shared-ui-store-cart-SC-64` |
-| Picture without alt text | Same picture, with item name in the image alt attribute | `grade10-site-store-cart-drawer-SC-41`, `shared-ui-store-cart-SC-65` |
-| Product without picture | Existing thumbnail placeholder | `grade10-site-store-cart-drawer-SC-35`, `shared-ui-store-cart-SC-66` |
-| Sold-out product with picture | Picture with the existing sold-out treatment | `grade10-site-store-cart-drawer-SC-42`, `shared-ui-store-cart-SC-64` |
-| Legacy response without picture fields | Existing thumbnail placeholder | `grade10-site-store-cart-drawer-SC-39`, `shared-ui-store-cart-SC-66` |
-| Pending review | Existing loading presentation | `grade10-site-store-cart-drawer-SC-06` |
-| Failed review | Existing unresolved feedback and readiness | `grade10-site-store-cart-drawer-SC-38` |
-| Picture resource fails | Existing browser image presentation; accepted cart facts remain | `grade10-site-store-cart-drawer-SC-45` |
-
 ## Points Reference
 
 [Storybook Default](https://storybook.grade10-stg.com/?path=/story/store-cart-blocks-cartdrawer--default)

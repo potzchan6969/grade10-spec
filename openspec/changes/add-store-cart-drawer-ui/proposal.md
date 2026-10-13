@@ -17,10 +17,6 @@ baseline.
 Store answers the cart drawer, reviews and edits the member cart, and reaches
 the existing checkout without first leaving that surface.
 
-The reported cart has blank picture boxes for products whose catalogue pictures load on the collection. The approved [thumbnail brief](../../../docs/references/store-cart-thumbnails.md) extends this change to current product pictures.
-
-**Thumbnail metric:** share of reviewed cart lines with a catalogue picture whose matching thumbnail loads in the drawer. The seeded browser regression requires all such lines to load.
-
 ## What Changes
 
 - Expose Cart in the site header on every surface once the Store cart drawer
@@ -30,7 +26,7 @@ The reported cart has blank picture boxes for products whose catalogue pictures 
   Store integration.
 - Run the existing live cart review on every open; keep unconfirmed values and
   Checkout unavailable while the read is pending or failed.
-- Map only reviewed line and subtotal facts, including current product pictures, into the shared drawer, and keep
+- Map only reviewed line and subtotal facts into the shared drawer, and keep
   shipping, promo redemption, points, tax, and discounts neutral or
   absent where the current integration supplies no answer.
 - For a signed-in collector, read held promo-code eligibility and the basket's
@@ -69,7 +65,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-- `shared/ui/store-cart` - consumer-owned pending state disables drawer actions across body, footer and promo sheet without changing their layout or adding promo editing; existing optional tender and picture props retain their compatibility and fallback behavior.
+- `shared/ui/store-cart` - consumer-owned pending state disables drawer actions across body, footer and promo sheet without changing their layout or adding promo editing; existing optional tender props retain their compatibility.
 
 - `grade10-site/site/page-shell` — carries Cart in the header: absent until
   the Store cart drawer answers, then global on every surface. Scenarios
@@ -91,8 +87,6 @@ See [Non-Goals](decisions.md#non-goals).
   same submodule bump) so `emptyTitle` and the empty `EmptyState` contract
   exist.
 
-The thumbnail extension also touches Shopify variant reads, optional reviewed-line response fields, application joins and fixtures in grade10. Shared picture stories and controlled assets stay in grade10-spec. `CartItemSummary`, `CartItem`, `CartDrawerBody` and `CartDrawer` retain their existing exports and presentation; the Grade10 storefront supplies the enriched props. No database, admin, deployment or new production dependency is required.
-
 No domain impact: the drawer reuses existing product and checkout addresses
 without changing the journeys those destination capabilities own.
 
@@ -113,8 +107,6 @@ The application owner archives after deployment acceptance.
 - [Shared Pending Operations](../../../docs/prds/products/shared/ui/store-cart.md#pending-operations)
 - [Cart Pending Operations](../../../docs/prds/products/grade10-site/store/cart.md#pending-operations)
 - [Cart Drawer · Reviewing the Cart](../../../docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart)
-- [Shared Cart · Product Pictures](../../../docs/prds/products/shared/ui/store-cart.md#product-pictures)
-- [Approved Thumbnail Brief](../../../docs/references/store-cart-thumbnails.md)
 - [Shared Tender Actions](../../../docs/prds/products/shared/ui/store-cart.md#tender-actions)
 - [Cart Promo Code](../../../docs/prds/products/grade10-site/store/cart.md#promo-code)
 - [Cart Points](../../../docs/prds/products/grade10-site/store/cart.md#points)
