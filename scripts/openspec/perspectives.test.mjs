@@ -686,6 +686,29 @@ test("shared-planning-agent-rounds-SC-113 - a backticked id the change does not 
   assert.match(printed.join("\n"), /shared-planning-gone-SC-09/);
 });
 
+test("shared-planning-agent-rounds-SC-109 - a group citing a scenario in the `<app>.<domain>-<capability>.SC<n>` form is given its block", () => {
+  const root = fixture();
+  citing(root);
+  const modern = (path, from, to) =>
+    writeFileSync(path, readFileSync(path, "utf8").replaceAll(from, to));
+  const change = join(root, "openspec", "changes", "demo");
+  for (const [from, to] of [
+    ["shared-planning-demo-SC-01", "g10.planning-demo.SC1"],
+    ["shared-planning-demo-SC-02", "g10.planning-demo.SC2"],
+  ]) {
+    modern(join(change, "specs/shared/planning/demo/spec.md"), from, to);
+    modern(join(change, "tasks.md"), from, to);
+  }
+  const text = readAll(root, bundleFor(root, "demo", "1", undefined, quiet));
+
+  assert.match(text, /demo first rule\./);
+  assert.doesNotMatch(text, /demo second rule\./);
+  assert.throws(
+    () => bundleFor(root, "demo", "4", undefined, quiet),
+    /group 4[\s\S]*g10\.planning-demo\.SC2[\s\S]*backtick/,
+  );
+});
+
 test("a group the plan does not carry is refused", () => {
   const root = fixture();
   citing(root);

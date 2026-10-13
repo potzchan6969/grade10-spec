@@ -20,7 +20,10 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
 import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import { sectionLinesOf } from "../../../tools/manual/src/content/sections.ts";
-import { outline } from "../../../tools/manual/src/store/markdown.mts";
+import {
+  outline,
+  SCENARIO_ID,
+} from "../../../tools/manual/src/store/markdown.mts";
 import {
   applyPerspectives,
   bugPerspectives,
@@ -509,9 +512,16 @@ const spanOf = (lines, heads, index) => {
 };
 
 /** The ids a section can cite, in the store's grammar: a case
- * (`…-US1-TC2-1`), a scenario (`…-SC-12`) or a journey (`…-US-03`). */
-const ID =
-  /[a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?-TC\d+-\d+|SC-\d+[a-z]?|US-\d+[a-z]?)(?![\w-])/g;
+ * (`…-US1-TC2-1`), a scenario (`…-SC-12`, `….SC12`) or a journey (`…-US-03`). */
+const ID = new RegExp(
+  `(?:${SCENARIO_ID.source}|[a-z0-9][a-z0-9-]*?-(?:US-?\\d+[a-z]?-TC\\d+-\\d+|US-\\d+[a-z]?))(?![\\w-])`,
+  "g",
+);
+const IS_SCENARIO = new RegExp(`^${SCENARIO_ID.source}$`);
+/** The id a heading issues: a scenario, or a journey or case in either form. */
+const HEADING_ID = new RegExp(
+  `^(?:Scenario:\\s+)?(${SCENARIO_ID.source}|[a-z0-9][a-z0-9.-]*\\.US-?\\d+[a-z]?(?:-TC-?\\d+)?|[a-z0-9][a-z0-9-]*?-US-?\\d+[a-z]?(?:-TC\\d+-\\d+)?)\\b`,
+);
 const isId = (text) => {
   ID.lastIndex = 0;
   const match = ID.exec(text);
@@ -567,13 +577,10 @@ const issuedBy = (root, dir) => {
           own.kept.push(spanOf(lines, heads, index));
         return;
       }
-      const id =
-        /^(?:Scenario:\s+)?((?:[a-z0-9][a-z0-9.-]*\.(?:US-?\d+[a-z]?(?:-TC-?\d+)?|SC-?\d+[a-z]?)|[a-z0-9][a-z0-9-]*?-(?:US-?\d+[a-z]?(?:-TC\d+-\d+)?|SC-\d+[a-z]?)))\b/.exec(
-          head.heading,
-        )?.[1];
+      const id = HEADING_ID.exec(head.heading)?.[1];
       if (!id) return;
       opens(index);
-      if (/(?:\.SC-?|-SC-)/.test(id)) {
+      if (IS_SCENARIO.test(id)) {
         const at = (level) =>
           heads.findLastIndex((one, j) => j < index && one.level === level);
         const requirement = at(3);

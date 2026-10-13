@@ -1086,6 +1086,34 @@ describe("a MODIFIED scenario restating a durable id", () => {
     expect(lines(result, "restated")).toEqual([]);
   });
 
+  it("fails a durable `<app>.<domain>-<capability>.SC<n>` id under another marker", async () => {
+    const id = "g10.demo-alpha.SC1";
+    const root = changing(
+      "restating",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...marked(
+          id,
+          "g10.demo-alpha.SC-zzz",
+        )(requirement("Alpha does things", id, "the thing better")),
+        "",
+      ].join("\n"),
+      {
+        "openspec/specs/demo-product/alpha/spec.md": spec(
+          "Alpha",
+          marked(
+            id,
+            "g10.demo-alpha.SC-a1b",
+          )(requirement("Alpha does things", id, "the thing")),
+        ),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      `openspec/changes/restating/specs/demo-product/alpha/spec.md — MODIFIED \`Alpha does things\` restates \`${id}\` under trace marker \`g10.demo-alpha.SC-zzz\`, which \`demo-product/alpha\` issues as \`g10.demo-alpha.SC-a1b\` — carry that marker, or give the scenario a new id`,
+    ]);
+  });
+
   it("warns on the durable id under no marker, naming the one to carry", async () => {
     const result = await runChecks(modifying("alpha-SC-01"), NO_GIT);
     expect(lines(result, "issued")).toEqual([]);

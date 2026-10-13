@@ -474,7 +474,7 @@ function readScenario(section: Section): Scenario {
   if (!match) {
     throw new StoreFileError(
       section.line,
-      "a scenario heading is `#### Scenario: [<capability>-SC-<n> - ]<name>`",
+      "a scenario heading is `#### Scenario: [<scenario id> - ]<name>`",
     );
   }
   const scenario: Scenario = { name: match[2], text: section.body };

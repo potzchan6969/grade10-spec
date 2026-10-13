@@ -157,6 +157,18 @@ describe("a spec issuing one id twice", () => {
     );
   });
 
+  it("refuses two scenarios wearing one `<app>.<domain>-<capability>.SC<n>` id", () => {
+    const entry = written({
+      [SPEC]: specText(
+        "g10.demo-alpha.SC1 - it happens",
+        "g10.demo-alpha.SC1 - it repeats",
+      ),
+    });
+    expect(entry.error?.message).toMatch(
+      /scenario `g10.demo-alpha.SC1` is issued twice, at line 13 and line 18/,
+    );
+  });
+
   it("refuses two journeys wearing one id", () => {
     const entry = written({
       [SPEC]: [
