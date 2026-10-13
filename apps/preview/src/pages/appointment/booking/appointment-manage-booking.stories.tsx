@@ -24,7 +24,7 @@ import {
   VISIT_NOW_MS,
   VISIT_RECORD,
   VISIT_TIME_ZONE,
-  VISIT_TODAY_DATE,
+  VISIT_TODAY,
 } from "../../vault-content";
 import { AppointmentPageShell, PageHeader } from "../../vault-shared";
 import { STORE_LOCATOR_HREF } from "../../workbench-story-nav";
@@ -80,7 +80,7 @@ function ManageBooking({ state }: { state: BookedState }) {
           month={selectedMonth}
           minMonth={VISIT_MIN_MONTH}
           maxMonth={VISIT_MAX_MONTH}
-          today={VISIT_TODAY_DATE}
+          today={VISIT_TODAY}
           days={{ status: "ready", data: VISIT_DAYS }}
           selectedDate={selectedDate}
           slots={{
@@ -184,13 +184,16 @@ export const Live: Story = {
 export const Moving: Story = {
   args: { state: "moving" },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     expect(
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).not.toBeNull();
-    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
-      "3",
+    const picked = canvasElement.querySelectorAll(
+      '[data-slot="booking-slot-picker"] [aria-pressed="true"][data-day]',
     );
+    expect(picked.length).toBeGreaterThan(0);
+    for (const day of picked) {
+      expect(day).toHaveAttribute("data-day", "2026-09-03");
+    }
   },
 };
 

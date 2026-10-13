@@ -34,7 +34,7 @@
       "sun": "일"
     },
     "timesIn": "시간 기준:",
-    "pickADay": "날짜를 고르면 예약 가능한 시간이 보입니다.",
+    "pickADay": "날짜를 선택하면 예약 가능한 시간을 볼 수 있습니다.",
     "noTimes": "이 날은 더 이상 빈 시간이 없습니다."
   },
   "details": {
@@ -45,13 +45,13 @@
     "phoneIncomplete": "전화번호를 모두 입력해 주세요.",
     "phoneRequired": "전화번호를 입력해 주세요. 방문 전에 매장에서 연락드립니다.",
     "phonePlaceholder": "+852 1234 5678",
-    "notes": "미리 알려 주실 내용이 있나요?",
+    "notes": "메모",
     "optional": "선택",
-    "nameMissing": "이름을 입력해 주세요.",
-    "emailMissing": "확인 메일을 받을 이메일을 입력해 주세요.",
-    "emailInvalid": "올바른 이메일 주소가 아닌 것 같습니다.",
+    "nameMissing": "이름을 입력하세요.",
+    "emailMissing": "name@example.com 형식으로 이메일을 입력하세요.",
+    "emailInvalid": "name@example.com 형식으로 이메일을 입력하세요.",
     "answerMissing": "하나를 골라야 계속할 수 있습니다.",
-    "submit": "방문 예약하기",
+    "submit": "예약",
     "choose": "선택하세요",
     "bookingAs": "예약자",
     "kinds": {
@@ -61,21 +61,28 @@
       "select": "드롭다운",
       "radio": "단일 선택",
       "checkboxes": "복수 선택"
-    }
+    },
+    "emailHint": "예약 확인 메일을 이 주소로 보냅니다.",
+    "phoneHint": "방문 당일 매장에서 연락드릴 수 있도록요.",
+    "phoneRequiredHint": "방문 전에 매장에서 전화를 드립니다.",
+    "notesHint": "매장이 알아야 할 내용을 적어 주세요.",
+    "chooseOne": "하나 이상 선택하세요.",
+    "chooseX": "{label}을(를) 선택하세요.",
+    "numberRange": "{min}~{max} 사이로 입력하세요."
   },
   "summary": {
     "title": "내 방문",
     "service": "서비스",
     "location": "매장",
-    "when": "일시"
+    "when": "시간"
   },
   "confirmation": {
-    "title": "예약이 완료됐습니다",
+    "title": "예약되었습니다",
     "body": "예약 내용을 캘린더 파일과 함께 이메일로 보냈습니다.",
     "service": "서비스",
     "location": "매장",
     "when": "일시",
-    "manage": "방문 옮기기 또는 취소",
+    "manage": "변경 또는 취소",
     "calendar": "캘린더에 추가",
     "beforeYouCome": "방문 전 안내",
     "answers": "알려주신 내용"
@@ -108,7 +115,10 @@
     "open": "열기",
     "signInTitle": "로그인하고 내 방문을 확인하세요",
     "signInBody": "예약할 때 쓴 이메일 기준으로 방문이 표시됩니다.",
-    "signIn": "로그인"
+    "signIn": "로그인",
+    "signedIn": "{email}(으)로 로그인됨",
+    "notYou": "본인이 아닌가요?",
+    "note": "{email}(으)로 예약한 모든 방문이 여기에 표시됩니다."
   },
   "state": {
     "booked": "예약됨",
@@ -183,7 +193,7 @@
     "triesBody": "이 이메일로 오늘 10번 예약을 시도했습니다. 내일 다시 시도하세요.",
     "triesBodyCall": "이 이메일로 오늘 10번 예약을 시도했습니다. 내일 다시 시도하거나 {shop} 매장({phone})으로 전화하세요.",
     "call": "{phone}로 전화",
-    "changeRule": "방문 시간이 끝나기 전까지 변경하거나 취소할 수 있습니다.",
+    "changeRule": "방문 시작 전까지 변경하거나 취소할 수 있습니다.",
     "change": "변경",
     "changeAria": "{what} 변경",
     "booked": "예약되었습니다",
@@ -206,8 +216,58 @@
       "refundNone": "취소하거나 방문하지 않으면 환불되지 않습니다.",
       "continue": "결제하기",
       "opening": "결제 페이지를 여는 중…",
-      "unavailable": "지금은 이 서비스를 온라인으로 예약할 수 없습니다. 매장에 전화해 예약해 주세요."
-    }
+      "unavailable": "지금은 이 서비스를 온라인으로 예약할 수 없습니다. 매장에 전화해 예약해 주세요.",
+      "now": "지금 결제",
+      "chargeDeposit": "보증금 {amount}",
+      "via": "안전한 Stripe 페이지에서 결제합니다. 결제를 마치기 전에는 청구되지 않습니다.",
+      "hold": "이 시간을 {minutes}분 동안 잡아 둡니다",
+      "receipt": "{amount} 결제 완료. 영수증은 해당 이메일에 있습니다."
+    },
+    "continue": "계속",
+    "need": {
+      "service": "계속하려면 서비스를 선택하세요.",
+      "shop": "계속하려면 매장을 선택하세요.",
+      "time": "계속하려면 시간을 선택하세요."
+    },
+    "stepsLabel": "예약 단계",
+    "stepDoneAria": "{n}단계, {label}, 완료. 이 단계로 돌아가기.",
+    "notChosen": "아직 선택 안 함",
+    "forLabel": "방문자",
+    "more100": "카드가 100장 넘나요?",
+    "messageUs": "먼저 문의하세요",
+    "dayFull": "마감",
+    "dayClosed": "휴무",
+    "heads": {
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토",
+      "sun": "일"
+    },
+    "stripTitle": "{from} ~ {to}",
+    "earlierDays": "이전 날짜",
+    "laterDays": "이후 날짜",
+    "todayDay": "오늘, {day}",
+    "parts": {
+      "morning": "오전",
+      "afternoon": "오후",
+      "evening": "저녁"
+    },
+    "specialHours": "영업 {from}~{to} · {reason}",
+    "fullOn": "{shop} 매장의 {day} 예약이 마감되었습니다.",
+    "closedOn": "{shop} 매장은 {day}에 휴무입니다.",
+    "errCount": "{count, plural, one {위에 표시된 항목을 확인하세요.} other {위에 표시된 #개 항목을 확인하세요.}}",
+    "aboutCards": "카드 정보",
+    "aboutItems": "물품 정보",
+    "forOther": "다른 사람을 위해 예약합니다",
+    "otherName": "방문자 이름",
+    "otherHint": "예약 확인증은 회원님께 이메일로 보내 드립니다. 방문자에게 전달해 주세요.",
+    "otherMissing": "방문자 이름을 입력하세요.",
+    "consent": "이 정보는 방문 진행과 관련 이메일 안내에만 사용합니다.",
+    "privacy": "개인정보 처리방침",
+    "calSaved": "캘린더 파일 저장됨"
   },
   "visit": {
     "mine": "내 방문",
@@ -240,7 +300,8 @@
       "bookedFor": "예약자",
       "shopPhone": "매장 전화",
       "timesIn": "{zone} 기준",
-      "whereValue": "Grade10 {shop}"
+      "whereValue": "Grade10 {shop}",
+      "zoneTime": "{zone, select, HKT {홍콩 시간} other {{zone} 기준}}"
     },
     "holdLine": "{time} 이후 {minutes}분 동안 시간을 잡아 둡니다.",
     "rel": "{days, plural, =0 {오늘} =1 {내일} other {#일 후}}",
@@ -267,20 +328,22 @@
     },
     "booked": {
       "lede": "{when}, {shop} 매장.",
-      "note": "당일 {time}까지 변경하거나 취소할 수 있습니다."
+      "note": "당일 {time}까지 변경하거나 취소할 수 있습니다.",
+      "passLine": "{service} · {shop} · {when}"
     },
     "today": {
       "title": "{time}에 뵙겠습니다",
       "lede": "{shop} 매장({address})에서 {service}.",
       "passLine": "{service} · {shop} · {from}~{to}",
-      "note": "{end}까지 변경하거나 취소할 수 있습니다. {held}까지 시간을 잡아 둡니다.",
-      "noteHeld": "{held}까지 시간을 잡아 둡니다."
+      "note": "{start}까지 변경하거나 취소할 수 있습니다. {held}까지 시간을 잡아 둡니다.",
+      "noteHeld": "{held}까지 시간을 잡아 둡니다.",
+      "notePaid": "{start}까지 변경하거나 취소할 수 있습니다. 방문까지 {hours}시간이 남지 않아 지금 취소하면 {money}은(는) 환불되지 않습니다."
     },
     "late": {
       "phaseNote": "늦음 · 약 {time} 도착",
       "keptTitle": "{held}까지 시간을 잡아 둘게요",
       "pastTitle": "시간은 {held}까지만 잡아 둡니다",
-      "keptLede": "{shop} 매장에 약 {minutes}분 늦는다고 알렸습니다. 도착하면 패스를 보여 주세요.",
+      "keptLede": "{shop} 매장에 약 {minutes}분 늦는다고 알렸습니다. 도착하면 카운터에서 전화번호나 이메일을 알려 주세요.",
       "pastLede": "{shop} 매장에 약 {time}에 도착한다고 알렸습니다. 오셔서 체크인하고 다음 빈 카운터를 기다려 주세요.",
       "keptNote": "{held} 이후에도 오실 수 있습니다. 체크인하고 다음 빈 카운터를 기다려 주세요.",
       "pastNote": "또는 다른 시간을 고르세요.",
@@ -294,7 +357,11 @@
       "sending": "보내는 중…",
       "sent": "{shop} 매장에 약 {minutes}분 늦는다고 알렸습니다.",
       "failed": "{shop} 매장에 알리지 못했습니다. 다시 시도하세요.",
-      "tooLate": "{held}부터는 시간을 잡아 두지 않습니다. 오셔서 체크인하거나 다른 시간을 고르세요."
+      "tooLate": "{held}부터는 시간을 잡아 두지 않습니다. 오셔서 체크인하거나 다른 시간을 고르세요.",
+      "hereTitle": "이미 도착하셨나요?",
+      "hereLabel": "도착했어요",
+      "hereHint": "카운터에 알려 드립니다. 카운터에서 전화번호나 이메일을 알려 주세요.",
+      "hereSent": "카운터에 도착했다고 알렸습니다."
     },
     "checkedIn": {
       "title": "불러 드릴게요",
@@ -307,7 +374,7 @@
     "called": {
       "phaseNote": "{time} 준비됨",
       "title": "{counter}가 준비되었습니다",
-      "lede": "지금 {counter}로 가서 패스를 보여 주세요.",
+      "lede": "지금 {counter}로 가세요.",
       "passLine": "{service} · {shop} · {time}",
       "held": "{time}까지 카운터를 잡아 둡니다.",
       "counterless": "내 카운터",
@@ -315,7 +382,8 @@
     },
     "grading": {
       "title": "그레이딩팀이 카드를 받았습니다",
-      "lede": "그레이딩팀이 접수 내용과 번호, 다음 안내를 {email}(으)로 보내 드립니다."
+      "lede": "그레이딩팀이 접수 내용과 번호, 다음 안내를 {email}(으)로 보내 드립니다.",
+      "titleCount": "그레이딩팀이 카드 {count}장을 받았습니다"
     },
     "vault": {
       "title": "보관소가 물품을 받았습니다",
@@ -328,14 +396,15 @@
     "passed": {
       "phaseNote": "{held}까지 잡아 둠",
       "title": "{held}까지 시간을 잡아 두었습니다",
-      "lede": "또는 다른 시간을 예약하세요.",
-      "note": "{end}까지 변경하거나 취소할 수 있습니다. 또는 {service}을(를) 바로 다시 예약하세요.",
+      "lede": "지금 오셔도 됩니다. 도착해서 체크인하고 다음 빈 카운터를 기다려 주세요. 또는 다른 시간을 예약하세요.",
+      "note": "{start}까지 변경하거나 취소할 수 있습니다. 또는 {service}을(를) 바로 다시 예약하세요.",
       "noteBook": "또는 {service}을(를) 바로 다시 예약하세요."
     },
     "missed": {
       "title": "이번에는 뵙지 못했습니다",
       "lede": "{day}에 {shop} 매장에서 체크인하지 않으셨습니다. 다시 예약하시면 알려 주신 내용을 채워 드립니다.",
-      "call": "방문하셨나요? {shop} 매장({phone})으로 전화해 주세요."
+      "call": "방문하셨나요? {shop} 매장({phone})으로 전화해 주세요.",
+      "ledePaid": "{day}에 {shop} 매장에서 체크인하지 않으셨습니다. 놓친 방문은 환불되지 않아 {money}은(는) 돌려드리지 않습니다."
     },
     "left": {
       "title": "차례가 되기 전에 떠나셨습니다",
@@ -353,7 +422,10 @@
       "title": "이 방문을 취소하셨습니다",
       "lede": "{day} {time}은(는) 이제 다른 분이 예약할 수 있습니다. {email}(으)로 이메일을 보냈습니다.",
       "reason": "취소 사유",
-      "note": "다시 예약하면 {shop} 매장의 {service}과(와) 알려 주신 내용으로 시작합니다."
+      "note": "다시 예약하면 {shop} 매장의 {service}과(와) 알려 주신 내용으로 시작합니다.",
+      "noteWith": "다시 예약하면 {shop} 매장의 {service}, {answers}(으)로 시작합니다.",
+      "ledeRefunding": "{money}이(가) 카드로 환불되는 중입니다. {email}(으)로 이메일을 보냈습니다.",
+      "ledeRefunded": "{money}이(가) 카드로 환불되었습니다. {email}(으)로 이메일을 보냈습니다."
     },
     "cancelledShop": {
       "title": "{shop} 매장에서 방문을 취소했습니다",
@@ -367,7 +439,10 @@
       "lede": "{time} 방문이 취소되었습니다. {email}(으)로 이메일을 보냈습니다.",
       "text": "{time}에 문을 닫았습니다. 편하실 때 다른 시간을 고르세요.",
       "earliest": "{shop} 매장 가장 빠른 시간: {when}",
-      "phaseNote": "{day} {time}부터"
+      "phaseNote": "{day} {time}부터",
+      "ledeRefunding": "{time} 방문이 취소되었고 {money}이(가) 카드로 환불되는 중입니다. {email}(으)로 이메일을 보냈습니다.",
+      "weatherTitle": "태풍 또는 호우 경보",
+      "textWeather": "경보가 발효 중이라 {time}에 문을 닫았습니다. 이동이 안전해지면 다른 시간을 골라 주세요."
     },
     "move": {
       "title": "시간 변경",
@@ -377,15 +452,16 @@
       "pick": "시간을 고르세요",
       "to": "{when}(으)로 변경",
       "moving": "변경 중…",
-      "moved": "{when}(으)로 변경했습니다. {email}(으)로 이메일을 보냈습니다."
+      "moved": "{when}(으)로 변경했습니다. {email}(으)로 이메일을 보냈습니다.",
+      "earliest": "가장 빠른 시간: {when}"
     },
     "cancelSheet": {
       "title": "방문을 취소할까요?",
       "sub": "{service} · {when} · {shop}",
       "free": "{day} {time}은(는) 다른 분이 예약할 수 있게 됩니다.",
       "mail": "취소되었다고 {email}(으)로 이메일을 보내 드립니다.",
-      "refunded": "{amount}이(가) 환불됩니다.",
-      "notRefunded": "환불되지 않습니다.",
+      "refunded": "{money}은(는) 카드로 환불됩니다.",
+      "notRefunded": "방문까지 {hours}시간이 남지 않아 {money}은(는) 환불되지 않습니다.",
       "why": "취소하시는 이유는 무엇인가요? (선택)",
       "reasons": {
         "cant": "갈 수 없어요",
@@ -395,7 +471,10 @@
       "more": "자세히 알려 주세요 (선택)",
       "keep": "방문 유지",
       "cancelling": "취소 중…",
-      "done": "방문을 취소했습니다. {email}(으)로 이메일을 보냈습니다."
+      "done": "방문을 취소했습니다. {email}(으)로 이메일을 보냈습니다.",
+      "refundTitle": "환불됨",
+      "noRefundTitle": "환불되지 않음",
+      "neverRefunded": "취소하면 {money}은(는) 환불되지 않습니다."
     },
     "nothing": {
       "title": "이 링크로 방문을 열 수 없습니다",
@@ -403,7 +482,7 @@
       "missing": "링크 일부가 빠졌습니다. 이메일에서 다시 열어 주세요.",
       "older": "예전 이메일의 링크입니다. 방문에 관한 최신 이메일의 링크를 사용하세요.",
       "moved": "방문의 이메일 주소가 바뀌어 링크가 새 주소로 갔습니다.",
-      "staff": "어느 매장 직원이든 전화번호나 이메일로 방문을 찾을 수 있습니다."
+      "staff": "어느 매장 직원이든 전화번호, 이메일 또는 이름으로 방문을 찾을 수 있습니다."
     },
     "reconnecting": "다시 연결하는 중…",
     "offline": "{time}에 업데이트했습니다. 이 페이지는 자동으로 다시 시도합니다.",
@@ -426,8 +505,12 @@
       "refunding": "환불",
       "refundingValue": "{amount}, 카드로 환불 진행 중",
       "refunded": "환불 완료",
-      "refundedValue": "{day}에 {amount} 환불"
-    }
+      "refundedValue": "{day}에 {amount} 환불",
+      "refundNote": "환불은 보통 영업일 기준 5~10일 안에 카드에 표시됩니다.",
+      "refundedSub": "결제한 카드로",
+      "missedKept": "환불되지 않음: 방문을 놓쳤습니다."
+    },
+    "calendarSaved": "캘린더 파일을 저장했습니다: {when}"
   },
   "ticket": {
     "yourTicket": "내 번호표",

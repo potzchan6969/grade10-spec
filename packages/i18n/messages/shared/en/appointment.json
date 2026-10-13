@@ -34,7 +34,7 @@
       "sun": "Sun"
     },
     "timesIn": "Times in",
-    "pickADay": "Pick a day to see its times.",
+    "pickADay": "Pick a day to see its free times.",
     "noTimes": "Nothing is free on this day any more."
   },
   "details": {
@@ -45,13 +45,13 @@
     "phoneIncomplete": "Enter the whole phone number.",
     "phoneRequired": "Add a phone number. The shop calls before this visit.",
     "phonePlaceholder": "+852 1234 5678",
-    "notes": "Anything we should know?",
+    "notes": "Notes",
     "optional": "optional",
-    "nameMissing": "Tell us your name.",
-    "emailMissing": "Tell us where to send the confirmation.",
-    "emailInvalid": "That doesn’t look like an email address.",
+    "nameMissing": "Enter your name.",
+    "emailMissing": "Enter an email like name@example.com.",
+    "emailInvalid": "Enter an email like name@example.com.",
     "answerMissing": "This is needed to continue.",
-    "submit": "Confirm Appointment",
+    "submit": "Book",
     "choose": "Choose",
     "bookingAs": "Booking as",
     "kinds": {
@@ -61,21 +61,28 @@
       "select": "Dropdown",
       "radio": "Single choice",
       "checkboxes": "Multiple choice"
-    }
+    },
+    "emailHint": "We send the confirmation here.",
+    "phoneHint": "So the shop can reach you on the day.",
+    "phoneRequiredHint": "The shop calls before this visit.",
+    "notesHint": "Anything the shop should know.",
+    "chooseOne": "Choose at least one.",
+    "chooseX": "Choose a {label}.",
+    "numberRange": "Enter {min} to {max}."
   },
   "summary": {
-    "title": "Your Visit",
+    "title": "Your visit",
     "service": "Service",
     "location": "Shop",
-    "when": "When"
+    "when": "Time"
   },
   "confirmation": {
-    "title": "You’re booked",
+    "title": "You are booked",
     "body": "We’ve sent the details to your email, with a calendar file.",
     "service": "Service",
     "location": "Shop",
     "when": "When",
-    "manage": "Move or cancel this visit",
+    "manage": "Change or cancel",
     "calendar": "Add to calendar",
     "beforeYouCome": "Before you come",
     "answers": "What you told us"
@@ -100,7 +107,7 @@
     "notFoundBody": "It may have been copied wrongly, or the visit it opened is gone."
   },
   "mine": {
-    "title": "Your visits",
+    "title": "My visits",
     "upcoming": "Upcoming",
     "past": "Past",
     "emptyTitle": "No visits yet",
@@ -108,7 +115,10 @@
     "open": "Open",
     "signInTitle": "Sign in to see your visits",
     "signInBody": "Your visits are listed under the email you booked with.",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "signedIn": "Signed in as {email}",
+    "notYou": "Not you?",
+    "note": "This lists every visit booked with {email}."
   },
   "state": {
     "booked": "Booked",
@@ -183,7 +193,7 @@
     "triesBody": "This email has tried to book 10 times today. Try again tomorrow.",
     "triesBodyCall": "This email has tried to book 10 times today. Try again tomorrow, or call {shop} on {phone}.",
     "call": "Call {phone}",
-    "changeRule": "You can change or cancel until your visit’s time ends.",
+    "changeRule": "You can change or cancel until your visit starts.",
     "change": "Change",
     "changeAria": "Change {what}",
     "booked": "You are booked",
@@ -206,8 +216,58 @@
       "refundNone": "Not refunded if you cancel or miss the visit.",
       "continue": "Continue to payment",
       "opening": "Opening payment…",
-      "unavailable": "This service can’t be booked online right now. Call the shop to book it."
-    }
+      "unavailable": "This service can’t be booked online right now. Call the shop to book it.",
+      "now": "Pay now",
+      "chargeDeposit": "Deposit {amount}",
+      "via": "You pay on a secure Stripe page. Nothing is charged until you finish there.",
+      "hold": "We hold this time for {minutes} minutes",
+      "receipt": "Paid {amount}. Your receipt is in that email."
+    },
+    "continue": "Continue",
+    "need": {
+      "service": "Choose a service to continue.",
+      "shop": "Pick a shop to continue.",
+      "time": "Pick a time to continue."
+    },
+    "stepsLabel": "Booking steps",
+    "stepDoneAria": "Step {n}, {label}, done. Go back to it.",
+    "notChosen": "Not chosen yet",
+    "forLabel": "For",
+    "more100": "More than 100 cards?",
+    "messageUs": "Message us first",
+    "dayFull": "Full",
+    "dayClosed": "Closed",
+    "heads": {
+      "mon": "Mo",
+      "tue": "Tu",
+      "wed": "We",
+      "thu": "Th",
+      "fri": "Fr",
+      "sat": "Sa",
+      "sun": "Su"
+    },
+    "stripTitle": "{from} to {to}",
+    "earlierDays": "Earlier days",
+    "laterDays": "Later days",
+    "todayDay": "Today, {day}",
+    "parts": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "specialHours": "Open {from} to {to} · {reason}",
+    "fullOn": "{day} is full at {shop}.",
+    "closedOn": "{shop} is closed on {day}.",
+    "errCount": "{count, plural, one {Check the field marked above.} other {Check the # fields marked above.}}",
+    "aboutCards": "About your cards",
+    "aboutItems": "About your items",
+    "forOther": "I’m booking for someone else",
+    "otherName": "Their name",
+    "otherHint": "We email the pass to you. Forward it to them.",
+    "otherMissing": "Enter their name.",
+    "consent": "We use these details to run your visit and email you about it.",
+    "privacy": "Privacy policy",
+    "calSaved": "Calendar file saved"
   },
   "visit": {
     "mine": "My visits",
@@ -240,7 +300,8 @@
       "bookedFor": "Booked for",
       "shopPhone": "Shop phone",
       "timesIn": "Times in {zone}",
-      "whereValue": "Grade10 {shop}"
+      "whereValue": "Grade10 {shop}",
+      "zoneTime": "{zone, select, HKT {Hong Kong time} other {Times in {zone}}}"
     },
     "holdLine": "We hold your time for {minutes} min after {time}.",
     "rel": "{days, plural, =0 {today} =1 {tomorrow} other {in # days}}",
@@ -267,20 +328,22 @@
     },
     "booked": {
       "lede": "{when} at {shop}.",
-      "note": "You can change or cancel until {time} on the day."
+      "note": "You can change or cancel until {time} on the day.",
+      "passLine": "{service} · {shop} · {when}"
     },
     "today": {
       "title": "See you at {time}",
       "lede": "{service} at {shop}, {address}.",
       "passLine": "{service} · {shop} · {from} to {to}",
-      "note": "Change or cancel until {end}. We hold your time until {held}.",
-      "noteHeld": "We hold your time until {held}."
+      "note": "Change or cancel until {start}. We hold your time until {held}.",
+      "noteHeld": "We hold your time until {held}.",
+      "notePaid": "Change or cancel until {start}. It’s less than {hours} hours before, so cancelling now keeps the {money}."
     },
     "late": {
       "phaseNote": "Running late · about {time}",
       "keptTitle": "We’ll hold your time until {held}",
       "pastTitle": "We hold your time until {held}",
-      "keptLede": "We told {shop} you’ll be about {minutes} min late. Show your pass when you arrive.",
+      "keptLede": "We told {shop} you’ll be about {minutes} min late. When you arrive, give your phone or email at the counter.",
       "pastLede": "We told {shop} about {time}. Come anyway: check in when you arrive and wait for the next free counter.",
       "keptNote": "After {held} you can still come: check in and wait for the next free counter.",
       "pastNote": "Or pick another time instead.",
@@ -294,7 +357,11 @@
       "sending": "Sending…",
       "sent": "{shop} knows: about {minutes} min late.",
       "failed": "We couldn’t tell {shop}. Try again.",
-      "tooLate": "We stopped holding your time at {held}. Check in when you arrive, or pick another time."
+      "tooLate": "We stopped holding your time at {held}. Check in when you arrive, or pick another time.",
+      "hereTitle": "Already outside?",
+      "hereLabel": "I’m here",
+      "hereHint": "Lets the desk know. At the counter, give your phone or email.",
+      "hereSent": "We told the desk you’re here."
     },
     "checkedIn": {
       "title": "We’ll call you",
@@ -307,7 +374,7 @@
     "called": {
       "phaseNote": "ready at {time}",
       "title": "{counter} is ready for you",
-      "lede": "Go to {counter} now and show your pass.",
+      "lede": "Go to {counter} now.",
       "passLine": "{service} · {shop} · {time}",
       "held": "We hold the counter for you until {time}.",
       "counterless": "Your counter",
@@ -315,7 +382,8 @@
     },
     "grading": {
       "title": "Grading has your cards",
-      "lede": "Grading will email {email} the submission, with its reference and what happens next."
+      "lede": "Grading will email {email} the submission, with its reference and what happens next.",
+      "titleCount": "Grading has your {count, plural, one {# card} other {# cards}}"
     },
     "vault": {
       "title": "The vault has your items",
@@ -328,14 +396,15 @@
     "passed": {
       "phaseNote": "held until {held}",
       "title": "We held your time until {held}",
-      "lede": "Or book another time.",
-      "note": "Change or cancel until {end}. Or book {service} again right away.",
+      "lede": "You can still come: check in when you arrive and wait for the next free counter. Or book another time.",
+      "note": "Change or cancel until {start}. Or book {service} again right away.",
       "noteBook": "Or book {service} again right away."
     },
     "missed": {
       "title": "We missed you",
       "lede": "You weren’t checked in at {shop} on {day}. Book again and we’ll fill in what you told us.",
-      "call": "Were you there? Call {shop} on {phone}."
+      "call": "Were you there? Call {shop} on {phone}.",
+      "ledePaid": "You weren’t checked in at {shop} on {day}. A missed visit is not refunded, so the {money} is kept."
     },
     "left": {
       "title": "You left before your turn",
@@ -353,7 +422,10 @@
       "title": "You cancelled this visit",
       "lede": "{time} on {day} is open for others now. We emailed {email}.",
       "reason": "Your reason",
-      "note": "Book again starts with {service} at {shop}, with what you told us."
+      "note": "Book again starts with {service} at {shop}, with what you told us.",
+      "noteWith": "Book again starts with {service} at {shop}, {answers}.",
+      "ledeRefunding": "Your {money} is on its way back to your card. We emailed {email}.",
+      "ledeRefunded": "Your {money} was refunded to your card. We emailed {email}."
     },
     "cancelledShop": {
       "title": "{shop} cancelled your visit",
@@ -367,7 +439,10 @@
       "lede": "Your {time} visit is cancelled. We emailed {email}.",
       "text": "We closed at {time}. Pick another time when it suits you.",
       "earliest": "Earliest at {shop}: {when}",
-      "phaseNote": "{day}, from {time}"
+      "phaseNote": "{day}, from {time}",
+      "ledeRefunding": "Your {time} visit is cancelled and your {money} is on its way back to your card. We emailed {email}.",
+      "weatherTitle": "Typhoon or rainstorm warning",
+      "textWeather": "We closed at {time} while the signal is up. Pick another time once it’s safe to travel."
     },
     "move": {
       "title": "Change time",
@@ -377,15 +452,16 @@
       "pick": "Pick a time",
       "to": "Move to {when}",
       "moving": "Moving…",
-      "moved": "Moved to {when}. We emailed {email}."
+      "moved": "Moved to {when}. We emailed {email}.",
+      "earliest": "Earliest: {when}"
     },
     "cancelSheet": {
       "title": "Cancel your visit?",
       "sub": "{service} · {when} · {shop}",
       "free": "{time} on {day} opens for others to book.",
       "mail": "We’ll email {email} that it’s cancelled.",
-      "refunded": "Your {amount} is refunded.",
-      "notRefunded": "Not refunded.",
+      "refunded": "Your {money} goes back to your card.",
+      "notRefunded": "It’s less than {hours} hours before your visit, so the {money} is not refunded.",
       "why": "Why are you cancelling? (optional)",
       "reasons": {
         "cant": "I can’t make it",
@@ -395,7 +471,10 @@
       "more": "Tell us more (optional)",
       "keep": "Keep my visit",
       "cancelling": "Cancelling…",
-      "done": "Visit cancelled. We emailed {email}."
+      "done": "Visit cancelled. We emailed {email}.",
+      "refundTitle": "Refunded",
+      "noRefundTitle": "Not refunded",
+      "neverRefunded": "The {money} is not refunded when you cancel."
     },
     "nothing": {
       "title": "This link doesn’t open a visit",
@@ -403,7 +482,7 @@
       "missing": "Part of the link is missing. Open it again from the email.",
       "older": "It’s from an older email. Use the link in the latest email about your visit.",
       "moved": "The email on the visit was changed, so its links went to the new address.",
-      "staff": "Staff at any shop can find your visit by your phone or email."
+      "staff": "Staff at any shop can find your visit by your phone, email or name."
     },
     "reconnecting": "Reconnecting…",
     "offline": "Updated {time}. This page tries again by itself.",
@@ -426,8 +505,12 @@
       "refunding": "Refund",
       "refundingValue": "{amount}, on its way back to your card",
       "refunded": "Refunded",
-      "refundedValue": "{amount} on {day}"
-    }
+      "refundedValue": "{amount} on {day}",
+      "refundNote": "Cards usually show a refund within 5 to 10 working days.",
+      "refundedSub": "To the card you paid with",
+      "missedKept": "Not refunded: the visit was missed."
+    },
+    "calendarSaved": "Calendar file saved: {when}"
   },
   "ticket": {
     "yourTicket": "Your ticket",

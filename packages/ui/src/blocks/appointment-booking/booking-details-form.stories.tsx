@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { BookingDetailsForm } from "./booking-details-form";
+import { BookingPayNotice } from "./booking-pay-notice";
 import {
   ALL_KINDS_QUESTIONS,
+  BOARD_GRADING_QUESTIONS,
   CONSULTATION_SERVICE,
   DETAILS_FORM_COPY,
   GRADING_SERVICE,
@@ -47,11 +49,9 @@ export const MissingDetails: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.type(canvas.getByRole("textbox", { name: "Name" }), "Ada");
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(
-      canvas.getByText("Tell us where to send the confirmation."),
+      canvas.getByText("Enter an email like name@example.com."),
     ).toBeVisible();
     expect(args.onSubmit).not.toHaveBeenCalled();
   },
@@ -70,9 +70,7 @@ export const ReportsTrimmedValues: Story = {
       canvas.getByRole("textbox", { name: "Email" }),
       "Ada@Example.com",
     );
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(args.onSubmit).toHaveBeenCalledWith({
       name: "Ada",
       email: "ada@example.com",
@@ -103,9 +101,7 @@ export const ReportsGradingAnswers: Story = {
       expect(page.queryByRole("listbox")).toBeNull();
     });
     await userEvent.click(canvas.getByRole("radio", { name: "PSA" }));
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(args.onSubmit).toHaveBeenCalledWith({
       name: "Ada",
       email: "ada@example.com",
@@ -129,7 +125,8 @@ export const SixKinds: Story = {
     expect(canvas.getByPlaceholderText("10,000")).toBeVisible();
     expect(canvas.getByText("Pick a size")).toBeVisible();
     expect(canvas.getAllByRole("radio")).toHaveLength(2);
-    expect(canvas.getAllByRole("checkbox")).toHaveLength(3);
+    // Three options, and booking for someone else.
+    expect(canvas.getAllByRole("checkbox")).toHaveLength(4);
 
     await userEvent.type(canvas.getByRole("textbox", { name: "Name" }), "Ada");
     await userEvent.type(
@@ -144,9 +141,7 @@ export const SixKinds: Story = {
     await userEvent.click(canvas.getByRole("radio", { name: "Pickup" }));
     await userEvent.click(canvas.getByRole("checkbox", { name: "Sleeves" }));
     await userEvent.click(canvas.getByRole("checkbox", { name: "Binder" }));
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(args.onSubmit).toHaveBeenCalledWith({
       name: "Ada",
       email: "ada@example.com",
@@ -186,17 +181,19 @@ export const RequiredCheckboxes: Story = {
       canvas.getByRole("textbox", { name: "Email" }),
       "ada@example.com",
     );
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
-    expect(canvas.getByText("This is needed to continue.")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
+    expect(canvas.getByText("Choose at least one.")).toBeVisible();
     expect(args.onSubmit).not.toHaveBeenCalled();
   },
 };
 
 /** The notes field is the site's to ask for: absent unless copy names it. */
 export const WithoutNotes: Story = {
-  args: { questions: [], description: undefined },
+  args: {
+    copy: { ...DETAILS_FORM_COPY, notes: undefined },
+    questions: [],
+    description: undefined,
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("textbox", { name: /Notes/ })).toBeNull();
@@ -220,9 +217,7 @@ export const WithNotes: Story = {
       canvas.getByRole("textbox", { name: /Notes/ }),
       "  Ring the bell ",
     );
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(args.onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ notes: "Ring the bell" }),
     );
@@ -262,9 +257,7 @@ export const PendingWithError: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("button", { name: /Confirm Appointment/ }),
-    ).toBeDisabled();
+    expect(canvas.getByRole("button", { name: /^Book/ })).toBeDisabled();
     expect(
       canvas.getByText("That time was just taken. Pick another."),
     ).toBeVisible();
@@ -290,9 +283,7 @@ export const Summarized: Story = {
     expect(canvas.getByText("Booking as")).toBeVisible();
     expect(canvas.getByText("ada@example.com")).toBeVisible();
     expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(args.onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Ada Lau",
@@ -335,12 +326,161 @@ export const PhoneRequired: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Booking as")).toBeVisible();
     expect(canvas.getByRole("textbox", { name: "Phone" })).toBeVisible();
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm Appointment" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
     expect(
       canvas.getByText("Add a phone number. The shop calls before this visit."),
     ).toBeVisible();
     expect(args.onSubmit).not.toHaveBeenCalled();
+  },
+};
+
+const SIGNED_IN = (
+  <p className="m-0 flex flex-wrap items-center gap-x-2 text-sm">
+    <span>Signed in as Alex Chan.</span>
+    <button className="min-h-11 font-semibold underline" type="button">
+      Not you?
+    </button>
+  </p>
+);
+
+/** The board's grading questions under their heading, each hint in view;
+ * an answer out of bounds is told what fits. */
+export const AboutYourCards: Story = {
+  args: {
+    questions: BOARD_GRADING_QUESTIONS,
+    questionsTitle: "About your cards",
+    description: undefined,
+    account: SIGNED_IN,
+    summarized: true,
+    initialValues: {
+      name: "Alex Chan",
+      email: "alex.chan@example.com",
+      phone: "+85291234567",
+    },
+    onInvalid: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { level: 3, name: "About your cards" }),
+    ).toBeVisible();
+    expect(canvas.getByText("1 to 19 cards.")).toBeVisible();
+    await userEvent.type(
+      canvas.getByRole("spinbutton", { name: "How many cards?" }),
+      "40",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
+    expect(
+      canvas.getByText(
+        "Enter 1 to 19. For 20 or more, go back and choose Bulk grading drop-off.",
+      ),
+    ).toBeVisible();
+    expect(canvas.getByText("Choose a grading company.")).toBeVisible();
+    expect(args.onInvalid).toHaveBeenLastCalledWith(2);
+    expect(args.onSubmit).not.toHaveBeenCalled();
+  },
+};
+
+/** Signed out: each contact field with the line under its label. */
+export const SignedOutHints: Story = {
+  args: { questions: [], description: undefined, phoneRequired: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("We send the confirmation here.")).toBeVisible();
+    expect(canvas.getByText("The shop calls before this visit.")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
+    expect(canvas.getByText("Enter your name.")).toBeVisible();
+  },
+};
+
+/** Booking for someone else asks their name, and reports it. */
+export const ForSomeoneElse: Story = {
+  args: {
+    questions: [],
+    description: undefined,
+    summarized: true,
+    initialValues: {
+      name: "Alex Chan",
+      email: "alex.chan@example.com",
+      phone: "+85291234567",
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("checkbox", { name: "I’m booking for someone else" }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
+    expect(canvas.getByText("Enter their name.")).toBeVisible();
+    await userEvent.type(
+      canvas.getByRole("textbox", { name: "Their name" }),
+      " Ben Chan ",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
+    expect(args.onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ bookedFor: "Ben Chan", name: "Alex Chan" }),
+    );
+  },
+};
+
+/** A paid service: the pay box and the consent line close the form, and the
+ * action bar outside it sends it. */
+export const PaidWithBar: Story = {
+  args: {
+    questions: [],
+    description: undefined,
+    formId: "booking-details",
+    hideSubmit: true,
+    summarized: true,
+    initialValues: {
+      name: "Alex Chan",
+      email: "alex.chan@example.com",
+      phone: "+85291234567",
+    },
+    footer: (
+      <>
+        <BookingPayNotice
+          amount="HK$100.00 deposit"
+          copy={{
+            title: "Pay now",
+            via: "You pay on a secure Stripe page. Nothing is charged until you finish there.",
+          }}
+          refund="Refunded if you cancel at least 24 hours before, or if the shop cancels."
+        />
+        <p className="m-0 text-[13px] leading-[18px]">
+          We use these details to run your visit and email you about it.{" "}
+          <a className="font-semibold underline" href="#privacy">
+            Privacy policy
+          </a>
+        </p>
+      </>
+    ),
+  },
+  render: (args) => (
+    <div>
+      <BookingDetailsForm {...args} />
+      <button form="booking-details" type="submit">
+        Continue to payment
+      </button>
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("button", { name: "Book" })).toBeNull();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Continue to payment" }),
+    );
+    expect(args.onSubmit).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** A slow write: every field reads only. */
+export const Pending: Story = {
+  args: { questions: [], description: undefined, pending: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("textbox", { name: "Name" })).toHaveAttribute(
+      "readonly",
+    );
   },
 };

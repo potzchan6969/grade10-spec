@@ -17,7 +17,7 @@ import {
   VISIT_NOW_MS,
   VISIT_RECORD,
   VISIT_TIME_ZONE,
-  VISIT_TODAY_DATE,
+  VISIT_TODAY,
 } from "../../vault-content";
 import {
   MANAGE_AND_SEE_MINE_CASES,
@@ -122,7 +122,7 @@ function ManageStepBody({ step }: { step: ManageStep }) {
           }}
           timeZone={VISIT_TIME_ZONE}
           timeZoneLabel={TIME_ZONE_LABEL}
-          today={VISIT_TODAY_DATE}
+          today={VISIT_TODAY}
         />
       ) : null}
     </VStack>

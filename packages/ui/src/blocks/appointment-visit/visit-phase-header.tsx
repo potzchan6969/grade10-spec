@@ -1,17 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import { Text } from "@grade10/design-system/components/display/text";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import type { VisitTone } from "./types";
-
-const BADGE = {
-  plain: "default",
-  ink: "brand",
-  info: "info",
-  ok: "success",
-  warn: "warning",
-  bad: "error",
-} as const satisfies Record<VisitTone, string>;
+import { VISIT_INK_2, VISIT_TINT } from "./visit-tones";
 
 type VisitPhaseHeaderCopy = {
   /** The badge's word for where it stands. */
@@ -26,30 +16,44 @@ type VisitPhaseHeaderCopy = {
 type VisitPhaseHeaderProps = {
   copy: VisitPhaseHeaderCopy;
   tone: VisitTone;
+  /** The title's heading level: the page's own heading unless it sits under one. */
+  level?: 1 | 2;
 };
 
 /** Where a visit or a ticket stands, its heading and the line under it;
  * read out as it changes. */
-function VisitPhaseHeader({ copy, tone }: VisitPhaseHeaderProps) {
+function VisitPhaseHeader({ copy, tone, level = 1 }: VisitPhaseHeaderProps) {
+  const Heading = level === 1 ? "h1" : "h2";
   return (
-    <VStack aria-live="polite" data-slot="phase-header" gap="sm">
-      <HStack gap="sm" vAlign="center">
-        <Badge variant={BADGE[tone]}>{copy.phase}</Badge>
+    <div
+      aria-live="polite"
+      className="flex flex-col gap-2.5"
+      data-slot="phase-header"
+    >
+      <p className="m-0 flex flex-wrap items-center gap-x-2 gap-y-1.5">
+        <Badge
+          className={cn(VISIT_TINT[tone], "h-6 px-2.5 text-xs font-bold")}
+          data-tone={tone}
+        >
+          {copy.phase}
+        </Badge>
         {copy.note ? (
-          <Text as="span" size="sm" tone="secondary">
+          <span
+            className={cn("text-[13px] leading-5 tabular-nums", VISIT_INK_2)}
+          >
             {copy.note}
-          </Text>
+          </span>
         ) : null}
-      </HStack>
-      <Text as="h2" size="xl" weight="bold">
+      </p>
+      <Heading className="m-0 text-2xl leading-[30px] font-bold tracking-[-0.01em] text-foreground">
         {copy.title}
-      </Text>
+      </Heading>
       {copy.lede ? (
-        <Text as="p" tone="secondary">
+        <p className={cn("m-0 text-[15px] leading-[22px]", VISIT_INK_2)}>
           {copy.lede}
-        </Text>
+        </p>
       ) : null}
-    </VStack>
+    </div>
   );
 }
 

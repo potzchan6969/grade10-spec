@@ -72,7 +72,7 @@ export const DROP_OFF_OPEN_LIST_STORY_ID =
 export const DROP_OFF_TIME_ZONE = "Asia/Hong_Kong";
 export const DROP_OFF_TIME_ZONE_LABEL = "Hong Kong time (GMT+8)";
 /** Shop-local today the calendar is drawn on. */
-export const DROP_OFF_TODAY = new Date(2026, 9, 13);
+export const DROP_OFF_TODAY = "2026-10-13";
 export const DROP_OFF_MIN_MONTH = "2026-10";
 export const DROP_OFF_MAX_MONTH = "2026-11";
 /** Thirty days from today, the service's horizon. */

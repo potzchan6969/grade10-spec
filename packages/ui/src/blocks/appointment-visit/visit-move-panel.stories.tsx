@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, screen } from "storybook/test";
 import {
   FIXTURE_MONTH,
   SEPTEMBER_3_SLOTS,
@@ -39,9 +39,11 @@ type Story = StoryObj<typeof meta>;
 
 /** Nothing picked yet: the confirm asks for a time. */
 export const Default: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Pick a time" })).toBeDisabled();
+  play: async () => {
+    const canvas = screen;
+    expect(
+      await canvas.findByRole("button", { name: "Pick a time" }),
+    ).toBeDisabled();
     expect(canvas.getByRole("button", { name: "Keep 10:15" })).toBeEnabled();
   },
 };
@@ -51,10 +53,9 @@ export const Picked: Story = {
     picked: true,
     copy: { ...MOVE_PANEL_COPY, confirm: "Move to Thu 3 Sep, 11:15" },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
     expect(
-      canvas.getByRole("button", { name: "Move to Thu 3 Sep, 11:15" }),
+      await screen.findByRole("button", { name: "Move to Thu 3 Sep, 11:15" }),
     ).toBeEnabled();
   },
 };

@@ -34,7 +34,7 @@
       "sun": "日"
     },
     "timesIn": "时间以此时区显示：",
-    "pickADay": "选择日期以查看可预约的时间。",
+    "pickADay": "选择日期以查看可预约时间。",
     "noTimes": "这一天已没有空档。"
   },
   "details": {
@@ -45,13 +45,13 @@
     "phoneIncomplete": "请输入完整的电话号码。",
     "phoneRequired": "请填写电话号码，店铺会在到访前致电。",
     "phonePlaceholder": "+852 1234 5678",
-    "notes": "有什么需要我们知道？",
+    "notes": "备注",
     "optional": "选填",
-    "nameMissing": "请填写姓名。",
-    "emailMissing": "请填写接收确认的邮箱。",
-    "emailInvalid": "这看起来不是有效的邮箱地址。",
+    "nameMissing": "请输入姓名。",
+    "emailMissing": "请输入电邮，例如 name@example.com。",
+    "emailInvalid": "请输入电邮，例如 name@example.com。",
     "answerMissing": "请选择一项以继续。",
-    "submit": "确认预约",
+    "submit": "预约",
     "choose": "请选择",
     "bookingAs": "预约人",
     "kinds": {
@@ -61,7 +61,14 @@
       "select": "下拉菜单",
       "radio": "单选",
       "checkboxes": "多选"
-    }
+    },
+    "emailHint": "确认邮件会寄到这里。",
+    "phoneHint": "方便门店当天联系你。",
+    "phoneRequiredHint": "店铺会在到访前致电。",
+    "notesHint": "有任何需要门店知道的事项。",
+    "chooseOne": "请最少选择一项。",
+    "chooseX": "请选择{label}。",
+    "numberRange": "请输入 {min} 至 {max}。"
   },
   "summary": {
     "title": "你的预约",
@@ -75,7 +82,7 @@
     "service": "服务",
     "location": "门店",
     "when": "时间",
-    "manage": "更改或取消此预约",
+    "manage": "更改或取消",
     "calendar": "加入日历",
     "beforeYouCome": "到店前须知",
     "answers": "你提供的信息"
@@ -100,7 +107,7 @@
     "notFoundBody": "链接可能复制有误，或它指向的预约已不存在。"
   },
   "mine": {
-    "title": "你的预约",
+    "title": "我的预约",
     "upcoming": "即将到来",
     "past": "过往",
     "emptyTitle": "尚无预约",
@@ -108,7 +115,10 @@
     "open": "查看",
     "signInTitle": "登录以查看你的预约",
     "signInBody": "预约会按你预约时使用的邮箱列出。",
-    "signIn": "登录"
+    "signIn": "登录",
+    "signedIn": "已登录：{email}",
+    "notYou": "不是你？",
+    "note": "这里列出以 {email} 作出的所有预约。"
   },
   "state": {
     "booked": "已预约",
@@ -183,7 +193,7 @@
     "triesBody": "此电邮今天已尝试预约 10 次。请明天再试。",
     "triesBodyCall": "此电邮今天已尝试预约 10 次。请明天再试，或致电{shop}门店 {phone}。",
     "call": "致电 {phone}",
-    "changeRule": "你可在预约时段结束前更改或取消。",
+    "changeRule": "你可在预约时段开始前更改或取消。",
     "change": "更改",
     "changeAria": "更改{what}",
     "booked": "预约成功",
@@ -206,8 +216,58 @@
       "refundNone": "取消或缺席均不设退款。",
       "continue": "前往付款",
       "opening": "正在打开付款页面…",
-      "unavailable": "此服务暂时无法在网上预约，请致电店铺预约。"
-    }
+      "unavailable": "此服务暂时无法在网上预约，请致电店铺预约。",
+      "now": "现在付款",
+      "chargeDeposit": "订金 {amount}",
+      "via": "你会在安全的 Stripe 页面付款，完成前不会收取任何费用。",
+      "hold": "我们会为你保留此时段 {minutes} 分钟",
+      "receipt": "已付款 {amount}。收据已随电邮寄出。"
+    },
+    "continue": "继续",
+    "need": {
+      "service": "请先选择服务。",
+      "shop": "请先选择门店。",
+      "time": "请先选择时间。"
+    },
+    "stepsLabel": "预约步骤",
+    "stepDoneAria": "第 {n} 步：{label}，已完成。返回此步。",
+    "notChosen": "尚未选择",
+    "forLabel": "到店人",
+    "more100": "超过 100 张卡？",
+    "messageUs": "请先联系我们",
+    "dayFull": "已满",
+    "dayClosed": "休息",
+    "heads": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "stripTitle": "{from}至{to}",
+    "earlierDays": "较早日期",
+    "laterDays": "较晚日期",
+    "todayDay": "今天，{day}",
+    "parts": {
+      "morning": "上午",
+      "afternoon": "下午",
+      "evening": "晚上"
+    },
+    "specialHours": "营业时间 {from} 至 {to} · {reason}",
+    "fullOn": "{shop}门店 {day}已满。",
+    "closedOn": "{shop}门店 {day}休息。",
+    "errCount": "{count, plural, one {请检查以上标示的栏位。} other {请检查以上标示的 # 个栏位。}}",
+    "aboutCards": "关于你的卡",
+    "aboutItems": "关于你的物品",
+    "forOther": "我为其他人预约",
+    "otherName": "到店人姓名",
+    "otherHint": "预约凭证会寄给你，请转发给对方。",
+    "otherMissing": "请输入到店人姓名。",
+    "consent": "我们只会用这些资料安排你的预约，并以电邮通知你。",
+    "privacy": "隐私政策",
+    "calSaved": "已保存日历文件"
   },
   "visit": {
     "mine": "我的预约",
@@ -240,7 +300,8 @@
       "bookedFor": "预约人",
       "shopPhone": "门店电话",
       "timesIn": "时间为 {zone}",
-      "whereValue": "Grade10 {shop}店"
+      "whereValue": "Grade10 {shop}店",
+      "zoneTime": "{zone, select, HKT {香港时间} other {时间为 {zone}}}"
     },
     "holdLine": "我们会在 {time} 后为你保留时段 {minutes} 分钟。",
     "rel": "{days, plural, =0 {今天} =1 {明天} other {# 天后}}",
@@ -267,20 +328,22 @@
     },
     "booked": {
       "lede": "{when}，{shop}店。",
-      "note": "你可以在当天 {time} 前更改或取消。"
+      "note": "你可以在当天 {time} 前更改或取消。",
+      "passLine": "{service} · {shop} · {when}"
     },
     "today": {
       "title": "{time} 见",
       "lede": "{service} · {shop}店，{address}。",
       "passLine": "{service} · {shop}店 · {from} 至 {to}",
-      "note": "{end} 前可以更改或取消。我们会为你保留时段至 {held}。",
-      "noteHeld": "我们会为你保留时段至 {held}。"
+      "note": "{start} 前可以更改或取消。我们会为你保留时段至 {held}。",
+      "noteHeld": "我们会为你保留时段至 {held}。",
+      "notePaid": "{start} 前可以更改或取消。距离到访不足 {hours} 小时，现在取消不会退回 {money}。"
     },
     "late": {
       "phaseNote": "会迟到 · 约 {time}",
       "keptTitle": "我们会为你保留时段至 {held}",
       "pastTitle": "我们只能保留时段至 {held}",
-      "keptLede": "我们已通知{shop}店你会迟大约 {minutes} 分钟。到店时请出示二维码。",
+      "keptLede": "我们已通知{shop}店你会迟大约 {minutes} 分钟。到店时请在柜台提供你的电话或电邮。",
       "pastLede": "我们已通知{shop}店你约 {time} 到。到店报到后，请轮候下一个空出的柜台。",
       "keptNote": "{held} 后仍可到店：报到后轮候下一个空出的柜台。",
       "pastNote": "或改为预约其他时间。",
@@ -294,7 +357,11 @@
       "sending": "正在发送…",
       "sent": "已通知{shop}店：大约迟 {minutes} 分钟。",
       "failed": "未能通知{shop}店，请再试。",
-      "tooLate": "我们已于 {held} 停止保留你的时段。到店时请报到，或选择其他时间。"
+      "tooLate": "我们已于 {held} 停止保留你的时段。到店时请报到，或选择其他时间。",
+      "hereTitle": "已经到了？",
+      "hereLabel": "我到了",
+      "hereHint": "会通知柜台。到柜台时提供你的电话或电邮。",
+      "hereSent": "已通知柜台你已到达。"
     },
     "checkedIn": {
       "title": "我们会叫你",
@@ -307,7 +374,7 @@
     "called": {
       "phaseNote": "{time} 已准备好",
       "title": "请到{counter}",
-      "lede": "请现在前往{counter}，并出示二维码。",
+      "lede": "请现在前往{counter}。",
       "passLine": "{service} · {shop}店 · {time}",
       "held": "我们会为你保留柜台至 {time}。",
       "counterless": "你的柜台",
@@ -315,7 +382,8 @@
     },
     "grading": {
       "title": "评级部已收到你的卡",
-      "lede": "评级部会把送评申请、编号及后续安排电邮到 {email}。"
+      "lede": "评级部会把送评申请、编号及后续安排电邮到 {email}。",
+      "titleCount": "评级部已收到你的 {count} 张卡"
     },
     "vault": {
       "title": "保险库已收到你的物品",
@@ -328,14 +396,15 @@
     "passed": {
       "phaseNote": "保留至 {held}",
       "title": "我们为你保留时段至 {held}",
-      "lede": "或预约其他时间。",
-      "note": "{end} 前可以更改或取消，或立即再预约{service}。",
+      "lede": "你仍可到店：到店报到后轮候下一个空出的柜台，或预约其他时间。",
+      "note": "{start} 前可以更改或取消，或立即再预约{service}。",
       "noteBook": "或立即再预约{service}。"
     },
     "missed": {
       "title": "这次未能见到你",
       "lede": "你于 {day} 未有在{shop}店报到。再次预约时，我们会预先填好你提供的资料。",
-      "call": "你当天有到店？请致电{shop}店 {phone}。"
+      "call": "你当天有到店？请致电{shop}店 {phone}。",
+      "ledePaid": "你于 {day} 未有在{shop}店报到。缺席不设退款，{money}不会退回。"
     },
     "left": {
       "title": "你在轮到你之前离开了",
@@ -353,7 +422,10 @@
       "title": "你已取消这个预约",
       "lede": "{day} {time} 已开放给其他人预约。我们已发电邮到 {email}。",
       "reason": "你的原因",
-      "note": "再次预约会预先填好：{service}、{shop}店及你提供的资料。"
+      "note": "再次预约会预先填好：{service}、{shop}店及你提供的资料。",
+      "noteWith": "再次预约会预先填好：{service}、{shop}店、{answers}。",
+      "ledeRefunding": "你的 {money}正退回你的信用卡。我们已发电邮到 {email}。",
+      "ledeRefunded": "你的 {money}已退回你的信用卡。我们已发电邮到 {email}。"
     },
     "cancelledShop": {
       "title": "{shop}店取消了你的预约",
@@ -367,7 +439,10 @@
       "lede": "你 {time} 的预约已取消。我们已发电邮到 {email}。",
       "text": "我们已于 {time} 关门。请另选合适时间。",
       "earliest": "{shop}店最早：{when}",
-      "phaseNote": "{day} {time} 起"
+      "phaseNote": "{day} {time} 起",
+      "ledeRefunding": "你 {time} 的预约已取消，{money}正退回你的信用卡。我们已发电邮到 {email}。",
+      "weatherTitle": "台风或暴雨警告",
+      "textWeather": "信号生效期间，我们已于 {time} 关门。待出行安全后，再选择其他时间。"
     },
     "move": {
       "title": "更改时间",
@@ -377,15 +452,16 @@
       "pick": "请选择时间",
       "to": "改到 {when}",
       "moving": "正在更改…",
-      "moved": "已改到 {when}。我们已发电邮到 {email}。"
+      "moved": "已改到 {when}。我们已发电邮到 {email}。",
+      "earliest": "最早：{when}"
     },
     "cancelSheet": {
       "title": "取消这个预约？",
       "sub": "{service} · {when} · {shop}店",
       "free": "{day} {time} 的时段会开放给其他人预约。",
       "mail": "我们会发电邮到 {email} 确认取消。",
-      "refunded": "你的 {amount} 会退还。",
-      "notRefunded": "不予退款。",
+      "refunded": "你的 {money}会退回你的信用卡。",
+      "notRefunded": "距离到访不足 {hours} 小时，{money}不设退款。",
       "why": "取消原因（选填）",
       "reasons": {
         "cant": "我未能出席",
@@ -395,7 +471,10 @@
       "more": "补充说明（选填）",
       "keep": "保留预约",
       "cancelling": "正在取消…",
-      "done": "预约已取消。我们已发电邮到 {email}。"
+      "done": "预约已取消。我们已发电邮到 {email}。",
+      "refundTitle": "可获退款",
+      "noRefundTitle": "不设退款",
+      "neverRefunded": "取消时，{money}不设退款。"
     },
     "nothing": {
       "title": "这个连结未能打开预约",
@@ -403,7 +482,7 @@
       "missing": "连结不完整。请从电邮再次打开。",
       "older": "这是旧电邮中的连结。请使用最新一封预约电邮中的连结。",
       "moved": "预约上的电邮地址已更改，连结已发到新地址。",
-      "staff": "任何门店的职员都可以用你的电话或电邮找到你的预约。"
+      "staff": "任何门店的职员都可以用你的电话、电邮或姓名找到你的预约。"
     },
     "reconnecting": "重新连线中…",
     "offline": "最后更新 {time}。此页会自动重试。",
@@ -426,8 +505,12 @@
       "refunding": "退款",
       "refundingValue": "{amount}，正退回你的信用卡",
       "refunded": "已退款",
-      "refundedValue": "{day} 退回 {amount}"
-    }
+      "refundedValue": "{day} 退回 {amount}",
+      "refundNote": "退款一般会在 5 至 10 个工作日内显示在你的信用卡账户。",
+      "refundedSub": "退回你付款的信用卡",
+      "missedKept": "不设退款：预约已错过。"
+    },
+    "calendarSaved": "已下载日历文件：{when}"
   },
   "ticket": {
     "yourTicket": "你的筹号",

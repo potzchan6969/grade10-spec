@@ -1,285 +1,699 @@
+import { dayValue, formatTimeOfDay, formatWeekday } from "@grade10/date";
 import {
-  BreadcrumbItem,
-  BreadcrumbSeparator,
-  Breadcrumbs,
-} from "@grade10/design-system/components/display/breadcrumbs";
-import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
-import { Link } from "@grade10/design-system/components/forms/link";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
-import {
+  BookingActionBar,
   BookingDetailsForm,
+  type BookingDetailsValues,
+  BookingLocationPicker,
+  BookingNotice,
+  BookingPayNotice,
   BookingServicePicker,
   type BookingSlot,
   BookingSlotPicker,
+  BookingStepDots,
   BookingSummary,
+  BookingSummaryBar,
+  VisitBookedPass,
+  VisitFullDay,
+  VisitRefusedBook,
 } from "@grade10/ui";
+import { CircleNotch, Warning } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
+import { AppointmentPageShell } from "../../vault-shared";
 import {
-  ACCOUNT_EMAIL,
-  BOOK_VISIT_NAV_COPY,
-  BOOK_VISIT_SERVICES,
-  CAUSEWAY_BAY,
-  DETAILS_FORM_COPY,
-  firstAvailableVisitDay,
-  NEXT_AVAILABLE_VISIT_DATE,
-  prepTipsForService,
-  SERVICE_PICKER_COPY,
-  SLOT_PICKER_COPY,
+  BOARD_MAX_MONTH,
+  BOARD_MIN_MONTH,
+  BOARD_SERVICES,
+  BOARD_SHOPS,
+  BOARD_TODAY_KEY,
+  BOARD_ZONE,
+  boardDays,
+  boardSlots,
+  DETAILS_COPY,
+  hkSlot,
+  ME,
+  SLOT_COPY,
+  SPECIAL_HOURS,
   SUMMARY_COPY,
-  slotsForVisitDay,
-  VAULT_CONFIRMATION_STORY_ID,
-  VISIT_DAYS,
-  VISIT_MAX_MONTH,
-  VISIT_MIN_MONTH,
-  VISIT_TIME_ZONE,
-  VISIT_TODAY_DATE,
-} from "../../vault-content";
-import { AppointmentPageShell, PageHeader } from "../../vault-shared";
-import { navigateToStory, STORE_LOCATOR_HREF } from "../../workbench-story-nav";
+  WORDS,
+} from "./book-visit-board";
 
-const READY_SERVICES = {
-  status: "ready" as const,
-  data: BOOK_VISIT_SERVICES,
+type Step = "service" | "location" | "time" | "details";
+type Phase = "flow" | "booked" | "confirming" | "expired";
+type Refusal = "taken" | "held" | "heldOut" | "tries" | null;
+
+type Scenario =
+  | "normal"
+  | "time just taken"
+  | "full day"
+  | "already booked signed out"
+  | "too many tries today"
+  | "slow network"
+  | "signed in, no phone on account"
+  | "service needs a phone"
+  | "paid service"
+  | "booking for someone else"
+  | "confirming payment"
+  | "paid and booked"
+  | "payment not completed";
+
+type Moment = {
+  step: Step;
+  phase: Phase;
+  service?: string;
+  shop?: string;
+  date?: string;
+  slot?: BookingSlot;
+  signedIn: boolean;
+  accountPhone: string;
+  phoneRequired: boolean;
+  refusal: Refusal;
+  busy: boolean;
+  gone: readonly number[];
+  bookedFor?: string;
 };
 
-const CONTACT_SEED = {
-  name: "Alex Chan",
-  email: ACCOUNT_EMAIL,
-  phone: "+85291234567",
-};
+const TAKEN = hkSlot("2026-10-22", "15:00");
 
-const ACCOUNT_LINE_COPY = {
-  signedIn: `Signed in as ${CONTACT_SEED.name}.`,
-  notYou: "Not you?",
-  signInLine: "Have an account? Sign in and we fill this in.",
-  signIn: "Sign in",
-};
+/** Each scenario is one moment of the same booking. */
+function preset(scenario: Scenario): Moment {
+  const base: Moment = {
+    step: "service",
+    phase: "flow",
+    signedIn: true,
+    accountPhone: ME.phone,
+    phoneRequired: false,
+    refusal: null,
+    busy: false,
+    gone: [],
+  };
+  const typed: Moment = {
+    ...base,
+    step: "details",
+    service: "drop",
+    shop: "central",
+    date: "2026-10-22",
+    slot: TAKEN,
+  };
+  const paid: Moment = {
+    ...typed,
+    service: "bulk",
+    slot: hkSlot("2026-10-22", "15:00", 45),
+  };
+  switch (scenario) {
+    case "time just taken":
+      return {
+        ...typed,
+        step: "time",
+        slot: undefined,
+        gone: [TAKEN.start],
+        refusal: "taken",
+      };
+    case "full day":
+      return { ...typed, step: "time", date: "2026-10-17", slot: undefined };
+    case "already booked signed out":
+      return { ...typed, signedIn: false, refusal: "heldOut" };
+    case "too many tries today":
+      return { ...typed, signedIn: false, refusal: "tries" };
+    case "slow network":
+      return { ...typed, busy: true };
+    case "signed in, no phone on account":
+      return { ...typed, accountPhone: "" };
+    case "service needs a phone":
+      return { ...typed, signedIn: false, phoneRequired: true };
+    case "paid service":
+      return paid;
+    case "booking for someone else":
+      return { ...typed, bookedFor: "Ben Chan" };
+    case "confirming payment":
+      return { ...paid, phase: "confirming" };
+    case "paid and booked":
+      return { ...paid, phase: "booked" };
+    case "payment not completed":
+      return { ...paid, phase: "expired" };
+    default:
+      return base;
+  }
+}
 
-type BookVisitView = "service" | "slot" | "details";
+const dayName = (date: string) => formatWeekday(date, "en");
 
-function BookVisitPage({ signedIn: signedInAtStart = true }) {
-  const [signedIn, setSignedIn] = useState(signedInAtStart);
-  const [view, setView] = useState<BookVisitView>("service");
-  const [serviceId, setServiceId] = useState<string | undefined>();
-  const [selectedDate, setSelectedDate] = useState<string | undefined>();
-  const [selectedStart, setSelectedStart] = useState<number | undefined>();
-  const [selectedEnd, setSelectedEnd] = useState<number | undefined>();
-  const [selectedMonth, setSelectedMonth] = useState<string>(VISIT_MIN_MONTH);
-  const service = BOOK_VISIT_SERVICES.find((row) => row.id === serviceId);
-  const prepTips = prepTipsForService(service?.id ?? "");
+const timeOf = (at: number) =>
+  formatTimeOfDay(at, { locale: "en", timeZone: BOARD_ZONE });
 
-  function clearSlot() {
-    setSelectedDate(undefined);
-    setSelectedStart(undefined);
-    setSelectedEnd(undefined);
+const dateOf = (at: number) => dayValue(new Date(at), BOARD_ZONE);
+
+const LINK =
+  "font-semibold text-foreground underline decoration-border-strong underline-offset-[3px]";
+
+function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
+  const [moment, setMoment] = useState<Moment>(() => preset(scenario));
+  const [month, setMonth] = useState(BOARD_MIN_MONTH);
+  const [need, setNeed] = useState<Step | null>(null);
+  const [invalid, setInvalid] = useState(0);
+  const [attempt, setAttempt] = useState(0);
+  const set = (next: Partial<Moment>) =>
+    setMoment((held) => ({ ...held, ...next }));
+
+  const service = BOARD_SERVICES.find((one) => one.id === moment.service);
+  const shops = BOARD_SHOPS.filter((shop) => service?.shops.includes(shop.id));
+  const shop = BOARD_SHOPS.find((one) => one.id === moment.shop);
+  const length = service
+    ? Number.parseInt(String(service.durationLabel), 10)
+    : 30;
+  const flow: Step[] = ["service", "location", "time", "details"];
+  const at = flow.indexOf(moment.step);
+  const go = (step: Step) => {
+    setNeed(null);
+    setInvalid(0);
+    set({ step, refusal: moment.refusal === "taken" ? null : moment.refusal });
+  };
+  const ready: Record<Step, boolean> = {
+    service: !!service,
+    location: !!shop,
+    time: !!moment.slot,
+    details: true,
+  };
+  const next = () => {
+    if (!ready[moment.step]) return setNeed(moment.step);
+    const following = flow[at + 1];
+    if (following) go(following);
+  };
+  const when = moment.slot
+    ? `${dayName(dateOf(moment.slot.start))}, ${timeOf(moment.slot.start)}`
+    : "";
+
+  if (moment.phase !== "flow" && service && shop && moment.slot) {
+    return (
+      <AppointmentPageShell>
+        <After
+          moment={moment}
+          onAgain={() =>
+            setMoment({
+              ...preset("normal"),
+              step: "time",
+              service: service.id,
+              shop: shop.id,
+            })
+          }
+          service={service}
+          shop={shop}
+          when={when}
+        />
+      </AppointmentPageShell>
+    );
   }
 
-  function handleMonthChange(month: string) {
-    setSelectedMonth(month);
-    setSelectedDate(firstAvailableVisitDay(month));
-    setSelectedStart(undefined);
-    setSelectedEnd(undefined);
-  }
-
-  function selectService(id: string) {
-    if (id !== serviceId) {
-      clearSlot();
+  const submit = (values: BookingDetailsValues) => {
+    if (moment.refusal === "heldOut" || moment.refusal === "tries") {
+      setAttempt((count) => count + 1);
+      return;
     }
-    setServiceId(id);
-  }
+    set({
+      bookedFor: values.bookedFor,
+      phase: service?.pay ? "confirming" : "booked",
+    });
+  };
 
-  function changeService() {
-    clearSlot();
-    setView("service");
-  }
+  const summary = {
+    busy: moment.busy,
+    copy: SUMMARY_COPY,
+    end: moment.slot?.end,
+    extraRows: [
+      ...(moment.bookedFor
+        ? [{ label: WORDS.forLabel, value: moment.bookedFor }]
+        : []),
+      ...(service?.pay
+        ? [{ label: WORDS.payNow, value: service.pay.line }]
+        : []),
+    ],
+    footer: WORDS.changeRule,
+    location: shop?.name,
+    notes: service?.notes ?? [],
+    onChangeLocation:
+      moment.step !== "location" ? () => go("location") : undefined,
+    onChangeService:
+      moment.step !== "service" ? () => go("service") : undefined,
+    onChangeWhen: moment.step !== "time" ? () => go("time") : undefined,
+    service: service?.name,
+    start: moment.slot?.start,
+    timeZone: BOARD_ZONE,
+  };
 
-  function changeDate() {
-    setView("slot");
-  }
-
-  function openSlotStep() {
-    setSelectedDate(NEXT_AVAILABLE_VISIT_DATE);
-    setView("slot");
-  }
-
-  function selectSlot(slot: BookingSlot) {
-    setSelectedStart(slot.start);
-    setSelectedEnd(slot.end);
-    setView("details");
-  }
+  const primary =
+    moment.step !== "details"
+      ? WORDS.continue
+      : moment.busy
+        ? WORDS.stillTrying
+        : service?.pay
+          ? WORDS.payContinue
+          : `Book ${when}`;
 
   return (
     <AppointmentPageShell>
-      <Breadcrumbs>
-        <BreadcrumbItem href={STORE_LOCATOR_HREF}>Appointment</BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem current>Book a Visit</BreadcrumbItem>
-      </Breadcrumbs>
-
-      <PageHeader title="Book a Visit" />
-
-      <div className="overflow-hidden rounded-2xl border border-border bg-card lg:grid lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <aside className="border-b border-border p-5 lg:border-r lg:border-b-0">
-          <BookingSummary
-            className="rounded-none border-0 bg-transparent p-0"
-            copy={SUMMARY_COPY}
-            service={
-              view !== "service" && service ? (
-                <VStack gap="none" hAlign="start">
-                  <span>{service.name}</span>
-                  {service.durationLabel ? (
-                    <span className="font-normal text-sm text-secondary-foreground">
-                      {service.durationLabel}
-                    </span>
-                  ) : null}
-                </VStack>
-              ) : undefined
-            }
-            serviceAction={
-              view !== "service" ? (
-                <Link
-                  aria-label={BOOK_VISIT_NAV_COPY.changeService}
-                  className="p-0"
-                  onClick={changeService}
-                  render={<button type="button" />}
-                  size="sm"
-                  variant="secondary"
-                >
-                  {BOOK_VISIT_NAV_COPY.change}
-                </Link>
-              ) : undefined
-            }
-            location={CAUSEWAY_BAY.name}
-            address={CAUSEWAY_BAY.address}
-            start={view === "details" ? selectedStart : undefined}
-            end={view === "details" ? selectedEnd : undefined}
-            whenAction={
-              view === "details" ? (
-                <Link
-                  aria-label={BOOK_VISIT_NAV_COPY.changeDate}
-                  className="p-0"
-                  onClick={changeDate}
-                  render={<button type="button" />}
-                  size="sm"
-                  variant="secondary"
-                >
-                  {BOOK_VISIT_NAV_COPY.change}
-                </Link>
-              ) : undefined
-            }
-            timeZone={VISIT_TIME_ZONE}
-            timeZoneLabel="Asia/Hong Kong time"
+      <div className="mx-auto grid w-full max-w-[70rem] items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,23.75rem)]">
+        {service ? (
+          <BookingSummaryBar
+            {...summary}
+            className="sticky top-0 z-[5] lg:hidden"
+            line={[service.name, shop?.name, when].filter(Boolean).join(" · ")}
           />
-        </aside>
-
-        {view === "service" ? (
-          <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
-            <BookingServicePicker
-              copy={SERVICE_PICKER_COPY}
-              services={READY_SERVICES}
-              selectedId={serviceId}
-              onSelect={selectService}
-            />
-            <div>
-              <Button
-                disabled={serviceId === undefined}
-                onClick={openSlotStep}
-                type="button"
-              >
-                {BOOK_VISIT_NAV_COPY.continue}
-              </Button>
-            </div>
-          </VStack>
-        ) : view === "slot" ? (
-          <div className="p-5 md:p-6">
-            <BookingSlotPicker
-              copy={SLOT_PICKER_COPY}
-              month={selectedMonth}
-              minMonth={VISIT_MIN_MONTH}
-              maxMonth={VISIT_MAX_MONTH}
-              today={VISIT_TODAY_DATE}
-              days={{ status: "ready", data: VISIT_DAYS }}
-              selectedDate={selectedDate}
-              slots={{
-                status: "ready",
-                data: selectedDate ? slotsForVisitDay(selectedDate) : [],
-              }}
-              selectedStart={selectedStart}
-              timeZone={VISIT_TIME_ZONE}
-              timeZoneLabel="Asia/Hong Kong time"
-              onMonthChange={handleMonthChange}
-              onSelectDay={(date) => {
-                setSelectedDate(date);
-                setSelectedStart(undefined);
-                setSelectedEnd(undefined);
-              }}
-              onSelectSlot={selectSlot}
+        ) : null}
+        <div className="flex min-w-0 flex-col gap-5">
+          <div className="flex flex-col gap-4">
+            <h1 className="m-0 text-xl leading-snug font-bold">
+              {WORDS.title}
+            </h1>
+            <BookingStepDots
+              busy={moment.busy}
+              copy={{ label: WORDS.stepsLabel, doneAria: WORDS.doneAria }}
+              current={moment.step}
+              onStep={go}
+              steps={flow.map((id) => ({ id, label: WORDS.steps[id] }))}
             />
           </div>
-        ) : (
-          <VStack className="p-5 md:p-6" gap="lg" hAlign="stretch">
-            <HStack gap="sm" vAlign="center" wrap>
-              <Text as="span" size="sm">
-                {signedIn
-                  ? ACCOUNT_LINE_COPY.signedIn
-                  : ACCOUNT_LINE_COPY.signInLine}
-              </Text>
-              <Button
-                onClick={() => setSignedIn(!signedIn)}
-                size="sm"
-                type="button"
-                variant="ghost"
-              >
-                {signedIn ? ACCOUNT_LINE_COPY.notYou : ACCOUNT_LINE_COPY.signIn}
-              </Button>
-            </HStack>
-            {service ? (
-              <BookingDetailsForm
-                key={`${service.id}:${signedIn}`}
-                copy={DETAILS_FORM_COPY}
-                questions={service.questions}
-                description={service.description}
-                initialValues={signedIn ? CONTACT_SEED : undefined}
-                summarized={signedIn}
-                onSubmit={() => navigateToStory(VAULT_CONFIRMATION_STORY_ID)}
-              />
-            ) : null}
-            {prepTips.length > 0 ? (
-              <section
-                aria-labelledby="prep-checklist"
-                className="flex flex-col gap-4"
-              >
-                <h2
-                  className="font-heading text-xl font-medium"
-                  id="prep-checklist"
-                >
-                  {BOOK_VISIT_NAV_COPY.prepTitle}
-                </h2>
-                <ol className="grid gap-3 sm:grid-cols-2">
-                  {prepTips.map((tip, index) => (
-                    <li
-                      key={tip}
-                      className="flex gap-3 rounded-(--radius-lg) border border-border p-3"
-                    >
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-medium tabular-nums">
-                        {index + 1}
-                      </span>
-                      <Text className="self-center" size="sm">
-                        {tip}
-                      </Text>
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            ) : null}
-          </VStack>
-        )}
+
+          {moment.step === "service" ? (
+            <section className="flex flex-col gap-5">
+              <h2 className="m-0 text-[17px] leading-6 font-bold">
+                {WORDS.svcQ}
+              </h2>
+              {(["grading", "vault"] as const).map((group) => (
+                <BookingServicePicker
+                  copy={{ title: WORDS.groups[group] }}
+                  footer={
+                    group === "grading" ? (
+                      <>
+                        {WORDS.more100}{" "}
+                        <a className={LINK} href="#contact">
+                          {WORDS.messageUs}
+                        </a>
+                      </>
+                    ) : undefined
+                  }
+                  heading="group"
+                  key={group}
+                  onSelect={(id) => {
+                    setNeed(null);
+                    const picked = BOARD_SERVICES.find((one) => one.id === id);
+                    set({
+                      service: id,
+                      shop: picked?.shops.includes(moment.shop ?? "")
+                        ? moment.shop
+                        : undefined,
+                    });
+                  }}
+                  selectedId={moment.service}
+                  services={{
+                    status: "ready",
+                    data: BOARD_SERVICES.filter((one) => one.group === group),
+                  }}
+                />
+              ))}
+            </section>
+          ) : null}
+
+          {moment.step === "location" && service ? (
+            <BookingLocationPicker
+              copy={{ title: WORDS.shopQ }}
+              description={`${shops.length} shops run ${service.name}.`}
+              locations={{ status: "ready", data: shops }}
+              onSelect={(id) => {
+                setNeed(null);
+                set({ shop: id });
+              }}
+              selectedId={moment.shop}
+            />
+          ) : null}
+
+          {moment.step === "time" && service && shop ? (
+            <BookingSlotPicker
+              copy={SLOT_COPY}
+              dayPanel={
+                moment.date === "2026-10-17" ? (
+                  <VisitFullDay
+                    copy={{
+                      title: `${dayName(moment.date)} is full at ${shop.name}.`,
+                      earliestEach: WORDS.earliestEach,
+                      noFreeYet: WORDS.noFreeYet,
+                    }}
+                    onPick={(id) => {
+                      const pick = BOARD_SHOPS.find((one) => one.id === id);
+                      if (!pick) return;
+                      const slot = hkSlot(
+                        pick.earliestAt.date,
+                        pick.earliestAt.time,
+                        length,
+                      );
+                      set({ shop: id, date: pick.earliestAt.date, slot });
+                    }}
+                    shops={shops.map((one) => ({
+                      id: one.id,
+                      name: String(one.name),
+                      earliest: one.earliestAt.label.replace(/^today/, "Today"),
+                    }))}
+                  />
+                ) : undefined
+              }
+              days={{ status: "ready", data: boardDays(month) }}
+              earliest={{
+                label: `Earliest: ${shop.earliestAt.label}`,
+                pressed:
+                  moment.slot?.start ===
+                  hkSlot(shop.earliestAt.date, shop.earliestAt.time).start,
+                onPick: () =>
+                  set({
+                    date: shop.earliestAt.date,
+                    slot: hkSlot(
+                      shop.earliestAt.date,
+                      shop.earliestAt.time,
+                      length,
+                    ),
+                    refusal: null,
+                  }),
+              }}
+              footer="Book at least 2 hours ahead, up to 60 days ahead."
+              layout="responsive"
+              maxMonth={BOARD_MAX_MONTH}
+              minMonth={BOARD_MIN_MONTH}
+              month={month}
+              note={moment.date ? SPECIAL_HOURS[moment.date] : undefined}
+              notice={
+                moment.refusal === "taken" ? (
+                  <BookingNotice
+                    body={WORDS.takenBody}
+                    title={`${timeOf(TAKEN.start)} on ${dayName(dateOf(TAKEN.start))} was just taken.`}
+                  />
+                ) : undefined
+              }
+              onMonthChange={setMonth}
+              onSelectDay={(date) => set({ date, slot: undefined })}
+              onSelectSlot={(slot) => {
+                setNeed(null);
+                set({ slot, refusal: null });
+              }}
+              selectedDate={moment.date}
+              selectedStart={moment.slot?.start}
+              slots={{
+                status: "ready",
+                data: moment.date
+                  ? boardSlots(moment.date, length, moment.gone)
+                  : [],
+              }}
+              timeZone={BOARD_ZONE}
+              today={BOARD_TODAY_KEY}
+            />
+          ) : null}
+
+          {moment.step === "details" && service ? (
+            <BookingDetailsForm
+              account={
+                <p className="m-0 flex flex-wrap items-center gap-x-2 text-sm leading-5 text-(--gray-700)">
+                  <span>
+                    {moment.signedIn ? WORDS.signedIn : WORDS.signInLine}
+                  </span>
+                  <button
+                    className={`${LINK} min-h-11 cursor-pointer bg-transparent p-0`}
+                    disabled={moment.busy}
+                    onClick={() => set({ signedIn: !moment.signedIn })}
+                    type="button"
+                  >
+                    {moment.signedIn ? WORDS.notYou : WORDS.signIn}
+                  </button>
+                </p>
+              }
+              copy={DETAILS_COPY}
+              footer={
+                <>
+                  {service.pay ? (
+                    <BookingPayNotice
+                      amount={service.pay.amount}
+                      copy={{ title: WORDS.payNow, via: WORDS.payVia }}
+                      refund={service.pay.refund}
+                    />
+                  ) : null}
+                  <p className="m-0 text-[13px] leading-[18px] text-(--gray-700)">
+                    {WORDS.consent}{" "}
+                    <a className={LINK} href="#privacy">
+                      {WORDS.privacy}
+                    </a>
+                  </p>
+                  {moment.refusal === "heldOut" ? (
+                    <VisitRefusedBook
+                      attempt={attempt}
+                      copy={{
+                        title: `This email already has a ${service.name}.`,
+                        body: "We’ve sent its link there. Sign in to see it here.",
+                        action: WORDS.signIn,
+                      }}
+                      onAction={() => set({ signedIn: true, refusal: null })}
+                      refusal="heldOut"
+                    />
+                  ) : moment.refusal === "tries" ? (
+                    <VisitRefusedBook
+                      actionHref="tel:+85223456789"
+                      attempt={attempt}
+                      copy={{
+                        title: "Too many tries today",
+                        body: "This email has tried to book 10 times today. Try again tomorrow, or call Central on 2345 6789.",
+                        action: "Call 2345 6789",
+                      }}
+                      refusal="tries"
+                    />
+                  ) : null}
+                </>
+              }
+              formId="book-visit-details"
+              hideSubmit
+              initialValues={
+                moment.signedIn
+                  ? {
+                      ...ME,
+                      phone: moment.accountPhone,
+                      bookedFor: moment.bookedFor,
+                      answers: { cards: "12", company: "PSA" },
+                    }
+                  : {
+                      name: ME.name,
+                      email: ME.email,
+                      answers: { cards: "12", company: "PSA" },
+                    }
+              }
+              key={`${moment.signedIn}:${service.id}`}
+              onInvalid={setInvalid}
+              onSubmit={submit}
+              pending={moment.busy}
+              phoneRequired={moment.phoneRequired}
+              questions={service.questions}
+              questionsTitle={
+                service.group === "grading"
+                  ? WORDS.aboutCards
+                  : WORDS.aboutItems
+              }
+              summarized={moment.signedIn}
+            />
+          ) : null}
+
+          <BookingActionBar
+            back={
+              at > 0
+                ? {
+                    label: WORDS.back,
+                    onClick: () => go(flow[at - 1] ?? "service"),
+                  }
+                : undefined
+            }
+            busy={moment.busy}
+            error={
+              need && need !== "details"
+                ? WORDS.need[need]
+                : moment.step === "details" && invalid > 0
+                  ? invalid === 1
+                    ? "Check the field marked above."
+                    : `Check the ${invalid} fields marked above.`
+                  : undefined
+            }
+            note={
+              moment.step !== "details"
+                ? undefined
+                : moment.busy
+                  ? WORDS.slowNote
+                  : service?.pay
+                    ? WORDS.payHold
+                    : undefined
+            }
+            noteLive={moment.busy}
+            primary={
+              moment.step === "details"
+                ? { label: primary, form: "book-visit-details" }
+                : { label: primary, onClick: next }
+            }
+          />
+        </div>
+        <BookingSummary
+          {...summary}
+          className="hidden lg:sticky lg:top-6 lg:flex"
+        />
       </div>
     </AppointmentPageShell>
+  );
+}
+
+/** After the flow: booked, confirming the payment, or the payment not done. */
+function After({
+  moment,
+  service,
+  shop,
+  when,
+  onAgain,
+}: {
+  moment: Moment;
+  service: (typeof BOARD_SERVICES)[number];
+  shop: (typeof BOARD_SHOPS)[number];
+  when: string;
+  onAgain: () => void;
+}) {
+  const slot = moment.slot ?? TAKEN;
+  if (moment.phase === "confirming" || moment.phase === "expired") {
+    const confirming = moment.phase === "confirming";
+    return (
+      <section
+        aria-busy={confirming || undefined}
+        className="flex max-w-[560px] flex-col gap-3 pt-2 pb-6"
+      >
+        <span
+          aria-hidden
+          className={`grid size-10 place-items-center rounded-full ${confirming ? "bg-muted text-(--gray-700)" : "bg-warning-muted text-(--yellow-700)"}`}
+        >
+          {confirming ? (
+            <span aria-hidden className="inline-flex animate-spin">
+              <CircleNotch size={20} />
+            </span>
+          ) : (
+            <Warning size={20} />
+          )}
+        </span>
+        {confirming ? (
+          <span className="inline-flex h-5.5 items-center self-start rounded-full bg-muted px-2.5 text-[11px] font-bold text-(--gray-700)">
+            {WORDS.confirmingPhase}
+          </span>
+        ) : null}
+        <h1 className="m-0 text-2xl leading-[30px] font-bold">
+          {confirming ? WORDS.confirmingTitle : WORDS.expiredTitle}
+        </h1>
+        <p
+          className="m-0 text-[15px] leading-[22px] text-(--gray-700)"
+          role="status"
+        >
+          {confirming
+            ? `${when} at ${shop.name}. This takes a few seconds, so keep this page open.`
+            : `Your ${timeOf(slot.start)} time on ${dayName(dateOf(slot.start))} was released. Nothing was charged.`}
+        </p>
+        <p className="m-0 text-sm leading-5 text-secondary-foreground">
+          {confirming
+            ? `We email ${ME.email} once it is confirmed.`
+            : WORDS.expiredNote}
+        </p>
+        {confirming ? null : (
+          <button
+            className="mt-2 h-11 cursor-pointer self-start rounded-full bg-primary px-5 text-[15px] font-semibold text-primary-foreground"
+            onClick={onAgain}
+            type="button"
+          >
+            {WORDS.bookAgain}
+          </button>
+        )}
+      </section>
+    );
+  }
+  return (
+    <VisitBookedPass
+      before={[
+        "Bring the cards in sleeves.",
+        `We hold your time until ${timeOf(slot.start + 15 * 60_000)}. Running late? Tell us from your visit page.`,
+        "Grading fees are paid at the counter",
+      ]}
+      confirmation={{
+        answers: [
+          { key: "cards", label: "How many cards?", answer: "12" },
+          { key: "company", label: "Grading company", answer: "PSA" },
+          { key: "phone", label: "Phone", answer: "+852 9123 4567" },
+        ],
+        calendarHref: "data:text/calendar,BEGIN:VCALENDAR",
+        manageHref: "#manage",
+        record: {
+          id: "bk_board",
+          service: service.name,
+          location: shop.name,
+          address: shop.address,
+          timeZone: BOARD_ZONE,
+          start: slot.start,
+          end: slot.end,
+          state: "booked",
+        },
+      }}
+      copy={{
+        confirmation: {
+          title: "You are booked",
+          body: `We emailed ${ME.email}.`,
+          service: "Service",
+          location: "Shop",
+          when: "Time",
+          beforeYouCome: "Before you come",
+          answers: "What you told us",
+          manage: "Change or cancel",
+          calendar: "Add to calendar",
+        },
+        pass: {
+          title: "Booked",
+          nameLabel: "Booked for",
+          note: "At the counter, give your phone or email.",
+        },
+        brand: "Grade10",
+        directions: "Directions",
+        until: `You can change or cancel until ${timeOf(slot.start)} on ${dayName(dateOf(slot.start))}.`,
+        before: "Before you come",
+        getThere: "How to get there",
+        another: "Book another visit",
+        calendarSaved: "Calendar file saved",
+      }}
+      directionsHref="https://maps.google.com/?q=18+Queen%27s+Road+Central+Hong+Kong"
+      getThere={[
+        { label: "Shop", value: shop.name },
+        ...(shop.address ? [{ label: "Where", value: shop.address }] : []),
+        ...(shop.mtr ? [{ label: "Directions", value: shop.mtr }] : []),
+        ...(shop.phone
+          ? [
+              {
+                label: "Shop phone",
+                value: (
+                  <a className={LINK} href="tel:+85223456789">
+                    {shop.phone}
+                  </a>
+                ),
+              },
+            ]
+          : []),
+      ]}
+      name={moment.bookedFor || ME.name}
+      onAgain={onAgain}
+      paid={
+        service.pay
+          ? {
+              label: "Paid",
+              value: service.pay.amount,
+              refund: service.pay.refund,
+            }
+          : undefined
+      }
+      receipt={
+        service.pay
+          ? `Paid ${service.pay.amount}. Your receipt is in that email.`
+          : undefined
+      }
+      when={`${when} to ${timeOf(slot.end)} HKT`}
+    />
   );
 }
 
@@ -288,143 +702,122 @@ const meta = {
   component: BookVisitPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
+  args: { scenario: "normal" },
 } satisfies Meta<typeof BookVisitPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** At the first step: a pick only selects, Continue moves on, and Continue
+ * with nothing picked says what is missing. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 1, name: "Book a Visit" }),
+      canvas.getByRole("heading", { level: 1, name: "Book a visit" }),
     ).toBeVisible();
-    expect(canvas.getByText("Grading Submission")).toBeVisible();
-    expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
-    expect(canvas.getByText("Store/Auction Listing")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "Choose a service to continue.",
+    );
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /^Grading drop-off/ }),
+    );
     expect(
-      canvas.getByText("13 Pak Sha Road, Causeway Bay, Hong Kong"),
+      canvas.getByRole("heading", { level: 2, name: "What do you need?" }),
     ).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
     expect(
-      canvasElement.querySelector('[data-slot="booking-summary"]'),
-    ).not.toBeNull();
+      canvas.getByRole("heading", { level: 2, name: "Pick a shop" }),
+    ).toBeVisible();
+    await userEvent.click(canvas.getByRole("radio", { name: /^Central/ }));
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Earliest: today, 16:30/ }),
+    );
     expect(
-      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
-    ).toBeDisabled();
+      canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
+    ).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
     expect(
-      canvas.queryByRole("button", {
-        name: BOOK_VISIT_NAV_COPY.changeService,
-      }),
-    ).toBeNull();
-    expect(
-      canvasElement.querySelector('[data-slot="booking-steps"]'),
-    ).toBeNull();
-    expect(
-      canvasElement.querySelector('[data-slot="booking-details-form"]'),
-    ).toBeNull();
-    expect(
-      canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
-    ).toBeNull();
-    for (const name of [
-      /Grading Submission/,
-      /Vault Drop-Off/,
-      /Store\/Auction Listing/,
-    ]) {
-      expect(canvas.getByRole("radio", { name })).not.toBeChecked();
-    }
+      canvas.getByRole("heading", { level: 2, name: "Your details" }),
+    ).toBeVisible();
   },
 };
 
-export const Slot: Story = {
+export const TimeJustTaken: Story = {
+  args: { scenario: "time just taken" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "15:00 on Thu 22 Oct was just taken.",
     );
-    await userEvent.click(
-      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
-    );
-    expect(canvas.queryByRole("button", { name: "Back" })).toBeNull();
-    expect(
-      canvas.getByRole("button", {
-        name: BOOK_VISIT_NAV_COPY.changeService,
-      }),
-    ).toBeVisible();
-    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
-      "2",
-    );
-    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "Sep",
-    );
-    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
-    expect(canvas.getByText("2026")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
-    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "Oct",
-    );
-    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
-      "1",
-    );
-    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
-    await userEvent.click(canvas.getByRole("button", { name: "Next month" }));
-    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
-      "Dec",
-    );
-    expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
-    expect(
-      canvas.getByRole("button", { name: /December 1st, 2026/ }),
-    ).toBeEnabled();
-    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
-      "1",
-    );
-    expect(canvas.getByRole("button", { name: "10:00" })).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: /December 2nd, 2026/ }),
-    ).toBeDisabled();
+    expect(canvas.queryByRole("button", { name: "15:00" })).toBeNull();
   },
 };
 
-/** The details step books under the account: its name, email and phone read
- * as a summary, and only the service's questions and notes are asked. */
-export const Details: Story = {
+export const FullDay: Story = {
+  args: { scenario: "full day" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("radio", { name: /Grading Submission/ }),
-    );
-    await userEvent.click(
-      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "10:00" }));
-    expect(canvas.getByText(ACCOUNT_LINE_COPY.signedIn)).toBeVisible();
-    expect(canvas.getByText("Alex Chan")).toBeVisible();
-    expect(canvas.getByText(ACCOUNT_EMAIL)).toBeVisible();
-    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
-    expect(canvas.queryByRole("textbox", { name: /Email/ })).toBeNull();
+    expect(canvas.getByText("Sat 17 Oct is full at Central.")).toBeVisible();
   },
 };
 
-/** A guest books without an account: the details step asks for a name and an
- * email, and offers a sign-in that fills them in. */
-export const Guest: Story = {
-  args: { signedIn: false },
+export const AlreadyBookedSignedOut: Story = {
+  args: { scenario: "already booked signed out" },
+};
+
+export const TooManyTriesToday: Story = {
+  args: { scenario: "too many tries today" },
+};
+
+export const SlowNetwork: Story = {
+  args: { scenario: "slow network" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    expect(canvas.getByRole("status")).toHaveTextContent(
+      "Keep this page open. We won’t book you twice.",
     );
-    await userEvent.click(
-      canvas.getByRole("button", { name: BOOK_VISIT_NAV_COPY.continue }),
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "10:00" }));
-    expect(canvas.getByText(ACCOUNT_LINE_COPY.signInLine)).toBeVisible();
-    expect(canvas.getByRole("textbox", { name: "Name" })).toHaveValue("");
-    await userEvent.click(
-      canvas.getByRole("button", { name: ACCOUNT_LINE_COPY.signIn }),
-    );
-    expect(canvas.getByText("Alex Chan")).toBeVisible();
-    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
+    expect(canvas.getByRole("button", { name: "Back" })).toBeDisabled();
   },
+};
+
+export const SignedInNoPhone: Story = {
+  args: { scenario: "signed in, no phone on account" },
+};
+
+export const ServiceNeedsAPhone: Story = {
+  args: { scenario: "service needs a phone" },
+};
+
+export const PaidService: Story = {
+  args: { scenario: "paid service" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("group", { name: "Pay now" })).toBeVisible();
+    expect(canvas.getByText("We hold this time for 30 minutes")).toBeVisible();
+  },
+};
+
+export const BookingForSomeoneElse: Story = {
+  args: { scenario: "booking for someone else" },
+};
+
+export const ConfirmingPayment: Story = {
+  args: { scenario: "confirming payment" },
+};
+
+export const PaidAndBooked: Story = {
+  args: { scenario: "paid and booked" },
+};
+
+export const PaymentNotCompleted: Story = {
+  args: { scenario: "payment not completed" },
+};
+
+/** At 390px the summary folds into the bar and the month into a strip. */
+export const Phone: Story = {
+  args: { scenario: "full day" },
+  globals: { viewport: { value: "mobile1" } },
 };

@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("table", { name: "Your visit" })).toBeVisible();
+    expect(canvas.getByRole("region", { name: "Your visit" })).toBeVisible();
     expect(canvas.getByText("Times in HKT")).toBeVisible();
   },
 };

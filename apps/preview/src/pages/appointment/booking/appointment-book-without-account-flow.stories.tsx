@@ -21,7 +21,7 @@ import {
   VISIT_MAX_MONTH,
   VISIT_MIN_MONTH,
   VISIT_TIME_ZONE,
-  VISIT_TODAY_DATE,
+  VISIT_TODAY,
 } from "../../vault-content";
 import {
   BOOK_WITHOUT_ACCOUNT_CASES,
@@ -94,7 +94,7 @@ function BookStepBody({ step }: { step: BookStep }) {
         slots={{ status: "ready", data: slotsForVisitDay("2026-09-03") }}
         timeZone={VISIT_TIME_ZONE}
         timeZoneLabel={TIME_ZONE_LABEL}
-        today={VISIT_TODAY_DATE}
+        today={VISIT_TODAY}
       />
     );
   }

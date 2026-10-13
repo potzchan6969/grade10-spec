@@ -8,7 +8,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    tone: "info",
+    tone: "plain",
     copy: {
       phase: "Booked",
       note: "in 2 days",
@@ -38,8 +38,16 @@ export const Called: Story = {
       phase: "Counter 3",
       note: "ready at 10:15",
       title: "Counter 3 is ready for you",
-      lede: "Go to Counter 3 now and show your pass.",
+      lede: "Go to Counter 3 now.",
     },
+  },
+};
+
+/** Checked in: the live tone while the collector waits. */
+export const CheckedIn: Story = {
+  args: {
+    tone: "info",
+    copy: { phase: "Checked in", note: "10:09", title: "We’ll call you" },
   },
 };
 

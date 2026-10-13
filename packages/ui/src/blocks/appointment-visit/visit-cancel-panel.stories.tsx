@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
-import { CANCEL_PANEL_COPY } from "./fixtures";
+import { expect, fn, screen, userEvent } from "storybook/test";
+import { CANCEL_PANEL_COPY, REFUND_DUE, REFUND_KEPT } from "./fixtures";
 import type { VisitCancelReason } from "./types";
 import {
   VisitCancelPanel,
@@ -46,8 +46,11 @@ type Story = StoryObj<typeof meta>;
 
 /** The reason is optional; Something else asks for the collector's words. */
 export const Default: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async ({ args }) => {
+    const canvas = screen;
+    expect(
+      await canvas.findByRole("dialog", { name: "Cancel your visit?" }),
+    ).toBeVisible();
     expect(canvas.queryByLabelText("Tell us more (optional)")).toBeNull();
     await userEvent.click(
       canvas.getByRole("radio", { name: "Something else" }),
@@ -60,18 +63,34 @@ export const Default: Story = {
 
 export const Cancelling: Story = {
   args: { reason: "wrong", pending: true },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Cancelling…" })).toBeDisabled();
+  play: async () => {
+    expect(
+      await screen.findByRole("button", { name: "Cancelling…" }),
+    ).toBeDisabled();
   },
 };
 
 export const Failed: Story = {
   args: { error: "We couldn’t cancel the visit. Try again." },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("alert")).toHaveTextContent(
+  play: async () => {
+    expect(await screen.findByRole("alert")).toHaveTextContent(
       "We couldn’t cancel the visit. Try again.",
     );
+  },
+};
+
+/** Paid, a day or more ahead: the deposit goes back to the card. */
+export const Refunded: Story = {
+  args: { refund: REFUND_DUE },
+  play: async () => {
+    expect(await screen.findByText("Refunded")).toBeVisible();
+  },
+};
+
+/** Paid, under a day ahead: the deposit is kept. */
+export const NotRefunded: Story = {
+  args: { refund: REFUND_KEPT },
+  play: async () => {
+    expect(await screen.findByText("Not refunded")).toBeVisible();
   },
 };

@@ -3,6 +3,10 @@
 
 // shared/ui/appointment-booking
 export {
+  BookingActionBar,
+  type BookingActionBarProps,
+} from "./blocks/appointment-booking/booking-action-bar";
+export {
   BookingConfirmation,
   type BookingConfirmationCopy,
   type BookingConfirmationProps,
@@ -23,6 +27,15 @@ export {
   type BookingManageCardProps,
 } from "./blocks/appointment-booking/booking-manage-card";
 export {
+  BookingNotice,
+  type BookingNoticeProps,
+} from "./blocks/appointment-booking/booking-notice";
+export {
+  BookingPayNotice,
+  type BookingPayNoticeCopy,
+  type BookingPayNoticeProps,
+} from "./blocks/appointment-booking/booking-pay-notice";
+export {
   BookingServicePicker,
   type BookingServicePickerCopy,
   type BookingServicePickerProps,
@@ -33,14 +46,23 @@ export {
   type BookingSlotPickerProps,
 } from "./blocks/appointment-booking/booking-slot-picker";
 export {
+  BookingStepDots,
+  type BookingStepDotsCopy,
+  type BookingStepDotsProps,
+} from "./blocks/appointment-booking/booking-step-dots";
+export {
   BookingSummary,
+  BookingSummaryBar,
+  type BookingSummaryBarProps,
   type BookingSummaryCopy,
   type BookingSummaryProps,
+  type BookingSummaryRow,
 } from "./blocks/appointment-booking/booking-summary";
 export type {
   BookingAnswerLine,
   BookingAnswers,
   BookingDay,
+  BookingDayKind,
   BookingDetailsValues,
   BookingLocation,
   BookingQuestion,
@@ -57,6 +79,8 @@ export type {
   VisitFullDayShop,
   VisitLateChoice,
   VisitListRow,
+  VisitNoticeIcon,
+  VisitNoticeTone,
   VisitTone,
   VisitWaitService,
   VisitWaitShop,
@@ -70,6 +94,7 @@ export {
   VisitBody,
   type VisitBodyCopy,
   type VisitBodyProps,
+  type VisitNoticeAt,
   type VisitNoticeCopy,
 } from "./blocks/appointment-visit/visit-body";
 export {
@@ -81,6 +106,7 @@ export {
   VisitCancelPanel,
   type VisitCancelPanelCopy,
   type VisitCancelPanelProps,
+  type VisitCancelRefund,
 } from "./blocks/appointment-visit/visit-cancel-panel";
 export {
   VisitFacts,
@@ -93,6 +119,7 @@ export {
   type VisitFullDayProps,
 } from "./blocks/appointment-visit/visit-full-day";
 export {
+  type VisitLateHereCopy,
   VisitLatePanel,
   type VisitLatePanelCopy,
   type VisitLatePanelProps,
@@ -108,6 +135,11 @@ export {
   type VisitListProps,
 } from "./blocks/appointment-visit/visit-list";
 export {
+  VisitMine,
+  type VisitMineCopy,
+  type VisitMineProps,
+} from "./blocks/appointment-visit/visit-mine";
+export {
   VisitMovePanel,
   type VisitMovePanelCopy,
   type VisitMovePanelProps,
@@ -116,6 +148,7 @@ export {
   VisitPass,
   type VisitPassCopy,
   type VisitPassProps,
+  type VisitPassSize,
 } from "./blocks/appointment-visit/visit-pass";
 export {
   VisitPhaseHeader,
@@ -133,6 +166,11 @@ export {
   type VisitRefusedBookCopy,
   type VisitRefusedBookProps,
 } from "./blocks/appointment-visit/visit-refused-book";
+export {
+  VisitSheet,
+  type VisitSheetCopy,
+  type VisitSheetProps,
+} from "./blocks/appointment-visit/visit-sheet";
 export {
   VisitTicketBody,
   type VisitTicketBodyCopy,
