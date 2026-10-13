@@ -677,8 +677,9 @@ function WinnerOrderPageState({
 }
 
 export type { WinnerOrderPageProps };
-export { CANCELLED_AT_MS, CANCELLED_ZONE, WinnerOrderPage };
 export {
+  CANCELLED_AT_MS,
+  CANCELLED_ZONE,
   COPY as WINNER_ORDER_COPY,
   hasIssuedInvoice,
   noteFor,
@@ -686,5 +687,6 @@ export {
   progressFor,
   receiptLinksFor,
   summaryLinesFor,
+  WinnerOrderPage,
   winnerOrderBadgeVariant,
 };

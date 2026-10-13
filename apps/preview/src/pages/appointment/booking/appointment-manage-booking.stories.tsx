@@ -3,10 +3,11 @@ import {
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "@grade10/design-system/components/forms/link";
 import type { BookingRecord } from "@grade10/ui";
-import { BookingManageCard, BookingSlotPicker, EmptyPanel } from "@grade10/ui";
+import { BookingManageCard, BookingSlotPicker } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -133,17 +134,15 @@ function ManageBookingPage({ state }: { state: ManageState }) {
 
       {state === "notFound" ? (
         <div className="w-full max-w-2xl">
-          <EmptyPanel
+          <EmptyState
             actions={
               <Link href={VAULT_BOOK_VISIT_HREF}>
                 {MANAGE_PAGE_COPY.bookVisit}
               </Link>
             }
-            copy={{
-              title: MANAGE_PAGE_COPY.notFoundTitle,
-              description: MANAGE_PAGE_COPY.notFoundDescription,
-            }}
-            slot="manage-not-found"
+            title={MANAGE_PAGE_COPY.notFoundTitle}
+            description={MANAGE_PAGE_COPY.notFoundDescription}
+            data-slot="manage-not-found"
           />
         </div>
       ) : (

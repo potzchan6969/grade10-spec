@@ -1,6 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { EmptyPanel, FactCard, FactCardSkeleton } from "@grade10/ui";
+import { FactCard, FactCardSkeleton } from "@grade10/ui";
 import {
   PageHeader,
   PrototypeNote,
@@ -48,7 +49,11 @@ function CaseListPrototype({ state }: CaseListPrototypeProps) {
           />
         ) : null}
         {state === "empty" ? (
-          <EmptyPanel copy={CASE_LIST_COPY.empty} actions={startRequest} />
+          <EmptyState
+            title={CASE_LIST_COPY.empty.title}
+            description={CASE_LIST_COPY.empty.description}
+            actions={startRequest}
+          />
         ) : null}
         {state === "cards"
           ? CASE_LIST_CASES.map((item) => (

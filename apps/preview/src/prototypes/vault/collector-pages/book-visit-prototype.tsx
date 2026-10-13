@@ -1,6 +1,7 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { EmptyPanel, FactCard } from "@grade10/ui";
+import { FactCard } from "@grade10/ui";
 import { SHOP_ADDRESS, SHOP_NAME } from "../../../pages/vault-content";
 import {
   PageHeader,
@@ -64,11 +65,9 @@ function BookVisitBody({ state }: BookVisitPrototypeProps) {
         </FactCard>
       ) : null}
       {state === "nothing-free" ? (
-        <EmptyPanel
-          copy={{
-            title: nothingFree.title,
-            description: nothingFree.description,
-          }}
+        <EmptyState
+          title={nothingFree.title}
+          description={nothingFree.description}
           actions={
             <Button
               onClick={() => navigateToStory(BOOK_A_VISIT_TIMES_STORY_ID)}
@@ -77,7 +76,7 @@ function BookVisitBody({ state }: BookVisitPrototypeProps) {
               {nothingFree.chooseDay}
             </Button>
           }
-          slot="book-visit-nothing-free"
+          data-slot="book-visit-nothing-free"
         />
       ) : null}
       {state === "booked" ? (

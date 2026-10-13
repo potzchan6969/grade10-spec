@@ -1,9 +1,10 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { EmptyPanel, FactCard } from "@grade10/ui";
+import { FactCard } from "@grade10/ui";
 import {
   type AgreementState,
   DOCUMENTS_COPY,
@@ -94,19 +95,18 @@ function AgreementSigning({
 }) {
   if (state === "declined")
     return (
-      <EmptyPanel
-        copy={{ title: declined.title, description: declined.description }}
-        slot="agreement-declined"
+      <EmptyState
+        title={declined.title}
+        description={declined.description}
+        data-slot="agreement-declined"
       />
     );
   if (state === "link-expired")
     return (
-      <EmptyPanel
-        copy={{
-          title: linkExpired.title,
-          description: linkExpired.description,
-        }}
-        slot="agreement-link-expired"
+      <EmptyState
+        title={linkExpired.title}
+        description={linkExpired.description}
+        data-slot="agreement-link-expired"
       />
     );
   if (state === "sealed")

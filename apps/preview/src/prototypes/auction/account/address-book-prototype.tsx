@@ -1,10 +1,11 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { AuctionAddressForm, EmptyPanel, SiteHeader } from "@grade10/ui";
+import { AuctionAddressForm, SiteHeader } from "@grade10/ui";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../../pages/store-content";
 import { navigateToStory } from "../../../pages/workbench-story-nav";
 import {
@@ -78,17 +79,15 @@ function AddressBookPanel({ state }: { state: AddressBookState }) {
 
   if (state === "empty")
     return (
-      <EmptyPanel
+      <EmptyState
         actions={
           <Button onClick={() => navigateToStory(ADDRESS_BOOK_STORY_IDS.add)}>
             {ADDRESS_BOOK_COPY.add}
           </Button>
         }
-        copy={{
-          title: ADDRESS_BOOK_COPY.empty.title,
-          description: ADDRESS_BOOK_COPY.empty.description,
-        }}
-        slot="address-book-empty"
+        title={ADDRESS_BOOK_COPY.empty.title}
+        description={ADDRESS_BOOK_COPY.empty.description}
+        data-slot="address-book-empty"
       />
     );
 

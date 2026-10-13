@@ -44,7 +44,10 @@ export function manualFeatures(root = rootDirectory) {
 export function declared(root = rootDirectory) {
   const path = join(root, COVERAGE_FILE);
   const data = existsSync(path) ? parse(readFileSync(path, "utf8")) : {};
-  return { "no-screen": data?.["no-screen"] ?? {}, operator: data?.operator ?? {} };
+  return {
+    "no-screen": data?.["no-screen"] ?? {},
+    operator: data?.operator ?? {},
+  };
 }
 
 /** Per feature: its story titles by kind, the journeys its flows cite, and what it owes. */

@@ -1,4 +1,8 @@
 import { Toast } from "@grade10/design-system/components/overlays/toast";
+import {
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { FlowContainer } from "../../../../../../packages/ui/src/blocks/shared/flow-container";
 import { type FlowWalkStep, walkFlowCases } from "../flow-walk";
@@ -73,7 +77,9 @@ export const CardStatus: Story = {
         {(lot) => (
           <AuctionLotCard
             heading
+            locale={FIXTURE_SHIPPED_LOCALE}
             lot={lot}
+            timeZone={FIXTURE_TIME_ZONE}
             onToggle={() => undefined}
             watched={false}
           />
