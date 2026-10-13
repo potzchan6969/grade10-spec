@@ -1,0 +1,121 @@
+{
+  "version": 2,
+  "change": "auction-slack-lifecycle-alerts",
+  "baseline": "819a793e7a3bc80505563efd5bda8a91d6ced12d744a3b731e612c495fd4a962",
+  "fingerprint": "3a9c0703d48c3c09ce268c23f6033f901ec46deaffb03241dfc9532b270eb694",
+  "reviewedBy": "@mason5991",
+  "acceptedAt": "2026-10-13T22:32:09.938Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#post-sale-queue",
+      "sha256": "4c855c5509e9f5494035986f4e34a079a15f8b89892ff887f9656d97e41397fd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#flagged-or-still-waiting",
+      "sha256": "f69b6493a4bb892a22094ba83b1fcccd6fb488feea72a767cc3760f653696be0",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#lifecycle-alerts",
+      "sha256": "c41034c3495b468e2508fbaac187b3bb1dfe308243d0b04ab45f8a08de461c07",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#rules",
+      "sha256": "a119cd3b8a977ad47254427d733af0cbbebb72137e59d5e1eab7710b5bd52ba3",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#slack",
+      "sha256": "5546ea6bfb2b6be87cc09b28160a4ddcb6ed34201f80fd65f59aa130f3204afa",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#today",
+      "sha256": "7c17ccfaa04b2845d908cb858f17f4b0af24c42821900f668ab162964d255d02",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/decisions.md",
+      "sha256": "9944d217f811d5fb0740eae82a081940f6eaaf52ca8b29b5bda7b27f48a792d8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/proposal.md",
+      "sha256": "9b0a8347b0e35f373ce60eacc91971aa7da2a42078899a11db77d06964578e6a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+      "sha256": "ac0ea37f4818bccbf79b56496ccdc40287c83a832495af6b1388f71e8d1e9869",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/specs/grade10-admin/console/daily-reminder/spec.md",
+      "sha256": "76ef2eb6b6f62cdc4eacf51022a4cbcda624b4a9536caf6de2583b339b5c1017",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+      "sha256": "4785cd576a36494cef6411311ef7d87eed209ec6a77dc64653860ab7e146b637",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/tech-design.md",
+      "sha256": "9b555c90078770fa7f6e29a866f9ccabccc5f1a3e9558e882d1fb0c0a7e1231d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/ui-design.md",
+      "sha256": "770d5786b417d5c5229e034bcbdf60bc21b825d7ae03e6eea79c97ce21bd3c87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+      "sha256": "e7457c6b2fc37054b3e0049c71ab8884c93255d26969fcee9b5d238242122bdd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+      "sha256": "d1a9d35209e683ea44ba816168eccb8ef0c389d6a6e2c4059ff829c35feba2ce",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+      "sha256": "4ae1bf33ddc9180ad005572d578cdbf9d8811652d58575f117da38856d238a2d",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/auction-slack-lifecycle-alerts/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Auction posts a warning Slack when an order becomes overdue or is flagged",
+        "Requirement: Auction posts lifecycle Slack when a listing goes live, ends or is extended",
+        "Requirement: Lifecycle Slack posts are best effort and never hold the bid or order path",
+        "Requirement: Slack posts the day's lists at 08:00 Hong Kong time",
+        "Requirement: Still Waiting lists the orders that have waited 48 hours for an operator action",
+        "Requirement: The channel and token come from the environment",
+        "Requirement: The console shows an operator the rows their grants allow",
+        "Requirement: The daily dialog opens on each entry until the operator closes it that Hong Kong day",
+        "Requirement: The lists agree with Needs you and mark nothing",
+        "Requirement: Today reads in three columns"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

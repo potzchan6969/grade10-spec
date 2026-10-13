@@ -1,9 +1,79 @@
 # grade10-admin/console/daily-reminder Test Cases
 
-**Status:** pending-review · 0/80
-**Drafts styled:** 2026-10-12, tcs-rules r5
+**Status:** pending-review · 0/101
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
-**Out of suite:** grade10-admin-console-daily-reminder-SC-07 - the backend list tests of task 2.4; grade10-admin-console-daily-reminder-SC-77 - the What's New read test of task 2.1; grade10-admin-console-daily-reminder-SC-78 - the Slack job test of task 3.1; grade10-admin-console-daily-reminder-SC-79 - the console storage tests of task 4.1; grade10-admin-console-daily-reminder-SC-80 - the Today page tests of task 4.1; grade10-admin-console-daily-reminder-SC-81 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-82 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-83 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-84 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-85 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-86 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-87 - the Slack message tests of task 5.2
+**Out of suite:** grade10-admin-console-daily-reminder-SC-07 - the backend list tests of task 2.4; grade10-admin-console-daily-reminder-SC-77 - the What's New read test of task 2.1; grade10-admin-console-daily-reminder-SC-78 - the Slack job test of task 3.1; grade10-admin-console-daily-reminder-SC-79 - the console storage tests of task 4.1; grade10-admin-console-daily-reminder-SC-80 - the Today page tests of task 4.1; grade10-admin-console-daily-reminder-SC-81 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-82 - the dialog tests of task 4.1; grade10-admin-console-daily-reminder-SC-83 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-84 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-85 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-86 - the Today page tests of task 5.3; grade10-admin-console-daily-reminder-SC-87 - the Slack message tests of task 5.2; grade10-admin-console-daily-reminder-SC-97 - the close-path Slack failure tests of task 2.1; grade10-admin-console-daily-reminder-SC-98 - the lifecycle not-configured tests of task 2.1 (both token and channel required)
+
+## Walk 1: Flagged or still waiting in the dialog and on Today
+
+**Starting state:**
+
+- admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
+- `<order_flag_fresh>` has an open payment flag raised 2 hours ago and is not past 48 hours in a waiting status.
+- `<order_wait>` has waited 49 hours in Preparing Invoice with no open flag.
+- `<order_overdue>` is Setup Overdue with no open flag.
+- `<order_flag_and_wait>` has an open payment flag and has also waited 49 hours in Preparing Invoice.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_fresh | Order with one open payment flag, raised 2 hours ago, flag reason `<flag_reason>` |
+| order_wait | Unflagged Preparing Invoice order waited 49 hours |
+| order_overdue | Setup Overdue order with no open flag |
+| order_flag_and_wait | Flagged Preparing Invoice order waited 49 hours; earliest open flag 3 hours ago |
+| flag_reason | Overpaid (any open payment flag reason the product shows) |
+
+### Route
+
+1. Navigate to <grade10 admin console url> and read Flagged or still waiting in the dialog.
+   - Flagged rows lead, then the 48-hour wait. `g10adm.console-daily-reminder.US2-TC17`
+   - A flagged-and-waiting order is one flagged row only. `g10adm.console-daily-reminder.US2-TC18`
+   - Setup Overdue alone is absent. `g10adm.console-daily-reminder.US2-TC19`
+   - The list heading carries a warning mark. `g10adm.console-daily-reminder.US2-TC20`
+   - A fresh flag appears the same day with its reason. `g10adm.console-daily-reminder.US5-TC1`
+2. Close the dialog and open <grade10 admin today url>.
+   - The waiting column is Flagged or still waiting with a warning mark and the caption Something wrong or waiting a while, needing your action. `g10adm.console-daily-reminder.US3-TC15`
+   - Empty waiting copy reads Nothing flagged or waiting too long. when no row remains after clearing fixtures. `g10adm.console-daily-reminder.US3-TC16`
+
+## Walk 2: Auction lifecycle Slack beside the daily morning list
+
+**Starting state:**
+
+- Slack is configured for Auction with the daily reminder channel and token.
+- `<listing_live>` is published and reaches its scheduled start with bidding open.
+- `<listing_ext>` is live and soft-close extends its end once.
+- `<listing_end>` reaches its end time after any extension.
+- `<order_od>` becomes Payment Overdue.
+- `<order_fg>` receives an open payment flag with reason `<flag_reason>`.
+- Morning fixtures include at least one What's New row and one Flagged or still waiting row.
+
+**Shared test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_live | Published listing whose scheduled start is reached |
+| listing_ext | Live listing soft-closed once; extension shown as whole minutes rounded down |
+| listing_end | Listing that ends at its (possibly extended) end time |
+| order_od | Order that transitions into Payment Overdue |
+| order_fg | Order that receives an open payment flag |
+| flag_reason | Overpaid |
+| slack channel | Auction daily reminder channel for the environment |
+
+### Route
+
+1. At 08:00 Hong Kong time, read `<slack channel>` for the daily message.
+   - The waiting list heading is Something wrong or waiting a while, needing your action, with a warning mark, and flagged rows lead. `g10adm.console-daily-reminder.US4-TC22`
+2. Drive `<listing_live>` through go-live, then soft-close `<listing_ext>`, then end `<listing_end>`, reading the channel after each move.
+   - One go-live message with start time and a console link. `g10adm.console-daily-reminder.US6-TC1`
+   - One extension message with how long and the new end time. `g10adm.console-daily-reminder.US6-TC2`
+   - One ended message with the end time. `g10adm.console-daily-reminder.US6-TC3`
+3. Drive `<order_od>` into Payment Overdue and flag `<order_fg>`, reading the channel after each transition.
+   - One overdue warning with the overdue status. `g10adm.console-daily-reminder.US7-TC1`
+   - One flagged warning with the flag reason. `g10adm.console-daily-reminder.US7-TC2`
+4. Leave `<order_od>` overdue and `<order_fg>` flagged without clearing, and wait past a further read window.
+   - No second overdue or flagged message. `g10adm.console-daily-reminder.US7-TC3`
 
 ## grade10-admin-console-daily-reminder-US1: Operator starts the day with what closed yesterday
 
@@ -43,7 +113,7 @@
 
 * The console page loads with the dialog open over it.
 * What's New lists a row for `<listing_1>` and a row for `<listing_2>`.
-* Still Waiting lists a row for `<order_2>`.
+* Flagged or still waiting lists a row for `<order_2>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-rz8 rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-bz8,g10adm.console-daily-reminder.SC-xxl,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-n4k,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-2u2,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-74n,g10adm.console-daily-reminder.SC-pxi,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-wmh,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd,g10adm.console-daily-reminder.SC-gxz,g10adm.console-daily-reminder.SC-k4n -->
 ### g10adm.console-daily-reminder.TC-rz8 (US1-TC2): A sold listing is one row that opens its winner order
@@ -438,7 +508,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The dialog opens.
-* The dialog shows Still Waiting with the row for `<order_2>`.
+* The dialog shows Flagged or still waiting with the row for `<order_2>`.
 * The dialog shows no What's New list and no empty message for it.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-ffo rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-bz8,g10adm.console-daily-reminder.SC-xxl,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-n4k,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-2u2,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-74n,g10adm.console-daily-reminder.SC-pxi,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-wmh,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd,g10adm.console-daily-reminder.SC-gxz,g10adm.console-daily-reminder.SC-k4n -->
@@ -628,7 +698,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | failing_list (row 1) | What's New |
-| failing_list (row 2) | Still Waiting |
+| failing_list (row 2) | Flagged or still waiting |
 
 **Steps:**
 
@@ -926,7 +996,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the page with no dialog.
 * Step 3 shows no dialog.
 * Step 4 shows no dialog.
-* Step 5 opens the dialog, listing `<order_2>` in Still Waiting.
+* Step 5 opens the dialog, listing `<order_2>` in Flagged or still waiting.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-r1t rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-bz8,g10adm.console-daily-reminder.SC-xxl,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-n4k,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-2u2,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-74n,g10adm.console-daily-reminder.SC-pxi,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-wmh,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd,g10adm.console-daily-reminder.SC-gxz,g10adm.console-daily-reminder.SC-k4n -->
 ### g10adm.console-daily-reminder.TC-r1t (US1-TC28): A deep link while signed out opens the dialog after sign-in
@@ -988,9 +1058,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| failed_lists, other (row 1) | What's New; Still Waiting has no row for the operator |
-| failed_lists, other (row 2) | Still Waiting; What's New has no row for the operator |
-| failed_lists, other (row 3) | What's New and Still Waiting; no other list |
+| failed_lists, other (row 1) | What's New; Flagged or still waiting has no row for the operator |
+| failed_lists, other (row 2) | Flagged or still waiting; What's New has no row for the operator |
+| failed_lists, other (row 3) | What's New and Flagged or still waiting; no other list |
 
 **Steps:**
 
@@ -1022,18 +1092,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
-* The read for Still Waiting is made to fail once and then succeed.
+* The read for Flagged or still waiting is made to fail once and then succeed.
 * `<order_2>` has waited 49 hours in Preparing Invoice.
 
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Click the Retry beside Still Waiting.
+2. Click the Retry beside Flagged or still waiting.
 
 **Expected Results:**
 
-* Step 1 shows Still Waiting as failed to load, with a Retry.
-* Step 2 shows the row for `<order_2>` in Still Waiting.
+* Step 1 shows Flagged or still waiting as failed to load, with a Retry.
+* Step 2 shows the row for `<order_2>` in Flagged or still waiting.
 * Step 2 removes the failure notice.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-u9a rev=1 covers=g10adm.console-daily-reminder.SC-t4n,g10adm.console-daily-reminder.SC-tp9,g10adm.console-daily-reminder.SC-xv5,g10adm.console-daily-reminder.SC-53i,g10adm.console-daily-reminder.SC-7xm,g10adm.console-daily-reminder.SC-zy5,g10adm.console-daily-reminder.SC-bz8,g10adm.console-daily-reminder.SC-xxl,g10adm.console-daily-reminder.SC-4ql,g10adm.console-daily-reminder.SC-ml9,g10adm.console-daily-reminder.SC-4zv,g10adm.console-daily-reminder.SC-n4k,g10adm.console-daily-reminder.SC-qy6,g10adm.console-daily-reminder.SC-81m,g10adm.console-daily-reminder.SC-2u2,g10adm.console-daily-reminder.SC-0so,g10adm.console-daily-reminder.SC-74n,g10adm.console-daily-reminder.SC-pxi,g10adm.console-daily-reminder.SC-iu6,g10adm.console-daily-reminder.SC-xp0,g10adm.console-daily-reminder.SC-cer,g10adm.console-daily-reminder.SC-z0d,g10adm.console-daily-reminder.SC-wmh,g10adm.console-daily-reminder.SC-rzr,g10adm.console-daily-reminder.SC-5sd,g10adm.console-daily-reminder.SC-gxz,g10adm.console-daily-reminder.SC-k4n -->
@@ -1101,11 +1171,11 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-console-daily-reminder-US2: Operator is reminded of orders still waiting on them
+## grade10-admin-console-daily-reminder-US2: Operator is reminded of flagged orders and orders still waiting on them
 
 **As an** operator with payment or shipment processing,
-**I want** the orders that have waited 48 hours for me to send an invoice, check a proof or dispatch listed every day until I act, longest wait first,
-**so that** an order I could not get to does not stay forgotten behind newer work.
+**I want** flagged orders at the top of Flagged or still waiting, then the orders that have waited 48 hours for me to send an invoice, check a proof or dispatch, listed every day until I act,
+**so that** a flag or a forgotten job is not lost behind newer work.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-ivd rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-ivd (US2-TC1): An order past 48 hours is a row saying the action it waits for
@@ -1141,7 +1211,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Find the row for `<order_w>` in Still Waiting.
+2. Find the row for `<order_w>` in Flagged or still waiting.
 3. Click the row.
 
 **Expected Results:**
@@ -1173,14 +1243,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Find the row for `<order_w>` in Still Waiting.
+2. Find the row for `<order_w>` in Flagged or still waiting.
 
 **Expected Results:**
 
-* Still Waiting holds a row for `<order_w>`.
+* Flagged or still waiting holds a row for `<order_w>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-ala rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-ala (US2-TC3): Still Waiting lists the longest wait first
+### g10adm.console-daily-reminder.TC-ala (US2-TC3): Flagged or still waiting lists the longest wait first
 
 **Classification:**
 
@@ -1203,7 +1273,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Read the order of rows in Still Waiting.
+2. Read the order of rows in Flagged or still waiting.
 
 **Expected Results:**
 
@@ -1239,11 +1309,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 lists `<order_w>` in Still Waiting.
+* Step 1 lists `<order_w>` in Flagged or still waiting.
 * Step 4 opens the dialog again, listing `<order_w>` with a longer wait.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-aah rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-aah (US2-TC5): An order that moves on leaves Still Waiting
+### g10adm.console-daily-reminder.TC-aah (US2-TC5): An order that moves on leaves Flagged or still waiting
 
 **Classification:**
 
@@ -1261,7 +1331,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds auction:read and auction:payment) is on <grade10 admin today url>.
-* `<order_w>` has waited 49 hours in Preparing Invoice and is listed in Still Waiting.
+* `<order_w>` has waited 49 hours in Preparing Invoice and is listed in Flagged or still waiting.
 
 **Steps:**
 
@@ -1272,10 +1342,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 4 shows Still Waiting with no row for `<order_w>`.
+* Step 4 shows Flagged or still waiting with no row for `<order_w>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-5ri rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-5ri (US2-TC6): An operator with no Still Waiting row sees no such list in the dialog
+### g10adm.console-daily-reminder.TC-5ri (US2-TC6): An operator with no Flagged or still waiting row sees no such list in the dialog
 
 **Classification:**
 
@@ -1303,7 +1373,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The dialog opens with What's New and its row for `<listing_1>`.
-* The dialog shows no Still Waiting list.
+* The dialog shows no Flagged or still waiting list.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-t7x rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-t7x (US2-TC7): An order short of 48 elapsed hours is not listed
@@ -1338,11 +1408,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Read Still Waiting.
+2. Read Flagged or still waiting.
 
 **Expected Results:**
 
-* Still Waiting holds no row for `<order_w>`.
+* Flagged or still waiting holds no row for `<order_w>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-to3 rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-to3 (US2-TC8): A wait runs from its status clock, not from the order's age
@@ -1378,11 +1448,11 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Read Still Waiting.
+2. Read Flagged or still waiting.
 
 **Expected Results:**
 
-* Still Waiting holds no row for `<order_w>`.
+* Flagged or still waiting holds no row for `<order_w>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-xga rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-xga (US2-TC9): Other statuses are not listed however long they wait
@@ -1421,14 +1491,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Read Still Waiting.
+2. Read Flagged or still waiting.
 
 **Expected Results:**
 
-* Still Waiting holds no row for `<order_w>`.
+* Flagged or still waiting holds no row for `<order_w>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-1iy rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-no9,g10adm.console-daily-reminder.SC-6zm,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-1iy (US2-TC10): Still Waiting marks no status, worklist row or order page
+### g10adm.console-daily-reminder.TC-1iy (US2-TC10): Flagged or still waiting marks no status, worklist row or order page
 
 **Classification:**
 
@@ -1446,7 +1516,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds auction:read and auction:payment) is on <grade10 admin today url>.
-* `<order_w>` has waited 100 hours in Preparing Invoice and is listed in Still Waiting.
+* `<order_w>` has waited 100 hours in Preparing Invoice and is listed in Flagged or still waiting.
 * `<needs_count>` is the Needs action count in Orders with no reminder lists in place.
 
 **Steps:**
@@ -1497,14 +1567,14 @@ Runs once per row of **Test data**.
 
 1. Sign in as `<operator>`.
 2. Navigate to <grade10 admin console url>.
-3. Read Still Waiting.
+3. Read Flagged or still waiting.
 
 **Expected Results:**
 
-* Still Waiting holds `<rows>`.
+* Flagged or still waiting holds `<rows>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-xnm rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-xnm (US2-TC12): The Still Waiting read leaves out rows the caller's grants do not allow
+### g10adm.console-daily-reminder.TC-xnm (US2-TC12): The Flagged or still waiting read leaves out rows the caller's grants do not allow
 
 **Classification:**
 
@@ -1526,54 +1596,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the API response for the Still Waiting list as `<caller>`.
+1. Read the API response for the Flagged or still waiting list as `<caller>`.
 
 **Expected Results:**
 
 * The response holds `<order_s>`.
 * The response holds no row for `<order_i>`.
-
-<!-- trace:case id=g10adm.console-daily-reminder.TC-j8o rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-j8o (US2-TC13): A flagged order is listed by its own wait, not by its flag
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-console-daily-reminder-US-02
-
-**Pre-conditions:**
-
-* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
-* `<order_f>` is in `<status>` with an open payment flag, and has waited `<waited>` since the clock the Orders table names for that status.
-* The flag was raised `<flagged>` ago.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| status, waited, flagged, listed (row 1) | Payment Verifying, 49 hours, 1 hour, lists |
-| status, waited, flagged, listed (row 2) | Preparing Shipment, 49 hours, 1 hour, lists |
-| status, waited, flagged, listed (row 3) | Preparing Shipment, 10 hours, 60 hours, does not list |
-
-**Steps:**
-
-1. Navigate to <grade10 admin console url>.
-2. Find the row for `<order_f>` in Still Waiting.
-
-**Expected Results:**
-
-* Still Waiting `<listed>` a row for `<order_f>`.
-* A listed row shows the wait from the status clock, not from the flag.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-n4g rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-5n3 -->
 ### g10adm.console-daily-reminder.TC-n4g (US2-TC14): The console shows the exact wait, not whole days
@@ -1599,7 +1627,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Read the waits of `<order_a>` and `<order_b>` in Still Waiting.
+2. Read the waits of `<order_a>` and `<order_b>` in Flagged or still waiting.
 
 **Expected Results:**
 
@@ -1631,14 +1659,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin console url>.
-2. Read the order of rows in Still Waiting.
+2. Read the order of rows in Flagged or still waiting.
 
 **Expected Results:**
 
 * The rows read `<order_z>`, `<order_x>`, `<order_y>` from top to bottom.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-e5w rev=1 covers=g10adm.console-daily-reminder.SC-v0i,g10adm.console-daily-reminder.SC-q0x,g10adm.console-daily-reminder.SC-06a,g10adm.console-daily-reminder.SC-bs5,g10adm.console-daily-reminder.SC-r85,g10adm.console-daily-reminder.SC-b1n,g10adm.console-daily-reminder.SC-89a,g10adm.console-daily-reminder.SC-n5c,g10adm.console-daily-reminder.SC-x5d,g10adm.console-daily-reminder.SC-juj,g10adm.console-daily-reminder.SC-hsd,g10adm.console-daily-reminder.SC-tvq,g10adm.console-daily-reminder.SC-22e,g10adm.console-daily-reminder.SC-vpd,g10adm.console-daily-reminder.SC-gjm,g10adm.console-daily-reminder.SC-b5m,g10adm.console-daily-reminder.SC-5n3 -->
-### g10adm.console-daily-reminder.TC-e5w (US2-TC16): The Still Waiting read refuses a caller with no auction access
+### g10adm.console-daily-reminder.TC-e5w (US2-TC16): The Flagged or still waiting read refuses a caller with no auction access
 
 **Classification:**
 
@@ -1660,23 +1688,198 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the API response for the Still Waiting list as `<caller>`.
+1. Read the API response for the Flagged or still waiting list as `<caller>`.
 
 **Expected Results:**
 
 * The response is a refusal.
 * The response holds no row.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-tbl rev=1 covers=g10adm.console-daily-reminder.SC-a99 -->
+### g10adm.console-daily-reminder.US2-TC17: Flagged rows lead above 48-hour waits
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Pre-conditions:**
+
+* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
+* `<order_flag_fresh>` has an open payment flag raised 2 hours ago and is not past 48 hours in a waiting status.
+* `<order_wait>` has waited 49 hours in Preparing Invoice with no open flag.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_fresh | Flagged order, open flag 2 hours old, under 48-hour wait |
+| order_wait | Unflagged Preparing Invoice order waited 49 hours |
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Read the order of rows in Flagged or still waiting.
+
+**Expected Results:**
+
+* The first row is `<order_flag_fresh>`.
+* `<order_wait>` sits under every flagged row.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-rwq rev=1 -->
+### g10adm.console-daily-reminder.US2-TC18: A flagged order past 48 hours is one flagged row only
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Pre-conditions:**
+
+* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
+* `<order_flag_and_wait>` has an open payment flag and has waited 49 hours in Preparing Invoice.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_and_wait | Flagged Preparing Invoice order waited 49 hours |
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Count the rows for `<order_flag_and_wait>` in Flagged or still waiting.
+
+**Expected Results:**
+
+* Exactly one row names `<order_flag_and_wait>`.
+* That row is among the flagged rows at the top, not among the wait rows below.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-urs rev=1 covers=g10adm.console-daily-reminder.SC-b00 -->
+### g10adm.console-daily-reminder.US2-TC19: Setup Overdue and Payment Overdue alone are not listed
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Pre-conditions:**
+
+* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
+* `<order_overdue>` is in `<status>` with no open payment flag.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| status (row 1) | Setup Overdue |
+| status (row 2) | Payment Overdue |
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Read Flagged or still waiting for `<order_overdue>`.
+
+**Expected Results:**
+
+* Flagged or still waiting holds no row for `<order_overdue>`.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7xu rev=2 covers=g10adm.console-daily-reminder.SC-5n3 -->
+### g10adm.console-daily-reminder.US2-TC20: The dialog waiting list title carries a warning mark
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Pre-conditions:**
+
+* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) has not closed the daily dialog today in this browser.
+* A What's New row and a Flagged or still waiting row exist for the operator.
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Read both lists and the Flagged or still waiting heading in the dialog.
+
+**Expected Results:**
+
+* The dialog holds What's New and Flagged or still waiting, in that order, each with its rows.
+* The Flagged or still waiting heading reads Flagged or still waiting.
+* A warning mark stands beside that heading.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-j8o rev=2 covers=none -->
+### g10adm.console-daily-reminder.TC-j8o (US2-TC13): A flagged order is listed by its own wait, not by its flag
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Pre-conditions:**
+
+* None.
+
+**Steps:**
+
+1. None. Superseded by flagged-at-top any-age cases under US2 and US5.
+
+**Expected Results:**
+
+* Deprecated. The change lists every open payment flag at the top at any age, with the flag reason and wait from the earliest open flag, and never as a separate wait row.
+
 ---
 
 ## grade10-admin-console-daily-reminder-US3: Operator finds the reminder again on Today
 
 **As an** operator who closed the daily dialog,
-**I want** the same two lists on Today, beside what needs me,
+**I want** What's New and Flagged or still waiting on Today, beside what needs me, with a warning mark on the waiting column,
 **so that** I can come back to them later in the day without the dialog.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-64m rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
-### g10adm.console-daily-reminder.TC-64m (US3-TC1): Today shows What's New, Still Waiting and Needs you side by side
+### g10adm.console-daily-reminder.TC-64m (US3-TC1): Today shows What's New, Flagged or still waiting and Needs you side by side
 
 **Classification:**
 
@@ -1703,9 +1906,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The page shows three columns: What's New, Still Waiting, Needs you.
+* The page shows three columns: What's New, Flagged or still waiting, Needs you.
 * What's New holds the row for `<listing_1>`.
-* Still Waiting holds the row for `<order_2>`.
+* Flagged or still waiting holds the row for `<order_2>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-ja5 rev=1 covers=g10adm.console-daily-reminder.SC-no9,g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-ja5 (US3-TC2): Needs you keeps its cards in one column with counts and links unchanged
@@ -1726,7 +1929,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) is on <grade10 admin today url>.
-* `<order_2>` has waited 49 hours in Preparing Invoice, so Still Waiting has a row.
+* `<order_2>` has waited 49 hours in Preparing Invoice, so Flagged or still waiting has a row.
 
 **Steps:**
 
@@ -1793,7 +1996,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin today url>.
-2. Read the grouping of rows in What's New and in Still Waiting.
+2. Read the grouping of rows in What's New and in Flagged or still waiting.
 
 **Expected Results:**
 
@@ -1827,8 +2030,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | empty_lists (row 1) | What's New only |
-| empty_lists (row 2) | Still Waiting only |
-| empty_lists (row 3) | What's New and Still Waiting |
+| empty_lists (row 2) | Flagged or still waiting only |
+| empty_lists (row 3) | What's New and Flagged or still waiting |
 
 **Steps:**
 
@@ -1866,7 +2069,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The lists stack in one column: What's New, Still Waiting, Needs you.
+* The lists stack in one column: What's New, Flagged or still waiting, Needs you.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-y84 rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-y84 (US3-TC7): Today reads the lists on load, tab return and Refresh, never on a timer
@@ -1931,7 +2134,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * What's New holds 12 rows.
-* Still Waiting holds 12 rows.
+* Flagged or still waiting holds 12 rows.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-c2l rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-c2l (US3-TC9): A row on Today opens its order or listing
@@ -1958,7 +2161,7 @@ Runs once per row of **Test data**.
 
 1. Click the What's New row for `<listing_1>`, then go back.
 2. Click the What's New row for `<listing_2>`, then go back.
-3. Click the Still Waiting row for `<order_2>`.
+3. Click the Flagged or still waiting row for `<order_2>`.
 
 **Expected Results:**
 
@@ -1990,12 +2193,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin today url>.
-2. Read Still Waiting.
+2. Read Flagged or still waiting.
 
 **Expected Results:**
 
-* Still Waiting holds the row for `<order_i>`.
-* Still Waiting holds no row for `<order_s>`.
+* Flagged or still waiting holds the row for `<order_i>`.
+* Flagged or still waiting holds no row for `<order_s>`.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-p3h rev=1 covers=g10adm.console-daily-reminder.SC-no9,g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
 ### g10adm.console-daily-reminder.TC-p3h (US3-TC11): Refresh reads all three columns again
@@ -2017,18 +2220,18 @@ Runs once per row of **Test data**.
 
 * admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) is on <grade10 admin today url> with the lists loaded.
 * `<order_1>` is the winner order of a listing sold yesterday, in Preparing Invoice, with a row in What's New.
-* `<order_w>` has waited 49 hours in Preparing Invoice and has a row in Still Waiting.
+* `<order_w>` has waited 49 hours in Preparing Invoice and has a row in Flagged or still waiting.
 
 **Steps:**
 
-1. Read the What's New row of `<order_1>`, the Still Waiting row of `<order_w>` and the Orders count in Needs you.
+1. Read the What's New row of `<order_1>`, the Flagged or still waiting row of `<order_w>` and the Orders count in Needs you.
 2. In another browser, send the invoice of `<order_1>` and of `<order_w>`.
 3. Click Refresh.
 
 **Expected Results:**
 
 * Step 3 shows the What's New row of `<order_1>` with its new status.
-* Step 3 shows no row for `<order_w>` in Still Waiting.
+* Step 3 shows no row for `<order_w>` in Flagged or still waiting.
 * Step 3 shows the Orders count in Needs you changed to match the Needs action count in Orders.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-v6b rev=1 covers=g10adm.console-daily-reminder.SC-v91,g10adm.console-daily-reminder.SC-ojd,g10adm.console-daily-reminder.SC-5yn,g10adm.console-daily-reminder.SC-pck,g10adm.console-daily-reminder.SC-75f,g10adm.console-daily-reminder.SC-pbn,g10adm.console-daily-reminder.SC-vn1,g10adm.console-daily-reminder.SC-x3y -->
@@ -2060,7 +2263,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | failing_list (row 1) | What's New |
-| failing_list (row 2) | Still Waiting |
+| failing_list (row 2) | Flagged or still waiting |
 
 **Steps:**
 
@@ -2097,7 +2300,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to <grade10 admin today url>.
-2. Read What's New and Still Waiting.
+2. Read What's New and Flagged or still waiting.
 
 **Expected Results:**
 
@@ -2135,13 +2338,77 @@ Runs once per row of **Test data**.
 * The Approvals card shows `<approval_1>` with its approve and decline controls.
 * The card shows the same content as it showed before the reminder.
 
+<!-- trace:case id=g10adm.console-daily-reminder.TC-orm rev=2 covers=g10adm.console-daily-reminder.SC-v91 -->
+### g10adm.console-daily-reminder.US3-TC15: Today names Flagged or still waiting with warning mark and caption
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-03
+
+**Pre-conditions:**
+
+* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) closed the daily dialog today.
+* At least one What's New row and one Flagged or still waiting row exist for the operator.
+
+**Steps:**
+
+1. Navigate to <grade10 admin today url>.
+2. Read the three columns from left to right, and the middle column's title and caption.
+
+**Expected Results:**
+
+* What's New, Flagged or still waiting and Needs you stand side by side, in that order.
+* The Flagged or still waiting title carries a warning mark beside it.
+* The caption reads Something wrong or waiting a while, needing your action.
+* The first two columns hold the rows the dialog held.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-oyo rev=2 covers=g10adm.console-daily-reminder.SC-pck -->
+### g10adm.console-daily-reminder.US3-TC16: An empty Flagged or still waiting column says Nothing flagged or waiting too long
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-03
+
+**Pre-conditions:**
+
+* admin(holds auction:read, auction:write, auction:operate, auction:payment and auction:shipment) is on <grade10 admin today url>.
+* The operator has no row in What's New and no Flagged or still waiting row.
+
+**Steps:**
+
+1. Read all three columns.
+
+**Expected Results:**
+
+* All three columns show.
+* What's New says No listing closed yesterday.
+* Flagged or still waiting says Nothing flagged or waiting too long.
+
 ---
 
 ## grade10-admin-console-daily-reminder-US4: Operator reads the day's lists in Slack
 
 **As an** auction operator who works from Slack,
-**I want** the day's new listings and the orders still waiting posted to our channel each morning, every row a link,
-**so that** the team sees what is waiting, and opens it, without first opening the console.
+**I want** the day's new listings and Flagged or still waiting posted to our channel each morning, headed Something wrong or waiting a while, needing your action, with a warning mark, every row a link,
+**so that** the team sees what is wrong or waiting, and opens it, without first opening the console.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-gqc rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
 ### g10adm.console-daily-reminder.TC-gqc (US4-TC1): Both lists post as one message at 08:00 Hong Kong time
@@ -2172,7 +2439,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * One message arrives at 08:00 Hong Kong time.
-* The message holds a What's New list and a Still Waiting list.
+* The message holds a What's New list and a Flagged or still waiting list.
 * Rows for `<listing_1>`, `<listing_2>` and `<order_2>` show.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-ark rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
@@ -2261,7 +2528,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the Still Waiting list in the message.
+1. Read the Flagged or still waiting list in the message.
 
 **Expected Results:**
 
@@ -2301,7 +2568,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Count the rows in Still Waiting in the message.
+1. Count the rows in Flagged or still waiting in the message.
 2. Read the end of the list.
 
 **Expected Results:**
@@ -2337,7 +2604,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Still Waiting shows 10 rows without `<order_last>` and a link to Today saying 1 more.
+* Flagged or still waiting shows 10 rows without `<order_last>` and a link to Today saying 1 more.
 * What's New shows 3 rows and no link to Today.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-12f rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95 -->
@@ -2446,8 +2713,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| rows_in, rows_out (row 1) | What's New, Still Waiting |
-| rows_in, rows_out (row 2) | Still Waiting, What's New |
+| rows_in, rows_out (row 1) | What's New, Flagged or still waiting |
+| rows_in, rows_out (row 2) | Flagged or still waiting, What's New |
 
 **Steps:**
 
@@ -2587,7 +2854,7 @@ Runs once per row of **Test data**.
 * The channel holds one message for `<day_2>` with the lists of `<day_2>`.
 * The log holds an error for `<day_1>`.
 
-<!-- trace:case id=g10adm.console-daily-reminder.TC-7e7 rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-f3g -->
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7e7 rev=2 covers=g10adm.console-daily-reminder.SC-f3g -->
 ### g10adm.console-daily-reminder.TC-7e7 (US4-TC17): Nothing posts without a channel or a token, and the log says it is not configured
 
 Runs once per row of **Test data**.
@@ -2607,16 +2874,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<missing>` is not set for the environment.
+* `<missing>` is missing or empty for the environment.
 * Rows exist for the day.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| missing (row 1) | the Slack channel |
-| missing (row 2) | the Slack access token |
-| missing (row 3) | both |
+| missing (row 1) | the Slack channel unset |
+| missing (row 2) | the Slack bot token unset |
+| missing (row 3) | both unset |
+| missing (row 4) | the Slack channel empty |
+| missing (row 5) | the Slack bot token empty |
 
 **Steps:**
 
@@ -2627,7 +2896,8 @@ Runs once per row of **Test data**.
 
 * No message posts.
 * The run does not post to any other channel.
-* The log says Slack is not configured.
+* The log says the reminder is not configured.
+* No error is raised into the scheduled run.
 
 <!-- trace:case id=g10adm.console-daily-reminder.TC-g9s rev=1 covers=g10adm.console-daily-reminder.SC-kf7,g10adm.console-daily-reminder.SC-99q,g10adm.console-daily-reminder.SC-oce,g10adm.console-daily-reminder.SC-alf,g10adm.console-daily-reminder.SC-4d8,g10adm.console-daily-reminder.SC-oap,g10adm.console-daily-reminder.SC-odp,g10adm.console-daily-reminder.SC-oxw,g10adm.console-daily-reminder.SC-nyt,g10adm.console-daily-reminder.SC-g63,g10adm.console-daily-reminder.SC-9ws,g10adm.console-daily-reminder.SC-s95,g10adm.console-daily-reminder.SC-6kr -->
 ### g10adm.console-daily-reminder.TC-g9s (US4-TC18): A failed send is tried once, logged and not sent again
@@ -2753,7 +3023,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the codes of the rows in Still Waiting.
+1. Read the codes of the rows in Flagged or still waiting.
 2. Read the end of the list.
 
 **Expected Results:**
@@ -2761,6 +3031,671 @@ Runs once per row of **Test data**.
 * The 10 rows hold the first 10 listing codes of `<codes>` in A to Z order.
 * The last code in A to Z order is not a row.
 * The end of the list shows a link to Today saying 1 more.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-kl7 rev=1 covers=g10adm.console-daily-reminder.SC-b02 -->
+### g10adm.console-daily-reminder.US4-TC22: Daily Slack waiting list uses the warning heading and leads with flagged rows
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-04
+
+**Pre-conditions:**
+
+* Slack is configured for the environment with a channel and token.
+* `<order_flag_fresh>` has an open payment flag raised 2 hours ago.
+* `<order_wait>` has waited 49 hours in Preparing Invoice with no open flag.
+* At least one What's New row exists so the daily message posts.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_fresh | Flagged order, open flag 2 hours old |
+| order_wait | Unflagged Preparing Invoice order waited 49 hours |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Wait until 08:00 Hong Kong time.
+2. Read the channel `<slack channel>`.
+3. Read the Flagged or still waiting section of the daily message.
+
+**Expected Results:**
+
+* The section heading reads Something wrong or waiting a while, needing your action.
+* A warning mark stands beside that heading.
+* The flagged row for `<order_flag_fresh>` sits above the wait row for `<order_wait>`.
+
+---
+
+## grade10-admin-console-daily-reminder-US5: Operator sees a flagged order on the waiting list the same day
+
+**As an** operator with payment processing,
+**I want** every order with an open payment flag listed at the top of Flagged or still waiting, with the flag reason, until the flag is cleared,
+**so that** a fresh flag is not hidden behind the 48-hour wait.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-jt5 rev=1 covers=g10adm.console-daily-reminder.SC-x5d -->
+### g10adm.console-daily-reminder.US5-TC1: A fresh flag appears at the top with its reason the same day
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Pre-conditions:**
+
+* admin(holds auction:read and auction:payment) has not closed the daily dialog today in this browser.
+* `<order_flag_fresh>` received an open payment flag with reason `<flag_reason>` 2 hours ago and is under 48 hours in every waiting status.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_fresh | Order flagged 2 hours ago, any status, under 48-hour wait |
+| flag_reason | Overpaid |
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Find the row for `<order_flag_fresh>` in Flagged or still waiting.
+3. Click the row.
+
+**Expected Results:**
+
+* The row sits among the flagged rows at the top.
+* The row shows `<flag_reason>` and a wait from the earliest open flag.
+* Step 3 opens the page of `<order_flag_fresh>`.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-lp9 rev=1 -->
+### g10adm.console-daily-reminder.US5-TC2: Clearing every flag removes the flagged row
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Pre-conditions:**
+
+* admin(holds auction:read and auction:payment) is on <grade10 admin today url>.
+* `<order_flag_fresh>` has one open payment flag and is listed at the top of Flagged or still waiting.
+* `<order_flag_fresh>` is not past 48 hours in a waiting status.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_fresh | Flagged order under 48-hour wait |
+
+**Steps:**
+
+1. Open the page of `<order_flag_fresh>` from its row.
+2. Clear every open payment flag.
+3. Navigate to <grade10 admin today url>.
+4. Refresh the lists.
+
+**Expected Results:**
+
+* Step 4 shows Flagged or still waiting with no flagged row for `<order_flag_fresh>`.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-qof rev=2 covers=g10adm.console-daily-reminder.SC-x4b -->
+### g10adm.console-daily-reminder.US5-TC3: Flagged wait and reason read from the earliest open flag
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Pre-conditions:**
+
+* admin(holds auction:read and auction:payment) has not closed the daily dialog today in this browser.
+* `<order_multi_flag>` has two open payment flags: the earlier raised 30 hours ago with reason `<earliest_reason>` and the later raised 2 hours ago with reason `<later_reason>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_multi_flag | Order with two open flags, earliest 30 hours ago |
+| earliest_reason | Underpaid |
+| later_reason | Overpaid |
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Read the flagged row for `<order_multi_flag>`.
+
+**Expected Results:**
+
+* The row shows `<earliest_reason>`, not `<later_reason>`.
+* The wait matches the earlier flag, about 30 hours, not the later 2-hour flag.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-sa7 rev=1 covers=g10adm.console-daily-reminder.SC-b01 -->
+### g10adm.console-daily-reminder.US5-TC4: An overdue order that is also flagged sits under Flagged
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Pre-conditions:**
+
+* admin(holds auction:read and auction:payment) has not closed the daily dialog today in this browser.
+* `<order_od_flag>` is Payment Overdue and has an open payment flag with reason `<flag_reason>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_od_flag | Payment Overdue order with an open payment flag |
+| flag_reason | Overpaid |
+
+**Steps:**
+
+1. Navigate to <grade10 admin console url>.
+2. Find the row for `<order_od_flag>` in Flagged or still waiting.
+
+**Expected Results:**
+
+* One flagged row names `<order_od_flag>` with `<flag_reason>`.
+* The row sits among the flagged rows at the top.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-31b rev=1 covers=g10adm.console-daily-reminder.SC-uoi -->
+### g10adm.console-daily-reminder.US5-TC5: Clearing every flag leaves a past-48-hour wait row at once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Pre-conditions:**
+
+* admin(holds auction:read and auction:payment) is on <grade10 admin today url>.
+* `<order_flag_and_wait>` has an open payment flag and has waited 49 hours in Preparing Invoice, listed as one flagged row.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_flag_and_wait | Flagged Preparing Invoice order waited 49 hours |
+
+**Steps:**
+
+1. Open the page of `<order_flag_and_wait>` from its row.
+2. Clear every open payment flag.
+3. Navigate to <grade10 admin today url>.
+4. Refresh the lists.
+
+**Expected Results:**
+
+* Step 4 shows one Send invoice wait row for `<order_flag_and_wait>` under Flagged or still waiting.
+* It shows no flagged row for `<order_flag_and_wait>`.
+
+---
+
+## grade10-admin-console-daily-reminder-US6: Operator learns in Slack when a listing goes live, ends or is extended
+
+**As an** auction operator who works from Slack,
+**I want** one message in our Auction channel when a listing goes live, when it ends, and when it is extended, each with the times that matter,
+**so that** the team can follow a live sale without watching the console.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7nw rev=2 covers=g10adm.console-daily-reminder.SC-a88 -->
+### g10adm.console-daily-reminder.US6-TC1: A listing going live posts once with its start time
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<listing_live>` opens bidding by `<open_path>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| open_path (row 1) | Published listing reaches its scheduled start with bidding open |
+| open_path (row 2) | Publish opens bidding because the scheduled start is already due |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Drive `<listing_live>` through `<open_path>` so bidding is open.
+2. Read the channel `<slack channel>`.
+3. Click the listing link in the go-live message.
+
+**Expected Results:**
+
+* One message names `<listing_live>` with its start time.
+* Step 3 opens the listing in the console.
+* The message shows no winner name, email or phone.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-5pk rev=2 covers=g10adm.console-daily-reminder.SC-a90 -->
+### g10adm.console-daily-reminder.US6-TC2: Each soft-close extension posts once with length and new end time
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<listing_ext>` is live.
+* Soft-close will move its end by `<extension_seconds>` seconds to `<new_end_time>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_ext | Live listing about to soft-close |
+| extension_seconds | 1800 |
+| extension_minutes_copy | 30 minutes |
+| new_end_time | The end time after this extension |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Drive the soft-close that extends `<listing_ext>` by `<extension_seconds>` seconds.
+2. Read the channel `<slack channel>`.
+
+**Expected Results:**
+
+* One message names `<listing_ext>`, `<extension_minutes_copy>` (whole minutes rounded down from `<extension_seconds>`) and `<new_end_time>`.
+* A second read before another extension shows no further extension message for that move.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7cj rev=1 covers=g10adm.console-daily-reminder.SC-a89 -->
+### g10adm.console-daily-reminder.US6-TC3: A listing ending posts once with its end time including extensions
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<listing_end>` reaches its end time `<end_time>`, including any prior extension.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_end | Listing ending at its final end time |
+| end_time | Final end time including any extension |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Wait until `<listing_end>` ends.
+2. Read the channel `<slack channel>`.
+
+**Expected Results:**
+
+* One message names `<listing_end>` with `<end_time>`.
+* Staying ended produces no further ended message.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-fka rev=1 covers=g10adm.console-daily-reminder.SC-a91 -->
+### g10adm.console-daily-reminder.US6-TC4: Lifecycle listing posts use the daily reminder channel and never name a customer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with one daily reminder channel and token.
+* A go-live, extension or ended lifecycle message for `<listing_any>` has just posted.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_any | Any listing that just posted a lifecycle message |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Read the channel `<slack channel>` for the lifecycle message.
+2. Compare it with the channel that received today's daily reminder.
+
+**Expected Results:**
+
+* The lifecycle message is in the same channel as the daily reminder.
+* The message shows no winner name, email or phone.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-mhl rev=2 covers=g10adm.console-daily-reminder.SC-a96 -->
+### g10adm.console-daily-reminder.US6-TC5: A failed extension alert is logged once and does not refuse the bid
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Pre-conditions:**
+
+* Auction Slack posting is forced to fail for the next lifecycle send.
+* `<listing_ext>` is live and a bid will earn soft-close.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_ext | Live listing about to soft-close |
+
+**Steps:**
+
+1. Place the bid that extends `<listing_ext>`.
+2. Confirm the bid stands and the end time has moved in the console.
+3. Read the operator logs for the failed Slack send.
+
+**Expected Results:**
+
+* The bid stands and the end time has moved before any Slack send starts.
+* The failure is logged naming the extension kind.
+* No retry posts the missed extension message later.
+
+---
+
+## grade10-admin-console-daily-reminder-US7: Operator is warned in Slack when an order becomes overdue or is flagged
+
+**As an** auction operator who works from Slack,
+**I want** one warning message when an order becomes Setup Overdue or Payment Overdue, and when it is flagged with its reason,
+**so that** money waiting on someone is noticed as soon as it happens.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-kf5 rev=1 covers=g10adm.console-daily-reminder.SC-a92,g10adm.console-daily-reminder.SC-a93,g10adm.console-daily-reminder.SC-a95 -->
+### g10adm.console-daily-reminder.US7-TC1: Becoming Setup Overdue or Payment Overdue posts one warning
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<order_od>` is about to become `<status>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| status (row 1) | Setup Overdue |
+| status (row 2) | Payment Overdue |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Drive `<order_od>` into `<status>`.
+2. Read the channel `<slack channel>`.
+3. Click the order link in the warning message.
+
+**Expected Results:**
+
+* One warning message names `<order_od>` and `<status>`.
+* A warning mark stands on the message.
+* Step 3 opens the order in the console.
+* The message shows no winner name, email or phone.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-swi rev=1 covers=g10adm.console-daily-reminder.SC-a94 -->
+### g10adm.console-daily-reminder.US7-TC2: Flagging an order posts one warning with the flag reason
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<order_fg>` is about to receive an open payment flag with reason `<flag_reason>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_fg | Order receiving an open payment flag |
+| flag_reason | Overpaid |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Raise the open payment flag on `<order_fg>` with `<flag_reason>`.
+2. Read the channel `<slack channel>`.
+
+**Expected Results:**
+
+* One warning message names `<order_fg>` and `<flag_reason>`.
+* A warning mark stands on the message.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-7k4 rev=1 -->
+### g10adm.console-daily-reminder.US7-TC3: Staying overdue or flagged does not post again
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<order_stay>` has already produced its one `<kind>` lifecycle warning and remains in that state.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| kind (row 1) | Payment Overdue |
+| kind (row 2) | open payment flag |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Note the lifecycle warning already in `<slack channel>` for `<order_stay>`.
+2. Wait through a further interval while `<order_stay>` stays in that state.
+3. Read the channel `<slack channel>` again.
+
+**Expected Results:**
+
+* No second `<kind>` warning posts for `<order_stay>`.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-9a8 rev=1 -->
+### g10adm.console-daily-reminder.US7-TC4: A failed overdue or flag post is logged once and does not refuse the order move
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Pre-conditions:**
+
+* Auction Slack posting is forced to fail for the next lifecycle send.
+* `<order_od>` is about to become Payment Overdue.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_od | Order about to become Payment Overdue |
+
+**Steps:**
+
+1. Drive `<order_od>` into Payment Overdue.
+2. Confirm the order shows Payment Overdue in the console.
+3. Read the operator logs for the failed Slack send.
+
+**Expected Results:**
+
+* The order is Payment Overdue.
+* The failure is logged.
+* No retry posts the missed overdue warning later.
+
+<!-- trace:case id=g10adm.console-daily-reminder.TC-8w7 rev=1 covers=g10adm.console-daily-reminder.SC-a94 -->
+### g10adm.console-daily-reminder.US7-TC5: Clearing every flag then raising a new one posts again
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Pre-conditions:**
+
+* Slack is configured for Auction with the daily reminder channel and token.
+* `<order_fg>` already produced one flagged lifecycle warning for an open payment flag that has since been cleared.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| order_fg | Order whose prior flag was cleared |
+| flag_reason | Overpaid |
+| slack channel | Auction daily reminder channel for the environment |
+
+**Steps:**
+
+1. Raise a new open payment flag on `<order_fg>` with `<flag_reason>`.
+2. Read the channel `<slack channel>`.
+
+**Expected Results:**
+
+* One new warning message names `<order_fg>` and `<flag_reason>`.
+* A warning mark stands on the message.
 
 ## Settled
 
@@ -2781,6 +3716,9 @@ Runs once per row of **Test data**.
 - **A row opened in a new tab** - a middle click, or a click with Ctrl or Cmd held, leaves the dialog open and sets no mark
 - **Long lists** - Today folds each product's list to one line until its chevron opens it; the dialog shows about four and a half rows of each and scrolls the rest inside the list
 - **Long lists** - Today opens the first product with rows and folds the others to one line, one open at a time, the opened one filling its column; the dialog shows about four and a half rows of each and scrolls the rest inside the list, fading the edge with more (Q49, Q50)
+- **Flagged orders** - superseded by this change: every open payment flag, any age, one flagged row at the top with the flag reason and wait from the earliest open flag; never also a wait row; Setup Overdue and Payment Overdue alone stay off the list (Q1, Q3, Q9); after every flag is cleared a past-48-hour wait returns at once as a wait row (Q12); several open flags show the earliest reason (Q11)
+- **Auction Slack env gate** - morning post and lifecycle alerts share one gate: send only when both bot token and channel are non-empty; missing or empty either skips the send, logs not configured, and leaves the 08:00 run and every other usual path untouched (Q15)
+- **Lifecycle Slack** - go-live once when bidding opens, including publish with start already due (Q14); extension length in whole minutes rounded down (Q16); re-flag after a clear posts again (Q13); posts only as a last best-effort step after the usual work (Q10)
 
 ## Reconciliation
 
@@ -2979,3 +3917,91 @@ Runs once per row of **Test data**.
 - **Raised** - nothing open. The two rows this run raised landed as Q46 (a whole-day wait reads `5d`; `g10adm.console-daily-reminder.TC-n4g`) and Q47 (a modified click leaves the dialog open; `g10adm.console-daily-reminder.TC-q7s`), and the 25 earlier rows are landed
 - **Tasks and requirements** - every scenario id `tasks.md` names exists, and each of the 85, with the amendment's, is named by at least one task. Each requirement has a tests-first task: the two reads and grants in 2.1, Slack and its failure in 3.1, the dialog and Today in 4.1; the page group 1 is store-only. Every group ends with a verify task, and the walk group walks US-01 and US-02 in 6.1, US-03 in 6.2 and US-04 in 6.3
 - **Markers** - `covers` lists every scenario serving the case's `Trace` journey, in spec order, as `docs/governance/test-traceability.md` requires, plus the scenarios that serve a Feature set group and are reached by the case: `grade10-admin-console-daily-reminder-SC-18` and `grade10-admin-console-daily-reminder-SC-19` by `g10adm.console-daily-reminder.TC-1iy`, `grade10-admin-console-daily-reminder-SC-18` by `g10adm.console-daily-reminder.TC-ja5` and `g10adm.console-daily-reminder.TC-p3h`, `grade10-admin-console-daily-reminder-SC-42` by `g10adm.console-daily-reminder.TC-z2e` and `g10adm.console-daily-reminder.TC-t2r`, `grade10-admin-console-daily-reminder-SC-65` by `g10adm.console-daily-reminder.TC-x5p` and `g10adm.console-daily-reminder.TC-e5w`, and `grade10-admin-console-daily-reminder-SC-53`, `grade10-admin-console-daily-reminder-SC-56`, `grade10-admin-console-daily-reminder-SC-57`, `grade10-admin-console-daily-reminder-SC-59` and `grade10-admin-console-daily-reminder-SC-60` by the US-04 cases that walk each. The case markers keep the ids their headings carry; the scenario markers were added to `spec.md` by Dev. The two scenarios removed since the earlier run (a day's message never posts twice, and a retry reads the lists as they stand) leave no marker and no `covers` entry; no case names either
+
+**Run:** QA2 reconciliation, 2026-10-13, in a fresh context. Read: this suite (including Walk 1 and Walk 2), the delta `spec.md` Purpose, Feature set and all scenarios, `user-journeys.md`, `proposal.md`, `decisions.md` (Q1–Q16 and `## Raised`), `ui-design.md`, `tech-design.md`, `tasks.md`, the Daily Reminder and Auction Management PRD pages linked from the proposal, and `docs/governance/specs-to-test-cases.md` Reconciliation. Carried cases keep the prior change's journey-wide `covers` markers. Denied regenerating cases from scenarios. Q11–Q16 were already landed; they were not re-asked. Patched scenarios and cases only where those answers required a clear correction. New cases remain `draft`. The change was not accepted.
+
+### Case dispositions (this change's new and patched cases)
+
+| Case | Anchor | Disposition |
+| --- | --- | --- |
+| `g10adm.console-daily-reminder.TC-tbl` (US2-TC17) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-99` |
+| `g10adm.console-daily-reminder.TC-rwq` (US2-TC18) | US-02 | Folded in part: `grade10-admin-console-daily-reminder-SC-16` one-row AND when also past 48 hours; no full THEN alone |
+| `g10adm.console-daily-reminder.TC-urs` (US2-TC19) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-100`; Payment Overdue row follows `grade10-admin-console-daily-reminder-SC-15` |
+| `g10adm.console-daily-reminder.TC-7xu` (US2-TC20) | US-02 | Folded: `grade10-admin-console-daily-reminder-SC-26`; rev 2 |
+| `g10adm.console-daily-reminder.TC-j8o` (US2-TC13) | US-02 | Deprecated; superseded by US2-TC17–20 and US5 cases |
+| `g10adm.console-daily-reminder.TC-orm` (US3-TC15) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-36`; rev 2 |
+| `g10adm.console-daily-reminder.TC-oyo` (US3-TC16) | US-03 | Folded: `grade10-admin-console-daily-reminder-SC-39`; rev 2 |
+| `g10adm.console-daily-reminder.TC-kl7` (US4-TC22) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-102` |
+| `g10adm.console-daily-reminder.TC-7e7` (US4-TC17) | US-04 | Folded: `grade10-admin-console-daily-reminder-SC-60`; empty-string rows and no-raise AND (Q15); rev 2; covers narrowed to SC-f3g |
+| `g10adm.console-daily-reminder.TC-jt5` (US5-TC1) | US-05 | Folded: `grade10-admin-console-daily-reminder-SC-16` |
+| `g10adm.console-daily-reminder.TC-lp9` (US5-TC2) | US-05 | Folded: clearing removes the flagged row when under 48 hours; requirement leaf, no separate scenario |
+| `g10adm.console-daily-reminder.TC-qof` (US5-TC3) | US-05 | Folded: `grade10-admin-console-daily-reminder-SC-103` (Q11); rev 2 |
+| `g10adm.console-daily-reminder.TC-sa7` (US5-TC4) | US-05 | Folded: `grade10-admin-console-daily-reminder-SC-101` |
+| `g10adm.console-daily-reminder.TC-31b` (US5-TC5) | US-05 | Folded: `grade10-admin-console-daily-reminder-SC-104` (Q12); added draft |
+| `g10adm.console-daily-reminder.TC-7nw` (US6-TC1) | US-06 | Folded: `grade10-admin-console-daily-reminder-SC-88` including publish-now (Q14); rev 2 |
+| `g10adm.console-daily-reminder.TC-5pk` (US6-TC2) | US-06 | Folded: `grade10-admin-console-daily-reminder-SC-90` whole minutes (Q16); rev 2 |
+| `g10adm.console-daily-reminder.TC-7cj` (US6-TC3) | US-06 | Folded: `grade10-admin-console-daily-reminder-SC-89` |
+| `g10adm.console-daily-reminder.TC-fka` (US6-TC4) | US-06 | Folded: `grade10-admin-console-daily-reminder-SC-91` |
+| `g10adm.console-daily-reminder.TC-mhl` (US6-TC5) | US-06 | Folded: `grade10-admin-console-daily-reminder-SC-96`; patched to extension failure and last-step wording; rev 2 |
+| `g10adm.console-daily-reminder.TC-kf5` (US7-TC1) | US-07 | Folded: `grade10-admin-console-daily-reminder-SC-92`, `grade10-admin-console-daily-reminder-SC-93`, `grade10-admin-console-daily-reminder-SC-95` |
+| `g10adm.console-daily-reminder.TC-swi` (US7-TC2) | US-07 | Folded: `grade10-admin-console-daily-reminder-SC-94` main THEN |
+| `g10adm.console-daily-reminder.TC-7k4` (US7-TC3) | US-07 | Folded in part: stay-no-repeat AND of `grade10-admin-console-daily-reminder-SC-92`, `grade10-admin-console-daily-reminder-SC-93`, `grade10-admin-console-daily-reminder-SC-94` |
+| `g10adm.console-daily-reminder.TC-9a8` (US7-TC4) | US-07 | Folded into best-effort requirement; overdue failure has no dedicated scenario beside `grade10-admin-console-daily-reminder-SC-96` / `grade10-admin-console-daily-reminder-SC-97` |
+| `g10adm.console-daily-reminder.TC-8w7` (US7-TC5) | US-07 | Folded: re-flag AND of `grade10-admin-console-daily-reminder-SC-94` (Q13); added draft |
+
+### Carried cases (US1–US4 prior suite)
+
+- **Kept** - 79 draft cases under US-01 to US-04 keep prior dispositions from the support-admin-daily-reminder reconciliation; their `covers` markers stay as journey-wide lists from that fold
+- **Over-claimed (inherited)** - those markers list every scenario serving the case's Trace journey, not only scenarios whose THEN the case fully asserts. Recorded here; markers left unchanged (immutable ids). This change's new markers use THEN-full links only
+
+### Scenario coverage (change-added and change-touched)
+
+| Spec scenario | Disposition |
+| --- | --- |
+| `grade10-admin-console-daily-reminder-SC-88` | Covered by US6-TC1; GIVEN widened for publish-now (Q14) |
+| `grade10-admin-console-daily-reminder-SC-89` | Covered by US6-TC3 |
+| `grade10-admin-console-daily-reminder-SC-90` | Covered by US6-TC2; THEN names whole minutes (Q16) |
+| `grade10-admin-console-daily-reminder-SC-91` | Covered by US6-TC4 |
+| `grade10-admin-console-daily-reminder-SC-92` | Covered by US7-TC1; stay-no-repeat in part by US7-TC3 |
+| `grade10-admin-console-daily-reminder-SC-93` | Covered by US7-TC1; stay-no-repeat in part by US7-TC3 |
+| `grade10-admin-console-daily-reminder-SC-94` | Covered by US7-TC2; re-flag by US7-TC5 (Q13); stay-no-repeat in part by US7-TC3 |
+| `grade10-admin-console-daily-reminder-SC-95` | Covered by US7-TC1 |
+| `grade10-admin-console-daily-reminder-SC-96` | Covered by US6-TC5; THEN requires bid move before Slack starts (Q10) |
+| `grade10-admin-console-daily-reminder-SC-97` | Out of suite - task 2.1 close-path Slack failure tests |
+| `grade10-admin-console-daily-reminder-SC-60` | Covered by US4-TC17; GIVEN/THEN widened for empty and no-raise (Q15) |
+| `grade10-admin-console-daily-reminder-SC-98` | Out of suite - task 2.1 lifecycle not-configured tests; shares `reminderDeps` gate with SC-60 (Q15) |
+| `grade10-admin-console-daily-reminder-SC-16` | Covered by US5-TC1; one-row AND in part by US2-TC18 |
+| `grade10-admin-console-daily-reminder-SC-99` | Covered by US2-TC17 |
+| `grade10-admin-console-daily-reminder-SC-100` | Covered by US2-TC19 |
+| `grade10-admin-console-daily-reminder-SC-101` | Covered by US5-TC4 |
+| `grade10-admin-console-daily-reminder-SC-102` | Covered by US4-TC22 |
+| `grade10-admin-console-daily-reminder-SC-103` | Added for Q11; covered by US5-TC3 |
+| `grade10-admin-console-daily-reminder-SC-104` | Added for Q12; covered by US5-TC5 |
+
+### Anchor coverage
+
+- **US-01** - carried cases; unchanged by this change's journeys
+- **US-02** - wait rows carried; flagged lead, one-row, overdue alone, dialog warning mark added
+- **US-03** - Today warning title/caption and empty copy added
+- **US-04** - Slack warning heading and flagged-first order added; morning not-configured bypass tightened for empty env (Q15)
+- **US-05** - fresh flag, clear, earliest reason/wait, flagged overdue, clear-to-wait
+- **US-06** - go-live (including publish-now), extension minutes, end, channel, extension failure
+- **US-07** - overdue and flag warnings, no repeat, re-flag, overdue failure
+- **Feature-set roots** - Flagged or still waiting, Slack lifecycle alerts, warning title, best effort, shared env bypass: each has at least one asserting case or an Out of suite verifier
+
+### Uncovered / over-claimed / contradictions
+
+- **Uncovered scenarios** - none among ADDED lifecycle and flagged scenarios after Out of suite for SC-97 and SC-98
+- **Over-claimed** - inherited journey-wide `covers` on carried US1–US4 cases (see above); new markers do not over-claim
+- **Contradictions** - none between cases and scenarios after Q11–Q16 patches
+- **Pending `covers` (intentional)** - US2-TC18, US5-TC2, US7-TC3 and US7-TC4 assert only part of a scenario's THEN (one-row AND, clear-under-48h requirement leaf, stay-no-repeat AND, overdue failure beside SC-96/SC-97). Dispositions above; validator warnings until a full-THEN case exists or approval accepts the partial folds
+- **Raised** - nothing new; Q11–Q16 already landed
+
+### Counts
+
+- Cases: 101 draft, 1 deprecated
+- New/patched this run: 22 dispositions in the table above (20 QA1 drafts + US5-TC5 + US7-TC5; US2-TC13 deprecated)
+- Scenarios added: SC-103, SC-104
+- Scenarios patched: SC-60 (Q15 morning empty/no-raise), SC-88 (Q14), SC-90 (Q16), SC-96/SC-98 and best-effort requirement (Q10/Q15 both-env and last step); Feature set daily Bypass when unset and lifecycle Best effort, last step matched
+- Cases patched: US4-TC17 (Q15), US5-TC3 (Q11), US6-TC1 (Q14), US6-TC2 (Q16), US6-TC5 (align to SC-96 last-step)
+- Cases added: US5-TC5 (Q12), US7-TC5 (Q13)
