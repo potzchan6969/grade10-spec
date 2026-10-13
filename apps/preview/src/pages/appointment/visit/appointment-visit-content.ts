@@ -549,3 +549,43 @@ export {
   WAIT_HREF,
   WAIT_SERVICES,
 };
+
+/** The visit went to grading: no pass, and grading's own mail follows. */
+export const WITH_GRADING_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "With grading",
+  note: "Sent Thu 3 Sep",
+  title: "Your cards are with grading",
+  lede: `${SHOP} sent your cards to grading. Grading’s own mail follows with the grades.`,
+  footNote: "Grading sends its own mail, not a Thanks.",
+};
+
+/** The visit went to the vault: no pass, and the vault's own mail follows. */
+export const WITH_VAULT_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "With the vault",
+  note: "Sent Thu 3 Sep",
+  title: "Your item is with the vault",
+  lede: `${SHOP} sent your item to the vault. The vault’s own mail follows.`,
+  footNote: "The vault sends its own mail, not a Thanks.",
+};
+
+/** The vault visit's facts: the same visit, under the vault's service. */
+export const VAULT_FACTS: readonly VisitFact[] = VISIT_FACTS.map((fact) =>
+  fact.label === "Service"
+    ? { label: "Service", value: "Vault Drop-Off" }
+    : fact,
+);
+
+/** The shop closed for the day: the closure's reason, and Pick another time. */
+export const SHOP_CLOSED_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "Shop closed",
+  note: "Thu 3 Sep",
+  title: "The shop is closed for your visit",
+  lede: `${SHOP} is closed on Thu 3 Sep, so your 10:15 visit can’t go ahead.`,
+  notice: {
+    title: "Closed for Signal 8",
+    text: "Signal 8 or black rain: we close while it’s up and email you.",
+  },
+};
