@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react-vite";
 import basePreview from "../.storybook/preview";
+import { withJourneys } from "./journeys";
 import { ManualDocsContainer } from "./manual-link";
 
 /* Themes, frames, and decorators come from the base preview. The sidebar reads
@@ -8,9 +9,11 @@ import { ManualDocsContainer } from "./manual-link";
  * feature, Screens, Flows, Prototypes, Parts and Blocks.
  *
  * Storybook evaluates this comparator on its own, so it imports nothing and
- * carries no types; `pnpm storybook:check` holds `roots` to the manual. */
+ * carries no types; `pnpm storybook:check` holds `roots` to the manual. A
+ * flow's journeys show under its canvas (`journeys.tsx`). */
 const preview: Preview = {
   ...basePreview,
+  decorators: [...(basePreview.decorators ?? []), withJourneys],
   parameters: {
     ...basePreview.parameters,
     docs: { ...basePreview.parameters?.docs, container: ManualDocsContainer },

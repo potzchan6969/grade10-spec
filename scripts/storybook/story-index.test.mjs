@@ -76,7 +76,7 @@ export const Default: Story = {};
 export const OnSale: Story = { name: "On sale" };
 `;
 
-  it("reads the title, its span, the component, the tags and the stories", () => {
+  it("reads the title, its span, the component, the tags, the stories and their journeys", () => {
     const file = parseStoryFile("cart-item.stories.tsx", text);
     assert.equal(file.title, "Store/Cart/Blocks/CartItem");
     assert.equal(
@@ -85,10 +85,26 @@ export const OnSale: Story = { name: "On sale" };
     );
     assert.equal(file.component, "CartItem");
     assert.deepEqual(file.tags, ["autodocs"]);
+    assert.deepEqual(file.journeys, []);
     assert.deepEqual(file.stories, [
-      { exportName: "Default", name: "Default" },
-      { exportName: "OnSale", name: "On sale" },
+      { exportName: "Default", name: "Default", journeys: [] },
+      { exportName: "OnSale", name: "On sale", journeys: [] },
     ]);
+  });
+
+  it("reads the journeys a flow names on its meta and its stories", () => {
+    const file = parseStoryFile(
+      "cart-flows.stories.tsx",
+      `const meta = {
+  title: "Store/Cart/Flows/Edit",
+  parameters: { layout: "fullscreen", journeys: ["a-US-01"] },
+} satisfies Meta;
+export default meta;
+export const Remove: Story = { parameters: { journeys: ["a-US-02"] } };
+`,
+    );
+    assert.deepEqual(file.journeys, ["a-US-01"]);
+    assert.deepEqual(file.stories[0].journeys, ["a-US-02"]);
   });
 
   it("reports a file the workbench serves at its index path", () => {

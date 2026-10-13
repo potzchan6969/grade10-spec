@@ -277,6 +277,7 @@ describe("checkStories", () => {
       'docs/prds/products/grade10-site/store/cart.md:2 - no story "store-cart-screens-cart--gone"',
     ]);
     assert.deepEqual(warnings, [
+      "Auth/Sign In - no Screens or Prototypes; draw them, or say why in apps/preview/coverage.yaml",
       'openspec/changes/add-x/ui-design.md:1 - no story "store-cart-cart--later"',
     ]);
   });

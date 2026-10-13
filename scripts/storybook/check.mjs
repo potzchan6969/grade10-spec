@@ -9,13 +9,20 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, sep } from "node:path";
 import { promisify } from "node:util";
 import { parse } from "yaml";
+import {
+  COVERAGE_FILE,
+  declared,
+  featureCoverage,
+  manualFeatures,
+} from "./coverage.mjs";
+import { DESIGN_SYSTEM, KINDS, START_HERE, titleCase } from "./grammar.mjs";
+import { citedJourneys, readJourneys } from "./journeys.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
+
+export { DESIGN_SYSTEM, KINDS, START_HERE, titleCase };
 
 const exec = promisify(execFile);
 
-export const START_HERE = "Start Here";
-export const DESIGN_SYSTEM = "Design System";
-export const KINDS = ["Screens", "Flows", "Prototypes", "Parts", "Blocks"];
 const PAGES = "apps/preview/src/pages/";
 const PROTOTYPES = "apps/preview/src/prototypes/";
 const BLOCKS = "packages/ui/src/blocks/";
@@ -23,15 +30,6 @@ const PRIMITIVES = "packages/design-system/src/components/";
 const WORKBENCH_PREVIEW = "apps/preview/.storybook-workbench/preview.tsx";
 /** Manual applications whose domains the workbench draws, in lookup order. */
 const APPS = ["grade10-site", "shared"];
-/** Where a domain slug is not its Title Case words. */
-const ACRONYMS = { kyc: "KYC" };
-
-export const titleCase = (slug) =>
-  ACRONYMS[slug] ??
-  slug
-    .split("-")
-    .map((word) => word[0].toUpperCase() + word.slice(1))
-    .join(" ");
 
 export const pascalCase = (basename) =>
   basename
@@ -255,6 +253,59 @@ export function resolves(id, entries) {
   return Boolean(entries[id]);
 }
 
+/** A flow names the journeys it walks, and every journey a story cites exists. */
+export function journeyErrors(root, parsed) {
+  const errors = [];
+  const warnings = [];
+  const { journeys } = readJourneys(root);
+  for (const [path, file] of Object.entries(parsed)) {
+    if (!file.title) continue;
+    const cited = citedJourneys(file);
+    if (file.title.split("/")[2] === "Flows" && !cited.length)
+      errors.push(
+        `"${file.title}" - a flow names the journeys it walks: parameters: { journeys: ["<id>-US-01"] }, from the user-journeys.md beside its spec`,
+      );
+    for (const id of cited) {
+      const journey = journeys.get(id);
+      if (!journey)
+        errors.push(`${path} - no journey "${id}" in any user-journeys.md`);
+      else if (!journey.durable)
+        warnings.push(
+          `${path} - journey "${id}" is only in ${journey.path}; it lands with that change`,
+        );
+    }
+  }
+  return { errors, warnings };
+}
+
+/** coverage.yaml names real features, and a collector feature holds something to look at. */
+export function coverageErrors(root, index) {
+  const errors = [];
+  const warnings = [];
+  const features = new Set(manualFeatures(root).map((feature) => feature.key));
+  for (const [kind, entries] of Object.entries(declared(root)))
+    for (const key of Object.keys(entries))
+      if (!features.has(key))
+        errors.push(
+          `${COVERAGE_FILE} - ${kind} "${key}" is no feature; use <domain>/<page> under docs/prds/products/grade10-site/ or shared/auth/`,
+        );
+  for (const row of featureCoverage(root, index)) {
+    if (
+      row.declared &&
+      Object.values(row.counts).some(Boolean) &&
+      row.status.startsWith("operator")
+    )
+      warnings.push(
+        `${row.title} - declared operator in ${COVERAGE_FILE} but holds stories`,
+      );
+    if (row.status.startsWith("missing"))
+      warnings.push(
+        `${row.title} - no Screens or Prototypes; draw them, or say why in ${COVERAGE_FILE}`,
+      );
+  }
+  return { errors, warnings };
+}
+
 async function trackedFiles(root) {
   const { stdout } = await exec("git", ["ls-files"], {
     cwd: root,
@@ -274,6 +325,12 @@ export async function checkStories({ root = rootDirectory, files } = {}) {
     errors.push(...placementErrors(root, path, file));
   }
   errors.push(...(await siblingImports(root)));
+  const journeyProblems = journeyErrors(root, parsed);
+  errors.push(...journeyProblems.errors);
+  warnings.push(...journeyProblems.warnings);
+  const coverageProblems = coverageErrors(root, { entries, files: parsed });
+  errors.push(...coverageProblems.errors);
+  warnings.push(...coverageProblems.warnings);
 
   const previewPath = join(root, WORKBENCH_PREVIEW);
   if (existsSync(previewPath)) {

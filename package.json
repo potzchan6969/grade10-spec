@@ -50,6 +50,7 @@
     "storybook:workbench": "pnpm run storybook",
     "storybook:pages": "node scripts/storybook/storybook.mjs",
     "storybook:check": "node scripts/storybook/check.mjs",
+    "storybook:coverage": "node scripts/storybook/coverage.mjs",
     "storybook:rename": "node scripts/storybook/rename.mjs",
     "storybook:design-system": "node scripts/storybook/storybook.mjs --dir packages/design-system",
     "storybook:ui": "node scripts/storybook/storybook.mjs --dir packages/ui",
