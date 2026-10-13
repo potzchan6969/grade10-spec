@@ -10,8 +10,8 @@
 
 ## Decisions
 
-Cart Q14 and Q15 disable non-dismissal actions for actual pending work and keep
-dismissal available. Cart Q16 and checkout Q35 record option B: a still-current
+Cart Q20 and Q21 disable non-dismissal actions for actual pending work and keep
+dismissal available. Cart Q22 and checkout Q35 record option B: a still-current
 successful reply opens Shopify after dismissal. Closing alone does not make
 that reply stale. A changed cart, tender, member or request still does.
 
@@ -27,7 +27,7 @@ own its cases without changing their identities. Both shared readings restart.
 2. Accept `add-store-cart-drawer-ui`, including the shared optional prop.
 3. Amend `add-shopify-checkout-integration` against its historical accepted
    fingerprint `137f9cec66da45e8975e44b4be5c14c272ad34df5ee7e37dca1b8061eb5e0d8c`.
-4. Land shared Group 10, then the drawer host and pending-Pay consumer groups.
+4. Land shared Group 15, then the drawer host and pending-Pay consumer groups.
 
 Each change retains its own acceptance and verdict. This sheet is planning
 evidence, not acceptance or publication. Historical snapshots stay intact.

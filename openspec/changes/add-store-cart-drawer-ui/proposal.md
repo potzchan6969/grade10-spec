@@ -69,8 +69,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-- `shared/ui/store-cart` - consumer-owned pending state disables drawer actions across body, footer and promo sheet without changing their layout or adding promo editing.
-  It also specifies the existing optional picture props and fallback rendering.
+- `shared/ui/store-cart` - consumer-owned pending state disables drawer actions across body, footer and promo sheet without changing their layout or adding promo editing; existing optional tender and picture props retain their compatibility and fallback behavior.
 
 - `grade10-site/site/page-shell` — carries Cart in the header: absent until
   the Store cart drawer answers, then global on every surface. Scenarios
@@ -111,9 +110,9 @@ The application owner archives after deployment acceptance.
 
 ## References
 
-- [Cart Drawer · Reviewing the Cart](../../../docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart)
 - [Shared Pending Operations](../../../docs/prds/products/shared/ui/store-cart.md#pending-operations)
 - [Cart Pending Operations](../../../docs/prds/products/grade10-site/store/cart.md#pending-operations)
+- [Cart Drawer · Reviewing the Cart](../../../docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart)
 - [Shared Cart · Product Pictures](../../../docs/prds/products/shared/ui/store-cart.md#product-pictures)
 - [Approved Thumbnail Brief](../../../docs/references/store-cart-thumbnails.md)
 - [Shared Tender Actions](../../../docs/prds/products/shared/ui/store-cart.md#tender-actions)
