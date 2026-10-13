@@ -139,10 +139,11 @@ what the scanner holds and shows. This section records where each part lands.
 | images | the product's image URLs, first 8, in the shop's order |
 
 - **Held** - every product in the copy except `isGiftCard`
-- **Graded** - Collectible Type `graded-*`, or a row in `consigned_products`
-  whose item `slabsOf` answers, which it does only for a live item with a
-  grader (Q38). A consigned item it does not answer is a raw card: held by
-  its photos, no reason counted. The consigned push sets no collectible type,
+- **Graded** - consigned (a row in `consigned_products`): its item is one
+  `slabsOf` answers, which it does only for a live item with a grader;
+  inventory decides, whatever the Collectible Type (Q38). Any other consigned
+  product is a raw card: held by its photos, no reason counted. House stock:
+  Collectible Type `graded-*`. The consigned push sets no collectible type,
   so a consigned slab is `slab` through its item alone
 - **Shared pricing** - `sellableVariant`, `pricedVariant` and `siteSaleOf`
   move from `store-frontend` into `@grade10/store-contracts`, beside
@@ -176,7 +177,7 @@ what the scanner holds and shows. This section records where each part lands.
 
 | Reason | When |
 | --- | --- |
-| `no_item` | graded, and names no item, or a code or id inventory does not hold live |
+| `no_item` | house stock, graded, and names no label code, or one inventory does not hold live |
 | `grader` | the item's grader is PCGS, NGC or PMG |
 | `duplicate` | two products name one item, or one grader and cert |
 | `cert` | the grader is read, and the cert is not 4-24 letters, digits or `-` (Q37) |
@@ -376,6 +377,10 @@ No column changes: `item_images` keeps its columns, and a retry reads
 - [A product replaces a photo] → the old photo's vectors go at once and the
   new one is learned at the next hourly run; the item is recognised by its other
   photos, or its cert, meanwhile
+- [The shop does not answer the discount read] → the pass fails before it
+  writes, so every shelf change waits, availability included, until the shop
+  answers; the pass monitor alerts. Rejected: writing without discounts, which
+  shows a sale item at its full price as fact
 - [The keeper's copy is empty after a fault] → version 0 writes nothing; a
   walk that fails keeps the last copy
 - [A bulk import of hundreds of products] → 100 per call under the 60-second

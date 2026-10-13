@@ -92,8 +92,8 @@ by its product photos alone, without grade or cert;
 where two products carry one cert, neither carries it. Operations is alerted to
 each
 
-- **What makes a slab** — a graded collectible type, or a consigned item
-  inventory holds with a grader; a consigned raw card raises no alert
+- **What makes a slab** — a consigned product whose item inventory holds with
+  a grader, whatever its type; a house-stock product of a graded type
 - **Certs are public** — a slab's cert and its house label code are printed on
   the slab, so the scan and the store's catalogue may carry them
 - **Graders the scanner does not read** — the scanner reads PSA, BGS, CGC, SGC
@@ -198,6 +198,7 @@ scanner can only give it if it holds the store's catalogue.
 | Not yet recognisable | Decided | Sealed boxes, merch and comics held now, recognised once the box detector ships — decided by the owner, 2026-10-13 | Product |
 | Slabs | Decided | Resolved to the exact unit through the inventory item the product names — decided by the owner, 2026-10-13 | Product |
 | House-stock slabs | Decided | The shop product names its item's label code; grader, grade and cert come from inventory — decided by the owner, 2026-10-13 | Product |
+| What makes a slab | Decided | Consigned: its inventory item holds a grader, whatever its type. House stock: a graded collectible type — decided by the round, 2026-10-13 | Product |
 | A slab with no known unit | Decided | Recognised by its photos, without grade or cert; Operations alerted — decided by the owner, 2026-10-13 | Product |
 | Availability | Decided | Available or Sold out, no count — decided by the owner, 2026-10-13 | Product |
 | Freshness | Decided | Follows the store's mirror; photos hourly on staging and production; an open scanner refreshes every few minutes — decided by the owner, 2026-10-13 | Product |

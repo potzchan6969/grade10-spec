@@ -34,8 +34,8 @@ carry the store page is `grade10-site/site/carried-surfaces`'s.
     names, for a consigned and a house-stock slab alike
   - House-stock label code: a stock keeper writes the slab's label code on the
     house-stock product, naming its inventory item
-  - Graded product: a graded collectible type, or a consigned item inventory
-    holds with a grader; a consigned raw card is a raw card
+  - Graded product: a consigned product whose item inventory holds with a
+    grader, or a house-stock product of a graded collectible type
   - Slab with no known unit: a graded product naming no item, one whose
     grader the scanner does not read, or one whose cert another product
     carries is recognised by its photos without grade or cert, and Operations
@@ -221,10 +221,10 @@ new handle.
 A graded product's unit SHALL be the inventory item the product names: for a
 consigned product, its consigned item; for a house-stock product, the item
 whose label code a stock keeper writes on the product in the shop. A graded
-product is one whose collectible type is a graded one, or a consigned product
-whose item inventory holds with a grader; a consigned product whose item
-inventory holds with no grader SHALL be held as a raw card, recognised by its
-photos, and SHALL NOT alert Operations.
+product is a consigned product whose item inventory holds with a grader, or a
+house-stock product whose collectible type is a graded one. Any other
+consigned product, whatever its collectible type, SHALL be held as a raw card,
+recognised by its photos, and SHALL NOT alert Operations.
 The store SHALL read the unit's grader, grade and cert from inventory for
 every copy it sends, and the item SHALL carry the grader and cert the scanner
 matches a slab's label to, and show the grade and cert. A graded product with
@@ -236,7 +236,7 @@ reads; a cert in any other form SHALL leave the product without a known unit.
 
 | No known unit | When |
 | --- | --- |
-| Names no item | The product names no item, or one inventory does not hold as a live slab |
+| Names no item | A house-stock product names no item, or one inventory does not hold as a live slab |
 | Grader not read | The item's grader is PCGS, NGC or PMG; the scanner reads PSA, BGS, CGC, SGC and TAG |
 | Unit carried twice | Two products name one item, or one grader and cert; neither carries it |
 | Cert not read | The item's grader is one the scanner reads, and its cert is not 4 to 24 letters, digits or hyphens |
@@ -349,12 +349,12 @@ reads; a cert in any other form SHALL leave the product without a known unit.
   second slab's grade and cert
 - **AND** scanning the first slab's label no longer names the product
 
-<!-- trace:scenario id=g10.store-shelf-scanning.SC-q13 rev=1 -->
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-q13 rev=2 -->
 #### Scenario: g10.store-shelf-scanning.SC51 - A consigned raw card is held as a raw card
 **Serves:** `Slab as its copy` - only a real slab raises the alert for a slab without a unit
 
 - **GIVEN** a consigned product whose inventory item is a raw card, with no
-  grader
+  grader, and whose collectible type a merchandiser set to a graded one
 - **WHEN** the next copy reaches the scanner
 - **THEN** the scanner holds it with its title, price, availability and
   photos, recognised by its photos, with no grade or cert
