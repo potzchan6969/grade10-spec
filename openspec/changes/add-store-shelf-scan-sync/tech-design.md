@@ -23,6 +23,12 @@ The [proposal](proposal.md) holds the scope. What grade10 runs today:
   `failed` for good; the queue never serves it again (`routes.ts:1039-1074`)
 - **Photos on staging only** - `tcg-ar-ops.yml`'s `photos` job runs hourly at
   `:17` against staging (`.github/workflows/tcg-ar-ops.yml:24,171`)
+- **Close store matches** - a photo match whose `alternatives` hold other
+  items of the store's collection within the scanner's alternative-print
+  window (`alternativePrints`, `MATCH.altWindow` and `altRel`,
+  `src/recog/match.ts`) resolves to every such item, closest first.
+  `ItemIndex.resolve` answers `{ how: "photos", items }`; the hosted page
+  draws the pick sheet in `ui-design.md`. Slabs found by cert never pick
 - **Open scanner** - `HostedApp.tsx` loads its collections once
   (`HostedApp.tsx:233-261`) and again only after an enrolled photo
 - **Catalogue first** - the scanner ranks a collection's photo hit and a
@@ -95,7 +101,12 @@ what the scanner holds and shows. This section records where each part lands.
 - **Stateless diff** - the pass sends every held product each tick and lets
   the scanner skip unchanged ones (below); it lists the collection's ids and
   deletes those the copy no longer holds. No store row records what was sent.
-  Rejected: a store-side hash table, a second record of the scanner's rows
+  Rejected: a store-side record of what was sent, a second copy of the
+  scanner's rows
+- **Discounts move every item** - a discount that starts or ends changes no
+  product, but the pass prices every product on every tick from
+  `readSiteDiscounts` (60-second memo), so the new price and badge reach the
+  scanner at the next pass
 - **Budget** - items go 100 per `putItems` call, each call under a 15-second
   deadline, the pass under 60 seconds (`beforeDeadline`). Upserts run before
   deletes. Work left at the budget is done at the next tick, and the pass
@@ -110,12 +121,13 @@ what the scanner holds and shows. This section records where each part lands.
 | --- | --- |
 | id | `shopify-<numeric product id>` (`numericIdOf`) |
 | collection | `store` |
-| title | the product's title |
 | kind | `slab` for Collectible Type `graded-card`; `comic` for `graded-magazine`, `graded-manga`; `sealed` for `sealed-*`, `blister-pack`; `other` otherwise |
-| data.price | the one item's price lowered by `siteSaleOf`, the product page's figure |
+| title | the product's title as the keeper holds it: the store's default language |
+| data.price | the one item's price lowered by `siteSaleOf`: what the shopper pays |
+| data.badges | `["Sale"]` while `siteSaleOf` lowers the price, else absent |
 | data.stock | `Available` when any variant is for sale, else `Sold out` |
 | data.url | the store page, only where the store gate is open and the URL is `https` |
-| data.subtitle | `<grader> <grade> · Cert <cert>`, only for a slab with a known unit |
+| data.grade | the unit's grade as inventory holds it, only for a slab with a known unit |
 | grader, cert | only for a slab with a known unit |
 | images | the product's image URLs, first 8, in the shop's order |
 
@@ -159,11 +171,13 @@ what the scanner holds and shows. This section records where each part lands.
 
 ### Scanner
 
-- **No-op upsert** - a migration adds `items.hash`, the SHA-256 of the
-  validated item in canonical JSON (sorted keys, images in order, collection
-  included). The batch route reads the stored hashes for its ids in one
-  query, skips equal ones, writes the rest and touches each collection once.
-  `PUT /items/:id` runs the same path. A row with no hash is written once
+- **No-op upsert** - `upsertItem` already reads the stored row and
+  `setImageUrls` the stored photo sources. It compares the incoming item with
+  them - collection, kind, title, `data` as canonical JSON (sorted keys),
+  card, grader, cert, and the set of image URLs - and writes nothing when
+  all are equal. The batch route collects the collections it changed and
+  touches each once. `PUT /items/:id` runs the same path. Rejected: a stored
+  hash column, a second record of fields the row already holds
 - **Answers as values** - the binding's methods answer
   `{ outcome: "ok", … } | { outcome: "refused", status, reason }`;
   `ScannerError` goes. A fault (a `5xx`, a missing project prop) still throws
@@ -175,6 +189,10 @@ what the scanner holds and shows. This section records where each part lands.
   `undefined` for an unbound environment. `ScannerPlatform` `implements` the
   API; the app's `src/shared/platform.ts` imports these rather than declaring
   them
+- **Grade and cert on a label read only** - the hosted label shows the
+  item's `<grader> <grade>` and `Cert <cert>` only when the match came from the
+  label (`how: "cert"`). A photo match names the product without them, so a
+  raw copy of a card sold only as a slab names the slab's product bare
 - **Store first** - in the identify step, after `routeByLanguage`
   (`src/app/engine/recog.worker.ts:577`), a collection hit that clears the
   scanner's accept threshold (`MATCH`, `src/recog/match.ts`) ranks above
@@ -191,14 +209,16 @@ what the scanner holds and shows. This section records where each part lands.
   again
 - **Model guard** - `POST /admin/queue/:seq/:n` answers `409` for an
   embedding from another model rather than dropping it, and the processor
-  exits non-zero when the queue's `model` differs from its own
+  exits non-zero, naming both models, when the queue's `model` differs from
+  its own. Rejected: running the processor at the commit `/health` reports,
+  an extra resolve and checkout that hides a mismatch rather than reporting it
 
 ### Operations
 
 - **Hourly on both** - the `photos` job's schedule runs a matrix over
-  `staging` and `production`; a dispatch runs the one chosen. Each job reads
-  the scanner's `/health` commit and processes at that commit, so its model
-  is the deployed one. An empty probe stops before install
+  `staging` and `production`; a dispatch runs the one chosen. An empty probe
+  stops before install. Between a model release on `main` and its deploy the
+  run fails loudly and learns nothing
 - **Secrets** - production's GitHub environment gains `TCG_AR_ADMIN_TOKEN`,
   the plaintext of production's `ADMIN_TOKEN_SHA256`
 - **Access** - a Bypass for `/scan/*` on `grade10-stg.com` and on the
@@ -259,7 +279,7 @@ No store write; nothing to make atomic. Example:
 [{ "id": "shopify-8812", "collection": "store", "title": "Pikachu Illustrator", "kind": "slab",
    "grader": "PSA", "cert": "126956765", "images": ["https://cdn.shopify.com/…/front.jpg?v=1"],
    "data": { "price": { "amountMinor": 120000, "currencyCode": "HKD" }, "stock": "Available",
-             "subtitle": "PSA 10 · Cert 126956765",
+             "grade": "10",
              "url": "https://grade10-stg.com/store/products/pikachu-illustrator" } },
  { "id": "shopify-9001", "collection": "store", "title": "Scarlet & Violet 151 Booster Box",
    "kind": "sealed", "images": ["https://cdn.shopify.com/…/box.jpg?v=3"],
@@ -289,8 +309,9 @@ and the id or label code matches. Read-only.
 | `deleteItem(id)` | `{ outcome: "ok", existed }` | - |
 | `putCollection(id, name)` | `{ outcome: "ok", id, name }` | `{ outcome: "refused", status: 400, reason }` |
 
-`putItems` mutation order, per batch: one read of stored hashes; per changed
-item the existing upsert and image statements; then one touch per collection.
+`putItems` mutation order, per item: the existing reads of its row and photo
+sources; when anything differs, the existing upsert and image statements;
+then, per batch, one touch per changed collection.
 An item's own write is the atomic unit, as today; a batch that stops part-way
 leaves written items written, and the next tick sends the rest.
 
@@ -318,11 +339,10 @@ Scanner D1 only; no Postgres change.
 
 | Table | Change |
 | --- | --- |
-| `items` | `hash TEXT` nullable, no default; written by every upsert; null until a row is next written |
 | `projects` | row `grade10`, inserted if absent, settings `{"games":["pokemon","pokemon-jp","onepiece","lorcana","weiss"],"brand":{"name":"grade10"}}` |
 
-`item_images` keeps its columns; a retry reads `state` and `updated_at`.
-`hash` is derived from the row's own fields and authoritative for nothing.
+No column changes: `item_images` keeps its columns, and a retry reads
+`state` and `updated_at`.
 
 ## Risks / Trade-offs
 
@@ -345,7 +365,7 @@ Scanner D1 only; no Postgres change.
 
 ## Migration Plan
 
-1. **Scanner** - contracts package, migration `0005` (hash, project), no-op
+1. **Scanner** - contracts package, migration `0005` (the project), no-op
    upsert, results, delete, ranking, refresh, queue retry and model guard.
    Deploy staging, migrate, then production after its D1 Time Travel bookmark
 2. **Inventory** - `StoreItemSlabs` entrypoint; deploy staging, production

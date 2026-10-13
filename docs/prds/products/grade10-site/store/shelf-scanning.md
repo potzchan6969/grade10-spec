@@ -16,8 +16,9 @@ site's `/scan`; the store keeps what it knows in step with the catalogue.
 | A change the shop reports | on the scanner within 5 minutes |
 | A change only the store's re-read finds | on the scanner within 10 minutes |
 | A new photo recognisable | within the hour, on staging and production |
-| An open scanner's catalogue | refreshed every few minutes, and when the shopkeeper returns to it |
-| What a scan shows | title, price, Available or Sold out, a link to the store page |
+| An open scanner's catalogue | read again every 2 minutes while in view, and when the shopkeeper returns to it |
+| Photos learned per product | the first 8, in the shop's order |
+| What a scan shows | title in the store's default language, the price the shopper pays, Available or Sold out, a link to the store page |
 
 ## What the Scanner Holds
 
@@ -86,10 +87,15 @@ grader, grade and cert from inventory, as for a consigned slab
 
 🚧 **A slab with no known unit** — a graded product that names no item, whose
 item's grader the scanner does not read, or whose cert another product also
-carries, is recognised by its product photos alone, without grade or cert;
+carries, or whose cert is in a form the scanner cannot read, is recognised
+by its product photos alone, without grade or cert;
 where two products carry one cert, neither carries it. Operations is alerted to
 each
 
+- **Graded is the collectible type** — a house-stock product is a slab when
+  its collectible type is a graded one
+- **Certs are public** — a slab's cert and its house label code are printed on
+  the slab, so the scan and the store's catalogue may carry them
 - **Graders the scanner does not read** — the scanner reads PSA, BGS, CGC, SGC
   and TAG labels; a PCGS, NGC or PMG slab is recognised by its photos
 
@@ -102,6 +108,13 @@ card catalogue match the same art, the scanner names the store product
 recognise from its photos — a sealed box, merch, a comic — is held now with
 its title, price and availability, and is recognised once the scanner's box
 detector ships
+
+🚧 **Two listings of one art** — where two store products that are not slabs
+match the same art, the scan shows both, closest first, and the shopkeeper
+picks one
+
+🚧 **A raw copy of a slab-only card** — a raw card the store sells only as a
+slab names the slab's product, without grade or cert
 
 - **Scanning it meanwhile** — the scanner shows what it shows for anything it
   does not recognise, "Not recognised yet — hold steady"
@@ -120,8 +133,10 @@ scanner with it
 
 ## On the Shelf
 
-🚧 **What a scan shows** — what the product page shows: the product's title,
-its price with automatic discounts, and its one item per card —
+🚧 **What a scan shows** — the product's title in the store's default
+language, and the price a shopper pays for its one item, with a Sale badge
+while an automatic discount lowers it; a discount that starts or ends reaches
+the scan with the store's next pass —
 [Product Status](/p/grade10-site/commerce/product-status#availability)
 
 🚧 **Available or Sold out** — availability is the shop's for-sale answer, read
@@ -129,12 +144,14 @@ as the store reads it; a scan shows no count —
 [Product Status](/p/grade10-site/commerce/product-status#availability)
 
 🚧 **An open scanner stays current** — an open scanner refreshes its catalogue
-every few minutes and when the shopkeeper returns to it, so it never shows an
-old price or availability for long
+every 2 minutes while in view and when the shopkeeper returns to it, so it
+never shows an old price or availability for long
 
 🚧 **One link** — shopkeepers open the scanner from one fixed link, bookmarked
 or printed as a QR code; it scans only, adds no photos, and shows only what the
-store shows publicly; rotating the scanner's key retires it
+store shows publicly; rotating the scanner's key retires it, the old link shows the
+scanner's usual refusal for a link that no longer works, and the shop manager
+hands out the new QR code
 
 :::detail{title="Code map" for="engineer"}
 - **Scanner** — `apps/backend/grade10/tcg-ar`; its platform API —
@@ -178,4 +195,10 @@ scanner can only give it if it holds the store's catalogue.
 | Freshness | Decided | Follows the store's mirror; photos hourly on staging and production; an open scanner refreshes every few minutes — decided by the owner, 2026-10-13 | Product |
 | The link | Decided | One fixed scan-only link, bookmarked or printed; retired by rotating its key — decided by the owner, 2026-10-13 | Product |
 | ZZZ | Decided | Grade10's store only — decided by the owner, 2026-10-13 | Product |
+| Certs | Decided | A slab's cert and house label code are public, printed on the slab — decided by the owner, 2026-10-13 | Product |
+| Two listings of one art | Decided | Both shown, closest first; the shopkeeper picks — decided by the owner, 2026-10-13 | Product |
+| Raw copy of a slab-only card | Decided | Names the slab's product without grade or cert — decided by the owner, 2026-10-13 | Product |
+| Retired link | Decided | The usual refusal; the shop manager hands out the new QR code — decided by the owner, 2026-10-13 | Product |
+| Discounts | Decided | The price the shopper pays with a Sale badge — decided by the owner, 2026-10-13 | Product |
+| Title language | Decided | The store's default — decided by the owner, 2026-10-13 | Product |
 :::

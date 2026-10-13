@@ -86,12 +86,13 @@ written again.
 
 | Field | Value |
 | --- | --- |
-| Title | The product's title |
-| Price | What the product page shows: its one item's price with the shop's automatic discounts, in minor units of the store's currency |
+| Title | The product's title, in the store's default language |
+| Price | What a shopper pays for its one item, the shop's automatic discounts taken off, in minor units of the store's currency |
+| Sale | A `Sale` badge while an automatic discount lowers the price |
 | Availability | `Available` when the shop offers any of its variants for sale, else `Sold out`; never a count |
 | Store page | The product's store page, only in a build that carries the store |
 | Grade and cert | The unit's grader, grade and cert, only for a slab whose unit is known |
-| Photos | The product's photos, in the shop's order |
+| Photos | The product's first 8 photos, in the shop's order |
 
 #### Scenario: g10.store-shelf-scanning.SC1 - A published product becomes one item
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper scans a sealed box the shop has just listed
@@ -193,6 +194,7 @@ grader, grade or cert, and Operations SHALL be alerted to it.
 | Names no item | The product names no item, or one inventory does not hold as a live slab |
 | Grader not read | The item's grader is PCGS, NGC or PMG; the scanner reads PSA, BGS, CGC, SGC and TAG |
 | Unit carried twice | Two products name one item, or one grader and cert; neither carries it |
+| Cert not read | The item's cert is not 4 to 24 letters, digits or hyphens |
 
 #### Scenario: g10.store-shelf-scanning.SC11 - A consigned slab's label names its product
 **Serves:** g10.store-shelf-scanning.US3 - the shopkeeper scans a consigned slab of a card the store lists several times
@@ -250,11 +252,25 @@ grader, grade or cert, and Operations SHALL be alerted to it.
   label names neither product by its cert
 - **AND** Operations is alerted to both
 
+#### Scenario: g10.store-shelf-scanning.SC34 - A cert the scanner cannot read
+**Serves:** `Slab as its copy` - a cert in another form is held like a grader the scanner does not read
+
+- **GIVEN** a consigned product whose item's cert is 30 characters long
+- **WHEN** the next copy reaches the scanner
+- **THEN** the scanner holds it without grade or cert, recognised by its
+  photos
+- **AND** Operations is alerted to a slab held without a unit
+
 ### Requirement: A store product is named before the shared card catalogue
 
 Where a store product and the scanner's shared card catalogue both match what
 the camera sees, and the store product's match is one the scanner accepts on
-its own, the scanner SHALL name the store product. A product the scanner
+its own, the scanner SHALL name the store product. Where two or more store
+products that are not slabs match one art about as closely, the scan SHALL
+show each of them, closest first, and the shopkeeper SHALL pick one; a scan
+with one close match SHALL show it directly. A slab's grade and cert SHALL
+show only when the scanner read its label, so a raw copy of a card the store
+sells only as a slab SHALL name the slab's product without them. A product the scanner
 cannot yet recognise from its photos SHALL still be held with its title,
 price and availability, and scanning it SHALL show what the scanner shows for
 anything it does not recognise.
@@ -283,6 +299,49 @@ anything it does not recognise.
 - **WHEN** the shopkeeper scans the box
 - **THEN** the scanner shows "Not recognised yet — hold steady", as for
   anything it does not recognise
+
+#### Scenario: g10.store-shelf-scanning.SC35 - One close match shows directly
+**Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a card the store lists once
+
+- **GIVEN** the store sells one raw listing of a card
+- **WHEN** the shopkeeper scans that card
+- **THEN** the scan shows that product's title, price and availability, with
+  no choice to make
+
+#### Scenario: g10.store-shelf-scanning.SC36 - Two listings of one art are both shown
+**Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a card the store lists twice, say in two languages
+
+- **GIVEN** the store sells two raw listings whose photos show the same art,
+  and the scanner matches the card in view to both about as closely
+- **WHEN** the shopkeeper scans that card
+- **THEN** the scan names the closest listing and says 2 matches
+- **AND** opening it lists both listings, closest first, each with its title,
+  price and availability
+
+#### Scenario: g10.store-shelf-scanning.SC37 - The shopkeeper picks one listing
+**Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper chooses the listing in their hand
+
+- **GIVEN** the scan lists two listings of one art
+- **WHEN** the shopkeeper picks the second
+- **THEN** the scan shows that listing's title, price, availability and, in a
+  build that carries the store, its store page link
+
+#### Scenario: g10.store-shelf-scanning.SC38 - The shopkeeper dismisses the list
+**Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper goes back to scanning without choosing
+
+- **GIVEN** the scan lists two listings of one art
+- **WHEN** the shopkeeper dismisses the list
+- **THEN** the camera view returns with no listing chosen
+
+#### Scenario: g10.store-shelf-scanning.SC39 - A raw copy of a card sold only as a slab
+**Serves:** `g10.store-shelf-scanning.US1`, `Recognition order` - the shopkeeper scans a raw card the store sells only graded
+
+- **GIVEN** the store sells a card only as a PSA 10 slab, and no listing of it
+  raw
+- **WHEN** the shopkeeper scans a raw copy of that card
+- **THEN** the scan names the slab's product with its title, price and
+  availability
+- **AND** shows no grade and no cert
 
 ### Requirement: The scanner learns new photos every hour
 
@@ -320,6 +379,14 @@ staging and on production, with the model the deployed scanner runs.
 - **THEN** the removed photo no longer recognises the product
 - **AND** the new photo is learned at the next hourly run
 
+#### Scenario: g10.store-shelf-scanning.SC40 - A product with more than 8 photos
+**Serves:** `Hourly photo learning` - the scanner learns what an item can hold
+
+- **GIVEN** a product with 10 photos
+- **WHEN** the next copy reaches the scanner and the hourly run has passed
+- **THEN** the scanner recognises the product from its first 8 photos in the
+  shop's order, and not from the last 2
+
 #### Scenario: g10.store-shelf-scanning.SC23 - A photo that failed is tried again after 24 hours
 **Serves:** `Hourly photo learning` - a photo that could not be fetched once is not lost for good
 
@@ -338,10 +405,12 @@ staging and on production, with the model the deployed scanner runs.
 
 When the scanner names a store product, it SHALL show the item's title, its
 price, `Available` or `Sold out`, and, in a build that carries the store, a
-link that opens the product's store page; for a slab whose unit is known it
-SHALL also show the grade and cert. An open scanner SHALL read its catalogue
-again every 2 minutes while it is in view, and at once when the shopkeeper
-returns to it.
+link that opens the product's store page; for a slab whose unit is known,
+read from its label, it SHALL also show the grade and cert. It SHALL show a
+`Sale` badge while an automatic discount lowers the price, and the price and
+badge SHALL follow a discount that starts or ends within 5 minutes. An open
+scanner SHALL read its catalogue again every 2 minutes while it is in view,
+and at once when the shopkeeper returns to it.
 
 #### Scenario: g10.store-shelf-scanning.SC25 - The price is the product page's
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper quotes what a customer pays online
@@ -350,7 +419,8 @@ returns to it.
   minor units and the second for sale at 120000 HKD minor units, and an
   automatic discount of 10% off every item with no minimum
 - **WHEN** the shopkeeper scans it
-- **THEN** the scanner shows 108000 HKD minor units and `Available`
+- **THEN** the scanner shows 108000 HKD minor units, a `Sale` badge and
+  `Available`
 
 #### Scenario: g10.store-shelf-scanning.SC26 - No count is shown
 **Serves:** g10.store-shelf-scanning.US4 - the shopkeeper reads whether the product can be bought, not how many are left
@@ -384,6 +454,18 @@ returns to it.
 - **THEN** scanning the product shows the new price, without reopening the
   link
 
+#### Scenario: g10.store-shelf-scanning.SC33 - A discount that starts reaches the scan
+**Serves:** g10.store-shelf-scanning.US1 - a sale the shop starts shows on the shelf without any product changing
+
+- **GIVEN** the scanner holds a product at 120000 HKD minor units with no
+  discount running
+- **WHEN** the shop starts an automatic discount of 10% off every item with
+  no minimum
+- **THEN** within 5 minutes the scan shows 108000 HKD minor units with a
+  `Sale` badge
+- **AND** once the discount ends, within 5 minutes it shows 120000 HKD minor
+  units and no badge
+
 ### Requirement: Shopkeepers open the scanner from one fixed link
 
 Each of staging and production SHALL have one fixed scanner link for the
@@ -413,5 +495,6 @@ is rotated.
 
 - **GIVEN** an operator issues a new key and revokes the link's key
 - **WHEN** anyone opens the old link
-- **THEN** the scanner does not open and says the link has expired
+- **THEN** the scanner does not open, and shows its usual refusal for a link
+  that no longer works
 - **AND** a link with the new key opens it
