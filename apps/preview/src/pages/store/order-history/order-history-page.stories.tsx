@@ -19,6 +19,7 @@ import {
   ORDER_HISTORY_READ_COPY,
   ORDER_HISTORY_READ_MS,
   PAST_ORDERS,
+  PAST_ORDERS_WITH_GUEST,
   PENDING_ACTIVE_ORDERS,
 } from "./order-history-content";
 import {
@@ -35,11 +36,14 @@ import {
 function OrderHistoryPage({
   empty = false,
   pendingTotal = false,
+  guestOrders = false,
   read: initialRead = "filled",
 }: {
   empty?: boolean;
   /** An active order whose total is not settled yet. */
   pendingTotal?: boolean;
+  /** Past orders lead with a guest order placed under the member's email. */
+  guestOrders?: boolean;
   /** The first read: `loading` shows skeletons, `failed` offers Retry. */
   read?: "filled" | "loading" | "failed";
 }) {
@@ -69,7 +73,9 @@ function OrderHistoryPage({
             }
             breadcrumbs={breadcrumbs}
             copy={ORDER_HISTORY_COPY}
-            pastOrders={empty ? [] : PAST_ORDERS}
+            pastOrders={
+              empty ? [] : guestOrders ? PAST_ORDERS_WITH_GUEST : PAST_ORDERS
+            }
             onShopNow={() => {}}
             onTrackOrder={(orderId) => {
               window.open(`https://example.com/track/${orderId}`, "_blank");
@@ -145,6 +151,22 @@ export const Filled: Story = {
   },
 };
 
+/** A guest order placed under the member's email is listed with their orders
+ * after sign-in; the card carries nothing to mark it. */
+export const WithGuestOrders: Story = {
+  name: "With guest orders",
+  args: { guestOrders: true },
+  parameters: { journeys: ["g10.store-order-history.US4"] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
+    expect(canvas.getByText("Order #G10-10520")).toBeVisible();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Past Orders" }),
+    ).toBeVisible();
+  },
+};
+
 export const Empty: Story = {
   args: { empty: true },
   play: async ({ canvasElement }) => {
@@ -190,9 +212,10 @@ export const RecoverableFailure: Story = {
   },
 };
 
-/** An active order with no settled total says so, and shows no zero amount. */
+/** The paid order, found in Your Orders while the store settles it. */
 export const PendingTotal: Story = {
   args: { pendingTotal: true },
+  parameters: { journeys: ["grade10-site-store-checkout-US-03"] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));

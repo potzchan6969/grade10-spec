@@ -33,7 +33,7 @@ function toStepIndicatorState(
  * Figma set `Product / Order / Order Details Delivery Status` (`5010:6234`).
  * Shown for online orders (delivery and in-store pickup via online purchase);
  * hidden for offline store payment orders. Step labels swap by order type:
- * delivery (`Order Placed → Shipped → Completed`) vs pickup
+ * delivery (`Order Placed → Shipping → Completed`) vs pickup
  * (`Order Placed → Pickup → Completed`). The stepper is
  * display-only — steps are not interactive.
  */

@@ -1,4 +1,10 @@
-import type { CartItemSummary, HeldPromoCode, PointsState } from "@grade10/ui";
+import type {
+  CartDrawerFooterCopy,
+  CartItemSummary,
+  HeldPromoCode,
+  PointsState,
+} from "@grade10/ui";
+import { STORE_CART_COPY } from "../store-content";
 
 /** Product picture the cart rows draw; the workbench's shared store fixture. */
 const PICTURE = new URL("../product.fixture.png", import.meta.url).href;
@@ -97,6 +103,48 @@ const HELD_PROMO_CODES: readonly HeldPromoCode[] = [
   },
 ];
 
+/** The guest's footer copy: guest checkout primary, the quiet sign-in line
+ * the block draws under it, and no points. */
+const GUEST_FOOTER_COPY: CartDrawerFooterCopy = {
+  ...STORE_CART_COPY.footer,
+  checkoutButton: "Check Out as Guest",
+};
+
+/** Codes open to everyone, listed to guests and members under their own heading. */
+const PUBLIC_PROMO_CODES: readonly HeldPromoCode[] = [
+  {
+    id: "public-g10launch",
+    label: "G10LAUNCH",
+    title: "HK$200 discount",
+    detailLabel: "Use by 30 Nov 2026",
+    applicable: true,
+  },
+  {
+    id: "public-holiday",
+    label: "HOLIDAY26",
+    title: "5% discount",
+    detailLabel: "Use by 31 Dec 2026",
+    applicable: true,
+  },
+];
+
+/** Goods at the HKD 120,000 bar: a guest is asked to sign in before checkout starts. */
+const BAR_CARD: CartItemSummary = {
+  id: "line-bar-card",
+  name: "2003 Pokémon Skyridge Charizard Holo #146 PSA 10",
+  price: "HK$128,000.00",
+  quantity: 1,
+  maxQuantity: 1,
+};
+const BAR_ITEMS: readonly CartItemSummary[] = [BAR_CARD, BOOSTER];
+const BAR_SUBTOTAL = "HK$129,200.00";
+
+/** Draft words for the sign-in ask that replaces the guest button at the bar. */
+const GUEST_BAR_ASK = {
+  prompt: "To check out HK$120,000 or more, sign in to your account.",
+  action: "Sign in",
+};
+
 /** Draft words for the review that cannot finish; the drawer block has no copy for it yet. */
 const CART_REVIEW_FAILED = {
   title: "Couldn’t check your cart",
@@ -109,29 +157,40 @@ const PRODUCT_DETAIL_STORY_ID =
   "store-product-page-screens-product-detail--default";
 
 /** Storybook story id of the Pay For The Cart flow the drawer's checkout continues to. */
-const CHECKOUT_PAY_STORY_ID = "store-checkout-flows-pay-for-the-cart--default";
+/** Storybook story id of the sign-in screen a guest's sign-in link opens. */
+const SIGN_IN_STORY_ID = "auth-sign-in-screens-sign-in--from-add-to-cart";
+
+/** Storybook story id of the Order Confirmed screen a guest checkout returns to. */
+const ORDER_CONFIRMED_STORY_ID =
+  "store-order-detail-screens-order-link--just-paid";
 
 export {
   ADJUSTED_ITEMS,
   ADJUSTED_SUBTOTAL,
   APPLIED_TOTAL,
+  BAR_ITEMS,
+  BAR_SUBTOTAL,
   BOOSTER,
   BOOSTER_NAME,
   CART_REVIEW_FAILED,
   CHARIZARD,
   CHARIZARD_NAME,
-  CHECKOUT_PAY_STORY_ID,
   DELISTED_ITEMS,
   DELISTED_LINE_ID,
   DELISTED_NAME,
+  GUEST_BAR_ASK,
+  GUEST_FOOTER_COPY,
   HELD_PROMO_CODES,
+  ORDER_CONFIRMED_STORY_ID,
   POINTS_APPLIED,
   POINTS_BALANCE_LABEL,
   POINTS_COLLAPSED,
   POINTS_EXPANDED,
   PRODUCT_DETAIL_STORY_ID,
+  PUBLIC_PROMO_CODES,
   READY_ITEMS,
   READY_SUBTOTAL,
+  SIGN_IN_STORY_ID,
   SITE_SALE_ITEMS,
   SITE_SALE_SUBTOTAL,
   SOLD_OUT_ITEMS,

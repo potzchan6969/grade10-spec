@@ -8,7 +8,9 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { rootDirectory } from "./story-index.mjs";
 
-const HEADING = /^###\s+([a-z0-9-]+-US-\d+):\s*(.+)$/gm;
+// Both id spellings in the store: the legacy `<path>-US-<n>` and the current
+// `<app>.<domain>-<capability>.US<n>` of openspec/config.yaml.
+const HEADING = /^###\s+([a-z0-9][a-z0-9.-]*[.-]US-?\d+):\s*(.+)$/gm;
 const NOBODY = /\*\*Walked by:\*\*\s*nobody/i;
 const ROLE = /\*\*As an?\*\*\s+([^,\n]+)/;
 /** Roles the workbench does not draw for: operators, staff, machines. */
@@ -73,7 +75,11 @@ export function readJourneys(root = rootDirectory) {
 
   let changes = [];
   try {
-    changes = readdirSync(join(root, "openspec/changes"));
+    changes = readdirSync(join(root, "openspec/changes"), {
+      withFileTypes: true,
+    })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name);
   } catch {}
   for (const change of changes) {
     if (change === "archive") continue;
