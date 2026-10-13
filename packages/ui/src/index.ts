@@ -439,11 +439,6 @@ export {
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared/ui/page-blocks
 export {
-  EmptyPanel,
-  type EmptyPanelCopy,
-  type EmptyPanelProps,
-} from "./blocks/page-blocks/empty-panel";
-export {
   FactCard,
   type FactCardCopy,
   type FactCardProps,

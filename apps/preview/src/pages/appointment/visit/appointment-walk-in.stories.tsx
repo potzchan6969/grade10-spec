@@ -1,8 +1,7 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Button } from "@grade10/design-system/components/forms/button";
-import { Link } from "@grade10/design-system/components/forms/link";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { EmptyPanel, VisitWaitBody } from "@grade10/ui";
+import { VisitWaitBody } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { AppointmentPageShell } from "../../vault-shared";
@@ -23,20 +22,20 @@ function WalkInBody({ state }: { state: WalkInState }) {
   }
   if (state === "notFound") {
     return (
-      <EmptyPanel
+      <EmptyState
         actions={
-          <HStack gap="md">
-            <Button size="md" variant="outline">
+          <>
+            <Button size="md" variant="secondary">
               Try again
             </Button>
-            <Link href={BOOK_HREF}>Book a time</Link>
-          </HStack>
+            <Button render={<a href={BOOK_HREF} />} size="md">
+              Book a time
+            </Button>
+          </>
         }
-        copy={{
-          title: "This shop’s wait could not be read",
-          description: "Check the address on the poster, or book a time.",
-        }}
-        slot="wait-error"
+        data-slot="wait-error"
+        description="Check the address on the poster, or book a time."
+        title="This shop’s wait could not be read"
       />
     );
   }
