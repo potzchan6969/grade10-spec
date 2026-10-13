@@ -211,7 +211,14 @@ export const CompleteSetupFlow: Story = {
     await waitFor(() => {
       expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
-    await userEvent.click(modal.getByRole("radio", { name: /Card/i }));
+    // HKD and card are preselected — Continue is enabled immediately.
+    expect(modal.getByRole("button", { name: "HKD" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await waitFor(() => {
+      expect(modal.getByRole("radio", { name: /Card/i })).toBeChecked();
+    });
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
 
     await waitFor(() => {
@@ -318,7 +325,14 @@ export const AddNewAddressSetupFlow: Story = {
     await waitFor(() => {
       expect(picker.getByText("Step 2 of 3")).toBeVisible();
     });
-    await userEvent.click(picker.getByRole("radio", { name: /Card/i }));
+    // HKD and card are preselected — Continue is enabled immediately.
+    expect(picker.getByRole("button", { name: "HKD" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await waitFor(() => {
+      expect(picker.getByRole("radio", { name: /Card/i })).toBeChecked();
+    });
     await userEvent.click(picker.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
       expect(picker.getByText("Step 3 of 3")).toBeVisible();

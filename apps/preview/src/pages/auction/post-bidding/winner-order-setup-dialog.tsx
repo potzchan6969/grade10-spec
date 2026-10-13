@@ -12,6 +12,8 @@ import { CheckboxListInput } from "@grade10/design-system/components/forms/check
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
+import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
+import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -160,8 +162,12 @@ const ADD_ADDRESS_FORM_ID = "winner-order-add-address-form";
 
 type WinnerOrderSetupPaymentMethod = "card" | "bank_transfer";
 
+/** Settlement currency the winner picks at Payment Method — USD or HKD. */
+type WinnerOrderSettlementCurrency = "USD" | "HKD";
+
 export type WinnerOrderSetupResult = {
   delivery: string;
+  settlementCurrency: WinnerOrderSettlementCurrency;
   paymentMethod: WinnerOrderSetupPaymentMethod;
   billing: string;
   sameAsDelivery: boolean;
@@ -171,8 +177,11 @@ type WinnerOrderSetupDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   savedAddresses?: readonly WinnerOrderSavedAddress[];
-  /** Currency for method offer — bank transfer only when HKD. */
-  currency?: "HKD" | "USD" | "JPY";
+  /**
+   * Settlement currencies offered at Payment Method. One entry fixes the
+   * currency and hides the choice; two show a Pay in picker (HKD defaults).
+   */
+  settlementCurrencies?: readonly WinnerOrderSettlementCurrency[];
   /** Called when the winner finishes all setup steps. */
   onConfirm: (result: WinnerOrderSetupResult) => void;
   /** Open the nested add-address form when the picker opens (Storybook). */
@@ -259,8 +268,27 @@ function CountryRegionField({
 }
 
 const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
-const FEE_RANGE_BANK =
-  "The transfer fee is on your invoice. Zero shows as Free.";
+const FEE_SENTENCE_BANK = "Any fee is on your invoice.";
+
+/** Bank-transfer rails named for the settlement currency. */
+function bankTransferDescription(
+  currency: WinnerOrderSettlementCurrency,
+): string {
+  const rails =
+    currency === "USD"
+      ? "Hong Kong bank transfer or SWIFT"
+      : "FPS or Hong Kong bank transfer";
+  return `${rails}. ${FEE_SENTENCE_BANK}`;
+}
+
+/** HKD is the default when offered; a single offered currency is fixed. */
+function defaultSettlementCurrency(
+  currencies: readonly WinnerOrderSettlementCurrency[],
+): WinnerOrderSettlementCurrency {
+  if (currencies.includes("HKD")) return "HKD";
+  // An empty offer reads as the USD-only path — nothing to pick.
+  return currencies[0] ?? "USD";
+}
 
 function stepTitle(step: SetupStep): string {
   if (step === 1) return "Delivery Address";
@@ -357,11 +385,12 @@ function WinnerOrderSetupDialog({
   open,
   onOpenChange,
   savedAddresses: savedAddressesProp = WINNER_ORDER_SAVED_ADDRESSES,
-  currency = "HKD",
+  settlementCurrencies = ["USD", "HKD"],
   onConfirm,
   initialNewAddressOpen = false,
   initialStep = 1,
 }: WinnerOrderSetupDialogProps) {
+  const settlementCurrencyLabelId = useId();
   const [step, setStep] = useState<SetupStep>(initialStep);
   const [addresses, setAddresses] = useState<WinnerOrderSavedAddress[]>(() => [
     ...savedAddressesProp,
@@ -380,8 +409,17 @@ function WinnerOrderSetupDialog({
         ? snapshotFromAddress(savedAddressesProp[0])
         : null,
     );
+  const [settlementCurrency, setSettlementCurrency] =
+    useState<WinnerOrderSettlementCurrency | null>(
+      defaultSettlementCurrency(settlementCurrencies),
+    );
+  // Card is the default payment method once a settlement currency is set.
   const [paymentMethod, setPaymentMethod] =
-    useState<WinnerOrderSetupPaymentMethod | null>(null);
+    useState<WinnerOrderSetupPaymentMethod>("card");
+  // Each settlement currency remembers the last method picked for it.
+  const [paymentMethodByCurrency, setPaymentMethodByCurrency] = useState<
+    Record<WinnerOrderSettlementCurrency, WinnerOrderSetupPaymentMethod>
+  >({ USD: "card", HKD: "card" });
   const [sameAsDelivery, setSameAsDelivery] = useState(true);
   const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
   const [saveForFuture, setSaveForFuture] = useState(
@@ -392,7 +430,7 @@ function WinnerOrderSetupDialog({
   const [enteringIds, setEnteringIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
   const enterTimersRef = useRef<Map<string, number>>(new Map());
-  const offerBankTransfer = currency === "HKD";
+  const showSettlementPicker = settlementCurrencies.length > 1;
 
   function resetDialogState() {
     for (const timerId of exitTimersRef.current.values()) {
@@ -412,7 +450,9 @@ function WinnerOrderSetupDialog({
         ? snapshotFromAddress(savedAddressesProp[0])
         : null;
     setDeliverySnapshot(seeded);
-    setPaymentMethod(null);
+    setSettlementCurrency(defaultSettlementCurrency(settlementCurrencies));
+    setPaymentMethod("card");
+    setPaymentMethodByCurrency({ USD: "card", HKD: "card" });
     setSameAsDelivery(true);
     setStep(initialStep);
     setNewAddressOpen(initialNewAddressOpen);
@@ -499,11 +539,12 @@ function WinnerOrderSetupDialog({
 
   function finishSetup() {
     const delivery = deliveryPayload();
-    if (!delivery || !paymentMethod) return;
+    if (!delivery || !settlementCurrency) return;
 
     if (sameAsDelivery) {
       onConfirm({
         delivery,
+        settlementCurrency,
         paymentMethod,
         billing: delivery,
         sameAsDelivery,
@@ -516,6 +557,7 @@ function WinnerOrderSetupDialog({
     if (!billing) return;
     onConfirm({
       delivery,
+      settlementCurrency,
       paymentMethod,
       billing: snapshotPayload(billing),
       sameAsDelivery,
@@ -532,7 +574,7 @@ function WinnerOrderSetupDialog({
       return;
     }
     if (step === 2) {
-      if (!paymentMethod) return;
+      if (!settlementCurrency) return;
       alignBillingSelectionToDelivery(deliverySnapshot);
       setStep(3);
       return;
@@ -656,7 +698,7 @@ function WinnerOrderSetupDialog({
 
   function handleOuterOpenChange(next: boolean) {
     if (!next && newAddressOpen) return;
-    if (!next && open && (step > 1 || paymentMethod != null || deliveryReady)) {
+    if (!next && open && (step > 1 || deliveryReady)) {
       const leave = window.confirm(
         "Leave order setup? Your progress on this order will not be saved.",
       );
@@ -668,7 +710,7 @@ function WinnerOrderSetupDialog({
 
   const primaryDisabled =
     (step === 1 && !deliveryReady) ||
-    (step === 2 && paymentMethod == null) ||
+    (step === 2 && settlementCurrency == null) ||
     (step === 3 && !billingReady);
 
   const primaryLabel = step === 3 ? "Complete Order Setup" : "Continue";
@@ -818,31 +860,70 @@ function WinnerOrderSetupDialog({
                 <DialogDescription>
                   Choose how you’ll pay. The exact amount is on the invoice.
                 </DialogDescription>
-                <RadioList
-                  aria-label="Payment method"
-                  className="gap-3"
-                  onValueChange={(value) => {
-                    if (value === "card" || value === "bank_transfer") {
-                      setPaymentMethod(value);
-                    }
-                  }}
-                  value={paymentMethod ?? ""}
-                >
+                {showSettlementPicker ? (
                   <div className="flex w-full flex-col gap-2">
-                    <RadioCard
-                      description={FEE_RANGE_CARD}
-                      title="Card"
-                      value="card"
-                    />
-                    {offerBankTransfer ? (
+                    <span
+                      className="text-sm font-medium text-foreground"
+                      id={settlementCurrencyLabelId}
+                    >
+                      Pay in
+                    </span>
+                    <SegmentedControl
+                      aria-labelledby={settlementCurrencyLabelId}
+                      className="w-fit self-start"
+                      onValueChange={(next) => {
+                        const currency = next[0];
+                        if (currency === "USD" || currency === "HKD") {
+                          setSettlementCurrency(currency);
+                          // Each currency remembers its last method pick.
+                          setPaymentMethod(
+                            paymentMethodByCurrency[currency] ?? "card",
+                          );
+                        }
+                      }}
+                      value={settlementCurrency ? [settlementCurrency] : []}
+                    >
+                      {settlementCurrencies.map((currency) => (
+                        <SegmentedControlItem key={currency} value={currency}>
+                          {currency}
+                        </SegmentedControlItem>
+                      ))}
+                    </SegmentedControl>
+                  </div>
+                ) : null}
+                {settlementCurrency != null ? (
+                  <RadioList
+                    aria-label="Payment method"
+                    className="gap-3"
+                    onValueChange={(value) => {
+                      if (value === "card" || value === "bank_transfer") {
+                        setPaymentMethod(value);
+                        if (settlementCurrency != null) {
+                          setPaymentMethodByCurrency((held) => ({
+                            ...held,
+                            [settlementCurrency]: value,
+                          }));
+                        }
+                      }
+                    }}
+                    value={paymentMethod}
+                  >
+                    <div className="flex w-full flex-col gap-2">
                       <RadioCard
-                        description={FEE_RANGE_BANK}
+                        description={FEE_RANGE_CARD}
+                        title="Card"
+                        value="card"
+                      />
+                      <RadioCard
+                        description={bankTransferDescription(
+                          settlementCurrency,
+                        )}
                         title="Bank transfer"
                         value="bank_transfer"
                       />
-                    ) : null}
-                  </div>
-                </RadioList>
+                    </div>
+                  </RadioList>
+                ) : null}
               </VStack>
             ) : null}
 
@@ -1076,5 +1157,9 @@ function WinnerOrderSetupDialog({
   );
 }
 
-export type { WinnerOrderSetupDialogProps, WinnerOrderSetupPaymentMethod };
+export type {
+  WinnerOrderSettlementCurrency,
+  WinnerOrderSetupDialogProps,
+  WinnerOrderSetupPaymentMethod,
+};
 export { WinnerOrderSetupDialog };
