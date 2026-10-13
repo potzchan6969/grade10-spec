@@ -82,7 +82,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Supplied alt text | Expected accessible name |
+| Supplied alt text | Expected alt attribute |
 | --- | --- |
 | absent | Gengar VMAX |
 | empty string | Gengar VMAX |
@@ -96,7 +96,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 3 still shows the supplied picture.
-* Its alt attribute is **Expected accessible name**.
+* Its alt attribute is **Expected alt attribute**.
 * No new copy or layout appears.
 
 <!-- trace:case id=g10.shared-store-cart.TC-y6p rev=1 covers=g10.shared-store-cart.SC-du1 -->
