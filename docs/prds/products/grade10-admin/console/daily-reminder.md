@@ -128,6 +128,8 @@ Slack channel.
   and days waited, and never a winner's name, email or phone
 - 🚧 **Quiet day** - nothing posts when both lists are empty; a list with no
   row is left out of a message that has rows
+- 🚧 **Layout** - each list's rows sit under their product, Auction first,
+  one line a row
 - 🚧 **Long lists** - each list shows its first 10 rows by exact wait or close,
   then a link to Today that says how many more
 - 🚧 **Titles** - a lot title over 60 characters is cut to 59 and an ellipsis
