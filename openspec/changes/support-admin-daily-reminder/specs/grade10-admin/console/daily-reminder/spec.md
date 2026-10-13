@@ -343,7 +343,7 @@ An entry is a full page load of the console by a signed-in operator, or a sign-i
 3. The dialog shows each list that has a row, What's New first, and says so beside any list that failed to load, with a Retry. A list that loaded with no row is left out.
 4. Closing the dialog by its close control, by Escape, by a click outside it, or by following a row, stores today's Hong Kong day as the operator's closed mark. An entry that opens nothing stores no mark.
 
-The mark SHALL be kept in the browser, per operator and per Hong Kong day, and SHALL be cleared when the operator signs out. Another browser keeps its own. A browser that keeps nothing between page loads SHALL show the dialog once per page load instead. Each product's list in the dialog SHALL show about four and a half rows and scroll the rest inside itself, so the dialog keeps its size however many rows there are. The dialog reads the lists when it opens and SHALL NOT read them again while it stays open. The console SHALL check the day on entry and not while the operator works.
+The mark SHALL be kept in the browser, per operator and per Hong Kong day, and SHALL be cleared when the operator signs out. Another browser keeps its own. A browser that keeps nothing between page loads SHALL show the dialog once per page load instead. Each product's list in the dialog SHALL show about four and a half rows and scroll the rest inside itself, fading the edge that has more beyond it, so the dialog keeps its size however many rows there are. The dialog reads the lists when it opens and SHALL NOT read them again while it stays open. The console SHALL check the day on entry and not while the operator works.
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-4zv rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-25 - The dialog opens over the page the operator lands on
@@ -516,18 +516,18 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day, and S
 - **THEN** the order opens in a new tab
 - **AND** the dialog stays open and the day's mark is not set
 
-<!-- trace:scenario id=g10adm.console-daily-reminder.SC-fyh rev=1 -->
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-fyh rev=2 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-82 - A long list scrolls inside the dialog
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the dialog stays on the screen however much is waiting
 
 - **GIVEN** nine Still Waiting rows for the operator
 - **WHEN** the dialog opens
-- **THEN** the Auction list shows about four and a half rows, and the rest scroll inside the list
+- **THEN** the Auction list shows about four and a half rows, and the rest scroll inside the list with its bottom edge faded
 - **AND** the dialog keeps its size and its close control stays in view
 
 ### Requirement: Today reads in three columns
 
-Today SHALL show What's New, Still Waiting and Needs you as three columns, in that order, with the lists the dialog holds. Needs you SHALL hold the section cards it holds now, one under another, with the counts and links unchanged. What's New and Still Waiting SHALL group their rows by product, Auction first, then Store, Consignment, Inventory and Appointments for each the operator can open; a product with no row SHALL show as one line saying Nothing yet. The first group with rows SHALL start opened and every other group SHALL show as one line with its product and count; a group's chevron SHALL open it and fold it back, and opening one group SHALL fold the group open in the same column. The three columns SHALL stand at one height, set by the tallest, and an opened group SHALL fill the rest of its column, never under about five and a half rows, and scroll its rows inside itself. A list that fails to load SHALL say so in its own column, with a Retry. The Approvals card SHALL leave the Needs you column and sit with the Recent and All sections under the three columns, otherwise unchanged. Today's Refresh SHALL read all three columns again. The lists SHALL also be read when Today loads and when the operator comes back to the tab, and never on a timer.
+Today SHALL show What's New, Still Waiting and Needs you as three columns, in that order, with the lists the dialog holds. Needs you SHALL hold the section cards it holds now, one under another, with the counts and links unchanged. What's New and Still Waiting SHALL group their rows by product, Auction first, then Store, Consignment, Inventory and Appointments for each the operator can open; a product with no row SHALL show as one line saying Nothing yet. The first group with rows SHALL start opened and every other group SHALL show as one line with its product and count; a group's chevron SHALL open it and fold it back, and opening one group SHALL fold the group open in the same column. The three columns SHALL stand at one height, set by the taller of Needs you and an opened group, and an opened group SHALL fill the rest of its column, never under about five and a half rows, and scroll its rows inside itself, fading the edge that has more beyond it. A list that fails to load SHALL say so in its own column, with a Retry. The Approvals card SHALL leave the Needs you column and sit with the Recent and All sections under the three columns, otherwise unchanged. Today's Refresh SHALL read all three columns again. The lists SHALL also be read when Today loads and when the operator comes back to the tab, and never on a timer.
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-v91 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-36 - Three columns side by side
@@ -637,7 +637,7 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **GIVEN** a wide screen, a Needs you column taller than the folded lists, and forty Still Waiting rows
 - **WHEN** Today loads
 - **THEN** the three columns stand at one height
-- **AND** Still Waiting's opened group fills the rest of its column and scrolls its rows inside itself, showing at least about five and a half rows
+- **AND** Still Waiting's opened group fills the rest of its column and scrolls its rows inside itself, showing at least about five and a half rows, with its bottom edge faded
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-ws4 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-86 - A product with no reminder yet says Nothing yet

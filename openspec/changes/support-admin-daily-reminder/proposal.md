@@ -30,8 +30,9 @@ reminder runs.
   operator who closed the dialog finds the lists again. Needs you holds the
   section cards it holds now, in one column; Approvals, Recent and All
   sections sit below.
-- **Slack message** - at 08:00 Hong Kong time every day, both lists post to one
-  Slack channel with a link on each row, sent once with no retry and no record.
+- **Slack message** - at 08:00 Hong Kong time every day, each product posts its
+  own lists as one message to its own Slack channel, headed with the product,
+  with a link on each row, sent once with no retry and no record.
   The channel is shared, so it carries every row and no customer names.
 - **By grant** - in the console, an operator sees only the rows whose action
   their grants let them take.
@@ -62,8 +63,8 @@ None.
 - Auction backend: one read for new listings and orders, one for orders
   waiting past the threshold, each scoped to the caller's grants for the
   console and unscoped for Slack.
-- Slack: one daily post to a channel. The channel and token are environment
-  settings, so staging and production can differ.
+- Slack: one daily post per product to its own channel. Each service sets its
+  own channel and token as environment settings, so staging and production can differ.
 - PRDs: Daily Reminder carries 🚧 for every outcome above; Auction Management
   carries one 🚧 line pointing at it; the console index's pointer is reworded.
 - Does not change any order status, worklist row, order page or the Needs you
