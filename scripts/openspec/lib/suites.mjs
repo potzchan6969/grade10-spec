@@ -326,11 +326,8 @@ export function readSpecIds(specPath) {
   // it; the change's suite owes a section to the journeys it adds or modifies.
   const context = new Set();
   let section = "";
-  let previousLine = "";
   const journeyHeading =
     /^###\s+([A-Za-z0-9][A-Za-z0-9.-]*\.(?:US-?\d+[a-z]?)|[\w-]+-US-?\d+[a-z]?)\b:\s*(.+?)\s*$/;
-  const scenarioDisplayHeading =
-    /^####\s+Scenario:\s+([A-Za-z0-9][A-Za-z0-9.-]*\.SC-?\d+[a-z]?)\b/;
   const scenarioMarker = /^<!--\s*trace:scenario\s+id=(\S+)/;
   for (const line of `${text}\n${stories}`.split("\n")) {
     const h = line.match(/^##\s+(.+?)\s*$/);
@@ -349,12 +346,8 @@ export function readSpecIds(specPath) {
     if (marker) scenarios.add(marker[1]);
     const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
-    const display = line.match(scenarioDisplayHeading);
-    if (display && !previousLine.match(scenarioMarker))
-      scenarios.add(display[1]);
     const inline = line.match(SCENARIO_BULLET);
     if (inline) scenarios.add(inline[1]);
-    previousLine = line;
   }
   return {
     journeys,

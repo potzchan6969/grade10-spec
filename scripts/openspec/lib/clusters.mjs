@@ -6,11 +6,13 @@ import {
 import { readTextIfExists } from "../../../tools/manual/src/store/disk.mts";
 import { NO_GIT } from "../../../tools/manual/src/store/git.mts";
 import {
+  scenarioIdsIn,
+  scenarioToken,
+} from "../../../tools/manual/src/store/markdown.mts";
+import {
   readChanges,
   readIssuedIds,
 } from "../../../tools/manual/src/store/read-changes.mts";
-
-const FIRST_SCENARIO = /-SC-\d+[a-z]?\b/;
 
 /** Groups of in-flight changes that edit one durable requirement or are
  *  linked by `depends_on`, with the requirements they share and an order that
@@ -115,10 +117,8 @@ function tokenOf(root, capability) {
   const text = readTextIfExists(
     join(root, "openspec", "specs", capability, "spec.md"),
   );
-  const id = text?.match(
-    new RegExp(`[a-z0-9][a-z0-9-]*${FIRST_SCENARIO.source}`),
-  )?.[0];
-  return id ? id.replace(FIRST_SCENARIO, "") : capability.replaceAll("/", "-");
+  const [id] = scenarioIdsIn(text ?? "");
+  return id ? scenarioToken(id) : capability.replaceAll("/", "-");
 }
 
 /** Every change joined to every change it is linked with, through `links`

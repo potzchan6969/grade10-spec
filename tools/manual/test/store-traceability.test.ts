@@ -210,6 +210,16 @@ describe("the ids a capability has issued", () => {
   it("knows nothing about a capability nobody has issued for", () => {
     expect(readIssuedIds(root).get("membership")).toBeUndefined();
   });
+
+  it("counts an id in the `<app>.<domain>-<capability>.SC<n>` form under its own token", () => {
+    const issued = readIssuedIds(root, [
+      "g10.auction-winner-order.SC4",
+      "g10.auction-winner-order.SC12a",
+      "g10.auction-winner-order.US3",
+      "g10.auction-winner-order.SC-3hh",
+    ]);
+    expect(issued.get("g10.auction-winner-order")).toEqual({ sc: 12, us: 3 });
+  });
 });
 
 /** A change that stops at its requirements writes specs and no tasks.md, so a lastMoved keyed to

@@ -25,6 +25,7 @@ import {
   git as runGit,
   type StoreMain,
 } from "./git.mts";
+import { scenarioToken } from "./markdown.mts";
 import { markQuestions } from "./questions.mts";
 import { readChangeDocuments } from "./read-change-documents.mts";
 import {
@@ -221,12 +222,11 @@ function markIssuedIds(root: string, specs: SpecEntry[]): void {
 function tokenOf(spec: SpecEntry): string {
   for (const requirement of spec.requirements) {
     for (const scenario of requirement.scenarios) {
-      const token = scenario.id?.replace(/-SC-\d+[a-z]?$/, "");
-      if (token) return token;
+      if (scenario.id) return scenarioToken(scenario.id);
     }
   }
   for (const journey of spec.journeys ?? []) {
-    const token = journey.id.replace(/-US-\d+$/, "");
+    const token = journey.id.replace(/(?:-US-|\.US)\d+$/, "");
     if (token !== journey.id) return token;
   }
   return spec.id.split("/").pop() ?? spec.id;
