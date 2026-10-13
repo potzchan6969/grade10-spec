@@ -42,7 +42,7 @@
       "col": 0,
       "type": "external",
       "label": "Opens the drawer",
-      "sublabel": "signed in; a guest has no cart",
+      "sublabel": "a guest picks no code or points",
       "width": 138
     },
     {
