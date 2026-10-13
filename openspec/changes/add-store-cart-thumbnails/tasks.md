@@ -6,7 +6,7 @@ Land controlled shared coverage before Group 4 selects the application dependenc
 - [ ] 1.2 Add deterministic served assets and shared Storybook picture states through existing `CartItemSummary` props. Preserve renderer, layout, copy and callbacks. `shared-ui-store-cart-SC-64`, `shared-ui-store-cart-SC-65`, `shared-ui-store-cart-SC-66`
 - [ ] 1.3 Verify the focused browser stories, `pnpm run test:stories:ui`, shared typecheck, UI Storybook build and planning/manual checks. Record the upstream PR, verified merge and published main SHA before application consumption.
 
-## 2. Reviewed picture contracts and catalogue adapter (grade10)
+## 2. Reviewed picture contracts and catalogue adapter (grade10) (owner: @kinisworking)
 
 This group owns the optional wire fields and the existing batched catalogue read. It needs no shared UI change or database migration.
 
