@@ -104,9 +104,9 @@ replaced the sale, the sale returns to the lines while it still runs.
 🚧 **Held, cannot apply** - a held code that cannot apply on this cart is
 listed apart from the ones that can, muted with its reason and no Apply.
 
-::story{id="store-cart-blocks-cartitem--sale-price" title="A line on the site sale"}
+::story{id="store-cart-blocks-cartitem-price--sale-price" title="A line on the site sale"}
 
-::story{id="store-cart-blocks-cartitem--product-coupon" title="A product coupon on the line"}
+::story{id="store-cart-blocks-cartitem-price--product-coupon" title="A product coupon on the line"}
 
 ::story{id="store-cart-blocks-cartdrawer-auto-discount--refuse" title="A refused promo on the site sale"}
 

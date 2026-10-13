@@ -136,7 +136,7 @@ export const HeldPromoSheet: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Your promo codes")).toBeInTheDocument();
+    expect(canvas.getByText("Promo codes")).toBeInTheDocument();
     expect(canvas.getByText("WELCOME100")).toBeInTheDocument();
     expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
     expect(
@@ -443,7 +443,7 @@ export const HeldPromoEmpty: Story = {
     expect(
       canvas.getByRole("button", { name: "Browse loyalty offers" }),
     ).toBeInTheDocument();
-    expect(canvas.queryByText("Your promo codes")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Promo codes")).not.toBeInTheDocument();
   },
 };
 
@@ -473,7 +473,7 @@ export const HeldPromoAllInapplicable: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
-    expect(canvas.queryByText("Your promo codes")).not.toBeInTheDocument();
+    expect(canvas.queryByText("Promo codes")).not.toBeInTheDocument();
     expect(canvas.getByText("SAVE200")).toBeInTheDocument();
   },
 };
