@@ -609,7 +609,7 @@
 
 | Field | Value |
 | --- | --- |
-| `<basket>` | A ready basket worth less than the identity bar |
+| `<basket>` | A ready basket |
 
 **Steps:**
 
@@ -647,7 +647,7 @@
 
 | Field | Value |
 | --- | --- |
-| `<basket>` | A ready basket worth less than the identity bar |
+| `<basket>` | A ready basket |
 | `<buyer email>` | An address with no Grade10 account |
 
 **Steps:**
@@ -689,7 +689,7 @@
 
 | Field | Value |
 | --- | --- |
-| `<basket>` | A ready basket worth less than the identity bar |
+| `<basket>` | A ready basket |
 
 **Steps:**
 

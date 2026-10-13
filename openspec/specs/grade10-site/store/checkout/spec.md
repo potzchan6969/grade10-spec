@@ -101,7 +101,7 @@ Shopify a reviewed basket without relying on client-supplied amounts.
 
 **Storefront boundary** - A collector with no session SHALL check out as a
 guest, under the guest checkout requirement below, and SHALL NOT be asked to
-sign in below the identity bar. Typed-email checkout MAY exist only on the
+sign in, at any value. Typed-email checkout MAY exist only on the
 development and staging operator test surface.
 
 **Order write** - The server SHALL insert the Grade10 order and its lines in
@@ -161,28 +161,24 @@ refused, whoever signs in afterwards. A member's Your Orders SHALL list the
 guest orders paid under the address their sign-in proved, without making those
 orders theirs.
 
-**The bar** - Goods worth the identity bar or more SHALL ask the guest to sign
-in before any order exists, as `grade10-site/commerce/commerce` states.
-
 **The cart** - This browser's cart SHALL be emptied once the guest's hosted
 invoice opens; the invoice holds the basket.
 
-<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=4 -->
+<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=5 -->
 #### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer checks out as a guest
 **Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
 
-- **GIVEN** a collector has no signed-in session, and a ready basket worth less
-  than the identity bar
+- **GIVEN** a collector has no signed-in session, and a ready basket of any
+  value
 - **WHEN** they continue to payment
 - **THEN** one Grade10 guest order and one Shopify hosted invoice are created
 - **AND** they are not asked to sign in
 
-<!-- trace:scenario id=g10.store-checkout.SC-wet rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-wet rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-66 - A guest pays the basket alone
 **Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
 
 - **GIVEN** a signed-out collector whose browser cart holds a ready basket
-  worth less than the identity bar
 - **WHEN** they press Pay
 - **THEN** the hosted invoice carries the reviewed lines with no promo code,
   reward coupon or points
