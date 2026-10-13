@@ -3,14 +3,14 @@
 **Status:** pending-review · 0/1
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
-## winner-order-US1: Winner settles a won lot
+## g10.auction-winner-order.US1: Winner settles a won lot
 
 **As a** winner,
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
 **so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
 
 <!-- trace:case id=g10.auction-winner-order.TC-srq rev=2 covers=g10.auction-winner-order.SC-los -->
-### winner-order-US1-TC57-2: A close with an internal bidder leading opens its order with its billing address and sends no letter
+### g10.auction-winner-order.US1-TC57: A close with an internal bidder leading opens its order with its billing address and sends no letter
 
 Runs once per row of **Test data**.
 
@@ -71,7 +71,7 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 round 6, 2026-10-12, over the round-4 run below. Dev's round-6 reading raised `winner-order-SC-277` to revision 2, a close with the house leading now opening the internal bidder's order, and dropped the MODIFIED block of one invoice and one order per lot. QA1's round-6 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, revised the case here. QA2 read both, the delta specs, `decisions.md` through Q58, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
 
-- **Round 6, revised** - `winner-order-US1-TC57-1` to `winner-order-US1-TC57-2` by `winner-order-SC-277`: a close with the internal bidder leading opens its order, flagged internal, and sends no letter; its marker's revision rises to 2
+- **Round 6, revised** - `g10.auction-winner-order.US1-TC57` to `g10.auction-winner-order.US1-TC57` by `winner-order-SC-277`: a close with the internal bidder leading opens its order, flagged internal, and sends no letter; its marker's revision rises to 2
 - **Round 6, corrected to the requirement** - QA1's House rows read the order not Awaiting Setup with only its billing address; they now read Preparing Invoice, `<house billing address>` as both addresses and bank transfer, as `winner-order-SC-277` states (Q52, Q53). `<house billing address>` names "Grade10 Stock Room", not the internal bidder (Q55)
 - **Round 6, out of suite** - `winner-order-SC-26`, `winner-order-SC-27` and `winner-order-SC-28` restate a collector winner's order, unchanged by this change, and stay with the durable suite's cases, beside the Collector over the house row here; `grade10-admin-auction-internal-bid-US6-TC4-1` also walks `winner-order-SC-277` through the order page and the send log
 - **Round 6, settled** - the stale line that the house is never a lot's winner is rewritten under Q5, Q33 and Q50 to Q53
@@ -81,8 +81,8 @@ Runs once per row of **Test data**.
 
 **Run, round 4:** QA2 round 4, 2026-10-08. Dev's round-4 reading moved scenario anchors onto journeys after the accept review; QA1's round-4 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, revised the internal-bid suite and drafted the winner-order case. QA2 read both, the delta specs, `decisions.md` through Q35, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
 
-- **Folded in** - `winner-order-US1-TC57-1` by `winner-order-SC-277`, its Collector over the house row the unchanged `winner-order-SC-26`
-- **Renumbered** - QA1 drafted it as `winner-order-US1-TC48-1`; `complete-auction-post-sale` has since published `TC48` to `TC53` and `TC56` under US1 in the durable suite, so it takes `TC57`, past every number issued there. Its Suites drop `smoke`, which the durable US1 already carries
+- **Folded in** - `g10.auction-winner-order.US1-TC57` by `winner-order-SC-277`, its Collector over the house row the unchanged `winner-order-SC-26`
+- **Renumbered** - QA1 drafted it as `g10.auction-winner-order.US1-TC48`; `complete-auction-post-sale` has since published `TC48` to `TC53` and `TC56` under US1 in the durable suite, so it takes `TC57`, past every number issued there. Its Suites drop `smoke`, which the durable US1 already carries
 - **Anchors** - `winner-order-SC-277` serves the Feature set group `A lot the house won`, a rule with no actor; the case traces `winner-order-US-01`, the journey a collector's win walks. Joined on the behaviour
 - **Out of suite** - superseded by Round 6, out of suite
 - **Rejected** - none

@@ -3,14 +3,14 @@
 **Status:** pending-review · 0/7
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
-## grade10-site-auction-notifications-US3: Collector raises after being outbid
+## g10.auction-notifications.US3: Collector raises after being outbid
 
 **As a** collector,
 **I want** to be emailed when I lose the lead on a lot I bid on,
 **so that** I can raise my maximum while the lot still takes bids.
 
 <!-- trace:case id=g10.auction-notifications.TC-bq3 rev=1 covers=g10.auction-notifications.SC-kl5 -->
-### grade10-site-auction-notifications-US3-TC4-1: A collector the house displaces gets the ordinary outbid letter
+### g10.auction-notifications.US3-TC4: A collector the house displaces gets the ordinary outbid letter
 
 Runs once per row of **Test data**.
 
@@ -58,7 +58,7 @@ Runs once per row of **Test data**.
 * Step 2: the letter names no house and no reserve.
 
 <!-- trace:case id=g10.auction-notifications.TC-83j rev=1 covers=g10.auction-notifications.SC-9dh -->
-### grade10-site-auction-notifications-US3-TC5-1: The house is never mailed when a collector displaces it
+### g10.auction-notifications.US3-TC5: The house is never mailed when a collector displaces it
 
 **Classification:**
 
@@ -100,14 +100,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-notifications-US4: Collector hears a new bid on a lot they bid on
+## g10.auction-notifications.US4: Collector hears a new bid on a lot they bid on
 
 **As a** collector,
 **I want** to be emailed when someone else bids on a lot I already bid on,
 **so that** I know the lot moved without being mailed on every increment.
 
 <!-- trace:case id=g10.auction-notifications.TC-y85 rev=1 covers=g10.auction-notifications.SC-mma -->
-### grade10-site-auction-notifications-US4-TC3-1: A house bid that moves the price mails the leader a new bid letter
+### g10.auction-notifications.US4-TC3: A house bid that moves the price mails the leader a new bid letter
 
 **Classification:**
 
@@ -150,7 +150,7 @@ Runs once per row of **Test data**.
 * Step 3: the letter names no house and no reserve.
 
 <!-- trace:case id=g10.auction-notifications.TC-znb rev=1 covers=g10.auction-notifications.SC-mnu -->
-### grade10-site-auction-notifications-US4-TC4-1: A not-placed internal bid mails no bidder
+### g10.auction-notifications.US4-TC4: A not-placed internal bid mails no bidder
 
 **Classification:**
 
@@ -192,7 +192,7 @@ Runs once per row of **Test data**.
 * Step 3 holds no row for `<lot_6>` after that time.
 
 <!-- trace:case id=g10.auction-notifications.TC-e8p rev=1 covers=g10.auction-notifications.SC-mnu -->
-### grade10-site-auction-notifications-US4-TC5-1: A house lower that moves nothing mails no bidder
+### g10.auction-notifications.US4-TC5: A house lower that moves nothing mails no bidder
 
 **Classification:**
 
@@ -238,14 +238,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-notifications-US6: Collector who lost hears the lot closed
+## g10.auction-notifications.US6: Collector who lost hears the lot closed
 
 **As a** collector who bid on a lot,
 **I want** to be emailed when someone else wins it,
 **so that** I know the outcome without reopening the lot.
 
 <!-- trace:case id=g10.auction-notifications.TC-2lb rev=1 covers=g10.auction-notifications.SC-xy1,g10.auction-notifications.SC-9dh -->
-### grade10-site-auction-notifications-US6-TC4-1: A house win mails every losing bidder and nobody as the winner
+### g10.auction-notifications.US6-TC4: A house win mails every losing bidder and nobody as the winner
 
 **Classification:**
 
@@ -289,14 +289,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-notifications-US7: Watcher hears a sold lot ended
+## g10.auction-notifications.US7: Watcher hears a sold lot ended
 
 **As a** collector watching a lot without bidding,
 **I want** to be emailed when that lot ends with a winner,
 **so that** I know bidding is over on a lot I followed.
 
 <!-- trace:case id=g10.auction-notifications.TC-7f9 rev=1 covers=g10.auction-notifications.SC-14x -->
-### grade10-site-auction-notifications-US7-TC3-1: A lot only the house bid on mails watchers sold
+### g10.auction-notifications.US7-TC3: A lot only the house bid on mails watchers sold
 
 **Classification:**
 
@@ -338,16 +338,16 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 round 6, 2026-10-12, over the run below. Dev's round-6 reading rewrote the requirement's house bullet: the order a house win opens for its internal bidder sends no letter, and `grade10-site-auction-notifications-SC-52` now reads that win opening the internal bidder's order, with no auction-won or setup letter; no scenario id or revision changed. QA1's round-6 blind pass wrote no case here. QA2 read the delta specs, `decisions.md` through Q58 and this suite; not the archive. It is a statement, not proof.
 
-- **Round 6, unchanged** - every case keeps its version: `grade10-site-auction-notifications-US6-TC4-1` already reads no auction-won letter and no row addressed to the house after a house win, and `grade10-site-auction-notifications-US3-TC5-1` no letter to the house
+- **Round 6, unchanged** - every case keeps its version: `g10.auction-notifications.US6-TC4` already reads no auction-won letter and no row addressed to the house after a house win, and `g10.auction-notifications.US3-TC5` no letter to the house
 - **Round 6, covered elsewhere** - the no-setup-letter result of `grade10-site-auction-notifications-SC-52` is read by `grade10-admin-auction-internal-bid-US6-TC4-1` across the setup window, and every later order letter by `grade10-admin-auction-internal-bid-US6-TC5-1` to `grade10-admin-auction-internal-bid-US6-TC7-1` (Q51)
 - **Round 6, rejected** - none
 - **Round 6, raised** - none
 
 **Run, round 3:** QA2, 2026-10-08. QA1's round-3 blind pass, rerun after a discarded attempt broke isolation, read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md` with its `## Raised` table as it stood through Q25, the linked pages `bidding.md` and `management.md` under `docs/prds/`, and the change's domain draft above the capability with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. Dev's round-3 reading wrote the scenarios, `tech-design.md` and `tasks.md` without QA1's suites. Q26 to Q29 landed after both readings, and where a case contradicted them the decision won. QA2 read QA1's suites, the delta specs, `decisions.md` through Q29, `tech-design.md`, `tasks.md`, the durable specs and suites, and both PRD pages; not the archive. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-notifications-US3-TC4-1` by `grade10-site-auction-notifications-SC-49`; `grade10-site-auction-notifications-US3-TC5-1` by `grade10-site-auction-notifications-SC-52`; `grade10-site-auction-notifications-US4-TC3-1` by `grade10-site-auction-notifications-SC-53`, the leader hearing the house's bid as the durable rule mails every enrolled bidder but the one who bid; `grade10-site-auction-notifications-US4-TC4-1` by `grade10-site-auction-notifications-SC-54`'s not-placed half; `grade10-site-auction-notifications-US6-TC4-1` by `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-52`; `grade10-site-auction-notifications-US7-TC3-1` by `grade10-site-auction-notifications-SC-51`
-- **Added by QA2** - `grade10-site-auction-notifications-US4-TC5-1`: a house lower that moves nothing mails nobody, for `grade10-site-auction-notifications-SC-54`'s lower half, which no blind case reached
-- **Covered at domain** - `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51` are also walked by `grade10-site-auction-e2e-US13-TC01-1`
+- **Folded in** - `g10.auction-notifications.US3-TC4` by `grade10-site-auction-notifications-SC-49`; `g10.auction-notifications.US3-TC5` by `grade10-site-auction-notifications-SC-52`; `g10.auction-notifications.US4-TC3` by `grade10-site-auction-notifications-SC-53`, the leader hearing the house's bid as the durable rule mails every enrolled bidder but the one who bid; `g10.auction-notifications.US4-TC4` by `grade10-site-auction-notifications-SC-54`'s not-placed half; `g10.auction-notifications.US6-TC4` by `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-52`; `g10.auction-notifications.US7-TC3` by `grade10-site-auction-notifications-SC-51`
+- **Added by QA2** - `g10.auction-notifications.US4-TC5`: a house lower that moves nothing mails nobody, for `grade10-site-auction-notifications-SC-54`'s lower half, which no blind case reached
+- **Covered at domain** - `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51` are also walked by `g10.auction-dmn.US13-TC1`
 - **Anchors** - `grade10-site-auction-notifications-SC-52` and `grade10-site-auction-notifications-SC-54` serve the Feature set group `House participation`; their cases trace the journeys whose letters they read
 - **Out of suite** - none
 - **Rejected** - none

@@ -3,7 +3,7 @@
 **Status:** pending-review · 0/6
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
-## grade10-site-auction-auto-bidding-US3: Collector competes through two maxima
+## g10.auction-auto-bidding.US3: Collector competes through two maxima
 
 **As a** collector,
 **I want** the current bid to come from the two highest maxima,
@@ -11,7 +11,7 @@
 with whoever committed first.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-m47 rev=1 covers=g10.auction-auto-bidding.SC-99a -->
-### grade10-site-auction-auto-bidding-US3-TC7-1: A collector's maximum resolves against the house maximum like any other
+### g10.auction-auto-bidding.US3-TC7: A collector's maximum resolves against the house maximum like any other
 
 Runs once per row of **Test data**.
 
@@ -59,7 +59,7 @@ Runs once per row of **Test data**.
 * Step 2: Recent bids lists customer A's bid and the house's bid that answers it, the house under its listing pseudonym.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-6gi rev=1 covers=g10.auction-auto-bidding.SC-gct -->
-### grade10-site-auction-auto-bidding-US3-TC8-1: A tie with the house stays with whoever committed first
+### g10.auction-auto-bidding.US3-TC8: A tie with the house stays with whoever committed first
 
 Runs once per row of **Test data**.
 
@@ -106,7 +106,7 @@ Runs once per row of **Test data**.
 * Step 2: Recent bids lists both bids at `<equal maximum>`, the earlier maximum's row first.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-19o rev=1 covers=g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-99a -->
-### grade10-site-auction-auto-bidding-US3-TC9-1: A collector learns nothing of the house beyond a bidder's pseudonym
+### g10.auction-auto-bidding.US3-TC9: A collector learns nothing of the house beyond a bidder's pseudonym
 
 **Classification:**
 
@@ -151,7 +151,7 @@ Runs once per row of **Test data**.
 * Neither lot shows the leader's maximum.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-9jg rev=1 covers=g10.auction-auto-bidding.SC-jd3 -->
-### grade10-site-auction-auto-bidding-US3-TC10-1: A bid just after the house's time meets the house first
+### g10.auction-auto-bidding.US3-TC10: A bid just after the house's time meets the house first
 
 **Classification:**
 
@@ -201,14 +201,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-auto-bidding-US4: Operator traces every committed maximum
+## g10.auction-auto-bidding.US4: Operator traces every committed maximum
 
 **As an** operator,
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-63a rev=1 covers=g10.auction-auto-bidding.SC-j3t -->
-### grade10-site-auction-auto-bidding-US4-TC2-1: The house's commitment, raise and lower are traced with when each was accepted
+### g10.auction-auto-bidding.US4-TC2: The house's commitment, raise and lower are traced with when each was accepted
 
 **Classification:**
 
@@ -256,7 +256,7 @@ Runs once per row of **Test data**.
 * Step 2 lists the house's `<lowered maximum>` accepted at `<lower time>`.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-vzk rev=1 covers=g10.auction-auto-bidding.SC-aqd,g10adm.auction-internal-bid.SC-ftu -->
-### grade10-site-auction-auto-bidding-US4-TC3-1: Staff without secret-floor access read House in the trace, never its maximum
+### g10.auction-auto-bidding.US4-TC3: Staff without secret-floor access read House in the trace, never its maximum
 
 **Classification:**
 
@@ -312,12 +312,12 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 round 5, 2026-10-12, over the round-4 run below: Dev added `grade10-site-auction-auto-bidding-SC-47` and named the internal bidder in the reserve holder's trace; QA1's round-5 blind pass wrote no case here. Round 4, 2026-10-08. Dev's round-4 reading moved scenario anchors onto journeys after the accept review; QA1's round-4 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, revised the internal-bid suite and drafted the winner-order case. QA2 read both, the delta specs, `decisions.md` through Q35, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-auto-bidding-US3-TC7-1` by `grade10-site-auction-auto-bidding-SC-33`; `grade10-site-auction-auto-bidding-US3-TC8-1` by `grade10-site-auction-auto-bidding-SC-34`, its House earlier row the durable tie rule; `grade10-site-auction-auto-bidding-US3-TC9-1` by `grade10-site-auction-auto-bidding-SC-33` and `grade10-site-auction-auto-bidding-SC-07`; `grade10-site-auction-auto-bidding-US4-TC2-1` by `grade10-site-auction-auto-bidding-SC-45`; `grade10-site-auction-auto-bidding-US4-TC3-1` by `grade10-site-auction-auto-bidding-SC-08` and `grade10-admin-auction-internal-bid-SC-32`
-- **Added by QA2** - `grade10-site-auction-auto-bidding-US3-TC10-1`: a collector bid just after the house's time meets the house first, for `grade10-site-auction-auto-bidding-SC-37`, which no blind case reached
-- **Corrected to the decisions** - `grade10-site-auction-auto-bidding-US4-TC3-1` expected no time on a House row; Q26 shows a house bid's own Accepted At, so it now expects it and refuses only when a maximum was accepted
-- **Covered at domain** - `grade10-site-auction-auto-bidding-SC-33` is also walked by `grade10-site-auction-e2e-US13-TC01-1`
-- **Out of suite** - `grade10-site-auction-auto-bidding-SC-36` by `grade10-admin-auction-internal-bid-US1-TC4-1`; `grade10-site-auction-auto-bidding-SC-38` by `grade10-admin-auction-internal-bid-US5-TC1-1`; `grade10-site-auction-auto-bidding-SC-39` by `grade10-site-auction-auction-US1-TC4-1`; `grade10-site-auction-auto-bidding-SC-40` by `grade10-site-auction-auction-US12-TC3-1`; `grade10-site-auction-auto-bidding-SC-41` by `grade10-admin-auction-internal-bid-US3-TC2-1` and `grade10-site-auction-auction-US12-TC3-1`; `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44` by `grade10-admin-auction-internal-bid-US4-TC4-1`; `grade10-site-auction-auto-bidding-SC-43` by `grade10-admin-auction-internal-bid-US4-TC2-2`; `grade10-site-auction-auto-bidding-SC-46` by `grade10-admin-auction-internal-bid-US5-TC7-1`; `grade10-site-auction-auto-bidding-SC-35` by the backend tests of tasks 3.1 and 3.2, since a person sees only that the house bids; `grade10-site-auction-auto-bidding-SC-01` to `grade10-site-auction-auto-bidding-SC-08`, `grade10-site-auction-auto-bidding-SC-22` to `grade10-site-auction-auto-bidding-SC-24` and `grade10-site-auction-auto-bidding-SC-25a` restate collector behaviour this change does not move, and stay with the durable suite's cases
-- **Anchors** - `grade10-site-auction-auto-bidding-SC-35`, `grade10-site-auction-auto-bidding-SC-38` and `grade10-site-auction-auto-bidding-SC-46` serve the Feature set group `House maximum`, rules with no actor; `grade10-site-auction-auto-bidding-SC-42`, `grade10-site-auction-auto-bidding-SC-43` and `grade10-site-auction-auto-bidding-SC-44` now serve `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04`, the journey their covering cases trace; `grade10-site-auction-auto-bidding-SC-39` and `grade10-site-auction-auto-bidding-SC-40` serve the durable journey `grade10-site-auction-auto-bidding-US-05`, carried under Context user journeys. `grade10-site-auction-auto-bidding-US-04` reads for an operator holding `auction:reserve`; what an operator without it reads of the house maximum is `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-07`, served there by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-40`. No scenario here serves that exception, so none is re-anchored; `grade10-site-auction-auto-bidding-US4-TC3-1` keeps its trace to `grade10-site-auction-auto-bidding-US-04` for `grade10-site-auction-auto-bidding-SC-08` and joins `grade10-admin-auction-internal-bid-SC-32` on the behaviour
+- **Folded in** - `g10.auction-auto-bidding.US3-TC7` by `grade10-site-auction-auto-bidding-SC-33`; `g10.auction-auto-bidding.US3-TC8` by `grade10-site-auction-auto-bidding-SC-34`, its House earlier row the durable tie rule; `g10.auction-auto-bidding.US3-TC9` by `grade10-site-auction-auto-bidding-SC-33` and `grade10-site-auction-auto-bidding-SC-07`; `g10.auction-auto-bidding.US4-TC2` by `grade10-site-auction-auto-bidding-SC-45`; `g10.auction-auto-bidding.US4-TC3` by `grade10-site-auction-auto-bidding-SC-08` and `grade10-admin-auction-internal-bid-SC-32`
+- **Added by QA2** - `g10.auction-auto-bidding.US3-TC10`: a collector bid just after the house's time meets the house first, for `grade10-site-auction-auto-bidding-SC-37`, which no blind case reached
+- **Corrected to the decisions** - `g10.auction-auto-bidding.US4-TC3` expected no time on a House row; Q26 shows a house bid's own Accepted At, so it now expects it and refuses only when a maximum was accepted
+- **Covered at domain** - `grade10-site-auction-auto-bidding-SC-33` is also walked by `g10.auction-dmn.US13-TC1`
+- **Out of suite** - `grade10-site-auction-auto-bidding-SC-36` by `grade10-admin-auction-internal-bid-US1-TC4-1`; `grade10-site-auction-auto-bidding-SC-38` by `grade10-admin-auction-internal-bid-US5-TC1-1`; `grade10-site-auction-auto-bidding-SC-39` by `g10.auction-auction.US1-TC4`; `grade10-site-auction-auto-bidding-SC-40` by `g10.auction-auction.US12-TC3`; `grade10-site-auction-auto-bidding-SC-41` by `grade10-admin-auction-internal-bid-US3-TC2-1` and `g10.auction-auction.US12-TC3`; `grade10-site-auction-auto-bidding-SC-42` and `grade10-site-auction-auto-bidding-SC-44` by `grade10-admin-auction-internal-bid-US4-TC4-1`; `grade10-site-auction-auto-bidding-SC-43` by `grade10-admin-auction-internal-bid-US4-TC2-2`; `grade10-site-auction-auto-bidding-SC-46` by `grade10-admin-auction-internal-bid-US5-TC7-1`; `grade10-site-auction-auto-bidding-SC-35` by the backend tests of tasks 3.1 and 3.2, since a person sees only that the house bids; `grade10-site-auction-auto-bidding-SC-01` to `grade10-site-auction-auto-bidding-SC-08`, `grade10-site-auction-auto-bidding-SC-22` to `grade10-site-auction-auto-bidding-SC-24` and `grade10-site-auction-auto-bidding-SC-25a` restate collector behaviour this change does not move, and stay with the durable suite's cases
+- **Anchors** - `grade10-site-auction-auto-bidding-SC-35`, `grade10-site-auction-auto-bidding-SC-38` and `grade10-site-auction-auto-bidding-SC-46` serve the Feature set group `House maximum`, rules with no actor; `grade10-site-auction-auto-bidding-SC-42`, `grade10-site-auction-auto-bidding-SC-43` and `grade10-site-auction-auto-bidding-SC-44` now serve `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-04`, the journey their covering cases trace; `grade10-site-auction-auto-bidding-SC-39` and `grade10-site-auction-auto-bidding-SC-40` serve the durable journey `grade10-site-auction-auto-bidding-US-05`, carried under Context user journeys. `grade10-site-auction-auto-bidding-US-04` reads for an operator holding `auction:reserve`; what an operator without it reads of the house maximum is `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-07`, served there by `grade10-admin-auction-internal-bid-SC-32` and `grade10-admin-auction-internal-bid-SC-40`. No scenario here serves that exception, so none is re-anchored; `g10.auction-auto-bidding.US4-TC3` keeps its trace to `grade10-site-auction-auto-bidding-US-04` for `grade10-site-auction-auto-bidding-SC-08` and joins `grade10-admin-auction-internal-bid-SC-32` on the behaviour
 - **Round 5, out of suite** - `grade10-site-auction-auto-bidding-SC-47` by `grade10-admin-auction-internal-bid-US1-TC12-1`, which reads one internal bidder under each lot's own pseudonym; it serves the Feature set group `House maximum`, a rule with no actor
 - **Round 5, anchors** - `grade10-admin-auction-internal-bid-SC-67` serves `grade10-site-auction-auto-bidding-US-04` beside its own journey, for the internal bidder the reserve holder's trace names (Q39); `grade10-admin-auction-internal-bid-US7-TC10-1` covers it, joined on the behaviour, and no case here is revised
 - **Rejected** - none

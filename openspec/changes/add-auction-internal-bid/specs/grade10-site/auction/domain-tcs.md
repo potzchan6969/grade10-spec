@@ -3,14 +3,14 @@
 **Status:** pending-review · 0/2
 **Drafts styled:** 2026-10-07, tcs-rules r4
 
-## grade10-site-auction-e2e-US13: Collectors bid against a house maximum through the close
+## g10.auction-dmn.US13: Collectors bid against a house maximum through the close
 
 **As a** collector,
 **I want** to compete for a lot to its close, with each bid, extension, result and letter decided by the auction rules,
 **so that** what I read, and what I am told, is what the auction decided.
 
 <!-- trace:case id=g10.auction-domain.TC-88l rev=1 covers=g10.auction-auto-bidding.SC-99a,g10.auction-notifications.SC-kl5,g10.auction-auction.SC-a4f,g10.auction-notifications.SC-xy1,g10.auction-notifications.SC-14x -->
-### grade10-site-auction-e2e-US13-TC01-1: The house outbids a collector and the lot closes sold under its pseudonym
+### g10.auction-dmn.US13-TC1: The house outbids a collector and the lot closes sold under its pseudonym
 
 **Classification:**
 
@@ -64,7 +64,7 @@
 * Step 7: customer A gets one You did not win letter with Winning bid <final price>; customer D gets one Lot watched, sold letter with Sold for <final price>.
 
 <!-- trace:case id=g10.auction-domain.TC-su0 rev=1 covers=g10.auction-auction.SC-fec -->
-### grade10-site-auction-e2e-US13-TC02-1: A collector beats the house in extended bidding and wins
+### g10.auction-dmn.US13-TC2: A collector beats the house in extended bidding and wins
 
 **Classification:**
 
@@ -117,9 +117,9 @@
 
 **Run:** QA2, 2026-10-08. QA1's levels pass composed these paths from every `user-journeys.md` in the domain and the domain's PRD pages, before the feature readings and without any `## Requirements` section, `tech-design.md` or the archive. QA2 joined each composed case to the scenarios its journeys accept, after Q26 to Q29 landed. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-e2e-US13-TC01-1` walks the house's commit, the outbid letter, extended bidding and the close, asserting `grade10-site-auction-auto-bidding-SC-33`, `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-auction-SC-109`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51`; `grade10-site-auction-e2e-US13-TC02-1` walks a collector beating the house in extended bidding, asserting `grade10-site-auction-auction-SC-02` and the durable extended-bidding rule
+- **Folded in** - `g10.auction-dmn.US13-TC1` walks the house's commit, the outbid letter, extended bidding and the close, asserting `grade10-site-auction-auto-bidding-SC-33`, `grade10-site-auction-notifications-SC-49`, `grade10-site-auction-auction-SC-109`, `grade10-site-auction-notifications-SC-50` and `grade10-site-auction-notifications-SC-51`; `g10.auction-dmn.US13-TC2` walks a collector beating the house in extended bidding, asserting `grade10-site-auction-auction-SC-02` and the durable extended-bidding rule
 - **Anchors** - QA2 round 4: `grade10-site-auction-auction-SC-02` and `grade10-site-auction-auction-SC-109` now serve `grade10-site-auction-auction-US-01`, so both traces gain that journey; the paths and assertions are unchanged
-- **Round 6** - QA2, 2026-10-12: Dev's round-6 reading opens the internal bidder's order at a house win and sends it no letter. `grade10-site-auction-e2e-US13-TC01-1` and `grade10-site-auction-e2e-US13-TC02-1` assert only collector reads and letters, which that leaves unchanged, so both keep their version; the internal order is walked by `grade10-admin-auction-e2e-US4-TC2-1`
+- **Round 6** - QA2, 2026-10-12: Dev's round-6 reading opens the internal bidder's order at a house win and sends it no letter. `g10.auction-dmn.US13-TC1` and `g10.auction-dmn.US13-TC2` assert only collector reads and letters, which that leaves unchanged, so both keep their version; the internal order is walked by `grade10-admin-auction-e2e-US4-TC2-1`
 - **Rejected** - none
 - **Raised** - none
 - **Uncovered anchors** - none

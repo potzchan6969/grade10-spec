@@ -3,14 +3,14 @@
 **Status:** pending-review · 0/4
 **Drafts styled:** 2026-10-08, tcs-rules r4
 
-## grade10-site-auction-auction-US1: Collector browses Auction listings
+## g10.auction-auction.US1: Collector browses Auction listings
 
 **As a** collector,
 **I want** the catalogue to show Auction listings with money in minor units,
 **so that** I am not offered Buy Now and a close with bids is absolute.
 
 <!-- trace:case id=g10.auction-auction.TC-m16 rev=1 covers=g10.auction-auction.SC-fec,g10.auction-auction.SC-a4f -->
-### grade10-site-auction-auction-US1-TC3-1: A lot the house leads at the close reads sold like any other
+### g10.auction-auction.US1-TC3: A lot the house leads at the close reads sold like any other
 
 Runs once per row of **Test data**.
 
@@ -60,7 +60,7 @@ Runs once per row of **Test data**.
 * The House row and the Collector row read alike in every step, save the pseudonym.
 
 <!-- trace:case id=g10.auction-auction.TC-fkn rev=1 covers=g10.auction-auction.SC-cqt,g10.auction-auto-bidding.SC-szf -->
-### grade10-site-auction-auction-US1-TC4-1: A lot whose only bid is the house's extends and closes sold at the starting price
+### g10.auction-auction.US1-TC4: A lot whose only bid is the house's extends and closes sold at the starting price
 
 Runs once per row of **Test data**.
 
@@ -109,7 +109,7 @@ Runs once per row of **Test data**.
 * Step 3 reads sold at `<starting price>`, one bid, under the house's listing pseudonym.
 
 <!-- trace:case id=g10.auction-auction.TC-dij rev=1 covers=g10.auction-auction.SC-14a,g10.auction-auction.SC-cqt -->
-### grade10-site-auction-auction-US1-TC5-1: A close the house leads opens the internal bidder's order and charges nobody
+### g10.auction-auction.US1-TC5: A close the house leads opens the internal bidder's order and charges nobody
 
 Runs once per row of **Test data**.
 
@@ -162,14 +162,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-auction-US11: Bidder is held to the close with everyone else
+## g10.auction-auction.US11: Bidder is held to the close with everyone else
 
 **As a** bidder,
 **I want** a lot to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
 **so that** nobody wins with a bid that arrived after the close.
 
 <!-- trace:case id=g10.auction-auction.TC-itn rev=1 covers=none -->
-### grade10-site-auction-auction-US11-TC12-1: A lot the house leads at the close reads sold like any other
+### g10.auction-auction.US11-TC12: A lot the house leads at the close reads sold like any other
 
 Runs once per row of **Test data**.
 
@@ -219,7 +219,7 @@ Runs once per row of **Test data**.
 * The House row and the Collector row read alike in every step, save the pseudonym.
 
 <!-- trace:case id=g10.auction-auction.TC-xcm rev=1 covers=none -->
-### grade10-site-auction-auction-US11-TC13-1: A lot whose only bid is the house's extends and closes sold at the starting price
+### g10.auction-auction.US11-TC13: A lot whose only bid is the house's extends and closes sold at the starting price
 
 Runs once per row of **Test data**.
 
@@ -269,14 +269,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-auction-US12: Bidder keeps a lot open only by moving its price
+## g10.auction-auction.US12: Bidder keeps a lot open only by moving its price
 
 **As a** bidder,
 **I want** extended bidding to restart only when a bid moves the lot's price,
 **so that** a leader cannot keep a lot open by raising their own maximum.
 
 <!-- trace:case id=g10.auction-auction.TC-2g4 rev=1 covers=g10.auction-auto-bidding.SC-pfm,g10.auction-auto-bidding.SC-ax3 -->
-### grade10-site-auction-auction-US12-TC3-1: A house change restarts the timer only when it moves the price
+### g10.auction-auction.US12-TC3: A house change restarts the timer only when it moves the price
 
 Runs once per row of **Test data**.
 
@@ -334,7 +334,7 @@ Runs once per row of **Test data**.
 
 **Run:** QA2 round 6, 2026-10-12, over the round-4 run below. Dev's round-6 reading raised `grade10-site-auction-auction-SC-106` to revision 2, added `grade10-site-auction-auction-SC-107` and `grade10-site-auction-auction-SC-108` under the Feature set group `Closing a lot the house leads`, and retired the two Bought in scenarios they replace. QA1's round-6 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, added one case here. QA2 read both, the delta specs, `decisions.md` through Q58, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
 
-- **Round 6, folded in** - `grade10-site-auction-auction-US1-TC5-1` (new) by `grade10-site-auction-auction-SC-107` and the order half of `grade10-site-auction-auction-SC-106`: its House alone row opens the internal bidder's order at the starting price. `grade10-site-auction-auction-US1-TC4-1` keeps `grade10-site-auction-auction-SC-106`'s collector read and its version
+- **Round 6, folded in** - `g10.auction-auction.US1-TC5` (new) by `grade10-site-auction-auction-SC-107` and the order half of `grade10-site-auction-auction-SC-106`: its House alone row opens the internal bidder's order at the starting price. `g10.auction-auction.US1-TC4` keeps `grade10-site-auction-auction-SC-106`'s collector read and its version
 - **Round 6, anchors** - `grade10-site-auction-auction-SC-107` serves the Feature set group `Closing a lot the house leads`; its case traces `grade10-site-auction-auction-US-01`, the journey whose close it reads. Joined on the behaviour
 - **Round 6, out of suite** - `grade10-site-auction-auction-SC-108` by the backend tests of task 4.1, a double settle opening one order, since a person cannot make the timer and a read settle at one moment; the admin reads of the internal order are `grade10-admin-auction-internal-bid-US6-TC1-2`'s and `grade10-admin-auction-internal-bid-US6-TC3-2`'s
 - **Round 6, settled** - the stale line that the house is never a lot's winner is rewritten under Q5, Q33 and Q51
@@ -344,10 +344,10 @@ Runs once per row of **Test data**.
 
 **Run, round 4:** QA2 round 4, 2026-10-08. Dev's round-4 reading moved scenario anchors onto journeys after the accept review; QA1's round-4 blind pass, denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`, revised the internal-bid suite and drafted the winner-order case. QA2 read both, the delta specs, `decisions.md` through Q35, `tech-design.md`, `tasks.md`, the durable specs and suites, and the PRD pages; not the archive. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-auction-US1-TC3-1` by `grade10-site-auction-auction-SC-02` and `grade10-site-auction-auction-SC-109`; `grade10-site-auction-auction-US1-TC4-1` by `grade10-site-auction-auction-SC-106` and `grade10-site-auction-auto-bidding-SC-39`, its At the scheduled close row by Q21; `grade10-site-auction-auction-US12-TC3-1` by `grade10-site-auction-auto-bidding-SC-40` and `grade10-site-auction-auto-bidding-SC-41`, its Lower while leading row by the auto-bidding rule that an accepted lower does not move the close
-- **Re-homed** - `grade10-site-auction-auction-SC-109` and `grade10-site-auction-auction-SC-106` now serve `grade10-site-auction-auction-US-01`, beside `grade10-site-auction-auction-SC-02`, so `grade10-site-auction-auction-US11-TC12-1` and `grade10-site-auction-auction-US11-TC13-1` traced a journey none of their scenarios serves. Their runs are unchanged as `grade10-site-auction-auction-US1-TC3-1` and `grade10-site-auction-auction-US1-TC4-1`, the next unused numbers under US1 (an archived change issued `TC1-2`); the US11 ids, issued in this change and never accepted, are kept `deprecated` with `covers=none`
-- **Anchors** - `grade10-site-auction-auction-US1-TC4-1` also covers `grade10-site-auction-auto-bidding-SC-39`, which serves `grade10-site-auction-auto-bidding-US-05`, and `grade10-site-auction-auction-US12-TC3-1` covers auto-bidding scenarios serving that capability's journeys; joined on the behaviour
-- **Covered at domain** - `grade10-site-auction-auction-SC-109` is also walked by `grade10-site-auction-e2e-US13-TC01-1`; `grade10-site-auction-auction-SC-02` by `grade10-site-auction-e2e-US13-TC02-1`
+- **Folded in** - `g10.auction-auction.US1-TC3` by `grade10-site-auction-auction-SC-02` and `grade10-site-auction-auction-SC-109`; `g10.auction-auction.US1-TC4` by `grade10-site-auction-auction-SC-106` and `grade10-site-auction-auto-bidding-SC-39`, its At the scheduled close row by Q21; `g10.auction-auction.US12-TC3` by `grade10-site-auction-auto-bidding-SC-40` and `grade10-site-auction-auto-bidding-SC-41`, its Lower while leading row by the auto-bidding rule that an accepted lower does not move the close
+- **Re-homed** - `grade10-site-auction-auction-SC-109` and `grade10-site-auction-auction-SC-106` now serve `grade10-site-auction-auction-US-01`, beside `grade10-site-auction-auction-SC-02`, so `g10.auction-auction.US11-TC12` and `g10.auction-auction.US11-TC13` traced a journey none of their scenarios serves. Their runs are unchanged as `g10.auction-auction.US1-TC3` and `g10.auction-auction.US1-TC4`, the next unused numbers under US1 (an archived change issued `TC1-2`); the US11 ids, issued in this change and never accepted, are kept `deprecated` with `covers=none`
+- **Anchors** - `g10.auction-auction.US1-TC4` also covers `grade10-site-auction-auto-bidding-SC-39`, which serves `grade10-site-auction-auto-bidding-US-05`, and `g10.auction-auction.US12-TC3` covers auto-bidding scenarios serving that capability's journeys; joined on the behaviour
+- **Covered at domain** - `grade10-site-auction-auction-SC-109` is also walked by `g10.auction-dmn.US13-TC1`; `grade10-site-auction-auction-SC-02` by `g10.auction-dmn.US13-TC2`
 - **Out of suite** - the round-4 Bought in scenarios were retired in round 6; `grade10-site-auction-auction-SC-01` and `grade10-site-auction-auction-SC-03` are unchanged and stay with the durable suite
 - **Rejected** - none
 - **Raised** - none
