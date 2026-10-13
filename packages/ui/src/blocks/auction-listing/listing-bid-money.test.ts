@@ -28,9 +28,7 @@ describe("sanitizeMoneyDraft", () => {
 });
 
 describe("sanitizeCustomMaximumDraft", () => {
-  it.each([
-    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
-  ] as const)(
+  it.each([["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR]] as const)(
     "accepts the supplied %s ceiling after whole-major conversion (shared-ui-auction-listing-SC-38, shared-ui-auction-listing-SC-58)",
     (currency, ceilingMinor, ceilingMajor) => {
       expect(
@@ -57,9 +55,7 @@ describe("sanitizeCustomMaximumDraft", () => {
     ).toBe("500");
   });
 
-  it.each([
-    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR, "9000000"],
-  ] as const)(
+  it.each([["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR, "9000000"]] as const)(
     "restores a previous valid draft for a genuine typed append above the supplied ceiling (shared-ui-auction-listing-SC-39, shared-ui-auction-listing-SC-43)",
     (currency, ceilingMinor, ceilingMajor, previousDraft) => {
       expect(
@@ -83,9 +79,7 @@ describe("sanitizeCustomMaximumDraft", () => {
     },
   );
 
-  it.each([
-    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
-  ] as const)(
+  it.each([["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR]] as const)(
     "clamps an oversized paste or replacement to the supplied ceiling, including an empty previous draft (shared-ui-auction-listing-SC-40, shared-ui-auction-listing-SC-41, shared-ui-auction-listing-SC-59)",
     (currency, ceilingMinor, ceilingMajor) => {
       for (const editOrigin of ["paste", "replacement"] as const) {
@@ -111,9 +105,7 @@ describe("sanitizeCustomMaximumDraft", () => {
     },
   );
 
-  it.each([
-    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
-  ] as const)(
+  it.each([["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR]] as const)(
     "clamps an appended paste and a cleaned fractional overshoot (shared-ui-auction-listing-SC-42, shared-ui-auction-listing-SC-60)",
     (currency, ceilingMinor, ceilingMajor) => {
       expect(
@@ -137,9 +129,7 @@ describe("sanitizeCustomMaximumDraft", () => {
     },
   );
 
-  it.each([
-    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
-  ] as const)(
+  it.each([["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR]] as const)(
     "uses exact string comparison for very large cleaned digits (shared-ui-auction-listing-SC-42)",
     (currency, ceilingMinor, ceilingMajor) => {
       expect(
@@ -168,13 +158,7 @@ describe("sanitizeCustomMaximumDraft", () => {
 
   it("still accepts clearing to empty", () => {
     expect(
-      sanitizeCustomMaximumDraft(
-        "",
-        "USD",
-        "500",
-        USD_CEILING_MINOR,
-        "paste",
-      ),
+      sanitizeCustomMaximumDraft("", "USD", "500", USD_CEILING_MINOR, "paste"),
     ).toBe("");
   });
 });

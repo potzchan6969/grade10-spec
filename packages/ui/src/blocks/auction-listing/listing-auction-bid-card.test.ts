@@ -362,7 +362,7 @@ describe("ListingAuctionBidCard USD ceiling through its public render seam", () 
         input(custom, "10000001", "insertText", "10000001");
       }
 
-    expect(custom.value).toBe(USD_CEILING_MAJOR);
+      expect(custom.value).toBe(USD_CEILING_MAJOR);
       expectNoCeilingMessage(container, custom);
     },
   );
@@ -409,9 +409,9 @@ describe("ListingAuctionBidCard USD chip bounds and collapse", () => {
       "Bid up to US$9,999,900",
       "Bid up to US$10,000,000",
     ]);
-    expect(chips.every((chip) => chip.textContent?.includes("HK$") === false)).toBe(
-      true,
-    );
+    expect(
+      chips.every((chip) => chip.textContent?.includes("HK$") === false),
+    ).toBe(true);
     expect(chips.at(-1)?.textContent).toContain("Limit");
 
     act(() => chips.at(-1)?.click());
@@ -432,9 +432,7 @@ describe("ListingAuctionBidCard USD chip bounds and collapse", () => {
     );
 
     expect(chips).toHaveLength(1);
-    expect(chips[0].getAttribute("aria-label")).toBe(
-      "Bid up to US$10,000,000",
-    );
+    expect(chips[0].getAttribute("aria-label")).toBe("Bid up to US$10,000,000");
     expect(chips[0].textContent).toContain("Limit");
 
     act(() => chips[0]?.click());
@@ -455,9 +453,7 @@ describe("ListingAuctionBidCard USD chip bounds and collapse", () => {
 
     expectNoEntry(container);
     expect(within(container).getByText("Max: US$9,999,950")).not.toBeNull();
-    expect(
-      within(container).getByText(COPY.maximumAtCeiling),
-    ).not.toBeNull();
+    expect(within(container).getByText(COPY.maximumAtCeiling)).not.toBeNull();
   });
 
   it("collapses the entry group when the viewer maximum is the USD ceiling (shared-ui-auction-listing-SC-64)", () => {
@@ -468,9 +464,7 @@ describe("ListingAuctionBidCard USD chip bounds and collapse", () => {
 
     expectNoEntry(container);
     expect(within(container).getByText("Max: US$10,000,000")).not.toBeNull();
-    expect(
-      within(container).getByText(COPY.maximumAtCeiling),
-    ).not.toBeNull();
+    expect(within(container).getByText(COPY.maximumAtCeiling)).not.toBeNull();
     expect(within(container).getByText(COPY.buyerFeeHint)).not.toBeNull();
     expect(
       within(container).queryByText(COPY.maximumMechanismSubtext),
