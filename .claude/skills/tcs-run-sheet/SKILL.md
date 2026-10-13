@@ -48,6 +48,10 @@ Execution results stay in Sheets. A manifest records coverage and provenance.
    arguments. Pass `exclusions` as JSON where needed. Add `sandbox=true` only
    for an explicitly requested sandbox sheet, not merely a feature test run.
    Sandbox uses `TCS_SHEET_SANDBOX_ID`; never hardcode that id.
+   To test unmerged suite changes, use `--sandbox --source-ref <commit>` in
+   the preview and pass that same commit as workflow input `source_ref`.
+   Production refuses this option. Sandbox source overrides must target the
+   configured sandbox sheet and cannot target the production sheet.
 
 5. **Report the run** — give run id, tab name, URL, fingerprint and workflow run id. A production write uploads `run-record`; trial receipts are not committed
 
