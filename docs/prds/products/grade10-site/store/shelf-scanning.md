@@ -13,8 +13,8 @@ site's `/scan`; the store keeps what it knows in step with the catalogue.
 | Rule | Value |
 | --- | --- |
 | What the scanner holds | every product the store publishes, sold out included, gift cards excepted |
-| A change the shop reports | on the scanner within 5 minutes of the shop's save |
-| A change only the store's re-read finds | on the scanner within 10 minutes of the shop's save |
+| A change the shop reports | on the scanner within 6 minutes of the shop's save; on an open scanner within 8 |
+| A change only the store's re-read finds | on the scanner within 11 minutes of the shop's save; on an open scanner within 13 |
 | A new photo recognisable | within the hour, on staging and production |
 | An open scanner's catalogue | read again every 2 minutes while in view, and when the shopkeeper returns to it |
 | Photos learned per product | the first 8, in the shop's order |

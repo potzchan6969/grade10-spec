@@ -15,7 +15,7 @@ carry the store page is `grade10-site/site/carried-surfaces`'s.
   - Every published product: each product the store publishes but gift cards
     is one item on the scanner, card, slab, sealed box, comic and merch alike
   - Following the store's mirror: a change the shop reports reaches the
-    scanner within 5 minutes, and one only the store's re-read finds within 10
+    scanner within 6 minutes, and one only the store's re-read finds within 11
   - Sold out stays: a sold-out product stays on the scanner and reads Sold out
   - Dropped products leave: a product the store unpublishes or deletes leaves
     with the next copy
@@ -77,9 +77,9 @@ The scanner SHALL hold one item for each product in the store's copy of the
 shop's catalogue, card, slab, sealed box, comic and merch alike, except a gift
 card, and SHALL hold no other item for the store. A product missing from the
 copy SHALL leave the scanner with the next copy that reaches it. A change the
-shop reports SHALL reach the scanner within 5 minutes of the shop's save; a
+shop reports SHALL reach the scanner within 6 minutes of the shop's save; a
 change only the store's re-read of the whole catalogue finds SHALL reach it
-within 10 minutes of the save. The store's copy SHALL
+within 11 minutes of the save. The store's copy SHALL
 decide every field: an item changed on the scanner SHALL be put back with the
 next copy, and an item whose fields and photos match the copy SHALL NOT be
 written again.
@@ -151,22 +151,26 @@ written again.
 - **THEN** the scanner records no change to the item, queues no photo for it
   and publishes no new version of the store's items
 
-#### Scenario: g10.store-shelf-scanning.SC8 - A reported change reaches the scanner within 5 minutes
+#### Scenario: g10.store-shelf-scanning.SC8 - A reported change reaches the scanner within 6 minutes
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper never quotes a price the store has since changed
 
 - **GIVEN** the scanner holds a product priced 120000 HKD minor units
 - **WHEN** a stock keeper saves a price of 110000 HKD minor units in the
   shop, and the shop reports the change
-- **THEN** within 5 minutes of the save, the scanner's item is priced 110000
+- **THEN** within 6 minutes of the save, the scanner's item is priced 110000
   HKD minor units
+- **AND** within 8 minutes of the save, a scanner left open and in view shows
+  110000 HKD minor units
 
-#### Scenario: g10.store-shelf-scanning.SC9 - A change only the re-read finds reaches the scanner within 10 minutes
+#### Scenario: g10.store-shelf-scanning.SC9 - A change only the re-read finds reaches the scanner within 11 minutes
 **Serves:** g10.store-shelf-scanning.US1 - a change the shop never reported still reaches the shelf
 
 - **GIVEN** the shop changes a product's price without reporting it
 - **WHEN** the store's next re-read of the whole catalogue finds the change
-- **THEN** within 10 minutes of the shop's save, the scanner's item carries
+- **THEN** within 11 minutes of the shop's save, the scanner's item carries
   the new price
+- **AND** within 13 minutes of the save, a scanner left open and in view shows
+  it
 
 #### Scenario: g10.store-shelf-scanning.SC10 - Production holds the store's products before the store opens there
 **Serves:** g10.store-shelf-scanning.US1 - the shop floor scans on production while production carries no store
@@ -441,9 +445,11 @@ price, `Available` or `Sold out`, and, in a build that carries the store, a
 link that opens the product's store page; for a slab whose unit is known,
 read from its label, it SHALL also show the grade and cert. It SHALL show a
 `Sale` badge while an automatic discount lowers the price, and the price and
-badge SHALL follow a discount that starts or ends within 5 minutes. An open
+badge SHALL follow a discount that starts or ends within 6 minutes. An open
 scanner SHALL read its catalogue again every 2 minutes while it is in view,
-and at once when the shopkeeper returns to it.
+and at once when the shopkeeper returns to it, so it shows a change the shop
+reports within 8 minutes of the save, and one only the re-read finds within
+13.
 
 #### Scenario: g10.store-shelf-scanning.SC25 - The price is the product page's
 **Serves:** g10.store-shelf-scanning.US1 - the shopkeeper quotes what a customer pays online
@@ -494,9 +500,9 @@ and at once when the shopkeeper returns to it.
   discount running
 - **WHEN** the shop starts an automatic discount of 10% off every item with
   no minimum
-- **THEN** within 5 minutes the scan shows 108000 HKD minor units with a
+- **THEN** within 6 minutes the scan shows 108000 HKD minor units with a
   `Sale` badge
-- **AND** once the discount ends, within 5 minutes it shows 120000 HKD minor
+- **AND** once the discount ends, within 6 minutes it shows 120000 HKD minor
   units and no badge
 
 ### Requirement: Shopkeepers open the scanner from one fixed link

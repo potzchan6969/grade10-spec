@@ -10,7 +10,7 @@ copy the store lists.
 
 **Metric:** share of published store products the scanner holds with the
 store's current title, price and availability. Unmeasured; the first delivery
-sets the baseline, and it should sit at 100% within 10 minutes of any catalogue
+sets the baseline, and it should sit at 100% within 11 minutes of any catalogue
 change.
 
 ## What Changes
@@ -18,8 +18,8 @@ change.
 - **A shopkeeper scans any shelf product and sees the store's answer** —
   title, price with automatic discounts, Available or Sold out, and a link to
   its store page, for every product the store publishes but gift cards
-- **The scanner follows the store's catalogue** — within 5 minutes of a change
-  the shop reports, within 10 of one only the store's re-read finds; a product
+- **The scanner follows the store's catalogue** — within 6 minutes of a change
+  the shop reports, within 11 of one only the store's re-read finds; a product
   the store drops, and a sold consigned slab, leave it
 - **An open scanner stays current** — it refreshes its catalogue every few
   minutes and when the shopkeeper returns to it

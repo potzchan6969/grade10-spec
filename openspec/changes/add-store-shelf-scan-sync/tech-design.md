@@ -92,10 +92,13 @@ what the scanner holds and shows. This section records where each part lands.
   Rejected: running inside the catalogue walk, which ties a scanner fault to
   the listing's net
 - **Follows the copy, not the walk** - reads `storeKeeper(env).sync(null)`.
-  Both bounds run from the shop's save (Q35). A reported change is in the
-  copy within seconds and on the scanner at the next tick (≤ 5 minutes). A
-  change only the walk finds lands in the copy during the next tick and on
-  the scanner at the one after (≤ 10 minutes)
+  Both bounds run from the shop's save (Q35): a tick every 5 minutes, the
+  report's seconds into the copy, and a pass held to its 60-second budget.
+  A reported change waits at most one tick and one pass (≤ 6 minutes); a
+  change only the walk finds waits for the walk's tick, then the next tick
+  and pass (≤ 11 minutes). An open scanner's 2-minute refresh adds 2 (≤ 8
+  and ≤ 13, Q26); a discount that starts or ends waits one tick and pass
+  (≤ 6)
 - **Version 0 writes nothing** - a keeper that has never walked answers an
   empty copy; the pass returns `{ skipped: "unwalked" }` rather than delete
   every item
@@ -361,12 +364,6 @@ No column changes: `item_images` keeps its columns, and a retry reads
   the scanner keeps its last state
 - [Two store deploys bind one scanner project] → only staging and production
   bind, one store each
-- [The 5 minutes run from the shop's save] → a report that lands just after
-  a tick waits the whole 5 minutes, plus the report's seconds and the pass's
-  own run, so the worst case overshoots by up to a minute. The pass sends
-  upserts first and finishes well inside the budget at today's size; a
-  trigger from the keeper on a reported change is the fix if the monitor's
-  timings show the bound missed
 - [A shared catalogue card scores above a store photo] → the store product
   wins only when its own hit clears the accept threshold, so a weak store
   photo never takes a name from the catalogue
