@@ -8220,20 +8220,6 @@ Runs once per row of **Test data**.
 
 **As a** winner who missed the 48-hour address deadline,
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
-**so that** I can still settle the lot I won once I have told Grade10 where to ship it. ## Retired - `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.
-
-## Retired
-- `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.
-
-## Retired
-
-- `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.
-
-## Retired
-
-- `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.
-
-**I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
 **so that** I can still settle the lot I won once I have told Grade10 where to ship it.
 
 `<!-- trace:case id=g10.auction-winner-order.TC-9uu rev=1 covers=g10.auction-winner-order.SC-r6m -->`
