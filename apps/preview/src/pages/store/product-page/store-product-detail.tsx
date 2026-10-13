@@ -12,6 +12,7 @@ import {
 } from "@grade10/ui";
 import { useMemo, useState } from "react";
 import { STORE_CART_COPY } from "../../store-content";
+import { STORE_LOCATOR_HREF } from "../../workbench-story-nav";
 import type { ProductDetailProduct } from "./product-detail-content";
 
 const ADD_TO_CART_MS = 400;
@@ -161,6 +162,7 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
                   <StoreProductMetadata
                     badges={product.badges}
                     copy={COPY.metadata}
+                    pickupHref={STORE_LOCATOR_HREF}
                     sku={saleItem?.sku}
                   />
                 </VStack>
@@ -223,4 +225,4 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
 }
 
 export type { StoreProductDetailProps };
-export { StoreProductDetail };
+export { COPY as STORE_PRODUCT_DETAIL_COPY, StoreProductDetail };
