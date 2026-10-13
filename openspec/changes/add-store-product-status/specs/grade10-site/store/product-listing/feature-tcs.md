@@ -168,14 +168,14 @@ finding out at the order.
 * `<card_2>` says `<full count>` are left.
 * The quantity does not rise past `<full count>`.
 
-## grade10-site-store-product-listing-US12: Collector signs in to add from the listing
+## grade10-site-store-product-listing-US12: Collector adds from the listing without signing in
 
 **As a** signed-out collector on the browse listing,
-**I want** Add to cart to open sign-in instead of building a guest cart,
-**so that** I only hold lines I can take to members-only checkout.
+**I want** Add to cart to put the line in a cart this browser keeps,
+**so that** I can buy without an account, and keep the line if I sign in.
 
-<!-- trace:case id=g10.store-product-listing.TC-ia6 rev=2 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
-### grade10-site-store-product-listing-US12-TC4-2: Sign-in completes a tile add the shop still sells at a count of 0
+<!-- trace:case id=g10.store-product-listing.TC-ia6 rev=3 covers=g10.store-product-listing.SC-dhn -->
+### grade10-site-store-product-listing-US12-TC4-3: A signed-out tile add the shop still sells at a count of 0 lands in the cart
 
 **Classification:**
 
@@ -192,10 +192,10 @@ finding out at the order.
 
 **Pre-conditions:**
 
-* customer is signed out, holds a member account, and is on <grade10 browse listing url>.
+* customer is signed out and is on <grade10 browse listing url>.
 * <product_1> has one variant, inventory tracked at 0, Continue selling when out of stock on, set up in the staging shop's admin.
 * 60 seconds have passed since the setup was saved.
-* The member cart is empty.
+* This browser's cart is empty.
 
 **Test data:**
 
@@ -207,16 +207,14 @@ finding out at the order.
 
 1. Type <product_1>'s name in the listing search and press Enter.
 2. Click the add control on <product_1>'s tile.
-3. Complete sign-in in the dialog with the member account.
-4. Open the cart drawer.
-5. Read <product_1>'s line.
+3. Open the cart drawer.
+4. Read <product_1>'s line.
 
 **Expected Results:**
 
 * Step 1: <product_1>'s tile reads available, with no remaining count shown.
-* Step 2 opens the sign-in dialog and adds nothing yet.
-* Step 3 closes the dialog and leaves the collector on the listing.
-* Step 5: the line reads 1, with no adjusted or sold-out marking.
+* Step 2 opens no sign-in dialog.
+* Step 4: the line reads 1, with no adjusted or sold-out marking.
 
 ## Reconciliation
 

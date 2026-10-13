@@ -22,12 +22,12 @@ count equal to the drawer title badge; with none, the badge is absent.
 - **Cart slot** — design-system `Nav` stays count-agnostic and takes an
   optional `cartSlot` that replaces the built-in cart control, as
   `accountSlot` does for account
-- **Member count** — grade10-site supplies the signed-in member's active-line
-  count from the same reviewed basket as the drawer, on every surface that
+- **Current cart's count** — grade10-site supplies the active-line count of
+  the member's cart, or of the cart this browser holds for a guest, from the
+  same reviewed basket as the drawer, on every surface that
   offers Cart, including while the drawer is closed
-- **Hidden count** — an unknown count, an empty cart and a signed-out session
-  show no badge and keep the Cart control; a member change clears the count at
-  once
+- **Hidden count** — an unknown count and an empty cart show no badge and keep
+  the Cart control; a change of session clears the count at once
 
 ## Non-Goals
 

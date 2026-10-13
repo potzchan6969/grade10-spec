@@ -1,6 +1,6 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review · 0/44
+**Status:** pending-review · 0/42
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
@@ -152,8 +152,8 @@ shifting under me.
 * The header and footer are rendered.
 * The surface remains in the content region while it loads.
 
-<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=2 covers=g10.site-page-shell.SC-9ud,g10.site-page-shell.SC-yxt -->
-### grade10-site-site-page-shell-US2-TC2-2: The session changes only the account entry and cart count
+<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=3 covers=g10.site-page-shell.SC-9ud,g10.site-page-shell.SC-yxt -->
+### grade10-site-site-page-shell-US2-TC2-3: The session changes only the account entry and cart count
 
 Runs once per row of **Test data**.
 
@@ -179,7 +179,7 @@ Runs once per row of **Test data**.
 
 | `<session>` | `<cart count badge>` |
 | --- | --- |
-| Signed out | none |
+| Signed out, 1 active line in this browser's cart | 1, once the cart review completes |
 | Signed in, no active lines | none |
 | Signed in, 2 active lines | 2, once the cart review completes |
 
@@ -823,13 +823,13 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 ## grade10-site-site-page-shell-US06: Collector opens their cart from the header
 
 **As a** collector,
-**I want** the Cart control to take me to my own cart, signing me in first when
-I am not,
-**so that** the cart I open is the one holding what I picked, rather than an
-empty room, from any surface once Store answers the cart drawer.
+**I want** the Cart control to open the cart holding what I picked, whether or
+not I am signed in,
+**so that** I can review it from any surface once Store answers the cart
+drawer.
 
-<!-- trace:case id=g10.site-page-shell.TC-6el rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
-### grade10-site-site-page-shell-US06-TC1-1: A signed-out collector presses Cart
+<!-- trace:case id=g10.site-page-shell.TC-6el rev=2 covers=g10.site-page-shell.SC-g63 -->
+### grade10-site-site-page-shell-US06-TC1-2: A signed-out collector presses Cart
 
 **Classification:**
 
@@ -847,6 +847,13 @@ empty room, from any surface once Store answers the cart drawer.
 **Pre-conditions:**
 
 * customer is signed out and is on a supported site surface whose header offers Cart.
+* This browser's cart holds <line_1>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <line_1> | One in-stock product line |
 
 **Steps:**
 
@@ -855,17 +862,47 @@ empty room, from any surface once Store answers the cart drawer.
 
 **Expected Results:**
 
-* The sign-in dialog opens over the surface.
-* The cart drawer does not open.
+* The cart drawer opens and shows <line_1>.
+* No sign-in dialog opens.
 
-<!-- trace:case id=g10.site-page-shell.TC-kv0 rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
-### grade10-site-site-page-shell-US06-TC2-1: Sign-in opens the cart they asked for
+<!-- trace:case id=g10.site-page-shell.TC-b8i rev=1 covers=g10.site-page-shell.SC-tj7 -->
+### grade10-site-site-page-shell-US06-TC4-1: A member presses Cart
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-06
+
+**Pre-conditions:**
+
+* customer is signed in and is on a supported site surface whose header offers Cart.
+
+**Steps:**
+
+1. Activate the Cart control in the header.
+2. Check the cart drawer and the dialog.
+
+**Expected Results:**
+
+* The cart drawer opens.
+* No sign-in dialog opens.
+
+<!-- trace:case id=g10.site-page-shell.TC-kv0 rev=2 covers=none -->
+### grade10-site-site-page-shell-US06-TC2-2: Sign-in opens the cart they asked for
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
@@ -890,14 +927,14 @@ empty room, from any surface once Store answers the cart drawer.
 * The sign-in dialog is closed.
 * The cart drawer is open.
 
-<!-- trace:case id=g10.site-page-shell.TC-wbo rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
-### grade10-site-site-page-shell-US06-TC3-1: Dismissing sign-in opens nothing
+<!-- trace:case id=g10.site-page-shell.TC-wbo rev=2 covers=none -->
+### grade10-site-site-page-shell-US06-TC3-2: Dismissing sign-in opens nothing
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -927,36 +964,6 @@ empty room, from any surface once Store answers the cart drawer.
 
 * The customer remains signed out on that surface.
 * No cart drawer is open, and none opens later.
-
-<!-- trace:case id=g10.site-page-shell.TC-b8i rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
-### grade10-site-site-page-shell-US06-TC4-1: A member presses Cart
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-page-shell-US-06
-
-**Pre-conditions:**
-
-* customer is signed in and is on a supported site surface whose header offers Cart.
-
-**Steps:**
-
-1. Activate the Cart control in the header.
-2. Check the cart drawer and the dialog.
-
-**Expected Results:**
-
-* The cart drawer opens.
-* No sign-in dialog opens.
 
 ---
 
@@ -1080,7 +1087,7 @@ auction-only or full primary nav.
 
 ## grade10-site-site-page-shell-US8: Collector sees the cart count without opening the drawer
 
-**As a** signed-in collector,
+**As a** collector,
 **I want** the header to show the same active-line count as my cart drawer as my cart changes,
 **so that** I can see how many active lines I hold from any surface without opening the drawer.
 
@@ -1455,8 +1462,8 @@ Runs once per row of **Test data**.
 
 * Header shows the newly reviewed active-line count.
 
-<!-- trace:case id=g10.site-page-shell.TC-ux8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
-### grade10-site-site-page-shell-US8-TC11-1: Visitors without a member session never display a cart count
+<!-- trace:case id=g10.site-page-shell.TC-ux8 rev=2 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC11-2: A guest's count is this browser's cart, and an unresolved session shows none
 
 Runs once per row of **Test data**.
 
@@ -1476,13 +1483,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer's session is <session>.
+* This browser's cart holds 2 active lines.
 
 **Test data:**
 
-| `<session>` |
-| --- |
-| Signed out |
-| Unresolved, with the session read held |
+| `<session>` | `<cart count badge>` |
+| --- | --- |
+| Signed out | 2, once the cart review completes |
+| Unresolved, with the session read held | none |
 
 **Steps:**
 
@@ -1491,7 +1499,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Cart remains visible without a count badge.
+* Cart remains visible and shows <cart count badge>.
 
 <!-- trace:case id=g10.site-page-shell.TC-szw rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
 ### grade10-site-site-page-shell-US8-TC12-1: Signing out clears the count before another review

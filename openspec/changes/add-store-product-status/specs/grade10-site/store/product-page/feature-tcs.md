@@ -426,14 +426,14 @@ to say how many that is,
 
 ---
 
-## grade10-site-store-product-page-US11: Collector signs in to add from the product page
+## grade10-site-store-product-page-US11: Collector adds from the product page without signing in
 
 **As a** signed-out collector on a product page,
-**I want** Add to cart to open sign-in instead of building a guest cart,
-**so that** I only hold lines I can take to members-only checkout.
+**I want** Add to cart to put the line in a cart this browser keeps,
+**so that** I can buy without an account, and keep the line if I sign in.
 
-<!-- trace:case id=g10.store-product-page.TC-maa rev=2 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
-### grade10-site-store-product-page-US11-TC3-2: Sign-in on the product page completes the add
+<!-- trace:case id=g10.store-product-page.TC-maa rev=3 covers=g10.store-product-page.SC-0j7 -->
+### grade10-site-store-product-page-US11-TC3-3: Signing in keeps the product page's add
 
 Runs once per row of **Test data**.
 
@@ -467,15 +467,14 @@ Runs once per row of **Test data**.
 
 1. Set the quantity to the row's requested quantity.
 2. Click the add control.
-3. Complete sign-in in the dialog with the member account.
+3. Sign in with the member account.
 4. Open the cart drawer if the add did not open it.
 5. Read <product>'s line.
 
 **Expected Results:**
 
 * Step 1 holds the requested quantity, with no ceiling and no remaining count shown.
-* Step 2 opens the sign-in dialog and adds nothing yet.
-* Step 3 closes the dialog and leaves the collector on <product url>.
+* Step 2 opens no sign-in dialog.
 * Step 5: one line of <product>, reading as the row says.
 
 ## Settled

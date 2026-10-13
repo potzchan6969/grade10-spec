@@ -24,12 +24,11 @@
     withholds stay out
   - Account page sign-out: the account page offers Sign Out wherever it is
     carried
-- Members-only cart
-  - Sign-in before the cart: the Cart control opens sign-in while no session
-    is signed in, and the drawer stays closed
-  - The cart the ask was for: the drawer opens by itself once the session
-    arrives, and nothing is left waiting when the ask is dismissed
-  - Active-line count: header and drawer agree without opening the drawer; unknown and signed-out counts stay hidden
+- Cart for anyone
+  - One press to the cart: the Cart control opens the drawer whether or not a
+    session is signed in, on a member's cart or the cart this browser holds
+  - Active-line count: header and drawer agree without opening the drawer; an
+    unknown count stays hidden
 - Links only to real surfaces
   - Controls with surfaces behind them: search and cart stay absent until the
     site answers them

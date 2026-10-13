@@ -1,6 +1,6 @@
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review · 0/30
+**Status:** pending-review · 0/28
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-product-page-US1: Collector reads a card at its own address
@@ -626,14 +626,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-store-product-page-US11: Collector signs in to add from the product page
+## grade10-site-store-product-page-US11: Collector adds from the product page without signing in
 
 **As a** signed-out collector on a product page,
-**I want** Add to cart to open sign-in instead of building a guest cart,
-**so that** I only hold lines I can take to members-only checkout.
+**I want** Add to cart to put the line in a cart this browser keeps,
+**so that** I can buy without an account, and keep the line if I sign in.
 
-<!-- trace:case id=g10.store-product-page.TC-7e1 rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
-### grade10-site-store-product-page-US11-TC1-1: Signed-out Add to cart opens sign-in
+<!-- trace:case id=g10.store-product-page.TC-7e1 rev=2 covers=g10.store-product-page.SC-za5 -->
+### grade10-site-store-product-page-US11-TC1-2: Signed-out Add to cart adds to this browser's cart
 
 **Classification:**
 
@@ -653,25 +653,63 @@ Runs once per row of **Test data**.
 * customer is signed out and is on <grade10 product url> that offers Add to cart.
 * The product is not sold out.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <qty_1> | 2 |
+
 **Steps:**
 
-1. Note the cart line count for that product.
+1. Choose a variant and set the quantity to <qty_1>.
 2. Activate Add to cart.
-3. Check the dialog and the cart.
+3. Check for a sign-in dialog.
+4. Open Cart.
 
 **Expected Results:**
 
-* The sign-in dialog opens over the product page.
-* No cart gains a line for that product.
+* Step 3 finds no sign-in dialog.
+* Step 4 shows the chosen variant at <qty_1>.
 
-<!-- trace:case id=g10.store-product-page.TC-5er rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
-### grade10-site-store-product-page-US11-TC2-1: Dismissing sign-in adds nothing
+<!-- trace:case id=g10.store-product-page.TC-maa rev=2 covers=g10.store-product-page.SC-0j7 -->
+### grade10-site-store-product-page-US11-TC3-2: Signing in keeps the product page's add
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
 * **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-11
+
+**Pre-conditions:**
+
+* customer is signed out and is on <grade10 product url>.
+* This browser's cart holds a variant added from that page.
+* customer's member cart holds no lines.
+
+**Steps:**
+
+1. Sign in.
+2. Open Cart.
+
+**Expected Results:**
+
+* The member's cart holds that variant.
+
+<!-- trace:case id=g10.store-product-page.TC-5er rev=2 covers=none -->
+### grade10-site-store-product-page-US11-TC2-2: Dismissing sign-in adds nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -696,44 +734,6 @@ Runs once per row of **Test data**.
 * customer remains signed out on the product page.
 * The cart is unchanged for that product.
 
-<!-- trace:case id=g10.store-product-page.TC-maa rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
-### grade10-site-store-product-page-US11-TC3-1: Sign-in on the product page completes the add
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-page-US-11
-
-**Pre-conditions:**
-
-* customer is signed out and is on <grade10 product url>.
-* Sign-in was opened from Add to cart for the chosen variant at quantity <qty_1>.
-* Sign-in can complete without leaving the product page.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| <qty_1> | 1 |
-
-**Steps:**
-
-1. Complete sign-in successfully while remaining on the product page.
-2. Check the sign-in dialog and the cart.
-
-**Expected Results:**
-
-* The sign-in dialog is closed.
-* The signed-in member cart holds that variant at <qty_1>.
-
 ---
 
 ## grade10-site-store-product-page-US12: Collector sees why sign-in is asked when adding from the product page
@@ -742,14 +742,14 @@ Runs once per row of **Test data**.
 **I want** the sign-in dialog to say I am signing in to add to cart,
 **so that** I know why the shop stopped the add.
 
-<!-- trace:case id=g10.store-product-page.TC-ir3 rev=1 covers=g10.store-product-page.SC-zl0 -->
-### grade10-site-store-product-page-US12-TC1-1: Add to cart sign-in title names why
+<!-- trace:case id=g10.store-product-page.TC-ir3 rev=2 covers=none -->
+### grade10-site-store-product-page-US12-TC1-2: Add to cart sign-in title names why
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression

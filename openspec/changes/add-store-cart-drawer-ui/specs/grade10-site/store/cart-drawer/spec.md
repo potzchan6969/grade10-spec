@@ -10,7 +10,8 @@ address.
   - Current-surface overlay: opens one cart over the page the collector is on
   - Preserved place: closing returns the collector to the same site address
 - Current cart review
-  - Member cart: shows the signed-in member cart belonging to the current session
+  - Current cart: shows the signed-in member's cart, or the cart this browser
+    holds for a signed-out collector
   - Fresh facts: starts the Store cart-validation read on every open
   - Unresolved read: never presents held price or availability as current
 - Honest cart summary
@@ -44,13 +45,12 @@ address.
 
 ## ADDED Requirements
 
-### Requirement: The signed-in member cart opens over the current site surface
+### Requirement: The cart opens over the current site surface
 
-After Cart access is granted, a signed-in collector activating the Cart control
-SHALL open one cart drawer over the current surface without changing the current
-address. When the drawer closes, the collector SHALL remain at that address.
-A signed-out Cart press follows `require-sign-in-from-nav-cart` and does not
-open a guest drawer.
+A collector activating the Cart control SHALL open one cart drawer over the
+current surface without changing the current address. When the drawer closes,
+the collector SHALL remain at that address. A signed-out Cart press opens the
+same drawer, as `grade10-site/site/page-shell` states.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-omn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-01 - Cart opens without leaving its surface
@@ -69,13 +69,11 @@ open a guest drawer.
 - **WHEN** the drawer closes
 - **THEN** the collector remains at the address beneath it
 
-### Requirement: The drawer reviews the current member cart
+### Requirement: The drawer reviews the current cart
 
-The drawer SHALL show the current member cart for a signed-in collector. A
-signed-out Cart press SHALL be handled by `require-sign-in-from-nav-cart` before
-this drawer opens; a signed-out session holds no cart lines. Every drawer open
-SHALL start the read defined by `grade10-site/store/cart-validation` for the
-member cart.
+The drawer SHALL show the current member cart for a signed-in collector, and
+the cart this browser holds for a signed-out one. Every drawer open SHALL start
+the read defined by `grade10-site/store/cart-validation` for that cart.
 
 While that read is pending, the drawer SHALL use the loading behavior defined
 by `shared/ui/store-cart` and SHALL NOT present held price or availability as
@@ -272,8 +270,7 @@ browser image presentation remains in effect.
 
 Reviewed lines SHALL accept these additive display fields. Existing guest and
 member review transports, basket quote and checkout outcomes carrying reviewed
-lines SHALL preserve their existing outcomes and amounts. Guest transport
-compatibility SHALL NOT enable a guest cart or drawer journey.
+lines SHALL preserve their existing outcomes and amounts.
 
 | Field | Type | Absence And Meaning |
 | --- | --- | --- |

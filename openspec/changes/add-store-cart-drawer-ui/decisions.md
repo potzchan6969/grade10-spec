@@ -2,14 +2,14 @@
 
 - Describe the Cart Drawer as the signed-in member's current cart
 - Keep global Cart availability with durable `grade10-site/site/page-shell`
-- Keep signed-out Cart access with `require-sign-in-from-nav-cart`
+- Keep signed-out Cart access with durable `grade10-site/site/page-shell`, which
+  opens the drawer on the cart this browser holds
 - Prevent another drawer action while a drawer read, write or checkout creation is pending
 - Keep dismissal available while waiting and recovery available after a failed operation
 - Show current product pictures so collectors can recognise the cart lines
 
 ## Non-Goals
 
-- Bringing back a guest browser cart or guest checkout.
 - Rebuilding `shared/ui/store-cart` components or changing their layout; the
   pending increment extends interaction guards without rebuilding the block.
 - Any backend implementation or contract change: no Worker, API procedure,
@@ -22,8 +22,7 @@
 - A Browse More or catalogue handoff from the drawer (removed with
   `CartItemSlot` in `cart-drawer-empty-state`).
 - Deciding when Cart appears or what a signed-out Cart press does; those rules
-  belong to durable `grade10-site/site/page-shell` and
-  `require-sign-in-from-nav-cart`.
+  belong to durable `grade10-site/site/page-shell`.
 - Variant-specific pictures, picture metadata in stored cart intent, separate
   picture requests or a picture cache.
 - Shared UI redesign, database migrations, new production dependencies or
@@ -31,8 +30,6 @@
 - No unrelated page refreshes, automatic action replay, new request timeout,
   cross-tab lock, telemetry implementation or backend cancellation behavior.
   Existing cart, tender and checkout failure treatments remain.
-- Enabling a guest cart or guest checkout; existing guest review transport
-  remains a compatibility check only.
 
 ## Decisions
 
@@ -41,9 +38,9 @@ The canonical Store and page-shell records settle this reconciliation on
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | Which cart does the drawer read? | The signed-in member's cart; a signed-out session holds no lines | Keeping the guest browser cart from this older delta, which contradicts the Store cart decision |
+| Q1 | Which cart does the drawer read? | The signed-in member's cart; for a signed-out collector, the cart this browser holds, as the Store cart's Guest cart decision sets | A members-only drawer, which would leave a guest's lines unseen |
 | Q2 | Which change owns Cart availability? | Durable `grade10-site/site/page-shell` owns absence until Store answers and global Cart after it answers (folded from `auction-first-site-header`); this change owns the drawer | Keeping a Store-only Cart handler in this change, which would contradict the global Cart decision |
-| Q3 | Which change owns a signed-out Cart press? | `require-sign-in-from-nav-cart` owns the sign-in dialog and resume; this drawer starts only for a signed-in member | Opening a guest drawer from this change, which would have no cart lines to review |
+| Q3 | Which change owns a signed-out Cart press? | Durable `grade10-site/site/page-shell`: the press opens this drawer on the cart this browser holds | A sign-in dialog before the drawer, which a guest no longer needs |
 
 | Q4 | Does the drawer apply points? | Yes; the user-approved Storybook plan supersedes the read-only points scope. Apply, Use max and Remove share checkout's persisted choice and server quote | Keeping points as display-only context |
 | Q5 | What happens to an existing code? | Preserve it when points change and include its accepted discount in the server quote | Resetting the code or changing existing promo editing |
