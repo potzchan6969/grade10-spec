@@ -197,7 +197,7 @@ function CartItemContent({
           <img
             src={item.imageSrc}
             alt={item.imageAlt || item.name}
-            className="size-full object-cover"
+            className="size-full object-contain"
           />
         ) : (
           <div className="size-full bg-muted" />

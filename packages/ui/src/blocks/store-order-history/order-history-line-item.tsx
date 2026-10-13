@@ -52,7 +52,7 @@ function OrderHistoryLineItem({
         {imageSrc ? (
           <img
             alt={imageAlt}
-            className="absolute inset-0 size-full object-cover"
+            className="absolute inset-0 size-full object-contain"
             src={imageSrc}
           />
         ) : null}
