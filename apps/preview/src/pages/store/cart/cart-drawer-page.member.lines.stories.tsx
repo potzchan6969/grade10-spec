@@ -12,7 +12,8 @@ import {
   SITE_SALE_SUBTOTAL,
   SOLD_OUT_ITEMS,
 } from "../cart-content";
-import { CartDrawerPage, drawer } from "./cart-drawer-page";
+import { CartDrawerPage } from "./cart-drawer-page";
+import { drawer } from "./cart-drawer-page.test-helpers";
 
 /** The signed-in drawer's line states: sold out, adjusted, on sale, removed. */
 const meta = {

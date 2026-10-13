@@ -9,7 +9,8 @@ import {
   UNCHECKED_ITEMS,
   UNCHECKED_TOTAL,
 } from "../cart-content";
-import { CartDrawerPage, drawer } from "./cart-drawer-page";
+import { CartDrawerPage } from "./cart-drawer-page";
+import { drawer } from "./cart-drawer-page.test-helpers";
 
 /** The open-time read of the cart: still running, or failed with Retry. */
 const meta = {

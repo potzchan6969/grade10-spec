@@ -8,7 +8,6 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { LISTING_LOT_GRID_CLASS, SiteHeader } from "@grade10/ui";
 import { Package, Vault } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
-import { expect, userEvent, waitFor, within } from "storybook/test";
 import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
 
 /**
@@ -295,39 +294,6 @@ function PrototypeNote({
   );
 }
 
-/**
- * Clicks Next through a flow's cases, asserting each case's title as it shows,
- * then opens the Expanded view and asserts one card per case.
- */
-async function walkFlowCases(
-  canvasElement: HTMLElement,
-  titles: readonly string[],
-) {
-  const canvas = within(canvasElement);
-  for (const [index, title] of titles.entries()) {
-    if (index > 0) {
-      await userEvent.click(canvas.getByRole("button", { name: "Next" }));
-    }
-    await waitFor(() => {
-      expect(canvas.getAllByText(title).length).toBeGreaterThan(0);
-    });
-  }
-  await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
-  for (const title of titles) {
-    expect(canvas.getAllByText(title).length).toBeGreaterThan(0);
-  }
-  expect(canvasElement.querySelectorAll(".demo-flow-case")).toHaveLength(
-    titles.length,
-  );
-  // Back to one case, so the canvas holds a single copy of the screen's landmarks.
-  await userEvent.click(canvas.getByRole("tab", { name: "Transition" }));
-  await waitFor(
-    () =>
-      expect(canvasElement.querySelectorAll(".demo-flow-case")).toHaveLength(1),
-    { timeout: 3000 },
-  );
-}
-
 export {
   AppointmentPageShell,
   FactRow,
@@ -340,5 +306,4 @@ export {
   VaultEmptyState,
   VaultItemDetailPageShell,
   VaultPageShell,
-  walkFlowCases,
 };

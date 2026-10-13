@@ -8,7 +8,8 @@ import {
   READY_ITEMS,
   READY_SUBTOTAL,
 } from "../cart-content";
-import { CartDrawerPage, drawer } from "./cart-drawer-page";
+import { CartDrawerPage } from "./cart-drawer-page";
+import { drawer } from "./cart-drawer-page.test-helpers";
 
 /** The signed-in drawer's tender and checkout: points, the gate, the redirect. */
 const meta = {

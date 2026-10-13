@@ -684,15 +684,8 @@ function WinnerOrderPageState({
 
 export type { WinnerOrderPageProps };
 export {
+  // Closed-order stories share this page's cancellation clock.
   CANCELLED_AT_MS,
   CANCELLED_ZONE,
-  COPY as WINNER_ORDER_COPY,
-  hasIssuedInvoice,
-  noteFor,
-  paymentMethodFor,
-  progressFor,
-  receiptLinksFor,
-  summaryLinesFor,
   WinnerOrderPage,
-  winnerOrderBadgeVariant,
 };

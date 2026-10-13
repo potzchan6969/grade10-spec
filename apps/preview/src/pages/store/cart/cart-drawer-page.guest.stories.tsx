@@ -24,7 +24,8 @@ import {
   SIGN_IN_STORY_ID,
 } from "../cart-content";
 import { GuestBarSignInAsk } from "../guest-bar-ask";
-import { CartDrawerPage, drawer } from "./cart-drawer-page";
+import { CartDrawerPage } from "./cart-drawer-page";
+import { drawer } from "./cart-drawer-page.test-helpers";
 
 /** The signed-out drawer: guest checkout, the sign-in line, and the bar ask. */
 const meta = {

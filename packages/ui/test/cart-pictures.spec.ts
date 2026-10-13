@@ -6,7 +6,7 @@ for (const [component, story, alt, soldOut] of [
   ["cartitem-picture", "picture-with-empty-alt", "Gengar VMAX", false],
   ["cartitem-picture", "picture-with-whitespace-alt", "  ", false],
   ["cartitem-picture", "sold-out-picture", "Card front", true],
-  ["cartdrawer-body", "pictures", "  ", false],
+  ["cartdrawerbody", "pictures", "  ", false],
   ["cartdrawer", "pictures", "Card front", true],
 ] as const) {
   test(`supplied picture and callbacks - ${component}/${story}`, async ({

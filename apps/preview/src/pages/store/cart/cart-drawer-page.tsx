@@ -8,7 +8,6 @@ import {
   SiteHeader,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
-import { within } from "storybook/test";
 import {
   STORE_CART_COPY,
   STORE_FOOTER,
@@ -47,9 +46,6 @@ type CartDrawerPageProps = {
   /** Signed-out drawer: guest checkout primary, sign-in line, public codes, no points. */
   guest?: boolean;
 };
-
-/** The drawer portals to the body, so every query reads the body. */
-const drawer = () => within(document.body);
 
 /**
  * A plain store page with the cart drawer open over it. The page owns the
@@ -166,4 +162,4 @@ function CartDrawerPage({
 }
 
 export type { CartDrawerPageProps };
-export { CartDrawerPage, drawer };
+export { CartDrawerPage };

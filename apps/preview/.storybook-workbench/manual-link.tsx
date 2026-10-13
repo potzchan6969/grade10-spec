@@ -13,7 +13,7 @@ const slug = (words: string) =>
 
 /** The manual page a `<Domain>/<Feature>/…` title names; none for Start Here
  * and the design system, which the manual does not page by feature. */
-export function manualPage(title: string | undefined) {
+function manualPage(title: string | undefined) {
   const [domain, feature] = title?.split("/") ?? [];
   if (!domain || !feature || domain === "Design System") return null;
   const app = domain === "Auth" ? "shared" : "grade10-site";
