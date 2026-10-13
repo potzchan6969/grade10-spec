@@ -294,6 +294,18 @@ function paymentMethodsForCurrency(
     : ["card", "hk_local", "swift"];
 }
 
+function paymentMethodIsAvailable(
+  currency: WinnerOrderSettlementCurrency,
+  paymentMethod: WinnerOrderSetupPaymentMethod,
+  cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>,
+): boolean {
+  return (
+    paymentMethod !== "card" ||
+    cardFeePercentages == null ||
+    cardFeePercentages[currency] != null
+  );
+}
+
 function stepTitle(step: SetupStep): string {
   if (step === 1) return "Delivery Address";
   if (step === 2) return "Payment Method";
@@ -709,7 +721,14 @@ function WinnerOrderSetupDialog({
 
   const primaryDisabled =
     (step === 1 && !deliveryReady) ||
-    (step === 2 && (settlementCurrency == null || paymentMethod == null)) ||
+    (step === 2 &&
+      (settlementCurrency == null ||
+        paymentMethod == null ||
+        !paymentMethodIsAvailable(
+          settlementCurrency,
+          paymentMethod,
+          cardFeePercentages,
+        ))) ||
     (step === 3 && !billingReady);
 
   const primaryLabel = step === 3 ? "Complete Order Setup" : "Continue";
@@ -878,6 +897,11 @@ function WinnerOrderSetupDialog({
                             current != null &&
                             paymentMethodsForCurrency(currency).includes(
                               current,
+                            ) &&
+                            paymentMethodIsAvailable(
+                              currency,
+                              current,
+                              cardFeePercentages,
                             )
                               ? current
                               : null,
@@ -901,8 +925,11 @@ function WinnerOrderSetupDialog({
                     onValueChange={(value) => {
                       if (
                         value === "card" &&
-                        cardFeePercentages != null &&
-                        cardFeePercentages[settlementCurrency] == null
+                        !paymentMethodIsAvailable(
+                          settlementCurrency,
+                          value,
+                          cardFeePercentages,
+                        )
                       ) {
                         return;
                       }
@@ -920,8 +947,11 @@ function WinnerOrderSetupDialog({
                     <div className="flex w-full flex-col gap-2">
                       <RadioCard
                         disabled={
-                          cardFeePercentages != null &&
-                          cardFeePercentages[settlementCurrency] == null
+                          !paymentMethodIsAvailable(
+                            settlementCurrency,
+                            "card",
+                            cardFeePercentages,
+                          )
                         }
                         description={
                           cardFeePercentages != null &&
