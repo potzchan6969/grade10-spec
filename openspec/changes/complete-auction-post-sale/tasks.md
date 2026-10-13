@@ -79,7 +79,7 @@
 - [x] 10.3 `docs/architecture/auction.md` takes the derived status, money in, proofs and test winners; `docs/conventions/development.md` takes the QA walk; `pnpm run lint`
 - [x] 10.4 `post-sale-journey.spec.ts` saves the HKD card rule through Payment Settings before the card journey, and a USD test winner reads that payment is not yet available, with Contact Us, and cannot confirm setup (SC-249); `pnpm run test:e2e`
 
-## 11. Archive Gate (grade10-spec)
+## 11. Archive Gate (grade10-spec) (owner: @htonyl)
 
 - [ ] 11.1 Acceptance order: this change is accepted without waiting for its dependencies to archive, and `close-overdue-address-confirmation` after this one; `add-winner-partial-payment` and `add-winner-order-tax-line` carry the edits the two would otherwise share (`decisions.md` Q41)
 - [ ] 11.2 Archive gate: what still waits on a dependency's archive
