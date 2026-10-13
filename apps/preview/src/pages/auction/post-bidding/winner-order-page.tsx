@@ -148,6 +148,8 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   view: "View",
   winningBid: "Winning bid",
   bank: "Bank",
+  bankDetailsClose: "Close",
+  bankDetailsQrAlt: "FPS payment QR code for this order",
 };
 
 const PREVIEW_CARD_FEE_PERCENTAGES = { USD: 4.4, HKD: 3.4 };

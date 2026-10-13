@@ -39,6 +39,10 @@
     "settlementTotal": "주문 합계",
     "paymentProcessingFee": "결제 처리 수수료"
   },
+  "bankDetails": {
+    "close": "닫기",
+    "qrAlt": "이 주문의 FPS 결제용 QR 코드"
+  },
   "cancelledOn": "{date}에 취소됨",
   "insuranceTooltip": "운송 중 주문 금액의 0.9%입니다.",
   "taxLabel": "세금",

@@ -39,6 +39,10 @@
     "settlementTotal": "訂單總額",
     "paymentProcessingFee": "付款處理費"
   },
+  "bankDetails": {
+    "close": "關閉",
+    "qrAlt": "此訂單的 FPS 付款二維碼"
+  },
   "cancelledOn": "已於 {date} 取消",
   "insuranceTooltip": "運輸途中按訂單金額的 0.9% 計算。",
   "taxLabel": "稅項",

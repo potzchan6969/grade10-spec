@@ -39,6 +39,10 @@
     "settlementTotal": "Order Total",
     "paymentProcessingFee": "Payment Processing Fee"
   },
+  "bankDetails": {
+    "close": "Close",
+    "qrAlt": "FPS payment QR code for this order"
+  },
   "cancelledOn": "Cancelled on {date}",
   "insuranceTooltip": "0.9% of the order value during transit.",
   "taxLabel": "Tax",

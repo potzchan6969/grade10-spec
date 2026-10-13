@@ -62,6 +62,8 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   view: "View",
   winningBid: "Winning bid",
   bank: "Bank",
+  bankDetailsClose: "Close",
+  bankDetailsQrAlt: "FPS payment QR code",
 };
 
 const BASE_PROPS: AuctionWinnerOrderProps = {

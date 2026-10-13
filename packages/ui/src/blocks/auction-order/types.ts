@@ -17,6 +17,8 @@ type AuctionWinnerOrderCopy = {
   view: string;
   winningBid: string;
   bank: string;
+  bankDetailsClose: string;
+  bankDetailsQrAlt: string;
 };
 
 type AuctionWinnerOrderAction = { label: string; onPress: () => void };

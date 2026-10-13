@@ -298,7 +298,7 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,340.00" },
+  { label: "Order Total", value: "US$16,340.00" },
 ];
 
 /**
@@ -677,8 +677,8 @@ export const WINNER_ORDER_HKD_HK_LOCAL_CONTENT: WinnerOrderContent = {
   setupPaymentMethod: "HK Local",
   settlementCurrency: "HKD",
   paymentRail: "hk_local",
-  usdTotal: undefined,
-  convertedTotal: undefined,
+  usdTotal: "US$16,340.00",
+  convertedTotal: "HK$128,269.00",
   convertedFee: undefined,
   primaryCta: "Submit Payment Proof",
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,

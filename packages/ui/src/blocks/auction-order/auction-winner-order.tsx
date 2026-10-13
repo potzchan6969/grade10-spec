@@ -507,10 +507,12 @@ function SettlementChoices({
 
 function BankDetailsDialog({
   bankDetails,
+  copy,
   onOpenChange,
   open,
 }: {
   bankDetails: AuctionWinnerOrderBankDetails;
+  copy: AuctionWinnerOrderCopy;
   onOpenChange: (open: boolean) => void;
   open: boolean;
 }) {
@@ -526,7 +528,7 @@ function BankDetailsDialog({
         <DialogBody>
           {bankDetails.qrSrc ? (
             <img
-              alt={`${bankDetails.title} QR code`}
+              alt={copy.bankDetailsQrAlt}
               className="mx-auto size-40 rounded-lg border border-border object-contain"
               src={bankDetails.qrSrc}
             />
@@ -554,7 +556,7 @@ function BankDetailsDialog({
         </DialogBody>
         <DialogFooter>
           <DialogClose render={<Button size="md" variant="outline" />}>
-            Close
+            {copy.bankDetailsClose}
           </DialogClose>
         </DialogFooter>
       </DialogContent>
@@ -867,6 +869,7 @@ function OrderSidebar({
       {bankDetails ? (
         <BankDetailsDialog
           bankDetails={bankDetails}
+          copy={copy}
           onOpenChange={setBankDetailsOpen}
           open={bankDetailsOpen}
         />

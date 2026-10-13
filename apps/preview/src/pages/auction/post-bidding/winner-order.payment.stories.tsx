@@ -39,8 +39,8 @@ const BANK_PENDING_CONTENT = {
   paymentRail: "fps",
   settlementCurrency: "HKD",
   primaryCta: "Submit Payment Proof",
-  usdTotal: undefined,
-  convertedTotal: undefined,
+  usdTotal: "US$16,340.00",
+  convertedTotal: "HK$128,269.00",
   convertedFee: undefined,
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
@@ -109,6 +109,7 @@ export const PendingPaymentBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -127,7 +128,19 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
     expect(sidebar.getByText("US$320.00")).toBeVisible();
-    expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
+
+    await userEvent.click(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
+    );
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "View Bank Details" });
+      expect(found).toBeVisible();
+      return within(found);
+    });
+    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
+    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
   },
 };
 
@@ -152,6 +165,8 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
+    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
 
     await userEvent.click(
       sidebar.getByRole("button", { name: "View Bank Details" }),
@@ -163,6 +178,8 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
     });
     expect(dialog.getByText("Bank name")).toBeVisible();
     expect(dialog.getByText("Branch code")).toBeVisible();
+    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
+    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
     expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
     expect(dialog.queryByText("SWIFT / BIC")).not.toBeInTheDocument();
     expect(dialog.queryByRole("tab")).not.toBeInTheDocument();

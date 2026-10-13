@@ -39,6 +39,10 @@
     "settlementTotal": "订单总额",
     "paymentProcessingFee": "付款处理费"
   },
+  "bankDetails": {
+    "close": "关闭",
+    "qrAlt": "此订单的 FPS 付款二维码"
+  },
   "cancelledOn": "已于 {date} 取消",
   "insuranceTooltip": "运输途中按订单金额的 0.9% 计算。",
   "taxLabel": "税费",
