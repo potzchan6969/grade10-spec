@@ -27,8 +27,7 @@ the lot at its own address without a page load.
 - **The card** — the first gallery item, the title, the status, the close,
   the current price and the watch control; a closed lot shows no watch
   control; no Buy Now listing ever appears
-- **Hidden lots** — a draft or called-off lot is never listed; a called-off
-  lot's canonical address remains directly accessible —
+- **Hidden lots** - a draft or called-off lot is never listed -
   [Lot Status](#auction-details)
 
 ### Listing Schema
@@ -133,9 +132,11 @@ lot before any script runs.
   sitemap is fetched — [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
 - **Not found** — an address naming no lot answers an honest 404 with the
   site's not-found surface, never an empty lot page
-- **Hidden from browse/search** — a draft or called-off lot is absent from
-  catalogue and search. A called-off lot remains directly accessible at its
-  canonical address; a draft has no public address.
+- **Hidden from browse/search** - a draft or called-off lot is absent from
+  catalogue and search; a draft has no public address.
+- 🚧 **Called-off address** - another listing can take a called-off lot's
+  former address. An unused address shows Page not found; a reused address
+  opens the new public lot.
 - 🚧 **Restricted regions** — where auctions are not offered, a request from
   that region sees no auction entry point anywhere on the site, and a direct
   auction address — the catalogue or a lot — answers the restriction page
@@ -196,11 +197,10 @@ never the collector's bid or order, and every page reads the same value.
 | **Active** | Bidding is open, extended bidding included | Live |
 | **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Setup to Refunded |
 | Hidden | Never published | Draft |
-| Removed from browse/search | Called off before close; canonical address remains direct | Called off |
+| Removed from browse/search | Called off before close | Called off |
 
-- **Hidden lots** — drafts have no public address. Called-off lots are not in
-  the catalogue, search or filters but remain directly accessible at their
-  canonical address; My Auctions shows a called-off lot to a collector who bid
+- **Hidden lots** - drafts have no public address. Called-off lots are not in
+  the catalogue, search or filters; My Auctions shows a called-off lot to a collector who bid
   on it, saying their card was not charged
 - **Between the close and the result** — once a lot's close passes, every
   page shows it Closed with no result yet; Won or Unsold appears when the
@@ -226,7 +226,7 @@ and publishes it; from the close on, the sale is worked in Orders
 | Saves a draft | Nothing; a draft has no address |
 | Creates it — a title, a slug, a price, a window, one media item, the stock held | Nothing yet |
 | Publishes it, now or at Publish at | The lot as **Upcoming**, then **Active** from its start |
-| Calls it off, any time before the close | The lot leaves browse and search, but its canonical address remains directly accessible |
+| Calls it off, any time before the close | The lot leaves browse and search; its former address follows Called-off address above |
 | Lets the close pass | **Ended**; the winner's order opens — [Post-Bidding](/p/grade10-site/auction/post-bidding) |
 | Reads Watchers on the Listings table | Nothing; a watch is private |
 
@@ -262,7 +262,8 @@ Active and Completed filters in bidding history.
 | The catalogue page | Decided | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Between the close and the result | Decided | Three statuses stay. Past the close and before the result is recorded, pages show the existing Closed state with no result, and Won or Unsold when the close commits. A fourth status, Closing, with its own copy was ruled out: a new state in four languages for a gap normally under a second. | Product |
-| Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, saying their card was not charged. | Product |
+| Draft and Called off | Decided | Draft has no public address. Called-off lots leave browse and search. A collector who bid on a called-off lot still sees it in My Auctions, saying their card was not charged. Explicit hard deletion is outside this capability. | Product |
+| Called-off address reuse | 🚧 In flight | Reuse replaces the former promise of a permanent direct address to a called-off lot. [Issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504) settles the choice; the listing code remains a reserved reference and cannot serve as an alternate public address. | @htonyl |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
