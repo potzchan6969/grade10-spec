@@ -236,30 +236,30 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
       body.getByRole("dialog", { name: "View Bank Details" }),
     );
     expect(dialog).toBeVisible();
+    const closeButton = body.getByRole("button", {
+      name: traditionalChineseAuctionOrders.bankDetails.close,
+    });
     expect(
       body.getByRole("img", {
         name: traditionalChineseAuctionOrders.bankDetails.qrAlt,
       }),
     ).toBeVisible();
-    expect(
-      body.getByRole("button", {
-        name: traditionalChineseAuctionOrders.bankDetails.close,
-      }),
-    ).toBeVisible();
+    expect(closeButton).toBeVisible();
+    await waitFor(() => expect(closeButton).toHaveFocus());
     for (let index = 0; index < 4; index += 1) {
       await userEvent.tab();
-      const active = document.activeElement;
-      expect(
-        dialog.contains(active) ||
-          active?.hasAttribute("data-base-ui-focus-guard"),
-      ).toBe(true);
+      await waitFor(() =>
+        expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(
+          true,
+        ),
+      );
     }
 
     await userEvent.keyboard("{Escape}");
     await waitFor(() =>
       expect(body.queryByRole("dialog")).not.toBeInTheDocument(),
     );
-    expect(trigger).toHaveFocus();
+    await waitFor(() => expect(trigger).toHaveFocus());
 
     await userEvent.keyboard("{Enter}");
     await waitFor(() => expect(body.getByRole("dialog")).toBeVisible());
@@ -271,7 +271,7 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
     await waitFor(() =>
       expect(body.queryByRole("dialog")).not.toBeInTheDocument(),
     );
-    expect(trigger).toHaveFocus();
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 
