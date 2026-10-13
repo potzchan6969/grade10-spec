@@ -28,7 +28,7 @@ Builds against group 1's contracts and fixture rows, never a running backend.
 - [ ] 3.3 Map flagged items from `useAuctionReminder` into `ReminderRow` tags with the flag reason and wait from the earliest open flag (`grade10-admin-console-daily-reminder-SC-16`, `grade10-admin-console-daily-reminder-SC-99`, `grade10-admin-console-daily-reminder-SC-103`)
 - [ ] 3.4 Verify: the console's own suites, `pnpm run typecheck`, `pnpm run lint`
 
-## 4. The pages (grade10-spec)
+## 4. The pages (grade10-spec) (owner: @mason5991)
 
 - [ ] 4.1 Read the accepted `spec.md` against `docs/prds/products/grade10-admin/console/daily-reminder.md` and Auction Management's Post-Sale Queue / lifecycle pointers; list every line of a page that the spec contradicts, and run `pnpm check:manual` for the 🚧 lines this change delivers
 - [ ] 4.2 Confirm Daily Reminder carries Flagged or still waiting, lifecycle alerts, the shared both-env bypass for morning and lifecycle, best effort and the warning copy, and that management.md still points at them
