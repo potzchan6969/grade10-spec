@@ -23,7 +23,7 @@ order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/interna
 | Bidding window | From the scheduled start to the recorded close |
 | Extension duration | **30 minutes** by default, set per listing; **0** turns extended bidding off |
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
-| Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
+| Currencies | 🚧 **USD** only for new lots; ❓ whether the HKD and JPY schedules retire or keep governing lots already priced in them — Product confirms |
 | Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 5,000,000,000**, the same on every lot |
 | Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |

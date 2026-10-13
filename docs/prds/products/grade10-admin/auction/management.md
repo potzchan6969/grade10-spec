@@ -14,7 +14,7 @@ the card is in the winner's hands. The collector's half is
 
 | Rule | Value |
 | --- | --- |
-| Currency | **USD**, **HKD** or **JPY**, one per listing; **HKD** when omitted |
+| Currency | 🚧 **USD** alone for new listings, and **USD** when omitted; ❓ whether HKD and JPY stay selectable for lots already priced in them — Product confirms |
 | Bid floor | The currency's price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
 | Title | Required at create; **1 to 200** characters |
 | Copy | Optional; at most **4,000** characters |
@@ -295,6 +295,9 @@ on winner, In transit, Closed and All, opening on Needs action.
   send is refused while the order has none, and the edit before send adds
   it; an address recorded by phone asks for billing too, same as delivery by
   default
+- 🚧 **Invoice in the settlement currency** — the winner chooses USD or HKD at
+  order setup, and the operator sends the invoice in that currency. For an HKD
+  order the operator enters the HKD amounts; Grade10 holds no exchange rate
 - 🚧 **Payment Processing Fee** - a card invoice's fee is Grade10's own: the
   Stripe card rule for the order's currency, grossed up so Grade10 keeps the
   Subtotal whole, read-only with the rule it came from. With no card rule for

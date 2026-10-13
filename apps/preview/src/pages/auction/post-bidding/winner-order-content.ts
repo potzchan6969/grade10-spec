@@ -1,5 +1,6 @@
 import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
+import type { WinnerOrderSettlementCurrency } from "./winner-order-setup-dialog";
 
 export type WinnerOrderStatus =
   | "awaiting_address"
@@ -67,6 +68,11 @@ export type WinnerOrderContent = {
   addressValue: string | null;
   /** Chosen during setup — card or bank transfer label. */
   setupPaymentMethod?: string | null;
+  /**
+   * Currency the invoice was issued in (chosen at setup). HKD invoices draw
+   * FPS + Hong Kong rails; USD draws Hong Kong + SWIFT. Defaults to HKD.
+   */
+  settlementCurrency?: WinnerOrderSettlementCurrency;
   billingLabel?: string;
   billingValue?: string | null;
   invoiceLines: WinnerOrderInvoiceLine[] | null;
@@ -285,6 +291,40 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.processingFee,
   },
   { label: "Order Total", value: "HK$16,340.00" },
+];
+
+/**
+ * USD-settled bank transfer invoice — same shape as the HK$ fixture, issued
+ * in US$ for a winner who picked USD at Complete Order Setup.
+ */
+export const USD_BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
+  { label: "Winning Bid", value: "$12,800.00" },
+  {
+    label: "Buyer’s Premium",
+    value: "$2,560.00",
+    tooltip: LINE_TOOLTIPS.buyersPremium,
+  },
+  {
+    label: "Shipping & Handling",
+    value: "$180.00",
+    tooltip: LINE_TOOLTIPS.shippingHandling,
+  },
+  {
+    label: "Insurance",
+    value: "$480.00",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
+    label: "Tax",
+    value: "$320.00",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
+    label: "Payment Processing Fee",
+    value: "Free",
+    tooltip: LINE_TOOLTIPS.processingFee,
+  },
+  { label: "Order Total", value: "US$16,340.00" },
 ];
 
 /** Shared progress dates once each milestone has happened. */
@@ -566,4 +606,17 @@ export const WINNER_ORDER_CONTENTS: Record<
   delivered: contentFor("delivered"),
   cancelled: contentFor("cancelled"),
   refunded: contentFor("refunded"),
+};
+
+/**
+ * USD-settled pending payment — invoice issued in US$, bank transfer chosen,
+ * so View Bank Details offers Hong Kong + SWIFT (no FPS).
+ */
+export const WINNER_ORDER_USD_BANK_TRANSFER_CONTENT: WinnerOrderContent = {
+  ...WINNER_ORDER_CONTENTS.pending_payment,
+  body: "Your invoice is ready. Pay by bank transfer before the deadline.",
+  setupPaymentMethod: "Bank transfer",
+  settlementCurrency: "USD",
+  primaryCta: "Submit Payment Proof",
+  invoiceLines: USD_BANK_TRANSFER_INVOICE_LINES,
 };
