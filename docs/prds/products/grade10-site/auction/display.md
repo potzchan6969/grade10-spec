@@ -175,7 +175,7 @@ lot before any script runs.
 - **One gallery** — no front and back slots; the first item is the card's
   picture, and a lot whose first item is a video still appears, with no
   placeholder
-- **The strip** — one image shows no thumbnail strip; 🚧 several show a left
+- **The strip** - one image shows no thumbnail strip; several show a left
   rail when the gallery is wide enough for it beside the main frame, and
   otherwise step with previous/next and progress only
 - **Made from the original** — a larger image is transformed to the size

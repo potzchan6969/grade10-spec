@@ -26,7 +26,7 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   zoom source, and falls back to the main source when a thumb or a zoom is
   not given, so one image can be a small file in the strip and a large one
   under the magnifier
-- **The strip** — one item shows no thumbnail strip; 🚧 several show a left
+- **The strip** - one item shows no thumbnail strip; several show a left
   rail when the gallery is wide enough for it beside the main frame, and
   otherwise step with previous/next and progress only; no items render
   nothing and offer no previous or next
@@ -162,4 +162,5 @@ code mapping — so these stories are the reference until frames are produced.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Bid enrollment | Decided | Its own part of the feature set: the setup blocks, their gates, and the signal the bid card reads. | Product |
+| Gallery strip | Decided | Several images show a left rail only when it fits beside the main frame. Stacked galleries keep previous/next and progress, with no strip under the stage. The rule covers `ListingLotGallery`; `ListingGallery` keeps its existing strip behavior, and the width threshold stays in code. The rail uses `thumb`, the main frame uses `detail`, and zoom uses `zoom` for the selected image. | Product |
 :::

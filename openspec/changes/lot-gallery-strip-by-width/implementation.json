@@ -51,5 +51,49 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Codex",
+    "reviewedAt": "2026-10-13T08:36:37Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The rolling site suite has been rewritten into route-based walks and includes later accepted case revisions. Its gallery cases still require a rail when wide, no rail but active previous/next and progress when stacked, and no rail or navigation for one image. These changes preserve the gallery behavior recorded for this implementation.",
+        "evidence": [
+          "Application commit 4be470909f1e210f7aab5b3af8c2abfb8a21e44 contains apps/frontend/grade10/e2e/tests/auction/listing-media.spec.ts cases TC-pls for the wide rail and TC-pbt for the stacked gallery controls; task groups 3 and 4.2 are checked.",
+          "Current durable scenarios SC-27 through SC-30 retain the one-image, empty, wide, and stacked gallery outcomes."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The rolling shared UI suite includes later accepted case and reconciliation updates. Its gallery statements retain the wide-only rail, stacked navigation and progress, one-image and empty boundaries, and the ListingGallery carve-out.",
+        "evidence": [
+          "The implementation submodule commit 17755105940a036975cdd256bdd3c251bae8921c contains packages/ui/src/blocks/auction-listing/listing-lot-gallery.stories.tsx; its SeveralImages and StackedSeveralImages play functions exercise rail visibility, thumb selection, progress, navigation, and zoom.",
+          "Task groups 2 and 3.1 are checked; task 3.1 records focused package and Storybook checks for the gallery source, rail, controls, and boundary states."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The changed Feature set entries add accepted bid-ceiling behavior. They do not change the gallery entry or the gallery requirement, and this implementation does not alter bid entry.",
+        "evidence": [
+          "The ceiling scenarios have dedicated package tests in packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts and listing-quick-maximum-bid-actions.test.ts, including SC-61 and SC-62.",
+          "The gallery width and stacked states are exercised by listing-lot-gallery.stories.tsx in implementation submodule commit 17755105940a036975cdd256bdd3c251bae8921c; archive preflight identifies only the Feature set anchor for this spec."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The sentence replaces a Unicode em dash with an ASCII hyphen. Its meaning is unchanged."
+      }
+    ]
+  }
 }

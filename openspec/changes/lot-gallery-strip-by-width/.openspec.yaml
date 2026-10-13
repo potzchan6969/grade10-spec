@@ -6,3 +6,4 @@ reviewed:
   decisions: 8d209779
   tech-design: 825d09f3
   specs: 0bf2e61e
+decisions_carried: "Q1-Q5 moved to docs/prds/products/shared/ui/auction-listing.md Product decisions; the site display page now marks its gallery rule as delivered."
