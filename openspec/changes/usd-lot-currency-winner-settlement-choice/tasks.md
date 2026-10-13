@@ -27,7 +27,7 @@
 - [x] 3.1 Settle the pages the proposal links: in `post-bidding.md` make the Order Setup table's payment method row name the rails and the settlement currency, and replace the buyer's premium row's per-currency minimum with one USD amount; in `management.md` replace the minimum charge row's per-currency wording; in `bidding.md`, `account.md`, `display.md` and `index.md` check that every 🚧 line matches the deltas
 - [x] 3.2 Verify: `pnpm check:manual` names no line of these pages and no unmarked page
 
-## 4. Currency overwrite and Payment Settings reshape (grade10)
+## 4. Currency overwrite and Payment Settings reshape (grade10) (owner: @htonyl)
 
 Depends on the grade10-spec groups only through the submodule bump.
 
