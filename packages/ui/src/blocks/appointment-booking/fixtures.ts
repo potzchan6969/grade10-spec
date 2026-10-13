@@ -195,7 +195,7 @@ const CANCELLED_RECORD: BookingRecord = {
 /** The board's cast: Hong Kong, Thu 15 Oct 2026 at 14:20. */
 const BOARD_NOW_MS = Date.UTC(2026, 9, 15, 6, 20);
 /** Shop-local today the calendar marks. */
-const BOARD_TODAY = new Date(2026, 9, 15);
+const BOARD_TODAY = "2026-10-15";
 const BOARD_MONTH = "2026-10";
 
 const GRADE_FEE = "Grading fees are paid at the counter";

@@ -25,7 +25,7 @@ import {
   BOARD_MIN_MONTH,
   BOARD_SERVICES,
   BOARD_SHOPS,
-  BOARD_TODAY,
+  BOARD_TODAY_KEY,
   BOARD_ZONE,
   boardDays,
   boardSlots,
@@ -415,7 +415,7 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
                   : [],
               }}
               timeZone={BOARD_ZONE}
-              today={BOARD_TODAY}
+              today={BOARD_TODAY_KEY}
             />
           ) : null}
 

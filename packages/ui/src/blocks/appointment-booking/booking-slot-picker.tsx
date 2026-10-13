@@ -52,8 +52,8 @@ type BookingSlotPickerProps = LocaleProps & {
   /** Inclusive bounds the collector can step within. */
   minMonth?: string;
   maxMonth?: string;
-  /** Frozen shop-local today the grid marks; omit it and the calendar uses now. */
-  today?: Date;
+  /** Shop-local today, `YYYY-MM-DD`, the grid marks; omit it and the calendar uses the reader's today. */
+  today?: string;
   days: AsyncState<readonly BookingDay[]>;
   selectedDate?: string;
   slots: AsyncState<readonly BookingSlot[]>;
@@ -123,7 +123,7 @@ function BookingSlotPicker({
   onSelectSlot,
   className,
 }: BookingSlotPickerProps) {
-  const todayKey = dayFromDate(today ?? new Date());
+  const todayKey = today ?? dayFromDate(new Date());
   // The name a reader sees is the one in force at the times shown: the picked
   // slot, else the picked day, else the month being browsed.
   const labelInstant =

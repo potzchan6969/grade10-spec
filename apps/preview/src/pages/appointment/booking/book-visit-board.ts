@@ -15,7 +15,6 @@ import type {
 
 const BOARD_ZONE = "Asia/Hong_Kong";
 /** Shop-local today the calendar marks. */
-const BOARD_TODAY = new Date(2026, 9, 15);
 const BOARD_TODAY_KEY = "2026-10-15";
 const BOARD_MIN_MONTH = "2026-10";
 const BOARD_MAX_MONTH = "2026-12";
@@ -392,7 +391,6 @@ export {
   BOARD_MIN_MONTH,
   BOARD_SERVICES,
   BOARD_SHOPS,
-  BOARD_TODAY,
   BOARD_TODAY_KEY,
   BOARD_ZONE,
   boardDays,
