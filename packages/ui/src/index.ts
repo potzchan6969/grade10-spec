@@ -172,13 +172,6 @@ export {
   receiptBreakdown,
 } from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
 export {
-  AuctionCard,
-  type AuctionCardBadge,
-  type AuctionCardCopy,
-  type AuctionCardProps,
-  type AuctionCardWhen,
-} from "./blocks/auction-listing/auction-card";
-export {
   FeaturedAuctionsBanner,
   type FeaturedAuctionsBannerCopy,
   type FeaturedAuctionsBannerCountdown,

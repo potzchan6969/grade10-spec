@@ -1,4 +1,8 @@
 import { cn } from "@grade10/design-system/lib/utils";
+import {
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import { useEffect, useRef, useState } from "react";
 import { AuctionLotCard } from "./auction-catalogue-card";
 import {
@@ -125,8 +129,10 @@ function AuctionCatalogueAllAuctionsGrid({
           >
             <AuctionLotCard
               heading
+              locale={FIXTURE_SHIPPED_LOCALE}
               lot={lot}
               onToggle={() => onToggle(lot.id)}
+              timeZone={FIXTURE_TIME_ZONE}
               watched={watched.has(lot.id)}
             />
           </li>
@@ -138,8 +144,10 @@ function AuctionCatalogueAllAuctionsGrid({
                 <AuctionLotCard
                   heading
                   loading
+                  locale={FIXTURE_SHIPPED_LOCALE}
                   lot={SKELETON_FIXTURE_LOT}
                   onToggle={() => {}}
+                  timeZone={FIXTURE_TIME_ZONE}
                   watched={false}
                 />
               </li>

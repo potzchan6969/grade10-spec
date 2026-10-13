@@ -1,3 +1,7 @@
+import {
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -47,8 +51,10 @@ function WatchedCard({ lot }: { lot: CatalogueLot }) {
   return (
     <AuctionLotCard
       heading
+      locale={FIXTURE_SHIPPED_LOCALE}
       lot={lot}
       onToggle={() => setWatched((value) => !value)}
+      timeZone={FIXTURE_TIME_ZONE}
       watched={watched}
     />
   );
@@ -56,6 +62,8 @@ function WatchedCard({ lot }: { lot: CatalogueLot }) {
 
 const cardArgs = {
   heading: true,
+  locale: FIXTURE_SHIPPED_LOCALE,
+  timeZone: FIXTURE_TIME_ZONE,
   lot: activeLot,
   watched: false,
   onToggle: () => {},
@@ -113,7 +121,7 @@ export const Ended: Story = {
   render: () => <WatchedCard lot={endedLot} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(endedLot.closeLabel)).toBeInTheDocument();
+    expect(canvas.getByText("Ended 2 Oct 2026, 18:00 HKT")).toBeInTheDocument();
     expect(canvas.queryByText(/Ends in/)).toBeNull();
     expect(
       canvas.getByRole("heading", { level: 3, name: endedLot.title }),
