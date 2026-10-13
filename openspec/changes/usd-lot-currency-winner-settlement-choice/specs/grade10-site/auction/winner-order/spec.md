@@ -24,6 +24,8 @@ tracker and delivery proof the order keeps afterwards.
   - Rail chosen at setup: each bank rail is its own choice, not one bank transfer choice
   - Currency change: switching currency before confirming clears a method the new currency does not offer
   - USD card needs a rule: card is offered in USD only once Finance saves a USD card fee rule
+- Internal bidder order
+  - Automatic settlement: an internal bidder's winning order starts in HKD on bank transfer via FPS at close, with no winner or operator setup step; the operator still sends its invoice
 - Bank transfer
   - Rail picked only: the invoice's bank details open on the rail the winner picked and name no other
 - Premium minimum
@@ -31,12 +33,16 @@ tracker and delivery proof the order keeps afterwards.
 
 ## ADDED Requirements
 
-### Requirement: An auction order is settled in USD
+### Requirement: The winner chooses a settlement currency at order setup
 
 At order setup the winner SHALL choose the order's settlement currency from
 `USD` and `HKD`, in the same step as the delivery address and the payment
 method. Grade10 SHALL preselect neither and SHALL refuse a confirmation that
 carries no currency. The lot is bid in USD whichever currency the winner picks.
+
+This choice applies to a collector winner. For an internal bidder's win,
+`grade10-admin/auction/internal-bid` sets HKD settlement, bank transfer and
+FPS at lot close; the internal order does not wait for winner setup.
 
 Until the winner confirms, they SHALL be able to change the currency freely.
 Once they confirm, the currency locks for the winner with the address and the
@@ -1009,13 +1015,18 @@ Grade10 SHALL create its one auction order in step 1, flagged internal, and
 SHALL, in place of step 2 and the winner's setup:
 
 - Take the internal bidder's billing address as it stands at the close as
-  the order's delivery address and billing address, and bank transfer as its
-  payment method, all confirmed at the close, so the order is ready for an
-  operator to quote and never waits on an address deadline. The lot reads USD
-  as any lot does and nothing else about the order changes, per
+  the order's delivery address and billing address, and set settlement
+  currency to `HKD`, payment method to `bank_transfer` and rail to `fps`, all
+  at the close. The order is ready for an operator to quote and send an
+  invoice and never waits on an address deadline. The lot and its winning bid
+  remain USD, per
   `grade10-admin/auction/internal-bid`.
 - Send no letter of `grade10-site/auction/notifications-order` for the order,
   at the close or after it, to the internal bidder or to anyone.
+
+The close SHALL write the internal order's currency and rail together with its
+confirmed address and method. It SHALL NOT leave these fields null for an
+operator to fill, and SHALL NOT issue an invoice.
 
 Order creation and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
@@ -1049,20 +1060,21 @@ close delivered more than once SHALL produce one auction order.
 - **THEN** the order's derived status is Preparing Invoice
 - **AND** the winner is offered no way to pay yet
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=4 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=6 -->
 #### Scenario: winner-order-SC-277 - A lot an internal bidder wins opens its order with the internal bidder's address
-**Serves:** A lot an internal bidder won - the close finds the house on top and opens the internal bidder's order
+**Serves:** `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-06`
 
-- **GIVEN** a `USD` lot where the house leads at 31000 USD minor units over
+- **GIVEN** a `USD` lot where the house leads at 30500 minor units over
   collector A, its internal bid naming an internal bidder whose billing
   address is in Hong Kong
 - **WHEN** the lot closes
 - **THEN** Grade10 creates one auction order for the internal bidder, flagged
-  internal, with invoice status `not_issued`
+  internal, with invoice status `not_issued` and settlement currency `HKD`
 - **AND** the order holds that billing address as its delivery and billing
-  address, with bank transfer, and derives as Preparing Invoice
-- **AND** the order reads the lot's USD
-- **AND** issues no invoice and sends no won, address or other letter for it
+  address, with `bank_transfer` on `fps`, and derives as Preparing Invoice
+- **AND** the order records the lot's 30500 minor-unit winning bid in USD
+- **AND** no invoice is issued, no winner or operator setup step is required,
+  and no won, address or other letter is sent for it
 
 ## REMOVED Requirements
 

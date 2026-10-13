@@ -12,13 +12,6 @@
 **I want** the buyer's premium on my invoice to follow one published rule,
 **so that** I can check what I am charged on top of my winning bid.
 
-### winner-order-US-08: Winner pays an invoice with a policy premium
-
-**As a** winner of an auction lot,
-**I want** my invoice to calculate the stated buyer premium correctly using the
-current currency minimum,
-**so that** the amount I pay is explainable and collectible.
-
 ### winner-order-US-09: Winner pays an invoice by bank transfer
 
 **As a** winner who would rather not pay a card fee,
@@ -52,5 +45,12 @@ current currency minimum,
 **so that** I see what I won and what it costs me in HKD.
 
 ## MODIFIED User journeys
+
+### winner-order-US-08: Winner pays an invoice with a policy premium
+
+**As a** winner of an auction lot,
+**I want** my invoice to calculate the stated buyer premium correctly using the
+one USD minimum,
+**so that** the amount I pay is explainable and collectible.
 
 ## REMOVED User journeys

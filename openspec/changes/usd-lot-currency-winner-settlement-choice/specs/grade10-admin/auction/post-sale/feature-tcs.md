@@ -1,6 +1,6 @@
 # grade10-admin/auction/post-sale Test Cases
 
-**Status:** pending-review · 0/11
+**Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-admin-auction-post-sale-SC-37, grade10-admin-auction-post-sale-SC-38, grade10-admin-auction-post-sale-SC-49, grade10-admin-auction-post-sale-SC-50, grade10-admin-auction-post-sale-SC-68, grade10-admin-auction-post-sale-SC-69, grade10-admin-auction-post-sale-SC-70, grade10-admin-auction-post-sale-SC-75, grade10-admin-auction-post-sale-SC-76, grade10-admin-auction-post-sale-SC-77, grade10-admin-auction-post-sale-SC-78, grade10-admin-auction-post-sale-SC-79, grade10-admin-auction-post-sale-SC-80, grade10-admin-auction-post-sale-SC-81, grade10-admin-auction-post-sale-SC-82, grade10-admin-auction-post-sale-SC-83, grade10-admin-auction-post-sale-SC-90, grade10-admin-auction-post-sale-SC-91, grade10-admin-auction-post-sale-SC-107, grade10-admin-auction-post-sale-SC-108, grade10-admin-auction-post-sale-SC-109, grade10-admin-auction-post-sale-SC-110, grade10-admin-auction-post-sale-SC-111, grade10-admin-auction-post-sale-SC-112, grade10-admin-auction-post-sale-SC-113, grade10-admin-auction-post-sale-SC-114, grade10-admin-auction-post-sale-SC-115, grade10-admin-auction-post-sale-SC-118, grade10-admin-auction-post-sale-SC-125, grade10-admin-auction-post-sale-SC-126, grade10-admin-auction-post-sale-SC-133, grade10-admin-auction-post-sale-SC-134, grade10-admin-auction-post-sale-SC-136, grade10-admin-auction-post-sale-SC-137, grade10-admin-auction-post-sale-SC-139, post-sale-SC-156, post-sale-SC-157, post-sale-SC-158, grade10-admin-auction-post-sale-SC-162, grade10-admin-auction-post-sale-SC-163, grade10-admin-auction-post-sale-SC-164, grade10-admin-auction-post-sale-SC-167, grade10-admin-auction-post-sale-SC-168, grade10-admin-auction-post-sale-SC-169, grade10-admin-auction-post-sale-SC-170, grade10-admin-auction-post-sale-SC-171, grade10-admin-auction-post-sale-SC-172, grade10-admin-auction-post-sale-SC-184, grade10-admin-auction-post-sale-SC-185, grade10-admin-auction-post-sale-SC-193, grade10-admin-auction-post-sale-SC-194, post-sale-SC-210, grade10-admin-auction-post-sale-SC-211, grade10-admin-auction-post-sale-SC-212, grade10-admin-auction-post-sale-SC-213, grade10-admin-auction-post-sale-SC-214, grade10-admin-auction-post-sale-SC-215, grade10-admin-auction-post-sale-SC-216
 
@@ -10,7 +10,7 @@
 **I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-u4w rev=2 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-u4w rev=2 -->
 ### post-sale-US5-TC9-2: Operator sends an invoice with tax typed in USD
 
 **Classification:**
@@ -51,8 +51,8 @@
 * Its Subtotal includes Tax and reads `<lines>` plus `<tax in HKD>` in HKD.
 * The invoice is `pending` and its order total equals that Subtotal.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-70n rev=1 covers=g10adm.auction-post-sale.SC-8ko,g10adm.auction-post-sale.SC-lxd,g10adm.auction-post-sale.SC-lc8 -->
-### post-sale-US5-TC20-1: Every quote amount is typed in USD and sent in the settlement currency
+<!-- trace:case id=g10adm.auction-post-sale.TC-70n rev=2 covers=g10adm.auction-post-sale.SC-8ko,g10adm.auction-post-sale.SC-c0y -->
+### post-sale-US5-TC20-2: Every quote amount is typed in USD and sent in the settlement currency
 
 Runs once per row of **Test data**.
 
@@ -80,6 +80,7 @@ Runs once per row of **Test data**.
 | `<shipping and handling>` | USD80 (range: >0 minor units), typed in USD |
 | `<insurance>` | USD40 (range: >0 minor units), typed in USD |
 | `<bank transfer fee>` | USD15 (range: >0 minor units), typed in USD |
+| Exact HKD quote row | Order has a 10100-minor-unit USD winning bid and 2020-minor-unit USD premium; enter USD1001 shipping and handling and USD0 bank transfer fee |
 
 | Settlement currency | Invoice amounts |
 | --- | --- |
@@ -99,6 +100,8 @@ Runs once per row of **Test data**.
 * Step 2: Shipping & Handling, Insurance and the bank transfer fee each take USD.
 * Step 4: the subtotal, the payment processing fee and the order total read in the row's settlement currency, and no conversion rate shows on the quote.
 * The sent invoice is `pending` and carries the amounts the row names, in the row's settlement currency, at the order total read in step 4.
+* For the exact HKD quote row, the quote's order total is 103100 minor units in HKD, with no conversion rate shown.
+* For the exact HKD quote row, Grade10 stores the shipping and handling line as 1001 minor units in USD and the sent invoice carries it as 7900 minor units in HKD.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-w5z rev=1 covers=g10adm.auction-post-sale.SC-pp0 -->
 ### post-sale-US5-TC21-1: The settlement currency is changed before send
@@ -140,8 +143,8 @@ Runs once per row of **Test data**.
 * Step 2: the quote reads in USD.
 * The sent invoice is in USD and carries `<shipping and handling>` as typed.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-r3c rev=1 covers=g10adm.auction-post-sale.SC-2g5 -->
-### post-sale-US5-TC22-1: The settlement currency is changed on a reissue after send
+<!-- trace:case id=g10adm.auction-post-sale.TC-r3c rev=2 covers=g10adm.auction-post-sale.SC-2g5 -->
+### post-sale-US5-TC22-2: The settlement currency is changed on a reissue after send
 
 **Classification:**
 
@@ -160,6 +163,13 @@ Runs once per row of **Test data**.
 
 * admin(operator with payment-processing) has an order with a pending invoice sent in HKD for bank transfer on HK Local.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Winning bid on the order | 78500 minor units in HKD |
+| USD winning bid on reissue | 10000 minor units in USD |
+
 **Steps:**
 
 1. Reissue the invoice, set its settlement currency to USD, keep HK Local, change nothing else and give a reason.
@@ -171,8 +181,9 @@ Runs once per row of **Test data**.
 * The reissued invoice is pending and is in USD, with its lines priced from the order's USD amounts and none converted.
 * The replaced invoice still reads its HKD amounts.
 * The reissued entry on the invoice log names the settlement currency as a changed part.
+* The reissued invoice's Winning Bid is 10000 minor units in USD; the replaced invoice's Winning Bid remains 78500 minor units in HKD.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-d4e rev=1 covers=g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-b44 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-d4e rev=1 -->
 ### post-sale-US5-TC23-1: The quote names the payment method and rail the winner chose
 
 Runs once per row of **Test data**.
@@ -217,7 +228,7 @@ Runs once per row of **Test data**.
 * A bank transfer row asks for a bank transfer fee in USD and shows no fee computed from the card rule.
 * The card row shows the fee computed from the card rule of the settlement currency, and no bank transfer fee field.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-9yj rev=1 covers=g10adm.auction-post-sale.SC-c0y -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-9yj rev=1 -->
 ### post-sale-US5-TC24-1: A typed amount that does not convert to a whole HK$ is rounded up
 **Classification:**
 
@@ -254,7 +265,7 @@ Runs once per row of **Test data**.
 * The invoice carries Shipping & Handling of HKD79.00.
 * The invoice line keeps USD10.01 as the amount the operator typed.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-jru rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-guq -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-jru rev=1 -->
 ### post-sale-US5-TC25-1: Sending prices the invoice in the settlement currency and locks the order
 Runs once per row of **Test data**.
 
@@ -301,7 +312,7 @@ Runs once per row of **Test data**.
 * The delivery address, the settlement currency and the payment method are locked.
 * The order reads Pending Payment.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-qz7 rev=1 covers=g10adm.auction-post-sale.SC-miq -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-qz7 rev=1 -->
 ### post-sale-US5-TC26-1: A large bank transfer fee is accepted and converts with the other lines
 **Classification:**
 
@@ -338,7 +349,7 @@ Runs once per row of **Test data**.
 * The invoice carries a bank transfer fee of HKD3,925.00, the typed amount converted.
 * The invoice is `pending` with an order total of HKD4,978.00.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-9i1 rev=1 covers=g10adm.auction-post-sale.SC-4va,g10adm.auction-post-sale.SC-xsv -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-9i1 rev=1 covers=g10adm.auction-post-sale.SC-xsv,g10adm.auction-post-sale.SC-4va -->
 ### post-sale-US5-TC27-1: A currency change that leaves the held rail unoffered is refused
 Runs once per row of **Test data**.
 
@@ -377,7 +388,7 @@ Runs once per row of **Test data**.
 * The order, or the current invoice, still holds the currency and rail it held before.
 * The invoice log gains no entry.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-pjh rev=1 covers=g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-0ew,g10adm.auction-post-sale.SC-j60 -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-pjh rev=1 covers=g10adm.auction-post-sale.SC-0ew -->
 ### post-sale-US5-TC28-1: An operator edits the method and rail before send, and a rail the currency does not offer is refused
 Runs once per row of **Test data**.
 
@@ -420,8 +431,7 @@ Runs once per row of **Test data**.
 * An accepted edit adds an order edited before send entry naming the operator, the reason, and each part changed with its value before and after.
 * A refused edit adds no entry and the order keeps its card method.
 
-
-<!-- trace:case id=g10adm.auction-post-sale.TC-ddn rev=1 covers=g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-ppk -->
+<!-- trace:case id=g10adm.auction-post-sale.TC-ddn rev=1 -->
 ### post-sale-US5-TC30-1: Recording setup by telephone carries a settlement currency
 Runs once per row of **Test data**.
 
@@ -460,38 +470,59 @@ Runs once per row of **Test data**.
 * An accepted record derives Preparing Invoice, and the winner cannot change the address because the address deadline has passed.
 * A refused record leaves the order in Setup Overdue holding no recorded address and no currency.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-rail rev=1 covers=g10adm.auction-post-sale.SC-r31,g10adm.auction-post-sale.SC-r32 -->
+### post-sale-US5-TC31-1: A rail-only change is accepted on reissue
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-05
+
+**Pre-conditions:**
+
+* admin(operator with payment-processing) has an order with a pending bank transfer invoice using the row's current rail.
+* Grade10 holds bank details for the row's new rail.
+
+**Test data:**
+
+| Settlement currency | Current rail | New rail |
+| --- | --- | --- |
+| HKD | FPS | HK Local |
+| USD | HK Local | International via SWIFT |
+
+**Steps:**
+
+1. Reissue the invoice with only the bank rail changed to the row's new rail, give the reason `Winner requested another rail`, and confirm.
+2. Read the order, the new invoice, the replaced invoice and the invoice log.
+
+**Expected Results:**
+
+* The reissue is accepted although the settlement currency and bank transfer method stay the same.
+* The order keeps the row's settlement currency and uses the row's new rail.
+* The new invoice is pending with the selected rail's bank details; the replaced invoice keeps its original rail.
+* The reissued entry records the rail as a changed part.
 
 ## Settled
 
 - None this run. The blind reading's question whether this capability takes a delta in this change was answered as Q24; the questions raised below are open.
 
+
+
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-14 for change `usd-lot-currency-winner-settlement-choice`, joining QA1's blind cases with Dev's delta scenarios on `post-sale-US-05`, the `Quote and send` anchor, and the restated `post-sale-US-02`, `post-sale-US-07` and `post-sale-US-18` (read through the `Quote and send` anchor, the one the delta defines). Read the change's `proposal.md`, `decisions.md` (Q1 to Q27 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
+**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with the current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline. Full case ledger and source paths: `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-admin.md`.
 
-| Finding | Disposition |
-| --- | --- |
-| Every quote amount is typed in USD; an HKD order reads the converted subtotal, fee and total and no rate; a USD order converts nothing and reads a line typed `80.00` as 8000 minor units | **Folded in:** `grade10-admin-auction-post-sale-SC-251`, `grade10-admin-auction-post-sale-SC-243` and `grade10-admin-auction-post-sale-SC-165`, asserted by the HKD and USD rows of `g10adm.auction-post-sale.US5-TC20`. QA2 widened its Expected Results with the subtotal, the fee, the order total and the no-rate clause |
-| A typed amount that converts to a fraction of a HK$ is rounded up on the line | **Added:** `g10adm.auction-post-sale.US5-TC24` asserts `grade10-admin-auction-post-sale-SC-252`. QA1's USD80 is a whole HK$ on conversion and reads no rounding |
-| Tax typed in USD converts and enters the Subtotal | **Folded in:** `post-sale-SC-155`, asserted by `g10adm.auction-post-sale.US5-TC9`, which QA2 widened with the bank transfer fee of 0, the `pending` status and the order total |
-| A send prices the invoice in the settlement currency, starts the deadline, locks the address, currency and method; a send with no insurance prices without it | **Added:** `g10adm.auction-post-sale.US5-TC25` asserts `grade10-admin-auction-post-sale-SC-48` and `grade10-admin-auction-post-sale-SC-63`, one row each; QA1 read the quote and not the send |
-| A bank transfer fee has no cap and converts with the other lines | **Added:** `g10adm.auction-post-sale.US5-TC26` asserts `grade10-admin-auction-post-sale-SC-119`. The refusal of a negative fee is `grade10-admin-auction-post-sale-SC-118`, restated unchanged |
-| The quote names the method and the rail the winner chose, asks for the bank transfer fee in USD, and names SWIFT on a USD order | **Folded in:** `grade10-admin-auction-post-sale-SC-117` and `grade10-admin-auction-post-sale-SC-244`, asserted by the rows of `g10adm.auction-post-sale.US5-TC23`. QA1's rows named abstract rails, which cannot tell FPS under HKD from SWIFT under USD, so QA2 made each row a currency and a named rail |
-| An operator changes the settlement currency before send with a reason, and the log names it | **Folded in:** `grade10-admin-auction-post-sale-SC-247`, asserted by `g10adm.auction-post-sale.US5-TC21`, which QA2 widened with the reason, the kept rail and the log entry. The reason and the entry are required by "An operator edits the address or method before send" |
-| A currency change that leaves the held method or rail unoffered is refused, before send and on a reissue | **Added:** `g10adm.auction-post-sale.US5-TC27` asserts `grade10-admin-auction-post-sale-SC-248` and `grade10-admin-auction-post-sale-SC-246`, one row each |
-| A reissue in another currency prices from the USD amounts, leaves the replaced invoice untouched and names the currency as changed | **Folded in:** `grade10-admin-auction-post-sale-SC-245`, asserted by `g10adm.auction-post-sale.US5-TC22`, which QA2 widened with the replaced invoice and the log entry |
-| An edit before send changes the address and method to a rail on the order's currency and is logged; a USD order is edited to SWIFT; FPS under USD is refused | **Added:** `g10adm.auction-post-sale.US5-TC28` asserts `grade10-admin-auction-post-sale-SC-135`, `grade10-admin-auction-post-sale-SC-249` and `grade10-admin-auction-post-sale-SC-138`, one row each. The title of `grade10-admin-auction-post-sale-SC-138` is historical, as its text says |
-| Recording setup by telephone names a settlement currency, and a record with none is refused | **Added:** `g10adm.auction-post-sale.US5-TC30` asserts `grade10-admin-auction-post-sale-SC-84` and `grade10-admin-auction-post-sale-SC-250`, one row each |
-| An internal bidder's order carries no settlement currency and no rail, and a send refuses until an operator sets them | **Stop and ask the author:** `grade10-admin-auction-post-sale-SC-253` is not linked and no case was written. `decisions.md` Q20 says the lot reads USD and "nothing else changes", while the scenario and "An operator quotes and sends the invoice" add a refusal and a step before send; the durable `grade10-admin-auction-internal-bid-SC-73`, outside this change by Q25, sends the internal order's invoice with no such step. Raised in `decisions.md` |
-| The quote's amounts are read in the settlement currency with no rate | **Checked, no contradiction:** the requirement names the subtotal, the payment processing fee and the order total in HKD for an HKD order, and the card quote reads the fee computed from the HKD rule; `grade10-admin-auction-post-sale-SC-251` and `grade10-admin-auction-post-sale-SC-69` agree. What the winner's Order Summary shows for the card fee is Q17 and is a winner-order question |
-| Scenarios the modified blocks restate with a USD fixture and no rule change: `grade10-admin-auction-post-sale-SC-107`, `-SC-110`, `-SC-111`, `post-sale-SC-158`, `post-sale-SC-210`, `grade10-admin-auction-post-sale-SC-170`, `-SC-172` and `-SC-216` | **Out of suite:** the durable suite holds the verifying cases: `g10adm.auction-post-sale.TC-6bv` (`SC-107`), `TC-w3j` (`SC-110` and `SC-172`), `post-sale-US7-TC8-1` (`SC-111`), `TC-6p7` (`post-sale-SC-158`), `TC-yjb` (`post-sale-SC-210`), `TC-42i` (`SC-170`) and `TC-0jl` (`SC-216`). Their fixtures read HKD; the rule is the same per currency |
-| The other 50 scenarios the modified blocks restate unchanged | **Out of suite:** the durable `g10adm.auction-post-sale` suite holds them, and this change does not alter them; each id appears in the `covers` of a case there. Those markers bundle a journey's cases, so they say which durable cases hold a scenario and not which one case asserts it |
-| Quote and send durable cases still read HKD amounts as typed: `g10adm.auction-post-sale.TC-dre` family, `TC-j3w`, `TC-jn5` | **Not folded:** the durable suite's fixtures; each needs a USD-typed restatement at the walk of task 11.7 or at archive |
-
-**Uncovered anchors:** none for `post-sale-US-05` or `Quote and send`.
-
-**Uncovered scenarios:** `grade10-admin-auction-post-sale-SC-253`, held for the author and the PM; see the row above.
-
-**Over-claimed cases:** none. The five QA1 cases were widened, not relabelled.
-
-**Contradictions:** `grade10-admin-auction-post-sale-SC-253` and the requirement text "an internal bidder's order holds neither until an operator sets them" read against `decisions.md` Q20 ("nothing else changes") and the durable internal-bid send scenario; held. `spec.md:223` and `spec.md:456` name an invoice-sent letter and an invoice-reissued letter that `grade10-site/auction/notifications-order` does not send; the letter is the payment reminder, per the contradictions note of that suite.
+- **Retained:** All 12 active case IDs, revisions, routes and classifications remain draft.
+- **Covered:** `US5-TC20` rev2 asserts `SC-251`'s 103100-minor-unit HKD quote total with no displayed rate and `SC-252`'s USD 1001 line stored as USD and sent as HKD 7900. `US5-TC21` asserts `SC-247`; `US5-TC22` rev2 asserts `SC-245`'s exact HKD 78500 to USD 10000 reissue while preserving the replaced invoice. `US5-TC27` asserts `SC-246` and `SC-248` refusals without changing the invoice/order or logging an edit. `US5-TC28` asserts `SC-249`'s accepted USD SWIFT change. `US5-TC31` asserts `SC-254` and `SC-255` rail-only reissues.
+- **Scope:** A bank rail is part of the payment choice under Q31. The operator still enters quote lines in USD and the order/invoice amounts read in the selected settlement currency.
+- **Out of suite:** Retain only scenarios whose complete THEN is not asserted by a route in this feature suite; see the enumerated list in the header. No unresolved product question remains.

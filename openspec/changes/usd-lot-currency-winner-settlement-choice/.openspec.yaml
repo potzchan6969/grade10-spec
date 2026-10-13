@@ -9,6 +9,7 @@ depends_on:
   - remove-my-auction-orders
 hands:
   design: "@tangconst"
+ui_waived: "@htonyl waived ui-design on 2026-10-14 and authorized correcting the existing stories to the settled currency and method choices."
 purpose_rewritten:
   grade10-site/auction/winner-order: "the order now carries a settlement currency the winner picks and a bank rail, so what a winner is sent and chooses changed"
   grade10-site/auction/bid-increments: "every auction bids in USD alone, so one USD schedule replaces a schedule per currency"

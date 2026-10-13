@@ -14,7 +14,7 @@ The proposal holds the motive. This file holds how the work lands.
 
 - One USD fact per money line, one pure conversion to HKD, and one place that owns both.
 - A sent invoice that never re-prices, whatever happens to the conversion figure later.
-- A currency and a rail that the order records and every later surface reads, changed only by the winner before confirming and by an operator before send or on a reissue.
+- A currency and a rail that the order records and every later surface reads; internal orders receive HKD and FPS at close, while ordinary winners and operators choose from the offered set.
 - A one-time, reversible-by-restore overwrite of lot currency.
 
 **Non-Goals:**
@@ -42,7 +42,7 @@ The specs govern the rules. These rows record how they are built.
 - **Persist, do not recompute** - At send the service writes one row per line holding the USD fact and the settlement amount. For a USD invoice the two are equal. A read never converts, so a later change to the figure cannot move a sent invoice.
 - **No rate on the invoice** - The figure is one constant and the lines protect the invoice. A per-invoice rate column would add a field that could leak onto a page. A reviewed change moves the constant and applies only to invoices sent or reissued after it.
 - **Card fee** - Computed in the settlement currency from that currency's rule, on the sum of the settlement lines, and stored as its own line with no USD fact. The Order Summary reads it from that line in HKD, after the separator below the two totals, on top of the converted HKD total; the USD total leaves it out and no USD fee shows. The winner pays the converted HKD total plus the fee, the invoice's Order Total (`decisions.md` Q17).
-- **Reissue** - Reprices from the USD facts in the currency the operator chose, which may differ from the replaced invoice's. It writes a new invoice and lines and leaves the replaced invoice and its lines untouched.
+- **Reissue** - Reprices from the USD facts in the currency the operator chose, which may differ from the replaced invoice's. A change to the settlement currency or payment choice counts; a payment choice includes its rail. A rail-only change writes a new invoice and bank snapshot and leaves the replaced invoice and snapshot untouched.
 - **Rejected: store only HKD** - The Order Summary needs the USD lines, and an audit needs the fact the conversion started from.
 
 ### Order currency and bank rail
@@ -53,7 +53,8 @@ The specs govern the rules. These rows record how they are built.
 - **Currency change** - The setup write validates the method against the offered set for the currency in the same request. A method the new currency does not offer is refused, and the form clears it on the client from the same set.
 - **Lock** - Confirmation writes address, currency, method and rail in one transaction. The invoice send reads those values inside its own transaction, so a send cannot see a half-confirmed order.
 - **Operator edit** - An operator's edit before send, and a reissue, write currency, method and rail through the same offered-set validation as the winner's confirmation, in one transaction, and record each changed part with its value before and after on the invoice log. A currency change that leaves the held method unoffered is refused unless the same edit names another.
-- **Internal bidder's order** - The close creates it with address and bank transfer, reading its lot's USD, and nothing else about it changes, per `grade10-admin/auction/internal-bid`. It sends as it did, with no currency or rail step. The refusals for a null currency or a bank transfer with a null rail apply to a winner's order, not to an internal bidder's.
+- **Internal bidder's order** - The close writes the internal bidder's billing address, `settlement_currency=HKD`, `payment_method=bank_transfer` and `bank_rail=fps` in the same order insert. The winning lot and bid remain USD. The order starts in Preparing Invoice; no invoice is issued at close. The operator still quotes and sends the invoice, lets it expire and cancels the order. There is no winner or operator setup step.
+- **Legacy internal orders** - Before adding the constraints, the migration checks every existing internal order. If an old row cannot be represented truthfully as HKD and FPS without changing an already sent invoice, the migration stops before it changes any order or invoice. The migration never re-prices or edits a sent invoice. It can be rerun after the legacy rows have a valid, reviewed mapping.
 - **Rejected: a four-valued method** - It would break every reader of `card` and `bank_transfer` for no gain; the rail only matters to View Bank Details.
 
 ### Bank details shown
@@ -105,10 +106,11 @@ Names are descriptive. Each is one processor with one input shape and one succes
 
 | Service | Input | Success | Refusal |
 | --- | --- | --- | --- |
-| Confirm order setup | order id, address, billing address, settlement currency, method, rail | order records currency, method and rail; status Preparing Invoice | `CURRENCY_REQUIRED`, `METHOD_NOT_OFFERED`, `ADDRESS_INVALID`; nothing written |
+| Confirm winner order setup | order id, address, billing address, settlement currency, method, rail | order records currency, method and rail; status Preparing Invoice | `CURRENCY_REQUIRED`, `METHOD_NOT_OFFERED`, `ADDRESS_INVALID`; nothing written |
+| Close internal bidder win | lot id, internal bidder id, winning USD bid | internal order records address, HKD, `bank_transfer` and FPS; status Preparing Invoice; no invoice | invalid or missing internal bidder address; nothing written |
 | Edit order before send | order id, address, settlement currency, method, rail, reason | order records the new values; log entry; status stays Preparing Invoice | `METHOD_NOT_OFFERED`, `REASON_REQUIRED`, `NOTHING_CHANGED`, `FORBIDDEN`; nothing written |
 | Send invoice | order id, operator quote in USD (shipping, insurance, tax, bank fee), the total the operator read | invoice with line rows, fee, total, deadline, bank snapshot | `NO_CARD_RULE`, `CURRENCY_NOT_SET`, `ORDER_NOT_READY`, `QUOTE_CHANGED`; nothing written |
-| Reissue invoice | order id, changed parts including settlement currency, quote in USD, reason | new invoice and lines; replaced invoice untouched | `METHOD_NOT_OFFERED`, `NO_CARD_RULE`, `NOTHING_CHANGED`, `QUOTE_CHANGED`; nothing written |
+| Reissue invoice | order id, changed parts including settlement currency or payment choice (method and rail), quote in USD, reason | new invoice and lines; replaced invoice untouched | `METHOD_NOT_OFFERED`, `NO_CARD_RULE`, `NOTHING_CHANGED`, `QUOTE_CHANGED`; nothing written |
 | Offered methods | settlement currency | list of methods and rails with their fee-range text | none |
 | Save payment settings | premium minimum in USD, card rules for USD and HKD | stored whole, operator and time recorded | `CURRENCY_UNSUPPORTED`, `RANGE`, `FORBIDDEN`; nothing written |
 | Overwrite lot currency | none | counts of listings, bids and maximums rewritten | none; re-running changes nothing |
@@ -132,8 +134,8 @@ Names follow the existing schema's conventions when written.
 
 | Table | Change | Notes |
 | --- | --- | --- |
-| auction order | add `settlement_currency` text, nullable, no default; add `bank_rail` text, nullable | Null until the winner confirms. A check holds `settlement_currency` to `USD` or `HKD` and `bank_rail` to `fps`, `hk_local` or `swift`, and requires a rail exactly when the method is `bank_transfer` |
-| invoice | add `settlement_currency` text, not null | Backfilled from the invoice's existing currency |
+| auction order | add `settlement_currency` text, nullable, no default; add `bank_rail` text, nullable | Null only for an ordinary winner before confirmation. Checks allow only USD or HKD; require FPS or HK Local for HKD bank transfer, HK Local or SWIFT for USD bank transfer, and no rail for card. An internal order must be HKD, `bank_transfer` and FPS. Preflight existing internal rows before adding validated checks; abort without updates if a sent invoice cannot be preserved |
+| invoice | add `settlement_currency` text, not null | Backfilled from each invoice's existing currency. No sent invoice amount, currency, line or bank snapshot is rewritten |
 | invoice line | add `usd_minor` bigint, nullable; keep the settlement amount column | Null on a card fee line. Equal to the amount on a USD invoice |
 | invoice bank snapshot | hold one rail | Existing rows keep three; new rows hold the picked rail |
 | listing, bid, auto-bid maximum | keep `currency`; add a check holding it to `USD` | Applied after the overwrite |
@@ -146,25 +148,26 @@ Authoritative: the USD facts and the stored settlement lines. Derived: the offer
 - **[Risk] A display path converts a second time and shows a different figure** → Blocks, PDFs and letters take lines from the view only; a lint rule in `grade10` forbids importing the conversion function outside the pricing module.
 - **[Risk] The figure changes later and a reissue prices differently from the sent invoice** → Line rows are stored; a test sends, changes the constant, reads the invoice and expects no change.
 - **[Risk] The overwrite leaves a priced-in-HKD amount meaning a different sum** → Accepted by Q12 because every such lot is test data. The overwrite counts its rows, runs once in a transaction, and a database backup precedes it.
-- **[Risk] Orders and invoices already sent on migrated lots read HKD beside a USD lot** → The overwrite touches lots, bids and maximums only. A sent invoice is a settlement record and stays; an order without a sent invoice has no settlement currency and picks at setup.
+- **[Risk] A legacy internal order gets new defaults that misstate its sent invoice** → The migration checks legacy internal rows before applying internal-order constraints and stops before mutation when it cannot preserve the sent invoice. New internal orders always write HKD and FPS at close. Existing sent invoices remain unchanged.
 - **[Risk] No USD card rule at launch** → The offered-methods function hides card in USD and the page says it is not yet available. The task list carries Finance's rule as a dated launch dependency.
 - **[Risk] A winner changes currency while an operator sends** → Confirmation locks currency and method; send reads the locked values in its transaction, so a half-confirmed order cannot be priced.
 - **[Risk] The card processor refuses a currency** → The card charge uses the settlement currency and the invoice total; a sandbox charge in each currency is part of the walk before launch.
-- **[Risk] Capabilities this change does not name still state HKD or JPY** → `grade10-admin/auction/test-winners` (currency per listing), `grade10-admin/auction/internal-bid` (a JPY listing) and `grade10-site/auction/bid-payment-method` (listings in three currencies). One follow-on change drops them, per `decisions.md` Q25. HKD examples in other auction capabilities stay, per Q27.
+- **[Risk] A sibling capability still accepts an HKD or JPY bid** → The listing, test-winner, internal-bid and bid-payment-method deltas all set the current bid and listing currency to USD. Settlement and invoice examples in HKD remain where the winner chooses HKD, per `decisions.md` Q27.
 - **[Trade-off] One constant over a table** - A rate table would let a third currency in. The cost is that a new currency is a code change and a spec change, which is the intent.
 
 ## Migration Plan
 
 1. Back up the auction tables. Record counts of listings, bids and maximums by currency.
-2. Deploy the schema additions, all nullable or defaulted, with the listing check not yet applied.
-3. Run the overwrite once: set `currency` to `USD` on every listing, bid and auto-bid maximum that holds `HKD` or `JPY`. Amounts, statuses and dates are untouched. Re-running changes nothing.
-4. Apply the `USD` check on those columns.
-5. Reshape Payment Settings: keep the USD premium minimum, delete HKD and JPY values and the JPY card rule.
-6. Finance saves a USD card rule.
-7. Set the brand's verified bar to 1500000 USD minor units.
-8. Deploy site and admin wiring.
+2. Check every existing internal order. If any cannot meet the internal-order checks without changing a sent invoice, stop before mutation and resolve that row.
+3. Deploy nullable order columns and invoice fields; backfill invoice currency from each invoice's existing currency; add internal-order checks only after the legacy check passes.
+4. Run the overwrite once: set `currency` to `USD` on every listing, bid and auto-bid maximum that holds `HKD` or `JPY`. Amounts, statuses and dates are untouched. Re-running changes nothing.
+5. Apply the `USD` check on those columns.
+6. Reshape Payment Settings: keep the USD premium minimum, delete HKD and JPY values and the JPY card rule.
+7. Finance saves a USD card rule.
+8. Set the brand's verified bar to 1500000 USD minor units.
+9. Deploy site and admin wiring.
 
-Rollback before step 4: restore the backup. After step 4 the check refuses non-USD writes, so rollback restores the backup and drops the check.
+Rollback before step 5: restore the backup. After step 5 the check refuses non-USD writes, so rollback restores the backup and drops the check.
 
 ## Open Questions
 

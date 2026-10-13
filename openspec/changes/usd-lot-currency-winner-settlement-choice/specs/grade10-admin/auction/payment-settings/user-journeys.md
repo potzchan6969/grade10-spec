@@ -15,11 +15,11 @@ premium for each auction currency,
 
 ## ADDED User journeys
 
-### grade10-admin-auction-payment-settings-US-03: Finance keeps one card rule per settlement currency
+### grade10-admin-auction-payment-settings-US-03: Finance keeps one USD minimum and one card rule per settlement currency
 
 **As a** finance operator,
-**I want** a card fee rule for USD and one for HKD, and nothing for a currency no winner can pick,
-**so that** a winner who settles in either currency can pay by card at a fee that covers what Stripe takes.
+**I want** one USD premium minimum and a card fee rule for USD and one for HKD,
+**so that** invoices use one bid-currency minimum and a winner can pay by card where Finance has configured its fee.
 
 ## MODIFIED User journeys
 

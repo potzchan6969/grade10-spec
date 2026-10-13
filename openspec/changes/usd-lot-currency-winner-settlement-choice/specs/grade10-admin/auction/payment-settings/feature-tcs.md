@@ -10,7 +10,7 @@
 **I want** one place under `/auction` to review and update the minimum buyer premium for each auction currency,
 **so that** invoice amounts follow the configured policy.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-q43 rev=2 covers=g10adm.auction-payment-settings.SC-erw -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-q43 rev=2 -->
 ### grade10-admin-auction-payment-settings-US1-TC1-2: Initial page shows one USD minimum
 
 **Classification:**
@@ -41,7 +41,7 @@
 * Step 1: one USD minimum is shown, reading USD0.00.
 * Step 2: no HKD or JPY minimum is shown.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-nzx rev=2 covers=g10adm.auction-payment-settings.SC-veg -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-nzx rev=2 -->
 ### grade10-admin-auction-payment-settings-US1-TC2-2: A saved USD minimum persists
 
 **Classification:**
@@ -78,7 +78,7 @@
 * Step 3 shows `<usd>` as saved.
 * The save names this operator and the time it was saved.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=2 covers=g10adm.auction-payment-settings.SC-ieg -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=2 -->
 ### grade10-admin-auction-payment-settings-US1-TC3-2: Invalid save changes nothing
 
 Runs once per row of **Test data**.
@@ -118,7 +118,7 @@ Runs once per row of **Test data**.
 * The save is refused because `<refusal>`.
 * USD remains 0 minor units.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-gof rev=2 covers=g10adm.auction-payment-settings.SC-qzp -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-gof rev=2 -->
 ### grade10-admin-auction-payment-settings-US1-TC5-2: Finance saves the minimum in major units, zero included
 
 Runs once per row of **Test data**.
@@ -159,7 +159,7 @@ Runs once per row of **Test data**.
 * The save is accepted.
 * The tab reads `<read>`, stored as `<stored>` minor units.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-6sl rev=1 covers=g10adm.auction-payment-settings.SC-ieg -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-6sl rev=1 -->
 ### grade10-admin-auction-payment-settings-US1-TC6-1: A premium minimum in HKD or JPY is refused
 
 Runs once per row of **Test data**.
@@ -199,15 +199,13 @@ Runs once per row of **Test data**.
 * Step 1 is refused.
 * Step 2 reads USD 100 minor units, unchanged.
 
----
-
 ## grade10-admin-auction-payment-settings-US2: Finance keeps the Stripe card fee rule
 
 **As a** finance operator,
 **I want** to set, per currency, the card rule that prices a card invoice's processing fee,
 **so that** a card invoice's fee always covers what Stripe takes, without an operator working it out by hand.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-df4 rev=2 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-df4 rev=2 -->
 ### grade10-admin-auction-payment-settings-US2-TC1-2: No rule until Finance sets one
 
 **Classification:**
@@ -240,15 +238,13 @@ Runs once per row of **Test data**.
 * After the reload, HKD reads 3.4% and HKD 2.35, with no rule in USD.
 * The save records the finance operator and the time.
 
----
-
 ## g10adm.auction-payment-settings.US3: Finance keeps one card rule per settlement currency
 
 **As a** finance operator,
 **I want** a card fee rule for USD and one for HKD, and nothing for a currency no winner can pick,
 **so that** a winner who settles in either currency can pay by card at a fee that covers what Stripe takes.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-lto rev=1 covers=g10adm.auction-payment-settings.SC-vst -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-lto rev=1 -->
 ### g10adm.auction-payment-settings.US3-TC1: Card rules are held for USD and HKD, and for no other currency
 
 **Classification:**
@@ -279,7 +275,7 @@ Runs once per row of **Test data**.
 * No JPY rule is shown.
 * No other currency is shown.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-xsy rev=1 covers=g10adm.auction-payment-settings.SC-vst -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-xsy rev=1 -->
 ### g10adm.auction-payment-settings.US3-TC2: The USD and HKD rules are kept apart
 
 **Classification:**
@@ -314,7 +310,7 @@ Runs once per row of **Test data**.
 * HKD reads 3.4% and HKD 2.35.
 * Neither rule overwrites the other.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-93a rev=1 covers=g10adm.auction-payment-settings.SC-lpf -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-93a rev=1 -->
 ### g10adm.auction-payment-settings.US3-TC3: A JPY card rule is refused
 
 **Classification:**
@@ -377,7 +373,7 @@ Runs once per row of **Test data**.
 * The save is accepted.
 * Card is no longer offered in USD and reads not yet available.
 
-<!-- trace:case id=g10adm.auction-payment-settings.TC-80l rev=1 covers=g10adm.auction-payment-settings.SC-qak,g10adm.auction-payment-settings.SC-rmb -->
+<!-- trace:case id=g10adm.auction-payment-settings.TC-80l rev=1 -->
 ### g10adm.auction-payment-settings.US3-TC5: Saving a USD rule with HKD empty offers card in USD
 
 **Classification:**
@@ -415,20 +411,13 @@ Runs once per row of **Test data**.
 
 - None this run. Every blind reading either folded into a scenario or went to `decisions.md` `## Raised`.
 
+
+
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-13 for change `usd-lot-currency-winner-settlement-choice`, joining QA1's blind cases with Dev's delta scenarios on `grade10-admin-auction-payment-settings-US-03` and the restated `grade10-admin-auction-payment-settings-US-01` and `grade10-admin-auction-payment-settings-US-02`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q14 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
+**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline. Full case ledger and source paths: `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-admin.md`.
 
-| Finding | Disposition |
-| --- | --- |
-| One USD premium minimum, initial 0, saved in major units, replaced whole | **Folded in:** `grade10-admin-auction-payment-settings-SC-01`, `grade10-admin-auction-payment-settings-SC-02` and `grade10-admin-auction-payment-settings-SC-05`, asserted by `g10adm.auction-payment-settings.US1-TC1`, `US1-TC2` and `US1-TC5` |
-| A minimum in HKD, JPY or a negative amount is refused and the stored value stays | **Added:** `US1-TC3` reads a negative amount and EUR, and the scenario names HKD, the currency this change retires. `g10adm.auction-payment-settings.US1-TC6` reads the HKD and JPY rows; both link `grade10-admin-auction-payment-settings-SC-03` and between them assert it |
-| An operator without payment processing cannot read or write the minimum | **Out of suite:** `grade10-admin-auction-payment-settings-SC-04` - the durable `g10adm.auction-payment-settings.TC-7de` holds it, unchanged |
-| Card rules are held for USD and HKD only; a JPY rule is refused with the stored rules unchanged | **Folded in:** `grade10-admin-auction-payment-settings-SC-13`, asserted by `g10adm.auction-payment-settings.US3-TC3`; `g10adm.auction-payment-settings.US3-TC1` reads that only USD and HKD show |
-| USD and HKD rules are kept side by side | **Folded in:** `grade10-admin-auction-payment-settings-SC-14`, asserted by `g10adm.auction-payment-settings.US3-TC2`, with the no-JPY clause read by `g10adm.auction-payment-settings.US3-TC1` |
-| A USD rule needs no HKD rule, and saving it offers card in USD | **Added:** QA1 read the withdrawal (`US3-TC4`) and not the offer. `g10adm.auction-payment-settings.US3-TC5` asserts `grade10-admin-auction-payment-settings-SC-15` and `grade10-admin-auction-payment-settings-SC-12` |
-| No rule until Finance saves one, and a save replaces the rules whole | **Folded in:** `grade10-admin-auction-payment-settings-SC-06` and `grade10-admin-auction-payment-settings-SC-07`, asserted by `g10adm.auction-payment-settings.US2-TC1` |
-| Clearing a currency's rule withdraws card there | **Fold candidate:** `g10adm.auction-payment-settings.US3-TC4` carries behaviour the requirement states ("only in a currency with a rule") and no scenario writes. Dev to fold it as a scenario, or the case stays unlinked |
-| Half a rule or an out-of-range percentage is refused; a rule grosses the subtotal up; the example shows its fee; staff cannot read or change the rules | **Out of suite:** `grade10-admin-auction-payment-settings-SC-08`, `grade10-admin-auction-payment-settings-SC-09`, `grade10-admin-auction-payment-settings-SC-10` and `grade10-admin-auction-payment-settings-SC-11` - the durable `g10adm.auction-payment-settings.TC-40o`, `TC-eng` and `TC-ape` hold them, and the rule is the same per currency. `grade10-admin-auction-payment-settings-SC-08` now names a USD half rule first and the durable case reads HKD rules; the equivalence is the same validation per currency |
-
-**Uncovered anchors:** none for `grade10-admin-auction-payment-settings-US-01`, `grade10-admin-auction-payment-settings-US-02` or `grade10-admin-auction-payment-settings-US-03`.
+- **Retained:** All 11 active case IDs, revisions, routes and classifications remain draft. All payment-settings anchors have active cases.
+- **Coverage:** The single USD premium minimum, the USD/HKD-only card-rule mapping and separate per-currency rules remain asserted by the retained cases. No case claims a JPY card rule or premium minimum.
+- **Out of suite:** The existing entries for permission gates, malformed rule writes and example fee calculations remain because their full THEN is not asserted by a case in this feature suite.
+- **Raised:** None. Q11 and Q13 settle the supported currencies and USD card-rule launch requirement.

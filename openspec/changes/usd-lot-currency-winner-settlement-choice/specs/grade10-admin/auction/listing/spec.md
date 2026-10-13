@@ -1,10 +1,17 @@
 # grade10-admin/auction/listing Specification
 
+## Purpose
+
+Lets an authorized Grade10 operator draft, create, and publish Auction
+listings, then restore stock and relist a lot that closes without a winner.
+The listing contract also sets the one currency all lots use for bidding.
+
 ## Feature set
 
 - Listing currency
   - USD only: the listing form offers no currency choice and stores USD when none is supplied
-  - Other currencies refused: HKD, JPY or any other currency is refused on a draft and at create, by the form and the API
+  - Earlier lots: HKD or JPY listing currencies are overwritten to USD with amounts and history unchanged
+  - Other currencies refused: HKD, JPY or any other currency is refused on a draft, create or update, by the form and API
 - Prices and window
   - Starting price of 0: a draft and create accept 0 in USD; a negative, non-whole or empty price is refused, and empty is never stored as 0
 
@@ -160,6 +167,9 @@ The form and API SHALL reject any other currency independently.
 The form SHALL state USD and offer no currency choice, and SHALL NOT display
 a minimum-increment field. Grade10's USD schedule governs the listing's bid
 floor.
+
+SC-57 retains its historical title and id. Its body requires the API to
+refuse a non-USD create; the form offers no currency control.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-mmr rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft

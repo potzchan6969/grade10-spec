@@ -3,13 +3,13 @@
 ## Purpose
 
 Lets a payment-authorized operator manage the minimum buyer premium used by
-auction invoices and the card fee rule for each settlement currency, USD and
-HKD, from the Auction admin section.
+auction invoices as one USD amount and manage the card fee rule for each
+settlement currency, USD and HKD, from the Auction admin section.
 
 ## Feature set
 
 - Payment settings
-  - Premium minimum: one USD minimum, zero or more, typed in major units and read in the bid currency
+  - Premium minimum: one USD minimum, zero or more, typed and read in the bid currency
   - Currencies held: card fee rules for USD and HKD, the two settlement currencies; JPY is not held
   - Card fee rule: one rule each for USD and HKD, a percentage and a fixed amount, or no rule
   - Card at setup: a winner is offered card only in a currency with a rule; USD needs Finance's rule before launch

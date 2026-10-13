@@ -1,11 +1,16 @@
 # grade10-admin/auction/post-sale Specification
 
+## Purpose
+
+Lets post-sale operators complete and protect winner orders, including
+preparing, sending, reissuing and cancelling invoices.
+
 ## Feature set
 
 - Quote and send
   - Quote in USD: the operator types every amount, the bank transfer fee included, in USD, and Grade10 converts it to the settlement currency picked
-  - Currency edited before send: the operator may change the order's settlement currency before send, and a reissue after
-  - Rail picked: the quote names the payment rail the winner chose, not one bank transfer
+  - Reissue choice: a changed settlement currency or payment choice, including a bank rail, counts as the required change
+  - Rail picked: the quote names the payment rail recorded on the order, not one bank transfer
 
 ## ADDED Requirements
 
@@ -394,16 +399,19 @@ integer of zero or more refuses the send.
 - **THEN** the invoice is `pending` with an order total of 312000 minor units
   in USD
 
-<!-- trace:scenario id=g10adm.auction-post-sale.SC-0op rev=2 -->
-#### Scenario: grade10-admin-auction-post-sale-SC-253 - An internal bidder's order for a USD lot is sent as before
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-0op rev=3 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-253 - An internal bidder's order quotes USD and sends an HKD invoice on FPS
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
-- **GIVEN** an internal bidder's auction order for a USD lot in Preparing
-  Invoice, flagged internal, holding bank transfer
-- **WHEN** an operator holding payment-processing enters Shipping & Handling of
-  0 and a bank transfer fee of 0 minor units in USD and sends
-- **THEN** the invoice is `pending`
-- **AND** no currency or rail step stands before the send
+- **GIVEN** an internal bidder's auction order in Preparing Invoice, flagged
+  internal, with HKD settlement and bank transfer on FPS, for a USD lot whose
+  winning bid is 10100 minor units and buyer's premium is 2020 minor units
+- **WHEN** an operator holding payment-processing quotes Shipping & Handling
+  of 1001 minor units and a bank transfer fee of 0, both in USD, then sends
+- **THEN** the quote names bank transfer on FPS and reads an invoice total of
+  103100 minor units in HKD
+- **AND** the invoice is `pending` with its USD facts and HKD settlement lines
+- **AND** the operator needed no currency or rail setup step before the send
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-b44 rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-244 - The quote names the SWIFT rail
@@ -446,7 +454,8 @@ whose invoice is `pending` or `expired`:
 **At least one change** - Grade10 SHALL refuse a reissue that changes none of
 the delivery address, settlement currency, payment method, bank transfer fee,
 Shipping & Handling, Insurance, Tax or deadline. A new reason alone is not a
-change; a fresh 7 days is.
+change; a fresh 7 days is. A change from one offered bank rail to another is a
+payment-method change, even when both choices are bank transfer.
 
 **On send** - On send Grade10 SHALL replace the current invoice with a new one
 carrying a new invoice ID, bank reference and internal audit number, per
@@ -650,6 +659,32 @@ card rule.
 - **WHEN** an operator reissues it in USD, keeping FPS, with a reason
 - **THEN** Grade10 refuses the reissue
 - **AND** the current invoice is unchanged
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-r31 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-254 - A rail-only change from FPS to HK Local is a reissue change
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an order in Pending Payment whose HKD bank transfer invoice uses
+  FPS, and both FPS and HK Local details are configured for HKD
+- **WHEN** an operator reissues it on HK Local with the same currency, fee,
+  quote, address and deadline, and gives a reason
+- **THEN** Grade10 accepts the reissue because the bank rail changed
+- **AND** the new invoice snapshots HK Local details and the replaced invoice
+  keeps its FPS details unchanged
+- **AND** the reissued entry names the bank rail as a changed part
+
+<!-- trace:scenario id=g10adm.auction-post-sale.SC-r32 rev=1 -->
+#### Scenario: grade10-admin-auction-post-sale-SC-255 - A rail-only change from HK Local to SWIFT is a reissue change
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an order in Pending Payment whose USD bank transfer invoice uses
+  HK Local, and both HK Local and SWIFT details are configured for USD
+- **WHEN** an operator reissues it on International via SWIFT with the same
+  currency, fee, quote, address and deadline, and gives a reason
+- **THEN** Grade10 accepts the reissue because the bank rail changed
+- **AND** the new invoice snapshots SWIFT details and the replaced invoice
+  keeps its HK Local details unchanged
+- **AND** the reissued entry names the bank rail as a changed part
 
 ### Requirement: An operator edits the address or method before send
 

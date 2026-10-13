@@ -66,8 +66,14 @@ None.
 - `shared/ui/auction-listing` — the HKD and JPY custom-maximum caps retire.
 - `grade10-admin/auction/payment-settings` — a card fee rule per settlement
   currency, USD and HKD; JPY dropped, and the premium minimum one USD amount.
+- `grade10-admin/auction/test-winners` - USD-only sandbox lot creation; the winner then chooses settlement currency normally.
+- `grade10-admin/auction/internal-bid` - USD bids and ceiling; an internal win records HKD settlement and FPS automatically, before the operator quotes and sends its invoice.
+- `grade10-site/auction/bid-payment-method` - the 20% premium disclosure on the one USD bid currency.
 
 ## Impact
+
+- The UI design artifact is waived by @htonyl on 2026-10-14. Existing stories are corrected to the settled selection and rail behavior.
+- The auction domain suites include the USD bid, winner settlement, and automatic internal HKD/FPS routes and are refreshed with the feature suites.
 
 - `apps/preview` and `packages/ui` auction fixtures already moved to US$ bid
   amounts ahead of this change (FE preparation); invoice/order fixtures stay
@@ -97,3 +103,6 @@ None.
 - [Post-Bidding · Settling in HKD](../../../docs/prds/products/grade10-site/auction/post-bidding.md#settling-in-hkd)
 - [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
 - [Auction Management · Payment Settings](../../../docs/prds/products/grade10-admin/auction/management.md#payment-settings)
+- [Auction Management · Test Winners](../../../docs/prds/products/grade10-admin/auction/management.md#test-winners)
+- [Internal Bid · Rules](../../../docs/prds/products/grade10-admin/auction/internal-bid.md#rules)
+- [Internal Bid](../../../docs/prds/products/grade10-admin/auction/internal-bid.md#internal-bid)

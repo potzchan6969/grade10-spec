@@ -12,137 +12,120 @@
 **I want** the panel to never offer an amount the supplied currency ceiling refuses,
 **so that** the collector reads the limit instead of a broken raise form.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=3 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-q3n -->
-### g10.shared-auction-listing.US1-TC19: Draft at the currency ceiling is accepted
+<!-- trace:case id=g10.shared-auction-listing.TC-fb2 rev=4 covers=g10.shared-auction-listing.SC-9e0,g10.shared-auction-listing.SC-q3n -->
+### g10.shared-auction-listing.US1-TC19: Draft at the USD ceiling is accepted
 
-Runs once in set mode and once in raise mode.
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, release
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
-* The consumer supplies the USD ceiling of 10000000 whole major units, in minor units.
-* The floor and any committed maximum are below the ceiling.
-* The custom maximum field is empty.
+* The bid panel receives a USD ceiling of `<ceiling>` and is rendered for an open lot in the row's mode.
 
 **Test data:**
 
-| Currency | Ceiling (whole major units) | Committed amount (minor units) |
-| --- | --- | --- |
-| USD | 10000000 | 1000000000 |
+| Mode | `<ceiling>` |
+| --- | --- |
+| Set maximum | USD10,000,000 whole major units |
+| Raise maximum | USD10,000,000 whole major units |
 
 **Steps:**
 
-1. Enter the USD ceiling into the custom maximum field.
-2. Read the displayed draft and reviewed amount.
+1. Enter `<ceiling>` in the custom maximum field.
+2. Read the field value and Place Bid state.
 3. Commit the maximum and read the callback amount.
 
 **Expected Results:**
 
-* The displayed draft equals the USD ceiling.
-* The reviewed amount agrees with the displayed draft.
-* The callback receives the committed amount, once.
-* No ceiling message appears.
+* The field retains `<ceiling>`.
+* Place Bid remains available.
+* The callback receives 1000000000 minor units in USD.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ygd rev=3 covers=g10.shared-auction-listing.SC-8ym -->
-### g10.shared-auction-listing.US1-TC20: Typed digit past the ceiling retains the draft
-
-Runs once per row of **Test data**, in both set and raise modes.
+### g10.shared-auction-listing.US1-TC20: Typing past the USD ceiling keeps the draft at its limit
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
-* The custom maximum draft equals the prior draft.
+* The custom maximum field uses the USD ceiling `<ceiling>`.
 
 **Test data:**
 
-| Currency | Ceiling | Prior draft |
-| --- | --- | --- |
-| USD | 10000000 | 10000000 |
-| USD | 10000000 | 9000000 |
+| Field | Value |
+| --- | --- |
+| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
+| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
 
 **Steps:**
 
-1. Put the caret at the draft's end without selecting it.
-2. Type one `1` using the native keyboard operation.
-3. Read the displayed draft and reviewed amount.
+1. Type `<over ceiling>` into the custom maximum field.
+2. Read the field value and validation message.
 
 **Expected Results:**
 
-* The displayed draft remains the prior draft.
-* The reviewed amount agrees with the retained draft.
-* No ceiling message appears.
+* The typed draft stops at `<ceiling>`.
+* No maximum or invalid amount message appears.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-35i rev=3 covers=g10.shared-auction-listing.SC-wdd -->
-### g10.shared-auction-listing.US1-TC21: Oversized paste into empty field becomes the ceiling
-
-Runs once in set mode and once in raise mode.
+### g10.shared-auction-listing.US1-TC21: Pasting above the USD ceiling clamps the field
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** acceptance
-* **Suites:** release
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation, manual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** Custom maximum ceiling
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
-* The custom maximum field is empty.
+* The custom maximum field is empty and uses the USD ceiling `<ceiling>`.
 
 **Test data:**
 
-| Currency | Paste | Ceiling |
-| --- | --- | --- |
-| USD | 10000001 | 10000000 |
+| Field | Value |
+| --- | --- |
+| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
+| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
 
 **Steps:**
 
-1. Paste the row's paste into the custom maximum field.
-2. Read the displayed draft and reviewed amount.
+1. Paste `<over ceiling>` into the custom maximum field.
+2. Read the field value.
 
 **Expected Results:**
 
-* The displayed draft equals the USD ceiling.
-* The reviewed amount agrees with the corrected draft.
-* No ceiling message appears.
+* The field value becomes `<ceiling>`.
+* The field does not display HKD or JPY cap choices.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-jr1 rev=3 covers=g10.shared-auction-listing.SC-z2x,g10.shared-auction-listing.SC-qdv -->
 ### g10.shared-auction-listing.US1-TC22: Oversized replacement of a draft becomes the ceiling
@@ -236,8 +219,6 @@ Runs once per row of **Test data**, in both set and raise modes.
 <!-- trace:case id=g10.shared-auction-listing.TC-hsy rev=3 covers=g10.shared-auction-listing.SC-xxl -->
 ### g10.shared-auction-listing.US1-TC24: Raise field retains typed draft and clamps replacement
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** major
@@ -261,7 +242,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Currency | Ceiling | Replacement
+| Currency | Ceiling | Replacement |
 | --- | --- | --- |
 | USD | 10000000 | 10000001 |
 
@@ -592,22 +573,4 @@ Runs once in set mode and once in raise mode.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-14 for change `usd-lot-currency-winner-settlement-choice`, joining QA1's refreshed cases with Dev's delta scenarios on the `Custom maximum ceiling`, `Quick bids`, `Raise floor` and `Bid enrollment` anchors of `shared-ui-auction-listing`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q27 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
-
-| Finding | Disposition |
-| --- | --- |
-| A draft at the ceiling is accepted, and the callback receives the ceiling in minor units, in set and raise | **Folded in:** `shared-ui-auction-listing-SC-38` and `shared-ui-auction-listing-SC-58`, asserted by `g10.shared-auction-listing.US1-TC19`. The HKD and JPY rows are gone from the case |
-| A typed digit past the ceiling keeps the previous draft, in set and raise | **Folded in:** `shared-ui-auction-listing-SC-39` by `g10.shared-auction-listing.US1-TC20`, `shared-ui-auction-listing-SC-43` by `US1-TC24` (the raise path) |
-| An oversized paste or replacement, a fractional paste and a paste at the ceiling read the USD ceiling with no ceiling message | **Folded in:** `shared-ui-auction-listing-SC-40` by `g10.shared-auction-listing.US1-TC21`, `shared-ui-auction-listing-SC-41` and `shared-ui-auction-listing-SC-59` by `US1-TC22`, `shared-ui-auction-listing-SC-42` by `US1-TC23`, `shared-ui-auction-listing-SC-53` by `US1-TC26`. `US1-TC25` reads the no-message clause on a paste over a valid draft and shares `shared-ui-auction-listing-SC-41` with `US1-TC22` |
-| A paste appended to a draft that equals the ceiling leaves the ceiling shown, and a typed digit leaves the previous draft | **Added:** `g10.shared-auction-listing.US1-TC64` asserts `shared-ui-auction-listing-SC-60`. `US1-TC20` reads the typed half only and `US1-TC24` pastes onto a draft of `500`, so neither starts from a draft at the ceiling |
-| A chip above the ceiling is offered at the ceiling and captioned as the limit; chips that land on the ceiling merge to one | **Folded in:** `shared-ui-auction-listing-SC-61` by `g10.shared-auction-listing.US1-TC59`, `shared-ui-auction-listing-SC-62` by `US1-TC60` |
-| The raise floor above the ceiling and a maximum at the ceiling collapse the entry group; a lot priced past the ceiling offers no entry; the collapse outranks the card setup lock | **Folded in:** `shared-ui-auction-listing-SC-63` and `shared-ui-auction-listing-SC-64` by the two rows of `g10.shared-auction-listing.US1-TC61`, `shared-ui-auction-listing-SC-65` by `US1-TC62`, `shared-ui-auction-listing-SC-66` by `US1-TC63` |
-| `g10.shared-auction-listing.US1-TC59` listed three chips for a leader at 9999800 with the 2x and 4x amounts both at the ceiling | **Corrected:** the requirement merges chips that show one amount, so the row now reads two chips; QA2 reworded the row, which the durable HKD row carried the same way |
-| A leader's chips, a non-leader's chips, the opening price chip and the typed raise floor, restated with USD fixtures and no other change | **Out of suite:** `shared-ui-auction-listing-SC-35`, `shared-ui-auction-listing-SC-36`, `shared-ui-auction-listing-SC-52` and `shared-ui-auction-listing-SC-37` - the durable `g10.shared-auction-listing.TC-tcx`, `TC-lwb`, `TC-7vc` and `TC-gk7` hold them. Their rows still list HKD and JPY schedules beside USD; the USD rows read the same rule, and the HKD and JPY rows need removing at archive |
-| The durable suite's ceiling and quick-bid cases carry HKD and JPY rows | **Not folded:** this suite's USD cases carry the same ids and replace them when the change is published; the HKD and JPY rows of `g10.shared-auction-listing.US1-TC3` to `US1-TC6` need removing then |
-
-**Uncovered anchors:** none for `Custom maximum ceiling`, `Quick bids`, `Raise floor` or `Bid enrollment`.
-
-**Over-claimed cases:** none. `g10.shared-auction-listing.US1-TC19` to `US1-TC26` are `automated` and name a `grade10` end-to-end test as their decider; that test still reads the HKD and JPY rows until task 10.2 and the walk of group 11 update it, so the `Decided by` claim is pending there.
-
-**Contradictions:** none between a case and a scenario. `shared-ui-auction-listing-SC-38` to `shared-ui-auction-listing-SC-43`, `shared-ui-auction-listing-SC-53`, `shared-ui-auction-listing-SC-35`, `shared-ui-auction-listing-SC-36`, `shared-ui-auction-listing-SC-37` and `shared-ui-auction-listing-SC-52` changed their fixtures from HKD to USD with no `rev` bump on the marker; Dev owns that repair.
+See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.

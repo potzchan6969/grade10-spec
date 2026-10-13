@@ -13,7 +13,7 @@
 **so that** Winner Order composes one contract instead of drawing its own.
 
 <!-- trace:case id=g10.shared-auction-order.TC-2fz rev=1 covers=g10.shared-auction-order.SC-cdc -->
-### g10.shared-auction-order.US1-TC23: The setup form offers USD and HKD with nothing preselected
+### g10.shared-auction-order.US1-TC23: Setup offers USD and HKD without a selection
 
 **Classification:**
 
@@ -34,15 +34,15 @@
 
 **Steps:**
 
-1. Read the settlement currency choices and which one is selected.
+1. Read the settlement currency choices and selected value.
 
 **Expected Results:**
 
-* The form offers USD and HKD, and no other currency.
-* Neither choice is selected.
+* The form offers USD and HKD only.
+* Neither currency is selected.
 
 <!-- trace:case id=g10.shared-auction-order.TC-3cr rev=1 covers=g10.shared-auction-order.SC-8j6 -->
-### g10.shared-auction-order.US1-TC24: The winner's currency pick is reported
+### g10.shared-auction-order.US1-TC24: Winner currency choice calls the supplied callback
 
 Runs once per row of **Test data**.
 
@@ -61,7 +61,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its setup form, no settlement currency chosen, and a spy on its currency callback.
+* `AuctionWinnerOrder` is rendered with no currency chosen and a spy on its currency callback.
 
 **Test data:**
 
@@ -72,17 +72,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose the settlement currency the row names.
+1. Choose the row's settlement currency.
 2. Read the spy.
 
 **Expected Results:**
 
-* The choice reads selected.
-* The currency callback is called once with the row's settlement currency.
-* No other callback is called and the block makes no request of its own.
+* The row's choice reads selected.
+* The callback is called once with the row's currency.
 
 <!-- trace:case id=g10.shared-auction-order.TC-giz rev=1 covers=g10.shared-auction-order.SC-7if -->
-### g10.shared-auction-order.US1-TC25: Payment methods follow the currency they are supplied for
+### g10.shared-auction-order.US1-TC25: Payment methods follow the selected currency
 
 Runs once per row of **Test data**.
 
@@ -101,27 +100,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its setup form, a set of payment methods supplied for USD, and a different set supplied for HKD.
+* `AuctionWinnerOrder` receives different payment methods for USD and HKD.
 
 **Test data:**
 
-| Settlement currency | Payment methods read |
-| --- | --- |
-| USD | Exactly the methods supplied for USD |
-| HKD | Exactly the methods supplied for HKD |
+| Settlement currency | Supplied methods | Expected choices |
+| --- | --- | --- |
+| USD | card, hk_local and swift | Card, HK Local and SWIFT; no FPS |
+| HKD | card, fps and hk_local | Card, FPS and HK Local; no SWIFT |
 
 **Steps:**
 
-1. Choose the settlement currency the row names.
+1. Choose the row's currency.
 2. Read the payment method choices.
 
 **Expected Results:**
 
-* The payment method choices are exactly the row's methods.
-* No method supplied only for the other currency appears.
+* Only the row's expected choices appear, as separate choices.
 
 <!-- trace:case id=g10.shared-auction-order.TC-kiy rev=1 covers=g10.shared-auction-order.SC-7if -->
-### g10.shared-auction-order.US1-TC26: Each bank rail is its own payment method choice
+### g10.shared-auction-order.US1-TC26: Each bank rail is its own choice
 
 **Classification:**
 
@@ -138,28 +136,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its setup form, HKD chosen, and two bank rails `<bank rail A>` and `<bank rail B>` supplied for HKD, with a spy on its payment method callback.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<bank rail A>` | A bank rail supplied for HKD |
-| `<bank rail B>` | A second bank rail supplied for HKD |
+* `AuctionWinnerOrder` is rendered with HKD selected and two HKD bank rails supplied.
 
 **Steps:**
 
 1. Read the payment method choices.
-2. Choose `<bank rail B>`.
-3. Read the spy.
+2. Choose the second bank rail.
 
 **Expected Results:**
 
-* Step 1: `<bank rail A>` and `<bank rail B>` read as two separate choices.
-* The callback is called once with `<bank rail B>`.
+* Each rail appears as a separate choice.
+* The second rail reads selected.
 
-<!-- trace:case id=g10.shared-auction-order.TC-bu1 rev=1 covers=g10.shared-auction-order.SC-z03 -->
-### g10.shared-auction-order.US1-TC27: The summary reads a USD total then a converted HKD total
+<!-- trace:case id=g10.shared-auction-order.TC-bu1 rev=3 covers=g10.shared-auction-order.SC-z03,g10.shared-auction-order.SC-m7x -->
+### g10.shared-auction-order.US1-TC27: HKD summary keeps USD lines and orders both totals
 
 **Classification:**
 
@@ -176,26 +166,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its summary and both a USD total and a converted HKD total supplied.
+* `AuctionWinnerOrder` is rendered for an HKD order with USD line items and totals.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<usd total>` | USD2,400 (range: >0 minor units) |
-| `<hkd total>` | The converted HKD total the application supplies for `<usd total>` |
+| USD line items | 10100, 2020 and 1001 minor units |
+| USD total | 13121 minor units |
+| HKD total | 103100 minor units |
+| HKD card fee | 3873 minor units |
 
 **Steps:**
 
-1. Read the summary's total lines from top to bottom.
+1. Read the line items and totals from top to bottom.
 
 **Expected Results:**
 
-* The USD total line reads `<usd total>`.
-* The HKD total line follows it and reads `<hkd total>`.
+* The three line items remain in USD.
+* Order Total shows 13121 minor units in USD, then 103100 minor units in HKD.
+* The fee reads 3873 minor units in HKD after the separator, below both totals.
+* Neither total includes the fee.
 
-<!-- trace:case id=g10.shared-auction-order.TC-p6m rev=1 covers=g10.shared-auction-order.SC-hc5 -->
-### g10.shared-auction-order.US1-TC28: View Bank Details shows only the rail supplied
+<!-- trace:case id=g10.shared-auction-order.TC-p6m rev=2 covers=g10.shared-auction-order.SC-hc5 -->
+### g10.shared-auction-order.US1-TC28: Bank details show only the supplied rail
 
 Runs once per row of **Test data**.
 
@@ -214,14 +208,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with the rail the row names supplied for its bank details.
+* `AuctionWinnerOrder` receives details for the row's selected bank rail.
 
 **Test data:**
 
-| Rail supplied |
+| Selected rail |
 | --- |
-| `<bank rail A>`, a bank rail with its own details |
-| `<bank rail B>`, a second bank rail with its own details |
+| FPS |
+| HK Local |
+| International via SWIFT |
 
 **Steps:**
 
@@ -230,13 +225,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* One dialog opens.
-* It shows the row's rail details only.
-* It shows no details of the other rail.
-* It shows no rail tabs.
+* One dialog shows only the selected rail's details and reference.
+* No rail tabs or copy controls appear.
 
 <!-- trace:case id=g10.shared-auction-order.TC-62a rev=1 covers=g10.shared-auction-order.SC-pd1 -->
-### g10.shared-auction-order.US1-TC29: No payment method is listed before a currency is chosen
+### g10.shared-auction-order.US1-TC29: No method appears before currency selection
+
 **Classification:**
 
 * **Severity:** major
@@ -252,16 +246,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its setup form, a set of payment methods supplied for USD and for HKD, and no settlement currency chosen.
+* `AuctionWinnerOrder` receives USD and HKD methods with no currency chosen.
 
 **Steps:**
 
-1. Read the payment method choices.
+1. Read the payment method choices and selected value.
 
 **Expected Results:**
 
-* No payment method is listed, and none is selected.
-* No method supplied for either currency appears.
+* No payment method appears or is selected.
 
 <!-- trace:case id=g10.shared-auction-order.TC-pm2 rev=1 covers=g10.shared-auction-order.SC-nxj -->
 ### g10.shared-auction-order.US1-TC30: A payment method supplied as unavailable shows its text and cannot be chosen
@@ -296,7 +289,8 @@ Runs once per row of **Test data**.
 * The payment method callback is not called.
 
 <!-- trace:case id=g10.shared-auction-order.TC-y6r rev=1 covers=g10.shared-auction-order.SC-bzz -->
-### g10.shared-auction-order.US1-TC31: A payment method value the application clears shows no selected choice
+### g10.shared-auction-order.US1-TC31: Parent clears a method absent from new currency
+
 **Classification:**
 
 * **Severity:** major
@@ -312,21 +306,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its setup form, USD chosen and a payment method value of one of the USD bank rails.
+* The setup form is rendered with USD selected and a selected USD bank rail that HKD does not offer.
 
 **Steps:**
 
-1. Read which payment method is selected.
-2. Supply HKD as the settlement currency and no payment method value.
-3. Read which payment method is selected.
+1. Read the selected method.
+2. Switch to HKD.
+3. Read the method choices and selected value.
 
 **Expected Results:**
 
-* Step 1: the supplied bank rail reads selected.
-* Step 3: HKD methods are listed and none is selected.
+* The USD bank rail is cleared when HKD is supplied with no selected method.
+* No HKD method is selected.
 
 <!-- trace:case id=g10.shared-auction-order.TC-mvr rev=1 covers=g10.shared-auction-order.SC-k6i -->
-### g10.shared-auction-order.US1-TC32: One total line shows when no converted total is supplied
+### g10.shared-auction-order.US1-TC32: Summary shows one total when conversion is absent
+
 **Classification:**
 
 * **Severity:** major
@@ -342,19 +337,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its summary, a USD total supplied and no converted total.
+* The summary receives a USD total and no converted total.
 
 **Steps:**
 
-1. Read the summary's total lines from top to bottom.
+1. Read the summary totals.
 
 **Expected Results:**
 
-* One Order Total line shows, and it reads the USD total supplied.
-* No second total line shows, and no amount is derived or converted by the block.
+* One USD Order Total appears.
+* No amount is derived or converted by the block.
 
 <!-- trace:case id=g10.shared-auction-order.TC-9r5 rev=1 covers=g10.shared-auction-order.SC-8eq -->
-### g10.shared-auction-order.US1-TC33: The detail omits the invoice link and pay control it was not given
+### g10.shared-auction-order.US1-TC33: Order detail omits controls it was not given
+
 **Classification:**
 
 * **Severity:** major
@@ -370,18 +366,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` is rendered with its order summary lines and no invoice PDF and no pay control supplied.
+* The order summary receives no invoice PDF and no pay control.
 
 **Steps:**
 
-1. Read the order summary.
-2. Look for an Invoice PDF link and a pay control.
+1. Read the order summary and look for an invoice link or pay control.
 
 **Expected Results:**
 
-* The order summary shows its lines.
-* No Invoice PDF link and no pay control show.
-
+* The summary shows its supplied lines.
+* No invoice link or pay control appears.
 
 ## Settled
 
@@ -389,23 +383,4 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-14 for change `usd-lot-currency-winner-settlement-choice`, joining QA1's blind cases with Dev's delta scenarios on the `Order detail` anchor of `shared-ui-auction-order`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q27 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
-
-| Finding | Disposition |
-| --- | --- |
-| The setup form offers USD and HKD and no other currency, with neither selected | **Folded in:** `shared-ui-auction-order-SC-21`, asserted by `g10.shared-auction-order.US1-TC23` |
-| A currency pick is reported once, and the block makes no request of its own | **Folded in:** `shared-ui-auction-order-SC-22`, asserted by `g10.shared-auction-order.US1-TC24`. QA1 read the callback and not the no-request clause; QA2 widened the case with one Expected Result |
-| The payment choices are the ones supplied for the currency picked, and each bank rail is its own choice | **Folded in, jointly:** `shared-ui-auction-order-SC-23` by `g10.shared-auction-order.US1-TC25` (the partition by currency) and `US1-TC26` (card, FPS and HK Local as separate choices). No one case reads the HKD list whole with no SWIFT; both cases use abstract rails and the partition is read by exact match |
-| No currency picked lists no method; an unavailable method cannot be chosen; a cleared value shows nothing selected | **Added:** `g10.shared-auction-order.US1-TC29`, `US1-TC30` and `US1-TC31` assert `shared-ui-auction-order-SC-24`, `shared-ui-auction-order-SC-25` and `shared-ui-auction-order-SC-26`. QA1 read the lists for a chosen currency only |
-| The summary reads a USD total line then the converted HKD total line | **Folded in:** `shared-ui-auction-order-SC-27`, asserted by `g10.shared-auction-order.US1-TC27` |
-| The summary reads one total line when no converted total is supplied | **Added:** `g10.shared-auction-order.US1-TC32` asserts `shared-ui-auction-order-SC-28`, including that the block derives no amount |
-| View Bank Details shows the one rail supplied, with no tabs and no other rail | **Folded in:** `shared-ui-auction-order-SC-29`, asserted by `g10.shared-auction-order.US1-TC28`, which QA2 widened with the no-tabs result. QA1's rows name abstract rails, so the case does not read FPS, HK Local or SWIFT by name; the walk of task 11.2 reads each rail on the page |
-| The block takes the bank details by a `bankDetails` prop and the dialog moves from the preview page into the block | **Checked, no contradiction:** the prop, the type `AuctionWinnerOrderBankDetails` and the move are named in `tech-design.md` (Presentation in this store) and in tasks 1.4, and the export list of "The winner-order surface exports" carries the four new types |
-| Restated unchanged: the import resolves, the order list blocks are not exported, the form shows supplied errors, the page body derives its steps and reports a press | **Out of suite:** `shared-ui-auction-order-SC-15` and `shared-ui-auction-order-SC-16` - verified by `packages/ui/src/blocks/auction-order/public-exports.test.ts` in this store; `shared-ui-auction-order-SC-17` by the durable `g10.shared-auction-order.TC-g9u` and `TC-l1e`; `shared-ui-auction-order-SC-19` by `g10.shared-auction-order.TC-1f8`; `shared-ui-auction-order-SC-20` by `g10.shared-auction-order.TC-fjf` |
-| The detail omits an invoice link and a pay control it was not given | **Added:** `g10.shared-auction-order.US1-TC33` asserts `shared-ui-auction-order-SC-18`; no durable case reads it |
-
-**Uncovered anchors:** none for `Order detail`.
-
-**Over-claimed cases:** none. `g10.shared-auction-order.US1-TC28` reads the supplied rail by a placeholder; the named rails are read in `grade10-site/auction/winner-order`.
-
-**Contradictions:** none.
+See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.

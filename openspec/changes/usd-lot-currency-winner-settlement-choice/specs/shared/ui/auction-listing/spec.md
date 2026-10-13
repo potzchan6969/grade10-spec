@@ -4,6 +4,7 @@
 
 - Custom maximum ceiling
   - Major-unit cap: USD 10,000,000 whole major units, the one cap; the HKD and JPY caps retire
+  - Currency policy: the consuming application supplies the USD ceiling; the block chooses no bid currency
 
 ## MODIFIED Requirements
 

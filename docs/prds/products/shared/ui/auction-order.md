@@ -15,7 +15,10 @@ component contract underneath it.
 
 - **Winner order** — the Winner Order page body from parts the
   application resolves: it derives the progress from the current step and
-  knows no order status; Storybook and the site render it
+  knows no order status; it shows the selected payment method and, for a bank
+  method, the one selected rail; Storybook and the site render it
+- 🚧 **Bank details dialog** — shows the same single rail as the invoice, with
+  its payment details and reference; no tabs or copy controls
 - **Address form** — the fields [Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, Personal or
   Company, a country-aware phone (country and digits required; E.164 when

@@ -31,15 +31,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * An open USD listing, starting price the row's starting price, with no accepted bid.
-* customer is signed in with a card linked and is on that listing's page.
+* A customer with a linked card is on that listing's page.
 
 **Test data:**
 
-| Starting price | Why this row | Minimum next amount |
-| --- | --- | --- |
-| 0 | Zero start | USD1 (fixed tier increment), the lowest USD increment |
-| USD280 (range: 10000-49999 minor units) | Positive start inside the USD 100 tier | USD280 (range: 10000-49999 minor units), the starting price |
-| USD100 (fixed tier boundary) | Positive start on the USD 100 tier boundary | USD100 (fixed tier boundary), the starting price |
+| Starting price | Minimum next amount |
+| --- | --- |
+| USD0 (fixed boundary) | USD1 (fixed minimum increment) |
+| USD280 (range: 10000-49999 minor units) | USD280 (same as starting price) |
+| USD100 (fixed tier boundary) | USD100 (same as starting price) |
 
 **Steps:**
 
@@ -48,9 +48,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The minimum next amount is the row's minimum next amount.
-* On a positive start it is the starting price, not the starting price plus its increment.
-* On a zero start it is the lowest USD increment, never 0.
+* The minimum is the row's amount.
+* A positive start is its own minimum; a zero start uses the lowest USD increment.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=2 covers=g10.auction-bid-increments.SC-ijk -->
 ### g10.auction-bid-increments.US1-TC5: Every listing publishes the next minimum in USD
@@ -82,8 +81,8 @@ Runs once per row of **Test data**.
 * The minimum next amount is shown in USD.
 * No other currency is shown.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-n6d rev=2 covers=g10.auction-bid-increments.SC-mn9 -->
-### g10.auction-bid-increments.US1-TC6: First bid at the opening price is accepted, then one increment applies
+<!-- trace:case id=g10.auction-bid-increments.TC-n6d rev=3 covers=g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t -->
+### g10.auction-bid-increments.US1-TC6: First bid accepts the opening price then advances one tier
 
 Runs once per row of **Test data**.
 
@@ -102,29 +101,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An open USD listing, starting price the row's starting price, with no accepted bid.
-* customer is signed in with a card linked and is on that listing's page.
+* An open USD listing has no accepted bid, and a customer with a linked card is on its page.
 
 **Test data:**
 
-| Starting price | Opening price, the bid amount | Increment at the opening price | Next minimum after |
-| --- | --- | --- | --- |
-| 0 | USD1 (range: 100-9999 minor units) | 100 (USD 0 tier) | USD2 (fixed derived value) |
-| USD100 (fixed tier boundary) | USD100 (fixed tier boundary) | 500 (USD 100 tier) | USD105 (fixed derived value) |
+| Start | First bid | Increment | Next minimum | Higher bid |
+| --- | --- | --- | --- | --- |
+| USD0 | USD1 (range: 100-9999 minor units) | USD1 (fixed tier increment) | USD2 (derived) | USD2.50 (above the minimum) |
+| USD100 (fixed tier boundary) | USD100 (fixed tier boundary) | USD5 (fixed tier increment) | USD105 (derived) | USD120 (above the minimum) |
 
 **Steps:**
 
-1. Enter the row's bid amount in the custom maximum on the bid panel.
-2. Confirm the bid.
-3. Read the minimum next amount on the bid panel.
+1. Enter the row's first bid in the bid field and confirm it.
+2. Read the minimum next amount.
+3. Enter the row's higher bid and confirm it.
+4. Read the highest bid.
 
 **Expected Results:**
 
-* Step 2: the bid is accepted.
-* Step 3: the minimum next amount is the opening price plus the increment at the opening price, the row's next minimum after.
+* Step 1: the bid is accepted.
+* Step 2: the next minimum is the first bid plus the row's increment.
+* Step 3: the higher bid is accepted.
+* Step 4: the highest bid is the row's higher bid.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-9do rev=2 covers=g10.auction-bid-increments.SC-b2w -->
-### g10.auction-bid-increments.US1-TC7: First bid below the opening price is refused
+<!-- trace:case id=g10.auction-bid-increments.TC-9do rev=3 covers=g10.auction-bid-increments.SC-b2w -->
+### g10.auction-bid-increments.US1-TC7: First bid below opening price is refused
 
 Runs once per row of **Test data**.
 
@@ -143,27 +144,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An open USD listing, starting price the row's starting price, with no accepted bid.
-* customer is signed in with a card linked and is on that listing's page.
+* An open USD listing has no accepted bid, and a customer with a linked card is on its page.
 
 **Test data:**
 
-| Starting price | Opening price | Bid amount |
-| --- | --- | --- |
-| 0 | USD1 (fixed boundary: the lowest USD increment) | USD0.99 (fixed boundary or equality) |
-| USD100 (fixed tier boundary) | USD100 (fixed tier boundary) | USD99 (fixed boundary or equality) |
+| Opening price | Bid amount |
+| --- | --- |
+| USD1 (fixed minimum increment) | USD0.99 (fixed boundary) |
+| USD100 (fixed tier boundary) | USD99 (fixed boundary) |
+| USD105 (fixed opening price) | USD104.99 (one minor unit below minimum) |
 
 **Steps:**
 
-1. Enter the row's bid amount in the custom maximum on the bid panel.
+1. Enter the row's bid amount in the custom maximum field.
 2. Confirm the bid.
 3. Read the bid panel.
 
 **Expected Results:**
 
-* Step 2: the bid is refused, naming the row's opening price as the minimum.
-* Step 3: the listing still has no accepted bid.
-* Step 3: the minimum next amount is still the row's opening price.
+* Step 2: the bid is refused and names the row's opening price as the minimum.
+* The listing remains without an accepted bid, and the minimum remains the opening price.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-4ox rev=3 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-pd0 -->
 ### g10.auction-bid-increments.US1-TC8: Lot starting at the ceiling takes one first bid there
@@ -215,11 +215,50 @@ Runs once per row of **Test data**.
 **so that** a mistyped bid or maximum never commits me to an amount I cannot settle.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=3 covers=g10.auction-bid-increments.SC-hm3 -->
-### g10.auction-bid-increments.US2-TC2: Direct bid above the ceiling is refused without effects
+### g10.auction-bid-increments.US2-TC2: Direct bid above USD ceiling is refused without effects
 
 **Classification:**
 
 * **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-increments-US-02
+
+**Pre-conditions:**
+
+* A live USD listing's minimum next bid is at or below `<ceiling>`; a linked-card customer is on the listing.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<ceiling>` | USD10,000,000 (fixed configured ceiling) |
+| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
+
+**Steps:**
+
+1. Enter `<over ceiling>` as the custom maximum and confirm.
+2. Read the refusal, highest bid, and bid count.
+3. Read the customer's My Auctions row.
+
+**Expected Results:**
+
+* The bid is refused and names `<ceiling>` as the maximum.
+* Highest bid and bid count are unchanged.
+* No row appears for the listing.
+
+<!-- trace:case id=g10.auction-bid-increments.TC-dfw rev=3 covers=g10.auction-bid-increments.SC-xnb -->
+### g10.auction-bid-increments.US2-TC3: Auto-bid maximum above USD ceiling is refused
+
+**Classification:**
+
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
@@ -232,70 +271,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked, account in good standing) can bid on an open USD listing.
-* The listing's minimum is below the ceiling.
-* The request is sent directly, bypassing the custom maximum field.
+* A live USD listing has an accepted bid; a bid request sets a maximum above `<ceiling>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<ceiling>` | USD10,000,000 (fixed configured value) |
-| `<bid amount>` | USD10,000,000.01 (fixed boundary or equality) |
+| `<ceiling>` | USD10,000,000 (fixed configured ceiling) |
+| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
 
 **Steps:**
 
-1. Read the listing's price, leader, bid count and maximums.
-2. Submit `<bid amount>` through the authenticated auction API.
-3. Read the API response.
-4. Read the listing's price, leader, bid count and maximums.
-5. Read the operational refusal entry for this attempt.
+1. Read the bid request result.
+2. Read the listing's highest bid and the bidder's stored maximum.
 
 **Expected Results:**
 
-* Step 3: the service refuses with `AMOUNT_TOO_HIGH`.
-* Step 3: `ceilingMinor` equals `<ceiling>`.
-* Step 4: price, leader, bid count and maximums remain unchanged.
-* Step 5: one entry names bidder, listing, code, amount and ceiling.
-
-<!-- trace:case id=g10.auction-bid-increments.TC-dfw rev=3 covers=g10.auction-bid-increments.SC-xnb -->
-### g10.auction-bid-increments.US2-TC3: Auto-bid maximum above the ceiling is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bid-increments-US-02
-
-**Pre-conditions:**
-
-* The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
-* The maximum is sent directly to the auction service.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<minimum>` | USD105 (range: 10000-49999 minor units) |
-| `<ceiling>` | USD10,000,000 (fixed configured value) |
-| `<maximum>` | USD10,000,000.01 (fixed boundary or equality) |
-
-**Steps:**
-
-1. As the collector, submit `<maximum>` through the authenticated auction API.
-2. Read the response and the collector's maximums on the listing.
-
-**Expected Results:**
-
-* The maximum is refused and the refusal names `<ceiling>` as the ceiling.
-* No maximum is recorded for the collector.
+* The request is refused and names `<ceiling>`.
+* Neither highest bid nor stored maximum changes.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-dlk rev=3 covers=g10.auction-bid-increments.SC-pd0 -->
 ### g10.auction-bid-increments.US2-TC4: Listing at the ceiling refuses a further direct bid
@@ -368,32 +361,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_1>` and `<lot_2>` are open lots with no accepted bid.
-* customer is signed in with a card linked.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An open lot, starting price USD50 (range: 5000-9999 minor units) |
-| `<lot_2>` | An open lot, starting price USD100 (fixed tier boundary) |
+* Two open lots have prices in different ranges of the same USD schedule.
 
 **Steps:**
 
-1. Open `<lot_1>`'s bid panel and read its minimum next amount.
-2. Open `<lot_2>`'s bid panel and read its minimum next amount.
-3. Place a bid of the minimum next amount on each lot and read its next minimum.
+1. Open each lot and read its listed amount and minimum next bid.
+2. Read the bid currency accepted by each bid panel.
 
 **Expected Results:**
 
-* Both lots show their prices and minimum in USD, with no currency choice.
-* Each first minimum is the lot's starting price.
-* Each next minimum is the bid plus the increment of the one USD schedule: USD1 on `<lot_1>`, USD5 on `<lot_2>`.
+* Both lots show USD amounts and accept USD bids.
+* The minimum next bid follows the same USD schedule on both lots.
+* No HKD or JPY bid tier or amount appears.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-fdc rev=1 covers=g10.auction-bid-increments.SC-5ea,g10.auction-bid-increments.SC-gq8 -->
-### g10.auction-bid-increments.US3-TC2: A currency other than USD cannot price an auction
+<!-- trace:case id=g10.auction-bid-increments.TC-fdc rev=1 covers=g10.auction-bid-increments.SC-60d,g10.auction-bid-increments.SC-5ea,g10.auction-bid-increments.SC-gq8 -->
+### g10.auction-bid-increments.US3-TC2: Non-USD currency cannot price an auction
 
 Runs once per row of **Test data**.
+
+**Pre-conditions:**
+
+None.
 
 **Classification:**
 
@@ -408,27 +396,23 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bid-increments-US-03
 
-**Pre-conditions:**
-
-* admin(holds the grant to set an auction's prices and window) holds an API session.
-* `<listing_1>` is a draft in USD with every create requirement set.
-
 **Test data:**
 
-| Currency sent | Why this row |
-| --- | --- |
-| HKD | A retired tier currency |
-| JPY | A retired tier currency |
+| Currency |
+| --- |
+| EUR |
+| HKD |
+| JPY |
 
 **Steps:**
 
-1. Send create for `<listing_1>` with the row's currency.
-2. Read the API response for `<listing_1>`.
+1. Submit an auction price using the row's currency.
+2. Read the result and look for a created lot.
 
 **Expected Results:**
 
-* Step 1 is refused.
-* Step 2 reads the listing as a draft in USD, not created.
+* The price is refused.
+* No lot is created or priced in the row's currency.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-sze rev=1 covers=g10.auction-bid-increments.SC-xjw,g10.auction-bid-increments.SC-tke -->
 ### g10.auction-bid-increments.US3-TC3: A lot that was priced in HKD before the overwrite bids on the USD schedule
@@ -471,35 +455,34 @@ Runs once per row of **Test data**.
 * The minimum next amount reads USD8,050.00.
 * No HKD amount shows.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-pn8 rev=1 covers=g10.auction-bid-increments.SC-ws7 -->
-### g10.auction-bid-increments.US3-TC4: An open listing publishes its amounts as USD
+<!-- trace:case id=g10.auction-bid-increments.TC-pn8 rev=2 covers=g10.auction-bid-increments.SC-ws7 -->
+### g10.auction-bid-increments.US3-TC4: Open listing publishes amounts as USD
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** high
+* **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-increments-US-03
 
 **Pre-conditions:**
 
-* An open listing in USD has a starting price of 20000 minor units and an accepted bid of 800000 minor units.
+* An open listing has a starting price, accepted bid and next minimum.
 
 **Steps:**
 
-1. Read the listing's facts through the public listing API.
+1. Open the listing and read its price, highest bid and minimum next amount.
 
 **Expected Results:**
 
-* The starting price, the current bid, the minimum next amount and the ceiling are each an integer count of minor units.
-* Each is paired with `USD`.
-* No other currency code is carried.
+* Each amount is shown in USD.
+* No other bid currency is shown.
 
 ## Settled
 
@@ -507,21 +490,4 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-13 for change `usd-lot-currency-winner-settlement-choice`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-bid-increments-US-03` and the restated `grade10-site-auction-bid-increments-US-01` and `grade10-site-auction-bid-increments-US-02`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q14 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
-
-| Finding | Disposition |
-| --- | --- |
-| Before any bid the minimum is the opening price: a positive start, and the lowest increment on a 0 start | **Folded in:** `grade10-site-auction-bid-increments-SC-01` and `grade10-site-auction-bid-increments-SC-12`, asserted by `g10.auction-bid-increments.US1-TC1`; the USD rows replace the HKD and JPY rows |
-| A boundary price takes the higher tier, and a first bid at the opening price leaves one increment | **Folded in:** `grade10-site-auction-bid-increments-SC-02`, asserted by `g10.auction-bid-increments.US1-TC6` |
-| A bid below the minimum is refused, naming it | **Folded in:** `grade10-site-auction-bid-increments-SC-04`, asserted by `g10.auction-bid-increments.US1-TC7` |
-| An open listing publishes its next minimum in USD | **Folded in:** `grade10-site-auction-bid-increments-SC-05`, asserted by `g10.auction-bid-increments.US1-TC5`. The page read shows the minimum only; the integer-and-code shape of every published amount is read by `g10.auction-bid-increments.US3-TC4` |
-| A listing publishes its starting price, current bid, minimum and ceiling each as minor units paired with USD | **Added:** QA1 read the minimum only. `g10.auction-bid-increments.US3-TC4` asserts `grade10-site-auction-bid-increments-SC-14` |
-| The manual floor uses the current public price, including a lot that was HKD before the overwrite | **Added:** `g10.auction-bid-increments.US3-TC3` asserts `grade10-site-auction-bid-increments-SC-07` and `grade10-site-auction-bid-increments-SC-13` on the one route, one row each |
-| A bid above the minimum is accepted | **Out of suite:** `grade10-site-auction-bid-increments-SC-03` - the durable `g10.auction-bid-increments.TC-qui` holds it, and USD values do not move it |
-| HKD and JPY cannot be scheduled | **Folded in:** `grade10-site-auction-bid-increments-SC-15` and `grade10-site-auction-bid-increments-SC-16`, asserted by `g10.auction-bid-increments.US3-TC2`. The case sends a create, and the scenarios say "sets its currency and schedules it": create is the act that sets the start and the close, so the route is read as the same; Dev should say it |
-| An unsupported currency such as EUR cannot be scheduled | **Out of suite:** `grade10-site-auction-bid-increments-SC-06` - the EUR rows of `g10adm.auction-listing.US74-TC2` and `g10adm.auction-listing.US74-TC3` exercise the same write, and this suite has no admin surface of its own |
-| A bid at the ceiling is accepted; above it a bid or an auto-bid maximum is refused, naming the ceiling; a listing at the ceiling takes no further bid | **Folded in:** `grade10-site-auction-bid-increments-SC-08`, `grade10-site-auction-bid-increments-SC-09`, `grade10-site-auction-bid-increments-SC-10` and `grade10-site-auction-bid-increments-SC-11`, asserted by `g10.auction-bid-increments.US1-TC8`, `US2-TC2`, `US2-TC3` and `US2-TC4`, and by the durable `g10.auction-bid-increments.TC-xdy`. The HKD and JPY rows are gone from all four cases |
-| `g10.auction-bid-increments.US3-TC1` bids on two lots on one schedule | **Kept, unlinked:** the case reads the requirement's first paragraph (every lot in USD, no currency choice), which no scenario states on its own beyond `grade10-site-auction-bid-increments-SC-13` and `grade10-site-auction-bid-increments-SC-14`. Pending a scenario or a link at review |
-| The durable suite's Manual row for `g10.auction-bid-increments.US2-TC3` still names a JPY maximum | **Not folded:** a row of the durable suite, outside this delta; it reads stale once the JPY ceiling retires and needs rewording at archive |
-
-**Uncovered anchors:** none for `grade10-site-auction-bid-increments-US-01`, `grade10-site-auction-bid-increments-US-02` or `grade10-site-auction-bid-increments-US-03`.
+See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.

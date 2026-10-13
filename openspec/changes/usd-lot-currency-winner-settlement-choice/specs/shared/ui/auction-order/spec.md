@@ -7,6 +7,7 @@
   - Rail choices: the payment methods are supplied per currency, each bank rail its own choice
   - Two totals: the summary renders a USD total line then a converted HKD total line when the application supplies both
   - One rail dialog: View Bank Details renders only the rail supplied
+  - Currency policy: the application supplies the order's settlement currency and payment choices
 
 ## ADDED Requirements
 

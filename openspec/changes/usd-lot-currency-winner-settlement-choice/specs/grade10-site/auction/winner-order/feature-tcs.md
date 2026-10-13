@@ -1,8 +1,8 @@
 # grade10-site/auction/winner-order Test Cases
 
-**Status:** pending-review · 0/38
-**Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-94, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
+**Status:** pending-review · 0/35
+**Drafts styled:** 2026-10-14, tcs-rules r5
+**Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
 
 ## g10.auction-winner-order.US8: Winner pays an invoice with a policy premium
 
@@ -10,8 +10,8 @@
 **I want** my invoice to calculate the stated buyer premium correctly using the current currency minimum,
 **so that** the amount I pay is explainable and collectible.
 
-<!-- trace:case id=g10.auction-winner-order.TC-n3p rev=2 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-30s -->
-### g10.auction-winner-order.US8-TC1: The invoice charges 20% of the winning bid as premium
+<!-- trace:case id=g10.auction-winner-order.TC-n3p rev=3 covers=g10.auction-winner-order.SC-30s,g10.auction-winner-order.SC-ml2 -->
+### g10.auction-winner-order.US8-TC1: Invoice premium is 20 percent of the winning bid
 
 **Classification:**
 
@@ -28,64 +28,64 @@
 
 **Pre-conditions:**
 
-* The USD premium minimum is 0.
-* An invoice is created for `<order_1>`.
+* A USD winner's sent invoice has no other lines.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_1>` | A USD order won at `<winning bid>` |
-| `<winning bid>` | USD150 (range: 8000-399999 minor units) |
-| `<premium>` | USD30.00: 20% of `<winning bid>` |
+| Winning bid | USD minimum | Buyer's Premium | Final amount |
+| --- | --- | --- | --- |
+| USD2,400 (fixed fixture) | USD0 | USD480.00 | USD2,880.00 |
+| USD2,500 (fixed fixture) | USD200.00 | USD500.00 | USD3,000.00 |
+| USD1.01 (fixed boundary) | USD0 | USD0.20 | USD1.21 |
 
 **Steps:**
 
-1. Read the API response for `<order_1>`'s invoice.
+1. Read the invoice winning bid, buyer's premium and final amount.
 
 **Expected Results:**
 
-* Buyer's premium is `<premium>`.
-* The total includes `<premium>`.
-* The premium is read in USD, with no other currency.
+* Each row's premium is the greater of 20% of its winning bid, rounded half up, or its USD minimum.
+* Each row's final amount includes the Buyer's Premium.
+* For the USD1.01 row, the premium is USD0.20, an integer count of USD minor units.
 
-<!-- trace:case id=g10.auction-winner-order.TC-zt4 rev=2 covers=g10.auction-winner-order.SC-b16 -->
-### g10.auction-winner-order.US8-TC2: The one USD minimum above 20% becomes the premium
+<!-- trace:case id=g10.auction-winner-order.TC-zt4 rev=2 -->
+### g10.auction-winner-order.US8-TC2: One USD minimum applies below twenty percent
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** unit
+* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** winner-order-US-08
 
 **Pre-conditions:**
 
-* The USD premium minimum is `<minimum>`.
+* A USD winner's sent invoice has a winning bid whose 20% premium is below the minimum.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<minimum>` | USD20 (fixed configured value) |
-| `<winning bid>` | USD7 (fixed fixture) |
-| 20% of `<winning bid>` | USD1.40 (fixed derived value) |
+| `<winning bid>` | USD1 (range: >0 minor units) |
+| `<minimum premium>` | USD1 (fixed configured minimum) |
 
 **Steps:**
 
-1. Compute the premium for `<winning bid>`.
+1. Read the invoice winning bid and buyer's premium.
 
 **Expected Results:**
 
-* The premium is `<minimum>`, not 20% of `<winning bid>`.
+* The premium equals `<minimum premium>` because 20% of `<winning bid>` is lower.
 
-<!-- trace:case id=g10.auction-winner-order.TC-dd3 rev=2 covers=g10.auction-winner-order.SC-2mz -->
+<!-- trace:case id=g10.auction-winner-order.TC-dd3 rev=2 -->
 ### g10.auction-winner-order.US8-TC3: With a zero minimum, 20% is rounded half up
 
 **Classification:**
@@ -161,7 +161,7 @@
 * Step 4: the premium is `<new minimum>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xji rev=1 -->
-### g10.auction-winner-order.US8-TC5: An HKD order converts the premium, minimum included, with the premium
+### g10.auction-winner-order.US8-TC5: HKD order converts the premium and minimum together
 
 **Classification:**
 
@@ -171,36 +171,31 @@
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-08
+* **Testability:** automation
+* **Trace:** winner-order-US-03
 
 **Pre-conditions:**
 
-* The USD premium minimum is `<minimum>` at send.
-* customer(winner) holds `<order_hkd_min>`, settled in HKD, with its invoice sent.
-* customer is on `<the winner's auction order url>` for `<order_hkd_min>`.
+* The invoice is for an HKD settlement and the USD premium rule has a non-zero minimum.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_hkd_min>` | An order won at USD5 (fixed fixture), 20% is USD1.00, settled in HKD |
-| `<minimum>` | USD12.50 (fixed configured value) |
-| `<premium USD>` | USD12.50: the minimum, higher than 20% |
-| `<premium HKD>` | HK$99: USD12.50 x 7.85 is 98.125, rounded up |
+| `<winning bid>` | USD1 (range: >0 minor units) |
+| `<minimum premium>` | USD1 (fixed configured minimum) |
+| `<exchange rate>` | 7.85 HKD per USD |
 
 **Steps:**
 
-1. Read the invoice's Buyer's Premium.
-2. Read Order Summary's Buyer's Premium line.
+1. Read the invoice premium and converted lines.
 
 **Expected Results:**
 
-* Step 1: Buyer's Premium reads `<premium HKD>`.
-* Step 2: the line reads `<premium USD>`.
-* The premium is not 20% of the winning bid: the minimum applies, then converts.
+* The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`.
+* HKD line amounts are each converted at the configured rate and rounded up before summing.
 
 ## g10.auction-winner-order.US9: Winner pays an invoice by bank transfer
 
@@ -208,10 +203,8 @@
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
-<!-- trace:case id=g10.auction-winner-order.TC-w18 rev=2 covers=g10.auction-winner-order.SC-bmm -->
-### g10.auction-winner-order.US9-TC1: A bank-transfer invoice shows the picked rail and the reference
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10.auction-winner-order.TC-w18 rev=4 covers=g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-i03 -->
+### g10.auction-winner-order.US9-TC1: Bank invoice shows the chosen rail and reference
 
 **Classification:**
 
@@ -219,41 +212,35 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** winner-order-US-09
 
-**Blocked:** Finance - the account details for each way are still open; Product - does the invoice PDF carry them?
-
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt>`.
-
-**Test data:**
-
-| Field | Value | Rail picked |
-| --- | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment | FPS |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment | HK Local |
-| `<order_bt>` | A USD order with a sent bank-transfer invoice, reading Pending Payment | International via SWIFT |
+* Outside production, Grade10 holds FPS bank details and Payment Settings holds an HKD card fee rule.
+* customer(winner) holds an HKD auction order in Awaiting Setup with a saved home address.
 
 **Steps:**
 
-1. Open the payment area.
-2. Read the payment instructions.
+1. Choose HKD and FPS, then confirm the home address.
+2. As the operator, send the invoice for bank transfer on FPS.
+3. As the winner, open View Bank Details.
+4. Read the dialog and payment reference.
 
 **Expected Results:**
 
-* The bank details of the row's rail show.
-* No other rail's details show.
-* The bank reference shows, with a copy control and a request to quote it.
-* No card Pay is offered.
+* The invoice names the selected FPS rail and its reference.
+* The dialog shows FPS ID, account name and an FPS QR only, without rail tabs or copy controls.
+* No HK Local or SWIFT details show.
 
-<!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=2 covers=g10.auction-winner-order.SC-v59 -->
-### g10.auction-winner-order.US9-TC22: The picked rail is recorded with the address where Grade10 holds bank details
+<!-- trace:case id=g10.auction-winner-order.TC-eu8 rev=3 covers=g10.auction-winner-order.SC-v59 -->
+### g10.auction-winner-order.US9-TC22:
+
+Runs once per row of **Test data**. The picked rail is recorded with the address where Grade10 holds bank details
 
 Runs once per row of **Test data**.
 
@@ -273,7 +260,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Grade10 holds the sample bank details for each rail outside production, and Payment Settings holds a card fee rule in the row's currency.
-* customer(winner) holds an auction order in the row's currency in Awaiting Setup.
+* customer(winner) holds an order won in USD in Awaiting Setup with a saved home address.
 
 **Test data:**
 
@@ -285,16 +272,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose the row's settlement currency.
-2. Confirm a delivery address with the row's rail.
+1. Choose the row's settlement currency and read the method choices.
+2. Confirm the delivery address with the row's rail.
 3. Reload the order.
 
 **Expected Results:**
 
-* Card and the row's rails were offered, none selected.
-* The order records the row's rail, not a single bank transfer choice, and reads Preparing Invoice.
+* Step 1: Card and the row's rails are offered, none selected.
+* Step 3: the order records bank transfer on the row's rail and reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-winner-order.TC-9v4 rev=3 covers=g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii -->
+<!-- trace:case id=g10.auction-winner-order.TC-9v4 rev=5 covers=g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii -->
 ### g10.auction-winner-order.US9-TC24: HK Local and SWIFT details show their expanded fields
 
 Runs once per row of **Test data**.
@@ -314,7 +301,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) has View Bank Details open for `<pending_bank_transfer_order>`, whose picked rail is the row's rail.
+* customer(winner) is on Winner Order for `<pending_bank_transfer_order>`, whose invoice is pending and picked rail is the row's rail.
 
 **Test data:**
 
@@ -326,15 +313,19 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the bank details.
+1. Read the invoice actions and open View Bank Details.
+2. Read the bank details.
 
 **Expected Results:**
 
+* No card Pay control is offered on the bank transfer invoice.
+* No rail tabs show, and only the row's rail shows.
+* No bank-detail row has a copy control.
 * HK Local shows bank name, bank code, branch code, full account number including bank and branch code, then payment reference.
-* SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference, then the OUR charges note after the reference.
+* SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference and memo warning, then the OUR charges note after the reference.
 * Only the row's rail shows.
 
-<!-- trace:case id=g10.auction-winner-order.TC-vvf rev=2 covers=g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-i03 -->
+<!-- trace:case id=g10.auction-winner-order.TC-vvf rev=2 -->
 ### g10.auction-winner-order.US9-TC32: View Bank Details opens on FPS with QR
 
 **Classification:**
@@ -377,7 +368,7 @@ Runs once per row of **Test data**.
 **I want** the buyer's premium on my invoice to follow one published rule,
 **so that** I can check what I am charged on top of my winning bid.
 
-<!-- trace:case id=g10.auction-winner-order.TC-x85 rev=2 covers=g10.auction-winner-order.SC-2mz,g10.auction-winner-order.SC-ml2 -->
+<!-- trace:case id=g10.auction-winner-order.TC-x85 rev=3 covers=g10.auction-winner-order.SC-zhu,g10.auction-winner-order.SC-b16,g10.auction-winner-order.SC-2mz -->
 ### g10.auction-winner-order.US3-TC5: The invoice's Buyer's Premium follows the published rule
 
 Runs once per row of **Test data**.
@@ -397,30 +388,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) won a lot at `<winning bid>`, settled in USD, and its invoice was sent.
-* The USD premium minimum in Auction Payment settings is `<minimum>` at send.
-* customer is on the order's Winner Order page.
+* admin(operator with payment-processing) holds a USD order in Preparing Invoice; it has no other invoice lines.
+* Auction Payment settings holds the row's USD premium minimum.
 
 **Test data:**
 
-| Winning bid | Minimum | Buyer's Premium | Rule |
-| --- | --- | --- | --- |
-| USD1,350 (range: 80000-399999 minor units) | USD0 | USD270.00 | 20% of the winning bid |
-| USD10.03 (fixed boundary) | USD0 | USD2.01 | 20% is 200.6 minor units, rounded half up |
-| USD10.02 (fixed boundary) | USD0 | USD2.00 | 20% is 200.4 minor units, rounded half up |
-| USD50 (fixed fixture) | USD20 (fixed configured value) | USD20.00 | The minimum, higher than 20% (USD10) |
+| Winning bid | Minimum | Buyer's Premium | Final amount | Rule |
+| --- | --- | --- | --- | --- |
+| USD1,350 (range: 80000-399999 minor units) | USD0 | USD270.00 | USD1,620.00 | 20% of the winning bid |
+| USD10.03 (fixed boundary) | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up |
+| USD10.02 (fixed boundary) | USD0 | USD2.00 | USD12.02 | 20% is 200.4 minor units, rounded half up |
+| USD50 (fixed fixture) | USD20 (fixed configured value) | USD20.00 | USD70.00 | The minimum, higher than 20% (USD10) |
+| USD2,500 (fixed scenario fixture) | USD200.00 (fixed configured value) | USD500.00 | USD3,000.00 | 20% of the winning bid; operator does not enter it |
 
 **Steps:**
 
-1. Read Order Summary.
-2. Hover the Buyer's Premium info tooltip.
+1. As the operator, open Send Invoice and read the quote fields.
+2. Send the invoice without entering a buyer's premium.
+3. As the winner, read Order Summary.
+4. Hover the Buyer's Premium info tooltip.
 
 **Expected Results:**
 
-* Step 1: the winning bid line reads `<winning bid>`.
-* Step 1: Buyer's Premium reads the row's value.
-* Step 1: the total equals the sum of the lines shown.
-* Step 2: a brief tooltip explains Buyer's Premium.
+* Step 1: no buyer's premium input is shown or requested from the operator.
+* Step 2: the invoice is sent with the row's buyer's premium computed by the USD rule.
+* Step 3: the winning bid line reads the row's winning bid and Buyer's Premium reads the row's value.
+* Step 3: the total equals the row's final amount, including the premium.
+* Step 4: a brief tooltip explains Buyer's Premium.
 
 ## g10.auction-winner-order.US1: Winner settles a won lot
 
@@ -428,8 +422,10 @@ Runs once per row of **Test data**.
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
 **so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
 
-<!-- trace:case id=g10.auction-winner-order.TC-4dz rev=2 covers=g10.auction-winner-order.SC-pt5 -->
-### g10.auction-winner-order.US1-TC50: The method can change until the winner confirms
+<!-- trace:case id=g10.auction-winner-order.TC-4dz rev=3 covers=g10.auction-winner-order.SC-pt5 -->
+### g10.auction-winner-order.US1-TC50:
+
+Runs once per row of **Test data**. The method can change until the winner confirms
 
 **Classification:**
 
@@ -449,18 +445,25 @@ Runs once per row of **Test data**.
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
 * customer(winner) holds an auction order in HKD in Awaiting Setup, with card chosen and not yet confirmed.
 
+**Test data:**
+
+| New rail | Expected recorded method |
+| --- | --- |
+| FPS | bank transfer on FPS |
+| HK Local | bank transfer on HK Local |
+
 **Steps:**
 
-1. Change the choice to FPS.
+1. Change the choice to the row's rail.
 2. Confirm the home address.
 3. Reload the order.
 
 **Expected Results:**
 
-* The order records FPS, not card.
+* The order records the row's bank transfer rail, not card.
 * The order reads Preparing Invoice.
 
-<!-- trace:case id=g10.auction-winner-order.TC-csb rev=2 covers=g10.auction-winner-order.SC-7y2,g10.auction-winner-order.SC-vbp -->
+<!-- trace:case id=g10.auction-winner-order.TC-csb rev=2 covers=g10.auction-winner-order.SC-vbp,g10.auction-winner-order.SC-7y2 -->
 ### g10.auction-winner-order.US1-TC52: A currency with no card fee rule reads card as not yet available
 
 Runs once per row of **Test data**.
@@ -481,7 +484,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds no card fee rule in the row's currency.
-* customer(winner) holds an auction order in the row's currency in Awaiting Setup.
+* customer(winner) holds an order won in USD in Awaiting Setup with a saved home address.
 
 **Test data:**
 
@@ -513,7 +516,7 @@ Runs once per row of **Test data**.
 **so that** I pay in the currency my money is already in.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ayp rev=1 covers=g10.auction-winner-order.SC-o92 -->
-### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD with neither chosen
+### g10.auction-winner-order.US24-TC1: Order setup offers USD and HKD without a choice
 
 **Classification:**
 
@@ -521,7 +524,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -530,28 +533,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) holds `<order_1>` in Awaiting Setup with a saved home address.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_1>` | An order won in USD, in Awaiting Setup |
+* A winner is on setup for a won lot whose auction bids were in USD.
 
 **Steps:**
 
-1. Open `<the winner's auction order url>` for `<order_1>`.
-2. Start setup and choose the home address.
-3. Read the settlement currency choice.
+1. Read the settlement currency and payment method choices.
 
 **Expected Results:**
 
-* USD and HKD are offered.
-* No other currency is offered.
-* Neither is selected.
+* USD and HKD are offered; neither is selected.
+* No payment method is selected before a currency is chosen.
 
-<!-- trace:case id=g10.auction-winner-order.TC-79a rev=1 covers=g10.auction-winner-order.SC-8c6 -->
-### g10.auction-winner-order.US24-TC2: The picked currency is the currency of the invoice
+<!-- trace:case id=g10.auction-winner-order.TC-79a rev=2 covers=g10.auction-winner-order.SC-8c6 -->
+### g10.auction-winner-order.US24-TC2: Chosen settlement currency prices the invoice
 
 Runs once per row of **Test data**.
 
@@ -561,7 +555,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -570,35 +564,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_1>` in Awaiting Setup with a saved home address.
-* admin(operator with payment processing) can send `<order_1>`'s invoice.
+* A winner is on order setup with an address and billing address ready.
 
 **Test data:**
 
-| Settlement currency | Rail |
-| --- | --- |
-| USD | HK Local |
-| HKD | FPS |
+| Settlement currency | Hammer price in USD minor units | Premium in USD minor units | Expected invoice amounts |
+| --- | ---: | ---: | --- |
+| USD | 250000 | 50000 | Winning Bid 250000 USD; Buyer's Premium 50000 USD; total 300000 USD |
+| HKD | 250000 | 50000 | Winning Bid 1962500 HKD; Buyer's Premium 392500 HKD; total 2356500 HKD |
 
 **Steps:**
 
-1. Choose the row's settlement currency and the row's rail, and confirm the home address.
-2. As the admin, send the invoice.
-3. As the winner, read the order's invoice and total.
+1. Choose the row's settlement currency.
+2. Choose a payment method offered for it.
+3. Confirm the order setup.
+4. Read the invoice currency and order total.
 
 **Expected Results:**
 
-* The order records the row's currency.
-* The invoice, its lines and its total read in the row's currency.
-* On the USD row no HKD amount appears.
+* The invoice shows the row's winning bid, premium and total in the row's currency, with no conversion for USD.
+* When the row is HKD, its converted lines use 7.85 and round up to whole HKD; no USD amount is printed.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8ea rev=1 covers=g10.auction-winner-order.SC-k63 -->
-### g10.auction-winner-order.US24-TC3: The currency cannot change once the invoice is sent
+### g10.auction-winner-order.US24-TC3: Sent invoice locks the chosen currency
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
@@ -611,27 +603,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_3>` is settled in USD and its invoice was sent.
-* customer(winner) holds `<order_3>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_3>` | An order settled in USD with a sent invoice |
+* A winner chose HKD and an operator sent the invoice.
 
 **Steps:**
 
-1. Open `<the winner's auction order url>` for `<order_3>`.
-2. Look for a control to change the settlement currency.
-3. Send Grade10 a request to change the order to HKD.
-4. Read the order.
+1. Try to change the settlement currency to USD.
+2. Read the invoice and order currency.
 
 **Expected Results:**
 
-* Step 2: no control to change the currency is offered.
-* Step 3: the request is refused.
-* Step 4: the order and its invoice still read USD.
+* The currency change is refused.
+* The sent invoice and order remain in HKD.
 
 <!-- trace:case id=g10.auction-winner-order.TC-a61 rev=1 covers=g10.auction-winner-order.SC-j1l -->
 ### g10.auction-winner-order.US24-TC4: A confirmation with no currency is refused
@@ -800,7 +782,7 @@ Runs once per row of **Test data**.
 **so that** I choose a way to pay that works for the account I will send it from.
 
 <!-- trace:case id=g10.auction-winner-order.TC-52z rev=1 covers=g10.auction-winner-order.SC-oyi,g10.auction-winner-order.SC-crs -->
-### g10.auction-winner-order.US25-TC1: Each currency offers its own methods and each rail is its own choice
+### g10.auction-winner-order.US25-TC1: Each currency offers its payment methods and rails
 
 Runs once per row of **Test data**.
 
@@ -810,8 +792,8 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke, regression
+* **Type:** acceptance
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -819,31 +801,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds an auction order in Awaiting Setup with a saved home address.
+* A winner is on order setup with USD and HKD settlement choices.
 
 **Test data:**
 
-| Settlement currency | Methods offered |
+| Currency | Offered methods |
 | --- | --- |
-| HKD | Card, FPS, HK Local |
 | USD | Card, HK Local, International via SWIFT |
+| HKD | Card, FPS, HK Local |
 
 **Steps:**
 
-1. Choose the home address and the row's settlement currency.
-2. Read the payment method choice.
+1. Choose the row's currency.
+2. Read all payment method choices.
 
 **Expected Results:**
 
-* Exactly the row's methods are offered.
-* No choice reads bank transfer as one method.
-* No method is selected.
+* Exactly the methods in the row are offered.
+* Each bank rail is a separate choice.
+* No method from the other currency is offered.
 
-<!-- trace:case id=g10.auction-winner-order.TC-7j7 rev=1 covers=g10.auction-winner-order.SC-4lj -->
-### g10.auction-winner-order.US25-TC2: Switching currency clears a method the new currency does not offer
-
-Runs once per row of **Test data**.
+<!-- trace:case id=g10.auction-winner-order.TC-7j7 rev=1 -->
+### g10.auction-winner-order.US25-TC2: Switching currency clears an unavailable method
 
 **Classification:**
 
@@ -860,26 +839,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds an auction order in Awaiting Setup with a saved home address.
-
-**Test data:**
-
-| First currency | Method | Second currency |
-| --- | --- | --- |
-| HKD | FPS | USD |
-| USD | International via SWIFT | HKD |
+* A USD winner selected an International via SWIFT method before confirming setup.
 
 **Steps:**
 
-1. Choose the row's first currency and its method.
-2. Change the settlement currency to the row's second currency.
-3. Read the payment method choice.
+1. Switch settlement currency to HKD.
+2. Read the selected method and available choices.
 
 **Expected Results:**
 
-* The method chosen before the switch is no longer selected.
-* The second currency's methods are offered.
+* International via SWIFT is no longer selected or offered.
+* The available HKD choices appear, with none selected.
 
 <!-- trace:case id=g10.auction-winner-order.TC-vje rev=1 covers=g10.auction-winner-order.SC-4lj -->
 ### g10.auction-winner-order.US25-TC3: A confirmation after a switch that cleared the method is refused
@@ -922,10 +892,10 @@ Runs once per row of **Test data**.
 * Step 4 is refused.
 * Step 5 reads the order in Awaiting Setup, holding no delivery address, no currency and no method.
 
-<!-- trace:case id=g10.auction-winner-order.TC-rwy rev=1 covers=g10.auction-winner-order.SC-6un -->
-### g10.auction-winner-order.US25-TC4: A method both currencies offer stays selected after a switch
+<!-- trace:case id=g10.auction-winner-order.TC-rwy rev=2 covers=g10.auction-winner-order.SC-6un -->
+### g10.auction-winner-order.US25-TC4:
 
-Runs once per row of **Test data**.
+Runs once per row of **Test data**. Switching currency keeps a still-offered method
 
 **Classification:**
 
@@ -942,26 +912,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_7>` in Awaiting Setup with a saved home address.
+* A winner selected the row's method for USD, and that method is offered for HKD.
 
 **Test data:**
 
-| First currency | Method | Second currency |
-| --- | --- | --- |
-| USD | HK Local | HKD |
-| HKD | HK Local | USD |
+| Selected method | Expected after switch |
+| --- | --- |
+| Card | Card remains selected |
+| HK Local | HK Local remains selected |
 
 **Steps:**
 
-1. Choose the home address, the row's first currency and the row's method.
-2. Change the settlement currency to the row's second currency.
-3. Read the payment method choice.
+1. Select the row's method for USD.
+2. Switch settlement currency to HKD.
+3. Read the selected payment method.
 
 **Expected Results:**
 
-* HK Local is still selected.
-* The second currency's methods are offered.
+* The row's method remains selected because HKD still offers it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-2ac rev=1 covers=g10.auction-winner-order.SC-rge -->
 ### g10.auction-winner-order.US25-TC5: A confirmation carrying a method the currency does not offer is refused
@@ -1131,7 +1099,7 @@ Runs once per row of **Test data**.
 **I want** every amount on my invoice, receipt and order letters in HKD,
 **so that** I pay and keep records in one currency without working out a rate.
 
-<!-- trace:case id=g10.auction-winner-order.TC-ac5 rev=1 covers=g10.auction-winner-order.SC-buj,g10.auction-winner-order.SC-ekn,g10.auction-winner-order.SC-tmf -->
+<!-- trace:case id=g10.auction-winner-order.TC-ac5 rev=3 covers=g10.auction-winner-order.SC-gc6,g10.auction-winner-order.SC-buj,g10.auction-winner-order.SC-ekn,g10.auction-winner-order.SC-tmf -->
 ### g10.auction-winner-order.US26-TC1: An HKD invoice reads every amount in HKD, each line rounded up then summed
 
 **Classification:**
@@ -1157,6 +1125,13 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_hkd>` | A lot won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent |
+| `<order_hkd_exact>` | A lot won at USD100.00, settled in HKD by FPS, invoice sent |
+| `<order_hkd_fraction>` | A lot won at USD101.00, settled in HKD by FPS, invoice sent |
+| `<order_hkd_lines>` | A lot won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee |
+| `<winning bid HKD exact>` | HK$793.00 (fixed derived value), 79,300 minor units |
+| `<premium HKD exact>` | HK$159.00 (fixed derived value), 15,900 minor units |
+| `<shipping HKD exact>` | HK$79.00 (fixed derived value), 7,900 minor units |
+| `<subtotal HKD exact>` | HK$1,031.00 (fixed derived value), 103,100 minor units |
 | `<winning bid>` | USD250 (fixed fixture): USD250 x 7.85 is 1962.5, rounded up to HK$1,963 |
 | `<premium>` | USD50 (fixed derived value): 20% of `<winning bid>`, premium minimum USD0; HK$393 after rounding up 392.5 |
 | `<shipping>` | USD12 (fixed fixture): HK$95 after rounding up 94.2 |
@@ -1165,8 +1140,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the invoice.
+1. Open `<order_hkd>`'s invoice.
 2. Read Buyer's Premium, Shipping & Handling and the total.
+3. Open `<order_hkd_exact>`'s invoice and read its Winning Bid.
+4. Open `<order_hkd_fraction>`'s invoice and read its Winning Bid.
+5. Open `<order_hkd>`'s invoice PDF.
+6. Open `<order_hkd_lines>`'s invoice and read its lines and total.
 
 **Expected Results:**
 
@@ -1174,13 +1153,17 @@ Runs once per row of **Test data**.
 * The total reads `<total HKD>`, not the whole-total value.
 * Every amount reads in HKD, and no USD amount appears.
 * No USD winning bid is printed.
+* `<order_hkd_exact>`'s Winning Bid is 78,500 minor units in HKD.
+* `<order_hkd_fraction>`'s Winning Bid is 79,300 minor units in HKD, not 79,285.
+* Step 5: every amount in the invoice PDF reads in HKD, the Winning Bid is 78,500 minor units, and no USD amount or conversion rate appears.
+* Step 6: Winning Bid is `<winning bid HKD exact>`, Buyer's Premium is `<premium HKD exact>`, Shipping & Handling is `<shipping HKD exact>`, and the total is `<subtotal HKD exact>`, the sum of the rounded lines.
 
-<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=1 covers=g10.auction-winner-order.SC-vvm -->
-### g10.auction-winner-order.US26-TC2: An HKD receipt reads in HKD and prints no USD winning bid
+<!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=3 covers=g10.auction-winner-order.SC-vvm -->
+### g10.auction-winner-order.US26-TC2: HKD receipt omits the USD winning bid
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -1193,27 +1176,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<the winner's auction order url>` for `<order_hkd_paid>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_hkd_paid>` | An order settled in HKD whose invoice of `<total HKD>` was paid in full |
-| `<total HKD>` | HK$2,451 (fixed derived value) |
+* A winner paid in full an HKD invoice whose total is 103100 minor units in HKD, for a lot bid in USD.
 
 **Steps:**
 
-1. Open the receipt for the payment.
-2. Read the receipt's amounts.
+1. Read the receipt and payment confirmed letter.
 
 **Expected Results:**
 
-* Every amount reads in HKD.
-* The amount paid reads `<total HKD>` and the amount left reads zero.
-* No USD winning bid is printed.
+* The order total and payment each read 103100 minor units in HKD.
+* Neither document prints the USD winning bid or conversion rate.
 
-<!-- trace:case id=g10.auction-winner-order.TC-9dm rev=1 covers=g10.auction-winner-order.SC-vvm -->
+<!-- trace:case id=g10.auction-winner-order.TC-9dm rev=1 -->
 ### g10.auction-winner-order.US26-TC3: Order letters of an HKD order carry HKD amounts
 
 **Classification:**
@@ -1285,7 +1259,7 @@ Runs once per row of **Test data**.
 * The refund reads `<refund>` in HKD.
 * No USD amount appears beside it.
 
-<!-- trace:case id=g10.auction-winner-order.TC-3ly rev=1 covers=g10.auction-winner-order.SC-qtr -->
+<!-- trace:case id=g10.auction-winner-order.TC-3ly rev=2 covers=g10.auction-winner-order.SC-qtr -->
 ### g10.auction-winner-order.US26-TC5: The card fee of an HKD order comes from the HKD rule
 
 **Classification:**
@@ -1311,8 +1285,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_card>` | A lot won at USD100 (fixed fixture), settled in HKD by card, premium minimum USD0, no other lines |
-| HKD Subtotal | HK$942 (fixed derived value): HK$785 bid + HK$157 premium, no rounding needed |
+| `<order_card>` | A lot won at USD101.00, with a USD20.20 premium and USD10.01 Shipping & Handling, settled in HKD by card |
+| HKD Subtotal | HK$1,031.00 (fixed derived value): HK$793 bid + HK$159 premium + HK$79 Shipping & Handling |
 
 **Steps:**
 
@@ -1321,11 +1295,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The card fee is the HKD rule's fee on the invoice's HKD Subtotal.
-* The fee and the total read in HKD.
+* The card fee is 3,873 minor units in HKD, the HKD rule's gross-up fee on the HKD Subtotal.
+* The total is 106,973 minor units in HKD.
 * The USD rule is not applied.
 
-<!-- trace:case id=g10.auction-winner-order.TC-uz6 rev=1 covers=g10.auction-winner-order.SC-gc6,g10.auction-winner-order.SC-buj -->
+<!-- trace:case id=g10.auction-winner-order.TC-uz6 rev=2 -->
 ### g10.auction-winner-order.US26-TC6: A USD amount converts to HKD rounded up to a whole HK$
 
 Runs once per row of **Test data**.
@@ -1363,7 +1337,7 @@ Runs once per row of **Test data**.
 
 * The result is `<hkd amount>`.
 
-<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=1 covers=g10.auction-winner-order.SC-tmf,g10.auction-winner-order.SC-vvm -->
+<!-- trace:case id=g10.auction-winner-order.TC-k5y rev=1 -->
 ### g10.auction-winner-order.US26-TC7: No page, invoice, receipt or letter names the conversion rate
 
 **Classification:**
@@ -1401,7 +1375,7 @@ Runs once per row of **Test data**.
 
 * No surface names a rate, an exchange rate or 7.85.
 
-<!-- trace:case id=g10.auction-winner-order.TC-one rev=1 -->
+<!-- trace:case id=g10.auction-winner-order.TC-one rev=1 covers=g10.auction-winner-order.SC-8gv -->
 ### g10.auction-winner-order.US26-TC8: A bank transfer fee typed in USD converts and rounds up with the other lines
 **Classification:**
 
@@ -1448,8 +1422,8 @@ Runs once per row of **Test data**.
 **I want** my Order Summary to keep the lot's USD amounts and show a USD total then the HKD total I will pay,
 **so that** I see what I won and what it costs me in HKD.
 
-<!-- trace:case id=g10.auction-winner-order.TC-vwm rev=1 covers=g10.auction-winner-order.SC-kdr -->
-### g10.auction-winner-order.US27-TC1: Order Summary under HKD keeps USD lines and reads two totals
+<!-- trace:case id=g10.auction-winner-order.TC-vwm rev=3 covers=g10.auction-winner-order.SC-kdr,g10.auction-winner-order.SC-fq4 -->
+### g10.auction-winner-order.US27-TC1: HKD summary places card fee after both subtotals
 
 **Classification:**
 
@@ -1457,7 +1431,7 @@ Runs once per row of **Test data**.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -1466,34 +1440,35 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<the winner's auction order url>` for `<order_hkd>`.
+* The winner selected HKD and two pending invoices have USD bid, premium and Shipping & Handling lines: one bank-transfer order and one card order.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<order_hkd>` | A lot won at USD250 (fixed fixture), settled in HKD, premium USD50, Shipping & Handling USD12, invoice sent |
-| USD total | USD312 (fixed derived value): 250 + 50 + 12 |
-| `<total HKD>` | HK$2,451 (fixed derived value): lines rounded up one by one, then summed |
+| Payment method | USD line | HKD line |
+| --- | --- | ---: |
+| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79,300; 15,900; 7,900 minor; subtotal 103,100 minor |
+| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79,300; 15,900; 7,900 minor; subtotal 103,100 minor |
+| HKD card rule | 3.4% + 235 minor | Card fee 3,873 minor; payable total 106,973 minor |
 
 **Steps:**
 
-1. Read Order Summary.
-2. Read Order Total.
+1. Read each row's Order Summary from top to bottom.
+2. Read each row's amount payable.
 
 **Expected Results:**
 
-* Step 1: the lines read in USD: the winning bid, Buyer's Premium and Shipping & Handling from the row.
-* Step 2: Order Total reads the USD total, then the HKD total.
-* The HKD total reads `<total HKD>`.
+* Both rows list the bid, premium and Shipping & Handling lines in USD.
+* Both rows show the USD subtotal of 13,121 minor units before the HKD subtotal of 103,100 minor units.
+* The bank-transfer row has no card fee and has an amount payable of 103,100 minor units in HKD.
+* The card row shows the HKD card fee of 3,873 minor units after the separator below both totals; its amount payable is 106,973 minor units in HKD and includes the fee, with no USD fee line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-7qs rev=1 covers=g10.auction-winner-order.SC-59h -->
-### g10.auction-winner-order.US27-TC2: Order Summary under USD reads one total in USD
+### g10.auction-winner-order.US27-TC2: USD summary shows one USD total
 
 **Classification:**
 
 * **Severity:** major
-* **Priority:** medium
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -1505,24 +1480,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<the winner's auction order url>` for `<order_usd>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<order_usd>` | A lot won at USD250 (fixed fixture), settled in USD, premium USD50, Shipping & Handling USD12, invoice sent |
+* The winner selected USD and the invoice has no converted HKD total.
 
 **Steps:**
 
-1. Read Order Summary.
-2. Read Order Total.
+1. Read the Order Summary totals.
 
 **Expected Results:**
 
-* The lines read in USD.
-* Order Total reads one total, in USD.
-* No HKD total appears.
+* The summary shows one USD total.
+* It shows no HKD subtotal or fee.
 
 <!-- trace:case id=g10.auction-winner-order.TC-17a rev=1 covers=g10.auction-winner-order.SC-ug0 -->
 ### g10.auction-winner-order.US27-TC3: The HKD total waits for the invoice
@@ -1562,58 +1529,66 @@ Runs once per row of **Test data**.
 
 ## Settled
 
-- An operator may change the settlement currency after the winner confirms: before the invoice is sent by an edit, and after it by a reissue, with a reason in both.
-- The operator types the bank transfer fee in USD and it converts with the other lines.
-- Only the won-lot letter keeps the USD winning bid; every later letter reads the settlement currency only.
-- The card fee range reads the percentage of the rule of the currency picked.
+- Q20 settles the internal order at lot close as HKD/FPS automatically, without setup or a winner/operator selection step; no invoice is issued at close.
+- Q31 counts a payment-choice change, including a rail-only change, as a reissue change.
+- Q16 types bank-transfer fees in USD and converts each fee line to HKD rounded up.
+- Q18 preserves USD only in the won-lot letter sent before currency selection; later order letters use settlement currency.
+- Q19 shows the percentage from the card rule for the currency selected.
+- SC-95 retains its historical title; its active body requires only the picked HK Local rail, with no tabs or other rail details.
+- SC-302 uses the rounded fee of 39,300 minor HKD and total 142,400 minor HKD.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-13, re-run 2026-10-14 against Dev's patch, for change `usd-lot-currency-winner-settlement-choice`, joining QA1's blind cases with Dev's delta scenarios on `winner-order-US-24`, `winner-order-US-25`, `winner-order-US-26` and `winner-order-US-27`, and the restated `winner-order-US-01`, `winner-order-US-03`, `winner-order-US-08` and `winner-order-US-09`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q27 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
+**Run:** QA2 2026-10-14, independent reconciliation of the blind QA1 cases against the current Dev scenarios and original journey anchors. Read proposal, decisions and `## Raised`, relevant revised PRDs, journeys, tech design, current and durable winner-order specs and suites, and `docs/governance/specs-to-test-cases.md`; QA1's report and pre-QA2 READY receipt were read as review inputs. The revised cases were not derived from scenarios. Case dispositions are recorded before the post-hoc links below. Full case-level evidence is [qa2-winner.md](../../../../qa2-winner.md).
 
-| Finding | Disposition |
+| Scenario | Disposition and evidence |
 | --- | --- |
-| Order setup offers USD and HKD, neither selected | **Folded in:** `winner-order-SC-278`, asserted by `g10.auction-winner-order.US24-TC1` |
-| A confirmation with no currency is refused, and the order records nothing | **Added:** `g10.auction-winner-order.US24-TC4` asserts `winner-order-SC-279`; QA1 read the choice and not its refusal |
-| A confirmed HKD choice is recorded and the order reads Preparing Invoice | **Added:** `g10.auction-winner-order.US24-TC5` asserts `winner-order-SC-280`. `US9-TC22` reads the rail and the status and not the currency, and `US24-TC2` reads the currency and not the status |
-| A USD order is priced with no conversion | **Folded in:** `winner-order-SC-281`, asserted by the USD row of `g10.auction-winner-order.US24-TC2`. That case reads no HKD amount and the lines in USD; the winning bid equal to the hammer price and the premium at 20% are read by `US8-TC1` |
-| A sent invoice keeps its currency | **Folded in:** `winner-order-SC-282`, asserted by `g10.auction-winner-order.US24-TC3`, which tries the other direction (USD order, request for HKD); the rule is symmetric |
-| USD converts at 7.85, a fraction rounds up to the whole HK$, and the HKD total is the sum of the rounded lines | **Folded in:** `winner-order-SC-283` and `winner-order-SC-284` by `g10.auction-winner-order.US26-TC6` (the 100.00, 100.01 and 0.01 rows); `winner-order-SC-284` and `winner-order-SC-285` by `g10.auction-winner-order.US26-TC1`, which reads the lines and the total against the whole-total value |
-| A card fee on an HKD order comes from the HKD rule, on the HKD subtotal | **Folded in:** `winner-order-SC-286`, asserted by `g10.auction-winner-order.US26-TC5`, which reads the rule applied and the USD rule not applied rather than the 3873 figure |
-| A sent HKD invoice does not re-price when the conversion figure changes, and a reissue prices at the new figure | **Out of suite:** `winner-order-SC-287` - the figure is one constant with no operator control, so only a code change can move it. Verified by the pricing test of task 6.1 in `grade10` that sends, changes the constant and reads the invoice (`tech-design.md`, Risks) |
-| An HKD invoice, receipt and letter print every amount in HKD, no USD winning bid and no rate | **Folded in, jointly:** `winner-order-SC-288` by `g10.auction-winner-order.US26-TC1` (amounts and no USD winning bid) and `US26-TC7` (no rate); `winner-order-SC-289` by `US26-TC2` (receipt), `US26-TC3` (letters) and `US26-TC7`. No one case reads receipt, letter and rate together |
-| US26-TC3 reads every letter of an HKD order and expects no USD winning bid | **Resolved by Q18, case reworded:** only the won-lot letter keeps the USD winning bid, sent before a currency is picked; the case now reads the letters sent after the pick and expects the won-lot letter at US$. The earlier stop is lifted |
-| US26-TC7 reads that no page, summary, invoice, receipt or letter names the rate | **Fold candidate:** the requirement says the rate is shown on no page, and the scenarios state it for the invoice, receipt and letter only. The Order Summary and the setup choice that the case reads have no scenario |
-| US26-TC4 reads a refund on an HKD order in HKD | **Fold candidate:** the requirement carries each refund in the settlement currency and no scenario writes it. Left unlinked |
-| US8-TC5 converts the premium, the USD minimum included, with the premium | **Fold candidate:** the requirement says there is no second minimum in HKD and no scenario shows a minimum converting. Left unlinked |
-| The Order Summary keeps USD lines and reads a USD total then an HKD total under HKD; one total under USD; no HKD total before send | **Folded in:** `winner-order-SC-290` by `g10.auction-winner-order.US27-TC1`, `winner-order-SC-291` by `US27-TC2`, `winner-order-SC-292` by `US27-TC3`, which QA2 added. The lot card clause of `winner-order-SC-290` is read before send only, by `US27-TC3` |
-| The premium is 20% of the hammer price, the one USD minimum when higher, rounded half up, kept on a sent invoice | **Folded in:** `winner-order-SC-40` and `grade10-site-auction-winner-order-SC-46` by `g10.auction-winner-order.US8-TC1`, `winner-order-SC-41` by `US8-TC2`, `winner-order-SC-42` by `US8-TC3` and `US3-TC5`, `winner-order-SC-43` by `US8-TC4`, `grade10-site-auction-winner-order-SC-47` by `US3-TC5`. The clause of `winner-order-SC-40` that no operator was asked to enter it is not read |
-| HKD offers Card, FPS and HK Local; USD offers Card, HK Local and SWIFT; each rail is its own choice | **Folded in:** `winner-order-SC-293` and `winner-order-SC-294`, asserted by the two rows of `g10.auction-winner-order.US25-TC1` |
-| Switching currency clears a method the new currency does not offer, keeps one both offer, and a confirmation without a new choice is refused | **Folded in:** `winner-order-SC-295` by `g10.auction-winner-order.US25-TC2` (the clearing) and `US25-TC3` (the refusal, added), `winner-order-SC-296` by `US25-TC4` (added) |
-| A method the currency does not offer is refused, and nothing is recorded | **Added:** `g10.auction-winner-order.US25-TC5` asserts `winner-order-SC-298` |
-| Card is not offered where no rule exists, in either currency, and the rails are | **Folded in:** `winner-order-SC-297` and `winner-order-SC-248` by the two rows of `g10.auction-winner-order.US1-TC52` |
-| The rail picked is recorded with the address, and a method can change until confirm | **Folded in:** `winner-order-SC-90` by `g10.auction-winner-order.US9-TC22`; `winner-order-SC-93` by `US1-TC50`, whose rail is FPS where the scenario names HK Local, the same class. The durable marker of `US1-TC50` named `g10.auction-winner-order.SC-1aa` (`winner-order-SC-92`), which it does not assert; the link moves to `winner-order-SC-93` |
-| The choice shows each method's fee wording by rail, none selected | **Added:** `g10.auction-winner-order.US25-TC6` asserts `winner-order-SC-91`. The durable `g10.auction-winner-order.TC-bmd` (`US9-TC23`) still reads "Bank transfer reads Bank fee set on your invoice" as one method; it needs a rail rewording at review |
-| A rail is offered only where Grade10 holds its bank details, in production too | **Added:** `g10.auction-winner-order.US25-TC7` asserts `winner-order-SC-92` and `winner-order-SC-226`, one row each. The durable `g10.auction-winner-order.TC-n0y` (`US1-TC48`) still sends "bank transfer" as one choice |
-| A confirmation with no method is refused; neither method offered reads not yet available; the setup deadline still runs | **Out of suite:** `winner-order-SC-94`, `winner-order-SC-249` and `winner-order-SC-257` - the durable `g10.auction-winner-order.TC-miy`, `TC-z2f` and `TC-s5e` hold them. `TC-z2f` still names "bank transfer" where the scenario names HK Local and SWIFT; the outcome is the same |
-| View Bank Details shows the one rail picked: FPS with QR, HK Local fields, SWIFT fields with the OUR note; the rail picked at setup is the rail shown | **Folded in:** `winner-order-SC-181` and `winner-order-SC-299` by `g10.auction-winner-order.US9-TC32`, `winner-order-SC-182` and `winner-order-SC-183` by `US9-TC24`, `winner-order-SC-95` by `US9-TC1`. `winner-order-SC-299` starts from a sent invoice in the case, not from setup; the walk of task 9.2 runs the whole route. The memo warning of `winner-order-SC-183` is not named in `US9-TC24` |
-| `g10.auction-winner-order.US9-TC1` expects the bank reference with a copy control | **Stop and ask the author:** the requirement and `g10.auction-winner-order.US9-TC32` read the reference as a detail row without a copy control. The durable `g10.auction-winner-order.TC-ypl` (`US9-TC20`, the copy control) is stale for the same reason. The case also carries a `**Blocked:**` line from QA1 that this run leaves |
-| A card payment on a bank transfer invoice is refused; the summary offers Submit Payment Proof and View Bank Details; Submit Payment Proof is proof-only | **Out of suite:** `winner-order-SC-96`, `winner-order-SC-180` and `winner-order-SC-184` - the durable `g10.auction-winner-order.TC-e6w`, `TC-6nc` and `TC-xmr` hold them, unchanged |
-| Invoice field scenarios the modified block restates: `winner-order-SC-04`, `-SC-05`, `-SC-38`, `-SC-39`, `-SC-62`, `-SC-63`, `-SC-69`, `-SC-110`, `-SC-111`, `-SC-214`, `-SC-215`, `-SC-216` | **Out of suite:** the durable invoice-line cases (`g10.auction-winner-order.TC-apy`, `TC-aq5`, `TC-7cb`, `TC-ujy`, `TC-m21`, `TC-nvv`, `TC-dvc`), which this change does not alter; their example amounts are HKD. The bank transfer fee question that `winner-order-SC-63`, `winner-order-SC-110` and `winner-order-SC-111` carried is settled by Q16: the fee is typed in USD, so `winner-order-SC-110` reads a USD invoice in USD and `winner-order-SC-111` types its zero in USD |
-| An operator changes the settlement currency after the winner confirmed and before the invoice is sent, and the winner's own write is still refused | **Added:** `g10.auction-winner-order.US24-TC6` asserts `winner-order-SC-300`. QA1 had no case for the operator's window; Q15 settled it. The operator side, its reason and its log entry are read by `g10adm.auction-post-sale.US5-TC21` |
-| A reissue in the other currency carries the currency the operator chose and leaves the replaced invoice in its own | **Added:** `g10.auction-winner-order.US24-TC7` asserts `winner-order-SC-301`; the same route is read from the operator's side by `g10adm.auction-post-sale.US5-TC22` |
-| The card fee range reads the percentage of the rule of the currency picked, and changes when the currency changes | **Added:** `g10.auction-winner-order.US25-TC8` asserts `winner-order-SC-303`. `g10.auction-winner-order.US25-TC6` reads the HKD wording only, so no case read the USD percentage or the switch |
-| An HKD order converts a bank transfer fee typed in USD, rounded up to the whole HK$, and adds it to the total | **Stop and ask the author:** `winner-order-SC-302` reads a fee of 5000 minor units in USD as 39250 minor units in HKD and an order total of 142350. 5000 x 7.85 is 392.5 HK$, which "An HKD order converts each USD line at a fixed rate and rounds it up" rounds to 39300, a multiple of 100, so the total reads 142400; the case `g10.auction-winner-order.US26-TC8` reads 39300 and 142400 and is left unlinked. The same requirement's table and `winner-order-SC-284` round a fraction up. Raised in `decisions.md` |
-| A lot an internal bidder wins opens its order with the internal bidder's address and no letter; the order's settlement currency and rail are left to the operator | **Held:** `winner-order-SC-277` is not linked. The first three clauses are the durable `g10.auction-winner-order.TC-srq`, with an HKD fixture there; the clause that currency and rail stay with the operator is the question raised against `grade10-admin/auction/post-sale` and `decisions.md` Q20 |
-| A lot close asks for an address and not payment, a repeated close creates nothing twice, and confirming an address readies the order | **Out of suite:** `winner-order-SC-26`, `winner-order-SC-27` and `winner-order-SC-28`, restated unchanged by the modified block - the durable US1 cases (`g10.auction-winner-order.TC-qaq` and its siblings, whose legacy markers bundle them) hold them |
-| The PRD page `post-bidding.md` still states the earlier model in places: the premium row (0 in USD, HKD and JPY), "in USD and JPY until Finance sets one", the invoice "Bank details" bullet (every enabled rail), the View Bank Details tab lines and the rail tab width line, and the Buyer's premium, Bank details and Card in USD and JPY decision rows | **Stop and ask the author:** the PRD owner. Task 3.1 names some of these lines. No case in this suite follows them; they contradict `decisions.md` Q4, Q10 and Q11 and the requirements above |
+| SC-278 | Covered by `TC-ayp`; both currencies offered, neither selected. |
+| SC-279 | Covered by `TC-a61`; no-currency confirmation refused and state unchanged. |
+| SC-280 | Covered by `TC-x0r`; confirmed HKD and Preparing Invoice. |
+| SC-281 | Covered by USD row in `TC-79a`; no conversion and USD lines/total. |
+| SC-282 | Covered by `TC-8ea`; the HKD-sent invoice refuses a USD write and remains HKD. |
+| SC-300, SC-301 | Covered by `TC-flb` and `TC-r4x`; operator pre-send correction and cross-currency reissue. |
+| SC-283, SC-284, SC-285 | Covered by repaired `TC-ac5`; exact 100.00, 101.00 and 101.00/20.20/10.01 USD bank-transfer fixtures with converted lines and rounded sum. |
+| SC-286 | Covered by `TC-3ly`; exact 103,100 minor HKD subtotal, 3,873 fee, 106,973 total, HKD rule selected. |
+| SC-287 | Out of suite: pricing module change test planned in task 6.1; the fixed rate is a code constant, not an operator-editable value. |
+| SC-288 | Covered by repaired `TC-ac5`; exact USD100 / HKD78,500 invoice and PDF, no USD amount or rate. |
+| SC-289 | Covered by repaired `TC-nf6`; exact HKD103,100 receipt and payment-confirmed letter, no USD winning bid or rate. |
+| SC-290, SC-304 | Covered by `TC-vwm`; exact supplied USD/HKD lines, subtotals, HKD card-fee gross-up, separator and payable amount. |
+| SC-291 | Covered by `TC-7qs`; one USD total only. |
+| SC-292 | Covered by `TC-17a`; no HKD total before invoice send and USD bid on lot card. |
+| SC-40 | Covered by repaired `TC-x85`; the operator quote has no premium input, then the invoice carries the exact USD500 premium for a USD2,500 bid and USD200 minimum. |
+| SC-41, SC-42 | Covered by `TC-x85`; exact min-higher and half-up invoice rows. |
+| SC-43 | Covered by `TC-i06`; sent premium stays and reissue uses new minimum. |
+| SC-46, SC-47 | Covered by repaired `TC-n3p`; exact USD2,500/500 premium with final amount inclusion, and USD1.01/0.20 integer-minor boundary. |
+| SC-293, SC-294 | Covered by `TC-52z`; exact offered method/rail sets for HKD and USD. |
+| SC-295 | Covered by `TC-vje`; switch clears selection and confirmation without new choice is refused. `TC-7j7` asserts only the clearing sub-outcome. |
+| SC-296 | Covered by repaired `TC-rwy`; its HK Local row stays selected when switching to HKD. |
+| SC-297, SC-248 | Covered by `TC-csb`; no-card-rule outcome and available rails. |
+| SC-298 | Covered by `TC-2ac`; unsupported method refused and setup facts unchanged. |
+| SC-90 | Covered by repaired `TC-eu8`; its HKD/FPS row records bank transfer on FPS and Preparing Invoice after confirmation. |
+| SC-91 | Covered by `TC-jfi`; exact HKD card/bank-fee wording and no selection. |
+| SC-303 | Covered by `TC-a8g`; USD 4.4% to HKD 3.4% choice wording. |
+| SC-92, SC-226 | Covered by `TC-pes`; outside-production HK Local-only and production no-bank-detail partitions, including FPS refusal. |
+| SC-93 | Covered by repaired `TC-4dz`; its HK Local row changes Card to HK Local and confirms the address. |
+| SC-94, SC-249, SC-257 | Out of suite: existing durable cases `TC-miy`, `TC-z2f`, `TC-s5e`; SC-249 has the same no-method refusal path, and SC-257 is setup-deadline behavior. |
+| SC-95 | Covered by `TC-9v4` for HK Local details and no card Pay. The title is explicitly historical and does not assert three rails. |
+| SC-181 | Covered by repaired `TC-w18`; it walks setup, send and the FPS dialog and checks FPS ID, account name, QR and no other rails. `TC-vvf` remains a duplicate candidate. |
+| SC-182, SC-183 | Covered by repaired `TC-9v4`; local and SWIFT fields, reference/memo warning, and OUR note order. |
+| SC-299 | Covered by repaired `TC-w18`; it walks HKD/FPS setup, invoice send and the FPS detail view. |
+| SC-277 | Covered at domain; see the full case link below. |
+| SC-302 | Covered by `TC-one`; Q16's USD-typed fee is converted per line to 39,300 HKD and total 142,400. |
+| SC-04, SC-05, SC-38, SC-39, SC-62, SC-63, SC-69, SC-110, SC-111, SC-214, SC-215, SC-216 | Out of suite: unchanged invoice-field scenarios remain with existing durable invoice cases; current winner-order changes do not alter those unchanged routes. |
+| SC-26, SC-27, SC-28 | Out of suite: unchanged close/duplicate-close/address-ready routes remain with durable winner-order lot-close cases. |
 
-**Uncovered anchors:** none for `winner-order-US-24`, `winner-order-US-25`, `winner-order-US-26` or `winner-order-US-27`.
+**Anchor coverage:** All eight declared journeys have at least one case: US1, US3, US8, US9, US24, US25, US26 and US27. No journey anchor is uncovered. US26 has uncovered scenario holes recorded above.
 
-**Uncovered scenarios:** `winner-order-SC-302` (contradiction, held) and `winner-order-SC-277` (held for the PM with Q20). No scenario is left uncovered without a named reason.
+- **Covered at domain** - SC-277 is fully asserted by `grade10-admin-auction-e2e-US4-TC2-3` in [domain-tcs.md](../../../grade10-admin/auction/domain-tcs.md#L253). Its expected results cover exactly one internal order, `not_issued`, HKD/FPS, the internal bidder's address, Preparing Invoice, no setup, no invoice at close, and no won, address, invoice, payment or other order letters to any recipient. The case uses a different valid USD bid fixture (505,000 minor units) than the scenario example (30,500); both exercise the same required close behavior.
 
-**Cases left unlinked on purpose:** `g10.auction-winner-order.US8-TC5`, `g10.auction-winner-order.US26-TC4`, `g10.auction-winner-order.US26-TC8` and the fold candidates above, kept `draft`. None is marked approved or actual.
+**Other uncovered behavior:** US26 refund-in-HKD case `TC-q56` is required by the anchor/requirement, but no current scenario states that output; case remains unlinked. `TC-xji` also remains unlinked because no scenario states conversion of the one USD premium minimum together with the premium. `TC-9dm` asserts post-pick letters and the pre-pick won-lot exception across all letters; no single scenario asserts that full set.
 
-**Over-claimed cases:** `g10.auction-winner-order.US26-TC7` reads that no page names the rate, including the Order Summary and the setup choice, while the scenarios it is linked to state the invoice, receipt and letter only; the page clause stands on the requirement.
+**Overclaims and duplicates:** `TC-k5y` reads the setup choice and Order Summary as well as invoice, receipt and letters; its no-rate expectation is supported by the broad requirement that no page names the rate, but its scope exceeds the named document scenarios. `TC-w18` and `TC-vvf` overlap on FPS detail presentation; `TC-w18` owns SC-181 and SC-299 after route repair, while TC-vvf remains unlinked. `TC-7j7` and `TC-vje` overlap on switch-clearing; only `TC-vje` also asserts refusal.
 
-**Contradictions:** `winner-order-SC-302` against the requirement's own rounding rule and table, `spec.md` of this delta at `winner-order-SC-302` (39250 and 142350 against 39300 and 142400). `winner-order-SC-95` keeps the title "shows three ways" over a THEN that shows one rail. `winner-order-SC-111` carries rev 1 with restated text. `g10.auction-winner-order.US9-TC1` still expects a copy control, as before.
+**Contradictions:** None found in current winner-order sources. SC-95's historical title is explicitly retained in its active spec and the body requires one picked rail. SC-302's current scenario and TC-one agree at 39,300 minor HKD fee and 142,400 minor HKD total. SC-277 and Q20 agree on automatic HKD/FPS at close without setup.
+
+**Case lifecycle:** All new or changed cases remain `draft`; case IDs are preserved. Ten cases were revised within their existing anchors: TC-n3p, TC-w18, TC-eu8, TC-9v4, TC-4dz, TC-rwy, TC-x85, TC-ac5, TC-nf6 and TC-vwm.

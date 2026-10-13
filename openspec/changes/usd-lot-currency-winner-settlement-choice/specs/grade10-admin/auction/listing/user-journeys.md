@@ -26,6 +26,9 @@
 **I want** a listing to price in USD with no other currency to choose,
 **so that** I do not guess a currency for a lot every collector bids on in one unit.
 
+An earlier HKD or JPY listing keeps every amount and its history when its
+currency becomes USD.
+
 ## MODIFIED User journeys
 
 ## REMOVED User journeys

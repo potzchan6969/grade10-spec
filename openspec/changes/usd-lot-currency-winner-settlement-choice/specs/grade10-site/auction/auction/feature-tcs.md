@@ -80,9 +80,9 @@ Runs once per row of **Test data**.
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
 | `unverified` | USD15,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
-| `unverified` | USD16,000 (range: >1500000 minor units), any bid above `<bar>` | Refused; no bid recorded |
+| `unverified` | USD15,200 (range: >1500000 minor units), above `<bar>` | Refused; no bid recorded |
 | `expired` | USD15,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
-| `expired` | USD16,000 (range: >1500000 minor units), any bid above `<bar>` | Refused; no bid recorded |
+| `expired` | USD15,200 (range: >1500000 minor units), above `<bar>` | Refused; no bid recorded |
 
 | Field | Value |
 | --- | --- |
@@ -100,8 +100,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The bid is refused as needing a verified identity, and the bid form says: Bids this high need a verified identity. Verify from your account, then bid again.
-* Highest bid and the bid count are unchanged - the auction records no bid.
+* The bid is refused as needing a verified identity, and the form says: Bids this high need a verified identity. Verify from your account, then bid again.
+* Highest bid and the bid count are unchanged; the auction records no bid.
 * Step 4 shows no row for `<listing_12>`.
 * Step 5 shows no entry for `<listing_12>`.
 
@@ -119,11 +119,9 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-04
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction.spec.ts`
 
 **Pre-conditions:**
 
@@ -134,10 +132,16 @@ Runs once per row of **Test data**.
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | USD520 (range: >0 and <1500000 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `expired` | USD520 (range: >0 and <1500000 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `verified` | USD520 (range: >0 and <1500000 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `unverified` | USD14,999.99 (fixed boundary or equality), one cent below `<bar>` | Forwarded as any other; no standing read |
+| `unverified` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
+| `expired` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
+| `verified` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
+| `unverified` | USD14,999.00 (fixed boundary or equality), one dollar below `<bar>` | Forwarded; no standing read |
+| `unverified` | USD14,999.99 (fixed boundary or equality), one cent below `<bar>` | Forwarded; no standing read |
+
+| Field | Value |
+| --- | --- |
+| `<card>` | Visa ending 4242 |
+| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
 
 **Steps:**
 
@@ -147,7 +151,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The bid is forwarded and accepted as any other, and Highest bid reads the bid amount the row names.
+* The bid is forwarded and accepted, and Highest bid reads the bid amount the row names.
 * No standing was read.
 
 ## Settled
@@ -156,19 +160,4 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 reconciliation 2026-10-14 for change `usd-lot-currency-winner-settlement-choice`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-auction-US-04`. Read the change's `proposal.md`, `decisions.md` (Q1 to Q27 and `## Raised`), `tech-design.md`, `tasks.md`, this delta `spec.md` and `user-journeys.md`, the durable `spec.md` and suite, and the PRD pages the proposal links. QA1 had read the frozen anchors, `decisions.md` and the PRD only, and no `## Requirements`. Links are post-hoc: a case is linked to a scenario only where its route and Expected Results assert the scenario's THEN; a link that two cases share between them says so.
-
-| Finding | Disposition |
-| --- | --- |
-| A verified bidder's bid at the bar is forwarded as any other | **Folded in:** `grade10-site-auction-auction-SC-17`, asserted by `g10.auction-auction.US4-TC1`, which bids exactly the bar |
-| An unverified or expired bidder's bid at or above the bar is held, the form names the verified identity and where to verify, and the auction records no bid | **Folded in:** `grade10-site-auction-auction-SC-16` and `grade10-site-auction-auction-SC-110`, asserted by the rows of `g10.auction-auction.US4-TC2`; the exactly-the-bar row is `grade10-site-auction-auction-SC-110`. QA2 replaced the case's paraphrase of the form sentence with the sentence of `grade10-site-auction-auction-SC-16` |
-| A bid below the bar asks nothing and reads no standing | **Folded in:** `grade10-site-auction-auction-SC-18` and `grade10-site-auction-auction-SC-111`, asserted by `g10.auction-auction.US4-TC3`. The case's boundary row is one cent below the bar, 1499999 minor units; the scenario's is 1499900. Both are below the bar and read no standing |
-| The US$15,000 bar applies to every bid because every bid is in USD | **Checked:** the delta of `grade10-site/auction/bid-increments` and `grade10-admin/auction/listing` refuse any other lot currency, so no bid path is in another currency and no conversion sits in the comparison. One path outside this change still makes a lot in another currency: `grade10-admin/auction/test-winners` (its Currency row reads USD, HKD or JPY). That lot is closed at its creation and takes no bid, so it never meets the bar; it does meet the USD check the design puts on the listing column. Raised in `decisions.md` against `test-winners` |
-| On a brand that deploys no identity store the bar does not exist | **Hole, unchanged:** a sentence of the requirement with no scenario here and no case in the durable suite; this change does not alter it. Left for the owner of the durable requirement |
-| The brand's bar is a configuration value, 1500000 minor units in USD | **Out of suite:** the value itself - verified by the launch check of task 8.1 in `grade10`, which reads the bar. The behaviour at the bar is read by `g10.auction-auction.US4-TC1` to `US4-TC3` |
-
-**Uncovered anchors:** none for `grade10-site-auction-auction-US-04`.
-
-**Over-claimed cases:** none. `g10.auction-auction.US4-TC3` is `automated` and names a `grade10` end-to-end test as its decider; that test must read the USD row for 1499999 minor units at the walk of task 11.7.
-
-**Contradictions:** none.
+See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.

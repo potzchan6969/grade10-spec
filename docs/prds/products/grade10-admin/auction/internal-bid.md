@@ -15,7 +15,7 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 | --- | --- |
 | Per listing | **One**, on a created or published listing, bidding as one internal bidder |
 | Internal bidders | Profiles kept in auction admin: a name, a unique email label and a billing address with a neutral recipient, no site account |
-| Amount | Whole major units, from the starting price to the currency's ceiling |
+| 🚧 Amount | Whole USD units, from the USD starting price to the USD ceiling |
 | Commit time | Required; from the start to the scheduled close, both included |
 | Who | `auction:reserve` only |
 | Collectors see | A listing pseudonym, as for any bidder |
@@ -33,12 +33,13 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
 - 🚧 **After it bids** - the time is fixed; the amount goes up until the close,
   or down only where the leader and the current bid stay the same and never
   below a bid already placed for the house
-- 🚧 **Listing edits** - a window, starting-price or currency change on a
+- 🚧 **Listing edits** - a window or starting-price change on a
   created listing that leaves it outside its limits clears it, and only a
   reserve holder sees that
-- 🚧 **Internal bidder win** - the lot reads sold to collectors; its order and
-  invoice go to the internal bidder, flagged internal, and an operator sends
-  the invoice, lets it expire and cancels the order. Only a reserve holder
+- 🚧 **Internal bidder win** - the lot reads sold to collectors; its order
+  uses HKD settlement and FPS set automatically, with no winner setup or
+  operator setup step. The operator still sends the invoice, lets it expire
+  and cancels the order; no letters are sent. Only a reserve holder
   sees the listing flagged as the internal bidder's win
 - 🚧 **Audit** - each set, change and removal is recorded without the amount
   or the time

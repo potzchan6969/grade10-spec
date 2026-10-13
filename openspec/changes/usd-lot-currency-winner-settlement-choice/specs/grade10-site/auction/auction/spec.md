@@ -4,6 +4,7 @@
 
 - Identity bar on a bid
   - US$15,000 bar: a bid of US$15,000 or more is held at the storefront before the auction hears of it
+  - USD comparison: every bid and the bar use USD, so the storefront compares them without conversion
 
 ## MODIFIED Requirements
 

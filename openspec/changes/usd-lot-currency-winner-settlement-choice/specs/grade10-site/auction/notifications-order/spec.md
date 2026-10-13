@@ -5,6 +5,7 @@
 - Post-close letters
   - Won-lot letter keeps the bid: auction-won, sent before a currency is picked, names the US$ winning bid
   - Letters in the settlement currency: invoice, payment reminder, payment received and receipt carry the settlement currency and no USD winning bid
+  - Internal bidder: no order letters are sent for an internal bidder's order
 
 ## ADDED Requirements
 
