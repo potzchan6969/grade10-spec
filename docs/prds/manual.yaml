@@ -7,6 +7,7 @@ groups:
     - grade10-site/loyalty
     - grade10-site/auction
     - grade10-site/vault
+    - grade10-site/submissions
     - grade10-site/grading
     - grade10-site/consignment
     - grade10-site/appointment
