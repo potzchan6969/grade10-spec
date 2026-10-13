@@ -33,7 +33,7 @@
 - [x] 2.4 Verify the auction listing gallery and inventory product media
       surface use the shared gallery behavior without adding a service call.
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @htonyl)
 
 Uses draft `feature-tcs.md` as its planning input.
 
