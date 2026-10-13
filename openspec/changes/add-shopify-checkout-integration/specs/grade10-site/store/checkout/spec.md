@@ -11,7 +11,7 @@
   - Current request: send reviewed lines, seen prices and accepted tender
   - Safe response: keep refusal and verification feedback; open only the current answer
 - Safe repetition and recovery
-  - One Pay at a time: one pending Pay per drawer
+  - One Pay at a time: one pending Pay per drawer; all other drawer actions wait
   - Stale answers: an answer for an older cart, tender or member opens nothing
   - Lost answers: existing failure feedback, no automatic retry
 - Order settlement and return
@@ -359,9 +359,11 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 
 **Pay** - Pay is the drawer's Proceed to Checkout control.
 
-**One Pay at a time** - The drawer SHALL hold at most one pending Pay. The lines and tender it sent SHALL stay fixed for that request; a later edit applies to the next Pay.
+**One Pay at a time** - The drawer SHALL hold at most one pending Pay. While it is active, all non-dismissal drawer actions SHALL wait under the cart drawer's pending-operation contract. Close, backdrop and Escape SHALL remain available. The lines and tender it sent SHALL stay fixed for that request; an edit from another tab or session applies to the next Pay. After this request ends, any other active drawer operation and the current-data guards SHALL still govern availability.
 
 **Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens Your Orders, a named line or refused tender is named in the drawer, verification shows the threshold feedback, with the account action where the profile page is enabled, and anything else shows the existing failure feedback.
+
+**Dismissed drawer** - Closing the drawer SHALL NOT cancel a sent Pay or make its answer stale. A still-current successful hosted-invoice answer SHALL open Shopify even after dismissal. A changed cart, tender, member or request SHALL retain the older-answer protection below.
 
 **Older answers** - An answer for an older cart, tender, member or request SHALL open nothing, navigate nowhere and change no drawer state. The drawer SHALL keep the current cart and tender.
 
@@ -387,24 +389,24 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **THEN** Pay is unavailable and no creation request uses earlier facts
 - **AND** after the write is acknowledged and current review and quote are ready Pay becomes available for the persisted choices
 
-<!-- trace:scenario id=g10.store-checkout.SC-5x2 rev=3 -->
+<!-- trace:scenario id=g10.store-checkout.SC-5x2 rev=4 -->
 #### Scenario: grade10-site-store-checkout-SC-34 - A pending Pay blocks another submission from the drawer
 **Serves:** grade10-site-store-checkout-US-05 - A pending Pay blocks another submission from the drawer
 
 - **GIVEN** Pay has been sent and its answer is delayed
-- **WHEN** the collector activates Pay again
-- **THEN** the drawer sends no second checkout request
+- **WHEN** the collector activates Pay or any non-dismissal item, tender, disclosure or navigation action again
+- **THEN** its control is disabled and the drawer sends no second checkout request, edit or navigation
 - **AND** Pay keeps its pending treatment until the answer arrives or fails
 
-<!-- trace:scenario id=g10.store-checkout.SC-cc7 rev=3 -->
+<!-- trace:scenario id=g10.store-checkout.SC-cc7 rev=4 -->
 #### Scenario: grade10-site-store-checkout-SC-35 - An older answer cannot redirect later edits
 **Serves:** `grade10-site-store-checkout-US-06`, `grade10-site-store-checkout-US-04` - An older answer cannot redirect later edits
 
 - **GIVEN** Pay has been sent and its answer is delayed
-- **WHEN** the collector edits the cart or tender, or the signed-in member changes, before the answer arrives
+- **WHEN** another tab or session changes the cart or tender, or the signed-in member changes, before the answer arrives
 - **THEN** the delayed answer opens no Shopify page, navigates nowhere and changes no drawer state
 - **AND** the drawer keeps the current cart and tender
-- **AND** a later Pay sends the current reviewed lines and tender as a new request
+- **AND** after the pending request and other drawer work end, a deliberate later Pay sends the current reviewed lines and tender as a new request
 
 <!-- trace:scenario id=g10.store-checkout.SC-8hm rev=3 -->
 #### Scenario: grade10-site-store-checkout-SC-38 - A lost answer ends the pending Pay without a retry
@@ -484,3 +486,32 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **THEN** the hosted invoice is never changed to the later lines or tender
 - **AND** the cart and tender reads show the later saved choices
 - **AND** whether that invoice stays payable is the store's answer, not the drawer's
+
+<!-- trace:scenario id=g10.store-checkout.SC-87t rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-66 - Ending Pay does not release another active operation
+**Serves:** grade10-site-store-checkout-US-05 - Collector waits until the current drawer can accept another Pay
+
+- **GIVEN** Pay and a current drawer refresh are active
+- **WHEN** Pay succeeds, is refused or fails while that refresh is still active
+- **THEN** the refresh continues to hold drawer actions even though Pay is no longer pending
+- **AND** a new Pay requires the refresh to end and current review and tender facts to permit it
+- **AND** no new Pay starts automatically
+
+<!-- trace:scenario id=g10.store-checkout.SC-4e3 rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-67 - Closing pending Pay preserves a sent request
+**Serves:** grade10-site-store-checkout-US-05 - Collector leaves while the payment request waits
+
+- **GIVEN** a checkout request is active
+- **WHEN** the collector dismisses the drawer with Close, backdrop or Escape and reopens it before the answer arrives
+- **THEN** dismissal remains available and does not cancel the sent request
+- **AND** the reopened same-member drawer sends no second Pay while that request remains active
+- **AND** a later successful hosted-invoice answer opens Shopify if the cart, tender, member and request remain current, whether the drawer stays closed or has reopened
+
+<!-- trace:scenario id=g10.store-checkout.SC-0mn rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-68 - Failed Pay releases only currently permitted actions
+**Serves:** grade10-site-store-checkout-US-02 - Collector chooses a deliberate next action after failure
+
+- **GIVEN** a checkout request is active and its answer fails or cannot be read
+- **WHEN** its failure is delivered with no other drawer work active
+- **THEN** the request is no longer pending, existing failure feedback appears and no action is replayed
+- **AND** item, tender and navigation actions return only where current state and callbacks permit them; Pay still requires current review and quote

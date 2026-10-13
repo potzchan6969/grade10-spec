@@ -5,11 +5,13 @@
 The Grade10 storefront already has a scoped member cart, live cart review, and
 a working checkout page, but its navigation does not expose the designed Cart
 Drawer. Collectors must leave the page they are browsing before they can see
-whether held lines changed.
+whether held lines changed. During pending operations, separate guards block Checkout and tender actions but do not establish one rule for all drawer actions.
 
 **Metric:** share of sessions that open the cart and proceed to checkout
 without first navigating to checkout. The first delivery establishes the
 baseline.
+
+**Pending-action metric:** count of drawer action attempts that start another operation or navigation while drawer work is pending; target 0, excluding dismissal. This adds no telemetry implementation.
 
 **Acceptance signal:** a signed-in collector opens Cart from any surface once
 Store answers the cart drawer, reviews and edits the member cart, and reaches
@@ -43,6 +45,16 @@ The reported cart has blank picture boxes for products whose catalogue pictures 
 - Consume `cart-drawer-empty-state` for the shared empty `EmptyState` and the
   retirement of `CartItemSlot` / Browse More.
 
+## Pending Operations
+
+- **Actions** - Disable quantity changes, removal, promo and points inputs and disclosures, Apply, Use max, held-code selection, tender removal, product and account/loyalty links, and Checkout while a drawer operation is pending, including controls in an already-open promo sheet.
+- **Scope interpretation** - Reads of the open cart, current price and stock, saved tender, promo eligibility and points, plus quantity/removal writes, tender quote and persistence, their confirming refreshes, and checkout creation all count. Unrelated page or catalogue refreshes do not.
+- **Dismissal** - Keep Close, backdrop click and Escape available while pending, including dismissal of an open promo sheet. Closing does not cancel or roll back an operation already sent.
+- **Completion** - Wait for every active drawer operation to finish. Success, refusal or failure ends that operation; existing errors, Retry and current-data availability rules still decide what the collector can do next. No action is replayed automatically. A failed read is not itself a request still running.
+- **Presentation** - Keep the existing skeleton and accepted-figure treatments. Disabling actions covers pointer and keyboard activation and blocks action callbacks; it does not change prices, discard entered values or prevent reading and scrolling.
+- **Checkout overlap** - This change owns drawer-wide interaction availability; `add-shopify-checkout-integration` consumes it for pending Pay and retains stale-answer protection for changes elsewhere.
+- **Compatibility** - Delivery planning chooses a backwards-compatible shared contract and maps Grade10 operations to it; the shared block acquires no product data or persistence of its own.
+
 ## Non-Goals
 
 See [Non-Goals](decisions.md#non-goals).
@@ -57,8 +69,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-- `shared/ui/store-cart` — optional consumer-owned pending tender state disables
-  existing controls without changing their layout or adding promo editing; specifies the existing optional picture props and fallback rendering.
+- `shared/ui/store-cart` - consumer-owned pending state disables drawer actions across body, footer and promo sheet without changing their layout or adding promo editing; existing optional tender and picture props retain their compatibility and fallback behavior.
 
 - `grade10-site/site/page-shell` — carries Cart in the header: absent until
   the Store cart drawer answers, then global on every surface. Scenarios
@@ -91,11 +102,16 @@ The user-approved Storybook plan supersedes the read-only points scope in
 completed Group 4; Group 5 delivers only the new points integration. The
 shared `CartDrawer` export already supports these actions; optional
 `tenderPending` on its existing props supplies the missing pending guard.
-No new primitive or component export is planned. Existing read-only callback guards stay intact.
+The pending-operations increment adds optional `interactionPending` to the
+existing drawer, body, item, footer and promo-sheet props. It extends body, navigation and
+nested-sheet guards while keeping `tenderPending` compatibility and existing
+read-only callback guards. The shared delta owns the public contract.
 The application owner archives after deployment acceptance.
 
 ## References
 
+- [Shared Pending Operations](../../../docs/prds/products/shared/ui/store-cart.md#pending-operations)
+- [Cart Pending Operations](../../../docs/prds/products/grade10-site/store/cart.md#pending-operations)
 - [Cart Drawer · Reviewing the Cart](../../../docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart)
 - [Shared Cart · Product Pictures](../../../docs/prds/products/shared/ui/store-cart.md#product-pictures)
 - [Approved Thumbnail Brief](../../../docs/references/store-cart-thumbnails.md)
