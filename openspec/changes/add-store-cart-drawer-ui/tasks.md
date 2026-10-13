@@ -159,13 +159,12 @@ fixtures; they do not depend on a running backend or Group 12's landing.
 
 Uses the extension's draft suite as planning input once QA2 has reconciled it;
 Groups 10-13 and the selected shared dependency are landed. This walk extends
-the existing journeys without repeating older implementation phases or
-enabling guest drawer access.
+the existing journeys without repeating older implementation phases.
 
 - [ ] 14.1 Extend the existing isolated Store E2E suite for signed-in member cart open/edit/product continuation (`grade10-site-store-cart-drawer-US-01`, `grade10-site-store-cart-drawer-US-02`, `grade10-site-store-cart-drawer-US-03`) with seeded image-bearing and image-free products. Assert each matching thumbnail URL, `complete === true` and `naturalWidth > 0` at narrow and wide widths; cover restored image-free intent after reload, quantity change/reopen, sold-out picture, alt fallback and failed review (`grade10-site-store-cart-drawer-SC-34` through `grade10-site-store-cart-drawer-SC-39`, `grade10-site-store-cart-drawer-SC-41`). Exercise existing tender/checkout journeys (`grade10-site-store-cart-drawer-US-04`, `grade10-site-store-cart-drawer-US-05`, `grade10-site-store-cart-drawer-US-06`) to confirm image enrichment leaves their current amounts and guards intact.
 - [ ] 14.2 Record browser evidence for the 2 reported products when their catalogue records exist, plus stable seeded regression evidence; missing products or local prerequisites are limitations, never skipped passing assertions. Keep batch-count, invalid-type and persistence proofs in runtime tests; browser evidence proves loaded image bytes. In the walk commit, mark only the draft cases its assertions decide automated with `pnpm run tcs:automated <case...> --decided-by grade10:<walk-path>`; name remaining manual cases in the suite and walk's rounds row for downstream human QA.
 - [ ] 14.3 Cover the independently reconciled routes: retained sold-out picture (`grade10-site-store-cart-drawer-SC-42`), unavailable variant field omission and cleanup in review/drawer runtime tests (`grade10-site-store-cart-drawer-SC-43`), image-free persistence and write inputs (`grade10-site-store-cart-drawer-SC-44`), and browser picture-resource failure after accepted review (`grade10-site-store-cart-drawer-SC-45`). Keep these distinct from catalogue-review failure; require no new broken-image fallback presentation.
-- [ ] 14.4 Verify: the focused isolated browser walk, the application validation gate and build after integration, shared dependency SHA, `git diff --check`, and the existing signed-out gate. Record actual commands, results, browser evidence and checks not run; this task grants no deployment or production-data operation.
+- [ ] 14.4 Verify: the focused isolated browser walk, the application validation gate and build after integration, shared dependency SHA, `git diff --check`, and the signed-out drawer on the cart this browser holds. Record actual commands, results, browser evidence and checks not run; this task grants no deployment or production-data operation.
 
 ## 15. Shared pending operation contract (grade10-spec)
 

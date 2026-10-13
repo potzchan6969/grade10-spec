@@ -46,7 +46,7 @@ States combine this change's Grade10 scenarios with durable
 | --- | --- |
 | Cart absent until drawer answers; then global (incl. Auction) | `grade10-site-site-page-shell-SC-09`, `grade10-site-site-page-shell-SC-16`; Storybook `site-chrome-siteheader-cart--on-auction-surface` |
 | Opens over surface; close keeps address | `grade10-site-store-cart-drawer-SC-01`, `grade10-site-store-cart-drawer-SC-02` |
-| Signed-in member cart; signed-out access is gated before the drawer | `grade10-site-store-cart-drawer-SC-04`; `grade10-site-site-page-shell-SC-21`–`SC-24` |
+| Signed-in member cart; a signed-out press opens the cart this browser holds | `grade10-site-store-cart-drawer-SC-04`; `grade10-site-site-page-shell-SC-21`, `grade10-site-site-page-shell-SC-24` |
 | Every open starts a fresh read | `grade10-site-store-cart-drawer-SC-05` |
 | Pending review | `grade10-site-store-cart-drawer-SC-06`; loading bones `shared-ui-store-cart-SC-08` |
 | Failed review over a read basket: lines unchecked, Retry in the failure toast | `grade10-site-store-cart-drawer-SC-07`, `grade10-site-store-cart-drawer-SC-08` |

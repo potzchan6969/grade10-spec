@@ -113,8 +113,7 @@ state. The final walks exercise pending, overlaps, recovery and dismissal.
 The approved thumbnail extension supersedes the image exclusion and the
 backend/wire-change exclusions in Original Delivery Notes. It adds Groups
 10-14 without changing the completed or in-flight group addresses. Existing
-points, promo, verification, checkout and signed-in-only access decisions stay
-in force. The [picture requirements](specs/grade10-site/store/cart-drawer/spec.md)
+points, promo, verification and checkout decisions stay in force. The [picture requirements](specs/grade10-site/store/cart-drawer/spec.md)
 and [shared picture contract](specs/shared/ui/store-cart/spec.md) own the outcome;
 the approved brief owns the selected scope.
 
@@ -190,8 +189,7 @@ used: member `cart.review`, existing guest `quote.reviewItems`, basket quote
 and checkout outcomes containing lines. Production decoder tests prove
 legacy responses decode with the new schema and enriched responses decode
 with the previous schema, including its handling of extra fields. Null or
-non-string supplied fields fail the current schema. Guest compatibility tests
-exercise transport only; Q1 and Q3 still forbid guest drawer journeys.
+non-string supplied fields fail the current schema.
 Regenerate API references through the existing generator when this shape
 affects them.
 
@@ -383,9 +381,9 @@ global after Store launch to cut checkout friction.
 ### Reuse the existing scoped cart and backend integration
 
 The host calls `useCart` and uses its scope, lines, item count, currency, and
-serialized writes. It never reads browser storage directly or reimplements the
-signed-out access gate; `require-sign-in-from-nav-cart` owns that activation
-behavior. The host introduces no new backend call. Quantity and removal
+serialized writes. It never reads browser storage directly: `useCart` holds
+the cart this browser keeps for a signed-out collector, and
+`grade10-site/site/page-shell` owns the Cart press. The host introduces no new backend call. Quantity and removal
 callbacks use the existing optimistic scope-keyed writes. Product activation
 uses the existing product-address helper. Checkout uses the current checkout
 route.

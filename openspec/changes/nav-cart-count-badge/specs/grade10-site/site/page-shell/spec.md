@@ -2,8 +2,9 @@
 
 ## Feature set
 
-- Members-only cart
-  - Active-line count: header and drawer agree without opening the drawer; unknown and signed-out counts stay hidden
+- Cart for anyone
+  - Active-line count: header and drawer agree without opening the drawer; an
+    unknown count stays hidden
 
 ## MODIFIED Requirements
 
@@ -12,11 +13,11 @@
 The site SHALL render the header and the footer before the session has
 resolved. The account entry's presentation and destination SHALL depend on the
 session: signed out shows a primary Sign In button; signed in shows the account
-icon that opens the account menu. What the Cart control opens and whether its
-count badge appears SHALL depend on the session too, and nothing else in the
-chrome SHALL. No chrome control SHALL appear, disappear, or move when the
-session arrives. The cart count badge SHALL NOT change the presence or
-position of the Cart control.
+icon that opens the account menu. Whose cart the Cart control opens and
+counts SHALL depend on the session too, and nothing else in the chrome SHALL.
+No chrome control SHALL appear, disappear, or move when the session arrives.
+The cart count badge SHALL NOT change the presence or position of the Cart
+control.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-9ud rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
@@ -40,13 +41,14 @@ position of the Cart control.
 
 ## ADDED Requirements
 
-### Requirement: The header shows the member cart's reviewed active-line count
+### Requirement: The header shows the current cart's reviewed active-line count
 
 On every surface whose header offers Cart, the site SHALL supply the header
-and drawer title with the same active-line count from the current member's
-reviewed basket. Each distinct active line SHALL count once, irrespective of
-quantity. Active lines include `default` and `adjusted` lines and exclude
-`soldOut` and `unavailable` lines. Checkout eligibility alone SHALL NOT
+and drawer title with the same active-line count from the current cart's
+reviewed basket: the signed-in member's, or the cart this browser holds.
+Each distinct active line SHALL count once, irrespective of quantity. Active
+lines include `default` and `adjusted` lines and exclude `soldOut` and
+`unavailable` lines. Checkout eligibility alone SHALL NOT
 determine the count.
 
 The header SHALL show the full positive count in wide and compact layouts.
@@ -104,14 +106,14 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 
 ### Requirement: The cart count refreshes without opening the drawer
 
-The site SHALL review the member's basket on cart hydration and after settled
+The site SHALL review the current basket on cart hydration and after settled
 cart mutations, with the drawer open or closed, and when the drawer opens and
 on retry after a failed review. Once review succeeds, the header SHALL reflect
 that reviewed basket without requiring the collector to open the drawer.
 
-Before the member has a verified count, pending hydration or review SHALL
-show no badge. During a later review for the same member, the header SHALL
-retain that member's last verified count until the review completes, including
+Before the current cart has a verified count, pending hydration or review
+SHALL show no badge. During a later review of the same cart, the header SHALL
+retain that cart's last verified count until the review completes, including
 when the refresh follows a failed cart update. A failed review SHALL hide the
 badge; a successful review SHALL replace it with the newly verified count.
 The header SHALL NOT show a badge skeleton or invent a count from unreviewed lines.
@@ -183,21 +185,24 @@ A change made on another device SHALL appear after the next review.
 - **AND** opening the drawer reviews the basket, and the header and the drawer
   title both display `3`
 
-### Requirement: The cart count belongs only to the current member
+### Requirement: The cart count belongs only to the current cart
 
-The site SHALL omit the count while the session is unresolved or signed out.
-When session ownership changes, it SHALL clear the previous member's count
-immediately and await the current member's reviewed basket. A late response
-for a previous session SHALL NOT restore or replace the current count.
+The site SHALL omit the count while the session is unresolved. A signed-out
+collector's count SHALL be that of the cart this browser holds. When session
+ownership changes, the site SHALL clear the previous count immediately and
+await the current cart's reviewed basket. A late response for a previous
+session SHALL NOT restore or replace the current count.
 
-<!-- trace:scenario id=g10.site-page-shell.SC-b9m rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-50 - Signed-out and unresolved sessions have no count
+<!-- trace:scenario id=g10.site-page-shell.SC-b9m rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-50 - An unresolved session has no count, and a guest counts this browser's cart
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
-- **GIVEN** a surface whose header offers Cart
-- **WHEN** its session is unresolved or signed out
+- **GIVEN** a surface whose header offers Cart, and `2` active lines in the
+  cart this browser holds
+- **WHEN** its session is unresolved
 - **THEN** the header displays no count badge
-- **AND** the Cart control remains available under its existing sign-in rule
+- **AND** once the session resolves signed out, the badge displays `2`
+- **AND** the Cart control stays available throughout
 
 <!-- trace:scenario id=g10.site-page-shell.SC-z8c rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-51 - Signing out clears the previous member's count
