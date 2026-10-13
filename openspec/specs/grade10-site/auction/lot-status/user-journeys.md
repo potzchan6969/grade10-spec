@@ -10,7 +10,7 @@
 
 **As a** collector,
 **I want** draft lots and called-off lots absent from browse, search and my watchlist,
-**so that** I can use a called-off lot's original address directly without it appearing as an available auction.
+**so that** I do not mistake an unfinished or withdrawn lot for an available auction.
 
 ### grade10-site-auction-lot-status-US-03: Bidder sees what happened to a called-off lot
 
