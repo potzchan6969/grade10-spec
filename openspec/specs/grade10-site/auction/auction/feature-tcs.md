@@ -27,8 +27,8 @@
 | --- | --- |
 | `<listing_11>` | A published listing with extension duration 1800s (30mins) and an extension cap of 3600s (60mins) |
 | `<listing_25>` | An open HKD listing taking bids, current bid `<current bid>` |
-| `<current bid>` | 480000 minor units (HKD 4,800.00) |
-| `<bid amount>` | 505000 minor units (HKD 5,050.00), at or above the minimum next bid |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 | `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
 | `<close before bids>` | 20:30 UTC |
@@ -117,22 +117,22 @@
 | `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
 | `<listing_10>` | A listing whose extended bidding timer ran out with no new bid |
-| Item | Currency: HKD; `<start>`: 20000 minor units (HKD 200.00), positive start; `<opening price>`: 20000 minor units (HKD 200.00), the start itself; `<next minimum>`: 21000 minor units (HKD 210.00) |
-| Item | Currency: HKD; `<start>`: 500 minor units (HKD 5.00), below the lowest increment; `<opening price>`: 500 minor units (HKD 5.00), the start itself; `<next minimum>`: 1500 minor units (HKD 15.00) |
-| Item | Currency: HKD; `<start>`: 0 minor units (HKD 0.00), zero start; `<opening price>`: 1000 minor units (HKD 10.00), the lowest increment; `<next minimum>`: 2000 minor units (HKD 20.00) |
-| Item | Currency: USD; `<start>`: 0 minor units (USD 0.00), zero start; `<opening price>`: 100 minor units (USD 1.00), the lowest increment; `<next minimum>`: 200 minor units (USD 2.00) |
-| Item | Currency: JPY; `<start>`: 0 minor units (JPY 0), zero start; `<opening price>`: 100 minor units (JPY 100), the lowest increment; `<next minimum>`: 200 minor units (JPY 200) |
-| Item | Currency: HKD; `<start>`: 20000 minor units (HKD 200.00); `<opening price>`: 20000 minor units (HKD 200.00), the start itself; `<bid amount>`: 19999 minor units (HKD 199.99), one minor unit below |
-| Item | Currency: USD; `<start>`: 50000 minor units (USD 500.00); `<opening price>`: 50000 minor units (USD 500.00), the start itself; `<bid amount>`: 49999 minor units (USD 499.99), one minor unit below |
-| Item | Currency: JPY; `<start>`: 20000 minor units (JPY 20,000); `<opening price>`: 20000 minor units (JPY 20,000), the start itself; `<bid amount>`: 19999 minor units (JPY 19,999), one minor unit below |
-| Item | Currency: HKD; `<start>`: 0 minor units (HKD 0.00), zero start; `<opening price>`: 1000 minor units (HKD 10.00), the lowest increment; `<bid amount>`: 999 minor units (HKD 9.99), one minor unit below |
-| Item | Currency: USD; `<start>`: 0 minor units (USD 0.00), zero start; `<opening price>`: 100 minor units (USD 1.00), the lowest increment; `<bid amount>`: 99 minor units (USD 0.99), one minor unit below |
-| Item | Currency: JPY; `<start>`: 0 minor units (JPY 0), zero start; `<opening price>`: 100 minor units (JPY 100), the lowest increment; `<bid amount>`: 99 minor units (JPY 99), one minor unit below |
+| Item | Currency: HKD; `<start>`: HKD280 (range: 1000–79999 minor units), positive start; `<opening price>`: HKD280 (range: 1000–79999 minor units), the start itself; `<next minimum>`: HKD290 (fixed derived value) |
+| Item | Currency: HKD; `<start>`: HKD7 (fixed boundary or equality), below the lowest increment; `<opening price>`: HKD7 (range: 1–999 minor units), the start itself; `<next minimum>`: HKD17 (fixed derived value) |
+| Item | Currency: HKD; `<start>`: HKD0 (fixed tier boundary), zero start; `<opening price>`: HKD10 (fixed boundary or equality), the lowest increment; `<next minimum>`: HKD20 (fixed derived value) |
+| Item | Currency: USD; `<start>`: USD0 (fixed tier boundary), zero start; `<opening price>`: USD1 (fixed boundary or equality), the lowest increment; `<next minimum>`: USD2 (fixed derived value) |
+| Item | Currency: JPY; `<start>`: JPY0 (fixed tier boundary), zero start; `<opening price>`: JPY100 (fixed boundary or equality), the lowest increment; `<next minimum>`: JPY200 (fixed derived value) |
+| Item | Currency: HKD; `<start>`: HKD280 (range: 1000–79999 minor units); `<opening price>`: HKD280 (range: 1000–79999 minor units), the start itself; `<bid amount>`: HKD279.99 (fixed boundary or equality), one minor unit below |
+| Item | Currency: USD; `<start>`: USD500 (fixed tier boundary); `<opening price>`: USD500 (fixed tier boundary), the start itself; `<bid amount>`: USD499.99 (fixed boundary or equality), one minor unit below |
+| Item | Currency: JPY; `<start>`: JPY20,000 (range: 15000–74999 minor units); `<opening price>`: JPY20,000 (range: 15000–74999 minor units), the start itself; `<bid amount>`: JPY19,999 (fixed boundary or equality), one minor unit below |
+| Item | Currency: HKD; `<start>`: HKD0 (fixed tier boundary), zero start; `<opening price>`: HKD10 (fixed boundary or equality), the lowest increment; `<bid amount>`: HKD9.99 (fixed boundary or equality), one minor unit below |
+| Item | Currency: USD; `<start>`: USD0 (fixed tier boundary), zero start; `<opening price>`: USD1 (fixed boundary or equality), the lowest increment; `<bid amount>`: USD0.99 (fixed boundary or equality), one minor unit below |
+| Item | Currency: JPY; `<start>`: JPY0 (fixed tier boundary), zero start; `<opening price>`: JPY100 (fixed boundary or equality), the lowest increment; `<bid amount>`: JPY99 (fixed boundary or equality), one minor unit below |
 | `<listing_26>` | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` |
-| `<current bid>` | 480000 minor units (HKD 4,800.00) |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
-| `<bid A>` | 505000 minor units (HKD 5,050.00) |
-| `<bid B>` | 600000 minor units (HKD 6,000.00), above `<bid A>` |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
+| `<bid A>` | HKD5,210 (range: 400000–799999 minor units) |
+| `<bid B>` | HKD6,200 (range: 400000–799999 minor units), above `<bid A>` |
 
 ### Route
 
@@ -180,20 +180,20 @@
 | --- | --- |
 | `<a verified account>` | An account whose standing is `verified` on the day of the bid |
 | `<card>` | Visa ending 4242 |
-| `<bar>` | 12000000 minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| `<bar>` | HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
 | `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
-| `<bid at the bar>` | 12000000 minor units (HKD 120,000.00), equal to `<bar>` |
-| Item | Standing: `unverified`; Bid amount: 12000000 minor units (HKD 120,000.00), exactly `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: `unverified`; Bid amount: 12500000 minor units (HKD 125,000.00), any bid above `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: `expired`; Bid amount: 12000000 minor units (HKD 120,000.00), exactly `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: `expired`; Bid amount: 12500000 minor units (HKD 125,000.00), any bid above `<bar>`; Outcome: Refused; no bid recorded |
+| `<bid at the bar>` | HKD120,000 (fixed boundary or equality), equal to `<bar>` |
+| Item | Standing: `unverified`; Bid amount: HKD120,000 (fixed boundary or equality), exactly `<bar>`; Outcome: Refused; no bid recorded |
+| Item | Standing: `unverified`; Bid amount: HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>`; Outcome: Refused; no bid recorded |
+| Item | Standing: `expired`; Bid amount: HKD120,000 (fixed boundary or equality), exactly `<bar>`; Outcome: Refused; no bid recorded |
+| Item | Standing: `expired`; Bid amount: HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>`; Outcome: Refused; no bid recorded |
 | Item | Standing: Field; Bid amount: Value |
 | Item | Standing: `<card>`; Bid amount: Visa ending 4242 |
-| Item | Standing: `<bar>`; Bid amount: 12000000 minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| Item | Standing: `<bar>`; Bid amount: HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
 | Item | Standing: `<listing_12>`; Bid amount: A live HKD listing whose minimum next bid is `<bar>` |
-| Item | Standing: `unverified`; Bid amount: 505000 minor units (HKD 5,050.00), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
-| Item | Standing: `expired`; Bid amount: 505000 minor units (HKD 5,050.00), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
-| Item | Standing: `verified`; Bid amount: 505000 minor units (HKD 5,050.00), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
+| Item | Standing: `unverified`; Bid amount: HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
+| Item | Standing: `expired`; Bid amount: HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
+| Item | Standing: `verified`; Bid amount: HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
 
 ### Route
 
@@ -508,7 +508,7 @@
 | --- | --- |
 | `<listing_4>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B |
 | `<bid time>` | 20:29:59 UTC, one second before the recorded close |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 | `<new close>` | 20:59:59 UTC, `<bid time>` plus 1800s |
 | Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: 600s (10mins); `<last accepted>`: 20:05:00 UTC; `<effective close>`: 20:10:00 UTC, the cap; `<bid time>`: 20:10:00 UTC, at the limit |
 | Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: 600s (10mins); `<last accepted>`: 20:05:00 UTC; `<effective close>`: 20:10:00 UTC, the cap; `<bid time>`: 20:10:01 UTC |
@@ -519,7 +519,7 @@
 | Item | `<extension duration>`: 0s; `<extension cap>`: None; `<last accepted>`: 19:58:00 UTC; `<effective close>`: 20:00:00.001 UTC, one millisecond after the scheduled close; `<bid time>`: 20:00:00.001 UTC, at the limit |
 | Item | `<extension duration>`: 0s; `<extension cap>`: None; `<last accepted>`: 19:58:00 UTC; `<effective close>`: 20:00:00.001 UTC, one millisecond after the scheduled close; `<bid time>`: 20:00:01 UTC |
 | Item | `<extension duration>`: Field; `<extension cap>`: Value |
-| Item | `<extension duration>`: `<bid amount>`; `<extension cap>`: 505000 minor units, at or above the minimum next bid |
+| Item | `<extension duration>`: `<bid amount>`; `<extension cap>`: HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 | `<listing_6>` | An open listing, scheduled close 20:00:00 UTC, extension duration 1800s (30mins), extension cap 0s |
 | `<listing_7>` | An HKD listing in extended bidding, led by customer A |
 | `<sweep interval>` | 300s (5mins) |
@@ -528,7 +528,7 @@
 | Item | `<listing_11>` state: An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap; `<close>`: its recorded close; `<result>`: Closed, customer A winning at `<leader price>` |
 | Item | `<listing_11>` state: An open HKD listing with no accepted bid, extension duration 1800s (30mins); `<close>`: its scheduled close; `<result>`: Closed unsold, never in extended bidding |
 | Item | `<listing_11>` state: Field; `<close>`: Value |
-| Item | `<listing_11>` state: `<leader price>`; `<close>`: 480000 minor units |
+| Item | `<listing_11>` state: `<leader price>`; `<close>`: HKD4,960 (range: 400000–799999 minor units) |
 | Item | `<listing_11>` state: `<sweep interval>`; `<close>`: 300s (5mins) |
 | `<listing_12>` | An HKD listing, scheduled close 20:00:00 UTC, recorded close 20:25:00 UTC, extension duration 1800s (30mins), extension cap 3600s (60mins) |
 
@@ -587,14 +587,14 @@
 | `<listing_9>` | An HKD listing in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
 | `<time left before bid>` | 5 minutes |
-| `<leader price>` | 100000 minor units |
-| `<user A maximum>` | 200000 minor units |
-| `<user B maximum>` | 200000 minor units, equal to `<user A maximum>` |
+| `<leader price>` | HKD1,260 (range: 80000–399999 minor units) |
+| `<user A maximum>` | HKD2,360 (range: 80000–399999 minor units) |
+| `<user B maximum>` | HKD2,360 (fixed boundary or equality), equal to `<user A maximum>` |
 | `<listing_10>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap |
 | `<close before raise>` | 3 minutes after the raise |
-| `<leader price>` | 530000 minor units |
-| `<user A maximum>` | 800000 minor units |
-| `<raised maximum>` | 900000 minor units |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<raised maximum>` | HKD9,600 (range: 800000–3999999 minor units) |
 
 ### Route
 
@@ -628,21 +628,21 @@
 
 | Item | Value |
 | --- | --- |
-| Item | customer A maximum: 200000 minor units (HKD 2,000.00), first; customer B maximum: 150000 minor units (HKD 1,500.00); customer C maximum: 120000 minor units (HKD 1,200.00); `<price before>`: 154000 minor units (HKD 1,540.00), customer B's maximum plus 4000; `<price after>`: 124000 minor units (HKD 1,240.00), customer C's maximum plus 4000; Leader after: customer B |
-| Item | customer A maximum: 200000 minor units (HKD 2,000.00), first; customer B maximum: 121000 minor units (HKD 1,210.00); customer C maximum: 120000 minor units (HKD 1,200.00); `<price before>`: 125000 minor units (HKD 1,250.00), customer B's maximum plus 4000; `<price after>`: 121000 minor units (HKD 1,210.00), capped at customer B's maximum; Leader after: customer B |
-| Item | customer A maximum: 150000 minor units (HKD 1,500.00), first; customer B maximum: 150000 minor units (HKD 1,500.00), second; customer C maximum: 120000 minor units (HKD 1,200.00); `<price before>`: 150000 minor units (HKD 1,500.00), equal maxima, customer A earlier; `<price after>`: 124000 minor units (HKD 1,240.00), customer C's maximum plus 4000; Leader after: customer B |
+| Item | customer A maximum: HKD2,300 (range: 80000–399999 minor units), first; customer B maximum: HKD1,700 (range: 80000–399999 minor units); customer C maximum: HKD1,350 (range: 80000–399999 minor units); `<price before>`: HKD1,740 (fixed derived value), customer B's maximum plus 4000; `<price after>`: HKD1,390 (fixed derived value), customer C's maximum plus 4000; Leader after: customer B |
+| Item | customer A maximum: HKD2,300 (range: 80000–399999 minor units), first; customer B maximum: HKD1,360 (range: 80000–399999 minor units); customer C maximum: HKD1,350 (range: 80000–399999 minor units); `<price before>`: HKD1,400 (fixed derived value), customer B's maximum plus 4000; `<price after>`: HKD1,360 (fixed derived value), capped at customer B's maximum; Leader after: customer B |
+| Item | customer A maximum: HKD1,750 (range: 80000–399999 minor units), first; customer B maximum: HKD1,750 (range: 80000–399999 minor units), second; customer C maximum: HKD1,350 (range: 80000–399999 minor units); `<price before>`: HKD1,750 (fixed boundary or equality), equal maxima, customer A earlier; `<price after>`: HKD1,390 (fixed derived value), customer C's maximum plus 4000; Leader after: customer B |
 | Item | customer A maximum: Field; customer B maximum: Value |
-| Item | customer A maximum: `<listing_27>`; customer B maximum: An open HKD listing, starting price 20000 minor units (HKD 200.00), scheduled close more than an hour away |
-| Item | customer A maximum: Increment; customer B maximum: 4000 minor units (HKD 40.00), the HK$800 tier, at every maximum above |
-| `<listing_28>` | An open HKD listing, starting price 20000 minor units (HKD 200.00), led by customer A alone at the starting price |
-| customer A maximum | 200000 minor units (HKD 2,000.00) |
+| Item | customer A maximum: `<listing_27>`; customer B maximum: An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away |
+| Item | customer A maximum: Increment; customer B maximum: HKD40 (range: 1000–79999 minor units), the HK$800 tier, at every maximum above |
+| `<listing_28>` | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), led by customer A alone at the starting price |
+| customer A maximum | HKD2,350 (range: 80000–399999 minor units) |
 | Item | Maxima, in the order committed: customer A 20000, customer B 15000, customer C 12000; `<price before>`: 15500; Erased: customer B; Leader after: customer A; `<price after>`: 12500, customer C's maximum plus 500 |
 | Item | Maxima, in the order committed: customer A 20000 raised to 50000 after customer B 19800, customer C 10000; `<price before>`: 20000; Erased: customer C; Leader after: customer A; `<price after>`: 20000, unchanged: customer B's maximum plus 500 is 20300, above `<price before>` |
 | Item | Maxima, in the order committed: customer A 20000, customer B 15000, customer C 11000; `<price before>`: 15500; Erased: customer C; Leader after: customer A; `<price after>`: 15500, unchanged, on the same bid |
 | Item | Maxima, in the order committed: customer A 20000, customer B 15000; `<price before>`: 15500; Erased: customer A; Leader after: customer B; `<price after>`: 10000, the opening price |
 | Item | Maxima, in the order committed: Field; `<price before>`: Value |
-| Item | Maxima, in the order committed: `<listing_32>`; `<price before>`: An open USD listing, opening price 10000 minor units (USD 100.00), scheduled close more than an hour away; every amount above is in USD minor units |
-| Item | Maxima, in the order committed: Increment; `<price before>`: 500 minor units (USD 5.00), the USD 100 tier, at every next maximum above |
+| Item | Maxima, in the order committed: `<listing_32>`; `<price before>`: An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units |
+| Item | Maxima, in the order committed: Increment; `<price before>`: USD5 (fixed derived value), the USD 100 tier, at every next maximum above |
 
 ### Route
 
@@ -658,7 +658,7 @@
 5. Erase customer A's account through the account-erasure procedure.
 6. Read `<listing_28>` from the public listing API.
    - `<listing_28>` has no leader and no current bid. g10.auction-auction.US13-TC2
-   - The next bid must reach 20000 minor units (HKD 200.00), the opening price. g10.auction-auction.US13-TC2
+   - The next bid must reach HKD280, the opening price. g10.auction-auction.US13-TC2
    - customer A's maximum appears nowhere on `<listing_28>`. g10.auction-auction.US13-TC2
 7. Read `<listing_32>` from the public listing API, noting its scheduled close.
    - reads Highest bid `<price before>`. g10.auction-auction.US13-TC3
@@ -688,34 +688,34 @@
 
 | Item | Value |
 | --- | --- |
-| Item | Refused when: Below the next minimum; Account state: In good standing; Lot state: Open, minimum next bid `<next minimum>`; Amount entered: 512900 minor units (HKD 5,129), one major unit below `<next minimum>`; The bid form says: Minimum bid is, naming `<next minimum>` |
+| Item | Refused when: Below the next minimum; Account state: In good standing; Lot state: Open, minimum next bid `<next minimum>`; Amount entered: HKD5,280 (fixed derived value), one major unit below `<next minimum>`; The bid form says: Minimum bid is, naming `<next minimum>` |
 | Item | Refused when: Bidding suspended on the account; Account state: Bidding suspended; Lot state: Open; Amount entered: `<next minimum>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
 | Item | Refused when: Account banned from bidding; Account state: Banned from bidding; Lot state: Open; Amount entered: `<next minimum>`; The bid form says: This account cannot bid. |
 | Item | Refused when: After the close; Account state: In good standing; Lot state: Past its effective close, its close not yet recorded, the page's live updates held back; Amount entered: `<next minimum>`; The bid form says: Your bid did not go through. |
 | Item | Refused when: Field; Account state: Value |
 | Item | Refused when: `<listing_29>`; Account state: An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` |
-| Item | Refused when: `<current bid>`; Account state: 505000 minor units (HKD 5,050.00) |
-| Item | Refused when: `<next minimum>`; Account state: 513000 minor units (HKD 5,130.00), `<current bid>` plus its 8000 increment |
+| Item | Refused when: `<current bid>`; Account state: HKD5,210 (range: 400000–799999 minor units) |
+| Item | Refused when: `<next minimum>`; Account state: HKD5,290 (fixed derived value), `<current bid>` plus its 8000 increment |
 | Item | Refused when: `<bid count>`; Account state: 3 |
-| `<listing_30>` | An open HKD listing led by customer A, maximum 800000 minor units (HKD 8,000.00) |
-| `<current bid>` | 505000 minor units (HKD 5,050.00) |
-| `<below minimum>` | 512900 minor units (HKD 5,129), one major unit below `<current bid>` plus its 8000 increment |
+| `<listing_30>` | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) |
+| `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
+| `<below minimum>` | HKD5,280 (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
 | Item | Standing before: No bid; Bid sent: A first maximum of `<maximum>`; Dropped: The answer, after the auction accepts the bid; The bid form reads: Placed, Leading with Your maximum `<maximum>`; Standing after: Leading, Your maximum `<maximum>`, a row on My Auctions |
 | Item | Standing before: No bid; Bid sent: A first maximum of `<maximum>`; Dropped: The request, before the auction receives it; The bid form reads: Could not place this bid.; Standing after: No bid, no row on My Auctions |
 | Item | Standing before: Leading, Your maximum `<maximum>`; Bid sent: A raise to `<raised maximum>`; Dropped: The answer, after the auction accepts the raise; The bid form reads: Placed, Leading with Your maximum `<raised maximum>`; Standing after: Leading, Your maximum `<raised maximum>` |
 | Item | Standing before: Leading, Your maximum `<maximum>`; Bid sent: A raise to `<raised maximum>`; Dropped: The request, before the auction receives it; The bid form reads: Could not place this bid.; Standing after: Leading, Your maximum `<maximum>` |
 | Item | Standing before: Field; Bid sent: Value |
-| Item | Standing before: `<listing_31>`; Bid sent: An open HKD listing with no other bidder, starting price 20000 minor units (HKD 200.00) |
-| Item | Standing before: `<maximum>`; Bid sent: 50000 minor units (HKD 500.00) |
-| Item | Standing before: `<raised maximum>`; Bid sent: 80000 minor units (HKD 800.00) |
+| Item | Standing before: `<listing_31>`; Bid sent: An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) |
+| Item | Standing before: `<maximum>`; Bid sent: HKD560 (range: 1000–79999 minor units) |
+| Item | Standing before: `<raised maximum>`; Bid sent: HKD920 (range: 80000–399999 minor units) |
 | `<ceiling>` | A distinct server-message marker |
 | Absent | A distinct server-message marker |
 | `<ceiling>` | Absent |
 | Absent | Absent |
 | Field | Value |
-| listing_29 | An open HKD listing led by customer B, current bid 505000 minor units and bid count 3 |
+| listing_29 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 |
 | valid draft | 5130 whole major units, the listing's next minimum |
-| ceiling | 8000000000 minor units (HKD 80,000,000) |
+| ceiling | HKD80,000,000 (fixed configured value) |
 
 ### Route
 
@@ -837,8 +837,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_25>` | An open HKD listing taking bids, current bid `<current bid>` |
-| `<current bid>` | 480000 minor units (HKD 4,800.00) |
-| `<bid amount>` | 505000 minor units (HKD 5,050.00), at or above the minimum next bid |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -1247,11 +1247,11 @@ Runs once per row of **Test data**.
 
 | Currency | `<start>` | `<opening price>` | `<next minimum>` |
 | --- | --- | --- | --- |
-| HKD | 20000 minor units (HKD 200.00), positive start | 20000 minor units (HKD 200.00), the start itself | 21000 minor units (HKD 210.00) |
-| HKD | 500 minor units (HKD 5.00), below the lowest increment | 500 minor units (HKD 5.00), the start itself | 1500 minor units (HKD 15.00) |
-| HKD | 0 minor units (HKD 0.00), zero start | 1000 minor units (HKD 10.00), the lowest increment | 2000 minor units (HKD 20.00) |
-| USD | 0 minor units (USD 0.00), zero start | 100 minor units (USD 1.00), the lowest increment | 200 minor units (USD 2.00) |
-| JPY | 0 minor units (JPY 0), zero start | 100 minor units (JPY 100), the lowest increment | 200 minor units (JPY 200) |
+| HKD | HKD280 (range: 1000–79999 minor units), positive start | HKD280 (range: 1000–79999 minor units), the start itself | HKD290 (range: 1000–79999 minor units) |
+| HKD | HKD7 (fixed boundary or equality), below the lowest increment | HKD7 (fixed boundary or equality), the start itself | HKD17 (range: 1000–79999 minor units) |
+| HKD | HKD0 (fixed tier boundary), zero start | HKD10 (fixed boundary or equality), the lowest increment | HKD20 (fixed boundary or equality) |
+| USD | USD0 (fixed tier boundary), zero start | USD1 (fixed boundary or equality), the lowest increment | USD2 (fixed boundary or equality) |
+| JPY | JPY0 (fixed tier boundary), zero start | JPY100 (fixed boundary or equality), the lowest increment | JPY200 (fixed boundary or equality) |
 
 **Steps:**
 
@@ -1296,12 +1296,12 @@ Runs once per row of **Test data**.
 
 | Currency | `<start>` | `<opening price>` | `<bid amount>` |
 | --- | --- | --- | --- |
-| HKD | 20000 minor units (HKD 200.00) | 20000 minor units (HKD 200.00), the start itself | 19999 minor units (HKD 199.99), one minor unit below |
-| USD | 50000 minor units (USD 500.00) | 50000 minor units (USD 500.00), the start itself | 49999 minor units (USD 499.99), one minor unit below |
-| JPY | 20000 minor units (JPY 20,000) | 20000 minor units (JPY 20,000), the start itself | 19999 minor units (JPY 19,999), one minor unit below |
-| HKD | 0 minor units (HKD 0.00), zero start | 1000 minor units (HKD 10.00), the lowest increment | 999 minor units (HKD 9.99), one minor unit below |
-| USD | 0 minor units (USD 0.00), zero start | 100 minor units (USD 1.00), the lowest increment | 99 minor units (USD 0.99), one minor unit below |
-| JPY | 0 minor units (JPY 0), zero start | 100 minor units (JPY 100), the lowest increment | 99 minor units (JPY 99), one minor unit below |
+| HKD | HKD280 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units), the start itself | HKD279.99 (fixed boundary or equality), one minor unit below |
+| USD | USD500 (fixed tier boundary) | USD500 (fixed tier boundary), the start itself | USD499.99 (fixed boundary or equality), one minor unit below |
+| JPY | JPY23,500 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units), the start itself | JPY23,499 (fixed boundary or equality), one minor unit below |
+| HKD | HKD0 (fixed tier boundary), zero start | HKD10 (fixed boundary or equality), the lowest increment | HKD9.99 (fixed boundary or equality), one minor unit below |
+| USD | USD0 (fixed tier boundary), zero start | USD1 (fixed boundary or equality), the lowest increment | USD0.99 (fixed boundary or equality), one minor unit below |
+| JPY | JPY0 (fixed tier boundary), zero start | JPY100 (fixed boundary or equality), the lowest increment | JPY99 (fixed boundary or equality), one minor unit below |
 
 **Steps:**
 
@@ -1429,10 +1429,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_26>` | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` |
-| `<current bid>` | 480000 minor units (HKD 4,800.00) |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
-| `<bid A>` | 505000 minor units (HKD 5,050.00) |
-| `<bid B>` | 600000 minor units (HKD 6,000.00), above `<bid A>` |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
+| `<bid A>` | HKD5,210 (range: 400000–799999 minor units) |
+| `<bid B>` | HKD6,200 (range: 400000–799999 minor units), above `<bid A>` |
 
 **Steps:**
 
@@ -1488,9 +1488,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<a verified account>` | An account whose standing is `verified` on the day of the bid |
 | `<card>` | Visa ending 4242 |
-| `<bar>` | 12000000 minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| `<bar>` | HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
 | `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
-| `<bid at the bar>` | 12000000 minor units (HKD 120,000.00), equal to `<bar>` |
+| `<bid at the bar>` | HKD120,000 (fixed boundary or equality), equal to `<bar>` |
 
 **Steps:**
 
@@ -1531,15 +1531,15 @@ Runs once per row of **Test data**.
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded |
-| `unverified` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded |
-| `expired` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded |
-| `expired` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded |
+| `unverified` | HKD120,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
+| `unverified` | HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>` | Refused; no bid recorded |
+| `expired` | HKD120,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
+| `expired` | HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>` | Refused; no bid recorded |
 
 | Field | Value |
 | --- | --- |
 | `<card>` | Visa ending 4242 |
-| `<bar>` | 12000000 minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| `<bar>` | HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
 | `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
 
 **Steps:**
@@ -1586,9 +1586,9 @@ Runs once per row of **Test data**.
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | 505000 minor units (HKD 5,050.00), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `expired` | 505000 minor units (HKD 5,050.00), any bid below `<bar>` | Forwarded as any other; no standing read |
-| `verified` | 505000 minor units (HKD 5,050.00), any bid below `<bar>` | Forwarded as any other; no standing read |
+| `unverified` | HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
+| `expired` | HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
+| `verified` | HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>` | Forwarded as any other; no standing read |
 
 **Steps:**
 
@@ -2675,7 +2675,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<leader price>` | 480000 minor units, HKD |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | 521000 minor units, at or above the minimum next bid |
 
 **Steps:**
 
@@ -2725,7 +2725,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<leader price>` | 480000 minor units, HKD |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | 521000 minor units, at or above the minimum next bid |
 
 **Steps:**
 
@@ -2819,7 +2819,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_4>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B |
 | `<bid time>` | 20:29:59 UTC, one second before the recorded close |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 | `<new close>` | 20:59:59 UTC, `<bid time>` plus 1800s |
 
 **Steps:**
@@ -2875,7 +2875,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -3048,7 +3048,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<leader price>` | 480000 minor units |
+| `<leader price>` | HKD4,960 (range: 400000–799999 minor units) |
 | `<sweep interval>` | 300s (5mins) |
 
 **Steps:**
@@ -3193,9 +3193,9 @@ Runs once per row of **Test data**.
 | `<listing_9>` | An HKD listing in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
 | `<time left before bid>` | 5 minutes |
-| `<leader price>` | 100000 minor units |
-| `<user A maximum>` | 200000 minor units |
-| `<user B maximum>` | 200000 minor units, equal to `<user A maximum>` |
+| `<leader price>` | HKD1,260 (range: 80000–399999 minor units) |
+| `<user A maximum>` | HKD2,360 (range: 80000–399999 minor units) |
+| `<user B maximum>` | HKD2,360 (fixed boundary or equality), equal to `<user A maximum>` |
 
 **Steps:**
 
@@ -3239,9 +3239,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_10>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap |
 | `<close before raise>` | 3 minutes after the raise |
-| `<leader price>` | 530000 minor units |
-| `<user A maximum>` | 800000 minor units |
-| `<raised maximum>` | 900000 minor units |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<raised maximum>` | HKD9,600 (range: 800000–3999999 minor units) |
 
 **Steps:**
 
@@ -3294,14 +3294,14 @@ Runs once per row of **Test data**.
 
 | customer A maximum | customer B maximum | customer C maximum | `<price before>` | `<price after>` | Leader after |
 | --- | --- | --- | --- | --- | --- |
-| 200000 minor units (HKD 2,000.00), first | 150000 minor units (HKD 1,500.00) | 120000 minor units (HKD 1,200.00) | 154000 minor units (HKD 1,540.00), customer B's maximum plus 4000 | 124000 minor units (HKD 1,240.00), customer C's maximum plus 4000 | customer B |
-| 200000 minor units (HKD 2,000.00), first | 121000 minor units (HKD 1,210.00) | 120000 minor units (HKD 1,200.00) | 125000 minor units (HKD 1,250.00), customer B's maximum plus 4000 | 121000 minor units (HKD 1,210.00), capped at customer B's maximum | customer B |
-| 150000 minor units (HKD 1,500.00), first | 150000 minor units (HKD 1,500.00), second | 120000 minor units (HKD 1,200.00) | 150000 minor units (HKD 1,500.00), equal maxima, customer A earlier | 124000 minor units (HKD 1,240.00), customer C's maximum plus 4000 | customer B |
+| HKD2,300 (range: 80000–399999 minor units), first | HKD1,700 (range: 80000–399999 minor units) | HKD1,350 (range: 80000–399999 minor units) | HKD1,740 (fixed derived value), customer B's maximum plus 4000 | HKD1,390 (fixed derived value), customer C's maximum plus 4000 | customer B |
+| HKD2,300 (range: 80000–399999 minor units), first | HKD1,360 (range: 80000–399999 minor units) | HKD1,350 (range: 80000–399999 minor units) | HKD1,400 (fixed derived value), customer B's maximum plus 4000 | HKD1,360 (fixed derived value), capped at customer B's maximum | customer B |
+| HKD1,750 (range: 80000–399999 minor units), first | HKD1,750 (range: 80000–399999 minor units), second | HKD1,350 (range: 80000–399999 minor units) | HKD1,750 (fixed boundary or equality), equal maxima, customer A earlier | HKD1,390 (fixed boundary or equality), customer C's maximum plus 4000 | customer B |
 
 | Field | Value |
 | --- | --- |
-| `<listing_27>` | An open HKD listing, starting price 20000 minor units (HKD 200.00), scheduled close more than an hour away |
-| Increment | 4000 minor units (HKD 40.00), the HK$800 tier, at every maximum above |
+| `<listing_27>` | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away |
+| Increment | HKD40 (fixed tier increment), the HK$800 tier, at every maximum above |
 
 **Steps:**
 
@@ -3345,8 +3345,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_28>` | An open HKD listing, starting price 20000 minor units (HKD 200.00), led by customer A alone at the starting price |
-| customer A maximum | 200000 minor units (HKD 2,000.00) |
+| `<listing_28>` | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), led by customer A alone at the starting price |
+| customer A maximum | HKD2,350 (range: 80000–399999 minor units) |
 
 **Steps:**
 
@@ -3356,7 +3356,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * `<listing_28>` has no leader and no current bid.
-* The next bid must reach 20000 minor units (HKD 200.00), the opening price.
+* The next bid must reach HKD280, the opening price.
 * customer A's maximum appears nowhere on `<listing_28>`.
 
 <!-- trace:case id=g10.auction-auction.TC-lxa rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
@@ -3386,15 +3386,15 @@ Runs once per row of **Test data**.
 
 | Maxima, in the order committed | `<price before>` | Erased | Leader after | `<price after>` |
 | --- | --- | --- | --- | --- |
-| customer A 20000, customer B 15000, customer C 12000 | 15500 | customer B | customer A | 12500, customer C's maximum plus 500 |
-| customer A 20000 raised to 50000 after customer B 19800, customer C 10000 | 20000 | customer C | customer A | 20000, unchanged: customer B's maximum plus 500 is 20300, above `<price before>` |
-| customer A 20000, customer B 15000, customer C 11000 | 15500 | customer C | customer A | 15500, unchanged, on the same bid |
-| customer A 20000, customer B 15000 | 15500 | customer A | customer B | 10000, the opening price |
+| customer A 23000, customer B 17000, customer C 13500 | 17500 | customer B | customer A | 14000, customer C's maximum plus 500 |
+| customer A 23000 raised to 47000 after customer B 22800, customer C 10500 | 23000 | customer C | customer A | 23000, unchanged: customer B's maximum plus 500 is 23300, above `<price before>` |
+| customer A 23000, customer B 17000, customer C 12500 | 17500 | customer C | customer A | 17500, unchanged, on the same bid |
+| customer A 23000, customer B 17000 | 17500 | customer A | customer B | 10000, the opening price |
 
 | Field | Value |
 | --- | --- |
-| `<listing_32>` | An open USD listing, opening price 10000 minor units (USD 100.00), scheduled close more than an hour away; every amount above is in USD minor units |
-| Increment | 500 minor units (USD 5.00), the USD 100 tier, at every next maximum above |
+| `<listing_32>` | An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units |
+| Increment | USD5 (fixed tier increment), the USD 100 tier, at every next maximum above |
 
 **Steps:**
 
@@ -3446,7 +3446,7 @@ Runs once per row of **Test data**.
 
 | Refused when | Account state | Lot state | Amount entered | The bid form says |
 | --- | --- | --- | --- | --- |
-| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | 512900 minor units (HKD 5,129), one major unit below `<next minimum>` | Minimum bid is, naming `<next minimum>` |
+| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | HKD5,280 (fixed derived value), one major unit below `<next minimum>` | Minimum bid is, naming `<next minimum>` |
 | Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. |
 | Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. |
 | After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. |
@@ -3454,8 +3454,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_29>` | An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` |
-| `<current bid>` | 505000 minor units (HKD 5,050.00) |
-| `<next minimum>` | 513000 minor units (HKD 5,130.00), `<current bid>` plus its 8000 increment |
+| `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
+| `<next minimum>` | HKD5,290 (fixed derived value), `<current bid>` plus its 8000 increment |
 | `<bid count>` | 3 |
 
 **Steps:**
@@ -3504,9 +3504,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_30>` | An open HKD listing led by customer A, maximum 800000 minor units (HKD 8,000.00) |
-| `<current bid>` | 505000 minor units (HKD 5,050.00) |
-| `<below minimum>` | 512900 minor units (HKD 5,129), one major unit below `<current bid>` plus its 8000 increment |
+| `<listing_30>` | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) |
+| `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
+| `<below minimum>` | HKD5,280 (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
 
 **Steps:**
 
@@ -3558,9 +3558,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_31>` | An open HKD listing with no other bidder, starting price 20000 minor units (HKD 200.00) |
-| `<maximum>` | 50000 minor units (HKD 500.00) |
-| `<raised maximum>` | 80000 minor units (HKD 800.00) |
+| `<listing_31>` | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) |
+| `<maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<raised maximum>` | HKD920 (range: 80000–399999 minor units) |
 
 **Steps:**
 
@@ -3613,9 +3613,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| listing_29 | An open HKD listing led by customer B, current bid 505000 minor units and bid count 3 |
+| listing_29 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 |
 | valid draft | 5130 whole major units, the listing's next minimum |
-| ceiling | 8000000000 minor units (HKD 80,000,000) |
+| ceiling | HKD80,000,000 (fixed configured value) |
 
 **Steps:**
 

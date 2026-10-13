@@ -117,10 +117,10 @@
 | --- | --- |
 | lot_6 | An open HKD lot led by customer B, closing after `<lot_7>` |
 | lot_7 | An open HKD lot customer A bid on, closing before `<lot_6>` |
-| current bid | 530000 minor units (HK$5,300) |
-| increment | 8000 minor units (HK$80), the HK$4,000 tier |
-| next minimum | `<current bid>` plus `<increment>`, 538000 minor units (HK$5,380) |
-| refused bid | HK$5,300, equal to `<current bid>`, below `<next minimum>` |
+| current bid | HK$5,460 (range: 400000–799999 minor units) |
+| increment | HK$80 (fixed tier increment), the HK$4,000 tier |
+| next minimum | `<current bid>` plus `<increment>`, HK$5,540 (fixed derived value) |
+| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` |
 | Returned the proof | Won, Pending Payment |
 | Confirmed the payment | Won, Processing |
 | lot_12 | customer A's won lot, proof under check |
@@ -189,11 +189,11 @@
 | lot_3 | An open lot taking bids, watched by this collector, closing after `<lot_4>` |
 | lot_4 | An open lot taking bids, watch-only for this collector, closing before `<lot_3>` |
 | first bid | The next valid bid shown on `<lot_3>`'s bid panel |
-| Item | Account state: Bidding allowed; `<typed bid>`: HK$100, below `<opening price>`; The bid form says: Minimum bid is `<opening price>` |
-| Item | Account state: Bidding suspended by an operator; `<typed bid>`: HK$200, `<opening price>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
+| Item | Account state: Bidding allowed; `<typed bid>`: HK$140, below `<opening price>`; The bid form says: Minimum bid is `<opening price>` |
+| Item | Account state: Bidding suspended by an operator; `<typed bid>`: HK$280, `<opening price>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
 | Item | Account state: Field; `<typed bid>`: Value |
 | Item | Account state: lot_5; `<typed bid>`: An open HKD lot with no bid from anyone |
-| Item | Account state: opening price; `<typed bid>`: 20000 minor units (HK$200), the starting price |
+| Item | Account state: opening price; `<typed bid>`: HK$280 (range: 1000–79999 minor units), the starting price |
 
 ### Route
 
@@ -327,8 +327,8 @@
 | --- | --- |
 | lot_2 | An HKD lot led by customer A, its close passed and not yet recorded |
 | lot_3 | An open HKD lot, its close more than an hour away |
-| customer B bid | 100000 minor units |
-| current bid | 120000 minor units, above `<customer B bid>` |
+| customer B bid | HKD1,180 (range: 80000–399999 minor units) |
+| current bid | HKD1,300 (range: 80000–399999 minor units), above `<customer B bid>` |
 
 ### Route
 
@@ -751,10 +751,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | lot_6 | An open HKD lot led by customer B, closing after `<lot_7>` |
 | lot_7 | An open HKD lot customer A bid on, closing before `<lot_6>` |
-| current bid | 530000 minor units (HK$5,300) |
-| increment | 8000 minor units (HK$80), the HK$4,000 tier |
-| next minimum | `<current bid>` plus `<increment>`, 538000 minor units (HK$5,380) |
-| refused bid | HK$5,300, equal to `<current bid>`, below `<next minimum>` |
+| current bid | HK$5,460 (range: 400000–799999 minor units) |
+| increment | HK$80 (fixed tier increment), the HK$4,000 tier |
+| next minimum | `<current bid>` plus `<increment>`, HK$5,540 (fixed derived value) |
+| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` |
 
 **Steps:**
 
@@ -1254,13 +1254,13 @@ Runs once per row of **Test data**.
 
 | Account state | `<typed bid>` | The bid form says |
 | --- | --- | --- |
-| Bidding allowed | HK$100, below `<opening price>` | Minimum bid is `<opening price>` |
-| Bidding suspended by an operator | HK$200, `<opening price>` | Bidding is suspended on this account. Contact Us to resolve it. |
+| Bidding allowed | HK$140, below `<opening price>` | Minimum bid is `<opening price>` |
+| Bidding suspended by an operator | HK$280, `<opening price>` | Bidding is suspended on this account. Contact Us to resolve it. |
 
 | Field | Value |
 | --- | --- |
 | lot_5 | An open HKD lot with no bid from anyone |
-| opening price | 20000 minor units (HK$200), the starting price |
+| opening price | HK$280 (range: 1000–79999 minor units), the starting price |
 
 **Steps:**
 
@@ -1781,8 +1781,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | lot_3 | An open HKD lot, its close more than an hour away |
-| customer B bid | 100000 minor units |
-| current bid | 120000 minor units, above `<customer B bid>` |
+| customer B bid | HKD1,180 (range: 80000–399999 minor units) |
+| current bid | HKD1,300 (range: 80000–399999 minor units), above `<customer B bid>` |
 
 **Steps:**
 

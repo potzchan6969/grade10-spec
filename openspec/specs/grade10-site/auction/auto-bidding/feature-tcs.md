@@ -12,7 +12,7 @@
 - An open listing in the row's currency, starting price 0, in the row's standing.
 - customer B is signed in with a card linked.
 - An open listing in the row's currency, starting price 0, extension duration 0, scheduled close 10 minutes ahead.
-- customer A committed a maximum of 50000 minor units before the scheduled close, the only maximum on the listing.
+- customer A committed the row's maximum before the scheduled close, the only maximum on the listing.
 - `<listing_1>` starts at 0 `HKD`, and customer A's maximum `<user A maximum>` stands alone at `<opening price>`.
 - customer B(card linked) is signed in on a separate session, on the lot page for `<listing_1>`.
 
@@ -20,36 +20,36 @@
 
 | Item | Value |
 | --- | --- |
-| Item | Currency: USD; Starting price: 20000 minor units (USD 200.00); Maximum: 50000 minor units (USD 500.00) |
-| Item | Currency: HKD; Starting price: 20000 minor units (HKD 200.00); Maximum: 50000 minor units (HKD 500.00) |
-| Item | Currency: JPY; Starting price: 20000 minor units (JPY 20,000); Maximum: 50000 minor units (JPY 50,000) |
-| Item | Currency: USD; Current bid: 22500 minor units (USD 225.00); Minimum increment: 2500 minor units (USD 25.00); Attempted maximum: 24000 minor units (USD 240.00) |
-| Item | Currency: HKD; Current bid: 22500 minor units (HKD 225.00); Minimum increment: 2500 minor units (HKD 25.00); Attempted maximum: 24000 minor units (HKD 240.00) |
-| Item | Currency: JPY; Current bid: 22500 minor units (JPY 22,500); Minimum increment: 2500 minor units (JPY 2,500); Attempted maximum: 24000 minor units (JPY 24,000) |
-| Item | Currency: USD; Committed maximum: 50000 minor units (USD 500.00); Raised maximum: 80000 minor units (USD 800.00) |
-| Item | Currency: HKD; Committed maximum: 50000 minor units (HKD 500.00); Raised maximum: 80000 minor units (HKD 800.00) |
-| Item | Currency: JPY; Committed maximum: 50000 minor units (JPY 50,000); Raised maximum: 80000 minor units (JPY 80,000) |
-| Item | Currency: USD; Committed maximum: 50000 minor units (USD 500.00); Attempted maximum: 30000 minor units (USD 300.00) |
-| Item | Currency: HKD; Committed maximum: 50000 minor units (HKD 500.00); Attempted maximum: 30000 minor units (HKD 300.00) |
-| Item | Currency: JPY; Committed maximum: 50000 minor units (JPY 50,000); Attempted maximum: 30000 minor units (JPY 30,000) |
-| Item | Currency: USD; Maximum: 100 minor units (USD 1.00), exactly the minimum; Lowest increment: 100 minor units (USD 1.00); Current bid after: 100 minor units (USD 1.00) |
-| Item | Currency: USD; Maximum: 50000 minor units (USD 500.00), in the USD 500 tier; Lowest increment: 100 minor units (USD 1.00); Current bid after: 100 minor units (USD 1.00) |
-| Item | Currency: HKD; Maximum: 1000 minor units (HKD 10.00), exactly the minimum; Lowest increment: 1000 minor units (HKD 10.00); Current bid after: 1000 minor units (HKD 10.00) |
-| Item | Currency: HKD; Maximum: 100000 minor units (HKD 1,000.00), in the HKD 800 tier; Lowest increment: 1000 minor units (HKD 10.00); Current bid after: 1000 minor units (HKD 10.00) |
-| Item | Currency: JPY; Maximum: 100 minor units (JPY 100), exactly the minimum; Lowest increment: 100 minor units (JPY 100); Current bid after: 100 minor units (JPY 100) |
-| Item | Currency: JPY; Maximum: 50000 minor units (JPY 50,000), in the JPY 15,000 tier; Lowest increment: 100 minor units (JPY 100); Current bid after: 100 minor units (JPY 100) |
-| Item | Currency: USD; Standing: No maximum committed; Minimum next bid: 100 minor units (USD 1.00); Customer B's attempted maximum: 99 minor units (USD 0.99) |
-| Item | Currency: HKD; Standing: No maximum committed; Minimum next bid: 1000 minor units (HKD 10.00); Customer B's attempted maximum: 999 minor units (HKD 9.99) |
-| Item | Currency: JPY; Standing: No maximum committed; Minimum next bid: 100 minor units (JPY 100); Customer B's attempted maximum: 99 minor units (JPY 99) |
-| Item | Currency: USD; Lowest increment: 100 minor units (USD 1.00); Winning bid: 100 minor units (USD 1.00) |
-| Item | Currency: HKD; Lowest increment: 1000 minor units (HKD 10.00); Winning bid: 1000 minor units (HKD 10.00) |
-| Item | Currency: JPY; Lowest increment: 100 minor units (JPY 100); Winning bid: 100 minor units (JPY 100) |
-| 1000 minor units (HKD 10.00), the opening price | Refused, naming 2000 minor units (HKD 20.00); current bid stays `<opening price>`, customer A leads |
-| 2000 minor units (HKD 20.00), the opening price plus one increment | Accepted; current bid 3000 minor units (HKD 30.00), `<user B maximum>` plus 1000; customer A leads |
+| Item | Currency: USD; Starting price: USD56 (range: 100–9999 minor units); Maximum: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Starting price: HKD28 (range: 1000–79999 minor units); Maximum: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Starting price: JPY2,350 (range: 100–14999 minor units); Maximum: JPY23,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Current bid: USD235 (range: 10000–49999 minor units); Minimum increment: USD25 (fixed tier increment); Attempted maximum: USD245 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Current bid: HKD280 (range: 1000–79999 minor units); Minimum increment: HKD30 (fixed tier increment); Attempted maximum: HKD300 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Current bid: JPY23,500 (range: 15000–74999 minor units); Minimum increment: JPY2,500 (fixed tier increment); Attempted maximum: JPY24,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Committed maximum: USD235 (range: 10000–49999 minor units); Raised maximum: USD470 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Committed maximum: HKD280 (range: 1000–79999 minor units); Raised maximum: HKD560 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Committed maximum: JPY23,500 (range: 15000–74999 minor units); Raised maximum: JPY47,000 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Committed maximum: USD470 (range: 10000–49999 minor units); Attempted maximum: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Committed maximum: HKD560 (range: 1000–79999 minor units); Attempted maximum: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Committed maximum: JPY47,000 (range: 15000–74999 minor units); Attempted maximum: JPY23,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Maximum: USD1 (fixed boundary or equality), exactly the minimum; Lowest increment: USD1 (fixed boundary or equality); Current bid after: USD1 (fixed derived value) |
+| Item | Currency: USD; Maximum: USD500 (fixed tier boundary), in the USD 500 tier; Lowest increment: USD1 (fixed boundary or equality); Current bid after: USD1 (fixed derived value) |
+| Item | Currency: HKD; Maximum: HKD10 (fixed boundary or equality), exactly the minimum; Lowest increment: HKD10 (fixed boundary or equality); Current bid after: HKD10 (fixed derived value) |
+| Item | Currency: HKD; Maximum: HKD920 (range: 80000–399999 minor units), in the HKD 800 tier; Lowest increment: HKD10 (fixed boundary or equality); Current bid after: HKD10 (fixed derived value) |
+| Item | Currency: JPY; Maximum: JPY100 (fixed boundary or equality), exactly the minimum; Lowest increment: JPY100 (fixed boundary or equality); Current bid after: JPY100 (fixed derived value) |
+| Item | Currency: JPY; Maximum: JPY47,000 (range: 15000–74999 minor units), in the JPY 15,000 tier; Lowest increment: JPY100 (fixed boundary or equality); Current bid after: JPY100 (fixed derived value) |
+| Item | Currency: USD; Standing: No maximum committed; Minimum next bid: USD1 (range: 100–9999 minor units); Customer B's attempted maximum: USD0.99 (range: 1–99 minor units) |
+| Item | Currency: HKD; Standing: No maximum committed; Minimum next bid: HKD10 (range: 1000–79999 minor units); Customer B's attempted maximum: HKD9.99 (range: 1–999 minor units) |
+| Item | Currency: JPY; Standing: No maximum committed; Minimum next bid: JPY100 (range: 100–14999 minor units); Customer B's attempted maximum: JPY99 (range: 1–99 minor units) |
+| Item | Currency: USD; Lowest increment: USD1 (fixed boundary or equality); Winning bid: USD1 (fixed boundary or equality) |
+| Item | Currency: HKD; Lowest increment: HKD10 (fixed boundary or equality); Winning bid: HKD10 (fixed boundary or equality) |
+| Item | Currency: JPY; Lowest increment: JPY100 (fixed boundary or equality); Winning bid: JPY100 (fixed boundary or equality) |
+| HKD10 (fixed tier increment), the opening price | Refused, naming HKD20 (fixed derived value); current bid stays `<opening price>`, customer A leads |
+| HKD20 (fixed derived value), the opening price plus one increment | Accepted; current bid HKD30 (fixed derived value), `<user B maximum>` plus 1000; customer A leads |
 | Field | Value |
 | `<listing_1>` | An open HKD listing, starting price 0, scheduled close more than an hour away |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<opening price>` | 1000 minor units (HKD 10.00), the lowest HKD increment |
+| `<user A maximum>` | HKD470 (range: 1000–79999 minor units) |
+| `<opening price>` | HKD10 (fixed tier increment), the lowest HKD increment |
 
 ### Route
 
@@ -111,13 +111,13 @@
 
 | Item | Value |
 | --- | --- |
-| Item | Currency: USD; Committed maximum: 50000 minor units (USD 500.00); Current bid: 25000 minor units (USD 250.00) |
-| Item | Currency: HKD; Committed maximum: 50000 minor units (HKD 500.00); Current bid: 25000 minor units (HKD 250.00) |
-| Item | Currency: JPY; Committed maximum: 50000 minor units (JPY 50,000); Current bid: 25000 minor units (JPY 25,000) |
-| Item | Currency: USD; Customer A's maximum: 50000 minor units (USD 500.00); Current bid: 25000 minor units (USD 250.00) |
-| Item | Currency: HKD; Customer A's maximum: 50000 minor units (HKD 500.00); Current bid: 25000 minor units (HKD 250.00) |
-| Item | Currency: JPY; Customer A's maximum: 50000 minor units (JPY 50,000); Current bid: 25000 minor units (JPY 25,000) |
-| Customer C's maximum | 60000 minor units |
+| Item | Currency: USD; Committed maximum: USD470 (range: 10000–49999 minor units); Current bid: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Committed maximum: HKD560 (range: 1000–79999 minor units); Current bid: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Committed maximum: JPY47,000 (range: 15000–74999 minor units); Current bid: JPY23,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Customer A's maximum: USD470 (range: 10000–49999 minor units); Current bid: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Customer A's maximum: HKD560 (range: 1000–79999 minor units); Current bid: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Customer A's maximum: JPY47,000 (range: 15000–74999 minor units); Current bid: JPY23,500 (range: 15000–74999 minor units) |
+| Customer C's maximum | JPY60,000 (range: 15000–74999 minor units) |
 
 ### Route
 
@@ -132,12 +132,12 @@
    - The facts carry the current bid, the row's value. g10.auction-auto-bidding.US2-TC3
 4. Open the listing's public facts.
    - The facts do not carry, and do not allow deriving, customer A's maximum, the row's value. g10.auction-auto-bidding.US2-TC3
-5. Commit a maximum of 60000 minor units as customer C.
+5. Commit a maximum of JPY60,000 (range: 15000–74999 minor units) as customer C.
    - Grade10 accepts customer C's commitment. g10.auction-auto-bidding.US2-TC4
 6. Read customer C's standing.
    - Customer C is reported as not leading. g10.auction-auto-bidding.US2-TC4
 7. Read the listing's public bid history.
-   - The public history records customer C's accepted action followed by customer B's automatic response, both at 60000 minor units. g10.auction-auto-bidding.US2-TC4
+   - The public history records customer C's accepted action followed by customer B's automatic response, both at JPY60,000 (fixed derived value). g10.auction-auto-bidding.US2-TC4
 
 ## Walk 3: Collector competes through two maxima and adjacent checks
 
@@ -149,17 +149,17 @@
 
 | Item | Value |
 | --- | --- |
-| Item | `<customer B maximum>`: 500 minor units; Resolved current bid: 600 minor units; Resolved leader: customer A |
-| Item | `<customer B maximum>`: 700 minor units; Resolved current bid: 800 minor units; Resolved leader: customer A |
-| Item | `<customer B maximum>`: 950 minor units; Resolved current bid: 1000 minor units; Resolved leader: customer A |
-| Item | `<customer B maximum>`: 1001 minor units; Resolved current bid: 1001 minor units; Resolved leader: customer B |
-| Item | `<customer B maximum>`: 1100 minor units; Resolved current bid: 1100 minor units; Resolved leader: customer B |
-| Item | `<customer B maximum>`: 1120 minor units; Resolved current bid: 1100 minor units; Resolved leader: customer B |
-| Customer B's raised maximum | 30000 minor units |
-| Customer A's raised maximum | 30000 minor units |
-| Customer A's raised maximum | 60000 minor units |
-| Customer B's maximum | 810000 minor units |
-| Customer C's maximum | 60000 minor units |
+| Item | `<customer B maximum>`: JPY500 (range: 100–14999 minor units); Resolved current bid: JPY600 (fixed derived value); Resolved leader: customer A |
+| Item | `<customer B maximum>`: JPY700 (range: 100–14999 minor units); Resolved current bid: JPY800 (fixed derived value); Resolved leader: customer A |
+| Item | `<customer B maximum>`: JPY950 (range: 100–14999 minor units); Resolved current bid: JPY1,000 (fixed derived value); Resolved leader: customer A |
+| Item | `<customer B maximum>`: JPY1,001 (range: 100–14999 minor units); Resolved current bid: JPY1,001 (fixed derived value); Resolved leader: customer B |
+| Item | `<customer B maximum>`: JPY1,100 (range: 100–14999 minor units); Resolved current bid: JPY1,100 (fixed derived value); Resolved leader: customer B |
+| Item | `<customer B maximum>`: JPY1,120 (range: 100–14999 minor units); Resolved current bid: JPY1,100 (fixed derived value); Resolved leader: customer B |
+| Customer B's raised maximum | JPY34,000 (range: 15000–74999 minor units) |
+| Customer A's raised maximum | JPY34,000 (range: 15000–74999 minor units) |
+| Customer A's raised maximum | JPY60,000 (range: 15000–74999 minor units) |
+| Customer B's maximum | JPY920,000 (range: 750000–1499999 minor units) |
+| Customer C's maximum | JPY60,000 (range: 15000–74999 minor units) |
 
 ### Route
 
@@ -168,28 +168,28 @@
    - The current bid matches the row's resolved current bid. g10.auction-auto-bidding.US3-TC1
    - The leader matches the row's resolved leader. g10.auction-auto-bidding.US3-TC1
    - Grade10 accepts no intermediate bid between the previous current bid and the resolved one. g10.auction-auto-bidding.US3-TC1
-3. Raise customer B's maximum to 30000 minor units.
+3. Raise customer B's maximum to JPY34,000 (range: 15000–74999 minor units).
    - Customer A still leads. g10.auction-auto-bidding.US3-TC2
 4. Read the listing's leader and current bid.
-   - The current bid is 31000 minor units. g10.auction-auto-bidding.US3-TC2
-5. Raise customer A's maximum to 30000 minor units.
+   - The current bid is JPY35,000 (fixed derived value). g10.auction-auto-bidding.US3-TC2
+5. Raise customer A's maximum to JPY34,000 (range: 15000–74999 minor units).
    - Customer B still leads. g10.auction-auto-bidding.US3-TC3
 6. Read the listing's leader and current bid.
-   - The current bid is 31000 minor units. g10.auction-auto-bidding.US3-TC3
-7. Raise customer A's maximum to 60000 minor units.
+   - The current bid is JPY35,000 (fixed derived value). g10.auction-auto-bidding.US3-TC3
+7. Raise customer A's maximum to JPY60,000 (range: 15000–74999 minor units).
    - Customer A leads. g10.auction-auto-bidding.US3-TC4
 8. Read the listing's leader and current bid.
-   - The current bid is 51000 minor units. g10.auction-auto-bidding.US3-TC4
-9. Commit a maximum of 810000 minor units as customer B.
+   - The current bid is JPY51,000 (fixed derived value). g10.auction-auto-bidding.US3-TC4
+9. Commit a maximum of JPY920,000 (range: 750000–1499999 minor units) as customer B.
    - Customer B leads. g10.auction-auto-bidding.US3-TC5
 10. Read the listing's leader and current bid.
-   - The current bid is 810000 minor units, not higher. g10.auction-auto-bidding.US3-TC5
-11. Commit a maximum of 60000 minor units as customer C.
+   - The current bid is JPY920,000 (fixed derived value), not higher. g10.auction-auto-bidding.US3-TC5
+11. Commit a maximum of JPY60,000 (range: 15000–74999 minor units) as customer C.
    - Customer B remains the leader. g10.auction-auto-bidding.US3-TC6
 12. Read the listing's leader and current bid.
-   - The current bid is 60000 minor units. g10.auction-auto-bidding.US3-TC6
+   - The current bid is JPY60,000 (fixed derived value). g10.auction-auto-bidding.US3-TC6
 13. Read the public bid history's ordering and timestamps.
-   - The history records customer C's accepted action at 60000 minor units, then customer B's automatic response at 60000 minor units, both in the same resolution timestamp group. g10.auction-auto-bidding.US3-TC6
+   - The history records customer C's accepted action at JPY60,000 (range: 15000–74999 minor units), then customer B's automatic response at JPY60,000 (fixed derived value), both in the same resolution timestamp group. g10.auction-auto-bidding.US3-TC6
 14. Open that listing's bid history.
    - Each commitment shows its bidder, its maximum, and its Accepted At. g10.auction-auto-bidding.US4-TC1
 
@@ -209,15 +209,15 @@
 | Item | Value |
 | --- | --- |
 | `<listing_3>` | An open HKD listing taking bids, led by customer A |
-| `<leader price>` | 20000 minor units (HKD 200.00), the starting price |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<user B maximum>` | 30000 minor units (HKD 300.00), below `<user A maximum>` |
-| `<increment>` | 1000 minor units (HKD 10.00), the HK$0 tier at `<user B maximum>` |
-| `<user A raise>` | 80000 minor units (HKD 800.00) |
+| `<leader price>` | HKD280 (range: 1000–79999 minor units), the starting price |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<user B maximum>` | HKD340 (range: 1000–79999 minor units), below `<user A maximum>` |
+| `<increment>` | HKD10 (fixed tier increment), the HK$0 tier at `<user B maximum>` |
+| `<user A raise>` | HKD920 (range: 80000–399999 minor units) |
 | `<listing_1>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800 seconds |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
 | `<bid time>` | The moment customer B confirms |
 | `<listing_2>` | An open listing, scheduled close 20:00 UTC, extension duration 1800 seconds |
 
@@ -275,9 +275,9 @@ An open listing with no bids, with the row's starting price.
 
 | Currency | Starting price | Maximum |
 | --- | --- | --- |
-| USD | 20000 minor units (USD 200.00) | 50000 minor units (USD 500.00) |
-| HKD | 20000 minor units (HKD 200.00) | 50000 minor units (HKD 500.00) |
-| JPY | 20000 minor units (JPY 20,000) | 50000 minor units (JPY 50,000) |
+| USD | USD56 (range: 100–9999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD28 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY2,350 (range: 100–14999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -318,9 +318,9 @@ An open listing whose current bid and minimum increment match the row.
 
 | Currency | Current bid | Minimum increment | Attempted maximum |
 | --- | --- | --- | --- |
-| USD | 22500 minor units (USD 225.00) | 2500 minor units (USD 25.00) | 24000 minor units (USD 240.00) |
-| HKD | 22500 minor units (HKD 225.00) | 2500 minor units (HKD 25.00) | 24000 minor units (HKD 240.00) |
-| JPY | 22500 minor units (JPY 22,500) | 2500 minor units (JPY 2,500) | 24000 minor units (JPY 24,000) |
+| USD | USD235 (range: 10000–49999 minor units) | USD25 (range: 100–9999 minor units) | USD245 (range: 10000–49999 minor units) |
+| HKD | HKD280 (range: 1000–79999 minor units) | HKD30 (range: 1000–79999 minor units) | HKD300 (range: 1000–79999 minor units) |
+| JPY | JPY23,500 (range: 15000–74999 minor units) | JPY2,500 (range: 100–14999 minor units) | JPY24,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -361,9 +361,9 @@ customer(leads with a committed maximum matching the row) is on that open listin
 
 | Currency | Committed maximum | Raised maximum |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 80000 minor units (USD 800.00) |
-| HKD | 50000 minor units (HKD 500.00) | 80000 minor units (HKD 800.00) |
-| JPY | 50000 minor units (JPY 50,000) | 80000 minor units (JPY 80,000) |
+| USD | USD235 (range: 10000–49999 minor units) | USD470 (range: 10000–49999 minor units) |
+| HKD | HKD280 (range: 1000–79999 minor units) | HKD560 (range: 1000–79999 minor units) |
+| JPY | JPY23,500 (range: 15000–74999 minor units) | JPY47,000 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -404,9 +404,9 @@ customer(has a committed maximum matching the row) is on that open listing's pag
 
 | Currency | Committed maximum | Attempted maximum |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 30000 minor units (USD 300.00) |
-| HKD | 50000 minor units (HKD 500.00) | 30000 minor units (HKD 300.00) |
-| JPY | 50000 minor units (JPY 50,000) | 30000 minor units (JPY 30,000) |
+| USD | USD470 (range: 10000–49999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD560 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -448,12 +448,12 @@ Runs once per row of **Test data**.
 
 | Currency | Maximum | Lowest increment | Current bid after |
 | --- | --- | --- | --- |
-| USD | 100 minor units (USD 1.00), exactly the minimum | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| USD | 50000 minor units (USD 500.00), in the USD 500 tier | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| HKD | 1000 minor units (HKD 10.00), exactly the minimum | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| HKD | 100000 minor units (HKD 1,000.00), in the HKD 800 tier | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| JPY | 100 minor units (JPY 100), exactly the minimum | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
-| JPY | 50000 minor units (JPY 50,000), in the JPY 15,000 tier | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
+| USD | USD1 (fixed boundary or equality), exactly the minimum | USD1 (fixed boundary or equality) | USD1 (range: 100–9999 minor units) |
+| USD | USD500 (fixed tier boundary), in the USD 500 tier | USD1 (range: 100–9999 minor units) | USD1 (range: 100–9999 minor units) |
+| HKD | HKD10 (fixed boundary or equality), exactly the minimum | HKD10 (fixed boundary or equality) | HKD10 (range: 1000–79999 minor units) |
+| HKD | HKD920 (range: 80000–399999 minor units), in the HKD 800 tier | HKD10 (range: 1000–79999 minor units) | HKD10 (range: 1000–79999 minor units) |
+| JPY | JPY100 (fixed boundary or equality), exactly the minimum | JPY100 (fixed boundary or equality) | JPY100 (range: 100–14999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units), in the JPY 15,000 tier | JPY100 (range: 100–14999 minor units) | JPY100 (range: 100–14999 minor units) |
 
 **Steps:**
 
@@ -498,9 +498,9 @@ Runs once per row of **Test data**.
 
 | Currency | Standing | Minimum next bid | Customer B's attempted maximum |
 | --- | --- | --- | --- |
-| USD | No maximum committed | 100 minor units (USD 1.00) | 99 minor units (USD 0.99) |
-| HKD | No maximum committed | 1000 minor units (HKD 10.00) | 999 minor units (HKD 9.99) |
-| JPY | No maximum committed | 100 minor units (JPY 100) | 99 minor units (JPY 99) |
+| USD | No maximum committed | USD1 (range: 100–9999 minor units) | USD0.99 (range: 1–99 minor units) |
+| HKD | No maximum committed | HKD10 (range: 1000–79999 minor units) | HKD9.99 (range: 1–999 minor units) |
+| JPY | No maximum committed | JPY100 (range: 100–14999 minor units) | JPY99 (range: 1–99 minor units) |
 
 **Steps:**
 
@@ -537,15 +537,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * An open listing in the row's currency, starting price 0, extension duration 0, scheduled close 10 minutes ahead.
-* customer A committed a maximum of 50000 minor units before the scheduled close, the only maximum on the listing.
+* customer A committed the row's maximum before the scheduled close, the only maximum on the listing.
 
 **Test data:**
 
 | Currency | Lowest increment | Winning bid |
 | --- | --- | --- |
-| USD | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| HKD | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| JPY | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
+| USD | USD1 (range: 100–9999 minor units) | USD1 (range: 100–9999 minor units) |
+| HKD | HKD10 (range: 1000–79999 minor units) | HKD10 (range: 1000–79999 minor units) |
+| JPY | JPY100 (range: 100–14999 minor units) | JPY100 (range: 100–14999 minor units) |
 
 **Steps:**
 
@@ -587,14 +587,14 @@ Runs once per row of **Test data**.
 
 | `<user B maximum>` | Outcome |
 | --- | --- |
-| 1000 minor units (HKD 10.00), the opening price | Refused, naming 2000 minor units (HKD 20.00); current bid stays `<opening price>`, customer A leads |
-| 2000 minor units (HKD 20.00), the opening price plus one increment | Accepted; current bid 3000 minor units (HKD 30.00), `<user B maximum>` plus 1000; customer A leads |
+| HKD10 (range: 1000–79999 minor units), the opening price | Refused, naming HKD20 (range: 1000–79999 minor units); current bid stays `<opening price>`, customer A leads |
+| HKD20 (fixed derived value), the opening price plus one increment | Accepted; current bid HKD30 (fixed derived value), `<user B maximum>` plus 1000; customer A leads |
 
 | Field | Value |
 | --- | --- |
 | `<listing_1>` | An open HKD listing, starting price 0, scheduled close more than an hour away |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<opening price>` | 1000 minor units (HKD 10.00), the lowest HKD increment |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<opening price>` | HKD10 (fixed tier increment), the lowest HKD increment |
 
 **Steps:**
 
@@ -642,9 +642,9 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 
 | Currency | Committed maximum | Current bid |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) |
-| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) |
-| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) |
+| USD | USD470 (range: 10000–49999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD560 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -713,9 +713,9 @@ customer A(leads with a committed maximum matching the row) is on a listing whos
 
 | Currency | Customer A's maximum | Current bid |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) |
-| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) |
-| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) |
+| USD | USD470 (range: 10000–49999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD560 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -748,17 +748,17 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads an HKD listing with a committed maximum of 60000 minor units).
+customer B(leads an HKD listing with a committed maximum of HKD600 (range: 1000–79999 minor units)).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer C's maximum | 60000 minor units |
+| Customer C's maximum | HKD600 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Commit a maximum of 60000 minor units as customer C.
+1. Commit a maximum of HKD600 (range: 1000–79999 minor units) as customer C.
 2. Read customer C's standing.
 3. Read the listing's public bid history.
 
@@ -766,7 +766,7 @@ customer B(leads an HKD listing with a committed maximum of 60000 minor units).
 
 * Grade10 accepts customer C's commitment.
 * Customer C is reported as not leading.
-* The public history records customer C's accepted action followed by customer B's automatic response, both at 60000 minor units.
+* The public history records customer C's accepted action followed by customer B's automatic response, both at HKD600 (fixed derived value).
 
 ---
 
@@ -798,18 +798,18 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-An open HKD listing where customer A leads with a committed maximum of 1000 minor units, the current bid is 400 minor units, and the applicable increment is 100 minor units.
+An open HKD listing where customer A leads with a committed maximum of HKD10 (range: 1000–79999 minor units), the current bid is HKD4 (range: 1–999 minor units), and the applicable increment is HKD1 (fixed tier increment).
 
 **Test data:**
 
 | `<customer B maximum>` | Resolved current bid | Resolved leader |
 | --- | --- | --- |
-| 500 minor units | 600 minor units | customer A |
-| 700 minor units | 800 minor units | customer A |
-| 950 minor units | 1000 minor units | customer A |
-| 1001 minor units | 1001 minor units | customer B |
-| 1100 minor units | 1100 minor units | customer B |
-| 1120 minor units | 1100 minor units | customer B |
+| HKD5 (range: 1–999 minor units) | HKD6 (fixed derived value) | customer A |
+| HKD7 (range: 1–999 minor units) | HKD8 (fixed derived value) | customer A |
+| HKD9.50 (range: 1–999 minor units) | HKD10 (fixed boundary or equality) | customer A |
+| HKD10.01 (range: 1000–79999 minor units) | HKD10.01 (fixed derived value) | customer B |
+| HKD11 (range: 1000–79999 minor units) | HKD11 (fixed derived value) | customer B |
+| HKD11.20 (range: 1000–79999 minor units) | HKD11 (fixed derived value) | customer B |
 
 **Steps:**
 
@@ -843,23 +843,23 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer A(leads an HKD listing at a current bid of 23500 minor units), and customer B's existing maximum is 22500 minor units.
+customer A(leads an HKD listing at a current bid of HKD280 (range: 1000–79999 minor units)), and customer B's existing maximum is HKD270 (range: 1000–79999 minor units).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer B's raised maximum | 30000 minor units |
+| Customer B's raised maximum | HKD340 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Raise customer B's maximum to 30000 minor units.
+1. Raise customer B's maximum to HKD340 (range: 1000–79999 minor units).
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer A still leads.
-* The current bid is 31000 minor units.
+* The current bid is HKD350 (fixed derived value).
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-29q rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
 ### g10.auction-auto-bidding.US3-TC3: Overtaken bidder raises but stays below the new leader
@@ -882,23 +882,23 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads an HKD listing with a committed maximum of 50000 minor units), having overtaken customer A.
+customer B(leads an HKD listing with a committed maximum of HKD560 (range: 1000–79999 minor units)), having overtaken customer A.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer A's raised maximum | 30000 minor units |
+| Customer A's raised maximum | HKD340 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Raise customer A's maximum to 30000 minor units.
+1. Raise customer A's maximum to HKD340 (range: 1000–79999 minor units).
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer B still leads.
-* The current bid is 31000 minor units.
+* The current bid is HKD350 (fixed derived value).
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-s1n rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
 ### g10.auction-auto-bidding.US3-TC4: Overtaken bidder raises past the current leader
@@ -921,23 +921,23 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads an HKD listing with a committed maximum of 50000 minor units), having overtaken customer A.
+customer B(leads an HKD listing with a committed maximum of HKD560 (range: 1000–79999 minor units)), having overtaken customer A.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer A's raised maximum | 60000 minor units |
+| Customer A's raised maximum | HKD640 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Raise customer A's maximum to 60000 minor units.
+1. Raise customer A's maximum to HKD640 (range: 1000–79999 minor units).
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer A leads.
-* The current bid is 51000 minor units.
+* The current bid is HKD570 (fixed derived value).
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-wr4 rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
 ### g10.auction-auto-bidding.US3-TC5: The current bid cannot exceed the new leader's own maximum
@@ -960,23 +960,23 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer A(leads an HKD listing with a committed maximum of 800000 minor units).
+customer A(leads an HKD listing with a committed maximum of HKD8,400 (range: 800000–3999999 minor units)).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer B's maximum | 810000 minor units |
+| Customer B's maximum | HKD9,200 (range: 800000–3999999 minor units) |
 
 **Steps:**
 
-1. Commit a maximum of 810000 minor units as customer B.
+1. Commit a maximum of HKD9,200 (range: 800000–3999999 minor units) as customer B.
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer B leads.
-* The current bid is 810000 minor units, not higher.
+* The current bid is HKD9,200 (fixed derived value), not higher.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7oh rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
 ### g10.auction-auto-bidding.US3-TC6: Equal maximum keeps the earlier leader and orders both public records together
@@ -999,25 +999,25 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads with a committed maximum of 60000 minor units).
+customer B(leads with a committed maximum of HKD600 (range: 1000–79999 minor units)).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer C's maximum | 60000 minor units |
+| Customer C's maximum | HKD600 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Commit a maximum of 60000 minor units as customer C.
+1. Commit a maximum of HKD600 (range: 1000–79999 minor units) as customer C.
 2. Read the listing's leader and current bid.
 3. Read the public bid history's ordering and timestamps.
 
 **Expected Results:**
 
 * Customer B remains the leader.
-* The current bid is 60000 minor units.
-* The history records customer C's accepted action at 60000 minor units, then customer B's automatic response at 60000 minor units, both in the same resolution timestamp group.
+* The current bid is HKD600 (fixed derived value).
+* The history records customer C's accepted action at HKD600 (range: 1000–79999 minor units), then customer B's automatic response at HKD600 (fixed derived value), both in the same resolution timestamp group.
 
 ---
 
@@ -1273,11 +1273,11 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_3>` | An open HKD listing taking bids, led by customer A |
-| `<leader price>` | 20000 minor units (HKD 200.00), the starting price |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<user B maximum>` | 30000 minor units (HKD 300.00), below `<user A maximum>` |
-| `<increment>` | 1000 minor units (HKD 10.00), the HK$0 tier at `<user B maximum>` |
-| `<user A raise>` | 80000 minor units (HKD 800.00) |
+| `<leader price>` | HKD280 (range: 1000–79999 minor units), the starting price |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<user B maximum>` | HKD340 (range: 1000–79999 minor units), below `<user A maximum>` |
+| `<increment>` | HKD10 (fixed tier increment), the HK$0 tier at `<user B maximum>` |
+| `<user A raise>` | HKD920 (range: 80000–399999 minor units) |
 
 **Steps:**
 
@@ -1325,8 +1325,8 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<listing_1>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800 seconds |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
 | `<bid time>` | The moment customer B confirms |
 
 **Steps:**

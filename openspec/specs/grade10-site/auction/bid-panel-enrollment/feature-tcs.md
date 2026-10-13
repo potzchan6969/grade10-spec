@@ -201,8 +201,8 @@
 | --- | --- |
 | <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
 | <maximum> | The next valid bid shown on the bid panel |
-| Item | <listing_11> state: Open, no bid, starting price 20000 minor units (HKD 200.00); <maximum>: 50000 minor units (HKD 500.00); Standing shown: Leading |
-| Item | <listing_11> state: Open, led by customer B with maximum 80000 minor units (HKD 800.00), current bid 20000 minor units (HKD 200.00); <maximum>: 50000 minor units (HKD 500.00), below customer B's maximum; Standing shown: Outbid, with the next valid bid |
+| Item | <listing_11> state: Open, no bid, starting price HKD280 (range: 1000–79999 minor units); <maximum>: HKD560 (range: 1000–79999 minor units); Standing shown: Leading |
+| Item | <listing_11> state: Open, led by customer B with maximum HKD840 (range: 80000–399999 minor units), current bid HKD280 (range: 1000–79999 minor units); <maximum>: HKD560 (range: 1000–79999 minor units), below customer B's maximum; Standing shown: Outbid, with the next valid bid |
 | <listing_4> | A new open listing this collector has not bid on; the card was linked on an earlier listing, and age was already attested |
 | <the other card> | 5555 5555 5555 4444, a Mastercard. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 | <listing_5> | An open listing taking bids; this collector has a linked card and has placed a bid on it |
@@ -1000,8 +1000,8 @@ Runs once per row of **Test data**.
 
 | <listing_11> state | <maximum> | Standing shown |
 | --- | --- | --- |
-| Open, no bid, starting price 20000 minor units (HKD 200.00) | 50000 minor units (HKD 500.00) | Leading |
-| Open, led by customer B with maximum 80000 minor units (HKD 800.00), current bid 20000 minor units (HKD 200.00) | 50000 minor units (HKD 500.00), below customer B's maximum | Outbid, with the next valid bid |
+| Open, no bid, starting price HKD280 (range: 1000–79999 minor units) | HKD560 (range: 1000–79999 minor units) | Leading |
+| Open, led by customer B with maximum HKD840 (range: 80000–399999 minor units), current bid HKD280 (range: 1000–79999 minor units) | HKD560 (range: 1000–79999 minor units), below customer B's maximum | Outbid, with the next valid bid |
 
 **Steps:**
 

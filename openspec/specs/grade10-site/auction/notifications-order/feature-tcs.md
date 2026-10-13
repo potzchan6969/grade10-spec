@@ -28,7 +28,7 @@
 | --- | --- |
 | `<lot_1>` | A lot that just closed with this winner |
 | `<lot_1>` | An order in Preparing Invoice |
-| `<total>` | 312000 minor units HKD |
+| `<total>` | HKD3,280 (fixed derived value) |
 | `<lot_1>` | An order whose invoice an operator can reissue |
 | `<lot_1>` | An order with a pending invoice and a known payment deadline |
 | `<lot_1>` | An order whose invoice was issued two days ago and is now paid |
@@ -166,7 +166,7 @@
 | Field | Value |
 | --- | --- |
 | `<lot_1>` | An order in Preparing Invoice |
-| `<total>` | 312000 minor units HKD |
+| `<total>` | HKD3,280 (fixed derived value) |
 
 **Steps:**
 

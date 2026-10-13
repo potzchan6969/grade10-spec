@@ -29,8 +29,8 @@
 | --- | --- |
 | <listing_a> | An open HKD listing the customer bid on |
 | <listing_b> | An open HKD listing with no bid from anyone |
-| <opening price> | 35000 minor units (HK$350), <listing_b>'s starting price |
-| <refused bid> | HK$100, below <opening price> |
+| <opening price> | HK$370 (range: 1000–79999 minor units), <listing_b>'s starting price |
+| <refused bid> | HK$120, below <opening price> |
 | Item | Listing state: Open, customer A leads; Filter: **Active**; Standing: Leading |
 | Item | Listing state: Open, customer B leads; Filter: **Active**; Standing: Outbid |
 | Item | Listing state: Closed, customer A won; Filter: **Completed**; Standing: Won |
@@ -38,10 +38,10 @@
 | Item | Listing state: Called off after customer A's bid; Filter: **Completed**; Standing: Canceled |
 | <listing_c> | An open HKD listing led by customer B |
 | <listing_d> | An open HKD listing customer A bid on after their last bid on <listing_c> |
-| <current bid> | 530000 minor units (HK$5,300), <listing_c>'s current bid |
-| <increment> | 8000 minor units (HK$80), the HK$4,000 tier |
-| <next minimum> | <current bid> plus <increment>, 538000 minor units (HK$5,380) |
-| <refused bid> | HK$5,300, equal to <current bid>, below <next minimum> |
+| <current bid> | HK$5,460 (range: 400000–799999 minor units), <listing_c>'s current bid |
+| <increment> | HK$80 (fixed tier increment), the HK$4,000 tier |
+| <next minimum> | <current bid> plus <increment>, HK$5,540 (fixed derived value) |
+| <refused bid> | HK$5,460, equal to <current bid>, below <next minimum> |
 | <listing_g> | A published HKD listing, called off after customer A's bid |
 
 ### Route
@@ -110,19 +110,19 @@
 
 | Item | Value |
 | --- | --- |
-| <listing_h> | An open USD listing with no other bidder, opening price 10000 minor units (USD 100.00) |
-| <maximum> | 50000 minor units (USD 500.00) |
+| <listing_h> | An open USD listing with no other bidder, opening price USD100 (fixed tier boundary) |
+| <maximum> | USD560 (range: 50000–99999 minor units) |
 | <listing_e> | An open HKD listing led by customer A |
-| <customer A maximum> | 20000 minor units (HK$200) |
+| <customer A maximum> | HK$200 (range: 1000–79999 minor units) |
 | <refused raise> | HK$200, equal to <customer A maximum> |
 | <listing_malformed> | An open HKD listing |
 | <malformed maximum> | 10.50, a decimal the browser refuses to submit |
-| <listing_private_max> | An open HKD listing, opening price 24000 minor units (HK$240) |
-| <first maximum> | 36000 minor units (HK$360) |
-| <raised maximum> | 48000 minor units (HK$480) |
-| <listing_engine> | An open HKD listing, current bid 26000 minor units (HK$260) |
-| <customer A maximum> | 64000 minor units (HK$640) |
-| <customer B maximum> | 41000 minor units (HK$410), below <customer A maximum> |
+| <listing_private_max> | An open HKD listing, opening price HK$280 (range: 1000–79999 minor units) |
+| <first maximum> | HK$420 (range: 1000–79999 minor units) |
+| <raised maximum> | HK$560 (range: 1000–79999 minor units) |
+| <listing_engine> | An open HKD listing, current bid HK$280 (range: 1000–79999 minor units) |
+| <customer A maximum> | HK$680 (range: 1000–79999 minor units) |
+| <customer B maximum> | HK$430 (range: 1000–79999 minor units), below <customer A maximum> |
 
 ### Route
 
@@ -170,31 +170,31 @@
 - customer A(signed in) leads <listing_auto> with a maximum above the current bid.
 - customer B(signed in, card linked) is on <listing_auto url>.
 - customer A(signed in) has a combined history on <listing_f>.
-- One decision on that history wrote customer A's maximum, their accepted price of 30000 USD minor units (USD 300.00), customer B's response at 31000 USD minor units (USD 310.00), and customer A's outbid standing, between an older and a newer rival price.
+- One decision on that history wrote customer A's maximum, their accepted price of USD300, customer B's response at USD310, and customer A's outbid standing, between an older and a newer rival price.
 - No new bid is placed on <listing_f> during the pass.
 - Each row starts from the same fixture.
-- customer A(signed in) leads <listing_boundary> with an accepted maximum of 1000 minor units (USD 10.00).
-- The current public bid is 400 minor units (USD 4.00) and the increment is 100 minor units (USD 1.00).
+- customer A(signed in) leads <listing_boundary> with an accepted maximum of USD10.
+- The current public bid is USD4 and the increment is USD1.
 - customer B(signed in, card linked) has placed no bid on <listing_boundary> and is on <listing_boundary url>.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
-| <listing_outbid> | An open HKD listing, opening price 32000 minor units (HK$320) |
-| <customer B maximum> | 47000 minor units (HK$470) |
-| <listing_auto> | An open HKD listing, current bid 28000 minor units (HK$280) |
-| <customer A maximum> | 61000 minor units (HK$610) |
-| <customer B maximum> | 39000 minor units (HK$390) |
+| <listing_outbid> | An open HKD listing, opening price HK$360 (range: 1000–79999 minor units) |
+| <customer B maximum> | HK$520 (range: 1000–79999 minor units) |
+| <listing_auto> | An open HKD listing, current bid HK$300 (range: 1000–79999 minor units) |
+| <customer A maximum> | HK$650 (range: 1000–79999 minor units) |
+| <customer B maximum> | HK$410 (range: 1000–79999 minor units) |
 | <listing_f> | An open USD listing customer A and customer B both bid on |
-| <split decision> | customer A's accepted price of 30000 USD minor units, customer B's response at 31000 USD minor units, and customer A's outbid standing |
-| Item | <customer B maximum>: 500 minor units (USD 5.00); Public history, in order: B at 500, then A's automatic response at 600, same time; Leader: A; B's account history: retains 500 |
-| Item | <customer B maximum>: 700 minor units (USD 7.00); Public history, in order: B at 700, then A's automatic response at 800, same time; Leader: A; B's account history: retains 700 |
-| Item | <customer B maximum>: 950 minor units (USD 9.50); Public history, in order: B at 950, then A's automatic response at 1000; A's response does not exceed 1000; Leader: A; B's account history: — |
-| Item | <customer B maximum>: 1000 minor units (USD 10.00); Public history, in order: B first at 1000, then A's automatic response at 1000, same time; Leader: A; B's account history: the maximum stays private |
-| Item | <customer B maximum>: 1001 minor units (USD 10.01); Public history, in order: B once at 1001; no new bid record for A; Leader: B; B's account history: retains 1001 |
-| Item | <customer B maximum>: 1100 minor units (USD 11.00); Public history, in order: B once at 1100; no intermediate record; no new bid record for A; Leader: B; B's account history: — |
-| Item | <customer B maximum>: 1120 minor units (USD 11.20); Public history, in order: B once at 1100, one increment above A's maximum; no new bid record for A; Leader: B; B's account history: retains 1120 |
+| <split decision> | customer A's accepted price of USD320 (range: 10000–49999 minor units), customer B's response at USD330 (range: 10000–49999 minor units), and customer A's outbid standing |
+| Item | <customer B maximum>: USD5 (range: 100–9999 minor units); Public history, in order: B at 500, then A's automatic response at 600, same time; Leader: A; B's account history: retains 500 |
+| Item | <customer B maximum>: USD7 (range: 100–9999 minor units); Public history, in order: B at 700, then A's automatic response at 800, same time; Leader: A; B's account history: retains 700 |
+| Item | <customer B maximum>: USD9.50 (range: 100–9999 minor units); Public history, in order: B at 950, then A's automatic response at 1000; A's response does not exceed 1000; Leader: A; B's account history: — |
+| Item | <customer B maximum>: USD10 (range: 100–9999 minor units); Public history, in order: B first at 1000, then A's automatic response at 1000, same time; Leader: A; B's account history: the maximum stays private |
+| Item | <customer B maximum>: USD10.01 (range: 100–9999 minor units); Public history, in order: B once at 1001; no new bid record for A; Leader: B; B's account history: retains 1001 |
+| Item | <customer B maximum>: USD11 (range: 100–9999 minor units); Public history, in order: B once at 1100; no intermediate record; no new bid record for A; Leader: B; B's account history: — |
+| Item | <customer B maximum>: USD11.20 (range: 100–9999 minor units); Public history, in order: B once at 1100, one increment above A's maximum; no new bid record for A; Leader: B; B's account history: retains 1120 |
 
 ### Route
 
@@ -475,8 +475,8 @@
 | --- | --- |
 | <listing_a> | An open HKD listing the customer bid on |
 | <listing_b> | An open HKD listing with no bid from anyone |
-| <opening price> | 35000 minor units (HK$350), <listing_b>'s starting price |
-| <refused bid> | HK$100, below <opening price> |
+| <opening price> | HK$370 (range: 1000–79999 minor units), <listing_b>'s starting price |
+| <refused bid> | HK$120, below <opening price> |
 
 **Steps:**
 
@@ -666,10 +666,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | <listing_c> | An open HKD listing led by customer B |
 | <listing_d> | An open HKD listing customer A bid on after their last bid on <listing_c> |
-| <current bid> | 530000 minor units (HK$5,300), <listing_c>'s current bid |
-| <increment> | 8000 minor units (HK$80), the HK$4,000 tier |
-| <next minimum> | <current bid> plus <increment>, 538000 minor units (HK$5,380) |
-| <refused bid> | HK$5,300, equal to <current bid>, below <next minimum> |
+| <current bid> | HK$5,460 (range: 400000–799999 minor units), <listing_c>'s current bid |
+| <increment> | HK$80 (fixed tier increment), the HK$4,000 tier |
+| <next minimum> | <current bid> plus <increment>, HK$5,540 (fixed derived value) |
+| <refused bid> | HK$5,460, equal to <current bid>, below <next minimum> |
 
 **Steps:**
 
@@ -761,8 +761,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_h> | An open USD listing with no other bidder, opening price 10000 minor units (USD 100.00) |
-| <maximum> | 50000 minor units (USD 500.00) |
+| <listing_h> | An open USD listing with no other bidder, opening price USD100 (fixed tier boundary) |
+| <maximum> | USD560 (range: 50000–99999 minor units) |
 
 **Steps:**
 
@@ -803,7 +803,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <listing_e> | An open HKD listing led by customer A |
-| <customer A maximum> | 20000 minor units (HK$200) |
+| <customer A maximum> | HK$200 (range: 1000–79999 minor units) |
 | <refused raise> | HK$200, equal to <customer A maximum> |
 
 **Steps:**
@@ -891,9 +891,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_private_max> | An open HKD listing, opening price 24000 minor units (HK$240) |
-| <first maximum> | 36000 minor units (HK$360) |
-| <raised maximum> | 48000 minor units (HK$480) |
+| <listing_private_max> | An open HKD listing, opening price HK$280 (range: 1000–79999 minor units) |
+| <first maximum> | HK$420 (range: 1000–79999 minor units) |
+| <raised maximum> | HK$560 (range: 1000–79999 minor units) |
 
 **Steps:**
 
@@ -936,9 +936,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_engine> | An open HKD listing, current bid 26000 minor units (HK$260) |
-| <customer A maximum> | 64000 minor units (HK$640) |
-| <customer B maximum> | 41000 minor units (HK$410), below <customer A maximum> |
+| <listing_engine> | An open HKD listing, current bid HK$280 (range: 1000–79999 minor units) |
+| <customer A maximum> | HK$680 (range: 1000–79999 minor units) |
+| <customer B maximum> | HK$430 (range: 1000–79999 minor units), below <customer A maximum> |
 
 **Steps:**
 
@@ -987,8 +987,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_outbid> | An open HKD listing, opening price 32000 minor units (HK$320) |
-| <customer B maximum> | 47000 minor units (HK$470) |
+| <listing_outbid> | An open HKD listing, opening price HK$360 (range: 1000–79999 minor units) |
+| <customer B maximum> | HK$520 (range: 1000–79999 minor units) |
 
 **Steps:**
 
@@ -1029,9 +1029,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_auto> | An open HKD listing, current bid 28000 minor units (HK$280) |
-| <customer A maximum> | 61000 minor units (HK$610) |
-| <customer B maximum> | 39000 minor units (HK$390) |
+| <listing_auto> | An open HKD listing, current bid HK$300 (range: 1000–79999 minor units) |
+| <customer A maximum> | HK$650 (range: 1000–79999 minor units) |
+| <customer B maximum> | HK$410 (range: 1000–79999 minor units) |
 
 **Steps:**
 
@@ -1130,7 +1130,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer A(signed in) has a combined history on <listing_f>.
-* One decision on that history wrote customer A's maximum, their accepted price of 30000 USD minor units (USD 300.00), customer B's response at 31000 USD minor units (USD 310.00), and customer A's outbid standing, between an older and a newer rival price.
+* One decision on that history wrote customer A's maximum, their accepted price of USD320, customer B's response at USD330, and customer A's outbid standing, between an older and a newer rival price.
 * No new bid is placed on <listing_f> during the pass.
 
 **Test data:**
@@ -1138,7 +1138,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <listing_f> | An open USD listing customer A and customer B both bid on |
-| <split decision> | customer A's accepted price of 30000 USD minor units, customer B's response at 31000 USD minor units, and customer A's outbid standing |
+| <split decision> | customer A's accepted price of USD320 (range: 10000–49999 minor units), customer B's response at USD330 (range: 10000–49999 minor units), and customer A's outbid standing |
 
 **Steps:**
 
@@ -1175,21 +1175,21 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Each row starts from the same fixture.
-* customer A(signed in) leads <listing_boundary> with an accepted maximum of 1000 minor units (USD 10.00).
-* The current public bid is 400 minor units (USD 4.00) and the increment is 100 minor units (USD 1.00).
+* customer A(signed in) leads <listing_boundary> with an accepted maximum of USD10.
+* The current public bid is USD4 and the increment is USD1.
 * customer B(signed in, card linked) has placed no bid on <listing_boundary> and is on <listing_boundary url>.
 
 **Test data:**
 
 | <customer B maximum> | Public history, in order | Leader | B's account history |
 | --- | --- | --- | --- |
-| 500 minor units (USD 5.00) | B at 500, then A's automatic response at 600, same time | A | retains 500 |
-| 700 minor units (USD 7.00) | B at 700, then A's automatic response at 800, same time | A | retains 700 |
-| 950 minor units (USD 9.50) | B at 950, then A's automatic response at 1000; A's response does not exceed 1000 | A | — |
-| 1000 minor units (USD 10.00) | B first at 1000, then A's automatic response at 1000, same time | A | the maximum stays private |
-| 1001 minor units (USD 10.01) | B once at 1001; no new bid record for A | B | retains 1001 |
-| 1100 minor units (USD 11.00) | B once at 1100; no intermediate record; no new bid record for A | B | — |
-| 1120 minor units (USD 11.20) | B once at 1100, one increment above A's maximum; no new bid record for A | B | retains 1120 |
+| USD5 (range: 100–9999 minor units) | B at 500, then A's automatic response at 600, same time | A | retains 500 |
+| USD7 (range: 100–9999 minor units) | B at 700, then A's automatic response at 800, same time | A | retains 700 |
+| USD9.50 (range: 100–9999 minor units) | B at 950, then A's automatic response at 1000; A's response does not exceed 1000 | A | — |
+| USD10 (range: 100–9999 minor units) | B first at 1000, then A's automatic response at 1000, same time | A | the maximum stays private |
+| USD10.01 (range: 100–9999 minor units) | B once at 1001; no new bid record for A | B | retains 1001 |
+| USD11 (range: 100–9999 minor units) | B once at 1100; no intermediate record; no new bid record for A | B | — |
+| USD11.20 (range: 100–9999 minor units) | B once at 1100, one increment above A's maximum; no new bid record for A | B | retains 1120 |
 
 **Steps:**
 

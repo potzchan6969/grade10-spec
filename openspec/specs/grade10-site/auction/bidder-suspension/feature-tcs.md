@@ -84,8 +84,8 @@
 
 **Starting state:**
 
-- `<lot_3>` is open and led by `customer A` at 30000 HKD minor units.
-- `customer A` holds a maximum of 50000 HKD minor units on `<lot_3>`.
+- `<lot_3>` is open and led by `customer A` at HKD340 (range: 1000–79999 minor units).
+- `customer A` holds a maximum of HKD560 (range: 1000–79999 minor units) on `<lot_3>`.
 - `customer A` has an auction invoice whose payment deadline is shortly due.
 - `customer B` can bid on `<lot_3>`.
 - `customer A` is suspended.
@@ -97,8 +97,8 @@
 
 | Item | Value |
 | --- | --- |
-| Item | `<lot_3>`: Open lot led by `customer A` at 30000 HKD minor units; Event after suspension: No new bid; Expected lot state: `customer A` still leads at the same price and history |
-| Item | `<lot_3>`: Open lot led by `customer A` at 30000 HKD minor units; Event after suspension: `customer B` commits a maximum of 40000 HKD minor units; Expected lot state: Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
+| Item | `<lot_3>`: Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units); Event after suspension: No new bid; Expected lot state: `customer A` still leads at the same price and history |
+| Item | `<lot_3>`: Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units); Event after suspension: `customer B` commits a maximum of HKD470 (range: 1000–79999 minor units); Expected lot state: Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
 | Item | `<lot_5>`: Open lot whose highest standing maximum belongs to suspended `customer A` |
 
 ### Route
@@ -107,7 +107,7 @@
 2. Wait for `customer A`'s payment deadline to pass.
 3. Perform the row's `Event after suspension`.
 4. Reload `<lot_3>`.
-   - `customer A` still leads `<lot_3>` at 30000 HKD minor units. g10.auction-bidder-suspension.US2-TC1
+   - `customer A` still leads `<lot_3>` at HKD340 (fixed unchanged value). g10.auction-bidder-suspension.US2-TC1
    - The leader, price and bid history match the row's `Expected lot state` value. g10.auction-bidder-suspension.US2-TC1
 5. Wait for `<lot_5>` to close.
 6. Sign in as `customer A`.
@@ -513,8 +513,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_3>` is open and led by `customer A` at 30000 HKD minor units.
-* `customer A` holds a maximum of 50000 HKD minor units on `<lot_3>`.
+* `<lot_3>` is open and led by `customer A` at HKD340 (range: 1000–79999 minor units).
+* `customer A` holds a maximum of HKD560 (range: 1000–79999 minor units) on `<lot_3>`.
 * `customer A` has an auction invoice whose payment deadline is shortly due.
 * `customer B` can bid on `<lot_3>`.
 
@@ -522,8 +522,8 @@ Runs once per row of **Test data**.
 
 | `<lot_3>` | Event after suspension | Expected lot state |
 | --- | --- | --- |
-| Open lot led by `customer A` at 30000 HKD minor units | No new bid | `customer A` still leads at the same price and history |
-| Open lot led by `customer A` at 30000 HKD minor units | `customer B` commits a maximum of 40000 HKD minor units | Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
+| Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units) | No new bid | `customer A` still leads at the same price and history |
+| Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units) | `customer B` commits a maximum of HKD470 (range: 1000–79999 minor units) | Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
 
 **Steps:**
 
@@ -534,7 +534,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `customer A` still leads `<lot_3>` at 30000 HKD minor units.
+* `customer A` still leads `<lot_3>` at HKD340 (fixed unchanged value).
 * The leader, price and bid history match the row's `Expected lot state` value.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-yp6 rev=1 -->

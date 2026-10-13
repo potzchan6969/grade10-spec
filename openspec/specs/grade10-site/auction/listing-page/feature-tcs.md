@@ -324,17 +324,17 @@
 | Item | Value |
 | --- | --- |
 | `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | 480000 minor units |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
 | `<bid count>` | 3 |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 | `<listing_2>` | An open HKD listing with one accepted bid, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800s (30mins) |
 | `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
-| `<user A maximum>` | 500000 minor units |
-| `<user B maximum>` | 600000 minor units, above `<user A maximum>` |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
-| `<user A maximum>` | 900000 minor units |
-| `<user B maximum>` | 600000 minor units, below `<user A maximum>` |
+| `<user A maximum>` | HKD5,280 (range: 400000–799999 minor units) |
+| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), above `<user A maximum>` |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
+| `<user A maximum>` | HKD9,280 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), below `<user A maximum>` |
 | `<maximum>` | At least two increments above the opening price |
 | `<higher maximum>` | At least two increments above `<maximum>` |
 
@@ -397,7 +397,7 @@
 
 - collector A has `<listing_3>` open with a live line.
 - customer B(card linked, email `<email_mike>`) can bid on `<listing_3>` from another session.
-- `<listing_3>` is open, its close about 10 minutes away.
+- `<listing_3>` is open, its close about 12 minutes away.
 - customer A is on the lot page for `<listing_3>` on a device whose clock is `<device skew>`.
 - customer B is on the same lot page on a device whose clock is correct.
 - `<listing_4>` is open with no accepted bid, its close under a minute away.
@@ -410,19 +410,19 @@
 | Item | Value |
 | --- | --- |
 | email_mike | `mike@example.com` |
-| Item | `<device skew>`: 5 minutes ahead |
-| Item | `<device skew>`: 5 minutes behind |
+| Item | `<device skew>`: 4 minutes ahead |
+| Item | `<device skew>`: 4 minutes behind |
 | Item | `<device skew>`: Field; Value 2: Value |
-| Item | `<device skew>`: `<listing_3>`; Value 2: An open HKD listing, close about 10 minutes away |
+| Item | `<device skew>`: `<listing_3>`; Value 2: An open HKD listing, close about 12 minutes away |
 | `<listing_4>` | An open HKD listing with no bids, extension duration 1800s (30mins) |
 | `<last moment>` | 0.4 seconds before the close |
-| Item | `<away>`: customer A's device sleeps for 1 minute |
-| Item | `<away>`: customer A's browser goes offline for 1 minute, then reconnects |
-| Item | `<away>`: customer A switches to another tab for 1 minute, then back |
+| Item | `<away>`: customer A's device sleeps for 45 seconds |
+| Item | `<away>`: customer A's browser goes offline for 45 seconds, then reconnects |
+| Item | `<away>`: customer A switches to another tab for 45 seconds, then back |
 | Item | `<away>`: Field; Value 2: Value |
-| Item | `<away>`: `<listing_3>`; Value 2: An open HKD listing, close about 10 minutes away |
-| Item | `<away>`: `<clock change>`; Value 2: customer A's device clock set 2 minutes ahead |
-| `<listing_3>` | An open HKD listing, close about 10 minutes away |
+| Item | `<away>`: `<listing_3>`; Value 2: An open HKD listing, close about 12 minutes away |
+| Item | `<away>`: `<clock change>`; Value 2: customer A's device clock set 90 seconds ahead |
+| `<listing_3>` | An open HKD listing, close about 12 minutes away |
 | `<correction>` | 0.6 seconds, under a second |
 
 ### Route
@@ -435,7 +435,7 @@
    - Its readable label is a listing pseudonym, not an email. g10.auction-listing-page.US12-TC9
 4. Read Time left on customer A's page and customer B's page at the same moment.
    - Both pages read the same Time left, to the second, at step 1. g10.auction-listing-page.US13-TC1
-5. Wait 1 minute.
+5. Wait 45 seconds.
    - Both pages read the same Time left, to the second, at step 3. g10.auction-listing-page.US13-TC1
 6. Read Time left on both pages at the same moment.
    - Neither page is off by `<device skew>`. g10.auction-listing-page.US13-TC1
@@ -486,10 +486,10 @@
 | Item | `<listing_5>`: Open with no accepted bid; `<viewer>`: customer A; `<result>`: Ended, with No bids under it |
 | `<listing_6>` | An HKD listing led by customer A |
 | `<listing_9>` | An HKD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | 480000 minor units |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
-| `<listing_10>` | An open HKD listing with no bids, starting price 20000 minor units, extension duration 1800s (30mins), no cap |
-| `<bid amount>` | 20000 minor units, the opening price |
+| `<leader price>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| `<listing_10>` | An open HKD listing with no bids, starting price HKD280 (range: 1000–79999 minor units), extension duration 1800s (30mins), no cap |
+| `<bid amount>` | HKD280 (range: 1000–79999 minor units), the opening price |
 | `<listing_11>` | An HKD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
 | `<bid amount>` | At or above the minimum next bid |
 
@@ -1775,9 +1775,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | 480000 minor units |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
 | `<bid count>` | 3 |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -1861,8 +1861,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | 480000 minor units |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -1906,8 +1906,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_1>` | An open HKD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | 480000 minor units |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -1951,10 +1951,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
-| `<current bid>` | 480000 minor units |
-| `<user A maximum>` | 500000 minor units |
-| `<user B maximum>` | 600000 minor units, above `<user A maximum>` |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<user A maximum>` | HKD5,280 (range: 400000–799999 minor units) |
+| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), above `<user A maximum>` |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
 
 **Steps:**
 
@@ -2000,8 +2000,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_8>` | An open HKD listing, scheduled close more than an hour away |
-| `<user A maximum>` | 900000 minor units |
-| `<user B maximum>` | 600000 minor units, below `<user A maximum>` |
+| `<user A maximum>` | HKD9,280 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD6,160 (range: 400000–799999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -2178,7 +2178,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_3>` is open, its close about 10 minutes away.
+* `<listing_3>` is open, its close about 12 minutes away.
 * customer A is on the lot page for `<listing_3>` on a device whose clock is `<device skew>`.
 * customer B is on the same lot page on a device whose clock is correct.
 
@@ -2186,17 +2186,17 @@ Runs once per row of **Test data**.
 
 | `<device skew>` |
 | --- |
-| 5 minutes ahead |
-| 5 minutes behind |
+| 4 minutes ahead |
+| 4 minutes behind |
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open HKD listing, close about 10 minutes away |
+| `<listing_3>` | An open HKD listing, close about 12 minutes away |
 
 **Steps:**
 
 1. Read Time left on customer A's page and customer B's page at the same moment.
-2. Wait 1 minute.
+2. Wait 45 seconds.
 3. Read Time left on both pages at the same moment.
 
 **Expected Results:**
@@ -2271,7 +2271,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_3>` is open, its close about 10 minutes away.
+* `<listing_3>` is open, its close about 12 minutes away.
 * customer A is on the lot page for `<listing_3>`.
 * customer B is on the same lot page on a device whose clock is correct.
 
@@ -2279,14 +2279,14 @@ Runs once per row of **Test data**.
 
 | `<away>` |
 | --- |
-| customer A's device sleeps for 1 minute |
-| customer A's browser goes offline for 1 minute, then reconnects |
-| customer A switches to another tab for 1 minute, then back |
+| customer A's device sleeps for 45 seconds |
+| customer A's browser goes offline for 45 seconds, then reconnects |
+| customer A switches to another tab for 45 seconds, then back |
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open HKD listing, close about 10 minutes away |
-| `<clock change>` | customer A's device clock set 2 minutes ahead |
+| `<listing_3>` | An open HKD listing, close about 12 minutes away |
+| `<clock change>` | customer A's device clock set 90 seconds ahead |
 
 **Steps:**
 
@@ -2320,7 +2320,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_3>` is open, its close about 10 minutes away.
+* `<listing_3>` is open, its close about 12 minutes away.
 * customer A is on the lot page for `<listing_3>`.
 * The auction service's time, read on customer A's return, is `<correction>` earlier than the page's countdown assumes, so the new reading would add time.
 
@@ -2328,7 +2328,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open HKD listing, close about 10 minutes away |
+| `<listing_3>` | An open HKD listing, close about 12 minutes away |
 | `<correction>` | 0.6 seconds, under a second |
 
 **Steps:**
@@ -2465,7 +2465,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_7>` | An HKD listing in extended bidding, led by customer B |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | 521000 minor units, at or above the minimum next bid |
 
 **Steps:**
 
@@ -2511,8 +2511,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_9>` | An HKD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | 480000 minor units |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<leader price>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2559,8 +2559,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_10>` | An open HKD listing with no bids, starting price 20000 minor units, extension duration 1800s (30mins), no cap |
-| `<bid amount>` | 20000 minor units, the opening price |
+| `<listing_10>` | An open HKD listing with no bids, starting price HKD280 (range: 1000–79999 minor units), extension duration 1800s (30mins), no cap |
+| `<bid amount>` | HKD280 (range: 1000–79999 minor units), the opening price |
 
 **Steps:**
 

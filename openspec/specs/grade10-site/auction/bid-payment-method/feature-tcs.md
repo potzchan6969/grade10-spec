@@ -29,14 +29,14 @@
 | <listing_2> | An open listing taking bids, not bid on by this collector |
 | <next bid> | The next valid bid shown on the bid panel |
 | <listing_8> | An open HKD listing led by customer A |
-| <user A maximum> | 800000 minor units (HKD 8,000.00) |
+| <user A maximum> | HKD8,400 (range: 800000–3999999 minor units) |
 | <listing_10> | An open listing taking bids, led by this collector |
 | <the successful Visa> | 4242 4242 4242 4242, the card <listing_10> is locked to. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 | <the other card> | 5555 5555 5555 4444. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
 | <locked maximum> | The collector's maximum on <listing_10> |
 | <other-card maximum> | A maximum above <locked maximum> |
-| <listing_11> | An open HKD listing, current bid 20000 minor units (HKD 200.00), minimum next bid 21000 minor units (HKD 210.00) |
-| <low maximum> | 20500 minor units (HKD 205.00), below the minimum next bid |
+| <listing_11> | An open HKD listing, current bid HKD280 (range: 1000–79999 minor units), minimum next bid HKD290 (range: 1000–79999 minor units) |
+| <low maximum> | HKD285 (range: 1000–79999 minor units), below the minimum next bid |
 
 ### Route
 
@@ -77,7 +77,7 @@
 21. Enter <low maximum> in the custom maximum on the bid panel.
 22. Click the bid action.
 23. Read the bid form and the linked card on the bid panel.
-   - the bid form names the minimum next bid, 21000 minor units (HKD 210.00), and Change is still offered on the linked card. g10.auction-bid-payment-method.US1-TC10
+   - the bid form names the minimum next bid, HKD290, and Change is still offered on the linked card. g10.auction-bid-payment-method.US1-TC10
 24. Click Change on the linked card.
    - opens card-link setup. g10.auction-bid-payment-method.US1-TC10
 
@@ -416,7 +416,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | <listing_8> | An open HKD listing led by customer A |
-| <user A maximum> | 800000 minor units (HKD 8,000.00) |
+| <user A maximum> | HKD8,400 (range: 800000–3999999 minor units) |
 
 **Steps:**
 
@@ -542,8 +542,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <listing_11> | An open HKD listing, current bid 20000 minor units (HKD 200.00), minimum next bid 21000 minor units (HKD 210.00) |
-| <low maximum> | 20500 minor units (HKD 205.00), below the minimum next bid |
+| <listing_11> | An open HKD listing, current bid HKD280 (range: 1000–79999 minor units), minimum next bid HKD290 (range: 1000–79999 minor units) |
+| <low maximum> | HKD285 (range: 1000–79999 minor units), below the minimum next bid |
 
 **Steps:**
 
@@ -554,7 +554,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 3: the bid form names the minimum next bid, 21000 minor units (HKD 210.00), and Change is still offered on the linked card.
+* Step 3: the bid form names the minimum next bid, HKD290, and Change is still offered on the linked card.
 * Step 4 opens card-link setup.
 
 ---

@@ -199,6 +199,8 @@ Lines scoped narrower than the store, one `###` per scope, by its path (`grade10
 ### grade10-site/auction
 
 - 2026-09-25, grade10-site/auction/domain-tcs.md: Two bidders use separate sessions. A maximum is entered in the custom maximum on the bid panel.
+- 2026-10-12, grade10-site/auction: For numeric test data, choose a representative value different from the linked scenario's example when the rule accepts a range or equivalence partition. Keep the scenario value when it is a boundary, tier threshold, equality or comparison value, computed fixture, or the specification gives no valid alternate range; bind any derived expected value to the row or formula.
+- 2026-10-13, grade10-site/auction: Every minor-unit test-data fixture uses a compact major-price reading: replaceable values use `HKD280 (range: 1000–79999 minor units)`, source-defined open bounds use `HKD70 (range: >0 minor units)`, and boundary, equality, derived, configured or otherwise fixed values use `HKD10 (fixed ...)`. Omit trailing `.00` for whole major amounts; keep non-zero fractional digits. These readings guide fixture selection and do not assert the product's display text.
 
 ## Refused
 

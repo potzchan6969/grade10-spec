@@ -14,7 +14,7 @@
 - <order_1> had <invoice_1> replaced by <invoice_2>, `pending`.
 - <order_1> is `payment_verifying` on <invoice_1>.
 - <order_1> has an invoice, status `expired`.
-- An auction order's card invoice of 323225 minor units in HKD is `expired`.
+- An auction order's card invoice of HKD3,232.25 (fixed derived value) is `expired`.
 - An auction order's invoice is `payment_verifying`.
 
 **Shared test data:**
@@ -48,7 +48,7 @@
    - <invoice_1> is still current and `payment_verifying`. g10.auction-order-status.US1-TC14
 8. Record a winner proof upload.
    - The write is refused; the status stays `expired`. g10.auction-order-status.US1-TC15
-9. Complete a card payment of 323225 minor units in HKD for the invoice.
+9. Complete a card payment of HKD3,232.25 (fixed derived value) for the invoice.
 10. Read the invoice status, the payment and the derived order status.
    - The invoice status is `paid`. g10.auction-order-status.US1-TC16
    - The payment is recorded and flagged Paid late. g10.auction-order-status.US1-TC16
@@ -460,11 +460,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order's card invoice of 323225 minor units in HKD is `expired`.
+* An auction order's card invoice of HKD3,232.25 (fixed derived value) is `expired`.
 
 **Steps:**
 
-1. Complete a card payment of 323225 minor units in HKD for the invoice.
+1. Complete a card payment of HKD3,232.25 (fixed derived value) for the invoice.
 2. Read the invoice status, the payment and the derived order status.
 
 **Expected Results:**

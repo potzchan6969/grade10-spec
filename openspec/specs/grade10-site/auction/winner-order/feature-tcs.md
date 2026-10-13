@@ -30,9 +30,9 @@
 | `<order_prefilled>` | An unpaid order whose delivery address is pre-filled from the account default, not confirmed |
 | `<order_unpaid>` | An unpaid HKD order, total `<total before>` |
 | `<address_far>` | A saved address whose shipping and insurance cost `<difference>` more |
-| `<total before>` | HKD 3,120.00 (312000 minor units) |
-| `<difference>` | HKD 40.00 (4000 minor units) |
-| `<total after>` | HKD 3,160.00: `<total before>` plus `<difference>` |
+| `<total before>` | HKD3,280 (fixed derived value) |
+| `<difference>` | HKD50 (range: 1000–79999 minor units) |
+| `<total after>` | HKD 3,330.00: `<total before>` plus `<difference>` |
 | `<lot_1>` | A lot taking bids, led by customer A, closing within a minute |
 | `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
 | `<order_unpaid>` | An unpaid order inside its payment deadline |
@@ -311,10 +311,10 @@
 - Country/Region has no value selected.
 - Other required address fields that the form needs are filled.
 - customer(winner) holds an auction order whose invoice has not been sent.
-- customer(winner) holds a paid auction order whose invoice includes Tax of 6000 minor units in HKD.
+- customer(winner) holds a paid auction order whose invoice includes Tax of HKD70 (range: >0 minor units).
 - customer(winner) holds a paid auction order whose operator added no Tax.
 - admin(operator with payment-processing) is on a card order in Preparing Invoice.
-- The order's lines before Tax total 312000 minor units in HKD.
+- The order's lines before Tax total HKD3,280 (fixed derived value).
 - Grade10 holds no bank details for the currency in the row.
 - customer(winner) holds an auction order in that currency in Awaiting Setup.
 - Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
@@ -360,19 +360,19 @@
 11. Open Winner Order and read Order Summary.
 12. Open the invoice PDF.
 13. Open the receipt PDF.
-   - Order Summary shows Tax of 6000 minor units in HKD between Insurance and Payment Processing Fee. g10.auction-winner-order.US1-TC31
+   - Order Summary shows Tax of HKD70 (range: >0 minor units) between Insurance and Payment Processing Fee. g10.auction-winner-order.US1-TC31
    - Order Summary offers the Tax info tip with the stated copy. g10.auction-winner-order.US1-TC31
-   - The invoice PDF and the receipt PDF each show Tax of 6000 minor units in HKD between Insurance and Subtotal. g10.auction-winner-order.US1-TC31
-   - Each PDF's Subtotal includes the 6000 minor units in HKD. g10.auction-winner-order.US1-TC31
+   - The invoice PDF and the receipt PDF each show Tax of HKD70 (range: >0 minor units) between Insurance and Subtotal. g10.auction-winner-order.US1-TC31
+   - Each PDF's Subtotal includes Tax of HKD70 (range: >0 minor units). g10.auction-winner-order.US1-TC31
 14. Open Winner Order and read Order Summary.
 15. Open the invoice PDF.
 16. Open the receipt PDF.
    - No surface shows a Tax line. g10.auction-winner-order.US1-TC32
    - Order Summary offers no Tax info tip. g10.auction-winner-order.US1-TC32
-17. Add Tax of 6000 minor units in HKD.
+17. Add Tax of HKD70 (range: >0 minor units).
 18. Send the invoice.
 19. Read its Subtotal and payment processing fee inputs.
-   - The Subtotal is 318000 minor units in HKD. g10.auction-winner-order.US1-TC33
+   - The Subtotal is HKD3,350 (fixed derived value). g10.auction-winner-order.US1-TC33
    - Grade10 computes the payment processing fee from that Subtotal. g10.auction-winner-order.US1-TC33
 20. Start setup, choose the home address and reach the payment method choice.
    - Only card is offered. g10.auction-winner-order.US1-TC48
@@ -451,32 +451,32 @@
 | Item | Value |
 | --- | --- |
 | `<order_paid>` | An HKD order paid in full at `<final amount>` |
-| `<final amount>` | HKD 3,160.00 (316000 minor units) |
+| `<final amount>` | HKD3,330 (range: 80000–399999 minor units) |
 | `<order_paid>` | An HKD order with invoice total `<total>`, paid by one payment of `<total>` |
-| `<total>` | HKD 1,000.00 (100000 minor units) |
+| `<total>` | HKD1,080 (fixed derived value) |
 | `<order_parts>` | An HKD order with invoice total `<total>`, paid `<payment 1>` then `<payment 2>` |
-| `<total>` | HKD 1,000.00 |
-| `<payment 1>` | HKD 400.00 |
-| `<payment 2>` | HKD 300.00 |
+| `<total>` | HKD 1,080.00 |
+| `<payment 1>` | HKD 420.00 |
+| `<payment 2>` | HKD 310.00 |
 | Item | Field: Receipt; Value: Previous Payments; Value 3: Current Payment Received; Value 4: Remaining Balance Due |
-| Item | Field: First; Value: 0; Value 3: HKD 400.00; Value 4: HKD 600.00: `<total>` − `<payment 1>` |
-| Item | Field: Second; Value: HKD 400.00; Value 3: HKD 300.00; Value 4: HKD 300.00: `<total>` − `<payment 1>` − `<payment 2>` |
+| Item | Field: First; Value: 0; Value 3: HKD 420.00; Value 4: HKD 660.00: `<total>` − `<payment 1>` |
+| Item | Field: Second; Value: HKD 420.00; Value 3: HKD 310.00; Value 4: HKD 350.00: `<total>` − `<payment 1>` − `<payment 2>` |
 | `<order_tolerance>` | An HKD order, total `<total>`, paid `<paid before>`, then closed Paid by an operator recording `<closing payment>` within the closing tolerance |
-| `<paid before>` | HKD 900.00 |
-| `<closing payment>` | HKD 50.00 |
+| `<paid before>` | HKD 960.00 |
+| `<closing payment>` | HKD 60.00 |
 | `<order_over>` | An HKD order, total `<total>`, with an operator-confirmed payment of `<payment>` |
-| `<payment>` | HKD 1,100.00 |
-| `<order_three>` | An HKD order, total HKD 1,000.00, paid HKD 200.00, HKD 300.00, HKD 100.00 in that order, one receipt each |
-| Item | Field: First; Value: 0; Value 3: HKD 200.00; Value 4: HKD 800.00 |
-| Item | Field: Second; Value: HKD 200.00; Value 3: HKD 300.00; Value 4: HKD 500.00 |
-| Item | Field: Third; Value: HKD 500.00; Value 3: HKD 100.00; Value 4: HKD 400.00 |
+| `<payment>` | HKD 1,190.00 |
+| `<order_three>` | An HKD order, total HKD 1,080.00, paid HKD 220.00, HKD 310.00, HKD 140.00 in that order, one receipt each |
+| Item | Field: First; Value: 0; Value 3: HKD 220.00; Value 4: HKD 860.00 |
+| Item | Field: Second; Value: HKD 220.00; Value 3: HKD 310.00; Value 4: HKD 550.00 |
+| Item | Field: Third; Value: HKD 530.00; Value 3: HKD 140.00; Value 4: HKD 410.00 |
 | `<order_shipped>` | A paid order dispatched with a carrier, `<tracking number>` and a recorded tracker link |
 | `<order_shipped_no_link>` | A paid order dispatched with a carrier and `<tracking number>`, and no tracker link |
 | `<order_shipped>` | A paid, dispatched order |
 | `<handover time>` | The handover timestamp in the carrier's report |
 | `<signature>` | The signature image in the carrier's report |
 | `<order_verifying>` | An HKD order, invoice `INV-202609-LK7P2Q-02`, total `<total>`, reading Payment Verifying |
-| `<total>` | HKD 3,170.00 (317000 minor units) |
+| `<total>` | HKD3,290 (fixed derived value) |
 | `<confirm time>` | 2026-09-30T16:30:00Z, October in Hong Kong |
 | `<receipt id>` | `REC-202610-LK7P2Q-02-P1` |
 | `<order_paid>` | A paid order whose invoice was once reissued |
@@ -571,10 +571,10 @@
 | Item | Value |
 | --- | --- |
 | `<order_shipped_no_link>` | A paid, fulfilled order with a ship date and a tracking number, and no recorded tracker link |
-| Item | Winning bid: HKD 10,000.00 (1000000 minor units); Minimum: HKD 0.00; Buyer's Premium: HKD 2,000.00; Rule: 20% of the winning bid |
+| Item | Winning bid: HKD13,500 (range: 800000–3999999 minor units); Minimum: HKD 0; Buyer's Premium: HKD 2,700; Rule: 20% of the winning bid |
 | Item | Winning bid: JPY 1003; Minimum: JPY 0; Buyer's Premium: JPY 201; Rule: 20% is 200.6, rounded half up |
 | Item | Winning bid: JPY 1002; Minimum: JPY 0; Buyer's Premium: JPY 200; Rule: 20% is 200.4, rounded half up |
-| Item | Winning bid: HKD 500.00 (50000 minor units); Minimum: HKD 200.00 (20000 minor units); Buyer's Premium: HKD 200.00; Rule: The minimum, higher than 20% (HKD 100.00) |
+| Item | Winning bid: HKD500 (range: 1000–79999 minor units); Minimum: HKD200 (fixed configured value); Buyer's Premium: HKD 200; Rule: The minimum, higher than 20% (HKD 100) |
 
 ### Route
 
@@ -697,14 +697,14 @@
 | Item | Value |
 | --- | --- |
 | `<order_1>` | An HKD order won at `<winning bid>` |
-| `<winning bid>` | HKD 2,500.00 (250000 minor units) |
-| `<premium>` | HKD 500.00: 20% of `<winning bid>` |
-| `<minimum>` | HKD 200.00 (20000 minor units) |
-| `<winning bid>` | HKD 5.00 (500 minor units) |
-| 20% of `<winning bid>` | HKD 1.00 (100 minor units) |
+| `<winning bid>` | HKD3,150 (range: 80000–399999 minor units) |
+| `<premium>` | HKD 560.00: 20% of `<winning bid>` |
+| `<minimum>` | HKD200 (fixed configured value) |
+| `<winning bid>` | HKD7 (fixed boundary or equality) |
+| 20% of `<winning bid>` | HKD1 (fixed derived value) |
 | `<winning bid>` | JPY 1003 |
 | `<premium>` | JPY 201: 20% is 200.6, rounded half up |
-| `<order_2>` | An HKD order won at HKD 5.00, invoice sent with premium HKD 1.00 |
+| `<order_2>` | An HKD order won at HKD 7.00, invoice sent with premium HKD 1.00 |
 | `<new minimum>` | HKD 200.00 |
 
 ### Route
@@ -740,7 +740,7 @@
 | --- | --- |
 | `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
 | `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<time left>` | 3 days 4 hours (273600s) before the payment deadline |
+| `<time left>` | 2 days 6 hours (194400s) before the payment deadline |
 | `<proof>` | One PDF under 5 MB |
 | Item | Files: 1 JPEG (lower limit) |
 | Item | Files: 1 PNG |
@@ -986,14 +986,14 @@
 | `<order_verifying>` | A bank-transfer order on its second check |
 | `<time left 2>` | The time left at the second upload |
 | `<order_verifying>` | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline |
-| `<time left>` | 3 days (259200s), a time inside the 7-day payment window |
+| `<time left>` | 2 days (172800s), a time inside the 7-day payment window |
 | `<return reason>` | The reason text the operator entered for the winner |
-| `<return time>` | 1 day after the upload |
+| `<return time>` | 18 hours after the upload |
 | `<order_verifying>` | An order paid by bank transfer, inside its payment window |
 | `<first reason>` | Amount does not match |
 | `<second reason>` | Reference missing from the transfer |
 | `<order_verifying>` | An order paid by bank transfer, `<time left>` before its payment deadline at upload |
-| `<time left>` | 3 days (259200s) |
+| `<time left>` | 2 days (172800s) |
 | `<return reason>` | The reason text the operator enters for the winner |
 
 ### Route
@@ -1721,9 +1721,9 @@
 | --- | --- |
 | `<order_unpaid>` | An unpaid HKD order, total `<total before>` |
 | `<address_far>` | A saved address whose shipping and insurance cost `<difference>` more |
-| `<total before>` | HKD 3,120.00 (312000 minor units) |
-| `<difference>` | HKD 40.00 (4000 minor units) |
-| `<total after>` | HKD 3,160.00: `<total before>` plus `<difference>` |
+| `<total before>` | HKD3,280 (fixed derived value) |
+| `<difference>` | HKD50 (range: 1000–79999 minor units) |
+| `<total after>` | HKD 3,330.00: `<total before>` plus `<difference>` |
 
 **Steps:**
 
@@ -3259,7 +3259,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) holds a paid auction order whose invoice includes Tax of 6000 minor units in HKD.
+* customer(winner) holds a paid auction order whose invoice includes Tax of HKD70 (range: >0 minor units).
 
 **Steps:**
 
@@ -3269,10 +3269,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Order Summary shows Tax of 6000 minor units in HKD between Insurance and Payment Processing Fee.
+* Order Summary shows Tax of HKD70 (range: >0 minor units) between Insurance and Payment Processing Fee.
 * Order Summary offers the Tax info tip with the stated copy.
-* The invoice PDF and the receipt PDF each show Tax of 6000 minor units in HKD between Insurance and Subtotal.
-* Each PDF's Subtotal includes the 6000 minor units in HKD.
+* The invoice PDF and the receipt PDF each show Tax of HKD70 (range: >0 minor units) between Insurance and Subtotal.
+* Each PDF's Subtotal includes Tax of HKD70 (range: >0 minor units).
 
 `<!-- trace:case id=g10.auction-winner-order.TC-nvv rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->`
 ### g10.auction-winner-order.US1-TC32: An untaxed invoice leaves Tax out
@@ -3324,17 +3324,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(operator with payment-processing) is on a card order in Preparing Invoice.
-* The order's lines before Tax total 312000 minor units in HKD.
+* The order's lines before Tax total HKD3,280 (fixed derived value).
 
 **Steps:**
 
-1. Add Tax of 6000 minor units in HKD.
+1. Add Tax of HKD70 (range: >0 minor units).
 2. Send the invoice.
 3. Read its Subtotal and payment processing fee inputs.
 
 **Expected Results:**
 
-* The Subtotal is 318000 minor units in HKD.
+* The Subtotal is HKD3,350 (fixed derived value).
 * Grade10 computes the payment processing fee from that Subtotal.
 
 `<!-- trace:case id=g10.auction-winner-order.TC-n0y rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->`
@@ -3598,7 +3598,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_paid>` | An HKD order paid in full at `<final amount>` |
-| `<final amount>` | HKD 3,160.00 (316000 minor units) |
+| `<final amount>` | HKD3,330 (range: 80000–399999 minor units) |
 
 **Steps:**
 
@@ -3636,7 +3636,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_paid>` | An HKD order with invoice total `<total>`, paid by one payment of `<total>` |
-| `<total>` | HKD 1,000.00 (100000 minor units) |
+| `<total>` | HKD1,080 (fixed derived value) |
 
 **Steps:**
 
@@ -3672,14 +3672,14 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_parts>` | An HKD order with invoice total `<total>`, paid `<payment 1>` then `<payment 2>` |
-| `<total>` | HKD 1,000.00 |
-| `<payment 1>` | HKD 400.00 |
-| `<payment 2>` | HKD 300.00 |
+| `<total>` | HKD 1,080.00 |
+| `<payment 1>` | HKD 420.00 |
+| `<payment 2>` | HKD 310.00 |
 
 | Receipt | Previous Payments | Current Payment Received | Remaining Balance Due |
 | --- | --- | --- | --- |
-| First | 0 | HKD 400.00 | HKD 600.00: `<total>` − `<payment 1>` |
-| Second | HKD 400.00 | HKD 300.00 | HKD 300.00: `<total>` − `<payment 1>` − `<payment 2>` |
+| First | 0 | HKD 420.00 | HKD 660.00: `<total>` − `<payment 1>` |
+| Second | HKD 420.00 | HKD 310.00 | HKD 350.00: `<total>` − `<payment 1>` − `<payment 2>` |
 
 **Steps:**
 
@@ -3716,9 +3716,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_tolerance>` | An HKD order, total `<total>`, paid `<paid before>`, then closed Paid by an operator recording `<closing payment>` within the closing tolerance |
-| `<total>` | HKD 1,000.00 |
-| `<paid before>` | HKD 900.00 |
-| `<closing payment>` | HKD 50.00 |
+| `<total>` | HKD 1,080.00 |
+| `<paid before>` | HKD 960.00 |
+| `<closing payment>` | HKD 60.00 |
 
 **Steps:**
 
@@ -3755,8 +3755,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_over>` | An HKD order, total `<total>`, with an operator-confirmed payment of `<payment>` |
-| `<total>` | HKD 1,000.00 |
-| `<payment>` | HKD 1,100.00 |
+| `<total>` | HKD 1,080.00 |
+| `<payment>` | HKD 1,190.00 |
 
 **Steps:**
 
@@ -3793,13 +3793,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_three>` | An HKD order, total HKD 1,000.00, paid HKD 200.00, HKD 300.00, HKD 100.00 in that order, one receipt each |
+| `<order_three>` | An HKD order, total HKD 1,080.00, paid HKD 220.00, HKD 310.00, HKD 140.00 in that order, one receipt each |
 
 | Receipt | Previous Payments | Current Payment Received | Remaining Balance Due |
 | --- | --- | --- | --- |
-| First | 0 | HKD 200.00 | HKD 800.00 |
-| Second | HKD 200.00 | HKD 300.00 | HKD 500.00 |
-| Third | HKD 500.00 | HKD 100.00 | HKD 400.00 |
+| First | 0 | HKD 220.00 | HKD 860.00 |
+| Second | HKD 220.00 | HKD 310.00 | HKD 550.00 |
+| Third | HKD 530.00 | HKD 140.00 | HKD 410.00 |
 
 **Steps:**
 
@@ -3914,7 +3914,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_verifying>` | An HKD order, invoice `INV-202609-LK7P2Q-02`, total `<total>`, reading Payment Verifying |
-| `<total>` | HKD 3,170.00 (317000 minor units) |
+| `<total>` | HKD3,290 (fixed derived value) |
 | `<confirm time>` | 2026-09-30T16:30:00Z, October in Hong Kong |
 | `<receipt id>` | `REC-202610-LK7P2Q-02-P1` |
 
@@ -4265,10 +4265,10 @@ Runs once per row of **Test data**.
 
 | Winning bid | Minimum | Buyer's Premium | Rule |
 | --- | --- | --- | --- |
-| HKD 10,000.00 (1000000 minor units) | HKD 0.00 | HKD 2,000.00 | 20% of the winning bid |
+| HKD13,500 (range: 800000–3999999 minor units) | HKD 0 | HKD 2,700 | 20% of the winning bid |
 | JPY 1003 | JPY 0 | JPY 201 | 20% is 200.6, rounded half up |
 | JPY 1002 | JPY 0 | JPY 200 | 20% is 200.4, rounded half up |
-| HKD 500.00 (50000 minor units) | HKD 200.00 (20000 minor units) | HKD 200.00 | The minimum, higher than 20% (HKD 100.00) |
+| HKD500 (range: 1000–79999 minor units) | HKD200 (range: 1000–79999 minor units) | HKD 200 | The minimum, higher than 20% (HKD 100) |
 
 **Steps:**
 
@@ -4726,8 +4726,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_1>` | An HKD order won at `<winning bid>` |
-| `<winning bid>` | HKD 2,500.00 (250000 minor units) |
-| `<premium>` | HKD 500.00: 20% of `<winning bid>` |
+| `<winning bid>` | HKD3,150 (range: 80000–399999 minor units) |
+| `<premium>` | HKD 630.00: 20% of `<winning bid>` |
 
 **Steps:**
 
@@ -4762,9 +4762,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<minimum>` | HKD 200.00 (20000 minor units) |
-| `<winning bid>` | HKD 5.00 (500 minor units) |
-| 20% of `<winning bid>` | HKD 1.00 (100 minor units) |
+| `<minimum>` | HKD200 (fixed configured value) |
+| `<winning bid>` | HKD7 (fixed boundary or equality) |
+| 20% of `<winning bid>` | HKD1 (fixed derived value) |
 
 **Steps:**
 
@@ -4833,7 +4833,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_2>` | An HKD order won at HKD 5.00, invoice sent with premium HKD 1.00 |
+| `<order_2>` | An HKD order won at HKD 7.00, invoice sent with premium HKD 1.00 |
 | `<new minimum>` | HKD 200.00 |
 
 **Steps:**
@@ -4920,7 +4920,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<time left>` | 3 days 4 hours (273600s) before the payment deadline |
+| `<time left>` | 2 days 6 hours (194400s) before the payment deadline |
 | `<proof>` | One PDF under 5 MB |
 
 **Steps:**
@@ -6111,9 +6111,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_verifying>` | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline |
-| `<time left>` | 3 days (259200s), a time inside the 7-day payment window |
+| `<time left>` | 2 days (172800s), a time inside the 7-day payment window |
 | `<return reason>` | The reason text the operator entered for the winner |
-| `<return time>` | 1 day after the upload |
+| `<return time>` | 18 hours after the upload |
 
 **Steps:**
 
@@ -6192,7 +6192,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_verifying>` | An order paid by bank transfer, `<time left>` before its payment deadline at upload |
-| `<time left>` | 3 days (259200s) |
+| `<time left>` | 2 days (172800s) |
 | `<return reason>` | The reason text the operator enters for the winner |
 
 **Steps:**

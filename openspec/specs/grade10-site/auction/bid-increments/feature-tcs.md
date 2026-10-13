@@ -17,34 +17,34 @@
 
 | Item | Value |
 | --- | --- |
-| Item | Currency: USD; Starting price: 0; Why this row: Zero start; Minimum next amount: 100 minor units (USD 1.00), the lowest USD increment |
-| Item | Currency: HKD; Starting price: 0; Why this row: Zero start; Minimum next amount: 1000 minor units (HKD 10.00), the lowest HKD increment |
-| Item | Currency: JPY; Starting price: 0; Why this row: Zero start; Minimum next amount: 100 minor units (JPY 100), the lowest JPY increment |
-| Item | Currency: HKD; Starting price: 20000 minor units (HKD 200.00); Why this row: Positive start inside the HKD 0 tier; Minimum next amount: 20000 minor units (HKD 200.00), the starting price |
-| Item | Currency: HKD; Starting price: 500 minor units (HKD 5.00); Why this row: Positive start below the lowest HKD increment; Minimum next amount: 500 minor units (HKD 5.00), the starting price |
-| Item | Currency: USD; Starting price: 10000 minor units (USD 100.00); Why this row: Positive start on the USD 100 tier boundary; Minimum next amount: 10000 minor units (USD 100.00), the starting price |
+| Item | Currency: USD; Starting price: 0; Why this row: Zero start; Minimum next amount: USD1 (fixed tier increment), the lowest USD increment |
+| Item | Currency: HKD; Starting price: 0; Why this row: Zero start; Minimum next amount: HKD10 (fixed tier increment), the lowest HKD increment |
+| Item | Currency: JPY; Starting price: 0; Why this row: Zero start; Minimum next amount: JPY100 (fixed tier increment), the lowest JPY increment |
+| Item | Currency: HKD; Starting price: HKD280 (range: 1000–79999 minor units); Why this row: Positive start inside the HKD 0 tier; Minimum next amount: HKD280 (range: 1000–79999 minor units), the starting price |
+| Item | Currency: HKD; Starting price: HKD7 (range: 1–999 minor units); Why this row: Positive start below the lowest HKD increment; Minimum next amount: HKD7 (range: 1–999 minor units), the starting price |
+| Item | Currency: USD; Starting price: USD100 (fixed tier boundary); Why this row: Positive start on the USD 100 tier boundary; Minimum next amount: USD100 (fixed tier boundary), the starting price |
 | Item | current public price: ---; increment: ---:; minimum next amount: ---: |
-| Item | current public price: 10000 USD minor units; increment: 500; minimum next amount: 10500 |
-| Item | current public price: 9999 USD minor units; increment: 100; minimum next amount: 10099 |
-| Item | current public price: 50000 USD minor units; increment: 1000; minimum next amount: 51000 |
+| Item | current public price: USD100 (fixed tier boundary); increment: 500; minimum next amount: 10500 |
+| Item | current public price: USD99.99 (range: 100–9999 minor units); increment: 100; minimum next amount: 10099 |
+| Item | current public price: USD500 (fixed tier boundary); increment: 1000; minimum next amount: 51000 |
 | --- | ---: |
-| 10500 USD minor units | 12000 |
-| 10500 USD minor units | 10499 |
+| USD105 (range: 10000–49999 minor units) | 12600 |
+| USD105 (fixed tier boundary) | USD104.99 (fixed boundary or equality) |
 | Item | listing currency: USD |
 | Item | listing currency: HKD |
 | Item | listing currency: JPY |
-| Item | Currency: USD; Starting price: 0; Opening price, the bid amount: 100 minor units (USD 1.00); Increment at the opening price: 100 (USD 0 tier); Next minimum after: 200 minor units (USD 2.00) |
-| Item | Currency: HKD; Starting price: 0; Opening price, the bid amount: 1000 minor units (HKD 10.00); Increment at the opening price: 1000 (HKD 0 tier); Next minimum after: 2000 minor units (HKD 20.00) |
-| Item | Currency: JPY; Starting price: 0; Opening price, the bid amount: 100 minor units (JPY 100); Increment at the opening price: 100 (JPY 0 tier); Next minimum after: 200 minor units (JPY 200) |
-| Item | Currency: HKD; Starting price: 500 minor units (HKD 5.00); Opening price, the bid amount: 500 minor units (HKD 5.00); Increment at the opening price: 1000 (HKD 0 tier); Next minimum after: 1500 minor units (HKD 15.00) |
-| Item | Currency: USD; Starting price: 10000 minor units (USD 100.00); Opening price, the bid amount: 10000 minor units (USD 100.00); Increment at the opening price: 500 (USD 100 tier); Next minimum after: 10500 minor units (USD 105.00) |
-| Item | Currency: HKD; Starting price: 0; Opening price: 1000 minor units (HKD 10.00); Bid amount: 900 minor units (HKD 9.00) |
-| Item | Currency: JPY; Starting price: 0; Opening price: 100 minor units (JPY 100); Bid amount: 99 minor units (JPY 99) |
-| Item | Currency: HKD; Starting price: 500 minor units (HKD 5.00); Opening price: 500 minor units (HKD 5.00); Bid amount: 400 minor units (HKD 4.00) |
-| Item | Currency: USD; Starting price: 10000 minor units (USD 100.00); Opening price: 10000 minor units (USD 100.00); Bid amount: 9900 minor units (USD 99.00) |
-| USD | 1000000000 minor units (USD 10,000,000.00) |
-| HKD | 8000000000 minor units (HKD 80,000,000.00) |
-| JPY | 5000000000 minor units (JPY 5,000,000,000) |
+| Item | Currency: USD; Starting price: 0; Opening price, the bid amount: USD1 (range: 100–9999 minor units); Increment at the opening price: 100 (USD 0 tier); Next minimum after: USD2 (fixed derived value) |
+| Item | Currency: HKD; Starting price: 0; Opening price, the bid amount: HKD10 (range: 1000–79999 minor units); Increment at the opening price: 1000 (HKD 0 tier); Next minimum after: HKD20 (fixed derived value) |
+| Item | Currency: JPY; Starting price: 0; Opening price, the bid amount: JPY100 (range: 100–14999 minor units); Increment at the opening price: 100 (JPY 0 tier); Next minimum after: JPY200 (fixed derived value) |
+| Item | Currency: HKD; Starting price: HKD7 (range: 1–999 minor units); Opening price, the bid amount: HKD7 (range: 1–999 minor units); Increment at the opening price: 1000 (HKD 0 tier); Next minimum after: HKD17 (fixed derived value) |
+| Item | Currency: USD; Starting price: USD100 (fixed tier boundary); Opening price, the bid amount: USD100 (fixed tier boundary); Increment at the opening price: 500 (USD 100 tier); Next minimum after: USD105 (fixed derived value) |
+| Item | Currency: HKD; Starting price: 0; Opening price: HKD10 (range: 1000–79999 minor units); Bid amount: HKD9 (range: 1–999 minor units) |
+| Item | Currency: JPY; Starting price: 0; Opening price: JPY100 (range: 100–14999 minor units); Bid amount: JPY99 (range: 1–99 minor units) |
+| Item | Currency: HKD; Starting price: HKD7 (range: 1–999 minor units); Opening price: HKD7 (range: 1–999 minor units); Bid amount: HKD6 (range: 1–999 minor units) |
+| Item | Currency: USD; Starting price: USD100 (fixed tier boundary); Opening price: USD100 (fixed tier boundary); Bid amount: USD99 (range: 100–9999 minor units) |
+| USD | USD10,000,000 (range: 1000000–1000000000 minor units) |
+| HKD | HKD80,000,000 (range: 8000000–8000000000 minor units) |
+| JPY | JPY5,000,000,000 (range: 1500000–5000000000 minor units) |
 
 ### Route
 
@@ -52,7 +52,7 @@
 2. Read the minimum next amount.
    - The minimum next amount is the row's minimum next amount. g10.auction-bid-increments.US1-TC1
    - On a positive start it is the starting price, not the starting price plus its increment. g10.auction-bid-increments.US1-TC1
-   - On a HKD 500 start it is not raised to the lowest increment. g10.auction-bid-increments.US1-TC1
+   - On a HKD 700 start it is not raised to the lowest increment. g10.auction-bid-increments.US1-TC1
    - On a zero start it is the currency's lowest increment, never 0. g10.auction-bid-increments.US1-TC1
 3. Open the listing bid panel.
 4. Place a bid of `<current public price>` plus `<increment>`.
@@ -107,12 +107,12 @@
 | Item | Value |
 | --- | --- |
 | Item | minimum: ---; ceiling: ---:; bid amount: ---: |
-| Item | minimum: 999990000 USD minor units; ceiling: 1000000000; bid amount: 1000000000 |
-| Item | Currency: USD; Ceiling: 1000000000 minor units (USD 10,000,000.00); Bid amount: 1000000001 minor units |
-| Item | Currency: HKD; Ceiling: 8000000000 minor units (HKD 80,000,000.00); Bid amount: 8000000001 minor units |
-| Item | Currency: JPY; Ceiling: 5000000000 minor units (JPY 5,000,000,000); Bid amount: 5000000001 minor units |
+| Item | minimum: USD9,999,900 (fixed configured value); ceiling: 1000000000; bid amount: 1000000000 |
+| Item | Currency: USD; Ceiling: USD10,000,000 (fixed configured value); Bid amount: USD10,000,000.01 (fixed boundary or equality) |
+| Item | Currency: HKD; Ceiling: HKD80,000,000 (fixed configured value); Bid amount: HKD80,000,000.01 (fixed boundary or equality) |
+| Item | Currency: JPY; Ceiling: JPY5,000,000,000 (fixed configured value); Bid amount: JPY5,000,000,001 (fixed boundary or equality) |
 | Item | `<minimum>`: ---; `<ceiling>`: ---:; `<maximum>`: ---: |
-| Item | `<minimum>`: 150000 JPY minor units; `<ceiling>`: 5000000000; `<maximum>`: 5000000001 |
+| Item | `<minimum>`: JPY150,000 (fixed tier boundary); `<ceiling>`: 5000000000; `<maximum>`: 5000000001 |
 
 ### Route
 
@@ -172,12 +172,12 @@ Runs once per row of **Test data**.
 
 | Currency | Starting price | Why this row | Minimum next amount |
 | --- | --- | --- | --- |
-| USD | 0 | Zero start | 100 minor units (USD 1.00), the lowest USD increment |
-| HKD | 0 | Zero start | 1000 minor units (HKD 10.00), the lowest HKD increment |
-| JPY | 0 | Zero start | 100 minor units (JPY 100), the lowest JPY increment |
-| HKD | 20000 minor units (HKD 200.00) | Positive start inside the HKD 0 tier | 20000 minor units (HKD 200.00), the starting price |
-| HKD | 500 minor units (HKD 5.00) | Positive start below the lowest HKD increment | 500 minor units (HKD 5.00), the starting price |
-| USD | 10000 minor units (USD 100.00) | Positive start on the USD 100 tier boundary | 10000 minor units (USD 100.00), the starting price |
+| USD | 0 | Zero start | USD1 (fixed boundary or equality), the lowest USD increment |
+| HKD | 0 | Zero start | HKD10 (fixed boundary or equality), the lowest HKD increment |
+| JPY | 0 | Zero start | JPY100 (fixed boundary or equality), the lowest JPY increment |
+| HKD | HKD280 (range: 1000–79999 minor units) | Positive start inside the HKD 0 tier | HKD280 (range: 1000–79999 minor units), the starting price |
+| HKD | HKD7 (range: 1–999 minor units) | Positive start below the lowest HKD increment | HKD7 (fixed tier increment), the starting price |
+| USD | USD100 (fixed tier boundary) | Positive start on the USD 100 tier boundary | USD100 (fixed tier boundary), the starting price |
 
 **Steps:**
 
@@ -188,7 +188,7 @@ Runs once per row of **Test data**.
 
 * The minimum next amount is the row's minimum next amount.
 * On a positive start it is the starting price, not the starting price plus its increment.
-* On a HKD 500 start it is not raised to the lowest increment.
+* On a HKD 700 start it is not raised to the lowest increment.
 * On a zero start it is the currency's lowest increment, never 0.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-0lh rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
@@ -219,9 +219,9 @@ The collector is enrolled and can bid.
 
 | current public price | increment | minimum next amount |
 | --- | ---: | ---: |
-| 10000 USD minor units | 500 | 10500 |
-| 9999 USD minor units | 100 | 10099 |
-| 50000 USD minor units | 1000 | 51000 |
+| USD100 (fixed tier boundary) | 500 | 10500 |
+| USD99.99 (range: 100–9999 minor units) | 100 | 10099 |
+| USD500 (fixed tier boundary) | 1000 | 51000 |
 
 **Steps:**
 
@@ -257,7 +257,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 
 | minimum | bid amount |
 | --- | ---: |
-| 10500 USD minor units | 12000 |
+| USD105 (range: 10000–49999 minor units) | 12600 |
 
 **Steps:**
 
@@ -294,7 +294,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 
 | minimum | bid amount |
 | --- | ---: |
-| 10500 USD minor units | 10499 |
+| USD105 (range: 10000–49999 minor units) | 10499 |
 
 **Steps:**
 
@@ -379,11 +379,11 @@ Runs once per row of **Test data**.
 
 | Currency | Starting price | Opening price, the bid amount | Increment at the opening price | Next minimum after |
 | --- | --- | --- | --- | --- |
-| USD | 0 | 100 minor units (USD 1.00) | 100 (USD 0 tier) | 200 minor units (USD 2.00) |
-| HKD | 0 | 1000 minor units (HKD 10.00) | 1000 (HKD 0 tier) | 2000 minor units (HKD 20.00) |
-| JPY | 0 | 100 minor units (JPY 100) | 100 (JPY 0 tier) | 200 minor units (JPY 200) |
-| HKD | 500 minor units (HKD 5.00) | 500 minor units (HKD 5.00) | 1000 (HKD 0 tier) | 1500 minor units (HKD 15.00) |
-| USD | 10000 minor units (USD 100.00) | 10000 minor units (USD 100.00) | 500 (USD 100 tier) | 10500 minor units (USD 105.00) |
+| USD | 0 | USD1 (range: 100–9999 minor units) | 100 (USD 0 tier) | USD2 (fixed derived value) |
+| HKD | 0 | HKD10 (range: 1000–79999 minor units) | 1000 (HKD 0 tier) | HKD20 (fixed derived value) |
+| JPY | 0 | JPY100 (range: 100–14999 minor units) | 100 (JPY 0 tier) | JPY200 (fixed derived value) |
+| HKD | HKD7 (range: 1–999 minor units) | HKD7 (range: 1–999 minor units) | 1000 (HKD 0 tier) | HKD17 (fixed derived value) |
+| USD | USD100 (fixed tier boundary) | USD100 (fixed tier boundary) | 500 (USD 100 tier) | USD105 (fixed derived value) |
 
 **Steps:**
 
@@ -424,10 +424,10 @@ Runs once per row of **Test data**.
 
 | Currency | Starting price | Opening price | Bid amount |
 | --- | --- | --- | --- |
-| HKD | 0 | 1000 minor units (HKD 10.00) | 900 minor units (HKD 9.00) |
-| JPY | 0 | 100 minor units (JPY 100) | 99 minor units (JPY 99) |
-| HKD | 500 minor units (HKD 5.00) | 500 minor units (HKD 5.00) | 400 minor units (HKD 4.00) |
-| USD | 10000 minor units (USD 100.00) | 10000 minor units (USD 100.00) | 9900 minor units (USD 99.00) |
+| HKD | 0 | HKD10 (range: 1000–79999 minor units) | HKD9 (range: 1–999 minor units) |
+| JPY | 0 | JPY100 (range: 100–14999 minor units) | JPY99 (range: 1–99 minor units) |
+| HKD | HKD7 (range: 1–999 minor units) | HKD7 (range: 1–999 minor units) | HKD6 (range: 1–999 minor units) |
+| USD | USD100 (fixed tier boundary) | USD100 (fixed tier boundary) | USD99 (fixed boundary or equality) |
 
 **Steps:**
 
@@ -468,9 +468,9 @@ Runs once per row of **Test data**.
 
 | Currency | `<ceiling>` |
 | --- | --- |
-| USD | 1000000000 minor units (USD 10,000,000.00) |
-| HKD | 8000000000 minor units (HKD 80,000,000.00) |
-| JPY | 5000000000 minor units (JPY 5,000,000,000) |
+| USD | USD10,000,000 (range: 1000000–1000000000 minor units) |
+| HKD | HKD80,000,000 (range: 8000000–8000000000 minor units) |
+| JPY | JPY5,000,000,000 (range: 1500000–5000000000 minor units) |
 
 **Steps:**
 
@@ -519,7 +519,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 
 | minimum | ceiling | bid amount |
 | --- | ---: | ---: |
-| 999990000 USD minor units | 1000000000 | 1000000000 |
+| USD9,999,900 (range: 1000000–1000000000 minor units) | 1000000000 | 1000000000 |
 
 **Steps:**
 
@@ -561,9 +561,9 @@ Runs once per row of **Test data**.
 
 | Currency | Ceiling | Bid amount |
 | --- | --- | --- |
-| USD | 1000000000 minor units (USD 10,000,000.00) | 1000000001 minor units |
-| HKD | 8000000000 minor units (HKD 80,000,000.00) | 8000000001 minor units |
-| JPY | 5000000000 minor units (JPY 5,000,000,000) | 5000000001 minor units |
+| USD | USD10,000,000 (fixed configured value) | USD10,000,000.01 (fixed boundary or equality) |
+| HKD | HKD80,000,000 (fixed configured value) | HKD80,000,000.01 (fixed boundary or equality) |
+| JPY | JPY5,000,000,000 (fixed configured value) | JPY5,000,000,001 (fixed boundary or equality) |
 
 **Steps:**
 
@@ -607,7 +607,7 @@ Runs once per row of **Test data**.
 
 | `<minimum>` | `<ceiling>` | `<maximum>` |
 | --- | ---: | ---: |
-| 150000 JPY minor units | 5000000000 | 5000000001 |
+| JPY150,000 (fixed tier boundary) | 5000000000 | 5000000001 |
 
 **Steps:**
 
@@ -649,9 +649,9 @@ Runs once per row of **Test data**.
 
 | Currency | Ceiling | Bid amount |
 | --- | --- | --- |
-| USD | 1000000000 minor units (USD 10,000,000.00) | 1000000001 minor units |
-| HKD | 8000000000 minor units (HKD 80,000,000.00) | 8000000001 minor units |
-| JPY | 5000000000 minor units (JPY 5,000,000,000) | 5000000001 minor units |
+| USD | USD10,000,000 (fixed configured value) | USD10,000,000.01 (fixed boundary or equality) |
+| HKD | HKD80,000,000 (fixed configured value) | HKD80,000,000.01 (fixed boundary or equality) |
+| JPY | JPY5,000,000,000 (fixed configured value) | JPY5,000,000,001 (fixed boundary or equality) |
 
 **Steps:**
 
@@ -727,7 +727,7 @@ Runs once per row of **Test data**.
 | Finding | Disposition |
 | --- | --- |
 | `g10.auction-bid-increments.US2-TC3` against `grade10-site-auction-bid-increments-SC-10` | **Joined:** JPY listing, minimum 150000 minor units, maximum 5000000001 refused naming 5000000000, and no maximum recorded, match the scenario |
-| `g10.auction-bid-increments.US1-TC8` against the requirement's table | **Joined:** the JPY row reads 5000000000 minor units (JPY 5,000,000,000), as the table and the bidding page's Ceiling row do; USD and HKD do not move |
+| `g10.auction-bid-increments.US1-TC8` against the requirement's table | **Joined:** the JPY row reads JPY5,000,000,000, as the table and the bidding page's Ceiling row do; USD and HKD do not move |
 | `TC3-2`'s pre-condition said the field cannot carry the maximum, but 5000000001 sits under the field's 9,999,999,999 | **Folded in:** `g10.auction-bid-increments.US2-TC3` keeps the direct send to read the service's own refusal, and now says the field would carry the maximum too |
 | Earlier rows that stated 10000000000, the field keeping the maximum out of the panel, or the quick-chip claim as current | **Folded in:** each row now states its outcome - 5000000000 (Q6), the field takes the maximum, and the chip claim is gone from `tech-design.md` |
 | Unchanged scenarios restated by the modified block - `SC-08`, `SC-09`, `SC-11` | **Out of suite:** walked by the durable suite's `g10.auction-bid-increments.US2-TC1`, `g10.auction-bid-increments.US2-TC2` and `g10.auction-bid-increments.US2-TC4`, whose USD and HKD values match those scenarios |

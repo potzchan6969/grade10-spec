@@ -31,23 +31,23 @@
 | Item | Value |
 | --- | --- |
 | `<listing_1>` | A draft auction listing with an empty gallery |
-| `<product>` | charizard-front.jpg, JPEG, 4.2 MB |
+| `<product>` | charizard-front.jpg, JPEG, 3.6 MB |
 | `<alt text>` | 1999 Charizard PSA 10, front, shadowless 1st edition |
 | `<listing_2>` | A published listing in Pokémon, gallery of three images |
 | `<listing_3>` | A published listing in another category, first gallery item an image |
 | `<listing_4>` | A live listing with bids, in HKD |
-| `<current bid>` | 480000 minor units |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
 | Item | `<surface>`: The auction catalogue at `<grade10 auction url>`; `<identity>`: the catalogue's own title and description; `<status>`: 200 |
 | Item | `<surface>`: `<listing_2>`'s own address; `<identity>`: `<listing_2>`'s title, description and canonical address, in `og:title`, `og:description` and `og:url`; `<status>`: 200 |
 | Item | `<surface>`: `<no lot address>`; `<identity>`: the site's not-found surface; `<status>`: 404 |
 | `<card>` | Visa ending 4242 |
 | `<listing_5>` | A live listing with no bids, several gallery images, in HKD |
-| `<starting price>` | 120000 minor units |
-| `<bid amount>` | 120000 minor units, equal to `<starting price>` |
+| `<starting price>` | HKD1,200 (range: 80000–399999 minor units) |
+| `<bid amount>` | HKD1,200 (fixed boundary or equality), equal to `<starting price>` |
 | `<listing_4>` | A live listing with bids from other users, in HKD, bid count `<bid count>` |
-| `<current bid>` | 480000 minor units (HKD 4,800.00) |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
-| `<bid amount>` | 487900 minor units (HKD 4,879), one major unit below `<current bid>` plus `<increment>` |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
+| `<bid amount>` | HKD5,039 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
 | `<bid count>` | 2 |
 
 ### Route
@@ -125,36 +125,36 @@
 | Item | Value |
 | --- | --- |
 | `<listing_5>` | A live listing with no bids, in HKD |
-| `<starting price>` | 120000 minor units |
-| `<increment>` | 25000 minor units |
-| `<user A maximum>` | 800000 minor units |
-| `<user B maximum>` | 505000 minor units, below `<user A maximum>` |
-| `<user B raise>` | 900000 minor units, above `<user A maximum>` |
+| `<starting price>` | HKD1,280 (range: 80000–399999 minor units) |
+| `<increment>` | HKD260 (fixed tier increment) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<user B raise>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
 | `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | 530000 minor units (HKD 5,300.00) |
-| `<increment>` | 20000 minor units (HKD 200.00), the HK$8,000 tier at `<user A maximum>` |
-| `<user A maximum>` | 800000 minor units (HKD 8,000.00) |
-| `<user B maximum>` | 900000 minor units (HKD 9,000.00), above `<user A maximum>` |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
 | `<listing_10>` | A live listing the user has bid on manually and automatically, now led by user B |
 | `<listing_7>` | A live listing with bids and a close approaching |
-| `<current bid>` | 480000 minor units |
-| `<time left>` | 6 minutes |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<time left>` | 7 minutes |
 | `<listing_9>` | A live listing with an extension cap, its close already at the cap |
 | `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
-| `<bid time>` | 2 minutes before the recorded close, inside `<extension window>` |
+| `<bid time>` | 3 minutes before the recorded close, inside `<extension window>` |
 | `<new time left>` | Unchanged — the close stays at the cap |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,040 (range: 400000–799999 minor units), at the minimum next bid |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<extension duration>` | 1800 seconds |
-| `<time left before bid>` | 5 minutes |
-| `<leader price>` | 530000 HKD minor units |
-| `<increment>` | 8000 HKD minor units (HKD 80.00), the HK$4,000 tier at `<user B maximum>` |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
-| `<user B maximum>` | 900000 HKD minor units, above `<user A maximum>` |
-| `<increment>` | 20000 HKD minor units (HKD 200.00), the HK$8,000 tier at `<user A maximum>` |
-| `<device skew>` | 3 minutes behind |
-| `<leader price>` | 530000 minor units |
+| `<time left before bid>` | 4 minutes |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier at `<user B maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
+| `<device skew>` | 4 minutes behind |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
 
 ### Route
 
@@ -233,21 +233,21 @@
 | --- | --- |
 | `<listing_11>` | A live listing the user holds an accepted bid on |
 | `<listing_14>` | An open HKD listing with no bids, starting price `<starting price>` |
-| `<starting price>` | 20000 minor units (HKD 200.00) |
-| `<increment>` | 1000 minor units (HKD 10.00), the HKD step at `<user A maximum>` |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<user B maximum>` | 80000 minor units (HKD 800.00), above `<user A maximum>` |
+| `<starting price>` | HKD280 (range: 1000–79999 minor units) |
+| `<increment>` | HKD10 (fixed tier increment), the HKD step at `<user A maximum>` |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<user B maximum>` | HKD920 (range: 80000–399999 minor units), above `<user A maximum>` |
 | `<price after A>` | `<starting price>` |
 | `<price after B>` | `<user A maximum>` plus `<increment>` |
 | `<no lot address>` | An address under the auction's lots naming no published lot |
 | lot_1 | A lot that was published, listed in the catalogue, then called off by an operator |
 | lot_1 address | The address of `<lot_1>` from when it was published |
 | `<listing_15>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | 513000 minor units, `<user B maximum>` plus its 8000 increment |
-| `<user A maximum>` | 800000 minor units, above `<final price>` |
-| `<user B maximum>` | 505000 minor units, below `<final price>` |
+| `<final price>` | HKD5,780 (fixed derived value), `<user B maximum>` plus its 8000 increment |
+| `<user A maximum>` | HKD8,400 (fixed derived value), above `<final price>` |
+| `<user B maximum>` | HKD5,700 (fixed derived value), below `<final price>` |
 | `<listing_16>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | 513000 minor units |
+| `<final price>` | HKD5,780 (fixed derived value) |
 
 ### Route
 
@@ -316,7 +316,7 @@
 | Field | Value |
 | --- | --- |
 | `<listing_1>` | A draft auction listing with an empty gallery |
-| `<product>` | charizard-front.jpg, JPEG, 4.2 MB |
+| `<product>` | charizard-front.jpg, JPEG, 3.6 MB |
 | `<alt text>` | 1999 Charizard PSA 10, front, shadowless 1st edition |
 
 **Steps:**
@@ -410,7 +410,7 @@ I read.
 | Field | Value |
 | --- | --- |
 | `<listing_4>` | A live listing with bids, in HKD |
-| `<current bid>` | 480000 minor units |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
 
 **Steps:**
 
@@ -509,8 +509,8 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<card>` | Visa ending 4242 |
 | `<listing_5>` | A live listing with no bids, several gallery images, in HKD |
-| `<starting price>` | 120000 minor units |
-| `<bid amount>` | 120000 minor units, equal to `<starting price>` |
+| `<starting price>` | HKD1,200 (range: 80000–399999 minor units) |
+| `<bid amount>` | HKD1,200 (fixed boundary or equality), equal to `<starting price>` |
 
 **Steps:**
 
@@ -558,9 +558,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<card>` | Visa ending 4242 |
 | `<listing_4>` | A live listing with bids from other users, in HKD, bid count `<bid count>` |
-| `<current bid>` | 480000 minor units (HKD 4,800.00) |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier |
-| `<bid amount>` | 487900 minor units (HKD 4,879), one major unit below `<current bid>` plus `<increment>` |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
+| `<bid amount>` | HKD5,039 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
 | `<bid count>` | 2 |
 
 **Steps:**
@@ -614,11 +614,11 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_5>` | A live listing with no bids, in HKD |
-| `<starting price>` | 120000 minor units |
-| `<increment>` | 25000 minor units |
-| `<user A maximum>` | 800000 minor units |
-| `<user B maximum>` | 505000 minor units, below `<user A maximum>` |
-| `<user B raise>` | 900000 minor units, above `<user A maximum>` |
+| `<starting price>` | HKD1,280 (range: 80000–399999 minor units) |
+| `<increment>` | HKD260 (fixed tier increment) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<user B raise>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
 
 **Steps:**
 
@@ -670,10 +670,10 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | 530000 minor units (HKD 5,300.00) |
-| `<increment>` | 20000 minor units (HKD 200.00), the HK$8,000 tier at `<user A maximum>` |
-| `<user A maximum>` | 800000 minor units (HKD 8,000.00) |
-| `<user B maximum>` | 900000 minor units (HKD 9,000.00), above `<user A maximum>` |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
 
 **Steps:**
 
@@ -758,8 +758,8 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_7>` | A live listing with bids and a close approaching |
-| `<current bid>` | 480000 minor units |
-| `<time left>` | 6 minutes |
+| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
+| `<time left>` | 7 minutes |
 
 **Steps:**
 
@@ -807,9 +807,9 @@ from my card until I win.
 | --- | --- |
 | `<listing_9>` | A live listing with an extension cap, its close already at the cap |
 | `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
-| `<bid time>` | 2 minutes before the recorded close, inside `<extension window>` |
+| `<bid time>` | 3 minutes before the recorded close, inside `<extension window>` |
 | `<new time left>` | Unchanged — the close stays at the cap |
-| `<bid amount>` | 505000 minor units, at or above the minimum next bid |
+| `<bid amount>` | HKD5,040 (range: 400000–799999 minor units), at the minimum next bid |
 
 **Steps:**
 
@@ -857,11 +857,11 @@ from my card until I win.
 | --- | --- |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<extension duration>` | 1800 seconds |
-| `<time left before bid>` | 5 minutes |
-| `<leader price>` | 530000 HKD minor units |
-| `<increment>` | 8000 HKD minor units (HKD 80.00), the HK$4,000 tier at `<user B maximum>` |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+| `<time left before bid>` | 4 minutes |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier at `<user B maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -909,12 +909,12 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
-| `<time left before bid>` | 5 minutes |
-| `<leader price>` | 530000 HKD minor units |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 900000 HKD minor units, above `<user A maximum>` |
-| `<increment>` | 20000 HKD minor units (HKD 200.00), the HK$8,000 tier at `<user A maximum>` |
-| `<device skew>` | 3 minutes behind |
+| `<time left before bid>` | 4 minutes |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<increment>` | HKD200 (fixed tier increment), the HK$8,000 tier at `<user A maximum>` |
+| `<device skew>` | 4 minutes behind |
 
 **Steps:**
 
@@ -966,8 +966,8 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | 530000 minor units |
-| `<user A maximum>` | 800000 minor units |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
 
 **Steps:**
 
@@ -1052,10 +1052,10 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_14>` | An open HKD listing with no bids, starting price `<starting price>` |
-| `<starting price>` | 20000 minor units (HKD 200.00) |
-| `<increment>` | 1000 minor units (HKD 10.00), the HKD step at `<user A maximum>` |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<user B maximum>` | 80000 minor units (HKD 800.00), above `<user A maximum>` |
+| `<starting price>` | HKD280 (range: 1000–79999 minor units) |
+| `<increment>` | HKD10 (fixed tier increment), the HKD step at `<user A maximum>` |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<user B maximum>` | HKD920 (range: 80000–399999 minor units), above `<user A maximum>` |
 | `<price after A>` | `<starting price>` |
 | `<price after B>` | `<user A maximum>` plus `<increment>` |
 
@@ -1285,9 +1285,9 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_15>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | 513000 minor units, `<user B maximum>` plus its 8000 increment |
-| `<user A maximum>` | 800000 minor units, above `<final price>` |
-| `<user B maximum>` | 505000 minor units, below `<final price>` |
+| `<final price>` | HKD5,780 (fixed derived value), `<user B maximum>` plus its 8000 increment |
+| `<user A maximum>` | HKD8,400 (fixed derived value), above `<final price>` |
+| `<user B maximum>` | HKD5,700 (fixed derived value), below `<final price>` |
 
 **Steps:**
 
@@ -1336,7 +1336,7 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_16>` | An HKD listing in extended bidding, led by customer A |
-| `<final price>` | 513000 minor units |
+| `<final price>` | HKD5,780 (fixed derived value) |
 
 **Steps:**
 
@@ -1382,8 +1382,8 @@ it.
 
 | `<product>` | `<refusal>` |
 | --- | --- |
-| grading-report.pdf, PDF, 1.1 MB | its type is not JPEG, PNG, WebP or AVIF |
-| charizard-back.jpg, JPEG, 118 MB | it is above the 104857600-byte bound |
+| grading-report.pdf, PDF, 1.3 MB | its type is not JPEG, PNG, WebP or AVIF |
+| charizard-back.jpg, JPEG, 113 MB | it is above the 104857600-byte bound |
 
 **Steps:**
 
@@ -1429,10 +1429,10 @@ it.
 | --- | --- |
 | `<card>` | Visa ending 4242 |
 | `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | 530000 minor units (HKD 5,300.00) |
-| `<increment>` | 8000 minor units (HKD 80.00), the HK$4,000 tier at `<user B maximum>` |
-| `<user A maximum>` | 800000 minor units (HKD 8,000.00) |
-| `<user B maximum>` | 555000 minor units (HKD 5,550.00), below `<user A maximum>` |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier at `<user B maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -1477,9 +1477,9 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_6>` | A live listing led by user A, in HKD |
-| `<leader price>` | 530000 minor units (HKD 5,300.00) |
-| `<user A maximum>` | 800000 minor units (HKD 8,000.00) |
-| `<lower maximum>` | 300000 minor units (HKD 3,000.00), below `<user A maximum>` |
+| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<lower maximum>` | HKD3,400 (range: 80000–399999 minor units), below `<user A maximum>` |
 
 **Steps:**
 

@@ -181,8 +181,20 @@ execution; a review classification is not a pass or fail result.
 
 Invoke `/tcs-review walk <target>` when the goal is to help a human tester
 understand or manually walk the suite rather than approve it. Walk mode is
-read-only: it does not create a review branch, change a case status, or write a
-run sheet.
+read-only and always reads from the latest `origin/main`: refresh the remote
+tracking ref before resolving the target when repository access allows, then
+read the suites, specs, journeys and supporting governance files from that ref
+only. Do not use the current branch, working-tree edits or untracked files as
+walk content. It does not create a review branch, make a commit, rewrite a
+suite, change a case status, add trace links, or write a run sheet. If the
+latest `origin/main` cannot be confirmed, stop and report that source problem
+instead of silently using another ref.
+
+- **Modification handoff** — if the tester asks to change any TCS content,
+  heading, marker, trace, status, walk, or run-sheet material, stop walk mode
+  and switch to the complete `/tcs-review <target>` workflow. That workflow
+  starts from the latest `main`, creates the review branch, and performs
+  preparation and verdict writes there.
 
 - **Resolve the target** — accept a capability, domain, journey, or stable case id. A case target shows its owning journey and every walk that references it; a journey or broader target shows the matching suites in file order
 - **Walk the product first** — give the same narrated product orientation as a first review, then explain only the TCS concepts needed by the selected material
