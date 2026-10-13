@@ -79,6 +79,10 @@ on:
         required: false
         default: false
         type: boolean
+      source_ref:
+        description: "Sandbox-only TC source branch or SHA; production always uses latest main"
+        required: false
+        type: string
       overwrite:
         description: "Rewrite this run id's tab and Summary block (same id)"
         required: false
@@ -181,6 +185,7 @@ jobs:
           LEVEL: ${{ inputs.level }}
           SCOPE: ${{ inputs.scope }}
           CHANGED_SINCE: ${{ inputs.changed_since }}
+          SOURCE_REF: ${{ inputs.source_ref }}
           INCLUDE_DRAFT: ${{ inputs.include_draft }}
           INCLUDE_AUTOMATED: ${{ inputs.include_automated }}
           SANDBOX: ${{ inputs.sandbox }}
@@ -191,6 +196,7 @@ jobs:
           # test on an empty input would end the step rather than skip a flag.
           set -- --env "${RUN_ENV:-staging}" --record-output .run-sheet-output/run-record.json
           if [ -s /tmp/exclusions.json ]; then set -- "$@" --exclusions-file /tmp/exclusions.json; fi
+          if [ -n "$SOURCE_REF" ]; then set -- "$@" --source-ref "$SOURCE_REF"; fi
           if [ -n "$CHANGED_SINCE" ]; then set -- "$@" --changed-since "$CHANGED_SINCE"; fi
           if [ -n "$RUN_NAME" ]; then set -- "$@" --name "$RUN_NAME"; fi
           if [ -n "$CONFIRMED" ]; then set -- "$@" --confirmed "$CONFIRMED"; fi
