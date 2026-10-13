@@ -1,0 +1,50 @@
+# Features with no screen in the workbench, and why. Every other feature with a
+# page under docs/prds/products/grade10-site/ or shared/auth/ holds Screens, or
+# Prototypes until its design is agreed. `pnpm storybook:coverage` reads this.
+
+# No screen of its own: events, counters, backend and policy, or a piece whose
+# states are drawn on another feature's screen. Its Flows still walk its
+# journeys.
+no-screen:
+  analytics/datadog-counters: counters, read in Datadog
+  analytics/mixpanel-events: events, read in Mixpanel
+  analytics/site-records: tables, read in the warehouse
+  commerce/checkout-domain: a runbook for the checkout domain
+  commerce/commerce: the order machine; its identity bar is a Cart Drawer state
+  commerce/order-status: the badge rule; drawn on Order History and Order Details
+  commerce/product-status: the availability rule; drawn on Product List, Product Detail and the Cart Drawer
+  commerce/site-content: where content lives
+  grading/messages: emails, previewed in apps/emails
+  loyalty/expiry-reminders: nothing is delivered yet
+  loyalty/coupons: a section of Membership; also drawn in the Cart Drawer
+  loyalty/paying-with-points: drawn in the Cart Drawer's footer
+  loyalty/points: earn and expiry rules; drawn as Membership activity
+  loyalty/rewards: a section of Membership
+  loyalty/shopify-integration: the Shopify link; its till panel is Shopify's
+  loyalty/tiers: drawn in the Membership summary
+  loyalty/wallet-member-card: a section of Membership
+  site/page-shell: the header and footer on every screen
+  site/crawlable-pages: server responses, tags and the sitemap
+  site/typography: the font kit; drawn in the design system
+  store/checkout: Shopify's page; walked as a flow from the Cart Drawer to Your Orders
+  store/cross-sell: a rail drawn on Product Detail
+  store/cart-validation: the cart's promise; drawn as Cart Drawer states
+  store/discounts: the price rules; drawn on product, cart and order screens
+  store/refunds: started in Shopify; drawn on Order Details
+  store/shipping: Shopify takes the address; tracking is on Your Orders
+  vault/case-lifecycle: the status machine; drawn on the case page
+  vault/compliance-and-readiness: policy
+  auth/audit: the trail; read in the console
+  auth/roles: the role vocabulary
+  auth/session: how a session is kept
+  auth/sign-out: a control in the account menu and on Profile
+  auth/test-sign-in: a door for the staging job
+
+# Seen only behind the counter. The workbench draws collector screens.
+operator:
+  consignment/operator-console: the consignment console
+  doc-sign/service: the documents service and its operator tools
+  loyalty/operator-console: the loyalty console
+  vault/operator-console: the vault console
+  auth/sessions: the console's session list
+  auth/users: the console's user directory

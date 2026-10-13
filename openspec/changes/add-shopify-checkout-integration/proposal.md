@@ -10,16 +10,13 @@ The cart drawer already reviews the basket and tender, but Pay still needs to se
 
 - **Current decision** - Review on open, wait for cart and tender writes, and let the existing checkout request make the Pay decision.
 - **Current request** - Send the reviewed lines with their seen prices, the accepted coupon, and positive points or no points field when none are spent.
-- **One Pay at a time** - Accept one Pay per drawer. An answer for an older cart, tender or member opens nothing.
+- **One Pay at a time** - Accept one Pay per drawer and disable its actions while the answer is pending, using `add-store-cart-drawer-ui`'s pending-operation scope. Changes from another tab or session still invalidate older answers.
 - **Answers** - Use the existing feedback for refusal, named lines, verification, settling and failure. A lost answer is not retried by itself.
 - **Payment return** - Poll the order, read the cart and tender again once it is paid, and keep the static Your Orders link on both Shopify confirmation pages.
 
 ## Non-Goals
 
-- **Operations** - No deployment, migration execution, production data operation, provider configuration change or real payment in this planning run.
-- **Surfaces** - No public guest checkout, standalone checkout page, embedded payment form, new order badge or order-specific Shopify return link.
-- **Local workarounds** - No new dependency, duplicate quote/order client, browser-owned invoice authority, local settlement, points hold or variant-based cart deletion.
-- **Backend** - No backend, contract, schema or migration change. Invoice reuse, terminal replay, concurrent Pay, dispatch recovery and durable retirement are [`add-checkout-purchase-safety`](../add-checkout-purchase-safety/proposal.md).
+See [Non-Goals](decisions.md#non-goals).
 
 ## Product Record
 
@@ -55,5 +52,7 @@ On 2026-10-09, @kinisworking kept this change to the frontend and moved the back
 ## References
 
 - [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
+- [Cart Pending Operations](../../../docs/prds/products/grade10-site/store/cart.md#pending-operations)
+- [Drawer Pending Scope](../add-store-cart-drawer-ui/proposal.md#pending-operations)
 - [Technical design](tech-design.md)
 - [Delivery tasks](tasks.md)

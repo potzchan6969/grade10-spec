@@ -65,7 +65,10 @@ const GROUP_HEADING = /^(\d+)\.\s*(.+)$/;
 const REPO_TAG = /\s*\(([^()@]+)\)\s*$/;
 const CHECKBOX = /^\s*-\s*\[( |x|X)\]\s?(.*)$/;
 const BULLET = /^\s*[-*]\s+(.+?)\s*$/;
-const ISSUED_ID = /([a-z0-9][a-z0-9-]*)-(SC|US|TC)-(\d+)/g;
+/** A permanent id as `<token>`, its kind and its number: the older
+ * `<capability>-SC-<n>`, or the current `<app>.<domain>-<capability>.SC<n>`. */
+const ISSUED_ID =
+  /([a-z0-9][a-z0-9-]*)-(SC|US|TC)-(\d+)|([a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*)\.(SC|US)(\d+)/g;
 const DELTA_HEADING = /^(ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements$/;
 const REMOVED_FEATURE_SET = /^REMOVED Feature set$/;
 const REQUIREMENT_HEADING = /^Requirement:\s*(.+?)\s*$/i;
@@ -1100,7 +1103,10 @@ export function readIssuedIds(
 }
 
 function claim(marks: Map<string, IssuedMarks>, text: string): void {
-  for (const [, token, kind, digits] of text.matchAll(ISSUED_ID)) {
+  for (const match of text.matchAll(ISSUED_ID)) {
+    const [token, kind, digits] = match[1]
+      ? match.slice(1, 4)
+      : match.slice(4, 7);
     const held = marks.get(token) ?? {};
     const key = kind.toLowerCase() as keyof IssuedMarks;
     const issued = Number(digits);

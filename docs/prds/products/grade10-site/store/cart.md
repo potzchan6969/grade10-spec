@@ -42,6 +42,10 @@ back to that page.
   the footer's rows in order, are on
   [Discounts](/p/grade10-site/store/discounts#where-each-shows)
 
+## Pending Operations
+
+🚧 **Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
+
 ## Promo Code
 
 🚧 One code rides the cart, typed or picked; every figure is the store's,
@@ -152,6 +156,8 @@ and tax before the invoice. A second code on one cart.
 | --- | --- | --- | --- |
 | Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
 | Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
+| Pending actions | Decided | The drawer waits for its reads and writes before accepting another action, rather than disabling Checkout alone. | @kinisworking |
+| Pending dismissal | Decided | Close, backdrop click and Escape remain available while an operation is pending, so a slow request does not trap the collector. Chosen over disabling dismissal. | @kinisworking |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | Product pictures | Decided | Use the product's first picture, as the collection card does, from the current cart read. Chosen over variant-specific pictures or pictures held with the cart, which can differ from the catalogue. | Product |
 | Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |

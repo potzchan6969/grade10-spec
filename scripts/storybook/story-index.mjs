@@ -98,6 +98,16 @@ function stringsOf(node) {
     .map((element) => element.text);
 }
 
+/** `parameters.journeys` of a meta or a story: the journey ids a flow walks. */
+function journeysOf(object) {
+  const parameters = objectLiteral(
+    propertyOf(object, "parameters")?.initializer,
+  );
+  return parameters
+    ? stringsOf(propertyOf(parameters, "journeys")?.initializer)
+    : [];
+}
+
 /**
  * The meta and the story exports of one CSF file. `titleSpan` is where the
  * title's string literal sits, quotes included, so a rename rewrites that
@@ -147,6 +157,7 @@ export function parseStoryFile(path, text) {
       ? componentProperty.initializer.text
       : null;
   const tags = stringsOf(propertyOf(meta, "tags")?.initializer);
+  const journeys = journeysOf(meta);
 
   const stories = exported
     .filter((name) => name !== "__namedExportsOrder")
@@ -157,10 +168,14 @@ export function parseStoryFile(path, text) {
         nameProperty && t.isStringLiteralLike(nameProperty.initializer)
           ? nameProperty.initializer.text
           : storyNameFromExport(exportName);
-      return { exportName, name };
+      return {
+        exportName,
+        name,
+        journeys: story ? journeysOf(story) : [],
+      };
     });
 
-  return { title, titleSpan, component, tags, stories };
+  return { title, titleSpan, component, tags, journeys, stories };
 }
 
 /** `<Meta title="…" />` of an unattached MDX page. */

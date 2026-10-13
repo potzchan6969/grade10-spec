@@ -2,7 +2,8 @@
 
 - [ ] 1.1 Run the changed-capability manual checks before the PRD update and record any rule or code-map discrepancy.
 - [ ] 1.2 Update the Listings section of Auction Management and the Auction Details and Lot Status sections of Auction Display to match the verified delivery and its code map. Keep delivery marks until archive verifies implementation.
-- [ ] 1.3 Verify: changed-page manual validation, writing review and source links for all 3 capability pages.
+- [ ] 1.3 Walks: after acceptance, rewrite the called-off steps and observations in the site feature walks through `/tcs-review` so each matches its revised case: listing-page Walks 1, 2, 8, 9 and 10 (`g10.auction-listing-page.US1-TC3`, `g10.auction-listing-page.US1-TC4`, `g10.auction-listing-page.US3-TC3`, `g10.auction-listing-page.US3-TC4`, `g10.auction-listing-page.US10-TC11`, `g10.auction-listing-page.US11-TC4`) and lot-status Walk 2 (`g10.auction-lot-status.US2-TC4`, `g10.auction-lot-status.US3-TC1`). A delta cannot carry a feature walk that names cases it does not define.
+- [ ] 1.4 Verify: changed-page manual validation, writing review and source links for all 3 capability pages.
 
 ## 2. Release Earlier Called-Off Slugs (grade10)
 

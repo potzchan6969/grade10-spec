@@ -4,7 +4,7 @@
 **Drafts styled:** 2026-10-08, tcs-rules r4
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 
-## grade10-site-auction-listing-page-US1: Collector opens a lot at its own address
+## g10.auction-listing-page.US1: Collector opens a lot at its own address
 
 **As a** collector,
 **I want** a lot's address to answer with that lot's own page in the response
@@ -13,7 +13,7 @@ HTML,
 without waiting for a script to run.
 
 <!-- trace:case id=g10.auction-listing-page.TC-2it rev=3 covers=g10.auction-listing-page.SC-l9n -->
-### grade10-site-auction-listing-page-US1-TC3-3: Reused address serves only its eligible current holder
+### g10.auction-listing-page.US1-TC3: Reused address serves only its eligible current holder
 
 **Classification:**
 
@@ -76,7 +76,7 @@ without waiting for a script to run.
 * No placeholder, old-lot content or separate code field replaces served content.
 
 <!-- trace:case id=g10.auction-listing-page.TC-tof rev=2 -->
-### grade10-site-auction-listing-page-US1-TC4-2: Client navigation opens the eligible replacement lot
+### g10.auction-listing-page.US1-TC4: Client navigation opens the eligible replacement lot
 
 **Classification:**
 
@@ -128,15 +128,15 @@ without waiting for a script to run.
 
 ---
 
-## grade10-site-auction-listing-page-US3: Collector opens an address that names no lot
+## g10.auction-listing-page.US3: Collector opens an address that names no lot
 
 **As a** collector,
 **I want** an address under the auction's lots that names no published lot to
 answer with the site's not-found surface,
 **so that** I am never shown an empty lot page or the catalogue in its place.
 
-<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=4 covers=g10.auction-listing-page.SC-c13 -->
-### grade10-site-auction-listing-page-US3-TC3-4: Unavailable original address serves Page not found
+<!-- trace:case id=g10.auction-listing-page.TC-pdz rev=4 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-c13 -->
+### g10.auction-listing-page.US3-TC3: Unavailable original address serves Page not found
 
 **Classification:**
 
@@ -197,7 +197,7 @@ Runs once per row of **Test data**.
 * An unpublished replacement does not appear there either.
 
 <!-- trace:case id=g10.auction-listing-page.TC-x03 rev=2 covers=g10.auction-listing-page.SC-b49,g10.auction-listing-page.SC-w3i -->
-### grade10-site-auction-listing-page-US3-TC4-2: Client navigation refuses an ineligible released address
+### g10.auction-listing-page.US3-TC4: Client navigation refuses an ineligible released address
 
 Runs once per row of **Test data**.
 
@@ -249,14 +249,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-listing-page-US10: Collector quotes a published lot
+## g10.auction-listing-page.US10: Collector quotes a published lot
 
 **As a** collector browsing a listing,
 **I want** to reference and share a lot by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
 <!-- trace:case id=g10.auction-listing-page.TC-87q rev=3 covers=g10.auction-listing-page.SC-57v -->
-### grade10-site-auction-listing-page-US10-TC2-3: Listing code absent from the page once scripts finish running
+### g10.auction-listing-page.US10-TC2: Listing code absent from the page once scripts finish running
 
 **Classification:**
 
@@ -296,7 +296,7 @@ Runs once per row of **Test data**.
 * A code occurs only within the full canonical address.
 
 <!-- trace:case id=g10.auction-listing-page.TC-5rp rev=3 covers=g10.auction-listing-page.SC-oq9 -->
-### grade10-site-auction-listing-page-US10-TC3-3: Listing code absent from the shared-link preview
+### g10.auction-listing-page.US10-TC3: Listing code absent from the shared-link preview
 
 **Classification:**
 
@@ -336,7 +336,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Neither document field contains a listing code or payment reference.
 
 <!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=2 -->
-### grade10-site-auction-listing-page-US10-TC4-2: Listing code absent from the page title and meta description
+### g10.auction-listing-page.US10-TC4: Listing code absent from the page title and meta description
 
 **Classification:**
 
@@ -368,7 +368,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Both identify the addressed lot, never the auction catalogue.
 
 <!-- trace:case id=g10.auction-listing-page.TC-6de rev=2 covers=g10.auction-listing-page.SC-dc3 -->
-### grade10-site-auction-listing-page-US10-TC9-2: Listing code stays absent once an order exists on the lot
+### g10.auction-listing-page.US10-TC9: Listing code stays absent once an order exists on the lot
 
 **Classification:**
 
@@ -403,7 +403,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Embedded and network data contain no separate code or payment reference.
 
 <!-- trace:case id=g10.auction-listing-page.TC-y7l rev=2 covers=g10.auction-listing-page.SC-suj -->
-### grade10-site-auction-listing-page-US10-TC10-2: An address naming no lot carries no listing code
+### g10.auction-listing-page.US10-TC10: An address naming no lot carries no listing code
 
 **Classification:**
 
@@ -435,7 +435,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * No lot content or separate payment reference appears.
 
 <!-- trace:case id=g10.auction-listing-page.TC-90g rev=2 -->
-### grade10-site-auction-listing-page-US10-TC11-2: Closed and settled listings retain their public addresses
+### g10.auction-listing-page.US10-TC11: Closed and settled listings retain their public addresses
 
 **Classification:**
 
@@ -472,14 +472,14 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 ---
 
-## grade10-site-auction-listing-page-US11: Collector contacts support about a lot
+## g10.auction-listing-page.US11: Collector contacts support about a lot
 
 **As a** collector contacting support about a lot,
 **I want** support to quickly identify which lot I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
 <!-- trace:case id=g10.auction-listing-page.TC-du4 rev=3 covers=g10.auction-listing-page.SC-51n -->
-### grade10-site-auction-listing-page-US11-TC1-3: No listing code available on the page for the collector to send
+### g10.auction-listing-page.US11-TC1: No listing code available on the page for the collector to send
 
 **Classification:**
 
@@ -517,7 +517,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The opened public lot shows no separate code to support.
 
 <!-- trace:case id=g10.auction-listing-page.TC-h6y rev=2 -->
-### grade10-site-auction-listing-page-US11-TC3-2: Title and address stay the collector's only reference once an order exists
+### g10.auction-listing-page.US11-TC3: Title and address stay the collector's only reference once an order exists
 
 **Classification:**
 
@@ -551,7 +551,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * Step 4 finds the same lot without a code.
 
 <!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=2 covers=none -->
-### grade10-site-auction-listing-page-US11-TC4-2: Called-off listing remains directly accessible
+### g10.auction-listing-page.US11-TC4: Called-off listing remains directly accessible
 
 **Classification:**
 
@@ -595,3 +595,13 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 - **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
 - **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+- **Walks** - Feature walks name cases this change does not define, so this delta carries none. The durable walks keep the earlier called-off steps until task 1.3 rewrites them through `/tcs-review`. The revised cases above govern.
+
+**Run:** QA2 repair pass, 2026-10-13, after the re-key to durable case ids and the lot-status Bidder exception repair. Read the 3 deltas, their journeys and the durable site and admin auction suites. Cases were reconciled against the delta scenarios' trace ids; no scenario text shaped a case, and only bodies the pass read were linked.
+
+- **Disposition** - Of 14 listing-page scenarios, 11 are linked and 3 are not. Added: TC-pdz@4 now also links SC-04, since every row asserts 404 and the Page not found screen for an address naming no published lot. Kept after re-reading: TC-2it@3 to SC55, TC-x03@2 to SC54 and SC56, TC-5rp@3 to SC-21, TC-du4@3 to SC-23, TC-y7l@2 to SC-24, TC-87q@3 to SC-25, TC-6de@2 to SC-27, TC-pdz@4 to SC-19. Unlinked on purpose: TC-tof@2 (US1-TC4) reads hydrated and lookup data and fresh preview metadata but not the served title, description and canonical URL without scripts that SC55 names, and TC-2it@3 already covers SC55; TC-zq9@2 (US10-TC4) checks only the tab title and meta description, not `og:url`, `og:title` and `og:description` of SC-21; TC-h6y@2 (US11-TC3) does not inspect client-fetched responses that SC-27 names; TC-90g@2 (US10-TC11) asserts a closed or settled listing keeps its address, for which this delta has no scenario.
+- **Coverage** - Uncovered scenarios: SC-20 (generated canonical address in the served response without scripts), SC-22 (client-fetched lot data carries no listing code on a published lot) and SC-26 (the code in place of a published lot's address answers not found). The delta mints new ids for them, no durable case claims them, and the inherited durable cases claim only SC-21. TC-pdz@4 and TC-x03@2 test the code-only address only for called-off lots, not for a published lot, so they cannot take SC-26. Record these 3 for a case, or a deliberate decision to leave them to the walk, before approval. No over-claimed case.
+- **Contradictions** - No active case in this delta asserts that a called-off address stays reachable or that the canonical slug is retained. TC-sa9 holds that outcome and stays deprecated under Q2. The durable Walk 10 steps 6-9 (`The canonical address still resolves to the called-off listing`) remain until task 1.3.
+- **Decision** - None new. Q1-Q4 stay settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+- **Walks** - Unchanged: this delta carries none, and task 1.3 repairs the durable walks through `/tcs-review`.

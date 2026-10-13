@@ -12,7 +12,8 @@ at.
 | `pnpm storybook` | The workbench: every story, on port 6006 when free |
 | `pnpm storybook:pages` | The page assemblies in `apps/preview` alone |
 | `pnpm storybook:ui` · `pnpm storybook:design-system` | One package's stories |
-| `pnpm storybook:check` | The grammar below, and every cited story id |
+| `pnpm storybook:check` | The grammar below, every cited story id and journey |
+| `pnpm storybook:coverage` | What each feature holds, and the journeys no flow walks yet (`--gaps` for only those) |
 | `pnpm storybook:rename <map>` | Retitles stories from an `old title<TAB>new title` map and rewrites every id that cites them |
 | `pnpm test:stories` | Every story's `play` and accessibility check, in Chromium |
 
@@ -86,22 +87,46 @@ Storybook holds it.
 - **Click-through** — a screen's controls open the next screen's story with
   `navigateToStory` or a `storyHref` link from `pages/workbench-story-nav.ts`,
   so a journey is walked in the canvas the way a collector walks it
-- **Flows** — a behaviour or a short journey shown as a sequence sits under
-  `Flows/` in `FlowContainer` (`packages/ui/src/blocks/shared/flow-container.tsx`):
-  one behaviour per story, its cases in one container, and a description
-  below the cards naming the journey id it walks and the outcome expected
+- **Flows** — a journey shown as a sequence sits under `Flows/` in
+  `FlowContainer` (`packages/ui/src/blocks/shared/flow-container.tsx`): one
+  journey or behaviour per story, its steps or cases in one container, and a
+  description below the cards saying the outcome expected
+- **Journeys cited** — a flow names the journeys it walks, by their ids in the
+  `user-journeys.md` beside the spec:
+  `parameters: { journeys: ["grade10-site-store-cart-drawer-US-01"] }`, on
+  the meta or one story. The workbench lists them under the canvas in their
+  own words
+- **Collector journeys** — the workbench draws what a collector, member,
+  bidder or winner walks; a journey only staff or operators walk is not drawn
+  here
 - **Play** — a flow's `play` steps through it, so `pnpm test:stories` keeps
   it working
 
 ## Prototypes
 
+- **Not yet designed** — a screen whose manual page marks it ❓, or whose
+  boards are not carried, is drawn as a wireframe `Prototypes/<Screen>`: its
+  states from the journeys and the page, composed of existing blocks and
+  plain layout, with a note on what the design must still settle. It renders
+  and passes accessibility like a screen
 - **Explore** — `/prototype` builds three directions behind its picker, in
   one `Prototypes/<Piece>` story tagged `!test`, so a rough draft never fails
   a run
 - **Outside the agreed look** — `apps/preview/src/prototypes/` is not under
   Design Override, so trying and deleting stops nothing
-- **Promote, then delete** — the picked direction folds into the screen, part
-  or block; the prototype file goes in the same commit
+- **Promote, then delete** — the picked direction, or the agreed design of a
+  wireframe, folds into the screen, part or block; the prototype file goes in
+  the same commit
+
+## Coverage
+
+Every feature page under `grade10-site/` and `shared/auth/` holds Screens, or
+Prototypes until its design is agreed. A feature with no screen of its own
+(events, policy, or a piece drawn on another feature's screen, whose flows
+still walk its journeys) or one only operators see is declared once, with
+why, in `apps/preview/coverage.yaml`.
+`pnpm storybook:coverage` prints each feature's counts and, per capability,
+the collector journeys a flow walks and those it does not yet.
 
 ## Product Details
 
@@ -128,6 +153,10 @@ story in place with `/animate`, `/transitions-polish` and `/ux-copy`.
   component's name
 - **Imports** — one feature reaching into another's folder
 - **Order** — a workbench `storySort` root list that is not the manual's
+- **Journeys** — a flow that names no journey, or a journey id no
+  `user-journeys.md` holds; one only an active change holds warns
+- **Coverage** — a key in `coverage.yaml` that is no feature; a collector
+  feature with no Screens or Prototypes warns
 - **Ids** — a cited story id no story answers, in `docs/`, `openspec/specs/`
   and code: `::story` cards, `?path=/story/` and `iframe.html?id=` links,
   `*_STORY_ID` constants, `storyHref` and `navigateToStory`, and backticked

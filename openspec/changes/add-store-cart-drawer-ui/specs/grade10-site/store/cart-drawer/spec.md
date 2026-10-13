@@ -32,6 +32,10 @@ address.
   - Hosted handoff: redirects to Shopify's hosted invoice once the session is created
   - Named refusal: a changed line or a provider refusal is named in the drawer, never on a separate page
 
+- Pending operations
+  - Drawer actions: wait together for current reads, writes and checkout creation
+  - Recovery: resume available actions only after every operation ends
+  - Dismissal: keep Close, backdrop click and Escape available while waiting
 - Product pictures
   - Current catalogue: recognises each retained line by its first product picture from the existing live read
   - Missing picture: preserves the placeholder, amounts and readiness when no picture is supplied
@@ -415,6 +419,7 @@ drawer SHALL start no check of its own.
 - **THEN** no checkout session is created
 - **AND** the drawer shows the bar's threshold and the basket's goods value in HKD minor units
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-5wy rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-31 - The gate links to the account page to verify
 **Serves:** grade10-site/store/account-identity#grade10-site-store-account-identity-US-01 - a collector who follows the drawer's gate to verify from their account
 
@@ -504,7 +509,7 @@ persist with the member cart for reload and checkout. Selecting points SHALL
 NOT mutate the loyalty ledger.
 
 While a points quote or persistence operation is unresolved, the drawer SHALL
-prevent duplicate tender submissions and activating Checkout. A quote,
+disable drawer actions under the pending-operations requirement below. A quote,
 refusal or persistence failure SHALL show a localized error and keep the last
 accepted choice and total for the same reviewed basket. Once the failed
 operation resolves, Checkout MAY use that still-current accepted quote.
@@ -545,13 +550,13 @@ authoritative reread resolves the accepted choice.
 - **THEN** invalid input does not persist or change the accepted total
 - **AND** a valid whole-number request above the ceiling uses the server-accepted capped amount
 
-<!-- trace:scenario id=g10.store-cart-drawer.SC-cui rev=1 -->
+<!-- trace:scenario id=g10.store-cart-drawer.SC-cui rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-23 - Pending changes prevent duplicate actions and checkout
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
 - **GIVEN** a points change awaiting quote or persistence completion
-- **WHEN** the collector tries another tender action or Checkout
-- **THEN** no duplicate tender operation or checkout navigation occurs
+- **WHEN** the collector tries a cart edit, another tender action, disclosure, product/account navigation or Checkout
+- **THEN** no action callback, duplicate tender operation or navigation occurs
 - **AND** the last accepted same-basket summary remains until the operation resolves
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-puc rev=1 -->
@@ -589,3 +594,96 @@ authoritative reread resolves the accepted choice.
 - **WHEN** the collector reloads or activates Checkout
 - **THEN** the choice is read from the member cart and the drawer's live quote re-quotes both points and code
 - **AND** only accepted spendPoints and the existing code reach the checkout session the drawer creates
+
+### Requirement: Pending drawer operations hold actions until work ends
+
+The drawer SHALL disable quantity and removal, promo and points inputs and
+non-dismissal disclosures, Apply, Use max, held-code selection, tender
+removal, product and account/loyalty navigation and Checkout while any current
+drawer operation is active. This includes current cart reads and writes,
+price/stock review, saved tender and eligibility/points reads, tender quoting
+and persistence, confirming reads and checkout creation. Unrelated page
+requests SHALL NOT hold this guard.
+
+Every active operation SHALL keep the guard until it succeeds, is refused or
+fails. Completing one operation SHALL NOT release the guard while another is
+active. A failed read or missing current facts alone SHALL NOT count as active
+work. After all work ends, existing error, Retry, callback and current-data
+guards SHALL decide which actions return. The drawer SHALL replay no action
+automatically. An accepted choice retained after a failed change SHALL remain
+usable only where the existing same-basket guard permits it.
+
+Pointer and keyboard action attempts while pending SHALL start no cart/tender
+write, read proposal or navigation. Accepted same-basket figures and entered
+values SHALL remain under the existing skeleton and unchecked-fact treatments.
+Pending SHALL NOT make held facts current. Scrolling and Close, backdrop and
+Escape SHALL remain available, including existing nested-sheet dismissal.
+Closing SHALL NOT cancel or roll back a sent operation. An older tender answer
+SHALL NOT update a reopened drawer; the current member's outstanding work and fresh
+reads SHALL continue to decide interaction availability there.
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-tmf rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC34 - Current reads hold drawer actions
+**Serves:** g10.store-cart-drawer.US7 - Collector waits for current cart and tender facts
+
+- **GIVEN** an open member drawer reading cart, review, saved tender, promo eligibility, points or a current quote, including a background refresh with cached values
+- **WHEN** the collector tries any non-dismissal drawer action by pointer or keyboard
+- **THEN** its control is disabled and no action starts a write, tender proposal or navigation
+- **AND** existing loaders or unchecked facts remain without presenting held facts as current
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-8et rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC35 - Cart writes hold item and tender actions together
+**Serves:** g10.store-cart-drawer.US7 - Collector waits for the saved quantity or removal
+
+- **GIVEN** a quantity or removal write is active
+- **WHEN** another item edit, tender input/action, disclosure, product/account link or Checkout is attempted, including a second activation in the same turn
+- **THEN** no second user action is dispatched and all those controls remain disabled
+- **AND** the guard continues through the current review and quote needed after the write
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-7zb rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC36 - Tender work holds every drawer action
+**Serves:** g10.store-cart-drawer.US7 - Collector waits through the accepted tender change
+
+- **GIVEN** a points or promo change is quoting, persisting or confirming, with entered values and an accepted same-basket summary
+- **WHEN** the collector tries another item, tender, disclosure, product/account or Checkout action, including inside an open promo sheet
+- **THEN** no action callback starts another operation or navigation
+- **AND** entered values and the accepted summary remain through each active step
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-25v rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC37 - Checkout creation holds all drawer actions
+**Serves:** g10.store-cart-drawer.US7 - Collector waits for the checkout answer
+
+- **GIVEN** checkout creation is active for the reviewed basket and tender
+- **WHEN** the collector tries an item, tender, disclosure, product/account or Checkout action
+- **THEN** the action is disabled and no edit, proposal, navigation or second checkout request starts
+- **AND** the existing checkout pending presentation remains with its submitted facts fixed
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-d60 rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC38 - Overlaps release only after the last operation
+**Serves:** g10.store-cart-drawer.US8 - Collector resumes after every active answer ends
+
+- **GIVEN** two current drawer operations are active
+- **WHEN** one succeeds, is refused or fails while the other remains active
+- **THEN** drawer actions stay disabled until the remaining operation ends
+- **AND** permitted actions then return under the current data guards without replaying an earlier attempt
+- **AND** an unrelated page request does not keep the drawer pending
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-kqq rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC39 - Terminal failures leave recovery available
+**Serves:** g10.store-cart-drawer.US8 - Collector chooses recovery after an operation fails
+
+- **GIVEN** a cart/tender read or confirming read fails, or a tender write is refused or fails, with no other drawer operation active
+- **WHEN** the failure is delivered
+- **THEN** the failed operation is no longer pending and existing error and Retry remain available
+- **AND** current-data guards withhold unsupported actions; same-basket accepted choice recovery is preserved where already permitted
+- **AND** no read, write or checkout is replayed automatically
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-p7g rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC40 - Dismissal does not cancel sent work
+**Serves:** g10.store-cart-drawer.US9 - Collector returns to the page while the drawer waits
+
+- **GIVEN** a drawer operation is active, with or without an open promo sheet
+- **WHEN** the collector scrolls, uses Close, backdrop or Escape, and later reopens the drawer
+- **THEN** scrolling and existing sheet-first dismissal work and the page address stays unchanged
+- **AND** closing cancels no sent operation or accepted write, and an older tender answer changes no reopened view
+- **AND** a same-member reopen waits for outstanding work and current reads before restoring permitted actions

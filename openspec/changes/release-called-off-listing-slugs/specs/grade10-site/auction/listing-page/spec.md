@@ -62,6 +62,11 @@
   - Called-off address: the original slug becomes available for reuse; an
     eligible new holder answers there, otherwise the address is not found
 
+## REMOVED Feature set
+
+- Public identifier
+  - Canonical address:
+
 ## MODIFIED Requirements
 
 ### Requirement: An address that names no lot is refused

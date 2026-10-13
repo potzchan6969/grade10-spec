@@ -183,6 +183,8 @@ Blocks](/p/shared/ui/auction-listing).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
 | Custom maximum | 🚧 Whole major units only, up to the currency's bid ceiling; extra typed digits stop, and an oversized paste or replacement becomes the ceiling silently |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
+| Chips beyond the ceiling | 🚧 A quick bid above the ceiling is offered at the ceiling, captioned as the limit; duplicates collapse to one chip |
+| Nothing left to offer | 🚧 Their maximum at the ceiling, or the lot's next minimum above it, collapses the chips, custom field and bid action to the amount reached and a limit line; the buyer-fee line stays |
 
 :::flow{title="From sign-in to a standing bid"}
 ## *Collector* — **Opens a live lot**
@@ -488,6 +490,7 @@ surface.
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
 | Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only. | Product |
 | Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1. Custom entry uses the currency ceiling: extra typed digits retain the prior draft, an oversized paste or replacement becomes the ceiling, and no maximum-bid message appears. Replaces the universal 9,999,999,999 field cap and restore-only rule, following [the owner's decision](https://github.com/9gag/grade10/issues/1008#issuecomment-6076137634). | Product (@tangconst) |
+| Ceiling reached | 🚧 In flight | A quick bid computed above the ceiling is offered at the ceiling, captioned as the limit; when no legal amount remains — the collector's maximum already at it, or the lot's next minimum above it — chips, custom field and bid action collapse to the amount reached and a line that the auction accepts no higher amount, with the buyer fee still shown. Keeping the controls disabled was ruled out: every number they showed was above what the auction accepts. | Product (@tangconst) |
 | Buyer fee on the panel | Decided | The 20% rate is disclosed under the bid action, never behind a tooltip; the amount first appears on the invoice. | Product |
 | Your bidding | Decided | The lot's personal dialog: two tabs, Bid placed then Your maximums, amount and time only, owner only; the live maximum stays on the panel. | Product |
 | Watch ≠ email alerts | Decided | Watch is list membership; email alerts are a per-lot preference, on by default when watched, off on unwatch; mute is not unwatch. An account-wide Auction email alerts switch covers every lot without clearing lists. | Product |

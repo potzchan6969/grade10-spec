@@ -35,6 +35,20 @@ test("an entry is its id, its paths and its other words", () => {
   );
 });
 
+test("an entry's id may be in the `<app>.<domain>-<capability>.SC<n>` form", () => {
+  const id = "g10.auction-winner-order.SC4";
+  assert.deepEqual(parseTestsCell(`\`${id}\`: scripts/a.test.mjs`), [
+    { id, paths: ["scripts/a.test.mjs"], words: [] },
+  ]);
+  const { missing, uncited } = checkTestsCell({
+    entries: parseTestsCell(`\`${id}\`: scripts/a.test.mjs`),
+    cited: [id],
+    isFile: () => true,
+    textOf: () => `test("${id} - the order is paid", () => {});`,
+  });
+  assert.deepEqual([missing, uncited], [[], []]);
+});
+
 test("shared-planning-agent-rounds-SC-58 - the ids left out are named, and no others", () => {
   const { missing } = held({}, `\`${SC57}\`: scripts/a.test.mjs`);
   assert.deepEqual(missing, [SC58]);

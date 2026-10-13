@@ -70,3 +70,31 @@ const PAST_ORDERS: readonly OrderHistoryOrderSummary[] = [
 ];
 
 export { ACTIVE_ORDERS, ORDER_HISTORY_COPY, PAST_ORDERS };
+
+/** Draft words for the first read and its failure, not yet in `@grade10/i18n`. */
+const ORDER_HISTORY_READ_COPY = {
+  loading: "Loading orders",
+  failed: "We couldn’t load your orders.",
+  retry: "Retry",
+};
+
+/** How long a retried order read takes in the workbench. */
+const ORDER_HISTORY_READ_MS = 400;
+
+/** An active order whose total the store has not settled yet. */
+const PENDING_ACTIVE_ORDERS: readonly OrderHistoryOrderSummary[] = [
+  {
+    id: "ord-pending-1",
+    orderId: "Order #G10-10412",
+    status: "processing",
+    date: FIXTURE_PLACED_ON,
+    total: "Total: Pending",
+    lines: [{ id: "pending-1", ...LINE }],
+  },
+];
+
+export {
+  ORDER_HISTORY_READ_COPY,
+  ORDER_HISTORY_READ_MS,
+  PENDING_ACTIVE_ORDERS,
+};

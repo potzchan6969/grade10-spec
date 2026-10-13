@@ -63,7 +63,7 @@ function RevealSection({
  * matching Order Details / Order History. Settles immediately under reduced
  * motion.
  */
-function StoreLocatorPage() {
+function StoreLocatorPage({ mapLoaded = true }: { mapLoaded?: boolean }) {
   const revealed = useFirstPaintReveal();
 
   return (
@@ -87,16 +87,18 @@ function StoreLocatorPage() {
               className="relative aspect-square w-full overflow-hidden rounded-2xl bg-muted"
               data-slot="store-locator-map"
             >
-              <iframe
-                allowFullScreen
-                aria-hidden
-                className="pointer-events-none size-full border-0"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                src={STORE_LOCATOR_STORE.mapEmbedSrc}
-                tabIndex={-1}
-                title={STORE_LOCATOR_COPY.mapTitle}
-              />
+              {mapLoaded && (
+                <iframe
+                  allowFullScreen
+                  aria-hidden
+                  className="pointer-events-none size-full border-0"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={STORE_LOCATOR_STORE.mapEmbedSrc}
+                  tabIndex={-1}
+                  title={STORE_LOCATOR_COPY.mapTitle}
+                />
+              )}
               <a
                 className="absolute inset-0"
                 href={STORE_LOCATOR_STORE.mapsHref}
@@ -218,4 +220,20 @@ export const Default: Story = {
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
+};
+
+/** The map has not loaded: its place still opens Google Maps and the box keeps its size, with no message. */
+export const MapNotLoaded: Story = {
+  args: { mapLoaded: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(storeLocatorRevealed(canvasElement)).toBe(true));
+    expect(canvasElement.querySelector("iframe")).toBeNull();
+    expect(
+      canvas.getByRole("link", { name: STORE_LOCATOR_COPY.openMap }),
+    ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
+    expect(
+      canvasElement.querySelector('[data-slot="store-locator-map"]'),
+    ).not.toBeNull();
+  },
 };

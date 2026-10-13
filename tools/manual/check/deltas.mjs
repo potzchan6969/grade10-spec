@@ -17,6 +17,7 @@ import { findRequirement } from "../src/api/requirements.ts";
 import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
 import {
   findSection,
+  JOURNEY_ID,
   outline,
   SCENARIO_ID,
   scenarioIdsIn,
@@ -50,7 +51,7 @@ import {
  * the delta, and one written here is read by nothing. */
 const CARRIED = new Set(["Purpose", "Feature set", "REMOVED Feature set"]);
 const ISSUED_ID = new RegExp(
-  `${SCENARIO_ID.source}|[a-z0-9][a-z0-9-]*-(?:US|TC)-\\d+`,
+  `${SCENARIO_ID.source}|${JOURNEY_ID.source}|[a-z0-9][a-z0-9-]*-TC-\\d+`,
   "g",
 );
 const LEADING_ID = new RegExp(`^(${SCENARIO_ID.source})\\b`);

@@ -27,6 +27,7 @@ import {
   sortTriggerLabel,
 } from "../../store-content";
 import { navigateToStory } from "../../workbench-story-nav";
+import { PRODUCT_LIST_COPY } from "./product-list-content";
 
 /** Storybook story id for the Product Detail page assembly. */
 const PRODUCT_DETAIL_STORY_ID =
@@ -108,6 +109,9 @@ function suggestionsForDraft(
   return groups.length > 0 ? groups : [];
 }
 
+/** Which result the listing draws: products, a search or filter that matches none, or a store with none yet. */
+type ProductListingState = "listed" | "noMatch" | "emptyCatalogue";
+
 /**
  * The product listing page as a store assembles it: `Nav`, the shared
  * `ProductBrowse` compound, `CartDrawer`, and `Footer`.
@@ -120,9 +124,14 @@ function suggestionsForDraft(
  * The nav cart button opens the shared drawer; checkout redirect stays a
  * workbench stub (consumer-owned in a real store). Header is `SiteHeader`.
  */
-function ProductListPage() {
-  const [selection, setSelection] =
-    useState<FilterSelection>(INITIAL_SELECTION);
+function ProductListPage({
+  listing = "listed",
+}: {
+  listing?: ProductListingState;
+}) {
+  const [selection, setSelection] = useState<FilterSelection>(
+    listing === "emptyCatalogue" ? {} : INITIAL_SELECTION,
+  );
   const [filterGroups, setFilterGroups] =
     useState<readonly FilterGroup[]>(FILTER_GROUPS);
   const [searchDraft, setSearchDraft] = useState("");
@@ -329,7 +338,7 @@ function ProductListPage() {
           },
         }}
         groups={{ status: "ready", data: filterGroups }}
-        hasMore={visibleCount < TOTAL_PRODUCTS}
+        hasMore={listing === "listed" && visibleCount < TOTAL_PRODUCTS}
         loadingMore={loadingMore}
         onClearFilters={() => {
           if (
@@ -376,11 +385,25 @@ function ProductListPage() {
           if (value !== sort) resetResults();
           setSort(value);
         }}
-        resultCount="100 Products"
+        resultCount={listing === "listed" ? "100 Products" : "0 Products"}
         results={
           completedGeneration !== requestGeneration
             ? { status: "loading" }
-            : { status: "ready", data: productData }
+            : listing === "listed"
+              ? { status: "ready", data: productData }
+              : listing === "noMatch"
+                ? {
+                    status: "empty",
+                    message: PRODUCT_LIST_COPY.noMatch,
+                    action: {
+                      label: PRODUCT_LIST_COPY.clearFilters,
+                      onAction: () => setSelection({}),
+                    },
+                  }
+                : {
+                    status: "empty",
+                    message: PRODUCT_LIST_COPY.emptyCatalogue,
+                  }
         }
         searchSuggestions={searchSuggestions}
         searchValue={searchDraft}
@@ -484,4 +507,33 @@ export const RapidChangesRestartResults: Story = {
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
+};
+
+/** A filter or search matches no product: the message and a clear-filters action. */
+export const NoMatch: Story = {
+  args: { listing: "noMatch" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const noMatch = await canvas.findByText(PRODUCT_LIST_COPY.noMatch);
+    expect(noMatch).toBeInTheDocument();
+    expect(
+      within(
+        noMatch.closest('[data-slot="empty-state"]') as HTMLElement,
+      ).getByRole("button", { name: PRODUCT_LIST_COPY.clearFilters }),
+    ).toBeInTheDocument();
+  },
+};
+
+/** A store with no products yet: its own message, and no clear-filters action. */
+export const EmptyCatalogue: Story = {
+  args: { listing: "emptyCatalogue" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      await canvas.findByText(PRODUCT_LIST_COPY.emptyCatalogue),
+    ).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: PRODUCT_LIST_COPY.clearFilters }),
+    ).not.toBeInTheDocument();
+  },
 };

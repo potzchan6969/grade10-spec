@@ -555,7 +555,6 @@ const VAULT_FOOTER = {
 const VISIT_TIME_ZONE = "Asia/Hong_Kong";
 /** Shop-local today the Book Visit calendar is drawn on. */
 const VISIT_TODAY = "2026-09-01";
-const VISIT_TODAY_DATE = new Date(2026, 8, 1);
 /** Last bookable day: three months from today. */
 const VISIT_HORIZON = "2026-12-01";
 const VISIT_MIN_MONTH = "2026-09";
@@ -1091,7 +1090,7 @@ export {
   VISIT_RECORD,
   VISIT_SLOTS,
   VISIT_TIME_ZONE,
-  VISIT_TODAY_DATE,
+  VISIT_TODAY,
   vaultItemCardStoryId,
   vaultItemRelatedStoryId,
   withRetrievalRequested,

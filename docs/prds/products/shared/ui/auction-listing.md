@@ -110,6 +110,13 @@ cancelled.
 - 🚧 **A leader's typed raise** — starts at the greater of the listing's next
   minimum and their maximum plus 100 minor units; that floor is not the first
   chip
+- 🚧 **Chips at the ceiling** — a quick bid computed above the currency's bid
+  ceiling is offered at the ceiling, captioned as the limit; two chips landing
+  on the same amount collapse to one
+- 🚧 **No amount left** — when nothing legal remains to offer — the collector's
+  maximum already at the ceiling, or the lot's next minimum above it — chips,
+  the custom field and the bid action give way to the amount reached and a
+  line that this auction accepts no higher amount; the buyer-fee line stays
 - **A moved floor** — Place Bid is the commitment, and a floor that moved
   meanwhile uses the panel's stale-floor recovery
 
@@ -135,7 +142,7 @@ cancelled.
 
 ::story{id="auction-bidding-blocks-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
-::story{id="auction-bidding-blocks-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
+::story{id="auction-bidding-blocks-listingauctionbidcard-custom-maximum--custom-maximum-ceiling" title="Custom maximum ceiling"}
 
 ::story{id="auction-display-blocks-listinglotmeta--default" title="The details section"}
 

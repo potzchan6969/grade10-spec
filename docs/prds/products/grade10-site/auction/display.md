@@ -135,8 +135,9 @@ lot before any script runs.
 - **Hidden from browse/search** - a draft or called-off lot is absent from
   catalogue and search; a draft has no public address.
 - 🚧 **Called-off address** - another listing can take a called-off lot's
-  former address. An unused address shows Page not found; a reused address
-  opens the new public lot.
+  former address, including a lot called off earlier, so a saved link to it
+  stops opening that lot. An unused address shows Page not found; a reused
+  address opens the new public lot.
 - 🚧 **Restricted regions** — where auctions are not offered, a request from
   that region sees no auction entry point anywhere on the site, and a direct
   auction address — the catalogue or a lot — answers the restriction page

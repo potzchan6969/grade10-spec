@@ -238,3 +238,30 @@ Uses draft feature cases as planning input after Group 11 lands. Planning marks 
 - [ ] 13.1 Keep one end-to-end actor walk for each frozen journey through the drawer, Your Orders and the Shopify return link; US-05 walks one Pay at a time and older and lost answers, not invoice reuse or recovery: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`.
 - [ ] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row.
 - [ ] 13.3 Verify Playwright and authorized staging evidence separately; record unrun gates and receipts without treating fixtures as live Shopify proof. Backend guarantees are evidenced by `add-checkout-purchase-safety`.
+
+## 14. Checkout pending product record (grade10-spec)
+
+Appended to preserve existing claims and addresses. The shared interaction
+contract is built by `add-store-cart-drawer-ui` Group 15, not duplicated here.
+
+- [ ] 14.1 Check the Checkout pending outcome and its Cart Drawer source link with the manual validator before updating the record.
+- [ ] 14.2 Keep `docs/prds/products/grade10-site/store/checkout.md` aligned with the delivered pending Pay, dismissal and recovery outcome; preserve construction marks until verified delivery.
+- [ ] 14.3 Verify this change's strict validation and the manual without modifying historical acceptance snapshots.
+
+## 15. Pending Pay integration (grade10)
+
+Depends on this change's Group 11 and `add-store-cart-drawer-ui` Groups 15-16:
+the existing shared guard and host mapping are required by this request path.
+
+- [ ] 15.1 Add failing request-lifetime tests in their own commit before 15.2; tick this box last. Update the changed revisions for drawer-wide pending Pay and an externally changed cart/tender, then cover overlaps, dismissal/reopen and failure recovery: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
+- [ ] 15.2 Make those tests pass using the common `interactionPending` input and synchronous Pay guard. Hold actual Pay until settlement without canceling on close, retain external cart/member stale-answer rejection and release only currently permitted actions after failure or the last operation; start no automatic new Pay. A still-current successful hosted-invoice answer opens Shopify after plain dismissal or reopen (Checkout Q35 / Cart Drawer Q22); drawer open state does not invalidate the request: `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-66`, `grade10-site-store-checkout-SC-67`, `grade10-site-store-checkout-SC-68`.
+- [ ] 15.3 Verify focused drawer/checkout tests, compatibility typechecks and frontend checks required by `docs/conventions/validation.md`; perform no backend, provider or production change.
+
+## 16. The walk - pending Pay (grade10)
+
+Uses draft `feature-tcs.md` as planning input after Groups 14-15 land; keeps
+Group 13's complete journey scope with the pending-action amendment.
+
+- [ ] 16.1 Keep an end-to-end actor walk for every checkout journey, including blocked drawer controls during Pay, changes from another tab/session, dismissal/reopen, overlapping operations, failed/lost answers and deliberate retry: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`.
+- [ ] 16.2 In the walks' own commit, mark only cases decided by those walks with `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` and name remaining manual provider cases in the suite and the walk's `rounds.md` row.
+- [ ] 16.3 Verify focused Playwright walks and record unrun Shopify/provider gates separately; preserve backend safety ownership and all earlier acceptance receipts.

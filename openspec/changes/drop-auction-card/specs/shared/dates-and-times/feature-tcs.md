@@ -1,6 +1,7 @@
 # shared/dates-and-times Test Cases
 
 **Status:** pending-review · 0/3
+**Drafts styled:** 2026-10-13, tcs-rules r4
 
 ## g10.shared-dates-and-times.US1: The zone a date is stated in
 
@@ -11,7 +12,7 @@
 **so that** I read the same instant the same way wherever it is shown.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-fqv rev=2 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### g10.shared-dates-and-times.US1-TC3-2: A deadline names the viewer's zone as it stands at its instant
+### g10.shared-dates-and-times.US1-TC3: A deadline names the viewer's zone as it stands at its instant
 
 Runs once per row of **Test data**.
 
@@ -55,7 +56,7 @@ Runs once per row of **Test data**.
 * The line names <zone name>.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-v92 rev=2 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### g10.shared-dates-and-times.US1-TC4-2: A deadline outside the HKT and EDT examples names the viewer's zone
+### g10.shared-dates-and-times.US1-TC4: A deadline outside the HKT and EDT examples names the viewer's zone
 
 Runs once per row of **Test data**.
 
@@ -103,7 +104,7 @@ Runs once per row of **Test data**.
 * The line names neither HKT nor UTC.
 
 <!-- trace:case id=g10.shared-dates-and-times.TC-07a rev=2 covers=g10.shared-dates-and-times.SC-q9s,g10.shared-dates-and-times.SC-4uc,g10.shared-dates-and-times.SC-4pe,g10.shared-dates-and-times.SC-egt,g10.shared-dates-and-times.SC-34o,g10.shared-dates-and-times.SC-xyg,g10.shared-dates-and-times.SC-hy6,g10.shared-dates-and-times.SC-jjl,g10.shared-dates-and-times.SC-k76,g10.shared-dates-and-times.SC-upi,g10.shared-dates-and-times.SC-apa,g10.shared-dates-and-times.SC-pi9,g10.shared-dates-and-times.SC-uu7,g10.shared-dates-and-times.SC-loc,g10.shared-dates-and-times.SC-n43,g10.shared-dates-and-times.SC-hl5,g10.shared-dates-and-times.SC-r3c -->
-### g10.shared-dates-and-times.US1-TC9-2: A collector clock reads the same text on any machine zone
+### g10.shared-dates-and-times.US1-TC9: A collector clock reads the same text on any machine zone
 
 Runs once per row of **Test data**.
 

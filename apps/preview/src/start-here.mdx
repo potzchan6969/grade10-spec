@@ -13,8 +13,8 @@ you are looking at.
 
 - **Appointment › Booking** — a domain and a feature, the same words as the manual's page
 - **Screens** — the feature's screens, such as Book Visit, with one story per state
-- **Flows** — a journey or behaviour played through as a sequence
-- **Prototypes** — directions to choose from, flipped with a picker
+- **Flows** — a journey played through as a sequence; the journeys it walks are listed under it
+- **Prototypes** — a screen not yet designed, as a wireframe, or directions to choose from
 - **Parts** — pieces drawn for this feature only
 - **Blocks** — shared components an app imports, with their states
 - **Design System** — primitives: buttons, fields, dialogs, by group
@@ -30,6 +30,7 @@ Name the feature, the kind and the state, in plain words:
 - `Appointment › Booking: add a "No slots this month" state to Book Visit`
 - `Vault › Portfolio: draw the "Retrieval requested" state of the asset card from <Figma link>`
 - `Store › Cart: walk adding an item through to checkout as a flow`
+- `Grading › Drop Off: wireframe the booking screen from its journeys`
 - `Vault › Portfolio: /prototype three empty states`
 - `Show me every state of Book Visit at 375px`
 
@@ -42,6 +43,7 @@ or ❓.
 
 - **`pnpm storybook`** — opens this Storybook at http://localhost:6006
 - **`pnpm storybook:check`** — holds every story to the sidebar's rules
+- **`pnpm storybook:coverage`** — what each feature holds, and the journeys no flow walks yet
 - **`pnpm test:stories`** — plays every story in a browser
 
 The rules: `docs/governance/storybook.md`. The published copy of `main`:

@@ -25,6 +25,9 @@ export type BiddingState =
   | "live-manual"
   | "live-auto-leading"
   | "live-auto-outbid"
+  | "live-auto-at-ceiling"
+  | "live-auto-near-ceiling"
+  | "live-past-ceiling"
   | "closed-sold"
   | "closed-won-payment-due"
   | "closed-won-settled"
@@ -44,6 +47,9 @@ export const BIDDING_STATE_LABELS: Record<BiddingState, string> = {
   "live-manual": "Live — manual",
   "live-auto-leading": "Live — auto leading",
   "live-auto-outbid": "Live — auto outbid",
+  "live-auto-at-ceiling": "Live — auto at ceiling",
+  "live-auto-near-ceiling": "Live — auto near ceiling",
+  "live-past-ceiling": "Live — past ceiling",
   "closed-sold": "Closed — sold",
   "closed-won-payment-due": "Closed — awaiting address",
   "closed-won-settled": "Closed — won settled",
@@ -69,6 +75,13 @@ export const BID_FIXTURE_LOT = {
 /** Live-auto-outbid: market above the viewer's maximum. */
 const OUTBID_CURRENT_MINOR =
   BID_FIXTURE_LOT.viewerMaximumMinor + BID_FIXTURE_LOT.incrementMinor;
+
+/** Live-past-ceiling: bidding has reached the ceiling, so the next bid sits above it. */
+const PAST_CEILING_CURRENT_MINOR = BID_FIXTURE_LOT.ceilingMinor;
+
+/** Live-auto-near-ceiling: the 4× chip steps past the ceiling. */
+const NEAR_CEILING_MAXIMUM_MINOR =
+  BID_FIXTURE_LOT.ceilingMinor - BID_FIXTURE_LOT.incrementMinor * 3;
 
 /** Closed hammer for sold / won / lost fixtures. */
 const CLOSED_SOLD_MINOR = 7_250_000;
@@ -174,6 +187,10 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
   amountAboveMaximum: "{amount} vs max",
+  maximumAtCeiling: "This is the highest maximum this auction accepts.",
+  biddingAtCeiling:
+    "Bidding has reached {amount}, the highest this auction accepts.",
+  ceilingChip: "Limit",
   minimumMaximumFloor: "At least {amount} (current bid + {increment})",
   minimumMaximumLeadingNudge: "At least {amount} (your maximum + {increment})",
   minimumMaximumLeadingIncrement:
@@ -253,12 +270,14 @@ export function stateMeta(state: BiddingState) {
           ? BID_FIXTURE_LOT.startingBidMinor
           : state === "live-auto-outbid"
             ? OUTBID_CURRENT_MINOR
-            : state === "closed-sold" ||
-                state === "closed-won-payment-due" ||
-                state === "closed-won-settled" ||
-                state === "closed-lost"
-              ? CLOSED_SOLD_MINOR
-              : BID_FIXTURE_LOT.currentBidMinor,
+            : state === "live-past-ceiling"
+              ? PAST_CEILING_CURRENT_MINOR
+              : state === "closed-sold" ||
+                  state === "closed-won-payment-due" ||
+                  state === "closed-won-settled" ||
+                  state === "closed-lost"
+                ? CLOSED_SOLD_MINOR
+                : BID_FIXTURE_LOT.currentBidMinor,
     bidCount:
       state === "live-no-bids" || state === "closed-unsold"
         ? 0
@@ -384,6 +403,26 @@ export function userBidHistoryForState(
           },
         ],
       };
+    case "live-auto-at-ceiling":
+    case "live-auto-near-ceiling": {
+      const maximumMinor = viewerMaximumForState(state) ?? 0;
+      return {
+        maximumRows: [
+          {
+            id: `user-max-${state}`,
+            amountLabel: fixtureAmount(maximumMinor),
+            acceptedAtMs: msAgo(25),
+          },
+        ],
+        bidRows: [
+          {
+            id: "user-bid-auto-current",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
+            acceptedAtMs: msAgo(2),
+          },
+        ],
+      };
+    }
     case "live-auto-outbid":
       return {
         maximumRows: [
@@ -462,7 +501,12 @@ export function userBidHistoryForState(
 
 export function bidModeForState(state: BiddingState): BidMode {
   if (state === "live-manual") return "manual";
-  if (state === "live-auto-leading" || state === "live-auto-outbid") {
+  if (
+    state === "live-auto-leading" ||
+    state === "live-auto-outbid" ||
+    state === "live-auto-at-ceiling" ||
+    state === "live-auto-near-ceiling"
+  ) {
     return "auto";
   }
   return "manual";
@@ -480,7 +524,13 @@ function listingAuctionStanding(state: BiddingState): ListingAuctionStanding {
   if (state === "closed-won-settled") return "won-settled";
   if (state === "closed-lost") return "lost";
   if (state === "live-auto-outbid") return "outbid";
-  if (state === "live-auto-leading") return "leading-max";
+  if (
+    state === "live-auto-leading" ||
+    state === "live-auto-at-ceiling" ||
+    state === "live-auto-near-ceiling"
+  ) {
+    return "leading-max";
+  }
   if (state === "live-manual") return "leading-manual";
   return "none";
 }
@@ -505,6 +555,8 @@ function viewerMaximumForState(state: BiddingState): number | undefined {
   if (state === "live-auto-leading" || state === "live-auto-outbid") {
     return BID_FIXTURE_LOT.viewerMaximumMinor;
   }
+  if (state === "live-auto-at-ceiling") return BID_FIXTURE_LOT.ceilingMinor;
+  if (state === "live-auto-near-ceiling") return NEAR_CEILING_MAXIMUM_MINOR;
   return undefined;
 }
 

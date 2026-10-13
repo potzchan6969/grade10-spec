@@ -65,8 +65,11 @@ import {
   SERVICE,
   SHOP_CLOSED_COPY,
   TOLD_ROWS,
+  VAULT_FACTS,
   VISIT_FACTS,
   VISIT_NAME,
+  WITH_GRADING_COPY,
+  WITH_VAULT_COPY,
 } from "./appointment-visit-content";
 
 type VisitState =
@@ -80,7 +83,9 @@ type VisitState =
   | "reconnecting"
   | "linkOpensNothing"
   | "paid"
-  | "paidRefunded";
+  | "paidRefunded"
+  | "withGrading"
+  | "withVault";
 
 type Panel = "move" | "cancel";
 
@@ -230,7 +235,7 @@ function BookedVisit({
                 : { status: "ready", data: [] },
               selectedStart: pick?.start,
               timeZone: VISIT_TIME_ZONE,
-              today: new Date("2026-09-01T02:00:00Z"),
+              today: "2026-09-01",
               onMonthChange: (next) => {
                 setMonth(next);
                 setDate(firstAvailableVisitDay(next));
@@ -312,6 +317,30 @@ const ENDED: Record<
   },
 };
 
+/** Phases past the pass: the cards or item went on, or the shop shut for the day. */
+const PHASE_PAGES: Record<
+  "withGrading" | "withVault",
+  {
+    copy: VisitBodyCopy;
+    tone: VisitTone;
+    acts: readonly VisitAct[];
+    facts: readonly VisitFact[];
+  }
+> = {
+  withGrading: {
+    copy: WITH_GRADING_COPY,
+    tone: "ink",
+    acts: [MINE_ACT],
+    facts: VISIT_FACTS,
+  },
+  withVault: {
+    copy: WITH_VAULT_COPY,
+    tone: "ink",
+    acts: [MINE_ACT],
+    facts: VAULT_FACTS,
+  },
+};
+
 function AppointmentVisitPage({
   state,
   opened = null,
@@ -330,6 +359,20 @@ function AppointmentVisitPage({
           bookHref={BOOK_HREF}
           copy={LINK_OPENS_NOTHING_COPY}
           mineHref={MINE_HREF}
+        />
+      </VisitShell>
+    );
+  }
+  if (state === "withGrading" || state === "withVault") {
+    const phase = PHASE_PAGES[state];
+    return (
+      <VisitShell>
+        <VisitBody
+          acts={phase.acts}
+          copy={phase.copy}
+          facts={phase.facts}
+          onDismiss={() => {}}
+          tone={phase.tone}
         />
       </VisitShell>
     );
@@ -518,3 +561,31 @@ export const LinkOpensNothing: Story = {
     ).toBeVisible();
   },
 };
+
+/** Sent to grading: no pass and no Directions, and grading's own mail follows. */
+export const WithGrading: Story = {
+  args: { state: "withGrading" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { name: "Grading has your 12 cards" }),
+    ).toBeVisible();
+    expect(canvas.queryByText("Your pass")).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Directions" })).toBeNull();
+    expect(canvas.getByRole("link", { name: "My visits" })).toBeVisible();
+  },
+};
+
+/** Sent to the vault: no pass, and the vault's own mail follows. */
+export const WithTheVault: Story = {
+  args: { state: "withVault" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { name: "Your item is with the vault" }),
+    ).toBeVisible();
+    expect(canvas.queryByText("Your pass")).toBeNull();
+    expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
+  },
+};
+

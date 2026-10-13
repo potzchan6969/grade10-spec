@@ -689,3 +689,20 @@ export {
   WAIT_SERVICES,
   WITH_GRADING_COPY,
 };
+
+/** The visit went to the vault: no pass, and the vault's own mail follows. */
+export const WITH_VAULT_COPY: VisitBodyCopy = {
+  ...BODY_WORDS,
+  phase: "With the vault",
+  note: "Sent Thu 3 Sep",
+  title: "Your item is with the vault",
+  lede: `${SHOP} sent your item to the vault. The vault’s own mail follows.`,
+  footNote: "The vault sends its own mail, not a Thanks.",
+};
+
+/** The vault visit's facts: the same visit, under the vault's service. */
+export const VAULT_FACTS: readonly VisitFact[] = VISIT_FACTS.map((fact) =>
+  fact.label === "Service"
+    ? { label: "Service", value: "Vault Drop-Off" }
+    : fact,
+);
