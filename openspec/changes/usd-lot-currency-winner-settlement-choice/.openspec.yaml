@@ -1,6 +1,11 @@
 schema: grade10-planning
 created: 2026-10-12
 promoted_by: "@tangconst"
+depends_on:
+  - add-winner-order-tax-line
+  - complete-auction-post-sale
+  - add-auction-internal-bid
+  - collapse-maximum-entry-at-ceiling
+  - remove-my-auction-orders
 hands:
   design: "@tangconst"
-page_waived: "draft for PM confirmation - the PRD marks land when the open decisions (Q3-Q6) settle"

@@ -1,16 +1,108 @@
 # Tasks
 
-> Draft - grouped tasks fill in at planning-dev once PM confirms the open
-> decisions (HKD-JPY schedule fate, USD verified-bidder bar).
+> The grade10-spec groups land first, and the submodule bump is the boundary.
+> The grade10 groups then claim in parallel against the contracts and
+> fixtures. The rate (fixed 7.85), the retirement of HKD and JPY lot pricing
+> and the invoice disclosure are settled in `decisions.md`.
 
-## Preparation already landed (ahead of acceptance)
+## 1. Winner order presentation and fixtures (grade10-spec)
 
-- [x] Auction bid-side fixtures and letter previews read `US$` (emails
-  `preview-lot.ts`, `packages/ui` auction stories, `apps/preview` auction
-  pages).
-- [x] `DEFAULT_LISTING_CURRENCY` → `USD` in `packages/ui/src/lib/format-money.ts`.
+- [ ] 1.1 Write the block tests first, in their own commit: the settlement currency choice with nothing preselected, one choice per method and rail, the method cleared on a currency switch, the two total lines under HKD and one under USD, and the one-rail bank details dialog (`winner-order-SC-278`, `winner-order-SC-279`, `winner-order-SC-280`, `winner-order-SC-290`, `winner-order-SC-291`, `winner-order-SC-292`, `winner-order-SC-293`, `winner-order-SC-294`, `winner-order-SC-295`, `winner-order-SC-296`, `winner-order-SC-297`, `winner-order-SC-95`, `winner-order-SC-181`, `winner-order-SC-182`, `winner-order-SC-183`, `winner-order-SC-184`, `winner-order-SC-299`, `shared-ui-auction-order-SC-21`, `shared-ui-auction-order-SC-22`, `shared-ui-auction-order-SC-23`, `shared-ui-auction-order-SC-24`, `shared-ui-auction-order-SC-25`, `shared-ui-auction-order-SC-26`, `shared-ui-auction-order-SC-27`, `shared-ui-auction-order-SC-28`, `shared-ui-auction-order-SC-29`)
+- [ ] 1.2 Add the `settlementCurrency` and `paymentChoices` props, the settlement currency choice and the per-rail method choices with their fee-range text to `AuctionWinnerOrder`, taking the offered methods from the view, and export `AuctionSettlementCurrency`, `AuctionPaymentRail` and `AuctionWinnerOrderPaymentChoice` (`winner-order-SC-278`, `winner-order-SC-293`, `winner-order-SC-294`, `winner-order-SC-295`, `winner-order-SC-296`, `winner-order-SC-297`, `winner-order-SC-303`, `shared-ui-auction-order-SC-21`, `shared-ui-auction-order-SC-22`, `shared-ui-auction-order-SC-23`, `shared-ui-auction-order-SC-24`, `shared-ui-auction-order-SC-25`, `shared-ui-auction-order-SC-26`)
+- [ ] 1.3 Add the `summary.convertedTotal` prop and the second Order Total line to the Order Summary, and keep the lot card's winning bid in USD (`winner-order-SC-290`, `winner-order-SC-291`, `winner-order-SC-292`, `shared-ui-auction-order-SC-27`, `shared-ui-auction-order-SC-28`)
+- [ ] 1.4 Add the `bankDetails` prop and the `AuctionWinnerOrderBankDetails` export, move the View Bank Details dialog from the `apps/preview` page assembly into the block, and show one rail with no tabs (`winner-order-SC-95`, `winner-order-SC-181`, `winner-order-SC-182`, `winner-order-SC-183`, `winner-order-SC-299`, `shared-ui-auction-order-SC-29`)
+- [ ] 1.5 Add the catalog keys for USD, HKD, each rail and the two total lines, in every language the catalogs hold, with no key that names the rate
+- [ ] 1.6 Add winner order stories for a USD order, an HKD order on FPS and on HK Local, a USD order on SWIFT, a currency switch that clears a method, and a USD order with no card rule (`winner-order-SC-293`, `winner-order-SC-294`, `winner-order-SC-295`, `winner-order-SC-297`)
+- [ ] 1.7 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, and the Storybook build for `apps/preview`
 
-## Open on PM
+## 2. Invoice, receipt and letter fixtures (grade10-spec)
 
-- [ ] HKD/JPY schedules and ceilings: retire, or keep for lots already priced.
-- [ ] Verified-bidder bar restated in USD (today HKD 120,000).
+- [ ] 2.1 Write the document tests first, in their own commit: an HKD invoice and receipt that print every amount in HKD, no USD winning bid and no rate (`winner-order-SC-288`, `winner-order-SC-289`, `order-mail-SC-66`)
+- [ ] 2.2 Add an HKD invoice and receipt fixture whose HKD lines are whole HK$ and sum to the order total, and hold the USD invoice fixture beside it (`winner-order-SC-285`, `winner-order-SC-288`)
+- [ ] 2.3 Make the order letter previews in `apps/emails` print settlement-currency amounts and no USD bid for an HKD order, and keep `US$` on the won-lot letter (`winner-order-SC-289`, `order-mail-SC-63`, `order-mail-SC-64`, `order-mail-SC-65`, `order-mail-SC-66`, `order-mail-SC-67`, `order-mail-SC-68`)
+- [ ] 2.4 Verify: `pnpm run test`, the `apps/emails` preview build, and `pnpm run typecheck`
+
+## 3. PRD pages (grade10-spec)
+
+- [ ] 3.1 Settle the pages the proposal links: in `post-bidding.md` make the Order Setup table's payment method row name the rails and the settlement currency, and replace the buyer's premium row's per-currency minimum with one USD amount; in `management.md` replace the minimum charge row's per-currency wording; in `bidding.md`, `account.md`, `display.md` and `index.md` check that every 🚧 line matches the deltas
+- [ ] 3.2 Verify: `pnpm check:manual` names no line of these pages and no unmarked page
+
+## 4. Currency overwrite and Payment Settings reshape (grade10)
+
+Depends on the grade10-spec groups only through the submodule bump.
+
+- [ ] 4.1 Write the migration tests first, in their own commit: an HKD and a JPY listing read USD with amounts, bids, status and dates unchanged; a USD listing is untouched; a second run changes nothing (`grade10-admin-auction-listing-SC-162`, `grade10-admin-auction-listing-SC-163`)
+- [ ] 4.2 Add the nullable order columns for settlement currency and bank rail, the invoice currency, the line USD fact and the one-rail bank snapshot, per `tech-design.md`
+- [ ] 4.3 Write the one-time overwrite of every HKD or JPY listing, bid and auto-bid maximum to USD, in one transaction with row counts logged (`grade10-admin-auction-listing-SC-162`, `grade10-admin-auction-listing-SC-163`)
+- [ ] 4.4 Apply the USD check on listing, bid and maximum currency after the overwrite (`grade10-admin-auction-listing-SC-161`)
+- [ ] 4.5 Reshape Payment Settings storage to one USD premium minimum and card rules for USD and HKD, deleting the HKD and JPY minimums and the JPY rule (`grade10-admin-auction-payment-settings-SC-13`)
+- [ ] 4.6 Verify: the migration suite on a copy of staging data, and a count query showing no HKD or JPY listing remains
+
+## 5. Bid, listing and Payment Settings services (grade10)
+
+- [ ] 5.1 Write the service tests first, in their own commit: the USD schedule and ceiling, the refusals of HKD and JPY, the listing writes, and Payment Settings saves (`grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-05`, `grade10-site-auction-bid-increments-SC-07`, `grade10-site-auction-bid-increments-SC-09`, `grade10-site-auction-bid-increments-SC-10`, `grade10-site-auction-bid-increments-SC-12`, `grade10-site-auction-bid-increments-SC-13`, `grade10-site-auction-bid-increments-SC-14`, `grade10-site-auction-bid-increments-SC-15`, `grade10-site-auction-bid-increments-SC-16`, `grade10-site-auction-auction-SC-110`, `grade10-site-auction-auction-SC-111`)
+- [ ] 5.2 Reduce the increment lookup and the ceiling to the one USD table and delete the HKD and JPY rows (`grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-09`, `grade10-site-auction-bid-increments-SC-10`, `grade10-site-auction-bid-increments-SC-12`, `grade10-site-auction-bid-increments-SC-13`)
+- [ ] 5.3 Refuse any currency but USD on a listing draft, create, update and schedule, and default an omitted currency to USD (`grade10-site-auction-bid-increments-SC-15`, `grade10-site-auction-bid-increments-SC-16`, `grade10-admin-auction-listing-SC-160`, `grade10-admin-auction-listing-SC-161`, `grade10-admin-auction-listing-SC-164`, `grade10-admin-auction-listing-SC-165`, `grade10-admin-auction-listing-SC-125a`)
+- [ ] 5.4 Save and read one USD premium minimum and card rules for USD and HKD, refusing JPY and any other code (`grade10-admin-auction-payment-settings-SC-01`, `grade10-admin-auction-payment-settings-SC-02`, `grade10-admin-auction-payment-settings-SC-03`, `grade10-admin-auction-payment-settings-SC-05`, `grade10-admin-auction-payment-settings-SC-06`, `grade10-admin-auction-payment-settings-SC-07`, `grade10-admin-auction-payment-settings-SC-13`, `grade10-admin-auction-payment-settings-SC-14`, `grade10-admin-auction-payment-settings-SC-15`)
+- [ ] 5.5 Set the brand's verified-bidder bar to 1500000 minor units in USD and compare a bid to it with no conversion, at or above (`grade10-site-auction-auction-SC-110`, `grade10-site-auction-auction-SC-111`)
+- [ ] 5.6 Verify: the service suites and `pnpm run typecheck` in grade10
+
+## 6. Order setup and invoice pricing (grade10)
+
+- [ ] 6.1 Write the pricing and setup tests first, in their own commit, with the HKD examples of `tech-design.md` (`winner-order-SC-281`, `winner-order-SC-282`, `winner-order-SC-283`, `winner-order-SC-284`, `winner-order-SC-285`, `winner-order-SC-286`, `winner-order-SC-287`, `winner-order-SC-40`, `winner-order-SC-41`, `winner-order-SC-42`, `winner-order-SC-43`, `grade10-site-auction-winner-order-SC-46`, `winner-order-SC-300`, `winner-order-SC-301`, `winner-order-SC-302`, `winner-order-SC-303`)
+- [ ] 6.2 Add the pricing module's one conversion function and rate constant, with integer arithmetic only, and make it the single owner (`winner-order-SC-283`, `winner-order-SC-284`)
+- [ ] 6.3 Compute the buyer's premium in USD against the one USD minimum (`winner-order-SC-40`, `winner-order-SC-41`, `winner-order-SC-42`, `winner-order-SC-43`, `grade10-site-auction-winner-order-SC-46`)
+- [ ] 6.4 Price an HKD invoice by converting and rounding up each line, the bank transfer fee typed in USD included, summing, and computing the card fee in HKD, and store the lines at send (`winner-order-SC-285`, `winner-order-SC-286`, `winner-order-SC-287`, `winner-order-SC-302`)
+- [ ] 6.5 Add the offered-methods function by currency, card rule and rail details, with the fee-range text reading the percentage of the picked currency's rule, and the setup write that records currency, method and rail and refuses a method the currency does not offer (`winner-order-SC-279`, `winner-order-SC-280`, `winner-order-SC-293`, `winner-order-SC-294`, `winner-order-SC-295`, `winner-order-SC-296`, `winner-order-SC-297`, `winner-order-SC-298`, `winner-order-SC-303`)
+- [ ] 6.6 Refuse a currency write that is not an operator's edit before send or a reissue, once the winner confirmed or an invoice is sent, and let a reissue carry another currency with the replaced invoice untouched (`winner-order-SC-282`, `winner-order-SC-300`, `winner-order-SC-301`)
+- [ ] 6.7 Snapshot the picked rail's details on the invoice and read only that rail (`winner-order-SC-299`)
+- [ ] 6.8 Add a fixture test that each HKD fixture in this store equals the conversion of its USD fact (`winner-order-SC-285`)
+- [ ] 6.9 Verify: the pricing and setup suites, a forbidden-import lint for the conversion function, and `pnpm run typecheck`
+
+## 7. Site and admin wiring (grade10)
+
+Frontend work against the contracts and fixtures, never a running backend.
+
+- [ ] 7.1 Write the page tests first, in their own commit (`winner-order-SC-278`, `winner-order-SC-290`, `winner-order-SC-291`, `winner-order-SC-303`, `grade10-admin-auction-listing-SC-159`, `grade10-admin-auction-payment-settings-SC-14`)
+- [ ] 7.2 Wire the setup form's currency and method choices and the Order Summary's total lines to the view (`winner-order-SC-278`, `winner-order-SC-290`, `winner-order-SC-291`, `winner-order-SC-292`)
+- [ ] 7.3 Make the bid panel, catalogue, listing page, My Auctions, bid history and letters show USD amounts from the one USD currency
+- [ ] 7.4 State USD as fixed text on the admin listing form and drop the currency control (`grade10-admin-auction-listing-SC-159`)
+- [ ] 7.5 Show the one USD premium minimum and the USD and HKD card rule rows on the admin Payment Settings page (`grade10-admin-auction-payment-settings-SC-14`)
+- [ ] 7.6 Verify: the page suites, `pnpm run typecheck` and `pnpm run lint` in grade10
+
+## 8. Launch dependencies (grade10)
+
+- [ ] 8.1 Write the launch check first, as a staging script: a USD card rule is present, no listing holds HKD or JPY, and the verified bar reads 1500000 minor units in USD (`winner-order-SC-297`, `grade10-admin-auction-listing-SC-163`)
+- [ ] 8.2 Finance saves the USD card fee rule in Payment Settings, recorded 2026-10-13 and due before the change goes live in production (`grade10-admin-auction-payment-settings-SC-15`)
+- [ ] 8.3 Run the one-time lot currency overwrite on production data, recorded 2026-10-13 and run once before the change goes live (`grade10-admin-auction-listing-SC-162`)
+- [ ] 8.4 Verify: the launch check passes on production
+- [ ] 8.5 Held for the PM, recorded 2026-10-13, `decisions.md` Q17: what a card order's Order Summary shows for the fee under HKD. Until the PM answers, ship the existing reading: the fee row in HKD among the USD lines, the USD total the sum of the USD lines, and the HKD total what the invoice asks for (`winner-order-SC-290`)
+- [ ] 8.6 Launch dependency, recorded 2026-10-13, `decisions.md` Q21: Finance confirms which HK Local and SWIFT bank details Grade10 holds for USD, and the launch check reports which rails a USD winner is offered, before the change goes live in production (`winner-order-SC-297`, `winner-order-SC-226`)
+
+## 9. Operator quote, edit before send and reissue (grade10)
+
+- [ ] 9.1 Write the quote tests first, in their own commit: a quote typed in USD for an HKD order reads the converted total, the bank transfer fee converts, the rail is named, an internal bidder's order for a USD lot is sent as before, a currency edit before send, and a reissue in another currency (`grade10-admin-auction-post-sale-SC-48`, `grade10-admin-auction-post-sale-SC-63`, `grade10-admin-auction-post-sale-SC-117`, `grade10-admin-auction-post-sale-SC-119`, `post-sale-SC-155`, `grade10-admin-auction-post-sale-SC-243`, `grade10-admin-auction-post-sale-SC-244`, `grade10-admin-auction-post-sale-SC-251`, `grade10-admin-auction-post-sale-SC-252`, `grade10-admin-auction-post-sale-SC-253`)
+- [ ] 9.2 Type the quote lines, the bank transfer fee included, in USD and read the subtotal, fee and total in the settlement currency from the one pricing call, with no rate on the dialog (`grade10-admin-auction-post-sale-SC-165`, `grade10-admin-auction-post-sale-SC-251`, `grade10-admin-auction-post-sale-SC-252`)
+- [ ] 9.3 Name the payment method and its rail on the quote and refuse a winner's send with no currency or no rail (`grade10-admin-auction-post-sale-SC-117`, `grade10-admin-auction-post-sale-SC-244`, `grade10-admin-auction-post-sale-SC-253`)
+- [ ] 9.4 Let an operator edit the settlement currency, method and rail before send with a reason, validated against the currency's offered set, and refuse a rail the currency does not offer (`grade10-admin-auction-post-sale-SC-135`, `grade10-admin-auction-post-sale-SC-138`, `grade10-admin-auction-post-sale-SC-247`, `grade10-admin-auction-post-sale-SC-248`, `grade10-admin-auction-post-sale-SC-249`)
+- [ ] 9.5 Let a reissue change the settlement currency, keep the replaced invoice untouched and refuse a rail the new currency does not offer (`grade10-admin-auction-post-sale-SC-107`, `grade10-admin-auction-post-sale-SC-245`, `grade10-admin-auction-post-sale-SC-246`)
+- [ ] 9.6 Let the record of setup carry a settlement currency and refuse one without (`grade10-admin-auction-post-sale-SC-84`, `grade10-admin-auction-post-sale-SC-216`, `grade10-admin-auction-post-sale-SC-250`)
+- [ ] 9.7 Verify: the post-sale suites, `pnpm run typecheck` and `pnpm run lint` in grade10
+
+## 10. Listing bid card ceiling (grade10-spec)
+
+- [ ] 10.1 Write the block tests first, in their own commit: the one USD ceiling for the custom maximum, the chips, the raise floor and the collapsed row (`shared-ui-auction-listing-SC-38`, `shared-ui-auction-listing-SC-39`, `shared-ui-auction-listing-SC-40`, `shared-ui-auction-listing-SC-41`, `shared-ui-auction-listing-SC-42`, `shared-ui-auction-listing-SC-43`, `shared-ui-auction-listing-SC-53`, `shared-ui-auction-listing-SC-58`, `shared-ui-auction-listing-SC-59`, `shared-ui-auction-listing-SC-60`, `shared-ui-auction-listing-SC-61`, `shared-ui-auction-listing-SC-62`, `shared-ui-auction-listing-SC-63`, `shared-ui-auction-listing-SC-64`, `shared-ui-auction-listing-SC-65`, `shared-ui-auction-listing-SC-66`)
+- [ ] 10.2 Drop the HKD and JPY ceilings from `ListingAuctionBidCard`'s tests, stories and fixtures, keeping the ceiling the view supplies at 1000000000 USD minor units (`shared-ui-auction-listing-SC-58`, `shared-ui-auction-listing-SC-61`)
+- [ ] 10.3 Verify: `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, and the Storybook build for `apps/preview`
+
+## 11. The walk (grade10)
+
+Uses draft `feature-tcs.md` as its planning input, and the groups it walks landed.
+
+- [ ] 11.1 Walk `grade10-site-auction-bid-increments-US-03`: a collector bids in USD on every lot, through the bid panel, including a lot that was HKD before the overwrite
+- [ ] 11.2 Walk `winner-order-US-24`, `winner-order-US-25`, `winner-order-US-26` and `winner-order-US-27`: a winner picks HKD, picks FPS, confirms, reads the sent invoice, the Order Summary with two total lines, View Bank Details with only FPS, then pays; repeat in USD with SWIFT and by card; switch currency before confirming and read the cleared method
+- [ ] 11.3 Walk `grade10-admin-auction-listing-US-74` and `grade10-admin-auction-payment-settings-US-03`: an operator creates a listing with no currency choice and Finance saves USD and HKD card rules
+- [ ] 11.4 Walk the restated journeys the change leans on: `winner-order-US-01`, `grade10-admin-auction-listing-US-01` and `grade10-admin-auction-payment-settings-US-02`
+- [ ] 11.7 Walk `post-sale-US-05`, `post-sale-US-07` and `post-sale-US-18`: an operator types a quote in USD for an HKD order and reads the HKD total, changes the settlement currency before send, reissues in another currency, and records a telephone setup with a currency; and `grade10-site-auction-auction-US-04`: a bid of US$15,000 is held and one just under it is not
+- [ ] 11.5 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:<walk path>`, in the walks' own commit; name the ones that stay manual in the suite and in the walk's `rounds.md` row
+- [ ] 11.6 Verify: the walk suite passes end to end in grade10, and `pnpm run tcs:validate` passes in this store
