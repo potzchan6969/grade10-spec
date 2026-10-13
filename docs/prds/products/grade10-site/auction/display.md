@@ -2,6 +2,7 @@
 title: Auction Display
 spec: grade10-site/auction/listing-page
 order: 2
+reviewed: 2026-10-14
 ---
 
 Where a collector meets a lot: the catalogue card, the lot's own page with its

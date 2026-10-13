@@ -24,6 +24,17 @@ import type { ReceiptPdfData } from "./receipt-pdf";
 import { ReceiptPdf } from "./receipt-pdf";
 
 const HEADER = ["Item", "Winning Bid", "Buyer's Premium", "Total"];
+const PAGINATION_CHARGES = [
+  { label: "Shipping & Handling", amount: "HKD 80.00" },
+  { label: "Insurance", amount: "HKD 40.00" },
+  { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,120.00" },
+  {
+    key: "paymentProcessingFee" as const,
+    label: "Payment Processing Fee",
+    amount: "HKD 112.25",
+  },
+  { key: "orderTotal" as const, label: "Order Total", amount: "HKD 3,232.25" },
+] as const;
 const BREAKDOWN = [
   "Original Invoice Total",
   "Previous Payments",
@@ -243,6 +254,7 @@ describe.each(DOCUMENTS)("%s's pages", (name, render) => {
     let movedAlone = false;
     for (const count of COUNTS(40)) {
       const bytes = await render(count, {
+        lineItems: PAGINATION_CHARGES,
         taxLine: { label: "Tax", amount: "HKD 12.00" },
       });
       await expectBodyAboveBottom(bytes);

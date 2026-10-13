@@ -1,12 +1,25 @@
+import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
-import type { AuctionWinnerOrderProps } from "./types";
+import type {
+  AuctionPaymentRail,
+  AuctionSettlementCurrency,
+  AuctionWinnerOrderPaymentChoice,
+  AuctionWinnerOrderProps,
+} from "./types";
 
 const IMAGE = new URL(
   "../store-order-history/product.fixture.png",
   import.meta.url,
 ).href;
+
+const { auctionOrders } = getMessages("grade10", "en");
+const { auctionOrders: traditionalChineseAuctionOrders } = getMessages(
+  "grade10",
+  "zh-Hant",
+);
 
 const COPY: AuctionWinnerOrderProps["copy"] = {
   orderProgress: "Order Progress",
@@ -17,6 +30,52 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   view: "View",
   winningBid: "Winning bid",
   bank: "Bank",
+  bankDetailsClose: auctionOrders.bankDetails.close,
+  bankDetailsQrAlt: auctionOrders.bankDetails.qrAlt,
+};
+
+const CONTROLLED_PAYMENT_CHOICES: Record<
+  AuctionSettlementCurrency,
+  readonly AuctionWinnerOrderPaymentChoice[]
+> = {
+  HKD: [
+    { value: "card", label: "Card", feeRange: "3.0% + HK$10" },
+    { value: "fps", label: "FPS", feeRange: "No fee" },
+    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
+  ],
+  USD: [
+    {
+      value: "card",
+      label: "Card",
+      feeRange: "3.0% + US$1",
+      unavailable: "Card is not yet available in USD.",
+    },
+    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
+    {
+      value: "swift",
+      label: "International via SWIFT",
+      feeRange: "No fee",
+    },
+  ],
+};
+
+const NON_ENGLISH_COPY = {
+  ...COPY,
+  bankDetailsClose: traditionalChineseAuctionOrders.bankDetails.close,
+  bankDetailsQrAlt: traditionalChineseAuctionOrders.bankDetails.qrAlt,
+};
+
+const CONTROLLED_BANK_DETAILS = {
+  rail: "fps" as AuctionPaymentRail,
+  title: "View Bank Details",
+  rows: [
+    { label: "Amount due", value: "HK$128,269.00" },
+    { label: "FPS ID", value: "852-1234-5678" },
+    { label: "Account name", value: "Grade10 Auctions" },
+    { label: "Payment reference", value: "G10-WINNER-1999" },
+  ],
+  qrSrc: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
+  note: "Open your banking app and scan this QR",
 };
 
 const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] = {
@@ -83,6 +142,138 @@ async function settled(canvasElement: HTMLElement) {
     ).toBe("true"),
   );
 }
+
+function ControlledSettlementStory({
+  base,
+}: {
+  base: AuctionWinnerOrderProps;
+}) {
+  const [currency, setCurrency] = useState<AuctionSettlementCurrency | null>(
+    null,
+  );
+  const [payment, setPayment] = useState<
+    AuctionWinnerOrderPaymentChoice["value"] | null
+  >(null);
+
+  function handleCurrencyChange(value: AuctionSettlementCurrency) {
+    setCurrency(value);
+    setPayment(null);
+  }
+
+  return (
+    <AuctionWinnerOrder
+      {...base}
+      copy={NON_ENGLISH_COPY}
+      bankDetails={payment === "fps" ? CONTROLLED_BANK_DETAILS : undefined}
+      paymentChoices={{
+        label: "Payment method",
+        byCurrency: CONTROLLED_PAYMENT_CHOICES,
+        value: payment,
+        onChange: setPayment,
+      }}
+      settlementCurrency={{
+        label: "Settlement currency",
+        options: [
+          { value: "USD", label: "USD" },
+          { value: "HKD", label: "HKD" },
+        ],
+        value: currency,
+        onChange: handleCurrencyChange,
+      }}
+      summary={{
+        ...base.summary,
+        pay: {
+          label: "Submit Payment Proof",
+          onPress: fn(),
+          secondary: { label: "View Bank Details", onPress: fn() },
+        },
+      }}
+    />
+  );
+}
+
+/**
+ * The shared block owns the rendered settlement controls and bank dialog. The
+ * consumer controls both selections, including clearing a rail on a currency
+ * change, and supplies every word in the non-English dialog.
+ */
+export const ControlledSettlementControlsAndBankDialog: Story = {
+  render: (args) => <ControlledSettlementStory base={args} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const currencyList = canvas.getByRole("radiogroup");
+    const usd = within(currencyList).getByRole("radio", { name: "USD" });
+    const hkd = within(currencyList).getByRole("radio", { name: "HKD" });
+    expect(usd).not.toBeChecked();
+    expect(hkd).not.toBeChecked();
+    expect(
+      canvas.queryByRole("radio", { name: "FPS" }),
+    ).not.toBeInTheDocument();
+
+    usd.focus();
+    await userEvent.keyboard(" ");
+    await waitFor(() => expect(usd).toBeChecked());
+    const card = canvas.getByRole("radio", { name: /^Card/ });
+    expect(card).toHaveAttribute("aria-disabled", "true");
+    expect(card).toHaveAccessibleName(/Card is not yet available in USD/);
+    await userEvent.click(card);
+    expect(card).not.toBeChecked();
+
+    hkd.focus();
+    await userEvent.keyboard(" ");
+    const fps = await waitFor(() =>
+      canvas.getByRole("radio", { name: /^FPS/ }),
+    );
+    fps.focus();
+    await userEvent.keyboard(" ");
+    await waitFor(() => expect(fps).toBeChecked());
+
+    const trigger = canvas.getByRole("button", { name: "View Bank Details" });
+    trigger.focus();
+    await userEvent.keyboard("{Enter}");
+    const dialog = await waitFor(() =>
+      body.getByRole("dialog", { name: "View Bank Details" }),
+    );
+    expect(dialog).toBeVisible();
+    const closeButton = body.getByRole("button", {
+      name: traditionalChineseAuctionOrders.bankDetails.close,
+    });
+    expect(
+      body.getByRole("img", {
+        name: traditionalChineseAuctionOrders.bankDetails.qrAlt,
+      }),
+    ).toBeVisible();
+    expect(closeButton).toBeVisible();
+    await waitFor(() => expect(closeButton).toHaveFocus());
+    for (let index = 0; index < 4; index += 1) {
+      await userEvent.tab();
+      await waitFor(() =>
+        expect(dialog.contains(canvasElement.ownerDocument.activeElement)).toBe(
+          true,
+        ),
+      );
+    }
+
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(body.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
+    await waitFor(() => expect(trigger).toHaveFocus());
+
+    await userEvent.keyboard("{Enter}");
+    await waitFor(() => expect(body.getByRole("dialog")).toBeVisible());
+    await userEvent.click(
+      body.getByRole("button", {
+        name: traditionalChineseAuctionOrders.bankDetails.close,
+      }),
+    );
+    await waitFor(() =>
+      expect(body.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
+};
 
 export const PendingPayment: Story = {
   play: async ({ args, canvasElement }) => {

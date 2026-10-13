@@ -1,7 +1,7 @@
 import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
-import { TABLE_LABELS } from "./fixtures";
+import { SAMPLE_RECEIPT, TABLE_LABELS, WITH_TAX_RECEIPT } from "./fixtures";
 import { LINE_HEIGHT, MARGIN, RIGHT_EDGE, SUMMARY_LEFT } from "./pdf-document";
 import {
   drawnHorizontalLines,
@@ -79,7 +79,77 @@ const SUMMARY_LINE_ITEMS = [
   { key: "orderTotal" as const, label: "Order Total", amount: "HKD 205.00" },
 ];
 
+const HKD_RECEIPT_AMOUNTS = [
+  "HK$793.00",
+  "HK$159.00",
+  "HK$952.00",
+  "HK$79.00",
+  "HK$1,031.00",
+  "HK$0.00",
+] as const;
+
 describe("receipt PDF renderer", () => {
+  it("keeps the tax receipt fixture arithmetic and payment breakdown coherent", async () => {
+    const strings = await drawnStrings(await ReceiptPdf(WITH_TAX_RECEIPT));
+    const amounts = new Map(
+      WITH_TAX_RECEIPT.lineItems.map((item) => [item.label, item.amount]),
+    );
+
+    expect(WITH_TAX_RECEIPT.itemTotal).toEqual({
+      winningBid: "HK$2,500.00",
+      buyersPremium: "HK$500.00",
+      total: "HK$3,000.00",
+    });
+    expect(amounts.get("Shipping & Handling")).toBe("HK$80.00");
+    expect(amounts.get("Insurance")).toBe("HK$40.00");
+    expect(WITH_TAX_RECEIPT.taxLine).toEqual({
+      label: "Tax",
+      amount: "HK$156.00",
+    });
+    expect(amounts.get("Subtotal")).toBe("HK$3,276.00");
+    expect(amounts.get("Payment Processing Fee")).toBe("HK$118.00");
+    expect(amounts.get("Order Total")).toBe("HK$3,394.00");
+    expect(WITH_TAX_RECEIPT.paymentBreakdown).toEqual({
+      originalInvoiceTotal: "HK$3,394.00",
+      previousPayments: "HK$0.00",
+      currentPaymentReceived: "HK$3,394.00",
+      remainingBalanceDue: "HK$0.00",
+    });
+    expect(3_000 + 80 + 40 + 156).toBe(3_276);
+    expect(3_276 + 118).toBe(3_394);
+    for (const amount of [
+      "HK$2,500.00",
+      "HK$500.00",
+      "HK$3,000.00",
+      "HK$80.00",
+      "HK$40.00",
+      "HK$156.00",
+      "HK$3,276.00",
+      "HK$118.00",
+      "HK$3,394.00",
+      "HK$0.00",
+    ]) {
+      expect(strings).toContain(amount);
+    }
+  });
+
+  // winner-order-SC-289
+  it("renders the HKD receipt fixture with every amount in HKD and no USD winning bid or rate", async () => {
+    const strings = await drawnStrings(await ReceiptPdf(SAMPLE_RECEIPT));
+    const text = strings.join(" ");
+
+    for (const amount of HKD_RECEIPT_AMOUNTS) expect(strings).toContain(amount);
+    const amounts = strings.filter((value) =>
+      /^(?:HK\$|\d)[\d,]*\.\d{2}$/.test(value),
+    );
+    expect(new Set(amounts)).toEqual(new Set(HKD_RECEIPT_AMOUNTS));
+    expect(strings.filter((value) => /^\d[\d,]*\.\d{2}$/.test(value))).toEqual(
+      [],
+    );
+    expect(text).not.toMatch(/\bUSD\b|US\$/);
+    expect(text).not.toContain("7.85");
+  });
+
   it("keeps the four immutable payment lines in order", () => {
     expect(receiptBreakdown(DATA)).toEqual([
       ["Original Invoice Total", "HKD 120.00"],

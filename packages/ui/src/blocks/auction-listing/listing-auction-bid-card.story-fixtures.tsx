@@ -147,7 +147,7 @@ export function liveView(
     minBidMinor: 6_050_000,
     incrementMinor: 250_000,
     suggestedMaxMinor: 9_500_000,
-    ceilingMinor: 8_000_000_000,
+    ceilingMinor: 1_000_000_000,
     ...overrides,
     currency: overrides.currency ?? DEFAULT_LISTING_CURRENCY,
   };

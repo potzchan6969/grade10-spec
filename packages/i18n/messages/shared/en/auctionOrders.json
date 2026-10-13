@@ -14,12 +14,34 @@
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
   "setup": {
+    "settlementCurrency": "Settlement currency",
+    "currency": {
+      "usd": "USD",
+      "hkd": "HKD"
+    },
+    "paymentMethod": "Payment method",
+    "paymentRail": {
+      "card": "Card",
+      "fps": "FPS",
+      "hkLocal": "HK Local",
+      "swift": "International via SWIFT"
+    },
     "fee": {
       "card": "Card fee about 3.4% + a fixed amount",
-      "bankTransfer": "Bank fee set on your invoice"
+      "bankTransfer": "Bank fee set on your invoice",
+      "noFee": "No fee"
     },
     "cardUnavailable": "Card is not yet available in {currency}.",
     "paymentUnavailable": "Payment is not yet available in {currency}."
+  },
+  "summary": {
+    "usdTotal": "Order Total",
+    "settlementTotal": "Order Total",
+    "paymentProcessingFee": "Payment Processing Fee"
+  },
+  "bankDetails": {
+    "close": "Close",
+    "qrAlt": "FPS payment QR code for this order"
   },
   "cancelledOn": "Cancelled on {date}",
   "insuranceTooltip": "0.9% of the order value during transit.",

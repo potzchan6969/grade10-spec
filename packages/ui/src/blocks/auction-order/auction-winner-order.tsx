@@ -6,8 +6,19 @@ import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@grade10/design-system/components/overlays/dialog";
 import {
   Tooltip,
   TooltipContent,
@@ -23,7 +34,7 @@ import {
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useLayoutEffect, useRef } from "react";
+import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
 import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -36,6 +47,7 @@ import {
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type {
   AuctionWinnerOrderAlert,
+  AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
@@ -416,11 +428,151 @@ function LotCard({
   );
 }
 
+function SettlementChoices({
+  settlementCurrency,
+  paymentChoices,
+}: {
+  settlementCurrency: NonNullable<
+    AuctionWinnerOrderProps["settlementCurrency"]
+  >;
+  paymentChoices?: AuctionWinnerOrderProps["paymentChoices"];
+}) {
+  const selectedCurrency = settlementCurrency.value;
+  const choices = selectedCurrency
+    ? (paymentChoices?.byCurrency[selectedCurrency] ?? [])
+    : [];
+
+  return (
+    <VStack className="w-full" gap="md" hAlign="stretch">
+      <RadioList
+        label={settlementCurrency.label}
+        onValueChange={(value) => {
+          if (value === "USD" || value === "HKD") {
+            settlementCurrency.onChange(value);
+          }
+        }}
+        value={settlementCurrency.value ?? ""}
+      >
+        {settlementCurrency.options.map((option) => (
+          <RadioCard
+            key={option.value}
+            title={option.label}
+            value={option.value}
+          />
+        ))}
+      </RadioList>
+
+      {paymentChoices && selectedCurrency ? (
+        choices.length > 0 ? (
+          <RadioList
+            label={paymentChoices.label}
+            onValueChange={(value) => {
+              const choice = choices.find((item) => item.value === value);
+              if (choice && !choice.unavailable) {
+                paymentChoices.onChange(choice.value);
+              }
+            }}
+            value={
+              choices.some((choice) => choice.value === paymentChoices.value)
+                ? (paymentChoices.value ?? "")
+                : ""
+            }
+          >
+            {choices.map((choice) => (
+              <RadioCard
+                description={
+                  choice.unavailable ? (
+                    <>
+                      <span>{choice.feeRange}</span>
+                      <span>{choice.unavailable}</span>
+                    </>
+                  ) : (
+                    choice.feeRange
+                  )
+                }
+                disabled={Boolean(choice.unavailable)}
+                key={choice.value}
+                title={choice.label}
+                value={choice.value}
+              />
+            ))}
+          </RadioList>
+        ) : paymentChoices.none ? (
+          <Text className="text-secondary-foreground" size="sm">
+            {paymentChoices.none}
+          </Text>
+        ) : null
+      ) : null}
+    </VStack>
+  );
+}
+
+function BankDetailsDialog({
+  bankDetails,
+  copy,
+  onOpenChange,
+  open,
+}: {
+  bankDetails: AuctionWinnerOrderBankDetails;
+  copy: AuctionWinnerOrderCopy;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+}) {
+  return (
+    <Dialog onOpenChange={onOpenChange} open={open}>
+      <DialogContent
+        className="max-h-[min(640px,calc(100dvh-2rem))] min-h-0"
+        showCloseButton
+      >
+        <DialogHeader>
+          <DialogTitle>{bankDetails.title}</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          {bankDetails.qrSrc ? (
+            <img
+              alt={copy.bankDetailsQrAlt}
+              className="mx-auto size-40 rounded-lg border border-border object-contain"
+              src={bankDetails.qrSrc}
+            />
+          ) : null}
+          <dl className="grid w-full gap-3">
+            {bankDetails.rows.map((row) => (
+              <div
+                className="grid gap-1 sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)] sm:gap-4"
+                key={`${row.label}-${row.value}`}
+              >
+                <dt className="text-sm font-medium text-secondary-foreground">
+                  {row.label}
+                </dt>
+                <dd className="break-words text-sm text-foreground">
+                  {row.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {bankDetails.note ? (
+            <p className="text-sm leading-5 text-secondary-foreground">
+              {bankDetails.note}
+            </p>
+          ) : null}
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose render={<Button size="md" variant="outline" />}>
+            {copy.bankDetailsClose}
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function OrderSummary({
   copy,
+  onViewBankDetails,
   summary,
 }: {
   copy: AuctionWinnerOrderCopy;
+  onViewBankDetails?: () => void;
   summary: AuctionWinnerOrderProps["summary"];
 }) {
   const { pay } = summary;
@@ -454,14 +606,35 @@ function OrderSummary({
           />
         ))}
       </VStack>
-      {summary.total ? (
+      {summary.total || summary.convertedTotal ? (
+        <>
+          <hr className="w-full border-border" />
+          {summary.total ? (
+            <SummaryRow
+              emphasize
+              label={summary.total.label}
+              muted={summary.total.muted}
+              value={summary.total.value}
+            />
+          ) : null}
+          {summary.convertedTotal ? (
+            <SummaryRow
+              emphasize
+              label={summary.convertedTotal.label}
+              muted={summary.convertedTotal.muted}
+              value={summary.convertedTotal.value}
+            />
+          ) : null}
+        </>
+      ) : null}
+
+      {summary.convertedFee ? (
         <>
           <hr className="w-full border-border" />
           <SummaryRow
-            emphasize
-            label={summary.total.label}
-            muted={summary.total.muted}
-            value={summary.total.value}
+            label={summary.convertedFee.label}
+            muted={summary.convertedFee.muted}
+            value={summary.convertedFee.value}
           />
         </>
       ) : null}
@@ -504,7 +677,7 @@ function OrderSummary({
             <Button
               className="w-full"
               disabled={pay.disabled || pay.loading}
-              onClick={pay.secondary.onPress}
+              onClick={onViewBankDetails ?? pay.secondary.onPress}
               size="md"
               variant="outline"
             >
@@ -612,10 +785,22 @@ function OrderSidebar({
   receipts = [],
   delivery,
   billing,
+  bankDetails,
+  paymentChoices,
+  settlementCurrency,
 }: Pick<
   AuctionWinnerOrderProps,
-  "copy" | "summary" | "paymentMethod" | "receipts" | "delivery" | "billing"
+  | "copy"
+  | "summary"
+  | "paymentMethod"
+  | "receipts"
+  | "delivery"
+  | "billing"
+  | "bankDetails"
+  | "paymentChoices"
+  | "settlementCurrency"
 >) {
+  const [bankDetailsOpen, setBankDetailsOpen] = useState(false);
   const methodCard =
     paymentMethod && paymentMethod.kind !== "text" ? paymentMethod : null;
   const methodText = paymentMethod?.kind === "text" ? paymentMethod : null;
@@ -637,7 +822,20 @@ function OrderSidebar({
           gap="md"
           hAlign="stretch"
         >
-          <OrderSummary copy={copy} summary={summary} />
+          {settlementCurrency ? (
+            <SettlementChoices
+              paymentChoices={paymentChoices}
+              settlementCurrency={settlementCurrency}
+            />
+          ) : null}
+          <OrderSummary
+            copy={copy}
+            onViewBankDetails={() => {
+              summary.pay?.secondary?.onPress();
+              if (bankDetails) setBankDetailsOpen(true);
+            }}
+            summary={summary}
+          />
         </VStack>
         {hasLowerSection ? (
           <VStack className="w-full p-4 sm:p-6" gap="lg" hAlign="stretch">
@@ -670,6 +868,14 @@ function OrderSidebar({
           </VStack>
         ) : null}
       </Card>
+      {bankDetails ? (
+        <BankDetailsDialog
+          bankDetails={bankDetails}
+          copy={copy}
+          onOpenChange={setBankDetailsOpen}
+          open={bankDetailsOpen}
+        />
+      ) : null}
     </aside>
   );
 }
@@ -695,6 +901,9 @@ function AuctionWinnerOrder({
   receipts,
   delivery,
   billing,
+  settlementCurrency,
+  paymentChoices,
+  bankDetails,
 }: AuctionWinnerOrderProps) {
   const revealed = useFirstPaintReveal();
   const mainStaggerIndex = progress ? 1 : 0;
@@ -776,11 +985,14 @@ function AuctionWinnerOrder({
           staggerIndex={sidebarStaggerIndex}
         >
           <OrderSidebar
+            bankDetails={bankDetails}
             billing={billing}
             copy={copy}
             delivery={delivery}
+            paymentChoices={paymentChoices}
             paymentMethod={paymentMethod}
             receipts={receipts}
+            settlementCurrency={settlementCurrency}
             summary={summary}
           />
         </RevealGroup>
@@ -790,7 +1002,11 @@ function AuctionWinnerOrder({
 }
 
 export type {
+  AuctionPaymentRail,
+  AuctionSettlementCurrency,
+  AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
+  AuctionWinnerOrderPaymentChoice,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,
 } from "./types";

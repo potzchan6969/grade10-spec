@@ -8,6 +8,7 @@ import {
 import {
   BANK_TRANSFER_INVOICE_LINES,
   WINNER_ORDER_CONTENTS,
+  WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
   WINNER_ORDER_USD_BANK_TRANSFER_CONTENT,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
@@ -38,6 +39,9 @@ const BANK_PENDING_CONTENT = {
   paymentRail: "fps",
   settlementCurrency: "HKD",
   primaryCta: "Submit Payment Proof",
+  usdTotal: "US$16,340.00",
+  convertedTotal: "HK$128,269.00",
+  convertedFee: undefined,
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
 
@@ -60,13 +64,15 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("18 Sep 2026")).toBeVisible();
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
+    expect(canvas.getAllByText("Order Total")).toHaveLength(2);
+    expect(canvas.getByText("US$16,340.00")).toBeVisible();
+    expect(canvas.getByText("HK$128,269.00")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
     expect(canvas.getByText("Tax")).toBeVisible();
-    expect(canvas.getByText("$320.00")).toBeVisible();
-    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
+    expect(canvas.getByText("US$320.00")).toBeVisible();
+    expect(canvas.getAllByText("Payment Processing Fee")).toHaveLength(1);
+    expect(canvas.getByText("HK$545.00")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
       sidebar.getByRole("button", { name: "Pay with Card" }),
@@ -103,6 +109,7 @@ export const PendingPaymentBankTransfer: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -120,8 +127,62 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("$320.00")).toBeVisible();
-    expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("US$320.00")).toBeVisible();
+    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
+
+    await userEvent.click(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
+    );
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "View Bank Details" });
+      expect(found).toBeVisible();
+      return within(found);
+    });
+    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
+    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
+  },
+};
+
+/** HKD invoice — the selected HK Local rail has its own bank details. */
+export const PendingPaymentHkdHongKongBankTransfer: Story = {
+  name: "Pending Payment - HKD HK Local - winner-order-SC-95",
+  args: {
+    status: "pending_payment",
+    content: WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    await winnerOrderSettled(canvasElement);
+    const sidebar = within(canvas.getByRole("complementary"));
+    expect(
+      sidebar.getByRole("button", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
+    ).toBeVisible();
+    expect(
+      sidebar.queryByRole("button", { name: "Pay with Card" }),
+    ).not.toBeInTheDocument();
+    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
+
+    await userEvent.click(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
+    );
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "View Bank Details" });
+      expect(found).toBeVisible();
+      return within(found);
+    });
+    expect(dialog.getByText("Bank name")).toBeVisible();
+    expect(dialog.getByText("Branch code")).toBeVisible();
+    expect(dialog.getByText("HK$128,269.00")).toBeVisible();
+    expect(dialog.queryByText("HK$16,340.00")).not.toBeInTheDocument();
+    expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
+    expect(dialog.queryByText("SWIFT / BIC")).not.toBeInTheDocument();
+    expect(dialog.queryByRole("tab")).not.toBeInTheDocument();
   },
 };
 
@@ -172,7 +233,7 @@ export const PendingPaymentUsdBankTransfer: Story = {
  * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
-  name: "Submit Proof Flow",
+  name: "Submit Proof Flow - winner-order-SC-184",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -190,6 +251,15 @@ export const SubmitBankPaymentProof: Story = {
       expect(found).toBeVisible();
       return within(found);
     });
+
+    // winner-order-SC-184: proof submission does not repeat invoice or rail details.
+    expect(
+      modal.queryByText(/Amount due|Order Total|Payment reference/i),
+    ).not.toBeInTheDocument();
+    expect(modal.queryByText(/US\$|HK\$/)).not.toBeInTheDocument();
+    expect(
+      modal.queryByText(/FPS|HK Local|SWIFT|bank/i),
+    ).not.toBeInTheDocument();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
     const transferDate = modal.getByLabelText("Transfer Date");

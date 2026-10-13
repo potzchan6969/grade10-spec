@@ -110,7 +110,9 @@ export const AddDeliveryAddress: Story = {
       expect(page.queryByRole("option", { name: "Australia" })).toBeNull();
     });
     const option = page.getByRole("option", { name: "Hong Kong" });
-    expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
+    await waitFor(() => {
+      expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
+    });
   },
 };
 

@@ -174,7 +174,7 @@ hours of the close.
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
 | 🚧 Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | Nothing preselected |
-| 🚧 Payment method | One of the methods or bank rails offered for the settlement currency — [Payment Methods by Currency](#payment-methods-by-currency) | Nothing preselected |
+| 🚧 Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | Nothing preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -303,7 +303,7 @@ by card, reads:
 | Line | Example | What it is |
 | --- | --- | --- |
 | Winning Bid | 100,000 | The accepted bid that won the lot |
-| Buyer's Premium | 20,000 | 20% of the winning bid, or the currency minimum; Grade10 computes it, and no operator enters, waives or changes it |
+| Buyer's Premium | 20,000 | 20% of the USD winning bid, or the one USD minimum; Grade10 computes it, and no operator enters, waives or changes it |
 | Shipping & Handling | 800 | Quoted for the confirmed address; zero reads Free, and a difference found after payment is neither charged nor refunded |
 | Insurance | 500 | Optional and above zero; absent when none |
 | 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |

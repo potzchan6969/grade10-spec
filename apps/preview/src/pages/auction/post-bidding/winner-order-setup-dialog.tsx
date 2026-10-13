@@ -171,7 +171,7 @@ export type WinnerOrderBankRail = Exclude<
 >;
 
 /** Settlement currency the winner picks at Payment Method — USD or HKD. */
-type WinnerOrderSettlementCurrency = "USD" | "HKD";
+export type WinnerOrderSettlementCurrency = "USD" | "HKD";
 
 export type WinnerOrderSetupResult = {
   delivery: string;
@@ -283,7 +283,7 @@ const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 function defaultSettlementCurrency(
   currencies: readonly WinnerOrderSettlementCurrency[],
 ): WinnerOrderSettlementCurrency | null {
-  return currencies.length === 1 ? currencies[0]! : null;
+  return currencies.length === 1 ? (currencies[0] ?? null) : null;
 }
 
 function paymentMethodsForCurrency(
@@ -292,6 +292,18 @@ function paymentMethodsForCurrency(
   return currency === "HKD"
     ? ["card", "fps", "hk_local"]
     : ["card", "hk_local", "swift"];
+}
+
+function paymentMethodIsAvailable(
+  currency: WinnerOrderSettlementCurrency,
+  paymentMethod: WinnerOrderSetupPaymentMethod,
+  cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>,
+): boolean {
+  return (
+    paymentMethod !== "card" ||
+    cardFeePercentages == null ||
+    cardFeePercentages[currency] != null
+  );
 }
 
 function stepTitle(step: SetupStep): string {
@@ -709,7 +721,14 @@ function WinnerOrderSetupDialog({
 
   const primaryDisabled =
     (step === 1 && !deliveryReady) ||
-    (step === 2 && (settlementCurrency == null || paymentMethod == null)) ||
+    (step === 2 &&
+      (settlementCurrency == null ||
+        paymentMethod == null ||
+        !paymentMethodIsAvailable(
+          settlementCurrency,
+          paymentMethod,
+          cardFeePercentages,
+        ))) ||
     (step === 3 && !billingReady);
 
   const primaryLabel = step === 3 ? "Complete Order Setup" : "Continue";
@@ -878,6 +897,11 @@ function WinnerOrderSetupDialog({
                             current != null &&
                             paymentMethodsForCurrency(currency).includes(
                               current,
+                            ) &&
+                            paymentMethodIsAvailable(
+                              currency,
+                              current,
+                              cardFeePercentages,
                             )
                               ? current
                               : null,
@@ -900,6 +924,16 @@ function WinnerOrderSetupDialog({
                     className="gap-3"
                     onValueChange={(value) => {
                       if (
+                        value === "card" &&
+                        !paymentMethodIsAvailable(
+                          settlementCurrency,
+                          value,
+                          cardFeePercentages,
+                        )
+                      ) {
+                        return;
+                      }
+                      if (
                         value === "card" ||
                         value === "fps" ||
                         value === "hk_local" ||
@@ -912,10 +946,20 @@ function WinnerOrderSetupDialog({
                   >
                     <div className="flex w-full flex-col gap-2">
                       <RadioCard
+                        disabled={
+                          !paymentMethodIsAvailable(
+                            settlementCurrency,
+                            "card",
+                            cardFeePercentages,
+                          )
+                        }
                         description={
-                          cardFeePercentages?.[settlementCurrency] == null
-                            ? FEE_RANGE_CARD
-                            : `Card fee about ${cardFeePercentages[settlementCurrency]}% + a fixed amount`
+                          cardFeePercentages != null &&
+                          cardFeePercentages[settlementCurrency] == null
+                            ? `Card is not yet available in ${settlementCurrency}`
+                            : cardFeePercentages?.[settlementCurrency] == null
+                              ? FEE_RANGE_CARD
+                              : `Card fee about ${cardFeePercentages[settlementCurrency]}% + a fixed amount`
                         }
                         title="Card"
                         value="card"
@@ -1172,5 +1216,5 @@ function WinnerOrderSetupDialog({
   );
 }
 
-export type { WinnerOrderSettlementCurrency, WinnerOrderSetupDialogProps };
+export type { WinnerOrderSetupDialogProps };
 export { WinnerOrderSetupDialog };

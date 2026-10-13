@@ -7,7 +7,10 @@ import {
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
+  type AuctionSettlementCurrency,
   AuctionWinnerOrder,
+  type AuctionWinnerOrderBankDetails,
+  type AuctionWinnerOrderPaymentChoice,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
   type OrderDetailsPaymentBrand,
@@ -33,8 +36,10 @@ import {
   type WinnerOrderReceipt,
   type WinnerOrderStatus,
 } from "./winner-order-content";
-import { WinnerOrderHowToPayDialog } from "./winner-order-how-to-pay-dialog";
-import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
+import {
+  WINNER_ORDER_BANK_DETAILS,
+  WinnerOrderPaymentProofDialog,
+} from "./winner-order-payment-proof-dialog";
 import { toastProofSubmitted } from "./winner-order-proof-feedback";
 import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
 import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
@@ -143,6 +148,8 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   view: "View",
   winningBid: "Winning bid",
   bank: "Bank",
+  bankDetailsClose: "Close",
+  bankDetailsQrAlt: "FPS payment QR code for this order",
 };
 
 const PREVIEW_CARD_FEE_PERCENTAGES = { USD: 4.4, HKD: 3.4 };
@@ -223,10 +230,10 @@ function summaryLineAmount(value: string): string {
       const digits = intPart.replaceAll(",", "");
       const fracDigits = frac ?? "";
       if (Number(digits) === 0 && Number(fracDigits || "0") === 0) {
-        return `${sign}$0`;
+        return `${sign}US$0`;
       }
       const decimals = fracDigits.padEnd(2, "0");
-      return `${sign}$${intPart}.${decimals}`;
+      return `${sign}US$${intPart}.${decimals}`;
     },
   );
 }
@@ -312,7 +319,10 @@ function summaryLinesFor(
   // Lot card keeps the lot currency; Order Summary line amounts use `$` with two decimals.
   const winningBidLine = summaryLineAmount(content.winningBid);
   if (content.invoiceLines?.length) {
-    return [...content.invoiceLines];
+    return content.invoiceLines.map((line) => ({
+      ...line,
+      value: line.value.startsWith("$") ? `US${line.value}` : line.value,
+    }));
   }
   if (content.status === "cancelled") {
     return [
@@ -354,6 +364,184 @@ function summaryLinesFor(
     },
     { label: "Order Total", value: "TBD", muted: true },
   ];
+}
+
+const SETTLEMENT_CURRENCY_OPTIONS: readonly {
+  value: AuctionSettlementCurrency;
+  label: string;
+}[] = [
+  { value: "USD", label: "USD" },
+  { value: "HKD", label: "HKD" },
+];
+
+const PAYMENT_RAILS_BY_CURRENCY: Record<
+  AuctionSettlementCurrency,
+  readonly AuctionWinnerOrderPaymentChoice[]
+> = {
+  HKD: [
+    {
+      value: "card",
+      label: "Card",
+      feeRange: "3.0% + HK$10 to 4.0% + HK$20",
+    },
+    { value: "fps", label: "FPS", feeRange: "No fee" },
+    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
+  ],
+  USD: [
+    {
+      value: "card",
+      label: "Card",
+      feeRange: "3.0% + US$1 to 4.0% + US$2",
+    },
+    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
+    {
+      value: "swift",
+      label: "International via SWIFT",
+      feeRange: "No fee",
+    },
+  ],
+};
+
+function selectedPaymentChoice(
+  content: WinnerOrderContent,
+): AuctionWinnerOrderPaymentChoice["value"] | null {
+  if (content.paymentRail) return content.paymentRail;
+  if (
+    content.setupPaymentMethod === "Card" ||
+    content.paymentMethod === "Visa"
+  ) {
+    return "card";
+  }
+  if (content.setupPaymentMethod === "FPS") return "fps";
+  if (content.setupPaymentMethod === "HK Local") return "hk_local";
+  if (content.setupPaymentMethod === "International via SWIFT") return "swift";
+  return null;
+}
+
+function settlementCurrencyFor(
+  content: WinnerOrderContent,
+): NonNullable<AuctionWinnerOrderProps["settlementCurrency"]> | undefined {
+  if (content.status !== "awaiting_address" || !content.settlementCurrency) {
+    return undefined;
+  }
+  return {
+    label: "Settlement currency",
+    options: SETTLEMENT_CURRENCY_OPTIONS,
+    value: content.settlementCurrency,
+    onChange: () => undefined,
+  };
+}
+
+function paymentChoicesFor(
+  content: WinnerOrderContent,
+): AuctionWinnerOrderProps["paymentChoices"] | undefined {
+  if (content.status !== "awaiting_address" || !content.settlementCurrency) {
+    return undefined;
+  }
+  return {
+    label: "Payment method",
+    byCurrency: PAYMENT_RAILS_BY_CURRENCY,
+    value: selectedPaymentChoice(content),
+    onChange: () => undefined,
+  };
+}
+
+function bankDetailsFor(
+  content: WinnerOrderContent,
+): AuctionWinnerOrderBankDetails | undefined {
+  const rail = content.paymentRail;
+  if (!rail) return undefined;
+
+  const invoiceTotal = content.invoiceLines?.find(
+    (line) => line.label === "Order Total",
+  )?.value;
+  const amountDue = content.convertedTotal ?? content.usdTotal ?? invoiceTotal;
+
+  const rows = [
+    ...(amountDue
+      ? [
+          {
+            label: "Amount due",
+            value: amountDue,
+          },
+        ]
+      : []),
+    ...(content.invoiceId
+      ? [{ label: "Invoice", value: content.invoiceId }]
+      : []),
+  ];
+
+  if (rail === "fps") {
+    return {
+      rail,
+      title: "View Bank Details",
+      rows: [
+        ...rows,
+        { label: "FPS ID", value: WINNER_ORDER_BANK_DETAILS.fpsId },
+        {
+          label: "Account name",
+          value: WINNER_ORDER_BANK_DETAILS.beneficiaryName,
+        },
+        {
+          label: "Payment reference",
+          value: WINNER_ORDER_BANK_DETAILS.transferReference,
+        },
+      ],
+      note: "Open your banking app and scan this QR",
+    };
+  }
+
+  if (rail === "hk_local") {
+    return {
+      rail,
+      title: "View Bank Details",
+      rows: [
+        ...rows,
+        { label: "Bank name", value: WINNER_ORDER_BANK_DETAILS.bankName },
+        { label: "Bank code", value: WINNER_ORDER_BANK_DETAILS.bankCode },
+        {
+          label: "Branch code",
+          value: WINNER_ORDER_BANK_DETAILS.branchCode,
+        },
+        {
+          label: "Account number",
+          value: WINNER_ORDER_BANK_DETAILS.accountNumber,
+        },
+        {
+          label: "Payment reference",
+          value: WINNER_ORDER_BANK_DETAILS.transferReference,
+        },
+      ],
+    };
+  }
+
+  return {
+    rail,
+    title: "View Bank Details",
+    rows: [
+      ...rows,
+      {
+        label: "Beneficiary name",
+        value: WINNER_ORDER_BANK_DETAILS.beneficiaryName,
+      },
+      {
+        label: "Beneficiary address",
+        value: WINNER_ORDER_BANK_DETAILS.beneficiaryAddress,
+      },
+      { label: "Bank name", value: WINNER_ORDER_BANK_DETAILS.bankName },
+      { label: "Bank address", value: WINNER_ORDER_BANK_DETAILS.bankAddress },
+      { label: "SWIFT / BIC", value: WINNER_ORDER_BANK_DETAILS.swiftCode },
+      {
+        label: "Account number / IBAN",
+        value: WINNER_ORDER_BANK_DETAILS.accountNumber,
+      },
+      {
+        label: "Payment reference",
+        value: WINNER_ORDER_BANK_DETAILS.transferReference,
+      },
+    ],
+    note: "In your bank app, choose OUR for transfer fees so we receive the full order total.",
+  };
 }
 
 function resolveContent(
@@ -427,7 +615,6 @@ function WinnerOrderPageState({
   );
   const [setupDialogOpen, setSetupDialogOpen] = useState(false);
   const [proofDialogOpen, setProofDialogOpen] = useState(false);
-  const [howToPayDialogOpen, setHowToPayDialogOpen] = useState(false);
   const [refundDialogOpen, setRefundDialogOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [cardCheckoutPending, setCardCheckoutPending] = useState(false);
@@ -484,7 +671,19 @@ function WinnerOrderPageState({
         "Only part of this invoice is settled. Contact Grade10 about what remains.")
       : null;
   const lines = summaryLinesFor(content);
-  const total = lines.find((line) => line.label === "Order Total");
+  const totalLine = lines.find((line) => line.label === "Order Total");
+  const total = totalLine
+    ? { ...totalLine, value: content.usdTotal ?? totalLine.value }
+    : undefined;
+  const cardSettlement =
+    content.settlementCurrency === "HKD" &&
+    !content.paymentRail &&
+    (content.setupPaymentMethod === "Card" || content.paymentMethod === "Visa");
+  const summaryLines = lines.filter(
+    (line) =>
+      line.label !== "Order Total" &&
+      !(cardSettlement && line.label === "Payment Processing Fee"),
+  );
 
   function handleSetupConfirm(result: WinnerOrderSetupResult) {
     setSetupResult(result);
@@ -594,7 +793,9 @@ function WinnerOrderPageState({
               ? `${content.lotTitle} — open lot details`
               : "Winning lot",
           }}
+          bankDetails={bankDetailsFor(content)}
           note={noteFor(content)}
+          paymentChoices={paymentChoicesFor(content)}
           paymentMethod={paymentMethodFor(content)}
           progress={progressFor(content)}
           receipts={receiptLinksFor(content).map((receipt) => ({
@@ -605,9 +806,19 @@ function WinnerOrderPageState({
                 receipt.fileName ?? "grade10-winner-receipt.pdf",
               ),
           }))}
+          settlementCurrency={settlementCurrencyFor(content)}
           summary={{
-            lines: lines.filter((line) => line !== total),
+            lines: summaryLines,
             total: total ?? null,
+            convertedTotal: content.convertedTotal
+              ? { label: "Order Total", value: content.convertedTotal }
+              : undefined,
+            convertedFee: content.convertedFee
+              ? {
+                  label: "Payment Processing Fee",
+                  value: content.convertedFee,
+                }
+              : undefined,
             invoicePdf: hasIssuedInvoice(content)
               ? { onOpen: openPlaceholderInvoicePdf }
               : undefined,
@@ -643,7 +854,7 @@ function WinnerOrderPageState({
                       payCta === "Submit Payment Proof" && content.paymentRail
                         ? {
                             label: "View Bank Details",
-                            onPress: () => setHowToPayDialogOpen(true),
+                            onPress: () => undefined,
                           }
                         : undefined,
                     deadline: content.deadline,
@@ -662,15 +873,6 @@ function WinnerOrderPageState({
         onOpenChange={setSetupDialogOpen}
         open={setupDialogOpen}
       />
-      {content.paymentRail ? (
-        <WinnerOrderHowToPayDialog
-          amountDue={total?.value}
-          invoiceId={content.invoiceId ?? undefined}
-          onOpenChange={setHowToPayDialogOpen}
-          open={howToPayDialogOpen}
-          paymentRail={content.paymentRail}
-        />
-      ) : null}
       <WinnerOrderPaymentProofDialog
         onOpenChange={setProofDialogOpen}
         onSubmit={handleProofSubmit}

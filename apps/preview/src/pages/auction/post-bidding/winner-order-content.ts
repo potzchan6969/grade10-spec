@@ -77,6 +77,10 @@ export type WinnerOrderContent = {
   settlementCurrency?: WinnerOrderSettlementCurrency;
   /** The one bank rail selected for this invoice, when paid by transfer. */
   paymentRail?: WinnerOrderBankRail;
+  /** Explicit view values for the USD and converted settlement totals. */
+  usdTotal?: string;
+  convertedTotal?: string;
+  convertedFee?: string;
   billingLabel?: string;
   billingValue?: string | null;
   invoiceLines: WinnerOrderInvoiceLine[] | null;
@@ -207,7 +211,7 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "$120.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,460.00" },
+  { label: "Order Total", value: "US$16,340.00" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -238,11 +242,11 @@ export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "$120.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,460.00" },
+  { label: "Order Total", value: "US$16,340.00" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$16,460",
+  amount: "HK$128,814",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
   transfer: {
@@ -294,7 +298,7 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,340.00" },
+  { label: "Order Total", value: "US$16,340.00" },
 ];
 
 /**
@@ -409,6 +413,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         setupPaymentMethod: "Card",
+        settlementCurrency: "HKD",
         billingLabel: "Billing address",
         billingValue: ADDRESS,
         invoiceLines: null,
@@ -429,7 +434,11 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         billingLabel: "Billing address",
         billingValue: ADDRESS,
         setupPaymentMethod: "Card",
+        settlementCurrency: "HKD",
         invoiceLines: INVOICE_LINES,
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
+        convertedFee: "HK$545.00",
         invoiceId: INVOICE_ID,
         deadline: PAYMENT_DEADLINE,
         primaryCta: "Pay with Card",
@@ -447,7 +456,11 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         billingLabel: "Billing address",
         billingValue: ADDRESS,
         setupPaymentMethod: "Card",
+        settlementCurrency: "HKD",
         invoiceLines: INVOICE_LINES,
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
+        convertedFee: "HK$545.00",
         invoiceId: INVOICE_ID,
         deadline: PAYMENT_DEADLINE_PASSED,
         primaryCta: null,
@@ -470,6 +483,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         paymentRail: "fps",
         invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -493,6 +508,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         settlementCurrency: "HKD",
         paymentRail: "fps",
         invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -522,6 +539,11 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        settlementCurrency: "HKD",
+        setupPaymentMethod: "Card",
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
+        convertedFee: "HK$545.00",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -538,6 +560,11 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        settlementCurrency: "HKD",
+        setupPaymentMethod: "Card",
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
+        convertedFee: "HK$545.00",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -556,6 +583,11 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        settlementCurrency: "HKD",
+        setupPaymentMethod: "Card",
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
+        convertedFee: "HK$545.00",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
@@ -588,6 +620,11 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        settlementCurrency: "HKD",
+        setupPaymentMethod: "Card",
+        usdTotal: "US$16,340.00",
+        convertedTotal: "HK$128,269.00",
+        convertedFee: "HK$545.00",
         invoiceId: INVOICE_ID,
         primaryCta: null,
         paymentMethod: "Visa",
@@ -626,6 +663,23 @@ export const WINNER_ORDER_USD_BANK_TRANSFER_CONTENT: WinnerOrderContent = {
   setupPaymentMethod: "International via SWIFT",
   settlementCurrency: "USD",
   paymentRail: "swift",
+  usdTotal: "US$16,340.00",
+  convertedTotal: undefined,
+  convertedFee: undefined,
   primaryCta: "Submit Payment Proof",
   invoiceLines: USD_BANK_TRANSFER_INVOICE_LINES,
+};
+
+/** HKD-settled pending payment on the separate HK Local bank rail. */
+export const WINNER_ORDER_HKD_HK_LOCAL_CONTENT: WinnerOrderContent = {
+  ...WINNER_ORDER_CONTENTS.pending_payment,
+  body: "Your invoice is ready. Pay by bank transfer before the deadline.",
+  setupPaymentMethod: "HK Local",
+  settlementCurrency: "HKD",
+  paymentRail: "hk_local",
+  usdTotal: "US$16,340.00",
+  convertedTotal: "HK$128,269.00",
+  convertedFee: undefined,
+  primaryCta: "Submit Payment Proof",
+  invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 };
