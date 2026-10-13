@@ -1,7 +1,7 @@
 import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
-import { TABLE_LABELS } from "./fixtures";
+import { SAMPLE_RECEIPT, TABLE_LABELS } from "./fixtures";
 import { LINE_HEIGHT, MARGIN, RIGHT_EDGE, SUMMARY_LEFT } from "./pdf-document";
 import {
   drawnHorizontalLines,
@@ -79,7 +79,33 @@ const SUMMARY_LINE_ITEMS = [
   { key: "orderTotal" as const, label: "Order Total", amount: "HKD 205.00" },
 ];
 
+const HKD_RECEIPT_AMOUNTS = [
+  "HK$793.00",
+  "HK$159.00",
+  "HK$952.00",
+  "HK$79.00",
+  "HK$1,031.00",
+  "HK$0.00",
+] as const;
+
 describe("receipt PDF renderer", () => {
+  // winner-order-SC-289
+  it("renders the HKD receipt fixture with every amount in HKD and no USD winning bid or rate", async () => {
+    const strings = await drawnStrings(await ReceiptPdf(SAMPLE_RECEIPT));
+    const text = strings.join(" ");
+
+    for (const amount of HKD_RECEIPT_AMOUNTS) expect(strings).toContain(amount);
+    const amounts = strings.filter((value) =>
+      /^(?:HK\$|\d)[\d,]*\.\d{2}$/.test(value),
+    );
+    expect(new Set(amounts)).toEqual(new Set(HKD_RECEIPT_AMOUNTS));
+    expect(strings.filter((value) => /^\d[\d,]*\.\d{2}$/.test(value))).toEqual(
+      [],
+    );
+    expect(text).not.toMatch(/\bUSD\b|US\$/);
+    expect(text).not.toContain("7.85");
+  });
+
   it("keeps the four immutable payment lines in order", () => {
     expect(receiptBreakdown(DATA)).toEqual([
       ["Original Invoice Total", "HKD 120.00"],

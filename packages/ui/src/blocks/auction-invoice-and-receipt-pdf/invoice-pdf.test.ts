@@ -1,7 +1,11 @@
 import { getMessages } from "@grade10/i18n";
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
-import { ALL_BANK_RAILS, TABLE_LABELS } from "./fixtures";
+import {
+  ALL_BANK_RAILS,
+  SAMPLE_INVOICE,
+  TABLE_LABELS,
+} from "./fixtures";
 import { InvoicePdf } from "./invoice-pdf";
 import {
   A4_WIDTH,
@@ -96,6 +100,25 @@ const INSURANCE = { label: "Insurance", amount: "HKD 40.00" };
 
 const SUMMARY_LINE_ITEMS = [SHIPPING, ...SUMMARY];
 
+const HKD_INVOICE_AMOUNTS = [
+  "HK$793.00",
+  "HK$159.00",
+  "HK$952.00",
+  "HK$79.00",
+  "HK$1,031.00",
+] as const;
+
+const HKD_FPS_RAIL = {
+  label: "FPS",
+  details: ["165123456", "Grade10 HK Ltd."],
+  reference: "LK7P2Q01",
+} as const;
+
+const HKD_FPS_BANK_RAILS = {
+  fps: { fpsId: HKD_FPS_RAIL.details[0], beneficiary: HKD_FPS_RAIL.details[1] },
+  reference: HKD_FPS_RAIL.reference,
+} as const;
+
 /** The lines drawn in the Item column from `top` (inclusive) down to `bottom` (exclusive). */
 function titleLines(rows: DrawnText[], top: number, bottom: number) {
   return rows.filter(
@@ -104,6 +127,39 @@ function titleLines(rows: DrawnText[], top: number, bottom: number) {
 }
 
 describe("invoice PDF renderer", () => {
+  // winner-order-SC-288
+  it("renders the HKD invoice fixture with every amount in HKD and no USD winning bid or rate", async () => {
+    const strings = await drawnStrings(await InvoicePdf(SAMPLE_INVOICE));
+    const text = strings.join(" ");
+
+    for (const amount of HKD_INVOICE_AMOUNTS) expect(strings).toContain(amount);
+    const amounts = strings.filter((value) =>
+      /^(?:HK\$|\d)[\d,]*\.\d{2}$/.test(value),
+    );
+    expect(new Set(amounts)).toEqual(new Set(HKD_INVOICE_AMOUNTS));
+    expect(strings.filter((value) => /^\d[\d,]*\.\d{2}$/.test(value))).toEqual(
+      [],
+    );
+    expect(text).not.toMatch(/\bUSD\b|US\$/);
+    expect(text).not.toContain("7.85");
+  });
+
+  // winner-order-SC-288, winner-order-SC-299
+  it("renders only the selected settlement rail and its details on the HKD invoice", async () => {
+    const strings = await drawnStrings(
+      await InvoicePdf({ ...SAMPLE_INVOICE, bankRails: HKD_FPS_BANK_RAILS }),
+    );
+    const text = strings.join(" ");
+
+    expect(strings).toContain(HKD_FPS_RAIL.label);
+    for (const detail of HKD_FPS_RAIL.details) expect(text).toContain(detail);
+    expect(text).toContain(HKD_FPS_RAIL.reference);
+    expect(text).not.toContain("SWIFT");
+    expect(text).not.toContain("GRADE10HKXXX");
+    expect(text).not.toContain("HK local transfer");
+    expect(text).not.toContain("Example Bank (003)");
+  });
+
   // shared-ui-invoice-and-receipt-pdf-SC-67
   it("renders an invoice that fits as exactly one A4 page", async () => {
     const bytes = await InvoicePdf({
