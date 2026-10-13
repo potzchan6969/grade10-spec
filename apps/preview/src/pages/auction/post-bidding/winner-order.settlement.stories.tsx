@@ -6,6 +6,7 @@ import {
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
+import { WINNER_ORDER_CONTENTS } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -94,6 +95,43 @@ export const AwaitingSetup: Story = {
     expect(
       canvas.queryByRole("link", { name: "Receipt PDF" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** HKD selected before invoice send: the lot stays in USD until invoice creation. */
+export const AwaitingSetupHkdBeforeInvoice: Story = {
+  name: "Awaiting Setup - HKD before invoice - winner-order-SC-292",
+  args: {
+    status: "awaiting_address",
+    content: {
+      ...WINNER_ORDER_CONTENTS.awaiting_address,
+      settlementCurrency: "HKD",
+      setupPaymentMethod: null,
+      paymentRail: undefined,
+      convertedTotal: undefined,
+      convertedFee: undefined,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    const sidebar = within(canvas.getByRole("complementary"));
+
+    // winner-order-SC-292: before invoice send, HKD has no payable total or fee.
+    expect(canvas.getByText(/^Winning bid: US\$12,800$/)).toBeVisible();
+    expect(sidebar.getByText("US$12,800.00")).toBeVisible();
+    const summaryRows = [
+      ...canvasElement.querySelectorAll<HTMLElement>(
+        '[data-slot="winner-order-summary-line"]',
+      ),
+    ];
+    expect(summaryRows.some((row) => row.textContent?.includes("HK$"))).toBe(
+      false,
+    );
+    expect(canvas.getByRole("radio", { name: "HKD" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
   },
 };
 
@@ -212,22 +250,56 @@ export const CompleteSetupFlow: Story = {
     });
     // The winner chooses the settlement currency and payment method.
     const hkd = modal.getByRole("button", { name: "HKD" });
-    expect(modal.getByRole("button", { name: "USD" })).toHaveAttribute(
+    const usd = modal.getByRole("button", { name: "USD" });
+    expect(usd).toHaveAttribute(
       "aria-pressed",
       "false",
     );
     expect(hkd).toHaveAttribute("aria-pressed", "false");
     expect(modal.queryByRole("radio")).not.toBeInTheDocument();
+    // winner-order-SC-279 shared UI scope: no choice keeps setup blocked.
     expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
 
+    // winner-order-SC-303: the card fee follows the selected settlement currency.
+    await userEvent.click(usd);
+    await waitFor(() => {
+      expect(
+        modal.getByText("Card fee about 4.4% + a fixed amount"),
+      ).toBeVisible();
+    });
+    const hkLocal = await waitFor(() => {
+      const found = modal.getByRole("radio", { name: /^HK Local\b/i });
+      expect(found).toBeVisible();
+      return found;
+    });
+    await userEvent.click(hkLocal);
+    await waitFor(() => {
+      expect(
+        modal.getByRole("radio", { name: /^HK Local\b/i }),
+      ).toBeChecked();
+    });
+
+    // winner-order-SC-296: a rail offered by both currencies stays selected.
     await userEvent.click(hkd);
+    await waitFor(() => {
+      expect(
+        modal.getByRole("radio", { name: /^HK Local\b/i }),
+      ).toBeChecked();
+      expect(
+        modal.getByText("Card fee about 3.4% + a fixed amount"),
+      ).toBeVisible();
+      expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+    });
+    // winner-order-SC-280 shared UI scope: the chosen HKD rail is callback-controlled;
+    // persisted confirmation remains an application-layer requirement.
+
     const card = await waitFor(() => {
       const found = modal.getByRole("radio", { name: /^Card\b/i });
       expect(found).toBeVisible();
       return found;
     });
     expect(card).not.toBeChecked();
-    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
     await userEvent.click(card);
     await waitFor(() => {
       expect(card).toBeChecked();

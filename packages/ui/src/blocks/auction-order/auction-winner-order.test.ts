@@ -188,7 +188,7 @@ function summaryRow(container: HTMLDivElement, expectedText: string) {
 }
 
 describe("AuctionWinnerOrder settlement presentation", () => {
-  it("winner-order-SC-278 and shared-ui-auction-order-SC-21/22 - offers USD and HKD with neither selected and reports a pick", () => {
+  it("winner-order-SC-278 and shared-ui-auction-order-SC-21 and shared-ui-auction-order-SC-22 - offers USD and HKD with neither selected and reports a pick", () => {
     const onChange = vi.fn();
     const { container } = mount({
       settlementCurrency: {
@@ -209,7 +209,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(onChange).toHaveBeenCalledWith("HKD");
   });
 
-  it("shared-ui-auction-order-SC-23/24/25 and winner-order-SC-293/294/297 - lists only the picked currency's rails with fee ranges", () => {
+  it("shared-ui-auction-order-SC-23 and winner-order-SC-293 - lists only the picked currency's rails with fee ranges", () => {
     const onCurrencyChange = vi.fn();
     const onPaymentChange = vi.fn();
     const { container } = mount({
@@ -264,7 +264,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(canvas.queryByRole("radio", { name: /^FPS\b/i })).toBeNull();
   });
 
-  it("shared-ui-auction-order-SC-25 - renders an unavailable card choice without making it selectable", () => {
+  it("shared-ui-auction-order-SC-25 and winner-order-SC-297 - renders an unavailable USD card without making it selectable", () => {
     const onPaymentChange = vi.fn();
     const { container } = mount({
       settlementCurrency: {
@@ -297,11 +297,16 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       card.parentElement?.querySelector<HTMLInputElement>('input[type="radio"]')
         ?.disabled,
     ).toBe(true);
+    expect(canvas.getByRole("radio", { name: /^HK Local\b/i })).not.toBeNull();
+    expect(
+      canvas.getByRole("radio", { name: /International via SWIFT/i }),
+    ).not.toBeNull();
+    expect(canvas.queryByRole("radio", { name: /^FPS\b/i })).toBeNull();
     act(() => card.click());
     expect(onPaymentChange).not.toHaveBeenCalled();
   });
 
-  it("shared-ui-auction-order-SC-26 and winner-order-SC-295/296 - clears the selected method when the controlled currency changes", () => {
+  it("shared-ui-auction-order-SC-26 and winner-order-SC-295 - clears the selected method when the controlled currency changes", () => {
     const paymentChoices: PaymentChoices = {
       label: "Payment method",
       byCurrency: PAYMENT_CHOICES,
@@ -352,7 +357,160 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ).toBe(true);
   });
 
-  it("winner-order-SC-290/304 and shared-ui-auction-order-SC-27/30 - renders USD then HKD totals and keeps the card fee on its own row", () => {
+  it("winner-order-SC-296 - keeps a method selected when both currencies offer it", () => {
+    const paymentChoices: PaymentChoices = {
+      label: "Payment method",
+      byCurrency: PAYMENT_CHOICES,
+      value: "hk_local",
+      onChange: vi.fn(),
+    };
+    const { container, rerender } = mount({
+      settlementCurrency: {
+        label: "Settlement currency",
+        options: CURRENCY_OPTIONS,
+        value: "USD",
+        onChange: vi.fn(),
+      },
+      paymentChoices,
+    });
+    const canvas = within(container);
+
+    expect(
+      canvas
+        .getByRole("radio", { name: /^HK Local\b/i })
+        .getAttribute("aria-checked"),
+    ).toBe("true");
+
+    rerender({
+      settlementCurrency: {
+        label: "Settlement currency",
+        options: CURRENCY_OPTIONS,
+        value: "HKD",
+        onChange: vi.fn(),
+      },
+      paymentChoices: {
+        ...paymentChoices,
+        value: "hk_local",
+      },
+    });
+
+    expect(
+      canvas
+        .getByRole("radio", { name: /^HK Local\b/i })
+        .getAttribute("aria-checked"),
+    ).toBe("true");
+    expect(
+      canvas.queryByRole("radio", { name: /International via SWIFT/i }),
+    ).toBeNull();
+  });
+
+  it("winner-order-SC-294 - offers USD card, HK Local and SWIFT without FPS", () => {
+    const { container } = mount({
+      settlementCurrency: {
+        label: "Settlement currency",
+        options: CURRENCY_OPTIONS,
+        value: "USD",
+        onChange: vi.fn(),
+      },
+      paymentChoices: {
+        label: "Payment method",
+        byCurrency: PAYMENT_CHOICES,
+        value: null,
+        onChange: vi.fn(),
+      },
+    });
+    const canvas = within(container);
+
+    expect(canvas.getByRole("radio", { name: /^Card\b/i })).not.toBeNull();
+    expect(canvas.getByRole("radio", { name: /^HK Local\b/i })).not.toBeNull();
+    expect(
+      canvas.getByRole("radio", { name: /International via SWIFT/i }),
+    ).not.toBeNull();
+    expect(canvas.queryByRole("radio", { name: /^FPS\b/i })).toBeNull();
+    expect(
+      canvas.getByRole("radio", { name: /^Card\b/i }).getAttribute(
+        "aria-checked",
+      ),
+    ).toBe("false");
+  });
+
+  it("winner-order-SC-303 - renders the card fee percentage for the picked currency", () => {
+    const feeChoices: PaymentChoices["byCurrency"] = {
+      USD: [
+        {
+          value: "card",
+          label: "Card",
+          feeRange: "Card fee about 4.4% + a fixed amount",
+        },
+      ],
+      HKD: [
+        {
+          value: "card",
+          label: "Card",
+          feeRange: "Card fee about 3.4% + a fixed amount",
+        },
+      ],
+    };
+    const paymentChoices: PaymentChoices = {
+      label: "Payment method",
+      byCurrency: feeChoices,
+      value: null,
+      onChange: vi.fn(),
+    };
+    const { container, rerender } = mount({
+      settlementCurrency: {
+        label: "Settlement currency",
+        options: CURRENCY_OPTIONS,
+        value: "USD",
+        onChange: vi.fn(),
+      },
+      paymentChoices,
+    });
+    const canvas = within(container);
+
+    expect(canvas.getByText("Card fee about 4.4% + a fixed amount")).not.toBeNull();
+    rerender({
+      settlementCurrency: {
+        label: "Settlement currency",
+        options: CURRENCY_OPTIONS,
+        value: "HKD",
+        onChange: vi.fn(),
+      },
+      paymentChoices,
+    });
+    expect(canvas.getByText("Card fee about 3.4% + a fixed amount")).not.toBeNull();
+    expect(
+      canvas.queryByText("Card fee about 4.4% + a fixed amount"),
+    ).toBeNull();
+  });
+
+  it("winner-order-SC-292 - omits HKD totals before invoice send and keeps the USD lot bid", () => {
+    const { container } = mount({
+      settlementCurrency: {
+        label: "Settlement currency",
+        options: CURRENCY_OPTIONS,
+        value: "HKD",
+        onChange: vi.fn(),
+      },
+    });
+    const canvas = within(container);
+
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidUS$101.00",
+      "Buyer's PremiumUS$20.20",
+      "Shipping & HandlingUS$10.01",
+      "Order TotalUS$131.21",
+    ]);
+    expect(canvas.queryByText("HK$1,031.00")).toBeNull();
+    expect(canvas.queryByText("HK$38.73")).toBeNull();
+    expect(
+      container
+        .querySelector('[data-slot="winner-order-lot"]')
+        ?.textContent,
+    ).toContain("Winning bid: US$101.00");
+  });
+
+  it("winner-order-SC-290 and winner-order-SC-304 and shared-ui-auction-order-SC-27 and shared-ui-auction-order-SC-30 - renders USD then HKD totals and keeps the card fee on its own row", () => {
     const { container } = mount({
       summary: {
         ...BASE_PROPS.summary,
@@ -423,7 +581,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(canvas.queryByText("HK$1,031.00")).toBeNull();
   });
 
-  it("winner-order-SC-95/181/182/183/184/299 and shared-ui-auction-order-SC-29 - opens one supplied bank rail and reports the control press", () => {
+  it("winner-order-SC-181 and shared-ui-auction-order-SC-29 - opens one supplied FPS rail and reports the control press", () => {
     const onViewBankDetails = vi.fn();
     const { container } = mount({
       bankDetails: {
@@ -434,6 +592,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
           { label: "Account name", value: "Grade10 Finance Limited" },
           { label: "Payment reference", value: "ORDER-123" },
         ],
+        qrSrc: "data:image/png;base64,ZmFrZS1xci1kYXRh",
         note: "Open your banking app and scan this QR",
       },
       summary: {
@@ -462,7 +621,121 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(within(dialog).getByText("fps@example.test")).not.toBeNull();
     expect(within(dialog).getByText("Payment reference")).not.toBeNull();
     expect(within(dialog).getByText("ORDER-123")).not.toBeNull();
+    expect(
+      within(dialog).getByRole("img", { name: COPY.bankDetailsQrAlt }),
+    ).not.toBeNull();
     expect(within(dialog).queryByRole("tab")).toBeNull();
     expect(within(dialog).queryByText(/HK Local|SWIFT/i)).toBeNull();
+  });
+
+  it("winner-order-SC-182 - opens HK Local details with bank and account fields", () => {
+    const { container } = mount({
+      bankDetails: {
+        rail: "hk_local",
+        title: "HK Local bank details",
+        rows: [
+          { label: "Bank name", value: "Grade10 Bank" },
+          { label: "Bank code", value: "004" },
+          { label: "Branch code", value: "123" },
+          { label: "Account number", value: "004-123-987654" },
+          { label: "Payment reference", value: "ORDER-HK-123" },
+        ],
+      },
+      summary: {
+        ...BASE_PROPS.summary,
+        pay: {
+          label: "Submit Payment Proof",
+          onPress: vi.fn(),
+          secondary: {
+            label: "View Bank Details",
+            onPress: vi.fn(),
+          },
+        },
+      },
+    });
+
+    act(() => {
+      within(container)
+        .getByRole("button", { name: "View Bank Details" })
+        .click();
+    });
+
+    const dialog = within(document.body).getByRole("dialog");
+    expect(within(dialog).getByText("HK Local bank details")).not.toBeNull();
+    for (const value of [
+      "Grade10 Bank",
+      "004",
+      "123",
+      "004-123-987654",
+      "ORDER-HK-123",
+    ]) {
+      expect(within(dialog).getByText(value)).not.toBeNull();
+    }
+    expect(within(dialog).queryByRole("tab")).toBeNull();
+    expect(within(dialog).queryByText(/FPS|SWIFT/i)).toBeNull();
+  });
+
+  it("winner-order-SC-183 - opens SWIFT details and places the OUR note after payment reference", () => {
+    const { container } = mount({
+      bankDetails: {
+        rail: "swift",
+        title: "International via SWIFT bank details",
+        rows: [
+          { label: "Beneficiary name", value: "Grade10 Finance Limited" },
+          {
+            label: "Beneficiary address",
+            value: "Unit 2602, Central, Hong Kong",
+          },
+          { label: "Bank name", value: "Grade10 Bank" },
+          { label: "Bank address", value: "1 Queen's Road Central" },
+          { label: "SWIFT / BIC", value: "G10BHKHHXXX" },
+          { label: "Account number / IBAN", value: "HK00G10B000123456789" },
+          { label: "Payment reference", value: "ORDER-USD-123" },
+        ],
+        note: "Choose OUR for transfer fees so Grade10 receives the full order total.",
+      },
+      summary: {
+        ...BASE_PROPS.summary,
+        pay: {
+          label: "Submit Payment Proof",
+          onPress: vi.fn(),
+          secondary: {
+            label: "View Bank Details",
+            onPress: vi.fn(),
+          },
+        },
+      },
+    });
+
+    act(() => {
+      within(container)
+        .getByRole("button", { name: "View Bank Details" })
+        .click();
+    });
+
+    const dialog = within(document.body).getByRole("dialog");
+    for (const value of [
+      "Grade10 Finance Limited",
+      "Unit 2602, Central, Hong Kong",
+      "Grade10 Bank",
+      "1 Queen's Road Central",
+      "G10BHKHHXXX",
+      "HK00G10B000123456789",
+      "ORDER-USD-123",
+    ]) {
+      expect(within(dialog).getByText(value)).not.toBeNull();
+    }
+    const reference = within(dialog).getByText("ORDER-USD-123");
+    const note = within(dialog).getByText(
+      "Choose OUR for transfer fees so Grade10 receives the full order total.",
+    );
+    expect(
+      Boolean(
+        reference.compareDocumentPosition(note) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+    expect(within(dialog).queryByRole("tab")).toBeNull();
+    expect(within(dialog).queryByText(/FPS|HK Local/i)).toBeNull();
   });
 });

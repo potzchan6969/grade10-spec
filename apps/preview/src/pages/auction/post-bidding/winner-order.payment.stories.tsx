@@ -146,7 +146,7 @@ export const PendingPaymentBankTransfer: Story = {
 
 /** HKD invoice — the selected HK Local rail has its own bank details. */
 export const PendingPaymentHkdHongKongBankTransfer: Story = {
-  name: "Pending Payment — HKD HK Local",
+  name: "Pending Payment - HKD HK Local - winner-order-SC-95",
   args: {
     status: "pending_payment",
     content: WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
@@ -233,7 +233,7 @@ export const PendingPaymentUsdBankTransfer: Story = {
  * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
-  name: "Submit Proof Flow",
+  name: "Submit Proof Flow - winner-order-SC-184",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -251,6 +251,11 @@ export const SubmitBankPaymentProof: Story = {
       expect(found).toBeVisible();
       return within(found);
     });
+
+    // winner-order-SC-184: proof submission does not repeat invoice or rail details.
+    expect(modal.queryByText(/Amount due|Order Total|Payment reference/i)).not.toBeInTheDocument();
+    expect(modal.queryByText(/US\$|HK\$/)).not.toBeInTheDocument();
+    expect(modal.queryByText(/FPS|HK Local|SWIFT|bank/i)).not.toBeInTheDocument();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
     const transferDate = modal.getByLabelText("Transfer Date");
