@@ -120,6 +120,12 @@
    - It reads the row's disclosure. g10.auction-bid-payment-method.US4-TC2
    - No currency amount appears in it. g10.auction-bid-payment-method.US4-TC2
 
+## g10.auction-bid-payment-method.US1: Collector bids on the card already linked
+
+**As a** signed-in collector with a linked card,
+**I want** my maximum to stand the moment I commit it, with nothing taken from my card,
+**so that** I bid in one step and pay only if I win.
+
 ### g10.auction-bid-payment-method.US1-TC1: No linked card means no bid, setup opens, and no bid is recorded
 
 **Classification:**

@@ -86,6 +86,12 @@
 12. In customer B's session, navigate to `<grade10 my auctions url>`.
    - does not list `<lot_4>`. g10.auction-lot-status.US3-TC1
 
+## g10.auction-lot-status.US1: Collector sees whether a lot can still be bid on
+
+**As a** collector,
+**I want** every lot to show whether it is Upcoming, Active or Ended,
+**so that** I can see at a glance whether I can still bid on it.
+
 ### g10.auction-lot-status.US1-TC1: Preparing Shipment maps to Ended
 
 **Classification:**

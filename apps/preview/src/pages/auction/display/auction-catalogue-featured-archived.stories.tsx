@@ -1,3 +1,7 @@
+import {
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
@@ -47,8 +51,10 @@ function FeaturedRow() {
   const { watched, onToggle } = useWatchState();
   return (
     <FeaturedAuctions
+      locale={FIXTURE_SHIPPED_LOCALE}
       lots={featuredLots}
       onToggle={onToggle}
+      timeZone={FIXTURE_TIME_ZONE}
       watched={watched}
     />
   );
@@ -58,8 +64,10 @@ function FeaturedPair() {
   const { watched, onToggle } = useWatchState();
   return (
     <FeaturedAuctionsPair
+      locale={FIXTURE_SHIPPED_LOCALE}
       lots={featuredLots}
       onToggle={onToggle}
+      timeZone={FIXTURE_TIME_ZONE}
       watched={watched}
     />
   );
@@ -115,8 +123,10 @@ export const FeaturedLot: Story = {
         eager
         heading={false}
         lift
+        locale={FIXTURE_SHIPPED_LOCALE}
         lot={featuredLot}
         onToggle={() => setWatched((value) => !value)}
+        timeZone={FIXTURE_TIME_ZONE}
         watched={watched}
       />
     );

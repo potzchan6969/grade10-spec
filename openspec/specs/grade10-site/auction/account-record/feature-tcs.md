@@ -340,6 +340,12 @@
 3. Find `<lot_3>`'s row in the Active tab.
    - Your Standing reads Outbid, with the next valid bid. g10.auction-account-record.US10-TC3
 
+## g10.auction-account-record.US1: Mark a listing now and find it again later
+
+**As a** collector,
+**I want** to watch listings I am interested in before bidding opens,
+**so that** I can find them again when it does without searching the catalogue a second time.
+
 ### g10.auction-account-record.US1-TC1: A lot watched before it opens is found when it opens
 
 **Classification:**
@@ -1662,55 +1668,6 @@ Runs once per row of **Test data**.
 **I want** each lot I bid on to show the auction's current or final price and, once it closes, whether I won,
 **so that** I know what a lot sold for and whether I lost it without opening the lot.
 
-<!-- trace:case id=g10.auction-account-record.TC-j99 rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
-### g10.auction-account-record.US10-TC1: Ended row shows the final price and the recorded result
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke, regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-10
-
-**Pre-conditions:**
-
-* `<lot_1>` closed, its close recorded, customer A winning at `<final price>`.
-* customer B's last bid on `<lot_1>` was `<customer B bid>`.
-* `<viewer>` is signed in.
-
-**Test data:**
-
-| `<viewer>` | `<own last bid>` | `<standing>` |
-| --- | --- | --- |
-| customer A | `<customer A maximum>` | Won |
-| customer B | `<customer B bid>` | Didn't win |
-
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | A closed HKD lot both customers bid on |
-| `<final price>` | 513000 minor units, `<customer B bid>` plus its 8000 increment |
-| `<customer A maximum>` | 800000 minor units, above `<final price>` |
-| `<customer B bid>` | 505000 minor units, customer B's maximum, below `<final price>` |
-
-**Steps:**
-
-1. Navigate to `<my auctions url>`.
-2. Select the Ended tab.
-3. Find `<lot_1>`'s row.
-
-**Expected Results:**
-
-* Current bid reads `<final price>`, not `<own last bid>`.
-* Your Standing reads `<standing>`.
-
 <!-- trace:case id=g10.auction-account-record.TC-p3p rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
 ### g10.auction-account-record.US10-TC2: Row shows no result before the close is recorded
 
@@ -1793,6 +1750,55 @@ Runs once per row of **Test data**.
 
 * Current bid reads `<current bid>`, not `<customer B bid>`.
 * Your Standing reads Outbid, with the next valid bid.
+
+<!-- trace:case id=g10.auction-account-record.TC-j99 rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
+### g10.auction-account-record.US10-TC1: Ended row shows the final price and the recorded result
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-10
+
+**Pre-conditions:**
+
+* `<lot_1>` closed, its close recorded, customer A winning at `<final price>`.
+* customer B's last bid on `<lot_1>` was `<customer B bid>`.
+* `<viewer>` is signed in.
+
+**Test data:**
+
+| `<viewer>` | `<own last bid>` | `<standing>` |
+| --- | --- | --- |
+| customer A | `<customer A maximum>` | Won |
+| customer B | `<customer B bid>` | Didn't win |
+
+| Field | Value |
+| --- | --- |
+| `<lot_1>` | A closed HKD lot both customers bid on |
+| `<final price>` | 513000 minor units, `<customer B bid>` plus its 8000 increment |
+| `<customer A maximum>` | 800000 minor units, above `<final price>` |
+| `<customer B bid>` | 505000 minor units, customer B's maximum, below `<final price>` |
+
+**Steps:**
+
+1. Navigate to `<my auctions url>`.
+2. Select the Ended tab.
+3. Find `<lot_1>`'s row.
+
+**Expected Results:**
+
+* Current bid reads `<final price>`, not `<own last bid>`.
+* Your Standing reads `<standing>`.
 
 <!-- trace:case id=g10.auction-account-record.TC-hgl rev=1 covers=g10.auction-account-record.SC-b5w,g10.auction-account-record.SC-fkr,g10.auction-account-record.SC-fao,g10.auction-account-record.SC-abi -->
 ### g10.auction-account-record.US10-TC4: Lone first bid confirming after the close reads Didn't win on an unsold lot

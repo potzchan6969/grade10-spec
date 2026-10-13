@@ -29,6 +29,40 @@ state and can follow a safe carrier address when one is supplied
 🚧 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address
 
+## Guest Order Link
+
+A guest order opens at `grade10.com/orders/<order-id>`, from the link in
+Shopify's order confirmation email or Continue on its thank-you page. Grade10 sends
+no email of its own. The link carries its secret after `#`, so no server or
+log sees it.
+
+- **No account** - the link opens the order for whoever holds it; nothing
+  asks them to sign in
+- **Same page** - the same order facts, progress and tracking as a member's
+  order
+- **Wrong link** - an unknown order, a member's order or a wrong secret all
+  show not-found
+- **Not indexed** - search engines are told not to index the address
+- **Where the link comes from** - the order carries it, and the View order
+  button in Shopify's order emails opens it. Thank you's Continue reaches it
+  through [Back From Checkout](#back-from-checkout)
+
+## Back From Checkout
+
+The Continue button on Shopify's Thank you page always goes to the bare
+checkout host, which sends it to `grade10.com/orders/latest`. That page opens
+the order this browser last sent to Shopify.
+
+- **Guest** - their private order page, link and secret included
+- **Member** - the order under their profile
+- **Nothing remembered** - a signed-in member sees their order list; anyone
+  else sees the store
+- **One day** - the browser forgets the order a day after checkout, and as
+  soon as Continue has used it; a new checkout replaces it
+- **Another device** - a buyer who pays on a different device lands on the
+  fallback. A guest's link still arrives in Shopify's confirmation email
+- **Not indexed** - search engines are told not to index the address
+
 ## Order Summary
 
 🚧 **Points** — when the shop names the settled order's points discount, under

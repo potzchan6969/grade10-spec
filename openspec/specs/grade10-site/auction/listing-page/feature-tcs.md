@@ -571,6 +571,14 @@
 4. Find the row marked You.
    - The row still shows the You badge. g10.auction-listing-page.US15-TC2
 
+## g10.auction-listing-page.US1: Collector opens a lot at its own address
+
+**As a** collector,
+**I want** a lot's address to answer with that lot's own page in the response
+HTML,
+**so that** I can read its name, its description and where its bidding stands
+without waiting for a script to run.
+
 ### g10.auction-listing-page.US1-TC1: Lot answers whole before scripts run
 
 **Classification:**

@@ -1,6 +1,7 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
-import { Link } from "@grade10/design-system/components/forms/link";
-import { EmptyPanel, VisitTicketBody, type VisitTone } from "@grade10/ui";
+import { Button } from "@grade10/design-system/components/forms/button";
+import { VisitTicketBody, type VisitTone } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, within } from "storybook/test";
@@ -77,13 +78,15 @@ function TicketBody({ state }: { state: TicketState }) {
   }
   if (state === "notFound") {
     return (
-      <EmptyPanel
-        actions={<Link href={BOOK_HREF}>Book a time</Link>}
-        copy={{
-          title: "This link doesn’t open a ticket",
-          description: "Ask at the counter and staff show your ticket again.",
-        }}
-        slot="ticket-not-found"
+      <EmptyState
+        actions={
+          <Button render={<a href={BOOK_HREF} />} size="md">
+            Book a time
+          </Button>
+        }
+        data-slot="ticket-not-found"
+        description="Ask at the counter and staff show your ticket again."
+        title="This link doesn’t open a ticket"
       />
     );
   }

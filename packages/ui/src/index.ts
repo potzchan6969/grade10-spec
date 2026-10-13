@@ -172,13 +172,6 @@ export {
   receiptBreakdown,
 } from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
 export {
-  AuctionCard,
-  type AuctionCardBadge,
-  type AuctionCardCopy,
-  type AuctionCardProps,
-  type AuctionCardWhen,
-} from "./blocks/auction-listing/auction-card";
-export {
   FeaturedAuctionsBanner,
   type FeaturedAuctionsBannerCopy,
   type FeaturedAuctionsBannerCountdown,
@@ -438,11 +431,6 @@ export {
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared/ui/page-blocks
-export {
-  EmptyPanel,
-  type EmptyPanelCopy,
-  type EmptyPanelProps,
-} from "./blocks/page-blocks/empty-panel";
 export {
   FactCard,
   type FactCardCopy,

@@ -1,3 +1,4 @@
+import { formatCollectorDeadline } from "@grade10/date";
 import {
   CarouselProgress,
   CarouselProgressItem,
@@ -91,7 +92,15 @@ function useNow(targetMs: number) {
   return now;
 }
 
-function LotCountdown({ lot }: { lot: CatalogueLot }) {
+function LotCountdown({
+  lot,
+  locale,
+  timeZone,
+}: {
+  lot: CatalogueLot;
+  locale: string;
+  timeZone: string;
+}) {
   const opens = lot.status === "Upcoming";
   const target = opens ? lot.startsAt : lot.closesAt;
   const targetMs = Date.parse(target);
@@ -104,7 +113,13 @@ function LotCountdown({ lot }: { lot: CatalogueLot }) {
   if (lot.status === "Ended") {
     return (
       <p className="text-sm text-secondary-foreground">
-        Ended <time dateTime={lot.closesAt}>{lot.closeLabel}</time>
+        <time dateTime={lot.closesAt}>
+          {formatCollectorDeadline(targetMs, {
+            locale,
+            prefix: "Ended",
+            timeZone,
+          })}
+        </time>
       </p>
     );
   }
@@ -118,7 +133,11 @@ function LotCountdown({ lot }: { lot: CatalogueLot }) {
     >
       <time dateTime={target}>
         <span className="sr-only">
-          {lead} {parts.long}
+          {formatCollectorDeadline(targetMs, {
+            locale,
+            prefix: opens ? "Opens" : "Ends",
+            timeZone,
+          })}
         </span>
         <span aria-hidden="true">
           {lead} {parts.short}
@@ -184,6 +203,8 @@ function CatalogueWatch({
 
 type AuctionLotCardProps = {
   lot: CatalogueLot;
+  locale: string;
+  timeZone: string;
   watched: boolean;
   onToggle: () => void;
   /** The list heads each title. Featured repeats the lot, so the title stays a link. */
@@ -205,6 +226,8 @@ const SKELETON_LOT: CatalogueLot = {
 
 function AuctionLotCardContent({
   lot,
+  locale,
+  timeZone,
   watched,
   onToggle,
   heading,
@@ -339,7 +362,7 @@ function AuctionLotCardContent({
               </div>
             </div>
           ) : null}
-          <LotCountdown lot={lot} />
+          <LotCountdown locale={locale} lot={lot} timeZone={timeZone} />
         </div>
         {lift ? (
           <span
@@ -392,6 +415,8 @@ function AuctionLotCard({
 
 type FeaturedAuctionsProps = {
   lots: readonly CatalogueLot[];
+  locale: string;
+  timeZone: string;
   watched: ReadonlySet<string>;
   onToggle: (id: string) => void;
   /** Boneyard skeletons while the page enter beat is in flight. */
@@ -418,6 +443,8 @@ function featuredCardWidth(count: number) {
 
 function FeaturedAuctions({
   lots,
+  locale,
+  timeZone,
   watched,
   onToggle,
   loading = false,
@@ -541,8 +568,10 @@ function FeaturedAuctions({
                       heading={false}
                       lift
                       loading
+                      locale={locale}
                       lot={SKELETON_LOT}
                       onToggle={() => {}}
+                      timeZone={timeZone}
                       watched={false}
                     />
                   </li>
@@ -566,8 +595,10 @@ function FeaturedAuctions({
                       eager
                       heading={false}
                       lift
+                      locale={locale}
                       lot={lot}
                       onToggle={() => onToggle(lot.id)}
+                      timeZone={timeZone}
                       watched={watched.has(lot.id)}
                     />
                   </li>
@@ -581,6 +612,8 @@ function FeaturedAuctions({
 
 type FeaturedAuctionsPairProps = {
   lots: readonly CatalogueLot[];
+  locale: string;
+  timeZone: string;
   watched: ReadonlySet<string>;
   onToggle: (id: string) => void;
 };
@@ -729,6 +762,8 @@ function StaggeredHeading({
  */
 function FeaturedAuctionsPair({
   lots,
+  locale,
+  timeZone,
   watched,
   onToggle,
 }: FeaturedAuctionsPairProps) {
@@ -1027,7 +1062,11 @@ function FeaturedAuctionsPair({
                           reduceMotion ? undefined : pairContentVariants
                         }
                       >
-                        <LotCountdown lot={lot} />
+                        <LotCountdown
+                          locale={locale}
+                          lot={lot}
+                          timeZone={timeZone}
+                        />
                       </motion.div>
                       <motion.div
                         animate="rest"

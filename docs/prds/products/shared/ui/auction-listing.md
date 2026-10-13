@@ -49,6 +49,9 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   close time when it shows a clock, as it does after an open lot's deadline; a
   close day alone names none
   ([Dates and Times](/p/platform/shared/dates-and-times))
+- 🚧 **Catalogue tile** — the tile carrying the close line is the catalogue's
+  `AuctionLotCard`: a closed lot draws a collector deadline naming the
+  viewer's zone, and the shared `AuctionCard` block leaves the package
 - **Winner after close** — when the lot is closed and sold, the winning
   public row shows a primary crown after the amount (`isWinner`; accessible
   name from consumer copy)

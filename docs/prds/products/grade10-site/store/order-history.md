@@ -35,8 +35,19 @@ localized Retry without replacing the address
 🚧 **Empty account** - a collector with no purchases gets a shopping path back
 to the Store
 
+**Guest orders** - a paid guest order placed under the email a member signs
+in with is listed with their orders. It stays a guest order: it earns no
+points and belongs to no account -
+[Checkout](/p/grade10-site/store/checkout#guest-checkout)
+
 ## Designs
 
 ::story{id="store-order-history-screens-order-history--filled" title="Your Orders, filled"}
 
 ::story{id="store-order-history-blocks-orderhistory--empty" title="An account with no orders"}
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Guest orders after sign-in | Decided | List a paid guest order under the member whose sign-in proves its email, with no points; the order stays a guest order. Shopify customer accounts and WooCommerce both match past guest orders by a proven email, and Shopify's confirmation with the order link already went to that inbox. Confirmed by the owner 2026-10-12. | Product |
+:::

@@ -649,6 +649,10 @@ export function parseSuite(text) {
     reviewed: null,
     reviewedLapsed: null,
     journeys: [],
+    // Cases met while no journey heading was open. They are in no journey's
+    // count, so the caller refuses them by name instead of leaving the
+    // review progress to disagree with the file.
+    orphans: [],
     legacy: new Set(),
     // The blind reading's own output: what the isolated input did not settle.
     // Tracked as present-or-absent and as empty-or-not, because an absent
@@ -664,6 +668,7 @@ export function parseSuite(text) {
 
   const pushCase = () => {
     if (tc && journey) journey.cases.push(tc);
+    else if (tc) suite.orphans.push({ id: tc.id, line: tc.line });
     tc = null;
   };
   const pushJourney = () => {

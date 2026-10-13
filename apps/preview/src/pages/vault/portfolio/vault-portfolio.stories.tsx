@@ -3,6 +3,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
+import { activeIntakeSubmissionCount } from "../../intake-content";
 import {
   INTAKE_TRACKER_STORY_ID,
   PORTFOLIO_ASSETS,
@@ -17,7 +18,6 @@ import {
   VaultPageShell,
 } from "../../vault-shared";
 import { navigateToStory } from "../../workbench-story-nav";
-import { activeIntakeSubmissionCount } from "../intake-content";
 import { ActiveIntakeAlert } from "./active-intake-alert";
 import { VaultAssetList } from "./vault-asset-list";
 import { VaultPortfolioStats } from "./vault-portfolio-stats";

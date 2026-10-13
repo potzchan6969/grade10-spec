@@ -1,6 +1,6 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** reopened · 57/105
+**Status:** reopened · 51/105
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
 **Out of suite:** shared-auth-sign-in-SC-34
@@ -1746,8 +1746,8 @@ Resend after a short wait,
 * Tab A shows the collector signed in, unreloaded.
 * The Check Your Email dialog is gone.
 
-<!-- trace:case id=g10.shared-sign-in.TC-wgf rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
-### shared-auth-sign-in-US8-TC2-1: Asking tab completes what the collector was refused
+<!-- trace:case id=g10.shared-sign-in.TC-wgf rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
+### shared-auth-sign-in-US8-TC2-2: Asking tab completes what the collector was refused
 
 Runs once per row of **Test data**.
 
@@ -1755,7 +1755,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
@@ -1774,14 +1774,12 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
 | `<lot>` | a live auction lot open to bid on |
 | `<bid amount>` | the lowest bid the lot accepts |
 | `<signed-in-only page>` | the collector's orders list, which only they may read |
 
 | `<refused action>` | What must have happened |
 | --- | --- |
-| add <listing> to the cart | <listing> is in the collector's cart |
 | bid <bid amount> on <lot> | the bid stands on <lot> |
 | open <signed-in-only page> | tab A is on <signed-in-only page> |
 
@@ -1833,8 +1831,8 @@ Runs once per row of **Test data**.
 * Tab C shows the collector signed in.
 * Tab C adds nothing to the cart and places no bid.
 
-<!-- trace:case id=g10.shared-sign-in.TC-iyj rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
-### shared-auth-sign-in-US8-TC4-1: Failed link follow leaves the asking tab as it was
+<!-- trace:case id=g10.shared-sign-in.TC-iyj rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
+### shared-auth-sign-in-US8-TC4-2: Failed link follow leaves the asking tab as it was
 
 Runs once per row of **Test data**.
 
@@ -1842,7 +1840,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1853,7 +1851,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <listing> in tab A, refused the add to the cart.
+* customer is signed out on <signed-in-only page> in tab A, refused it.
 * Tab A shows Check Your Email after asking for a link at <collector email>.
 
 **Test data:**
@@ -1861,7 +1859,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
+| `<signed-in-only page>` | the collector's orders list, which only they may read |
 
 | `<failed link>` | What it is |
 | --- | --- |
@@ -1878,17 +1876,17 @@ Runs once per row of **Test data**.
 
 * Tab A shows nobody signed in.
 * Tab A still shows the Check Your Email dialog.
-* <listing> is in no cart.
+* <signed-in-only page> stays closed.
 * Tab A says nothing about the link.
 
-<!-- trace:case id=g10.shared-sign-in.TC-zy9 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
-### shared-auth-sign-in-US8-TC5-1: Asking tab moved on before the link was followed
+<!-- trace:case id=g10.shared-sign-in.TC-zy9 rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
+### shared-auth-sign-in-US8-TC5-2: Asking tab moved on before the link was followed
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1899,7 +1897,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <listing> in tab A, refused the add to the cart.
+* customer is signed out on <lot> in tab A, refused the bid.
 * Tab A shows Check Your Email after asking for a link at <collector email>.
 
 **Test data:**
@@ -1907,7 +1905,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
+| `<lot>` | a live auction lot open to bid on |
+| `<bid amount>` | the lowest bid the lot accepts |
 
 **Steps:**
 
@@ -1919,17 +1918,17 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Tab A shows the collector signed in.
-* The add is not carried out.
-* The cart has no line for <listing>.
+* The bid is not placed.
+* <lot> holds no bid from the collector.
 
-<!-- trace:case id=g10.shared-sign-in.TC-54a rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
-### shared-auth-sign-in-US8-TC6-1: Refused action is done once, not twice
+<!-- trace:case id=g10.shared-sign-in.TC-54a rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
+### shared-auth-sign-in-US8-TC6-2: Refused action is done once, not twice
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1940,7 +1939,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <listing> in tab A, refused the add to the cart.
+* customer is signed out on <lot> in tab A, refused the bid of <bid amount>.
 * Tab A shows Check Your Email after asking for a link at <collector email>.
 
 **Test data:**
@@ -1948,18 +1947,19 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
+| `<lot>` | a live auction lot open to bid on |
+| `<bid amount>` | the lowest bid the lot accepts |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Return to tab A, and confirm <listing> is in the cart once.
-3. Leave tab A for tab B, then return to tab A, without touching the add control.
+2. Return to tab A, and confirm the bid of <bid amount> stands on <lot>.
+3. Leave tab A for tab B, then return to tab A, without touching the bid control.
 
 **Expected Results:**
 
-* The cart still holds one line for <listing>, not a doubled line.
-* Returning a second time carries the add out no further times.
+* <lot> holds one bid of <bid amount> from the collector, not two.
+* Returning a second time places the bid no further times.
 
 <!-- trace:case id=g10.shared-sign-in.TC-3kv rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC7-1: Asking tab on another site of the brand carries on
@@ -2039,14 +2039,14 @@ Runs once per row of **Test data**.
 * Tab A still shows Check Your Email.
 * Tab A shows nobody signed in.
 
-<!-- trace:case id=g10.shared-sign-in.TC-0m4 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
-### shared-auth-sign-in-US8-TC9-1: Two tabs asked for a link before either was followed
+<!-- trace:case id=g10.shared-sign-in.TC-0m4 rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
+### shared-auth-sign-in-US8-TC9-2: Two tabs asked for a link before either was followed
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2057,7 +2057,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, refused the add to the cart on <listing> in tab A.
+* customer is signed out, refused <signed-in-only page> in tab A.
 * customer is refused the bid on <lot> in tab C.
 * Both tabs show Check Your Email after asking for a link at <collector email>.
 
@@ -2066,7 +2066,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
+| `<signed-in-only page>` | the collector's orders list, which only they may read |
 | `<lot>` | a live auction lot open to bid on |
 
 **Steps:**
@@ -2078,16 +2078,16 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Both tabs show the collector signed in.
-* Tab A carries out its add and tab C carries out its bid: each surface that asked completes its own refusal, whether or not its own link was the one that worked.
+* Tab A opens <signed-in-only page> and tab C carries out its bid: each surface that asked completes its own refusal, whether or not its own link was the one that worked.
 
-<!-- trace:case id=g10.shared-sign-in.TC-lnk rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
-### shared-auth-sign-in-US8-TC10-1: Refused action that can no longer be done is refused, not skipped
+<!-- trace:case id=g10.shared-sign-in.TC-lnk rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
+### shared-auth-sign-in-US8-TC10-2: Refused action that can no longer be done is refused, not skipped
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2098,7 +2098,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <listing> in tab A, refused the add to the cart.
+* customer is signed out on <lot> in tab A, refused the bid of <bid amount>.
 * Tab A shows Check Your Email after asking for a link at <collector email>.
 
 **Test data:**
@@ -2106,19 +2106,20 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control, of which one remains |
+| `<lot>` | a live auction lot open to bid on |
+| `<bid amount>` | the lowest bid the lot accepts |
 
 **Steps:**
 
-1. Sell the last <listing> so it can no longer be added.
+1. In a separate session, another bidder bids above <bid amount> on <lot>.
 2. Follow the unused, unexpired link from that email in tab B.
 3. Return to tab A.
 
 **Expected Results:**
 
 * Tab A shows the collector signed in.
-* Tab A reports the refusal an add is ordinarily refused with when the listing is gone.
-* Tab A does not pass the add over in silence.
+* Tab A reports the refusal a bid below the lot's lowest accepted bid ordinarily gets.
+* Tab A does not pass the bid over in silence.
 
 <!-- trace:case id=g10.shared-sign-in.TC-4z2 rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC11-2: Dialog on a tab that asked for nothing closes too, on its own side

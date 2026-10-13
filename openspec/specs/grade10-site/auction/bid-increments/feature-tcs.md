@@ -144,6 +144,12 @@
 15. Read the operational refusal entry for this attempt.
    - one entry names bidder, listing, code, amount and ceiling. g10.auction-bid-increments.US2-TC4
 
+## g10.auction-bid-increments.US1: Collector places a bid across a price tier
+
+**As a** collector,
+**I want** the minimum next bid to scale with the lot's price,
+**so that** I can enter an affordable opening bid and a sensible later bid.
+
 ### g10.auction-bid-increments.US1-TC1: Minimum before any bid is the opening price
 
 Runs once per row of **Test data**.

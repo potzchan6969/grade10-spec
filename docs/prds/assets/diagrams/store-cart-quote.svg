@@ -72,8 +72,8 @@ svg[data-diagram="store-cart-quote"] .c-lane{fill: var(--lane-fill); stroke: var
         <path data-step="drawer-shows-the-total" data-edge-from="store-prices-the-cart" data-edge-to="drawer-shows-the-total" data-edge-key="6" data-composition-points="597,341;597,243;648,243" d="M 597 341 L 597 243 L 648 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
         <path data-step="loyalty-answers-the-wallet" data-edge-from="store-prices-the-cart" data-edge-to="loyalty-answers-the-wallet" data-edge-key="7" data-composition-points="597,393;597,465" d="M 597 393 L 597 465" class="a-dashed" stroke-width="1.4" marker-end="url(#store-cart-quote-arrowhead-dashed)"/>
         
-        <g data-step="member-opens-the-drawer" id="store-cart-quote-node-member-opens-the-drawer" data-node-id="member-opens-the-drawer" data-node-label="Opens the drawer" aria-label="Focus Opens the drawer, signed in; a guest has no cart, Member" data-node-kind="external" data-node-sublabel="signed in; a guest has no cart" data-node-context="Member">
-          <title>Opens the drawer · signed in; a guest has no cart · Member</title>
+        <g data-step="member-opens-the-drawer" id="store-cart-quote-node-member-opens-the-drawer" data-node-id="member-opens-the-drawer" data-node-label="Opens the drawer" aria-label="Focus Opens the drawer, a guest picks no code or points, Member" data-node-kind="external" data-node-sublabel="a guest picks no code or points" data-node-context="Member">
+          <title>Opens the drawer · a guest picks no code or points · Member</title>
           <rect x="48" y="93" width="138" height="52" rx="6" class="c-mask"/>
           <rect x="48" y="93" width="138" height="52" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
@@ -81,7 +81,7 @@ svg[data-diagram="store-cart-quote"] .c-lane{fill: var(--lane-fill); stroke: var
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="117" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Opens the drawer</text>
-          <text data-detail="context" x="117" y="131" class="t-muted" font-size="7.2" text-anchor="middle">signed in; a guest has no cart</text>
+          <text data-detail="context" x="117" y="131" class="t-muted" font-size="6.9" text-anchor="middle">a guest picks no code or points</text>
         </g>
         <g data-step="member-chooses-a-code-or-points" id="store-cart-quote-node-member-chooses-a-code-or-points" data-node-id="member-chooses-a-code-or-points" data-node-label="Chooses a code" aria-label="Focus Chooses a code, or points, typed or picked, Member" data-node-kind="external" data-node-sublabel="or points, typed or picked" data-node-context="Member">
           <title>Chooses a code · or points, typed or picked · Member</title>

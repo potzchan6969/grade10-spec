@@ -16,8 +16,8 @@ requirements. Today's vault product is shop custody with an optional loan —
   - `Appointment/Booking/Screens/Book Visit`
   - `Appointment/Booking/Screens/Confirmation`
   - `Appointment/Booking/Screens/Appointments`
-  - `Vault/Collector Pages/Screens/Intake Tracker`
-  - `Vault/Collector Pages/Parts/IntakeItemCard`
+  - `Submissions/Intake Tracker/Screens/Intake Tracker`
+  - `Submissions/Intake Tracker/Parts/IntakeItemCard`
   - `Vault/Portfolio/Screens/Portfolio`
   - `Vault/Portfolio/Screens/Asset Detail`
   - `Vault/Portfolio/Screens/Asset Detail/Retrieval Dialog`

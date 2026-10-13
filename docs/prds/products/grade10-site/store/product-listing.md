@@ -78,9 +78,9 @@ The product listing lets collectors browse the catalogue and open a product.
 Details Page, as the photo does; a sold-out card opens neither, because the
 listing sells.
 
-**Signed-out Add to cart** — opens the sign-in dialog titled
-**Sign In to Add to Cart**; no guest cart; after a successful sign-in the
-add completes when practical.
+**Signed-out Add to cart** - adds the line to the cart this browser holds,
+with no sign-in; signing in later moves those lines into the member's cart -
+[Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
 
 ## Adaptive Filter
 
@@ -217,8 +217,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
 | Utility row | Decided | Help, Shipping and Orders & Returns do not sit under the filter. Where Help and store or auction documentation live is still open on [Page Shell](/p/grade10-site/site/page-shell). | Product |
-| Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. | Product |
-| Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Header Sign In and other entry points keep **Sign In to Grade10**. Cart, not bag. | Product |
+| Guest cart | Decided | A signed-out Add to cart adds to the cart this browser holds; a guest checks out from it. Supersedes sign-in to add. Cart, not bag. | Product |
 | Site discounts on the tile | Decided | The shop's own automatic discounts are read from the shop, refreshed every minute, and shown as [Discounts](/p/grade10-site/store/discounts#where-each-shows) sets out; a discount that waits on a basket is the cart's to price. A discount an app computes is not shown, because what it reaches cannot be read. | Product |
 | No stock on browse | Decided | The listing and the product page show no remaining count, no scarcity cue and no cap on a requested quantity from a stock count. The cart's review is the only authority for a quantity, and Cart explains a short fill. | Product |
 | Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |

@@ -500,6 +500,13 @@ function checkSuite(root, filePath, rulesRev, allCases) {
     err(1, `written in an older shape: ${shape}`);
 
   // --- journeys ----------------------------------------------------------
+  // A case under no journey heading is in no journey's count, so the review
+  // progress would disagree with the file and say nothing about why.
+  for (const orphan of suite.orphans)
+    err(
+      orphan.line,
+      `case \`${orphan.id}\` sits under no journey heading — put its \`## <scope>.US<n>: <title>\` heading and three-line story before it, the line a walk rewrite or a merge may have dropped`,
+    );
   const seenJourneys = new Set();
   const seenCaseIds = new Set();
   for (const j of suite.journeys) {

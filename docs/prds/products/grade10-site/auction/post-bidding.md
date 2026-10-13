@@ -12,6 +12,10 @@ order — set up, invoiced, paid, shipped — and the letters that carry it.
 
 Bidding stops, the result is fixed at once, and only the winner gets an order.
 
+🚧 A lot an internal bidder wins gets its order like any winner's, flagged
+internal; it takes the internal bidder's billing address and sends no letter,
+and an operator lets its invoice expire and cancels it - [Internal Bid](/p/grade10-admin/auction/internal-bid)
+
 - **Every lot reads Ended** — with or without a winner, whatever happens to
   the order afterwards — [Lot
   Status](/p/grade10-site/auction/display#auction-details)

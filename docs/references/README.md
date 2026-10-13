@@ -77,3 +77,7 @@ them.
 behind Order Status: one row per note and each combination a decision settles
 by name, the badge and note the store gives it, and where the store records
 it, for `add-store-order-status`'s task 1.1 to check.
+
+[`store-process-cost.md`](store-process-cost.md) is what one accepted
+amendment cost in store commands, and six proposals to cut it; QA accepted
+all six, which become one change.

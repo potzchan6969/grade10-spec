@@ -124,6 +124,20 @@ test("an anchor-only active case is a non-blocking QA2 warning before approval",
   assert.match(out, /no post-hoc scenario links/);
 });
 
+test("a case under no journey heading is refused by name, not as a count mismatch", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8").replace(
+    "## demo-alpha-US1: Collector does the thing",
+    "## Walk 1: Do the thing",
+  );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /`demo-alpha-US1-TC1-1` sits under no journey heading/);
+});
+
 test("an approved actual anchor-only case is not export-eligible", () => {
   const root = store("", []);
   const file = join(root, `${CHANGE}/feature-tcs.md`);
