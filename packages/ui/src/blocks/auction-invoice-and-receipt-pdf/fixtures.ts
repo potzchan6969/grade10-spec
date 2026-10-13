@@ -160,6 +160,21 @@ const HKD_INVOICE_ITEM_TOTAL: PdfItemTotal = {
   total: "HK$952.00",
 };
 
+const TAX_INVOICE_ITEMS: readonly PdfItemRow[] = [
+  {
+    title: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
+    winningBid: "HK$2,500.00",
+    buyersPremium: "HK$500.00",
+    total: "HK$3,000.00",
+  },
+] as const;
+
+const TAX_INVOICE_ITEM_TOTAL: PdfItemTotal = {
+  winningBid: "HK$2,500.00",
+  buyersPremium: "HK$500.00",
+  total: "HK$3,000.00",
+};
+
 const USD_SETTLEMENT_CHARGES = [
   { label: "Shipping & Handling", amount: "US$10.01" },
   { key: "subtotal" as const, label: "Subtotal", amount: "US$131.21" },
@@ -251,6 +266,8 @@ export const REPLACEMENT_INVOICE: InvoicePdfData = {
 
 export const WITH_TAX_INVOICE: InvoicePdfData = {
   ...SAMPLE_INVOICE,
+  items: TAX_INVOICE_ITEMS,
+  itemTotal: TAX_INVOICE_ITEM_TOTAL,
   lineItems: [
     ...INVOICE_CHARGES.slice(0, 2),
     { key: "subtotal", label: "Subtotal", amount: "HK$3,276.00" },
@@ -297,6 +314,8 @@ export const BANK_TRANSFER_RECEIPT: ReceiptPdfData = {
 
 export const WITH_TAX_RECEIPT: ReceiptPdfData = {
   ...SAMPLE_RECEIPT,
+  items: TAX_INVOICE_ITEMS,
+  itemTotal: TAX_INVOICE_ITEM_TOTAL,
   lineItems: [
     ...INVOICE_CHARGES.slice(0, 2),
     { key: "subtotal", label: "Subtotal", amount: "HK$3,276.00" },
