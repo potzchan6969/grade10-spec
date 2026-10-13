@@ -105,12 +105,17 @@ read them.
 - 🚧 **Needs you** - holds the section cards it holds now, one under another,
   with the counts and links unchanged; a failed list shows the same notice and
   Retry in its column
+- 🚧 **One height** - the three columns stand side by side at one height,
+  set by the taller of Needs you and an opened group
 - 🚧 **Inner groups** - What's New and Still Waiting group their rows by
-  product, Auction first. Each group shows as one line with its count until
-  the operator opens it with its chevron, and closes again the same way. An
-  opened group shows about five and a half rows and scrolls the rest inside
-  itself, with the edge that has more beyond it faded
-- 🚧 **Empty list** - a column with no row for the operator stays and says so
+  product: Auction, then Store, Consignment, Inventory and Appointments, each
+  the operator can open. Each group shows as one line with its count until
+  its chevron opens it; opening one closes the other in that column
+- 🚧 **An opened group** - fills the rest of its column, never under about
+  five and a half rows, and scrolls the rest inside itself, with the edge
+  that has more beyond it faded
+- 🚧 **Empty list** - a product with no row says Nothing yet, so a column with
+  no row for the operator stays and says so
 - 🚧 **Below the columns** - Approvals leaves the Needs you column and sits with
   Recent and All sections under the three columns; the card is unchanged
 - 🚧 **Refresh** - Today's Refresh reads all three columns again; the dialog
