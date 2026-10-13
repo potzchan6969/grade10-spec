@@ -1,39 +1,36 @@
-reviewed: 300b9c1606f13dd16906378bae6553fcaa7e7da4
-source-identity: fa8716bc565a75903f45b3c055d3e530c5d66ebaf8b01ed46ac8dc5e29675aff
-baseline-identity: unavailable - acceptance preflight did not complete
-verdict: Not ready - 1 blocker
+reviewed: 3d3368db613c19c4ddc30b8fb0bf6a24e223065a
+source-identity: 7a486c64cb16516cfd6cef8f468d9e860f16d358bec76b9519959234a7720d7e
+baseline-identity: 313c29bfb08b0a85b88819b17e66f32a28263098c9c71d5d7cf87b10bd616ed7
+verdict: Not ready - 2 blockers
 
 # Acceptance Review
 
 PR: https://github.com/9gag/grade10-spec/pull/1155
 
-Review is blocked at the required preflight gate. The final acceptance preflight and current-tree manual check both fail on 43 in-flight-mark findings, all on the unrelated `docs/prds/products/grade10-admin/console/daily-reminder.md`. The baseline-only manual snapshot reports the same 43 findings, which confirms they predate this change; its four snapshot-only issued-ID findings do not occur in the current-tree check. The acceptance preflight lists no other blocker among the change's 51 durable targets. The structural review preflight is ready with no blockers, and strict change validation reports no errors. Case validation reports no errors and 446 warnings.
-
-The accept-review procedure stops semantic review when acceptance preflight is blocked. QA2 reports document repairs to the prior review's six substantive findings, but this independent review did not reach semantic revalidation. No prior finding is claimed as independently verified or fixed here.
+The review covered the rebased PR at its frozen HEAD. The folded durable contract still carries two feature-set conflicts. The rest of the inspected deltas, PRD decisions, QA2 dispositions and accepted overlaps agree with the settled choices. The three purpose rewrites are intentional and their resulting purposes retain the capability scope.
 
 | # | Severity | Where | Finding | Owner | Fix in | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | blocker | `docs/prds/products/grade10-admin/console/daily-reminder.md` (43 `🚧` lines); current-tree `pnpm check:manual`; folded-tree `pnpm accept:preflight usd-lot-currency-winner-settlement-choice` | Acceptance preflight cannot complete because the unrelated daily-reminder page has 43 in-flight lines with no active change delivering them. The pure-main baseline manual snapshot reports the same 43 page findings. This is a baseline gate failure, outside this currency change's scope. | Owner of daily-reminder PRD / planning coordinator | Repair or otherwise resolve the daily-reminder in-flight marks in their owning change, then rerun the current-tree manual check and this change's acceptance preflight. Resume independent semantic review only after preflight passes. | open |
+| 1 | blocker | Folded `openspec/specs/grade10-admin/auction/payment-settings/spec.md:13-17`; change delta `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/payment-settings/spec.md:11-24` | The folded Feature set still says USD, HKD and JPY each have a premium minimum and default, and describes card rules per currency. The new contract has one USD premium minimum, no HKD/JPY minimum, and card rules only for USD and HKD. The change delta adds the new facts but leaves the old feature-set bullets in the fold, so the durable output states both contracts. | Payment Settings planning owner | Rewrite the delta's Feature set so the resulting folded Feature set removes the retired three-currency minimum/default claims and states the USD/HKD card-rule scope; regenerate the fold and repeat QA2 reconciliation. | open |
+| 2 | blocker | Folded `openspec/specs/grade10-site/auction/bid-increments/spec.md:11,21-22`; change delta `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-increments/spec.md:11-15,19-24` | The folded Feature set still says Grade10 owns USD, HKD and JPY tiers and keeps a per-currency ceiling. The new requirement says every lot uses one USD schedule and USD 10,000,000 ceiling, with no HKD/JPY schedule or ceiling. The delta adds the new policy but leaves the retired currency-set and ceiling bullets in the folded output. | Bid Increments planning owner | Rewrite the delta's Feature set so the resulting fold removes the HKD/JPY tier and per-currency ceiling claims; regenerate the fold and repeat QA2 reconciliation. | open |
 
 ## Coverage
 
 | Source or dependency | Checked identity | Checks applied | Carried from |
 | --- | --- | --- | --- |
-| Review manifest and scoped inputs | Commit `300b9c1606f13dd16906378bae6553fcaa7e7da4`; manifest digest `fa8716bc565a75903f45b3c055d3e530c5d66ebaf8b01ed46ac8dc5e29675aff` | Structural readiness and bounded review scope; zero blockers | Current final review-preflight receipt |
-| Acceptance preflight and durable folds | Commit `300b9c1606f13dd16906378bae6553fcaa7e7da4`; `/private/tmp/accept-review-1155-final-accept.txt` | Gate result and 51 durable targets; blocked only by daily-reminder marks | Current final receipt; no semantic fold review completed |
-| Current-tree manual check | Commit `300b9c1606f13dd16906378bae6553fcaa7e7da4`; `/private/tmp/accept-review-1155-final-manual.txt` | 43 failures, all on the daily-reminder page; 296 warnings | Current final receipt |
-| Baseline manual check | Main snapshot; `/private/tmp/accept-review-1155-main-manual.txt` | Confirms the same 43 daily-reminder failures predate this change; four issued-ID failures exist only in the snapshot | Current baseline snapshot |
-| Strict change validation and case validation | Commit `300b9c1606f13dd16906378bae6553fcaa7e7da4`; `/private/tmp/accept-review-1155-final-changes.txt`, `/private/tmp/accept-review-1155-final-cases.txt` | No strict validation errors; case validation has no errors and 446 warnings | Current final receipts |
-| QA2 reconciliation | Eight `qa2-*.md` reports in this change directory | Repair evidence is present for prior findings; independent semantic revalidation remains pending the gate | QA2 reports; not treated as an independent review |
+| Review manifest and scoped sources | HEAD `3d3368db613c19c4ddc30b8fb0bf6a24e223065a`; manifest digest `7a486c64cb16516cfd6cef8f468d9e860f16d358bec76b9519959234a7720d7e`; 479 inputs | Reviewed proposal, decisions, design, tasks, all scoped delta files, manifest expansions, 17 capability scopes, changed requirements and changed PRD pages at PR HEAD | Current manifest |
+| PRD and decision record | Same PR HEAD | Compared the nine updated PRD pages with their deltas and decision rows; checked the USD-only bid currency, USD 10m ceiling, winner-selected USD/HKD settlement, fixed 7.85 per-line HKD rounding, method/rail choices, operator USD quotes, internal-bid close behavior and reissue triggers | Current PRD and `decisions.md`; QA2 source-linked reconciliations |
+| Folded durable contract | Baseline `313c29bfb08b0a85b88819b17e66f32a28263098c9c71d5d7cf87b10bd616ed7`; prepared fold `/private/tmp/pr1155-rebase-folded`; 53 files | Read all durable outputs listed by preflight; checked Purpose preservation, modified/added/removed requirements, unchanged requirement conflicts and consuming durable rules. The two feature-set conflicts above remain | Current prepared fold |
+| QA2 and changed cases | Eight change-local `qa2-*.md` reports at PR HEAD | Used source-linked dispositions for reconciled unchanged cases; checked repaired temporal, auto-bid and domain numeric fixtures; kept changed cases in draft and made no claim of execution or human acceptance | Current QA2 reports |
+| Overlapping changes | Manifest overlaps at PR HEAD; accepted change records | Checked the overlapping internal-bid, tax, post-sale, maximum-entry and order-list deltas as amendments against their accepted results; no conflicting active delta found | Accepted overlap records and current QA2 |
+| Acceptance and manual gates | PR HEAD; `/private/tmp/pr1155-rebase-accept.txt`; `/private/tmp/pr1155-rebase-manual.txt`; `/private/tmp/pr1155-rebase-review.json` | Matching gates passed: review manifest ready, acceptance preflight exit 0, manual check exit 0 with 295 warnings. Gates were reused, not rerun | Current receipts |
 
 ## Gate Receipts
 
-| Command | Exit | Result | Output |
-| --- | ---: | --- | --- |
-| `pnpm plan:review-preflight usd-lot-currency-winner-settlement-choice --json` | 0 | Ready; no blockers | `/private/tmp/accept-review-1155-final-review.txt` |
-| `pnpm accept:preflight usd-lot-currency-winner-settlement-choice` | 1 | Blocked by the 43 daily-reminder in-flight-mark failures | `/private/tmp/accept-review-1155-final-accept.txt` |
-| `pnpm check:manual` | 1 | 43 failures, all on the daily-reminder page; 296 warnings | `/private/tmp/accept-review-1155-final-manual.txt` |
-| `node scripts/openspec/validate-changes.mjs --strict` | 0 | 78 validated; 13 other changes waiting on input | `/private/tmp/accept-review-1155-final-changes.txt` |
-| Case validator | 0 | No errors; 446 warnings | `/private/tmp/accept-review-1155-final-cases.txt` |
+| Gate | Result | Receipt |
+| --- | --- | --- |
+| Review manifest | Ready; no blockers | `/private/tmp/pr1155-rebase-review.json` |
+| Acceptance preflight | Exit 0; baseline `313c29bfb08b0a85b88819b17e66f32a28263098c9c71d5d7cf87b10bd616ed7`; 53 durable files | `/private/tmp/pr1155-rebase-accept.txt` |
+| Manual check | Exit 0; 295 warnings | `/private/tmp/pr1155-rebase-manual.txt` |
 
-Not ready - 1 blocker
+Not ready - 2 blockers
