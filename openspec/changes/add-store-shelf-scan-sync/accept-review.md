@@ -1,5 +1,5 @@
-reviewed: 5ca22e4f3
-source-identity: f2b8f9ff39c2798334e1d4c0bf13b08c40e4538bce28a9cbb7610aafb60a33eb
+reviewed: 513d608f4
+source-identity: cc87c3d1efc36bb026c397e8861d916403a88e7aa0a85181afe594e92cb4b55d
 baseline-identity: ee6936709a83cef1f222ad585bc956b7b33f5ef7af4dd6b22de3410904c43e2e
 verdict: Ready to accept
 
@@ -19,20 +19,21 @@ verdict: Ready to accept
 | 12 | note | `spec.md` Feature set | Says 2 minutes | Dev | - | fixed 143bd14a8 |
 | 13 | note | `tech-design.md` Discounts move every item; tasks 5.1, 5.3 | The pass reads discounts fresh, skipping the memo (`readSiteDiscounts({ fresh: true })`) | Dev | - | fixed 143bd14a8 |
 | 14 | note | `user-journeys.md` | Journey ids run US1-US4, US7, US6, with no US5 | QA | - | open |
-| 15 | fix | `spec.md` "A slab names its own unit" (sentence 2 vs the "Names no item" row); `tech-design.md` **Graded** and `no_item`; page "What makes a slab" | Take a consigned raw card whose shop product carries a graded collectible type. The requirement says it SHALL be held as a raw card and SHALL NOT alert. It is also graded by its type, which the table's "Names no item … one inventory does not hold as a live slab" alerts. Tech design follows the type clause and counts `no_item`. The consigned push sets no type (`services/consigned/sync.ts`), but a merchandiser can set one. State which clause wins: "a consigned product is graded only when inventory holds its item with a grader, whatever its type", or keep the alert for a typed one | PM, Dev | page Slabs, then `spec.md`, then `tech-design.md` | open |
-| 16 | note | `decisions.md` Q27 vs `tech-design.md` Discounts move every item | The pass now fails before writing when the shop does not answer the discount read. Q27 names only the scanner and inventory. A discount outage therefore stalls every shelf change, availability included, until the shop answers. Add the discount read to Q27, with this trade-off under Risks | Dev | `decisions.md`, `tech-design.md` | open |
-| 17 | note | `decisions.md` Q38; page Decisions table | The prior review put the consigned-slab rule to the owner. Q38 records it as decided by the round, taking the recommended option, and the page's Decisions table has no row for it. Owner confirmation is optional | PM | page Decisions | open |
+| 15 | fix | `spec.md` "A slab names its own unit", "Names no item" row, Feature set; `tech-design.md` **Graded** and `no_item`; page "What makes a slab" | Two SHALLs disagreed for a consigned raw card a merchandiser typed as graded. Now inventory decides a consigned product whatever its type, and house stock is graded by type. The requirement, table row, feature set, page bullet, Decisions row, Q38, tech design, task 6.3, SC51 rev 2 and US1-TC27 rev 2 all say so | PM, Dev | - | fixed 233829674 |
+| 16 | note | `decisions.md` Q27; `tech-design.md` Risks | Q27 names the discount read, and Risks states the outage trade-off. The pass monitor (no `outcome:ok` for 30 minutes) carries the alert | Dev | - | fixed 233829674 |
+| 17 | note | page Decisions table; `decisions.md` Q38 | The page gains a "What makes a slab" row, decided by the round | PM | - | fixed 233829674 |
 
 ## Coverage
 
 | Source or dependency | Checked identity | Checks applied | Carried from |
 | --- | --- | --- | --- |
 | Drift: `git log HEAD..FETCH_HEAD` over the change, shelf-scanning, product-listing, product-status and carried-surfaces pages, `openspec/specs/grade10-site/store`, both former dependencies, the cart-drawer sheet | FETCH_HEAD 7f8fd2718, already merged at b24b3f605 | no commits; no `implementation.json` or archive for this change on main | - |
-| `plan:review-preflight` | digest f2b8f9ff…, status ready, overlaps none | manifest | - |
-| `accept:preflight` | fingerprint 2d87ce13dec799717fbf59f1d0e893a19cd03eb5e0b169bacdb5a4ea31c97cf3, baseline ee693670… | ready to fold and accept; 4 durable files | - |
+| `plan:review-preflight` | digest cc87c3d1…, status ready, overlaps none | manifest | - |
+| `accept:preflight` | fingerprint 7590ba192fb81c19cec1d09b80a131a308fcdc76e8f6296ea875e4b9e6020414, baseline ee693670… | ready to fold and accept; 4 durable files | - |
 | `check:manual` | 0 failures, 288 warnings, none on shelf-scanning and no `changed meaning` | Warnings | - |
 | Repair diff `4c87ac921..5ca22e4f3` on the change, its pages and the cart-drawer sheet | 5ca22e4f3 | Each prior finding re-read at source; changed requirement text re-read ("A slab names its own unit", Feature set, SC20, SC51) | - |
-| Q38 graded rule | 5ca22e4f3 | page, decisions, spec requirement, feature set and table, tech design, tasks 6.1 and 6.3, SC14, SC15, SC51, US1-TC27, US3-TC1, US3-TC5, US4-TC3 | - |
+| Repair diff `5ca22e4f3..513d608f4` | 513d608f4 | Findings 15-17 re-read at source; changed requirement sentence, "Names no item" row, Feature set leaf and SC51 rev 2 re-read; US1-TC27 rev 2 and QA2 rerun at 7230c711e; nothing new found | - |
+| Q38 graded rule | 513d608f4 | page, decisions, spec requirement, feature set and table, tech design, tasks 6.1 and 6.3, SC14, SC15, SC51, US1-TC27, US3-TC1, US3-TC5, US4-TC3 | - |
 | Unchanged requirements, ui-design, user-journeys, domain-tcs | 4c87ac921 | Page to delta, Same facts, Designs, Journeys | 4c87ac921 review |
 | `feature-tcs.md` Reconciliation | 5ca22e4f3 | 51 cases, all draft; 51 scenarios, all covered; rerun disposition at e1625c180 | QA2 rerun receipt |
 | grade10 code claims | origin/main 79b92f0b2 | `routes.ts` upsert SELECT, `client.ts` resolve and `bySeq`, `match.ts` `altWindow`/`altRel`, `siteDiscounts.ts` memo, consigned push metafields, inventory `items.grader` and `retired_at`, store cron `*/5` | - |
