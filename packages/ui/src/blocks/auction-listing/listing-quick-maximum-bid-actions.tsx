@@ -141,6 +141,20 @@ function ListingQuickMaximumBidActions({
     raw: string;
     origin: "paste";
   } | null>(null);
+  const [previousAuthorizationStatus, setPreviousAuthorizationStatus] =
+    useState(authorizationStatus);
+  // A commit that settles without an error has been accepted: its draft is
+  // spent, and the raised maximum moves the floor above it.
+  if (previousAuthorizationStatus !== authorizationStatus) {
+    setPreviousAuthorizationStatus(authorizationStatus);
+    if (
+      previousAuthorizationStatus === "pending" &&
+      authorizationStatus === "idle"
+    ) {
+      setCustomDraft("");
+      setSelectedPresetKey(null);
+    }
+  }
 
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
