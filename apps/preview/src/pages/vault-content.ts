@@ -50,7 +50,7 @@ const VAULT_MY_VISITS_STORY_ID =
   "appointment-booking-screens-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
 const INTAKE_TRACKER_STORY_ID =
-  "vault-collector-pages-screens-intake-tracker--in-progress";
+  "submissions-intake-tracker-screens-intake-tracker--in-progress";
 const VAULT_PORTFOLIO_STORY_ID = "vault-portfolio-screens-portfolio--filled";
 const VAULT_ITEM_DETAIL_STORY_ID =
   "vault-portfolio-screens-asset-detail--graded";

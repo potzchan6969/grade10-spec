@@ -17,14 +17,14 @@ import { FilePdf } from "@phosphor-icons/react";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
 import { useState } from "react";
-import { VAULT_PORTFOLIO_STORY_ID } from "../../vault-content";
-import { navigateToStory } from "../../workbench-story-nav";
 import {
   type IntakeItemRow,
   isVaulted,
   SERVICE_LABELS,
   VAULT_IN_PROGRESS_ITEMS,
-} from "../intake-content";
+} from "../../intake-content";
+import { VAULT_PORTFOLIO_STORY_ID } from "../../vault-content";
+import { navigateToStory } from "../../workbench-story-nav";
 import intakeItemCardBones from "./intake-item-card.bones.json";
 
 registerBones({
