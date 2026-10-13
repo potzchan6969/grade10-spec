@@ -1,6 +1,6 @@
 # grade10-site/store/shelf-scanning Test Cases
 
-**Status:** pending-review · 0/48
+**Status:** pending-review · 0/50
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## Walk 1: Shopkeeper scans the staging shelf with the shop's link
@@ -53,7 +53,7 @@ current title, price and availability for it,
 **so that** I can answer a customer without looking the product up, and never
 quote a price the store has since changed.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-66n rev=2 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-66n rev=3 -->
 ### g10.store-shelf-scanning.US1-TC1: Scan shows the price the product page shows
 
 Runs once per row of **Test data**.
@@ -84,6 +84,7 @@ Runs once per row of **Test data**.
 | A raw card with two variants, the first sold out and the second for sale | the second variant | Available | none |
 | A raw card with two variants, both sold out | the first listed variant | Sold out | none |
 | A raw card with one variant under a running automatic discount | the one variant, at the price the shopper pays | Available | a Sale badge |
+| A raw card with two variants, the first sold out and the second for sale, under a running automatic discount | the second variant, at the price the shopper pays | Available | a Sale badge |
 
 **Steps:**
 
@@ -177,7 +178,7 @@ Runs once per row of **Test data**.
 
 * Step 2's item carries `<new price>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-k23 rev=1 covers=g10.store-shelf-scanning.SC-dan,g10.store-shelf-scanning.SC-icy -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-k23 rev=2 covers=g10.store-shelf-scanning.SC-dan,g10.store-shelf-scanning.SC-icy -->
 ### g10.store-shelf-scanning.US1-TC4: Every published product but gift cards is held on the scanner
 
 Runs once per row of **Test data**.
@@ -198,6 +199,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<product>` exists in the staging shop in the state its row names, unchanged for the last 10 minutes.
+* `<product>` has at least one photo, older than the last hourly photo run.
 
 **Test data:**
 
@@ -216,11 +218,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Read the scanner's items for the grade10 store.
+2. Read the photos of a held `<product>`'s item and whether each is learned.
 
 **Expected Results:**
 
 * `<product>` is `<held>`.
 * A held `<product>` is one item, carrying its store title, price and availability.
+* Step 2's item carries `<product>`'s photos, each learned, sealed box, comic and merch alike.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-1o9 rev=1 covers=g10.store-shelf-scanning.SC-9kw -->
 ### g10.store-shelf-scanning.US1-TC5: A product the store drops leaves the scanner
@@ -359,8 +363,10 @@ Runs once per row of **Test data**.
 * Step 2 names `<card_1>` and reads Available.
 * Step 2's title and price match step 3's.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-c6t rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-c6t rev=2 -->
 ### g10.store-shelf-scanning.US1-TC9: The store's product is named over the shared card catalogue
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -377,9 +383,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<card_shared>` is a raw card published to the staging store, its photos learned.
+* `<card_shared>` is a raw card published to the staging store, `<availability>`, its photos learned.
 * The scanner's shared card catalogue holds a card with `<card_shared>`'s art.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
+
+**Test data:**
+
+| `<availability>` | `<reads>` |
+| --- | --- |
+| for sale | Available |
+| sold out | Sold out |
 
 **Steps:**
 
@@ -390,6 +403,7 @@ Runs once per row of **Test data**.
 
 * Step 2 names the store product `<card_shared>`.
 * Step 2's price is the store's price, not the shared catalogue's.
+* Step 2 reads `<reads>`, the store's answer, with no count.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-9ks rev=1 covers=g10.store-shelf-scanning.SC-z1x -->
 ### g10.store-shelf-scanning.US1-TC10: A product the scanner cannot yet recognise reads as unknown
@@ -584,7 +598,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the photo left failed, not retried every hour.
 * Step 2 shows the photo learned.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=2 covers=g10.store-shelf-scanning.SC-hdf -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=3 covers=g10.store-shelf-scanning.SC-hdf -->
 ### g10.store-shelf-scanning.US1-TC15: An open scanner picks up a change without being reopened
 
 Runs once per row of **Test data**.
@@ -610,22 +624,24 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<report>` | `<open scanner bound>` | `<new price>` |
-| --- | --- | --- |
-| reaches | 480s (8mins) | A price different from `<card_1>`'s on file |
-| does not reach | 780s (13mins) | A price different from `<card_1>`'s on file |
+| `<report>` | `<item bound>` | `<open scanner bound>` | `<new price>` |
+| --- | --- | --- | --- |
+| reaches | 360s (6mins) | 480s (8mins) | A price different from `<card_1>`'s on file |
+| does not reach | 660s (11mins) | 780s (13mins) | A price different from `<card_1>`'s on file |
 
 **Steps:**
 
 1. Point the camera at `<card_1>`; read the price.
 2. In the staging shop's admin, set `<card_1>`'s price to `<new price>` and save; note the time.
-3. Without reloading or leaving the scanner, wait `<open scanner bound>` past step 2's time.
-4. Point the camera at `<card_1>`.
+3. `<item bound>` past step 2's time, read the scanner's item for `<card_1>`.
+4. Without reloading or leaving the scanner, wait `<open scanner bound>` past step 2's time.
+5. Point the camera at `<card_1>`.
 
 **Expected Results:**
 
 * Step 1 shows the price on file.
-* Step 4 shows `<new price>`.
+* Step 3's item carries `<new price>`.
+* Step 5 shows `<new price>`.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-2et rev=1 covers=g10.store-shelf-scanning.SC-hdf -->
 ### g10.store-shelf-scanning.US1-TC16: Returning to the scanner picks up a change at once
@@ -667,7 +683,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the price on file.
 * Step 5 shows `<new price>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-2su rev=1 covers=g10.store-shelf-scanning.SC-92k -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-2su rev=2 covers=g10.store-shelf-scanning.SC-92k -->
 ### g10.store-shelf-scanning.US1-TC17: Two listings of one art are both offered, closest first
 
 **Classification:**
@@ -705,6 +721,8 @@ Runs once per row of **Test data**.
 5. Tap `<card_jp>`'s row.
 6. Read the sheet.
 7. Tap the back control.
+8. Tap `<card_jp>`'s row again.
+9. Open the store page link on the sheet.
 
 **Expected Results:**
 
@@ -714,6 +732,7 @@ Runs once per row of **Test data**.
 * Step 4's first row carries step 2's title and price.
 * Step 6 shows `<card_jp>` alone, with its title, price and availability.
 * Step 7 lists both products again.
+* Step 9 opens `<card_jp>`'s own page at `<grade10 store url>`, not `<card_en>`'s.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-hbv rev=1 covers=g10.store-shelf-scanning.SC-egb -->
 ### g10.store-shelf-scanning.US1-TC18: Dismissing the pick sheet chooses neither listing
@@ -953,7 +972,7 @@ Runs once per row of **Test data**.
 
 * Step 2's title is step 3's title.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-30a rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-30a rev=2 -->
 ### g10.store-shelf-scanning.US1-TC24: A raw card beside a slab of the same art offers the pick without grade or cert
 
 **Classification:**
@@ -989,8 +1008,78 @@ Runs once per row of **Test data**.
 * Step 2 shows one title and price, and a chip counting 2 matches.
 * Step 2 shows no grade chip and no cert chip.
 * Step 4 lists `<card_raw>` and `<slab_1>`, each with title, price and availability.
+* Step 4's first row carries step 2's title and price.
 * No row in step 4 shows a grade or a cert.
 * Step 5 shows `<slab_1>` alone, with its title, price and availability, and no grade or cert.
+
+<!-- trace:case id=g10.store-shelf-scanning.TC-dx2 rev=1 -->
+### g10.store-shelf-scanning.US1-TC25: A pass with nothing changed in the shop publishes no new catalogue
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** performance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-shelf-scanning.US1
+
+**Pre-conditions:**
+
+* Every product published to the staging store is held on the scanner, its photos learned.
+* Nothing in the staging shop or inventory changes during the case.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| two passes | 600s (10mins): two of the store's 5-minute passes |
+
+**Steps:**
+
+1. Read the version of the scanner's catalogue for the grade10 store; note the time.
+2. `<two passes>` after step 1's time, read the version again.
+3. Read the scanner's photo queue.
+
+**Expected Results:**
+
+* Step 2's version is step 1's.
+* Step 3 holds no photo of a store product queued since step 1.
+
+<!-- trace:case id=g10.store-shelf-scanning.TC-gu0 rev=1 -->
+### g10.store-shelf-scanning.US1-TC26: The hourly photo run stops when its model differs from the scanner's
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-shelf-scanning.US1
+
+**Pre-conditions:**
+
+* The hourly photo run's model on staging differs from the scanner's.
+* A new photo of `<card_1>`, a raw card published to the staging store, waits to be learned.
+
+**Steps:**
+
+1. Wait for the next hourly photo run on staging.
+2. Read that run's record.
+
+**Expected Results:**
+
+* Step 2's run failed, naming the model mismatch, before preparing any photo to learn.
+* Step 2's run learned no photo and rebuilt nothing.
 
 ---
 
@@ -1412,7 +1501,7 @@ Runs once per row of **Test data**.
 * Step 3's monitor is raised.
 * Step 4's log names `<slab_1>`'s product as held without a unit.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-hjq rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-hjq rev=2 -->
 ### g10.store-shelf-scanning.US3-TC8: Two slabs of one card matched by their photos are both offered without grade or cert
 
 Runs once per row of **Test data**.
@@ -1455,7 +1544,45 @@ Runs once per row of **Test data**.
 * Step 2 shows one title and price, and a chip counting 2 matches.
 * Step 2 shows no grade chip and no cert chip.
 * Step 4 lists `<slab_1>` and `<slab_2>`, each with title, price and availability.
+* Step 4's first row carries step 2's title and price.
 * No row in step 4 shows a grade or a cert.
+
+<!-- trace:case id=g10.store-shelf-scanning.TC-1jq rev=1 -->
+### g10.store-shelf-scanning.US3-TC9: A graded product naming no inventory item is recognised by its photos
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-shelf-scanning.US3
+
+**Pre-conditions:**
+
+* `<slab_house>`'s product is a house-stock slab published to the staging store, its collectible type a graded one.
+* `<slab_house>`'s product names no inventory item: no label code is written on it.
+* `<slab_house>`'s photos are learned.
+* admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
+
+**Steps:**
+
+1. Point the camera at `<slab_house>`'s front and hold it steady.
+2. Read the scan.
+3. Open the Datadog monitor on `store.shelf_scan.unit_missing`.
+4. Search the store's Datadog logs from its last pass for `<slab_house>`'s product.
+
+**Expected Results:**
+
+* Step 2 names `<slab_house>`'s product, with title, price and availability.
+* Step 2 shows no grade and no cert.
+* Step 3's monitor is raised.
+* Step 4's log names `<slab_house>`'s product as held without a unit.
 
 ---
 
@@ -1625,8 +1752,8 @@ Runs once per row of **Test data**.
 * Step 1 opens the scanner at the site's `/scan`, with no sign-in asked.
 * Step 3 names `<card_1>` from the `<environment>` store.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-foj rev=1 -->
-### g10.store-shelf-scanning.US7-TC2: The shop's link offers no way to add photos
+<!-- trace:case id=g10.store-shelf-scanning.TC-foj rev=2 -->
+### g10.store-shelf-scanning.US7-TC2: The shop's link scans but cannot add photos
 
 **Classification:**
 
@@ -1638,7 +1765,7 @@ Runs once per row of **Test data**.
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation, manual
 * **Trace:** g10.store-shelf-scanning.US7
 
 **Pre-conditions:**
@@ -1646,46 +1773,27 @@ Runs once per row of **Test data**.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 * `<card_1>` is a raw card published to the staging store, recognised by the scanner.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| link key | The key in `<g10 scan link>` for staging |
+| new photo | A photo of `<card_1>`'s art the scanner does not hold |
+
 **Steps:**
 
 1. Point the camera at `<card_1>`.
 2. Look over the scan and every control the scanner offers.
+3. Send the scanner `<new photo>` for `<card_1>`'s item with `<link key>`.
+4. Read the API response.
+5. Read the scanner's photos for `<card_1>`'s item.
 
 **Expected Results:**
 
+* Step 1 names `<card_1>`.
 * Step 2 finds no control that adds or replaces a photo.
-
-<!-- trace:case id=g10.store-shelf-scanning.TC-h6m rev=1 -->
-### g10.store-shelf-scanning.US7-TC3: A photo sent with the link's key is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-shelf-scanning.US7
-
-**Pre-conditions:**
-
-* `<card_1>` is a raw card held on the staging scanner.
-* The caller holds only the key in `<g10 scan link>`.
-
-**Steps:**
-
-1. Send the scanner a photo for `<card_1>`'s item with that key.
-2. Read the API response.
-3. Read the scanner's photos for `<card_1>`'s item.
-
-**Expected Results:**
-
-* Step 2 refuses the photo.
-* Step 3 shows the photos unchanged.
+* Step 4 refuses the photo.
+* Step 5 shows `<card_1>`'s photos unchanged.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-dci rev=2 -->
 ### g10.store-shelf-scanning.US7-TC4: A scan shows nothing the store page does not
