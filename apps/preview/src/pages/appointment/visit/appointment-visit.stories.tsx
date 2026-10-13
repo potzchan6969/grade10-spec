@@ -435,7 +435,12 @@ export const WithGrading: Story = {
     ).toBeVisible();
     expect(canvas.queryByText("Your pass")).toBeNull();
     expect(canvas.queryByRole("link", { name: "Directions" })).toBeNull();
-    expect(canvas.getByRole("link", { name: "My visits" })).toBeVisible();
+    const crumbs = canvas.getByRole("navigation", { name: "Breadcrumb" });
+    const [mine, ...rest] = canvas
+      .getAllByRole("link", { name: "My visits" })
+      .filter((link) => !crumbs.contains(link));
+    expect(rest).toHaveLength(0);
+    expect(mine).toBeVisible();
   },
 };
 

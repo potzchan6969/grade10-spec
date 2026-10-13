@@ -2,7 +2,7 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { FlowContainer } from "../../../../../../packages/ui/src/blocks/shared/flow-container";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
@@ -134,11 +134,13 @@ export const FindTheHongKongShop: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(canvas.getByRole("button", { name: "Menu" }));
     expect(
-      canvas
-        .getAllByRole("link", { name: "Store Locator" })
-        .some((link) => link.getAttribute("aria-current") === "page"),
-    ).toBe(true);
+      await body.findByRole("link", { name: "Store Locator" }),
+    ).toHaveAttribute("aria-current", "page");
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(body.queryByRole("dialog")).toBeNull());
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(
       canvas.getAllByRole("link", { name: "Store Locator" })[0],

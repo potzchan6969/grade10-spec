@@ -81,6 +81,7 @@ function ProfileStepCard({ step }: { step: ProfileStep }) {
       />
     ) : (
       <ProfileForm
+        key={step}
         copy={PROFILE_FORM_COPY}
         error={
           step === "refused"

@@ -514,11 +514,12 @@ export const NoMatch: Story = {
   args: { listing: "noMatch" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const noMatch = await canvas.findByText(PRODUCT_LIST_COPY.noMatch);
+    expect(noMatch).toBeInTheDocument();
     expect(
-      await canvas.findByText(PRODUCT_LIST_COPY.noMatch),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: PRODUCT_LIST_COPY.clearFilters }),
+      within(
+        noMatch.closest('[data-slot="empty-state"]') as HTMLElement,
+      ).getByRole("button", { name: PRODUCT_LIST_COPY.clearFilters }),
     ).toBeInTheDocument();
   },
 };

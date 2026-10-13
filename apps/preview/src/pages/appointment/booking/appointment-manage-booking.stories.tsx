@@ -10,7 +10,7 @@ import type { BookingRecord } from "@grade10/ui";
 import { BookingManageCard, BookingSlotPicker } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   COMPLETED_VISIT_RECORD,
   firstAvailableVisitDay,
@@ -202,11 +202,10 @@ export const CancelConfirmation: Story = {
     await userEvent.click(
       canvas.getByRole("button", { name: MANAGE_CARD_COPY.cancel }),
     );
-    expect(
-      within(document.body).getByRole("dialog", {
-        name: MANAGE_CARD_COPY.cancelTitle,
-      }),
-    ).toBeVisible();
+    const dialog = await within(document.body).findByRole("dialog", {
+      name: MANAGE_CARD_COPY.cancelTitle,
+    });
+    await waitFor(() => expect(dialog).toBeVisible());
     expect(
       within(document.body).getByRole("button", {
         name: MANAGE_CARD_COPY.cancelConfirm,
@@ -252,7 +251,9 @@ export const NotFound: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText(MANAGE_PAGE_COPY.notFoundTitle)).toBeVisible();
     expect(
-      canvas.getByRole("link", { name: MANAGE_PAGE_COPY.bookVisit }),
+      within(canvas.getByRole("main")).getByRole("link", {
+        name: MANAGE_PAGE_COPY.bookVisit,
+      }),
     ).toBeVisible();
   },
 };

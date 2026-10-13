@@ -319,6 +319,13 @@ async function walkFlowCases(
   expect(canvasElement.querySelectorAll(".demo-flow-case")).toHaveLength(
     titles.length,
   );
+  // Back to one case, so the canvas holds a single copy of the screen's landmarks.
+  await userEvent.click(canvas.getByRole("tab", { name: "Transition" }));
+  await waitFor(
+    () =>
+      expect(canvasElement.querySelectorAll(".demo-flow-case")).toHaveLength(1),
+    { timeout: 3000 },
+  );
 }
 
 export {

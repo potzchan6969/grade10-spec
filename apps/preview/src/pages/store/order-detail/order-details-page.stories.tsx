@@ -212,7 +212,15 @@ export const PartialRefund: Story = {
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
     expect(canvas.getByText("Order Summary")).toBeVisible();
     expect(canvas.getByText("−HK$105.00")).toBeVisible();
-    expect(canvas.getByText("HK$885.00")).toBeVisible();
+    const summary = within(
+      canvasElement.querySelector(
+        '[data-slot="order-details-sidebar"]',
+      ) as HTMLElement,
+    );
+    for (const label of ["Subtotal", "Total"]) {
+      const row = summary.getByText(label, { exact: true }).parentElement;
+      expect(within(row as HTMLElement).getByText("HK$885.00")).toBeVisible();
+    }
   },
 };
 

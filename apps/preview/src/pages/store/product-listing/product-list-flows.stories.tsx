@@ -263,9 +263,12 @@ export const NarrowTheCatalogue: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText(`${PRODUCTS.length} Products`)).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
-    expect(canvas.getByText(PRODUCT_LIST_COPY.noMatch)).toBeVisible();
+    const noMatch = canvas.getByText(PRODUCT_LIST_COPY.noMatch);
+    expect(noMatch).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: PRODUCT_LIST_COPY.clearFilters }),
+      within(
+        noMatch.closest('[data-slot="empty-state"]') as HTMLElement,
+      ).getByRole("button", { name: PRODUCT_LIST_COPY.clearFilters }),
     ).toBeVisible();
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
     expect(canvasElement.querySelectorAll(".demo-flow-case")).toHaveLength(

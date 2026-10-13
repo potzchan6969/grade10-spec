@@ -133,6 +133,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const PRODUCT_NAME = "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)";
+/** The Pokémon collection tile; the footer's own Pokémon link is not a tile. */
+const POKEMON_TILE = /🐭\s*Pokémon/;
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
@@ -143,7 +145,9 @@ export const Default: Story = {
     expect(
       canvas.getByRole("heading", { name: "Collections" }),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "Pokémon" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: POKEMON_TILE }),
+    ).toBeInTheDocument();
     expect(canvas.getAllByText(PRODUCT_NAME).length).toBe(5);
   },
 };
@@ -159,7 +163,7 @@ export const CollectionsLoading: Story = {
     expect(
       canvas.getByText(STORE_HOME_READ_COPY.collectionsLoading),
     ).toBeInTheDocument();
-    expect(canvas.queryByRole("link", { name: "Pokémon" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: POKEMON_TILE })).toBeNull();
   },
 };
 

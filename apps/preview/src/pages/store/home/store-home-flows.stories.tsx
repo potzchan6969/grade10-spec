@@ -241,7 +241,7 @@ export const EnterTheCatalogue: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: "Marketplace" })).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
-    expect(canvas.getByRole("link", { name: "Pokémon" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: /Pokémon/ })).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getAllByText(PRODUCT_NAME).length).toBe(3);
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
@@ -320,11 +320,14 @@ export const MoveAroundFromTheChrome: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas
-        .getAllByRole("link", { name: "Store" })
-        .some((link) => link.getAttribute("aria-current") === "page"),
-    ).toBe(true);
+    const body = within(canvasElement.ownerDocument.body);
+    await userEvent.click(canvas.getByRole("button", { name: "Menu" }));
+    expect(await body.findByRole("link", { name: "Store" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => expect(body.queryByRole("dialog")).toBeNull());
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
     expect(canvas.getByRole("heading", { name: "Marketplace" })).toBeVisible();
     await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));

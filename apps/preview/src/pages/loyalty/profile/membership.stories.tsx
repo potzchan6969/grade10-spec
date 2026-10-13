@@ -258,7 +258,7 @@ export const Default: Story = {
       canvas.getByRole("progressbar", { name: "Points earned this year" }),
     ).toHaveAttribute("aria-valuenow", "320");
     expect(
-      canvas.getByRole("link", { name: "Go to checkout" }),
+      canvas.getByRole("button", { name: "Go to checkout" }),
     ).toHaveAttribute("href", LOYALTY_PAY_PART_OF_BASKET_HREF);
 
     await userEvent.click(canvas.getAllByRole("button", { name: "Redeem" })[0]);
@@ -354,7 +354,7 @@ export const Narrow: Story = {
       canvas.getByRole("heading", { level: 1, name: "Membership" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("link", { name: "Go to checkout" }),
+      canvas.getByRole("button", { name: "Go to checkout" }),
     ).toBeInTheDocument();
   },
 };
