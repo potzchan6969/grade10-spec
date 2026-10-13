@@ -22,7 +22,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 
 ### Public Codes
 
-- 🚧 **Shown in the drawer** - the picker lists public codes to guests and members - [Cart Drawer](/p/grade10-site/store/cart#promo-code)
+- **Shown in the drawer** - the picker lists public codes to guests and members - [Cart Drawer](/p/grade10-site/store/cart#promo-code)
 - **Source** - Shopify discounts tagged `public`, read by the store
 - **Order beside wallet codes** - those that fit first, soonest to expire first, across both
 

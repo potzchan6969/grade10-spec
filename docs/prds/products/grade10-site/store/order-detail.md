@@ -31,7 +31,7 @@ distinct at the same address
 
 ## Order Link
 
-🚧 Every order, guest or member, opens at `grade10.com/orders/<order-id>`
+Every web order, guest or member, opens at `grade10.com/orders/<order-id>`
 from the View order button in Shopify's order emails. Grade10 sends no
 store email of its own. The link carries its secret after `#`, so no server
 or log sees it.
@@ -58,19 +58,23 @@ the order this browser last sent to Shopify.
 
 - **Guest** - their private order page, link and secret included
 - **Member** - the order under their profile
-- 🚧 **Order confirmed** - the guest's page is the order page; the
+- **Order confirmed** - the guest's page is the order page; the
   placed-on line names the email the receipt went to — Placed on {date}.
   Receipt sent to {email}.
-- 🚧 **Create an account** - a persistent toast on the order page asks to
-  add this order to an account — Sign in to earn points for this order —
-  with one Sign in action; closing it hides it for this order
-- 🚧 **Added** - after a sign-in that proves the order's email the order
+- **Create an account** - a persistent toast on the order page asks to
+  add this order to an account - Sign in to earn points for this order, or
+  once it has completed, Sign in to see it with your other orders - with
+  one Sign in action; closing it hides it for this order
+- **Joined at payment** - a guest order that joined an account at payment
+  is that member's order, so the toast asks to sign in to see it -
+  [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- **Added** - after a sign-in that proves the order's email the order
   joins the account and the toast says so, with a way to it. The magic
   link proves the email, so it works on another device
-- 🚧 **Signed out only** - the email note and the toast show whenever an
+- **Signed out only** - the email note and the toast show whenever an
   order page is viewed signed out — this return or a link opened later;
   signed in, neither shows
-- 🚧 **Another email** - a Google account under another email signs the
+- **Another email** - a Google account under another email signs the
   buyer in but does not add the order; the toast says the order was
   placed with {email} and offers a magic link to it
 - **Nothing remembered** - a signed-in member sees their order list; anyone
@@ -126,5 +130,5 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 | Post-checkout prompt | Decided | The account prompt lives on the Grade10 order page after checkout, not on a Shopify Thank-you extension. Decided 2026-10-13. | Product |
 | Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |
 | Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, linked after it completed, or a guest order with no owner — shows no points section at all. Decided 2026-10-13. | Product |
-|| Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
+| Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
 :::

@@ -48,15 +48,15 @@ back to that page.
 
 ## Promo Code
 
-🚧 One code rides the cart, typed or picked; every figure is the store's,
+One code rides the cart, typed or picked; every figure is the store's,
 read against the cart as it stands and held nowhere.
 
-- 🚧 **Typed** — a code the store knows takes its cut off the total at
+- **Typed** — a code the store knows takes its cut off the total at
   once; one it refuses stays in the field with the refusal's own sentence,
   and the total does not move
-- 🚧 **Picked** — a held code applies the same way from the list; one that
+- **Picked** — a held code applies the same way from the list; one that
   cannot ride this cart is listed apart with its reason
-- 🚧 **Public codes** — codes open to everyone are listed to guests and
+- **Public codes** — codes open to everyone are listed to guests and
   members alike; a member-only code typed by a guest gets the same refusal
   as a code nobody minted —
   [Discounts](/p/grade10-site/store/discounts#public-codes)
@@ -103,11 +103,11 @@ The refusals are the coupon's own —
 - 🚧 **Sent** — the order is promised with the same code and points the
   drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
-- 🚧 **Guest** - the signed-out drawer's primary button is Check out as
+- **Guest** - the signed-out drawer's primary button is Check out as
   guest; under it a quiet Sign in link for points and rewards. Signing in
-  merges the browser cart and reopens the
-  drawer with points and the wallet; a public code already on the cart
-  stays if it still fits -
+  merges the browser cart and reopens the drawer with points and the
+  wallet; the guest's code moves to the member's cart unless that cart
+  already holds one -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}

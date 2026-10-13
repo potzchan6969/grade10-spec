@@ -14,7 +14,7 @@ reviewed: 2026-10-06
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
 | Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7× |
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
-| Timing | 🚧 **When the order completes** — the Completed badge: every item fulfilled and paid in full, not carrier-confirmed delivery ([Order Status](/p/grade10-site/commerce/order-status)). A till sale completes at the counter. A guest order earns only if it was linked before it completed ([Checkout](/p/grade10-site/store/checkout#guest-checkout)) |
+| Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter. A guest order earns only if it was joined to an account before it completed ([Checkout](/p/grade10-site/store/checkout#guest-checkout)) |
 
 ## Qualification Criteria
 
@@ -36,10 +36,18 @@ A fully discounted order earns nothing and writes no ledger entry.
 
 ## Backend Flow
 
-🚧 An order's earn is written when the order reaches the Completed badge, on
-the net it has paid then, and that number is the one every refund is read
-against. The earn is delivered by retry until the programme takes it, and
-taken once, so a purchase during an outage still earns, and never twice.
+An order's earn is written once, the first time the order completes.
+
+- **Complete** - every item fulfilled, paid or partly refunded, and goods
+  left after its refunds. A partly refunded order still completes, so the
+  earn never waits for the Completed badge
+- **Basis** - the goods paid for less those refunded at completion; every
+  later refund is read against it
+- **Till sale** - earns at the counter
+- **Guest order** - earns only if it was joined to an account before it
+  completed - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- **Delivery** - retried until the programme takes it, and taken once, so
+  a purchase during an outage still earns, and never twice
 
 ❓ The diagrams below still draw the earn starting from Order paid — the old
 trigger — and need redrawing to start from the order's completion.
@@ -183,7 +191,7 @@ the member still holds from them.
   two halves take exactly what one refund of the whole takes
 - **Never below zero** — a claw-back takes only what the member still holds
   from that money; the gap is counted, spent points first, expired next
-- 🚧 **Refund before the earn** — a refund that lands before the order
+- **Refund before the earn** — a refund that lands before the order
   completes lowers what it earns on: the basis is the net paid at completion.
   One after completion claws back as below
 - **Tier** — the contribution the points made leaves with them, and the tier
@@ -243,7 +251,7 @@ $139 takes.
 | Refunds | $39 of the single, before the order completes | 0 | 0 |
 | Earns | the order completes on $100 net, 10 pts × 1.2 | +12 | 12 |
 
-🚧 A refund before completion prices the earn down — the basis is the net
+A refund before completion prices the earn down — the basis is the net
 the order has paid at completion, so nothing needs clawing back.
 :::
 
@@ -446,7 +454,8 @@ spend rather than lose a balance that was about to lapse.
 | Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
 | What moving those dates costs | Decided | Nothing; the move ran on staging alone, which holds play data. A production database starts under the one date. | Finance |
 | Warning a member before the day | Decided | Who is owed one is worked out apart from what tells them - [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders). | Product |
-| Earn on completion | Decided | Every store order earns when it completes — the Completed badge, every item fulfilled and paid in full — on the net it has paid then, at the member's tier at completion; a till sale completes at the counter. An order canceled or refunded in full before it completes never earns; a refund before completion lowers the basis, one after claws back as today; the inactivity clock counts the earn on its completion date. Decided 2026-10-13; supersedes earn-when-paid. | Product |
+| Earn on completion | Decided | Every store order earns when it completes, by the rule under [Rules](#rules), on the net it has paid then, at the member's tier at completion; a till sale completes at the counter. An order canceled or refunded in full before it completes never earns; a refund before completion lowers the basis, one after claws back as today; the inactivity clock counts the earn on its completion date. Decided 2026-10-13; supersedes earn-when-paid. | Product |
 | Pending points | Decided | No pending line anywhere else — Order Details' own points section reads Points to Earn before completion and Points Earned after, and is absent when the order won't earn. Decided 2026-10-13. | Product |
 | Orders in flight at cutover | Decided | An order paid but not yet completed when the completion rule ships earns when it completes, guarded so no order earns twice — one that already earned at payment under the old rule earns nothing again. Decided 2026-10-13. | Product |
+| Completion, not the badge | Decided | An order earns the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds. Not the Completed badge: any refund turns the badge to Refunded, so a partly refunded order would never earn. Decided 2026-10-13. | Product |
 :::
