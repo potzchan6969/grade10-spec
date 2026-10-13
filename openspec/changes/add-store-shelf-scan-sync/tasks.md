@@ -35,7 +35,7 @@
 - [ ] 5.4 Move the lane table and `gatesFor` into `@grade10/app-env` as `siteGates`; `apps/frontend/grade10/src/surfaces.ts` imports it
 - [ ] 5.5 Verify: store-frontend and grade10 site tests, `pnpm --dir apps/frontend/grade10 run typecheck`
 
-## 6. Store shelf pass (grade10)
+## 6. Store shelf pass (grade10) (owner: @ecchochan)
 
 Needs groups 2, 4 and 5 landed.
 
