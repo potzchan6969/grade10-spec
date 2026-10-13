@@ -4,9 +4,6 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import * as publicEntry from "../../index";
 import {
-  EmptyPanel,
-  type EmptyPanelCopy,
-  type EmptyPanelProps,
   FactCard,
   type FactCardCopy,
   type FactCardProps,
@@ -27,8 +24,6 @@ import {
 // Each block carries a `<Name>Props` and a `<Name>Copy` beside it; a type the
 // entry stopped exporting fails here rather than in a consumer.
 type PublicPageBlockTypes = [
-  EmptyPanelCopy,
-  EmptyPanelProps,
   FactCardCopy,
   FactCardProps,
   FactCardSkeletonCopy,
@@ -63,7 +58,6 @@ const capabilityModules = import.meta.glob<Record<string, unknown>>(
 );
 
 const CAPABILITY_EXPORTS = [
-  "EmptyPanel",
   "FactCard",
   "FactCardSkeleton",
   "NoteList",
@@ -72,14 +66,10 @@ const CAPABILITY_EXPORTS = [
 
 describe("page blocks public entry", () => {
   // shared-ui-page-blocks-SC-01
-  it("exports the five named page blocks", () => {
-    expect([
-      EmptyPanel,
-      FactCard,
-      FactCardSkeleton,
-      NoteList,
-      StageRail,
-    ]).toEqual(Array.from({ length: 5 }, () => expect.any(Function)));
+  it("exports the four named page blocks", () => {
+    expect([FactCard, FactCardSkeleton, NoteList, StageRail]).toEqual(
+      Array.from({ length: 4 }, () => expect.any(Function)),
+    );
   });
 
   // shared-ui-page-blocks-SC-01
