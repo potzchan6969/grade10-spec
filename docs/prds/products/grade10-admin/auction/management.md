@@ -110,7 +110,7 @@ the card is in the winner's hands. The collector's half is
   A direct-upload file joins the gallery when it is dropped or chosen; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
-- 🚧 **Uploading and ordering** - files an operator drops or chooses are stored
+- **Uploading and ordering** - files an operator drops or chooses are stored
   at once, several at a time, after the last item, with no preview to confirm;
   a replacement stores the same way. The operator drags items into order, and
   the new order holds as soon as it is dropped, except while inventory assets
