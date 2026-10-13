@@ -82,7 +82,9 @@ change only the store's re-read of the whole catalogue finds SHALL reach it
 within 11 minutes of the save. The store's copy SHALL
 decide every field: an item changed on the scanner SHALL be put back with the
 next copy, and an item whose fields and photos match the copy SHALL NOT be
-written again.
+written again. An item SHALL follow its product: a product whose handle
+changes SHALL keep its one item, and the item's store page SHALL follow the
+new handle.
 
 | Field | Value |
 | --- | --- |
@@ -191,6 +193,26 @@ written again.
   price and availability
 - **AND** no item carries a store page
 
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-3fz rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC44 - The title is in the store's default language
+**Serves:** g10.store-shelf-scanning.US1 - the shopkeeper reads one title whatever the phone's language
+
+- **GIVEN** a product whose Traditional and Simplified Chinese titles differ
+  from its title in the store's default language
+- **WHEN** a shopkeeper whose phone is set to Traditional or Simplified
+  Chinese scans it
+- **THEN** the scan shows the product's title in the store's default language
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-80a rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC45 - A product whose handle changes keeps its one item
+**Serves:** g10.store-shelf-scanning.US2 - the link never opens a store page the product has left
+
+- **GIVEN** the scanner holds a product, in a build that carries the store
+- **WHEN** a stock keeper changes the product's handle in the shop and the
+  next copy reaches the scanner
+- **THEN** the scanner holds one item for the product, whose store page link
+  opens the product's page at its new handle
+
 ### Requirement: A slab names its own unit
 
 A graded product's unit SHALL be the inventory item the product names: for a
@@ -201,7 +223,8 @@ The store SHALL read the unit's grader, grade and cert from inventory for
 every copy it sends, and the item SHALL carry the grader and cert the scanner
 matches a slab's label to, and show the grade and cert. A graded product with
 no known unit SHALL be held with its other fields and its photos, without
-grader, grade or cert, and Operations SHALL be alerted to it. The scanner
+grader, grade or cert, and Operations SHALL be alerted to it; the alert SHALL
+clear once a copy holds no graded product without a known unit. The scanner
 SHALL read a cert of 4 to 24 letters, digits or hyphens from every grader it
 reads; a cert in any other form SHALL leave the product without a known unit.
 
@@ -284,6 +307,53 @@ reads; a cert in any other form SHALL leave the product without a known unit.
 - **THEN** the scanner holds it without grade or cert, recognised by its
   photos
 - **AND** Operations is alerted to a slab held without a unit
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-0gv rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC46 - A BGS, SGC or TAG slab is named by its label
+**Serves:** g10.store-shelf-scanning.US3 - every grader the scanner reads names the slab as PSA does
+
+- **GIVEN** the store sells a BGS, an SGC and a TAG slab, each product naming
+  its inventory item
+- **WHEN** the shopkeeper scans each slab's label
+- **THEN** the scan names that slab's product with its item's grader, grade
+  and cert
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-6k5 rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC47 - A label code no inventory item carries
+**Serves:** g10.store-shelf-scanning.US6 - a mistyped label code leaves the slab found by its photos, not lost
+
+- **GIVEN** a house-stock slab's product, its photos learned
+- **WHEN** a stock keeper writes a label code no inventory item carries on
+  the product and the next copy reaches the scanner
+- **THEN** the scanner holds it without grade or cert, recognised by its
+  photos
+- **AND** Operations is alerted to a slab held without a unit, the log naming
+  the product
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-hn6 rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC48 - A changed label code moves the slab facts
+**Serves:** g10.store-shelf-scanning.US6 - the stock keeper corrects which slab a product sells
+
+- **GIVEN** a house-stock product carrying one slab's label code, and a second
+  slab registered in inventory with another grade and cert, named by no
+  product
+- **WHEN** a stock keeper replaces the code with the second slab's and the
+  next copy reaches the scanner
+- **THEN** scanning the second slab's label names the product with the
+  second slab's grade and cert
+- **AND** scanning the first slab's label no longer names the product
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-9sn rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC49 - The alert clears once no slab is held without a unit
+**Serves:** g10.store-shelf-scanning.US6 - correcting the last slab without a unit ends the alert
+
+- **GIVEN** the only product held without a unit is a house-stock slab
+  carrying a label code no inventory item carries, and Operations is alerted
+- **WHEN** a stock keeper writes its item's label code and the next copy
+  reaches the scanner
+- **THEN** scanning its label names the product with its item's grade and
+  cert
+- **AND** Operations' alert clears
 
 ### Requirement: A store product is named before the shared card catalogue
 
@@ -550,8 +620,10 @@ reports within 8 minutes of the save, and one only the re-read finds within
 Each of staging and production SHALL have one fixed scanner link for the
 shop: the hosted scanner with the project's public key, searching the store's
 items. It SHALL open without signing in, from outside the company's access
-wall, SHALL scan only, adding no photos, and SHALL stop working when its key
-is rotated.
+wall, SHALL scan only, adding no photos, SHALL show only what the store shows
+publicly, and SHALL stop working when its key is rotated. A scan SHALL show
+no stock count and no value but the title, price, `Sale` badge, availability
+and store page link, and a slab's grade and cert, which its label prints.
 
 <!-- trace:scenario id=g10.store-shelf-scanning.SC-jxn rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC30 - The link opens the scanner without sign-in
@@ -567,9 +639,9 @@ is rotated.
 **Serves:** g10.store-shelf-scanning.US7 - the link can only scan
 
 - **GIVEN** the scanner opened from the shop's link
-- **WHEN** anyone tries to add a photo to an item through it
-- **THEN** the scanner offers no way to, and the service refuses a photo sent
-  with the link's key
+- **WHEN** anyone tries to add a photo to an item through it, from the
+  scanner's controls or by sending one with the link's key
+- **THEN** the item's photos stay as the store sent them
 
 <!-- trace:scenario id=g10.store-shelf-scanning.SC-3yv rev=1 -->
 #### Scenario: g10.store-shelf-scanning.SC32 - Rotating the key retires the link
@@ -580,3 +652,14 @@ is rotated.
 - **THEN** the scanner does not open, and shows its usual refusal for a link
   that no longer works
 - **AND** a link with the new key opens it
+
+<!-- trace:scenario id=g10.store-shelf-scanning.SC-nbk rev=1 -->
+#### Scenario: g10.store-shelf-scanning.SC50 - A scan shows only what the store shows publicly
+**Serves:** g10.store-shelf-scanning.US7 - a link anyone can open exposes nothing the store keeps private
+
+- **GIVEN** the scanner opened from the shop's link, and the store selling a
+  raw card with 7 for sale under an automatic discount and a house-stock slab
+- **WHEN** the shopkeeper scans the card, and the slab by its label
+- **THEN** each scan shows no stock count and no value but the title, price,
+  `Sale` badge, availability, store page link and, for the slab, grade and
+  cert
