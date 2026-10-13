@@ -109,8 +109,9 @@ read them.
   set by the taller of Needs you and an opened group
 - 🚧 **Inner groups** - What's New and Still Waiting group their rows by
   product: Auction, then Store, Consignment, Inventory and Appointments, each
-  the operator can open. Each group shows as one line with its count until
-  its chevron opens it; opening one closes the other in that column
+  the operator can open. The first with rows, Auction first, starts opened;
+  the others show as one line with their count until their chevron opens
+  them, and opening one closes the other in that column
 - 🚧 **An opened group** - fills the rest of its column, never under about
   five and a half rows, and scrolls the rest inside itself, with the edge
   that has more beyond it faded
@@ -169,7 +170,7 @@ operator, in the console and in the team's Slack.
 | Three columns on Today | 🚧 In flight | What's New, Still Waiting and Needs you side by side; Approvals, Recent and All sections stay below, unchanged. Chosen over folding Approvals into the Needs you column, which squeezes its approve and decline controls. | Product |
 | One attempt, no record | 🚧 In flight | The message is tried once and nothing records the send; a failure is logged and that day's message is lost. Chosen over retries through the day with a record of each day's send, which needs a table and a rule against posting twice. | Product |
 | Flagged orders are listed | 🚧 In flight | An order in a waiting status is listed by its own wait even with an open payment flag. Chosen over leaving it to Needs you, which would hide a forgotten dispatch behind a flag. | Product |
-| Folded on Today, scrolled in the dialog | 🚧 In flight | Today shows each product's list as one line until it is opened, so the page stays short; the dialog shows about four and a half rows of each and scrolls the rest inside the list. Chosen over full lists in both, which push Needs you and Approvals down the page and grow the dialog past the screen. | Product |
+| One group open on Today, scrolled in the dialog | 🚧 In flight | Today opens the first product with rows and folds the others to one line, one open at a time, so the page stays short; the dialog shows about four and a half rows of each and scrolls the rest inside the list, fading the edge with more. Chosen over every group folded, so the operator opens Auction on every visit, and over full lists in both, which push Needs you and Approvals down the page and grow the dialog past the screen. | Product |
 | Slack, one message per product | 🚧 In flight | Each product posts its own message at 08:00 Hong Kong time to its own channel, with the same token or its own. Chosen over one message for every product, which needs one place that reads every product's lists, and over email or a message to each operator, which needs an address or a Slack account for every operator. | Product |
 | Slack carries everyone's rows, no customer names | 🚧 In flight | A shared channel cannot be scoped to one operator's grants, and a customer's name does not belong in it; the link carries the identity. Chosen over per-grant filtering and over naming the winner. | Product |
 :::

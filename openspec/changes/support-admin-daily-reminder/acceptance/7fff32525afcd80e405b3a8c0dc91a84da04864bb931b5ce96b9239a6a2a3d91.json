@@ -1,0 +1,122 @@
+{
+  "version": 2,
+  "change": "support-admin-daily-reminder",
+  "baseline": "4f82a026789c7e0be9da0cd3103cb8701f08e359a05c648542c4ba4bdd262120",
+  "fingerprint": "7fff32525afcd80e405b3a8c0dc91a84da04864bb931b5ce96b9239a6a2a3d91",
+  "reviewedBy": "mason5991",
+  "acceptedAt": "2026-10-13T14:41:39.442Z",
+  "supersedes": "5a83d73195725bc28e1137c2a69de7cf834190c92165fb1579c81b855fc4dd78",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#post-sale-queue",
+      "sha256": "e6ae1641da22a1577d3ab67852cb0a292da20439bdf8f38d51287e02d6da88a2",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#opening",
+      "sha256": "b9b22ab0f48488444c0cc7047a3b85d0f0342d3b864f84fc9716e989611818e2",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#rules",
+      "sha256": "81fa3b77ebd53849ed2f99f33ba003c1886d89d17b8ebb2b2da54fe7c3f6616a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#slack",
+      "sha256": "aea826d318b6f1f5ff102100f3729128876505ea68d8d3d84284ca510cca1724",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#still-waiting",
+      "sha256": "e936c48196368ca8a70f881c8278fe575816ce7f6a386d05feef8861c9a3059a",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#today",
+      "sha256": "53805ee09a0914a9ba09f11c985da7ac14f37114420c39b197b9afa1129b29f0",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#what-s-new",
+      "sha256": "48d664b1a8b59a79ce2134315aaf5059e26d2a7ddffde169c4fcda4daaec3a3f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/console/daily-reminder.md#who-sees-a-row",
+      "sha256": "66e2bc824d259e1163945fda427d7b63c06c6a8e50e5f5e84df79f0f0ede4961",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/support-admin-daily-reminder/decisions.md",
+      "sha256": "db45e4e075e31f74dff77c72692d553dcba1bf18b94a943ea4647c17f42ee171",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/support-admin-daily-reminder/proposal.md",
+      "sha256": "9d5e5ea0384bedabe396a1b79aa9b10e2082610cac5a8d18cdc0b760d1991a36",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/support-admin-daily-reminder/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+      "sha256": "99bcab61331309f4827f5a5ae277340ff1d9bd6be6840532caeace28b4b546e7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/support-admin-daily-reminder/specs/grade10-admin/console/daily-reminder/spec.md",
+      "sha256": "e209cd1f2b7a913aee3253d3080560f7df9ccf017ff37ce4302785d34476d94d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/support-admin-daily-reminder/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+      "sha256": "c05c7aa46ef8ea285c3665ddd718ff9f460b09f773ab69b49bdc7fe7a4b27303",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/support-admin-daily-reminder/tech-design.md",
+      "sha256": "32b2881b0ccd8395a587da4abc6e99e1606b592d2df035ad74e92175af500265",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+      "sha256": "cbf1d9087c45d1d273f04eff9f177b2d1813fe2ec8600c96d4d6a6b05f0491c0",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+      "sha256": "032dac09ea3c6236659dbe6a34ea034eb05c143cc7bd7ed6b82ea26cfacde5a4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+      "sha256": "16ce9bc9d1631c81e85bbf4b1a2441f651df86eb9e0a638c46076f2601b1a9f3",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Slack posts the day's lists at 08:00 Hong Kong time",
+        "Requirement: Still Waiting lists the orders that have waited 48 hours for an operator action",
+        "Requirement: The channel and token come from the environment",
+        "Requirement: The console shows an operator the rows their grants allow",
+        "Requirement: The daily dialog opens on each entry until the operator closes it that Hong Kong day",
+        "Requirement: The day's message is sent once and a failure is logged",
+        "Requirement: The lists agree with Needs you and mark nothing",
+        "Requirement: Today reads in three columns",
+        "Requirement: What's New lists the listings that closed on the previous Hong Kong day"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/console/daily-reminder/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -22,10 +22,11 @@ Reminds an operator, once a day, which listings closed yesterday and which order
   - Long lists: each product's list scrolls inside itself past about four and a half rows
 - Today columns
   - Three columns: What's New, Still Waiting and Needs you side by side
-  - Product groups: each list groups its rows by product, Auction first, folded to one line until opened
+  - Product groups: each list groups its rows by product, Auction first, the first with rows opened and one open at a time; a product with no rows says Nothing yet
+  - One height: the three columns stand at one height, and an opened group fills its column and scrolls
   - Rest of Today: Approvals leaves the Needs you column and sits below with Recent and All sections
 - Slack message
-  - Daily post: both lists go to one channel at 08:00 Hong Kong time every day
+  - Daily post: each product posts its own lists to its own channel at 08:00 Hong Kong time every day
   - Row links: each row links to its listing or order in the console
   - Shared content: every row, with no winner name, email or phone
   - Quiet and long: nothing posts on an empty day, and each list stops at 10 rows
@@ -342,7 +343,7 @@ An entry is a full page load of the console by a signed-in operator, or a sign-i
 3. The dialog shows each list that has a row, What's New first, and says so beside any list that failed to load, with a Retry. A list that loaded with no row is left out.
 4. Closing the dialog by its close control, by Escape, by a click outside it, or by following a row, stores today's Hong Kong day as the operator's closed mark. An entry that opens nothing stores no mark.
 
-The mark SHALL be kept in the browser, per operator and per Hong Kong day, and SHALL be cleared when the operator signs out. Another browser keeps its own. A browser that keeps nothing between page loads SHALL show the dialog once per page load instead. Each product's list in the dialog SHALL show about four and a half rows and scroll the rest inside itself, so the dialog keeps its size however many rows there are. The dialog reads the lists when it opens and SHALL NOT read them again while it stays open. The console SHALL check the day on entry and not while the operator works.
+The mark SHALL be kept in the browser, per operator and per Hong Kong day, and SHALL be cleared when the operator signs out. Another browser keeps its own. A browser that keeps nothing between page loads SHALL show the dialog once per page load instead. Each product's list in the dialog SHALL show about four and a half rows and scroll the rest inside itself, fading the edge that has more beyond it, so the dialog keeps its size however many rows there are. The dialog reads the lists when it opens and SHALL NOT read them again while it stays open. The console SHALL check the day on entry and not while the operator works.
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-4zv rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-25 - The dialog opens over the page the operator lands on
@@ -515,18 +516,18 @@ The mark SHALL be kept in the browser, per operator and per Hong Kong day, and S
 - **THEN** the order opens in a new tab
 - **AND** the dialog stays open and the day's mark is not set
 
-<!-- trace:scenario id=g10adm.console-daily-reminder.SC-fyh rev=1 -->
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-fyh rev=2 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-82 - A long list scrolls inside the dialog
 **Serves:** grade10-admin-console-daily-reminder-US-02 - the dialog stays on the screen however much is waiting
 
 - **GIVEN** nine Still Waiting rows for the operator
 - **WHEN** the dialog opens
-- **THEN** the Auction list shows about four and a half rows, and the rest scroll inside the list
+- **THEN** the Auction list shows about four and a half rows, and the rest scroll inside the list with its bottom edge faded
 - **AND** the dialog keeps its size and its close control stays in view
 
 ### Requirement: Today reads in three columns
 
-Today SHALL show What's New, Still Waiting and Needs you as three columns, in that order, with the lists the dialog holds. Needs you SHALL hold the section cards it holds now, one under another, with the counts and links unchanged. What's New and Still Waiting SHALL group their rows by product, Auction first. Each group SHALL show as one line with its product and count until the operator opens it with its chevron, and SHALL fold back to one line when the chevron is pressed again. A list that fails to load SHALL say so in its own column, with a Retry. The Approvals card SHALL leave the Needs you column and sit with the Recent and All sections under the three columns, otherwise unchanged. Today's Refresh SHALL read all three columns again. The lists SHALL also be read when Today loads and when the operator comes back to the tab, and never on a timer.
+Today SHALL show What's New, Still Waiting and Needs you as three columns, in that order, with the lists the dialog holds. Needs you SHALL hold the section cards it holds now, one under another, with the counts and links unchanged. What's New and Still Waiting SHALL group their rows by product, Auction first, then Store, Consignment, Inventory and Appointments for each the operator can open; a product with no row SHALL show as one line saying Nothing yet. The first group with rows SHALL start opened and every other group SHALL show as one line with its product and count; a group's chevron SHALL open it and fold it back, and opening one group SHALL fold the group open in the same column. The three columns SHALL stand at one height, set by the taller of Needs you and an opened group, and an opened group SHALL fill the rest of its column, never under about five and a half rows, and scroll its rows inside itself, fading the edge that has more beyond it. A list that fails to load SHALL say so in its own column, with a Retry. The Approvals card SHALL leave the Needs you column and sit with the Recent and All sections under the three columns, otherwise unchanged. Today's Refresh SHALL read all three columns again. The lists SHALL also be read when Today loads and when the operator comes back to the tab, and never on a timer.
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-v91 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-36 - Three columns side by side
@@ -612,18 +613,43 @@ Today SHALL show What's New, Still Waiting and Needs you as three columns, in th
 - **WHEN** Today loads
 - **THEN** the Needs you total and the summary sentence both count the two asks
 
-<!-- trace:scenario id=g10adm.console-daily-reminder.SC-ihf rev=1 -->
-#### Scenario: grade10-admin-console-daily-reminder-SC-83 - Each product's list folds to one line on Today
-**Serves:** grade10-admin-console-daily-reminder-US-03 - Today stays short until the operator opens a list
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-ihf rev=2 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-83 - The first product with rows starts opened on Today
+**Serves:** grade10-admin-console-daily-reminder-US-03 - the operator reads the rows without a click
 
-- **GIVEN** three What's New rows and nine Still Waiting rows for the operator
+- **GIVEN** three What's New rows and nine Still Waiting rows for the operator, all auction's
 - **WHEN** Today loads
-- **THEN** each column shows Auction as one line with its count and a chevron down, and no row
-- **AND** pressing the chevron shows every row and turns it up, and pressing it again folds the list back to one line
+- **THEN** each column shows Auction opened, with its rows and a chevron up
+- **AND** pressing the chevron folds Auction to one line with its count, and pressing it again opens it
+
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-xl4 rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-84 - One group opens at a time in a column
+**Serves:** grade10-admin-console-daily-reminder-US-03 - an opened list takes the column
+
+- **GIVEN** Still Waiting holds rows from two products, the first opened
+- **WHEN** the operator opens the second with its chevron
+- **THEN** the second opens and the first folds to one line with its count
+
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-yio rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-85 - The columns stand at one height and an opened group fills its column
+**Serves:** grade10-admin-console-daily-reminder-US-03 - a long list never stretches Today
+
+- **GIVEN** a wide screen, a Needs you column taller than the folded lists, and forty Still Waiting rows
+- **WHEN** Today loads
+- **THEN** the three columns stand at one height
+- **AND** Still Waiting's opened group fills the rest of its column and scrolls its rows inside itself, showing at least about five and a half rows, with its bottom edge faded
+
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-ws4 rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-86 - A product with no reminder yet says Nothing yet
+**Serves:** grade10-admin-console-daily-reminder-US-03 - the operator sees every product the reminder will hold
+
+- **GIVEN** an operator who can open Store, Consignment, Inventory and Appointments, none of which has reminder rows
+- **WHEN** Today loads
+- **THEN** each list shows, after Auction, a line for each of those products saying Nothing yet, with no chevron
 
 ### Requirement: Slack posts the day's lists at 08:00 Hong Kong time
 
-At 08:00 Hong Kong time every day, including weekends, one trigger SHALL post the lists as one message to one Slack channel:
+At 08:00 Hong Kong time every day, including weekends, each product SHALL post its own lists as one message to its own Slack channel, headed with the product and the Hong Kong day, such as Auction daily reminder. Auction's trigger posts auction's lists:
 
 1. Both lists are read for the Hong Kong day, with every row and not one operator's grants.
 2. When both are empty, nothing posts. A list with no row is left out of a message that has rows.
@@ -744,6 +770,15 @@ At 08:00 Hong Kong time every day, including weekends, one trigger SHALL post th
 - **THEN** the first 10 rows are AU-1001 to AU-1010
 - **AND** the link to Today says 1 more
 
+<!-- trace:scenario id=g10adm.console-daily-reminder.SC-1cz rev=1 -->
+#### Scenario: grade10-admin-console-daily-reminder-SC-87 - Auction's message is headed with its product
+**Serves:** grade10-admin-console-daily-reminder-US-04 - the channel reads whose lists these are
+
+- **GIVEN** a Still Waiting row and auction's channel and token set
+- **WHEN** auction's daily trigger fires on Monday 12 October
+- **THEN** one message headed "Auction daily reminder · Monday 12 Oct 2026" posts to auction's channel
+- **AND** it carries auction's rows only
+
 ### Requirement: The day's message is sent once and a failure is logged
 
 The daily trigger SHALL send the day's message once, and nothing SHALL record that it was sent. When Slack refuses the message or cannot be reached, the failure SHALL be logged as an error naming the Hong Kong day and the reason, the message SHALL NOT be sent again, and that day's message is lost. The next message is the next day's, naming the lists of that day.
@@ -775,7 +810,7 @@ The daily trigger SHALL send the day's message once, and nothing SHALL record th
 
 ### Requirement: The channel and token come from the environment
 
-The Slack access token and the channel SHALL be set per environment, so staging and production can differ, and never from the console. When either is not set, nothing SHALL post and the log SHALL say the reminder is not configured.
+Each product's Slack access token and channel SHALL be set per environment in that product's own settings, so staging and production can differ and two products may share them, and never from the console. When either is not set, nothing SHALL post and the log SHALL say the reminder is not configured.
 
 <!-- trace:scenario id=g10adm.console-daily-reminder.SC-hb6 rev=1 -->
 #### Scenario: grade10-admin-console-daily-reminder-SC-59 - The post goes to the environment's channel

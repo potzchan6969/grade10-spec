@@ -25,7 +25,7 @@ The spec is [Daily Reminder](specs/grade10-admin/console/daily-reminder/spec.md)
 - No notification table, read state or bell (Q1), and no record of a send (Q22): no table, no migration.
 - No retry and no late post (Q22, Q29).
 - No change to `orderStatusSql`, the worklist, an order page or the Needs you counts.
-- No cross-product aggregation in the Slack post; Auction is the only source today.
+- No cross-product aggregation in the Slack post: each product posts its own message to its own channel (Q51), and Auction is the only one that posts today.
 
 ## Decisions
 
@@ -35,7 +35,7 @@ The spec is [Daily Reminder](specs/grade10-admin/console/daily-reminder/spec.md)
 | --- | --- | --- |
 | The two reads | `packages/grade10-auction/backend/src/repositories/reminderReads.ts`, composed in `services/reminder/` | Table-oriented SQL beside `orderQueue.ts`; the service owns grant scoping and the HK window (`docs/conventions/backend.md`, "Entrypoints adapt transport; services own behavior; repositories own SQL") |
 | Console endpoints | `trpc/routers/reminder.ts` with `whatsNew` and `stillWaiting`, merged in `trpc/router.ts`; grants in `ADMIN_PERMISSIONS` | Two procedures so one list can fail without the other (Q15) |
-| Slack message and port | `services/reminder/slackMessage.ts` (pure), `slack/` (the port's fetch implementation), `SlackPort` in `types/ports.ts` | The shape of `stripe/`, `storage/` and `types/ports.ts`; tests bind a fake at the port |
+| Slack message and port | `@grade10/slack` (`packages/slack`): `SlackPort`, `slackClient`, the text helpers and `dailyReminderMessage`, shared by every product's worker; `services/reminder/slackMessage.ts` maps auction's lists onto it; `types/ports.ts` re-exports the port | The shape of `@grade10/webpush`: one client and message shape per vendor, each worker composing it from its own secrets (Q51); tests bind a fake at the port |
 | The daily job | `services/reminder/post.ts` (`postDailyReminder`), run by its own cron in `entrypoint.ts` | Not a work list: it claims no row and has no state to select by, see Trigger |
 | Console addresses | `AUCTION_CONSOLE_PATHS` in `packages/grade10-auction/contracts/src/` (new, beside `adminPaths.ts`) | The worker builds links the console must answer; a test pins it to `ROUTES.dashboard`, `ROUTES.auctionOrder` and `ROUTES.auctionListing` in `apps/admin/grade10/src/surfaces.ts` so the two cannot drift |
 | Row model and list block | `packages/frontend-console/src/` beside `registries.ts` | `ReminderRow`, `ReminderAnswer`, `ReminderHook` and a `ReminderColumn` block, as `NeedsYouHook` sits there; the dialog and Today share one block |
@@ -107,12 +107,12 @@ The registry is `Partial<Record<SectionId, ReminderHook>>`, `{ auction: useAucti
 
 - **Reads** - `useAuctionReminder` runs two `useQuery`s with the shared `LIST_QUERY`, `refetchOnWindowFocus: true` and no interval, as `useOrdersNeedingAction.ts` does (Q28). Today's Refresh bumps the provider's `generation`, the remount Needs you uses, so all three columns read again (Q39).
 - **Columns** - `TodayPage` takes a `reminder` prop and renders `ReminderColumn` for What's New, for Still Waiting, then the existing Needs you section, each always shown (Q25). A failed list shows the notice and Retry in its column (Q35), as Needs you shows `ReadFailureNotice` today. Below the narrow breakpoint the columns stack with Needs you last (`useNarrow` already exists in `frontend-console`).
-- **Fold and scroll** - one list block, `ReminderListView` in `chrome/ReminderList.tsx`, draws both places with a `layout` (Q48). On Today (`collapsible`) each product group is one line with its count and a chevron button carrying `aria-expanded`; ChevronDown opens it, ChevronUp folds it, and it starts folded on every load. In the dialog (`scroll`) each group's rows sit in a box with a fixed `max-height` of about four and a half rows and `overflow-y: auto`, so the dialog keeps its size and its close control stays in view.
+- **Fold and scroll** - one list block, `ReminderGroups` in `packages/frontend-console`, draws both places with a `layout` (Q48). On Today (`collapsible`) the first group with rows starts opened and each other group is one line with its count and a chevron button carrying `aria-expanded`; one group is open at a time in a column (Q49). The three columns stretch to one height, and the opened group's rows take the rest of the column as a flex item with a floor of about five and a half rows, scrolling inside it with the edge that has more beyond it faded (Q50). Store, Consignment, Inventory and Appointments, each the operator can open, stand as empty groups that say Nothing yet (Q50). In the dialog (`scroll`) each group's rows sit in a box with a fixed `max-height` of about four and a half rows and `overflow-y: auto`, its edge with more faded as on Today, so the dialog keeps its size and its close control stays in view.
 - **Approvals** - today `ApprovalsCard` is a child of the Needs you grid (`TodayPage.tsx`, the `approvals ? <ApprovalsCard …>` child). It moves into its own section under the three columns beside Recent and All sections (Q41); the card and its props are unchanged. The total pill ("approvals included") and `todaySummary`'s sentence keep counting Approvals (Q45).
 
 ### The Slack post
 
-**Trigger.** A dedicated cron, `0 0 * * *`, which is 08:00 in Hong Kong (Hong Kong keeps no summer time), beside the existing `*/5 * * * *` in `triggers.crons`. `scheduled` branches on `controller.cron`: the reminder cron runs `postDailyReminder` and nothing else, any other cron runs the pass as today, as vault does for a cron it does not recognise (`packages/vault/backend/src/entrypoint.ts`). Both expressions become literals in the entrypoint, so `scripts/checks/check-crons.mjs` starts grading the worker in both directions (today it reports the worker as one that "runs one pass for whatever fires"). Loyalty is the precedent for two named crons (`NIGHTLY_CRON`, `DRAIN_CRON` in `packages/loyalty/backend/src/entrypoint.ts`).
+**Trigger.** A dedicated cron, `0 0 * * *`, which is 08:00 in Hong Kong (Hong Kong keeps no summer time), beside the existing `*/5 * * * *` in `triggers.crons`. `scheduled` branches on `controller.cron`: the reminder cron runs `postDailyReminder` and nothing else, the five-minute cron runs the pass, and any other cron fails the run, so a cron added to `wrangler.jsonc` without a branch is caught at once. Both expressions become literals in the entrypoint, so `scripts/checks/check-crons.mjs` starts grading the worker in both directions (today it reports the worker as one that "runs one pass for whatever fires"). Loyalty is the precedent for two named crons (`NIGHTLY_CRON`, `DRAIN_CRON` in `packages/loyalty/backend/src/entrypoint.ts`).
 
 Chosen over a work list in the existing pass, gated to 00:00 UTC:
 
@@ -135,7 +135,7 @@ The window test makes a list lie about what it is, and its silent failure is the
 
 **A repeat is accepted (Q38).** `chat.postMessage` has no idempotency key. If the cron is delivered twice, or the invocation dies after Slack accepts the post and the platform runs it again, the channel sees the message twice. Nothing in the repository guards it; whether Cloudflare re-runs a failed cron invocation is not verified here.
 
-**The message.** `chat.postMessage` with `channel`, `text` (counts only, the notification fallback), `blocks`, `unfurl_links: false`, `unfurl_media: false` (Q37). Blocks: one header (the Hong Kong weekday and day), then per list that has a row a heading section, one section per row, and a context line `N more on Today` linked to Today when the list has more than 10. A list with no row has no heading. One block per row keeps the post under Slack's 3,000-character section limit even after escaping, and a full post is at most 25 blocks against the limit of 50.
+**The message.** `chat.postMessage` with `channel`, `text` (counts only, the notification fallback), `blocks`, `unfurl_links: false`, `unfurl_media: false` (Q37). Blocks: one header naming the product and the Hong Kong weekday and day, as `Auction daily reminder · Monday 12 Oct 2026` (Q51), then per list that has a row a heading section, its rows one per line in as many sections as keep each under Slack's 3,000-character section limit after escaping, and a context line `N more on Today` linked to Today when the list has more than 10. A list with no row has no heading. A full post is at most about 25 blocks against the limit of 50.
 
 Row text: `<link|CODE> Title` with a title over 60 characters cut to its first 59 and `…`, then ` - Sold` or ` - Unsold` for What's New and ` - Send invoice - 3 days` for Still Waiting. `&`, `<` and `>` in a title are escaped as Slack requires. The message is built by a pure function from the rows and the console origin, and takes no winner field at all: the channel audience does not select one. Slack's API is from its documented Web API and is not verified in this repository.
 
@@ -180,7 +180,7 @@ One counter, `auction.reminder.post`, tagged `result` (`sent`, `failed`, `empty`
 - **[A large day]** The console shows every row (Q23) → one statement and a response of a few hundred rows at most; Slack stops at 10 per list.
 - **[Drift between the reminder and the worklist]** → the status and the clocks are the worklist's functions, and a repository test seeds one order per status, flagged and not, and asserts the reminder is a subset of the Needs action segment (Q16).
 - **[A new cron literal]** → `check-crons` now grades the auction worker's two expressions against `wrangler.jsonc`; a one-character edit to either fails CI.
-- **[Single source today]** The Slack job sits in the auction worker → when Inventory or Vault add rows, the message needs one composer over several products, and that move is that change's.
+- **[Single source today]** The Slack job sits in the auction worker → when Store, Inventory or another product adds rows, its worker composes `dailyReminderMessage` from `@grade10/slack` with its own secrets and channel; that wiring is that change's.
 
 ## Migration Plan
 
