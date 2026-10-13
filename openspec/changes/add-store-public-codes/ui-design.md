@@ -18,8 +18,8 @@
   guest.
 - `PromoTicket` — the shared row for public and held codes alike.
 - Design reference (workbench):
-  `store-cart-blocks-cartdrawer-footer-guest--guest-with-public-code`,
-  `store-cart-blocks-cartdrawer-footer-guest--member-with-public-codes`
+  `store-cart-blocks-cartdrawerfooter-guest--guest-with-public-code`,
+  `store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes`
 
 ## States
 

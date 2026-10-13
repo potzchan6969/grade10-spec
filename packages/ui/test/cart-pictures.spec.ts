@@ -1,12 +1,12 @@
 import { expect, test } from "playwright/test";
 
 for (const [component, story, alt, soldOut] of [
-  ["cartitem", "picture", "Card front", false],
-  ["cartitem", "picture-without-alt", "Gengar VMAX", false],
-  ["cartitem", "picture-with-empty-alt", "Gengar VMAX", false],
-  ["cartitem", "picture-with-whitespace-alt", "  ", false],
-  ["cartitem", "sold-out-picture", "Card front", true],
-  ["cartdrawerbody", "pictures", "  ", false],
+  ["cartitem-picture", "picture", "Card front", false],
+  ["cartitem-picture", "picture-without-alt", "Gengar VMAX", false],
+  ["cartitem-picture", "picture-with-empty-alt", "Gengar VMAX", false],
+  ["cartitem-picture", "picture-with-whitespace-alt", "  ", false],
+  ["cartitem-picture", "sold-out-picture", "Card front", true],
+  ["cartdrawer-body", "pictures", "  ", false],
   ["cartdrawer", "pictures", "Card front", true],
 ] as const) {
   test(`supplied picture and callbacks - ${component}/${story}`, async ({
@@ -62,7 +62,7 @@ for (const story of ["without-picture", "empty-picture-source"]) {
         productRequests.push(request.url());
     });
     await page.goto(
-      `/iframe.html?id=store-cart-blocks-cartitem--${story}&viewMode=story`,
+      `/iframe.html?id=store-cart-blocks-cartitem-picture--${story}&viewMode=story`,
     );
     const row = page
       .locator('[data-slot="cart-item"]')
@@ -87,7 +87,7 @@ test("shared-ui-store-cart-SC-64 - A supplied cart picture loads in the existing
   page,
 }) => {
   await page.goto(
-    "/iframe.html?id=store-cart-blocks-cartitem--picture&viewMode=story",
+    "/iframe.html?id=store-cart-blocks-cartitem-picture--picture&viewMode=story",
   );
   const row = page
     .locator('[data-slot="cart-item"]')
