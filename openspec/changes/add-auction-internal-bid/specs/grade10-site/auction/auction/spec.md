@@ -73,7 +73,7 @@ changing nothing. The letters the close owes are
 `grade10-site/auction/notifications`'s.
 
 <!-- trace:scenario id=g10.auction-auction.SC-a4f rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-103 - A lot the house wins reads sold
+#### Scenario: grade10-site-auction-auction-SC-109 - A lot the house wins reads sold
 **Serves:** grade10-site-auction-auction-US-01 - a collector reads a closed lot the house won as any absolute close
 
 - **GIVEN** an `HKD` listing where the house, shown as Bidder 2, leads at
@@ -99,7 +99,7 @@ changing nothing. The letters the close owes are
 #### Scenario: grade10-site-auction-auction-SC-107 - A lot the house wins opens its internal bidder's order
 **Serves:** `Closing a lot the house leads` - the settle finds the house on top
 
-- **GIVEN** the listing of `grade10-site-auction-auction-SC-103`, whose
+- **GIVEN** the listing of `grade10-site-auction-auction-SC-109`, whose
   internal bid names Harbour Cards
 - **WHEN** it closes
 - **THEN** Grade10 opens one winner order for Harbour Cards, flagged
