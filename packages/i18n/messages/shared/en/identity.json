@@ -1,6 +1,6 @@
 {
   "title": "Identity",
-  "description": "Orders of {order} or more and bids of {bid} or more need a verified identity. Verify once and it counts everywhere with us.",
+  "description": "Bids of {bid} or more need a verified identity. Verify once and it counts everywhere with us.",
   "loading": "Checking where you stand…",
   "loadFailed": "We could not read your identity status. Try again in a moment.",
   "verifiedUntil": "Verified. Your document is valid until {day}.",

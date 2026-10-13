@@ -5,13 +5,13 @@ order: 2
 ---
 
 A collector verifies who they are once, from their own account, and is
-recognised wherever Grade10 asks: at a checkout or a bid of **HKD 120,000** or
-more, and at a vault visit.
+recognised wherever Grade10 asks: at a bid of **HKD 120,000** or more, and at
+a vault visit.
 
 - **Where they stand** — verified until a day, expired, or not yet; read from
   the KYC service the day the page is opened, whichever product verified them
-- **The bar** — the order value and the bid value that ask for a verified
-  identity, in the store's currency
+- **The bar** — the bid value that asks for a verified identity, in the
+  store's currency
 - **Verify** — read what the provider will check, tick the agreement, press
   verify, and finish on the provider's page on this device; the result lands on
   its own
@@ -69,8 +69,8 @@ photographing the passport again.
   record it from the case, the fallback that never closes
   ([Identity Check](/p/grade10-site/vault/identity-check))
 - **Who reads it** — vault staff, on the case, the name and the document image;
-  the collector, on this card, a standing and never a name; a checkout or a
-  bid above the bar, the same standing before it goes through
+  the collector, on this card, a standing and never a name; a bid above the
+  bar, the same standing before it goes through
 - **Walled** — reached only by Grade10's own services over a binding, never a
   browser: one misconfigured origin would otherwise put every customer's legal
   name and passport photograph in front of one
@@ -108,8 +108,8 @@ instead of asking for the passport again.
 - **One identity per case** — binding a second replaces the first rather than
   adding to it, and what is displaced stays on file until the product that
   displaced it decides: keep it as evidence, or discard it
-- **A standing for a yes or no** — the store at a checkout and the auction at
-  a bid read verified, expired or unverified, judged on the day they ask, with
+- **A standing for a yes or no** — the auction at a bid reads verified,
+  expired or unverified, judged on the day it asks, with
   when the check was decided and who performed it, and nothing that names the
   person; only a product that records or binds holds the record
 
@@ -206,9 +206,8 @@ which settles its own paperwork
   erasure
 - **The card** — `@grade10/store-frontend/identity`, one slice; every word a
   prop until the application's submodule carries the `identity` catalogue
-- **The gates** — `checkout.createCheckout`, `createCheckoutWithEmail` and
-  `auction.placeBid` in the store's tRPC routers, on `identityGates` from
-  `@grade10/app-env`
+- **The gate** — `auction.placeBid` in the store's tRPC routers, on
+  `identityGates` from `@grade10/app-env`
 - **Service design** — [the working note](/references/kyc-service-design)
 :::
 
@@ -221,13 +220,13 @@ fixed, and puts a legal name through a keyboard on its way to a signature page.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Collector | Buying or bidding above the bar | Verifies once, from the account, and is not asked at the next high-value purchase. |
+| Collector | Bidding above the bar | Verifies once, from the account, and is not asked at the next high-value bid. |
 | Collector | Booked a visit, at home | Verifies in minutes, arrives ready. |
 | Collector | Document lapsed | Finds out at home, not after travelling. |
-| Collector | Verified once, opens a second case or checks out | Not asked for the document again, and the store never learns who they are. |
+| Collector | Verified once, opens a second case or bids | Not asked for the document again, and the store never learns who they are. |
 | Collector | Asks to be forgotten | Every copy goes, including the provider's. |
 | Vault operator | Reading a case's identity | Can tell a counter check from a hosted one, and how old it is. |
-| Compliance | A sale above the bar, or a signed agreement years later | The account holds a verified identity with consent on record; the face matched the document, and the evidence is readable without a vendor. |
+| Compliance | A bid above the bar, or a signed agreement years later | The account holds a verified identity with consent on record; the face matched the document, and the evidence is readable without a vendor. |
 
 **Not in scope.** Verifying a guest, or anybody outside a vault case or an
 account. Any identity field on the site. Inviting by email from the store.
@@ -240,7 +239,7 @@ the KYC service.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Verified above the bar | Share of orders and bids at or above the bar placed by a verified collector. | Product |
+| Verified above the bar | Share of bids at or above the bar placed by a verified collector. | Product |
 | Recognised | Share of verifications reused rather than repeated, and of new cases bound to an existing identity. | Product |
 | Drop-off | Share of checks started that never decide, and of invitations that expire undecided. | Product |
 | Erasure completeness | Share of releases whose provider command is acknowledged within the stated window. | Compliance |
@@ -249,9 +248,9 @@ the KYC service.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The bar | Decided | HKD 120,000.00 on an order's goods and on a bid — the value at which a Hong Kong dealer in high-value goods has to know its customer. One value per brand. | Product |
-| Where the gate stands | Decided | At the storefront, before an order is written or the auction hears of a bid. | Engineering |
-| Guests | Decided | Above the bar a guest signs in; a standing belongs to an account. | Product |
+| The bar | Decided | HKD 120,000.00 on a bid — the value at which a Hong Kong dealer in high-value goods has to know its customer. One value per brand. | Product |
+| Where the gate stands | Decided | At the storefront, before the auction hears of a bid. | Engineering |
+| Checkout bar | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000; only a bid asks. | Product |
 | A gate reads a standing | Decided | A product that only asks whether a person is verified holds a gate — verified, expired or unverified — and never the record. | Product |
 | Person-wide read | Decided | A read of a person crosses products; every write stays scoped to the caller's own cases. | Product |
 | Consent | Decided | Explicit, on the page that starts the check, stamped on the check; the text names the document and face check, what is kept, reuse across Grade10, and erasure. A DPIA is completed before production; the provider's DPA governs the transfer. | Compliance |
@@ -274,7 +273,7 @@ the KYC service.
 
 **Risks.**
 
-- **A first-time bar** — a collector reaching it at checkout meets a
+- **A first-time bar** — a collector reaching it at a bid meets a
   verification they did not plan for; the card on the account page and the
   recognition of a vault check keep that a one-time cost
 - **A trust boundary** — a verdict is one the estate has never had, every

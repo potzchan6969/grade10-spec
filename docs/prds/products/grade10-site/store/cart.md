@@ -100,11 +100,6 @@ The refusals are the coupon's own —
 - 🚧 **Created from the drawer** — Proceed to Checkout sends the reviewed
   lines, the code and the points straight to Shopify; there is no separate
   checkout page to reopen or re-read them
-- 🚧 **The bar** — goods of **HKD 120,000** or more: an unverified member
-  who presses Proceed to Checkout sees the verify message, with the account
-  link where the profile page is enabled; no checkout session is created. Under the bar, or already verified,
-  Proceed to Checkout runs —
-  [Checkout](/p/grade10-site/store/checkout#integration-readiness)
 - 🚧 **Sent** — the order is promised with the same code and points the
   drawer shows —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
@@ -112,8 +107,7 @@ The refusals are the coupon's own —
   guest; under it a quiet Sign in link for points and rewards. Signing in
   merges the browser cart and reopens the
   drawer with points and the wallet; a public code already on the cart
-  stays if it still fits. Goods at the bar replace the guest button with
-  the sign-in ask -
+  stays if it still fits -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
@@ -183,7 +177,7 @@ and tax before the invoice. A second code on one cart.
 | Shipping | Decided | Unknown until the invoice; the estimated total is the goods after the site discounts and this store's own tender. | Product |
 | Priced by the shop | Decided | The drawer asks the shop to price the basket the way its checkout will, site discounts and the chosen code together, so a code the drawer shows as applied is applied at checkout. The held list is still answered by the store's own rules, because asking the shop once per held code on every edit is too many calls; the chosen code is the one the shop answers. | Product |
 | Checkout creation | 🚧 In flight | The drawer creates checkout directly and redirects to Shopify's hosted invoice; there is no separate `/checkout` page. | Engineering |
-| Verification before a session | Decided | Goods of HKD 120,000 or more answer Proceed to Checkout with the verify message, and the account link where the profile page is enabled. No checkout session is created until the member is verified. The identity check still runs only on the account page. Asking Shopify first and showing the gate from its reply is not this drawer. | Product |
+| Verification before a session | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000; Proceed to Checkout runs at any value. | Product |
 | Public codes | Decided | Public codes — codes open to everyone — are listed to guests and members alike — [Discounts](/p/grade10-site/store/discounts#public-codes). Decided 2026-10-13; supersedes the rule that the store mints every code to one member and the cart neither lists nor takes a public code (2026-10-12). | Product |
 | The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::
