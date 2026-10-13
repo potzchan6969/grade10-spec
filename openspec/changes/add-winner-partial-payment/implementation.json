@@ -87,5 +87,17 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Codex (Sol 6.1 medium)",
+    "reviewedAt": "2026-10-13T15:52:33.449180Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "Removed backtick wrappers from 185 existing trace:case HTML comments in 1263363b9. Normalizing only those wrappers in the claimed baseline produces byte-for-byte identical current content; case IDs, revisions and all test prose are unchanged. This restores trace parsing without changing the accepted behavior."
+      }
+    ]
+  }
 }
