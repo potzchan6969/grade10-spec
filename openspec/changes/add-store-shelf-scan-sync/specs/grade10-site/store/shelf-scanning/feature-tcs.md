@@ -1,6 +1,6 @@
 # grade10-site/store/shelf-scanning Test Cases
 
-**Status:** pending-review · 0/46
+**Status:** pending-review · 0/48
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## Walk 1: Shopkeeper scans the staging shelf with the shop's link
@@ -99,8 +99,8 @@ Runs once per row of **Test data**.
 * Step 2 shows `<sale badge>`.
 * Step 4's title and the price it charges match step 2's.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-cks rev=2 -->
-### g10.store-shelf-scanning.US1-TC2: A change the shop reports reaches the scanner within 5 minutes
+<!-- trace:case id=g10.store-shelf-scanning.TC-cks rev=3 -->
+### g10.store-shelf-scanning.US1-TC2: A change the shop reports reaches the scanner within 6 minutes of the save
 
 Runs once per row of **Test data**.
 
@@ -132,18 +132,17 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, open `<card_1>`.
-2. Make `<change>` and save.
-3. Reload `<card_1>`'s page at `<grade10 store url>` until it shows the new `<field read>`; note the time.
-4. 300s (5mins) after step 3's time, reload `<g10 scan link>`.
-5. Point the camera at `<card_1>`.
+2. Make `<change>` and save; note the time.
+3. 360s (6mins) after step 2's time, reload `<g10 scan link>`.
+4. Point the camera at `<card_1>`.
 
 **Expected Results:**
 
-* Step 5 shows `<card_1>`'s new `<field read>`.
-* Step 5's other details are unchanged.
+* Step 4 shows `<card_1>`'s new `<field read>`.
+* Step 4's other details are unchanged.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-sz9 rev=2 -->
-### g10.store-shelf-scanning.US1-TC3: A change only the store's re-read finds reaches the scanner within 10 minutes
+<!-- trace:case id=g10.store-shelf-scanning.TC-sz9 rev=3 -->
+### g10.store-shelf-scanning.US1-TC3: A change only the store's re-read finds reaches the scanner within 11 minutes of the save
 
 **Classification:**
 
@@ -171,13 +170,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. In the staging shop's admin, set `<card_1>`'s price to `<new price>`.
-2. Reload `<card_1>`'s page at `<grade10 store url>` until it shows `<new price>`; note the time.
-3. 600s (10mins) after step 2's time, read the scanner's item for `<card_1>`.
+1. In the staging shop's admin, set `<card_1>`'s price to `<new price>` and save; note the time.
+2. 660s (11mins) after step 1's time, read the scanner's item for `<card_1>`.
 
 **Expected Results:**
 
-* Step 3's item carries `<new price>`.
+* Step 2's item carries `<new price>`.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-k23 rev=1 -->
 ### g10.store-shelf-scanning.US1-TC4: Every published product but gift cards is held on the scanner
@@ -258,7 +256,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, `<drop>`; note the time.
-2. 300s (5mins) later, reload `<g10 scan link>`.
+2. 360s (6mins) later, reload `<g10 scan link>`.
 3. Point the camera at `<card_1>`.
 
 **Expected Results:**
@@ -290,7 +288,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, change a different product, so the store's copy of the catalogue moves.
-2. 300s (5mins) later, read the scanner's item for `<card_1>`.
+2. 360s (6mins) later, read the scanner's item for `<card_1>`.
 
 **Expected Results:**
 
@@ -320,7 +318,7 @@ Runs once per row of **Test data**.
 
 1. Note the last write of the scanner's items for `<card_1>` and `<card_2>`.
 2. In the staging shop's admin, change `<card_2>`'s price.
-3. 300s (5mins) later, read both items and the scanner's photo queue.
+3. 360s (6mins) later, read both items and the scanner's photo queue.
 
 **Expected Results:**
 
@@ -468,7 +466,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the `<environment>` shop's admin, publish `<card_new>` to the store with a photo; note the time.
-2. 3600s (1h) after the publish, plus 300s (5mins), reload `<g10 scan link>`.
+2. 3600s (1h) after the publish, plus 360s (6mins), reload `<g10 scan link>`.
 3. Point the camera at `<card_new>`.
 
 **Expected Results:**
@@ -510,7 +508,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, make `<photo change>` on `<card_1>`; note the time.
-2. After the first hourly photo run that starts 300s (5mins) or more past the save, reload `<g10 scan link>`.
+2. After the first hourly photo run that starts 360s (6mins) or more past the save, reload `<g10 scan link>`.
 3. Point the camera at a print of `<new photo>`.
 4. Point the camera at a print of `<old photo>`.
 
@@ -586,8 +584,10 @@ Runs once per row of **Test data**.
 * Step 1 shows the photo left failed, not retried every hour.
 * Step 2 shows the photo learned.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-47l rev=2 -->
 ### g10.store-shelf-scanning.US1-TC15: An open scanner picks up a change without being reopened
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -605,27 +605,27 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<card_1>` is a raw card published to the staging store, recognised by the scanner.
+* The shop's report of product changes `<report>` the store.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone, in the foreground.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| new price | A price different from `<card_1>`'s on file |
-| open scanner bound | 420s (7mins): the store's 300s (5mins) pass plus the open scanner's 120s (2mins) read |
+| `<report>` | `<open scanner bound>` | `<new price>` |
+| --- | --- | --- |
+| reaches | 480s (8mins) | A price different from `<card_1>`'s on file |
+| does not reach | 780s (13mins) | A price different from `<card_1>`'s on file |
 
 **Steps:**
 
 1. Point the camera at `<card_1>`; read the price.
-2. In the staging shop's admin, set `<card_1>`'s price to `<new price>`.
-3. Reload `<card_1>`'s page at `<grade10 store url>` on another device until it shows `<new price>`; note the time.
-4. Without reloading or leaving the scanner, wait `<open scanner bound>` past step 3's time.
-5. Point the camera at `<card_1>`.
+2. In the staging shop's admin, set `<card_1>`'s price to `<new price>` and save; note the time.
+3. Without reloading or leaving the scanner, wait `<open scanner bound>` past step 2's time.
+4. Point the camera at `<card_1>`.
 
 **Expected Results:**
 
 * Step 1 shows the price on file.
-* Step 5 shows `<new price>`.
+* Step 4 shows `<new price>`.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-2et rev=1 -->
 ### g10.store-shelf-scanning.US1-TC16: Returning to the scanner picks up a change at once
@@ -658,7 +658,7 @@ Runs once per row of **Test data**.
 
 1. Point the camera at `<card_1>`; read the price.
 2. Switch the phone to another app.
-3. In the staging shop's admin, set `<card_1>`'s price to `<new price>`; wait 300s (5mins).
+3. In the staging shop's admin, set `<card_1>`'s price to `<new price>`; wait 360s (6mins).
 4. Switch the phone back to the scanner.
 5. Point the camera at `<card_1>` within 30s.
 
@@ -781,8 +781,10 @@ Runs once per row of **Test data**.
 * Step 2 shows no chip counting matches.
 * Step 3 shows `<card_1>` alone, with no list to pick from.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-9qu rev=1 -->
-### g10.store-shelf-scanning.US1-TC20: A raw copy of a slab-only card names the slab's product
+<!-- trace:case id=g10.store-shelf-scanning.TC-9qu rev=2 -->
+### g10.store-shelf-scanning.US1-TC20: A raw copy of a card the store sells as slabs names the slab's product or offers the pick
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -799,23 +801,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<slab_1>` is a PSA slab published to the staging store, naming its inventory item, its photos learned.
-* The store sells `<slab_1>`'s card as no other product.
-* `<raw copy>` is an ungraded copy of `<slab_1>`'s card, not in a slab.
+* The store sells `<raw copy>`'s card only as `<slabs>`, published to the staging store, each naming its inventory item, their photos learned.
+* `<raw copy>` is an ungraded copy of that card, not in a slab.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
+
+**Test data:**
+
+| `<slabs>` | `<label>` | `<on tap>` |
+| --- | --- | --- |
+| one PSA slab, `<slab_1>` | `<slab_1>`'s title, price and availability chip, with no chip counting matches | `<slab_1>`'s product alone, with no list to pick from |
+| two PSA slabs, `<slab_1>` and `<slab_2>`, at different prices | one title and price, and a chip counting 2 matches | a list of `<slab_1>`'s and `<slab_2>`'s products, each with title, price and availability |
 
 **Steps:**
 
 1. Point the camera at `<raw copy>` and hold it steady.
-2. Read the scan.
+2. Read the label over the card.
+3. Tap the label.
 
 **Expected Results:**
 
-* Step 2 names `<slab_1>`'s product, with its title, price and availability.
-* Step 2 shows no grade and no cert.
+* Step 2 shows `<label>`.
+* Step 3 shows `<on tap>`.
+* Neither step shows a grade or a cert.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-4xj rev=1 -->
-### g10.store-shelf-scanning.US1-TC21: An automatic discount that starts or ends reaches the scan with the next pass
+<!-- trace:case id=g10.store-shelf-scanning.TC-4xj rev=2 -->
+### g10.store-shelf-scanning.US1-TC21: An automatic discount that starts or ends reaches the scan within 6 minutes
 
 **Classification:**
 
@@ -841,7 +851,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | discount | An automatic discount of 10% on `<card_1>`, needing no code |
-| next pass | 300s (5mins): the store's pass |
+| next pass | 360s (6mins): the store's next pass, from the save |
 
 **Steps:**
 
@@ -893,7 +903,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, move `<distinct photo>` to `<position>` in `<card_1>`'s photo order and save; note the time.
-2. After the first hourly photo run that starts 300s (5mins) or more past the save, reload `<g10 scan link>`.
+2. After the first hourly photo run that starts 360s (6mins) or more past the save, reload `<g10 scan link>`.
 3. Point the camera at a print of `<distinct photo>`.
 4. Point the camera at a print of `<card_1>`'s first photo.
 
@@ -942,6 +952,45 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2's title is step 3's title.
+
+<!-- trace:case id=g10.store-shelf-scanning.TC-30a rev=1 -->
+### g10.store-shelf-scanning.US1-TC24: A raw card beside a slab of the same art offers the pick without grade or cert
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-shelf-scanning.US1
+
+**Pre-conditions:**
+
+* `<card_raw>` is a raw card and `<slab_1>` a PSA slab of the same card, both published to the staging store, for sale, at different prices.
+* `<slab_1>` names its inventory item, which carries a grade and cert.
+* Both products' photos show the same art and are learned.
+* admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
+
+**Steps:**
+
+1. Point the camera at `<card_raw>` and hold it steady.
+2. Read the label over the card.
+3. Tap the label.
+4. Read the sheet.
+5. Tap `<slab_1>`'s row.
+
+**Expected Results:**
+
+* Step 2 shows one title and price, and a chip counting 2 matches.
+* Step 2 shows no grade chip and no cert chip.
+* Step 4 lists `<card_raw>` and `<slab_1>`, each with title, price and availability.
+* No row in step 4 shows a grade or a cert.
+* Step 5 shows `<slab_1>` alone, with its title, price and availability, and no grade or cert.
 
 ---
 
@@ -1024,7 +1073,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, set `<card_1>`'s handle to `<new handle>`; note the time.
-2. 300s (5mins) later, reload `<g10 scan link>`.
+2. 360s (6mins) later, reload `<g10 scan link>`.
 3. Point the camera at `<card_1>`.
 4. Open the store page link.
 
@@ -1224,7 +1273,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<slab_a>` and `<slab_b>` are published to the staging store, each naming an inventory item with the same PSA cert.
-* Both products' photos are learned.
+* Both products' photos are learned, each showing a different card's art.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
 **Steps:**
@@ -1270,7 +1319,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | new grade | A grade different from `<slab_1>`'s inventory item on file |
-| next pass | 300s (5mins): the store's pass, which reads inventory every time |
+| next pass | 360s (6mins): the store's pass, which reads inventory every time |
 
 **Steps:**
 
@@ -1282,7 +1331,7 @@ Runs once per row of **Test data**.
 
 * Step 3 names `<slab_1>`'s product with `<new grade>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-i60 rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-i60 rev=2 -->
 ### g10.store-shelf-scanning.US3-TC6: A slab read by its label never offers a pick
 
 **Classification:**
@@ -1301,7 +1350,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<slab_1>` and `<slab_2>` are PSA slabs of one card published to the staging store, each naming its inventory item.
-* Both products' photos are learned.
+* `<card_raw>` is a raw card of the same card published to the staging store.
+* All three products' photos show the same art and are learned.
 * admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
 
 **Steps:**
@@ -1312,12 +1362,14 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 names `<slab_1>`'s product, with a grade chip and a cert chip.
+* Step 2 names `<slab_1>`'s product, with a grade chip and a cert chip matching `<slab_1>`'s inventory item.
 * Step 2 shows no chip counting matches.
-* Step 3 shows `<slab_1>`'s product alone, with no list to pick from.
+* Step 3 shows `<slab_1>`'s product alone, with its grade and cert, and no list to pick from.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-esc rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-esc rev=2 -->
 ### g10.store-shelf-scanning.US3-TC7: A slab whose cert the scanner cannot read is recognised by its photos
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1340,9 +1392,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| unreadable cert | ❓ A PSA cert in a form the scanner does not read; which forms it reads is raised in `decisions.md` |
+| `<unreadable cert>` |
+| --- |
+| A PSA cert of 25 digits, one past the longest the scanner reads |
+| A PSA cert of 3 digits, one short of the shortest the scanner reads |
+| A PSA cert of 8 digits with a slash among them |
 
 **Steps:**
 
@@ -1357,6 +1411,51 @@ Runs once per row of **Test data**.
 * Step 2 shows no grade and no cert.
 * Step 3's monitor is raised.
 * Step 4's log names `<slab_1>`'s product as held without a unit.
+
+<!-- trace:case id=g10.store-shelf-scanning.TC-hjq rev=1 -->
+### g10.store-shelf-scanning.US3-TC8: Two slabs of one card matched by their photos are both offered without grade or cert
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-shelf-scanning.US3
+
+**Pre-conditions:**
+
+* `<slab_1>` and `<slab_2>` are `<slabs>` of one card published to the staging store, at different prices, each naming its inventory item.
+* Both products' photos show the same art and are learned.
+* admin(shopkeeper) has `<g10 scan link>` for staging open on a phone.
+
+**Test data:**
+
+| `<slabs>` | `<view>` |
+| --- | --- |
+| PSA slabs | `<slab_1>`'s front with its label covered |
+| PCGS slabs | `<slab_1>`'s front, label in view |
+
+**Steps:**
+
+1. Point the camera at `<view>` and hold it steady.
+2. Read the label over the slab.
+3. Tap the label.
+4. Read the sheet.
+
+**Expected Results:**
+
+* Step 2 shows one title and price, and a chip counting 2 matches.
+* Step 2 shows no grade chip and no cert chip.
+* Step 4 lists `<slab_1>` and `<slab_2>`, each with title, price and availability.
+* No row in step 4 shows a grade or a cert.
 
 ---
 
@@ -1402,7 +1501,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, `<stock change>` on `<product>`; note the time.
-2. 300s (5mins) later, reload `<g10 scan link>`.
+2. 360s (6mins) later, reload `<g10 scan link>`.
 3. Point the camera at `<product>`.
 4. Open `<product>`'s page at `<grade10 store url>`.
 
@@ -1436,7 +1535,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. In the staging shop's admin, set `<card_1>`'s variant count to 1; note the time.
-2. 300s (5mins) later, reload `<g10 scan link>`.
+2. 360s (6mins) later, reload `<g10 scan link>`.
 3. Point the camera at `<card_1>`.
 
 **Expected Results:**
@@ -1467,7 +1566,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Buy `<slab_1>` through the staging store's checkout; note the time.
-2. Once the store no longer lists `<slab_1>`, wait 300s (5mins) and reload `<g10 scan link>`.
+2. Once the store no longer lists `<slab_1>`, wait 360s (6mins) and reload `<g10 scan link>`.
 3. Point the camera at `<slab_1>`'s label.
 
 **Expected Results:**
@@ -1716,7 +1815,7 @@ shopkeeper scans that slab.
 
 1. As admin(stock keeper), in the staging shop's admin, open `<slab_house>`'s product.
 2. Write `<label code>` in `<label code field>` and save; note the time.
-3. 300s (5mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
+3. 360s (6mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
 4. Point the camera at `<slab_house>`'s label.
 
 **Expected Results:**
@@ -1755,7 +1854,7 @@ shopkeeper scans that slab.
 **Steps:**
 
 1. As admin(stock keeper), in the staging shop's admin, write `<unknown code>` in `<slab_house>`'s `<label code field>` and save.
-2. 300s (5mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
+2. 360s (6mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
 3. Point the camera at `<slab_house>`'s front and hold it steady.
 4. Open the Datadog monitor on `store.shelf_scan.unit_missing`.
 5. Search the store's Datadog logs from its last pass for `<slab_house>`'s product.
@@ -1798,7 +1897,7 @@ shopkeeper scans that slab.
 **Steps:**
 
 1. As admin(stock keeper), in the staging shop's admin, write `<label code>` in `<slab_b>`'s `<label code field>` and save.
-2. 300s (5mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
+2. 360s (6mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
 3. Point the camera at `<slab_a>`'s label.
 4. Point the camera at `<slab_a>`'s front and hold it steady.
 5. Point the camera at `<slab_b>`'s front and hold it steady.
@@ -1846,7 +1945,7 @@ shopkeeper scans that slab.
 **Steps:**
 
 1. As admin(stock keeper), in the staging shop's admin, replace `<old code>` with `<new code>` in `<slab_house>`'s `<label code field>` and save.
-2. 300s (5mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
+2. 360s (6mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
 3. Point the camera at `<slab_new>`'s label.
 4. Point the camera at `<slab_old>`'s label.
 
@@ -1889,7 +1988,7 @@ shopkeeper scans that slab.
 **Steps:**
 
 1. As admin(stock keeper), in the staging shop's admin, replace `<unknown code>` with `<label code>` in `<slab_house>`'s `<label code field>` and save.
-2. 300s (5mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
+2. 360s (6mins) later, as admin(shopkeeper), reload `<g10 scan link>`.
 3. Point the camera at `<slab_house>`'s label.
 4. Open the Datadog monitor on `store.shelf_scan.unit_missing`.
 
