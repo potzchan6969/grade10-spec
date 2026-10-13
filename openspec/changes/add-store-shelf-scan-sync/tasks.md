@@ -3,7 +3,7 @@
 - [ ] 1.1 Update `docs/prds/products/grade10-site/store/shelf-scanning.md`'s code map: the store's pass (`packages/grade10-store/backend/src/services/shelfScan/`), the scanner's contracts (`packages/tcg-ar/contracts`), inventory's `StoreItemSlabs`; and `docs/prds/products/grade10-site/site/carried-surfaces.md`'s code map for the lane table's move to `@grade10/app-env`. `add-store-locator` also edits the carried-surfaces page: land this code-map line after it, or rebase onto it
 - [ ] 1.2 Verify: `pnpm check:manual`
 
-## 2. Scanner platform (grade10)
+## 2. Scanner platform (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Tests, in their own commit before the code: an upsert whose fields, `data` and image URLs equal the stored ones writes nothing and touches no collection, a changed one writes once, a batch touches each collection once, an unknown delete answers `existed: false`, binding methods answer refusals as values, a failed photo returns to the queue after 24 hours, a mismatched model's result is `409`, replaced and dropped image URLs (`g10.store-shelf-scanning.SC7`, `g10.store-shelf-scanning.SC22`, `g10.store-shelf-scanning.SC23`, `g10.store-shelf-scanning.SC24`)
 - [ ] 2.2 Add `packages/tcg-ar/contracts` (`@grade10/tcg-ar-contracts`): `ItemInput`, `ItemData`, `ItemKind`, `GRADERS`, the result union, `ScannerPlatformApi`, `scannerService`; `src/shared/platform.ts` imports them and `ScannerPlatform` implements the API

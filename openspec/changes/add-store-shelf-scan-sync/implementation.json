@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7590ba192fb81c19cec1d09b80a131a308fcdc76e8f6296ea875e4b9e6020414"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "8de959dd09396240966cb00b8e5714076c0ad805",
+    "capturedAt": "2026-10-13T06:33:45.150Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-store-shelf-scan-sync/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/shelf-scanning/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/shelf-scanning/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A scan shows the store's answer",
+          "Requirement: A slab names its own unit",
+          "Requirement: A store product is named before the shared card catalogue",
+          "Requirement: Shopkeepers open the scanner from one fixed link",
+          "Requirement: The scanner holds every published store product",
+          "Requirement: The scanner learns new photos every hour"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/store/shelf-scanning/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
