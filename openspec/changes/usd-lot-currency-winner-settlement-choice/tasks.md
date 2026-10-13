@@ -38,7 +38,7 @@ Depends on the grade10-spec groups only through the submodule bump.
 - [ ] 4.5 Reshape Payment Settings storage to one USD premium minimum and card rules for USD and HKD, deleting the HKD and JPY minimums and the JPY rule (`grade10-admin-auction-payment-settings-SC-13`)
 - [ ] 4.6 Verify: the migration suite on a copy of staging data, and a count query showing no HKD or JPY listing remains
 
-## 5. Bid, listing and Payment Settings services (grade10)
+## 5. Bid, listing and Payment Settings services (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Write the service tests first, in their own commit: the USD schedule and ceiling, the refusals of HKD and JPY, the listing writes, and Payment Settings saves (`grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-05`, `grade10-site-auction-bid-increments-SC-07`, `grade10-site-auction-bid-increments-SC-09`, `grade10-site-auction-bid-increments-SC-10`, `grade10-site-auction-bid-increments-SC-12`, `grade10-site-auction-bid-increments-SC-13`, `grade10-site-auction-bid-increments-SC-14`, `grade10-site-auction-bid-increments-SC-15`, `grade10-site-auction-bid-increments-SC-16`, `grade10-site-auction-auction-SC-110`, `grade10-site-auction-auction-SC-111`)
 - [ ] 5.2 Reduce the increment lookup and the ceiling to the one USD table and delete the HKD and JPY rows (`grade10-site-auction-bid-increments-SC-01`, `grade10-site-auction-bid-increments-SC-09`, `grade10-site-auction-bid-increments-SC-10`, `grade10-site-auction-bid-increments-SC-12`, `grade10-site-auction-bid-increments-SC-13`)
