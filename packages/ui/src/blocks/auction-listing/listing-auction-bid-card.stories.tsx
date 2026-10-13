@@ -1,6 +1,7 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_ALT_TIME_ZONE,
@@ -831,6 +832,48 @@ export const DisplayTextReplacesARowsTime: Story = {
     expect(canvas.getByText("DISPLAY-TEXT-MARKER")).toBeInTheDocument();
     expect(canvas.getByText("1 Sep 2026, 20:00")).toBeInTheDocument();
     expect(canvas.queryByText("1 Sep 2026, 21:00")).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * A raise the server accepted clears the custom field. The raised maximum moves
+ * the minimum above the submitted amount, so a kept draft would read as invalid.
+ */
+export const AcceptedRaiseClearsCustomField: Story = {
+  render: (args) => {
+    const [status, setStatus] = useState<"idle" | "pending">("idle");
+    const [maximumMinor, setMaximumMinor] = useState(6_050_000);
+    return (
+      <ListingAuctionBidCard
+        {...args}
+        authorizationStatus={status}
+        onCommitMaximum={(amountMinor) => {
+          setStatus("pending");
+          setTimeout(() => {
+            setMaximumMinor(amountMinor);
+            setStatus("idle");
+          }, 50);
+        }}
+        view={liveView({
+          standing: "leading-max",
+          viewerMaximumMinor: maximumMinor,
+        })}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("spinbutton", {
+      name: /min\./i,
+    }) as HTMLInputElement;
+    await userEvent.type(field, "70000");
+    expect(field.value).toBe("70000");
+    await userEvent.click(
+      canvas.getByRole("button", { name: /^Raise maximum to/ }),
+    );
+    await waitFor(() => expect(field.value).toBe(""));
+    expect(field).not.toHaveAttribute("aria-invalid", "true");
+    expect(canvas.queryByRole("alert")).not.toBeInTheDocument();
   },
 };
 
