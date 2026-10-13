@@ -178,8 +178,40 @@ vault identity verification, shared console blocks, order settlement and
 two currency-change capabilities. Those unrelated omissions remain outside
 this pending increment.
 
-**Acceptance status** - Blocked. No independent acceptance verdict, new
-accepted fingerprint or published revision is claimed. The acceptance-review
-skill says a blocked preflight stops review, so acceptance review, acceptance
-and publication are not run. Application implementation is not part of this
-planning update.
+**Previous acceptance status (2026-10-13)** - Blocked. No independent
+acceptance verdict, new accepted fingerprint or published revision was
+claimed. The acceptance-review skill says a blocked preflight stops review, so
+acceptance review, acceptance and publication were not run. Application
+implementation was not part of that planning update.
+
+## Purpose Alignment Rerun
+
+**Run:** planning-dev scoped rerun on 2026-10-14 after the durable
+`grade10-site/store/cart-drawer` Purpose changed when the cart picture contract
+was accepted. The repair is committed at `43f592e056a5` on top of published
+store main `76973009c9f9`.
+
+**QA1:** The Purpose now carries the durable sentence and the drawer's existing
+review, edit and onward-navigation scope. No feature-set root, journey,
+requirement, or case anchor changed, so no new behavior case is owed.
+
+**Dev:** The existing `tech-design.md`, `tasks.md`, `ui-design.md` and
+requirements still cover the same drawer and shared pending-operation contract.
+The implementation groups and the Q22 checkout rule are unchanged.
+
+**QA2:** The scoped change suites validate with no errors: 43 cart cases and 9
+shared cases remain draft. The scoped durable cart suite and shared suite also
+validate with no errors. `plan:review-preflight` returns `ready` with source
+identity `85da7375cc6e40ff7d740617d3dd31b5ee8cfe1b7e93d61393cfa2701a7370e5`.
+
+**Acceptance review:** The fresh review is blocked by the store-wide folded
+suite gate, not by the cart-drawer Purpose or its scoped suites. The current
+`accept:preflight` reports no Purpose blocker and returns fingerprint
+`c78048e9e4accfed8be53b02b74022107e39bd91f38e0c0effabce59e2babb05` with
+baseline `1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052`,
+but `tcs:validate --require-suites` exits 1 on pre-existing store-wide suite
+coverage and metadata findings outside this change.
+
+**Status:** Not ready to accept. No acceptance record, published revision, or
+implementation claim is made. The product owner's acceptance command waits for
+the store-wide suite gate and the required push of this Purpose repair.
