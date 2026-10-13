@@ -232,10 +232,13 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
     const trigger = canvas.getByRole("button", { name: "View Bank Details" });
     trigger.focus();
     await userEvent.keyboard("{Enter}");
-    const dialog = await waitFor(() =>
-      body.getByRole("dialog", { name: "View Bank Details" }),
-    );
-    expect(dialog).toBeVisible();
+    const dialog = await waitFor(() => {
+      const opened = body.getByRole("dialog", {
+        name: "View Bank Details",
+      });
+      expect(opened).toBeVisible();
+      return opened;
+    });
     const closeButton = body.getByRole("button", {
       name: traditionalChineseAuctionOrders.bankDetails.close,
     });
