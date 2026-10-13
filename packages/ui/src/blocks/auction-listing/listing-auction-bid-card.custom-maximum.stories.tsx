@@ -19,14 +19,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Exercises the supplied HKD ceiling through native typing and paste.
+ * Exercises the supplied USD ceiling through native typing and paste.
  */
 export const CustomMaximumCeiling: Story = {
+  args: {
+    view: liveView({ currency: "USD", ceilingMinor: 1_000_000_000 }),
+  },
   parameters: {
     docs: {
       description: {
         story:
-          "Custom amount accepts the supplied HKD ceiling. A typed digit beyond it restores the previous draft, while paste clamps to the ceiling.",
+          "Custom amount accepts the supplied USD ceiling. A typed digit beyond it restores the previous draft, while paste clamps to the ceiling.",
       },
     },
   },
@@ -39,13 +42,13 @@ export const CustomMaximumCeiling: Story = {
     await userEvent.type(field, "500");
     expect(field).toHaveValue(500);
     await userEvent.clear(field);
-    await userEvent.type(field, "80000000");
+    await userEvent.type(field, "10000000");
     await userEvent.type(field, "1");
-    expect(field).toHaveValue(80000000);
+    expect(field).toHaveValue(10000000);
     await userEvent.clear(field);
     field.focus();
-    await userEvent.paste("80000001");
-    expect(field).toHaveValue(80000000);
+    await userEvent.paste("10000001");
+    expect(field).toHaveValue(10000000);
     expect(canvas.queryByText(/^Min\.:/)).not.toBeInTheDocument();
   },
 };
@@ -140,15 +143,16 @@ export const RefusedCommitKeepsCustomField: Story = {
 export const MaximumAtCeiling: Story = {
   args: {
     view: liveView({
-      currency: "HKD",
+      currency: "USD",
       standing: "leading-max",
       currentBidMinor: 5_800_000,
-      viewerMaximumMinor: 8_000_000_000,
+      viewerMaximumMinor: 1_000_000_000,
+      ceilingMinor: 1_000_000_000,
     }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Max: HK$80,000,000")).toBeInTheDocument();
+    expect(canvas.getByText("Max: US$10,000,000")).toBeInTheDocument();
     expect(
       canvas.getByText("This is the highest maximum this auction accepts."),
     ).toBeInTheDocument();
@@ -169,19 +173,20 @@ export const MaximumAtCeiling: Story = {
 export const LotAtCeilingWithoutMaximum: Story = {
   args: {
     view: liveView({
-      currency: "HKD",
+      currency: "USD",
       standing: "none",
-      currentBidMinor: 7_999_995_000,
-      minBidMinor: 8_000_005_000,
+      currentBidMinor: 999_999_500,
+      minBidMinor: 1_000_000_500,
       incrementMinor: 10_000,
+      ceilingMinor: 1_000_000_000,
     }),
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("HK$80,000,000")).toBeInTheDocument();
+    expect(canvas.getByText("US$10,000,000")).toBeInTheDocument();
     expect(
       canvas.getByText(
-        "Bidding has reached HK$80,000,000, the highest this auction accepts.",
+        "Bidding has reached US$10,000,000, the highest this auction accepts.",
       ),
     ).toBeInTheDocument();
     expect(canvas.queryByRole("spinbutton")).not.toBeInTheDocument();
@@ -199,11 +204,12 @@ export const LotAtCeilingWithoutMaximum: Story = {
 export const ChipsClampedAtCeiling: Story = {
   args: {
     view: liveView({
-      currency: "HKD",
+      currency: "USD",
       standing: "leading-max",
       currentBidMinor: 5_800_000,
-      viewerMaximumMinor: 7_999_970_000,
+      viewerMaximumMinor: 999_970_000,
       incrementMinor: 10_000,
+      ceilingMinor: 1_000_000_000,
     }),
   },
   play: async ({ canvasElement }) => {
@@ -211,12 +217,12 @@ export const ChipsClampedAtCeiling: Story = {
     const group = canvas.getByRole("group");
     const chips = within(group).getAllByRole("button");
     expect(chips).toHaveLength(3);
-    expect(canvas.getByText("HK$79,999,800")).toBeInTheDocument();
-    expect(canvas.getByText("HK$79,999,900")).toBeInTheDocument();
-    expect(canvas.getByText("HK$80,000,000")).toBeInTheDocument();
+    expect(canvas.getByText("US$9,999,800")).toBeInTheDocument();
+    expect(canvas.getByText("US$9,999,900")).toBeInTheDocument();
+    expect(canvas.getByText("US$10,000,000")).toBeInTheDocument();
     expect(canvas.getByText("Limit")).toBeInTheDocument();
     for (const chip of chips) {
-      expect(chip).not.toHaveTextContent(/80,000,0[1-9]|8[1-9],/);
+      expect(chip).not.toHaveTextContent(/10,000,00[1-9]|10,000,0[1-9]\d/);
     }
   },
 };
