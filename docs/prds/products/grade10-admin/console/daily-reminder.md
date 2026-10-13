@@ -90,7 +90,8 @@ longest wait first. It stays on the list every day until the order moves on.
 - 🚧 **Only a full load** - returning to the tab or moving between pages does
   not open it
 - 🚧 **Long lists in the dialog** - each product's list shows about four and a
-  half rows and scrolls inside itself; the dialog keeps its size
+  half rows and scrolls inside itself, faded at the edge with more; the dialog
+  keeps its size
 - 🚧 **A list that fails to load** - says so beside the list that loaded, with a
   Retry; when the other list is empty the dialog still opens for the failure,
   so it never reads as nothing waiting
@@ -106,7 +107,9 @@ read them.
   Retry in its column
 - 🚧 **Inner groups** - What's New and Still Waiting group their rows by
   product, Auction first. Each group shows as one line with its count until
-  the operator opens it with its chevron, and closes again the same way
+  the operator opens it with its chevron, and closes again the same way. An
+  opened group shows about five and a half rows and scrolls the rest inside
+  itself, with the edge that has more beyond it faded
 - 🚧 **Empty list** - a column with no row for the operator stays and says so
 - 🚧 **Below the columns** - Approvals leaves the Needs you column and sits with
   Recent and All sections under the three columns; the card is unchanged
