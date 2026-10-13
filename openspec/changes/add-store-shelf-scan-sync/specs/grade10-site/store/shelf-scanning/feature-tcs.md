@@ -1083,7 +1083,7 @@ Runs once per row of **Test data**.
 * Step 2's failure names both models, the photo run's and the scanner's.
 * Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-49c rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-49c rev=1 covers=g10.store-shelf-scanning.SC-q13 -->
 ### g10.store-shelf-scanning.US1-TC27: A consigned raw card is held as a raw card, never alerted
 
 **Classification:**
@@ -2152,12 +2152,21 @@ shopkeeper scans that slab.
 
 ## Reconciliation
 
+**Run:** QA2 rerun on 2026-10-13, scoped, at source `e1625c180`. The accept
+review added `g10.store-shelf-scanning.SC51` and Q38: a consigned product is
+graded only when inventory holds its item with a grader. It moved
+`g10.store-shelf-scanning.SC20` to rev 2, at the next hourly run, and three
+feature-set lines: Graded product, Store product first and the open
+scanner's 2 minutes. Blind QA added US1-TC27, moved US1-TC11 to rev 2 to wait
+for the first hourly run 6 minutes past the save, and stated the grader in
+the setups of US3-TC1, US3-TC5 and US4-TC3. Every case still agrees with
+Q38. 46 of the 51 cases carry `covers`, and all 51 scenarios are covered.
+
 **Run:** QA2 rerun on 2026-10-13, scoped, at source `59a1c7986`. Tech design
 now says the photo processor learns a photo with no card in it from the whole
 photo and never marks it failed, so US1-TC4's "each learned" stands. A blind
 QA patch extended US1-TC13, US1-TC26, US2-TC2 and US7-TC4, and each now fully
-asserts its scenario. 45 of the 50 cases carry `covers`, and all 50
-scenarios are covered.
+asserts its scenario.
 
 **Run:** QA2 rerun on 2026-10-13, scoped, at source `63e6714dd`. Dev added
 `g10.store-shelf-scanning.SC44` to `g10.store-shelf-scanning.SC50`, stated
@@ -2190,7 +2199,7 @@ gained their `trace:scenario` markers in this run so cases can link them.
 | US1-TC8 | Partial: does not assert that no store page shows; US2-TC1 covers it | `g10.store-shelf-scanning.SC10` partly |
 | US1-TC9 | Covers | `g10.store-shelf-scanning.SC17` |
 | US1-TC10 | Covers | `g10.store-shelf-scanning.SC19` |
-| US1-TC11 | Covers | `g10.store-shelf-scanning.SC20` |
+| US1-TC11 | Covers at rev 2, after the first hourly run 6 minutes past the save | `g10.store-shelf-scanning.SC20` |
 | US1-TC12 | Covers | `g10.store-shelf-scanning.SC22` |
 | US1-TC13 | Covers | `g10.store-shelf-scanning.SC21` |
 | US1-TC14 | Covers | `g10.store-shelf-scanning.SC23` |
@@ -2206,6 +2215,7 @@ gained their `trace:scenario` markers in this run so cases can link them.
 | US1-TC24 | Covers | `g10.store-shelf-scanning.SC41` |
 | US1-TC25 | Covers: an unchanged catalogue version shows no item was written | `g10.store-shelf-scanning.SC7` |
 | US1-TC26 | Covers | `g10.store-shelf-scanning.SC24` |
+| US1-TC27 | Covers | `g10.store-shelf-scanning.SC51` |
 | US2-TC1 | Covers, staging row and production row | `g10.store-shelf-scanning.SC10`, `g10.store-shelf-scanning.SC27`, `g10.store-shelf-scanning.SC28` |
 | US2-TC2 | Covers | `g10.store-shelf-scanning.SC45` |
 | US2-TC3 | Partial: asserts the picked listing's link, not its availability; US1-TC17 covers it | `g10.store-shelf-scanning.SC37` partly |
