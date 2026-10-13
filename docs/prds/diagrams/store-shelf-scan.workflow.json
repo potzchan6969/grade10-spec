@@ -1,0 +1,121 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "From the shop's catalogue to the shelf",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "shop",
+      "label": "Shop"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "scanner",
+      "label": "Scanner"
+    },
+    {
+      "id": "staff",
+      "label": "Staff"
+    }
+  ],
+  "mainPath": [
+    "a-product-is-published",
+    "the-store-keeps-the-scanner-in-step",
+    "the-scanner-learns-the-photos",
+    "staff-point-the-camera",
+    "the-product-shows"
+  ],
+  "nodes": [
+    {
+      "id": "a-product-is-published",
+      "lane": "shop",
+      "col": 0,
+      "type": "external",
+      "label": "Product published",
+      "sublabel": "any kind, sold out too",
+      "width": 138
+    },
+    {
+      "id": "the-store-keeps-the-scanner-in-step",
+      "lane": "store",
+      "col": 1,
+      "type": "backend",
+      "label": "Scanner kept in step",
+      "sublabel": "every 5 minutes",
+      "width": 138
+    },
+    {
+      "id": "the-store-keeps-the-scanner-in-step_unit",
+      "lane": "store",
+      "col": 2,
+      "type": "database",
+      "label": "Slab's own unit",
+      "sublabel": "grader, grade, cert",
+      "width": 138
+    },
+    {
+      "id": "the-scanner-learns-the-photos",
+      "lane": "scanner",
+      "col": 2,
+      "type": "backend",
+      "label": "Photos learned",
+      "sublabel": "hourly; nothing new, nothing done",
+      "width": 138
+    },
+    {
+      "id": "staff-point-the-camera",
+      "lane": "staff",
+      "col": 3,
+      "type": "frontend",
+      "label": "Camera on the shelf",
+      "sublabel": "the site's /scan",
+      "width": 138
+    },
+    {
+      "id": "the-product-shows",
+      "lane": "staff",
+      "col": 4,
+      "type": "frontend",
+      "label": "Product shown",
+      "sublabel": "title, price, stock, link",
+      "width": 138
+    }
+  ],
+  "edges": [
+    {
+      "from": "a-product-is-published",
+      "to": "the-store-keeps-the-scanner-in-step",
+      "variant": "emphasis"
+    },
+    {
+      "from": "the-store-keeps-the-scanner-in-step",
+      "to": "the-store-keeps-the-scanner-in-step_unit",
+      "label": "slab"
+    },
+    {
+      "from": "the-store-keeps-the-scanner-in-step",
+      "to": "the-scanner-learns-the-photos",
+      "label": "items",
+      "variant": "emphasis"
+    },
+    {
+      "from": "the-scanner-learns-the-photos",
+      "to": "staff-point-the-camera",
+      "variant": "dashed"
+    },
+    {
+      "from": "staff-point-the-camera",
+      "to": "the-product-shows",
+      "variant": "emphasis"
+    }
+  ]
+}
