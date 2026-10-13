@@ -32,9 +32,7 @@ function VisitFullDay({ copy, shops, waitHref, onPick }: VisitFullDayProps) {
       className="flex flex-col gap-3 rounded-xl bg-muted p-3.5"
       data-slot="booking-full-day"
     >
-      <span className="text-sm leading-5 font-bold">
-        {copy.title}
-      </span>
+      <span className="text-sm leading-5 font-bold">{copy.title}</span>
       {/* biome-ignore lint/a11y/useSemanticElements: a group of presses under its line, not form controls */}
       <div
         aria-labelledby={headingId}
