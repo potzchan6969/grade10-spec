@@ -8,6 +8,7 @@ import {
 import {
   BANK_TRANSFER_INVOICE_LINES,
   WINNER_ORDER_CONTENTS,
+  WINNER_ORDER_USD_BANK_TRANSFER_CONTENT,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
 import { PROOF_SUBMITTED_TOAST } from "./winner-order-proof-feedback";
@@ -119,6 +120,49 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Tax")).toBeVisible();
     expect(sidebar.getByText("$320.00")).toBeVisible();
     expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
+  },
+};
+
+/**
+ * USD-settled invoice — bank transfer chosen; View Bank Details offers
+ * Hong Kong + International, no FPS.
+ */
+export const PendingPaymentUsdBankTransfer: Story = {
+  name: "Pending Payment — USD Bank Transfer",
+  args: {
+    status: "pending_payment",
+    content: WINNER_ORDER_USD_BANK_TRANSFER_CONTENT,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+    await winnerOrderSettled(canvasElement);
+    const sidebar = within(canvas.getByRole("complementary"));
+    expect(
+      sidebar.getByRole("button", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
+    ).toBeVisible();
+    expect(
+      sidebar.queryByRole("button", { name: "Pay with Card" }),
+    ).not.toBeInTheDocument();
+    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+
+    await userEvent.click(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
+    );
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "View Bank Details" });
+      expect(found).toBeVisible();
+      return within(found);
+    });
+    expect(dialog.getByText("US$16,340.00")).toBeVisible();
+    expect(
+      dialog.getByRole("tab", { name: "Hong Kong", selected: true }),
+    ).toBeVisible();
+    expect(dialog.getByRole("tab", { name: "International" })).toBeVisible();
+    expect(dialog.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
   },
 };
 

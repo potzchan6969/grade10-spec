@@ -26,6 +26,7 @@ import {
   useState,
 } from "react";
 import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
+import type { WinnerOrderSettlementCurrency } from "./winner-order-setup-dialog";
 
 const REFERENCE_WARNING =
   "Enter this reference in your bank app’s Memo or Remarks field. Missing it delays verification." as const;
@@ -179,6 +180,11 @@ type WinnerOrderHowToPayDialogProps = {
   /** Collector-facing invoice ID — shown as DialogSubtext. */
   invoiceId?: string;
   transferReference?: string;
+  /**
+   * Currency the operator invoiced in. HKD offers FPS + Hong Kong;
+   * USD offers Hong Kong + SWIFT.
+   */
+  settlementCurrency?: WinnerOrderSettlementCurrency;
 };
 
 /**
@@ -192,8 +198,11 @@ function WinnerOrderHowToPayDialog({
   amountDue = WINNER_ORDER_BANK_DETAILS.totalAmountDue,
   invoiceId,
   transferReference = WINNER_ORDER_BANK_DETAILS.transferReference,
+  settlementCurrency = "HKD",
 }: WinnerOrderHowToPayDialogProps) {
-  const [rail, setRail] = useState("fps");
+  const showFps = settlementCurrency === "HKD";
+  const showSwift = settlementCurrency === "USD";
+  const [rail, setRail] = useState(showFps ? "fps" : "local");
   const tabScrollRef = useRef<HTMLDivElement>(null);
   const [animateSwap, setAnimateSwap] = useState(false);
   const wideTrack = useWideTabTrack();
@@ -275,62 +284,68 @@ function WinnerOrderHowToPayDialog({
                   fullWidth={wideTrack}
                   size={wideTrack ? "md" : "sm"}
                 >
-                  <TabsTrigger
-                    className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
-                    value="fps"
-                  >
-                    FPS
-                  </TabsTrigger>
+                  {showFps ? (
+                    <TabsTrigger
+                      className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
+                      value="fps"
+                    >
+                      FPS
+                    </TabsTrigger>
+                  ) : null}
                   <TabsTrigger
                     className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
                     value="local"
                   >
-                    HK Local
+                    Hong Kong
                   </TabsTrigger>
-                  <TabsTrigger
-                    className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
-                    value="swift"
-                  >
-                    International
-                  </TabsTrigger>
+                  {showSwift ? (
+                    <TabsTrigger
+                      className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
+                      value="swift"
+                    >
+                      International
+                    </TabsTrigger>
+                  ) : null}
                 </TabsList>
               </div>
             </div>
 
             <RailFrame animateContent={animateSwap} rail={rail}>
-              <TabsContent className={TAB_PANEL_CLASS} value="fps">
-                <RailPanel>
-                  <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5">
-                    <VStack
-                      className="w-full shrink-0 items-center justify-center sm:w-auto"
-                      gap="sm"
-                    >
-                      <FpsQrPlaceholder />
-                      <Text
-                        className="text-center text-secondary-foreground sm:max-w-36"
-                        size="sm"
+              {showFps ? (
+                <TabsContent className={TAB_PANEL_CLASS} value="fps">
+                  <RailPanel>
+                    <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5">
+                      <VStack
+                        className="w-full shrink-0 items-center justify-center sm:w-auto"
+                        gap="sm"
                       >
-                        Open your banking app and scan this QR
-                      </Text>
-                    </VStack>
-                    <VStack
-                      className="min-w-0 flex-1 border-t border-border pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5"
-                      gap="sm"
-                      hAlign="stretch"
-                    >
-                      <DetailRow
-                        label="FPS ID"
-                        value={WINNER_ORDER_BANK_DETAILS.fpsId}
-                      />
-                      <DetailRow
-                        label="Account name"
-                        value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
-                      />
-                      <PaymentReferenceBand value={transferReference} />
-                    </VStack>
-                  </div>
-                </RailPanel>
-              </TabsContent>
+                        <FpsQrPlaceholder />
+                        <Text
+                          className="text-center text-secondary-foreground sm:max-w-36"
+                          size="sm"
+                        >
+                          Open your banking app and scan this QR
+                        </Text>
+                      </VStack>
+                      <VStack
+                        className="min-w-0 flex-1 border-t border-border pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5"
+                        gap="sm"
+                        hAlign="stretch"
+                      >
+                        <DetailRow
+                          label="FPS ID"
+                          value={WINNER_ORDER_BANK_DETAILS.fpsId}
+                        />
+                        <DetailRow
+                          label="Account name"
+                          value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
+                        />
+                        <PaymentReferenceBand value={transferReference} />
+                      </VStack>
+                    </div>
+                  </RailPanel>
+                </TabsContent>
+              ) : null}
 
               <TabsContent className={TAB_PANEL_CLASS} value="local">
                 <RailPanel>
@@ -358,45 +373,47 @@ function WinnerOrderHowToPayDialog({
                 </RailPanel>
               </TabsContent>
 
-              <TabsContent className={TAB_PANEL_CLASS} value="swift">
-                <RailPanel>
-                  <DetailList>
-                    <DetailRow
-                      label="Beneficiary name"
-                      value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
-                    />
-                    <DetailRow
-                      label="Beneficiary address"
-                      value={WINNER_ORDER_BANK_DETAILS.beneficiaryAddress}
-                    />
-                    <DetailRow
-                      label="Bank name"
-                      value={WINNER_ORDER_BANK_DETAILS.bankName}
-                    />
-                    <DetailRow
-                      label="Bank address"
-                      value={WINNER_ORDER_BANK_DETAILS.bankAddress}
-                    />
-                    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+              {showSwift ? (
+                <TabsContent className={TAB_PANEL_CLASS} value="swift">
+                  <RailPanel>
+                    <DetailList>
                       <DetailRow
-                        label="SWIFT / BIC"
-                        value={WINNER_ORDER_BANK_DETAILS.swiftCode}
+                        label="Beneficiary name"
+                        value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
                       />
                       <DetailRow
-                        label="Account number / IBAN"
-                        value={WINNER_ORDER_BANK_DETAILS.accountNumber}
+                        label="Beneficiary address"
+                        value={WINNER_ORDER_BANK_DETAILS.beneficiaryAddress}
                       />
-                    </div>
-                    <PaymentReferenceBand value={transferReference} />
-                    <Alert
-                      dismissible={false}
-                      layout="inline"
-                      status="warning"
-                      title={OUR_NOTE}
-                    />
-                  </DetailList>
-                </RailPanel>
-              </TabsContent>
+                      <DetailRow
+                        label="Bank name"
+                        value={WINNER_ORDER_BANK_DETAILS.bankName}
+                      />
+                      <DetailRow
+                        label="Bank address"
+                        value={WINNER_ORDER_BANK_DETAILS.bankAddress}
+                      />
+                      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                        <DetailRow
+                          label="SWIFT / BIC"
+                          value={WINNER_ORDER_BANK_DETAILS.swiftCode}
+                        />
+                        <DetailRow
+                          label="Account number / IBAN"
+                          value={WINNER_ORDER_BANK_DETAILS.accountNumber}
+                        />
+                      </div>
+                      <PaymentReferenceBand value={transferReference} />
+                      <Alert
+                        dismissible={false}
+                        layout="inline"
+                        status="warning"
+                        title={OUR_NOTE}
+                      />
+                    </DetailList>
+                  </RailPanel>
+                </TabsContent>
+              ) : null}
             </RailFrame>
           </Tabs>
         </DialogBody>

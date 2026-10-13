@@ -367,6 +367,7 @@ function resolveContent(
     return {
       ...base,
       addressValue: setup.delivery,
+      settlementCurrency: setup.settlementCurrency,
       setupPaymentMethod:
         setup.paymentMethod === "bank_transfer" ? "Bank transfer" : "Card",
       billingLabel: "Billing address",
@@ -648,9 +649,11 @@ function WinnerOrderPageState({
         open={setupDialogOpen}
       />
       <WinnerOrderHowToPayDialog
+        amountDue={total?.value}
         invoiceId={content.invoiceId ?? undefined}
         onOpenChange={setHowToPayDialogOpen}
         open={howToPayDialogOpen}
+        settlementCurrency={content.settlementCurrency ?? "HKD"}
       />
       <WinnerOrderPaymentProofDialog
         onOpenChange={setProofDialogOpen}

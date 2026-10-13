@@ -15,11 +15,13 @@ import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
 type HowToPayDemoProps = {
   onOpenChange?: (open: boolean) => void;
   invoiceId?: string;
+  settlementCurrency?: "USD" | "HKD";
 };
 
 function HowToPayDemo({
   onOpenChange = fn(),
   invoiceId = WINNER_ORDER_INVOICE_ID,
+  settlementCurrency = "HKD",
 }: HowToPayDemoProps) {
   const [open, setOpen] = useState(true);
 
@@ -49,6 +51,7 @@ function HowToPayDemo({
           onOpenChange(next);
         }}
         open={open}
+        settlementCurrency={settlementCurrency}
         transferReference={WINNER_ORDER_BANK_DETAILS.transferReference}
       />
     </div>
@@ -64,7 +67,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order View Bank Details — invoice ID as DialogSubtext, amount due, FPS (QR + manual fields), HK Local / International rails, payment reference band (listing code), OUR note on SWIFT; panels scroll inside the dialog.",
+          "Standalone Storybook preview of Winner Order View Bank Details — invoice ID as DialogSubtext, amount due, FPS (QR + manual fields), Hong Kong / International rails, payment reference band (listing code), OUR note on SWIFT; panels scroll inside the dialog.",
       },
     },
   },
@@ -87,9 +90,9 @@ async function findVisibleDialog(
   });
 }
 
-/** Amount, FPS default, QR, reference at bottom — no Copy controls. */
-export const Form: Story = {
-  name: "Form",
+/** HKD invoice — FPS default, QR, reference at bottom; no Copy controls. */
+export const HkdFpsRail: Story = {
+  name: "HKD — FPS rail",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
@@ -126,14 +129,14 @@ export const Form: Story = {
   },
 };
 
-/** HK Local shows branch code. */
-export const HkLocalTab: Story = {
-  name: "HK Local tab",
+/** HKD invoice — Hong Kong rail shows branch code. */
+export const HkdHongKongRail: Story = {
+  name: "HKD — Hong Kong rail",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
-    await userEvent.click(modal.getByRole("tab", { name: "HK Local" }));
+    await userEvent.click(modal.getByRole("tab", { name: "Hong Kong" }));
     await waitFor(() => {
       expect(modal.getByText("Branch code")).toBeVisible();
       expect(
@@ -156,9 +159,47 @@ export const HkLocalTab: Story = {
   },
 };
 
-/** SWIFT shows OUR note. */
-export const SwiftTab: Story = {
-  name: "SWIFT tab",
+/** HKD invoice — FPS + Hong Kong, no International rail; FPS first. */
+export const HkdRails: Story = {
+  name: "HKD — FPS + Hong Kong",
+  args: { settlementCurrency: "HKD" },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "View Bank Details");
+    const modal = within(dialog);
+    expect(
+      modal.getByRole("tab", { name: "FPS", selected: true }),
+    ).toBeVisible();
+    expect(modal.getByRole("tab", { name: "Hong Kong" })).toBeVisible();
+    expect(
+      modal.queryByRole("tab", { name: "International" }),
+    ).not.toBeInTheDocument();
+    expect(modal.getByText("FPS ID")).toBeVisible();
+  },
+};
+
+/** USD invoice — Hong Kong + International (SWIFT), no FPS; Hong Kong first. */
+export const UsdRails: Story = {
+  name: "USD — Hong Kong + International",
+  args: { settlementCurrency: "USD" },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "View Bank Details");
+    const modal = within(dialog);
+    expect(modal.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
+    expect(
+      modal.getByRole("tab", { name: "Hong Kong", selected: true }),
+    ).toBeVisible();
+    expect(modal.getByRole("tab", { name: "International" })).toBeVisible();
+    // Hong Kong panel shows by default; SWIFT field coverage lives in SWIFT tab.
+    expect(modal.getByText("Branch code")).toBeVisible();
+  },
+};
+
+/** USD invoice — International rail shows SWIFT fields and the OUR note. */
+export const UsdInternationalRail: Story = {
+  name: "USD — International rail",
+  args: { settlementCurrency: "USD" },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
