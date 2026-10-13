@@ -46,7 +46,7 @@ Needs groups 2, 4 and 5 landed.
 - [ ] 6.5 Bind `SCANNER` (`grade10-tcg-ar-<env>`, `ScannerPlatform`, `props.project: "grade10"`) and `INVENTORY_SLABS` (`StoreItemSlabs`) on staging and production in `apps/backend/grade10/store/wrangler.jsonc`; rename `consignedProductUrl` to `storeProductUrl`
 - [ ] 6.6 Verify: the store backend's node and workers tests, `pnpm --filter @grade10/store-service typecheck`, `pnpm run check:libs`
 
-## 7. Operations (grade10)
+## 7. Operations (grade10) (owner: @ecchochan)
 
 Needs groups 2 and 6 deployed to the environment it acts on.
 
