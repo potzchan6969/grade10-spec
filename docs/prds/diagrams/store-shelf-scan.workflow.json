@@ -19,19 +19,23 @@
       "label": "Store"
     },
     {
+      "id": "inventory",
+      "label": "Inventory"
+    },
+    {
       "id": "scanner",
       "label": "Scanner"
     },
     {
       "id": "staff",
-      "label": "Staff"
+      "label": "Shopkeeper"
     }
   ],
   "mainPath": [
     "a-product-is-published",
     "the-store-keeps-the-scanner-in-step",
     "the-scanner-learns-the-photos",
-    "staff-point-the-camera",
+    "a-shopkeeper-points-the-camera",
     "the-product-shows"
   ],
   "nodes": [
@@ -50,43 +54,43 @@
       "col": 1,
       "type": "backend",
       "label": "Scanner kept in step",
-      "sublabel": "every 5 minutes",
+      "sublabel": "as the mirror moves",
       "width": 138
     },
     {
-      "id": "the-store-keeps-the-scanner-in-step_unit",
-      "lane": "store",
+      "id": "inventory-names-the-slab",
+      "lane": "inventory",
       "col": 2,
       "type": "database",
-      "label": "Slab's own unit",
-      "sublabel": "inventory or shop product",
+      "label": "Slab named",
+      "sublabel": "grader, grade, cert",
       "width": 138
     },
     {
       "id": "the-scanner-learns-the-photos",
       "lane": "scanner",
-      "col": 2,
+      "col": 3,
       "type": "backend",
       "label": "Photos learned",
-      "sublabel": "hourly; nothing new, nothing done",
+      "sublabel": "hourly",
       "width": 138
     },
     {
-      "id": "staff-point-the-camera",
+      "id": "a-shopkeeper-points-the-camera",
       "lane": "staff",
-      "col": 3,
+      "col": 4,
       "type": "frontend",
       "label": "Camera on the shelf",
-      "sublabel": "the site's /scan",
+      "sublabel": "one fixed link",
       "width": 138
     },
     {
       "id": "the-product-shows",
       "lane": "staff",
-      "col": 4,
+      "col": 5,
       "type": "frontend",
       "label": "Product shown",
-      "sublabel": "title, price, stock, link",
+      "sublabel": "title, price, availability",
       "width": 138
     }
   ],
@@ -98,7 +102,7 @@
     },
     {
       "from": "the-store-keeps-the-scanner-in-step",
-      "to": "the-store-keeps-the-scanner-in-step_unit",
+      "to": "inventory-names-the-slab",
       "label": "slab"
     },
     {
@@ -109,11 +113,11 @@
     },
     {
       "from": "the-scanner-learns-the-photos",
-      "to": "staff-point-the-camera",
+      "to": "a-shopkeeper-points-the-camera",
       "variant": "dashed"
     },
     {
-      "from": "staff-point-the-camera",
+      "from": "a-shopkeeper-points-the-camera",
       "to": "the-product-shows",
       "variant": "emphasis"
     }

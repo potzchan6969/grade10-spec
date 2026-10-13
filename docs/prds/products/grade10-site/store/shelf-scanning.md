@@ -4,7 +4,7 @@ spec: grade10-site/store/shelf-scanning
 order: 8
 ---
 
-Shelf scanning lets shop staff point the card scanner at a product on the
+Shelf scanning lets a shopkeeper point the card scanner at a product on the
 shop's shelf and see what the store sells it as. The scanner opens at the
 site's `/scan`; the store keeps what it knows in step with the catalogue.
 
@@ -12,114 +12,135 @@ site's `/scan`; the store keeps what it knows in step with the catalogue.
 
 | Rule | Value |
 | --- | --- |
-| What the scanner holds | every product the store publishes, sold out included |
-| A catalogue change on the scanner | within 5 minutes |
+| What the scanner holds | every product the store publishes, sold out included, gift cards excepted |
+| A change the shop reports | on the scanner within 5 minutes |
+| A change only the store's re-read finds | on the scanner within 10 minutes |
 | A new photo recognisable | within the hour, on staging and production |
-| A photo run with nothing new | does nothing |
-| What a scan shows | title, price, stock, a link to the store page |
+| An open scanner's catalogue | refreshed every few minutes, and when the shopkeeper returns to it |
+| What a scan shows | title, price, Available or Sold out, a link to the store page |
 
 ## What the Scanner Holds
 
 🚧 **Every published product** — each product the store publishes is one item
-on the scanner: card, slab, sealed box and merch alike
+on the scanner: card, slab, sealed box, comic and merch alike
 
-🚧 **In step within 5 minutes** — a product the shop publishes, reprices,
-sells out, brings back or changes the photos of reaches the scanner within 5
-minutes
+🚧 **In step with the store's mirror** — a product the shop publishes,
+reprices, sells out, brings back or changes the photos of reaches the scanner
+as the store's own copy of the catalogue moves —
+[Product Data](/p/grade10-site/store/product-listing#product-data)
 
 🚧 **Gone when the store drops it** — a product the store unpublishes or
-deletes leaves the scanner within 5 minutes
+deletes leaves the scanner with the next copy
+
+🚧 **A sold consigned slab leaves** — the store takes a sold consigned slab
+off its catalogue, so it leaves the scanner rather than reading Sold out
 
 🚧 **The store's catalogue wins** — an item changed on the scanner is put back
-to the store's version within 5 minutes
+to the store's version with the next copy
+
+🚧 **On production before the store opens there** — production's scanner holds
+the store's products with their title, price and availability now; the link to
+the store page appears only where the store is carried —
+[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 - **Every shelf product is published** — the shop sells nothing on the shelf
   that the store does not publish, so the scanner misses none
 
 :::flow{title="From the shop's catalogue to the shelf" diagram="assets/diagrams/store-shelf-scan.svg"}
 ## A product is published
-A stock keeper publishes a product on the shop, or changes its price, stock or
-photos — [Product Data](/p/grade10-site/store/product-listing#product-data).
+A stock keeper publishes a product on the shop, or changes its price,
+availability or photos — [Product Data](/p/grade10-site/store/product-listing#product-data).
 ## The store keeps the scanner in step
-Every 5 minutes the store compares its catalogue with the scanner's items. It
-adds what is new, rewrites what moved, removes what it no longer publishes,
-and leaves what matches untouched. A slab carries its own unit's grader, grade
-and cert.
+When its copy of the catalogue moves, the store adds what is new to the
+scanner, rewrites what changed, removes what it no longer publishes, and
+leaves what matches untouched.
+## Inventory names the slab
+For a slab, the store reads the grader, grade and cert of the inventory item
+the product names.
 ## The scanner learns the photos
-Every hour the scanner learns the photos it has not seen. A run that finds
-none does nothing.
-## Staff point the camera
-A shopkeeper opens `/scan` on a phone and points it at the shelf.
+Every hour the scanner learns the photos it has not seen.
+## A shopkeeper points the camera
+The shopkeeper opens the scanner's link on a phone and points it at the shelf.
 ## The product shows
-The scanner names the product and shows the store's title, price, stock and a
-link to its store page.
+The scanner names the product and shows the store's title, price,
+availability and a link to its store page.
 :::
 
 ## Slabs
 
-A slab is known by its grader and cert.
+A slab is known by its grader and cert, read from the inventory item its
+product names. Every slab on the shop's shelf is a registered inventory item.
 
 | Product | How the store knows its slab |
 | --- | --- |
-| Consigned slab | the consigned item, and that item's grader, grade and cert in inventory |
-| House-stock slab | the grader and cert the stock keeper writes on the product in the shop |
-| Raw card | no slab: held by its card |
+| Consigned slab | the consigned item, in inventory |
+| House-stock slab | the label code the stock keeper writes on the product in the shop, naming its inventory item |
+| Raw card | no slab: recognised by its product photos |
 
-🚧 **The copy, not only the card** — a consigned slab's product carries the
-grader, grade and cert of the one slab it sells, so the scanner reading that
-slab's label names that product with its grade and cert
+🚧 **The copy, not only the card** — the scanner reading a slab's label names
+the one product that sells that slab, and the result shows its grade and cert
 
-🚧 **House-stock slabs** — a stock keeper writes the slab's grader and cert on
-the product in the shop, and the scanner names that product when it reads
-that slab's label
+🚧 **House-stock slabs name their item** — a stock keeper writes the slab's
+label code on the house-stock product in the shop, and the store reads the
+grader, grade and cert from inventory, as for a consigned slab
 
-🚧 **A slab with no known unit** — a graded product the store cannot join to
-one slab is held by its card alone, without grade or cert, and counted so the
-gap shows
+🚧 **A slab with no known unit** — a graded product that names no item, whose
+item's grader the scanner does not read, or whose cert another product also
+carries, is recognised by its product photos alone, without grade or cert;
+where two products carry one cert, neither carries it. Operations is alerted to
+each
 
-## Sealed Boxes
+- **Graders the scanner does not read** — the scanner reads PSA, BGS, CGC, SGC
+  and TAG labels; a PCGS, NGC or PMG slab is recognised by its photos
 
-🚧 **Held before they are recognised** — sealed boxes are on the scanner now,
-with their title, price and stock; the scanner does not recognise a box from
-its product photos until its box detector ships
+## Recognition
 
-- **Scanning a box** — until the box detector ships, the scanner shows what
-  it shows for anything it does not recognise, "Not recognised yet — hold
-  steady"
+🚧 **A store product wins** — where a store product and the scanner's shared
+card catalogue match the same art, the scanner names the store product
+
+🚧 **Held before they are recognised** — a product the scanner cannot yet
+recognise from its photos — a sealed box, merch, a comic — is held now with
+its title, price and availability, and is recognised once the scanner's box
+detector ships
+
+- **Scanning it meanwhile** — the scanner shows what it shows for anything it
+  does not recognise, "Not recognised yet — hold steady"
 
 ## Photos
 
 🚧 **Hourly on both** — the scanner learns new photos every hour on staging
 and on production
 
-🚧 **Nothing new, nothing done** — an item whose fields and photo list match
-what the scanner holds is not written again, so no photo is queued, the
-scanner's files are not rebuilt, and an hourly run that finds no photo to
-learn does nothing
+🚧 **Nothing new, nothing done** — an hour with no new photo costs nothing, and
+a product whose details and photos have not moved is not written again
 
-- **Photos change, the item learns again** — a product's new or replaced
-  photo is learned at the next hourly run; a photo the product drops leaves
-  the scanner with it
+🚧 **Photos change, the item learns again** — a product's new or replaced
+photo is learned at the next hourly run; a photo the product drops leaves the
+scanner with it
 
 ## On the Shelf
 
-🚧 **What a scan shows** — the product's title, its price in the store's
-currency, its stock, and a link that opens its store page
+🚧 **What a scan shows** — what the product page shows: the product's title,
+its price with automatic discounts, and its one item per card —
+[Product Status](/p/grade10-site/commerce/product-status#availability)
 
-🚧 **Sold out** — a sold-out product is still named, and its stock reads
-"Sold out", as the store reads availability —
-[Product Page](/p/grade10-site/store/product-page)
+🚧 **Available or Sold out** — availability is the shop's for-sale answer, read
+as the store reads it; a scan shows no count —
+[Product Status](/p/grade10-site/commerce/product-status#availability)
 
-🚧 **A link from the store** — shop staff open `/scan` through a link the
-store hands out; anyone holding it sees the store's public prices and nothing
-more
+🚧 **An open scanner stays current** — an open scanner refreshes its catalogue
+every few minutes and when the shopkeeper returns to it, so it never shows an
+old price or availability for long
 
-- **Grade10's store only** — ZZZ's store is not held
+🚧 **One link** — shopkeepers open the scanner from one fixed link, bookmarked
+or printed as a QR code; it scans only, adds no photos, and shows only what the
+store shows publicly; rotating the scanner's key retires it
 
 :::detail{title="Code map" for="engineer"}
 - **Scanner** — `apps/backend/grade10/tcg-ar`; its platform API —
   `apps/backend/grade10/tcg-ar/docs/PLATFORM.md`
-- **Store pass** — the store's 5-minute schedule, `packages/grade10-store/backend/src/sweeps/cron.ts`
+- **Store's catalogue mirror** — `packages/grade10-store/backend/src/durables/CatalogKeeper/`
+- **Store schedule** — `packages/grade10-store/backend/src/sweeps/cron.ts`
 - **Photo run** — `.github/workflows/tcg-ar-ops.yml`, job `photos`;
   `apps/backend/grade10/tcg-ar/scripts/process-photos.ts`
 - **Slab facts** — inventory items, `packages/inventory/backend/src/db/schema/items.ts`
@@ -127,34 +148,34 @@ more
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Staff on the shop floor need the store's answer for the product in their hand,
-and the scanner can only give it if it holds the store's catalogue.
+Shopkeepers need the store's answer for the product in their hand, and the
+scanner can only give it if it holds the store's catalogue.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Shopkeeper | A customer asks about a product on the shelf | Sees its title, price and stock, and can open its store page |
+| Shopkeeper | A customer asks about a product on the shelf | Sees its title, price and availability, and can open its store page |
 | Shopkeeper | Holds one slab of a card the store lists several times | Sees the listing of that slab, with its grade and cert |
-| Stock keeper | Publishes, reprices or sells out a product | Sees the scanner follow within minutes |
-| Stock keeper | Lists a house-stock slab | Writes its grader and cert on the product, so the scanner names that copy |
+| Stock keeper | Lists a house-stock slab | Writes its label code on the product, so the scanner names that copy |
 
 **Measurement.**
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Scanner in step | Share of published products the scanner holds with the store's current title, price and stock. Unmeasured; first delivery sets the baseline | Product |
+| Scanner in step | Share of published products the scanner holds with the store's current title, price and availability. Unmeasured; first delivery sets the baseline | Product |
+| Slabs without a unit | Graded products held without grade or cert. Alerted to Operations | Operations |
 
 **Decisions.**
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| What is held | Decided | Every published product; sold out kept and labelled — decided by the owner, 2026-10-13 | Product |
-| Sealed boxes | Decided | Held now, recognised once the box detector ships — decided by the owner, 2026-10-13 | Product |
-| Slabs | Decided | Resolved to the exact unit: a consigned slab through its inventory item, a house-stock slab through the grader and cert on its shop product — decided by the owner, 2026-10-13 | Product |
-| Freshness | Decided | Products every 5 minutes; photos hourly on staging and production; nothing new, nothing done — decided by the owner, 2026-10-13 | Product |
-| House-stock slabs | Decided | The stock keeper writes the grader and cert on the shop product; the store reads them — decided by the owner, 2026-10-13 | Product |
-| A slab with no known unit | Decided | Held by its card alone, without grade or cert, and counted — decided by the owner, 2026-10-13 | Product |
-| Scanning a sealed box | Decided | The scanner's usual "not recognised" hint — decided by the owner, 2026-10-13 | Product |
-| Who opens the scanner | Decided | Shop staff, through a link the store hands out; prices are public — decided by the owner, 2026-10-13 | Product |
+| What is held | Decided | Every published product but gift cards; sold out kept — decided by the owner, 2026-10-13 | Product |
+| Production | Decided | Synced now; the store-page link only where the store is carried — decided by the owner, 2026-10-13 | Product |
+| Not yet recognisable | Decided | Sealed boxes, merch and comics held now, recognised once the box detector ships — decided by the owner, 2026-10-13 | Product |
+| Slabs | Decided | Resolved to the exact unit through the inventory item the product names — decided by the owner, 2026-10-13 | Product |
+| House-stock slabs | Decided | The shop product names its item's label code; grader, grade and cert come from inventory — decided by the owner, 2026-10-13 | Product |
+| A slab with no known unit | Decided | Recognised by its photos, without grade or cert; Operations alerted — decided by the owner, 2026-10-13 | Product |
+| Availability | Decided | Available or Sold out, no count — decided by the owner, 2026-10-13 | Product |
+| Freshness | Decided | Follows the store's mirror; photos hourly on staging and production; an open scanner refreshes every few minutes — decided by the owner, 2026-10-13 | Product |
+| The link | Decided | One fixed scan-only link, bookmarked or printed; retired by rotating its key — decided by the owner, 2026-10-13 | Product |
 | ZZZ | Decided | Grade10's store only — decided by the owner, 2026-10-13 | Product |
-| Till-only products | Decided | None: every shelf product is published to the store — decided by the owner, 2026-10-13 | Operations |
 :::
