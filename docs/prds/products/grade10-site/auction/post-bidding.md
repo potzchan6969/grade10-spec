@@ -167,7 +167,8 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| 🚧 Payment method | Card in a currency with a card fee rule; bank transfer where Grade10 holds bank details for the order's currency; each choice shows its fee range | Nothing preselected |
+| 🚧 Settlement currency | **USD** or **HKD**; lots and bids stay in USD, and the invoice is issued in the currency chosen | **HKD** |
+| 🚧 Payment method | The methods of the settlement currency below, each in a currency with a card fee rule or bank details; each choice shows its fee range | **Card** |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -202,6 +203,17 @@ hours of the close.
 - 🚧 **One-time address after a reload** — an unsaved one-time address stays
   on the order after leaving and returning, until the winner confirms or the
   setup deadline passes
+- 🚧 **Settlement currency** — the winner chooses USD or HKD before the payment
+  method, HKD first, and each currency remembers the method last picked in it;
+  the winning bid stays in USD, and the operator issues the invoice in the
+  chosen currency. Grade10 holds no exchange rate, so the operator sets the
+  HKD amounts
+- 🚧 **Methods by currency** — USD offers card, Hong Kong bank transfer and
+  overseas transfer by SWIFT; HKD offers card, FPS and Hong Kong bank
+  transfer. View Bank Details shows only the rails of the order's currency
+- ❓ **Rate, rounding and disclosure** — how the operator reaches an HKD
+  amount, how it rounds, and whether the invoice prints the USD winning bid
+  beside it; Finance and Product confirm
 - 🚧 **Card where Finance set a rule** — card is offered only in a currency
   with a card fee rule; in USD and JPY until Finance sets one, the choice
   reads that card is not yet available, per [Auction Management · Payment
@@ -634,6 +646,8 @@ a second payment provider, and changes to the bid-time rules.
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
 | Payment fee wording | 🚧 In flight | Card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. Chosen over showing no figure for either. | Product (@tangconst) |
+| Settlement currency | 🚧 In flight | Lots and bids are USD alone; a winner settles in USD or HKD, chosen at order setup. HKD settlement is new: the operator issues the invoice in HKD, so Grade10 holds no exchange rate. Chosen over a rate in Payment Settings and over converting automatically at setup, which put a rate and its rounding on Finance before launch. Any other display currency later converts from USD. | Product (@tangconst) |
+| Methods by settlement currency | 🚧 In flight | USD: card, Hong Kong bank transfer, SWIFT. HKD: card, FPS, Hong Kong bank transfer. | Product (@tangconst) |
 | Card in USD and JPY | 🚧 In flight | Card launches without a rule in USD and JPY: until Finance saves one, a winner in that currency is not offered card and reads why. Chosen over holding launch for Finance's rates and over charging no card fee. | Finance |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
