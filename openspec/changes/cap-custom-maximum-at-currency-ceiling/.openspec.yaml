@@ -7,3 +7,5 @@ hands:
   qa: "@htonyl"
   dev: "@htonyl"
   release: "@htonyl"
+reviewed:
+  specs: 3fb7ceec
