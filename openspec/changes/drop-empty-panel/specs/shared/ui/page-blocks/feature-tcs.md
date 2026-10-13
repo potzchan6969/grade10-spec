@@ -1,6 +1,7 @@
 # shared/ui/page-blocks Test Cases
 
-**Status:** pending-review · 0/3
+**Status:** pending-review · 0/2
+**Drafts styled:** 2026-10-13, tcs-rules r4
 
 ## Background
 
@@ -18,7 +19,7 @@
 **so that** every site page composes store blocks instead of drawing its own.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-aau rev=2 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
-### g10.shared-page-blocks.US1-TC1-2: Every named page block exports from the package entry
+### g10.shared-page-blocks.US1-TC1: Every named page block exports from the package entry
 
 **Classification:**
 
@@ -50,7 +51,7 @@
 * Each export carries its own `<Name>Props` type and a `<Name>Copy` type for its words.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-dwb rev=2 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
-### g10.shared-page-blocks.US1-TC16-2: A block carries the slot it is given, or its own
+### g10.shared-page-blocks.US1-TC16: A block carries the slot it is given, or its own
 
 **Classification:**
 
@@ -84,7 +85,7 @@
 * Step 4: the rail's root carries no `data-slot` and the stepper carries `data-slot="stepper"`; then the rail's root carries `data-slot="vault-case-stages"`.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-vgl rev=2 covers=none -->
-### g10.shared-page-blocks.US1-TC15-2: An empty panel reads its title and reports its way out
+### g10.shared-page-blocks.US1-TC15: An empty panel reads its title and reports its way out
 
 **Classification:**
 

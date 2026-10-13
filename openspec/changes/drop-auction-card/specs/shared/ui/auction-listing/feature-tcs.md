@@ -1,6 +1,7 @@
 # shared/ui/auction-listing Test Cases
 
 **Status:** pending-review · 0/2
+**Drafts styled:** 2026-10-13, tcs-rules r4
 
 ## Background
 
@@ -15,7 +16,7 @@
 **so that** the collector reviews a usable amount before committing.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=2 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
-### g10.shared-auction-listing.US1-TC55-2: A catalogue tile close follows the viewer zone
+### g10.shared-auction-listing.US1-TC55: A catalogue tile close follows the viewer zone
 
 **Classification:**
 
@@ -45,7 +46,7 @@
 * The New York line names `EDT` and does not contain `HKT`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=2 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
-### g10.shared-auction-listing.US1-TC57-2: A tile's close line takes the supplied locale and zone together
+### g10.shared-auction-listing.US1-TC57: A tile's close line takes the supplied locale and zone together
 
 Runs once per row of **Test data**.
 
