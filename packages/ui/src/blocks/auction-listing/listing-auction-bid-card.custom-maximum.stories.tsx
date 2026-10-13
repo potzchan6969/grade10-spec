@@ -93,6 +93,45 @@ export const AcceptedRaiseClearsCustomField: Story = {
 };
 
 /**
+ * A commit the server refused without a message settles to idle with the
+ * maximum unmoved, so the draft and its commit action stay.
+ */
+export const RefusedCommitKeepsCustomField: Story = {
+  render: (args) => {
+    const [status, setStatus] = useState<"idle" | "pending">("idle");
+    return (
+      <ListingAuctionBidCard
+        {...args}
+        authorizationStatus={status}
+        onCommitMaximum={() => {
+          setStatus("pending");
+          setTimeout(() => setStatus("idle"), 200);
+        }}
+        view={liveView({
+          standing: "leading-max",
+          viewerMaximumMinor: 6_050_000,
+        })}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("spinbutton", {
+      name: /min\./i,
+    }) as HTMLInputElement;
+    await userEvent.type(field, "70000");
+    const commit = canvas.getByRole("button", { name: /^Raise maximum to/ });
+    await userEvent.click(commit);
+    await waitFor(() => expect(commit).toBeDisabled());
+    await waitFor(() => expect(commit).toBeEnabled());
+    expect(field.value).toBe("70000");
+    expect(
+      canvas.getByRole("button", { name: /^Raise maximum to/ }),
+    ).toBeEnabled();
+  },
+};
+
+/**
  * Maximum at the currency ceiling: the entry group collapses to a status
  * row - chips, the custom field and the commit action leave the panel.
  *
