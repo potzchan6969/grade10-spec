@@ -49,9 +49,9 @@ export const Guest: Story = {
   },
 };
 
-/** Guest's promo sheet: `heldPromoCodes={null}` hides the member section —
- * no "Your promo codes", no empty state, no Browse loyalty — while
- * `publicPromoCodes` still lists the codes open to everyone. */
+/** Guest's promo sheet: `heldPromoCodes={null}` hides the member empty
+ * state and Browse loyalty, while `publicPromoCodes` still lists the codes
+ * open to everyone under "Promo codes". */
 export const GuestWithPublicCode: Story = {
   name: "Guest With Public Code",
   render: (args) => {
@@ -80,9 +80,8 @@ export const GuestWithPublicCode: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    expect(canvas.getByText("Promo codes")).toBeInTheDocument();
+    expect(canvas.getAllByText("Promo codes")).toHaveLength(1);
     expect(canvas.getByText("G10LAUNCH")).toBeInTheDocument();
-    expect(canvas.queryByText("Your promo codes")).not.toBeInTheDocument();
     expect(
       canvas.queryByText("You don’t have any promo codes yet."),
     ).not.toBeInTheDocument();
@@ -92,8 +91,8 @@ export const GuestWithPublicCode: Story = {
   },
 };
 
-/** Member's promo sheet: public codes under their own heading, after the
- * member's "Your promo codes" and "Not valid" sections. */
+/** Member's promo sheet: held and public codes list together under one
+ * "Promo codes" heading, before "Not valid for this order". */
 export const MemberWithPublicCodes: Story = {
   name: "Member With Public Codes",
   render: (args) => {
@@ -122,15 +121,15 @@ export const MemberWithPublicCodes: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const yourHeading = canvas.getByText("Your promo codes");
-    const publicHeading = canvas.getByText("Promo codes");
-    expect(yourHeading).toBeInTheDocument();
-    expect(publicHeading).toBeInTheDocument();
-    expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
+    const heading = canvas.getByText("Promo codes");
+    const notValid = canvas.getByText("Not valid for this order");
+    expect(heading).toBeInTheDocument();
+    expect(notValid).toBeInTheDocument();
+    expect(canvas.getByText("WELCOME100")).toBeInTheDocument();
     expect(canvas.getByText("G10LAUNCH")).toBeInTheDocument();
-    // Node.compareDocumentPosition: public section follows the member one.
+    // Node.compareDocumentPosition: the one list precedes Not valid.
     expect(
-      yourHeading.compareDocumentPosition(publicHeading) &
+      heading.compareDocumentPosition(notValid) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
   },

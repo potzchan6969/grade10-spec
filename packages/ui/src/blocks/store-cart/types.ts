@@ -134,7 +134,7 @@ type CartDrawerFooterCopy = {
   removePromo: string;
   /** Section heading above held codes the member can pick. */
   yourPromoCodes: string;
-  /** Partition heading for held codes that cannot apply to this cart. */
+  /** Partition heading for codes that cannot apply to this cart. */
   notValidPromoCodes: string;
   /** Empty held list — no live codes to pick. */
   noHeldPromoCodes: string;
@@ -164,7 +164,7 @@ type CartDrawerFooterCopy = {
   signInAction?: string;
   /** Quiet text after the sign-in action — e.g. "for points and rewards". */
   signInSuffix?: string;
-  /** Section heading above codes open to everyone — e.g. "Promo codes". */
+  /** Section heading above every applicable code, held and public — e.g. "Promo codes". */
   publicPromoCodes?: string;
 };
 

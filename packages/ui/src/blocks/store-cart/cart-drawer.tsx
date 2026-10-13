@@ -1143,11 +1143,10 @@ type CartPromoSheetProps = {
   copy: CartDrawerFooterCopy;
   promoState: PromoState;
   /** Live held codes only — omit expired/void; filtering is consumer-owned.
-   * `null` hides the member section entirely — no heading, empty state or
-   * loyalty CTA — which is a guest's sheet. */
+   * `null` hides the member empty state and loyalty CTA — a guest's sheet. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
-  /** Codes open to everyone, under their own heading after the member
-   * sections; guests and members alike can pick or type one. */
+  /** Codes open to everyone, merged with the held list under one "Promo
+   * codes" heading; guests and members alike can pick or type one. */
   publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
   tenderPending?: boolean;
@@ -1187,8 +1186,14 @@ function CartPromoSheet({
   const showHeldSection = heldPromoCodes != null;
   const heldList =
     heldPromoCodes && heldPromoCodes.length > 0 ? heldPromoCodes : null;
-  const applicableHeld = heldList?.filter((c) => c.applicable) ?? [];
-  const inapplicableHeld = heldList?.filter((c) => !c.applicable) ?? [];
+  const applicable = [
+    ...(heldList?.filter((c) => c.applicable) ?? []),
+    ...publicPromoCodes.filter((c) => c.applicable),
+  ];
+  const inapplicable = [
+    ...(heldList?.filter((c) => !c.applicable) ?? []),
+    ...publicPromoCodes.filter((c) => !c.applicable),
+  ];
 
   useEffect(() => {
     if (!open) {
@@ -1284,116 +1289,72 @@ function CartPromoSheet({
           </HStack>
         ) : null}
 
-        {showHeldSection ? (
-          heldList ? (
-            <VStack gap="md" className="w-full">
-              {applicableHeld.length > 0 ? (
-                <VStack gap="sm" className="w-full">
-                  <span className="text-xs font-medium leading-4 text-secondary-foreground">
-                    {copy.yourPromoCodes}
-                  </span>
-                  <VStack gap="sm" className="w-full">
-                    {applicableHeld.map((code) => {
-                      const selected = selectedHeldPromoId === code.id;
-                      return (
-                        <PromoTicket
-                          key={code.id}
-                          code={code}
-                          selected={selected}
-                          action={
-                            onSelectHeldPromo ? (
-                              <Button
-                                size="sm"
-                                variant="secondary"
-                                disabled={tenderPending || isVerifying || !open}
-                                onClick={() => {
-                                  if (!tenderPending) {
-                                    onSelectHeldPromo?.(code.id);
-                                  }
-                                }}
-                              >
-                                {copy.applyHeldPromo}
-                              </Button>
-                            ) : null
-                          }
-                        />
-                      );
-                    })}
-                  </VStack>
-                </VStack>
-              ) : null}
-
-              {inapplicableHeld.length > 0 ? (
-                <VStack gap="sm" className="w-full">
-                  <span className="text-xs font-medium leading-4 text-secondary-foreground">
-                    {copy.notValidPromoCodes}
-                  </span>
-                  <VStack gap="sm" className="w-full">
-                    {inapplicableHeld.map((code) => (
-                      <PromoTicket key={code.id} code={code} muted />
-                    ))}
-                  </VStack>
-                </VStack>
-              ) : null}
-            </VStack>
-          ) : (
-            <EmptyState
-              compact
-              title={copy.noHeldPromoCodes}
-              icon={<Tag aria-hidden weight="regular" />}
-              actions={
-                onBrowseLoyalty ? (
-                  <Button
-                    size="md"
-                    variant="secondary"
-                    disabled={tenderPending || !open}
-                    onClick={() => {
-                      if (!tenderPending) onBrowseLoyalty();
-                    }}
-                  >
-                    {copy.browseLoyaltyOffers}
-                  </Button>
-                ) : undefined
-              }
-            />
-          )
-        ) : null}
-
-        {publicPromoCodes.length > 0 && copy.publicPromoCodes ? (
+        {applicable.length > 0 && copy.publicPromoCodes ? (
           <VStack gap="sm" className="w-full">
             <span className="text-xs font-medium leading-4 text-secondary-foreground">
               {copy.publicPromoCodes}
             </span>
             <VStack gap="sm" className="w-full">
-              {publicPromoCodes.map((code) =>
-                code.applicable ? (
-                  <PromoTicket
-                    key={code.id}
-                    code={code}
-                    selected={selectedHeldPromoId === code.id}
-                    action={
-                      onSelectHeldPromo ? (
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          disabled={tenderPending || isVerifying || !open}
-                          onClick={() => {
-                            if (!tenderPending) {
-                              onSelectHeldPromo?.(code.id);
-                            }
-                          }}
-                        >
-                          {copy.applyHeldPromo}
-                        </Button>
-                      ) : null
-                    }
-                  />
-                ) : (
-                  <PromoTicket key={code.id} code={code} muted />
-                ),
-              )}
+              {applicable.map((code) => (
+                <PromoTicket
+                  key={code.id}
+                  code={code}
+                  selected={selectedHeldPromoId === code.id}
+                  action={
+                    onSelectHeldPromo ? (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        disabled={tenderPending || isVerifying || !open}
+                        onClick={() => {
+                          if (!tenderPending) {
+                            onSelectHeldPromo?.(code.id);
+                          }
+                        }}
+                      >
+                        {copy.applyHeldPromo}
+                      </Button>
+                    ) : null
+                  }
+                />
+              ))}
             </VStack>
           </VStack>
+        ) : null}
+
+        {inapplicable.length > 0 ? (
+          <VStack gap="sm" className="w-full">
+            <span className="text-xs font-medium leading-4 text-secondary-foreground">
+              {copy.notValidPromoCodes}
+            </span>
+            <VStack gap="sm" className="w-full">
+              {inapplicable.map((code) => (
+                <PromoTicket key={code.id} code={code} muted />
+              ))}
+            </VStack>
+          </VStack>
+        ) : null}
+
+        {showHeldSection && !heldList && publicPromoCodes.length === 0 ? (
+          <EmptyState
+            compact
+            title={copy.noHeldPromoCodes}
+            icon={<Tag aria-hidden weight="regular" />}
+            actions={
+              onBrowseLoyalty ? (
+                <Button
+                  size="md"
+                  variant="secondary"
+                  disabled={tenderPending || !open}
+                  onClick={() => {
+                    if (!tenderPending) onBrowseLoyalty();
+                  }}
+                >
+                  {copy.browseLoyaltyOffers}
+                </Button>
+              ) : undefined
+            }
+          />
         ) : null}
       </VStack>
     </VStack>
@@ -1421,8 +1382,8 @@ type CartDrawerProps = {
   /** Live held codes only — omit expired/void; filtering is consumer-owned.
    * `null` hides the member section entirely — a guest's list. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
-  /** Codes open to everyone, under their own heading after the member
-   * sections; guests and members alike can pick or type one. */
+  /** Codes open to everyone, merged with the held list under one "Promo
+   * codes" heading; guests and members alike can pick or type one. */
   publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
   /**
