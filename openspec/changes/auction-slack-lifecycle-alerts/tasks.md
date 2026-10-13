@@ -34,7 +34,7 @@ Builds against group 1's contracts and fixture rows, never a running backend.
 - [ ] 4.2 Confirm Daily Reminder carries Flagged or still waiting, lifecycle alerts, the shared both-env bypass for morning and lifecycle, best effort and the warning copy, and that management.md still points at them
 - [ ] 4.3 Verify: `pnpm check:manual`, `pnpm run validate:changes`
 
-## 5. The walk (grade10)
+## 5. The walk (grade10) (owner: @mason5991)
 
 Uses draft `feature-tcs.md` as its planning input, and the groups it walks landed.
 
