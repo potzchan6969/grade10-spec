@@ -59,7 +59,7 @@ winner of three lots has three orders, each with its own deadlines.
 
 ### Order Progress
 
-- 🚧 **Under Shipping** — Preparing Shipment and Shipped both read against
+- **Under Shipping** — Preparing Shipment and Shipped both read against
   the Shipping step as its current (progress) step; while Preparing Shipment,
   Shipping subtext reads Preparing to ship; Shipped and Preparing Shipment
   badges use the muted default Badge tone on Winner Order and My Auctions
@@ -93,7 +93,7 @@ meaning.
 | 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
-| 🚧 **Preparing Shipment** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
+| **Preparing Shipment** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
@@ -588,7 +588,7 @@ a second payment provider, and changes to the bid-time rules.
 | Winner Order layout | Decided | The site renders the Winner Order design's page body from `@grade10/ui`, so a design change reaches the site on the next submodule bump. States the design never drew sit as alerts under the lot, in the order the site supplies. Chosen over fixing the site's own copy of the page, which drifts again on the next design change, and over an open content slot, which lets the page rebuild the design beside it. | Product and design |
 | Winner Order dialogs | Decided | Setup, how to pay, payment proof, contact and refund stay the site's, each moving into the design in a change of its own. Chosen over moving all five at once, when three hold their own address book, bank details or files. | Product and design |
 | Bank transfer dialogs | Decided | Bank instructions and proof submission use separate dialogs. Chosen over a combined dialog so the winner can read instructions without starting a proof upload. | Product and design (@tangconst) |
-| Progress stepper | 🚧 In flight | Five presentation steps, Address → Invoice → Payment → **Shipping** → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Preparing Shipment and Shipped under Shipping as the **current** (progress) step (Preparing Shipment subtext: Preparing to ship — not an incomplete Shipping step), Delivered as Completed. Shipped and Preparing Shipment badges use the muted `default` Badge tone on Winner Order and My Auctions. **BREAKING** vs past-tense Shipped as the phase label and badge Processing for a paid undispatched order — those read as already shipped when the Shipping step pings. | Product and design (@tangconst) |
+| Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → **Shipping** → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Preparing Shipment and Shipped under Shipping as the **current** (progress) step (Preparing Shipment subtext: Preparing to ship — not an incomplete Shipping step), Delivered as Completed. Shipped and Preparing Shipment badges use the muted `default` Badge tone on Winner Order and My Auctions. **BREAKING** vs past-tense Shipped as the phase label and badge Processing for a paid undispatched order — those read as already shipped when the Shipping step pings. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Proof submit feedback | Decided | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. The success and failure messages are localized in English, Simplified Chinese and Traditional Chinese. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
