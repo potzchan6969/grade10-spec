@@ -1583,7 +1583,7 @@ Runs once per row of **Test data**.
 
 **Anchor coverage:** All eight declared journeys have at least one case: US1, US3, US8, US9, US24, US25, US26 and US27. No journey anchor is uncovered. US26 has uncovered scenario holes recorded above.
 
-- **Covered at domain** - SC-277 is fully asserted by `grade10-admin-auction-e2e-US4-TC2-3` in [domain-tcs.md](../../../grade10-admin/auction/domain-tcs.md#L253). Its expected results cover exactly one internal order, `not_issued`, HKD/FPS, the internal bidder's address, Preparing Invoice, no setup, no invoice at close, and no won, address, invoice, payment or other order letters to any recipient. The case uses a different valid USD bid fixture (505,000 minor units) than the scenario example (30,500); both exercise the same required close behavior.
+- **Covered at domain** - SC-277 is fully asserted by `grade10-admin-auction-e2e-US4-TC2-5` in [domain-tcs.md](../../../grade10-admin/auction/domain-tcs.md#L253). Its expected results cover exactly one internal order, `not_issued`, HKD/FPS, the internal bidder's address, Preparing Invoice, no setup, no invoice at close, and no won, address, invoice, payment or other order letters to any recipient. The case and scenario use the same USD winning bid of 10,100 minor units.
 
 **Other uncovered behavior:** US26 refund-in-HKD case `TC-q56` is required by the anchor/requirement, but no current scenario states that output; case remains unlinked. `TC-xji` also remains unlinked because no scenario states conversion of the one USD premium minimum together with the premium. `TC-9dm` asserts post-pick letters and the pre-pick won-lot exception across all letters; no single scenario asserts that full set.
 

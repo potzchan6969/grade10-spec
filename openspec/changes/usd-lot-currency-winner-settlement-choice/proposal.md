@@ -34,8 +34,9 @@ the money they hold.
 - **Methods follow the currency** — HKD offers Card, FPS and HK Local; USD
   offers Card, HK Local and International via SWIFT. Each rail is a choice at
   setup.
-- **The operator has no currency to choose** — the listing form is USD only,
-  and HKD and JPY leave it and Payment Settings.
+- **The operator has no listing currency to choose** - the listing form is
+  USD only. Payment Settings keeps the USD and HKD settlement card rules and
+  one USD premium minimum; JPY leaves it.
 
 ## Non-Goals
 
@@ -69,15 +70,23 @@ None.
 - `grade10-admin/auction/test-winners` - USD-only sandbox lot creation; the winner then chooses settlement currency normally.
 - `grade10-admin/auction/internal-bid` - USD bids and ceiling; an internal win records HKD settlement and FPS automatically, before the operator quotes and sends its invoice.
 - `grade10-site/auction/bid-payment-method` - the 20% premium disclosure on the one USD bid currency.
+- `grade10-site/auction/auto-bidding` - USD maximums, standing bids and house competition use the one USD schedule.
+- `grade10-site/auction/account-record` - My Auctions prices and refused-raise examples use USD.
+- `grade10-site/auction/listing-page` - live bid and minimum-next-bid updates carry USD.
+- `grade10-site/auction/bidder-suspension` - standing and won bid facts stay in USD when an account is suspended.
+- `grade10-site/auction/notifications` - close-outcome letters name the winning bid in USD.
+
+The existing operator telephone-setup action gains its own journey anchor;
+its behavior stays unchanged.
 
 ## Impact
 
 - The UI design artifact is waived by @htonyl on 2026-10-14. Existing stories are corrected to the settled selection and rail behavior.
 - The auction domain suites include the USD bid, winner settlement, and automatic internal HKD/FPS routes and are refreshed with the feature suites.
 
-- `apps/preview` and `packages/ui` auction fixtures already moved to US$ bid
-  amounts ahead of this change (FE preparation); invoice/order fixtures stay
-  HK$ to exercise an HKD-settled order.
+- `apps/preview` and `packages/ui` auction fixtures use US$ bid amounts and
+  the USD10,000,000 ceiling, including near-ceiling chips. Invoice/order
+  fixtures use HK$ where they exercise HKD settlement.
 - `apps/emails` auction letter previews show US$ bid amounts and an HK$ order
   total.
 - `grade10-site` wires the USD lot currency and the setup-time settlement

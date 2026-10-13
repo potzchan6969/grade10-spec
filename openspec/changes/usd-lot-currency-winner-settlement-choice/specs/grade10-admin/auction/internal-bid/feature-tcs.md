@@ -19,7 +19,7 @@
 | `<internal bidder>` | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test, billing address `<house billing address>` |
 | `<house billing address>` | A Hong Kong address with every required field: name "Grade10 Stock Room", 1 Test Road, Central, Hong Kong |
 
-## grade10-admin-auction-internal-bid-US-01: Admin protects a lot with an internal bid at a set time
+## grade10-admin-auction-internal-bid-US1: Admin protects a lot with an internal bid at a set time
 
 **As an** auction admin,
 **I want** to set a hidden house maximum on a listing, the internal bidder it bids as, and the time Grade10 commits it,
@@ -705,7 +705,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the write, saying the internal bidder is retired.
 * Step 3: `<listing_55>` holds no internal bid.
 
-## grade10-admin-auction-internal-bid-US-02: Admin changes an internal bid before its time
+## grade10-admin-auction-internal-bid-US2: Admin changes an internal bid before its time
 
 **As an** auction admin,
 **I want** to change or remove the amount and the time until the internal bid is committed,
@@ -893,7 +893,7 @@ Runs once per row of **Test data**.
 * Step 1: `<listing_10>` reads Canceled.
 * Step 3: no house bid was placed at `<commit time>`, and no internal bid is held for `<listing_10>`.
 
-## grade10-admin-auction-internal-bid-US-03: Admin raises a committed internal bid
+## grade10-admin-auction-internal-bid-US3: Admin raises a committed internal bid
 
 **As an** auction admin,
 **I want** to raise the house maximum any time the lot still takes a bid,
@@ -1188,7 +1188,7 @@ Runs once per row of **Test data**.
 * Step 3: the house's new bid at `<new highest bid>` reads House with `<bidder P>`'s name.
 * Step 4: Highest bid reads `<new highest bid>`, and customer A is outbid.
 
-## grade10-admin-auction-internal-bid-US-04: Admin lowers a committed internal bid without moving the lead
+## grade10-admin-auction-internal-bid-US4: Admin lowers a committed internal bid without moving the lead
 
 **As an** auction admin,
 **I want** to lower the house maximum when the leader and the current bid stay as they are,
@@ -1391,7 +1391,7 @@ Runs once per row of **Test data**.
 * Step 5 is refused, naming the house's bid of `<house bid>`.
 * Step 6 shows `<kept lower>`, committed.
 
-## grade10-admin-auction-internal-bid-US-05: Admin learns an internal bid came too late
+## grade10-admin-auction-internal-bid-US5: Admin learns an internal bid came too late
 
 **As an** auction admin,
 **I want** to see that an internal bid was not placed because the price had already passed it,
@@ -1783,14 +1783,14 @@ Runs once per row of **Test data**.
 * Step 2 is accepted.
 * Step 3 shows `<saved amount>`, not placed.
 
-## grade10-admin-auction-internal-bid-US-06: Admin settles the order of a lot an internal bidder won
+## grade10-admin-auction-internal-bid-US6: Admin settles the order of a lot an internal bidder won
 
 **As an** auction admin,
 **I want** the order and invoice of a lot an internal bidder won to be issued to that internal bidder and flagged internal,
 **so that** I can let the invoice expire and cancel the order as I do any unpaid order, while knowing it was the house's win.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-rzs rev=3 covers=g10adm.auction-internal-bid.SC-nl0 -->
-### grade10-admin-auction-internal-bid-US6-TC1-3: A house win opens one order for its internal bidder, flagged internal
+<!-- trace:case id=g10adm.auction-internal-bid.TC-rzs rev=4 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC1-4: A house win opens one order for its internal bidder, flagged internal
 
 Runs once per row of **Test data**.
 
@@ -1936,8 +1936,8 @@ Runs once per row of **Test data**.
 * Step 6 holds no auction-won letter and no other order letter, to anyone.
 * Step 6 holds no row addressed to `<internal bidder>`'s email label.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-cww rev=2 covers=g10adm.auction-internal-bid.SC-nl0 -->
-### grade10-admin-auction-internal-bid-US6-TC4-2: At the close the internal order takes HKD settlement and FPS with the internal bidder's billing address
+<!-- trace:case id=g10adm.auction-internal-bid.TC-cww rev=3 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC4-3: At the close the internal order takes HKD settlement and FPS with the internal bidder's billing address
 
 **Classification:**
 
@@ -1982,8 +1982,8 @@ Runs once per row of **Test data**.
 * Step 5: the status is the one step 3 read, not Setup Overdue; the invoice reads Not issued.
 * Step 6 holds no setup reminder, setup overdue or other order letter.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=2 covers=g10adm.auction-internal-bid.SC-6fc -->
-### grade10-admin-auction-internal-bid-US6-TC5-2: An operator sends the internal order's invoice by hand, and no invoice letter goes out
+<!-- trace:case id=g10adm.auction-internal-bid.TC-dqh rev=3 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC5-3: An operator sends the internal order's invoice by hand, and no invoice letter goes out
 
 **Classification:**
 
@@ -2027,8 +2027,8 @@ Runs once per row of **Test data**.
 * Step 4: the deadline is 7 calendar days after the send.
 * Step 5 holds no invoice-sent letter and no payment reminder, to anyone.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-kgs rev=2 covers=g10adm.auction-internal-bid.SC-77a -->
-### grade10-admin-auction-internal-bid-US6-TC6-2: The internal invoice expires after its 7 days, silently, and the order waits for the operator
+<!-- trace:case id=g10adm.auction-internal-bid.TC-kgs rev=3 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC6-3: The internal invoice expires after its 7 days, silently, and the order waits for the operator
 
 **Classification:**
 
@@ -2070,8 +2070,8 @@ Runs once per row of **Test data**.
 * Step 4: the order still reads Payment Overdue; nothing cancelled it.
 * Step 5 holds no day-3, day-6, final notice or payment overdue letter, to anyone.
 
-<!-- trace:case id=g10adm.auction-internal-bid.TC-2d2 rev=2 covers=g10adm.auction-internal-bid.SC-jzh -->
-### grade10-admin-auction-internal-bid-US6-TC7-2: An operator cancels the internal order by hand and the lot goes back to stock
+<!-- trace:case id=g10adm.auction-internal-bid.TC-2d2 rev=3 covers=none -->
+### grade10-admin-auction-internal-bid-US6-TC7-3: An operator cancels the internal order by hand and the lot goes back to stock
 
 Runs once per row of **Test data**.
 
@@ -2127,7 +2127,7 @@ Runs once per row of **Test data**.
 * Step 6 reads `<available before>` plus `<held quantity>`.
 * Step 7 holds no cancellation letter or other order letter, to anyone.
 
-## grade10-admin-auction-internal-bid-US-07: Admin keeps protected lots secret from staff
+## grade10-admin-auction-internal-bid-US7: Admin keeps protected lots secret from staff
 
 **As an** auction admin,
 **I want** operators without secret-floor access never to see an internal bid's amount or time, or learn that a lot has one before the house bids,
@@ -2729,7 +2729,7 @@ Runs once per row of **Test data**.
 * Step 3: in the Staff row, neither read carries `<house maximum>`, the commit time or the internal bid's state.
 * Step 4 finds no order in either row.
 
-## grade10-admin-auction-internal-bid-US-08: Admin learns a listing edit cleared the internal bid
+## grade10-admin-auction-internal-bid-US8: Admin learns a listing edit cleared the internal bid
 
 **As an** auction admin,
 **I want** to see that a change to a listing's window, starting price or currency cleared its internal bid,
@@ -3025,7 +3025,7 @@ Runs once per row of **Test data**.
 * Step 2 refuses the non-USD currency update.
 * Step 3 shows `<listing_51>` remains USD, with `<house maximum>` at `<commit time>` still set.
 
-## grade10-admin-auction-internal-bid-US-09: Admin keeps the internal bidders an internal bid can bid as
+## grade10-admin-auction-internal-bid-US9: Admin keeps the internal bidders an internal bid can bid as
 
 **As an** auction admin,
 **I want** to add, rename and retire internal bidder profiles in auction admin,

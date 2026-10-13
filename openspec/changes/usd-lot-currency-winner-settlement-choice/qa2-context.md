@@ -6,12 +6,18 @@ This bounded QA2 covers `grade10-admin/auction/internal-bid` and `grade10-site/a
 
 Source identities after this bounded pass:
 
-- **Internal-bid feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/feature-tcs.md` SHA-256 `67325c6fb94d728cb2695ba03b0b7d34686c5dc5528217268f43ae60213f94b4`
-- **Internal-bid delta spec** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/spec.md` SHA-256 `8e6fae61f3147b2d92204e56f168ea6bd2da4a480c4fcb86f7148e6b3df4e897`
+- **Internal-bid feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/feature-tcs.md` SHA-256 `d4dbad494cc4171ea8577dd7560e67527c4399eb8e958a881ce159c3fe5c4900`
+- **Internal-bid delta spec** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/spec.md` SHA-256 `d85248e6466ae60a6ed1cbc45d86a7ce0dcceccd60e170f08c60b659309ee687`
 - **Internal-bid journeys** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/user-journeys.md` SHA-256 `ffd6d6bc66f359d6ab3a4904f444f1e9699f364b7de362399a0c65d6f666e2cc`
-- **Bid-payment-method feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/feature-tcs.md` SHA-256 `31c121b5daa319a1e5b167e2fd8323af4522c744e2939c4e89c631ab89be8e19`
-- **Bid-payment-method delta spec** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/spec.md` SHA-256 `6d09f0e6313a08e8874819095488eb93a978226edceb43ca160b2bd58ad2dec3`
+- **Bid-payment-method feature TCS** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/feature-tcs.md` SHA-256 `0603ebc46a037bdb9b981c007b1f413fea2493ed613f662f2a28b093632d3c60`
+- **Bid-payment-method delta spec** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/spec.md` SHA-256 `f6c92d2f6972999c7fd8e492fc4a877c4f052ab9a12bf1d2bc5f73f6f95cf8ff`
 - **Bid-payment-method journeys** - `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-site/auction/bid-payment-method/user-journeys.md` SHA-256 `da238c1b0fb5ad158ff9a4cc533dac83b0eae667c544fa45607068c7af999690`
+
+## Readonly recheck after metadata fold
+
+The parent restored the exact durable `Purpose` sections and canonical case-group aliases. This reread confirms: internal-bid groups are US-01 through US-09; bid-payment-method groups are US-01, US-02 and US-04; all 71 internal and 13 site trace-case markers are unique; and the 90 internal plus two site `covers` links resolve to current scenarios. The site US1-TC1 legacy heading has no trace marker, as recorded in the case ledger. No case-marker ID repeats. Some scenarios have links from multiple independently complete cases as recorded in the ledger; no marker replacement or coverage overwrite occurred.
+
+The case counts still match the canonical anchors: internal active cases are 13/4/6/4/8/7/12/5/10, excluding the two deprecated historical cases; site cases are 10/2/2, with the legacy unmarked US1-TC1 retained in the 10. The one deliberate group/Trace difference is TC-v7q: it is listed under the restored US-08 group but traces to US-01, matching SC-wib/qzx/ps0 and the carried admin QA2 disposition. US-08 still has its five active cases. The durable Purpose sections match exactly; no scenario, journey or case behavior changed in this metadata fold.
 
 ## Disposition rules and anchors
 
@@ -64,7 +70,7 @@ QA1 found active feature-case coverage for all nine internal-bid journeys, and t
 | `g10adm.auction-internal-bid.TC-vuc` rev4 | draft | SC-on5 |
 | `g10adm.auction-internal-bid.TC-cww` rev2 | draft | SC-nl0 |
 | `g10adm.auction-internal-bid.TC-dqh` rev2 | draft | SC-6fc |
-| `g10adm.auction-internal-bid.TC-kgs` rev2 | draft | SC-77a |
+| `g10adm.auction-internal-bid.TC-kgs` rev2 | draft | partial: expiry status and no letters only; no suspension assertion |
 | `g10adm.auction-internal-bid.TC-2d2` rev2 | draft | SC-jzh |
 | `g10adm.auction-internal-bid.TC-hy3` rev2 | draft | SC-n08; SC-27a; SC-d57 |
 | `g10adm.auction-internal-bid.TC-kku` rev2 | draft | SC-w8v |
@@ -103,6 +109,7 @@ Case-level findings:
 - **TC-kg8 rev3 / US9-TC2-3** - Existing no-billing-address row explicitly refuses and creates no bidder. Covers SC-tj3 (SC-79).
 - **TC-v7q rev2 / US8-TC6-2** - Retained the corrected current behavior; EUR, HKD and JPY update rows refuse and preserve the USD listing and bid. Covers SC-wib, SC-qzx and SC-ps0 (historical SC-35/42/43 titles).
 - **Deprecated cases** - TC-dui (US1 currency-edit history) and TC-qxx (US8 currency-change history) remain deprecated with `covers=none`; neither claims current coverage.
+- **TC-kgs rev2 / US7 expiry route** - Asserts invoice expiry and absence of letters. It does not assert the no-suspension outcome, so it is partial for SC-77a (historical label SC-74) and is not linked as full coverage.
 - **Other active cases** - Baseline-linked candidate scenarios were carried only when current THEN assertions remained complete on the case route. Candidate overclaims removed include TC-of0 and TC-jm4 to SC-dq6, TC-88a to SC-5x7, TC-kok to SC-mxk/SC-m8q, TC-d07 to SC-glg before its repair, TC-vuc to SC-nl0, and TC-81p to SC-on5.
 
 ## Internal-bid scenario dispositions
@@ -138,7 +145,7 @@ Case-level findings:
 | `SC-nl0` - A lot an internal bidder wins opens its internal order | Covered by `g10adm.auction-internal-bid.TC-rzs`, `g10adm.auction-internal-bid.TC-cww` |
 | `SC-l6i` - A later change to the internal bidder's address leaves its order as it was | Covered by `g10adm.auction-internal-bid.TC-2nf` |
 | `SC-6fc` - An operator sends the internal order's invoice and nobody is mailed | Covered by `g10adm.auction-internal-bid.TC-dqh` |
-| `SC-77a` - The internal order's invoice expires with no letter and no suspension | Covered by `g10adm.auction-internal-bid.TC-kgs` |
+| `SC-77a` (historical label SC-74) - The internal order's invoice expires with no letter and no suspension | Partial - `g10adm.auction-internal-bid.TC-kgs` asserts expiry and no letters, but not no suspension. Out-of-suite verifier: backend test planned in `openspec/changes/add-auction-internal-bid/tasks.md` task 4.1; this change has no current complete case for that assertion. See gap disposition below. |
 | `SC-jzh` - An operator cancels the expired internal order and the lot returns to stock | Covered by `g10adm.auction-internal-bid.TC-2d2` |
 | `SC-rrc` - Staff read an internal order's buyer as House | Covered by `g10adm.auction-internal-bid.TC-rfj`, `g10adm.auction-internal-bid.TC-81p` |
 | `SC-u1p` - Only a reserve holder sees the listing flagged as the internal bidder's win | Covered by `g10adm.auction-internal-bid.TC-17a`, `g10adm.auction-internal-bid.TC-81p` |
@@ -186,7 +193,7 @@ Case-level findings:
 | `SC-epm` - A reserve holder reads which internal bidder bid | Covered by `g10adm.auction-internal-bid.TC-mnc` |
 | `SC-s2h` - An internal bidder's email label matches no Listings search | Covered by `g10adm.auction-internal-bid.TC-k1j` |
 
-Scenario count check: 76 current internal-bid scenarios; each has a feature case, full domain case, or explicit partial/out-of-suite disposition above. SC-74 is the only partial behavior. SC-71, SC-73 and SC-75 are fully asserted by the admin domain case `g10adm.auction-dmn.TC-sjg` rev3.
+Scenario count check: 76 current internal-bid scenarios; each has a feature case, full domain case, or explicit partial/out-of-suite disposition above. SC-77a (historical label SC-74) is the only partial behavior. SC-71, SC-73 and SC-75 are fully asserted by the admin domain case `g10adm.auction-dmn.TC-sjg` rev3.
 
 ## Bid-payment-method dispositions
 
@@ -214,7 +221,9 @@ Scenario count check: 76 current internal-bid scenarios; each has a feature case
 
 ## Remaining gaps and overclaims
 
-- **Internal-bid SC-74** - The UI case does not assert no account suspension. Existing backend expiry check remains the named out-of-suite verifier; no case link is assigned for this partial behavior.
+- **Internal-bid SC-74** - The feature case `g10adm.auction-internal-bid.TC-kgs` asserts invoice expiry and no letters, but it does not assert the no-account-suspension THEN; the domain cases do not add this assertion. No current backend test specifically verifies an internal invoice expiring without suspension. The exact planned verifier is `openspec/changes/add-auction-internal-bid/tasks.md` task 4.1 (unchecked): add backend tests including “an expiry with no suspension.” Its implementation dependency is task 4.3 in that file: skip `suspendForExpiredInvoice` for an internal order and scope the expiry error to a collector order. The reason is explicit in the scenario: an internal bidder has no site account that could be suspended. The current change task 11.8 also plans a walk that lets the invoice expire with no account suspension, but it is unchecked and is not current evidence. Its source is `openspec/changes/usd-lot-currency-winner-settlement-choice/tasks.md` SHA-256 `223a32a60c68eb6bad36bf00c3d305aa13f81521142339cf18b4727535039824`. Thus SC-74 remains partial/out of suite until task 4.1's test is implemented and passes. No feature or domain case link is assigned to this partial assertion.
+  - **Verifier references and source hashes** - Active delta scenario: `openspec/changes/usd-lot-currency-winner-settlement-choice/specs/grade10-admin/auction/internal-bid/spec.md` SHA-256 `d85248e6466ae60a6ed1cbc45d86a7ce0dcceccd60e170f08c60b659309ee687`. Feature out-of-suite note: `.../internal-bid/feature-tcs.md` SHA-256 `d4dbad494cc4171ea8577dd7560e67527c4399eb8e958a881ce159c3fe5c4900`. Domain out-of-suite note: `.../auction/domain-tcs.md` SHA-256 `0de56610b26eaa8c809d39acbb2ee6e0e30e825ea050abe8ffc33ba1418bd1e9`. Planned verifier task: `openspec/changes/add-auction-internal-bid/tasks.md` SHA-256 `3d4d17f7549b00cf3f1767ee099068159e0035809bc2df37147ad6c1754f96a0`; implementation task 4.3 is in the same file. The durable QA record that assigns this exact backend test lane is `openspec/specs/grade10-admin/auction/internal-bid/feature-tcs.md` SHA-256 `1a9824b653e7c82ffd49b11ff35f9ef4f43d7b3161f20458b32cc6568ee4e74e`.
+  - **Current-code test check** - `apps/backend/grade10/auction/test/db/sweeps/winnerInvoice.spec.ts:59` SHA-256 `2628ade4099397e8c01a2aec63aa13ca06c4a099429bbe103fb12fb391e093be` covers a regular overdue winner and expects suspension; it does not exercise an internal order. `packages/grade10-auction/backend/test/services/bidders/suspension.test.ts:203` SHA-256 `d15c3ec1ce07f0fca5746697582867f8a4ba77f0e9ecf7ad81cbc4d77ea0dac3` checks that a missing bidder does not create a suspension row, but it does not test invoice expiry. Neither is claimed as SC-74's verifier.
 - **No uncovered current internal-bid scenario remains after QA2 repairs.** SC-78 and SC-79 were already present in the delta and now have full current cases.
 - **No uncovered bid-payment-method delta scenario remains.** SC-x21 and SC-oeb have direct full cases.
 - **Product questions** - None. Current settled behavior is USD universal bidding; internal house wins automatically receive HKD settlement and bank transfer on FPS at close, with no setup and no letters; the operator still quotes and sends the invoice.

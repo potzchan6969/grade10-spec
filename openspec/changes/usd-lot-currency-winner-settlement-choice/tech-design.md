@@ -70,6 +70,12 @@ The specs govern the rules. These rows record how they are built.
 - **One schedule** - The increment lookup loses its currency switch and reads one USD table and one USD ceiling. The HKD and JPY rows are deleted, not left as dead data.
 - **API and form** - Both refuse any other code. The admin form shows USD as fixed text.
 
+### Site bid facts and read paths
+
+- **Scope** - `grade10-site/auction/auto-bidding`, `account-record`, `listing-page`, `bidder-suspension` and `notifications` carry auction bid facts. Their maxima, current prices, minimum next bids and close-outcome bid amounts use USD minor units after the listing overwrite.
+- **Viewer floor** - My Auctions and the live lot page read the minimum next bid supplied for that viewer and listing version. They do not derive a floor from the displayed price. The USD schedule gives a 132500 minor-unit floor after an accepted manual bid of 130000.
+- **Settlement boundary** - These site bid facts remain USD when an internal bidder's order starts in HKD on FPS at close. The order is created without sending an invoice; the operator still quotes and sends it. A later payment-rail or settlement-currency change is enough to reissue under the order pricing rules above.
+
 ### Payment Settings
 
 - **Spec governs** - `grade10-admin/auction/payment-settings`.

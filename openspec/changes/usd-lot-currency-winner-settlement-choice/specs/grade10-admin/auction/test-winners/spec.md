@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Lets an operator outside production create a test winner with a closed
-sandbox lot through the real auction close, then sign in with the ordinary
-link so QA can walk a winner's order.
+Lets an operator, outside production, make in one step a test account that
+has won a closed sandbox lot, and sign in as it with the ordinary sign-in
+link, so QA walks a winner's order by hand as a real winner would.
 
 ## Feature set
 

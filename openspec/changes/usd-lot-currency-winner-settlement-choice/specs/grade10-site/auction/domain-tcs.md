@@ -36,16 +36,16 @@
 | `<listing_2>` | A published listing in Pokémon, gallery of three images |
 | `<listing_3>` | A published listing in another category, first gallery item an image |
 | `<listing_4>` | A live listing with bids, in USD |
-| `<current bid>` | USD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | Item | `<surface>`: The auction catalogue at `<grade10 auction url>`; `<identity>`: the catalogue's own title and description; `<status>`: 200 |
 | Item | `<surface>`: `<listing_2>`'s own address; `<identity>`: `<listing_2>`'s title, description and canonical address, in `og:title`, `og:description` and `og:url`; `<status>`: 200 |
 | Item | `<surface>`: `<no lot address>`; `<identity>`: the site's not-found surface; `<status>`: 404 |
 | `<card>` | Visa ending 4242 |
 | `<listing_5>` | A live listing with no bids, several gallery images, in USD |
-| `<starting price>` | USD1,200 (range: 80000–399999 minor units) |
+| `<starting price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<bid amount>` | USD1,200 (fixed boundary or equality), equal to `<starting price>` |
 | `<listing_4>` | A live listing with bids from other users, in USD, bid count `<bid count>` |
-| `<current bid>` | USD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<increment>` | USD25 (fixed tier increment), the USD1,000 tier |
 | `<bid amount>` | USD4,984 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
 | `<bid count>` | 2 |
@@ -125,36 +125,36 @@
 | Item | Value |
 | --- | --- |
 | `<listing_5>` | A live listing with no bids, in USD |
-| `<starting price>` | USD1,280 (range: 80000–399999 minor units) |
-| `<increment>` | USD25 (fixed tier increment) |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
-| `<user B raise>` | USD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<starting price>` | USD1,280 (range: 100000–499999 minor units) |
+| `<increment>` | USD50 (fixed tier increment at the USD5,000 tier for `<user B maximum>`) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
+| `<user B raise>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 | `<listing_6>` | A live listing led by user A, in USD |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 | `<listing_10>` | A live listing the user has bid on manually and automatically, now led by user B |
 | `<listing_7>` | A live listing with bids and a close approaching |
-| `<current bid>` | USD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<time left>` | 7 minutes |
 | `<listing_9>` | A live listing with an extension cap, its close already at the cap |
 | `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
 | `<bid time>` | 3 minutes before the recorded close, inside `<extension window>` |
 | `<new time left>` | Unchanged — the close stays at the cap |
-| `<bid amount>` | USD4,985 (range: 400000–799999 minor units), at the minimum next bid |
+| `<bid amount>` | USD4,985 (range: 100000–499999 minor units), at the minimum next bid |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<extension duration>` | 1800 seconds |
 | `<time left before bid>` | 4 minutes |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user B maximum>` |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
-| `<user B maximum>` | USD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
 | `<device skew>` | 4 minutes behind |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 
 ### Route
 
@@ -234,10 +234,10 @@
 | --- | --- |
 | `<listing_11>` | A live listing the user holds an accepted bid on |
 | `<listing_14>` | An open USD listing with no bids, starting price `<starting price>` |
-| `<starting price>` | USD280 (range: 1000–79999 minor units) |
+| `<starting price>` | USD280 (range: 10000–49999 minor units) |
 | `<increment>` | USD10 (fixed tier increment), the USD step at `<user A maximum>` |
-| `<user A maximum>` | USD560 (range: 1000–79999 minor units) |
-| `<user B maximum>` | USD920 (range: 80000–399999 minor units), above `<user A maximum>` |
+| `<user A maximum>` | USD560 (range: 50000–99999 minor units) |
+| `<user B maximum>` | USD920 (range: 50000–99999 minor units), above `<user A maximum>` |
 | `<price after A>` | `<starting price>` |
 | `<price after B>` | `<user A maximum>` plus `<increment>` |
 | `<no lot address>` | An address under the auction's lots naming no published lot |
@@ -400,7 +400,7 @@ I read.
 * No card offers Buy Now or a stock count.
 * Step 2 opens `<listing_2>`'s own address without a page load, showing that lot.
 
-<!-- trace:case id=g10.auction-dmn.TC-yqv rev=2 -->
+<!-- trace:case id=g10.auction-dmn.TC-yqv rev=3 -->
 ### g10.auction-dmn.US2-TC2: Lot page answers whole before scripts run
 
 **Classification:**
@@ -426,7 +426,7 @@ I read.
 | Field | Value |
 | --- | --- |
 | `<listing_4>` | A live listing with bids, in USD |
-| `<current bid>` | USD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 
 **Steps:**
 
@@ -493,7 +493,7 @@ Runs once per row of **Test data**.
 **so that** the card I looked at is the card my bid stands on, with nothing taken from it until I win.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-rl3 rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-rl3 rev=4 -->
 ### g10.auction-dmn.US3-TC1: Gallery study leads to an accepted first bid
 
 **Classification:**
@@ -522,7 +522,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<card>` | Visa ending 4242 |
 | `<listing_5>` | A live listing with no bids, several gallery images, in USD |
-| `<starting price>` | USD1,200 (range: 80000–399999 minor units) |
+| `<starting price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<bid amount>` | USD1,200 (fixed boundary or equality), equal to `<starting price>` |
 
 **Steps:**
@@ -539,7 +539,7 @@ Runs once per row of **Test data**.
 * Highest bid reads `<bid amount>`, the bid count reads 1, and Recent Bids shows the user's own bid as You.
 * Step 4 shows nothing held or charged on `<card>`.
 
-<!-- trace:case id=g10.auction-dmn.TC-5pk rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-5pk rev=4 -->
 ### g10.auction-dmn.US3-TC2: Bid below the next increment is refused on the bid form and recorded nowhere
 
 **Classification:**
@@ -568,7 +568,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<card>` | Visa ending 4242 |
 | `<listing_4>` | A live listing with bids from other users, in USD, bid count `<bid count>` |
-| `<current bid>` | USD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<increment>` | USD25 (fixed tier increment), the USD1,000 tier |
 | `<bid amount>` | USD4,984 (fixed derived value), one major unit below `<current bid>` plus `<increment>` |
 | `<bid count>` | 2 |
@@ -596,7 +596,7 @@ Runs once per row of **Test data**.
 from my card until I win.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-r2v rev=2 -->
+<!-- trace:case id=g10.auction-dmn.TC-r2v rev=3 -->
 ### g10.auction-dmn.US4-TC1: Two maxima settle at the second-highest plus one increment
 
 **Classification:**
@@ -623,11 +623,11 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_5>` | A live listing with no bids, in USD |
-| `<starting price>` | USD1,280 (range: 80000–399999 minor units) |
+| `<starting price>` | USD1,280 (range: 100000–499999 minor units) |
 | `<increment>` | USD25 (fixed tier increment) |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
-| `<user B raise>` | USD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
+| `<user B raise>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 
 **Steps:**
 
@@ -650,7 +650,7 @@ from my card until I win.
 **so that** I can see I was outbid and what the next bid must clear.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-0cq rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-0cq rev=4 -->
 ### g10.auction-dmn.US5-TC1: Outbid standing reaches the lot page and the bids index
 
 **Classification:**
@@ -678,10 +678,10 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_6>` | A live listing led by user A, in USD |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 
 **Steps:**
 
@@ -739,7 +739,7 @@ from my card until I win.
 **so that** whoever I send it to reads the card I meant, not the catalogue.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-wrl rev=2 -->
+<!-- trace:case id=g10.auction-dmn.TC-wrl rev=3 -->
 ### g10.auction-dmn.US6-TC1: Shared link unfurls as the lot and stays put on hydration
 
 **Classification:**
@@ -764,7 +764,7 @@ from my card until I win.
 | Field | Value |
 | --- | --- |
 | `<listing_7>` | A live listing with bids and a close approaching |
-| `<current bid>` | USD4,960 (range: 400000–799999 minor units) |
+| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
 | `<time left>` | 7 minutes |
 
 **Steps:**
@@ -785,7 +785,7 @@ from my card until I win.
 **so that** the time I read and the time I am judged by are the same.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-5yl rev=1 -->
+<!-- trace:case id=g10.auction-dmn.TC-5yl rev=2 -->
 ### g10.auction-dmn.US7-TC2: Extension cap holds while the bid is still accepted
 
 **Classification:**
@@ -815,7 +815,7 @@ from my card until I win.
 | `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
 | `<bid time>` | 3 minutes before the recorded close, inside `<extension window>` |
 | `<new time left>` | Unchanged — the close stays at the cap |
-| `<bid amount>` | USD4,985 (range: 400000–799999 minor units), at the minimum next bid |
+| `<bid amount>` | USD4,985 (range: 100000–499999 minor units), at the minimum next bid |
 
 **Steps:**
 
@@ -831,7 +831,7 @@ from my card until I win.
 
 `<!-- archive fold: g10.auction-dmn.TC-wh3@2 (2026-09-17-revise-auction-extended-bidding) replaced the earlier extended-bidding case -->`
 
-<!-- trace:case id=g10.auction-dmn.TC-wh3 rev=2 -->
+<!-- trace:case id=g10.auction-dmn.TC-wh3 rev=3 -->
 ### g10.auction-dmn.US7-TC3: Price-moving auto-bid in extended bidding restarts the timer on the open page
 
 **Classification:**
@@ -862,10 +862,10 @@ from my card until I win.
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<extension duration>` | 1800 seconds |
 | `<time left before bid>` | 4 minutes |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user B maximum>` |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -880,7 +880,7 @@ from my card until I win.
 * Step 3 reads Time left `<extension duration>`, labelled Extended bidding, with no reload.
 * The lot closes after step 4, and no further bid is placed.
 
-<!-- trace:case id=g10.auction-dmn.TC-n2z rev=1 -->
+<!-- trace:case id=g10.auction-dmn.TC-n2z rev=2 -->
 ### g10.auction-dmn.US7-TC4: Catalogue card and open lot page agree after an extension
 
 **Classification:**
@@ -912,9 +912,9 @@ from my card until I win.
 | --- | --- |
 | `<listing_8>` | A listing in extended bidding, led by customer A, current bid `<leader price>` |
 | `<time left before bid>` | 4 minutes |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD9,600 (range: 800000–3999999 minor units), above `<user A maximum>` |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD9,600 (range: 500000–999999 minor units), above `<user A maximum>` |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user A maximum>` |
 | `<device skew>` | 4 minutes behind |
 
@@ -939,7 +939,7 @@ from my card until I win.
 it.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-nhf rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-nhf rev=4 -->
 ### g10.auction-dmn.US8-TC1: Rival reads the price but never the leader's maximum
 
 **Classification:**
@@ -967,8 +967,8 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_6>` | A live listing led by user A, in USD |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
 
 **Steps:**
 
@@ -1021,7 +1021,7 @@ it.
 
 `<!-- archive fold: g10.auction-dmn.TC-fp8@2 (2026-09-16-default-auction-bid-holds-off) replaced the earlier linked-card bid case -->`
 
-<!-- trace:case id=g10.auction-dmn.TC-fp8 rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-fp8 rev=4 -->
 ### g10.auction-dmn.US8-TC3: A linked collector's bid stands at once on the card on file
 
 **Classification:**
@@ -1048,10 +1048,10 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_14>` | An open USD listing with no bids, starting price `<starting price>` |
-| `<starting price>` | USD280 (range: 1000–79999 minor units) |
+| `<starting price>` | USD280 (range: 10000–49999 minor units) |
 | `<increment>` | USD10 (fixed tier increment), the USD step at `<user A maximum>` |
-| `<user A maximum>` | USD560 (range: 1000–79999 minor units) |
-| `<user B maximum>` | USD920 (range: 80000–399999 minor units), above `<user A maximum>` |
+| `<user A maximum>` | USD560 (range: 50000–99999 minor units) |
+| `<user B maximum>` | USD920 (range: 50000–99999 minor units), above `<user A maximum>` |
 | `<price after A>` | `<starting price>` |
 | `<price after B>` | `<user A maximum>` plus `<increment>` |
 
@@ -1268,7 +1268,7 @@ it.
 **so that** what I read on either is what the auction decided.
 
 
-<!-- trace:case id=g10.auction-dmn.TC-3iz rev=2 -->
+<!-- trace:case id=g10.auction-dmn.TC-3iz rev=3 -->
 ### g10.auction-dmn.US12-TC1: Winner and losing bidder read one result on the lot and My Auctions
 
 **Classification:**
@@ -1296,7 +1296,7 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_15>` | An USD listing in extended bidding, led by customer A |
+| `<listing_15>` | A USD listing in extended bidding, led by customer A |
 | `<final price>` | USD5,750 (fixed derived value), `<user B maximum>` plus its USD50 increment |
 | `<user A maximum>` | USD8,400 (fixed derived value), above `<final price>` |
 | `<user B maximum>` | USD5,700 (fixed derived value), below `<final price>` |
@@ -1317,7 +1317,7 @@ it.
 * Step 5's row reads Didn't win, with Current bid `<final price>`, not `<user B maximum>`.
 * Step 5's row reads "Your card was not charged.".
 
-<!-- trace:case id=g10.auction-dmn.TC-8w7 rev=2 -->
+<!-- trace:case id=g10.auction-dmn.TC-8w7 rev=3 -->
 ### g10.auction-dmn.US12-TC2: Catalogue card and lot page turn at the close without a reload
 
 **Classification:**
@@ -1344,7 +1344,7 @@ it.
 
 | Field | Value |
 | --- | --- |
-| `<listing_16>` | An USD listing in extended bidding, led by customer A |
+| `<listing_16>` | A USD listing in extended bidding, led by customer A |
 | `<final price>` | USD5,750 (fixed derived value) |
 
 **Steps:**
@@ -1577,7 +1577,7 @@ it.
 
 ### g10.auction-dmn.US4: Collector commits a maximum and is bid to the lead
 
-<!-- trace:case id=g10.auction-dmn.TC-cru rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-cru rev=4 -->
 #### g10.auction-dmn.US4-TC2: Auto-bid raises the leader on their behalf, with nothing taken from the card
 
 **Classification:**
@@ -1606,10 +1606,10 @@ it.
 | --- | --- |
 | `<card>` | Visa ending 4242 |
 | `<listing_6>` | A live listing led by user A, in USD |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
 | `<increment>` | USD50 (fixed tier increment), the USD5,000 tier at `<user B maximum>` |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<user B maximum>` | USD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<user B maximum>` | USD5,700 (range: 500000–999999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -1624,7 +1624,7 @@ it.
 * The bid count includes the raise, and the history shows it as placed on user A's behalf rather than as a manual bid.
 * Step 4 shows nothing held or charged on `<card>`.
 
-<!-- trace:case id=g10.auction-dmn.TC-b5t rev=3 -->
+<!-- trace:case id=g10.auction-dmn.TC-b5t rev=4 -->
 #### g10.auction-dmn.US4-TC3: Lowering a maximum is refused on the bid form and the lead holds
 
 **Classification:**
@@ -1651,9 +1651,9 @@ it.
 | Field | Value |
 | --- | --- |
 | `<listing_6>` | A live listing led by user A, in USD |
-| `<leader price>` | USD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | USD8,400 (range: 800000–3999999 minor units) |
-| `<lower maximum>` | USD3,400 (range: 80000–399999 minor units), below `<user A maximum>` |
+| `<leader price>` | USD1,200 (range: 100000–499999 minor units) |
+| `<user A maximum>` | USD8,400 (range: 500000–999999 minor units) |
+| `<lower maximum>` | USD3,400 (range: 100000–499999 minor units), below `<user A maximum>` |
 
 **Steps:**
 
@@ -1761,7 +1761,7 @@ it.
 - No domain case reads a card hold, a card authorization, a payment confirmation or a bid-time hold switch; the cases that did are rewritten or deprecated (decisions Q1, Q5). A case that reads the card reads that nothing is held or charged on it.
 - A refused attempt is not a bid: it shows on the bid form that made it and nowhere in the bidder's history, My Auctions or the lot's public record (decisions Q6).
 - A losing row on My Auctions reads "Your card was not charged." (decision Q2).
-- Bid fixtures in the domain suite use the current USD schedule; settlement HKD remains only in the winner-order case.
+- Bid fixtures in this suite use the current USD schedule. Settlement choices and invoice facts remain in the winner-order case; TC-k4p joins the auction close to the winner setup and invoiced summary.
 - **Archived fold records — 2026-10-12 suite rewrite** —
   - **2026-09-16-default-auction-bid-holds-off** — `grade10-site-auction-e2e-US08-TC1-1` → `g10.auction-dmn.US8-TC1`.
   - **2026-09-17-revise-auction-extended-bidding** — `grade10-site-auction-e2e-US07-TC01-2` → current journey cases are the replacement record.
@@ -1772,3 +1772,5 @@ it.
 ## Reconciliation
 
 See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+
+This R5 reconciliation also applies the selective bid-fixture corrections listed in `/private/tmp/qa2-1155-domain-r5-report.md`. TC-k4p stays at rev3 with the exact USD/HKD totals, fee and post-send timing. TC-wrl stays draft with `automation, manual` testability and manual automation status while its current-bid range is corrected.

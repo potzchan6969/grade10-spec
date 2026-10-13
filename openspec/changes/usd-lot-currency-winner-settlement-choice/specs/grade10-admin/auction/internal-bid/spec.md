@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Lets an auction admin protect a lot's final price with a hidden house maximum
-that Grade10 commits at a chosen time, then settles a house win through its
-own auction order.
+Lets an auction admin protect a lot's final price with a house maximum that
+collectors cannot see, committed at a time the admin chooses and then bid like
+any collector's maximum - [Internal Bid](/p/grade10-admin/auction/internal-bid).
 
 ## Feature set
 
@@ -448,16 +448,16 @@ buyer and the listing:
 A search of Orders by an email SHALL NOT match an internal bidder's email
 label, for any operator.
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-nl0 rev=2 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-nl0 rev=3 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-71 - A lot an internal bidder wins opens its internal order
 **Serves:** grade10-admin-auction-internal-bid-US-06 - the house's win opens an order the admin can run
 
-- **GIVEN** a `USD` listing where the house leads at 30500 USD minor units
-  with a Placed internal bid of 50000 as Harbour Cards, whose billing address
+- **GIVEN** a `USD` listing where the house leads at 10100 USD minor units
+  with a Placed internal bid of 10100 as Harbour Cards, whose billing address
   is in Hong Kong
 - **WHEN** the listing closes
 - **THEN** Grade10 opens one auction order for Harbour Cards, flagged
-  internal, at a winning bid of 30500 USD minor units
+  internal, at a winning bid of 10100 USD minor units
 - **AND** the order holds Harbour Cards's billing address as its delivery and
   billing address, with HKD settlement and bank transfer on FPS, and reads Preparing Invoice
 - **AND** no invoice is issued and no letter is sent
@@ -472,15 +472,17 @@ label, for any operator.
 - **AND** the order still holds the billing address Harbour Cards had at the
   close
 
-<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=2 -->
+<!-- trace:scenario id=g10adm.auction-internal-bid.SC-6fc rev=3 -->
 #### Scenario: grade10-admin-auction-internal-bid-SC-73 - An operator sends the internal order's invoice and nobody is mailed
 **Serves:** grade10-admin-auction-internal-bid-US-06 - the admin sends the invoice of the house's win
 
 - **GIVEN** the order of `grade10-admin-auction-internal-bid-SC-71`, and an
   operator holding payment-processing
-- **WHEN** they enter Shipping & Handling of 0 USD and a bank transfer fee of 0
+- **WHEN** they enter Shipping & Handling of USD10.01 and a bank transfer fee of 0
   USD, then send the invoice at 2026-11-03T09:00:00Z
-- **THEN** the quote names bank transfer on FPS and reads in HKD
+- **THEN** the quote names bank transfer on FPS and reads a total of
+  103100 minor units in HKD, from the USD101 winning bid, USD20.20 premium,
+  USD10.01 shipping and USD0 bank transfer fee
 - **AND** the invoice is `pending` with a payment deadline of
   2026-11-10T09:00:00Z, and the order reads Pending Payment
 - **AND** no invoice-sent letter is sent

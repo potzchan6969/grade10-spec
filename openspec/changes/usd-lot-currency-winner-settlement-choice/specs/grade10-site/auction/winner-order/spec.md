@@ -1060,11 +1060,11 @@ close delivered more than once SHALL produce one auction order.
 - **THEN** the order's derived status is Preparing Invoice
 - **AND** the winner is offered no way to pay yet
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=6 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=7 -->
 #### Scenario: winner-order-SC-277 - A lot an internal bidder wins opens its order with the internal bidder's address
 **Serves:** `grade10-admin/auction/internal-bid#grade10-admin-auction-internal-bid-US-06`
 
-- **GIVEN** a `USD` lot where the house leads at 30500 minor units over
+- **GIVEN** a `USD` lot where the house leads at 10100 minor units over
   collector A, its internal bid naming an internal bidder whose billing
   address is in Hong Kong
 - **WHEN** the lot closes
@@ -1072,7 +1072,7 @@ close delivered more than once SHALL produce one auction order.
   internal, with invoice status `not_issued` and settlement currency `HKD`
 - **AND** the order holds that billing address as its delivery and billing
   address, with `bank_transfer` on `fps`, and derives as Preparing Invoice
-- **AND** the order records the lot's 30500 minor-unit winning bid in USD
+- **AND** the order records the lot's 10100 minor-unit winning bid in USD
 - **AND** no invoice is issued, no winner or operator setup step is required,
   and no won, address or other letter is sent for it
 

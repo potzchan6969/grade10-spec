@@ -2,8 +2,12 @@
 
 ## Purpose
 
-Lets a collector bid with the card linked to their account and understand the
-buyer's premium rate, while payment remains part of the winner's order.
+Lets a collector bid on the card linked to their account: the card carries to
+every lot, can change until their first accepted bid on a lot, and is then
+locked to that lot. Nothing is held or charged on the card when they bid; only
+the winner pays, by the invoice on their winner order. The bid panel
+discloses the buyer-premium rate without turning the bidding surface into an
+invoice preview.
 
 ## Feature set
 

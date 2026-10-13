@@ -250,8 +250,8 @@
 **I want** a lot an internal bidder wins to open its internal order, which I invoice, let expire and cancel by hand,
 **so that** the card goes back to stock through the same order flow as any unpaid lot.
 
-<!-- trace:case id=g10adm.auction-dmn.TC-sjg rev=3 covers=grade10-admin-auction-internal-bid-SC-71,grade10-admin-auction-internal-bid-SC-73,grade10-admin-auction-internal-bid-SC-75,g10.auction-winner-order.SC-los -->
-### grade10-admin-auction-e2e-US4-TC2-3: An internal bidder's win is invoiced, expires and is cancelled, and the stock comes back
+<!-- trace:case id=g10adm.auction-dmn.TC-sjg rev=5 covers=grade10-admin-auction-internal-bid-SC-71,grade10-admin-auction-internal-bid-SC-73,grade10-admin-auction-internal-bid-SC-75,g10.auction-winner-order.SC-los,grade10-admin-auction-post-sale-SC-253 -->
+### grade10-admin-auction-e2e-US4-TC2-5: An internal bidder's win is invoiced, expires and is cancelled, and the stock comes back
 
 **Classification:**
 
@@ -282,14 +282,15 @@
 | `<product_4>` | A product with `<available before>` units available beside the hold |
 | `<held quantity>` | 2 units (any quantity from 1 to 500) |
 | `<available before>` | 3 units (any count) |
-| `<starting price>` | 400000 minor units (US$4,000.00) |
-| `<user A maximum>` | 500000 minor units (US$5,000.00) |
-| `<internal bidder>` | An active internal bidder profile: name "QA House Four", email label qa-house-four@internal.test |
+| `<starting price>` | 10000 minor units (US$100.00) |
+| `<user A maximum>` | 10000 minor units (US$100.00) |
+| `<internal bidder>` | An active internal bidder profile: name "Harbour Cards", email label harbour@internal.grade10.example |
 | `<house billing address>` | A Hong Kong address with every required field: name "Grade10 Stock Room", 4 Test Road, Central, Hong Kong |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
+| `<house maximum>` | 10100 minor units (US$101.00) |
 | `<commit time>` | 10 minutes from now |
-| `<final price>` | 505000 minor units: `<user A maximum>` plus its USD 50 increment |
-| `<shipping>` | 0 minor units (USD0.00), Shipping & Handling |
+| `<final price>` | 10100 minor units (US$101.00), the house maximum |
+| `<buyer's premium>` | 2020 minor units (USD20.20) |
+| `<shipping>` | 1001 minor units (USD10.01), Shipping & Handling |
 | `<transfer fee>` | 0 minor units (USD0.00), bank transfer fee |
 | `<note>` | "QA internal order, house win" |
 
@@ -311,7 +312,8 @@
 * Step 4: the order is flagged internal, buyer House with `<internal bidder>`, winning bid `<final price>` USD, HKD settlement, FPS and Preparing Invoice, with `<house billing address>` as its delivery and billing address.
 * At Step 4, exactly one internal order exists. Its invoice status is `not_issued`, no invoice has been issued, and its method is `bank_transfer` on `fps`.
 * The order does not enter Awaiting Setup and neither the winner nor operator chooses settlement currency or rail.
-* Step 5: the operator's quote takes USD inputs, names HKD settlement and bank transfer on FPS, and the invoice status becomes `pending`. The order reads Pending Payment with HKD amounts and a deadline 7 calendar days after the send.
+* Step 5: the operator's quote takes USD inputs of 1001 minor units for Shipping & Handling and 0 for the transfer fee, names HKD settlement and bank transfer on FPS, and the invoice status becomes `pending`.
+* The invoice total is 103100 minor units in HKD: the USD winning bid of 10100 converts to 79300, the USD premium of 2020 converts to 15900, and USD shipping of 1001 converts to 7900. The order reads Pending Payment and its deadline is 7 calendar days after the send.
 * Step 6: the order reads Payment Overdue, the invoice Expired.
 * Step 7: the confirmation says no letter is sent, and the order then reads Cancelled.
 * Step 8 reads `<available before>` plus `<held quantity>`.
@@ -387,3 +389,4 @@
 - **US3:** The normal winner chooses HKD/FPS before the operator quotes in USD and sends the HKD invoice. This remains distinct from internal winner handling.
 - **US4:** The internal winner receives HKD/FPS at close without winner or operator setup. The operator still quotes and sends the invoice, waits for expiry and cancels by hand.
 - **Out of suite:** The no-suspension assertion of internal-bid `SC-74` remains assigned to the backend check. No other domain-level scenario is claimed by inference.
+- **US4-TC2:** Revision 5 uses the exact shared close fixture: the winning bid is USD 10,100; USD premium is 2,020; and USD shipping is 1,001. The invoice lines convert to HKD 79,300 + 15,900 + 7,900 = HKD 103,100. It keeps the single-order, `not_issued` at close, HKD/FPS, no-setup, operator quote/send, expiry, cancellation, and any-recipient no-letter assertions. It covers internal-bid SC-71, SC-73 and SC-75, winner-order SC-277, and post-sale SC-253. Tasks 6.10 and 11.8 remain the planned implementation verifiers.

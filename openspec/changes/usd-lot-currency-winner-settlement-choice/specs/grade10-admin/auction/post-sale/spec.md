@@ -1,9 +1,8 @@
 # grade10-admin/auction/post-sale Specification
 
 ## Purpose
-
-Lets post-sale operators complete and protect winner orders, including
-preparing, sending, reissuing and cancelling invoices.
+Post-sale operators can see, complete and protect the billing address needed
+before a winner's invoice is sent.
 
 ## Feature set
 
@@ -11,6 +10,9 @@ preparing, sending, reissuing and cancelling invoices.
   - Quote in USD: the operator types every amount, the bank transfer fee included, in USD, and Grade10 converts it to the settlement currency picked
   - Reissue choice: a changed settlement currency or payment choice, including a bank rail, counts as the required change
   - Rail picked: the quote names the payment rail recorded on the order, not one bank transfer
+- Setup
+  - Reopen setup: an operator gives a winner in Setup Overdue a fresh 48 hours, with a reason, or records the setup themselves, never after the invoice is sent
+  - Telephone record: delivery and billing addresses, settlement currency and payment choice are required when the operator records the winner's setup
 
 ## ADDED Requirements
 
@@ -1112,7 +1114,7 @@ append-only and retained".
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-2g4 rev=3 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-84 - An operator records setup without reopening
-**Serves:** Setup - reopen setup or record it
+**Serves:** `grade10-admin/auction/post-sale#post-sale-US-20` - Operator records setup given by telephone
 
 - **GIVEN** an auction order in Setup Overdue whose address deadline was
   at 2026-09-14T09:00:00Z
@@ -1214,7 +1216,7 @@ append-only and retained".
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-ppk rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-250 - Recording setup without a currency is refused
-**Serves:** Setup - reopen setup or record it
+**Serves:** `grade10-admin/auction/post-sale#post-sale-US-20` - Operator records setup given by telephone
 
 - **GIVEN** an auction order in Setup Overdue whose address deadline has passed
 - **WHEN** an operator holding payment-processing records a delivery address, a

@@ -121,7 +121,7 @@
    - It reads the row's disclosure. g10.auction-bid-payment-method.US4-TC2
    - No currency amount appears in it. g10.auction-bid-payment-method.US4-TC2
 
-## grade10-site-auction-bid-payment-method-US-01: Collector bids on the card already linked
+## g10.auction-bid-payment-method.US1: Collector bids on the card already linked
 
 **As a** signed-in collector with a linked card,
 **I want** my maximum to stand the moment I commit it, with nothing taken from my card,
@@ -562,7 +562,7 @@ Runs once for the sole supported bid currency.
 * Step 3: the bid form names the minimum next bid, USD285, and Change is still offered on the linked card.
 * Step 4 opens card-link setup.
 
-## grade10-site-auction-bid-payment-method-US-02: Collector raises a bid on the same card
+## g10.auction-bid-payment-method.US2: Collector raises a bid on the same card
 
 **As a** collector who already bid on a listing,
 **I want** a higher bid to use the card I already committed to that listing,
@@ -659,7 +659,7 @@ Runs once for the sole supported bid currency.
 - `g10.auction-bid-payment-method.US3` is retired by `refused-bid-is-not-a-bid`; its deprecated case content is removed from the durable suite.
 - Retired marker IDs folded here: `g10.auction-bid-payment-method.TC-txz`
 
-## grade10-site-auction-bid-payment-method-US-04: Collector understands the buyer-premium rate before bidding
+## g10.auction-bid-payment-method.US4: Collector understands the buyer-premium rate before bidding
 
 **As a** collector considering a live lot,
 **I want** to know the buyer's premium rate before I bid,
