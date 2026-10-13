@@ -199,9 +199,7 @@ export const UsdWithoutCardRule: Story = {
       return choice;
     });
     expect(card).toHaveAttribute("aria-disabled", "true");
-    expect(
-      modal.getByText("Card is not yet available in USD"),
-    ).toBeVisible();
+    expect(modal.getByText("Card is not yet available in USD")).toBeVisible();
     expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
     expect(
       modal.getByRole("radio", { name: /^International via SWIFT\b/ }),

@@ -47,8 +47,8 @@ import {
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type {
   AuctionWinnerOrderAlert,
-  AuctionWinnerOrderCopy,
   AuctionWinnerOrderBankDetails,
+  AuctionWinnerOrderCopy,
   AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,
@@ -432,7 +432,9 @@ function SettlementChoices({
   settlementCurrency,
   paymentChoices,
 }: {
-  settlementCurrency: NonNullable<AuctionWinnerOrderProps["settlementCurrency"]>;
+  settlementCurrency: NonNullable<
+    AuctionWinnerOrderProps["settlementCurrency"]
+  >;
   paymentChoices?: AuctionWinnerOrderProps["paymentChoices"];
 }) {
   const selectedCurrency = settlementCurrency.value;
@@ -472,7 +474,7 @@ function SettlementChoices({
             }}
             value={
               choices.some((choice) => choice.value === paymentChoices.value)
-                ? paymentChoices.value ?? ""
+                ? (paymentChoices.value ?? "")
                 : ""
             }
           >
@@ -608,12 +610,12 @@ function OrderSummary({
         <>
           <hr className="w-full border-border" />
           {summary.total ? (
-          <SummaryRow
-            emphasize
-            label={summary.total.label}
-            muted={summary.total.muted}
-            value={summary.total.value}
-          />
+            <SummaryRow
+              emphasize
+              label={summary.total.label}
+              muted={summary.total.muted}
+              value={summary.total.value}
+            />
           ) : null}
           {summary.convertedTotal ? (
             <SummaryRow
@@ -1002,8 +1004,8 @@ function AuctionWinnerOrder({
 export type {
   AuctionPaymentRail,
   AuctionSettlementCurrency,
-  AuctionWinnerOrderCopy,
   AuctionWinnerOrderBankDetails,
+  AuctionWinnerOrderCopy,
   AuctionWinnerOrderPaymentChoice,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,

@@ -134,7 +134,10 @@ if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
   });
 }
 
-if (typeof window !== "undefined" && typeof window.PointerEvent !== "function") {
+if (
+  typeof window !== "undefined" &&
+  typeof window.PointerEvent !== "function"
+) {
   Object.defineProperty(window, "PointerEvent", {
     configurable: true,
     value: class PointerEvent extends MouseEvent {},
@@ -428,9 +431,9 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ).not.toBeNull();
     expect(canvas.queryByRole("radio", { name: /^FPS\b/i })).toBeNull();
     expect(
-      canvas.getByRole("radio", { name: /^Card\b/i }).getAttribute(
-        "aria-checked",
-      ),
+      canvas
+        .getByRole("radio", { name: /^Card\b/i })
+        .getAttribute("aria-checked"),
     ).toBe("false");
   });
 
@@ -468,7 +471,9 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     });
     const canvas = within(container);
 
-    expect(canvas.getByText("Card fee about 4.4% + a fixed amount")).not.toBeNull();
+    expect(
+      canvas.getByText("Card fee about 4.4% + a fixed amount"),
+    ).not.toBeNull();
     rerender({
       settlementCurrency: {
         label: "Settlement currency",
@@ -478,7 +483,9 @@ describe("AuctionWinnerOrder settlement presentation", () => {
       },
       paymentChoices,
     });
-    expect(canvas.getByText("Card fee about 3.4% + a fixed amount")).not.toBeNull();
+    expect(
+      canvas.getByText("Card fee about 3.4% + a fixed amount"),
+    ).not.toBeNull();
     expect(
       canvas.queryByText("Card fee about 4.4% + a fixed amount"),
     ).toBeNull();
@@ -504,9 +511,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(canvas.queryByText("HK$1,031.00")).toBeNull();
     expect(canvas.queryByText("HK$38.73")).toBeNull();
     expect(
-      container
-        .querySelector('[data-slot="winner-order-lot"]')
-        ?.textContent,
+      container.querySelector('[data-slot="winner-order-lot"]')?.textContent,
     ).toContain("Winning bid: US$101.00");
   });
 
@@ -530,10 +535,7 @@ describe("AuctionWinnerOrder settlement presentation", () => {
 
     const sidebar = within(container).getByRole("complementary");
     const separator = sidebar.querySelector("hr");
-    const shippingRow = summaryRow(
-      container,
-      "Shipping & HandlingUS$10.01",
-    );
+    const shippingRow = summaryRow(container, "Shipping & HandlingUS$10.01");
     const usdTotalRow = summaryRow(container, "Order TotalUS$131.21");
     expect(separator).not.toBeNull();
     expect(shippingRow).not.toBeUndefined();

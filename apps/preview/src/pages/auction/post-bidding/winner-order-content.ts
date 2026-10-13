@@ -246,7 +246,7 @@ export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$16,460",
+  amount: "HK$128,814",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
   transfer: {

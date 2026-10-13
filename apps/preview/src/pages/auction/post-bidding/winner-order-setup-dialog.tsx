@@ -283,7 +283,7 @@ const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 function defaultSettlementCurrency(
   currencies: readonly WinnerOrderSettlementCurrency[],
 ): WinnerOrderSettlementCurrency | null {
-  return currencies.length === 1 ? currencies[0]! : null;
+  return currencies.length === 1 ? (currencies[0] ?? null) : null;
 }
 
 function paymentMethodsForCurrency(

@@ -78,8 +78,17 @@ export const ProcessingOverpaid: Story = {
     expect(canvas.getByText("Order Progress")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
-    expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
+    const sidebarElement = canvas.getByRole("complementary");
+    const summaryRows = [
+      ...sidebarElement.querySelectorAll<HTMLElement>(
+        '[data-slot="winner-order-summary-line"]',
+      ),
+    ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
+    expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
+      "Order TotalUS$16,340.00",
+      "Order TotalHK$128,269.00",
+    ]);
+    expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
@@ -113,6 +122,9 @@ export const ProcessingBankTransfer: Story = {
       ...WINNER_ORDER_CONTENTS.processing,
       paymentMethod: "HSBC",
       paymentMasked: "···· 8891",
+      setupPaymentMethod: "FPS",
+      paymentRail: "fps",
+      convertedFee: undefined,
       invoiceLines: BANK_TRANSFER_INVOICE_LINES,
     },
   },
@@ -124,19 +136,27 @@ export const ProcessingBankTransfer: Story = {
         '[data-slot="winner-order-page"][data-status="processing"]',
       ),
     ).not.toBeNull();
-    const sidebar = within(canvas.getByRole("complementary"));
+    const sidebarElement = canvas.getByRole("complementary");
+    const sidebar = within(sidebarElement);
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getByLabelText("Bank")).toBeVisible();
     expect(sidebar.getByText("···· 8891")).toBeVisible();
     expect(sidebar.getByText("HSBC")).toBeVisible();
     expect(sidebar.queryByText("Visa")).not.toBeInTheDocument();
     expect(sidebar.queryByText("···· 4242")).not.toBeInTheDocument();
-    expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
-    expect(sidebar.getByText("Free")).toBeVisible();
-    expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("$320.00")).toBeVisible();
-    expect(sidebar.getByText("HK$16,340.00")).toBeVisible();
-    expect(sidebar.queryByText("$120.00")).not.toBeInTheDocument();
+    const summaryRows = [
+      ...sidebarElement.querySelectorAll<HTMLElement>(
+        '[data-slot="winner-order-summary-line"]',
+      ),
+    ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
+    expect(summaryRows).toContain("Payment Processing FeeFree");
+    expect(summaryRows).toContain("TaxUS$320.00");
+    expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
+      "Order TotalUS$16,340.00",
+      "Order TotalHK$128,269.00",
+    ]);
+    expect(summaryRows).not.toContain("Payment Processing FeeHK$545.00");
+    expect(summaryRows).not.toContain("Payment Processing FeeUS$120.00");
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },

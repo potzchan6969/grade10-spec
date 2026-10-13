@@ -7,8 +7,8 @@ import {
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
-  AuctionWinnerOrder,
   type AuctionSettlementCurrency,
+  AuctionWinnerOrder,
   type AuctionWinnerOrderBankDetails,
   type AuctionWinnerOrderPaymentChoice,
   type AuctionWinnerOrderProps,
@@ -406,7 +406,10 @@ function selectedPaymentChoice(
   content: WinnerOrderContent,
 ): AuctionWinnerOrderPaymentChoice["value"] | null {
   if (content.paymentRail) return content.paymentRail;
-  if (content.setupPaymentMethod === "Card" || content.paymentMethod === "Visa") {
+  if (
+    content.setupPaymentMethod === "Card" ||
+    content.paymentMethod === "Visa"
+  ) {
     return "card";
   }
   if (content.setupPaymentMethod === "FPS") return "fps";

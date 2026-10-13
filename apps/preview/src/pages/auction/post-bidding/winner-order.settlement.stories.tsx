@@ -251,10 +251,7 @@ export const CompleteSetupFlow: Story = {
     // The winner chooses the settlement currency and payment method.
     const hkd = modal.getByRole("button", { name: "HKD" });
     const usd = modal.getByRole("button", { name: "USD" });
-    expect(usd).toHaveAttribute(
-      "aria-pressed",
-      "false",
-    );
+    expect(usd).toHaveAttribute("aria-pressed", "false");
     expect(hkd).toHaveAttribute("aria-pressed", "false");
     expect(modal.queryByRole("radio")).not.toBeInTheDocument();
     // winner-order-SC-279 shared UI scope: no choice keeps setup blocked.
@@ -274,17 +271,13 @@ export const CompleteSetupFlow: Story = {
     });
     await userEvent.click(hkLocal);
     await waitFor(() => {
-      expect(
-        modal.getByRole("radio", { name: /^HK Local\b/i }),
-      ).toBeChecked();
+      expect(modal.getByRole("radio", { name: /^HK Local\b/i })).toBeChecked();
     });
 
     // winner-order-SC-296: a rail offered by both currencies stays selected.
     await userEvent.click(hkd);
     await waitFor(() => {
-      expect(
-        modal.getByRole("radio", { name: /^HK Local\b/i }),
-      ).toBeChecked();
+      expect(modal.getByRole("radio", { name: /^HK Local\b/i })).toBeChecked();
       expect(
         modal.getByText("Card fee about 3.4% + a fixed amount"),
       ).toBeVisible();

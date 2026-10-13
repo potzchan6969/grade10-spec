@@ -120,9 +120,18 @@ export const Refunded: Story = {
     expect(canvas.queryByText("Order Progress")).not.toBeInTheDocument();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
-    expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,460.00")).toBeVisible();
-    expect(canvas.getByText("Refund HK$16,460")).toBeVisible();
+    const sidebarElement = canvas.getByRole("complementary");
+    const summaryRows = [
+      ...sidebarElement.querySelectorAll<HTMLElement>(
+        '[data-slot="winner-order-summary-line"]',
+      ),
+    ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
+    expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
+      "Order TotalUS$16,340.00",
+      "Order TotalHK$128,269.00",
+    ]);
+    expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
+    expect(canvas.getByText("Refund HK$128,814")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "View" }));
     const page = within(canvasElement.ownerDocument.body);
     const dialogElement = await waitFor(() => {

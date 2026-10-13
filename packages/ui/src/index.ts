@@ -357,11 +357,11 @@ export {
   type AuctionPhoneFieldProps,
 } from "./blocks/auction-order/auction-phone-field";
 export {
-  AuctionWinnerOrder,
   type AuctionPaymentRail,
   type AuctionSettlementCurrency,
-  type AuctionWinnerOrderCopy,
+  AuctionWinnerOrder,
   type AuctionWinnerOrderBankDetails,
+  type AuctionWinnerOrderCopy,
   type AuctionWinnerOrderPaymentChoice,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,

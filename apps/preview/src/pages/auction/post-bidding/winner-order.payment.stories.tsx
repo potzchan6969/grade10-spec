@@ -7,8 +7,8 @@ import {
 } from "./winner-order.story-shared";
 import {
   BANK_TRANSFER_INVOICE_LINES,
-  WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
   WINNER_ORDER_CONTENTS,
+  WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
   WINNER_ORDER_USD_BANK_TRANSFER_CONTENT,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
@@ -253,9 +253,13 @@ export const SubmitBankPaymentProof: Story = {
     });
 
     // winner-order-SC-184: proof submission does not repeat invoice or rail details.
-    expect(modal.queryByText(/Amount due|Order Total|Payment reference/i)).not.toBeInTheDocument();
+    expect(
+      modal.queryByText(/Amount due|Order Total|Payment reference/i),
+    ).not.toBeInTheDocument();
     expect(modal.queryByText(/US\$|HK\$/)).not.toBeInTheDocument();
-    expect(modal.queryByText(/FPS|HK Local|SWIFT|bank/i)).not.toBeInTheDocument();
+    expect(
+      modal.queryByText(/FPS|HK Local|SWIFT|bank/i),
+    ).not.toBeInTheDocument();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
     const transferDate = modal.getByLabelText("Transfer Date");

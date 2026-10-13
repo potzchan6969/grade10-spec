@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { getMessages } from "@grade10/i18n";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
@@ -207,7 +207,9 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
     const hkd = within(currencyList).getByRole("radio", { name: "HKD" });
     expect(usd).not.toBeChecked();
     expect(hkd).not.toBeChecked();
-    expect(canvas.queryByRole("radio", { name: "FPS" })).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("radio", { name: "FPS" }),
+    ).not.toBeInTheDocument();
 
     usd.focus();
     await userEvent.keyboard(" ");
@@ -254,7 +256,9 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
     }
 
     await userEvent.keyboard("{Escape}");
-    await waitFor(() => expect(body.queryByRole("dialog")).not.toBeInTheDocument());
+    await waitFor(() =>
+      expect(body.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
     expect(trigger).toHaveFocus();
 
     await userEvent.keyboard("{Enter}");
@@ -264,7 +268,9 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
         name: traditionalChineseAuctionOrders.bankDetails.close,
       }),
     );
-    await waitFor(() => expect(body.queryByRole("dialog")).not.toBeInTheDocument());
+    await waitFor(() =>
+      expect(body.queryByRole("dialog")).not.toBeInTheDocument(),
+    );
     expect(trigger).toHaveFocus();
   },
 };
