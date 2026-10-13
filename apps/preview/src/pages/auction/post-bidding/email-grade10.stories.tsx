@@ -91,7 +91,7 @@ function EmailGrade10Demo(props: EmailGrade10DemoProps) {
 }
 
 const meta = {
-  title: "Auction/Post Bidding/Winner Order/Email Grade10",
+  title: "Auction/Post Bidding/Screens/Winner Order/Email Grade10",
   component: EmailGrade10Demo,
   tags: ["autodocs"],
   parameters: {

@@ -60,9 +60,9 @@ claim opens Store Locator in the same tab, in the page's language -
 
 ## Designs
 
-::story{id="store-store-locator-store-locator--default" title="Store Locator - default"}
+::story{id="store-store-locator-screens-store-locator--default" title="Store Locator - default"}
 
-::story{id="store-store-locator-store-locator--narrow" title="Store Locator - narrow"}
+::story{id="store-store-locator-screens-store-locator--narrow" title="Store Locator - narrow"}
 
 :::detail{title="Product decisions" for="pm"}
 Collectors need one honest answer for where the shop is. A finder UI for one

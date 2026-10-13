@@ -29,7 +29,8 @@ import {
 import { navigateToStory } from "../../workbench-story-nav";
 
 /** Storybook story id for the Product Detail page assembly. */
-const PRODUCT_DETAIL_STORY_ID = "store-product-page-product-detail--default";
+const PRODUCT_DETAIL_STORY_ID =
+  "store-product-page-screens-product-detail--default";
 
 const RESULTS_LOAD_MS = 450;
 const PAGE_SIZE = 10;
@@ -427,7 +428,7 @@ function ProductListPage() {
 }
 
 const meta = {
-  title: "Store/Product Listing/Product List",
+  title: "Store/Product Listing/Screens/Product List",
   component: ProductListPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -2,7 +2,7 @@
 
 ### Winner Order — Submit Payment Proof
 
-Storybook: `Auction/Post Bidding/Winner Order/Payment/Submit Payment Proof` (Form,
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Payment/Submit Payment Proof` (Form,
 Submit proof, Submit failure) and page story **Submit Proof Flow**.
 
 Title **Submit Payment Proof**. Subtext: after transfer, upload the receipt

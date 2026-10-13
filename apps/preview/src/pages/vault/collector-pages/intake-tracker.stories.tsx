@@ -211,7 +211,7 @@ function IntakeTrackerPage({
 }
 
 const meta = {
-  title: "Vault/Collector Pages/Intake Tracker",
+  title: "Vault/Collector Pages/Screens/Intake Tracker",
   component: IntakeTrackerPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

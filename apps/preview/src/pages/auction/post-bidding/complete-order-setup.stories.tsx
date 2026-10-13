@@ -78,7 +78,7 @@ function CompleteOrderSetupDemo({
 }
 
 const meta = {
-  title: "Auction/Post Bidding/Winner Order/Setup/Complete Order Setup",
+  title: "Auction/Post Bidding/Screens/Winner Order/Setup/Complete Order Setup",
   component: CompleteOrderSetupDemo,
   tags: ["autodocs"],
   parameters: {

@@ -178,7 +178,7 @@ function AppointmentsPage({ empty = false }: { empty?: boolean }) {
 }
 
 const meta = {
-  title: "Appointment/Booking/Appointments",
+  title: "Appointment/Booking/Screens/Appointments",
   component: AppointmentsPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

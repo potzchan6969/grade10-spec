@@ -59,7 +59,7 @@ requirements is how `packages/design-system/src/pages/` went wrong.
 1. Put the content in `src/pages/<domain>/<feature>/<page>-content.ts`, the
    manual's slugs. Never import it from a package: content that lives in a
    package is content a second store would inherit.
-2. Write `<page>.stories.tsx` beside it, titled `<Domain>/<Feature>/<Screen>`
+2. Write `<page>.stories.tsx` beside it, titled `<Domain>/<Feature>/Screens/<Screen>`
    ([`docs/governance/storybook.md`](../../docs/governance/storybook.md)), with a component that owns the state
    and passes it down. Declare `layout: "fullscreen"` in its meta; the default
    here is `centered`, so that the primitives and compound components the

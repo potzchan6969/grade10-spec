@@ -10,7 +10,7 @@ always-underlined link.
 | --- | --- | --- |
 | Product card - name activates with photo | [`ProductCard` → Named Once](?path=/story/store-product-listing-blocks-productcard--named-once) | [Product Card](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155&m=dev) |
 | Browse grid - name reachable when activation supplied | [`ProductBrowse` → Default](?path=/story/store-product-listing-blocks-productbrowse--default) | - |
-| Preview listing → product detail via name | [`Store/Product Listing/Product List` → Default](?path=/story/store-product-listing-product-list--default) | - |
+| Preview listing → product detail via name | [`Store/Product Listing/Screens/Product List` → Default](?path=/story/store-product-listing-screens-product-list--default) | - |
 
 ## Components
 

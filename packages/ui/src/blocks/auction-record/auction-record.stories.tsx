@@ -37,7 +37,7 @@ import type { AuctionRecordRowProps } from "./types";
 const AUCTION_CARD_STORY =
   "?path=/story/auction-bidding-blocks-auctionrecordrow--leading";
 const MY_AUCTIONS_PAGE_STORY =
-  "?path=/story/auction-bidding-my-auctions--post-auction";
+  "?path=/story/auction-bidding-screens-my-auctions--post-auction";
 
 const breadcrumbs = (
   <Breadcrumbs>

@@ -103,7 +103,7 @@ function AppointmentTicketPage({ state }: { state: TicketState }) {
 }
 
 const meta = {
-  title: "Appointment/Visit/Ticket",
+  title: "Appointment/Visit/Screens/Ticket",
   component: AppointmentTicketPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

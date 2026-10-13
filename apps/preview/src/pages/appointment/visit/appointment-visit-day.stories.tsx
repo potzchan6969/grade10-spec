@@ -223,7 +223,7 @@ function AppointmentVisitDayPage({ state }: { state: DayState }) {
 }
 
 const meta = {
-  title: "Appointment/Visit/Visit Day",
+  title: "Appointment/Visit/Screens/Visit Day",
   component: AppointmentVisitDayPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

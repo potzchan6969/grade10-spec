@@ -56,7 +56,7 @@ text, not a link
 
 ## Designs
 
-::story{id="store-product-page-product-detail--docs" title="Product details"}
+::story{id="store-product-page-screens-product-detail--docs" title="Product details"}
 
 :::detail{title="Implementation map" for="engineer"}
 - [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)

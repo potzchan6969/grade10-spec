@@ -36,7 +36,7 @@ function VaultRequestRetrievalDialogDemo() {
 }
 
 const meta = {
-  title: "Vault/Portfolio/Asset Detail/Retrieval Dialog",
+  title: "Vault/Portfolio/Screens/Asset Detail/Retrieval Dialog",
   component: VaultRequestRetrievalDialogDemo,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

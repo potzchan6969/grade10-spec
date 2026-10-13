@@ -15,7 +15,7 @@ const exec = promisify(execFile);
 
 export const START_HERE = "Start Here";
 export const DESIGN_SYSTEM = "Design System";
-export const KINDS = ["Flows", "Prototypes", "Parts", "Blocks"];
+export const KINDS = ["Screens", "Flows", "Prototypes", "Parts", "Blocks"];
 const PAGES = "apps/preview/src/pages/";
 const PROTOTYPES = "apps/preview/src/prototypes/";
 const BLOCKS = "packages/ui/src/blocks/";
@@ -119,9 +119,11 @@ export function placementErrors(root, path, file) {
     return errors;
   }
 
-  const [domain, feature, third, fourth] = parts;
+  const [domain, feature, kind, fourth] = parts;
   if (parts.length < 3) {
-    errors.push(`"${title}" - a title reads "<Domain>/<Feature>/<Screen>"`);
+    errors.push(
+      `"${title}" - a title reads "<Domain>/<Feature>/Screens/<Screen>"`,
+    );
     return errors;
   }
   if (!manualPage(root, domain, feature)) {
@@ -130,11 +132,16 @@ export function placementErrors(root, path, file) {
     );
     return errors;
   }
+  if (!KINDS.includes(kind)) {
+    errors.push(
+      `"${title}" - a screen sits under Screens: "${domain}/${feature}/Screens/${parts.slice(2).join("/")}"`,
+    );
+    return errors;
+  }
 
-  const kind = KINDS.includes(third) ? third : "Screen";
   const featureFolder = `${sanitize(domain)}/${sanitize(feature)}/`;
   const expected = {
-    Screen: PAGES + featureFolder,
+    Screens: PAGES + featureFolder,
     Flows: PAGES + featureFolder,
     Parts: PAGES + featureFolder,
     Prototypes: PROTOTYPES + featureFolder,
@@ -142,10 +149,9 @@ export function placementErrors(root, path, file) {
   }[kind];
   if (!path.startsWith(expected))
     errors.push(
-      `"${title}" - ${kind === "Screen" ? "a screen" : `a story under ${kind}`} lives in ${expected}, not ${path}`,
+      `"${title}" - a story under ${kind} lives in ${expected}, not ${path}`,
     );
-  if (kind !== "Screen" && !fourth)
-    errors.push(`"${title}" - name what sits under ${kind}`);
+  if (!fourth) errors.push(`"${title}" - name what sits under ${kind}`);
   if ((kind === "Parts" || kind === "Blocks") && fourth) {
     const leaf = leafError(fourth);
     if (leaf) errors.push(leaf);

@@ -22,7 +22,7 @@ const CARD_FACT_LABELS = {
 const FILLED_SMALL_VIEWPORT_STORY =
   "?path=/story/auction-bidding-blocks-auctionrecord--filled-small-viewport";
 const MY_AUCTIONS_PAGE_STORY =
-  "?path=/story/auction-bidding-my-auctions--post-auction";
+  "?path=/story/auction-bidding-screens-my-auctions--post-auction";
 
 function AuctionCard(item: AuctionRecordRowProps) {
   return (

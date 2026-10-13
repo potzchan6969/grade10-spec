@@ -8,14 +8,14 @@ adjacent surfaces settled in Storybook rather than Figma.
 
 ### Terms of Service
 
-::story{id="site-carried-surfaces-legal--terms-of-service" title="Terms of Service"}
+::story{id="site-carried-surfaces-screens-legal--terms-of-service" title="Terms of Service"}
 
 Site header, centred document title, one-line last-updated block, section
 list, footer. Footer LEGAL links reach this story and Privacy.
 
 ### Privacy Policy
 
-::story{id="site-carried-surfaces-legal--privacy-policy" title="Privacy Policy"}
+::story{id="site-carried-surfaces-screens-legal--privacy-policy" title="Privacy Policy"}
 
 Same shell and type scale as Terms; privacy sections from the Storybook
 fixture.
@@ -49,8 +49,8 @@ catalogs until a publish change.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Terms default | Full Terms draft, chrome, footer TERMS link active to this story | **Out of suite:** Storybook play on `site-carried-surfaces-legal--terms-of-service` (`skip_specs`) |
-| Privacy default | Full Privacy draft, chrome, footer PRIVACY POLICY link active to this story | **Out of suite:** Storybook play on `site-carried-surfaces-legal--privacy-policy` (`skip_specs`) |
+| Terms default | Full Terms draft, chrome, footer TERMS link active to this story | **Out of suite:** Storybook play on `site-carried-surfaces-screens-legal--terms-of-service` (`skip_specs`) |
+| Privacy default | Full Privacy draft, chrome, footer PRIVACY POLICY link active to this story | **Out of suite:** Storybook play on `site-carried-surfaces-screens-legal--privacy-policy` (`skip_specs`) |
 
 Live “Being prepared” status on the app routes is unchanged and out of this
 file’s screens.

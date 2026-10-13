@@ -105,13 +105,13 @@ the one a search engine keeps.
   addresses, images and current bids. A closed lot's offer stays on the lot
   page
 
-::story{id="auction-display-auction-list--default" title="Auction list"}
+::story{id="auction-display-screens-auction-list--default" title="Auction list"}
 
 ::story{id="auction-display-blocks-featuredauctionsbanner--carousel-banner" title="Featured carousel"}
 
-::story{id="auction-display-auction-list-all-auctions--default" title="All auctions"}
+::story{id="auction-display-screens-auction-list-all-auctions--default" title="All auctions"}
 
-::story{id="auction-display-auction-list-all-auctions--empty" title="No auctions"}
+::story{id="auction-display-screens-auction-list-all-auctions--empty" title="No auctions"}
 
 ::story{id="auction-display-parts-auctionlotcard--active" title="Active"}
 

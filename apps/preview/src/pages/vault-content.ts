@@ -42,16 +42,20 @@ const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
 const ACCOUNT_EMAIL = "collector@example.com";
 
 /** Storybook ids for vault proposal pages (workbench deep links). */
-const VAULT_BOOK_VISIT_STORY_ID = "appointment-booking-book-visit--default";
-const VAULT_CONFIRMATION_STORY_ID = "appointment-booking-confirmation--default";
-const VAULT_MY_VISITS_STORY_ID = "appointment-booking-appointments--default";
+const VAULT_BOOK_VISIT_STORY_ID =
+  "appointment-booking-screens-book-visit--default";
+const VAULT_CONFIRMATION_STORY_ID =
+  "appointment-booking-screens-confirmation--default";
+const VAULT_MY_VISITS_STORY_ID =
+  "appointment-booking-screens-appointments--default";
 const VAULT_MANAGE_VISIT_STORY_ID = VAULT_MY_VISITS_STORY_ID;
 const INTAKE_TRACKER_STORY_ID =
-  "vault-collector-pages-intake-tracker--in-progress";
-const VAULT_PORTFOLIO_STORY_ID = "vault-portfolio-portfolio--filled";
-const VAULT_ITEM_DETAIL_STORY_ID = "vault-portfolio-asset-detail--graded";
+  "vault-collector-pages-screens-intake-tracker--in-progress";
+const VAULT_PORTFOLIO_STORY_ID = "vault-portfolio-screens-portfolio--filled";
+const VAULT_ITEM_DETAIL_STORY_ID =
+  "vault-portfolio-screens-asset-detail--graded";
 const VAULT_RETRIEVAL_STORY_ID =
-  "vault-portfolio-asset-detail-retrieval-dialog--default";
+  "vault-portfolio-screens-asset-detail-retrieval-dialog--default";
 /** Storybook ids for vault item-card assemblies (workbench deep links). */
 const VAULT_ASSET_CARD_IN_VAULT_STORY_ID =
   "vault-portfolio-parts-vaultassetcard--in-vault";
@@ -63,16 +67,16 @@ const VAULT_ASSET_CARD_RETRIEVAL_STORY_ID =
   "vault-portfolio-parts-vaultassetcard--retrieval-pending";
 /** Detail variants for listed and auction-bound assets. */
 const VAULT_ITEM_DETAIL_LISTED_STORY_ID =
-  "vault-portfolio-asset-detail--listed";
+  "vault-portfolio-screens-asset-detail--listed";
 const VAULT_ITEM_DETAIL_LIVE_AUCTION_STORY_ID =
-  "vault-portfolio-asset-detail--live-auction";
+  "vault-portfolio-screens-asset-detail--live-auction";
 const VAULT_ITEM_DETAIL_RETRIEVAL_PENDING_STORY_ID =
-  "vault-portfolio-asset-detail--retrieval-pending";
+  "vault-portfolio-screens-asset-detail--retrieval-pending";
 /** Workbench destinations the detail page links out to for live holdings. */
 const AUCTION_LOT_LIVE_STORY_ID =
-  "auction-display-lot-details--live-auto-leading";
+  "auction-display-screens-lot-details--live-auto-leading";
 const STORE_PRODUCT_DETAIL_STORY_ID =
-  "store-product-page-product-detail--default";
+  "store-product-page-screens-product-detail--default";
 const ACTIVE_INTAKE_ALERT_STORY_ID =
   "vault-portfolio-parts-activeintakealert--with-submissions";
 

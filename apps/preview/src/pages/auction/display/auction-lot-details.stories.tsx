@@ -7,7 +7,7 @@ import {
 import { AuctionLotDetailsPage } from "./auction-lot-details-page";
 
 const meta = {
-  title: "Auction/Display/Lot Details",
+  title: "Auction/Display/Screens/Lot Details",
   component: AuctionLotDetailsPage,
   parameters: {
     layout: "fullscreen",
