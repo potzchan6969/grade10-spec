@@ -33,7 +33,7 @@ Depends on Group 2's contract and Group 1's merged shared work before the applic
 - [ ] 4.3 Select the published grade10-spec main SHA containing Group 1's verified merge and update only the application gitlink through the supported workflow. Preserve unrelated nested work, record the upstream PR/merge/SHA and make `pnpm run check:submodules` pass.
 - [ ] 4.4 Verify focused cart model, mapper, hook/fixture and app-host suites, affected typechecks, `pnpm check:quick`, application build and diff after the pin moves. Confirm the host and shared renderer add no product query or image cache.
 
-## 5. The walk - Cart product pictures (grade10)
+## 5. The walk - Cart product pictures (grade10) (owner: @kinisworking)
 
 Use the draft suite after QA2 reconciles it. Groups 1-4 and the selected shared dependency are landed before this walk.
 
