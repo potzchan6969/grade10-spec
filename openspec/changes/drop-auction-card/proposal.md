@@ -1,5 +1,7 @@
 # Drop AuctionCard — repoint the catalogue tile deadline at AuctionLotCard
 
+**Author:** @tangconst - 2026-10-13
+
 ## Why
 
 `shared/ui/auction-listing` still contracts `AuctionCard`, the shared catalogue
