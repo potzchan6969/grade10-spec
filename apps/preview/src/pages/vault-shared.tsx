@@ -2,11 +2,13 @@ import { Alert } from "@grade10/design-system/components/display/alert";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { LISTING_LOT_GRID_CLASS, SiteHeader } from "@grade10/ui";
 import { Package, Vault } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useRef, useState } from "react";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { VAULT_FOOTER, VAULT_SITE_HEADER } from "./vault-content";
 
 /**
@@ -260,6 +262,65 @@ function FactRow({
   );
 }
 
+/**
+ * The note a wireframe carries at its top: the design still to settle, and the
+ * manual page the screen reads from. Not a block; drawn only in prototypes.
+ */
+function PrototypeNote({
+  manualPath,
+  settles,
+}: {
+  manualPath: string;
+  settles: string;
+}) {
+  return (
+    <aside
+      aria-label="Not yet designed"
+      className="flex flex-col gap-2 rounded-2xl border border-dashed border-border bg-muted/40 p-4"
+      role="note"
+    >
+      <Text size="sm" weight="medium">
+        Not yet designed
+      </Text>
+      <Text size="sm" tone="secondary">
+        The design must still settle {settles} Manual page:{" "}
+        <Link
+          href={`https://spec.grade10-stg.com/p/grade10-site/${manualPath}`}
+        >
+          {manualPath}
+        </Link>
+        .
+      </Text>
+    </aside>
+  );
+}
+
+/**
+ * Clicks Next through a flow's cases, asserting each case's title as it shows,
+ * then opens the Expanded view and asserts one card per case.
+ */
+async function walkFlowCases(
+  canvasElement: HTMLElement,
+  titles: readonly string[],
+) {
+  const canvas = within(canvasElement);
+  for (const [index, title] of titles.entries()) {
+    if (index > 0) {
+      await userEvent.click(canvas.getByRole("button", { name: "Next" }));
+    }
+    await waitFor(() => {
+      expect(canvas.getAllByText(title).length).toBeGreaterThan(0);
+    });
+  }
+  await userEvent.click(canvas.getByRole("tab", { name: "Expanded" }));
+  for (const title of titles) {
+    expect(canvas.getAllByText(title).length).toBeGreaterThan(0);
+  }
+  expect(canvasElement.querySelectorAll(".demo-flow-case")).toHaveLength(
+    titles.length,
+  );
+}
+
 export {
   AppointmentPageShell,
   FactRow,
@@ -267,8 +328,10 @@ export {
   PageHeader,
   PageSection,
   ProposalBanner,
+  PrototypeNote,
   StickyTabBar,
   VaultEmptyState,
   VaultItemDetailPageShell,
   VaultPageShell,
+  walkFlowCases,
 };
