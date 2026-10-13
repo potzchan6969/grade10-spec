@@ -5,6 +5,7 @@ import { CartDrawerBody } from "./cart-drawer";
 import {
   DEFAULT_CART_COPY,
   OVERFLOW_CART_ITEMS,
+  PICTURE_CART_ITEM,
   SAMPLE_CART_ITEMS,
 } from "./fixtures";
 import type { CartItemSummary } from "./types";
@@ -42,6 +43,12 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+export const Pictures: Story = {
+  args: {
+    items: [{ ...PICTURE_CART_ITEM, imageAlt: "  " }, SAMPLE_CART_ITEMS[1]],
+  },
+};
 
 /** Default list: cart items only */
 export const Default: Story = {

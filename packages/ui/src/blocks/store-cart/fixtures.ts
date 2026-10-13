@@ -426,3 +426,15 @@ export {
   storyCartEstimatedTotal,
   storyPromoLabel,
 };
+
+import cartPictureUrl from "./assets/cart-picture.svg?url&no-inline";
+
+export const PICTURE_CART_ITEM = {
+  id: "picture-card",
+  name: "Gengar VMAX",
+  price: "HK$100.00",
+  quantity: 1,
+  maxQuantity: 3,
+  imageSrc: `${cartPictureUrl.split("?")[0]}?v=7`,
+  imageAlt: "Card front",
+};

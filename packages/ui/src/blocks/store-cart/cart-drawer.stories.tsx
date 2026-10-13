@@ -9,6 +9,7 @@ import {
   DEFAULT_CART_COPY,
   formatStoryCreditHkd,
   OVERFLOW_CART_ITEMS,
+  PICTURE_CART_ITEM,
   parseStoryMoney,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
@@ -72,6 +73,12 @@ const meta = {
     heldPromoCodes: SAMPLE_HELD_PROMO_CODES,
   },
 } satisfies Meta<typeof CartDrawer>;
+
+export const Pictures: StoryObj<typeof meta> = {
+  args: {
+    items: [{ ...PICTURE_CART_ITEM, status: "soldOut" }, SAMPLE_CART_ITEMS[0]],
+  },
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;

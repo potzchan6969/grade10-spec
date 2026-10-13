@@ -2,7 +2,11 @@ import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { CartItem } from "./cart-drawer";
-import { DEFAULT_CART_COPY, SAMPLE_CART_ITEMS } from "./fixtures";
+import {
+  DEFAULT_CART_COPY,
+  PICTURE_CART_ITEM,
+  SAMPLE_CART_ITEMS,
+} from "./fixtures";
 
 const container: Decorator[] = [
   (Story) => (
@@ -310,4 +314,48 @@ export const NoLineMaximum: Story = {
     await userEvent.click(increment);
     expect(args.onQuantityChange).toHaveBeenCalledWith(3);
   },
+};
+
+const pictureActions: Story["play"] = async ({ canvasElement, args }) => {
+  const canvas = within(canvasElement);
+  await userEvent.click(canvas.getByRole("button", { name: "Gengar VMAX" }));
+  expect(args.onClickProduct).toHaveBeenCalledTimes(1);
+  if (args.item.status !== "soldOut") {
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Increase quantity" }),
+    );
+    expect(args.onQuantityChange).toHaveBeenCalledWith(2);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Decrease quantity" }),
+    );
+    expect(args.onQuantityChange).toHaveBeenCalledWith(1);
+  }
+  await userEvent.click(canvas.getByRole("button", { name: "Remove item" }));
+  expect(args.onRemove).toHaveBeenCalledTimes(1);
+};
+
+export const Picture: Story = {
+  args: { item: PICTURE_CART_ITEM },
+  play: pictureActions,
+};
+export const PictureWithoutAlt: Story = {
+  args: { item: { ...PICTURE_CART_ITEM, imageAlt: undefined } },
+};
+export const PictureWithEmptyAlt: Story = {
+  args: { item: { ...PICTURE_CART_ITEM, imageAlt: "" } },
+};
+export const PictureWithWhitespaceAlt: Story = {
+  args: { item: { ...PICTURE_CART_ITEM, imageAlt: "  " } },
+};
+export const WithoutPicture: Story = {
+  args: { item: { ...PICTURE_CART_ITEM, imageSrc: undefined } },
+  play: pictureActions,
+};
+export const EmptyPictureSource: Story = {
+  args: { item: { ...PICTURE_CART_ITEM, imageSrc: "" } },
+  play: pictureActions,
+};
+export const SoldOutPicture: Story = {
+  args: { item: { ...PICTURE_CART_ITEM, status: "soldOut" } },
+  play: pictureActions,
 };
