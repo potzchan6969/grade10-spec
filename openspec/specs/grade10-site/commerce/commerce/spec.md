@@ -54,12 +54,12 @@ SHALL not exist.
 - **WHEN** any buyer checks out
 - **THEN** no standing is read and the checkout proceeds as any other
 
-<!-- trace:scenario id=g10.commerce-commerce.SC-ytc rev=1 -->
+<!-- trace:scenario id=g10.commerce-commerce.SC-ytc rev=2 -->
 #### Scenario: grade10-site-commerce-commerce-SC-29 - A guest above the bar is asked to sign in
 **Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
 - **GIVEN** a buyer with no session, and a basket whose goods are worth the bar
   or more
-- **WHEN** they check out with a typed address
+- **WHEN** they check out as a guest, or with a typed address
 - **THEN** the checkout is refused and they are asked to sign in, and no order
   is made

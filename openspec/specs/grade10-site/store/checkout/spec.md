@@ -2,10 +2,10 @@
 
 ## Purpose
 
-An authenticated collector's Store checkout is a live decision before a
-Shopify-hosted payment. It carries a current basket and accepted tender into
-one hosted checkout while Grade10 retains the order of record and repairs its
-payment lifecycle.
+A member's or a guest's Store checkout is a live decision before a
+Shopify-hosted payment. It carries a current basket, and a member's accepted
+tender, into one hosted checkout while Grade10 retains the order of record and
+repairs its payment lifecycle.
 
 ## Feature set
 
@@ -14,7 +14,7 @@ payment lifecycle.
   - Accepted promo and points choices beside a subtotal estimate
   - Shipping and tax left to Shopify's address-aware checkout
 - Hosted Shopify handoff
-  - Signed-in storefront checkout through one Shopify draft-order invoice
+  - Member and guest storefront checkout through one Shopify draft-order invoice
   - Local order and provider references bound before the buyer leaves
   - Provider refusal kept distinct from a paid order
 - Safe repetition and recovery
@@ -25,6 +25,12 @@ payment lifecycle.
   - Pending orders settle through webhook, reconcile and order reads
   - Paid orders appear in Your Orders and release the member cart
   - Shopify confirmation returns the collector to the Grade10 order
+- Guest checkout
+  - The basket alone: no promo code, no reward coupon and no points
+  - The email address taken on Shopify's page and kept once paid
+  - A guest order belongs to nobody: no account, no points, no claim
+  - A private order link, and Continue back to the order just sent
+  - A member's Your Orders lists guest orders under their sign-in address
 - Carrier rates
   - Shopify asks a token-gated stateless carrier rule for served destinations
   - The callback and store preview use the same configured rate
@@ -90,12 +96,13 @@ named line.
 ### Requirement: A signed-in member receives one Shopify hosted checkout
 
 The public storefront SHALL require a fresh signed-in member session before it
-creates an order. The server SHALL own all money facts and SHALL hand Shopify a
-reviewed basket without relying on client-supplied amounts.
+creates a member's order. The server SHALL own all money facts and SHALL hand
+Shopify a reviewed basket without relying on client-supplied amounts.
 
-**Storefront boundary** - A signed-out collector SHALL be asked to sign in and
-no public storefront order or Shopify checkout SHALL be created. Typed-email
-checkout MAY exist only on the development and staging operator test surface.
+**Storefront boundary** - A collector with no session SHALL check out as a
+guest, under the guest checkout requirement below, and SHALL NOT be asked to
+sign in below the identity bar. Typed-email checkout MAY exist only on the
+development and staging operator test surface.
 
 **Order write** - The server SHALL insert the Grade10 order and its lines in
 one transaction, call Shopify outside that transaction, and record the
@@ -117,15 +124,15 @@ embedded payment secret.
 - **AND** one Shopify hosted invoice opens with the reviewed variants and quantities
 - **AND** the member is not shown an embedded payment form
 
-<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer cannot start storefront checkout
-**Serves:** grade10-site-store-checkout-US-04 - The public storefront requires a proved member identity
+<!-- trace:scenario id=g10.store-checkout.SC-f06 rev=4 -->
+#### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer checks out as a guest
+**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
 
-- **GIVEN** a collector has no signed-in session on the public checkout
-- **WHEN** they try to continue to payment
-- **THEN** the collector is asked to sign in
-- **AND** no Grade10 order or Shopify checkout is created
-- **AND** a typed email is not treated as proof for the public storefront
+- **GIVEN** a collector has no signed-in session, and a ready basket worth less
+  than the identity bar
+- **WHEN** they continue to payment
+- **THEN** one Grade10 guest order and one Shopify hosted invoice are created
+- **AND** they are not asked to sign in
 
 <!-- trace:scenario id=g10.store-checkout.SC-g07 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-07 - Shopify names a line refused at payment
@@ -145,6 +152,130 @@ embedded payment secret.
 - **WHEN** the server prepares the hosted invoice response
 - **THEN** the local order stores the provider checkout reference before the URL is returned
 - **AND** a database transaction never remains open while Shopify is called
+
+### Requirement: A guest checks out the basket alone, and the order belongs to nobody
+
+A collector with no session SHALL check out the cart this browser holds as a
+guest. A request that carries a session SHALL be refused rather than written
+as a guest's.
+
+**Basket only** - A guest checkout SHALL carry the reviewed lines alone: no
+promo code, no reward coupon and no points.
+
+**Email** - Shopify's page SHALL take the buyer's email address, and the store
+SHALL keep that address on the order once it is paid.
+
+**Nobody's order** - A guest order SHALL never gain an owner. Paying it SHALL
+make no account, it SHALL earn no points, and an operator's claim SHALL be
+refused, whoever signs in afterwards. A member's Your Orders SHALL list the
+guest orders paid under the address their sign-in proved, without making those
+orders theirs.
+
+**The bar** - Goods worth the identity bar or more SHALL ask the guest to sign
+in before any order exists, as `grade10-site/commerce/commerce` states.
+
+**The cart** - This browser's cart SHALL be emptied once the guest's hosted
+invoice opens; the invoice holds the basket.
+
+<!-- trace:scenario id=g10.store-checkout.SC-wet rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-66 - A guest pays the basket alone
+**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
+
+- **GIVEN** a signed-out collector whose browser cart holds a ready basket
+  worth less than the identity bar
+- **WHEN** they press Pay
+- **THEN** the hosted invoice carries the reviewed lines with no promo code,
+  reward coupon or points
+- **AND** this browser's cart is empty once the invoice opens
+
+<!-- trace:scenario id=g10.store-checkout.SC-1yf rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-67 - A paid guest order keeps its address and belongs to nobody
+**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
+
+- **GIVEN** a guest order whose buyer typed an address on Shopify's page
+- **WHEN** Shopify reports it paid
+- **THEN** the order keeps that address and names no owner
+- **AND** no account is made from the address
+- **AND** no points are earned on the order
+- **AND** an operator's claim of the order is refused
+
+<!-- trace:scenario id=g10.store-checkout.SC-2g0 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-68 - A signed-in request is never a guest's
+**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
+
+- **GIVEN** a signed-in member
+- **WHEN** a guest checkout request carries their session
+- **THEN** the request is refused
+- **AND** no guest order is made
+
+<!-- trace:scenario id=g10.store-checkout.SC-pxw rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-71 - A member's Your Orders lists guest orders under their address
+**Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
+
+- **GIVEN** a guest order paid under the address a member signs in with
+- **WHEN** that member opens Your Orders
+- **THEN** the guest order is listed
+- **AND** it still names no owner and earns nothing
+
+### Requirement: A guest order opens from its private link
+
+Every order SHALL carry a link to its Grade10 page, and Shopify's order emails
+SHALL print it. A member's link SHALL be their order under
+`/profile/orders/<order-id>`. A guest order's link SHALL be
+`/orders/<order-id>#<secret>`: the secret rides after `#`, so no server or log
+sees it.
+
+The page SHALL open the order for whoever holds the link, ask nobody to sign
+in, and show the same order facts as a member's order. An unknown order, a
+member's order, a wrong secret and a missing secret SHALL all show not-found.
+The page SHALL tell search engines not to index it.
+
+<!-- trace:scenario id=g10.store-checkout.SC-g6e rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-69 - The link opens the guest order
+**Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
+
+- **GIVEN** a paid guest order and its link from Shopify's confirmation email
+- **WHEN** anyone opens the link, signed in or not
+- **THEN** the order's page shows its items, money and progress
+- **AND** nothing asks them to sign in
+
+<!-- trace:scenario id=g10.store-checkout.SC-kl3 rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-70 - A wrong link shows not-found
+**Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
+
+- **GIVEN** a link to an unknown order, to a member's order, with a wrong
+  secret, or with no secret
+- **WHEN** it is opened
+- **THEN** the site's not-found page shows
+- **AND** nothing about the order is revealed
+
+### Requirement: Continue opens the order this browser last sent to Shopify
+
+Shopify's Thank you Continue SHALL reach `/orders/latest`. That page SHALL open
+the order this browser last sent to Shopify, once, and only within a day of
+that checkout: a guest's private page, or a member's own order. With no such
+order remembered, it SHALL send a signed-in member to Your Orders and anyone
+else to the store, deciding only once the session has resolved. The page SHALL
+tell search engines not to index it.
+
+<!-- trace:scenario id=g10.store-checkout.SC-gxp rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-72 - Continue opens the order just paid
+**Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
+
+- **GIVEN** a guest or a member who paid on Shopify in this browser
+- **WHEN** they press Continue on Shopify's Thank you page
+- **THEN** that order's Grade10 page opens: a guest's private page, or the
+  member's own order
+
+<!-- trace:scenario id=g10.store-checkout.SC-lrv rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-73 - With no order remembered, Continue falls back
+**Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
+
+- **GIVEN** a browser that remembers no checkout, one that already used it, or
+  one whose checkout is more than a day old
+- **WHEN** `/orders/latest` opens
+- **THEN** a signed-in member lands on Your Orders
+- **AND** anyone else lands on the store
 
 ### Requirement: A checkout intent is safe to repeat
 
