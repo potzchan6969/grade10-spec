@@ -106,7 +106,7 @@ meaning.
   dispatch and the delivery, so the order reads Delivered
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
-- 🚧 **Shipment** — while the lot is dispatched (`fulfilled`), Order Progress
+- **Shipment** — while the lot is dispatched (`fulfilled`), Order Progress
   shows the tracking number as a link to the carrier's tracking page (opens
   externally) when the operator recorded a tracker link, and as plain text
   when none was; the link stays after Delivered; no separate Track shipment
@@ -291,7 +291,7 @@ by card, reads:
 The invoice is paid once and in full; paying it in parts is an operator's
 doing, under Edge Cases.
 
-🚧 Bank-transfer proof submit confirms the handoff, leaves the dialog open on
+Bank-transfer proof submit confirms the handoff, leaves the dialog open on
 failure, and locks the form while work is in progress.
 
 ::image{src="assets/diagrams/auction-payment.svg" alt="Paying an auction invoice: the winner pays by card and the provider confirms it, or transfers and uploads proof an operator confirms or returns; an unpaid invoice expires on day 7 and is reissued, settled or cancelled"}
@@ -313,11 +313,11 @@ failure, and locks the form while work is in progress.
 
 #### Bank Transfer Instructions
 
-- 🚧 **Two entry points** — while the invoice is pending, Order summary keeps
+- **Two entry points** — while the invoice is pending, Order summary keeps
   **Submit Payment Proof** as the primary control and places **View Bank
   Details** under it; View Bank Details opens bank rails, Submit Payment
   Proof opens the proof dialog
-- 🚧 **View Bank Details** — opens with the FPS tab selected. It shows amount
+- **View Bank Details** — opens with the FPS tab selected. It shows amount
   due and rail fields as detail rows (no
   Copy); each rail tab ends with payment reference and a warning to enter it
   in the bank memo, after the rail fields: FPS ID, account name and QR; HK
@@ -326,13 +326,13 @@ failure, and locks the form while work is in progress.
   name, bank address, SWIFT/BIC, full account or IBAN, then payment
   reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
-- 🚧 **Rail tab width** — on small screens, the FPS, HK Local and
+- **Rail tab width** — on small screens, the FPS, HK Local and
   International tabs hug their labels and scroll horizontally so every name
   stays readable; at wider sizes, the three tabs share the full-width track
 
 #### Bank Transfer Proof
 
-- 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
+- **Submit Payment Proof** — proof fields and upload only (no amount due
   or transfer reference); **1 to 3** PDF, PNG, JPG, HEIC or HEIF files, **5 MB**
   each and **15 MB** total, uploaded once after paying, with inline
   irreversible microcopy saying nothing can be added or changed after submit;
@@ -587,11 +587,12 @@ a second payment provider, and changes to the bid-time rules.
 | Refund transaction clues | Decided | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
 | Winner Order layout | Decided | The site renders the Winner Order design's page body from `@grade10/ui`, so a design change reaches the site on the next submodule bump. States the design never drew sit as alerts under the lot, in the order the site supplies. Chosen over fixing the site's own copy of the page, which drifts again on the next design change, and over an open content slot, which lets the page rebuild the design beside it. | Product and design |
 | Winner Order dialogs | Decided | Setup, how to pay, payment proof, contact and refund stay the site's, each moving into the design in a change of its own. Chosen over moving all five at once, when three hold their own address book, bank details or files. | Product and design |
+| Bank transfer dialogs | Decided | Bank instructions and proof submission use separate dialogs. Chosen over a combined dialog so the winner can read instructions without starting a proof upload. | Product and design (@tangconst) |
 | Progress stepper | 🚧 In flight | Five presentation steps, Address → Invoice → Payment → **Shipping** → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Preparing Shipment and Shipped under Shipping as the **current** (progress) step (Preparing Shipment subtext: Preparing to ship — not an incomplete Shipping step), Delivered as Completed. Shipped and Preparing Shipment badges use the muted `default` Badge tone on Winner Order and My Auctions. **BREAKING** vs past-tense Shipped as the phase label and badge Processing for a paid undispatched order — those read as already shipped when the Shipping step pings. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
-| Proof submit feedback | 🚧 In flight | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. The success and failure messages are localized in English, Simplified Chinese and Traditional Chinese. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
-| Tracking link on Winner Order | 🚧 In flight | While fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as the external carrier link with an arrow when the operator recorded a tracker link, and as plain text when none was. No separate Track shipment button and no carrier name in that chrome. Chosen over carrier name plus a Track shipment CTA. | Product and design (@tangconst) |
+| Proof submit feedback | Decided | Successful proof upload shows toast **Proof submitted** / **We'll verify your payment shortly.** and Payment Verifying. A failed upload keeps the dialog open with the draft and toast **Proof not submitted** / **Nothing was saved. Try again.** While submitting or converting HEIC the form locks and leave is blocked. Confirm stays inline microcopy. The success and failure messages are localized in English, Simplified Chinese and Traditional Chinese. Chosen over page-only toast and over a second confirm screen. | Product and design (@tangconst) |
+| Tracking link on Winner Order | Decided | While fulfilment is `fulfilled` (Shipped and Delivered), Order Progress shows the tracking number as the external carrier link with an arrow when the operator recorded a tracker link, and as plain text when none was. No separate Track shipment button and no carrier name in that chrome. Chosen over carrier name plus a Track shipment CTA. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation on the first saved draft, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. New receipt IDs use the listing code, invoice sequence and an unpadded per-invoice payment sequence. Historical receipt IDs remain unchanged. | Product and Finance |
 | Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
 | Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |

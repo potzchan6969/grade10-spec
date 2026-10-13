@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-09-22
+promoted_by: "@tangconst"
+hands:
+  pm: "@tangconst"
+  design: "@tangconst"
+  tech: "@tangconst"
+  qa: "@tangconst"
+  dev: "@tangconst"
+decisions_carried: "Q1-Q20 remain in the post-bidding PRD Bank Transfer Instructions and Bank Transfer Proof sections; the Bank transfer dialogs Product decisions row preserves the separate-dialog choice. Presentation details remain in the durable contract and archived design."
