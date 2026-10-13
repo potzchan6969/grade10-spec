@@ -17,7 +17,7 @@ Slack. Auction is the first source; each product adds its own rows later.
 | What's New window | The previous Hong Kong day |
 | Still Waiting threshold | **48 hours** since the order's wait began |
 | Dialog opens | Each entry with a row for the operator or a list that failed, until they close it that Hong Kong day |
-| Slack message | **08:00** Hong Kong time, every day, to one channel |
+| Slack message | **08:00** Hong Kong time, every day, one per product to its own channel |
 | Slack list length | **10** rows a list, then a link to Today |
 | Slack wait | Whole days, rounded down |
 | Reading | Both lists read from the current listings and orders each time |
@@ -126,8 +126,10 @@ read them.
 
 ## Slack
 
-🚧 At **08:00** Hong Kong time every day, both lists post as one message to a
-Slack channel.
+🚧 At **08:00** Hong Kong time every day, each product posts its own message,
+such as **Auction daily reminder**, with its own two lists, to its own Slack
+channel. Auction posts first; Store, Consignment, Inventory and Appointments
+post theirs when they add rows.
 
 - 🚧 **Links** - each row links to its listing or order in the console; the
   message shows no link previews
@@ -136,16 +138,17 @@ Slack channel.
   and days waited, and never a winner's name, email or phone
 - 🚧 **Quiet day** - nothing posts when both lists are empty; a list with no
   row is left out of a message that has rows
-- 🚧 **Layout** - each list's rows sit under their product, Auction first,
-  one line a row
+- 🚧 **Layout** - the heading names the product and the day; each list's
+  rows follow one line a row
 - 🚧 **Long lists** - each list shows its first 10 rows by exact wait or close,
   then a link to Today that says how many more
 - 🚧 **Titles** - a lot title over 60 characters is cut to 59 and an ellipsis
 - 🚧 **One attempt** - the message is sent once; a failure is logged and that
   day's message is not sent later
-- 🚧 **Set per environment** - the channel and the access token come from the
-  environment, never from the console; without them nothing posts and the log
-  says it is not configured
+- 🚧 **Set per environment** - each product's channel and access token come
+  from its own environment settings, never from the console; two products may
+  share them. Without them that product posts nothing and the log says it is
+  not configured
 
 :::detail{title="Product decisions" for="pm"}
 The owner wanted a reminder, not a second queue: the Orders worklist already
@@ -167,6 +170,6 @@ operator, in the console and in the team's Slack.
 | One attempt, no record | 🚧 In flight | The message is tried once and nothing records the send; a failure is logged and that day's message is lost. Chosen over retries through the day with a record of each day's send, which needs a table and a rule against posting twice. | Product |
 | Flagged orders are listed | 🚧 In flight | An order in a waiting status is listed by its own wait even with an open payment flag. Chosen over leaving it to Needs you, which would hide a forgotten dispatch behind a flag. | Product |
 | Folded on Today, scrolled in the dialog | 🚧 In flight | Today shows each product's list as one line until it is opened, so the page stays short; the dialog shows about four and a half rows of each and scrolls the rest inside the list. Chosen over full lists in both, which push Needs you and Approvals down the page and grow the dialog past the screen. | Product |
-| Slack, one channel | 🚧 In flight | One message at 08:00 Hong Kong time every day to one channel. Chosen over email or a message to each operator, which needs an address or a Slack account for every operator. | Product |
+| Slack, one message per product | 🚧 In flight | Each product posts its own message at 08:00 Hong Kong time to its own channel, with the same token or its own. Chosen over one message for every product, which needs one place that reads every product's lists, and over email or a message to each operator, which needs an address or a Slack account for every operator. | Product |
 | Slack carries everyone's rows, no customer names | 🚧 In flight | A shared channel cannot be scoped to one operator's grants, and a customer's name does not belong in it; the link carries the identity. Chosen over per-grant filtering and over naming the winner. | Product |
 :::
