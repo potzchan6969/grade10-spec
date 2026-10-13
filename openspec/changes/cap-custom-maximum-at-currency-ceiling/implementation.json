@@ -69,6 +69,95 @@
       "components": [
         "web"
       ]
+    },
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "cea6d10a6c0b82527c581beb9ce466413a595f8b",
+      "components": [],
+      "scope": "no-runtime",
+      "reason": "Shared UI source, stories and catalogs are consumed by the recorded Grade10 web implementation; this repository has no separate runtime deployment for this change."
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "@htonyl (Codex archive verification)",
+    "reviewedAt": "2026-10-13T07:20:01.419Z",
+    "changes": [
+      {
+        "path": "openspec/changes/cap-custom-maximum-at-currency-ceiling/ui-design.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The Storybook route changed to the current registered story. The custom-entry states and behavior are unchanged.",
+        "evidence": [
+          "https://github.com/9gag/grade10/pull/1060",
+          "https://github.com/9gag/grade10-spec/pull/1089",
+          "https://github.com/9gag/grade10/issues/1008#issuecomment-6122133066",
+          "Fresh archive validation: 159 frontend, 39 decoder, 52 shared UI and 21 backend tests passed."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The current suite and journeys include later accepted auction refinements and trace metadata. The accepted ceiling-refusal behavior remains implemented by PR 1060; added internal-bid behavior belongs to add-auction-internal-bid.",
+        "evidence": [
+          "https://github.com/9gag/grade10/pull/1060",
+          "https://github.com/9gag/grade10-spec/pull/1089",
+          "https://github.com/9gag/grade10/issues/1008#issuecomment-6122133066",
+          "Fresh archive validation: 159 frontend, 39 decoder, 52 shared UI and 21 backend tests passed."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/auction/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The current suite and journeys include later accepted auction refinements and trace metadata. The accepted ceiling-refusal behavior remains implemented by PR 1060; added internal-bid behavior belongs to add-auction-internal-bid.",
+        "evidence": [
+          "https://github.com/9gag/grade10/pull/1060",
+          "https://github.com/9gag/grade10-spec/pull/1089",
+          "https://github.com/9gag/grade10/issues/1008#issuecomment-6122133066",
+          "Fresh archive validation: 159 frontend, 39 decoder, 52 shared UI and 21 backend tests passed."
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The current suite and journeys include later accepted auction refinements and trace metadata. The accepted ceiling-refusal behavior remains implemented by PR 1060; added internal-bid behavior belongs to add-auction-internal-bid.",
+        "evidence": [
+          "https://github.com/9gag/grade10/pull/1060",
+          "https://github.com/9gag/grade10-spec/pull/1089",
+          "https://github.com/9gag/grade10/issues/1008#issuecomment-6122133066",
+          "Fresh archive validation: 159 frontend, 39 decoder, 52 shared UI and 21 backend tests passed."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": [],
+        "classification": "semantic",
+        "reason": "The later collapse-maximum-entry-at-ceiling change adds chip clamping and no-entry states. The accepted custom-entry correction contract remains implemented by PR 1089 and PR 1060; the later change owns its added outcomes. Automation metadata for this delivery is recorded with its landed tests.",
+        "evidence": [
+          "https://github.com/9gag/grade10/pull/1060",
+          "https://github.com/9gag/grade10-spec/pull/1089",
+          "https://github.com/9gag/grade10/issues/1008#issuecomment-6122133066",
+          "Fresh archive validation: 159 frontend, 39 decoder, 52 shared UI and 21 backend tests passed."
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The later collapse-maximum-entry-at-ceiling change adds chip clamping and no-entry states. The accepted custom-entry correction contract remains implemented by PR 1089 and PR 1060; the later change owns its added outcomes. Automation metadata for this delivery is recorded with its landed tests.",
+        "evidence": [
+          "https://github.com/9gag/grade10/pull/1060",
+          "https://github.com/9gag/grade10-spec/pull/1089",
+          "https://github.com/9gag/grade10/issues/1008#issuecomment-6122133066",
+          "Fresh archive validation: 159 frontend, 39 decoder, 52 shared UI and 21 backend tests passed."
+        ]
+      }
+    ]
+  }
 }
