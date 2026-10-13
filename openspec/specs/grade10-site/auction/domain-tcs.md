@@ -290,6 +290,13 @@
    - 's card reads Ended and names when it ended, with no watch control. g10.auction-dmn.US12-TC2
    - Neither page reloaded. g10.auction-dmn.US12-TC2
 
+## g10.auction-dmn.US1: Operator publishes a gallery a collector can shop
+
+**As an** operator with catalogue grant,
+**I want** the images and alt text I confirm on a draft listing to be what the
+catalogue and the listing page show,
+**so that** a collector shops the card I photographed rather than a placeholder.
+
 ### g10.auction-dmn.US1-TC1: Confirmed gallery image reaches the catalogue card
 
 **Classification:**

@@ -762,6 +762,12 @@
 22. Read My Auctions and Bidding History for `<listing_29>`.
    - neither surface records the refused attempt. g10.auction-auction.US14-TC4
 
+## g10.auction-auction.US1: Collector browses Auction listings
+
+**As a** collector,
+**I want** the catalogue to show Auction listings with money in minor units,
+**so that** I am not offered Buy Now and a close with bids is absolute.
+
 ### g10.auction-auction.US1-TC2: Public listing read exposes the close and extension policy
 
 **Classification:**

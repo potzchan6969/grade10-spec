@@ -340,6 +340,12 @@
 3. Find `<lot_3>`'s row in the Active tab.
    - Your Standing reads Outbid, with the next valid bid. g10.auction-account-record.US10-TC3
 
+## g10.auction-account-record.US1: Mark a listing now and find it again later
+
+**As a** collector,
+**I want** to watch listings I am interested in before bidding opens,
+**so that** I can find them again when it does without searching the catalogue a second time.
+
 ### g10.auction-account-record.US1-TC1: A lot watched before it opens is found when it opens
 
 **Classification:**

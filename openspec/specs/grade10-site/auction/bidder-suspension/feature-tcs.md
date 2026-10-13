@@ -160,6 +160,13 @@
    - The account record no longer blocks bidding for the reinstated account. g10.auction-bidder-suspension.US3-TC3
    - The suspension and its reason remain as history. g10.auction-bidder-suspension.US3-TC3
 
+## g10.auction-bidder-suspension.US1: Collector who misses a deadline loses their auction standing
+
+**As a** collector who let a payment deadline pass,
+**I want** to be told plainly that I can no longer bid, what I still owe, and
+how to resolve it,
+**so that** I understand what I can still do and what it takes to bid again.
+
 ### g10.auction-bidder-suspension.US1-TC1: Deadline suspension refuses new auction actions
 
 **Classification:**

@@ -249,6 +249,12 @@
    - The setup modal does not open. g10.auction-bid-panel-enrollment.US4-TC2
    - The panel shows Leading with the collector's maximum and current bid. g10.auction-bid-panel-enrollment.US4-TC2
 
+## g10.auction-bid-panel-enrollment.US1: Collector signs in to bid on a lot
+
+**As a** signed-out collector on a live lot,
+**I want** the bid panel to offer sign-in when I try to bid,
+**so that** I can authenticate before linking a card.
+
 ### g10.auction-bid-panel-enrollment.US1-TC1: Sign-in is offered instead of place bid
 
 **Classification:**

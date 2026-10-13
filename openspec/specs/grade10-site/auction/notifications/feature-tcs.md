@@ -292,6 +292,12 @@
    - No You did not win letter. g10.auction-notifications.US8-TC2
    - No Lot watched, sold letter. g10.auction-notifications.US8-TC2
 
+## g10.auction-notifications.US1: Collector hears a watched lot is opening
+
+**As a** collector,
+**I want** to be emailed as a watched lot opens,
+**so that** I can come back and bid without sitting on the page.
+
 ### g10.auction-notifications.US1-TC1: Watcher is mailed 24 hours before and at the opening
 
 Runs once per row of **Test data**.

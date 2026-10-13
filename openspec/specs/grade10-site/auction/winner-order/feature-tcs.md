@@ -1584,6 +1584,12 @@
 22. Confirm the account's saved home address at 2026-09-14T08:50:00Z, ten minutes before that deadline and after 48 hours from the scheduled close.
    - The confirmation is accepted and the order reads Preparing Invoice. g10.auction-winner-order.US23-TC11
 
+## g10.auction-winner-order.US1: Winner settles a won lot
+
+**As a** winner,
+**I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
+**so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
+
 ### g10.auction-winner-order.US1-TC1: A lot closing with a winner opens one order whose quoted charges read TBD
 
 **Classification:**

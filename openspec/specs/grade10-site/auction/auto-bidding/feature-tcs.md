@@ -249,6 +249,12 @@
 14. Read the listing's state and recorded close.
    - The recorded close reads 20:30 UTC. g10.auction-auto-bidding.US5-TC9
 
+## g10.auction-auto-bidding.US1: Collector commits a maximum on an open listing
+
+**As a** collector,
+**I want** to commit the most I will pay and raise it later,
+**so that** Grade10 bids for me only as far as needed to lead.
+
 ### g10.auction-auto-bidding.US1-TC1: First maximum opens bidding at the starting price
 
 Runs once per row of **Test data**.

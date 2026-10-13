@@ -415,6 +415,12 @@
    - Each row still shows a listing pseudonym of the form Bidder N. g10.auction-bidding-history.US9-TC2
    - Neither row exposes an email. g10.auction-bidding-history.US9-TC2
 
+## g10.auction-bidding-history.US1: Collector reads their bidding index
+
+**As a** collector,
+**I want** every listing I placed a bid on in one private index,
+**so that** I can see my standing without hunting through the catalogue.
+
 ### g10.auction-bidding-history.US1-TC1: Repeated activity is grouped under one listing
 
 **Classification:**

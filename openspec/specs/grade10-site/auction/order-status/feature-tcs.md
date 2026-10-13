@@ -252,6 +252,12 @@
 4. Read derived order status.
    - Order derives as Preparing Shipment. g10.auction-order-status.US8-TC7
 
+## g10.auction-order-status.US1: Expired invoice keeps Pending Payment without winner card pay
+
+**As a** winner or operator,
+**I want** an unpaid invoice past its deadline to read Payment Overdue without winner card pay,
+**so that** the deadline ends self-service settlement while operators can still resolve the order.
+
 ### g10.auction-order-status.US1-TC1: Expired derives Payment Overdue
 
 **Classification:**

@@ -96,6 +96,12 @@
    - Email alerts for that listing are off. g10.auction-watchlist.US5-TC1
    - Confirmation says the watch stayed. g10.auction-watchlist.US5-TC1
 
+## g10.auction-watchlist.US1: Collector watches a listing to come back to it
+
+**As a** signed-in collector,
+**I want** to mark a listing to come back to without bidding on it,
+**so that** I can leave the page and find it again without searching.
+
 ### g10.auction-watchlist.US1-TC1: Watch from the listing page records one watch
 
 **Classification:**

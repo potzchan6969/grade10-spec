@@ -105,6 +105,12 @@
    - The tracking number reads as plain text, not a link. g10.auction-notifications-order.US1-TC55
    - The letter offers no track-and-trace action. g10.auction-notifications-order.US1-TC55
 
+## g10.auction-notifications-order.US1: Post-close letters
+
+**As a** customer(winner),
+**I want** the letters Grade10 sends about my auction order,
+**so that** I know what to do next without guessing.
+
 ### g10.auction-notifications-order.US1-TC1: Winning a lot sends auction-won
 
 **Classification:**
