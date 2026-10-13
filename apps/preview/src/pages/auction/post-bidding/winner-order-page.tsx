@@ -296,7 +296,10 @@ function paymentMethodFor(
     content.status === "pending_payment" ||
     content.status === "pending_payment_expired";
   return content.setupPaymentMethod && !pendingPayment
-    ? { kind: "text", label: content.setupPaymentMethod }
+    ? {
+        kind: "text",
+        label: `${content.setupPaymentMethod} (${content.settlementCurrency ?? "HKD"})`,
+      }
     : undefined;
 }
 

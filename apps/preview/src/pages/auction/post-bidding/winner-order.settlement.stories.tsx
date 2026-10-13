@@ -163,7 +163,7 @@ export const PreparingInvoice: Story = {
     expect(canvas.getByText("Tax")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
-    expect(canvas.getByText("Card")).toBeVisible();
+    expect(canvas.getByText("Card (HKD)")).toBeVisible();
     expect(canvas.getByText("Billing address")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /complete|pay/i }),
@@ -246,6 +246,7 @@ export const CompleteSetupFlow: Story = {
     expect(
       deliveryAddressBlock(canvasElement).getByText(/Alex Chan/),
     ).toBeVisible();
+    expect(canvas.getByText("Card (HKD)")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Complete Order Setup" }),
     ).not.toBeInTheDocument();
