@@ -353,14 +353,14 @@ on winner, In transit, Closed and All, opening on Needs action.
   received; 1 to 5 private proof files; and a reason. Never on a card invoice,
   which is reissued as bank transfer first
 
-- 🚧 **Partially Paid** — the deadline stops for good, and what will not be
+- **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
 | Total with this payment | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
-| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
-| 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
+| Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
+| 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
+| Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
 ### Address Confirmation Window
@@ -586,7 +586,7 @@ settings.
 | Money that lands | 🚧 In flight | A card payment is always recorded, and one the invoice did not expect carries a flag until an operator clears it with a reason. On an expired invoice it pays the invoice, since it paid the whole total; on a replaced or cancelled invoice, at an amount that differs, or on an invoice in any state that cannot take a card payment, it counts toward nothing and blocks nothing, and finance returns it outside Grade10. Chosen over refusing or dropping it, which loses track of money Grade10 holds, and over never moving a status, which leaves an expired invoice the winner paid in full to be settled a second time. | Product and finance |
 | Test winners | 🚧 In flight | Outside production, one action makes a test account on the operator's own tagged address that won a closed sandbox lot through the real close, so its letters go out. It signs in with the ordinary link in a private window, and Cancel is the order's own. Chosen over seeding an order around the real close, which skipped its letters, and over a sign-in link of its own, which auth would have to guard. | Product and Engineering |
 | How long an order waited | 🚧 In flight | Each row and order page shows how long the order has waited in its status. Setup Overdue is the status at the 48-hour address deadline, and Preparing Invoice carries no mark; its payment timer starts at send. Chosen over a second Overdue mark beside the Setup Overdue status, which also marked the operator's own queue after 72 hours. | Product |
-| Partial payment stays operator-only | 🚧 In flight | Recorded through Record payment, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
+| Partial payment stays operator-only | Decided | Recorded through Record payment, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
 | Who records a refund | Decided | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:payment`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
 | Refund money path | Decided | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
 | One refund, any amount | Decided | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |

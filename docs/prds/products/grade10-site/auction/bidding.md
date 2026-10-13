@@ -318,7 +318,7 @@ the same facts sit in the five-column table.
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
-- 🚧 **Payment Verifying and Partially Paid** — a won lot reads Payment
+- **Payment Verifying and Partially Paid** — a won lot reads Payment
   Verifying while its proof waits for an operator, and Partially Paid while
   an operator collects it in parts
 - **Setup Overdue and Payment Overdue** — a won lot reads Setup Overdue
