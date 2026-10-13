@@ -1,30 +1,26 @@
 ## Goals
 
 - Show auction prices in USD on every collector-facing auction surface.
-- Let a winner choose USD or HKD settlement at order setup.
+- Make USD the only base currency for an item price and a bid.
+- Settle an order in USD, with card, Hong Kong local bank transfer and SWIFT.
 
 ## Non-Goals
 
-- ❓ The conversion rate's owner, lock point and rounding — pending PM/Finance.
-- ❓ Whether HKD and JPY lot schedules are retired or kept for lots already
-  live in those currencies — pending PM.
-- ❓ The verified-bidder bar restated in USD (today HKD 120,000) — pending PM.
-- ❓ Whether the invoice and letters disclose the USD bid beside converted
-  totals — pending PM.
-- Multi-currency lot pricing, FX display conversion on bid surfaces, or a
-  settlement currency beyond USD/HKD.
+- HKD settlement and the winner's choice of currency - [`add-hkd-settlement`](../add-hkd-settlement/decisions.md).
+- A display in any other currency; if one comes, it converts from USD and is its own change.
+- ❓ Whether HKD and JPY lot schedules are retired or kept for lots already live in those currencies - pending PM.
+- ❓ The verified-bidder bar restated in USD (today HKD 120,000) - pending PM.
 - Changes to `shared/money-amounts` or `shared/ui/auction-listing` contracts.
 
 ## Decisions
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | How do lots price? | Denominated in USD; collectors see `US$` | USD display conversion over a non-USD lot currency |
-| Q2 | Who picks settlement currency? | The winner, at order setup — USD or HKD | Order currency fixed to the lot currency; a fixed HKD order |
-| Q3 | ❓ Rate source and lock? | Pending PM/Finance | — |
-| Q4 | ❓ HKD/JPY schedules? | Pending PM — retire or keep for live lots | — |
-| Q5 | ❓ Verified-bidder bar in USD? | Pending PM (today HKD 120,000) | — |
-| Q6 | ❓ Invoice discloses USD bid / rate? | Pending PM | — |
+| Q1 | How do lots price? | USD alone, for an item price and a bid; collectors see `US$` | A display conversion over a non-USD lot currency |
+| Q2 | What does a first order settle in? | USD, with card, Hong Kong local bank transfer and SWIFT | A fixed HKD order |
+| Q3 | What happens to JPY in Payment Settings? | It stays, dormant; USD and HKD are the active entries | Removing the row |
+| Q4 | ❓ HKD/JPY schedules? | Pending PM - retire, or keep for live lots | - |
+| Q5 | ❓ Verified-bidder bar in USD? | Pending PM (today HKD 120,000) | - |
 
 ## Raised
 
