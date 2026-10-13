@@ -9,3 +9,7 @@ depends_on:
   - remove-my-auction-orders
 hands:
   design: "@tangconst"
+purpose_rewritten:
+  grade10-site/auction/winner-order: "the order now carries a settlement currency the winner picks and a bank rail, so what a winner is sent and chooses changed"
+  grade10-site/auction/bid-increments: "every auction bids in USD alone, so one USD schedule replaces a schedule per currency"
+  grade10-admin/auction/payment-settings: "Payment Settings now hold a card fee rule per settlement currency and one USD premium minimum, not a mapping per lot currency"

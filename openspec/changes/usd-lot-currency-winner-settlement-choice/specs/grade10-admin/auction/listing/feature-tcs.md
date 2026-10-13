@@ -4,14 +4,14 @@
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-admin-auction-listing-SC-01, grade10-admin-auction-listing-SC-02, grade10-admin-auction-listing-SC-04, grade10-admin-auction-listing-SC-05, grade10-admin-auction-listing-SC-07, grade10-admin-auction-listing-SC-08, grade10-admin-auction-listing-SC-09, grade10-admin-auction-listing-SC-10, grade10-admin-auction-listing-SC-11, grade10-admin-auction-listing-SC-12, grade10-admin-auction-listing-SC-25, grade10-admin-auction-listing-SC-26, grade10-admin-auction-listing-SC-27, grade10-admin-auction-listing-SC-27a, grade10-admin-auction-listing-SC-28, grade10-admin-auction-listing-SC-70, grade10-admin-auction-listing-SC-127, grade10-admin-auction-listing-SC-129, grade10-admin-auction-listing-SC-149, grade10-admin-auction-listing-SC-150, grade10-admin-auction-listing-SC-151, grade10-admin-auction-listing-SC-162, grade10-admin-auction-listing-SC-163
 
-## g10adm.auction-listing.US1: Operator saves an unfinished listing and comes back to it
+## grade10-admin-auction-listing-US1: Operator saves an unfinished listing and comes back to it
 
 **As a** auction operator,
 **I want** to save a listing before I know every fact about the card,
 **so that** I can start from the item in front of me and finish once the rest arrives.
 
 <!-- trace:case id=g10adm.auction-listing.TC-qk8 rev=3 covers=g10adm.auction-listing.SC-r6p -->
-### g10adm.auction-listing.US1-TC3: Draft refuses a negative or non-whole starting price
+### grade10-admin-auction-listing-US1-TC3-3: Draft refuses a negative or non-whole starting price
 
 Runs once per row of **Test data**.
 
@@ -55,7 +55,7 @@ Runs once per row of **Test data**.
 * Step 5 still shows the listing as a draft.
 
 <!-- trace:case id=g10adm.auction-listing.TC-uka rev=2 covers=g10adm.auction-listing.SC-a6f -->
-### g10adm.auction-listing.US1-TC6: Draft keeps a starting price of 0 apart from an empty one
+### grade10-admin-auction-listing-US1-TC6-2: Draft keeps a starting price of 0 apart from an empty one
 
 **Classification:**
 
@@ -106,14 +106,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10adm.auction-listing.US3: Operator creates a listing that is ready to sell
+## grade10-admin-auction-listing-US3: Operator creates a listing that is ready to sell
 
 **As a** auction operator,
 **I want** the listing checked against everything an auction needs at the moment I create it,
 **so that** nothing incomplete can reach a bidder.
 
 <!-- trace:case id=g10adm.auction-listing.TC-igg rev=2 covers=g10adm.auction-listing.SC-mmr -->
-### g10adm.auction-listing.US3-TC1: Operator creates a filled draft
+### grade10-admin-auction-listing-US3-TC1-2: Operator creates a filled draft
 
 **Classification:**
 
@@ -154,7 +154,7 @@ Runs once per row of **Test data**.
 * Step 3 does not list that listing.
 
 <!-- trace:case id=g10adm.auction-listing.TC-8u6 rev=2 covers=g10adm.auction-listing.SC-rj8 -->
-### g10adm.auction-listing.US3-TC15: Operator corrects a created listing's starting price
+### grade10-admin-auction-listing-US3-TC15-2: Operator corrects a created listing's starting price
 
 **Classification:**
 
@@ -194,7 +194,7 @@ Runs once per row of **Test data**.
 * Step 4 still shows the listing as created.
 
 <!-- trace:case id=g10adm.auction-listing.TC-h7v rev=2 covers=g10adm.auction-listing.SC-rhp -->
-### g10adm.auction-listing.US3-TC21: Create accepts a starting price of 0 in USD
+### grade10-admin-auction-listing-US3-TC21-2: Create accepts a starting price of 0 in USD
 
 **Classification:**
 
@@ -230,7 +230,7 @@ Runs once per row of **Test data**.
 * Step 6 reads 0 minor units USD.
 
 <!-- trace:case id=g10adm.auction-listing.TC-fc7 rev=2 covers=g10adm.auction-listing.SC-hze -->
-### g10adm.auction-listing.US3-TC22: API create refuses a negative or non-whole starting price
+### grade10-admin-auction-listing-US3-TC22-2: API create refuses a negative or non-whole starting price
 
 Runs once per row of **Test data**.
 
@@ -271,7 +271,7 @@ Runs once per row of **Test data**.
 * Step 2 reads starting price 0 minor units USD.
 
 <!-- trace:case id=g10adm.auction-listing.TC-ebb rev=2 covers=g10adm.auction-listing.SC-rfu -->
-### g10adm.auction-listing.US3-TC24: Operator lowers a created listing's starting price to 0
+### grade10-admin-auction-listing-US3-TC24-2: Operator lowers a created listing's starting price to 0
 
 **Classification:**
 
@@ -313,7 +313,7 @@ Runs once per row of **Test data**.
 * Step 5 reads the listing as created.
 
 <!-- trace:case id=g10adm.auction-listing.TC-g4v rev=2 covers=g10adm.auction-listing.SC-v2q,g10adm.auction-listing.SC-28a -->
-### g10adm.auction-listing.US3-TC25: API create with 0 and no currency creates as USD 0
+### grade10-admin-auction-listing-US3-TC25-2: API create with 0 and no currency creates as USD 0
 
 **Classification:**
 
@@ -352,7 +352,7 @@ Runs once per row of **Test data**.
 * Step 2 reads starting price 0 minor units USD.
 
 <!-- trace:case id=g10adm.auction-listing.TC-m53 rev=2 covers=none -->
-### g10adm.auction-listing.US3-TC26: Currency change reformats the same minor-unit price
+### grade10-admin-auction-listing-US3-TC26-2: Currency change reformats the same minor-unit price
 
 **Classification:**
 
@@ -388,14 +388,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10adm.auction-listing.US9: Operator lists an unsold lot again
+## grade10-admin-auction-listing-US9: Operator lists an unsold lot again
 
 **As a** auction operator,
 **I want** the stock of a listing that closed with no winner to come back on its own, and a Relist on that listing,
 **so that** a card nobody bought goes back on sale without me hunting for its stock.
 
 <!-- trace:case id=g10adm.auction-listing.TC-xzh rev=3 covers=g10adm.auction-listing.SC-t6r,g10adm.auction-listing.SC-5vh,g10adm.auction-listing.SC-le0,g10adm.auction-listing.SC-4ez,g10adm.auction-listing.SC-lc6,g10adm.auction-listing.SC-z9c,g10adm.auction-listing.SC-j1h,g10adm.auction-listing.SC-suv,g10adm.auction-listing.SC-lqj,g10adm.auction-listing.SC-nq1,g10adm.auction-listing.SC-2m4,g10adm.auction-listing.SC-9uj -->
-### g10adm.auction-listing.US9-TC3: Relist from the row opens a new draft holding stock on Save
+### grade10-admin-auction-listing-US9-TC3-3: Relist from the row opens a new draft holding stock on Save
 
 **Classification:**
 

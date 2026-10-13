@@ -4,7 +4,7 @@
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** shared-ui-auction-order-SC-15, shared-ui-auction-order-SC-16, shared-ui-auction-order-SC-17, shared-ui-auction-order-SC-19, shared-ui-auction-order-SC-20
 
-## shared.ui-auction-order.US1: Address form component contract
+## g10.shared-auction-order.US1: Address form component contract
 
 **Walked by:** nobody on their own - a component contract; the order detail and the address form are walked through `grade10-site/auction/winner-order`, which composes the blocks
 
@@ -13,7 +13,7 @@
 **so that** Winner Order composes one contract instead of drawing its own.
 
 <!-- trace:case id=g10.shared-auction-order.TC-2fz rev=1 covers=g10.shared-auction-order.SC-cdc -->
-### shared.ui-auction-order.US1-TC23: The setup form offers USD and HKD with nothing preselected
+### g10.shared-auction-order.US1-TC23: The setup form offers USD and HKD with nothing preselected
 
 **Classification:**
 
@@ -42,7 +42,7 @@
 * Neither choice is selected.
 
 <!-- trace:case id=g10.shared-auction-order.TC-3cr rev=1 covers=g10.shared-auction-order.SC-8j6 -->
-### shared.ui-auction-order.US1-TC24: The winner's currency pick is reported
+### g10.shared-auction-order.US1-TC24: The winner's currency pick is reported
 
 Runs once per row of **Test data**.
 
@@ -82,7 +82,7 @@ Runs once per row of **Test data**.
 * No other callback is called and the block makes no request of its own.
 
 <!-- trace:case id=g10.shared-auction-order.TC-giz rev=1 covers=g10.shared-auction-order.SC-7if -->
-### shared.ui-auction-order.US1-TC25: Payment methods follow the currency they are supplied for
+### g10.shared-auction-order.US1-TC25: Payment methods follow the currency they are supplied for
 
 Runs once per row of **Test data**.
 
@@ -121,7 +121,7 @@ Runs once per row of **Test data**.
 * No method supplied only for the other currency appears.
 
 <!-- trace:case id=g10.shared-auction-order.TC-kiy rev=1 covers=g10.shared-auction-order.SC-7if -->
-### shared.ui-auction-order.US1-TC26: Each bank rail is its own payment method choice
+### g10.shared-auction-order.US1-TC26: Each bank rail is its own payment method choice
 
 **Classification:**
 
@@ -159,7 +159,7 @@ Runs once per row of **Test data**.
 * The callback is called once with `<bank rail B>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-bu1 rev=1 covers=g10.shared-auction-order.SC-z03 -->
-### shared.ui-auction-order.US1-TC27: The summary reads a USD total then a converted HKD total
+### g10.shared-auction-order.US1-TC27: The summary reads a USD total then a converted HKD total
 
 **Classification:**
 
@@ -195,7 +195,7 @@ Runs once per row of **Test data**.
 * The HKD total line follows it and reads `<hkd total>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-p6m rev=1 covers=g10.shared-auction-order.SC-hc5 -->
-### shared.ui-auction-order.US1-TC28: View Bank Details shows only the rail supplied
+### g10.shared-auction-order.US1-TC28: View Bank Details shows only the rail supplied
 
 Runs once per row of **Test data**.
 
@@ -236,7 +236,7 @@ Runs once per row of **Test data**.
 * It shows no rail tabs.
 
 <!-- trace:case id=g10.shared-auction-order.TC-62a rev=1 covers=g10.shared-auction-order.SC-pd1 -->
-### shared.ui-auction-order.US1-TC29: No payment method is listed before a currency is chosen
+### g10.shared-auction-order.US1-TC29: No payment method is listed before a currency is chosen
 **Classification:**
 
 * **Severity:** major
@@ -264,7 +264,7 @@ Runs once per row of **Test data**.
 * No method supplied for either currency appears.
 
 <!-- trace:case id=g10.shared-auction-order.TC-pm2 rev=1 covers=g10.shared-auction-order.SC-nxj -->
-### shared.ui-auction-order.US1-TC30: A payment method supplied as unavailable shows its text and cannot be chosen
+### g10.shared-auction-order.US1-TC30: A payment method supplied as unavailable shows its text and cannot be chosen
 **Classification:**
 
 * **Severity:** major
@@ -296,7 +296,7 @@ Runs once per row of **Test data**.
 * The payment method callback is not called.
 
 <!-- trace:case id=g10.shared-auction-order.TC-y6r rev=1 covers=g10.shared-auction-order.SC-bzz -->
-### shared.ui-auction-order.US1-TC31: A payment method value the application clears shows no selected choice
+### g10.shared-auction-order.US1-TC31: A payment method value the application clears shows no selected choice
 **Classification:**
 
 * **Severity:** major
@@ -326,7 +326,7 @@ Runs once per row of **Test data**.
 * Step 3: HKD methods are listed and none is selected.
 
 <!-- trace:case id=g10.shared-auction-order.TC-mvr rev=1 covers=g10.shared-auction-order.SC-k6i -->
-### shared.ui-auction-order.US1-TC32: One total line shows when no converted total is supplied
+### g10.shared-auction-order.US1-TC32: One total line shows when no converted total is supplied
 **Classification:**
 
 * **Severity:** major
@@ -354,7 +354,7 @@ Runs once per row of **Test data**.
 * No second total line shows, and no amount is derived or converted by the block.
 
 <!-- trace:case id=g10.shared-auction-order.TC-9r5 rev=1 covers=g10.shared-auction-order.SC-8eq -->
-### shared.ui-auction-order.US1-TC33: The detail omits the invoice link and pay control it was not given
+### g10.shared-auction-order.US1-TC33: The detail omits the invoice link and pay control it was not given
 **Classification:**
 
 * **Severity:** major

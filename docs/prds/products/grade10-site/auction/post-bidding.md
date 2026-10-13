@@ -288,9 +288,8 @@ winner who picks USD pays it unchanged.
   pays the converted HKD total plus the fee
 - 🚧 **Bank details by currency** — Finance configures the bank details for
   USD and HKD, rail by rail, and a rail is offered once its details are held
-- ❓ **Where Finance configures them** — the admin panel, under Payment
-  Settings; PM and Engineering confirm whether that screen exists today or is
-  new work
+- 🚧 **Where Finance configures them** — the admin panel, where the bank
+  details remain configurable for USD and HKD; nothing here moves it
 
 ## The Invoice
 

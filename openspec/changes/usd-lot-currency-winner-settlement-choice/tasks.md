@@ -77,7 +77,7 @@ Frontend work against the contracts and fixtures, never a running backend.
 - [ ] 8.3 Run the one-time lot currency overwrite on production data, recorded 2026-10-13 and run once before the change goes live (`grade10-admin-auction-listing-SC-162`)
 - [ ] 8.4 Verify: the launch check passes on production
 - [ ] 8.5 Settled rule, recorded 2026-10-14, `decisions.md` Q21: Finance configures the USD and HKD bank details, rail by rail, and a rail is offered once its details are held. The launch check reports which rails each currency offers (`winner-order-SC-297`, `winner-order-SC-226`)
-- [ ] 8.6 Held for the PM and Engineering, recorded 2026-10-14, `decisions.md` Q28: whether the admin panel's bank-details screen exists or is new work. No implementation task and no requirement until answered
+- [x] 8.6 Settled by the PM, `decisions.md` Q28: bank details remain configurable in the admin panel by Finance for USD and HKD; no task and no requirement moves it
 
 ## 9. Operator quote, edit before send and reissue (grade10)
 

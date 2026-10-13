@@ -16,7 +16,7 @@ collector's own money. The **settlement currency** is what a winner pays in.
 Splitting them lets every lot bid in one unit, USD, and lets a winner pay in
 the money they hold.
 
-**Metric:** TBC - ❓ awaiting PM.
+**Metric:** share of won auction orders settled in HKD, read beside USD, and winners who confirm setup without contacting Grade10 about currency or method.
 
 ## What Changes
 

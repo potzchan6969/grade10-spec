@@ -4,14 +4,14 @@
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-admin-auction-post-sale-SC-37, grade10-admin-auction-post-sale-SC-38, grade10-admin-auction-post-sale-SC-49, grade10-admin-auction-post-sale-SC-50, grade10-admin-auction-post-sale-SC-68, grade10-admin-auction-post-sale-SC-69, grade10-admin-auction-post-sale-SC-70, grade10-admin-auction-post-sale-SC-75, grade10-admin-auction-post-sale-SC-76, grade10-admin-auction-post-sale-SC-77, grade10-admin-auction-post-sale-SC-78, grade10-admin-auction-post-sale-SC-79, grade10-admin-auction-post-sale-SC-80, grade10-admin-auction-post-sale-SC-81, grade10-admin-auction-post-sale-SC-82, grade10-admin-auction-post-sale-SC-83, grade10-admin-auction-post-sale-SC-90, grade10-admin-auction-post-sale-SC-91, grade10-admin-auction-post-sale-SC-107, grade10-admin-auction-post-sale-SC-108, grade10-admin-auction-post-sale-SC-109, grade10-admin-auction-post-sale-SC-110, grade10-admin-auction-post-sale-SC-111, grade10-admin-auction-post-sale-SC-112, grade10-admin-auction-post-sale-SC-113, grade10-admin-auction-post-sale-SC-114, grade10-admin-auction-post-sale-SC-115, grade10-admin-auction-post-sale-SC-118, grade10-admin-auction-post-sale-SC-125, grade10-admin-auction-post-sale-SC-126, grade10-admin-auction-post-sale-SC-133, grade10-admin-auction-post-sale-SC-134, grade10-admin-auction-post-sale-SC-136, grade10-admin-auction-post-sale-SC-137, grade10-admin-auction-post-sale-SC-139, post-sale-SC-156, post-sale-SC-157, post-sale-SC-158, grade10-admin-auction-post-sale-SC-162, grade10-admin-auction-post-sale-SC-163, grade10-admin-auction-post-sale-SC-164, grade10-admin-auction-post-sale-SC-167, grade10-admin-auction-post-sale-SC-168, grade10-admin-auction-post-sale-SC-169, grade10-admin-auction-post-sale-SC-170, grade10-admin-auction-post-sale-SC-171, grade10-admin-auction-post-sale-SC-172, grade10-admin-auction-post-sale-SC-184, grade10-admin-auction-post-sale-SC-185, grade10-admin-auction-post-sale-SC-193, grade10-admin-auction-post-sale-SC-194, post-sale-SC-210, grade10-admin-auction-post-sale-SC-211, grade10-admin-auction-post-sale-SC-212, grade10-admin-auction-post-sale-SC-213, grade10-admin-auction-post-sale-SC-214, grade10-admin-auction-post-sale-SC-215, grade10-admin-auction-post-sale-SC-216
 
-## g10adm.auction-post-sale.US5: Operator quotes and sends a winner's invoice
+## post-sale-US5: Operator quotes and sends a winner's invoice
 
 **As an** operator,
 **I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
-<!-- trace:case id=g10adm.auction-post-sale.TC-dre rev=2 covers=g10adm.auction-post-sale.SC-qv1 -->
-### g10adm.auction-post-sale.US5-TC9: Operator sends an invoice with tax typed in USD
+<!-- trace:case id=g10adm.auction-post-sale.TC-u4w rev=2 covers=g10adm.auction-post-sale.SC-qvj,g10adm.auction-post-sale.SC-omk,g10adm.auction-post-sale.SC-t9u,g10adm.auction-post-sale.SC-tj1,g10adm.auction-post-sale.SC-hgh,g10adm.auction-post-sale.SC-gks,g10adm.auction-post-sale.SC-qv1,g10adm.auction-post-sale.SC-36t,g10adm.auction-post-sale.SC-g1u,g10adm.auction-post-sale.SC-qtj -->
+### post-sale-US5-TC9-2: Operator sends an invoice with tax typed in USD
 
 **Classification:**
 
@@ -52,7 +52,7 @@
 * The invoice is `pending` and its order total equals that Subtotal.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-70n rev=1 covers=g10adm.auction-post-sale.SC-8ko,g10adm.auction-post-sale.SC-lxd,g10adm.auction-post-sale.SC-lc8 -->
-### g10adm.auction-post-sale.US5-TC20: Every quote amount is typed in USD and sent in the settlement currency
+### post-sale-US5-TC20-1: Every quote amount is typed in USD and sent in the settlement currency
 
 Runs once per row of **Test data**.
 
@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 * The sent invoice is `pending` and carries the amounts the row names, in the row's settlement currency, at the order total read in step 4.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-w5z rev=1 covers=g10adm.auction-post-sale.SC-pp0 -->
-### g10adm.auction-post-sale.US5-TC21: The settlement currency is changed before send
+### post-sale-US5-TC21-1: The settlement currency is changed before send
 
 **Classification:**
 
@@ -141,7 +141,7 @@ Runs once per row of **Test data**.
 * The sent invoice is in USD and carries `<shipping and handling>` as typed.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-r3c rev=1 covers=g10adm.auction-post-sale.SC-2g5 -->
-### g10adm.auction-post-sale.US5-TC22: The settlement currency is changed on a reissue after send
+### post-sale-US5-TC22-1: The settlement currency is changed on a reissue after send
 
 **Classification:**
 
@@ -173,7 +173,7 @@ Runs once per row of **Test data**.
 * The reissued entry on the invoice log names the settlement currency as a changed part.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-d4e rev=1 covers=g10adm.auction-post-sale.SC-75y,g10adm.auction-post-sale.SC-b44 -->
-### g10adm.auction-post-sale.US5-TC23: The quote names the payment method and rail the winner chose
+### post-sale-US5-TC23-1: The quote names the payment method and rail the winner chose
 
 Runs once per row of **Test data**.
 
@@ -218,7 +218,7 @@ Runs once per row of **Test data**.
 * The card row shows the fee computed from the card rule of the settlement currency, and no bank transfer fee field.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-9yj rev=1 covers=g10adm.auction-post-sale.SC-c0y -->
-### g10adm.auction-post-sale.US5-TC24: A typed amount that does not convert to a whole HK$ is rounded up
+### post-sale-US5-TC24-1: A typed amount that does not convert to a whole HK$ is rounded up
 **Classification:**
 
 * **Severity:** major
@@ -255,7 +255,7 @@ Runs once per row of **Test data**.
 * The invoice line keeps USD10.01 as the amount the operator typed.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-jru rev=1 covers=g10adm.auction-post-sale.SC-7jg,g10adm.auction-post-sale.SC-guq -->
-### g10adm.auction-post-sale.US5-TC25: Sending prices the invoice in the settlement currency and locks the order
+### post-sale-US5-TC25-1: Sending prices the invoice in the settlement currency and locks the order
 Runs once per row of **Test data**.
 
 **Classification:**
@@ -302,7 +302,7 @@ Runs once per row of **Test data**.
 * The order reads Pending Payment.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-qz7 rev=1 covers=g10adm.auction-post-sale.SC-miq -->
-### g10adm.auction-post-sale.US5-TC26: A large bank transfer fee is accepted and converts with the other lines
+### post-sale-US5-TC26-1: A large bank transfer fee is accepted and converts with the other lines
 **Classification:**
 
 * **Severity:** major
@@ -339,7 +339,7 @@ Runs once per row of **Test data**.
 * The invoice is `pending` with an order total of HKD4,978.00.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-9i1 rev=1 covers=g10adm.auction-post-sale.SC-4va,g10adm.auction-post-sale.SC-xsv -->
-### g10adm.auction-post-sale.US5-TC27: A currency change that leaves the held rail unoffered is refused
+### post-sale-US5-TC27-1: A currency change that leaves the held rail unoffered is refused
 Runs once per row of **Test data**.
 
 **Classification:**
@@ -378,7 +378,7 @@ Runs once per row of **Test data**.
 * The invoice log gains no entry.
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-pjh rev=1 covers=g10adm.auction-post-sale.SC-ys6,g10adm.auction-post-sale.SC-0ew,g10adm.auction-post-sale.SC-j60 -->
-### g10adm.auction-post-sale.US5-TC28: An operator edits the method and rail before send, and a rail the currency does not offer is refused
+### post-sale-US5-TC28-1: An operator edits the method and rail before send, and a rail the currency does not offer is refused
 Runs once per row of **Test data**.
 
 **Classification:**
@@ -422,7 +422,7 @@ Runs once per row of **Test data**.
 
 
 <!-- trace:case id=g10adm.auction-post-sale.TC-ddn rev=1 covers=g10adm.auction-post-sale.SC-2g4,g10adm.auction-post-sale.SC-ppk -->
-### g10adm.auction-post-sale.US5-TC30: Recording setup by telephone carries a settlement currency
+### post-sale-US5-TC30-1: Recording setup by telephone carries a settlement currency
 Runs once per row of **Test data**.
 
 **Classification:**

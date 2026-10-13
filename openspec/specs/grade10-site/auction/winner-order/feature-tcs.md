@@ -3676,8 +3676,6 @@ Runs once per row of **Test data**.
 * Grade10 refuses the confirmation.
 * The order is still Awaiting Setup, with no delivery address and no method recorded.
 
-<!-- trace:case id=g10.auction-winner-order.TC-o26 rev=1 covers=g10.auction-winner-order.SC-pt5 -->
-
 ---
 
 ## g10.auction-winner-order.US2: Winner follows a settled lot to delivery

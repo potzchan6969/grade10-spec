@@ -168,6 +168,6 @@ Rollback before step 4: restore the backup. After step 4 the check refuses non-U
 
 ## Open Questions
 
-- **Where Finance configures bank details** - Held for the PM and Engineering, `decisions.md` Q28: whether the admin panel's bank-details screen exists today or is new work. This design assumes no new model and writes no requirement for the screen. If it is new, it takes its own `payment-settings` change and design.
+- **Where Finance configures bank details** - Settled, `decisions.md` Q28: the admin panel, where they remain configurable for USD and HKD. This design does not move it.
 - **Separate USD HK Local account** - Whether USD uses the same HK Local account as HKD or a second one. It changes only Finance's configuration key, not the model or the specs.
 - **Index of overwritten lots** - Whether support wants a list of lots that were HKD or JPY. The overwrite logs ids already; a report is optional.

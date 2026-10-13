@@ -4,14 +4,14 @@
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** grade10-admin-auction-payment-settings-SC-04, grade10-admin-auction-payment-settings-SC-08, grade10-admin-auction-payment-settings-SC-09, grade10-admin-auction-payment-settings-SC-10, grade10-admin-auction-payment-settings-SC-11
 
-## g10adm.auction-payment-settings.US1: Operator maintains the auction premium minimums
+## grade10-admin-auction-payment-settings-US1: Operator maintains the auction premium minimums
 
 **As a** auction operator with payment processing,
 **I want** one place under `/auction` to review and update the minimum buyer premium for each auction currency,
 **so that** invoice amounts follow the configured policy.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-q43 rev=2 covers=g10adm.auction-payment-settings.SC-erw -->
-### g10adm.auction-payment-settings.US1-TC1: Initial page shows one USD minimum
+### grade10-admin-auction-payment-settings-US1-TC1-2: Initial page shows one USD minimum
 
 **Classification:**
 
@@ -42,7 +42,7 @@
 * Step 2: no HKD or JPY minimum is shown.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-nzx rev=2 covers=g10adm.auction-payment-settings.SC-veg -->
-### g10adm.auction-payment-settings.US1-TC2: A saved USD minimum persists
+### grade10-admin-auction-payment-settings-US1-TC2-2: A saved USD minimum persists
 
 **Classification:**
 
@@ -79,7 +79,7 @@
 * The save names this operator and the time it was saved.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-s5q rev=2 covers=g10adm.auction-payment-settings.SC-ieg -->
-### g10adm.auction-payment-settings.US1-TC3: Invalid save changes nothing
+### grade10-admin-auction-payment-settings-US1-TC3-2: Invalid save changes nothing
 
 Runs once per row of **Test data**.
 
@@ -119,7 +119,7 @@ Runs once per row of **Test data**.
 * USD remains 0 minor units.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-gof rev=2 covers=g10adm.auction-payment-settings.SC-qzp -->
-### g10adm.auction-payment-settings.US1-TC5: Finance saves the minimum in major units, zero included
+### grade10-admin-auction-payment-settings-US1-TC5-2: Finance saves the minimum in major units, zero included
 
 Runs once per row of **Test data**.
 
@@ -160,7 +160,7 @@ Runs once per row of **Test data**.
 * The tab reads `<read>`, stored as `<stored>` minor units.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-6sl rev=1 covers=g10adm.auction-payment-settings.SC-ieg -->
-### g10adm.auction-payment-settings.US1-TC6: A premium minimum in HKD or JPY is refused
+### grade10-admin-auction-payment-settings-US1-TC6-1: A premium minimum in HKD or JPY is refused
 
 Runs once per row of **Test data**.
 
@@ -201,14 +201,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10adm.auction-payment-settings.US2: Finance keeps the Stripe card fee rule
+## grade10-admin-auction-payment-settings-US2: Finance keeps the Stripe card fee rule
 
 **As a** finance operator,
 **I want** to set, per currency, the card rule that prices a card invoice's processing fee,
 **so that** a card invoice's fee always covers what Stripe takes, without an operator working it out by hand.
 
 <!-- trace:case id=g10adm.auction-payment-settings.TC-df4 rev=2 covers=g10adm.auction-payment-settings.SC-pzf,g10adm.auction-payment-settings.SC-cac -->
-### g10adm.auction-payment-settings.US2-TC1: No rule until Finance sets one
+### grade10-admin-auction-payment-settings-US2-TC1-2: No rule until Finance sets one
 
 **Classification:**
 

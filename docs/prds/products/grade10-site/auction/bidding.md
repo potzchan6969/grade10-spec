@@ -40,12 +40,12 @@ Three currencies meet in an auction, and each has one job.
 | Also called | 🚧 Lot currency, price tag, labelled currency | Local currency | 🚧 Payment currency |
 | Which | 🚧 **USD**, the only one | The collector's own choice | 🚧 **USD** or **HKD** |
 | Chosen by | Nobody; every lot is priced in it and it never changes | The collector, for themself | The winner, once, at [Order Setup](/p/grade10-site/auction/post-bidding#order-setup) |
-| What it is for | The unit every auction is bid in; a collector always types USD | ❓ A reference price, converted live from the bid currency; not built | What the invoice, order total, fees and letters are paid in |
+| What it is for | The unit every auction is bid in; a collector always types USD | A reference price, converted live from the bid currency; defined, not built | What the invoice, order total, fees and letters are paid in |
 | Today | Per lot: USD, HKD or JPY | Not offered | The lot's currency |
 
 - 🚧 **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
   and the increment are all USD; no lot is priced in another currency
-- ❓ **Preferred currency** — a reference price in the collector's own
+- **Preferred currency** — a reference price in the collector's own
   currency is defined here so the three are not confused; no surface shows
   one in this change, and nothing converts a bid for display
 - 🚧 **Settlement currency** — a USD fact becomes an HKD fact only at
