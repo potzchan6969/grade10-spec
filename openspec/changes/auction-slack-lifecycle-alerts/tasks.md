@@ -19,7 +19,7 @@ Needs group 1's contracts only where a flagged alert reuses flag-reason words. D
 - [ ] 2.6 Widen the optional Slack secret `why` strings to name lifecycle alerts beside the daily reminder; no new secrets
 - [ ] 2.7 Verify: `pnpm run test:backend`, `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
-## 3. Console copy and warning mark (grade10)
+## 3. Console copy and warning mark (grade10) (owner: @mason5991)
 
 Builds against group 1's contracts and fixture rows, never a running backend.
 
