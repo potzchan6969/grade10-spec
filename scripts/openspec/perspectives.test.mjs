@@ -709,6 +709,34 @@ test("shared-planning-agent-rounds-SC-109 - a group citing a scenario in the `<a
   );
 });
 
+test("shared-planning-agent-rounds-SC-110 - a group citing a case in the `<app>.<domain>-<capability>.US<n>-TC<m>` form is given that case", () => {
+  const root = fixture();
+  citing(root);
+  const change = join(root, "openspec", "changes", "demo");
+  for (const file of [
+    "specs/shared/planning/demo/feature-tcs.md",
+    "tasks.md",
+  ]) {
+    const path = join(change, file);
+    writeFileSync(
+      path,
+      readFileSync(path, "utf8")
+        .replaceAll(
+          "shared-planning-demo-US1-TC1-1",
+          "g10.planning-demo.US1-TC1",
+        )
+        .replaceAll(
+          "shared-planning-demo-US1-TC2-1",
+          "g10.planning-demo.US1-TC2",
+        ),
+    );
+  }
+  const text = readAll(root, bundleFor(root, "demo", "3", undefined, quiet));
+
+  assert.match(text, /demo case one one steps\./);
+  assert.doesNotMatch(text, /demo case one two steps\./);
+});
+
 test("a group the plan does not carry is refused", () => {
   const root = fixture();
   citing(root);

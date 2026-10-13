@@ -1,7 +1,11 @@
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
-import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
+import {
+  discoverSpecs,
+  readSpecs,
+  readTestCases,
+} from "../src/store/read-specs.mts";
 import { writeStore } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
@@ -96,6 +100,47 @@ describe("spec entries", () => {
     const topic = specs.find((spec) => spec.id === "demo-topic");
     expect(topic?.testCases).toBeUndefined();
     expect(topic?.testCasesStatus).toBeUndefined();
+  });
+});
+
+describe("case headings in every form the store writes", () => {
+  const caseText = (heading: string, trace: string) =>
+    [
+      `### ${heading}`,
+      "",
+      "* **Status:** draft",
+      "* **Automation status:** manual",
+      `* **Trace:** ${trace}`,
+      "",
+    ].join("\n");
+  const suite = readTestCases(
+    [
+      "# Alpha Test Cases",
+      "",
+      "**Status:** pending-review",
+      "",
+      "## Walk 1: Reader follows the thing",
+      "",
+      caseText(
+        "g10.demo-alpha.US1-TC1: Reader asks for the thing",
+        "g10.demo-alpha.US1",
+      ),
+      caseText(
+        "g10.demo-alpha.TC-ue2 (US1-TC2): Reader asks again",
+        "g10.demo-alpha.US1, g10.demo-beta.US2",
+      ),
+      caseText("alpha-US1-TC3-1: Reader asks a third time", "alpha-US-01"),
+      caseText("alpha-TC-04: Reader asks for a scenario", "alpha-SC-02"),
+    ].join("\n"),
+  );
+
+  it("reads each case under the id its heading displays, with its traces", () => {
+    expect(suite.cases.map(({ id, traces }) => [id, traces])).toEqual([
+      ["g10.demo-alpha.US1-TC1", ["g10.demo-alpha.US1"]],
+      ["g10.demo-alpha.TC-ue2", ["g10.demo-alpha.US1", "g10.demo-beta.US2"]],
+      ["alpha-US1-TC3-1", ["alpha-US-01"]],
+      ["alpha-TC-04", ["alpha-SC-02"]],
+    ]);
   });
 });
 

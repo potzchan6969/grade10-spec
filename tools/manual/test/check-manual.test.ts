@@ -939,6 +939,27 @@ describe("permanent ids across the whole store", () => {
     ]);
   });
 
+  it("fails a `<app>.<domain>-<capability>.US<n>` journey an archived change issued", async () => {
+    const journeys = (title: string) =>
+      `## User journeys\n\n### g10.demo-alpha.US7: ${title}\n\nThey do it.\n`;
+    const root = changing(
+      "first",
+      issuing("alpha", ["g10.demo-alpha.SC9"]),
+      {
+        "openspec/changes/archive/2026-01-01-add-beta/proposal.md":
+          proposal("Add beta"),
+        "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/alpha/spec.md":
+          issuing("alpha", ["g10.demo-alpha.SC8"]),
+        "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/alpha/user-journeys.md":
+          journeys("Somebody else"),
+      },
+      journeys("Someone new"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `g10.demo-alpha.US7`, which the archived `add-beta` also issues — an id is issued once and never freed",
+    ]);
+  });
+
   it("passes a REMOVED requirement naming the ids an archived change issued", async () => {
     const root = changing(
       "first",

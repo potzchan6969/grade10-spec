@@ -167,6 +167,18 @@ export function sectionSpan(
 export const SCENARIO_ID =
   /(?:[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*\.SC\d+[a-z]?|[a-z0-9][a-z0-9-]*-SC-\d+[a-z]?)/;
 
+/** What a journey id looks like: `<app>.<domain>-<capability>.US<n>`, a
+ * composed suite's `g10.auction-dmn.US1`, `g10-pdt.US1` or `platform.US1`, or
+ * the older `<capability>-US-<n>`. */
+export const JOURNEY_ID =
+  /(?:[a-z0-9][a-z0-9.-]*\.US\d+|[a-z0-9][a-z0-9-]*-US-\d+)/;
+
+/** What a case heading's id looks like: its journey and `-TC<m>`
+ * (`g10.auction-bidder-suspension.US1-TC1`), or the older
+ * `<capability>-US<n>-TC<m>-<k>`. */
+export const CASE_ID =
+  /(?:[a-z0-9][a-z0-9.-]*\.US\d+-TC\d+|[a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?)/;
+
 /** Where an id cannot start or end without being part of a longer one:
  * `x.y.SC1` is not cited by `a.x.y.SC1`, `alpha-SC-1` by `demo-alpha-SC-1`,
  * nor either by `…SC12` or `…SC1a`. */
