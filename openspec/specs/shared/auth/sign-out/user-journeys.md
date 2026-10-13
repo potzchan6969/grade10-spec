@@ -11,3 +11,9 @@
 **As a** signed-in person,
 **I want** a refused sign-out named as a failure I can retry,
 **so that** a network miss does not leave me signed in with no explanation.
+
+### shared-auth-sign-out-US-03: Operator signs out of the console and stays signed in on the site
+
+**As an** operator,
+**I want** signing out of one surface to end that surface's session only,
+**so that** I do not lose my cart or watchlist by closing the console, nor leave the console open by leaving the site.

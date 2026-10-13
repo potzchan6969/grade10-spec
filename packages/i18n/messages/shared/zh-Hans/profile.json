@@ -5,5 +5,23 @@
   "bioLabel": "简介",
   "editLabel": "编辑个人资料",
   "emptyBio": "还没有填写简介。",
-  "memberSince": "{date} 起成为会员"
+  "memberSince": "{date} 起成为会员",
+  "consignments": {
+    "view": {
+      "new": "已收到申请",
+      "toprice": "已收件",
+      "tosign": "待签署",
+      "tolist": "已签署",
+      "onsale": "发售中",
+      "sold": "已售出",
+      "payout": "款项即將支付",
+      "ended": "已结束：请选择下一步",
+      "returning": "正寄回给你",
+      "closed": "已完结"
+    },
+    "sellerLine": "卖家：{name}",
+    "sellerLineSub": "透过 Grade10 寄卖的收藏家。卡片由我们保管，并由我们收款及处理退货。",
+    "lotSellerLine": "寄卖者：{name}",
+    "lotSellerLineSub": "透过 Grade10 拍卖出售。卡片由我们保管，并由我们收款及交付。"
+  }
 }

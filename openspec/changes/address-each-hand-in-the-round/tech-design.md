@@ -62,16 +62,13 @@ and after (`(none)` on one side for a line added or removed). The routing is
 landing on the line; an answered line carries 🚧 until the change that
 delivers it archives.
 
-### QA is a hand of Specified
+### QA review stays downstream
 
-`Q3`. `stage-changes-and-notify-hands`' Hands table and Whose-turn table gain
-`qa` at Specified, so `hands.ts`'s derivation reaches QA on the landing of the
-requirements and the existing `Your turn` sender tells them once, keyed on
-the change, the stage and the role. The body for the `qa` role names the
-suite's path, its case count and `/tcs-review <change>` in place of the
-command to paste. The `tasks` instruction's walk group names "the suite
-reviewed (`/tcs-review`)" as an input, held by `tasks-template.test.mjs`.
-Rejected: a `review` kind, a second sender, a new stage.
+`Q3`. Specified keeps `pm` as its only hand. A requirements landing creates
+no QA turn, and `tasks.md` carries no review task or review dependency. Human
+QA discovers `pending-review` and `reopened` suites after deployment and runs
+`/tcs-review` independently of acceptance, the fold, implementation, the walk
+and archive. Rejected: a `review` kind, a second sender and a new stage.
 
 ### The interview's shape is one rule in the governance page
 

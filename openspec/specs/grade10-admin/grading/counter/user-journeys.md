@@ -3,13 +3,13 @@
 ### grade10-admin-grading-counter-US-01: Operator opens the shop and sees what every submission waits for
 
 **As a** member of shop staff starting a shift,
-**I want** the queue cut by what each submission waits for, today's drop-offs in a strip, and a badge naming why a row needs me,
+**I want** the queue cut by what each submission waits for, today's submissions, and a badge naming why a row needs me,
 **so that** I work the counter without being emailed anything.
 
 ### grade10-admin-grading-counter-US-02: Operator hands a booked list in at the counter
 
 **As a** member of shop staff with a collector at the desk,
-**I want** to find the booking, or write a walk-in's list with them, check each card and photograph it, confirm the level fits every declared value, show the agreement on the iPad, take the fee and any cover line at the till only once it is sealed, and print the labels and hand in with the intake receipt going out, the submission staying booked and the cards going home if no line was paid,
+**I want** to open the submission a visit started, or write a walk-in's list with them, check each card and photograph it, confirm the level fits every declared value, show the agreement on the iPad, take the fee and any cover line at the till only once it is sealed, and print the labels and hand in with the intake receipt going out, the submission staying booked and the cards going home if no line was paid,
 **so that** the cards are sealed in the bag with a receipt in one visit and nothing was paid for a card nobody checked.
 
 ### grade10-admin-grading-counter-US-03: Operator refuses one card and the rest go on
@@ -81,7 +81,7 @@
 ### grade10-admin-grading-counter-US-14: Operator's acts follow the grant they hold and the status in front of them
 
 **As a** member of shop staff,
-**I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel only on the collector's word and never once the visit starts or a card is checked or refused, refused independently when the submission has moved under me,
+**I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel only on the collector's word and never once a card is checked or refused, refused independently when the submission has moved under me,
 **so that** I am never shown a button that will only be refused, and two of us at one counter cannot leave a submission where neither meant.
 
 ### grade10-admin-grading-counter-US-15: Operations changes a default without a deploy

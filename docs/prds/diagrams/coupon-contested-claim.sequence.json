@@ -62,7 +62,7 @@
       "from": "loyalty",
       "to": "rows",
       "y": 290,
-      "label": "reserve it, only where still available",
+      "label": "claim it, only where still available",
       "variant": "security"
     },
     {
@@ -112,9 +112,9 @@
       "from": "newer",
       "to": "earlier",
       "y": 580,
-      "label": "cancel that sale, give its claim back",
+      "label": "retire that sale, give its claim back",
       "variant": "security",
-      "note": "or refuse by name, where that checkout is still live"
+      "note": "or refuse by name, where that checkout took the money, will not close, or is still being submitted"
     },
     {
       "id": "again",

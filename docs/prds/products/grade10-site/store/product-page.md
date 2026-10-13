@@ -9,8 +9,10 @@ The product details page shows one product, its price, and the one sellable
 item a collector can add.
 
 - **Card** — name, description, images and the one sellable item's price;
-  badges and compare-at price where the catalogue provides them
-- 🚧 **One item to buy** — the page offers no size, option or variant choice.
+  badges where the catalogue provides them, and the site discounts named
+  among them; the sale strikes as on the listing —
+  [Discounts](/p/grade10-site/store/discounts#where-each-shows)
+- **One item to buy** — the page offers no size, option or variant choice.
   Shopify's sale identifier stays internal to availability and cart handling
 - 🚧 **Buy** — choose a quantity, add the product, and stay on the page; while
   the add is pending the controls show Adding…; after it settles the cart
@@ -24,8 +26,8 @@ item a collector can add.
   fill
 - **Sold out** — a sold-out product says so and cannot be added; its price
   remains visible
-- **Shipping and pickup** — static copy on every card: shipping calculated at
-  checkout, free pick-up at Hong Kong Grade10 Store
+- **Shipping and pickup** — the same copy on every card: shipping calculated
+  at checkout, free pick-up at Hong Kong Grade10 Store
 - **Shared link** — unfurls with the card's first picture, fitted whole into
   the wide box a preview fetcher lays out and padded white, and says it is the
   wide card; a card the catalogue pictures no way unfurls without a picture,
@@ -35,14 +37,17 @@ item a collector can add.
 
 ## Buy
 
-**Signed-out Add to cart** — opens the sign-in dialog titled
-**Sign In to Add to Cart**; no guest cart; after a successful sign-in the
-add completes when practical.
+**Signed-out Add to cart** - adds the line to the cart this browser holds,
+with no sign-in; signing in later moves those lines into the member's cart -
+[Cart Drawer](/p/grade10-site/store/cart#reviewing-the-cart)
 
 ## Free Pick-up
 
-🚧 **Opens Store Locator** — the free pick-up claim names Hong Kong Grade10
-Store and opens Store Locator
+🚧 **Opens Store Locator** - the store name in the free pick-up claim opens
+Store Locator in the same tab, in the page's language
+
+🚧 **No dead label** - Shipping fee has no page behind it, so it is plain
+text, not a link
 
 ## You May Also Like
 
@@ -51,7 +56,7 @@ Store and opens Store Locator
 
 ## Designs
 
-::story{id="pages-store-product-detail-page--docs" title="Product details"}
+::story{id="store-product-page-screens-product-detail--docs" title="Product details"}
 
 :::detail{title="Implementation map" for="engineer"}
 - [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)
@@ -59,7 +64,7 @@ Store and opens Store Locator
 - [Product view](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductView.tsx)
 - [Purchase view and internal sale identity](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductBuyBox.tsx)
 - [Product variant model and priced item selection](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/domain/models/Product.ts)
-- [Standalone product detail preview](https://github.com/9gag/grade10-spec/blob/main/apps/preview/src/store-product/store-product-detail.tsx)
+- [Standalone product detail preview](https://github.com/9gag/grade10-spec/blob/main/apps/preview/src/pages/store/product-page/store-product-detail.tsx)
 - [Frontend feature layout](https://github.com/9gag/grade10/blob/main/docs/conventions/code-layout.md)
 :::
 
@@ -92,8 +97,7 @@ auction lot's address.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Which picture | Decided | The card's first catalogue image, in the shop's own order. | Product |
-| Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. Same rule as the listing. | Product |
-| Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Same string as the listing. Header Sign In keeps **Sign In to Grade10**. | Product |
+| Guest cart | Decided | A signed-out Add to cart adds to the cart this browser holds; a guest checks out from it. Same rule as the listing. Supersedes sign-in to add. | Product |
 | Fitted, not cropped | Decided | The card sits whole inside the box. A slab's label or a card's corner cut off is the one thing a preview of it must not do. | Product |
 | Pad colour | Decided | White, fixed. Product photographs sit on white, so the pad reads as more of the same rather than as a colour of ours. | Design |
 | No picture, no tag | Decided | A card the catalogue pictures no way unfurls without a picture. A fetcher's own placeholder beats a broken image. | Product |
@@ -101,5 +105,8 @@ auction lot's address.
 | Large card on X | Decided | The response names the card shape, because X sizes the card from that name alone and defaults to the small square. Wide with a picture, small without. | Product |
 | Originals under the box | Decided | A picture narrower than the box is enlarged to fill it, so it reads soft rather than small, and the declared size is always the delivered one. | Product |
 | Lot previews | ❓ Open | An auction lot's address unfurls with no picture; its images are the auction's, not the shop's. | Product |
+| Low-stock annotation | Decided | The Product Detail frame's Low inventory indicator, which asks for `Only X left`, is superseded: this page's no-scarcity rule governs, and the frame is historical, since the stories are the agreed look. | Design |
+| Remaining count in the shared blocks | Decided | Grade10 supplies none of the product header's or the listing card's remaining-count element, nor the purchase panel's stepper ceiling from a stock count, so no Grade10 surface shows them. The blocks keep all three as optional props. | Product |
 | A catalogue image that fails to transform | ❓ Open | Whether a card whose image exists but fails to load or resize from the CDN falls back to no `og:image`, the same as a card with no image, or something else. | Engineering |
+| Points and discounts on a consigned card | ❓ Open | Whether points, coupons and the shop's discounts reach a card a collector consigned; the consignor is paid on the listed price either way - [Consignment](/p/grade10-site/consignment#price). | Product |
 :::

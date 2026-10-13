@@ -34,6 +34,7 @@ import {
   readRetiredJourneys,
   requirementBlocks,
 } from "../src/store/read-specs.mts";
+import { describeReuse, reusedInChange } from "../src/store/reused-ids.mts";
 import {
   anchorRefusal,
   everyBlock,
@@ -53,6 +54,10 @@ const ISSUED_ID = new RegExp(
   "g",
 );
 const LEADING_ID = new RegExp(`^(${SCENARIO_ID.source})\\b`);
+const MARKED_SCENARIO = new RegExp(
+  `<!--\\s*trace:scenario id=(\\S+)[^\\n]*\\n#### Scenario:\\s*(${SCENARIO_ID.source})\\b`,
+  "g",
+);
 const SCENARIO_HEADING = /^Scenario:\s*/i;
 const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
@@ -62,13 +67,16 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   // state the product manager hands over in — and the restated copies in it
   // are checkable without a `spec.md` anywhere near them.
   checkContext(ctx, journeysOf(ctx, changes));
+  for (const change of changes)
+    for (const { file, reuse } of reusedInChange(ctx.roots.store, change.id))
+      ctx.add("reused", file, describeReuse(reuse));
 
   const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
   checkShape(files, ctx.add);
   checkFolded(ctx, files, shape);
   checkOverlap(files, ctx.add);
-  checkIssued(ctx, files);
+  checkIssued(ctx, files, shape);
   checkFuse(ctx, files, pages);
   checkAnchors(ctx, files);
   checkBlind(ctx, files, shape);
@@ -403,7 +411,7 @@ function journeysUnder(text, heading) {
 
 /** Every in-flight delta file, read once and parsed by the store's own
  * reader: the sections the fold splits on, and the requirements under them. */
-function readDeltaFiles(root, changes) {
+export function readDeltaFiles(root, changes) {
   const files = [];
   for (const change of changes) {
     for (const delta of change.deltas) {
@@ -413,6 +421,7 @@ function readDeltaFiles(root, changes) {
       const sections = deltaSections(text);
       files.push({
         change: change.id,
+        dependsOn: change.dependsOn ?? [],
         accepted: change.accepted === true,
         spec: delta.spec,
         file,
@@ -567,13 +576,9 @@ function checkFolded(ctx, files, shape) {
   }
 }
 
-/** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
- * REMOVED block archived second writes the first's text away, silently; an
- * ADDED block archived second fails outright, since the fold refuses to add
- * a name that exists. Either way each change is named to the other, with the
- * other's heading, so a person reads both before building on either
- * (`shared-planning-agent-rounds-SC-102`). */
-function checkOverlap(files, add) {
+/** Every requirement a delta folds, keyed by capability and name, with the
+ * claims held on it; two changes in one list is an overlap. */
+export function overlapClaims(files) {
   const claims = new Map();
   for (const one of files) {
     for (const requirement of one.requirements) {
@@ -583,9 +588,27 @@ function checkOverlap(files, add) {
       claims.set(key, held);
     }
   }
+  return claims;
+}
+
+/** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
+ * REMOVED block archived second writes the first's text away, silently; an
+ * ADDED block archived second fails outright, since the fold refuses to add
+ * a name that exists. A recorded dependency orders a stack: the upstream
+ * contract is accepted before its dependent one, so their shared requirement
+ * is intentional and must not make every unrelated pull request red. All
+ * other overlaps name each change to the other, with the other's heading,
+ * so a person reads both before building on either
+ * (`shared-planning-agent-rounds-SC-102`). */
+function checkOverlap(files, add) {
+  const claims = overlapClaims(files);
+  const dependencies = new Map(
+    files.map((one) => [one.change, new Set(one.dependsOn)]),
+  );
 
   for (const held of claims.values()) {
     if (new Set(held.map((one) => one.change)).size < 2) continue;
+    if (isOrdered(held, dependencies)) continue;
     for (const claim of held) {
       const others = held
         .filter((one) => one.change !== claim.change)
@@ -605,12 +628,35 @@ function checkOverlap(files, add) {
   }
 }
 
+/** A dependency stack can extend the same requirement in order. Both paths
+ * would be a cycle, which is not an order and remains an overlap failure. */
+function isOrdered(held, dependencies) {
+  const reaches = (from, target, seen = new Set()) => {
+    if (seen.has(from)) return false;
+    seen.add(from);
+    for (const next of dependencies.get(from) ?? []) {
+      if (next === target || reaches(next, target, seen)) return true;
+    }
+    return false;
+  };
+
+  return held.every((claim, index) =>
+    held.slice(index + 1).every((other) => {
+      const forward = reaches(claim.change, other.change);
+      const backward = reaches(other.change, claim.change);
+      return forward !== backward;
+    }),
+  );
+}
+
 /** RULE `issued`: `<capability>-SC/US/TC-<n>` is issued once, ever. The
  * issued universe is the durable specs plus every delta in the store,
  * archived ones included — the fold destroys a delta's journeys, so an id an
  * archived change issued lives nowhere else, and reusing it rewrites history
- * silently. */
-function checkIssued(ctx, files) {
+ * silently. A MODIFIED scenario restating a durable id under another trace
+ * marker makes one readable id name two records; one restating it with no
+ * marker is RULE `restated`'s. */
+function checkIssued(ctx, files, shape) {
   const durable = new Map();
   for (const spec of ctx.specs.values()) {
     for (const requirement of spec.requirements) {
@@ -622,6 +668,7 @@ function checkIssued(ctx, files) {
     for (const test of spec.testCases ?? []) durable.set(test.id, spec.id);
   }
 
+  const markers = durableMarkers(ctx.roots.store, shape);
   const archived = archivedIds(ctx.roots.store);
   const issuers = new Map();
   const claim = (id, change) => {
@@ -654,17 +701,33 @@ function checkIssued(ctx, files) {
         `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed`,
       );
     }
-    // An accepted change's ADDED ids are the ones its acceptance published.
+    // An accepted change's scenarios are the ones its acceptance published.
     if (one.accepted) continue;
     for (const requirement of one.requirements) {
-      if (requirement.kind !== "added") continue;
+      if (requirement.kind === "added")
+        for (const scenario of scenarios(requirement.block.children)) {
+          const id = LEADING_ID.exec(scenario)?.[1];
+          if (id === undefined || !durable.has(id)) continue;
+          ctx.add(
+            "issued",
+            one.file,
+            `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed`,
+          );
+        }
+      if (requirement.kind !== "modified") continue;
+      const issued = markers(one.spec);
+      const restated = markersIn(requirement.block.raw);
       for (const scenario of scenarios(requirement.block.children)) {
         const id = LEADING_ID.exec(scenario)?.[1];
-        if (id === undefined || !durable.has(id)) continue;
+        const marker = issued.get(id);
+        if (marker === undefined || restated.get(id) === marker) continue;
+        const under = restated.has(id)
+          ? `under trace marker \`${restated.get(id)}\``
+          : "with no trace marker";
         ctx.add(
-          "issued",
+          restated.has(id) ? "issued" : "restated",
           one.file,
-          `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed`,
+          `${label(requirement)} restates \`${id}\` ${under}, which \`${one.spec}\` issues as \`${marker}\` — carry that marker, or give the scenario a new id`,
         );
       }
     }
@@ -723,6 +786,28 @@ function durableBlocks(root, shape) {
       : new Map();
     cache.set(id, blocks);
     return blocks;
+  };
+}
+
+/** Each scenario id a text holds under a trace marker, against the marker's
+ * id. */
+const markersIn = (text) =>
+  new Map(
+    [...text.matchAll(MARKED_SCENARIO)].map(([, marker, id]) => [id, marker]),
+  );
+
+/** `markersIn` over each capability's durable spec, read once. */
+function durableMarkers(root, shape) {
+  const cache = new Map();
+  return (id) => {
+    if (!cache.has(id)) {
+      const dir = shape.dirs.get(id);
+      cache.set(
+        id,
+        dir ? markersIn(readText(join(root, dir, "spec.md"))) : new Map(),
+      );
+    }
+    return cache.get(id);
   };
 }
 

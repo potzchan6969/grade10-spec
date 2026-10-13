@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PaginationNext } from "./pagination-next";
 
 const meta = {
-  title: "Components/PaginationNext",
+  title: "Design System/Display/PaginationNext",
   component: PaginationNext,
   tags: ["autodocs"],
 } satisfies Meta<typeof PaginationNext>;

@@ -1,0 +1,36 @@
+reviewed: 06a824181
+source-identity: sha256:63f4c9ac1adf4a7f59f824b0e8cf4013f0e074937f71ca3dea048ea3db3cd464 (review-scope-inputs, 377 inputs)
+baseline-identity: ff2fc4fbd2b11ffed7a31f73aa87cea81a6dd44fcc15aed26003bc616e04c678
+verdict: Ready to accept
+
+Rerun of the review at 72d1b42e, bounded by `git diff 72d1b42e 06a82418` (3 files, one commit). The repair to #10 changed the Feature set line `spec.md:19`, so that line, the requirement it summarises (`spec.md:336`-`:345`), the Purpose and the page's Rules and Opening lines (`daily-reminder.md:19`, `:66`-`:96`) were reread against each other. Earlier carried rows keep their 72d1b42e status.
+
+| # | Severity | Where | Finding | Owner | Fix in | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | blocker | `daily-reminder.md:19`, `:77`-`:83`; `console/index.md:22`-`:24`; `auction/management.md:263`-`:266`; delta `spec.md:3`, `:19`, `:336` vs step 4 `:343`, SC-67, Q40 | When the dialog opens was stated two ways: "first entry" on the pages, Purpose, Feature set and requirement name, against "each entry until closed" in the body, SC-67 and Q40. All now say each entry opens it until the operator closes it that Hong Kong day, and the page's new "Nothing to show" line carries Q40. Proposal and tech design agree. The remaining "first" wording (journey US-01 "when I first open the console", TC-ue2's title, Q24's "once, when they enter") is still true of the first entry and contradicts nothing. | PM, Dev | - | fixed 72d1b42e |
+| 2 | fix | delta `spec.md:142` vs `daily-reminder.md:53`-`:54`, Q43, Q46 | The requirement now states the wait in days and hours, `3d 5h`, and `5d` on a whole day; SC-16 is in task 4.3. | Dev | - | fixed 72d1b42e |
+| 3 | note | `docs/prds/products/grade10-admin/console/index.md:22`-`:24` | The "Daily reminder" bullet stays unmarked. The repair's reason holds: `check:manual` counts a 🚧 delivered only by a change with a delta on the page's `spec`, citing it, or linking a `##`-`####` section of the page (`tools/manual/check/marks.mjs:19`, `sections.mjs:5`), and this index has neither `spec` frontmatter nor headings. The bullet is a pointer whose target marks every outcome 🚧. | PM | Optional: add the bullet when the change is delivered rather than now | open |
+| 4 | fix | `feature-tcs.md:2873` vs the disposition table `:2786`-`:2871` | Counts now read 72 folded, 8 in part, 0 uncovered, matching a scripted count of the table. With SC-82 repointed to task 4.1 (#5), every out-of-suite scenario is again verified by an automated test, so `:2875` is true as written. Was: the QA2 record is refreshed (81 scenarios, Q46 to Q48, `## Settled` carries `5d`, the new-tab click and the fold and scroll), but its Counts line still reads "70 folded, 8 folded in part, 0 raised, 2 uncovered". The table holds 72 Folded and 8 Folded in part, and no row is uncovered. `:2875` also says each out-of-suite scenario is listed "with the automated test that verifies it", while SC-82 is given to a walk. | QA2 | - | fixed 06a82418 |
+| 5 | fix | `feature-tcs.md:6` vs `tasks.md:36` (4.1), `:39` (4.4) | Out of suite now gives SC-82 to the dialog tests of task 4.1, which names it; 4.4 builds the scroll. Was: SC-07 has left the `covers` markers, and the scripted join now finds every scenario either traced or out of suite, never both. SC-82 now points at walk 5.1, but 5.1 seeds three orders past 48 hours and two or three new listings, fewer than the four and a half rows a list shows, so the walk never reaches the scroll it is said to read. Task 4.1 already names SC-82. | QA2, Dev | - | fixed 06a82418 |
+| 6 | fix | `tech-design.md:55`, `:78`, `:102`, `:110`, `:196`; `tasks.md:39`, `:41` | Tech design now cites Q42 to Q46 instead of open questions, and designs the Q48 fold and scroll; SC-82 moved to task 4.4. | Dev | - | fixed 72d1b42e |
+| 7 | note | delta SC-54 `spec.md:755`-`:757`, SC-57 `:771`-`:774` | The scenarios no longer name five-minute passes. | Dev | - | fixed 72d1b42e |
+| 8 | note | delta `spec.md:142`, `daily-reminder.md:59`-`:61`, Q31 vs durable `openspec/specs/grade10-admin/auction/post-sale/spec.md:899`, `management.md:260` | For a flagged order, the worklist counts the wait from the flag and the reminder from the status, so one order shows two waits on two surfaces. Decided (Q31) and stated on both pages. Recorded so post-build QA expects it. | - | None | open |
+| 9 | note | delta SC-82 `spec.md:525` | The scenario now says "its close control", as the page does. | Dev | - | fixed 72d1b42e |
+| 10 | fix | `daily-reminder.md:19` (Rules: "Each entry with a row for the operator"), `:72`-`:73` ("the dialog does not open when neither has one"), delta Feature set `spec.md:19` vs requirement step 2 `spec.md:341`, `daily-reminder.md:81`, `:93`-`:95`, SC-71, Q35 | The summary lines leave out the failed list. The requirement, the page's Opening lines and SC-71 open the dialog when a list failed to load even with no row, but the Rules row, the "No row, no list" line and the Feature set line read as if only a row opens it. The page states the exception plainly at `:93`, so no reader is left without it. Now the Rules row (`:19`), the "No row, no list" line (`:72`-`:74`) and the Feature set line (`spec.md:19`) all open it for a row or a failed list, as step 2, "Nothing to show" and SC-71 do. The Purpose names no opening condition and stays true. | PM, Dev | - | fixed 06a82418 |
+
+## Coverage
+
+| Source or dependency | Checked identity | Checks applied | Carried from |
+| --- | --- | --- | --- |
+| `pnpm plan:review-preflight support-admin-daily-reminder --json` | exit 0, status ready, no blockers, overlaps none, no expansions, sourceIdentity 63f4c9ac… (377 inputs) | Gate receipt | - |
+| `pnpm accept:preflight support-admin-daily-reminder` | exit 0, "ready to fold and accept", fingerprint 5a83d73195725bc28e1137c2a69de7cf834190c92165fb1579c81b855fc4dd78, baseline ff2fc4fb…, 3 durable files to write | Gate receipt, folded tree (new capability, no durable file on `main`) | - |
+| `pnpm check:manual` (current tree) | exit 0, 0 failures, 247 warnings; none on this change's pages or capability, no `changed meaning` | Warnings | - |
+| `pnpm run tcs:validate` | exit 0; change suite 80 draft, 0 approved | New cases stay draft | - |
+| `git diff 72d1b42e 06a82418` (3 files) | 06a82418 | Every repair verified against #4, #5, #10 | - |
+| delta `spec.md` Purpose, Feature set `:19`, requirement `:336`-`:345` | 06a82418 | Same facts against the page, folded result | - |
+| `daily-reminder.md:19`, `:66`-`:96` | 06a82418 | Same facts, 🚧 and ❓ marks (none open) | - |
+| `feature-tcs.md` Out of suite, Counts, SC-82 references | 06a82418 | Scripted count: 72 Folded, 8 Folded in part, 0 raised or uncovered; SC-82 only out of suite | - |
+| `tasks.md` 4.1, 4.4 | 06a82418 (unchanged since 72d1b42e) | SC-82 named by a test task | - |
+| `proposal.md`, `tech-design.md`, `decisions.md`, `user-journeys.md`, other requirements and scenarios | unchanged since 72d1b42e | Page to delta, same facts, journeys to scenarios, nothing open | 72d1b42e |
+| `tools/manual/check/marks.mjs`, `sections.mjs` | unchanged since 72d1b42e | Delivery rule behind #3 | 72d1b42e |
+| `openspec/specs/grade10-admin/auction/post-sale/spec.md` waited-since requirement | unchanged since 72d1b42e | Related contract (#8) | 72d1b42e |

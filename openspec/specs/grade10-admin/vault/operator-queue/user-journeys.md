@@ -3,8 +3,8 @@
 ### grade10-admin-vault-operator-queue-US-01: Operator opens the shop and sees what is waiting
 
 **As a** member of shop staff starting a shift,
-**I want** the queue cut by what each case is waiting for, with today's visits
-and a badge saying why a case needs me,
+**I want** the queue cut by what each case is waiting for, with a badge saying
+why a case needs me,
 **so that** I can work the counter without being emailed anything.
 
 ### grade10-admin-vault-operator-queue-US-02: Operator finds the case of the person at the counter
@@ -36,13 +36,13 @@ everything we hold,
 ### grade10-admin-vault-operator-queue-US-06: Operator reads the shop's day at a glance
 
 **As a** member of shop staff starting a shift,
-**I want** a count on every view and today's visits in slot order,
+**I want** a count on every view and the cases waiting on staff first,
 **so that** I know the day's load before I open a case.
 
-### grade10-admin-vault-operator-queue-US-07: Operator walks the visit in order
+### grade10-admin-vault-operator-queue-US-07: Operator walks the counter's case in order
 
 **As a** member of shop staff with a customer at the counter,
-**I want** the case to list the visit's steps in order, tick each as it
+**I want** the case to list the counter's steps in order, tick each as it
 lands, and say why an act is not offered yet,
 **so that** a shop of three runs the flow from the screen rather than from
 memory.
@@ -56,7 +56,7 @@ before the cure date, the notice sent on which day,
 
 ### grade10-admin-vault-operator-queue-US-09: Operator reads the identity state the record names
 
-**As a** member of shop staff arranging a visit,
+**As a** member of shop staff working a case,
 **I want** the identity panel to say Verified, Out, Stalled, Refused, Lapsed
 or None,
 **so that** I know whether to send the check again, wait, or do it at the
@@ -100,3 +100,23 @@ grader, grade and cert, editable once the register has the item, with the
 collector's request kept as they sent it, and to show registration pending
 until it does,
 **so that** the case and the register never tell two stories about one item.
+
+### grade10-admin-vault-operator-queue-US-23: Operator checks the forfeiture notice before it goes
+
+**As a** member of shop staff,
+**I want** sending the forfeiture notice to ask me first, naming the address it
+goes to and the date to pay by it sets,
+**so that** a legal deadline never starts on a misplaced press, and I know who
+will read it.
+
+### grade10-admin-vault-operator-queue-US-24: Operator reads how late a loan is from the case header
+
+**As a** member of shop staff,
+**I want** the case header to say how many days a live loan is past its due
+date, and the date to pay by once a forfeiture notice stands,
+**so that** I know where a late loan stands the moment I open its case,
+without the money grant.
+
+## Retired
+
+- `grade10-admin-vault-operator-queue-US-22` - Retired by add-multi-store-appointments: the diary owns visits, so the console no longer cancels one.

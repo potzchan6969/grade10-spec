@@ -47,6 +47,9 @@ the card is in the winner's hands. The collector's half is
   a changed quantity moves the hold, changing the product warns that Save
   moves it, create is refused without a matching hold, and a call-off
   releases it
+- **A consigned lot** - consignment makes it as a draft from the item, its
+  photographs and facts; it takes no stock hold, and its starting price is
+  the consignment's floor, which an operator here cannot change
 - **Cert ID** - creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for regular stock without a Cert
   record; each Cert ID can have its own live listing, and only one
@@ -66,12 +69,20 @@ the card is in the winner's hands. The collector's half is
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
-  separate move, now or at a Publish at after now that can be cleared
-- **Call off** — any time before the close, bids or not; the stock is
-  released, the listing leaves browse and search, and its canonical
-  slug remains reserved and directly accessible. Its listing code stays
-  reserved and never resolves as a route; explicit hard deletion is outside
-  this rule
+  separate move, now or at a Publish at after now and no later than the
+  start, that can be cleared
+- **Publish now** — publishes at once, even after the start; on a listing
+  with a Publish at it asks first, because publishing now removes that time
+- **Schedule as typed** — a Publish at, start or close in the past, a close
+  not after the start, or a Publish at after the start shows under its field
+  before Save; a time left as stored is not refused, so a listing whose start
+  has passed still saves
+- **Publish still needs** — a created listing with a Publish at names under
+  it each field its publish still needs
+- 🚧 **Call off** - any time before the close, bids or not; the stock is
+  released and the listing leaves browse and search. Its former address is
+  available for another listing. Its listing code stays reserved and never
+  resolves as a route; explicit hard deletion is outside this rule
 - **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and
@@ -84,23 +95,43 @@ the card is in the winner's hands. The collector's half is
   and gallery. The draft takes its own stock hold on Save, gets its own slug
   and listing code, sets its own window, and carries no bids or history from
   the closed one. Campaign, reserve, extension, taxonomy and sandbox start as
-  on any new draft. Relist shows on an Unsold listing only, to an operator who
-  can operate auctions; nothing is stored until Save. It shows on the
+  on any new draft. Relist shows on an Unsold listing, never on one a
+  collector won, to an operator who can operate auctions; nothing is stored
+  until Save. It shows on the
   listing's row in the Listings table, once its stock was released, and not
-  on a listing in a campaign or one already relisted
+  on a listing in a campaign or one already relisted. A consigned lot is
+  relisted from its consignment, and reads Relist from consignment with its
+  reference
 - **Media** — an operator can choose reusable assets from the selected
   inventory product or upload media directly to the listing, then order every
   item together. A chosen product asset becomes part of the listing on Save:
   later product-media edits, reordering, or deletion do not change that lot.
-  A picked direct-upload file is previewed and stored only on confirm; an item
+  A direct-upload file joins the gallery when it is dropped or chosen; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
+- 🚧 **Uploading and ordering** - files an operator drops or chooses are stored
+  at once, several at a time, after the last item, with no preview to confirm;
+  a replacement stores the same way. The operator drags items into order, and
+  the new order holds as soon as it is dropped, except while inventory assets
+  wait for Save. Removing an item still asks first
 - **Cert-aware inventory media** - a listing for one Cert ID starts with
   untagged product media and media tagged to that Cert. Media tagged to another
   Cert stays in a separately labelled drawer until the operator deliberately
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
+- 🚧 **Internal bid** - on a created or published listing, an admin sets a
+  house maximum and the time Grade10 commits it, from the start to the
+  scheduled close. Until that time both can
+  change or be removed. After it, the time is fixed and the amount can go up
+  until the close, or down only where the leader and the current bid stay as
+  they are. A maximum already short of the next bid at its time is not placed,
+  and the admin sees that. Only operators who may see a secret floor see it;
+  other operators see the house's bids and orders labelled House. Relist does not carry it
+- 🚧 **Internal bidder win** - a lot an internal bidder wins opens its order
+  and invoice for that internal bidder, flagged internal; an operator sends the
+  invoice, lets it expire and cancels the order. Staff read the buyer as House;
+  only a reserve holder sees the listing flagged as the internal bidder's win
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change
 - 🚧 **Open order** - a won lot's row opens its order in Orders
@@ -110,10 +141,13 @@ the card is in the winner's hands. The collector's half is
 - **Refused** — a currency outside the three, or a starting price that is not
   a whole amount of 0 or more; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
-  campaign; a close not after the start, or a close or Publish at not after
-  now at create; a ninth media item, an unsupported or empty file, or
+  campaign; a close not after the start, a Publish at after the start, a
+  start, close or Publish at typed not after now, or a close not after now at
+  create; a ninth media item, an unsupported or empty file, or
   removing the last item once created; prices, window, slug or sandbox on a
-  published listing, and every write on a closed, settled or canceled one
+  published listing, and every write on a closed, settled or canceled one;
+  the starting price or currency of a consigned lot; a refund that writes off
+  a consigned lot not yet delivered
 
 :::detail{title="Listings code map" for="engineer"}
 - **Close** — `sweeps/close.ts`
@@ -174,7 +208,7 @@ order.
 | Rule | Value |
 | --- | --- |
 | Payment window | **7 calendar days** from send |
-| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen gives a fresh **48 hours**; after confirmation only an operator changes it |
+| 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen of unconfirmed Setup Overdue gives a fresh **48 hours**; after confirmation only an operator changes it |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -187,7 +221,7 @@ order.
 | 🚧 Payment Overdue | Needs action | Reissue | The payment deadline |
 | 🚧 Payment Verifying | Needs action | Check proof | The winner's latest proof |
 | 🚧 Partially Paid | Waiting on winner | Record payment | The latest payment |
-| 🚧 Processing | Needs action | Dispatch | The payment that paid it |
+| 🚧 Preparing Shipment | Needs action | Dispatch | The payment that paid it |
 | 🚧 Shipped | In transit | Confirm delivery | The dispatch |
 | 🚧 Delivered · Cancelled · Refunded | Closed | None | The delivery, the cancel or the refund |
 
@@ -199,9 +233,15 @@ order.
   identifier, beside the deadline, the reissue count and the suspension state
 - 🚧 **One timeline** - the invoice log, the fulfilment log and comments,
   oldest first; a comment is 1 to 2,000 characters, never edited or deleted
+- 🚧 **Hong Kong time** - every date and time on the worklist, the order page,
+  the timeline and the send and reissue dialog's deadline reads in Hong Kong
+  time (GMT+8), whatever zone the operator's browser is in
 - 🚧 **Each action is a dialog** - it restates what will happen, a refusal
   reads as a sentence with the dialog kept open, and money is typed as the
   winner reads it, `50.00` for HK$50.00
+- 🚧 **An action sent twice happens once** - a double click or a retry after a
+  lost reply does the action once and answers what the first did; a request
+  reused for another action is refused
 
 | Action | On | Access |
 | --- | --- | --- |
@@ -213,8 +253,8 @@ order.
 | 🚧 Reopen the address form, or record setup | Setup Overdue | Payment processing |
 | 🚧 Change setup | Preparing Invoice | Payment processing |
 | 🚧 Clear flag | Each flagged payment, with a reason | Payment processing |
-| Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
-| 🚧 Dispatch | Processing | Shipment processing |
+| 🚧 Refund | Preparing Shipment, Shipped, Delivered or Partially Paid, once | Refund processing |
+| 🚧 Dispatch | Preparing Shipment | Shipment processing |
 | 🚧 Confirm delivery | Shipped | Shipment processing |
 | 🚧 Comment | Any order the operator can open | Reading |
 
@@ -232,6 +272,10 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Waited** - from when the status began, or from a flag. Setup Overdue is
   the status at the 48-hour address deadline and nothing else is marked:
   Preparing Invoice carries no mark, and no wait changes a status
+- 🚧 **Daily reminder** - an order that has waited 48 hours for an invoice,
+  a proof check or a dispatch is listed in a dialog until the operator closes
+  it for the day, and in Slack at 08:00, with the day's new listings - [Daily
+  Reminder](/p/grade10-admin/console/daily-reminder)
 - 🚧 **Search and filters** - by the start of a listing code, any invoice ID
   the order held, the winner's email or a payment's reference; one status of
   the segment's, then a cancellation
@@ -297,25 +341,41 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 On a paid invoice | Counts above the Order Total | Overpaid |
 | 🚧 On an invoice in any other state, which no card payment can start on | Counts toward nothing | Unexpected status |
 
+### Manual Payment Collection
+
 - 🚧 **Record payment** - one dialog for money received outside the card
   checkout: the amount, starting at the balance; bank transfer, cash or a
   described method; a reference, required for a bank transfer; the date
   received; 1 to 5 private proof files; and a reason. Never on a card invoice,
   which is reissued as bank transfer first
+
 - 🚧 **Partially Paid** — the deadline stops for good, and what will not be
   paid off is settled by hand outside Grade10
 
-| Payments so far | The next payment | What happens |
+| Total with this payment | The next payment | What happens |
 | --- | --- | --- |
-| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid |
-| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
-| 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
+| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid, and updating it to Paid is refused |
+| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; this payment brings the total to 90% or more, and every later payment under 100% asks again |
+| 🚧 Any | Exactly the balance | Closes on its own; the order reads Preparing Shipment |
 | 🚧 Any | More than the balance | Accepted after an overpayment confirmation; the invoice is marked Paid, the payment is flagged Overpaid, and the excess can be returned through the refund flow |
 
-- 🚧 **Reopening the address form** — after the 48-hour deadline and before
-  send, on request and with a reason, giving a fresh 48 hours; repeatable,
-  changes no status, never on a cancelled order. Or the operator records an
-  address the winner gives by phone, leaving the form closed
+### Address Confirmation Window
+
+- 🚧 **Reopening the address form** — after the 48-hour deadline passed with no
+  confirmed address and before send, on request and with a reason, giving a
+  fresh 48 hours; repeatable, writes no status directly but its reopened facts
+  derive Awaiting Setup, never on a cancelled order. Or, only while the order
+  is unconfirmed Setup Overdue and its invoice is `not_issued`, the operator
+  records an address by phone, leaving
+  the form closed. Both
+  paths refuse once an address is confirmed, an invoice is sent or the order is
+  cancelled
+- 🚧 **Recording a method** — recording setup refuses a payment method the
+  order's currency does not offer: card where Payment Settings holds no card
+  fee rule for it, bank transfer where Grade10 holds no bank details; a reopen
+  is still allowed when the currency offers neither
+
+### Order Cancellation
 
 | Cancelling an order | Value |
 | --- | --- |
@@ -323,7 +383,7 @@ on winner, In transit, Closed and All, opening on Needs action.
 | 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the winner is emailed, a suspension stays, and the cancel cannot be undone |
 | The lot | Back to stock with no runner-up offer, its hammer price and bid history kept for audit and never carried into a new listing |
 | 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
-| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, finance sends the money back outside Grade10, and the operator clears the flag once it has gone |
+| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, Finance sends the money back outside Grade10, and an operator with payment processing clears the flag with a reason and any return reference once it has gone |
 
 - **Refund** — the winner asks Customer Service, outside Grade10; the
   operator sends the money by hand, in the Stripe dashboard or by bank
@@ -358,16 +418,16 @@ on winner, In transit, Closed and All, opening on Needs action.
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
 - **Failed payments** - every failed payment attempt stays in the invoice log
-- ❓ **Contact channel** — how an operator reaches a winner about a transfer
-  or a proof; WhatsApp is the working assumption, on the number from the
-  address form; Operations confirms
+- **Contact channel** — an operator reaches a winner about a transfer or a
+  proof on WhatsApp, at the phone number from the address form; Operations
+  confirmed it
 
 ## Fulfilment
 
 Shipment is its own grant, apart from payment: the person who may settle
 money is not necessarily the person who dispatches cards.
 
-- 🚧 **Dispatch** - from the page of a Processing order: the carrier, the
+- 🚧 **Dispatch** - from the page of a Preparing Shipment order: the carrier, the
   tracking number and the carrier's tracker link when there is one, with the
   address kept as it stood; the order reads Shipped and the winner gets the
   shipped letter. Recording an address never dispatches
@@ -399,15 +459,15 @@ it.
   invoice charges on a subtotal of 1,000 in its currency, grossed up so
   Grade10 keeps the whole subtotal once Stripe takes its fee from the whole
   charge
-- ❓ **USD and JPY** - no card fee until Finance sets one, so a card invoice
-  in them cannot be sent; Finance confirms the rates
+- 🚧 **USD and JPY** - no card rule at launch: until Finance saves one for a
+  currency, a winner in it is not offered card at order setup and reads that
+  card is not yet available there, and no card invoice in it can be sent
 
 | Subtotal | Stripe card fee | Card fee charged | Order total |
 | --- | --- | --- | --- |
 | HK$1,000.00 | 3.4% + HK$2.35 | HK$37.63 | HK$1,037.63 |
 | HK$3,120.00 | 3.4% + HK$2.35 | HK$112.25 | HK$3,232.25 |
 
-::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 
 ## Grants
 
@@ -497,9 +557,14 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
+| Internal bid | 🚧 In flight | One house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see its bids labelled House, each with its own time; never its amount, or its commit time before it bids. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
+| House win | 🚧 In flight | Collectors read the lot as sold; its order and invoice go to the internal bidder, flagged internal, and an operator lets the invoice expire and cancels the order. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
+| Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
+| A consigned lot | Decided | Consignment makes it as a draft with no stock hold and owns its start price, which is the consignment's floor, and its relist. | Product |
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |
@@ -507,7 +572,7 @@ settings.
 | Payment source | Decided | The order tells a card payment through Stripe from money an operator records. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |
-| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
+| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason, reopens only an unconfirmed Setup Overdue order before invoice send; a reopen gives a fresh 48 hours and its reopened window derives Awaiting Setup. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | 🚧 In flight | Under Auction because auction invoices use it; behind payment processing, `auction:payment`, because changing it changes the amount collected. Chosen over the settlement grant, which only `admin` holds, so finance could not keep the settings it owns. | Product and finance |
 | Payment processing fee | 🚧 In flight | The invoice's payment method decides. A card invoice's fee is Grade10's own: the Stripe card rule per currency, grossed up so Grade10 keeps the subtotal whole; with no rule for the currency, the invoice cannot be sent or reissued. A bank transfer invoice's fee is the operator's own; a sent invoice never re-prices, and Finance enters the card rule at rollout. Chosen over reading the provider's fees at send, which Stripe cannot answer - [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice). | Product and finance |

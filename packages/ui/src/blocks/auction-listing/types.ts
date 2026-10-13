@@ -8,12 +8,14 @@ export type ListingBidHistoryRow = {
   isViewer?: boolean;
   /**
    * When true, the lot is closed sold and this row is the winning public
-   * bid — the list shows a Winner badge. Live lots omit this flag.
+   * bid — the list shows a crown named by `copy.winner`, and none without
+   * it. Live lots omit this flag.
    */
   isWinner?: boolean;
   /**
-   * When true, the row matches the leading price but is not the accepted
-   * (earlier) bid — the list shows a tip explaining time priority.
+   * When true, the row ties on amount with a row listed above it, at the
+   * current price or at any older tie lower down — the list shows a tip
+   * explaining that the earlier maximum leads.
    */
   samePricePriority?: boolean;
 };
@@ -34,8 +36,15 @@ export type ListingUserMaximumHistoryRow = {
 };
 
 export type ListingLotGalleryImage = {
+  /** Main stage image. Also the fallback when `thumbSrc` or `zoomSrc` is omitted. */
   src: string;
+  /** Thumbnail rail image. Falls back to `src`. */
+  thumbSrc?: string;
+  /** Zoom dialog image. Falls back to `src`. */
+  zoomSrc?: string;
   alt: string;
+  /** Short caption shown next to the slide counter, e.g. `Front`. */
+  label?: string;
 };
 
 export type ListingAuctionStanding =
@@ -51,6 +60,8 @@ export type ListingAuctionStanding =
 export type ListingAuctionBidView = {
   /** ISO 4217 currency for every amount on this listing. */
   currency: string;
+  /** Consumer-owned maximum in integer minor units for this listing currency. */
+  ceilingMinor: number;
   headerLabel: string;
   live: boolean;
   opens: boolean;

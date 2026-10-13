@@ -141,7 +141,7 @@ another Figma file, or a frame the nightly design sync no longer finds, is a
 warning. `alt` on an image is required:
 
 ```md
-::story{id="blocks-store-cart--default" title="The cart block" height="480"}
+::story{id="store-cart-blocks-cartdrawer--default" title="The cart block" height="480"}
 ::image{src="assets/tier-ladder.png" alt="The four tiers and their thresholds"}
 ```
 

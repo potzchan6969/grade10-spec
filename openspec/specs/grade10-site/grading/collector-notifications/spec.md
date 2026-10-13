@@ -66,12 +66,14 @@ it can ship.
 - **Nothing unanswered** — a new kind of event SHALL NOT be shippable until somebody has decided which of the two it is.
 - **The event, not the actor** — what a collector hears SHALL be a property of what happened, so the same event sends the same message whether the collector, the counter or a sweep caused it.
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-6ja rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-01 - Every event is decided
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector who never has to ask the shop what stage the cards are at
 
 - **WHEN** the map from events to messages is read
 - **THEN** every kind of event on a submission names a message or names silence, and none is unanswered
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-8jz rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-02 - The same event tells the same message
 **Serves:** What is sent - one wording for an event however it came about
 
@@ -102,6 +104,7 @@ submission was planned under, each carrying an action link to the submission:
 - **What it attaches** — the handed-in message SHALL carry the intake receipt and the signed agreement, the hand-back receipt SHALL carry the signed receipt, and the drop-off booked message SHALL carry a calendar file.
 - **The plan's link** — the list-saved message SHALL be sent once, by the daily sweep, for a plan kept with no drop-off booked, read as the plan stands when the sweep runs: a plan with a visit then is sent none, and a plan whose visit was cancelled or missed before the sweep is sent it; nothing SHALL wait on the collector closing the page, and a plan already sent its link is never sent it again.
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-1h7 rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-26 - The daily sweep sends a plan left unbooked its link once
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector who left the wizard without booking finds the plan again from their inbox
 
@@ -109,6 +112,7 @@ submission was planned under, each carrying an action link to the submission:
 - **WHEN** the daily sweep runs, and runs again the next day
 - **THEN** the first plan's collector is sent the list-saved message with its link once, and the second is sent none
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-cti rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-28 - A plan whose visit was cancelled before the sweep is sent its link
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector who booked, then cancelled, can still find the plan from their inbox
 
@@ -116,6 +120,7 @@ submission was planned under, each carrying an action link to the submission:
 - **WHEN** the sweep runs
 - **THEN** the collector is sent the list-saved message with its link once
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-c2o rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-29 - A collector whose cards travel in two shipments is told both
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector following each parcel their cards are in
 
@@ -123,12 +128,14 @@ submission was planned under, each carrying an action link to the submission:
 - **WHEN** the on-its-way message is sent
 - **THEN** it names both shipments, each with its tracking and its card
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-sgg rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-03 - The link opens the submission with no account
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector going straight from the message to the page rather than signing in
 
 - **WHEN** a collector opens the action link on any message
 - **THEN** the submission the message is about opens at its own address, with no account asked for
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-f1b rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-04 - A message says only what is true of this submission
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading a message that raises nothing they do not owe
 
@@ -136,6 +143,7 @@ submission was planned under, each carrying an action link to the submission:
 - **WHEN** the grades message is sent
 - **THEN** it carries each card's grade and neither the paragraph about settling nor the paragraph about an ungraded card
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-v4r rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-05 - Handed in carries the papers
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector leaving the counter with the record of what they paid and signed
 
@@ -143,6 +151,7 @@ submission was planned under, each carrying an action link to the submission:
 - **THEN** the collector is sent a message stating what was paid and the cards taken in, with the intake receipt and the signed agreement attached
 - **AND** where the level carries cover, what was paid names the cover beside the fee
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-mi6 rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-23 - One channel, one language
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading every message in one inbox, in one language
 
@@ -150,6 +159,7 @@ submission was planned under, each carrying an action link to the submission:
 - **WHEN** the cards are handed in
 - **THEN** the handed-in message is sent by email, in English, and nothing is sent on any other channel
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-faz rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-24 - A message with no document attaches nothing
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading a short message where there is no document to keep
 
@@ -164,12 +174,14 @@ Two events are decided silent, because the collector has already been told.
 - **Naming a collector** — naming the person who may collect, or changing them, SHALL send no message; the submission's history SHALL log it.
 - **Decided, not forgotten** — both SHALL stand in the map as silence, so neither reads as an event nobody answered.
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-pte rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-06 - A refused card is told at the counter, not by email
 **Serves:** grade10-site-grading-collector-notifications-US-02 - the collector who watched the card be refused and needs no email about it
 
 - **WHEN** staff refuse a card in front of the collector
 - **THEN** no message is sent, and the card carries its refused badge and the staff's words on the submission page
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-95a rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-07 - Naming somebody to collect sends nothing
 **Serves:** grade10-site-grading-collector-notifications-US-02 - the collector naming a friend on the page and seeing it logged there
 
@@ -195,6 +207,7 @@ about it comes from the submission.
 - **THEN** the submission sends one booked message naming the visit's day, time and shop, what to bring, the cards and the fee, and the day the cards leave, with a calendar file attached
 - **AND** no second message about that visit reaches the collector from the diary
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-asi rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-09 - The reminder comes the day before
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector turning up with the right cards on the right day
 
@@ -242,6 +255,7 @@ and the release stops at the written notice.
 - **WHEN** staff record the written notice as posted
 - **THEN** the collector is sent it that day, naming what is due, the pickup code, the days it gives from the posting date as pinned at signing, and the clause it acts under
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-1tw rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-14 - A rung told twice is told once
 **Serves:** Reminders and the notice - the collector not told twice on a day the sweep ran twice
 
@@ -266,6 +280,7 @@ takes the act it was about down with it.
 - **Parked** — a message the ladder runs out on SHALL be parked with its reason and SHALL leave the queue, and its submission SHALL be flagged for staff on the queue and on the submission itself.
 - **Sent again** — an operator holding the grading operate grant SHALL be able to send a parked message again, and the flag SHALL clear when it goes.
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-fse rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-16 - The cards are handed in though the mail failed
 **Serves:** grade10-site-grading-collector-notifications-US-03 - the operator whose counter keeps working through a provider outage
 
@@ -273,6 +288,7 @@ takes the act it was about down with it.
 - **WHEN** the cards are handed in
 - **THEN** the hand-in stands and the message is owed
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-5mn rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-17 - The ladder spent, parked and flagged
 **Serves:** grade10-site-grading-collector-notifications-US-03 - the operator finding out a collector was never told
 
@@ -280,6 +296,7 @@ takes the act it was about down with it.
 - **WHEN** the retries run until the ladder is spent
 - **THEN** the message is parked with its reason, its submission is flagged for staff, and no further attempt is made
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-57m rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-18 - An operator sends a parked message again
 **Serves:** grade10-site-grading-collector-notifications-US-03 - the operator clearing the flag by getting the message out
 
@@ -287,6 +304,7 @@ takes the act it was about down with it.
 - **WHEN** an operator holding the grading operate grant sends it again
 - **THEN** the message is back on the queue and the submission's flag clears when it goes
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-pgt rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-25 - The flag clears when the channel accepts the send
 **Serves:** grade10-site-grading-collector-notifications-US-03 - the operator watching the flag come off the submission they just sent again
 
@@ -303,12 +321,14 @@ Every message closes the same way, whatever it is about.
 - **Which shop** — the shop SHALL be the one the submission's visit is at; a submission with no visit SHALL name the brand's main shop, the diary shop the setting `grading.main_shop_id` names.
 - **The clock** — every date and time in a message SHALL be stated on the shop's clock, `Asia/Hong_Kong`, and the footer SHALL say so.
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-6cs rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-19 - The footer names the submission and who is writing
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading their own submission id off a message to quote at the shop
 
 - **WHEN** any message is sent about a submission
 - **THEN** it carries that submission's id, its cards, grader and level directly above a footer naming the custodian under its registered name trading as Grade10, the shop and its address, its weekly opening hours from the diary, the shop phone, and the complaints contact
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-esj rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-27 - A plan with no visit names the brand's main shop
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading where to go before any drop-off is booked
 
@@ -316,6 +336,7 @@ Every message closes the same way, whatever it is about.
 - **WHEN** its list-saved message is sent
 - **THEN** the footer names the brand's main shop, its address, its weekly hours from the diary and its phone
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-ey2 rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-20 - Every date is the shop's
 **Serves:** grade10-site-grading-collector-notifications-US-01 - the collector abroad reading a date they can turn up on
 
@@ -332,6 +353,7 @@ message goes out with a blank where one of them belongs.
 - **A letter the sweep sends** — a sweep row whose letter would print an unset value SHALL stay due and unclaimed in production, and SHALL raise `grading.sweep.repair` naming the value, until it is set.
 - **Rendered before it commits** — an act that sends a message SHALL render that message before its own record is written, so no record stands describing a message that cannot be sent.
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-r9o rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-21 - A value Legal has not set prints in brackets outside production
 **Serves:** The footer - the shop reading its own letters on staging before Legal has answered
 
@@ -346,6 +368,7 @@ message goes out with a blank where one of them belongs.
 - **WHEN** the cards are handed in
 - **THEN** the act is refused by name, nothing is written, and no message is owed
 
+<!-- trace:scenario id=g10.grading-collector-notifications.SC-0qd rev=1 -->
 #### Scenario: grade10-site-grading-collector-notifications-SC-30 - A sweep letter waits for an unset value in production
 **Serves:** The footer - the shop never sends a reminder with a blank where the complaints contact belongs
 

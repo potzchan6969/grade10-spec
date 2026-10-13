@@ -7,7 +7,7 @@ import { FILTER_GROUPS, UTILITY_LINKS } from "./fixtures";
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Store Product Listing/FilterPanel",
+  title: "Store/Product Listing/Blocks/FilterPanel",
   component: FilterPanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

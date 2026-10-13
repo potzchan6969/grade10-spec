@@ -14,8 +14,8 @@ rather than hidden.
   - Decided at build: the set is fixed when the build is made, never read per
     request
   - Store surfaces: the store, its collections, a card's page, the shop's two
-    handed-out addresses, the cart, the checkout, and a collector's order
-    history and order detail
+    handed-out addresses, the cart, the checkout, a collector's order history
+    and order detail, and Store Locator
   - Vault surfaces: the signing ceremony alone; the collector's own vault
     screens are carried by no build until they are designed again
   - Booking surfaces: booking a visit, the private link from a booking's
@@ -25,9 +25,15 @@ rather than hidden.
   - Membership surfaces: the membership page and the join page, one set that
     is carried or withheld whole
   - Labs: the demonstration surfaces and the unapproved refund and shipping
-    drafts, carried in development and staging
-  - Everything else: the auction, the front door, the terms and the privacy
-    page, and sign-in, carried on every lane
+    drafts, carried in development, staging and staging-2
+  - Everything else: the auction, the terms and the privacy page, and
+    sign-in, carried on every lane
+  - Grading surfaces: the counter signing, where a collector signs a grading
+    submission's agreement and receipts on the shop's tablet
+  - Front door: carried in development, staging and staging-2; where it is
+    withheld, the home address sends a collector on to the auction
+  - Lanes: development, staging and staging-2 carry every waiting product;
+    uat, preview and production carry none of them
 - An address nothing carries
   - Not found: it answers with the not-found surface and a 404
   - Every address beneath it: the addresses under an uncarried surface answer
@@ -187,11 +193,11 @@ as already specified.
 - **WHEN** the footer renders
 - **THEN** no shop column appears and no link leads to a store surface
 
-<!-- trace:scenario id=g10.site-carried-surfaces.SC-4cr rev=1 -->
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-4cr rev=2 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-13 - The front door offers no way into a shop
 **Serves:** grade10-site-site-carried-surfaces-US-01 - the collector meeting the first page of the site before the shop opens
 
-- **GIVEN** a build made for production
+- **GIVEN** a build that carries the front door but not the store's set
 - **WHEN** a collector opens the front door
 - **THEN** neither the store button nor the store card is there, and nothing
   in its place promises a shop
@@ -215,11 +221,12 @@ as already specified.
 - **THEN** it names no page of a product the build does not carry
 - **AND** every item it does name opens an address the build answers
 
-<!-- trace:scenario id=g10.site-carried-surfaces.SC-7os rev=1 -->
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-7os rev=2 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-33 - The front door's card row renders empty rather than being removed
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector reading a front door built to hold a card for each of the three waiting products
 
-- **GIVEN** a build made for production
+- **GIVEN** a build that carries the front door and none of the store's, the
+  vault's or booking's sets
 - **WHEN** the front door renders
 - **THEN** the card row is present on the page and holds no card for the
   store, the vault or booking
@@ -279,11 +286,12 @@ surface that answers it.
 
 ### Requirement: Each waiting product waits for its own launch
 
-Five products wait for the public — the store, the vault, booking a visit,
-the profile and membership — and each moves as one set on the lanes stated
-for it. The auction is not one of them: it is carried on every lane already.
+Six products wait for the public - the store, the vault, booking a visit,
+the profile, membership and grading - and each moves as one set on the lanes
+stated for it. The front door waits behind a gate of its own. The auction is
+not one of them: it is carried on every lane already.
 
-**The five sets** - The surfaces of each waiting product are:
+**The six sets** - The surfaces of each waiting product are:
 
 | Product | Surface | What it answers |
 | --- | --- | --- |
@@ -295,6 +303,7 @@ for it. The auction is not one of them: it is carried on every lane already.
 | Store | Checkout | Where a collector pays |
 | Store | Order history | A collector's own orders |
 | Store | Order detail | One of a collector's orders |
+| Store | Store Locator | The shop's location and hours |
 | Vault | Signing ceremony | Where a case is signed on the shop's iPad |
 | Booking | Booking | Booking a visit |
 | Booking | Booking link | The private link a booking's mail carries |
@@ -302,11 +311,16 @@ for it. The auction is not one of them: it is carried on every lane already.
 | Profile | Profile | The account page on its own |
 | Membership | Membership | The member's own page |
 | Membership | Join | Joining the programme |
+| Grading | Counter signing | The agreement and receipts a collector signs on the shop's tablet at the counter |
 
 **Order history and order detail keep the store's gate** - Order history and
 order detail belong to the store's set alone; whether a build carries the
 profile SHALL change neither. A build that carries the store but not the
 profile SHALL still answer both wherever the store's set is carried.
+
+**Store Locator moves with the store** - Store Locator's address, its header
+and footer items and its sitemap entry SHALL be carried wherever the store's
+set is carried, and withheld wherever it is withheld.
 
 **All or none** - A build SHALL carry every surface of a product's set or none
 of it.
@@ -315,24 +329,31 @@ of it.
 screens are carried by no build until they are designed again, and their
 addresses answer as addresses no surface holds.
 
-**One set at a time** - Each product's set SHALL be decided on its own, and
-carrying one SHALL NOT carry another.
+**One set at a time** - Each product's set, and the front door, SHALL be
+decided on its own, and carrying one SHALL NOT carry another.
 
 **Which lanes** - Which lanes carry each set SHALL be decided by the deploy
 environment the build is made for, never by the stage the site is served at:
 
-| Lane | Store | Vault | Booking | Profile | Membership | Labs | Every other surface |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Development | carried | carried | carried | carried | carried | carried | carried |
-| Staging | carried | carried | carried | carried | carried | carried | carried |
-| Preview | not carried | not carried | not carried | not carried | not carried | not carried | carried |
-| Production | not carried | not carried | not carried | not carried | not carried | not carried | carried |
+| Lane | Front door | Store | Vault | Booking | Profile | Membership | Grading | Labs | Every other surface |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Development | carried | carried | carried | carried | carried | carried | carried | carried | carried |
+| Staging | carried | carried | carried | carried | carried | carried | carried | carried | carried |
+| Staging-2 | carried | carried | carried | carried | carried | carried | carried | carried | carried |
+| UAT | not carried | not carried | not carried | not carried | not carried | not carried | not carried | not carried | carried |
+| Preview | not carried | not carried | not carried | not carried | not carried | not carried | not carried | not carried | carried |
+| Production | not carried | not carried | not carried | not carried | not carried | not carried | not carried | not carried | carried |
+
+**The front door** - The front door is the home page. Where a build withholds
+it, the home address, bare or under a language prefix, SHALL send a collector
+on to the auction in that language, with a redirect that is not permanent. The
+home address is then the auction's way in, not an address the build refuses.
 
 **Labs** - The labs are the demonstration surfaces and the refund and shipping
 drafts nobody has approved.
 
-**Every other surface** - Every other surface — the auction, the front door,
-the terms and the privacy page, and sign-in — SHALL be carried on every lane.
+**Every other surface** - Every other surface - the auction, the terms and
+the privacy page, and sign-in - SHALL be carried on every lane.
 
 <!-- trace:scenario id=g10.site-carried-surfaces.SC-w1o rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-20 - A public build carries none of the three waiting products
@@ -369,13 +390,13 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** no labs surface answers
 - **AND** a development or a staging build answers each of them
 
-<!-- trace:scenario id=g10.site-carried-surfaces.SC-d8a rev=1 -->
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-d8a rev=2 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-24 - The holding site is carried on every lane
-**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the five products are shut
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the waiting products are shut
 
 - **GIVEN** a build made for production
-- **WHEN** a collector opens the auction, the front door, the terms, the
-  privacy page, or sign-in
+- **WHEN** a collector opens the auction, the terms, the privacy page, or
+  sign-in
 - **THEN** each answers as it does on every other lane
 
 <!-- trace:scenario id=g10.site-carried-surfaces.SC-hx8 rev=1 -->
@@ -414,6 +435,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** the other is carried too
 - **AND** where one is withheld the other is withheld with it
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-4zd rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-40 - The collector's vault screens answer not-found on every lane
 **Serves:** grade10-site-site-carried-surfaces-US-06 - the collector who opens an old vault link finds nothing rather than a screen nobody designed
 
@@ -421,6 +443,49 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **WHEN** a collector opens the vault's case list, its request, a case's page, the identity check or Your data
 - **THEN** each is not found
 - **AND** where the vault's set is carried, the signing ceremony still answers
+
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-wjy rev=1 -->
+#### Scenario: grade10-site-site-carried-surfaces-SC-41 - Store Locator waits with the store
+**Serves:** `grade10-site-site-carried-surfaces-US-01`, `grade10-site-site-carried-surfaces-US-03` - the collector and the crawler on a build whose shop has not opened meet no shop location either
+
+- **GIVEN** a build made for production, preview or uat
+- **WHEN** a collector opens the Store Locator address
+- **THEN** it is not found
+- **AND** neither the header nor the footer names Store Locator
+- **AND** the sitemap does not list it
+- **AND** a build made for development, staging or staging-2 answers it, names
+  it in the header and the footer, and lists it in the sitemap
+
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-hn8 rev=1 -->
+#### Scenario: grade10-site-site-carried-surfaces-SC-42 - The home address opens the auction where the front door is withheld
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who types grade10.com before the front door has opened and lands on the auction
+
+- **GIVEN** a build made for production, preview or uat
+- **WHEN** a collector opens the home address, bare or under a language prefix
+- **THEN** they are sent on to the auction in that language
+- **AND** the redirect is not permanent
+- **AND** a build made for development, staging or staging-2 answers the home
+  address with the front door
+
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-bpn rev=1 -->
+#### Scenario: grade10-site-site-carried-surfaces-SC-43 - Staging-2 carries what staging carries, and uat withholds what production withholds
+**Serves:** `grade10-site-site-carried-surfaces-US-05`, `grade10-site-site-carried-surfaces-US-08` - the collector on the second staging lane finds every product open, and on uat finds the public site
+
+- **GIVEN** a build made for staging-2 and a build made for uat
+- **WHEN** a collector opens a surface of each waiting product's set and a
+  labs address on each
+- **THEN** staging-2 answers every one of them
+- **AND** uat answers none of them, as production does
+- **AND** both answer the auction, the terms, the privacy page and sign-in
+
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-zf5 rev=1 -->
+#### Scenario: grade10-site-site-carried-surfaces-SC-44 - Grading waits on the same lanes the other waiting products wait on
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before grading has opened
+
+- **GIVEN** a build made for production, preview or uat
+- **WHEN** a collector opens grading's counter signing
+- **THEN** it is not found
+- **AND** a build made for development, staging or staging-2 answers it
 
 ### Requirement: Where a product is carried it behaves as it is specified to
 
@@ -434,8 +499,8 @@ carries it.
 **One line per product** - Opening a product SHALL be a change to the lanes
 carrying that product's set and to nothing else: every surface in the set
 SHALL start answering together, no surface outside it SHALL change the lanes
-it is carried on, and the other four waiting products SHALL stay on the
-lanes already stated for them.
+it is carried on, and the other waiting products SHALL stay on the lanes
+already stated for them.
 
 <!-- trace:scenario id=g10.site-carried-surfaces.SC-hz5 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-25 - Staging works as it did before
@@ -456,12 +521,12 @@ lanes already stated for them.
 - **THEN** every surface in the vault's set answers on it
 - **AND** no surface outside the set changes the lanes it is carried on
 
-<!-- trace:scenario id=g10.site-carried-surfaces.SC-3r5 rev=1 -->
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-3r5 rev=2 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-27 - The other waiting products stay shut while one opens
 **Serves:** Where a product is open - the launches still to come, each waiting on its own line rather than on the first one
 
-- **GIVEN** a build made for production, carrying none of the five waiting
+- **GIVEN** a build made for production, carrying none of the six waiting
   sets
 - **WHEN** production is stated to carry the vault's set alone
 - **THEN** every vault surface answers on it
-- **AND** no store, booking, profile or membership surface answers
+- **AND** no store, booking, profile, membership or grading surface answers

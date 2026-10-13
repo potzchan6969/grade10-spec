@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { InputOtpSlot } from "./input-otp-slot";
 
 const meta = {
-  title: "Components/InputOtpSlot",
+  title: "Design System/Forms/InputOtpSlot",
   component: InputOtpSlot,
   tags: ["autodocs"],
   argTypes: {

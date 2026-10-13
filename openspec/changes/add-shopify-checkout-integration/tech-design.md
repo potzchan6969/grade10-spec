@@ -1,149 +1,103 @@
 ## Context
 
-The application already creates Shopify hosted invoices from the cart drawer.
-PR #653 separates creation from canonical quote, coupon and order clients.
-`CartDrawerHost.tsx` sends reviewed items and accepted tender through
-`useCreateCheckout`; `CheckoutApiService` decodes the existing contract through
-the injected `StoreProcedureClient`. Customer order surfaces already poll open
-orders and refresh cart projections after observing a paid web order.
+The [proposal](proposal.md) holds the motivation; [Q24-Q29](decisions.md) keep this change to the frontend. Facts below were read on the application branch `codex/feat-shopify-checkout-integration` at `c05700431`.
 
-The existing optional intent field and frontend result variants do not prove
-backend replay support. The current router accepts `intentId` but does not
-pass it to creation. This plan consumes existing behavior and adds no backend
-intent, provider or settlement guarantee.
+| Source | Finding |
+| --- | --- |
+| `packages/grade10-store/backend/src/trpc/routers/checkout.ts` | `checkout.createCheckout` is a `freshAuthedProcedure`. Input: `items`, optional `spendPoints` (`spendPointsSchema`, an integer above 0), `couponCodes`, `couponId`, `deviceId`. It runs the gross-goods gate before `createCheckout`. |
+| `packages/grade10-store/contracts/src/schemas.ts` | `checkoutItemSchema` carries `productHandle`, `variantId`, `quantity` and optional `seenUnitPriceMinor`. `checkoutResultSchema` answers `created`, `contradicted`, `rejected`, `failed` or `identityRequired`. |
+| `packages/grade10-store/backend/src/services/checkout.ts` | For a member paying for their cart unchanged since a standing checkout, `findOpenCartCheckout` and `reusedCheckout` return that invoice when it carries the same points, wallet coupon and codes; the answer is `created` with `reused: true`. Otherwise a new order is promised, and `supersedePromisedOrders` keeps only the newest payable checkout. Reuse returns before the live review. |
+| `packages/grade10-store/backend/src/trpc/routers/cart.ts:discardMovedPast` | A member's line or tender edit discards the invoices the cart moved past, best effort after the response. The shop's review write-back discards nothing. |
+| App commit `306a68624` | Removed the v2 context read, intent persistence, their schemas and DI wiring. The drawer uses only `createCheckout`. |
+| `packages/grade10-store/backend/src/repositories/carts.ts:convertCart` | Converts a cart only while `id`, `editedVersion` and `status = active` match the order. `services/orders/transitions.ts` calls it inside the paid transition. A shop review write-back does not move `editedVersion`. |
+| `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx` | Builds the request, holds the Pay guards and maps answers (see Decisions). |
+| `apps/frontend/grade10/src/pages/orders/orderSettlement.ts` | `usePaidOrdersCartSync` invalidates the cart and tender queries once per newly paid web order. Both order pages poll every 2,000 ms while an order is open. |
+| `integrations/shopify-pos/grade10/extensions/{thank-you,order-status}` | Both call `renderYourOrdersLink`, a static link to the baked Grade10 orders URL, labelled from the extension's own locales. |
 
 ## Goals / Non-Goals
 
-- **Goals** - Complete drawer response handling, pending submission gating,
-  existing verification feedback and order return against existing clients and
-  fixtures.
-- **Non-Goals** - Backend, persistence, wire-contract, provider, recovery,
-  carrier and settlement changes; old-invoice cancellation; reconciliation of
-  cart edits made during payment; new dependencies or shared UI exports.
+- **Goal** - Land the [delta](specs/grade10-site/store/checkout/spec.md) in the drawer, the order pages and the two Shopify extensions, using the current backend as it is.
+- **Non-goal** - Any backend, contract, schema, migration or provider change. See Not in This Change.
 
 ## Decisions
 
-### Keep the Existing Frontend Boundaries
+The spec governs what Pay sends, one Pay at a time, older and lost answers, and the paid refresh. These are the implementation choices.
 
-The [checkout contract](specs/grade10-site/store/checkout/spec.md) governs the
-collector's handoff and return. Keep product orchestration in the Grade10
-drawer host, domain outcome decisions in the existing checkout feature, and
-API decoding in its data layer. Reuse the current DI tokens, repository and
-procedure client rather than adding a parallel checkout client.
+### Request
 
-Use `quote.basket`, `quote.points`, the canonical coupon clients, `orders.get`
-and `orders.list` where their existing adapters already answer. Preserve
-deprecated backend aliases and operator test adapters. No endpoint is renamed
-or changed by this amendment.
+- **Procedure** - `useCreateCheckout` calls `checkout.createCheckout` through the existing store procedure client. No second client, no context read and no fallback procedure.
+- **Lines** - A copy of each `review.items` entry: `productHandle`, `variantId`, `quantity`, `seenUnitPriceMinor`. Pay stays disabled while any reviewed item lacks `seenUnitPriceMinor`.
+- **Tender** - `sendableTender(quoted)` from `BasketQuote.ts`: `couponCodes: [code]` for a store code, `couponId` for a wallet coupon, and `spendPoints` only when the quote applied more than 0 points. No points sends no field (Q25).
+- **Device** - `deviceId` only when tracking holds one.
+- **Readiness** - Pay is disabled while the mutation is pending, a cart or tender write is unacknowledged, the review or quote is not ready, or the tender read failed. The `@grade10/ui` CartDrawer adds its own Redirecting guard.
 
-### Submit Current Review and Accepted Tender
+| Rejected | Why |
+| --- | --- |
+| v2 request with cart id, cart version, purchase key and zero-inclusive points | Removed by Q25; the backend owns cart association |
+| Sending `spendPoints: 0` | `spendPointsSchema` refuses 0 |
 
-Use the drawer's current continuous review and quote. Keep the existing
-`sendableTender` projection and seen-price metadata; do not derive payable
-money in the browser or add a separate pre-Pay read. Existing server validation
-remains authoritative. Freeze the submitted items and accepted tender in the
-mutation variables; later drawer changes do not rewrite that request or the
-invoice it creates.
+### Pay Guards
 
-Guard the action before mutation and keep it unavailable until the current
-frontend request resolves. A later deliberate Pay invokes creation again.
-Do not wire `useCheckoutIntent`, persist an intent, reuse a stored invoice or
-search for an earlier provider draft. The old invoice is ignored and may
-remain payable. A transport failure does not establish whether creation ran.
-
-### Use Existing Outcome Decisions
-
-Keep `resolveCheckout` as the total domain decision and let the drawer render
-its answer. Redirect only for an existing hosted URL; settling opens the
-existing order surface. Named-line contradictions/refusals refresh the current
-review and show the existing feedback. Transport and contract failures stay
-distinct from resolved business outcomes and restore the ready-basket retry.
-
-Keep the existing drawer-host account-verification feedback when required. It
-shows the gross-goods threshold and account action, then returns the drawer to
-its existing checkout-failure treatment; the identity check still runs on the
-account route. No shared drawer slot or export is added by this integration.
-Sign-out uses the current sign-in action and cannot fall back to typed-email
-checkout. `createCheckoutWithEmail` remains `publicProcedure` on the backend;
-the unchanged operator surface retains its existing access and sandbox gates.
-
-The published union also contains settled, terminal, intent-conflict and
-recovery-required outcomes. Preserve exhaustive handling and safe existing
-order/support navigation if one is received. Fixture coverage can exercise
-that compatibility vocabulary without claiming the current backend emits it,
-or adding intent/recovery behavior to make it do so.
-
-### Reflect Existing Paid Cleanup
-
-Keep the existing order hooks, pending polling and `orderSettlement.ts` cart
-invalidation. No redirect, confirmation-link click or merely returned browser
-clears cart data. The existing backend paid transition removes whole matching
-variant lines and clears cart tender. Browser reads reflect its result,
-including when quantity or tender changed during payment; there is no new
-client reconciliation or quantity-subtraction algorithm.
-
-### Reuse the Shopify Confirmation Extensions
-
-Use `integrations/shopify-pos/grade10/extensions/thank-you`, `order-status` and
-their shared `yourOrdersLink.ts`. Preserve Shopify layout primitives and
-localized labels. Verify the static Grade10 orders destination in fixtures;
-no purchase-specific resolver or `@grade10/ui` export is added. Shop activation
-and real staging payment are later, separately authorized operational work.
-
-## Database Schema
-
-Unchanged. No columns, indexes, migrations, request fingerprints, dispatch
-states or recovery deadlines are added. Existing order and cart records remain
-authoritative; frontend cached reads are projections.
-
-## Acceptance Fold
-
-The delta uses an explicit `## REMOVED Feature set` section to retire the
-withdrawn Safe repetition and recovery group. The acceptance fold removes that
-root group before publishing the frontend contract, while preserving the
-historical acceptance snapshot and implementation claim.
-
-## Service Interfaces
-
-Existing interfaces are consumed without modification.
-
-| Frontend Boundary | Input | Output |
+| Guard | Holds | Ends the request when |
 | --- | --- | --- |
-| Creation use case and repository | Reviewed product handle, variant id, quantity, optional seen unit price; accepted points/coupon choices; optional device id | Existing checkout outcome or transport/contract error |
-| Creation data service | Existing `CreateCheckoutPayload` through injected `StoreProcedureClient` | Decoded `checkoutResultSchema` in the Effect success channel; `ApiError` in failure channel |
-| Domain resolution | Existing `CheckoutOutcome` | Redirect, settling, verification, cart amendment, retry/support, or existing compatibility outcome |
-| Order reads | Existing order id or list limit | Existing order/list response; polling follows existing open statuses |
+| `checkoutActive` ref | Set synchronously before the call | Cleared in `finally` |
+| Member snapshot | `sessionState.snapshot()` taken at Pay; Pay refuses unless it is `signedIn` with the drawer's `userId` | The current snapshot is not the same object |
+| Request key and generation | `userId`, each line's variant, quantity, price and handle, the reviewed basket key and the tender choice key; any change bumps a counter | Key or counter differs from the values captured at Pay |
+| Mounted ref | The drawer is mounted | It unmounts |
 
-Capture immutable mutation variables and originating member scope before
-submission. A synchronous current-request guard prevents a second handler
-invocation before React renders pending state; rendered `isPending` keeps the
-action unavailable thereafter. Late completion after a member change cannot
-redirect or render the previous member's outcome. These are frontend controls,
-not backend locks or deduplication. The browser performs no persistence writes
-or transaction ownership beyond existing cart operations.
+- **Older answer** - When any guard fails, the answer is dropped: no `leaveFor`, no navigation, no toast. `checkoutHandled` pulses `summaryLoading` for one render so the CartDrawer leaves Redirecting and the current cart stays (Q28).
+- **Lost answer** - A transport or decode error rejects `mutateAsync`. For the current request the host rethrows and the CartDrawer shows `checkoutFailed`. TanStack mutations default to no retry, and the app's `QueryClient` sets none. A later Pay is a new request (Q27, Q29).
+- **Rejected** - A request key kept in `sessionStorage` across reload: Q29 leaves repeated Pay to the backend.
+
+### Answers
+
+`resolveCheckout` maps each `checkoutResultSchema` answer to one kind; the host gives each kind its existing treatment. Every path that throws ends in the CartDrawer's `checkoutFailed` toast.
+
+| Answer | Kind | Drawer |
+| --- | --- | --- |
+| `created` with a URL | `redirect` | Close, then `leaveFor(url)` |
+| `created` without a URL | `settling` | Close, then open Your Orders |
+| `contradicted`, or `rejected` other than `currencyMismatch` | `amendCart` | Toast naming the moved lines when any are named, `retryReview()`, then throw |
+| `failed` with `points_refused` or `coupon_refused` | `retry` | Toast naming the refused tender; no throw |
+| `identityRequired` | `verify` | Threshold toast with the profile action when `config.gates.profile` is on, then throw |
+| Other `failed`, or `currencyMismatch` | `retry` or `support` | Throw |
+
+- **Unreachable kinds** - `CheckoutResolution.ts` still accepts a `CompatibleCheckoutOutcome` and returns `settled`, `terminal`, `intentConflict` and `recoveryRequired`. The current contract emits none of them, and Q25 removed the request that could. Task 11.8 removes them, so a new answer kind becomes a compile error in `resolveCheckout` rather than a silent fall-through.
+
+### Paid Refresh
+
+- **Order pages** - `OrderHistoryPage` and `OrderDetailsPage` poll at `ORDER_SETTLEMENT_POLL_MS` (2,000 ms) only while `isOrderOpen(status)`.
+- **Cart refresh** - `usePaidOrdersCartSync` remembers each web order it saw paid and invalidates the `["cart", "intent"]` and `["cart", "tender"]` prefixes once per newly paid order. The reads return what `convertCart` left: an empty cart with default tender, or a later or rebuilt cart unchanged.
+- **Rejected** - Deleting matching variants or subtracting quantities in the browser (Q8).
+
+### Shopify Return
+
+- **Targets** - `purchase.thank-you.block.render` and `customer-account.order-status.block.render`.
+- **Link** - `GRADE10_ORDERS_URL` from the baked origin; label key `yourOrders` in `en.default`, `zh-Hans` and `zh-Hant`. No order-specific link and no reliance on Continue shopping (Q10).
+
+## Not in This Change
+
+[`add-checkout-purchase-safety`](../add-checkout-purchase-safety/proposal.md) owns these. The durable requirement "A checkout intent is safe to repeat" stays published and unmodified (Q24).
+
+- **Purchase identity** - One purchase across Pay, reload and lost answers; terminal replay
+- **Review before reuse** - A live review before the backend returns a standing invoice; today `reusedCheckout` returns it first
+- **Concurrent Pay** - Tabs converging on one order and invoice
+- **Dispatch** - Persisted dispatch claim, response-loss recovery and the manual-recovery block
+- **Retirement** - Durable retirement after member edits; canceled shown only from provider facts
+- **Old clients** - Legacy-procedure safety and the migration 0050 cart-reset drain
 
 ## Risks / Trade-offs
 
-- **Repeated creation** - A later Pay can create another payable invoice.
-  Gate the in-flight frontend action and avoid any copy promising deduplication.
-- **Response loss** - Creation may have happened before a transport failure.
-  Present the existing error/order outcome without promising invoice recovery.
-- **Member changes during a request** - Capture the originating member scope
-  and reject stale UI effects after sign-out or switching member; do not render
-  another member's order or redirect from their late response.
-- **Cart edits during payment** - The invoice remains fixed. Refresh the
-  server's existing cleanup result; do not preserve added quantity with a new
-  reconciliation policy.
-- **Real-shop setup** - Fixture proof cannot prove extension placement or
-  provider payment. Record those observations only in an authorized staging walk.
+- **[Risk] Two tabs or a reload send two Pays** → No frontend control by design (Q29). The drawer blocks only its own second Pay.
+- **[Risk] A lost answer leaves an invoice the collector cannot see in the drawer** → The order pages list the pending order once the backend wrote it; the drawer claims nothing about it.
+- **[Risk] A guard misses a state change** → The request key covers every value the request carries, and the generation counter catches a key that returns to an earlier value.
+- **[Risk] The unreachable kinds hide a contract change** → Task 11.8 removes them.
 
 ## Migration Plan
 
-1. Add meaningful failing frontend fixture and browser integration coverage
-   before the corresponding frontend changes.
-2. Complete drawer wiring, order response handling and existing extension
-   integration; run focused frontend and extension checks.
-3. After staging authorization, deploy frontend assets and activate/verify the
-   existing extension return surfaces. No backend or data migration is needed.
-4. Roll back affected frontend assets or extension activation if required;
-   existing invoices and backend order state remain authoritative.
+1. Ship the frontend and both extensions; the backend is unchanged and needs no migration.
+2. Roll back by redeploying the previous frontend. The frontend writes no data of its own.
+
+## Open Questions
+
+None. What the drawer shows when the session expires between review and Pay (SC-54) is verified by task 11.6, not designed here.

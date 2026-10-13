@@ -50,7 +50,7 @@ function RadioCard({
       data-slot="radio-card"
       data-disabled={disabled || undefined}
       className={cn(
-        "flex w-full items-start gap-2 rounded-xl border border-border bg-card px-3 pt-3 pb-4 text-foreground transition-colors",
+        "flex w-full items-stretch gap-2 rounded-xl border border-border bg-card text-foreground transition-colors",
         "has-[[data-slot=radio-button][data-checked]]:border-primary has-[[data-slot=radio-button][data-checked]]:bg-primary/5",
         disabled
           ? "opacity-50"
@@ -62,19 +62,16 @@ function RadioCard({
         className,
       )}
     >
-      {/* biome-ignore lint/a11y/noLabelWithoutControl: RadioButton renders the input this label wraps. */}
-      <label
-        data-slot="radio-card-label"
+      <RadioButton
+        {...props}
         className={cn(
-          "flex min-w-0 flex-1 items-start gap-2 text-sm",
-          disabled ? "cursor-not-allowed" : "cursor-pointer",
+          "min-h-full min-w-0 flex-1 gap-2 px-3 pt-3 pb-4 text-left text-sm",
+          disabled
+            ? "cursor-not-allowed disabled:opacity-100"
+            : "cursor-pointer",
         )}
+        disabled={disabled}
       >
-        <RadioButton
-          {...props}
-          disabled={disabled}
-          className={disabled ? "disabled:opacity-100" : undefined}
-        />
         <span
           data-slot="radio-card-content"
           className="flex min-w-0 flex-1 flex-col items-start gap-0.5"
@@ -97,11 +94,11 @@ function RadioCard({
           ) : null}
           {children}
         </span>
-      </label>
+      </RadioButton>
       {action != null ? (
         <div
           data-slot="radio-card-action"
-          className="flex h-6 shrink-0 items-center"
+          className="flex h-6 shrink-0 items-center pr-3 pt-3"
         >
           {action}
         </div>

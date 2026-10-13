@@ -1,0 +1,116 @@
+{
+  "version": 2,
+  "change": "name-points-discount-deduction",
+  "baseline": "64019b4897c514d6eb6d9d0ef02c73e67e0ca70f77dc148cafc83b6bebf7c89c",
+  "fingerprint": "317278af3eb238529898ad10fb00435787d56d681eaae3a9ceb985c359b50dc2",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:54:00.576Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/paying-with-points.md#rules",
+      "sha256": "de9cb618e19840e6037c649f4d378a0757bb3c14d5e81899f7bf0830609837a0",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/shopify-integration.md#online-checkout",
+      "sha256": "70733a0f1893fd5f02377fe5f6fadf97ecbf77c026f4be4e602573870c92e558",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/shopify-integration.md#two-channels-one-pipeline",
+      "sha256": "b743855f32409eb3bf844d6380efcb553bedb748de8076ca483624f00a260851",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/discounts.md#the-sale-step-by-step",
+      "sha256": "ea2865a9178f875ee1e6145cf4c3371ef9d6d18df388639e52f4387654dff076",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/discounts.md#undo",
+      "sha256": "0830d404129a2c0dff4c5f9d8c3739ca50932472e12d96b69bdd7af3536ba7cd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/order-detail.md#order-summary",
+      "sha256": "d971a6dd267eeb6b65b027c8370b98b8cf93b0f6dc1d960db107797a90c22782",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/decisions.md",
+      "sha256": "0e62cd90dd99541a804d8d644c1d2f3995bca3b69ef5712ba5f862f898464a88",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/proposal.md",
+      "sha256": "af3ae3d96782533d8fc4bcd56da15746719f755be5c6b00ea04516fd0ce48458",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "4661efc0538b100fd3be49dc2b4e8ae6b7f63b3c124cee29f4319b135609dab4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/specs/grade10-site/store/membership/feature-tcs.md",
+      "sha256": "08e014247d618d65b79716c141b3a6fd58da8720b04ae4fb206efeab2a4867f1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/specs/grade10-site/store/membership/spec.md",
+      "sha256": "6a119f79d01fb449bf182ee2104c703ac3d2f87bf0ace495a866b11278735ba9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/specs/grade10-site/store/membership/user-journeys.md",
+      "sha256": "baac1e8bdd411326c81afc69763397689dba573f8f4aa33aa56c88f7dcaed878",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/name-points-discount-deduction/tech-design.md",
+      "sha256": "3efbb4643514dd3e142aca66b6806807ad82c1a42f9f8d43d8a9f462fc62900f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "6252e9f0c25297d278bbe8944aba9d05c888b31fb1ecef36264b29f9a524879c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/feature-tcs.md",
+      "sha256": "c09ed5d33b6ed9384fd4c653bc2609009f8cf253d2f0a3b913a398d3bb144650",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/spec.md",
+      "sha256": "66dff1212f1d4cc8e506c4833caa06afd9a0b73a7f68bc2f32be2c6dedea66c8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/user-journeys.md",
+      "sha256": "e9f27c2e846e53f45559764d90150e3bc3e5122f756b03e5e0e3c8ccd767eb84",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Points come off as one order-level discount either channel accepts"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/membership/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

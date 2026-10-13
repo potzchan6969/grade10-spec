@@ -1,3 +1,5 @@
 schema: grade10-planning
 created: 2026-09-16
 promoted_by: "@htonyl"
+depends_on:
+  - complete-auction-post-sale

@@ -30,29 +30,45 @@
   "visit": {
     "title": "你的到店預約",
     "at": "{location}，{when}",
-    "pick": "選一個時間，並把物品帶來。在你同意之前，我們不會對它做任何事。",
+    "book": "預約到店",
+    "pick": "請帶同物品前來。在你同意之前，我們不會對它做任何事。",
     "cancel": "取消這次預約",
     "loadingLocations": "正在載入門市…",
     "where": "門市",
-    "nothingFree": "{location} 未來 {days} 天沒有空檔。",
+    "duration": "到店處理約需 {minutes, plural, other {# 分鐘}}",
+    "moreShops": "新門市開業後會在此顯示。",
+    "day": "日期",
+    "nextDays": "{days, plural, other {未來 # 天}}",
+    "earlierWeek": "上一週",
+    "laterWeek": "下一週",
+    "timeOn": "{day} 的時間",
+    "bookAt": "預約 {when}",
+    "moveTo": "改期至 {when}",
+    "nothingFree": "{location} 由 {first} 至 {last} 沒有空檔。",
     "unavailable": "這個時間已被預約。請在下方另選一個 — 列表剛剛更新過。",
     "booked": {
-      "title": "已預約到店",
-      "emailLine": "確認電郵正在發送中。",
+      "title": "你的到店預約已確認",
+      "emailLine": "確認電郵正在發送中。請帶同物品 — 以及你一併送來的其他物品。",
       "calendar": "加入日曆",
       "move": "改期",
       "cancel": "取消",
       "before": {
+        "title": "到店之前",
+        "verifyTitle": "在這部手機上核實身分",
+        "verifyBody": "只需幾分鐘，準備好身分證明文件和相機即可。這樣在門市就不用處理護照，而且在家就能知道證件是否已過期。",
         "verify": "立即核實",
         "verified": "已核實身分 — 除了物品，甚麼都不用帶。",
-        "bring": "帶同物品。",
-        "sign": "在門市簽署貸款及保管協議。",
-        "signStorage": "在門市簽署保管協議。",
-        "moneyFollows": "簽署後，款項隨後發放。",
-        "inPerson": "或於到店時當場核實身分。"
+        "inPerson": "想親身出示證件？請在到店時帶同證件，職員會在櫃檯用一分鐘核對。",
+        "bringTitle": "帶同物品",
+        "bringItems": "{items}，以及你已提交申請的其他物品。",
+        "bring": "這件物品，以及你已提交申請的其他物品。",
+        "signTitle": "在櫃檯簽署",
+        "sign": "在我們的 iPad 上簽署一次：保管協議；如你接受報價，另加貸款協議。收到款項之前，你不欠任何款項。",
+        "signStorage": "在我們的 iPad 上簽署一次：保管協議。"
       }
     },
-    "rules": "可於預約時段前隨時改期或取消。錯過時段，我們會結束該次預約 — 個案本身仍然保留。",
+    "rules": "你可於預約開始前隨時改期或取消。如錯過預約，我們只會結束這次預約，個案仍然保留。",
+    "rulesRequest": "你可於預約開始前隨時改期或取消。如錯過預約，我們只會結束這次預約，個案仍然保留 — 除非個案仍只是一份申請。",
     "moved": "你開啟此頁期間，這宗個案有所變動。沒有執行任何操作 — 此頁現已顯示最新狀況。"
   },
   "ceremony": {
@@ -108,7 +124,6 @@
     "postalAddressHint": "只會用於寄發書面通知。",
     "submitLabel": "簽署{title}",
     "submittingLabel": "正在簽署…",
-    "retryLabel": "再試一次",
     "missingPages": "簽署前請閱讀每一頁。",
     "missingConsent": "請勾選方格，確認你已閱讀。",
     "missingSignature": "請在上方方格內簽名。",
@@ -127,6 +142,40 @@
     "sealedIntegrityWarning": "下載的副本與你所簽署文件的指紋碼不符，因此並未儲存。你的簽名已記錄 — 請向身旁的職員索取列印副本。",
     "signedTitle": "你的簽名已記錄",
     "signedMessage": "文件封存前，還有其他人需要簽署。",
+    "disclosureTick": "我已閱讀以上內容，並同意以電子方式審閱及簽署。",
+    "identityChecked": "你的身分證明文件已於 {day} 核實。",
+    "venueLine": "簽署地點：{venue}",
+    "caseLine": "個案 {reference} · {subject}",
+    "caseOnly": "個案 {reference}",
+    "linkClock": "連結尚餘 {remaining} 有效",
+    "readToEndFirst": "請先閱讀至最後一頁",
+    "continueLabel": "繼續簽署",
+    "comesNext": "第 {position} 份，共 {total} 份 — 下一份是{next}",
+    "comesLast": "第 {position} 份，共 {total} 份 — 這是最後一份",
+    "readAgainLabel": "重新閱讀",
+    "signSummary": "{title} — 已閱讀 {viewed}/{pageCount} 頁",
+    "nextUp": "下一份：{title}",
+    "lastNote": {
+      "release": "封存後，物品即會交還給你"
+    },
+    "sealedAt": "封存時間：{time}",
+    "sealedMessageMailed": "已簽署的副本在你的個案頁面，並正寄往 {email}。請保留下方的指紋碼 — 它正是這一組文件的識別碼。",
+    "sealedDigest": "{digest} · 封存於 {when}",
+    "nextStepsTitle": "接下來",
+    "nextSteps": {
+      "vaultTitle": "職員把物品存入保險庫",
+      "vaultDetail": "物品存入後，你會收到電郵。今次到訪已完成。",
+      "moneyTitle": "款項以銀行轉帳發放",
+      "moneyDetail": "{amount}，於物品存入保險庫後發放。{days} 天由發放當日起計，我們會以電郵通知你到期日。",
+      "repayTitle": "於銀行還款，親身取回",
+      "repayDetail": "個案頁面列明任何日期的欠款，以及款項應付往何處。",
+      "collectTitle": "親身取回",
+      "collectDetail": "請帶同今天出示的身分證明文件；職員會準備放行文件供你簽署。",
+      "handoverTitle": "職員把物品交還給你",
+      "handoverDetail": "離開前請檢查物品。此個案再無未清款項。"
+    },
+    "nothingMore": "你無需在此裝置上再做任何事。",
+    "doneLabel": "完成 — 請把 iPad 交回",
     "refusal": {
       "TOKEN_INVALID": {
         "title": "這條簽署連結無效",
@@ -137,8 +186,8 @@
         "message": "為保障你的安全，簽署連結的有效時間很短。請索取新的連結。"
       },
       "TOKEN_CONSUMED": {
-        "title": "這次簽署已經完成",
-        "message": "如果你剛剛簽署完畢，就不用再做甚麼 — 已簽署的副本在你的個案頁面，身旁的職員也可以為你列印。否則就是這條連結已經用過，請索取新的連結。"
+        "title": "這條簽署連結已被取代",
+        "message": "這批文件已另發新連結，只有最新的一條有效。請向身旁的職員索取。"
       },
       "TOKEN_CONFLICT": {
         "title": "這條連結已在另一部裝置開啟",
@@ -155,6 +204,10 @@
       "PACKET_COMPLETED": {
         "title": "這批文件已經簽妥",
         "message": "所有需要簽署的人都已簽妥。你可以關閉這個頁面。"
+      },
+      "PACKET_DECLINED": {
+        "title": "沒有簽署任何文件",
+        "message": "文件已撤回，你的簽署連結亦已失效。身旁的職員可協助你處理下一步。"
       },
       "DOCUMENT_UNKNOWN": {
         "title": "這份文件不屬於今次簽署",

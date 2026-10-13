@@ -6,7 +6,7 @@ import { ProfileForm } from "./profile-form";
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Store Profile/ProfileForm",
+  title: "Account/Profile/Blocks/ProfileForm",
   component: ProfileForm,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

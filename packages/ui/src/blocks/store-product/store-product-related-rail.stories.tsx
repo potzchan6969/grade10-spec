@@ -9,7 +9,7 @@ import {
 import { StoreProductRelatedRail } from "./store-product-related-rail";
 
 const meta = {
-  title: "Store Product/Related Rail",
+  title: "Store/Cross Sell/Blocks/StoreProductRelatedRail",
   component: StoreProductRelatedRail,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

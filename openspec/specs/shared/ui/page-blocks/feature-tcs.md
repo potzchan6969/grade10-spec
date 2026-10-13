@@ -1,6 +1,6 @@
 # shared/ui/page-blocks Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/16
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 ## Background
@@ -10,7 +10,7 @@
 * A callback a block reports logs in the Actions panel under its own name. A story's own checks run when it opens and show in the Interactions panel; before a step that clicks, return the story to its start there and clear the Actions panel.
 * The Controls panel changes a story's props in place; a step that plays the consumer's part sets them there.
 
-## shared-ui-page-blocks-US1: The page parts site pages compose
+## g10.shared-page-blocks.US1: The page parts site pages compose
 
 **Walked by:** nobody on their own - a component contract site pages compose; the journeys of the vault's collector capabilities (`grade10-site/vault/*`) and grading's collector capabilities (`grade10-site/grading/*`) are what reach it.
 
@@ -18,7 +18,8 @@
 **I want** titled fact cards, note lists, stage rails and empty panels through props alone,
 **so that** every site page composes store blocks instead of drawing its own.
 
-### shared-ui-page-blocks-US1-TC1-1: Every named page block exports from the package entry
+<!-- trace:case id=g10.shared-page-blocks.TC-aau rev=1 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
+### g10.shared-page-blocks.US1-TC1: Every named page block exports from the package entry
 
 **Classification:**
 
@@ -49,7 +50,8 @@
 * No other component is exported under that comment.
 * Each export carries its own `<Name>Props` type and a `<Name>Copy` type for its words.
 
-### shared-ui-page-blocks-US1-TC2-1: No page block reads a catalogue, fetches, routes or stores
+<!-- trace:case id=g10.shared-page-blocks.TC-tq2 rev=1 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
+### g10.shared-page-blocks.US1-TC2: No page block reads a catalogue, fetches, routes or stores
 
 **Classification:**
 
@@ -79,7 +81,8 @@
 * No block imports a message catalogue.
 * No block fetches, stores, routes or subscribes to data.
 
-### shared-ui-page-blocks-US1-TC3-1: A fact card with every part draws them in order
+<!-- trace:case id=g10.shared-page-blocks.TC-j63 rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
+### g10.shared-page-blocks.US1-TC3: A fact card with every part draws them in order
 
 **Classification:**
 
@@ -119,7 +122,8 @@
 * The card is one region named <card title>.
 * The rows are one table named <rows label>, one row per label and value.
 
-### shared-ui-page-blocks-US1-TC4-1: Rows alone name their table by the card's title
+<!-- trace:case id=g10.shared-page-blocks.TC-0td rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
+### g10.shared-page-blocks.US1-TC4: Rows alone name their table by the card's title
 
 **Classification:**
 
@@ -155,7 +159,8 @@
 * The table is named <card title>.
 * Nothing is drawn under the title but the table: no line, lead, body or action.
 
-### shared-ui-page-blocks-US1-TC5-1: A card with no rows draws no table
+<!-- trace:case id=g10.shared-page-blocks.TC-29c rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
+### g10.shared-page-blocks.US1-TC5: A card with no rows draws no table
 
 **Classification:**
 
@@ -193,7 +198,8 @@ Runs once per row of **Test data**.
 
 * The card reads as the row's outcome says.
 
-### shared-ui-page-blocks-US1-TC6-1: Loading cards are one busy status, placeholders hidden
+<!-- trace:case id=g10.shared-page-blocks.TC-skf rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
+### g10.shared-page-blocks.US1-TC6: Loading cards are one busy status, placeholders hidden
 
 **Classification:**
 
@@ -230,7 +236,8 @@ Runs once per row of **Test data**.
 * One busy status is announced, named <loading label>.
 * No placeholder is announced on its own.
 
-### shared-ui-page-blocks-US1-TC7-1: A count below one draws no loading cards
+<!-- trace:case id=g10.shared-page-blocks.TC-rfs rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
+### g10.shared-page-blocks.US1-TC7: A count below one draws no loading cards
 
 **Classification:**
 
@@ -265,7 +272,8 @@ Runs once per row of **Test data**.
 * The render throws an error naming <count below one>.
 * No status and no placeholder is drawn.
 
-### shared-ui-page-blocks-US1-TC8-1: Dividers fall between two lines, never after the last
+<!-- trace:case id=g10.shared-page-blocks.TC-we2 rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
+### g10.shared-page-blocks.US1-TC8: Dividers fall between two lines, never after the last
 
 **Classification:**
 
@@ -305,7 +313,8 @@ Runs once per row of **Test data**.
 * The lines read in the order given.
 * A divider sits where the row says, and none under the last line.
 
-### shared-ui-page-blocks-US1-TC9-1: A line carrying a link keeps its link
+<!-- trace:case id=g10.shared-page-blocks.TC-22r rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
+### g10.shared-page-blocks.US1-TC9: A line carrying a link keeps its link
 
 **Classification:**
 
@@ -340,7 +349,8 @@ Runs once per row of **Test data**.
 * The first line holds <verify link> as a link to its address, then the in-person line.
 * Every other line reads as given.
 
-### shared-ui-page-blocks-US1-TC10-1: An empty note list draws nothing
+<!-- trace:case id=g10.shared-page-blocks.TC-z3a rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
+### g10.shared-page-blocks.US1-TC10: An empty note list draws nothing
 
 **Classification:**
 
@@ -368,7 +378,8 @@ Runs once per row of **Test data**.
 
 * No list and no divider is drawn.
 
-### shared-ui-page-blocks-US1-TC11-1: The rail marks the stage reached and every stage around it
+<!-- trace:case id=g10.shared-page-blocks.TC-xrp rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
+### g10.shared-page-blocks.US1-TC11: The rail marks the stage reached and every stage around it
 
 **Classification:**
 
@@ -409,7 +420,8 @@ Runs once per row of **Test data**.
 * Current is in progress and is the one current step.
 * The row's Done stages read done, its To come stages still to come.
 
-### shared-ui-page-blocks-US1-TC12-1: An ended case stays at its stage with the ending's word
+<!-- trace:case id=g10.shared-page-blocks.TC-xr0 rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
+### g10.shared-page-blocks.US1-TC12: An ended case stays at its stage with the ending's word
 
 **Classification:**
 
@@ -445,7 +457,8 @@ Runs once per row of **Test data**.
 * Offer is in progress, with <ending word> under it.
 * Every stage after Offer reads still to come.
 
-### shared-ui-page-blocks-US1-TC13-1: A stage the rail does not hold is refused by name
+<!-- trace:case id=g10.shared-page-blocks.TC-hab rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
+### g10.shared-page-blocks.US1-TC13: A stage the rail does not hold is refused by name
 
 **Classification:**
 
@@ -479,7 +492,8 @@ Runs once per row of **Test data**.
 * The render throws an error naming <stage not held>.
 * No rail is drawn.
 
-### shared-ui-page-blocks-US1-TC14-1: A narrow screen scrolls the rail, not the page
+<!-- trace:case id=g10.shared-page-blocks.TC-8jg rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
+### g10.shared-page-blocks.US1-TC14: A narrow screen scrolls the rail, not the page
 
 **Classification:**
 
@@ -509,7 +523,8 @@ Runs once per row of **Test data**.
 * The rail scrolls to show Home.
 * The page does not scroll sideways.
 
-### shared-ui-page-blocks-US1-TC15-1: An empty panel reads its title and reports its way out
+<!-- trace:case id=g10.shared-page-blocks.TC-vgl rev=1 covers=g10.shared-page-blocks.SC-kyu -->
+### g10.shared-page-blocks.US1-TC15: An empty panel reads its title and reports its way out
 
 **Classification:**
 
@@ -539,7 +554,8 @@ Runs once per row of **Test data**.
 * Step 1: the title reads, with no line under it.
 * Step 3: the action logs once.
 
-### shared-ui-page-blocks-US1-TC16-1: A block carries the slot it is given, or its own
+<!-- trace:case id=g10.shared-page-blocks.TC-dwb rev=1 covers=g10.shared-page-blocks.SC-zu0,g10.shared-page-blocks.SC-pmq,g10.shared-page-blocks.SC-33c -->
+### g10.shared-page-blocks.US1-TC16: A block carries the slot it is given, or its own
 
 **Classification:**
 

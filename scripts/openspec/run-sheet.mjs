@@ -30,6 +30,7 @@
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
+import { cliArgs } from "./lib/args.mjs";
 import {
   BODY_FOREGROUND,
   COLUMN_WIDTHS,
@@ -88,6 +89,7 @@ Selection - one of these, and the first two resolve to the third:
   --priority <list>   Cases at these priorities
   --level <list>      feature, domain, product, platform
   --scope <substr>    Only suites whose path contains this
+  --changed-since <sha>  Cases owned by suites affected since this commit
   --cases <ids>       A comma-separated list of case ids
   --cases-file <path> The same list, one id per line (\`#\` comments allowed)
 
@@ -115,6 +117,7 @@ function parseArgs(argv) {
     priority: null,
     level: null,
     scope: null,
+    changedSince: null,
     cases: null,
     includeDraft: false,
     includeAutomated: true,
@@ -132,6 +135,7 @@ function parseArgs(argv) {
     "--priority": "priority",
     "--level": "level",
     "--scope": "scope",
+    "--changed-since": "changedSince",
     "--sha": "sha",
     "--sheet": "sheet",
     "--overwrite": "overwrite",
@@ -220,6 +224,23 @@ function headSha() {
     }).trim();
   } catch {
     return "unknown";
+  }
+}
+
+function changedPathsSince(sha) {
+  try {
+    return execFileSync("git", ["diff", "--name-only", sha, "HEAD"], {
+      cwd: ROOT,
+      encoding: "utf8",
+    })
+      .split("\n")
+      .map((one) => one.trim())
+      .filter(Boolean);
+  } catch {
+    die(
+      `cannot compare changes since \`${sha}\``,
+      "Use a commit that exists in this checkout, or pass --cases-file with explicit ids.",
+    );
   }
 }
 
@@ -779,7 +800,7 @@ function summaryDressing(sheetId, startRow, rows, runId) {
 
 // ---------------------------------------------------------------------------
 
-const args = parseArgs(process.argv.slice(2));
+const args = parseArgs(cliArgs());
 args.env = envOf(args.env);
 if (!args.env)
   die("--env is staging or production", "Omit it to default to staging.");
@@ -787,12 +808,28 @@ if (!args.name) {
   help();
   die("--name is required: it names the run and the tab.");
 }
-const hasFilter = Boolean(args.suites || args.priority || args.level);
+if (args.cases && args.changedSince)
+  die(
+    "--changed-since cannot be combined with --cases or --cases-file",
+    "Use one explicit case list, or let the commit scope resolve the list.",
+  );
+const hasFilter = Boolean(
+  args.suites || args.priority || args.level || args.changedSince,
+);
 if (!args.cases && !hasFilter)
   die(
     "no selection",
     "Give --cases or --cases-file with the exact ids, or a filter such as\n" +
       "--suites regression. --scope alone narrows the files read; it selects nothing.",
+  );
+
+const changedPaths = args.changedSince
+  ? changedPathsSince(args.changedSince)
+  : null;
+if (args.changedSince && changedPaths.length === 0)
+  die(
+    `no files changed since \`${args.changedSince}\``,
+    "Use a wider baseline commit, or pass explicit case ids.",
   );
 
 const candidates = readCandidates(ROOT, args.scope);
@@ -807,6 +844,7 @@ const {
   level: args.level,
   includeDraft: args.includeDraft,
   includeAutomated: args.includeAutomated,
+  changedPaths,
 });
 const picked = inReadingOrder(unordered);
 
@@ -839,6 +877,12 @@ const {
 console.log(
   `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
 );
+if (args.changedSince)
+  console.log(
+    dim(
+      `Changed-since scope: ${changedPaths.length} file${changedPaths.length === 1 ? "" : "s"} after ${args.changedSince}`,
+    ),
+  );
 console.log(dim(automatedLine));
 // Each one by name, with what decides it: the count says the gate ran, and
 // these say where to read what it ran on (Q72).
@@ -937,7 +981,9 @@ const payload = summaryRows({
   tab,
   date,
   name: args.name,
-  selection: args.selection ?? "",
+  selection:
+    args.selection ??
+    (args.changedSince ? `changed since ${args.changedSince}` : ""),
   env: args.env,
   sha,
 });

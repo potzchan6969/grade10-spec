@@ -4,7 +4,7 @@ import { useState } from "react";
 import { StepperInput } from "./stepper-input";
 
 const meta = {
-  title: "Components/StepperInput",
+  title: "Design System/Forms/StepperInput",
   component: StepperInput,
   tags: ["autodocs"],
   args: {

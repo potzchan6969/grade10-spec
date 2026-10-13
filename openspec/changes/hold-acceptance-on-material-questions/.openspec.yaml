@@ -1,0 +1,12 @@
+schema: grade10-planning
+created: 2026-10-07
+depends_on:
+  - run-a-round-on-every-artifact
+  - stage-changes-and-notify-hands
+hands:
+  pm: "@ecchochan"
+  qa: "@chloe9gag"
+  dev: "@ecchochan"
+ui_waived: "the rule moves the store's records and checks; Pending already lists a wait under the hand who owes it"
+awaiting:
+  specs: "2026-10-07, the outline, the blind suite and the requirements - @ecchochan"

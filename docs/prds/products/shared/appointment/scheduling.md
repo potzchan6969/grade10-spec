@@ -56,12 +56,16 @@ exactly as a new booking. A closed booking refuses every further move,
 cancellation or outcome, and repeating the same cancellation or outcome
 answers the booking unchanged.
 
+- ❓ **Calls** - a call seats a waiting visit on any open resource that runs its service from now; [Front Desk](/p/grade10-admin/appointment/front-desk) states it
+
 ## Notifications
 
 A booking with an address gets a confirmation, an update when it moves, a
 cancellation, and one reminder at the service's lead, each with a calendar
 file naming the service, the shop, its address, the start and the end in the
 shop's zone. A booking without an address is told nothing.
+
+- ❓ **After the visit** - a Thanks or a We missed you, 2 hours after the shop next opens; [Your Visit](/p/grade10-site/appointment/visit) states both
 
 ## Erasure
 

@@ -32,6 +32,7 @@ and catches up without being reloaded by hand.
   way, where the tree holds uncommitted work or the checkout holds a commit
   `main` does not, and SHALL leave the checkout as it was
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-mty rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-72 - A page open while `main` moves is told and refreshes when caught up
 **Serves:** shared-planning-change-stages-US-10 - the teammate answers on what landed, on the page they already had open
 
@@ -44,6 +45,7 @@ and catches up without being reloaded by hand.
 **AND** ten minutes after the page was told, the notice SHALL say the site has not caught up and SHALL NOT say the site refreshes itself
 **AND** the page SHALL NOT replace what it shows while a text field has focus, and SHALL do it once focus leaves
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-0du rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-73 - The locally run manual says how far behind and pulls
 **Serves:** shared-planning-change-stages-US-11 - the teammate reads what landed without leaving the page for a command
 
@@ -54,6 +56,7 @@ and catches up without being reloaded by hand.
 **AND** a checkout level with `main`, or one with nothing to compare against, SHALL show no count and no notice
 **AND** a checkout whose fetch of `origin` fails SHALL keep the last counts it read and say when they were last read
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-43a rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-74 - Pull is refused on a dirty or ahead checkout
 **Serves:** shared-planning-change-stages-US-11 - the teammate's own work is never decided for them
 
@@ -62,6 +65,7 @@ and catches up without being reloaded by hand.
 **THEN** it SHALL refuse the pull and name which of the two is in the way
 **AND** the checkout SHALL be left as it was, with nothing committed, stashed, merged or rebased
 
+<!-- trace:scenario id=g10.shared-change-stages.SC-7i0 rev=1 -->
 #### Scenario: shared-planning-change-stages-SC-75 - No relay, no banner
 **Serves:** shared-planning-change-stages-US-10 - the teammate reads the page as they do today wherever nothing can tell it
 

@@ -5,30 +5,14 @@ description: Run a round on a change's ui-design.md - the screens, the exports e
 
 # The Designer's Round
 
-**The artifact:** `ui-design.md`, drawn from the page sections the change
-links, the proposal, the decisions and the journeys. A change with no
-user-facing surface writes none, and the record says `ui_waived: <why>`.
-
-**The rules:** `planning-design` - what the file holds, what it links rather
-than restates, and the design reference (Storybook,
-`packages/design-system`, `packages/ui`, `packages/i18n`) it stands on - plus:
+- **Scope** - Draft `ui-design.md` for the named change from its linked PRD sections, proposal, decisions and journeys. A change with no user-facing surface records `ui_waived: <why>` instead.
+- **Artifact Rules** - Use [planning-design](../planning-design/SKILL.md) for the design reference, screens, components and States table. Read the enriched artifact instructions:
 
 ```bash
 openspec instructions ui-design --change <change>
 ```
 
-Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
-landing and the re-read.
-
-## What the Round Adds Here
-
-- **The frames come from the designer** — the ask carries the links to the
-  frames. A screen no frame in the ask covers writes a dated
-  `awaiting: ui-design: "<date>, <screen> - @<handle>"` line in the change's
-  record, and the draft describes no screen of its own in its place
-- **A state is a bullet** — a state a reader sees goes in `## States`, with
-  the journey it serves; a product detail a state needs goes on the page as a
-  ❓ line first
-- **A designer specifying a new change** — that is `/workflow-plan`'s lane, the way
-  `planning-design` routes it: the proposal, the decisions and the journeys
-  first, with the design reference handed over with them
+- **Round** - Follow `workflow-round` ([skill](../workflow-round/SKILL.md)) with the change and `ui-design` artifact for its readers, summary and landing.
+- **The frames come from the designer** - The ask carries the frame links. A screen no frame in the ask covers writes a dated `awaiting: ui-design: "<date>, <screen> - @<handle>"` line in the change's record, and the draft describes no screen of its own in its place.
+- **New Change** - Route a designer specifying a new change through [workflow-plan](../workflow-plan/SKILL.md) first, passing the requested outcome and design reference.
+- **Completion** - Return the design draft and round outcome, or the recorded wait for missing design input.

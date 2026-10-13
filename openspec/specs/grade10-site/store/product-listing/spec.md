@@ -47,7 +47,12 @@ address. The catalogue narrows by one collection or by a query, never by both.
 - Said when it is news
   - Few left: the card says how many remain once the shop is nearly out
   - All of them asked for: the card says the same when the collector has taken the last one
+- Opening a card
+  - Name and photo alike: a card's name and its photo open that card's own page
+  - Sold out, closed: a sold-out card opens from neither, because the listing sells
+
 ## Requirements
+
 ### Requirement: The browse listing answers at its own address
 
 The browse listing SHALL answer at an address of its own beneath the store,
@@ -635,3 +640,25 @@ sign-in surface's consumer-owned title copy.
 - **WHEN** they activate Add to cart and the sign-in dialog opens
 - **THEN** the dialog title is **Sign In to Add to Cart**
 
+### Requirement: A card on the listing opens its own product page
+
+A card on the browse listing SHALL open its own product page from its name
+and from its photo alike. Because the listing sells, a sold-out card SHALL
+open from neither.
+
+<!-- trace:scenario id=g10.store-product-listing.SC-o14 rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-55 - A card's name opens its own page
+**Serves:** grade10-site-store-product-listing-US-16 - Collector opens a card from the listing
+
+- **GIVEN** a card on the listing that is not sold out
+- **WHEN** a collector activates the card's name
+- **THEN** that card's own page renders
+- **AND** activating the card's photo instead renders the same page
+
+<!-- trace:scenario id=g10.store-product-listing.SC-biu rev=1 -->
+#### Scenario: grade10-site-store-product-listing-SC-56 - A sold-out card does not open
+**Serves:** grade10-site-store-product-listing-US-16 - Collector opens a card from the listing
+
+- **GIVEN** a sold-out card on the listing
+- **WHEN** a collector presses the card's name and its photo
+- **THEN** the listing stays where it is and no product page renders

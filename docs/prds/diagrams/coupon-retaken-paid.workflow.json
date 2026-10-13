@@ -91,8 +91,8 @@
       "lane": "shopify",
       "col": 3,
       "type": "external",
-      "label": "Code re-minted",
-      "sublabel": "the earlier one is discarded",
+      "label": "Its own code minted",
+      "sublabel": "the earlier one is deactivated",
       "width": 156
     },
     {

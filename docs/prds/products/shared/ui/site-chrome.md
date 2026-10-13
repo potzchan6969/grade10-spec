@@ -8,8 +8,9 @@ reviewed: 2026-09-21
 Two components make the chrome: a site header and a site footer. Each is usable
 on its own, and between them they are what every storefront page sits inside.
 
-A header control appears only when the application supplies a handler for it, so
-nothing on screen is dead — no search box that searches nothing, no cart icon
+A header control appears only when the application supplies a handler for it,
+or, for account and cart, a control of its own in that place, so nothing on
+screen is dead — no search box that searches nothing, no cart icon
 over a store with no cart. A region of the header with nothing in it is absent
 rather than empty, and a footer section with no content is dropped the same way.
 
@@ -23,36 +24,36 @@ currency.
 
 ## Account Entry
 
-**`SiteHeader`** — a compound header wraps the design-system `Nav` with
+**`SiteHeader`** - a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
-sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders
-joins ahead of My Auctions and Membership joins after it. KYC stays out of
-the menu
+sign-in email, then My Auctions and Sign Out
 
-🚧 **My Orders** — ahead of My Auctions once Store answers, opening the Store
-order history surface, and omitted until then
+**Profile** - first in the menu, only when `onProfile` is supplied
 
-**Membership** — ❓ after My Auctions once Store answers; the destination is
-unconfirmed
+**My Orders** - ahead of My Auctions, only when `onMyOrders` is supplied
 
-**Avatar without an email** — ❓ when `accountEmail` is not supplied and the
-menu falls back to `copy.accountMenuLabel`, whether the small initial avatar
-still renders (and from what) or is omitted along with the email is
-unconfirmed
+**Membership** - after My Auctions, only when `onMembership` and
+`copy.membership` are supplied
 
-**Compact menu** — below a 896px-wide container, a leading menu control opens a
+🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
+orders item included
+
+🚧 **Profile image** - the menu's avatar shows the profile's image where the
+collector has one, and the initial where they do not
+
+**Avatar without an email** - when `accountEmail` is not supplied, the menu
+shows `copy.accountMenuLabel` and no avatar
+
+🚧 **Account menu stories** - on Auction & Store, `WithProfile` supplies every
+handler and shows all five items in order; `Open` supplies no Membership and
+shows My Orders, My Auctions and Sign Out
+
+**Compact menu** - below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the
 drawer when it is answered.
-
-## No Profile
-
-🚧 **No Profile item** — the menu never offers Profile; there is no Profile
-page. Optional `onProfile` stays on the contract so a later page can wire it;
-Grade10 does not supply it. Specs and Storybook that still named Profile as
-joining once carried are corrected here
 
 ## External Links
 
@@ -62,48 +63,56 @@ utility strip / compact utility list.
 
 ## Cart Count
 
-🚧 When the cart control is present and the cart holds active lines, `SiteHeader`
-shows a round count on the cart icon — the same number as the cart drawer title
-badge. An empty, omitted, or unknown count hides it. Signed-out visitors have
-no guest cart, so they receive no count. Design-system `Nav` stays
-count-agnostic.
+🚧 **Cart count** - when the cart control is present and the cart holds active
+lines, `SiteHeader` shows a round count on the cart icon, the same number as
+the cart drawer title badge, in full, never `99+`. An empty, omitted, or
+unknown count hides it. A signed-out visitor's count is the cart their
+browser holds. Design-system `Nav` stays
+count-agnostic: a header that shows a count hands `Nav` its own cart control
+through an optional cart slot, as it does for account.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
-::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
+::story{id="design-system-layout-nav-overview--all-controls" title="Nav — all controls"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
 
-::story{id="site-chrome-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
 
-::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 
-::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
-::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
+::story{id="design-system-layout-nav-account--sign-in" title="Nav — Sign In button"}
 
-::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
+::story{id="design-system-layout-nav-layout--narrow" title="Nav — narrow (375px)"}
 
-::story{id="components-nav-layout--menu-open" title="Nav — menu open (375px)"}
+::story{id="design-system-layout-nav-layout--menu-open" title="Nav — menu open (375px)"}
 
-::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
+::story{id="design-system-layout-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
-::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
-::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
+::story{id="design-system-layout-nav-overview--another-brand" title="Nav — another brand"}
 
-::story{id="components-footer--auction-only" title="Footer — auction only"}
+::story{id="design-system-layout-footer--auction-only" title="Footer — auction only"}
 
 The site's own rules for what the shell must do — the landmarks, the session
 timing, the small-width reflow — are [the page shell's](/p/grade10-site/site/page-shell).
 This capability is the component contract underneath it.
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Full cart count | Decided | The header shows the whole count the application supplies, the same number as the drawer title. Rejected `99+`, which would disagree with the drawer title. The planning round decided it from the drawer-title match on this page. | Product |
+:::

@@ -54,7 +54,7 @@ const SUITE = (manual) =>
   [
     "# demo/alpha Test Cases",
     "",
-    "**Status:** pending-review",
+    "**Status:** pending-review · 0/3",
     "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
     "",
     "## demo-alpha-US1: Collector does the thing",
@@ -110,6 +110,58 @@ function store(story, manual = MANUAL) {
   return root;
 }
 
+test("an anchor-only active case is a non-blocking QA2 warning before approval", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8").replace(
+    "### demo-alpha-US1-TC1-1: The thing happens, 1",
+    "<!-- trace:case id=demo.alpha.TC-001 rev=1 -->\n### demo-alpha-US1-TC1-1: The thing happens, 1",
+  );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.equal(result.status, 0, out);
+  assert.match(out, /no post-hoc scenario links/);
+});
+
+test("a case under no journey heading is refused by name, not as a count mismatch", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8").replace(
+    "## demo-alpha-US1: Collector does the thing",
+    "## Walk 1: Do the thing",
+  );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /`demo-alpha-US1-TC1-1` sits under no journey heading/);
+});
+
+test("an approved actual anchor-only case is not export-eligible", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8")
+    .replace("**Status:** pending-review · 0/3", "**Status:** approved · 3/3")
+    .replace("**Drafts styled:** 2026-09-01, tcs-rules r3.0\n", "")
+    .replaceAll("**Status:** draft", "**Status:** actual");
+  const withReview = text.replace(
+    "**Status:** approved · 3/3\n",
+    "**Status:** approved · 3/3\n**Reviewed:** 2026-09-01, tcs-rules r5\n",
+  );
+  writeFileSync(
+    file,
+    withReview.replace(
+      "### demo-alpha-US1-TC1-1: The thing happens, 1",
+      "<!-- trace:case id=demo.alpha.TC-001 rev=1 -->\n### demo-alpha-US1-TC1-1: The thing happens, 1",
+    ),
+  );
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /not export-eligible/);
+});
+
 const run = runValidator;
 
 // Product and platform suites have no adjacent spec.md: their traces resolve
@@ -133,7 +185,7 @@ test("product and platform suites validate their scoped journeys and id prefixes
     [
       `# ${title} Test Cases`,
       "",
-      "**Status:** pending-review",
+      "**Status:** pending-review · 0/1",
       "**Drafts styled:** 2026-09-24, tcs-rules r3.0",
       "",
       `## ${prefix}-US1: Admin completes a cross-domain path`,
@@ -227,7 +279,7 @@ test("shared-planning-agent-rounds-SC-103 - a Manual table under a journey, on a
   const suite = [
     "# demo/alpha Test Cases",
     "",
-    "**Status:** pending-review",
+    "**Status:** pending-review · 0/1",
     "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
     "",
     "## demo-alpha-US1: Collector does the thing",
@@ -269,6 +321,190 @@ test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test cites 
   const result = run(
     store("// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n"),
   );
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test("a walk cannot reference a missing stable case id", () => {
+  const root = store(
+    "// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n",
+  );
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const original = readFileSync(suite, "utf8");
+  writeFileSync(
+    suite,
+    original.replace(
+      "## demo-alpha-US1: Collector does the thing",
+      [
+        "## Walk 1: Complete the thing",
+        "",
+        "### Route",
+        "",
+        "1. Open the thing. `TC-zzz (US1-TC1)`",
+        "",
+        "## demo-alpha-US1: Collector does the thing",
+      ].join("\n"),
+    ),
+  );
+  const result = run(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /walk `Walk 1: Complete the thing` references `tc-zzz`/);
+});
+
+test("a feature walk may reference a full case id from its own suite", () => {
+  const root = store("", []);
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const original = readFileSync(suite, "utf8")
+    .replace(
+      "## demo-alpha-US1: Collector does the thing",
+      "## demo-alpha.US1: Collector does the thing",
+    )
+    .replace(
+      "### demo-alpha-US1-TC1-1: The thing happens, 1",
+      "### demo-alpha.US1-TC1: The thing happens, 1",
+    );
+  writeFileSync(
+    suite,
+    original.replace(
+      "## demo-alpha.US1: Collector does the thing",
+      [
+        "## Walk 1: Complete the thing",
+        "",
+        "### Route",
+        "",
+        "1. Open the thing. `demo-alpha.US1-TC1`",
+        "",
+        "## demo-alpha.US1: Collector does the thing",
+      ].join("\n"),
+    ),
+  );
+  const result = run(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test("a platform walk resolves a full lower-level feature case id", () => {
+  const root = mkdtempSync(join(tmpdir(), "cross-suite-walk-"));
+  for (const [name, content] of Object.entries(
+    specFiles("openspec/specs/demo/alpha/item"),
+  )) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
+
+  const feature = [
+    "# demo/alpha Test Cases",
+    "",
+    "**Status:** pending-review · 0/1",
+    "**Drafts styled:** 2026-09-24, tcs-rules r5",
+    "",
+    "## demo-alpha-US1: Collector does the thing",
+    "",
+    "**As a** collector,",
+    "**I want** the thing,",
+    "**so that** it is done.",
+    "",
+    "### demo.alpha.TC-a1b (US1-TC1): The thing happens",
+    "",
+    "**Classification:**",
+    "",
+    "* **Severity:** major",
+    "* **Priority:** high",
+    "* **Status:** draft",
+    "* **Behaviour:** positive",
+    "* **Type:** functional",
+    "* **Suites:** regression",
+    "* **Layer:** e2e",
+    "* **Automation status:** manual",
+    "* **Testability:** manual",
+    "* **Trace:** demo-alpha-US-01",
+    "",
+    "**Pre-conditions:**",
+    "None.",
+    "",
+    "**Steps:**",
+    "",
+    "1. Do the thing.",
+    "",
+    "**Expected Results:**",
+    "",
+    "* The thing happened.",
+    "",
+    "## Reconciliation",
+    "",
+    "**Run:** 2026-09-24; cross-suite walk fixture.",
+    "",
+  ].join("\n");
+  const featureFile = join(
+    root,
+    "openspec/specs/demo/alpha/item/feature-tcs.md",
+  );
+  mkdirSync(dirname(featureFile), { recursive: true });
+  writeFileSync(featureFile, feature);
+
+  const platform = [
+    "# platform Test Cases",
+    "",
+    "**Status:** pending-review · 0/1",
+    "**Drafts styled:** 2026-09-24, tcs-rules r5",
+    "",
+    "## Walk 1: Admin publishes, site displays",
+    "",
+    "### Route",
+    "",
+    "1. Admin creates `listing_a`.",
+    "   - Pairing check: record the listing id.",
+    "   - `demo.alpha.TC-a1b (US1-TC1)`",
+    "",
+    "## platform-US1: The platform route holds",
+    "",
+    "**As an** admin,",
+    "**I want** the platform route,",
+    "**so that** the products agree.",
+    "",
+    "### platform.TC-c3d (US1-TC1): The products agree",
+    "",
+    "**Classification:**",
+    "",
+    "* **Severity:** major",
+    "* **Priority:** high",
+    "* **Status:** draft",
+    "* **Behaviour:** positive",
+    "* **Type:** integration",
+    "* **Suites:** smoke",
+    "* **Layer:** e2e",
+    "* **Automation status:** manual",
+    "* **Testability:** manual",
+    "* **Trace:** demo-alpha-US-01, another-market-US-01",
+    "",
+    "**Pre-conditions:**",
+    "None.",
+    "",
+    "**Steps:**",
+    "",
+    "1. Complete the platform route.",
+    "",
+    "**Expected Results:**",
+    "",
+    "* The products agree.",
+    "",
+    "## Reconciliation",
+    "",
+    "**Run:** 2026-09-24; cross-suite walk fixture.",
+    "",
+  ].join("\n");
+  const platformFile = join(root, "openspec/specs/platform-tcs.md");
+  writeFileSync(platformFile, platform);
+
+  for (const [name, content] of Object.entries(
+    specFiles("openspec/specs/another/market/item"),
+  )) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content.replaceAll("demo-alpha", "another-market"));
+  }
+
+  const result = run(root);
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });
 
@@ -353,8 +589,8 @@ test("an approved file with a new draft reads reopened through its lapsed Review
     );
   const header = (status, reviewed) =>
     approvedOnce.replace(
-      "**Status:** pending-review\n**Drafts styled:** 2026-09-01, tcs-rules r3.0",
-      `**Status:** ${status}\n**Drafts styled:** 2026-09-01, tcs-rules r3\n${reviewed}`,
+      "**Status:** pending-review · 0/3\n**Drafts styled:** 2026-09-01, tcs-rules r3.0",
+      `**Status:** ${status} · 2/3\n**Drafts styled:** 2026-09-01, tcs-rules r3\n${reviewed}`,
     );
 
   writeFileSync(
@@ -370,18 +606,18 @@ test("an approved file with a new draft reads reopened through its lapsed Review
   writeFileSync(
     suite,
     header(
-      "in-review",
+      "approved",
       "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20",
     ),
   );
   assert.match(
     run(root).stdout,
-    /file status is `in-review` but its cases imply `reopened`/,
+    /file status is `approved` but this snapshot allows `pending-review` or `reopened`/,
   );
 
   writeFileSync(
     suite,
-    header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3"),
+    header("pending-review", "**Reviewed:** 2026-09-10, tcs-rules r3"),
   );
   assert.match(
     run(root).stdout,
@@ -439,6 +675,56 @@ test("a Covered at domain line is refused when its domain case is missing or dep
   assert.match(out, /a \*\*Covered at domain\*\* line names no domain case/);
 });
 
+test("a Covered at domain line resolves a modern stable domain case heading", () => {
+  const root = store("// the story: demo-alpha-US1-TC1-1\n", [
+    "- **Covered at domain** — the thing happens, walked by `demo.domain-dmn.TC-a1b`",
+  ]);
+  const domain = join(root, "openspec/specs/demo/domain-tcs.md");
+  mkdirSync(dirname(domain), { recursive: true });
+  writeFileSync(
+    domain,
+    [
+      "# demo Test Cases",
+      "",
+      "## demo.domain-dmn.US1: A path across the domain",
+      "",
+      "### demo.domain-dmn.TC-a1b (US1-TC1): The composed path",
+      "",
+      "* **Status:** actual",
+      "* **Trace:** demo-alpha-US-01, demo-beta-US-01",
+    ].join("\n"),
+  );
+  assert.doesNotMatch(
+    run(root).stdout,
+    /covered at domain by `demo\.domain-dmn\.TC-a1b`, which no/,
+  );
+});
+
+test("a Covered at domain line resolves a modern domain heading id", () => {
+  const root = store("// the story: demo-alpha-US1-TC1-1\n", [
+    "- **Covered at domain** — the thing happens, walked by `demo.domain-dmn.US1-TC1`",
+  ]);
+  const domain = join(root, "openspec/specs/demo/domain-tcs.md");
+  mkdirSync(dirname(domain), { recursive: true });
+  writeFileSync(
+    domain,
+    [
+      "# demo Test Cases",
+      "",
+      "## demo.domain-dmn.US1: A path across the domain",
+      "",
+      "### demo.domain-dmn.US1-TC1: The composed path",
+      "",
+      "* **Status:** actual",
+      "* **Trace:** demo-alpha-US-01, demo-beta-US-01",
+    ].join("\n"),
+  );
+  assert.doesNotMatch(
+    run(root).stdout,
+    /covered at domain by `demo\.domain-dmn\.US1-TC1`, which no/,
+  );
+});
+
 // Archived changes copied suites across without their cases before the carry
 // gate refused it. The validator warns on each archived case no live suite
 // holds under its id, `<v>` aside, and the durable suite does not name.
@@ -482,9 +768,9 @@ test("warns on an archived case the fold left behind, and not on one held, re-ve
   );
 });
 
-// `<v>` and a trace marker's `rev` count the same changes; where a case
-// carries a marker the two agree.
-test("refuses a case whose trace marker rev differs from its <v>, and passes one that matches", () => {
+// Legacy heading suffixes must not disagree with the marker's `rev` during
+// migration; modern headings take their version only from the marker.
+test("refuses a legacy heading whose marker rev differs, and passes one that matches", () => {
   const root = mkdtempSync(join(tmpdir(), "trace-rev-"));
   const marked = (id, rev) =>
     `<!-- trace:case id=g10.demo-alpha.TC-${id.slice(-4, -2)}x rev=${rev} covers=g10.demo-alpha.SC-abc -->\n### ${id}: A case\n\n* **Status:** draft\n`;
@@ -504,7 +790,7 @@ test("refuses a case whose trace marker rev differs from its <v>, and passes one
   const out = run(root).stdout;
   assert.match(
     out,
-    /case `demo-alpha-US1-TC1-2` is at `<v>` 2 and its trace marker at `rev=1`/,
+    /legacy case heading `demo-alpha-US1-TC1-2` carries suffix 2, but its trace marker carries `rev=1`/,
   );
   assert.doesNotMatch(out, /case `demo-alpha-US1-TC2-2` is at/);
 });
@@ -520,7 +806,7 @@ test("a retired journey holds only deprecated cases, which may still trace it", 
     [
       "# demo/alpha Test Cases",
       "",
-      "**Status:** in-review",
+      `**Status:** pending-review · 0/${status === "deprecated" ? 1 : 2}`,
       "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
       "",
       "## demo-alpha-US1: Collector does the thing",
@@ -560,7 +846,90 @@ test("a retired journey holds only deprecated cases, which may still trace it", 
   const live = at("draft");
   assert.match(
     live,
-    /journey `demo-alpha-US-02` is retired, so every case under it is deprecated/,
+    /journey `demo-alpha-US2` is retired, so every case under it is deprecated/,
   );
   assert.match(live, /traces `demo-alpha-US-02`, which is neither a journey/);
+});
+
+test("a change suite traces the feature set groups its delta folds to, accepted or not", () => {
+  const traced = (
+    anchor,
+    removed = "",
+    durable = "- Doing the thing\n- Kept group\n  - Kept leaf: stays\n  - Gone leaf: goes\n- Gone group\n- Emptied group\n  - Only: a\n",
+  ) => {
+    const root = mkdtempSync(join(tmpdir(), "partial-feature-set-"));
+    for (const [name, content] of Object.entries({
+      ...SPEC,
+      "openspec/specs/demo/alpha/spec.md": `## Feature set\n\n${durable}`,
+      [`${CHANGE}/spec.md`]: SPEC[`${CHANGE}/spec.md`].replace(
+        "- Doing the thing\n",
+        `- A new group\n\n## REMOVED Feature set\n\n- Gone group\n- Kept group\n  - Gone leaf: goes\n- Emptied group\n  - Only: a\n${removed}`,
+      ),
+      [`${CHANGE}/feature-tcs.md`]: SUITE([]).replace(
+        "* **Trace:** demo-alpha-US-01",
+        `* **Trace:** ${anchor}`,
+      ),
+    })) {
+      const file = join(root, name);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, content);
+    }
+    return run(root).stdout;
+  };
+  const refused =
+    /traces `[^`]+`, which is neither a journey nor a feature set group/;
+
+  for (const anchor of ["Doing the thing", "Kept group", "A new group"])
+    assert.doesNotMatch(traced(anchor), refused, anchor);
+  for (const anchor of ["Gone group", "Emptied group"])
+    assert.match(traced(anchor), refused, anchor);
+  const accepted = traced(
+    "Kept group",
+    "",
+    "- A new group\n- Doing the thing\n- Kept group\n  - Kept leaf: stays\n",
+  );
+  assert.doesNotMatch(accepted, refused);
+  assert.doesNotMatch(accepted, /does not fold/);
+  assert.match(
+    traced("Kept group", "- Gone group\n"),
+    /the feature set does not fold: demo\/alpha: REMOVED Feature set names a root group more than once/,
+  );
+});
+
+test("a change suite owes a section to the journeys it adds or modifies, not to its context journeys", () => {
+  const journey = (n) =>
+    [
+      `### demo-alpha-US-0${n}: Collector does thing ${n}`,
+      "",
+      "**As a** collector,",
+      `**I want** thing ${n},`,
+      "**so that** it is done.",
+      "",
+    ].join("\n");
+  const at = (heading) => {
+    const root = mkdtempSync(join(tmpdir(), "context-journey-"));
+    for (const [name, content] of Object.entries({
+      ...SPEC,
+      [`${CHANGE}/user-journeys.md`]: [
+        "## MODIFIED User journeys",
+        "",
+        journey(1),
+        `## ${heading}`,
+        "",
+        journey(2),
+      ].join("\n"),
+      [`${CHANGE}/feature-tcs.md`]: SUITE([]),
+    })) {
+      const file = join(root, name);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, content);
+    }
+    return run(root).stdout;
+  };
+
+  assert.doesNotMatch(at("Context user journeys"), /has no section/);
+  assert.match(
+    at("ADDED User journeys"),
+    /spec journey `demo-alpha-US-02` has no section in this suite/,
+  );
 });

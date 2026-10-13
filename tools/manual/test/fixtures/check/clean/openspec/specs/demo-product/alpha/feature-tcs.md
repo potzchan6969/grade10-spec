@@ -1,6 +1,6 @@
 # Alpha test cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 
 ## alpha-US-01: Someone does the thing
 

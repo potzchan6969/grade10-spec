@@ -4,12 +4,12 @@ spec: grade10-site/site/crawlable-pages
 order: 2
 ---
 
-A public surface is one a collector reaches with no session — today the
-marketing page, the store and the auction. Every one of them puts its title,
-description, headline and static copy in the first response. A collector on a
-slow connection, a crawler and a link preview all get something real without
-executing anything, and scripts then make that surface interactive rather than
-redrawing it from blank.
+A public surface is one a collector reaches with no session, on a build that
+carries it — [Carried Surfaces](/p/grade10-site/site/carried-surfaces). Every
+one of them puts its title, description, headline and static copy in the first
+response. A collector on a slow connection, a crawler and a link preview all
+get something real without executing anything, and scripts then make that
+surface interactive rather than redrawing it from blank.
 
 Each surface names itself. Its title and description belong to it and no other
 surface, and on an in-page navigation the document title becomes the
@@ -89,9 +89,10 @@ into checkable requirements.
 - **The front door names the organisation** — the site's own name, address
   and logo, in schema.org's words, so a search engine can attribute the site
   rather than guessing
-- **A card is a product with an offer** — the merchant's vendor as its
-  brand, one offer per variant priced and available exactly as the page
-  shows it, a struck-through price carried as the same saving the page draws
+- 🚧 **A card is a product with an offer** — the merchant's vendor as its
+  brand, one offer for the card's one item, priced and available exactly as
+  the page shows it, a struck-through price carried as the same saving the
+  page draws
 - **The trail above a surface is a breadcrumb** — the same steps the page
   draws, in the order it draws them, in the page's own language
 - **Never a claim past the page** — structured data restates only what the

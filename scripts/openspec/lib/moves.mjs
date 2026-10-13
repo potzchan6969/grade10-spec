@@ -15,6 +15,7 @@ import {
   behindOf,
   handOf,
   handOfArtifact,
+  taskTotals,
 } from "../../../tools/manual/src/api/stages.ts";
 import { addressOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
@@ -45,6 +46,13 @@ export async function readingOf(root) {
       behind: behindOf(change, artifactsOf(change)),
       landedBy: change.landedBy ?? {},
       suites: change.suites,
+      accepted: change.accepted === true,
+      // The groups an engineer has put their name on, in the plan's order:
+      // the first one to appear is the claim the channel hears about.
+      claims: (change.taskGroups ?? [])
+        .filter((group) => group.owner)
+        .map((group) => ({ num: group.num, owner: group.owner })),
+      tasks: taskTotals(change),
     });
   }
   return read;
@@ -107,6 +115,68 @@ export function landedBetween(base, head) {
     if (landed.length > 0) landings.push({ id, landed });
   }
   return landings;
+}
+
+/** The five moments the channel post reports, in the order a change meets
+ * them. Nothing else a push does reaches the post. */
+export const MILESTONES = [
+  "proposed",
+  "accepted",
+  "claimed",
+  "completed",
+  "archived",
+];
+
+/**
+ * The milestones each change crossed between the two readings, one entry per
+ * change and milestone, in `MILESTONES` order and then by id.
+ *
+ * - **proposed** — the change is in flight at the head and was nowhere at the
+ *   base: the product manager opened it
+ * - **accepted** — the change's acceptance record is valid at the head and
+ *   was not at the base: its requirements are published
+ * - **claimed** — a task group names an owner at the head and none did at the
+ *   base
+ * - **completed** — every task is checked at the head and was not at the base
+ * - **archived** — `archived` names it: the push moved it into the archive,
+ *   which the in-flight readings cannot see on their own
+ *
+ * A milestone crossed back — a reverted acceptance, an unchecked box — is not
+ * a milestone and says nothing; crossing it again is, and is told again.
+ */
+export function milestonesBetween(base, head, archived = []) {
+  const crossed = [];
+  const complete = (at) =>
+    at.tasks.total > 0 && at.tasks.done === at.tasks.total;
+  for (const [id, at] of head) {
+    const was = base.get(id);
+    if (!was) crossed.push({ id, milestone: "proposed", title: at.title });
+    if (at.accepted && !was?.accepted)
+      crossed.push({ id, milestone: "accepted", title: at.title });
+    if (at.claims.length > 0 && !(was?.claims.length > 0))
+      crossed.push({
+        id,
+        milestone: "claimed",
+        title: at.title,
+        claims: at.claims,
+      });
+    if (complete(at) && !(was && complete(was)))
+      crossed.push({
+        id,
+        milestone: "completed",
+        title: at.title,
+        tasks: at.tasks,
+      });
+  }
+  for (const id of archived) {
+    if (head.has(id)) continue;
+    crossed.push({ id, milestone: "archived", title: base.get(id)?.title });
+  }
+  return crossed.sort(
+    (left, right) =>
+      MILESTONES.indexOf(left.milestone) -
+        MILESTONES.indexOf(right.milestone) || left.id.localeCompare(right.id),
+  );
 }
 
 /** The change, linked: its thread where the record names one, the change page

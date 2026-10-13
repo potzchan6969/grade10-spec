@@ -34,9 +34,10 @@ import {
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
 
-const AUCTION_CARD_STORY = "?path=/story/my-auctions-auction-card--leading";
+const AUCTION_CARD_STORY =
+  "?path=/story/auction-bidding-blocks-auctionrecordrow--leading";
 const MY_AUCTIONS_PAGE_STORY =
-  "?path=/story/pages-auction-my-auctions-page--default";
+  "?path=/story/auction-bidding-screens-my-auctions--post-auction";
 
 const breadcrumbs = (
   <Breadcrumbs>
@@ -128,7 +129,7 @@ function MyAuctions({
 }
 
 const meta = {
-  title: "My Auctions/My Auctions",
+  title: "Auction/Bidding/Blocks/AuctionRecord",
   component: AuctionRecord,
   tags: ["autodocs"],
   parameters: {
@@ -599,7 +600,7 @@ export const AlertsPending: Story = {
         title: "1999 Base Set Charizard PSA 9",
         state: "leading",
         stateLabel: "Leading",
-        currentBid: "HK$12,800",
+        currentBid: "US$12,800",
         closesAt: "Closes 17 Sep 2026, 21:00 HKT",
         href: "#lot-charizard",
         emailAlertsPending: true,

@@ -6,12 +6,13 @@ import {
   CONSULTATION_SERVICE,
   GRADING_SERVICE,
   SERVICE_PICKER_COPY,
+  VAULTING_SERVICE,
 } from "./fixtures";
 
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Appointment Booking/BookingServicePicker",
+  title: "Appointment/Booking/Blocks/BookingServicePicker",
   component: BookingServicePicker,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -19,7 +20,7 @@ const meta = {
     copy: SERVICE_PICKER_COPY,
     services: {
       status: "ready",
-      data: [GRADING_SERVICE, CONSULTATION_SERVICE],
+      data: [GRADING_SERVICE, VAULTING_SERVICE, CONSULTATION_SERVICE],
     },
     onSelect: fn(),
   },
@@ -32,23 +33,45 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Grading Submission")).toBeVisible();
+    expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
+    expect(canvas.getByText("Store/Auction Listing")).toBeVisible();
     await userEvent.click(
-      canvas.getByRole("button", { name: /Collection consultation/ }),
+      canvas.getByRole("radio", { name: /Store\/Auction Listing/ }),
     );
     expect(args.onSelect).toHaveBeenCalledWith("svc_consultation");
   },
 };
 
 export const Selected: Story = {
-  args: { selectedId: "svc_consultation" },
+  args: { selectedId: "svc_grading" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: /Collection consultation/ }),
-    ).toHaveAttribute("aria-pressed", "true");
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    ).toBeChecked();
     expect(
-      canvas.getByRole("button", { name: /Card grading/ }),
-    ).toHaveAttribute("aria-pressed", "false");
+      canvas.getByRole("radio", { name: /Vault Drop-Off/ }),
+    ).not.toBeChecked();
+  },
+};
+
+/** A fresh pick reports once; picking the ticked service again reports again,
+ * so Back then Continue is never stuck. */
+export const Repick: Story = {
+  args: { selectedId: "svc_grading" },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Vault Drop-Off/ }),
+    );
+    expect(args.onSelect).toHaveBeenCalledTimes(1);
+    expect(args.onSelect).toHaveBeenLastCalledWith("svc_vault_drop_off");
+    await userEvent.click(
+      canvas.getByRole("radio", { name: /Grading Submission/ }),
+    );
+    expect(args.onSelect).toHaveBeenCalledTimes(2);
+    expect(args.onSelect).toHaveBeenLastCalledWith("svc_grading");
   },
 };
 

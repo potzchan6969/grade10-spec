@@ -75,8 +75,9 @@ metafield's `value`, a JSON list of product gids in the order stored.
 The spec governs the rule (world, then language, then type; newest first; not
 the card itself; not sold out). One function owns it:
 
-`relatedRail(card, pickIds, entries, limit)` in `services/catalog/related.ts`
-beside `browse.ts`, returning the rail's cards in final order:
+`relatedRail({ cardId, pickIds, entries, limit })` in
+`services/catalog/related.ts` beside `browse.ts`, `limit` defaulting to the
+rail's six (Q35), returning the rail's cards in final order:
 
 1. **The picks** — each id resolved to the mirror's entry, in the stored
    order; an id no entry answers is left out and counted
@@ -149,7 +150,7 @@ in `@grade10/ui`, with the formatter the listing already uses —
 - **A pick's tile and the similar set** — from the mirror's copy: within the
   mirror's own window on a report, 5 minutes at worst on the re-read, and the
   page's minute on top; a pick the mirror has not heard of yet is left out
-  until it has
+  until it has ([Q59](decisions.md#decisions))
 
 ### The rail has one off switch, in the brand's store config
 
@@ -223,10 +224,11 @@ contract's decoding default, which goes with 3.2's deploy (Q40).
 ## Risks / Trade-offs
 
 - [The complementary list's namespace and key on the Storefront API, and
-  whether the shop's private token exposes it] → confirmed against the dev
-  shop's private token before `tasks.md` lands; where the standard field does
-  not read, the fallback is the rejected custom metafield of handles, built in
-  its place
+  whether the shop's private token exposes it] → settled by
+  [Q45](decisions.md#decisions): the Search & Discovery app's
+  `shopify--discovery--product_recommendation.complementary_products` field,
+  read as stored; a token that cannot read it answers `picks_absent`, which
+  alerts
 - [A shop that never installed Search & Discovery] → every product reads
   `picks_absent`; the similar rule fills the rail; the run sheet checks the
   field on the staging shop, and the alert catches a production shop losing it

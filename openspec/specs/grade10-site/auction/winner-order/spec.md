@@ -1,6 +1,7 @@
 # grade10-site/auction/winner-order Specification
 
 ## Purpose
+
 What a winner is sent after a lot closes and what they do with it: one order
 per lot, a delivery address, payment method and billing address they choose, an
 operator's invoice priced for both, payment by card or by a bank transfer they
@@ -27,6 +28,10 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
   - Amendment and recalculation: a winner corrects the destination and sees what it costs before paying
   - Locking at payment: the order snapshot stops moving once money has changed hands
+  - Missed deadline closes the form: after the address deadline, counted from the lot's actual close and judged by when Grade10 receives the write, the winner cannot put an address on the order; the account address book stays open
+  - Reopened by an operator: the winner has no way to reopen the form; an operator reopens it or records the address, and the winner then confirms as before
+  - Retired at send: sending the invoice retires the address deadline
+  - One-time address kept: an unsaved one-time delivery or billing address stays on the order after the winner leaves and returns, until they confirm or the setup deadline passes
 - Billing address at setup
   - Same as delivery address is selected by default
   - A separate saved or one-time address uses the existing address fields
@@ -42,6 +47,8 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Complete A–Z catalogue: delivery Add Address lists every country and region, not a short designated set
   - Searchable filter: typing in Country/Region narrows the list to matching names
   - Field label Country/Region: the picker reads Country/Region
+  - Billing uses the same list: billing Add Address lists the same complete A-Z catalogue with the same search as delivery
+  - Names in the account's language: Country/Region names read and sort in the language of the account, as the rest of the site does
 - Address snapshots
   - The confirmed billing address is locked on the order
   - Later account-address changes do not rewrite the order
@@ -53,17 +60,25 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Fee range at the choice: fixed text Grade10 sets, with no amount for bank transfer
   - Offered by currency: bank transfer only where bank details are set up
   - Locked on confirmation: once the winner confirms, they change neither the address nor the method; an operator edits them before send and reissues after
+  - Offered where Grade10 can take it: card only in a currency with a card fee rule in Payment Settings; bank transfer only in a currency whose bank details Grade10 holds - a sample HKD account outside production, and in production the account Finance confirms
+  - Card not yet available: in a currency with no card fee rule, card reads that it is not yet available there and cannot be chosen
+  - No method in the currency: with neither method offered, the winner reads that payment is not yet available there, with Contact Us, and cannot confirm; the setup deadline keeps running
+  - Fee wording at the choice: card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`
 - Invoice
   - Fee priced by method: Payment Processing Fee is the card gross-up or the operator's bank transfer fee, never dropped
   - Identifier formats: an invoice ID and a bank reference built from the listing code, the month and the invoice count; a reissue takes new ones, and an old one still finds the order
   - Listing code: `L` and five characters, fixed for the listing's life, never on the public listing page
   - Internal audit number: one gapless count across invoices and receipts, never shown to the winner
-  - Replaced invoice: an invoice a reissue replaced says so and names its replacement
+  - Payment reference: the listing's own code, carried forward as the order's one collector-facing reference once a winner exists; there is no separate public order ID, and it never appears on the public listing page — `grade10-admin/auction/listing` allocates the code, this capability only carries it forward
+  - Invoice ID: the payment reference plus a 2-digit issuance sequence; a reissue takes the next sequence and an old invoice ID still finds the order
+  - Replacement invoice: a reissue's new invoice says `Replaces invoice {id}` and names the prior invoice it replaces
 - Bank transfer
-  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and copy controls for account number, amount due, and transfer reference
-  - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
-  - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
+  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the payment reference to quote; the bank-rail presentation is governed by `add-winner-how-to-pay-rails`
+  - Payment proof: one upload of 1 to 3 files (1 required) in Submit Payment Proof, behind a confirm step; proof fields and upload only (no amount or reference chrome)
+  - Payment Verifying: the deadline stops, Submit Payment Proof, View Bank Details and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
+  - View Bank Details: Order summary secondary control opens a dialog with amount due (no Copy) and three pill tabs defaulting to FPS; each tab shows that rail’s fields then payment reference as a detail row (no Copy) with memo warning — FPS (ID, account name, QR), HK Local (bank name, bank code, branch code, full account number including bank and branch code), SWIFT (beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number or IBAN, then payment reference, then OUR charges note)
+  - Two entry points: Submit Payment Proof opens the proof dialog; View Bank Details opens the rails dialog; both hide when Pay is hidden
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
   - Receipt payment breakdown: each receipt identifies the invoice total, prior payments, the current payment and remaining amount
@@ -71,28 +86,42 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
+  - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
+  - Shipping tracker: the tracking number is the link to the carrier tracking page when the operator recorded a tracker link, plain text otherwise, with no separate carrier name
+  - Delivery proof: what the carrier recorded on handover, given what these lots are worth
+  - Receipt identifier: a receipt for a finalized payment uses the invoice payload plus its unpadded per-invoice sequence; historic receipt IDs remain unchanged
+  - Receipt: it itemises Tax when added
+  - Cancelled order notice: explains the terminal date, retained lot and winning bid
+  - Contact Us: gives the winner the only next action, with the `order cancelled` ready email
+  - Payment receipts: lists every partial payment on the existing receipt row
 - Settlement
   - Single fresh charge: one transaction for the final amount, retryable on failure
+  - Operator-collected balance: keeps a partially paid invoice out of winner self-service
 - Payment deadline
   - Seven days from close: a fixed end to the winner's obligation, unmoved by anything they do to the invoice
-- Records the winner keeps
-  - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
-  - Shipping tracker: where the lot is once it has left
-  - Delivery proof: what the carrier recorded on handover, given what these lots are worth
+  - Closed after partial payment: removes the self-service deadline once collection starts
 - Contact Us on locked orders
   - Copy-first ready email: Contact Us opens a dialog with To, Subject and Message; Copy Message is first, Open Mail App is second
   - Subject names invoice or lot: the order's current invoice id when one exists; lot title when setup is overdue and no invoice has been issued
   - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
-  - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question; Copy Message stays footer-only
+  - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
-- Order page
-  - Sections: Order Information, Collection Method, Order Status timeline, Lots.
-  - By status: address form, invoice with Pay Now, or read-only detail.
-- Delivery address form
-  - Address form: required and optional fields, errors on empty required fields.
+- Order-progress tracking
+  - Tracking number: while fulfilment is `fulfilled` with a tracking number, Order Progress makes the number an external link to the carrier tracking page when the operator recorded a tracker link, and plain text otherwise; no Track shipment control or carrier name appears in Order Progress; the link remains after delivery is confirmed
+- Settlement progress
+  - Five presentation steps: Address → Invoice → Payment → Shipping → Completed
+  - Preparing Shipment and Shipped share the Shipping step as **current** (progress); Preparing Shipment subtext reads Preparing to ship
+  - Status badges: Preparing Shipment and Shipped use Badge `default` (muted fill) on Winner Order, matching My Auctions
+- Tax on a winner's order
+  - Before send: Tax reads TBD with an info tip
+  - After send: Tax shows the operator's amount or is absent when none
+  - Itemisation: the invoice and receipt carry Tax between Insurance and Subtotal
+  - Card fee base: Tax is part of the Subtotal the payment fee grosses up
 - Card payment
-  - Unfinished session: says so and leaves the invoice payable.
-  - Confirming: a completed session reads Confirming payment until paid.
+  - No start once closed: no card payment starts on an expired or checked invoice, and one that completes anyway is recorded
+- A lot an internal bidder won
+  - Internal bidder order: a close with an internal bidder leading opens its order with the internal bidder's billing address and sends no letter
+
 ## Requirements
 
 ### Requirement: Invoice fields
@@ -104,8 +133,8 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
-| Invoice ID | Given at send, per "Every invoice carries an invoice ID and a bank reference". Finds the order, including after a reissue |
-| Bank reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
+| Invoice ID | Given at send, per "Every invoice carries an invoice ID and the order's payment reference". Finds the order, including after a reissue |
+| Payment reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
@@ -113,38 +142,44 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
-| Tax | An optional line reserved for the separate tax change; no rate or regime is defined here |
+| Tax | Optional. Added by an operator for the order, and greater than zero when added. Grade10 defines no rate, jurisdiction or formal tax receipt |
 | Subtotal | The sum of the components above |
 | Payment processing fee | Priced by the payment method, below. On every invoice, and never dropped |
 | Order total | The total payable — the subtotal plus the payment processing fee |
 | Sent at | When the operator sent the invoice. Stored in UTC |
-| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC, displayed in the winner's own zone |
-| Replaced by | On a replaced invoice only: the invoice that replaced it |
+| Payment deadline | 7 calendar days from Sent at, stopped while proof is checked. Stored in UTC; shown in the viewer's local zone on Winner Order and in `Asia/Hong_Kong` as `GMT+8` on the invoice PDF |
+| Replaces invoice | On a replacement invoice only: the prior invoice ID named by `Replaces invoice {id}` |
 | Invoice status | Per `grade10-site/auction/order-status`. A replaced invoice holds none |
 
 The payment processing fee SHALL be priced by the invoice's payment method:
 
 | Method | Payment processing fee |
 | --- | --- |
-| Card | The amount that leaves the subtotal whole after the payment provider takes a fixed fee and a percentage of the whole charge, computed below |
+| Card | The amount that leaves the subtotal whole after the card rule's fixed amount and percentage of the whole charge, computed below |
 | Bank transfer | The amount the operator entered on the quote or the reissue. Zero or more |
 
-For card, Grade10 SHALL read both provider fees for the invoice's currency at
-the moment the invoice is sent, SHALL compute the order total as the subtotal
-plus the fixed fee divided by one less the percentage, SHALL round that total
+For card, Grade10 SHALL take the card rule for the invoice's currency from
+Payment Settings, per `grade10-admin/auction/payment-settings`, at the moment
+the invoice is sent, SHALL compute the order total as the subtotal plus the
+rule's fixed amount divided by one less its percentage, SHALL round that total
 up to the next minor unit, and SHALL take the fee as the difference between
-the order total and the subtotal.
+the order total and the subtotal. Grade10 SHALL NOT read the payment
+provider's fees.
 
-The fee SHALL be fixed on the invoice once sent. A later change in the
-provider's fees SHALL NOT move it; only a reissue SHALL price it again. No
-settlement SHALL drop or change it.
+The fee SHALL be fixed on the invoice once sent. A later change to the card
+rule SHALL NOT move it; only a reissue SHALL price it again. No settlement
+SHALL drop or change it.
 
 Wherever the winner reads the invoice's lines — the order, the receipt, and
 any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
-**Free**, SHALL show a Payment Processing Fee of zero as **Free**, and SHALL
-leave the Insurance line out when the operator added none. Insurance and
-Payment Processing Fee are separate lines: omitting Insurance does not replace
-it with the fee.
+**Free**, SHALL show a Payment Processing Fee of zero as **Free**, SHALL
+leave the Insurance line out when the operator added none, and SHALL leave the
+Tax line out when the operator added none. Insurance and Payment Processing
+Fee are separate lines: omitting Insurance does not replace it with the fee.
+
+Where the Tax line is shown, Winner Order's Order Summary SHALL place it
+between Insurance and Payment Processing Fee, and the invoice and receipt PDFs
+SHALL place it between Insurance and Subtotal.
 
 On Winner Order's order summary, Grade10 SHALL offer brief info tooltips beside
 **Buyer’s Premium**, **Shipping & Handling**, **Insurance**, and **Payment Processing Fee**
@@ -159,15 +194,15 @@ SHALL still carry Subtotal.
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-6nv rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-6nv rev=2 -->
 #### Scenario: winner-order-SC-04 - An estimated total is marked as one
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent a bank transfer invoice with a winning bid of
-  250000, a buyer's premium of 50000, shipping of 8000, insurance of 4000 and
+  250000, a buyer's premium of 50000, shipping of 8000, insurance of 4000, tax of 6000 and
   a payment processing fee of 0 minor units in HKD
 - **WHEN** the winner reads the invoice
-- **THEN** the order total is 312000 minor units in HKD
+- **THEN** the order total is 318000 minor units in HKD
 - **AND** no component is marked as an estimate
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-33a rev=1 -->
@@ -181,12 +216,12 @@ an invoice amount before an operator has sent it.
 - **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-awt rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-awt rev=2 -->
 #### Scenario: winner-order-SC-62 - The fee grosses the subtotal up
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent a card invoice whose subtotal is 312000 minor units in HKD
-- **AND** the payment provider's fees for HKD at that moment were 235 minor units and 3.4 per cent
+- **AND** the HKD card rule in Payment Settings when it was sent was 3.4 per cent and 235 minor units
 - **WHEN** the winner reads the invoice
 - **THEN** the payment processing fee is 11225 minor units in HKD
 - **AND** the order total is 323225 minor units in HKD
@@ -252,6 +287,34 @@ historical: a manually settled order keeps its payment processing fee.
 - **WHEN** the winner opens the order
 - **THEN** the Payment Processing Fee line is shown and reads Free
 - **AND** the order total is 312000 minor units in HKD
+
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ppq rev=1 -->
+#### Scenario: winner-order-SC-215 - An invoice with no tax shows no Tax line
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice without adding Tax
+- **WHEN** the winner reads the invoice, receipt, or Order Summary
+- **THEN** no Tax line is shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-deu rev=1 -->
+#### Scenario: winner-order-SC-216 - Tax is included in the card fee base
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an invoice whose winning bid, buyer's premium, shipping, insurance,
+  and Tax total 318000 minor units in HKD
+- **WHEN** Grade10 prices its card payment processing fee
+- **THEN** the Subtotal used for the gross-up is 318000 minor units in HKD
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-4z7 rev=1 -->
+#### Scenario: winner-order-SC-214 - Tax is itemised on the invoice and receipt
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** a paid auction order whose invoice includes Tax of 6000 minor units
+  in HKD
+- **WHEN** the winner reads the invoice and receipt
+- **THEN** each shows Tax of 6000 minor units in HKD between Insurance and
+  Subtotal
 
 ### Requirement: Insurance info tooltip
 
@@ -572,79 +635,6 @@ selects an address. Grade10 SHALL pre-select no payment method.
 - **THEN** that auction order carries the amended address
 - **AND** their saved address book is unchanged
 
-### Requirement: The bid-time hold is released, never captured
-
-When a bid-time authorization exists, Grade10 SHALL release it on every bidder
-of a closing lot, winner and losing bidders alike, and SHALL NOT leave a losing
-bidder's authorization to expire on its own.
-
-Grade10 SHALL NOT capture or increment a bid-time authorization as any part
-of settlement. The winner SHALL pay by the method the invoice was sent for:
-
-| Invoice method | How the winner pays |
-| --- | --- |
-| Card | A single new card transaction for the order total, against a stored card or another card they enter |
-| Bank transfer | A transfer they make themselves, then proof uploaded per "The winner uploads payment proof once" |
-
-Cash and every other method are recorded by an operator alone, per
-`grade10-admin/auction/post-sale`.
-
-Releasing an authorization that has already expired SHALL succeed as a
-no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
-
-A refused or failed card payment SHALL NOT void the invoice. While a card
-invoice's status is `pending`, it SHALL remain payable by card and the winner
-SHALL be able to retry with the same or a different card. The primary pay
-control SHALL read **Pay with Card**. When the invoice status is `expired` or
-`payment_verifying`, Grade10 SHALL NOT offer or accept winner card payment.
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-aky rev=1 -->
-#### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** a winner holding an open bid-time authorization on the closing lot
-- **WHEN** the lot closes
-- **THEN** Grade10 releases that authorization at close without capturing it
-- **AND** after an operator later sends a card invoice, the winner's payment is a
-  single new transaction for the order total
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-tg2 rev=1 -->
-#### Scenario: winner-order-SC-13 - An expired hold releases as a no-op
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** a winner whose bid-time authorization expired before the lot closed
-- **WHEN** the lot closes
-- **THEN** Grade10 records the release as successful
-- **AND** creates the auction order as normal
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-ai3 rev=1 -->
-#### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
-**Serves:** winner-order-US-01 - the lot close that opens the winner's order also frees every losing hold
-
-- **GIVEN** a lot closing with one winner and three losing bidders holding
-  open authorizations
-- **WHEN** the lot closes
-- **THEN** Grade10 releases all three losing authorizations
-- **AND** does not wait for them to expire
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-0ex rev=1 -->
-#### Scenario: winner-order-SC-15 - A declined payment leaves the invoice payable
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** an unpaid card invoice inside its payment deadline
-- **WHEN** the winner's payment is declined
-- **THEN** the invoice status remains `pending`
-- **AND** the winner can retry with the same or a different card
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-rbe rev=1 -->
-#### Scenario: winner-order-SC-35 - The winner is offered card payment only
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** an auction order whose invoice was sent for card and is `pending`
-- **WHEN** the winner opens the order to pay
-- **THEN** Grade10 offers Pay with Card
-- **AND** shows no bank transfer details, no proof upload, and no cash or other method
-
 ### Requirement: Records the winner keeps
 
 Each auction order SHALL carry these records, retrievable by the winner for
@@ -655,16 +645,20 @@ account SHALL NOT shorten the 7 years.
 
 | Record | When | Contents |
 | --- | --- | --- |
-| Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
-| Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
-| Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
+| Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, Tax when added, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
+| Shipping tracker | Fulfilment status is `fulfilled` | The tracking number, as the link to the carrier tracking page when the operator recorded a tracker link, plain text otherwise. No separate carrier name |
+| Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided - handover timestamp, signature, proof-of-delivery image |
 
-Every receipt SHALL carry a receipt ID, unique across all receipts:
-`REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]`, for example
-`REC-202609-LK7P2Q-01-P1`. `[LISTING_ID]` and `[SEQ]` are the paid invoice's.
-`[YYYYMM]` is the year and month the payment was confirmed, in Hong Kong time.
-`[INDEX]` counts the payments on the invoice; an invoice takes one payment, so
-every receipt ends `-P1`.
+Each receipt issued after this change SHALL carry a receipt ID, unique across
+all such receipts: `RC-[CODE][INVOICE_SEQ]P[RECEIPT_SEQ]`, for example
+`RC-LK42301P1`. `[CODE]` is the paid invoice's unchanged payment reference,
+`[INVOICE_SEQ]` is that invoice's sequence without the `IN-` prefix, and
+`[RECEIPT_SEQ]` counts finalized receipt-bearing payments on that invoice,
+starting at `1` without padding. Grade10 SHALL allocate the next sequence
+atomically with the finalized full or partial payment. A refund, reversal or
+void SHALL allocate no receipt ID or rewrite one already issued. Receipt IDs
+issued before this change, including `REC-...` IDs, remain unchanged. Formal
+tax-receipt content remains outside this requirement.
 
 Every receipt SHALL show this breakdown:
 
@@ -698,46 +692,42 @@ The receipt SHALL name the payment method:
 | Bank transfer, proof confirmed by an operator | Bank transfer |
 | Recorded by an operator | Bank transfer, cash, or the description the operator gave for another method, with the external reference where one was recorded |
 
-A receipt for a confirmed bank transfer SHALL NOT be marked as manually
-settled. A receipt for a manually settled order SHALL be marked as manually settled,
-SHALL be visually distinguishable from a card-settled receipt, and SHALL
-record the amount settled, the payment method, the external reference, and a
-pointer to any invoice it supersedes. No proof file, the winner's or an
-operator's, SHALL appear on the receipt.
+A receipt SHALL record the amount settled, the payment method, and the external
+reference when one was recorded. No proof file, the winner's or an operator's,
+SHALL appear on the receipt. It SHALL carry no settlement-origin badge.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-49p rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-49p rev=2 -->
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order paid at an order total of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
 - **THEN** the receipt shows the winning bid, buyer's premium, Shipping &
-  Handling, insurance, any tax amount supplied by the separate tax capability,
-  the subtotal, the payment processing fee, and the order total
+  Handling, insurance, Tax when added, the subtotal, the payment processing
+  fee, and the order total
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-9qq rev=1 -->
-#### Scenario: winner-order-SC-19 - A manually settled receipt says so
+#### Scenario: winner-order-SC-19 - A manually settled receipt records payment facts
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order an operator settled by bank transfer with an
   external reference, after reissuing and replacing an earlier invoice
 - **WHEN** the winner opens the receipt
-- **THEN** it is marked as manually settled and is distinguishable from a
-  card-settled receipt
-- **AND** it records the amount settled, which includes the payment processing
-  fee, bank transfer as the method, the external reference, and the invoice it
-  supersedes
+- **THEN** it records the amount settled, which includes the payment processing
+  fee, bank transfer as the method, and the external reference
+- **AND** it carries no settlement-origin badge
 - **AND** it shows no proof file
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-0wc rev=3 -->
 #### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose fulfilment status has just become
   `fulfilled` with a tracking number attached
 - **WHEN** the winner opens the order
-- **THEN** it shows the carrier name, the tracking number, and a link to the
-  carrier
+- **THEN** it shows the tracking number as the link to the carrier tracking
+  page when the operator recorded a tracker link, and as plain text otherwise
+- **AND** it shows no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-8xb rev=1 -->
 #### Scenario: winner-order-SC-21 - Delivery proof records what the carrier provided
@@ -757,13 +747,14 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the winner opens the receipt
 - **THEN** the payment method reads as a Visa card ending 4242
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-f2w rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-f2w rev=2 -->
 #### Scenario: winner-order-SC-112 - Every receipt carries a receipt ID
 **Serves:** Records the winner keeps - receipt ID and breakdown
 
-- **GIVEN** one order paid by card, one confirmed from bank transfer proof, and one settled manually
+- **GIVEN** one post-change order paid by card, one confirmed from bank transfer
+  proof, and one settled manually
 - **WHEN** the winner opens each receipt
-- **THEN** each carries a receipt ID ending `-P1`
+- **THEN** each carries a receipt ID in the `RC-[CODE][INVOICE_SEQ]P1` form
 - **AND** each names its invoice ID
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-vxf rev=1 -->
@@ -776,13 +767,14 @@ operator's, SHALL appear on the receipt.
 - **AND** it is not marked as manually settled
 - **AND** it shows no proof file and no file name
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-kiz rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-kiz rev=2 -->
 #### Scenario: winner-order-SC-131 - A receipt ID takes the paid invoice and the payment month
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
-- **GIVEN** an order whose bank transfer invoice `INV-202609-LK7P2Q-02` has an order total of 317000 minor units in HKD
-- **WHEN** an operator confirms its proof at 2026-09-30T16:30:00Z, which is 1 October in Hong Kong, and the winner opens the receipt
-- **THEN** the receipt ID is `REC-202610-LK7P2Q-02-P1`
+- **GIVEN** an order whose bank transfer invoice is `IN-LK7P2Q02` and has an
+  order total of 317000 minor units in HKD
+- **WHEN** an operator confirms its first payment proof and the winner opens the receipt
+- **THEN** the receipt ID is `RC-LK7P2Q02P1`
 - **AND** it shows Original Invoice Total 317000, Previous Payments 0, Current Payment Received 317000 and Remaining Balance Due 0, in minor units of HKD
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-e8v rev=1 -->
@@ -793,13 +785,13 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the winner opens both receipts
 - **THEN** the two receipt IDs differ
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-pvg rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-pvg rev=2 -->
 #### Scenario: winner-order-SC-135 - A repeated confirmation keeps one receipt ID
 **Serves:** Records the winner keeps - receipt ID and breakdown
 
-- **GIVEN** an auction order whose receipt ID is `REC-202609-LK7P2Q-01-P1`
+- **GIVEN** an auction order whose receipt ID is `RC-LK7P2Q01P1`
 - **WHEN** the payment confirmation is delivered again
-- **THEN** the receipt ID is still `REC-202609-LK7P2Q-01-P1`
+- **THEN** the receipt ID is still `RC-LK7P2Q01P1`
 - **AND** no other receipt ID and no other internal audit number is issued
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-xqw rev=1 -->
@@ -809,6 +801,42 @@ operator's, SHALL appear on the receipt.
 - **GIVEN** a paid order with a replaced invoice, its current invoice and a receipt, whose winner deleted their account a year after payment
 - **WHEN** Grade10 retrieves the order's documents 6 years after payment
 - **THEN** the replaced invoice PDF, the current invoice PDF and the receipt PDF are all returned
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-r8w rev=1 -->
+#### Scenario: winner-order-SC-247 - A finalized first payment receives the new receipt ID
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** invoice `IN-LK42301` for an order whose payment reference is `LK423`
+- **AND** it has no finalized receipt-bearing payment
+- **WHEN** its first full or partial payment finalizes
+- **THEN** its receipt ID is `RC-LK42301P1`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-k31 rev=1 -->
+#### Scenario: winner-order-SC-222 - Each finalized payment advances only its invoice's receipt sequence
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** invoice `IN-LK42301` has receipts through `RC-LK42301P9`
+- **WHEN** another partial payment for it finalizes
+- **THEN** the receipt ID is `RC-LK42301P10`
+- **AND** a finalized payment on invoice `IN-LK42302` starts at `RC-LK42302P1`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-4mt rev=1 -->
+#### Scenario: winner-order-SC-223 - Historical and non-payment events do not receive the new receipt ID
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** a historical receipt ID is `REC-202609-LK7P2Q-01-P1`
+- **WHEN** the receipt is read after this change is delivered
+- **THEN** its ID remains unchanged
+- **AND** a refund, reversal or void creates no receipt ID
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-6pw rev=1 -->
+#### Scenario: winner-order-SC-246 - Nothing identifying the lot's order is shown before a winner exists
+**Serves:** winner-order-US-21 - Winner quotes their order
+
+- **GIVEN** a lot that has not yet closed, and the same lot just after it closes with no winner
+- **WHEN** anyone reads the lot outside a winning order
+- **THEN** no payment reference, invoice ID, or receipt ID is shown for it
+- **AND** the lot is identified only by its title
 
 ### Requirement: A lot close opens an order that waits for the winner's address
 
@@ -826,6 +854,19 @@ When the winner confirms a delivery address, the order SHALL become ready for
 an operator to quote, per `grade10-admin/auction/post-sale`. From then on the
 winner SHALL NOT change the address, per "The delivery address locks when the
 invoice is sent".
+
+When a lot's leading bid at its close is the house's, under
+`grade10-site/auction/auction`, the winner is the internal bidder of
+`grade10-admin/auction/internal-bid` that the lot's internal bid names.
+Grade10 SHALL create its one auction order in step 1, flagged internal, and
+SHALL, in place of step 2 and the winner's setup:
+
+- Take the internal bidder's billing address as it stands at the close as
+  the order's delivery address and billing address, and bank transfer as its
+  payment method, all confirmed at the close, so the order is ready for an
+  operator to quote and never waits on an address deadline.
+- Send no letter of `grade10-site/auction/notifications-order` for the order,
+  at the close or after it, to the internal bidder or to anyone.
 
 Order creation and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
@@ -858,6 +899,20 @@ close delivered more than once SHALL produce one auction order.
 - **WHEN** the winner confirms a delivery address
 - **THEN** the order's derived status is Preparing Invoice
 - **AND** the winner is offered no way to pay yet
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-los rev=2 -->
+#### Scenario: winner-order-SC-277 - A lot an internal bidder wins opens its order with the internal bidder's address
+**Serves:** A lot an internal bidder won - the close finds the house on top and opens the internal bidder's order
+
+- **GIVEN** an `HKD` lot where the house leads at 31000 HKD minor units over
+  collector A, its internal bid naming an internal bidder whose billing
+  address is in Hong Kong
+- **WHEN** the lot closes
+- **THEN** Grade10 creates one auction order for the internal bidder, flagged
+  internal, with invoice status `not_issued`
+- **AND** the order holds that billing address as its delivery and billing
+  address, with bank transfer, and derives as Preparing Invoice
+- **AND** issues no invoice and sends no won, address or other letter for it
 
 ### Requirement: The delivery address locks when the invoice is sent
 
@@ -933,9 +988,9 @@ shipping difference discovered after payment.
 ### Requirement: The payment deadline is fixed when the invoice is sent
 
 The payment deadline SHALL be 7 calendar days from the moment an operator
-sends the invoice. Grade10 SHALL fix it at send, store it in UTC, and display
-it in the winner's own timezone on both the invoice and the auction order, per
-`shared/dates-and-times`.
+sends the invoice. Grade10 SHALL fix it at send and store it in UTC. Winner
+Order SHALL display it in the viewer's local zone. The invoice PDF SHALL
+display it in `Asia/Hong_Kong`, labelled `GMT+8`, per `shared/dates-and-times`.
 
 Nothing the winner does SHALL move the deadline — not a failed payment, and
 not leaving the order untouched — except uploading payment proof, which stops
@@ -950,10 +1005,19 @@ invoice status SHALL never become `expired`. The winner-facing address confirm
 window is separate and does not write `expired` on the invoice.
 
 When the deadline passes with the invoice `pending`, Grade10 SHALL set the
-invoice status to `expired`, per `grade10-site/auction/order-status`. The
-order reads Payment Overdue. The winner SHALL NOT be offered card payment or
-proof upload while the invoice is `expired`; the order SHALL show Contact Us in
-its overdue alert. An operator SHALL restore self-service payment only by
+invoice status to `expired`, per `grade10-site/auction/order-status`, unless a
+card payment Grade10 received before the deadline is still awaiting its
+outcome. While that outcome is awaited the invoice stays `pending`, the order
+reads Pending Payment and Winner Order offers no Pay Now, per
+`grade10-admin/auction/post-sale`. A card session that ends unpaid after the
+deadline - declined, timed out or abandoned - SHALL count as a failed outcome:
+Grade10 SHALL write `expired` when the session ends, and the invoice SHALL NOT
+stay `pending` past it. That replaces the timed-out and abandoned outcomes of
+"An unfinished card payment leaves the invoice payable", which hold only
+before the deadline. Otherwise the order reads Payment Overdue. The winner
+SHALL NOT be offered card payment or proof upload while the invoice is
+`expired`, and Pay Now stays closed; the order SHALL show Contact Us in its
+overdue alert. An operator SHALL restore self-service payment only by
 reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
 `grade10-admin/auction/post-sale`.
 
@@ -963,9 +1027,11 @@ reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
 
 - **GIVEN** an auction order whose invoice an operator sent at
   2026-09-12T09:00:00Z
-- **WHEN** the winner reads the invoice
+- **AND** the winner opens Winner Order in a browser set to `America/New_York`
+- **WHEN** the winner reads the order and its invoice PDF
 - **THEN** the payment deadline is 2026-09-19T09:00:00Z
-- **AND** it is displayed in the winner's own timezone as an absolute datetime
+- **AND** Winner Order shows it as an absolute datetime at 05:00 `EDT`
+- **AND** the invoice PDF shows it at 17:00 `GMT+8`
 - **AND** no countdown is shown
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-9ea rev=1 -->
@@ -1031,7 +1097,7 @@ follows up per `grade10-admin/auction/post-sale`.
 - **WHEN** the winner opens Winner Order
 - **THEN** Confirm delivery address is offered
 - **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
-  displayed in the winner's zone as an absolute datetime
+  displayed in the viewer's local zone as an absolute datetime
 - **AND** no countdown is shown
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-36a rev=1 -->
@@ -1076,7 +1142,7 @@ winner SHALL not be offered a way to reopen either window.
 ### Requirement: Winner Order shows five progress steps
 
 Winner Order SHALL present settlement progress as five steps in this order:
-**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
+**Address**, **Invoice**, **Payment**, **Shipping**, **Completed**. The steps
 SHALL be presentation only and SHALL NOT replace the derived order status
 vocabulary in `grade10-site/auction/order-status`.
 
@@ -1085,7 +1151,7 @@ vocabulary in `grade10-site/auction/order-status`.
 | Address | Awaiting Setup or Setup Overdue |
 | Invoice | Preparing Invoice |
 | Payment | Pending Payment (invoice `pending`), Payment Overdue (invoice `expired`), or Payment Verifying |
-| Shipped | Processing or Shipped |
+| Shipping | Preparing Shipment or Shipped |
 | Completed | Delivered |
 
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
@@ -1095,7 +1161,10 @@ Step subtext SHALL use day-only dates in the winner's zone. While Address is
 current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
 Payment is current and the invoice is `pending`, subtext SHALL read
 `Pay by {date}`. While the invoice is `payment_verifying`, Payment subtext
-SHALL name no date. Description copy SHALL wrap so five columns do not
+SHALL name no date. While Shipping is current and the derived status is
+**Preparing Shipment**, Shipping subtext SHALL read **Preparing to ship**.
+While Shipping is current and the derived status is **Shipped**, Shipping
+subtext SHALL use the day-only ship date when one is known. Description copy SHALL wrap so five columns do not
 overflow.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-11o rev=1 -->
@@ -1111,10 +1180,29 @@ overflow.
 #### Scenario: winner-order-SC-55 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
-- **GIVEN** an auction order whose derived status is Processing
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment and Shipping vocabulary.
+
+- **GIVEN** an auction order whose derived status is Preparing Shipment
 - **WHEN** the winner opens Winner Order
-- **THEN** the progress stepper marks Shipped as the current step
-- **AND** does not invent a Processing step label
+- **THEN** the progress stepper marks Shipping as the current (progress) step
+- **AND** Shipping subtext reads Preparing to ship
+- **AND** the title badge uses Badge `default`
+- **AND** does not invent a Preparing Shipment step label
+- **AND** does not leave Shipping incomplete or upcoming while Payment is complete
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-lk0 rev=2 -->
+#### Scenario: winner-order-SC-253 - A shipped order keeps Shipping current
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose derived status is Shipped, with a day-only
+  ship date and a tracking number when one is known
+- **WHEN** the winner opens Winner Order
+- **THEN** the title badge uses Badge `default`
+- **AND** Shipping is the current progress step with the day-only ship date
+- **AND** a tracking number is the external carrier link when the operator
+  recorded a tracker link, and plain text otherwise
+- **AND** Order Progress adds no separate Track shipment control and no separate carrier name
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fm0 rev=1 -->
 #### Scenario: winner-order-SC-56 - Cancelled hides the stepper
@@ -1180,7 +1268,7 @@ sent for.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-qpe rev=1 -->
 #### Scenario: winner-order-SC-109 - A reissued order offers the current invoice
-**Serves:** Invoice - a replaced invoice says so and names its replacement
+**Serves:** Invoice - a replacement invoice names the invoice it replaces
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
 - **WHEN** the winner opens the invoice PDF from Winner Order
@@ -1332,20 +1420,46 @@ an auction order, Winner Order SHALL also ask how they will pay:
 the chosen method on the order.
 
 **Fee range at the choice** - The fee range for each method SHALL be fixed
-text Grade10 sets; its wording is TBC. The bank transfer text SHALL name no
-amount, since an operator sets that fee on the invoice.
+text Grade10 sets:
 
-**Offered by currency** - Grade10 SHALL offer bank transfer only in a currency
-with bank details set up.
-
-| Currency | Methods offered |
+| Method | Reads |
 | --- | --- |
-| HKD | Card, bank transfer |
-| USD | Card |
-| JPY | Card |
+| Card | `Card fee about 3.4% + a fixed amount` |
+| Bank transfer | `Bank fee set on your invoice` |
+
+The bank transfer text SHALL name no amount, since an operator sets that fee
+on the invoice.
+
+**Offered where Grade10 can take it** - Grade10 SHALL offer each method only
+where it can take the payment:
+
+| Method | Offered where |
+| --- | --- |
+| Card | Payment Settings holds a card fee rule for the order's currency, per `grade10-admin/auction/payment-settings` |
+| Bank transfer | Grade10 holds bank details for the order's currency |
+
+| Where | Bank details Grade10 holds |
+| --- | --- |
+| Outside production | A sample HKD account |
+| Production | The HKD account Finance confirms; none until then |
+
+**Card not yet available** - In a currency with no card fee rule, the choice
+SHALL show card as not yet available in that currency, and the winner SHALL
+NOT be able to choose it. Once Finance saves a card fee rule for the currency,
+card SHALL be offered on every order in it that the winner has not yet
+confirmed.
+
+**Neither method** - Where neither method is offered, Winner Order SHALL say
+that payment is not yet available in the order's currency and offer Contact
+Us, per "Contact Us opens a copy-first ready email", and Grade10 SHALL refuse
+a confirmation as one with no method chosen. The setup deadline SHALL keep
+running: the order reads Setup Overdue once it passes, as any unconfirmed
+order does, and an operator reopens or records setup by hand, per
+`grade10-admin/auction/post-sale`.
 
 **Refused** - Grade10 SHALL refuse a confirmation with no method chosen, and
-SHALL refuse bank transfer on an order whose currency does not offer it.
+SHALL refuse a method where it is not offered. A refused confirmation SHALL
+record neither the address nor the method.
 
 **Locked on confirmation** - Until the winner confirms, they SHALL be able to
 change the method freely. Once they confirm, the method locks for the winner,
@@ -1355,7 +1469,8 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Setup
+- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
+  bank details
 - **WHEN** the winner confirms a delivery address and chooses bank transfer
 - **THEN** the order records bank transfer as its payment method
 - **AND** the order derives as Preparing Invoice
@@ -1364,17 +1479,19 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-91 - The choice shows a fee range and no bank transfer amount
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Setup
+- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
+  bank details and Payment Settings holds an HKD card fee rule
 - **WHEN** the winner reaches the payment method choice
-- **THEN** card and bank transfer each show the fee range text Grade10 set
-- **AND** the bank transfer text names no amount
+- **THEN** card reads `Card fee about 3.4% + a fixed amount`
+- **AND** bank transfer reads `Bank fee set on your invoice`, naming no amount
 - **AND** neither method is selected
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-1aa rev=1 -->
 #### Scenario: winner-order-SC-92 - A currency with no bank details offers card only
 **Serves:** Payment method - bank transfer only where bank details are set up
 
-- **GIVEN** an auction order in USD Awaiting Setup
+- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
+  holds a USD card fee rule
 - **WHEN** the winner reaches the payment method choice
 - **THEN** only card is offered
 - **AND** a confirmation carrying bank transfer for that order is refused
@@ -1383,7 +1500,9 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-93 - The method can change until the winner confirms
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD Awaiting Setup on which the winner has chosen card and not yet confirmed
+- **GIVEN** an auction order in HKD Awaiting Setup, where Grade10 holds HKD
+  bank details and Payment Settings holds an HKD card fee rule, on which the
+  winner has chosen card and not yet confirmed
 - **WHEN** the winner changes the choice to bank transfer and confirms the address
 - **THEN** the order records bank transfer
 - **AND** the order derives as Preparing Invoice
@@ -1397,23 +1516,89 @@ per "The delivery address locks when the invoice is sent".
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order is still Awaiting Setup
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-er5 rev=1 -->
+#### Scenario: winner-order-SC-226 - Production offers card only until Finance confirms the account
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order in HKD Awaiting Setup in production, where
+  Grade10 holds no HKD bank details and Payment Settings holds an HKD card
+  fee rule
+- **WHEN** the winner reaches the payment method choice
+- **THEN** only card is offered
+- **AND** a confirmation carrying the home address and bank transfer is refused
+- **AND** the order holds no delivery address and no method
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-7y2 rev=1 -->
+#### Scenario: winner-order-SC-248 - A currency with no card fee rule does not offer card
+**Serves:** Payment method - card only where Finance set a card fee rule
+
+- **GIVEN** an auction order in HKD Awaiting Setup outside production, where
+  Grade10 holds the sample HKD bank details and Payment Settings holds no HKD
+  card fee rule
+- **WHEN** the winner reaches the payment method choice
+- **THEN** card reads that it is not yet available in HKD and cannot be chosen
+- **AND** bank transfer is offered
+- **AND** a confirmation carrying card for that order is refused
+- **AND** the order holds no delivery address and no method
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-cz1 rev=1 -->
+#### Scenario: winner-order-SC-249 - A currency with neither method cannot confirm setup
+**Serves:** Payment method - card only where Finance set a card fee rule
+
+- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
+  holds no USD card fee rule
+- **WHEN** the winner reaches the payment method choice
+- **THEN** the page says payment is not yet available in USD and offers
+  Contact Us
+- **AND** neither card nor bank transfer can be chosen
+- **AND** Grade10 refuses a confirmation of the delivery address
+- **AND** the order is still Awaiting Setup, holding no delivery address and no
+  method
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ii6 rev=1 -->
+#### Scenario: winner-order-SC-257 - The setup deadline runs where no method is offered
+**Serves:** winner-order-US-07 - Winner misses the address deadline
+
+- **GIVEN** an auction order in USD Awaiting Setup, where Payment Settings
+  holds no USD card fee rule, whose winner has not confirmed setup
+- **WHEN** 48 hours pass from the lot's close
+- **THEN** the order reads Setup Overdue
+- **AND** an operator holding payment processing can reopen or record its
+  setup
+
 ### Requirement: A bank transfer invoice shows how to pay
 
 A pending bank transfer invoice tells the winner where to send the money and
 what reference to quote.
 
-**Three ways to pay** - While an invoice sent for bank transfer is `pending`,
-Winner Order SHALL show these three ways to pay in place of card Pay. Each
-SHALL ask the winner to quote the invoice's bank reference. Submit Payment
-Proof SHALL offer icon copy controls for the account number / IBAN, the total
-amount due, and the transfer reference (each with a success toast on copy).
-The account details are TBC.
+**Two entry points** - While an invoice sent for bank transfer is `pending`,
+Winner Order's order summary SHALL offer **Submit Payment Proof** as the
+primary control and **View Bank Details** as a secondary control immediately under
+it. **View Bank Details** SHALL open the View Bank Details dialog. **Submit Payment
+Proof** SHALL open the Submit Payment Proof dialog. Grade10 SHALL hide both
+controls whenever Pay is hidden, including while the invoice is `payment_verifying`.
+
+**View Bank Details** - The View Bank Details dialog SHALL show the total amount due
+and three tabs with FPS selected by default. Each tab SHALL show that rail’s
+fields as labelled detail rows without copy controls, then the invoice's bank
+reference as a labelled detail row without a copy control, and a warning that
+the winner must enter the reference in the bank app's memo or remarks field.
+At `sm` and wider, the three tabs SHALL share a full-width track. Below `sm`,
+the track SHALL hug its labels and scroll horizontally so all three names stay
+readable. Live account details and the FPS QR come from Finance-owned configuration.
+Grade10 snapshots those approved instructions on the issued bank-transfer
+invoice; the preview uses Grade10 Finance Limited and HSBC Hong Kong samples.
 
 | Way to pay | Details shown |
 | --- | --- |
-| SWIFT | Beneficiary name, SWIFT/BIC, account number or IBAN |
-| FPS | FPS ID, beneficiary name |
-| Hong Kong local bank transfer | Bank name and bank code, beneficiary name, account number |
+| FPS (default) | FPS ID, account name, scannable FPS QR |
+| Hong Kong local bank transfer | Bank name, bank code, branch code, full account number including bank and branch code |
+| SWIFT (International) | Beneficiary name, beneficiary address, bank name, bank address (main branch address, city, country), SWIFT/BIC, full account number or IBAN; after the payment reference, a note to choose OUR for transfer fees so Grade10 receives the full order total |
+
+**Submit Payment Proof** - Submit Payment Proof SHALL be a separate dialog
+titled Submit Payment Proof. It SHALL NOT show amount due, transfer reference,
+or the three rail tabs. Proof upload rules stay under "The winner uploads
+payment proof once".
 
 **No card Pay** - Grade10 SHALL offer no card Pay control on a bank transfer
 invoice and SHALL refuse a card payment attempted against one. A winner who
@@ -1424,9 +1609,10 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
-- **WHEN** the winner opens Winner Order
-- **THEN** SWIFT, FPS and Hong Kong local bank transfer details are shown with the fields above
-- **AND** each asks the winner to quote the bank reference
+- **WHEN** the winner opens View Bank Details
+- **THEN** FPS, Hong Kong local bank transfer and SWIFT details are available as tabs with the fields above
+- **AND** the bank reference is shown at the bottom of the selected tab
+- **AND** the tab track is full-width at `sm` and wider, and hugs the labels with horizontal scrolling below `sm`
 - **AND** no card Pay control is offered
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-dvp rev=1 -->
@@ -1438,151 +1624,53 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `pending`
 
-### Requirement: Every invoice carries an invoice ID and a bank reference
-
-Every sent invoice gets two identifiers built from the listing code, and a
-reissue takes fresh ones.
-
-**Identifier formats** - Grade10 SHALL give every invoice, card or bank
-transfer, an invoice ID and a bank reference when it is sent. Each SHALL be
-unique across all invoices.
-
-| Identifier | Format | Example |
-| --- | --- | --- |
-| Invoice ID | `INV-[YYYYMM]-[LISTING_ID]-[SEQ]` | `INV-202609-LK7P2Q-01` |
-| Bank reference | `[LISTING_ID][SEQ]` | `LK7P2Q01` |
-
-| Part | Rule |
-| --- | --- |
-| `[YYYYMM]` | The year and month the invoice is sent, in Hong Kong time. A reissue sent in a later month carries that month |
-| `[LISTING_ID]` | The listing code of the lot's listing, below |
-| `[SEQ]` | The count of the listing's invoices: `01` for the first invoice sent, the next number on each reissue. Two digits, then three after `99` |
-
-**Bank reference** - The bank reference SHALL hold only capital letters and
-digits, with no hyphen, space or other symbol. It is 8 characters, or 9 once
-`[SEQ]` passes `99`, so it fits SWIFT's 35-character remittance line.
-
-**Where shown** - Winner Order and the invoice PDF SHALL show the invoice ID.
-Grade10 SHALL show the winner the bank reference only on a bank transfer
-invoice, per "A bank transfer invoice shows how to pay"; a card invoice's bank
-reference is shown to operators only.
-
-**Listing code** - Each listing SHALL hold a listing code, assigned no later
-than when the listing is published: `L` followed by 5 characters drawn from
-capital letters and digits other than `0`, `O`, `1` and `I`.
-
-**How the code is made** - Grade10 SHALL derive the code from a hash of the
-listing's internal id. When the result is already held by another listing,
-Grade10 SHALL hash again with a counter until the code is unique. The code
-SHALL be stored, unique across all listings, and never changed or reused. A
-later change of hash method SHALL NOT move a stored code.
-
-**Never on the listing page** - The winner SHALL see the listing code only as
-part of the invoice ID; the public listing page SHALL NOT show it.
-
-**After a reissue** - A reissue replaces the current invoice with a new one,
-per `grade10-admin/auction/post-sale`, and the new invoice SHALL take a new
-invoice ID and a new bank reference.
-
-**An old one still finds the order** - Looking up the invoice ID or bank
-reference of any invoice, including a replaced invoice's, SHALL find its
-auction order.
-
-**Replaced invoice** - A replaced invoice SHALL hold no invoice status of its
-own and SHALL never read `cancelled`; the order's invoice status is its current
-invoice's, per `grade10-site/auction/order-status`. The PDF of a replaced
-invoice SHALL say it was replaced and SHALL name the invoice ID of the invoice
-that replaced it.
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-n8j rev=1 -->
-#### Scenario: winner-order-SC-97 - A replaced invoice's identifiers still find the order
-**Serves:** Invoice - an old identifier still finds the order after a reissue
-
-- **GIVEN** an auction order whose first invoice an operator replaced with a reissue
-- **WHEN** a payment quoting the first invoice's bank reference, or its invoice ID, is looked up
-- **THEN** it finds that auction order
-- **AND** the order's current invoice carries its own invoice ID and bank reference
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-sjx rev=1 -->
-#### Scenario: winner-order-SC-98 - A replaced invoice names its replacement
-**Serves:** Invoice - a replaced invoice says so and names its replacement
-
-- **GIVEN** an auction order whose first invoice an operator replaced with a reissue
-- **WHEN** the first invoice's PDF is opened
-- **THEN** it says the invoice was replaced and names the new invoice's invoice ID
-- **AND** the first invoice holds no invoice status and does not read `cancelled`
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-12a rev=1 -->
-#### Scenario: winner-order-SC-114 - The invoice ID is shown on the order and the PDF
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** one auction order whose invoice was sent for card and one sent for bank transfer
-- **WHEN** the winner opens each order and its invoice PDF
-- **THEN** each order shows its invoice ID
-- **AND** its PDF shows the same invoice ID
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-q9s rev=1 -->
-#### Scenario: winner-order-SC-122 - The invoice ID and bank reference take the Hong Kong month
-**Serves:** Invoice - identifier formats
-
-- **GIVEN** a lot on the listing whose listing code is `LK7P2Q`, with no invoice sent yet
-- **WHEN** an operator sends its first invoice at 2026-09-30T17:00:00Z, which is 1 October in Hong Kong
-- **THEN** the invoice ID is `INV-202610-LK7P2Q-01`
-- **AND** the bank reference is `LK7P2Q01`
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-8dg rev=1 -->
-#### Scenario: winner-order-SC-123 - A reissue takes the next number and its own month
-**Serves:** Invoice - a reissue takes new identifiers
-
-- **GIVEN** an order on listing `LK7P2Q` whose first invoice `INV-202609-LK7P2Q-01` was sent in September 2026
-- **WHEN** an operator reissues it at 2026-10-02T02:00:00Z
-- **THEN** the new invoice ID is `INV-202610-LK7P2Q-02` and its bank reference is `LK7P2Q02`
-- **AND** looking up `LK7P2Q01` or `INV-202609-LK7P2Q-01` finds the same order
-- **AND** the first invoice's PDF names `INV-202610-LK7P2Q-02`
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-qt4 rev=1 -->
-#### Scenario: winner-order-SC-124 - The invoice count grows to three digits after 99
-**Serves:** Invoice - identifier formats
-
-- **GIVEN** an order on listing `LK7P2Q` whose current invoice is `INV-202609-LK7P2Q-99`
-- **WHEN** an operator reissues it in September 2026
-- **THEN** the new invoice ID is `INV-202609-LK7P2Q-100`
-- **AND** the bank reference is `LK7P2Q100`, 9 characters of capital letters and digits
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-upc rev=1 -->
-#### Scenario: winner-order-SC-125 - A listing code that is already held is hashed again
-**Serves:** Invoice - listing code
-
-- **GIVEN** a listing about to be published whose internal id hashes to a code another listing already holds
-- **WHEN** the listing is published
-- **THEN** it holds a code Grade10 derived by hashing again with a counter
-- **AND** the code is `L` and 5 characters with no `0`, `O`, `1` or `I`, held by no other listing
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-g6f rev=1 -->
-#### Scenario: winner-order-SC-126 - A stored listing code never moves
-**Serves:** Invoice - listing code
-
-- **GIVEN** a published listing whose stored listing code is `LK7P2Q`
-- **WHEN** Grade10 changes the hash method it derives codes with
-- **THEN** the listing still holds `LK7P2Q`
-- **AND** no other listing is given `LK7P2Q`
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-1pz rev=1 -->
-#### Scenario: winner-order-SC-127 - The public listing page does not show the listing code
-**Serves:** Invoice - listing code
-
-- **GIVEN** a published listing whose listing code is `LK7P2Q`
-- **WHEN** anyone opens its public listing page
-- **THEN** `LK7P2Q` appears nowhere on the page
-
-<!-- trace:scenario id=g10.auction-winner-order.SC-ly9 rev=1 -->
-#### Scenario: winner-order-SC-128 - Only a bank transfer invoice shows the bank reference
+<!-- trace:scenario id=g10.auction-winner-order.SC-zbt rev=1 -->
+#### Scenario: winner-order-SC-180 - Order summary offers Submit Payment Proof and View Bank Details
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** one order whose `pending` invoice was sent for bank transfer with bank reference `LK7P2Q01`, and one whose `pending` invoice was sent for card
-- **WHEN** the winner opens each on Winner Order and copies the transfer reference on the first
-- **THEN** the first shows `LK7P2Q01` and the copied text is exactly `LK7P2Q01`
-- **AND** the card order shows no bank reference and no transfer-reference copy control
+- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
+- **WHEN** the winner opens Winner Order
+- **THEN** Order summary shows Submit Payment Proof
+- **AND** View Bank Details sits under it
+- **AND** View Bank Details opens the View Bank Details dialog
+- **AND** Submit Payment Proof opens the Submit Payment Proof dialog
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-zx9 rev=1 -->
+#### Scenario: winner-order-SC-181 - View Bank Details opens on FPS
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
+- **WHEN** the winner opens View Bank Details
+- **THEN** the FPS tab is selected
+- **AND** FPS ID, account name and an FPS QR are shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-tf6 rev=1 -->
+#### Scenario: winner-order-SC-182 - HK Local tab shows branch code
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** the View Bank Details dialog is open
+- **WHEN** the winner selects HK Local
+- **THEN** bank name, bank code, branch code and the full account number including bank and branch code are shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-oii rev=1 -->
+#### Scenario: winner-order-SC-183 - SWIFT tab shows OUR note after payment reference
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** the View Bank Details dialog is open
+- **WHEN** the winner selects International (SWIFT)
+- **THEN** beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC and the full account number or IBAN are shown
+- **AND** the payment reference and memo warning are shown
+- **AND** a note after the payment reference tells the winner to choose OUR for transfer fees so Grade10 receives the full order total
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-fm9 rev=1 -->
+#### Scenario: winner-order-SC-184 - Submit Payment Proof is proof-only
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
+- **WHEN** the winner opens Submit Payment Proof from Order summary
+- **THEN** the dialog title is Submit Payment Proof
+- **AND** amount due and transfer reference are not shown
+- **AND** no FPS, HK Local or SWIFT tab is shown
 
 ### Requirement: Invoices and receipts carry an internal audit number
 
@@ -1629,36 +1717,53 @@ invoice while an operator checks it.
    (JPEG), or HEIC/HEIF of at most **5 MB** (5,242,880 bytes). The set SHALL
    total at most **15 MB** (15,728,640 bytes). HEIC/HEIF SHALL be converted to
    JPEG before storage so an operator can open it without a special viewer.
-2. Read a confirm step saying nothing can be added after upload.
-3. Confirm.
+2. Read irreversible microcopy saying nothing can be added or changed after
+   submit (inline in Submit Payment Proof - no second confirm screen).
+3. Confirm submit.
 
-**On confirm** - On confirm Grade10 SHALL store the files against the
-invoice, set the invoice status to `payment_verifying`, stop the payment
+**On confirm** - On a successful confirm Grade10 SHALL store the files against
+the invoice, set the invoice status to `payment_verifying`, stop the payment
 deadline and record the time left, per `grade10-site/auction/order-status`,
 and write a proof-uploaded entry to the invoice log. The order SHALL derive as
-Payment Verifying. No letter is sent.
+Payment Verifying. Winner Order SHALL show a success toast titled **Proof
+submitted** with description **We'll verify your payment shortly.** for an
+English locale, and localized copy for Simplified Chinese and Traditional
+Chinese. No letter is sent.
 
 **Payment Verifying** - While the invoice is `payment_verifying`, Winner Order
 SHALL show no payment deadline running, SHALL offer no card Pay and no upload,
-and SHALL refuse a further upload.
+SHALL hide Submit Payment Proof and View Bank Details, and SHALL refuse a
+further upload. It SHALL show an inline default Alert with the Hourglass icon,
+stating that Grade10 is verifying the transfer and will email when payment is
+confirmed. The Alert sits under Order progress on small viewports and under the
+lot from `lg` up, where the Preparing Invoice alert sits.
+
+**Busy** - While the upload is submitting, or while HEIC/HEIF is converting,
+Submit Payment Proof SHALL lock the whole form and SHALL block leave (Cancel,
+Escape and overlay dismiss do nothing) until that beat finishes.
 
 **Refused** - Grade10 SHALL refuse the whole upload and store nothing when any
-file breaks step 1, SHALL refuse a confirm with no file, and SHALL refuse an
+file breaks step 1. It SHALL judge a file's type by its content, not its name:
+a file whose content is not PDF, PNG, JPEG, HEIC or HEIF SHALL be refused and
+never relabelled. Grade10 SHALL refuse a confirm with no file, and SHALL refuse an
 upload on a card invoice, on any invoice not `pending`, and from anyone but
 the order's winner.
 
-**Nothing stored until it succeeds** - Leaving the confirm step without
-confirming SHALL store nothing. An upload that fails part-way SHALL store
-nothing and leave the invoice `pending`, and the winner may upload again; the
-one upload counts only once an upload succeeds.
+**Nothing stored until it succeeds** - Leaving Submit Payment Proof without a
+successful confirm SHALL store nothing. An upload that fails part-way SHALL
+store nothing, leave the invoice `pending`, keep Submit Payment Proof open with
+the draft the winner had entered, and show an error toast titled **Proof not
+submitted** with description **Nothing was saved. Try again.** for an English
+locale, and localized copy for Simplified Chinese and Traditional Chinese; the
+winner may upload again. The one upload counts only once an upload succeeds.
 
-**Who reads the files** - Proof files SHALL be readable by any operator who
-can open the order, per `grade10-admin/auction/post-sale`, and never by the
-winner. Winner Order, the receipt and every letter SHALL show no proof file
-and no file name, the winner's or an operator's. Only the Payment Verifying
+**Who reads the files** - Payment proof files SHALL be readable by any operator
+who can open the order, per `grade10-admin/auction/post-sale`, and never by the
+winner. Winner Order, the receipt and every letter SHALL show no payment proof
+file and no file name, the winner's or an operator's. Only the Payment Verifying
 status shows that proof was sent.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-bsl rev=2 -->
 #### Scenario: winner-order-SC-99 - Uploading proof stops the deadline
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
@@ -1667,6 +1772,7 @@ status shows that proof was sent.
 - **THEN** the invoice is `payment_verifying` and the order derives as Payment Verifying
 - **AND** the time left recorded is 6 days
 - **AND** Winner Order offers no card Pay and no further upload
+- **AND** Submit Payment Proof and View Bank Details are hidden
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-q86 rev=1 -->
 #### Scenario: winner-order-SC-100 - Files outside the limits are refused
@@ -1687,12 +1793,12 @@ status shows that proof was sent.
 - **THEN** Grade10 refuses it
 - **AND** the files already stored are unchanged
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-7jw rev=2 -->
 #### Scenario: winner-order-SC-102 - Leaving the confirm step uploads nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** a bank transfer invoice that is `pending`
-- **WHEN** the winner chooses one PNG, reads the confirm step, and leaves without confirming
+- **WHEN** the winner chooses one PNG, reads the irreversible microcopy, and leaves without confirming
 - **THEN** no file is stored
 - **AND** the invoice is still `pending` and the winner can upload
 
@@ -1727,8 +1833,8 @@ status shows that proof was sent.
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** an invoice that is `payment_verifying`
-- **WHEN** a card payment is attempted for it
-- **THEN** Grade10 refuses it and makes no charge
+- **WHEN** the winner tries to start a card payment for it
+- **THEN** Grade10 starts none and makes no charge
 - **AND** the invoice is still `payment_verifying`
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-d3x rev=1 -->
@@ -1740,13 +1846,15 @@ status shows that proof was sent.
 - **THEN** neither offers an upload
 - **AND** Grade10 refuses both attempts
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-uxu rev=2 -->
 #### Scenario: winner-order-SC-119 - An upload that fails part-way stores nothing
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** a bank transfer invoice that is `pending`
+- **GIVEN** a bank transfer invoice that is `pending` and Submit Payment Proof open with a filled draft
 - **WHEN** the winner confirms three files and the upload fails before it completes
 - **THEN** no file is stored and the invoice is still `pending`
+- **AND** Submit Payment Proof stays open with the draft
+- **AND** an error toast reads **Proof not submitted** / **Nothing was saved. Try again.**
 - **AND** the winner can upload again
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-7nh rev=1 -->
@@ -1756,6 +1864,43 @@ status shows that proof was sent.
 - **GIVEN** an auction order whose bank transfer invoice is `pending`, won by another collector
 - **WHEN** a signed-in collector who is not its winner attempts an upload against it
 - **THEN** Grade10 refuses it
+- **AND** the invoice is still `pending`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8q1 rev=1 -->
+#### Scenario: winner-order-SC-218 - Successful proof submit shows the success toast
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** the winner confirms a valid proof upload
+- **THEN** the invoice is `payment_verifying` and the order derives as Payment Verifying
+- **AND** a success toast reads **Proof submitted** / **We'll verify your payment shortly.**
+- **AND** an inline default Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed, under Order progress on small viewports and under the lot from `lg` up
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-bb1 rev=1 -->
+#### Scenario: winner-order-SC-219 - Leave is blocked while submitting or converting
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** Submit Payment Proof is open and either the upload is submitting or HEIC conversion is running
+- **WHEN** the winner tries Cancel, Escape or overlay dismiss
+- **THEN** the dialog stays open
+- **AND** the form stays locked until that beat finishes
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8uw rev=1 -->
+#### Scenario: winner-order-SC-220 - Confirm stays inline microcopy
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** the winner opens Submit Payment Proof
+- **THEN** irreversible microcopy says nothing can be added or changed after submit
+- **AND** no second confirm screen is shown
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ddi rev=1 -->
+#### Scenario: winner-order-SC-239 - A file whose content is not a type Grade10 takes is refused
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** a bank transfer invoice that is `pending`
+- **WHEN** an upload carries a GIF file named `slip.jpg`
+- **THEN** Grade10 refuses the whole upload and stores no file
 - **AND** the invoice is still `pending`
 
 ### Requirement: Returned proof reopens the invoice
@@ -1819,32 +1964,42 @@ the latest external reason; the invoice log keeps every reason, per
 
 ### Requirement: Contact Us opens a copy-first ready email
 
-When Contact Us is offered on a locked Winner Order, the winner reaches
-Grade10 through a ready email they can copy into any mail app.
+When Contact Us is offered on a locked Winner Order, or on an Awaiting Setup
+order where neither payment method is offered, the winner reaches Grade10
+through a ready email they can copy into any mail app.
 
-**Opens** — Contact Us SHALL open a dialog. It SHALL NOT open a mail client
+**Opens** - Contact Us SHALL open a dialog. It SHALL NOT open a mail client
 as the first action, and SHALL NOT show only a toast that names the address.
 
-**Hidden until open** — `support@grade10.com` SHALL NOT appear on the order
+**Setup with no method** - On an Awaiting Setup order where neither method is
+offered, the ready subject and body SHALL use the `setup overdue` reason, though
+the status reads Awaiting Setup, since the winner can only ask an operator to
+reopen or record setup.
+
+**Hidden until open** - `support@grade10.com` SHALL NOT appear on the order
 page before Contact Us opens the dialog.
 
-**Ready email** — The open dialog SHALL show, in order:
+**Ready email** - The open dialog SHALL show, in order:
 
-1. To — `support@grade10.com`, not editable by the winner, with copy in place
-2. Subject — the ready subject for this order and reason, not editable by the
+1. To - `support@grade10.com`, not editable by the winner, with copy in place
+2. Subject - the ready subject for this order and reason, not editable by the
    winner, with copy in place
-3. Message — an editable `Textarea` prefilled with the ready body and space
+3. Message - an editable `Textarea` prefilled with the ready body and space
    for the winner's question. No copy control SHALL sit beside the Message
    field; Copy Message stays footer-only
 
-**Footer** — The dialog footer SHALL offer, in order:
+**Footer** - The dialog footer SHALL offer, in order:
 
-1. Copy Message first — copies the full ready email (To, Subject and
+1. Copy Message first - copies the full ready email (To, Subject and
    Message) for pasting into any mail app
-2. Open Mail App second — optional; opens a `mailto:` to
+2. Open Mail App second - optional; opens a `mailto:` to
    `support@grade10.com` carrying the current Subject and Message
 
-**Export** — The design system SHALL export `Textarea` as a labelled
+**Copy Message confirms in place** - Once Copy Message has copied the email,
+the button itself SHALL read Copied for a moment, then Copy Message again. No
+toast SHALL appear, so the dialog stays the only thing on screen.
+
+**Export** - The design system SHALL export `Textarea` as a labelled
 multi-line field that shares TextInput's label, status and message contract.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-nlr rev=1 -->
@@ -1859,6 +2014,17 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** Copy Message is the first footer action
 - **AND** Open Mail App is the second footer action
 - **AND** no mail client opens as the first action
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-i2y rev=1 -->
+#### Scenario: winner-order-SC-262 - Contact Us on an order with no method uses the setup overdue reason
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order in USD Awaiting Setup, where neither card nor bank
+  transfer is offered
+- **WHEN** the winner chooses Contact Us
+- **THEN** the dialog opens with the ready Subject and Message for the
+  `setup overdue` reason
+- **AND** the order status still reads Awaiting Setup
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-fu8 rev=1 -->
 #### Scenario: winner-order-SC-161 - The support address stays off the order until Contact Us
@@ -1899,26 +2065,42 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** the winner cannot edit To or Subject
 - **AND** Copy Message remains the footer control for the full ready email
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-81q rev=1 -->
+#### Scenario: winner-order-SC-250 - Copy Message confirms through its own state
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** the Contact Us dialog is open on a locked Winner Order
+- **WHEN** the winner chooses Copy Message and the email is copied
+- **THEN** the button reads Copied for a moment, then Copy Message again
+- **AND** no toast appears
+
 ### Requirement: The ready email names the invoice or the lot and the reason
 
 The ready email's subject and body identify the order so support can open it
 without a follow-up.
 
-**Subject** — When the order's current invoice id exists, the subject SHALL be
+**Subject** - For `order cancelled` the subject SHALL be
+`Auction lot {lot title}: order cancelled`, invoice or not. Otherwise, when
+the order's current invoice id exists, the subject SHALL be
 `Auction order {invoice id}: {reason}`. When no invoice id exists (including
 setup overdue before send), the subject SHALL be
 `Auction lot {lot title}: {reason}`.
 
-**Reason** — On Winner Order the reason fragment SHALL be one of
-`setup overdue`, `payment overdue`, or `partial payment`.
+**Reason** - On Winner Order the reason fragment SHALL be one of
+`setup overdue`, `payment overdue`, `partial payment`, or `order cancelled`.
+A Cancelled Winner Order is locked, so it offers Contact Us under "Contact Us
+opens a copy-first ready email" with the `order cancelled` reason. The
+operator's cancellation category and note SHALL NOT appear in the subject or
+body.
 
-**Body** — Message SHALL greet Grade10, say the winner needs help with this
+**Body** - Message SHALL greet Grade10, say the winner needs help with this
 auction order, name the lot title, name the status label for the reason
-(`Setup overdue`, `Payment overdue`, or `Partially paid`), and leave space
-for the winner's question. When an invoice id exists and the reason is not
-setup overdue, the body SHALL name that invoice id.
+(`Setup overdue`, `Payment overdue`, `Partially paid`, or `Cancelled`), and
+leave space for the winner's question. When an invoice id exists and the reason
+is not setup overdue, the body SHALL name that invoice id; a Cancelled order
+that never had an invoice names none.
 
-**Partial payment** — When the reason is partial payment, the body MAY list
+**Partial payment** - When the reason is partial payment, the body MAY list
 receipt ids and MUST NOT name the remaining balance. When no receipt id
 exists yet, the body SHALL list none.
 
@@ -1933,43 +2115,49 @@ exists yet, the body SHALL list none.
 - **AND** Message names that lot title and status Setup overdue
 - **AND** Message names no invoice id
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-30l rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-30l rev=2 -->
 #### Scenario: winner-order-SC-165 - Payment overdue names the invoice
 **Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose payment deadline has passed unpaid, with
-  current invoice id `INV-202609-LK7P2Q-01` and lot title
-  "Charizard Base Set PSA 10"
+  current invoice id `IN-LK42301` and lot title "Charizard Base Set PSA 10"
 - **WHEN** the winner opens Contact Us
-- **THEN** Subject is
-  `Auction order INV-202609-LK7P2Q-01: payment overdue`
+- **THEN** Subject is `Auction order IN-LK42301: payment overdue`
 - **AND** Message names that invoice id, that lot title, and status Payment
   overdue
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-kjq rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-kjq rev=2 -->
 #### Scenario: winner-order-SC-166 - Partial payment may list receipts and never the balance
 **Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** a partially paid auction order with current invoice id
-  `INV-202609-LK7P2Q-01`, lot title "Charizard Base Set PSA 10", and receipt
-  ids `REC-202609-LK7P2Q-01-P1` and `REC-202609-LK7P2Q-01-P2`
+  `IN-LK42301`, lot title "Charizard Base Set PSA 10", and receipt ids
+  `RC-LK42301P1` and `RC-LK42301P2`
 - **WHEN** the winner opens Contact Us
-- **THEN** Subject is
-  `Auction order INV-202609-LK7P2Q-01: partial payment`
+- **THEN** Subject is `Auction order IN-LK42301: partial payment`
 - **AND** Message may list those receipt ids
 - **AND** Message names no remaining balance
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-hx5 rev=1 -->
+<!-- trace:scenario id=g10.auction-winner-order.SC-hx5 rev=2 -->
 #### Scenario: winner-order-SC-168 - A reissued invoice uses the current invoice id
 **Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose payment deadline has passed unpaid after a
-  reissue, with current invoice id `INV-202609-LK7P2Q-02` and a replaced
-  invoice id `INV-202609-LK7P2Q-01`
+  reissue, with current invoice id `IN-LK42302` and a replaced invoice id
+  `IN-LK42301`
 - **WHEN** the winner opens Contact Us
-- **THEN** Subject is
-  `Auction order INV-202609-LK7P2Q-02: payment overdue`
-- **AND** Subject does not name `INV-202609-LK7P2Q-01`
+- **THEN** Subject is `Auction order IN-LK42302: payment overdue`
+- **AND** Subject does not name `IN-LK42301`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-e1w rev=1 -->
+#### Scenario: winner-order-SC-275 - Contact Us on a cancelled order names the lot and the cancellation
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a cancelled auction order for lot title "Charizard Base Set PSA 10", with current invoice id `IN-LK42301` and an operator cancellation category and note
+- **WHEN** the winner chooses Contact Us
+- **THEN** Subject is `Auction lot Charizard Base Set PSA 10: order cancelled`
+- **AND** Message names that lot title, that invoice id and status Cancelled
+- **AND** neither Subject nor Message names the cancellation category or note
 
 ### Requirement: Add Address collects phone with country
 
@@ -2197,6 +2385,7 @@ be refused as an empty Country/Region.
 refused with a field refusal beside Country/Region, as for other empty
 required address fields.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-fm8 rev=1 -->
 #### Scenario: winner-order-SC-174 - Delivery Add Address lists every country and region
 **Serves:** winner-order-US-01 - choosing where the lot ships on delivery Add Address
 
@@ -2204,6 +2393,7 @@ required address fields.
 - **WHEN** the winner opens the Country/Region picker
 - **THEN** the popup lists every country and region in A–Z order
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-ckz rev=1 -->
 #### Scenario: winner-order-SC-175 - Typing filters the list to matching names
 **Serves:** winner-order-US-01 - finding a country or region by search on delivery Add Address
 
@@ -2212,6 +2402,7 @@ required address fields.
 - **THEN** the list shows only names that match that query
 - **AND** names that do not match are not shown
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-98w rev=1 -->
 #### Scenario: winner-order-SC-178 - A query with no match leaves the list empty
 **Serves:** winner-order-US-01 - searching for a country or region that is not in the catalogue
 
@@ -2219,12 +2410,14 @@ required address fields.
 - **WHEN** the winner types a query that matches no catalogue name
 - **THEN** the list shows no country or region options
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-vuk rev=1 -->
 #### Scenario: winner-order-SC-176 - The field reads Country/Region
 **Serves:** winner-order-US-01 - naming the destination on delivery Add Address
 
 - **WHEN** a winner is on Winner Order setup delivery Add Address
 - **THEN** the picker field label reads Country/Region
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-h2c rev=1 -->
 #### Scenario: winner-order-SC-177 - An empty Country/Region is refused
 **Serves:** winner-order-US-01 - confirming delivery Add Address without a country or region
 
@@ -2401,19 +2594,22 @@ its absence from the order page remain governed by
 ### Requirement: An unfinished card payment leaves the invoice payable
 
 Pay Now SHALL start a hosted card payment session for the current invoice. Its
-outcome SHALL read as follows.
+outcome SHALL read as follows. The two unfinished rows hold before the payment
+deadline; for a session started in time that ends unpaid after it, "The payment
+deadline is fixed when the invoice is sent" governs.
 
 | Session outcome | The winner sees | Order |
 | --- | --- | --- |
 | Completed | **Confirming payment** until Grade10 records the invoice `paid` | Preparing Shipment once paid |
-| Timed out | Payment was not completed; Pay Now is available again | Stays Pending Payment |
-| Abandoned or cancelled by the winner | Payment was not completed; Pay Now is available again | Stays Pending Payment |
-| Declined | The refusal, per "The bid-time hold is released, never captured" | Stays Pending Payment |
+| Timed out before the deadline | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Abandoned or cancelled by the winner before the deadline | Payment was not completed; Pay Now is available again | Stays Pending Payment |
+| Declined | The refusal, per "The winner pays a sent invoice by the method it was sent for" | Stays Pending Payment |
 
 Pay Now after an unfinished session SHALL start a fresh session. An unfinished
 session SHALL NOT change the invoice, its amount or its deadline. Grade10 SHALL
 NOT show the order as paid before it records the invoice `paid`.
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-bbg rev=1 -->
 #### Scenario: winner-order-SC-49 - A timed-out payment session stays payable
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2422,6 +2618,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **THEN** the page says payment was not completed
 - **AND** the order is still Pending Payment with Pay Now available
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-7ra rev=1 -->
 #### Scenario: winner-order-SC-50 - Pay Now after an unfinished session starts fresh
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2429,6 +2626,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **WHEN** the winner selects Pay Now
 - **THEN** a new payment session starts for the same invoice amount
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-u5t rev=1 -->
 #### Scenario: winner-order-SC-51 - A completed session confirms before reading Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2439,6 +2637,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **THEN** the page shows Confirming payment
 - **AND** the order does not yet read Preparing Shipment
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-49w rev=1 -->
 #### Scenario: winner-order-SC-52 - A recorded payment reads Preparing Shipment
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2499,6 +2698,7 @@ SHALL not derive a second Expired order status.
   not lift it
 - **AND** offers Pay what is owed
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-y2j rev=1 -->
 #### Scenario: winner-order-SC-242 - An unpaid order shows the invoice and the pay control
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
@@ -2507,6 +2707,7 @@ SHALL not derive a second Expired order status.
 - **THEN** the sidebar shows every invoice line and the pay control
 - **AND** the confirmed delivery address and the lot
 
+<!-- trace:scenario id=g10.auction-winner-order.SC-apq rev=1 -->
 #### Scenario: winner-order-SC-243 - An order preparing its invoice offers no payment
 **Serves:** winner-order-US-19 - Winner confirms where a won lot ships
 
@@ -2514,3 +2715,559 @@ SHALL not derive a second Expired order status.
 - **WHEN** the winner opens it
 - **THEN** the page shows the confirmed address
 - **AND** offers no invoice and no pay control
+
+### Requirement: Every invoice carries an invoice ID and the order's payment reference
+
+Every sent invoice carries the order's payment reference and an invoice ID
+built from it; a reissue takes the next invoice ID while the payment
+reference never changes.
+
+**Payment reference** - The bank reference and payment reference are the same
+value; Grade10 SHALL NOT issue a second identifier. The payment reference
+SHALL be the winner's order's one collector-facing reference: the listing
+code that `grade10-admin/auction/listing` allocates for the lot, carried
+forward unchanged once a winner exists on it. This capability SHALL NOT allocate,
+derive, or reissue the code; it only consumes the value
+`grade10-admin/auction/listing` already holds for the listing. There is no
+separate public order ID — the payment reference stands in for one.
+
+**Invoice ID** - Grade10 SHALL give every invoice, card or bank transfer, an
+invoice ID when it is sent. Each SHALL be unique across all invoices.
+
+| Identifier | Format | Example |
+| --- | --- | --- |
+| Payment reference | the listing code, unchanged | `LK423` |
+| Invoice ID | `IN-[PAYMENT_REF][SEQ]` | `IN-LK42301` |
+
+| Part | Rule |
+| --- | --- |
+| `[PAYMENT_REF]` | The order's payment reference, above |
+| `[SEQ]` | The count of the order's invoices: `01` for the first invoice sent, the next number on each reissue; it uses at least two digits and continues as `100` after `99` |
+
+**Invariant across reissue** - A reissue replaces the current invoice with a
+new one, per `grade10-admin/auction/post-sale`, and the new invoice SHALL take
+the next `[SEQ]`. The payment reference SHALL NOT change on a reissue, or at
+any other point in the order's life — it is fixed on the listing's first saved
+draft and carried forward as-is.
+
+**Where shown** - Winner Order and the invoice PDF SHALL show both the
+invoice ID and the payment reference, on every invoice regardless of payment
+method; the payment reference is also the value quoted in FPS, local bank
+transfer and SWIFT notes on a bank transfer invoice, per "A bank transfer
+invoice shows how to pay". Grade10 SHALL NOT show the payment reference, the
+invoice ID, or any receipt ID before a winning order exists on the listing;
+until then a lot is identified by its title and canonical address. The public
+listing page exposes the lower-case code only through that address, per
+`grade10-site/auction/listing-page`.
+
+**An old invoice ID still finds the order** - Looking up any invoice's
+invoice ID, including a replaced invoice's, or the order's payment reference,
+SHALL find the auction order.
+
+**Replacement relationship** - A reissue's new invoice SHALL retain the prior
+invoice ID as `replacesInvoice` and its PDF SHALL say `Replaces invoice {id}`.
+The prior invoice remains retained, SHALL hold no invoice status of its own
+and SHALL never read `cancelled`; the order's invoice status is its current
+invoice's, per `grade10-site/auction/order-status`.
+
+**Stripe metadata** - When creating a card payment for the order, Grade10
+SHALL write the order's payment reference to the Stripe payment's metadata
+under `payment_reference_code`. Stripe's own returned provider reference
+SHALL be stored by Grade10 separately from every collector-facing identifier,
+used only in internal document filenames created after the payment is
+obtained, and SHALL NOT reach the winner on any surface.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-n8j rev=1 -->
+#### Scenario: winner-order-SC-97 - A replaced invoice's identifiers still find the order
+**Serves:** winner-order-US-21 - Winner quotes their order
+
+- **GIVEN** an auction order whose first invoice an operator replaced with a reissue
+- **WHEN** a payment quoting the first invoice's invoice ID, or the order's payment reference, is looked up
+- **THEN** it finds that auction order
+- **AND** the order's current invoice carries its own invoice ID, built from the same unchanged payment reference
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-sjx rev=1 -->
+#### Scenario: winner-order-SC-98 - A replacement invoice names the invoice it replaces
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** an auction order whose first invoice an operator replaced with a reissue
+- **WHEN** the winner opens the replacement invoice's PDF
+- **THEN** it shows `Replaces invoice` and the first invoice's invoice ID
+- **AND** the first invoice remains retained, holds no invoice status and does not read `cancelled`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-12a rev=1 -->
+#### Scenario: winner-order-SC-114 - The invoice ID is shown on the order and the PDF
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** one auction order whose invoice was sent for card and one sent for bank transfer
+- **WHEN** the winner opens each order and its invoice PDF
+- **THEN** each order shows its invoice ID and its payment reference
+- **AND** its PDF shows the same invoice ID
+- **AND** the card order's payment reference is shown exactly as the bank transfer order's is
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-q9s rev=1 -->
+#### Scenario: winner-order-SC-122 - The invoice ID and payment reference use the payment reference
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** a lot on an order whose payment reference is `LK423`, with no invoice sent yet
+- **WHEN** an operator sends its first invoice
+- **THEN** the invoice ID is `IN-LK42301`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-8dg rev=1 -->
+#### Scenario: winner-order-SC-123 - A reissue takes the next invoice number
+**Serves:** Invoice - a reissue takes a new invoice ID while the payment reference stays put
+
+- **GIVEN** an order whose payment reference is `LK423` and whose first invoice `IN-LK42301` was sent
+- **WHEN** an operator reissues it
+- **THEN** the new invoice ID is `IN-LK42302`
+- **AND** the order's payment reference is still `LK423`, unchanged by the reissue
+- **AND** looking up `IN-LK42301`, `IN-LK42302`, or `LK423` all find the same order
+- **AND** the new invoice's PDF says `Replaces invoice IN-LK42301`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-qt4 rev=1 -->
+#### Scenario: winner-order-SC-124 - The invoice count grows to three digits after 99
+**Serves:** Invoice - a reissue takes a new invoice ID while the payment reference stays put
+
+- **GIVEN** an order whose payment reference is `LK423` and whose latest invoice is `IN-LK42399`
+- **WHEN** an operator reissues it
+- **THEN** the new invoice ID is `IN-LK423100`
+- **AND** the payment reference remains `LK423`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-upc rev=1 -->
+#### Scenario: winner-order-SC-125 - A listing code that is already held is hashed again
+**Serves:** winner-order-US-21 - Winner quotes their order
+
+- **GIVEN** a listing-code candidate collides with an active code or retained reservation
+- **WHEN** its draft is first saved
+- **THEN** allocation retries and stores a distinct valid 5-character code
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-g6f rev=1 -->
+#### Scenario: winner-order-SC-126 - A stored listing code never moves
+**Serves:** winner-order-US-21 - Winner quotes their order
+
+- **GIVEN** a listing already stores payment reference `LK423`
+- **WHEN** the allocator implementation changes
+- **THEN** the listing and its order continue to use `LK423`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1pz rev=1 -->
+#### Scenario: winner-order-SC-127 - The public listing page does not show the listing code
+**Serves:** winner-order-US-21 - Winner quotes their order
+
+- **GIVEN** a listing whose payment reference is `LK423`
+- **WHEN** its public page or shared preview is fetched
+- **THEN** the payment reference appears only as the lower-case canonical URL suffix
+- **AND** no public representation exposes a labelled payment-reference field
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-ly9 rev=1 -->
+#### Scenario: winner-order-SC-128 - Each invoice shows the payment reference
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** one pending invoice sent for card and one pending invoice sent for bank transfer
+- **WHEN** the winner opens each invoice
+- **THEN** both show the payment reference
+- **AND** the card invoice requires no separate bank-reference identifier
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-dsa rev=1 -->
+#### Scenario: winner-order-SC-244 - The payment reference is shown unconditionally, not gated by payment method
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** one order whose `pending` invoice was sent for bank transfer, and one whose `pending` invoice was sent for card
+- **WHEN** the winner opens each on Winner Order
+- **THEN** both orders show the payment reference
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-l1s rev=1 -->
+#### Scenario: winner-order-SC-245 - Stripe metadata carries the payment reference and never the provider reference to the winner
+**Serves:** winner-order-US-22 - Winner reviews invoice and payment details
+
+- **GIVEN** an auction order paid by card
+- **WHEN** Grade10 creates the Stripe payment for that order
+- **THEN** the Stripe payment's metadata carries `payment_reference_code` equal to the order's payment reference
+- **AND** Stripe's own returned provider reference appears on no surface the winner reads
+
+### Requirement: Winner Order makes the tracking number the carrier link
+
+While an auction order's fulfilment is `fulfilled` and it has a tracking
+number, Winner Order SHALL show that number as the external link to the carrier
+tracking page in Order Progress when the operator recorded a tracker link. The
+link SHALL open in a new tab. Order Progress SHALL show no separate Track
+shipment control or carrier name. The link SHALL remain after
+`delivery_confirmed` is set while the fulfilment stays `fulfilled`. When the
+operator recorded no tracker link, Winner Order SHALL show the tracking number
+as plain text, with no carrier name and no Track shipment control.
+
+This requirement governs the live Winner Order presentation only.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-h7d rev=2 -->
+#### Scenario: winner-order-SC-251 - A dispatched lot shows the tracking number as the carrier link
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose fulfilment status has just become
+  `fulfilled` with a tracking number and a tracker link attached
+- **WHEN** the winner opens the order
+- **THEN** Order Progress shows the tracking number as a link to the carrier
+  tracking page
+- **AND** the link opens in a new tab
+- **AND** it shows no separate Track shipment control and no carrier name in
+  Order Progress
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-k4r rev=2 -->
+#### Scenario: winner-order-SC-252 - The tracker remains after delivery is confirmed
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order that is `fulfilled` with a tracking number and a
+  tracker link, and `delivery_confirmed` is set
+- **WHEN** the winner opens the order
+- **THEN** Order Progress still shows the tracking number as a link to the
+  carrier tracking page
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-tgb rev=1 -->
+#### Scenario: winner-order-SC-276 - Without a tracker link the tracking number is plain text
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order that is `fulfilled` with a tracking number and no
+  tracker link recorded by the operator
+- **WHEN** the winner opens the order
+- **THEN** Order Progress shows the tracking number as plain text, not a link
+- **AND** it shows no carrier name and no Track shipment control
+
+### Requirement: Tax info tooltip
+
+On Winner Order's Order Summary, Tax explains itself whenever the line is shown.
+
+**Tooltip** - Grade10 SHALL offer a brief info tooltip beside Tax whenever the
+Tax line is shown.
+
+**Copy** - The tooltip SHALL read `Set by Grade10 for where your order ships.
+Some orders have none.`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-d0w rev=1 -->
+#### Scenario: winner-order-SC-217 - A shown Tax line carries its info tooltip
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice with Tax of 6000 minor units in HKD
+- **WHEN** the winner reads Order Summary
+- **THEN** the Tax line shows 6000 minor units in HKD
+- **AND** the Tax line sits between Insurance and Payment Processing Fee
+- **AND** it offers an info tooltip reading `Set by Grade10 for where your order
+  ships. Some orders have none.`
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-mph rev=1 -->
+#### Scenario: winner-order-SC-212 - An absent Tax line offers no tooltip
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice without adding Tax
+- **WHEN** the winner reads Order Summary
+- **THEN** no Tax line is shown
+- **AND** no Tax tooltip is offered
+
+### Requirement: Tax before the invoice is sent
+
+Before an operator sends the invoice, Order Summary names Tax without an amount.
+
+**Before send** - Before an operator has sent the invoice, Winner Order's Order
+Summary SHALL show Tax as TBD with the other fee rows.
+
+**No amount** - Grade10 SHALL NOT show a calculated Tax amount before the
+operator sends the invoice.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1ok rev=1 -->
+#### Scenario: winner-order-SC-213 - Tax reads TBD before the invoice is sent
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order before an operator has sent its invoice
+- **WHEN** the winner reads Order Summary
+- **THEN** Tax is shown as TBD with the other fee rows
+- **AND** no calculated Tax amount is shown
+- **AND** the Tax line offers its info tooltip
+
+### Requirement: Winner Order explains cancellation without exposing the reason
+
+For a cancelled auction order, Winner Order SHALL show the cancellation date as a
+day-only date in the viewer's local zone, the lot and winning bid, and Contact Us as the only next action. It SHALL not show
+the operator's category or note, SHALL not show a stepper or payment action,
+and SHALL preserve the order's retained facts.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1fb rev=2 -->
+#### Scenario: winner-order-SC-143 - Cancelled keeps the lot and winning bid visible
+**Serves:** winner-order-US-13 - Winner learns their order was cancelled
+
+- **GIVEN** a cancelled auction order with a lot and winning bid
+- **WHEN** the winner opens Winner Order
+- **THEN** it shows Cancelled on the recorded day in the viewer's local zone, the lot and winning bid
+- **AND** it shows Contact Us only, without the internal reason
+
+### Requirement: Winner Order shows a locked partially paid record
+
+When an operator has recorded money but has not closed the invoice, Winner
+Order SHALL show Partially Paid as a locked state with Contact Us and a receipt
+link for each payment in the existing receipt row, oldest first. It SHALL show
+no running balance: it SHALL keep showing the full invoice amount, never a
+remaining balance. It SHALL hide Pay, Submit Payment Proof, View Bank Details,
+address changes, invoice reissue and cancellation, and SHALL show no further
+payment deadline.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-34b rev=1 -->
+#### Scenario: winner-order-SC-156 - The partially paid order is locked
+**Serves:** winner-order-US-20 - Winner sees partial collection without a second order
+
+- **GIVEN** an order with one partial payment and money still due
+- **WHEN** the winner opens Winner Order
+- **THEN** it reads Partially Paid
+- **AND** it offers Contact Us, shows the full invoice amount and shows no
+  remaining balance
+- **AND** it shows a separate receipt link for each recorded payment, oldest first
+- **AND** it shows no Pay, Submit Payment Proof, View Bank Details, reissue,
+  address change or cancel action
+
+### Requirement: A missed address deadline closes the address form
+
+This requirement builds on "The address confirm window is 48 hours from lot
+close", which sets the address deadline, hides Confirm once it passes, and
+shows Contact Us. It adds what that closing means and how the form comes back.
+
+The address deadline SHALL be measured from the lot's actual close, counting
+every extended-bidding extension, and SHALL NOT be measured from its scheduled
+close. The 48 hours SHALL be one Grade10-owned figure, the same for every lot.
+A new figure SHALL apply to lots closing after it is set and SHALL NOT move the
+deadline of an order that already has one.
+
+A write SHALL be judged by the moment Grade10 receives it. A delivery address
+Grade10 receives at or after the address deadline SHALL be refused, however
+long the winner spent composing it.
+
+Once the address deadline has passed and no invoice has been sent, Grade10
+SHALL refuse the winner's address writes on the order:
+
+| Winner's write | Behaviour after the address deadline |
+| --- | --- |
+| Confirm a delivery address | Refused |
+| Add, edit or archive an address in the account address book | Unaffected |
+
+The account address book is account-wide and shared across storefronts, per
+"The account owns a reusable shipping address book". Only the write that puts
+an address on this order SHALL be refused.
+
+Grade10 SHALL offer the winner no way to reopen the address form. Only an
+operator reopens it or records the address, per
+"An operator reopens the address form" in `grade10-admin/auction/post-sale`;
+after a reopen the winner SHALL confirm the address as before. A confirmed
+address stays locked, per "The delivery address locks when the invoice is
+sent". Grade10 SHALL send the winner no letter when the form is reopened; the
+operator tells them directly.
+
+Sending the invoice SHALL retire the address deadline. An invoice is sent only
+on a confirmed address, which locks on confirm, per "The delivery address
+locks when the invoice is sent", so Grade10 SHALL neither show the address
+deadline nor refuse on it afterwards.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-oos rev=1 -->
+#### Scenario: winner-order-SC-144 - The address deadline counts from the extended close
+**Serves:** winner-order-US-23 - Winner gets the address form back
+
+- **GIVEN** a lot whose scheduled close was 2026-09-12T08:45:00Z and whose
+  actual close, after extended bidding, was 2026-09-12T09:00:00Z
+- **WHEN** the winner opens the order
+- **THEN** the address deadline shown is 2026-09-14T09:00:00Z
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-r6m rev=1 -->
+#### Scenario: winner-order-SC-145 - An address received just inside the deadline is accepted
+**Serves:** winner-order-US-23 - Winner gets the address form back
+
+- **GIVEN** an auction order whose address deadline is 2026-09-14T09:00:00Z
+- **WHEN** Grade10 receives the winner's delivery address at 2026-09-14T08:59:00Z
+- **THEN** Grade10 accepts the confirmation
+- **AND** the order's derived status is Preparing Invoice
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-kz8 rev=1 -->
+#### Scenario: winner-order-SC-146 - An address received after the deadline is refused
+**Serves:** winner-order-US-23 - Winner gets the address form back
+
+- **GIVEN** an auction order in Setup Overdue whose address deadline was
+  2026-09-14T09:00:00Z
+- **WHEN** Grade10 receives the winner's delivery address at 2026-09-14T09:01:00Z
+- **THEN** Grade10 refuses the confirmation
+- **AND** the order has no confirmed delivery address
+- **AND** its derived status is still Setup Overdue
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-6ax rev=1 -->
+#### Scenario: winner-order-SC-148 - A reopen gives the winner a fresh 48 hours
+**Serves:** winner-order-US-23 - Winner gets the address form back
+
+- **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
+  `not_issued` whose address deadline was 2026-09-14T09:00:00Z
+- **WHEN** an operator reopens the address form at 2026-09-16T14:00:00Z
+- **THEN** the order shows Confirm delivery address with the deadline
+  2026-09-18T14:00:00Z
+- **AND** the winner can confirm a delivery address again
+- **AND** Grade10 offers the winner no way to reopen it themselves
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-90v rev=1 -->
+#### Scenario: winner-order-SC-149 - A reopen sends the winner no letter
+**Serves:** winner-order-US-23 - Winner gets the address form back
+
+- **GIVEN** an unconfirmed auction order in Setup Overdue with invoice status
+  `not_issued` whose address deadline has passed
+- **WHEN** an operator reopens the address form
+- **THEN** the order offers Confirm delivery address again
+- **AND** Grade10 sends the winner no letter about the reopen
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-js5 rev=1 -->
+#### Scenario: winner-order-SC-150 - Sending the invoice retires the address deadline
+**Serves:** Delivery address - retired at send
+
+- **GIVEN** an auction order whose winner confirmed an address and whose
+  invoice an operator sent at 2026-09-13T09:00:00Z
+- **WHEN** 2026-09-14T09:00:00Z passes
+- **THEN** the order shows no address deadline and no missed-deadline alert
+- **AND** it shows the locked address and how to reach Grade10 to request a
+  change
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-byg rev=1 -->
+#### Scenario: winner-order-SC-151 - A missed address deadline leaves the address book alone
+**Serves:** Delivery address - missed deadline closes the form
+
+- **GIVEN** an auction order whose address deadline has passed
+- **WHEN** the winner edits a saved address in their account address book and
+  saves a new one
+- **THEN** Grade10 accepts both writes
+- **AND** neither reaches that auction order
+- **AND** the order still has no confirmed delivery address
+
+### Requirement: The winner pays a sent invoice by the method it was sent for
+
+The winner SHALL pay by the method the invoice was sent for:
+
+| Invoice method | How the winner pays |
+| --- | --- |
+| Card | A single new card transaction for the order total, against a stored card or another card they enter |
+| Bank transfer | A transfer they make themselves, then proof uploaded per "The winner uploads payment proof once" |
+
+Cash and every other method are recorded by an operator alone, per
+`grade10-admin/auction/post-sale`.
+
+A refused or failed card payment SHALL NOT void the invoice. While a card
+invoice's status is `pending`, it SHALL remain payable by card and the winner
+SHALL be able to retry with the same or a different card. The primary pay
+control SHALL read **Pay with Card**. When the invoice status is `expired` or
+`payment_verifying`, Grade10 SHALL NOT offer or start winner card payment; one
+that completes anyway is recorded per "Money that lands is always recorded" in
+`grade10-admin/auction/post-sale`.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-0ex rev=1 -->
+#### Scenario: winner-order-SC-15 - A declined payment leaves the invoice payable
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an unpaid card invoice inside its payment deadline
+- **WHEN** the winner's payment is declined
+- **THEN** the invoice status remains `pending`
+- **AND** the winner can retry with the same or a different card
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-rbe rev=1 -->
+#### Scenario: winner-order-SC-35 - The winner is offered card payment only
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose invoice was sent for card and is `pending`
+- **WHEN** the winner opens the order to pay
+- **THEN** Grade10 offers Pay with Card
+- **AND** shows no bank transfer details, no proof upload, and no cash or other method
+
+### Requirement: Billing Add Address uses the delivery Country/Region picker
+
+Billing Add Address SHALL name the billing country or region the same way
+delivery Add Address does, per "Delivery Add Address Country/Region picker":
+one field read Country/Region, every country and region in A-Z order, typing
+narrows the list, a query with no match leaves it empty, and an empty
+Country/Region is refused beside the field.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-rlh rev=1 -->
+#### Scenario: winner-order-SC-259 - Billing Add Address lists every country and region
+**Serves:** winner-order-US-11 - Winner bills a won lot to a different address
+
+- **GIVEN** a winner on billing Add Address after unticking Same as delivery
+  address
+- **WHEN** the winner opens the Country/Region picker
+- **THEN** the popup lists every country and region in A-Z order, the same
+  list as delivery Add Address
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-1i2 rev=1 -->
+#### Scenario: winner-order-SC-260 - Typing filters the billing list to matching names
+**Serves:** winner-order-US-11 - Winner bills a won lot to a different address
+
+- **GIVEN** a winner with the Country/Region picker open on billing Add Address
+- **WHEN** the winner types a query that matches one or more catalogue names
+- **THEN** the list shows only names that match that query
+
+### Requirement: Country/Region names follow the account's language
+
+The Country/Region picker on delivery and billing Add Address reads in the
+account's language, as the rest of the site does.
+
+**Names** - Each country and region SHALL read in the account's language.
+
+**Order** - The list SHALL keep every country and region, sorted
+alphabetically in that language.
+
+**Search** - Typing SHALL match the names as they read in that language.
+
+**Stored** - The country or region an address holds SHALL NOT change with the
+language; a winner who changes language reads the same choice in the new one.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-05o rev=1 -->
+#### Scenario: winner-order-SC-261 - A Traditional Chinese account reads and searches names in Traditional Chinese
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** a winner whose account language is Traditional Chinese, on
+  delivery Add Address
+- **WHEN** the winner opens the Country/Region picker and types `日本`
+- **THEN** the list reads its names in Traditional Chinese
+- **AND** the list narrows to `日本`
+
+### Requirement: An unsaved one-time address stays on the order until setup ends
+
+A winner who adds a one-time address without saving it to the address book
+can leave the order and come back to it.
+
+**Kept** - An unsaved one-time delivery or billing address SHALL stay on the
+order after the winner leaves and returns, listed and selectable as when it
+was added, per "The account owns a reusable shipping address book".
+
+**Until** - Grade10 SHALL keep it until the winner confirms setup or the setup
+deadline passes, whichever comes first. After either, the order SHALL NOT
+offer it again, including when an operator reopens setup.
+
+**The order's alone** - It SHALL stay on this order only and SHALL NOT enter
+the account address book or any other order.
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-zyl rev=1 -->
+#### Scenario: winner-order-SC-254 - An unsaved one-time delivery address is there on return
+**Serves:** winner-order-US-12 - Winner confirms delivery when five addresses are already saved
+
+- **GIVEN** an auction order in Awaiting Setup, on which the winner added a
+  one-time delivery address without saving it and has not confirmed
+- **WHEN** the winner leaves the order and returns to it before the setup
+  deadline
+- **THEN** the address picker lists the one-time address ahead of the saved
+  addresses
+- **AND** the winner can select it and confirm setup with it
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-z4a rev=1 -->
+#### Scenario: winner-order-SC-255 - An unsaved one-time billing address is there on return
+**Serves:** winner-order-US-11 - Winner bills a won lot to a different address
+
+- **GIVEN** an auction order in Awaiting Setup, on which the winner unticked
+  Same as delivery address and added a one-time billing address without
+  saving it
+- **WHEN** the winner leaves the order and returns to it before the setup
+  deadline
+- **THEN** the one-time billing address is still offered for billing
+- **AND** the account address book does not hold it
+
+<!-- trace:scenario id=g10.auction-winner-order.SC-m55 rev=1 -->
+#### Scenario: winner-order-SC-256 - The one-time address is gone once the setup deadline passes
+**Serves:** winner-order-US-07 - Winner misses the address deadline
+
+- **GIVEN** an auction order on which the winner added a one-time delivery
+  address without saving it and did not confirm before the setup deadline
+- **AND** an operator reopened setup after the deadline passed
+- **WHEN** the winner opens the order
+- **THEN** the address picker does not offer the one-time address

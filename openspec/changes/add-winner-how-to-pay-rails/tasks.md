@@ -16,9 +16,10 @@
 - [x] 1.3 Wire Order summary primary **Submit Payment Proof** and secondary
       **View Bank Details** for pending bank-transfer invoices; hide both when
       Payment Verifying
-- [x] 1.4 Align transfer reference fixture to `LK7P2Q01`; seed rail values with
-      Grade10 Finance Limited / HSBC Hong Kong samples (live accounts remain
-      Finance TBC)
+- [x] 1.4 Align transfer reference fixture to `LK7P2Q01`; seed previews with
+      Grade10 Finance Limited / HSBC Hong Kong samples. Live instructions and
+      the FPS QR come from Finance-owned configuration and are snapshotted on
+      the issued invoice.
 - [x] 1.5 Storybook: View Bank Details standalone (FPS / HK Local / SWIFT);
       Submit Payment Proof standalone; Payment page shell + **Submit Proof
       Flow** / **Pay with Card** CTA outcomes (no duplicate dialog smokes)

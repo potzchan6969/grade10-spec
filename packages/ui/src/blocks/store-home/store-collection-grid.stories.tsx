@@ -4,7 +4,7 @@ import { COLLECTIONS } from "./fixtures";
 import { StoreCollectionGrid } from "./store-collection-grid";
 
 const meta = {
-  title: "Store Home/StoreCollectionGrid",
+  title: "Store/Home/Blocks/StoreCollectionGrid",
   component: StoreCollectionGrid,
   tags: ["autodocs"],
   args: { collections: COLLECTIONS },

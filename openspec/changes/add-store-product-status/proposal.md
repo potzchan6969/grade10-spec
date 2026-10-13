@@ -17,8 +17,8 @@ have shown when they opened the cart.
 
 **Metric:** share of checkout requests refused for a line the cart had shown as
 fine. A stated derivation and stated re-read moments move it toward zero; it is
-unmeasured today, so the first delivery sets the baseline. *(Assumption — the
-source PRD names no metric.)*
+unmeasured today, so the first delivery sets the baseline — the Measurement row
+of [Cart Validation](../../../docs/prds/products/grade10-site/store/cart-validation.md).
 
 **Acceptance signal:** a signed-in collector who opens the cart is told about
 every line that moved before they press checkout, not after.
@@ -43,8 +43,9 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   request. A shop that exposes no count, or a count of zero while still
   offering the variant, bounds nothing.
 - **A card's tile reflects its most available variant.** Out of stock only when
-  every variant on it is. Its page presents one sellable item and reads
-  availability from that item's internal Shopify sale identity.
+  every variant on it is. The tile shows the price of the card's one sellable
+  item, and its page presents that item and reads availability from its
+  internal Shopify sale identity.
 - **Browse surfaces communicate no quantity.** No remaining count, no scarcity
   treatment, no label separating one available variant from another. A
   collector may still request a quantity while adding from a browse surface,
@@ -64,35 +65,43 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   order from an earlier read, however recent.
 - **A line that cannot be filled in full is reduced to what remains** and
   reported as adjusted; one that cannot be filled at all is reported out of
-  stock and left for the collector to remove. A line is never grown.
-- **A withdrawn product is reported as unavailable,** distinctly from out of
-  stock.
+  stock and left for the collector to remove, and checkout waits until they
+  do. A line is never grown.
+- **A withdrawn product leaves the cart and is named.** When the cart opens or
+  checkout finds it, a line whose product left the channel, or whose variant
+  no longer exists, is removed and one notice names every line removed; a
+  line that sold out stays for the collector to remove.
 - **A repriced line is shown at the current price,** the change disclosed as
   plainly rising as falling, and the disclosed price becomes the line's price
   from then on. No browser-supplied or recorded price ever reaches a checkout
   order.
 - **A cart the read contradicts is not handed off.** Every contradicted line is
-  named at once and the collector returns to the cart to resolve it.
+  named at once and the collector returns to the cart to resolve it. A
+  checkout the store's read or the shop refuses reads the cart again as
+  opening it does.
 - **The store's read is advisory; the shop remains the authority.** A refusal
   after a passing read is reported with the line named, a cart the shop would
   fill short is refused rather than sold short, and a read that cannot complete
   blocks checkout rather than guessing.
 - **An initial cart read can fail before any lines are known.** The drawer
-  presents an unchecked cart with Retry, no current total and no checkout
-  action; it does not invent line names.
+  offers Retry, no current total and no checkout, names no line and never
+  shows the cart as empty; it shows the cart as `shared/ui/store-cart` shows a
+  cart not yet read.
 
-No component contract changes. `shared/ui/store-product-listing` takes
+No component export changes. `shared/ui/store-product-listing` takes
 availability as a supplied condition and forbids deriving one;
 `shared/ui/store-cart` carries `default`, `adjusted`, `soldOut` and
 `unavailable` and reads status and price when the drawer opens. This change
-states what the store puts into them.
+states what the store puts into them, and restates what each cart status means
+so Store Cart's table no longer defines them by stock.
 
 ## Non-Goals
 
 - **Overriding the shop's inventory policy.** Whether a variant sells past zero
   is set on the shop, and the store neither adds a pre-order treatment for it
-  nor refuses what the shop sells. A catalogue that must never sell past zero
-  says so on the shop. *(Assumption — no variant on the Grade10 shop is set to
+  nor refuses a variant the shop sells; a count above zero still bounds a
+  request, because the store never reads the setting (decisions Q20). A
+  catalogue that must never sell past zero says so on the shop. *(Assumption — no variant on the Grade10 shop is set to
   sell past zero; if one is, the store sells it as available.)*
 - **Low stock as a cue to buy.** Browse surfaces state availability and nothing
   about quantity. The cart's `adjusted` warning explains a quantity the store
@@ -105,8 +114,7 @@ states what the store puts into them.
 - **Refresh cadence for browse surfaces.** Whether the listing reads live or
   from cache is engineering's. The two cart reads are not cadence — they are
   stated moments, and they are live.
-- **Visual treatment.** Whether out of stock and unavailable are drawn alike is
-  design's.
+- **Visual treatment.** How Sold out is drawn is design's.
 
 ## Capabilities
 
@@ -123,10 +131,21 @@ states what the store puts into them.
 ### Modified Capabilities
 
 - `grade10-site/store/product-listing`: remove stock-derived quantity limits
-  and low-stock counts from listing tiles.
+  and low-stock counts from listing tiles. The signed-out add keeps its
+  durable rule, because the tile's first add is always 1 (decisions Q18).
 - `grade10-site/store/product-page`: remove stock-derived quantity limits and
-  low-stock counts from the product page while keeping its one sellable item
-  and internal Shopify sale identity; the page offers no variant choice.
+  low-stock counts from the product page; the page answers, adds and reads sold
+  out for its one sellable item through the internal Shopify sale identity, and
+  offers no variant choice. `A card is added to the cart from its own page`
+  is retired and replaced by `A card's one item is added to the cart from its
+  own page`, whose scenarios take new ids because the old ones add a chosen
+  grade.
+- `shared/ui/store-cart`: `Cart item status includes unavailable` keeps its
+  four values and states each meaning as cart-validation answers it, rather
+  than by stock (decisions Q21); `Unavailable items are removed silently after
+  open loading` takes its meaning of `unavailable` from that table rather than
+  a second definition. No export changes, and Grade10, its one consumer,
+  already assigns them so.
 
 ## Impact
 
@@ -141,12 +160,51 @@ marks affected lines unchecked, replaces their last availability and prices
 and the cart total with unchecked states, names them in a retryable notice, and
 withholds checkout.
 
-The change directory is named `add-store-product-status` and carries four
+The change directory is named `add-store-product-status` and carries five
 capabilities; the name is left alone so the open pull request keeps its
 history. Its standalone Storybook product-detail preview is updated to match
 the variant and availability behavior specified here.
+The card's structured data carries one offer, for its one item, because
+Crawlable Pages restates only what the page shows (decisions Q24).
 
 `product-status` walks the listing, product page and cart as one Store path;
 the Store domain test suite is updated with that path. The product-detail
 preview uses the same one-item presentation and keeps its Shopify sale
 identifier out of shopper-facing copy.
+
+`redesign-store-product-detail-page` also changes the product page. This change
+accepts first and carries the one-item add and sold-out requirements; the
+redesign rebases against the folded page (decisions Q5). The shared blocks'
+remaining-count element and stepper ceiling leave in a `shared/ui` change of
+their own, handed to redraw-store-product-card-frames (decisions Q8); this
+change's compositions supply none of them.
+
+This change depends on `cart-drawer-empty-state`: cart-validation's
+**In flight** names Store Cart's rule for a cart not yet read, which only that
+change states (decisions Q9). `redesign-store-product-detail-page` and
+`add-store-cart-drawer-ui` depend on this change, because the first rebases on
+the folded product page and the second cites the folded cart-validation.
+
+The `add-shopify-checkout-integration` amendment re-accepts an accepted change,
+which a dependency cannot record: it accepts ahead of this change or with it,
+never after, because it names cart-validation's two reads where the durable
+checkout still names checkout open and Pay (decisions Q15). Its checkout suite
+takes its QA2 rerun first, then accepts with
+`--supersedes 137f9cec66da45e8975e44b4be5c14c272ad34df5ee7e37dca1b8061eb5e0d8c`.
+The four accept back to back in one push, in this order:
+`cart-drawer-empty-state`, `present-cart-site-sale-promo-outcomes`, which
+folds its own `shared/ui/store-cart` delta first, the
+`add-shopify-checkout-integration` amendment, then this change.
+
+## References
+
+- [Product Status](../../../docs/prds/products/grade10-site/commerce/product-status.md)
+- [Product Status · Browsing Limits](../../../docs/prds/products/grade10-site/commerce/product-status.md#browsing-limits)
+- [Product Status · Quantity Requests](../../../docs/prds/products/grade10-site/commerce/product-status.md#quantity-requests)
+- [Cart Validation](../../../docs/prds/products/grade10-site/store/cart-validation.md)
+- [Product Listing](../../../docs/prds/products/grade10-site/store/product-listing.md)
+- [Product Details](../../../docs/prds/products/grade10-site/store/product-page.md)
+- [Cart Drawer](../../../docs/prds/products/grade10-site/store/cart.md)
+- [Store Cart](../../../docs/prds/products/shared/ui/store-cart.md)
+- [Crawlable Pages · Structured Data](../../../docs/prds/products/grade10-site/site/crawlable-pages.md#structured-data)
+- [Checkout](../../../docs/prds/products/grade10-site/store/checkout.md)

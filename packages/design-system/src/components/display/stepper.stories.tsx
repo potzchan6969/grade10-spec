@@ -7,7 +7,7 @@ import { Step } from "./step";
 import { Stepper } from "./stepper";
 
 const meta = {
-  title: "Components/Stepper",
+  title: "Design System/Display/Stepper",
   component: Stepper,
   tags: ["autodocs"],
 } satisfies Meta<typeof Stepper>;
@@ -31,6 +31,33 @@ export const ThreeSteps: Story = {
         state="progress"
       />
       <Step label="Completed" showTrailingConnector={false} state="upcoming" />
+    </Stepper>
+  ),
+};
+
+export const Vertical: Story = {
+  render: () => (
+    <Stepper orientation="vertical">
+      <Step
+        description={FIXTURE_ORDER_PLACED_DAY}
+        label="Order Placed"
+        orientation="vertical"
+        showLeadingConnector={false}
+        state="completed"
+      />
+      <Step
+        description={FIXTURE_ORDER_SHIPPED_DAY}
+        label="Shipped"
+        orientation="vertical"
+        state="progress"
+      />
+      <Step
+        description="Arrives soon"
+        label="Completed"
+        orientation="vertical"
+        showTrailingConnector={false}
+        state="upcoming"
+      />
     </Stepper>
   ),
 };

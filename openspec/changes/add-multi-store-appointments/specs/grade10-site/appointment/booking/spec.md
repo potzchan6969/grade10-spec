@@ -50,6 +50,7 @@ answer is missing, saying which, and SHALL send nothing until they are
 supplied. `/book?service=<slug>` SHALL open the flow with that service picked.
 A product-bound service SHALL never be listed.
 
+<!-- trace:scenario id=g10.appointment-booking.SC-gqn rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-01 - Collector books a grading visit
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -58,6 +59,7 @@ A product-bound service SHALL never be listed.
 - **THEN** the confirmation shows the service, the shop and its address, the start in the shop's zone naming the zone, and the link that manages the visit
 - **AND** a confirmation is sent to that address
 
+<!-- trace:scenario id=g10.appointment-booking.SC-2v2 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-02 - Missing details are refused before anything is sent
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -66,6 +68,7 @@ A product-bound service SHALL never be listed.
 - **THEN** the form names both as missing
 - **AND** no booking is requested
 
+<!-- trace:scenario id=g10.appointment-booking.SC-ic4 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-03 - A time taken meanwhile is refused and the times refresh
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -74,6 +77,7 @@ A product-bound service SHALL never be listed.
 - **THEN** the site says the time was taken
 - **AND** returns them to that day's times, refreshed, with their details kept
 
+<!-- trace:scenario id=g10.appointment-booking.SC-4vt rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-04 - The service's questions are asked in order
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -81,6 +85,7 @@ A product-bound service SHALL never be listed.
 - **WHEN** a collector reaches the details step
 - **THEN** the two questions are shown after the contact fields, in that order, the required one marked
 
+<!-- trace:scenario id=g10.appointment-booking.SC-tro rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-05 - Only what the diary offers is shown
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -89,6 +94,7 @@ A product-bound service SHALL never be listed.
 - **THEN** the times shown are exactly those the diary offers, labelled in Hong Kong time with the zone named
 - **AND** no time between 10:05 and 11:55 is shown
 
+<!-- trace:scenario id=g10.appointment-booking.SC-6rg rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-06 - A day with nothing free cannot be picked
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -96,6 +102,7 @@ A product-bound service SHALL never be listed.
 - **WHEN** a collector views that month
 - **THEN** that Sunday is shown as unavailable and cannot be picked
 
+<!-- trace:scenario id=g10.appointment-booking.SC-hh8 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-07 - Days beyond the horizon cannot be picked
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -103,6 +110,7 @@ A product-bound service SHALL never be listed.
 - **WHEN** a collector views the month holding the 31st day from today
 - **THEN** every day from the 31st on is shown as unavailable
 
+<!-- trace:scenario id=g10.appointment-booking.SC-wxd rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-08 - Only customer-bookable services are listed
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -110,12 +118,14 @@ A product-bound service SHALL never be listed.
 - **WHEN** a collector opens `/book`
 - **THEN** the grading service is listed and the vault visit is not
 
+<!-- trace:scenario id=g10.appointment-booking.SC-qnf rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-09 - A service address opens the flow at that service
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **WHEN** a collector opens `/book?service=grading`
 - **THEN** the flow opens with the grading service picked, at the shop step
 
+<!-- trace:scenario id=g10.appointment-booking.SC-uei rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-10 - A second live visit for the same service is told so
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -136,6 +146,7 @@ offer to move it, through the same day and time picks as a new booking, and
 to cancel it after a confirmation. A closed booking SHALL show its state and
 offer nothing. A link naming no booking SHALL answer not found.
 
+<!-- trace:scenario id=g10.appointment-booking.SC-zkm rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-11 - The link opens the booking
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -143,6 +154,7 @@ offer nothing. A link naming no booking SHALL answer not found.
 - **WHEN** the collector opens the link from their confirmation
 - **THEN** the page shows the service, the shop and its address, the start in the shop's zone, and offers to move or cancel
 
+<!-- trace:scenario id=g10.appointment-booking.SC-i84 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-12 - The collector moves the visit from the link
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -151,6 +163,7 @@ offer nothing. A link naming no booking SHALL answer not found.
 - **THEN** the same booking is live at the new start
 - **AND** an update is sent to their address
 
+<!-- trace:scenario id=g10.appointment-booking.SC-4nw rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-13 - The collector cancels from the link
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -159,6 +172,7 @@ offer nothing. A link naming no booking SHALL answer not found.
 - **THEN** the booking is `cancelled` and the page says so
 - **AND** a cancellation is sent to their address
 
+<!-- trace:scenario id=g10.appointment-booking.SC-qlj rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-14 - A closed booking's link offers nothing
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -166,12 +180,14 @@ offer nothing. A link naming no booking SHALL answer not found.
 - **WHEN** the collector opens its link
 - **THEN** the page shows the visit as completed and offers neither a move nor a cancellation
 
+<!-- trace:scenario id=g10.appointment-booking.SC-cps rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-15 - A link naming nothing answers not found
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **WHEN** a collector opens `/book/manage` with a secret the diary does not hold
 - **THEN** the page answers not found and shows no booking
 
+<!-- trace:scenario id=g10.appointment-booking.SC-0h6 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-16 - The secret never leaves the browser
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -186,6 +202,7 @@ attendee address is the account's address, upcoming visits first and past
 ones after, each opening its manage link. Signed out, the address SHALL
 invite the collector to sign in.
 
+<!-- trace:scenario id=g10.appointment-booking.SC-tsn rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-17 - The list holds the visits under the collector's address
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -194,6 +211,7 @@ invite the collector to sign in.
 - **THEN** tomorrow's visit is listed first as upcoming and last week's after it as past
 - **AND** each opens the page that manages it
 
+<!-- trace:scenario id=g10.appointment-booking.SC-8pb rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-18 - Signed out, the list invites sign-in
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -208,6 +226,7 @@ per locale. `/book/manage` and `/book/mine` SHALL answer at one address per
 locale, SHALL NOT be listed in the sitemap, and SHALL tell crawlers not to
 index them.
 
+<!-- trace:scenario id=g10.appointment-booking.SC-gxp rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-19 - The booking surface is served and listed
 **Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
@@ -215,6 +234,7 @@ index them.
 - **THEN** each answers 200 with the booking surface's title and description in its own language before any script runs
 - **AND** the sitemap lists all three
 
+<!-- trace:scenario id=g10.appointment-booking.SC-msb rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-20 - The private addresses are never indexed
 **Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
@@ -246,6 +266,7 @@ the deployed path until a Turnstile site is registered and its key lands in
 app-env, the per-address budget holding meanwhile. A spent budget SHALL answer `TOO_MANY_REQUESTS` and a failed
 challenge SHALL answer `FORBIDDEN`.
 
+<!-- trace:scenario id=g10.appointment-booking.SC-mb6 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-21 - An address that has spent its budget is refused
 **Serves:** grade10-site-appointment-booking-US-03 - A script tries to book the shop out
 
@@ -253,6 +274,7 @@ challenge SHALL answer `FORBIDDEN`.
 - **WHEN** it attempts an 11th
 - **THEN** the attempt is refused `TOO_MANY_REQUESTS`, and the refusal carries the reason `budget` so the site can word the wait itself
 
+<!-- trace:scenario id=g10.appointment-booking.SC-zhe rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-22 - A request with no challenge token is refused where the secret is set
 **Serves:** grade10-site-appointment-booking-US-03 - A script tries to book the shop out
 
@@ -260,6 +282,7 @@ challenge SHALL answer `FORBIDDEN`.
 - **WHEN** a booking request carries no challenge token
 - **THEN** it is refused `FORBIDDEN`
 
+<!-- trace:scenario id=g10.appointment-booking.SC-fg8 rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-23 - A refused request holds no seat
 **Serves:** grade10-site-appointment-booking-US-03 - A script tries to book the shop out
 

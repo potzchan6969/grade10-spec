@@ -1,3 +1,5 @@
+# grade10-admin/auction/test-winners Specification
+
 ## Purpose
 
 Lets an operator, outside production, make in one step a test account that
@@ -69,6 +71,7 @@ nothing twice.
 **Never biddable** - The lot SHALL be closed from the moment it is made, so it
 takes no bid. It lists as any closed sandbox lot does.
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-pxq rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-11 - One action makes a winner waiting on setup
 **Serves:** Making a test winner - from nothing to an order that waits on the winner
 
@@ -82,6 +85,7 @@ takes no bid. It lists as any closed sandbox lot does.
   titled `Test lot <code>`, won at 100000 minor units in HKD
 - **AND** the auction-won letter reaches that address
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-wfn rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-12 - Production answers as if the action did not exist
 **Serves:** Making a test winner - never where real collectors bid
 
@@ -91,6 +95,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **THEN** Grade10 answers as if the action did not exist
 - **AND** no account, lot or order is made
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-kfc rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-13 - The production console carries no Test tab
 **Serves:** Making a test winner - the console shipped to production leaves it out
 
@@ -100,6 +105,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **THEN** no Test tab is offered
 - **AND** the console's code carries none of the Test tab's code
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-ibc rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-14 - An address other than the operator's own tagged one is refused
 **Serves:** Making a test winner - letters only ever reach the operator
 
@@ -109,6 +115,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **THEN** Grade10 refuses each
 - **AND** no account, lot or order is made
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-0fh rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-15 - An address holding a verified account is refused
 **Serves:** Making a test winner - a test winner never takes over an account in use
 
@@ -117,6 +124,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **THEN** Grade10 refuses it, saying the address already holds an account
 - **AND** no lot or order is made
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-qka rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-16 - The same address makes one test winner
 **Serves:** Making a test winner - a repeated request returns the first
 
@@ -126,6 +134,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **THEN** Grade10 returns the same order
 - **AND** one account, one lot and one order exist for that address
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-9cm rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-17 - A close in the past opens an order already overdue
 **Serves:** Making a test winner - QA reaches a missed deadline without waiting
 
@@ -133,6 +142,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **WHEN** they make a test winner closed at 2026-09-26T10:00:00Z
 - **THEN** its order reads Setup Overdue
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-fb4 rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-18 - A close beyond 30 days back or in the future is refused
 **Serves:** Making a test winner - a close QA can reach, and no further
 
@@ -142,6 +152,7 @@ takes no bid. It lists as any closed sandbox lot does.
 - **THEN** Grade10 refuses each
 - **AND** no account, lot or order is made
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-y07 rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-19 - The test lot takes no bid, its order cancelled or not
 **Serves:** Making a test winner - the sandbox lot is never open to bids
 
@@ -164,6 +175,7 @@ so the operator's own session stays signed in. The link and the order's
 letters reach the operator's own inbox, since the address is theirs with a
 tag.
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-90p rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-20 - The emailed link opens the test winner's order
 **Serves:** Test winner sign-in - QA signs in as the winner from their own inbox
 
@@ -173,6 +185,7 @@ tag.
 - **THEN** the window is signed in as the test account
 - **AND** it shows the test winner's order in Awaiting Setup
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-3rj rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-21 - Email sign-in link sends a new link
 **Serves:** Test winner sign-in - a lapsed link is replaced from the panel
 
@@ -200,6 +213,7 @@ cancelled test winner stays listed.
 test winner. Without it, Winners SHALL name the access it needs and show
 nothing else.
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-qra rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-22 - Winners lists test winners newest first
 **Serves:** Test winner panel - every test winner and where its order stands
 
@@ -211,6 +225,7 @@ nothing else.
   made, with Open order and Email sign-in link
 - **AND** Open order opens that order in Orders
 
+<!-- trace:scenario id=g10adm.auction-test-winners.SC-xvn rev=1 -->
 #### Scenario: grade10-admin-auction-test-winners-SC-23 - Without both grants Winners names the access it needs
 **Serves:** Test winner panel - only an operator who may also create accounts
 

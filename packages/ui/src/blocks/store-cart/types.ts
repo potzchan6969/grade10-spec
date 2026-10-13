@@ -7,19 +7,22 @@ type CartItemStatus = "default" | "adjusted" | "soldOut" | "unavailable";
  * All amounts and strings are display-ready presentation values.
  *
  * Discount display (each dollar once):
- * - **Catalogue / site special sale** — `price` + optional `originalPrice`
- *   (compare-at); no `couponCode`. Auto storewide cuts use this shape on every
- *   eligible line.
+ * - **Product-class site sale** — `price` + optional `originalPrice`
+ *   (compare-at); no `couponCode`. A catalogue, product or collection sale
+ *   uses this shape on every line it cuts.
+ * - **Order-class site discount** — a cut off the whole order, such as a
+ *   storewide or spend-threshold discount, never touches the lines: it is an
+ *   `OrderDiscountRow` in the footer, after the Subtotal it is taken from.
  * - **Product promo/coupon** — `couponCode` on this line with the discounted
  *   unit `price` (and optional pre-coupon `originalPrice`). That cut MUST NOT
  *   also appear as `PromoState` `applied` on the footer.
  * - **Order-level promo/coupon/points** — lines stay at catalogue/sale prices
  *   with no `couponCode`; the footer summary carries the cut.
  * - **Site sale × order promo** — Shopify combine rules decide refuse, stack,
- *   or replace. Site sale shows as line `price` + `originalPrice` (compare-at);
- *   do not also name it as a footer Store sale row. Stack adds only the code
- *   cut in the footer on the post-sale Subtotal. Replace lifts the line sale
- *   and shows only the code.
+ *   or replace. A product-class sale shows as line `price` + `originalPrice`
+ *   (compare-at); do not also name it as a footer row. Stack adds only the
+ *   code cut in the footer on the post-sale Subtotal. Replace lifts the line
+ *   sale and shows only the code.
  */
 type CartItemSummary = {
   id: string;
@@ -53,7 +56,23 @@ type CartItemSummary = {
 type PromoState =
   | { status: "collapsed" }
   | { status: "expanded"; error?: string }
-  | { status: "applied"; code: string; discountAmount: ReactNode };
+  | {
+      status: "applied";
+      /** e.g. `Discount (SAVE10)`. */
+      label: string;
+      discountAmount: ReactNode;
+    };
+
+/**
+ * An order-class site discount in the footer, after the Subtotal and before
+ * the promo slot. Display-ready; the shopper cannot remove it.
+ */
+type OrderDiscountRow = {
+  /** e.g. `Discount (Spend 10k 10% off)`. */
+  label: string;
+  /** e.g. `−HK$4,270.00`. */
+  amount: string;
+};
 
 /**
  * A live promo code the member already holds (minted from Loyalty).
@@ -169,6 +188,7 @@ export type {
   CartItemStatus,
   CartItemSummary,
   HeldPromoCode,
+  OrderDiscountRow,
   PointsState,
   PromoNotice,
   PromoState,

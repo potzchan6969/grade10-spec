@@ -1,3 +1,5 @@
+# grade10-site/auction/account-record Specification
+
 ## Feature set
 
 - Won Status
@@ -28,6 +30,8 @@ or shipment state.
 | Cancelled | Invoice status is `cancelled` |
 | Refunded | Invoice status is `refunded` |
 
+Preparing Shipment and Shipped SHALL use Badge `default` on a Won row.
+
 This surface SHALL remain read-only. It SHALL offer no control that records
 payment, uploads payment proof, requests a wire, records shipment, changes an
 address or payment method, or changes an auction order's status.
@@ -51,6 +55,7 @@ reads that their card was not charged".
 - **GIVEN** a won listing whose invoice status is `paid` and whose fulfilment status is `unfulfilled`
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Preparing Shipment
+- **AND** its status badge uses Badge `default`
 
 <!-- trace:scenario id=g10.auction-account-record.SC-pu6 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-21 - Manual collection reads as the same Paid
@@ -77,6 +82,7 @@ reads that their card was not charged".
 - **GIVEN** one won listing whose paid order is fulfilled without delivery confirmation and one whose paid order has delivery confirmation
 - **WHEN** the winner opens their Bidding page
 - **THEN** the first listing's state is Shipped
+- **AND** its status badge uses Badge `default`
 - **AND** the second listing's state is Delivered
 
 <!-- trace:scenario id=g10.auction-account-record.SC-4sy rev=1 -->

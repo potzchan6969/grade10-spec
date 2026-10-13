@@ -18,9 +18,9 @@ change, p95; and the listing's answer time at a location holding no copy.
 - **One copy per shop** — the store keeps the catalogue copy in one place per
   shop, applies each change the shop reports and re-reads the whole catalogue
   every 5 minutes; every location follows that copy instead of building its own
-- **Seconds after save** — a product published, taken down or repriced, and
-  stock that moves, reach the listing everywhere within seconds of the shop's
-  own reads answering the change
+- **Seconds after save** — a product published, taken down, repriced, sold
+  out or brought back reaches the listing everywhere within seconds of the
+  shop's own reads answering the change
 - **No listing view reads the shop** — the copy carries whole products, so the
   grid, its count and its sidebar answer from it alone and keep answering
   while the shop is unreachable

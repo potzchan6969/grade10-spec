@@ -95,6 +95,7 @@ their words.
   they lift it
 - **A fact the sentence states** — is recorded as the product manager's, never
   asked back
+- **How it is asked** — as a [Clarification Request](../../AGENTS.md#questions-and-blockers)
 
 ## Readers
 

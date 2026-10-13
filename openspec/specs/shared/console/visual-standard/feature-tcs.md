@@ -1,6 +1,6 @@
 # shared/console/visual-standard Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/5
 **Drafts styled:** 2026-09-02, tcs-rules r1
 
 ## shared-console-visual-standard-US1: Operator moves between consoles in one shift

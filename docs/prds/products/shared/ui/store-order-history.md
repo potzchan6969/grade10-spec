@@ -12,8 +12,16 @@ Every store application renders them from that one source, supplying copy,
 imagery, formatted values and callbacks — the blocks fetch nothing and format
 nothing themselves.
 
+🚧 The application chooses which of the six a badge shows, and the badge gives
+it no meaning of its own: for a Store order,
+[Order Status](/p/grade10-site/commerce/order-status) decides it.
+
 The page hides a section with nothing in it rather than rendering an empty
 heading, and when both lists are empty it shows the empty state that sends a
 collector to the store. Track Order appears on a card only when the
 application enables it, and each part is importable alone, so a console that
 needs just the badge or just a card takes that and no more.
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="shared/ui/store-order-history"}
+:::

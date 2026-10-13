@@ -21,11 +21,11 @@ const container: Decorator[] = [
  * Scrollable item container of the cart drawer (`4735:6493`).
  *
  * Owns list composition: overflow, empty, and mixed item states.
- * Per-row visuals live on [`CartItem`](?path=/docs/store-cart-cartitem--docs);
- * fetch-on-open loading lives on [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs).
+ * Per-row visuals live on [`CartItem`](?path=/docs/store-cart-blocks-cartitem--docs);
+ * fetch-on-open loading lives on [`CartDrawer`](?path=/docs/store-cart-blocks-cartdrawer--docs).
  */
 const meta = {
-  title: "Store Cart/CartDrawerBody",
+  title: "Store/Cart/Blocks/CartDrawerBody",
   component: CartDrawerBody,
   tags: ["autodocs"],
   decorators: container,

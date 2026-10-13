@@ -52,7 +52,7 @@ const googleContinue = (
 );
 
 const meta = {
-  title: "Auth Sign In/SignInCard",
+  title: "Auth/Sign In/Blocks/SignInCard",
   component: SignInCard,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -261,6 +261,21 @@ export const GoogleFrameStaysInsideTheClip: Story = {
     expect(frame.height).toBe(44);
     expect(frame.top).toBeGreaterThanOrEqual(clip.top);
     expect(frame.bottom).toBeLessThanOrEqual(clip.bottom);
+  },
+};
+
+/**
+ * `Login Dialog` is 448 wide, where the generic Dialog caps at 512. Google
+ * draws its button at 400, so a card left at 512 sets it in a 462 column and
+ * the button stops short of both edges. The cap is read from computed style,
+ * which holds at any viewport; a narrow one only shrinks the dialog below it.
+ */
+export const HoldsTheFrameWidth: Story = {
+  name: "Frame width",
+  play: async () => {
+    const dialog = await within(document.body).findByRole("dialog");
+
+    expect(getComputedStyle(dialog).maxWidth).toBe("448px");
   },
 };
 

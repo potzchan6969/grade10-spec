@@ -74,7 +74,7 @@ test("shared-planning-agent-rounds-SC-57 - every group of the tasks template but
     );
     assert.match(
       tasks[0],
-      /`<capability>-SC-\d+`/,
+      /`<app>\.<domain>-<capability>\.SC\d+`/,
       `group \`${heading}\`'s test task carries no scenario id hint`,
     );
     // The clause an engineer copies into a real plan: the order the tests
@@ -118,18 +118,14 @@ test("every group heading of the tasks template carries its repository tag", () 
 test("shared-planning-agent-rounds-SC-90 - the walk group uses draft cases during planning and defers human QA until deployment", () => {
   const template = read(`${SCHEMA}/templates/${artifact.template}`);
   const walkText = template.slice(template.indexOf("## 3. The walk"));
-  assert.match(walkText, /Uses draft `feature-tcs\.md` as its input/i);
-  assert.match(walkText, /human QA reviews cases after deployment/i);
-  assert.match(walkText, /`\/tcs-run-sheet` executes manual cases/i);
-  // `check:manual`'s `walk` rule refuses a walk group that names no
-  // `/tcs-review` of its change, so the template names the placeholder for it.
-  assert.match(walkText, /`\/tcs-review <change>`/);
-  assert.match(
-    instruction,
-    /preamble names that review \(`\/tcs-review <change>`\)/,
-  );
+  assert.match(walkText, /Uses draft `feature-tcs\.md` as its planning input/i);
+  assert.doesNotMatch(walkText, /tcs-review|tcs-run-sheet/i);
   assert.match(instruction, /draft suite.*as its planning input/i);
   assert.match(instruction, /human QA after deployment/i);
+  assert.match(
+    instruction,
+    /never a task, walk input, acceptance gate or archive gate/i,
+  );
   assert.doesNotMatch(walkText, /Needs `feature-tcs\.md` reviewed/);
 });
 

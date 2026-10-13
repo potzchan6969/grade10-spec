@@ -1,6 +1,6 @@
 # grade10-site/analytics Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 12/29
 **Drafts styled:** 2026-10-02, tcs-rules r4
 
 **Out of suite:** none — every Feature set root group this change introduces
@@ -14,13 +14,14 @@ trace those groups.
 * A Mixpanel event is read in the Mixpanel project's events view, by its name and the fact's id.
 * The store, auction and loyalty workers sweep every 5 minutes, the vault worker every 15 minutes.
 
-## grade10-site-analytics-US1: Mixpanel events and profiles
+## g10.analytics-analytics.US1: Mixpanel events and profiles
 
 **As a** collector,
 **I want** browse, bid, and pay recorded as one path without inventing people,
 **so that** funnels and cohorts stay honest for the operators who read them.
 
-### grade10-site-analytics-US1-TC1-1: Signed-in event names user and device
+<!-- trace:case id=g10.analytics-analytics.TC-ob4 rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC1: Signed-in event names user and device
 
 **Classification:**
 
@@ -49,7 +50,8 @@ trace those groups.
 - The event still names that device.
 - Audience is `collector`.
 
-### grade10-site-analytics-US1-TC2-1: Anonymous event names only the device
+<!-- trace:case id=g10.analytics-analytics.TC-rtl rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC2: Anonymous event names only the device
 
 **Classification:**
 
@@ -77,7 +79,8 @@ trace those groups.
 - The event is attributed to the device.
 - The event is not attributed to a user id.
 
-### grade10-site-analytics-US1-TC3-1: Client cannot claim a user id
+<!-- trace:case id=g10.analytics-analytics.TC-hzq rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC3: Client cannot claim a user id
 
 **Classification:**
 
@@ -104,7 +107,8 @@ trace those groups.
 
 - The recorded event is not attributed to that user id.
 
-### grade10-site-analytics-US1-TC4-1: Staff browsing the collector site are marked staff
+<!-- trace:case id=g10.analytics-analytics.TC-i1k rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC4: Staff browsing the collector site are marked staff
 
 **Classification:**
 
@@ -131,7 +135,8 @@ trace those groups.
 
 - Audience is `staff`.
 
-### grade10-site-analytics-US1-TC5-1: Ownerless paid order sits on the order alone
+<!-- trace:case id=g10.analytics-analytics.TC-q84 rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC5: Ownerless paid order sits on the order alone
 
 **Classification:**
 
@@ -161,7 +166,8 @@ trace those groups.
 - Grade10 does not send Order Paid again on the claim.
 - Mixpanel does not merge that order device onto the member.
 
-### grade10-site-analytics-US1-TC6-1: Sign-out and session expiry start a new device
+<!-- trace:case id=g10.analytics-analytics.TC-8v8 rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC6: Sign-out and session expiry start a new device
 
 **Classification:**
 
@@ -191,7 +197,8 @@ trace those groups.
 - Neither event is attributed to the previous collector.
 - No Signed In or Signed Out Mixpanel event is recorded.
 
-### grade10-site-analytics-US1-TC7-1: Server emit that continues a visit keeps the device
+<!-- trace:case id=g10.analytics-analytics.TC-voq rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC7: Server emit that continues a visit keeps the device
 
 **Classification:**
 
@@ -222,7 +229,8 @@ trace those groups.
 - Checkout Started, web Order Paid, and the other server event each name that `$device_id`.
 - Browse events from that device can join the paid account after sign-in.
 
-### grade10-site-analytics-US1-TC8-1: First-touch campaign on the landing
+<!-- trace:case id=g10.analytics-analytics.TC-nxv rev=1 covers=g10.analytics-analytics.SC-rx2,g10.analytics-analytics.SC-ju7,g10.analytics-analytics.SC-ubv,g10.analytics-analytics.SC-w72,g10.analytics-analytics.SC-su2,g10.analytics-analytics.SC-4xt,g10.analytics-analytics.SC-7qm,g10.analytics-analytics.SC-sss,g10.analytics-analytics.SC-asj,g10.analytics-analytics.SC-bk7,g10.analytics-analytics.SC-ni2,g10.analytics-analytics.SC-j7u,g10.analytics-analytics.SC-v8r,g10.analytics-analytics.SC-fpn,g10.analytics-analytics.SC-vau,g10.analytics-analytics.SC-ce8,g10.analytics-analytics.SC-4ge,g10.analytics-analytics.SC-use,g10.analytics-analytics.SC-u9c,g10.analytics-analytics.SC-hbr,g10.analytics-analytics.SC-6ma -->
+### g10.analytics-analytics.US1-TC8: First-touch campaign on the landing
 
 **Classification:**
 
@@ -253,7 +261,8 @@ trace those groups.
 - Page Viewed and Lot Viewed carry the UTM Source, Medium, Campaign, and Content values that were present.
 - The first Page Viewed includes Initial Referrer.
 
-### grade10-site-analytics-US1-TC9-1: Account Created fires once when the store first knows a user id
+<!-- trace:case id=g10.analytics-analytics.TC-1pv rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC9: Account Created fires once when the store first knows a user id
 
 **Classification:**
 
@@ -285,7 +294,8 @@ trace those groups.
 - Mixpanel does not record Account Created for the existing email request.
 - The identity worker records no Mixpanel event.
 
-### grade10-site-analytics-US1-TC10-1: Browser may send client names only
+<!-- trace:case id=g10.analytics-analytics.TC-03a rev=1 covers=g10.analytics-analytics.SC-rx2,g10.analytics-analytics.SC-ju7,g10.analytics-analytics.SC-ubv,g10.analytics-analytics.SC-w72,g10.analytics-analytics.SC-su2,g10.analytics-analytics.SC-4xt,g10.analytics-analytics.SC-7qm,g10.analytics-analytics.SC-sss,g10.analytics-analytics.SC-asj,g10.analytics-analytics.SC-bk7,g10.analytics-analytics.SC-ni2,g10.analytics-analytics.SC-j7u,g10.analytics-analytics.SC-v8r,g10.analytics-analytics.SC-fpn,g10.analytics-analytics.SC-vau,g10.analytics-analytics.SC-ce8,g10.analytics-analytics.SC-4ge,g10.analytics-analytics.SC-use,g10.analytics-analytics.SC-u9c,g10.analytics-analytics.SC-hbr,g10.analytics-analytics.SC-6ma -->
+### g10.analytics-analytics.US1-TC10: Browser may send client names only
 
 **Classification:**
 
@@ -313,7 +323,8 @@ trace those groups.
 
 - Ingest rejects both submissions.
 
-### grade10-site-analytics-US1-TC11-1: Store funnel client and server events
+<!-- trace:case id=g10.analytics-analytics.TC-xjo rev=1 covers=g10.analytics-analytics.SC-rx2,g10.analytics-analytics.SC-ju7,g10.analytics-analytics.SC-ubv,g10.analytics-analytics.SC-w72,g10.analytics-analytics.SC-su2,g10.analytics-analytics.SC-4xt,g10.analytics-analytics.SC-7qm,g10.analytics-analytics.SC-sss,g10.analytics-analytics.SC-asj,g10.analytics-analytics.SC-bk7,g10.analytics-analytics.SC-ni2,g10.analytics-analytics.SC-j7u,g10.analytics-analytics.SC-v8r,g10.analytics-analytics.SC-fpn,g10.analytics-analytics.SC-vau,g10.analytics-analytics.SC-ce8,g10.analytics-analytics.SC-4ge,g10.analytics-analytics.SC-use,g10.analytics-analytics.SC-u9c,g10.analytics-analytics.SC-hbr,g10.analytics-analytics.SC-6ma -->
+### g10.analytics-analytics.US1-TC11: Store funnel client and server events
 
 **Classification:**
 
@@ -346,7 +357,8 @@ trace those groups.
 - Order Paid carries Member true, Points Earned, Points Spent, and Tier when the programme priced the spend.
 - A refused checkout records no Checkout Started.
 
-### grade10-site-analytics-US1-TC12-3: Auction funnel events
+<!-- trace:case id=g10.analytics-analytics.TC-6r6 rev=3 covers=g10.analytics-analytics.SC-rx2,g10.analytics-analytics.SC-ju7,g10.analytics-analytics.SC-ubv,g10.analytics-analytics.SC-w72,g10.analytics-analytics.SC-su2,g10.analytics-analytics.SC-4xt,g10.analytics-analytics.SC-7qm,g10.analytics-analytics.SC-sss,g10.analytics-analytics.SC-asj,g10.analytics-analytics.SC-bk7,g10.analytics-analytics.SC-ni2,g10.analytics-analytics.SC-j7u,g10.analytics-analytics.SC-v8r,g10.analytics-analytics.SC-fpn,g10.analytics-analytics.SC-vau,g10.analytics-analytics.SC-ce8,g10.analytics-analytics.SC-4ge,g10.analytics-analytics.SC-use,g10.analytics-analytics.SC-u9c,g10.analytics-analytics.SC-hbr,g10.analytics-analytics.SC-6ma -->
+### g10.analytics-analytics.US1-TC12: Auction funnel events
 
 **Classification:**
 
@@ -398,7 +410,8 @@ trace those groups.
 * Step 8 shows no Bid Placed for `<refused maximum>` or for the auto-bid step.
 * Step 8 shows no Bidder Outbid for this collector.
 
-### grade10-site-analytics-US1-TC13-1: Loyalty facts on Mixpanel
+<!-- trace:case id=g10.analytics-analytics.TC-ac6 rev=1 covers=g10.analytics-analytics.SC-rx2,g10.analytics-analytics.SC-ju7,g10.analytics-analytics.SC-ubv,g10.analytics-analytics.SC-w72,g10.analytics-analytics.SC-su2,g10.analytics-analytics.SC-4xt,g10.analytics-analytics.SC-7qm,g10.analytics-analytics.SC-sss,g10.analytics-analytics.SC-asj,g10.analytics-analytics.SC-bk7,g10.analytics-analytics.SC-ni2,g10.analytics-analytics.SC-j7u,g10.analytics-analytics.SC-v8r,g10.analytics-analytics.SC-fpn,g10.analytics-analytics.SC-vau,g10.analytics-analytics.SC-ce8,g10.analytics-analytics.SC-4ge,g10.analytics-analytics.SC-use,g10.analytics-analytics.SC-u9c,g10.analytics-analytics.SC-hbr,g10.analytics-analytics.SC-6ma -->
+### g10.analytics-analytics.US1-TC13: Loyalty facts on Mixpanel
 
 **Classification:**
 
@@ -431,7 +444,8 @@ trace those groups.
 - Till Order Paid has Origin `pos` and that Session ID.
 - A refused till identification records no Member Identified.
 
-### grade10-site-analytics-US1-TC14-1: Vault conversion funnel join
+<!-- trace:case id=g10.analytics-analytics.TC-8io rev=1 covers=g10.analytics-analytics.SC-rx2,g10.analytics-analytics.SC-ju7,g10.analytics-analytics.SC-ubv,g10.analytics-analytics.SC-w72,g10.analytics-analytics.SC-su2,g10.analytics-analytics.SC-4xt,g10.analytics-analytics.SC-7qm,g10.analytics-analytics.SC-sss,g10.analytics-analytics.SC-asj,g10.analytics-analytics.SC-bk7,g10.analytics-analytics.SC-ni2,g10.analytics-analytics.SC-j7u,g10.analytics-analytics.SC-v8r,g10.analytics-analytics.SC-fpn,g10.analytics-analytics.SC-vau,g10.analytics-analytics.SC-ce8,g10.analytics-analytics.SC-4ge,g10.analytics-analytics.SC-use,g10.analytics-analytics.SC-u9c,g10.analytics-analytics.SC-hbr,g10.analytics-analytics.SC-6ma -->
+### g10.analytics-analytics.US1-TC14: Vault conversion funnel join
 
 **Classification:**
 
@@ -459,7 +473,8 @@ trace those groups.
 - Mixpanel records Vault Case Submitted, Vault Visit Booked, Vault Offer Made, Vault Offer Accepted, Vault Payout Recorded, and Identity Bound.
 - Financed cases per week are still read from the vault ledger, not from Mixpanel alone.
 
-### grade10-site-analytics-US1-TC15-1: User profile snapshot for a user id only
+<!-- trace:case id=g10.analytics-analytics.TC-sca rev=1 covers=g10.analytics-analytics.SC-o7d,g10.analytics-analytics.SC-syh,g10.analytics-analytics.SC-d0t,g10.analytics-analytics.SC-icd -->
+### g10.analytics-analytics.US1-TC15: User profile snapshot for a user id only
 
 **Classification:**
 
@@ -492,7 +507,8 @@ trace those groups.
 - Mixpanel holds no user profile for the anonymous device.
 - The profile does not carry `$email`, `$name`, or `$phone`.
 
-### grade10-site-analytics-US1-TC16-1: Collector IP for geolocation
+<!-- trace:case id=g10.analytics-analytics.TC-k4b rev=1 covers=g10.analytics-analytics.SC-4pj,g10.analytics-analytics.SC-xtj,g10.analytics-analytics.SC-xjq,g10.analytics-analytics.SC-n19,g10.analytics-analytics.SC-77x,g10.analytics-analytics.SC-3pq,g10.analytics-analytics.SC-b8p,g10.analytics-analytics.SC-2py,g10.analytics-analytics.SC-y2g,g10.analytics-analytics.SC-1h1,g10.analytics-analytics.SC-w73,g10.analytics-analytics.SC-3nr,g10.analytics-analytics.SC-5cv,g10.analytics-analytics.SC-kpf,g10.analytics-analytics.SC-ya9,g10.analytics-analytics.SC-lw5,g10.analytics-analytics.SC-8vy -->
+### g10.analytics-analytics.US1-TC16: Collector IP for geolocation
 
 **Classification:**
 
@@ -525,7 +541,8 @@ trace those groups.
 - Order Paid does not use the worker's address as the person's location.
 - The profile write sets `$ip` to `0` and does not set location from the worker.
 
-### grade10-site-analytics-US1-TC17-1: Refusals stay off Mixpanel
+<!-- trace:case id=g10.analytics-analytics.TC-ao3 rev=1 covers=g10.analytics-analytics.SC-xi3,g10.analytics-analytics.SC-5sa,g10.analytics-analytics.SC-27a -->
+### g10.analytics-analytics.US1-TC17: Refusals stay off Mixpanel
 
 **Classification:**
 
@@ -556,7 +573,8 @@ trace those groups.
 - Admin console use records no Mixpanel event.
 - Grade10 records the catalog and ZZZ is not required to emit storefront events.
 
-### grade10-site-analytics-US1-TC18-1: Committed fact reaches Mixpanel on the worker's next sweep
+<!-- trace:case id=g10.analytics-analytics.TC-jsp rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC18: Committed fact reaches Mixpanel on the worker's next sweep
 
 Runs once per row of **Test data**.
 
@@ -602,7 +620,8 @@ Runs once per row of **Test data**.
 * Step 4 shows the row's server event once, for that fact.
 * Step 5 shows zero waiting records.
 
-### grade10-site-analytics-US1-TC19-1: Rolled-back fact sends nothing
+<!-- trace:case id=g10.analytics-analytics.TC-u5k rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC19: Rolled-back fact sends nothing
 
 **Classification:**
 
@@ -637,7 +656,8 @@ Runs once per row of **Test data**.
 * Step 3 shows zero waiting records.
 * Step 5 finds no Bid Placed for `<lot_2>`.
 
-### grade10-site-analytics-US1-TC20-1: Record survives a worker that stops after the commit
+<!-- trace:case id=g10.analytics-analytics.TC-hqt rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC20: Record survives a worker that stops after the commit
 
 **Classification:**
 
@@ -671,7 +691,8 @@ Runs once per row of **Test data**.
 * Step 2 shows one waiting record.
 * Step 4 shows one Bid Placed for that maximum.
 
-### grade10-site-analytics-US1-TC21-1: Outage of hours drains once Mixpanel recovers
+<!-- trace:case id=g10.analytics-analytics.TC-gnk rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC21: Outage of hours drains once Mixpanel recovers
 
 **Classification:**
 
@@ -715,7 +736,8 @@ Runs once per row of **Test data**.
 * Step 5 shows Order Paid once for each of `<paid orders>`.
 * Step 6 shows zero waiting records.
 
-### grade10-site-analytics-US1-TC22-1: Send accepted but seen as failed counts once
+<!-- trace:case id=g10.analytics-analytics.TC-kbo rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC22: Send accepted but seen as failed counts once
 
 **Classification:**
 
@@ -749,7 +771,8 @@ Runs once per row of **Test data**.
 * Step 4 shows Reward Redeemed once.
 * Step 5 shows zero waiting records.
 
-### grade10-site-analytics-US1-TC23-1: Replayed paid webhook keeps one Order Paid record
+<!-- trace:case id=g10.analytics-analytics.TC-e7f rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC23: Replayed paid webhook keeps one Order Paid record
 
 **Classification:**
 
@@ -786,7 +809,8 @@ Runs once per row of **Test data**.
 * Step 4 still shows one waiting record.
 * Step 7 shows Order Paid once for `<order_6>`.
 
-### grade10-site-analytics-US1-TC24-1: Refused record in a batch is held, the rest sent
+<!-- trace:case id=g10.analytics-analytics.TC-kxi rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC24: Refused record in a batch is held, the rest sent
 
 **Classification:**
 
@@ -831,7 +855,8 @@ Runs once per row of **Test data**.
 * Step 5 shows the alarm raised for the held record.
 * Step 7 shows one held record and still no Bid Placed; nothing sent it or dropped it.
 
-### grade10-site-analytics-US1-TC25-1: Held profile write never lands over a later one
+<!-- trace:case id=g10.analytics-analytics.TC-kqh rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC25: Held profile write never lands over a later one
 
 **Classification:**
 
@@ -871,7 +896,8 @@ Runs once per row of **Test data**.
 * Step 7 shows Tier `Black`; the held write did not delay it.
 * Step 9 still shows Tier `Black`.
 
-### grade10-site-analytics-US1-TC26-1: Profile ends on the latest write after an outage
+<!-- trace:case id=g10.analytics-analytics.TC-3cx rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC26: Profile ends on the latest write after an outage
 
 **Classification:**
 
@@ -908,7 +934,8 @@ Runs once per row of **Test data**.
 * Step 7 shows Tier `Black`.
 * Step 8 shows zero waiting records.
 
-### grade10-site-analytics-US1-TC27-1: Erased account's waiting and held records go with it
+<!-- trace:case id=g10.analytics-analytics.TC-uyx rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC27: Erased account's waiting and held records go with it
 
 **Classification:**
 
@@ -951,7 +978,8 @@ Runs once per row of **Test data**.
 * Step 5 finds no Reward Redeemed for `<reward_2>` or `<reward_3>`.
 * Step 5 finds the profile write the erasure itself made: Member false, no Tier.
 
-### grade10-site-analytics-US1-TC28-1: Worker with an empty token writes no record
+<!-- trace:case id=g10.analytics-analytics.TC-qhu rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC28: Worker with an empty token writes no record
 
 **Classification:**
 
@@ -984,7 +1012,8 @@ Runs once per row of **Test data**.
 * Step 3 shows zero waiting and zero held records.
 * Step 4 shows the store's Mixpanel records are off, its token empty.
 
-### grade10-site-analytics-US1-TC29-1: Browser batch failure stays best effort
+<!-- trace:case id=g10.analytics-analytics.TC-mlg rev=1 covers=g10.analytics-analytics.SC-pih,g10.analytics-analytics.SC-knh,g10.analytics-analytics.SC-de4,g10.analytics-analytics.SC-r2p,g10.analytics-analytics.SC-5it,g10.analytics-analytics.SC-v9d,g10.analytics-analytics.SC-yhx,g10.analytics-analytics.SC-22m,g10.analytics-analytics.SC-mer,g10.analytics-analytics.SC-brm,g10.analytics-analytics.SC-kt8,g10.analytics-analytics.SC-ehg,g10.analytics-analytics.SC-9wu -->
+### g10.analytics-analytics.US1-TC29: Browser batch failure stays best effort
 
 **Classification:**
 

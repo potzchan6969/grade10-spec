@@ -12,7 +12,7 @@ shipped without it.
 
 **As a** collector,
 **I want** the header and the footer rendered before the session has resolved,
-with only the account entry updating once it does,
+with only the account entry and the cart count updating once it does,
 **so that** I can start navigating immediately without unrelated chrome
 shifting under me.
 
@@ -21,9 +21,9 @@ shifting under me.
 **As a** collector,
 **I want** Sign In when I am signed out, and when I am signed in an account
 menu that shows my sign-in email with its small initial avatar above My
-Auctions and Sign Out on auction launch, and My Orders, My Auctions,
-Membership, and Sign Out once Store answers, with Cart in the bar only once
-Store answers,
+Auctions and Sign Out on auction launch, with Profile first wherever the
+account page is carried and My Orders ahead of My Auctions once Store
+answers, and no item whose page the site withholds,
 **so that** one place in the header takes me where I can go for this launch,
 without a second auction-orders link.
 
@@ -59,3 +59,9 @@ empty room, from any surface once Store answers the cart drawer.
 (after Store Locator when present, after Auction on auction-only),
 **so that** I can read help without losing the page I was on, whether I am on
 auction-only or full primary nav.
+
+### grade10-site-site-page-shell-US-08: Collector sees the cart count without opening the drawer
+
+**As a** signed-in collector,
+**I want** the header to show the same active-line count as my cart drawer as my cart changes,
+**so that** I can see how many active lines I hold from any surface without opening the drawer.

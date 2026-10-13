@@ -13,15 +13,15 @@ under `apps/emails` is a draft preview only and is not in this change.
 
 | Leg | Where |
 | --- | --- |
-| Storybook | `My Auctions/Winner Order/Payment` → Partially Paid; Post-auction My Auctions rows |
+| Storybook | `Auction/Post Bidding/Screens/Winner Order/Payment` → Partially Paid; Post-auction My Auctions rows |
 | `packages/ui` | `AuctionRecordRow` badge tone `warning` for Partially Paid |
-| Preview page | `apps/preview/src/pages/winner-order-page.tsx` — settlement Contact Us alert; Receipt PDF row |
+| Preview page | `apps/preview/src/pages/auction/post-bidding/winner-order-page.tsx` — settlement Contact Us alert; Receipt PDF row |
 
 ## Screens
 
 ### Winner Order — Partially Paid
 
-Storybook: `My Auctions/Winner Order/Payment` → **Partially Paid**.
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Payment` → **Partially Paid**.
 
 Locked settlement: no Pay, no pay-by date, Payment step current. Sidebar
 warning Alert with Contact Us; no remaining-balance figure. Payment method

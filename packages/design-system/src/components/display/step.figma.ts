@@ -5,13 +5,20 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-const upcoming = instance.getBoolean("upcoming");
+const upcoming = instance.getEnum("upcoming", {
+  false: false,
+  true: true,
+});
+const orientation = instance.getEnum("orientation", {
+  horizontal: "horizontal",
+  vertical: "vertical",
+});
 const showDescription = instance.getBoolean("showDescription");
 const label = instance.getString("label");
 const description = instance.getString("description");
 
 export default {
-  example: figma.code`<Step label="${label}"${showDescription ? figma.code` description="${description}"` : ""}${upcoming ? figma.code` state="upcoming"` : figma.code` state="progress"`} />`,
+  example: figma.code`<Step label="${label}"${showDescription ? figma.code` description="${description}"` : ""}${orientation === "horizontal" ? "" : figma.code` orientation="${orientation}"`}${upcoming ? figma.code` state="upcoming"` : figma.code` state="progress"`} />`,
   imports: ['import { Step } from "@grade10/design-system"'],
   id: "step",
   metadata: { nestable: true },

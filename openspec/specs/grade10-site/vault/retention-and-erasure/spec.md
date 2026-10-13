@@ -153,6 +153,7 @@ rather than failing the whole.
 - **WHEN** one of them becomes live between being listed and being reached
 - **THEN** that case is refused and reported, and the others are erased
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-pi1 rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-41 - A person who never held a case is held back by nothing
 **Serves:** grade10-site-vault-retention-and-erasure-US-01 - Collector asks to be forgotten and the vault answers for its own data
 
@@ -219,6 +220,7 @@ moment of erasure, never from a list read earlier.
 - **WHEN** the person is erased
 - **THEN** those entries name an erased collector, the entries themselves stand, and staff actors are untouched
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-qye rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-44 - A removed walk-in is purged and loses the collector's actor id
 **Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
 
@@ -268,6 +270,7 @@ once or as kept forever.
 - released or forfeited - SHALL carry the same classes and windows; the read
 of any other case SHALL carry none.
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-j8k rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-16 - The page names each class with its window
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector working out how long their papers and photographs are kept
 
@@ -275,6 +278,7 @@ of any other case SHALL carry none.
 - **WHEN** the collector reads Your data
 - **THEN** each class is carried with its window in days after a case ends
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-4vv rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-17 - A class nobody has decided reads as undecided
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector reading a class whose window Legal has not confirmed
 
@@ -283,6 +287,7 @@ of any other case SHALL carry none.
 - **THEN** that class is carried with no number
 - **AND** it is carried neither as zero days nor as kept forever
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-1hs rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-18 - A case that ended names what is kept and points at Your data
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector reading a released case and following it to the ask
 
@@ -314,6 +319,7 @@ record holds, with the facts each names:
 birth, the document type, its number, its expiry or its photograph, and SHALL
 NOT carry why a check was refused.
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-sxi rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-19 - A verified identity reads until when and how it was checked
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector checking whether they must verify again before their next visit
 
@@ -321,6 +327,7 @@ NOT carry why a check was refused.
 - **WHEN** they read Your data
 - **THEN** the standing is carried as verified until that day, with how it was checked and the day it was checked
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-4ye rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-20 - A check still out is not read as no identity
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector who started a check and comes back to see where it got to
 
@@ -329,6 +336,7 @@ NOT carry why a check was refused.
 - **THEN** the standing is carried as out, with the day it was started
 - **AND** it is not carried as none
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-ry3 rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-39 - A stalled check reads as a check that is out
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector coming back to a check the shop is still waiting on
 
@@ -337,6 +345,7 @@ NOT carry why a check was refused.
 - **THEN** the standing is carried as stalled, with the day it was started
 - **AND** it is not carried as none
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-9u2 rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-21 - An expired check reads as expired
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector finding out that what was checked no longer stands
 
@@ -344,6 +353,7 @@ NOT carry why a check was refused.
 - **WHEN** they read Your data
 - **THEN** the standing is carried as lapsed, with the day it expired
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-zcq rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-40 - An identity nobody asked for reads as none on file
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector finding out whether anything of theirs was ever checked
 
@@ -351,6 +361,7 @@ NOT carry why a check was refused.
 - **WHEN** they read Your data
 - **THEN** the standing is carried as none
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-avy rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-22 - The standing names neither the person nor their document
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector reading their standing on a page the vault answers over the counter's record
 
@@ -379,6 +390,7 @@ before an erasure may run, and the cancel inside it, are
 5. A hold standing while a request is open SHALL be carried beside the
    request, and the erasure waits until the hold lifts.
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-syx rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-23 - The ask is withheld while the vault still holds something
 **Serves:** grade10-site-vault-retention-and-erasure-US-01 - a collector asking to be forgotten before their case is finished
 
@@ -407,6 +419,7 @@ before an erasure may run, and the cancel inside it, are
 - **THEN** Your data carries no request
 - **AND** a new ask may be filed
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-z4t rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-26 - A hold that stands while a request is open is named beside it
 **Serves:** grade10-site-vault-retention-and-erasure-US-01 - a collector who filed the ask and then opened a case
 
@@ -541,6 +554,7 @@ name beside the request.
 - **WHEN** their erasure is run
 - **THEN** it is refused, naming the money unsettled
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-4zz rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-33 - The ask is filed while cards are out, and the cards are named as its hold
 **Serves:** grade10-site-vault-retention-and-erasure-US-04 - a collector asking to be forgotten while their cards are still being graded
 
@@ -556,6 +570,7 @@ name beside the request.
 - **WHEN** their erasure is run
 - **THEN** no submission refuses it
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-1ly rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-38 - A submission nobody booked refuses nothing and goes with the account
 **Serves:** `grade10-site-vault-retention-and-erasure-US-04` - a collector asking to be forgotten over a list they planned and never booked
 
@@ -635,6 +650,7 @@ bounded to that same page.
 answered, the read SHALL name that part as failed and SHALL carry every other
 part it answered.
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-1jf rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-12 - Your data is the account holder's own page
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector opening their account's data page
 
@@ -649,6 +665,7 @@ part it answered.
 - **WHEN** they read Your data
 - **THEN** every one of those documents is carried under the case it belongs to
 
+<!-- trace:scenario id=g10.vault-retention-and-erasure.SC-8wl rev=1 -->
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-15 - A block that cannot be answered leaves the rest of the page standing
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector reading the page when part of it cannot be answered
 

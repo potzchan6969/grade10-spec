@@ -50,6 +50,10 @@ unban, and delete report out for the moderation dialog — the panel never
 confirms them. Status on the table stays one line; the ban reason lives on the
 panel.
 
+🚧 **A session names its surface** — the sessions dialog and the panel show
+whether each session is the site's or the console's, when the console supplies
+it, so an operator can tell what they are ending.
+
 ## Auction Suspension
 
 The account panel offers suspending the account from auctions, or reinstating

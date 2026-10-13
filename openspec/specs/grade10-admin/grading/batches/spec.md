@@ -102,6 +102,7 @@ for that trio SHALL join it rather than opening a second.
 **Its name** - a batch SHALL be named by its shop, its grader and level, and
 its cut-off date.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-jam rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-01 - The first card handed in opens the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator finds the day's cards already gathered into the parcel that will leave
 
@@ -110,6 +111,7 @@ its cut-off date.
 - **THEN** a batch is opened for that shop, grader and level with its cut-off,
   and the submission joins it
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-uzm rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-02 - A second batch never opens beside an open one
 **Serves:** grade10-admin-grading-batches-US-01 - the operator sends one parcel for the shop, the grader and the level rather than two
 
@@ -117,6 +119,7 @@ its cut-off date.
 - **WHEN** another submission at that grader and level is handed in
 - **THEN** it joins that batch, and no second batch is opened for the trio
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-e4n rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-03 - A card at another level waits for its own batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator keeps one order at one level in the parcel that leaves
 
@@ -125,6 +128,7 @@ its cut-off date.
 - **THEN** it joins that grader and level's own batch instead, and the first
   batch is unchanged
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-yte rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-44 - A batch opened from the console takes the trio's first card
 **Serves:** grade10-admin-grading-batches-US-01 - the operator opens the week's parcel before the first collector walks in
 
@@ -162,6 +166,7 @@ than one day SHALL be badged as waiting on the shop.
 - **WHEN** its cut-off passes with no ship date recorded
 - **THEN** it reads Closed, and nothing was written to say so
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-oj1 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-05 - The box arrives and the batch reads back, unchecked
 **Serves:** grade10-admin-grading-batches-US-02 - the operator opens the returned box against the batch that reads as waiting
 
@@ -170,6 +175,7 @@ than one day SHALL be badged as waiting on the shop.
 - **THEN** it reads Back, unchecked, and it is badged as waiting on the shop
   once it has stood unchecked for more than one day
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-fxt rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-06 - Receiving finished reads the batch received
 **Serves:** grade10-admin-grading-batches-US-02 - the operator sees the box closed off with the day it came back
 
@@ -193,6 +199,7 @@ batch rather than the one that closed.
 **The estimate** - the date a batch is due back SHALL be counted from its ship
 day, at the level's own number of weeks.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-24g rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-07 - A card handed in after the cut-off joins the next batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator hands a list in on Friday and it leaves with next week's parcel
 
@@ -201,6 +208,7 @@ day, at the level's own number of weeks.
 - **THEN** it joins the trio's next batch, and the closed batch's cards are
   unchanged
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-ucf rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-08 - The batch that closed on Thursday ships the next day
 **Serves:** grade10-admin-grading-batches-US-01 - the operator works the morning after the cut-off from a row that says the parcel goes today
 
@@ -224,6 +232,7 @@ stored.
 **At the cap** - the safe's tile SHALL say so where the declared value held is
 at or above the cap.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-7n8 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-09 - The tiles read the day over the counter
 **Serves:** grade10-admin-grading-batches-US-05 - the operator building a batch reads the shop's day off the counter rather than an email
 
@@ -260,6 +269,7 @@ answer SHALL say whether more remain.
 **Nothing to ship** - a closed batch holding no submission handed in SHALL
 offer no way to ship it.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-uso rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-55 - The list puts what waits on the shop first and pages the rest behind it
 **Serves:** grade10-admin-grading-batches-US-01 - the operator works the morning from the top of the batches page
 
@@ -313,6 +323,7 @@ together or none of them, and SHALL tell each collector once.
 **A batch already shipped** - a second attempt to ship the same batch SHALL be
 refused by name and SHALL send nothing further.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-tky rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-45 - A batch still open offers no way to ship it
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel that is still taking cards
 
@@ -321,6 +332,7 @@ refused by name and SHALL send nothing further.
 - **THEN** it reads Open, no way to ship it is offered, and the ship form
   cannot be opened on it
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-3kj rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-10 - The packing list names every intake id in the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator packs the parcel against a list the grader can check the cards off
 
@@ -328,6 +340,7 @@ refused by name and SHALL send nothing further.
 - **WHEN** the packing list is printed
 - **THEN** it carries one line per intake id, eight lines in all
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-z6w rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-11 - Marking it shipped sends every submission and tells every collector
 **Serves:** grade10-admin-grading-batches-US-01 - the operator sends the parcel with one press rather than opening each submission
 
@@ -339,12 +352,14 @@ refused by name and SHALL send nothing further.
   with its estimate back counted from the ship day, and each of the three
   collectors is told the tracking and that date once
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-p89 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-12 - A ship date ahead of today is refused
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot record a parcel as gone before it has gone
 
 - **WHEN** a ship date later than the shop's today is entered on the ship form
 - **THEN** it is refused on the field, and the batch is not shipped
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-bll rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-56 - A ship date before the cut-off is refused
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot record a parcel as gone before its batch closed
 
@@ -352,6 +367,7 @@ refused by name and SHALL send nothing further.
 - **WHEN** a ship date of the Wednesday before is entered on the ship form
 - **THEN** it is refused on the field, and the batch is not shipped
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-ppx rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-13 - The act is held while a field it needs is unset
 **Serves:** grade10-admin-grading-batches-US-01 - the operator is told what the form still wants before the parcel leaves
 
@@ -399,6 +415,7 @@ batch: the hand-in refuses it at check-in, as
 **One currency** - the cover and the declared values are both HKD, so no rate
 SHALL ever be applied between them.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-26l rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-43 - The ship form reads the insured total off the cards in the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator declares to the courier what the parcel is worth without adding it up
 
@@ -409,6 +426,7 @@ SHALL ever be applied between them.
   typed over, and it is recorded on the batch as the figure declared to the
   courier
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-uis rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-15 - A declared total above the courier's cover is refused
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel worth more than the courier has agreed to cover
 
@@ -418,6 +436,7 @@ SHALL ever be applied between them.
 - **THEN** it is refused naming 45000000 HKD minor units against 30000000 HKD
   minor units, and no submission moves
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-x8i rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-57 - A batch above the cover ships split into shipments each under it
 **Serves:** grade10-admin-grading-batches-US-01 - the operator sends a batch worth more than the courier covers without leaving any parcel uncovered
 
@@ -434,6 +453,7 @@ SHALL ever be applied between them.
 - **AND** a shipment whose total passes 30000000 HKD minor units, or a card left
   in no shipment, is refused by name and nothing moves
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-vk6 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-16 - An unset courier cover holds the ship
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel against a cover nobody has written down
 
@@ -461,6 +481,7 @@ from With the grader to Grades are in and tell every collector in it.
 **Recorded once** - recording a stage already recorded SHALL write nothing
 further and SHALL tell nobody again.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-7sk rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-17 - The morning read records the grader's stage in its own words
 **Serves:** grade10-admin-grading-batches-US-04 - the operator types what the grader's order page said this morning
 
@@ -470,6 +491,7 @@ further and SHALL tell nobody again.
 - **THEN** the stage and those words stand on the batch and on every
   submission in it, unchanged
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-pxd rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-18 - The stage that is the move puts the grades in for the whole batch
 **Serves:** grade10-admin-grading-batches-US-04 - the operator reads the grades posted on the grader's order and the whole batch follows
 
@@ -506,6 +528,7 @@ the day it is set.
 **The same date** - a re-estimate to the date already set SHALL write nothing
 further and SHALL tell nobody again.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-wfu rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-20 - A batch past its estimate reads late with nothing written
 **Serves:** grade10-admin-grading-batches-US-04 - the operator finds the late order on the row before the collector asks about it
 
@@ -514,6 +537,7 @@ further and SHALL tell nobody again.
 - **THEN** the batch reads late and is counted in the tile of batches past
   their estimate, and nothing was written to say so
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-08v rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-50 - The due-back badge stands from the estimated day until the batch is received
 **Serves:** grade10-admin-grading-batches-US-04 - the operator watches for the batches whose day back has come before a collector asks
 
@@ -524,6 +548,7 @@ further and SHALL tell nobody again.
 - **AND** on a day after that estimate the badge is running late instead
 - **AND** neither badge stands once the batch reads Received
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-8c6 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-21 - A re-estimate takes a reason and tells every collector that day
 **Serves:** grade10-admin-grading-batches-US-04 - the operator passes the grader's new date on to everybody whose cards are in the parcel
 
@@ -532,6 +557,7 @@ further and SHALL tell nobody again.
 - **THEN** the batch carries the new date and the reason, and all four
   collectors are told that day
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-xgu rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-48 - A re-estimate with no reason is refused
 **Serves:** grade10-admin-grading-batches-US-04 - the operator gives the collector the reason the date moved, not just a new day
 
@@ -563,6 +589,7 @@ submissions, and nothing SHALL be written.
 **Offered only then** - the act SHALL be offered on the batch only once no
 submission in it is short of Grades are in.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-s4w rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-52 - The box is not recorded arrived before its grades are in
 **Serves:** grade10-admin-grading-batches-US-02 - the operator records the box the day it lands, once the grader has graded every card in it
 
@@ -614,6 +641,7 @@ SHALL no longer hold the batch.
 **One line each** - a manifest repeating a line number, a cert or an intake id
 SHALL be refused by name, and nothing entered.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-xx9 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-23 - Nothing is scanned until the manifest and the invoice are in
 **Serves:** grade10-admin-grading-batches-US-02 - the operator opening the box works against what the grader said it sent
 
@@ -623,6 +651,7 @@ SHALL be refused by name, and nothing entered.
   invoice first, typed line by line with no file to import, and scanning opens
   once both are entered
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-n7i rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-24 - A manifest line naming no intake id in the batch is held unmatched
 **Serves:** grade10-admin-grading-batches-US-02 - the operator sees the grader's line that belongs to nothing the shop sent
 
@@ -632,6 +661,7 @@ SHALL be refused by name, and nothing entered.
 - **THEN** that line is listed as unmatched, and the batch cannot be finished
   while it stands
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-t91 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-51 - Staff resolve an unmatched line by naming its card or closing it
 **Serves:** grade10-admin-grading-batches-US-02 - the operator clears the grader's mistyped line without re-entering the manifest
 
@@ -663,6 +693,7 @@ it, and nothing SHALL be recorded.
 with the grader's code and its note, each where the manifest line gives one;
 a line carrying neither SHALL be taken, not refused.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-pqo rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-25 - A scan matches the cert to the card the manifest names
 **Serves:** grade10-admin-grading-batches-US-02 - the operator works down the box slab by slab and each one finds its card
 
@@ -672,6 +703,7 @@ a line carrying neither SHALL be taken, not refused.
   intake id names, and the row reads matched and scanned against its
   submission
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-5j9 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-26 - A cert another submission holds is refused by name
 **Serves:** grade10-admin-grading-batches-US-02 - the operator is stopped before a slab is put with the wrong collector's cards
 
@@ -680,6 +712,7 @@ a line carrying neither SHALL be taken, not refused.
 - **THEN** the scan is refused naming the submission that holds that cert, and
   nothing is recorded on either card
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-1hw rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-46 - A cert that grader returned in an earlier batch is refused
 **Serves:** grade10-admin-grading-batches-US-02 - the operator is stopped from putting one grader's cert on two cards, months apart
 
@@ -689,6 +722,7 @@ a line carrying neither SHALL be taken, not refused.
 - **THEN** the scan is refused naming the submission that holds that cert, and
   nothing is recorded on either card
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-06a rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-27 - A cert the manifest does not carry is refused
 **Serves:** grade10-admin-grading-batches-US-02 - the operator finds a slab in the box the grader never listed
 
@@ -696,6 +730,7 @@ a line carrying neither SHALL be taken, not refused.
 - **WHEN** that cert is scanned
 - **THEN** the scan is refused by name, and nothing is recorded
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-x40 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-28 - A card returned raw is recorded ungraded with the grader's code
 **Serves:** grade10-admin-grading-batches-US-02 - the operator records the card that came back in its sleeve as the grader described it
 
@@ -723,6 +758,7 @@ line's does.
 **Refused** - a card that did not travel in the batch, or one a line already
 names, SHALL be refused by name, and nothing entered.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-uhm rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-54 - A slab the manifest leaves out is added as the grader's omission and scanned
 **Serves:** grade10-admin-grading-batches-US-02 - the operator puts the grader's missing line on the manifest rather than holding the box
 
@@ -748,6 +784,7 @@ become ready when the batch is finished.
 
 **One unit** - the upcharges' sum SHALL be given in HKD minor units.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-u0i rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-29 - The counters read what the box has given up so far
 **Serves:** grade10-admin-grading-batches-US-02 - the operator half way down the box reads what is left without counting the slabs
 
@@ -774,6 +811,7 @@ receiving is finished.
 the batch is finished; an exception recorded on a card is told that day, as
 the exceptions and the upcharge say.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-mg6 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-30 - A half-scanned box is put down and taken up again
 **Serves:** grade10-admin-grading-batches-US-02 - the operator serves a customer in the middle of a box and comes back to it
 
@@ -806,6 +844,7 @@ back.
 **Finished once** - finishing a batch already finished SHALL write nothing
 further and SHALL tell nobody again.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-21a rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-31 - Finishing is held while a line or a slab is unresolved
 **Serves:** grade10-admin-grading-batches-US-02 - the operator cannot close a box with a slab still unaccounted for
 
@@ -815,6 +854,7 @@ further and SHALL tell nobody again.
 - **THEN** it is refused naming the unmatched line and that card, and no
   submission moves
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-8ys rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-32 - Finishing makes every submission ready and tells each collector once
 **Serves:** grade10-admin-grading-batches-US-02 - the operator closes the box and every collector in it hears the same day
 
@@ -865,6 +905,7 @@ damaged.
 recorded, in the message for a card not back with the box; a held card's
 message SHALL name the day the grader holds it until.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-dn8 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-34 - A card held by the grader is recorded with the date it is expected
 **Serves:** grade10-admin-grading-batches-US-03 - the operator finishing the box records the one card the grader kept and lets the others go
 
@@ -874,6 +915,7 @@ message SHALL name the day the grader holds it until.
 - **THEN** that card carries held with that date, the other three carry their
   own outcomes, and the batch can be finished
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-jze rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-47 - A card recorded held with no date it is expected is refused
 **Serves:** grade10-admin-grading-batches-US-03 - the operator cannot leave a card with the grader and no day to chase it on
 
@@ -882,6 +924,7 @@ message SHALL name the day the grader holds it until.
 - **THEN** the record is refused naming the date, and nothing is recorded on
   the card
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-awd rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-35 - A card that did not come back owes its declared value
 **Serves:** grade10-admin-grading-batches-US-03 - the operator records the slab that is missing from the box against the money it costs
 
@@ -891,6 +934,7 @@ message SHALL name the day the grader holds it until.
 - **THEN** the card carries not returned and owes a payout of 800000 HKD minor
   units
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-y6t rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-36 - A damaged slab is photographed in the box before it leaves it
 **Serves:** grade10-admin-grading-batches-US-03 - the operator keeps the evidence for the claim before the slab is moved
 
@@ -900,6 +944,7 @@ message SHALL name the day the grader holds it until.
   arrived in, and the card then carries damaged with those photographs and
   owes a payout at its declared value
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-dpc rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-37 - The collector hears either outcome the same day
 **Serves:** grade10-admin-grading-batches-US-03 - the collector hears about the card from the shop rather than by counting the slabs at the counter
 
@@ -908,6 +953,7 @@ message SHALL name the day the grader holds it until.
   back with the box, and a held card's message names the day the grader holds
   it until
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-lnj rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-53 - A card no manifest line names holds finishing until it is recorded
 **Serves:** grade10-admin-grading-batches-US-03 - the operator cannot close a box with a card the grader never listed left unaccounted for
 
@@ -935,6 +981,7 @@ another grader, SHALL stay unmatched.
 the day it is scanned, and its submission SHALL then read Ready to collect for
 that card, with the second hand-back offered at the counter.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-y5i rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-58 - A held card comes home in a later box
 **Serves:** grade10-admin-grading-batches-US-02 - the operator closes the gap on the one card the grader kept without opening the earlier batch again
 
@@ -965,6 +1012,7 @@ charged to the collector and SHALL never be shown as what is due.
 differences at receiving, and a gap SHALL be recorded as the shop's to settle
 with the grader.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-j3q rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-38 - A card moved up a level owes the sheet's difference
 **Serves:** grade10-admin-grading-batches-US-02 - the collector is charged at the counter the figure they were quoted before booking
 
@@ -974,6 +1022,7 @@ with the grader.
 - **WHEN** a card in it is scanned as charged at that next level
 - **THEN** the card owes an upcharge of 25000 HKD minor units
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-xay rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-39 - An invoice that disagrees with the sheet is the shop's to settle
 **Serves:** grade10-admin-grading-batches-US-02 - the operator reconciles the grader's bill without the collector's figure moving
 
@@ -1006,6 +1055,7 @@ each other, so the cap cannot be passed by both.
 **Operational** - the cap SHALL stand as an operational limit until cover is
 bought, and SHALL be changeable as a setting rather than by a release.
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-7rg rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-40 - The safe's total counts the ready slabs still held
 **Serves:** grade10-admin-grading-batches-US-05 - the operator reads what the shop is holding, the graded slabs nobody has collected included
 
@@ -1016,6 +1066,7 @@ bought, and SHALL be changeable as a setting rather than by a release.
 - **WHEN** the declared value in the safe is read
 - **THEN** it reads 24000000 HKD minor units
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-nmc rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-41 - A hand-in that would carry the safe past its cap is refused
 **Serves:** grade10-admin-grading-batches-US-05 - the collector at the desk is booked back in rather than leaving cards the shop cannot cover
 
@@ -1035,6 +1086,7 @@ bought, and SHALL be changeable as a setting rather than by a release.
 - **THEN** one is taken and the other is refused, and the total never passes
   30000000 HKD minor units
 
+<!-- trace:scenario id=g10adm.grading-batches.SC-5n2 rev=1 -->
 #### Scenario: grade10-admin-grading-batches-SC-49 - A hand-in that fills the safe to its cap is taken
 **Serves:** grade10-admin-grading-batches-US-05 - the collector at the desk is taken in while there is still room on the shelf
 

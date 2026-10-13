@@ -1,2 +1,9 @@
 schema: grade10-planning
 created: 2026-09-09
+hands:
+  pm: "@tangconst"
+  design: "@ecchochan"
+  tech: "@ecchochan"
+  qa: "@ecchochan"
+  dev: "@ecchochan"
+design_waived: "the product code is wholly in packages/ui of this store and already landed - 44d8d1afa took mix-blend-multiply off the ProductCardImage photo, and the application's pin c1a6d0286 holds it; the grade10 work is one walk and its end-to-end guard, with no product code and no bump"

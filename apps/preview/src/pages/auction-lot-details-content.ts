@@ -16,7 +16,7 @@ import {
   LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,
   type LiveListingFacts,
   stateMeta,
-} from "../auction-listing/listing-auction-bid-fixtures";
+} from "./listing-auction-bid-fixtures";
 import { HELP_NAV_ITEM } from "./workbench-story-nav";
 
 export {
@@ -32,7 +32,7 @@ export {
   remainingSecondsUntil,
   stateMeta,
   userBidHistoryForState,
-} from "../auction-listing/listing-auction-bid-fixtures";
+} from "./listing-auction-bid-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const IMAGE_CARDDASS = new URL(
@@ -107,7 +107,7 @@ export const AUCTION_LOT = {
     },
   ],
   ...BID_FIXTURE_LOT,
-  currency: "HKD",
+  currency: "USD",
 };
 
 export const AUCTION_LOT_BADGES: readonly ListingLotMetaBadge[] = [
@@ -216,6 +216,7 @@ export const AUCTION_LOT_DETAILS_COPY = {
     },
   },
   gallery: {
+    zoom: "Click to zoom",
     previous: "Previous image",
     next: "Next image",
     images: "Auction images",

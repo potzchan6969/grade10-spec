@@ -5,7 +5,9 @@ order: 1
 ---
 
 ZZZ has three surfaces — home, sign-in and the profile — and each answers at an
-address of its own, whether it is reached by a link or by a refresh. A surface
+address of its own, whether it is reached by a link or by a refresh. The
+profile is the same account page Grade10 shows —
+[Profile](/p/grade10-site/account/profile). A surface
 owns the addresses beneath it unless a nested surface names one, and an address
 under no surface renders a not-found surface. Falling back to home is the
 specific mistake this rules out.

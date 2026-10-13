@@ -22,7 +22,7 @@ const breadcrumbs = (
 );
 
 const meta = {
-  title: "Store Order History/OrderHistory",
+  title: "Store/Order History/Blocks/OrderHistory",
   component: OrderHistory,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

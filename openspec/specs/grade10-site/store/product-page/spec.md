@@ -23,8 +23,9 @@ per card rather than per page.
   - Not-found refusal: an address naming no card answers 404 and the site's
     not-found surface, never an empty page
 - Reaching a card
-  - Grid entry: the storefront opens a card's own address from that card,
-    without a page load
+  - Grid entry: a card that opens on the listing, the front door or the
+    rail under a card takes the collector to its own address, without a page
+    load
   - Sitemap honesty: the sitemap lists only addresses a collector can fetch,
     never an unfilled pattern
 - Buying from the page
@@ -53,6 +54,10 @@ per card rather than per page.
     filled white
   - Honest absence: a card with no image carries no `og:image`
   - Named shape: the response says which card shape the picture is drawn in
+- Free pick-up
+  - Store name opens Store Locator: the store name in the free pick-up claim
+    is a link to Store Locator
+  - No dead label: a fulfilment label the site has no page for is not a link
 
 ## Requirements
 
@@ -106,21 +111,26 @@ surface, never an empty product page.
 
 ### Requirement: A card is reached from the storefront
 
-The storefront SHALL open a card's own address from that card in the grid,
-without a page load.
+Where a card on the storefront opens, the storefront SHALL open that card's
+own address, without a page load. Which cards open, and from which of their
+controls, is the rule of the surface that shows them:
+`grade10-site/store/product-listing` for the browse listing,
+`grade10-site/store/home` for the front door, and
+`grade10-site/store/cross-sell` for the rail under a card.
 
 The sitemap lists the surfaces the build writes a document for, and a card is
 not one of them: which addresses the catalogue answers is not known when the
 site is built. It SHALL never list an address carrying an unfilled parameter
 in place of them.
 
-<!-- trace:scenario id=g10.store-product-page.SC-wo0 rev=1 -->
+<!-- trace:scenario id=g10.store-product-page.SC-wo0 rev=2 -->
 #### Scenario: grade10-site-store-product-page-SC-05 - A card is opened from the grid
 **Serves:** grade10-site-store-product-page-US-02 - Collector opens a card from the storefront
 
-- **GIVEN** a collector on the storefront
-- **WHEN** they open a card in the grid
+- **GIVEN** a card that opens, on the listing, the front door's row or the rail under a card
+- **WHEN** a collector opens it
 - **THEN** that card's address is what they are on, showing that card's page
+- **AND** the page was not loaded again to show it
 
 <!-- trace:scenario id=g10.store-product-page.SC-21y rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-06 - The sitemap names no pattern
@@ -388,3 +398,33 @@ it carries none.
 - **THEN** the delivered `og:image` is exactly 1200 by 630 pixels, the
   original enlarged to fill the box rather than left at its native size
   inside more padding
+
+### Requirement: Free pick-up opens Store Locator
+
+The store name in the free pick-up claim is the way into Store Locator.
+
+**Store name as control** - When the product page shows free pick-up at Hong
+Kong Grade10 Store, that claim SHALL open the Store Locator surface. The store
+name in the claim SHALL be the control that reaches Store Locator, in the same
+tab and in the product page's language.
+
+**No dead label** - A fulfilment label the site has no page for SHALL NOT be a
+link.
+
+<!-- trace:scenario id=g10.store-product-page.SC-21b rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-25 - Free pick-up reaches Store Locator
+**Serves:** grade10-site-store-product-page-US-10 - Collector opens Store Locator from free pick-up
+
+- **GIVEN** a product page showing free pick-up at Hong Kong Grade10 Store
+- **WHEN** a collector activates that store name
+- **THEN** Store Locator renders in the same tab
+- **AND** in the product page's language
+
+<!-- trace:scenario id=g10.store-product-page.SC-res rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-38 - A label with no page is not a link
+**Serves:** grade10-site-store-product-page-US-10 - the collector reading the shipping and pickup lines finds one link, the shop's
+
+- **GIVEN** a product page showing its shipping and pickup lines
+- **WHEN** a collector reads them
+- **THEN** Shipping fee is not a link
+- **AND** the store name in free pick-up is the only link among them

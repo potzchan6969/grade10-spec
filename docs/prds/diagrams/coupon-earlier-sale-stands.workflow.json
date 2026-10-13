@@ -31,7 +31,7 @@
     "member-picks-a-coupon",
     "store-tries-to-free-it",
     "store-refuses-by-name",
-    "member-told-which-sale"
+    "member-told-an-earlier-sale-stands"
   ],
   "nodes": [
     {
@@ -40,7 +40,7 @@
       "col": 0,
       "type": "external",
       "label": "Picks a coupon",
-      "sublabel": "held by an earlier sale",
+      "sublabel": "carried by an earlier sale",
       "width": 156
     },
     {
@@ -71,13 +71,13 @@
       "width": 156
     },
     {
-      "id": "member-told-which-sale",
+      "id": "member-told-an-earlier-sale-stands",
       "lane": "member",
       "col": 3,
       "type": "external",
-      "label": "Told which sale",
+      "label": "Told an earlier sale stands",
       "sublabel": "never just unavailable",
-      "width": 156
+      "width": 196
     }
   ],
   "edges": [
@@ -104,7 +104,7 @@
     },
     {
       "from": "store-refuses-by-name",
-      "to": "member-told-which-sale",
+      "to": "member-told-an-earlier-sale-stands",
       "variant": "emphasis",
       "fromSide": "top",
       "toSide": "bottom"

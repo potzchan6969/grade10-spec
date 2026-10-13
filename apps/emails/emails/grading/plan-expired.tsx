@@ -26,7 +26,7 @@ export default function PlanExpiredEmail({
       footer={previewFooter}
       greeting={`Hi ${previewSubmission.collectorName},`}
       heading="Your submission list has expired"
-      lead={`You planned ${cardCount} cards for ${grader} ${level} on ${hkDate(plannedAt)} and no drop-off was booked in ${keptDays} days, so the list has expired.`}
+      lead={`You planned ${cardCount} cards for ${grader} ${level} on ${hkDate(plannedAt)} and the cards were not handed in within ${keptDays} days, so the list has expired.`}
       preheader="Nothing was paid and nothing is owed. Start again whenever you are ready."
       submission={previewSubmissionLine}
     >

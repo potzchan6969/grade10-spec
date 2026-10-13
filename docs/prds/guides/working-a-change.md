@@ -185,7 +185,7 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 | 3 | Accepted | Invoking human, after QA1 · Dev · QA2 | `/planning-dev <id>`, then accept with the preflight fingerprint |
 | 4 | Building | Engineer | `/workflow-build <id> <group>` |
 | 5 | Implementation-complete | Engineer, after verification | `pnpm plan implementation <id> --commit <sha> --component <id>` |
-| 6 | Archived | Nobody | `/openspec-archive-change` after verification |
+| 6 | Archived | Nobody | App repository archive workflow after verification |
 
 - **What proves each stage** - [Change Stages](/p/shared/planning/change-stages). Deployment availability is tracked separately and does not wait for archive.
 
@@ -214,7 +214,7 @@ say what you say, and what has to be running.
   which the relay makes
 - **The doors mix** — a change opened in the thread carries on from a
   terminal and back: the files are the state, and each door reads them
-- **The old flow, meanwhile** — `openspec-propose`, `spec-push` and `dev-help`
+- **The old flow, meanwhile** — `spec-push` and `dev-help`
   stay until the team has adopted the line commands. A change opened with
   them shows on the board like any other, owes no round row, and gets the
   same channel post

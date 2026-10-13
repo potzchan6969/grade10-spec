@@ -70,11 +70,11 @@ svg[data-diagram="shopify-order-pipeline"] .c-lane{fill: var(--lane-fill); strok
           <text x="243.83333333333334" y="205" class="t-backend" font-size="9" text-anchor="middle">points and coupons chosen</text>
         </g>
         </g>
-        <g data-step="discount" data-edge-from="store" data-edge-to="shopify" data-edge-label="order id and the Points discount" data-edge-key="1" data-edge-id="discount">
+        <g data-step="discount" data-edge-from="store" data-edge-to="shopify" data-edge-label="order id and the points discount" data-edge-key="1" data-edge-id="discount">
           <path data-composition-edge-from="store" data-composition-edge-to="shopify" data-composition-edge-id="discount" data-composition-points="371.1666666666667,275;250.83333333333334,275" d="M 371.1666666666667 275 L 250.83333333333334 275" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-order-pipeline-arrowhead-emphasis)"/>
         <g data-detail="context">
           <rect x="221.8" y="255" width="178.4" height="16" rx="3" class="c-mask"/>
-          <text x="311" y="265" class="t-backend" font-size="9" text-anchor="middle">order id and the Points discount</text>
+          <text x="311" y="265" class="t-backend" font-size="9" text-anchor="middle">order id and the points discount</text>
         </g>
         </g>
         <g data-step="pay" data-edge-from="buyer" data-edge-to="shopify" data-edge-label="pays" data-edge-key="2" data-edge-id="pay">

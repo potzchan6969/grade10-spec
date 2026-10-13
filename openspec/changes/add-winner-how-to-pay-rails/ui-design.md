@@ -2,9 +2,9 @@
 
 ### Winner Order — Order summary (pending bank transfer)
 
-Layout SoT: Storybook `My Auctions/Winner Order/Payment` —
+Layout SoT: Storybook `Auction/Post Bidding/Screens/Winner Order/Payment` —
 `Pending Payment — Bank Transfer` and related payment stories in
-`apps/preview/src/pages/winner-order.payment.stories.tsx`.
+`apps/preview/src/pages/auction/post-bidding/winner-order.payment.stories.tsx`.
 
 Primary full-width **Submit Payment Proof**; secondary full-width outline
 **View Bank Details** immediately beneath (≥8px gap). Secondary hides whenever the
@@ -12,7 +12,7 @@ primary is hidden.
 
 ### Winner Order — View Bank Details
 
-Storybook: `My Auctions/Winner Order/Payment/View Bank Details` (standalone) and
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Payment/View Bank Details` (standalone) and
 opened from the page secondary control.
 
 Title **View Bank Details**. Subtext: choose a transfer method and use the
@@ -32,7 +32,7 @@ use Grade10 Finance Limited / HSBC Hong Kong. Footer **Done**.
 
 ### Winner Order — Submit Payment Proof
 
-Storybook: `My Auctions/Winner Order/Payment/Submit Payment Proof` and page
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Payment/Submit Payment Proof` and page
 story **Submit Proof Flow**.
 
 Title **Submit Payment Proof**. Subtext: after transfer, upload the receipt
@@ -79,8 +79,8 @@ tokens only (no alternate palette).
 | Open (FPS default) | Amount + FPS panel (ID, account name, QR with alt, payment reference at bottom) | `winner-order-SC-181` |
 | HK Local tab | Bank name, bank code, branch code, full account number (bank and branch code included); payment reference at bottom | `winner-order-SC-182` |
 | SWIFT tab | Beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number; payment reference; OUR note after reference | `winner-order-SC-183` |
-| Narrow viewport | Pill track hugs labels and scrolls horizontally; International stays readable | **Out of suite:** Storybook View Bank Details at 320px |
-| Wide viewport | Pill track full-width; three triggers share the row | **Out of suite:** Storybook View Bank Details at desktop |
+| Narrow viewport | Pill track hugs labels and scrolls horizontally; International stays readable | `winner-order-SC-95` |
+| Wide viewport | Pill track full-width; three triggers share the row | `winner-order-SC-95` |
 
 ### Winner Order — Submit Payment Proof
 

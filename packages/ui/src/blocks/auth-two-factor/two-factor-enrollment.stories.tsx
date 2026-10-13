@@ -4,7 +4,7 @@ import { BACKUP_CODES, TOTP_URI } from "./fixtures";
 import { TwoFactorEnrollment } from "./two-factor-enrollment";
 
 const meta = {
-  title: "Auth Two Factor/TwoFactorEnrollment",
+  title: "Auth/Roles/Blocks/TwoFactorEnrollment",
   component: TwoFactorEnrollment,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

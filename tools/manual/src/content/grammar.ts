@@ -261,8 +261,8 @@ const FRONTMATTER_KEYS = [
 
 const REVIEWED_RE = /^\d{4}-\d{2}-\d{2}$/;
 const LEAF_RE = /^::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
-const CONTAINER_OPEN_RE = /^:::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
-const CONTAINER_CLOSE_RE = /^:::\s*$/;
+export const CONTAINER_OPEN_RE = /^:::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
+export const CONTAINER_CLOSE_RE = /^:::\s*$/;
 const FENCE_RE = /^(`{3,}|~{3,})/;
 const ATTR_RE = /^([a-z][a-z0-9-]*)="([^"]*)"/;
 

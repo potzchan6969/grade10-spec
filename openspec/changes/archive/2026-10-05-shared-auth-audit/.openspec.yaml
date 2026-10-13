@@ -1,0 +1,4 @@
+schema: grade10-planning
+created: 2026-08-31
+page_waived: "predates the page rule — pages updated to the delivered shape at archive"
+decisions_carried: "Q1–Q6 onto docs/prds/products/shared/auth/audit.md and docs/prds/products/grade10-admin/audit/index.md (identity writes, fail-closed enable exception, no email, directory-person links)"

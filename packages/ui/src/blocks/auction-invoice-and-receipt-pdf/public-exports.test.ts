@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import type {
+  InvoicePdfBankRails,
   InvoicePdfCopy,
   InvoicePdfData,
   InvoicePdfLineItem,
   InvoicePdfRenderOptions,
+  InvoicePdfReplacement,
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
   ReceiptPaymentBreakdown,
@@ -21,11 +25,15 @@ import {
 } from "../../index";
 
 type PublicInvoiceAndReceiptPdfTypes = [
+  InvoicePdfBankRails,
   InvoicePdfCopy,
   InvoicePdfData,
   InvoicePdfLineItem,
+  InvoicePdfReplacement,
   InvoicePdfRenderOptions,
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
   ReceiptPdfCopy,

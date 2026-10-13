@@ -30,6 +30,7 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
 | [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) | The card in Google Wallet and Apple Wallet — what each code can do, and how a pass stays current |
 | [Operator Console](/p/grade10-site/loyalty/operator-console) | Moving points by hand, and restarting a member's expiry |
+| [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders) | Who is owed a warning before their points lapse |
 
 Three audiences touch it. **Members** get the membership with their account,
 carry a member card at `/membership`, and read tier, balance, what is expiring,

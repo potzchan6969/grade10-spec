@@ -1,6 +1,6 @@
 # grade10-site/store/product-listing Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 **Out of suite:**
@@ -15,6 +15,7 @@ what is gone, what it costs and how many are left,
 **so that** I never open a product that has gone or reach for a price the shop
 has left behind.
 
+<!-- trace:case id=g10.store-product-listing.TC-hgz rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC1-1: A published product is listed within seconds
 
 **Classification:**
@@ -47,6 +48,7 @@ has left behind.
 * Step 2 lists <a product> at both locations.
 * Step 3 reads one more than <the listing's count> above the grid, and each of <a product>'s facets counts one more.
 
+<!-- trace:case id=g10.store-product-listing.TC-rjj rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC2-1: A product taken down leaves within seconds
 
 **Classification:**
@@ -78,7 +80,8 @@ has left behind.
 * Step 2 lists <a product> at neither location.
 * Step 3 reads one fewer than <the listing's count> above the grid, and each of <a product>'s facets counts one fewer.
 
-### grade10-site-store-product-listing-US14-TC3-1: A card follows the shop's price and stock
+<!-- trace:case id=g10.store-product-listing.TC-ift rev=2 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
+### grade10-site-store-product-listing-US14-TC3-2: A card follows the shop's price and availability
 
 **Classification:**
 
@@ -95,7 +98,7 @@ has left behind.
 
 **Pre-conditions:**
 
-* The listing lists <a product> at <old price>, and the card stops at <old count>.
+* The listing lists <a product> at <old price>, for sale.
 * The shop's own reads answer a save at once.
 
 **Test data:**
@@ -104,22 +107,22 @@ has left behind.
 | --- | --- |
 | <old price> | The price the card shows before the change |
 | <new price> | A price that moves <a product> in a lowest-price order |
-| <old count> | The count the card stops at before the change |
-| <new count> | A count above zero and below <old count> |
 
 **Steps:**
 
-1. In the shop, save <a product> with <new price> and <new count>.
+1. In the shop, save <a product> with <new price>.
 2. Within 10 seconds, open <grade10 browse listing url> ordered by lowest price.
 3. Read <a product>'s card.
-4. Raise the card's quantity past <new count>.
+4. In the shop, set every variant of <a product> to a count of 0, not sold when out of stock.
+5. Within 10 seconds, open <grade10 browse listing url> again and read <a product>'s card.
 
 **Expected Results:**
 
 * Step 2 places <a product> where <new price> falls in the order.
 * Step 3 shows <new price> on the card.
-* Step 4 stops the quantity at <new count>.
+* Step 5 reads Sold out on the card.
 
+<!-- trace:case id=g10.store-product-listing.TC-yl5 rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC4-1: A change the shop never reported is caught by the re-read
 
 **Classification:**
@@ -150,6 +153,7 @@ has left behind.
 
 * Step 3 names the world <new label>.
 
+<!-- trace:case id=g10.store-product-listing.TC-yla rev=1 covers=g10.store-product-listing.SC-5zl,g10.store-product-listing.SC-gxw,g10.store-product-listing.SC-6q8,g10.store-product-listing.SC-kj0,g10.store-product-listing.SC-71h -->
 ### grade10-site-store-product-listing-US14-TC5-1: A location holding no copy answers from the one the store keeps
 
 **Classification:**
@@ -189,6 +193,7 @@ has left behind.
 **I want** the listing to keep answering when the shop's own service is down,
 **so that** I can go on browsing and come back to buy when it is up.
 
+<!-- trace:case id=g10.store-product-listing.TC-izq rev=1 covers=g10.store-product-listing.SC-bcq -->
 ### grade10-site-store-product-listing-US15-TC1-1: The listing lists while the shop is down
 
 **Classification:**
@@ -221,3 +226,12 @@ has left behind.
 * Step 2 lists the same products, count and sidebar at both locations, with no message about the shop.
 * Step 3 is what fails or waits, not the listing.
 * Step 4 lists the same products, count and sidebar as step 2.
+
+## Reconciliation
+
+**Run:** Update on 2026-10-06, from `add-store-product-status`. SC-51 moved
+to rev 2, A card follows the shop's price and availability: a card stops at no
+count, because product status puts no ceiling on a browse quantity
+(`add-store-product-status` decisions Q1 and Q17). US14-TC3 moved to rev 2 to
+match: it saves a new price, then sells every variant out, and reads Sold out
+on the card. QA2 reruns on this suite.

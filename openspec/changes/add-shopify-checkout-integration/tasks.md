@@ -2,16 +2,23 @@
 
 - [ ] 1.1 Verify amended frontend requirements and frozen anchors with the
   scoped artifact checks; preserve trace identities and draft case status.
-- [ ] 1.2 Update the checkout PRD and linked frontend architecture records for
-  current drawer creation, fresh submissions, fixed invoices and unchanged
-  backend cleanup; do not add backend intent or recovery contracts.
-- [ ] 1.3 Verify with `pnpm check:manual` and
+
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 1.2 | PRD update for purchase reuse, recovery and provider-aware retirement; moved to `add-checkout-purchase-safety` |
+| 1.3 | Verification of the 1.2 PRD update |
+
+These retired addresses are not completed tasks and are never reused.
+
+- [ ] 1.4 Update the checkout PRD's Integration readiness to this change's frontend outcomes - the drawer's Pay request, one Pay at a time, the later cart and the return path - and leave invoice reuse, changed-purchase retirement and recovery to `add-checkout-purchase-safety`; retain durable carrier and settlement guarantees.
+- [ ] 1.5 Verify with `pnpm check:manual` and
   `pnpm openspec validate add-shopify-checkout-integration --strict`.
 
 ## 2. Shared contract and order persistence (grade10) (owner: @kinisworking)
 
-Withdrawn by the frontend-only amendment. No implementation or verification
-work remains in this group. Owner and addresses preserve the existing claim.
+Previously withdrawn addresses remain historical. Backend contract and
+persistence work belongs to `add-checkout-purchase-safety`; this group's owner
+preserves its claim.
 
 | Retired Address | Withdrawn Work |
 | --- | --- |
@@ -24,8 +31,9 @@ These retired addresses are not completed tasks and are never reused.
 
 ## 3. Backend checkout and Shopify lifecycle (grade10) (owner: @kinisworking)
 
-Withdrawn by the frontend-only amendment. Existing backend behavior remains a
-dependency, without changes or delivery tasks here.
+Previously withdrawn addresses remain historical. Backend lifecycle and
+recovery work belongs to `add-checkout-purchase-safety`; these addresses are
+never reused.
 
 | Retired Address | Withdrawn Work |
 | --- | --- |
@@ -42,9 +50,10 @@ These retired addresses are not completed tasks and are never reused.
 
 ## 4. Storefront checkout and order surfaces (grade10) (owner: @kinisworking)
 
-Consumes existing canonical clients and fixtures; depends on no new backend
-or Group 2 implementation. Tests land before their corresponding code and the
-test checkbox is ticked last.
+Completed tasks record the prior frontend implementation and evidence. The
+remaining frontend-only work lands in Group 11; these checkmarks do not prove
+the amended scenarios. Tests precede their code and the test checkbox is
+ticked last.
 
 - [x] 4.1 Add failing frontend fixture and mounted browser coverage for current
   review/tender, changed-line repair, hosted handoff, signed-out gating and
@@ -73,9 +82,9 @@ These retired addresses are not completed tasks and are never reused.
 - [x] 4.8 Add failing fixture and browser tests for fresh submission after
   resolution/reload, synchronous and rendered pending guards, fixed submitted
   purchase, unchanged whole-line cleanup, existing verification feedback and response loss;
-  include delayed response after sign-out/member change and compatible domain
-  result mapping without asserting backend replay emission:
-  `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
+  include delayed response after sign-out/member change and current domain
+  result mapping without adding backend replay emission:
+  `grade10-site-store-checkout-SC-34`,
   `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`,
   `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`.
 - [x] 4.9 Complete current review/accepted-tender submission, existing
@@ -83,7 +92,7 @@ These retired addresses are not completed tasks and are never reused.
   scope and ignore stale UI effects; omit intent persistence and invoice reuse:
   `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02`,
   `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`,
-  `grade10-site-store-checkout-SC-33`, `grade10-site-store-checkout-SC-34`,
+  `grade10-site-store-checkout-SC-34`,
   `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-37`.
 - [x] 4.10 Complete existing outcome navigation/feedback, pending order reads
   and paid cart refresh without local deletion or new reconciliation:
@@ -98,8 +107,9 @@ These retired addresses are not completed tasks and are never reused.
 ## 5. Staging shop readiness and release walk (grade10) (owner: @kinisworking)
 
 Real staging configuration, deployment and payment require later explicit
-authorization. No shop/provider/carrier/backend configuration is delivered by
-this planning or implementation phase.
+authorization. This planning run performs none. Backend staging evidence -
+invoice reuse, retirement, recovery, concurrency and carrier - belongs to
+`add-checkout-purchase-safety`.
 
 | Retired Address | Withdrawn Work |
 | --- | --- |
@@ -113,29 +123,118 @@ These retired addresses are not completed tasks and are never reused.
 - [x] 5.5 Prepare frontend staging observations for current drawer handoff,
   later fresh submission, fixed invoice, sign-in/verification, pending/paid
   order display, unchanged cart refresh and both Shopify return surfaces.
-- [ ] 5.6 After explicit staging authorization, verify deployed frontend and
-  existing extension placement against the existing shop; record observed
-  invoice/order references and outcomes without adding recovery, carrier or
-  settlement work or claiming duplicate prevention.
-- [ ] 5.7 Verify the recorded frontend staging observations against the scoped
-  draft suite; record environment, commands, observed results and unrun gates.
+- [ ] 5.6 After explicit staging authorization, observe the deployed drawer and both Shopify return extensions against the staging shop: the request sent at Pay, one Pay at a time, a pending order in Your Orders, the cart after payment and the static Your Orders link; record order and invoice references. Include a line that sells out after the invoice opens and confirm Shopify names it without the order reading paid: `grade10-site-store-checkout-SC-07`.
+- [ ] 5.7 Verify the staging observations against this change's frontend scenarios; name every observation not run and leave backend gates to `add-checkout-purchase-safety`.
 
-## 6. The walk (grade10)
+## 6. Earlier walk plan (grade10)
 
-Uses the draft feature suite as input after frontend delivery. Human QA reviews
-deployed implementation with `/tcs-review add-shopify-checkout-integration`;
-manual execution uses `/tcs-run-sheet`. Cases remain draft during planning.
+Group 13 holds this change's walk.
 
-- [ ] 6.1 Keep browser walks for all checkout journeys through drawer review,
-  Pay, refusal repair, sign-in and Shopify/order return, using existing
-  contract fixtures for automation and separately authorized staging for real
-  shop observations: `grade10-site-store-checkout-US-01`,
-  `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`,
-  `grade10-site-store-checkout-US-04`.
-- [ ] 6.2 In the walks' commit, mark only cases actually decided by them with
-  `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>`; name cases
-  remaining manual in the suite and the walk's rounds row.
-- [ ] 6.3 Verify the relevant Playwright flows and record fixture versus
-  authorized staging proof separately. No duplicate-invoice, backend recovery
-  or carrier guarantees are part of this walk; production enablement requires
-  separate authorization.
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 6.1 | Walks for all six journeys including safe reuse and recovery |
+| 6.2 | Case flips for the 6.1 walks |
+| 6.3 | Verification of the 6.1 walks with duplicate-invoice, recovery and carrier evidence |
+
+These retired addresses are not completed tasks and are never reused.
+
+## 7. Contract and compatibility tests (grade10) (owner: @kinisworking)
+
+App commit `306a68624` removed the versioned checkout transport these tasks
+built. Their completion is historical and no longer describes the code; Q25
+returns the drawer to the existing `checkout.createCheckout` request.
+
+| Retired Address | Completed Then Removed |
+| --- | --- |
+| 7.1 | Shared codec, datasource, resolver and fixture tests for the v2 context and Pay |
+| 7.2 | Shared v2 schemas and client, fixture and domain mapping |
+| 7.3 | Verification of the v2 wire matrix |
+| 7.4 | Zero-inclusive v2 points and legacy omission tests |
+
+These retired addresses are never reused.
+
+## 8. Durable purchase identity and current decision (grade10)
+
+Moved to `add-checkout-purchase-safety` (Q24).
+
+| Retired Address | Moved Work |
+| --- | --- |
+| 8.1 | Race and service tests for repeat, terminal replay and concurrent first creates |
+| 8.2 | Additive schema and migrations for purchase identity |
+| 8.3 | Context read, canonical purchase identity and terminal replay |
+| 8.4 | Backend and real-Postgres race verification |
+
+These retired addresses are not completed tasks and are never reused.
+
+## 9. Dispatch recovery and retirement (grade10)
+
+Moved to `add-checkout-purchase-safety` (Q24).
+
+| Retired Address | Moved Work |
+| --- | --- |
+| 9.1 | Worker, service and DB tests for dispatch recovery and retirement |
+| 9.2 | Persisted dispatch claim, correlation and bind-once recovery |
+| 9.3 | Durable retirement after member edits |
+| 9.4 | Legacy adapter and pending-invoice drain |
+| 9.5 | Fault-injection and worker verification |
+
+These retired addresses are not completed tasks and are never reused.
+
+## 10. Settlement, conversion and carrier evidence (grade10)
+
+Moved to `add-checkout-purchase-safety` (Q24). This change verifies the merged
+conversion guard from the frontend in Group 11.
+
+| Retired Address | Moved Work |
+| --- | --- |
+| 10.1 | Settlement, conversion and carrier tests |
+| 10.2 | Member-edit conversion guard repair |
+| 10.3 | Carrier token gate and preview parity repair |
+| 10.4 | Backend and real-Postgres verification |
+| 10.5 | Shop-review conversion regression |
+
+These retired addresses are not completed tasks and are never reused.
+
+## 11. Frontend cart-header integration (grade10) (owner: @kinisworking)
+
+| Retired Address | Withdrawn Work |
+| --- | --- |
+| 11.1 | Tests for same-session identity, conflict refresh, recovery blockade and terminal mapping |
+| 11.2 | Session-scoped submitted identity and server context in the drawer |
+| 11.3 | Created/reused, settling, terminal, conflict and recovery wiring |
+| 11.4 | Verification of the 11.1-11.3 plan |
+| 11.5 | Zero-points v2 handoff and required price acknowledgement tests |
+
+These retired addresses are not completed tasks and are never reused. The
+tasks below use the current backend as it is (Q24-Q29); tests precede code and
+11.6 is ticked last.
+
+- [ ] 11.6 Add failing tests before 11.7-11.9, each citing its scenario id: the drawer request shape with and without points, one pending Pay, older answers after an edit or member change, a lost or unreadable answer with no retry, existing answer treatments, readiness and signed-out or expired-session gating, order polling, paid cart refresh, later edits and both return links. Replace the browser flows that assert invoice reuse after reload: `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02`, `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-06`, `grade10-site-store-checkout-SC-07`, `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-15`, `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-45`, `grade10-site-store-checkout-SC-47`, `grade10-site-store-checkout-SC-49`, `grade10-site-store-checkout-SC-50`, `grade10-site-store-checkout-SC-51`, `grade10-site-store-checkout-SC-52`, `grade10-site-store-checkout-SC-53`, `grade10-site-store-checkout-SC-54`, `grade10-site-store-checkout-SC-57`, `grade10-site-store-checkout-SC-58`, `grade10-site-store-checkout-SC-59`, `grade10-site-store-checkout-SC-60`, `grade10-site-store-checkout-SC-62`, `grade10-site-store-checkout-SC-63`, `grade10-site-store-checkout-SC-64`, `grade10-site-store-checkout-SC-65`.
+- [ ] 11.7 Make the drawer pass its 11.6 tests through `checkout.createCheckout` alone: reviewed lines with seen prices, the accepted coupon, points only above 0, one pending Pay, older answers dropped, lost answers ended without retry and the existing answer treatments; hold no purchase identity in the browser: `grade10-site-store-checkout-SC-01`, `grade10-site-store-checkout-SC-02`, `grade10-site-store-checkout-SC-03`, `grade10-site-store-checkout-SC-04`, `grade10-site-store-checkout-SC-05`, `grade10-site-store-checkout-SC-06`, `grade10-site-store-checkout-SC-07`, `grade10-site-store-checkout-SC-34`, `grade10-site-store-checkout-SC-35`, `grade10-site-store-checkout-SC-37`, `grade10-site-store-checkout-SC-38`, `grade10-site-store-checkout-SC-49`, `grade10-site-store-checkout-SC-50`, `grade10-site-store-checkout-SC-51`, `grade10-site-store-checkout-SC-52`, `grade10-site-store-checkout-SC-53`, `grade10-site-store-checkout-SC-54`, `grade10-site-store-checkout-SC-57`, `grade10-site-store-checkout-SC-58`, `grade10-site-store-checkout-SC-63`, `grade10-site-store-checkout-SC-64`, `grade10-site-store-checkout-SC-65`.
+- [ ] 11.8 Remove the `settled`, `terminal`, `intentConflict` and `recoveryRequired` resolution kinds and the compatible outcome input the current contract cannot send; keep `resolveCheckout` total over the existing checkout answers.
+- [ ] 11.9 Keep order polling while open, the paid cart and tender refresh without local deletion, and both static Your Orders links passing their 11.6 tests: `grade10-site-store-checkout-SC-12`, `grade10-site-store-checkout-SC-13`, `grade10-site-store-checkout-SC-15`, `grade10-site-store-checkout-SC-36`, `grade10-site-store-checkout-SC-45`, `grade10-site-store-checkout-SC-47`, `grade10-site-store-checkout-SC-59`, `grade10-site-store-checkout-SC-60`, `grade10-site-store-checkout-SC-62`.
+- [ ] 11.10 Link the existing backend tests that prove the unchanged provider, settlement, operator and carrier scenarios with `trace:supports` markers, changing no backend code; report a scenario with no existing test to `add-checkout-purchase-safety` instead of building it here: `grade10-site-store-checkout-SC-08`, `grade10-site-store-checkout-SC-14`, `grade10-site-store-checkout-SC-16`, `grade10-site-store-checkout-SC-17`, `grade10-site-store-checkout-SC-18`, `grade10-site-store-checkout-SC-55`, `grade10-site-store-checkout-SC-56`.
+- [ ] 11.11 Verify focused frontend and extension suites, Grade10 and ZZZ type checks and the change-sensitive checks in `docs/conventions/validation.md`; record commands and results. Keep existing status labels and add no new badge.
+
+## 12. Integration and authorized staging evidence (grade10)
+
+Moved to `add-checkout-purchase-safety` (Q24). This change's frontend staging
+observations are 5.6 and 5.7.
+
+| Retired Address | Moved Work |
+| --- | --- |
+| 12.1 | Mounted flows on real workers and Postgres for concurrent, lost, replayed and interrupted Pay |
+| 12.2 | Local backend end-to-end checks |
+| 12.3 | Staging readiness sheet for drain, correlation, retirement and carrier |
+| 12.4 | Authorized staging evidence for reuse, concurrency, recovery and retirement |
+| 12.5 | Implementation provenance for the backend guarantees |
+
+These retired addresses are not completed tasks and are never reused.
+
+## 13. The walk (grade10)
+
+Uses draft feature cases as planning input after Group 11 lands. Planning marks no case approved or actual.
+
+- [ ] 13.1 Keep one end-to-end actor walk for each frozen journey through the drawer, Your Orders and the Shopify return link; US-05 walks one Pay at a time and older and lost answers, not invoice reuse or recovery: `grade10-site-store-checkout-US-01`, `grade10-site-store-checkout-US-02`, `grade10-site-store-checkout-US-03`, `grade10-site-store-checkout-US-04`, `grade10-site-store-checkout-US-05`, `grade10-site-store-checkout-US-06`.
+- [ ] 13.2 In the walks' own commit, use `pnpm run tcs:automated <case…> --decided-by grade10:<walk-path>` only for cases the walks decide. Name remaining manual provider cases in the suite and rounds row.
+- [ ] 13.3 Verify Playwright and authorized staging evidence separately; record unrun gates and receipts without treating fixtures as live Shopify proof. Backend guarantees are evidenced by `add-checkout-purchase-safety`.

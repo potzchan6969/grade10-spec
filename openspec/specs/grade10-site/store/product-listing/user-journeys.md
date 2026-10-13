@@ -61,6 +61,7 @@ where a narrowing left off rather than to a page number.
 scrolled past,
 **so that** I can tell whether it is worth reading on before I have read to the
 end.
+
 ### grade10-site-store-product-listing-US-09: Collector opens the listing at rest
 
 **As a** collector,
@@ -85,3 +86,9 @@ collection I came for.
 **As a** signed-out collector on the browse listing,
 **I want** the sign-in dialog to say I am signing in to add to cart,
 **so that** I know why the shop stopped the add.
+
+### grade10-site-store-product-listing-US-16: Collector opens a card from the listing
+
+**As a** collector browsing the listing,
+**I want** a card's name to open its product, as its photo does,
+**so that** the name I read first takes me to the product I came for.

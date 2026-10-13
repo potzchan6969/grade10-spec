@@ -22,16 +22,17 @@ Read [`AGENTS.md`](AGENTS.md) before using an AI agent in this repository. It de
 
 ```bash
 pnpm setup:worktree
-pnpm storybook                     # cross-package page assemblies
-pnpm storybook:workbench           # those assemblies plus both packages' stories
+pnpm storybook                     # the workbench: every story, by domain and feature
+pnpm storybook:pages               # the page assemblies alone
 pnpm storybook:design-system       # design-system primitives alone
 pnpm storybook:ui                  # shared compound components alone
 ```
 
-The workbench Storybook on `main` (preview pages + UI + design-system) is
-published at
-[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com).
-Locally that is `pnpm storybook:workbench`.
+The workbench Storybook on `main` is published at
+[https://storybook.grade10-stg.com](https://storybook.grade10-stg.com). Its
+sidebar follows the manual's domains and pages; where a story goes and how
+designers and agents draw states, flows and prototypes is
+[`docs/governance/storybook.md`](docs/governance/storybook.md).
 
 For concurrent worktrees, install Playwright once before running browser tests:
 

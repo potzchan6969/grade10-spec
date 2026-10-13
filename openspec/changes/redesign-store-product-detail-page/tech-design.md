@@ -19,10 +19,9 @@ The remaining delivery work is the description disclosure: group 5 replaces
 the character-count estimate with a post-layout overflow decision while
 keeping server rendering and hydration deterministic.
 
-The stock ceiling and remaining-count behavior in the frontend completion plan
-belongs to `hold-cart-quantity-to-stock`, groups 3 and 5. This change consumes
-that change's landed product-model and buy-box boundary; it does not introduce
-a second stock threshold or duplicate its presentation task.
+The page shows no remaining count and puts no stock ceiling on the stepper:
+`add-store-product-status` removed both from the product page, and owns the
+page's one-item add and sold-out requirements.
 
 ## Goals / Non-Goals
 
@@ -39,8 +38,8 @@ a second stock threshold or duplicate its presentation task.
 
 - **Provider work** — no Shopify query, API, database, webhook, or deployment
   change for the remaining frontend groups
-- **Stock-policy work** — no new ceiling or scarcity rule; those belong to
-  `hold-cart-quantity-to-stock`
+- **Stock-policy work** — no ceiling or scarcity rule; the page's availability
+  is `add-store-product-status`'s
 - **Design-system work** — no new export, variant, or token
 
 ## Decisions
@@ -83,10 +82,9 @@ catalogue strings and could show a false product facet.
 The `Product` contract does not gain shipping or pickup fields for v1. The
 page renders the same locale-catalogue fulfilment copy for every product:
 shipping is calculated at checkout with a `Shipping fee` label, and pickup is
-available at `Hong Kong Grade10 Store`. The two labels are underlined as in the
-Figma frame but are non-interactive because the annotation leaves both targets
-TBC. A later contract or navigation change can add real destinations without
-changing product metadata semantics.
+available at `Hong Kong Grade10 Store`. The store name opens Store Locator and
+`Shipping fee`, which has no page, is text, per `add-store-locator`. Neither
+destination changes product metadata semantics.
 
 The alternative is to point both labels at the store surface or invent an
 external URL. Rejected: neither target represents the shipping-fee details or
@@ -96,12 +94,12 @@ store locator promised by the annotation.
 
 The Figma frame shows one general quantity stepper because each product has one
 sellable Shopify item. The page does not render a size, option, or variant
-chooser. The price and inventory context follow that item's catalogue data, and
+chooser. The price and availability follow that item's catalogue data, and
 its Shopify sale identifier is passed to the cart without becoming visible
 product text.
 
-The stepper uses the design-system `Stepper` with a minimum of one and a
-finite maximum when the product item exposes a positive quantity. The buy box
+The stepper uses the design-system `Stepper` with a minimum of one and no
+maximum from a stock count. The buy box
 passes the chosen quantity to the existing cart use case. Pending, success,
 and cart quantity are observed from the existing mutation/query state rather
 than duplicated in storage.
@@ -137,22 +135,19 @@ The alternative is to keep the fixed character budget in the product model.
 Rejected: line wrapping changes with width, font, and locale, so the model
 cannot decide whether the rendered region exceeds three lines.
 
-### Consume stock-limit ownership from its own change
+### Leave availability to product status
 
-The product page and buy box share the quantity state and stock feedback
-defined by `hold-cart-quantity-to-stock`. Its product-model group owns the
-finite ceiling and single scarcity rule; its product-page group owns the
-remaining-count presentation. The redesign keeps its existing quantity and
-cart scenarios and does not add parallel helpers or thresholds.
-
-The alternative is to add a second stock helper to this change. Rejected: two
-rules for the same shop count would let the stepper and the message disagree.
+`add-store-product-status` owns what the page says about availability: the
+one item's price and whether it can be bought, with no remaining count and no
+stock ceiling. The redesign keeps its gallery and description scenarios, and
+of the add only the pending label, the drawer opening, the reset and the Sold
+out label on the add action. It adds no stock helper or threshold.
 
 ### Keep copy in the shared catalogs
 
 The new labels (`Shop`, `About This Item`, `Shipping & Pickup`, `Shipping
 calculated at checkout`, `Shipping fee`, `Free pick-up at`, `Hong Kong Grade10
-Store`, `Only X left`, `Show more`, `Show less`, `Adding…`, and `Sold out`)
+Store`, `Show more`, `Show less`, `Adding…`, and `Sold out`)
 are added to the shared product/store message catalog. Other locales fall back
 through the existing catalog-resolution mechanism until translations are
 supplied.
@@ -199,9 +194,10 @@ accepts a fabricated default label.
 - Layout measurement can briefly precede the overflow decision → keep the
   control in the SSR-safe initial render and hide it only after a measured
   collapsed region proves that no disclosure is needed.
-- A stock change can land beside this redesign → keep the stock model and
-  threshold in `hold-cart-quantity-to-stock`, and consume its shared boundary
-  rather than adding a second rule here.
+- Two changes move the product page → `add-store-product-status` accepts
+  first. This change's requirements already state only what that change does
+  not; once it folds, SC-17 and SC-18 move to serve US-03 and US-04, their
+  cases join those journeys' folded suites, and US-08 and US-09 retire.
 
 ## Migration Plan
 
@@ -209,8 +205,8 @@ accepts a fabricated default label.
 2. Bump `external/grade10-spec` in `grade10`.
 3. Complete the description disclosure group with layout measurement and
    serving, hydration, package, and application coverage.
-4. Land the stock model and product-page work through
-   `hold-cart-quantity-to-stock`, without duplicating its helpers here.
+4. Rebase this delta against the product page `add-store-product-status`
+   folds, adding no stock helper here.
 5. Run the remaining product-page acceptance checks on the chosen integration
    build.
 

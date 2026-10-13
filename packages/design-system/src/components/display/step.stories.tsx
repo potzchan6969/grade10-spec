@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { Step } from "./step";
 
 const meta = {
-  title: "Components/Step",
+  title: "Design System/Display/Step",
   component: Step,
   tags: ["autodocs"],
   argTypes: {
@@ -11,11 +11,16 @@ const meta = {
       control: "inline-radio",
       options: ["upcoming", "progress", "completed"],
     },
+    orientation: {
+      control: "inline-radio",
+      options: ["horizontal", "vertical"],
+    },
   },
   args: {
     label: "Step",
     description: "Description",
     state: "progress",
+    orientation: "horizontal",
     showLeadingConnector: true,
     showTrailingConnector: true,
   },
@@ -80,4 +85,8 @@ export const FirstStep: Story = {
 
 export const LastStep: Story = {
   args: { showTrailingConnector: false },
+};
+
+export const Vertical: Story = {
+  args: { orientation: "vertical" },
 };

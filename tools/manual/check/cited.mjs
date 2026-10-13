@@ -24,6 +24,12 @@
  * is the record of what happened, and rewriting one to chase a capability the
  * store has since refolded would be a lie about the change that shipped.
  *
+ * A row a change's `rounds.md` already carries on `main` is a record too, and
+ * is read the same way: it names the scenarios its round ran against, and a
+ * scenario the change retired since leaves that row citing an id nothing
+ * issues. Rewriting the row would hold it to today's readers as a new one and
+ * say a round ran that did not, so only the rows a branch adds are checked.
+ *
  * Two id shapes, because the store issues two: a scenario or a journey, issued
  * once for the whole store, and a `Q<n>` decisions row, issued by one change's
  * own table. The second resolves against that change and nowhere else.
@@ -91,7 +97,15 @@ function meant(issued, id) {
   return found.length === 1 ? issued.get(found[0]) : null;
 }
 
-export function checkCited(root, add) {
+const ROUNDS = /^openspec\/changes\/[^/]+\/rounds\.md$/;
+const NO_LINES = new Set();
+
+/**
+ * `readMain` answers each rounds file as `main` carries it, keyed by path, for
+ * every path asked at once; a store with no `main` answers nothing, and every
+ * row is then checked.
+ */
+export async function checkCited(root, add, readMain = async () => new Map()) {
   const files = walkFiles(root, join(root, "openspec"), ".md");
   const texts = new Map(
     files.map((path) => [path, readText(join(root, path))]),
@@ -108,17 +122,25 @@ export function checkCited(root, add) {
     }
   }
 
+  const onMain = await readMain(
+    [...texts.keys()].filter((path) => ROUNDS.test(path)),
+  );
+
   /** The decisions rows per change, read once per run. */
   const rows = new Map();
 
   for (const [path, text] of texts) {
     if (path.startsWith(ARCHIVE)) continue;
+    const kept = onMain.has(path)
+      ? new Set(onMain.get(path).split("\n"))
+      : NO_LINES;
+    const lines = text.split("\n");
     // One row per id per file: sixty-five ids cited twice each is not 130
     // problems, and the line named is the first a reader would reach.
     const unresolved = new Map();
     for (const { id, line } of citations(text)) {
       const key = id.toLowerCase();
-      if (issued.has(key)) continue;
+      if (issued.has(key) || kept.has(lines[line - 1])) continue;
       if (!unresolved.has(key)) unresolved.set(key, { id, line, more: 0 });
       else unresolved.get(key).more++;
     }

@@ -51,11 +51,11 @@ rules:
     - "Include a metric that would move if this change works."
     - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs: true` owes a `skip_specs_why` beside it."
   specs:
-    - "`/planning-dev` freezes journeys and feature-set roots as anchors. Isolated contexts run QA1 blind draft cases without scenarios, Dev technical design and scenarios, then QA2 reconciliation. An anchor change invalidates both readings and restarts them fresh. The same human resolves questions and accepts once."
+    - "`/planning-dev` freezes journeys and feature-set roots as anchors. Isolated contexts run QA1 blind draft cases without scenarios, Dev technical design and scenarios, then QA2 reconciliation. Planning-dev owns dependency-based restarts and input identities. The same human resolves questions and accepts once."
     - "Write `## Purpose` only when the text composed from the durable Purpose and the PRD differs from the durable one. When written it replaces that Purpose whole, for an existing capability as much as a new one."
     - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
     - "`pnpm spec:accept` publishes requirements and a snapshot. First claim records durable-spec commit and target scope. Archive compares that scope with durable specs; every difference needs acknowledgement. It does not fold again."
-    - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens, so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix."
+    - "Scenario heading: `#### Scenario: <app>.<domain>-<capability>.SC<n> - <title>`. The capability still owns the path `<product>/<domain>/<capability>`; `<app>` is its stable display code. Number from 1; an issued heading id is permanent - a removal retires it, nothing renumbers it. Existing trace:scenario marker ids never change; new marker ids remain separate machine identity allocated by the CLI."
     - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. Three anchors resolve: this capability's journey id, another capability's as `<path>#<journey-id>`, or a Feature set root group matched verbatim - the group only for a rule with no actor, and its prose names the walk rather than the group. Several anchors are written as code spans, because a group name may hold a comma."
     - "Every `###` under a requirements section is a `### Requirement:` - never a group heading: the fold absorbs it into the requirement above, and an ATX `## Group` ends the section and drops every requirement after it."
     - "One requirement for the flow, as numbered steps for whoever uses the surface - not a scenario per step. One requirement per entity with fields, only when this change adds or changes them, and one per entity with states; both as markdown tables. Never restate an unchanged fact."
@@ -67,7 +67,7 @@ rules:
 
   user-journeys:
     - "The schema instruction holds the rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` routing declaration, the verbatim context copies and every anchor."
-    - "Journey ids are `<capability prefix>-US-<n>`, permanent and never renumbered. There is no `**Accepted by:**` line, and no cap on the number of journeys."
+    - "Journey ids are `<app>.<domain>-<capability>.US<n>`, permanent and never renumbered. The OpenSpec path remains the ownership source, and the app code is its stable display prefix. There is no `**Accepted by:**` line, and no cap on the number of journeys."
   test-cases:
     - "`docs/governance/specs-to-test-cases.md` governs the shape. QA1 drafts blind cases from frozen anchors, never scenarios. New cases stay draft; preserve existing metadata. Human QA reviews after deployment with `tcs-review`; execution uses `tcs-run-sheet`."
   ui-design:

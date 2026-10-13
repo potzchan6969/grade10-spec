@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadioListItem } from "./radio-list-item";
 
 const meta = {
-  title: "Components/RadioListItem",
+  title: "Design System/Forms/RadioListItem",
   component: RadioListItem,
   tags: ["autodocs"],
   decorators: [

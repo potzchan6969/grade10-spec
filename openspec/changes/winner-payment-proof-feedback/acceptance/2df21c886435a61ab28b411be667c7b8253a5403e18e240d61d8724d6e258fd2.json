@@ -1,0 +1,86 @@
+{
+  "version": 2,
+  "change": "winner-payment-proof-feedback",
+  "baseline": "3221e1a582ace1a65a97e80a47659b5cd35751ab71a3796d50b403933a19b88f",
+  "fingerprint": "2df21c886435a61ab28b411be667c7b8253a5403e18e240d61d8724d6e258fd2",
+  "reviewedBy": "htonyl",
+  "acceptedAt": "2026-10-07T04:13:14.800Z",
+  "supersedes": "87e432b05db234b6bb8046d7d9b4d0f1593edf16be0b7d1e5e1798e741940f99",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-proof",
+      "sha256": "7d857e52f240f3e2ec75a97cc38e19fe71c8dd45ff210d3628d1e897031d6eb0",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/decisions.md",
+      "sha256": "d260dc941dd198c34ce1e3c1492b7975e67e583019909c055f7f6b6433c80c07",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/proposal.md",
+      "sha256": "95c6fb719d012fd5952c47291515ba002a3c44610ce775c1c836e801b98795c4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "5f3c3ec4f4482d0d477aab834508c9558c98208e25a26dfad8b5c635c6c10640",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "74ee24248f9f364f1ff24d0fadd523384f79ff11a37e71b015708231af39e4b5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "873b995f21c439d06b26f4c85afe97afc14980059142cc56f251efbf020225e2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/tech-design.md",
+      "sha256": "0ca18a155bd44752cdc72d42f062a80d82fa4c403a3eeb38cfb24890fbf742b6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/ui-design.md",
+      "sha256": "1b62d593cbfccf9c782b55a00eb43039bccd2daa8396f45c21d7a8ca25bf064e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "d4d6207fc5650552298c0d5d90018030aff704acebba047aed11372190edbc82",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "c32c1ec750c077ea2dfd965cdc024c6a8dc0af8f9456941ae01c269f2eb6faae",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "bbc928ccc871579d475b786777bd05ff31ebd260305d313b5c3f5e1f4d29cda4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/winner-payment-proof-feedback/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Requirement: The winner uploads payment proof once"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

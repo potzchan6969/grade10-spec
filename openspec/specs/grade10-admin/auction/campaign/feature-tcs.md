@@ -1,6 +1,6 @@
 # grade10-admin/auction/campaign Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/15
 **Drafts styled:** 2026-10-05, tcs-rules r4
 
 ## grade10-admin-auction-campaign-US1: Operator finds the catalogue cover called a campaign

@@ -31,7 +31,7 @@ function footerLines({
   return [
     `${custodianName ?? "[Custodian registered name]"}, trading as Grade10. ${shopName} · ${shopAddress ?? "[Shop address]"}`,
     `Complaints: ${complaintsContact ?? "[Complaints contact]"}.`,
-    "Dates and times are Hong Kong time.",
+    "Dates and times are Hong Kong time (GMT+8).",
   ];
 }
 

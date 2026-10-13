@@ -66,8 +66,8 @@ svg[data-diagram="coupon-life"] .c-lane{fill: var(--lane-fill); stroke: var(--la
         <path data-step="used" data-edge-from="claimed" data-edge-to="used" data-edge-label="the order is paid" data-edge-key="2" data-composition-points="554,246;653.6,246" d="M 554 246 L 653.6 246" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
         <path data-step="available" data-edge-from="redeemed" data-edge-to="available" data-edge-key="3" data-composition-points="198,246;226,246" d="M 198 246 L 226 246" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
         
-        <g data-step="discount" id="coupon-life-node-discount" data-node-id="discount" data-node-label="Discount code" aria-label="Focus Discount code, a new claim discards the last, Shopify" data-node-kind="external" data-node-sublabel="a new claim discards the last" data-node-tag="ephemeral" data-node-context="Shopify">
-          <title>Discount code · a new claim discards the last · Shopify · ephemeral</title>
+        <g data-step="discount" id="coupon-life-node-discount" data-node-id="discount" data-node-label="Discount code" aria-label="Focus Discount code, a new claim frees the last, Shopify" data-node-kind="external" data-node-sublabel="a new claim frees the last" data-node-tag="ephemeral" data-node-context="Shopify">
+          <title>Discount code · a new claim frees the last · Shopify · ephemeral</title>
           <rect x="404" y="86" width="150" height="68" rx="6" class="c-mask"/>
           <rect x="404" y="86" width="150" height="68" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(410 92) scale(0.6875)">
@@ -75,7 +75,7 @@ svg[data-diagram="coupon-life"] .c-lane{fill: var(--lane-fill); stroke: var(--la
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="479" y="107" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Discount code</text>
-          <text data-detail="context" x="479" y="124" class="t-muted" font-size="8" text-anchor="middle">a new claim discards the last</text>
+          <text data-detail="context" x="479" y="124" class="t-muted" font-size="8" text-anchor="middle">a new claim frees the last</text>
         <text data-detail="fine" x="479" y="142" class="t-external" font-size="7" text-anchor="middle">ephemeral</text>
         </g>
         <g data-step="redeemed" id="coupon-life-node-redeemed" data-node-id="redeemed" data-node-label="Redeemed or granted" aria-label="Focus Redeemed or granted, points, or an operator, The coupon" data-node-kind="frontend" data-node-sublabel="points, or an operator" data-node-context="The coupon">

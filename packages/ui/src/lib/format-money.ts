@@ -1,28 +1,61 @@
-/** ISO 4217 minor-unit exponents Grade10 recognizes. */
+/** ISO 4217 minor-unit exponents, held equal to docs/prds/platform/shared/money-amounts.md. */
 const CURRENCY_EXPONENT: Readonly<Record<string, number>> = {
   AED: 2,
   AUD: 2,
+  BHD: 3,
+  BIF: 0,
   BRL: 2,
   CAD: 2,
   CHF: 2,
+  CLP: 0,
   CNY: 2,
+  CZK: 2,
+  DJF: 0,
+  DKK: 2,
   EUR: 2,
   GBP: 2,
+  GNF: 0,
   HKD: 2,
-  IDR: 2,
+  ILS: 2,
+  INR: 2,
+  IQD: 3,
+  ISK: 0,
+  JOD: 3,
   JPY: 0,
+  KMF: 0,
   KRW: 0,
   KWD: 3,
+  LYD: 3,
   MXN: 2,
   MYR: 2,
+  NOK: 2,
   NZD: 2,
+  OMR: 3,
   PHP: 2,
+  PLN: 2,
+  PYG: 0,
+  RON: 2,
+  RWF: 0,
+  SEK: 2,
   SGD: 2,
   THB: 2,
+  TND: 3,
+  TRY: 2,
   TWD: 2,
+  UGX: 0,
   USD: 2,
+  UYI: 0,
   VND: 0,
+  VUV: 0,
+  XAF: 0,
+  XOF: 0,
+  XPF: 0,
+  ZAR: 2,
 };
+
+/** Every code the table holds, sorted by code. */
+export const SUPPORTED_CURRENCY_CODES: readonly string[] =
+  Object.keys(CURRENCY_EXPONENT);
 
 export type FormatMoneyOptions = {
   locale?: string;
@@ -62,7 +95,7 @@ function getFormatter(
 }
 
 /** Default listing currency per grade10-auction admin-listing create defaults. */
-export const DEFAULT_LISTING_CURRENCY = "HKD";
+export const DEFAULT_LISTING_CURRENCY = "USD";
 
 export function currencyExponent(code: string): number {
   const exponent = CURRENCY_EXPONENT[code.toUpperCase()];
@@ -133,6 +166,42 @@ export function formatMoney(
   const exponent = currencyExponent(code);
   const major = minor / 10 ** exponent;
   return getFormatter(locale, code, currencyDisplay).format(major);
+}
+
+/**
+ * A lot amount reads `US$` for USD wherever the locale's own symbol is a
+ * bare `$` — auction surfaces disambiguate the dollar. Every other currency
+ * keeps the locale's symbol.
+ */
+export function formatLotMoney(
+  minor: number,
+  code: string,
+  options: FormatMoneyOptions = {},
+): string {
+  const locale = resolveLocale(options.locale);
+  const exponent = currencyExponent(code);
+  const major = minor / 10 ** exponent;
+  const disambiguateUsd = code.toUpperCase() === "USD";
+  return getFormatter(locale, code, "symbol")
+    .formatToParts(major)
+    .map((part) =>
+      part.type === "currency" && disambiguateUsd && part.value === "$"
+        ? "US$"
+        : part.value,
+    )
+    .join("");
+}
+
+/** Input prefix for a lot amount — `US$` where the locale's symbol is `$`. */
+export function formatLotMoneyPrefix(
+  code: string,
+  options: FormatMoneyOptions = {},
+): string {
+  const prefix = formatMoneyPrefix(code, {
+    ...options,
+    currencyDisplay: "symbol",
+  });
+  return code.toUpperCase() === "USD" && prefix === "$" ? "US$" : prefix;
 }
 
 /** Numeric portion only — grouping and fraction digits, no currency symbol. */

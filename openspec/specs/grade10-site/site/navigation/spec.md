@@ -55,6 +55,7 @@ surface SHALL resolve to the not-found surface. The not-found surface's title
 and description SHALL be static text that never includes the failed address
 or any other dynamic content, and it SHALL offer a control back to home.
 
+<!-- trace:scenario id=g10.site-navigation.SC-70e rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-01 - A nested address answers as its surface
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -62,6 +63,7 @@ or any other dynamic content, and it SHALL offer a control back to home.
   its own names, such as an address beneath the store
 - **THEN** that surface renders
 
+<!-- trace:scenario id=g10.site-navigation.SC-p5e rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-02 - A nested surface renders for itself
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -69,6 +71,7 @@ or any other dynamic content, and it SHALL offer a control back to home.
   mailed lot link beneath the auction
 - **THEN** the nested surface renders, not the surface above it
 
+<!-- trace:scenario id=g10.site-navigation.SC-jo4 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-03 - An unknown address resolves to not-found
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -76,6 +79,7 @@ or any other dynamic content, and it SHALL offer a control back to home.
 - **THEN** the not-found surface renders, showing its static title and
   description
 
+<!-- trace:scenario id=g10.site-navigation.SC-m4k rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-26 - Back to Home leaves the not-found surface for the brand home
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 

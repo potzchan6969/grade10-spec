@@ -92,7 +92,7 @@ describe("suiteTotalsOf", () => {
     cases: ChangeSuite["cases"],
   ): ChangeSuite => ({
     capability,
-    status: "in-review",
+    status: "pending-review",
     cases,
   });
 

@@ -34,6 +34,7 @@
 | Q14 | OpenSpec vehicle? | New change `winner-payment-proof-feedback` | Fold into how-to-pay rails |
 | Q15 | Preview submit failure? | Story that forces failure | Spec-only until app |
 | Q16 | Dirty leave (not busy)? | Keep preview `window.confirm` | In-product confirm now |
+| Q17 | Proof toast localization? | Add localized entries for English, Simplified Chinese and Traditional Chinese | Keep consumer copy English-only |
 
 ## Raised
 
@@ -45,3 +46,4 @@
 | `grade10-site/auction/winner-order` | Leave while converting HEIC? | Q12 |
 | `grade10-site/auction/winner-order` | Failure toast copy and stay-open behaviour? | Q5 |
 | `grade10-site/auction/winner-order` | Failure toast wording | Q11 |
+| `grade10-site/auction/winner-order` | Localize proof success and failure toasts? | Q17 |

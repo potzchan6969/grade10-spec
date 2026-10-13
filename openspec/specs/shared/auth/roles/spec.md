@@ -47,6 +47,7 @@ SHALL hold `user` only. Unknown role names SHALL be ignored.
 - **WHEN** a product reads who is calling
 - **THEN** that unknown name is not among the roles
 
+<!-- trace:scenario id=g10.shared-roles.SC-2bw rev=1 -->
 #### Scenario: shared-auth-roles-SC-20 - Finance and treasurer are kept as roles
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -164,6 +165,7 @@ change who holds a role, and SHALL NOT change what a role grants.
 - **THEN** they can change who holds a role
 - **AND** they cannot change what that role grants
 
+<!-- trace:scenario id=g10.shared-roles.SC-tdr rev=1 -->
 #### Scenario: shared-auth-roles-SC-12 - Staff run a vault case and cannot move its money
 **Serves:** shared-auth-roles-US-03 - Case work and money are separate grants
 
@@ -175,6 +177,7 @@ change who holds a role, and SHALL NOT change what a role grants.
 - **AND** the payout, the repayment, the money book and the auction payment
   are refused
 
+<!-- trace:scenario id=g10.shared-roles.SC-tm7 rev=1 -->
 #### Scenario: shared-auth-roles-SC-13 - A treasurer moves vault money and sees no identity document
 **Serves:** shared-auth-roles-US-03 - Case work and money are separate grants
 
@@ -184,6 +187,7 @@ change who holds a role, and SHALL NOT change what a role grants.
 - **AND** opening the identity document behind that case, starting a
   valuation on it, and making it an offer are refused
 
+<!-- trace:scenario id=g10.shared-roles.SC-gk8 rev=1 -->
 #### Scenario: shared-auth-roles-SC-16 - Finance collects auction payment and nothing else
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -193,6 +197,7 @@ change who holds a role, and SHALL NOT change what a role grants.
 - **AND** recording its shipment, an auction operate action, an auction write
   action, and reading a vault case are refused
 
+<!-- trace:scenario id=g10.shared-roles.SC-11t rev=1 -->
 #### Scenario: shared-auth-roles-SC-18 - Admin holds the whole vocabulary
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -201,6 +206,7 @@ change who holds a role, and SHALL NOT change what a role grants.
   vocabulary's order, `vault:payout`, `kyc:read` and `grading:approve`
   included
 
+<!-- trace:scenario id=g10.shared-roles.SC-gip rev=1 -->
 #### Scenario: shared-auth-roles-SC-19 - Staff run the grading counter, bookings and stock
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -209,6 +215,7 @@ change who holds a role, and SHALL NOT change what a role grants.
   person raised, change a booking, and change inventory stock
 - **THEN** each action is allowed
 
+<!-- trace:scenario id=g10.shared-roles.SC-tyx rev=1 -->
 #### Scenario: shared-auth-roles-SC-23 - Staff move items and the treasurer holds no inventory grant
 **Serves:** shared-auth-roles-US-02 - the operator's grants follow the closed vocabulary
 
@@ -284,6 +291,7 @@ evidence whichever product holds them, so `vault:read` SHALL NOT reach them.
 **No `kyc:write`** - There SHALL be no `kyc:write`; recording a verification
 stays with the flow that needs it.
 
+<!-- trace:scenario id=g10.shared-roles.SC-85d rev=1 -->
 #### Scenario: shared-auth-roles-SC-11 - Reading a case is not reading its identity document
 **Serves:** shared-auth-roles-US-03 - Case work and money are separate grants
 
@@ -292,6 +300,7 @@ stays with the flow that needs it.
   signed document behind it
 - **THEN** the case is shown and both documents are refused
 
+<!-- trace:scenario id=g10.shared-roles.SC-a54 rev=1 -->
 #### Scenario: shared-auth-roles-SC-21 - The vocabulary is exactly the listed set
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -300,6 +309,7 @@ stays with the flow that needs it.
   table, in that order
 - **AND** it holds no `finance` resource and no `kyc:write`
 
+<!-- trace:scenario id=g10.shared-roles.SC-njl rev=1 -->
 #### Scenario: shared-auth-roles-SC-24 - Writing the register is not moving an item
 **Serves:** shared-auth-roles-US-02 - the operator's grants follow the closed vocabulary
 
@@ -320,6 +330,7 @@ roles they hold, so a step that needs two people still needs two:
 | Reversing a vault money row | the person who recorded that row |
 | Approving a grading waiver, payout, payout reversal, setting or fee-sheet row | the person who asked for it |
 
+<!-- trace:scenario id=g10.shared-roles.SC-v6v rev=1 -->
 #### Scenario: shared-auth-roles-SC-22 - One person holding staff and treasurer cannot approve their own act
 **Serves:** shared-auth-roles-US-03 - Case work and money are separate grants
 

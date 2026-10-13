@@ -8,6 +8,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { readTeamMap, TEAM_MAP } from "../../../scripts/openspec/lib/team.mjs";
+import { storyIndex } from "../../../scripts/storybook/story-index.mjs";
 import { capabilitiesOf } from "../src/store/capabilities.mts";
 import { readText } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
@@ -118,6 +119,14 @@ export const RULES = [
     title: "Restated stories that are not what the store holds",
   },
   {
+    // The fold places stories and cases by id, so one handed to something new
+    // replaces the durable entry. Acceptance refuses it; a `warn` here until
+    // the changes written before that refusal are renumbered.
+    key: "reused",
+    level: "warn",
+    title: "Durable story, case or journey ids a change hands to something new",
+  },
+  {
     key: "outline",
     level: "fail",
     title: "Suites beside a spec whose scenarios never landed",
@@ -195,6 +204,14 @@ export const RULES = [
     title: "Requirements two in-flight changes both fold",
   },
   { key: "issued", level: "fail", title: "Permanent ids issued twice" },
+  {
+    // Acceptance refuses a fold that drops a durable scenario's marker; a
+    // `warn` here until the changes written before markers were carried are
+    // restated with them.
+    key: "restated",
+    level: "warn",
+    title: "MODIFIED scenarios restating a durable id with no trace marker",
+  },
   {
     key: "marks",
     level: "fail",
@@ -382,13 +399,21 @@ export function createContext(roots, report, { specs, changes, stories }) {
   };
 }
 
-/** The workbench Storybook build is gitignored, so story ids are checkable
- * only where someone has built it. Never fetched over the network, and an
- * index half-written by an interrupted build is one more store file the
- * readers could not parse — never the end of the whole run. */
+/** Story ids come from the stories' own source, as the workbench would index
+ * them (`scripts/storybook/story-index.mjs`), so a card is checked with nothing
+ * built. Where the source holds no story or cannot be read - no TypeScript to
+ * parse it with - a built index stands in: the build is gitignored, never fetched over the
+ * network, and an index half-written by an interrupted build is one more store
+ * file the readers could not parse — never the end of the whole run. */
 export function readStoryIndex(root, add) {
   const dir = join(root, "apps", "preview");
   if (!existsSync(dir)) return null;
+  try {
+    const ids = new Set(Object.keys(storyIndex({ root }).entries));
+    if (ids.size) return { file: "the stories' source", ids };
+  } catch {
+    // No TypeScript where the store is mounted: read a build instead.
+  }
   const built = readdirSync(dir, { withFileTypes: true })
     .filter(
       (entry) =>

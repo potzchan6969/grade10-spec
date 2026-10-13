@@ -120,6 +120,9 @@ function InFlightSuites({ rows }: { rows: ChangeSuiteRow[] }) {
                       }
                     >
                       {suite.status}
+                      {suite.status === "retired"
+                        ? ""
+                        : ` · ${suite.cases.actual}/${suite.cases.actual + suite.cases.draft}`}
                     </Badge>
                   )}
                 </span>
@@ -226,6 +229,9 @@ function QaRowCard({ row }: { row: QaRow }) {
               variant={row.suiteStatus === "approved" ? "success" : "warning"}
             >
               {row.suiteStatus}
+              {row.suiteStatus === "retired"
+                ? ""
+                : ` · ${row.cases.actual}/${row.cases.actual + row.cases.draft}`}
             </Badge>
           ) : (
             <Badge size="sm" variant="outline">

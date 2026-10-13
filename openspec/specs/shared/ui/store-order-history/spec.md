@@ -11,7 +11,7 @@ one component source, supplying copy, imagery, formatted values, and callbacks.
 ## Feature set
 
 - Order status
-  - Status badge: Show fulfillment state with the six Status-set variants.
+  - Status badge: Show the consumer's chosen status, one of the six Status-set variants, with its label.
 - Order line item
   - Product thumbnail and line copy: Show image, product×qty text, and line total.
 - Order card
@@ -59,14 +59,10 @@ components for the order history surface — `OrderHistoryStatus`,
 `processing`, `pickup`, `canceled`, and `refunded`, and SHALL display the
 consumer-supplied label for that status. It SHALL NOT invent other status values.
 
-| Status | Meaning |
-| --- | --- |
-| `completed` | Paid or picked up in store, or delivered for an online order |
-| `shipped` | Shipped and in transit (online) |
-| `processing` | Submitted but not yet shipped (online) |
-| `pickup` | Ready for pickup in the physical store (online) |
-| `canceled` | Canceled (online) |
-| `refunded` | Payment refunded (in-store or online) |
+The consumer SHALL choose the status, and the component SHALL NOT define what
+an order's status means. For a Grade10 Store order, `grade10-site/commerce/order-status`
+defines it. `pickup` SHALL remain an accepted status even though no
+consumer supplies it yet.
 
 <!-- trace:scenario id=g10.shared-store-order-history.SC-fem rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-08 - Each status renders its label

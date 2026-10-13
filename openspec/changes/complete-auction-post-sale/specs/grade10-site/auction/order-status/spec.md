@@ -1,3 +1,5 @@
+# Order Status - delta
+
 ## Feature set
 
 - Writable primitives
@@ -39,11 +41,15 @@ from the chain of invoices on the order.
 | `fulfilled` | The warehouse has dispatched the lot and a tracking number is attached |
 
 Grade10 SHALL write `expired` at the moment the payment deadline passes with
-the invoice still `pending`, and never on a `payment_verifying` invoice. An
+the invoice still `pending`, and never on a `payment_verifying` invoice. A card
+payment started before the deadline holds the invoice `pending` until it ends,
+per `grade10-site/auction/winner-order` "The payment deadline is fixed when the
+invoice is sent". An
 expired invoice SHALL NOT offer or start winner card payment, and SHALL NOT
 accept proof upload. An operator SHALL reissue it to `pending` with a new
 deadline, settle it manually to `paid`, or cancel it.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-tc9 rev=1 -->
 #### Scenario: auction-status-SC-01 - A new auction order starts pending and unfulfilled
 **Serves:** Writable primitives - a new auction order starts pending and unfulfilled
 
@@ -51,6 +57,7 @@ deadline, settle it manually to `paid`, or cancel it.
 - **THEN** its invoice status is `not_issued`
 - **AND** its fulfilment status is `unfulfilled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-i18 rev=1 -->
 #### Scenario: auction-status-SC-02 - Expiry writes no status
 **Serves:** Writable primitives - expiry writes no status
 
@@ -60,6 +67,7 @@ deadline, settle it manually to `paid`, or cancel it.
 - **THEN** Grade10 sets the invoice status to `expired`
 - **AND** the fulfilment status is still `unfulfilled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-wlf rev=1 -->
 #### Scenario: auction-status-SC-03 - A reissue keeps the invoice pending
 **Serves:** Writable primitives - a reissue keeps the invoice pending
 
@@ -68,6 +76,7 @@ deadline, settle it manually to `paid`, or cancel it.
 - **THEN** the invoice status is `pending`
 - **AND** the payment deadline is the new one the reissue set
 
+<!-- trace:scenario id=g10.auction-order-status.SC-8qq rev=1 -->
 #### Scenario: auction-status-SC-42 - A replaced invoice holds no status
 **Serves:** Derived order status - the order's invoice status is always its current invoice's
 
@@ -92,7 +101,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | Invoice status | `payment_verifying` | `paid` | An operator confirms the proof |
 | Invoice status | `payment_verifying` | `pending` | An operator returns the proof; the deadline restarts with the time left |
 | Invoice status | `expired` | `paid` | An operator commits a manual settlement |
-| Invoice status | `expired` | `paid` | A card payment lands on it anyway, flagged Paid late; a payment started in time keeps the invoice `pending` instead |
+| Invoice status | `expired` | `paid` | A card payment lands on it anyway, flagged Paid late |
 | Invoice status | `expired` | `pending` | An operator reissues the invoice with a new deadline |
 | Invoice status | `expired` | `partially_paid` | An operator records a payment short of the order total on a bank transfer invoice |
 | Invoice status | `expired` | `cancelled` | An operator cancels the order. The listing stays Closed and its stock hold is released, so the item is back in stock. |
@@ -118,6 +127,7 @@ always recorded" in `grade10-admin/auction/post-sale`. It SHALL move the
 invoice status only when it lands on the current invoice, `pending` or
 `expired`, at its order total; anywhere else it SHALL move no status.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-r6z rev=1 -->
 #### Scenario: auction-status-SC-13 - A paid invoice cannot return to pending
 **Serves:** Writable primitives - a paid invoice cannot return to pending
 
@@ -126,6 +136,7 @@ invoice status only when it lands on the current invoice, `pending` or
 - **THEN** Grade10 refuses the write
 - **AND** the invoice status is still `paid`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-d22 rev=1 -->
 #### Scenario: auction-status-SC-14 - A cancelled invoice is terminal
 **Serves:** Writable primitives - a cancelled invoice is terminal
 
@@ -134,6 +145,7 @@ invoice status only when it lands on the current invoice, `pending` or
 - **THEN** Grade10 refuses it
 - **AND** the invoice status is still `cancelled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-j9x rev=1 -->
 #### Scenario: auction-status-SC-22 - An invoice cannot be sent without a confirmed address
 **Serves:** Writable primitives - an invoice cannot be sent without a confirmed address
 
@@ -147,6 +159,7 @@ Scenario `auction-status-SC-25` keeps its title with its id. The title is
 historical: an expired invoice starts no card payment, and one that lands
 anyway pays it, flagged Paid late.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-0sk rev=1 -->
 #### Scenario: auction-status-SC-25 - An expired invoice refuses winner card payment
 **Serves:** Derived order status - an expired invoice derives Payment Overdue without winner card pay
 
@@ -156,6 +169,7 @@ anyway pays it, flagged Paid late.
 - **AND** the invoice status remains `expired`
 - **AND** the order still derives as Payment Overdue
 
+<!-- trace:scenario id=g10.auction-order-status.SC-wt0 rev=1 -->
 #### Scenario: auction-status-SC-45 - Proof moves the invoice to payment_verifying and back
 **Serves:** Writable primitives - `payment_verifying` is entered on upload and left by an operator
 
@@ -168,6 +182,7 @@ Scenario `auction-status-SC-46` keeps its title with its id. The title is
 historical: a checked invoice starts no card payment, and one that completes
 anyway is recorded and moves nothing.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-er6 rev=1 -->
 #### Scenario: auction-status-SC-46 - A checked invoice refuses cancel, reissue, settlement and card payment
 **Serves:** Writable primitives - only confirm or return leaves `payment_verifying`
 
@@ -176,6 +191,7 @@ anyway is recorded and moves nothing.
 - **THEN** Grade10 refuses each, and no card is charged
 - **AND** the invoice status is still `payment_verifying`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-e4v rev=1 -->
 #### Scenario: auction-status-SC-47 - Confirming proof writes paid
 **Serves:** Writable primitives - `payment_verifying` is left by an operator
 
@@ -184,6 +200,7 @@ anyway is recorded and moves nothing.
 - **THEN** the invoice status is `paid`
 - **AND** the order derives as Preparing Shipment
 
+<!-- trace:scenario id=g10.auction-order-status.SC-q1w rev=1 -->
 #### Scenario: auction-status-SC-48 - Proof upload enters payment_verifying only from pending
 **Serves:** Writable primitives - `payment_verifying` is entered on upload
 
@@ -192,6 +209,7 @@ anyway is recorded and moves nothing.
 - **THEN** Grade10 refuses each
 - **AND** each invoice status is unchanged
 
+<!-- trace:scenario id=g10.auction-order-status.SC-1xq rev=1 -->
 #### Scenario: auction-status-SC-55 - A card payment landing on an expired invoice pays it, flagged Paid late
 **Serves:** Writable primitives - money that lands after the deadline pays the invoice
 
@@ -201,6 +219,7 @@ anyway is recorded and moves nothing.
 - **THEN** the invoice status is `paid`, and the payment is flagged Paid late
 - **AND** the order derives as Preparing Shipment
 
+<!-- trace:scenario id=g10.auction-order-status.SC-wjo rev=1 -->
 #### Scenario: auction-status-SC-56 - A card payment landing on a checked invoice moves nothing
 **Serves:** Guards - money that lands while proof is checked moves no status
 
@@ -211,6 +230,7 @@ anyway is recorded and moves nothing.
 - **AND** the invoice status is still `payment_verifying`, and the order still
   derives as Payment Verifying
 
+<!-- trace:scenario id=g10.auction-order-status.SC-4yo rev=1 -->
 #### Scenario: auction-status-SC-57 - A card payment on a cancelled invoice moves no status
 **Serves:** Guards - money that lands on a cancelled order revives nothing
 

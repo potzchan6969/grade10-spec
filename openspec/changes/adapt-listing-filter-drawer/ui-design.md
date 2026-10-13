@@ -9,17 +9,17 @@ change. Wide filter panel layout stays on the existing Filter Panel frame.
 
 | Surface | Storybook (SoT) |
 | --- | --- |
-| Count + sort / Worlds / Types pills (secondary, one scrolling row to page edge) | [`ProductBrowse` → Narrow](?path=/story/store-product-listing-productbrowse--narrow) |
-| Sort bottom drawer — apply on choose | [`ProductBrowse` → Narrow Sort Applies On Choose](?path=/story/store-product-listing-productbrowse--narrow-sort-applies-on-choose) |
-| Facet bottom drawer — draft, Clear, Show Results (stacked primary above secondary); list scrolls; sheet max ~80dvh; 16px padding on small viewports | [`ProductBrowse` → Narrow Facet Clear Draft](?path=/story/store-product-listing-productbrowse--narrow-facet-clear-draft) |
-| Whole page, narrow viewport | [`Pages/Store/Product List Page` → Default](?path=/story/pages-store-product-list-page--default) at mobile viewport |
+| Count + sort / Worlds / Types pills (secondary, one scrolling row to page edge) | [`ProductBrowse` → Narrow](?path=/story/store-product-listing-blocks-productbrowse--narrow) |
+| Sort bottom drawer — apply on choose | [`ProductBrowse` → Narrow Sort Applies On Choose](?path=/story/store-product-listing-blocks-productbrowse--narrow-sort-applies-on-choose) |
+| Facet bottom drawer — draft, Clear, Show Results (stacked primary above secondary); list scrolls; sheet max ~80dvh; 16px padding on small viewports | [`ProductBrowse` → Narrow Facet Clear Draft](?path=/story/store-product-listing-blocks-productbrowse--narrow-facet-clear-draft) |
+| Whole page, narrow viewport | [`Store/Product Listing/Screens/Product List` → Default](?path=/story/store-product-listing-screens-product-list--default) at mobile viewport |
 
 ### Wide listing (unchanged)
 
 | Surface | Storybook (SoT) | Figma |
 | --- | --- | --- |
-| Sidebar search + stacked groups | [`ProductBrowse` → Default](?path=/story/store-product-listing-productbrowse--default) | [Filter panel](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952&m=dev) |
-| Count, sort dropdown, chips | [`ProductListHeader`](?path=/story/store-product-listing-productlistheader--default) | [Product List Header](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-14117&m=dev) |
+| Sidebar search + stacked groups | [`ProductBrowse` → Default](?path=/story/store-product-listing-blocks-productbrowse--default) | [Filter panel](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952&m=dev) |
+| Count, sort dropdown, chips | [`ProductListHeader`](?path=/story/store-product-listing-blocks-productlistheader--default) | [Product List Header](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-14117&m=dev) |
 
 ## Components
 
@@ -44,10 +44,10 @@ change. Wide filter panel layout stays on the existing Filter Panel frame.
 
 | State | Spec scenario | Story |
 | --- | --- | --- |
-| Narrow pills; no search; no Filter icon | `shared-ui-store-product-listing-SC-80` | [Narrow](?path=/story/store-product-listing-productbrowse--narrow) |
-| Sort applies on choose and closes | `shared-ui-store-product-listing-SC-81` | [Narrow Sort Applies On Choose](?path=/story/store-product-listing-productbrowse--narrow-sort-applies-on-choose) |
-| Pill labels: group / one option / compact count | `shared-ui-store-product-listing-SC-82` | [Narrow](?path=/story/store-product-listing-productbrowse--narrow), [Narrow Facet Clear Draft](?path=/story/store-product-listing-productbrowse--narrow-facet-clear-draft) |
-| Facet draft applies on Show Results | `shared-ui-store-product-listing-SC-83` | [Narrow](?path=/story/store-product-listing-productbrowse--narrow) |
-| Facet Clear empties draft only | `shared-ui-store-product-listing-SC-84` | [Narrow Facet Clear Draft](?path=/story/store-product-listing-productbrowse--narrow-facet-clear-draft) |
-| Wide sidebar + search; no pill row | `shared-ui-store-product-listing-SC-85` | [Default](?path=/story/store-product-listing-productbrowse--default) |
-| Filters / groups still usable when results empty or error | `shared-ui-store-product-listing-SC-12`, `SC-27`, `SC-28` | [`ProductBrowse/States`](?path=/story/store-product-listing-productbrowse-states--no-match) |
+| Narrow pills; no search; no Filter icon | `shared-ui-store-product-listing-SC-80` | [Narrow](?path=/story/store-product-listing-blocks-productbrowse--narrow) |
+| Sort applies on choose and closes | `shared-ui-store-product-listing-SC-81` | [Narrow Sort Applies On Choose](?path=/story/store-product-listing-blocks-productbrowse--narrow-sort-applies-on-choose) |
+| Pill labels: group / one option / compact count | `shared-ui-store-product-listing-SC-82` | [Narrow](?path=/story/store-product-listing-blocks-productbrowse--narrow), [Narrow Facet Clear Draft](?path=/story/store-product-listing-blocks-productbrowse--narrow-facet-clear-draft) |
+| Facet draft applies on Show Results | `shared-ui-store-product-listing-SC-83` | [Narrow](?path=/story/store-product-listing-blocks-productbrowse--narrow) |
+| Facet Clear empties draft only | `shared-ui-store-product-listing-SC-84` | [Narrow Facet Clear Draft](?path=/story/store-product-listing-blocks-productbrowse--narrow-facet-clear-draft) |
+| Wide sidebar + search; no pill row | `shared-ui-store-product-listing-SC-85` | [Default](?path=/story/store-product-listing-blocks-productbrowse--default) |
+| Filters / groups still usable when results empty or error | `shared-ui-store-product-listing-SC-12`, `SC-27`, `SC-28` | [`ProductBrowse/States`](?path=/story/store-product-listing-blocks-productbrowse-states--no-match) |

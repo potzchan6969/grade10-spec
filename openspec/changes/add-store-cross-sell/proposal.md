@@ -9,7 +9,7 @@ to the listing. The catalogue already holds the cards beside it. The stock
 keeper knows which ones belong together. The page shows none of them.
 
 **Metric:** rail opens and the add-to-cart rate of the sessions that open
-one, as [Measurement](../../../docs/prds/products/grade10-site/store/cross-sell.md#product-decisions)
+one, as [Measurement](../../../docs/prds/products/grade10-site/store/cross-sell.md)
 defines them; unmeasured until instrumented.
 
 ## What Changes
@@ -45,9 +45,9 @@ See [Non-Goals](decisions.md#non-goals).
 
 - `shared/ui/store-home` — `StoreSectionHeader` accepts copy with no browse
   label where no link is drawn.
-- `shared/ui/store-product-listing` — a sold-out `ProductCard` still reports
-  its activation where the consumer handles it, and a tile drawn without a cart
-  control needs no cart words. `ProductCard` and `ProductSummary` take an
+- `shared/ui/store-product-listing` — a tile drawn without a cart control
+  needs no cart words. A sold-out `ProductCard` still opens where it does not
+  sell, a rule `activate-listing-tile-by-name`'s tile requirement states (Q56). `ProductCard` and `ProductSummary` take an
   optional `href`, the product's address, which draws a tile that opens as a
   link to it: in `grade10`, the rail gives each tile its card's address, and
   the listing page and the store home's row give none yet (Q52).

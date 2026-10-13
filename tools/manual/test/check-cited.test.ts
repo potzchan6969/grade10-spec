@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { runChecks } from "../check/check-manual.mjs";
+import { checkCited } from "../check/cited.mjs";
 import { NO_GIT } from "../src/store/git.mts";
 import { writeStore } from "./tmp-store";
 
@@ -267,5 +268,67 @@ describe("a `Q<n>` cited in backticks", () => {
     ).toEqual([
       "openspec/references/loose-note.md — line 1: `Q1` names a decisions row, and nothing outside a change's directory issues one",
     ]);
+  });
+});
+
+describe("a rounds record", () => {
+  const ROW = (id: string) =>
+    `| 2 | 3 | simpler; verifier | it stood | - | \`${id}\`: test.mjs |`;
+  const ROUNDS = "openspec/changes/probe/rounds.md";
+  const record = (rows: string[]) =>
+    ["# Rounds", "", "| Round | Artifact |", "| --- | --- |", ...rows, ""].join(
+      "\n",
+    );
+
+  /** `cited` alone, with `main` carrying `onMain` for the rounds file. */
+  const run = async (now: string, onMain?: string) => {
+    const root = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": SPEC,
+      [ROUNDS]: now,
+      "openspec/changes/probe/tasks.md":
+        "- [x] 1.1 Ran it (`demo-product-alpha-SC-49`)\n",
+    });
+    const asked: string[][] = [];
+    const found: string[] = [];
+    await checkCited(
+      root,
+      (_rule: string, path: string, reason: string) =>
+        found.push(`${path} — ${reason}`),
+      async (paths: string[]) => {
+        asked.push(paths);
+        return new Map(onMain === undefined ? [] : [[ROUNDS, onMain]]);
+      },
+    );
+    return { asked, found: found.sort() };
+  };
+
+  it("keeps a row main carries, citing a scenario the change retired since", async () => {
+    const kept = record([ROW("demo-product-alpha-SC-49")]);
+    const { asked, found } = await run(kept, kept);
+    expect(asked).toEqual([[ROUNDS]]);
+    expect(found).toEqual([
+      "openspec/changes/probe/tasks.md — line 1: `demo-product-alpha-SC-49` is issued nowhere in the store",
+    ]);
+  });
+
+  it("checks a row the branch adds or edits", async () => {
+    const before = record([ROW("demo-product-alpha-SC-01")]);
+    const { found } = await run(
+      record([
+        ROW("demo-product-alpha-SC-01"),
+        ROW("demo-product-alpha-SC-50"),
+      ]),
+      before,
+    );
+    expect(found).toContain(
+      "openspec/changes/probe/rounds.md — line 6: `demo-product-alpha-SC-50` is issued nowhere in the store",
+    );
+  });
+
+  it("checks every row where the store has no main", async () => {
+    const { found } = await run(record([ROW("demo-product-alpha-SC-49")]));
+    expect(found).toContain(
+      "openspec/changes/probe/rounds.md — line 5: `demo-product-alpha-SC-49` is issued nowhere in the store",
+    );
   });
 });

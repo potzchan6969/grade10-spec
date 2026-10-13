@@ -1,0 +1,135 @@
+{
+  "version": 2,
+  "change": "cap-custom-maximum-entry",
+  "baseline": "b37d8092370373c120f2b4c10090c45c5479df567ae1cd737f1d5b756448e449",
+  "fingerprint": "a9274789f83bcf95227ec9634c73ae51f2842232ad76b697937cda76c70b05ed",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-05T12:15:39.287Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#auction-logic",
+      "sha256": "f93ff9085010b978da411208a306e1e62ec19f916eef52be6c9af636cf57f1c3",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/auction-listing.md#custom-maximum",
+      "sha256": "322778f290a347ef3b74133b3373ffa2325347c767c811f4e685d3c4c4c3f70f",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/decisions.md",
+      "sha256": "58bb3a14dae93eb25e6c851b236b906818e49d3f83e8d6a41b0e0e3f009919b1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/proposal.md",
+      "sha256": "841c7a17dc8587240909869412ada768bb3de2a765855847c0f71836ab9bb8d4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "sha256": "2206a385d1fff11db1d3d5d01d0295f248f8ba39e7017ecfdbadfe30a42f85cb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/specs/grade10-site/auction/bid-increments/spec.md",
+      "sha256": "77308fce340b898af4a1a729248022018cc7c47632ccf17ea0123c7393070d15",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "sha256": "3bfee6ab725bd9312551ad8db492324bb272f57d74cfc2109dbc1e2aed39c861",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "a0531798f5781a8be9b77fcdfeab6275b09e2425ede73b82cbdb914dd5c04f45",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "aecdaf2111f72d2e1078dac098bb60dc7a331cfabfa4e42f0f3bba07c8317d5d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/tech-design.md",
+      "sha256": "2e9cc1c91b1a1a7a8e6c56189ef8918a7efbd8a35c109388540b91f456d79a08",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/ui-design.md",
+      "sha256": "f904d8aefe598849231e3ea4da08d95c2f99607403b370a4e114e5fae6c1c665",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "sha256": "6dad9a3d4eb9eb0c4692748c87c1f4ff3c927c4fc9c7a50b8f1991ec209bee21",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+      "sha256": "c6aa865b6225b40193103ec921762774783de561883dbe28500eb10fba1da408",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "sha256": "3bfee6ab725bd9312551ad8db492324bb272f57d74cfc2109dbc1e2aed39c861",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "0a0a7b9d5bb23d3fc0cb9e9eb7ff8c2eb0d5540c77ad611f74c63cfdfb63ab13",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "8697a09bb3ef81941e23483f1858a9d1f67caf4195de85468fcd7475a4e20bbe",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/cap-custom-maximum-entry/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/spec.md",
+      "anchors": [
+        "Requirement: A bid never exceeds its currency's ceiling"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/bid-increments/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Custom maximum entry respects a major-unit ceiling"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

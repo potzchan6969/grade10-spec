@@ -7,7 +7,7 @@ import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-pay
 import { PaymentMethodCard } from "./payment-method-card";
 
 const meta = {
-  title: "Payment Method/PaymentMethodCard",
+  title: "Auction/Post Bidding/Blocks/PaymentMethodCard",
   component: PaymentMethodCard,
   tags: ["autodocs"],
   parameters: {

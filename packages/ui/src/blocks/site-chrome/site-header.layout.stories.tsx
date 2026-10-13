@@ -4,7 +4,7 @@ import { SiteHeader } from "./site-header";
 import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
 const meta = {
-  title: "Site Chrome/SiteHeader/Layout",
+  title: "Site/Page Shell/Blocks/SiteHeader/Layout",
   component: SiteHeader,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

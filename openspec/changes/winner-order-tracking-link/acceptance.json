@@ -1,0 +1,88 @@
+{
+  "version": 2,
+  "change": "winner-order-tracking-link",
+  "baseline": "d54bf0d5deb98acc7817b7c2a2d9956355300e6555848c4f022e9c9b8706cef0",
+  "fingerprint": "af17439fecb88b48390bcb587082a0ea04afdf6c5cd2624d98491657cfe0c291",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-07T09:53:57.491Z",
+  "supersedes": "db746df58afcaf3fed59a9a7fd8154b54f98d685befef997e7405a4fff5c8387",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#order-status",
+      "sha256": "4870c8e2c81f1e201c0d9b279b299011049d6d1fcae963a931499859b14d1d3b",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/decisions.md",
+      "sha256": "d3d2116bd8784b9e07ae80a1e3b5eb09199e2278e24ad969ea0335065148bbbf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/proposal.md",
+      "sha256": "51eb8c693c6441204406e10213e34e9696ef8c350978e3618be1db3e03eb7d6e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "991273dbc274c9fefc3fbd1b486cbe5c13fed4e49303a67d275b8f8e5da8dfdc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "03438bd6e7a685e5913907f1f14db6ca16b853f5def3382cfef33da62ef7cb21",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "3830d0bee1d6818d5a7d97cfbead96934027417b288140d7c25350686a4bd3a3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/tech-design.md",
+      "sha256": "4f8ec512aa42b70f18680158f3add17b3f0e21486462258a60497046bc3b679e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/winner-order-tracking-link/ui-design.md",
+      "sha256": "3442c31b1b8e9e700a9c8dc14e16730a324d3541c06011f91b40c116ab4db56d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "8aed2b57a20e2f4c083c6ab91beb87f371fed0ad94340fc884ad90858e04daeb",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "d14badfff50ebf4067d305ec8a5792ac00aa8d48ca8eb179248da074b39daa80",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "bbc928ccc871579d475b786777bd05ff31ebd260305d313b5c3f5e1f4d29cda4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/winner-order-tracking-link/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Winner Order makes the tracking number the carrier link"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

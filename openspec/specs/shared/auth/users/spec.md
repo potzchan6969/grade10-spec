@@ -264,6 +264,7 @@ request closing, cancelled or completed, is what changes standing.
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
+<!-- trace:scenario id=g10.shared-users.SC-vpv rev=1 -->
 #### Scenario: shared-auth-users-SC-34 - A ban closes a cached read within 70 seconds
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -273,6 +274,7 @@ request closing, cancelled or completed, is what changes standing.
 - **THEN** an ordinary browse read that starts 70 seconds or more after the
   ban reports no person, even though the cookie cache would not have expired
 
+<!-- trace:scenario id=g10.shared-users.SC-5vl rev=1 -->
 #### Scenario: shared-auth-users-SC-42 - Standing does not change while an erasure request is open
 **Serves:** shared-auth-users-US-02 - an operator reaching for Ban or Unban on an account whose erasure is under way
 
@@ -356,6 +358,7 @@ every read that starts 70 seconds or more after the change.
 - **WHEN** they save their own account without `admin`
 - **THEN** their account no longer holds `admin`
 
+<!-- trace:scenario id=g10.shared-users.SC-7i8 rev=1 -->
 #### Scenario: shared-auth-users-SC-35 - A role change reaches a cached read within 70 seconds
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -388,6 +391,7 @@ SHALL leave the account as `user` only.
 **Duplicate email** - When an Auth account already holds that email, the
 system SHALL refuse create and SHALL NOT create a second Auth row.
 
+<!-- trace:scenario id=g10.shared-users.SC-6zy rev=1 -->
 #### Scenario: shared-auth-users-SC-28 - An operator creates a passwordless Auth account
 **Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
 
@@ -399,6 +403,7 @@ system SHALL refuse create and SHALL NOT create a second Auth row.
 - **AND** the account is not enrolled in loyalty from create
 - **AND** no invite or magic-link email is sent from create
 
+<!-- trace:scenario id=g10.shared-users.SC-icb rev=1 -->
 #### Scenario: shared-auth-users-SC-29 - Create as plain user needs only user:create
 **Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
 
@@ -407,6 +412,7 @@ system SHALL refuse create and SHALL NOT create a second Auth row.
 - **WHEN** they create an account with a name, that email, and role `user`
 - **THEN** one Auth account exists for that email with roles `user` only
 
+<!-- trace:scenario id=g10.shared-users.SC-aob rev=1 -->
 #### Scenario: shared-auth-users-SC-30 - Create without user:create is refused
 **Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
 
@@ -415,6 +421,7 @@ system SHALL refuse create and SHALL NOT create a second Auth row.
 - **THEN** the system refuses the request
 - **AND** no Auth account holds that email
 
+<!-- trace:scenario id=g10.shared-users.SC-fdw rev=1 -->
 #### Scenario: shared-auth-users-SC-31 - Elevated create without user:set-role is refused
 **Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
 
@@ -423,6 +430,7 @@ system SHALL refuse create and SHALL NOT create a second Auth row.
 - **THEN** the system refuses the request
 - **AND** no Auth account holds that email
 
+<!-- trace:scenario id=g10.shared-users.SC-30l rev=1 -->
 #### Scenario: shared-auth-users-SC-32 - Duplicate email is refused
 **Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
 
@@ -432,6 +440,7 @@ system SHALL refuse create and SHALL NOT create a second Auth row.
 - **THEN** the system refuses the request
 - **AND** exactly one Auth account holds that email
 
+<!-- trace:scenario id=g10.shared-users.SC-52a rev=1 -->
 #### Scenario: shared-auth-users-SC-33 - Empty roles at create leave a user
 **Serves:** shared-auth-users-US-05 - Operator creates an Auth account before first sign-in
 
@@ -467,6 +476,7 @@ it SHALL carry its own day an erasure may run.
 | Cancelled | closed before any product erased anything | nothing; a new request may be filed |
 | Completed | closed after every product erased what it held | nothing; a new request may be filed |
 
+<!-- trace:scenario id=g10.shared-users.SC-94n rev=1 -->
 #### Scenario: shared-auth-users-SC-43 - A closed request stays closed
 **Serves:** Erasure requests - a console or a product sending the same cancel twice leaves the person's record as it was
 
@@ -475,6 +485,7 @@ it SHALL carry its own day an erasure may run.
 - **THEN** the request stays cancelled
 - **AND** nothing about the person changes
 
+<!-- trace:scenario id=g10.shared-users.SC-qww rev=1 -->
 #### Scenario: shared-auth-users-SC-44 - A person asks again after cancelling
 **Serves:** shared-auth-users-US-06 - somebody who changed their mind once and asks to be forgotten again later
 
@@ -509,6 +520,7 @@ day an erasure may run, read on the brand's own zone, which
 `shared/dates-and-times` states, and the request stands until every product has
 erased what it holds.
 
+<!-- trace:scenario id=g10.shared-users.SC-r91 rev=1 -->
 #### Scenario: shared-auth-users-SC-45 - The account holder files their own request
 **Serves:** shared-auth-users-US-06 - somebody asking to be forgotten from their own account rather than at an operator's desk
 
@@ -518,6 +530,7 @@ erased what it holds.
 - **AND** they are answered with the day it was filed and the day an erasure
   may run, seven days later
 
+<!-- trace:scenario id=g10.shared-users.SC-qse rev=1 -->
 #### Scenario: shared-auth-users-SC-46 - A request the person filed themselves bans nothing
 **Serves:** shared-auth-users-US-06 - somebody who filed the ask and comes back to read it before the window runs out
 
@@ -526,6 +539,7 @@ erased what it holds.
 - **THEN** they are signed in
 - **AND** the product reports that person
 
+<!-- trace:scenario id=g10.shared-users.SC-7rv rev=1 -->
 #### Scenario: shared-auth-users-SC-47 - The account holder cancels inside the window
 **Serves:** shared-auth-users-US-06 - somebody changing their mind before anything of theirs is erased
 
@@ -535,6 +549,7 @@ erased what it holds.
 - **THEN** the request closes as cancelled
 - **AND** no request is open for them
 
+<!-- trace:scenario id=g10.shared-users.SC-lh5 rev=1 -->
 #### Scenario: shared-auth-users-SC-48 - A cancel on the day an erasure may run is refused
 **Serves:** shared-auth-users-US-06 - somebody coming back to the ask on the day the days they could have taken it back in run out
 
@@ -573,6 +588,7 @@ request over, a cancel sent through the account holder's own request SHALL be
 refused, and the request SHALL stay open as the operator's. A taken-over request
 SHALL end only by running or by an operator's cancel.
 
+<!-- trace:scenario id=g10.shared-users.SC-z5x rev=1 -->
 #### Scenario: shared-auth-users-SC-49 - An operator's filing shuts the account
 **Serves:** shared-auth-users-US-02 - an operator taking a person who must leave off the brand from the directory
 
@@ -581,6 +597,7 @@ SHALL end only by running or by an operator's cancel.
 - **THEN** one open request stands for that person
 - **AND** that person cannot sign in
 
+<!-- trace:scenario id=g10.shared-users.SC-xp8 rev=1 -->
 #### Scenario: shared-auth-users-SC-50 - Cancelling an operator's request lets the person back in
 **Serves:** shared-auth-users-US-02 - an operator undoing a filing made in error before anything is erased
 
@@ -599,6 +616,7 @@ SHALL end only by running or by an operator's cancel.
 - **AND** that person cannot sign in
 - **AND** the day an erasure may run is unchanged
 
+<!-- trace:scenario id=g10.shared-users.SC-gnj rev=1 -->
 #### Scenario: shared-auth-users-SC-40 - The take-over leaves the person no cancel of their own
 **Serves:** shared-auth-users-US-06 - somebody who asked for themselves and tries to take the ask back once the shop has taken it over
 
@@ -608,6 +626,7 @@ SHALL end only by running or by an operator's cancel.
 - **THEN** the system refuses the cancel
 - **AND** the request stays open as the one the shop filed
 
+<!-- trace:scenario id=g10.shared-users.SC-2ey rev=1 -->
 #### Scenario: shared-auth-users-SC-41 - An erasure over an admin is refused
 **Serves:** shared-auth-users-US-02 - an operator reaching for the erasure of an account that no ban may touch
 
@@ -634,6 +653,7 @@ unbanned.
 erasure filing applied it. An account banned before the request was filed SHALL
 stay banned when the request is cancelled.
 
+<!-- trace:scenario id=g10.shared-users.SC-x17 rev=1 -->
 #### Scenario: shared-auth-users-SC-37 - A second ask answers the open request
 **Serves:** shared-auth-users-US-06 - somebody who asks again because the first ask looked as though it had not landed
 
@@ -642,6 +662,7 @@ stay banned when the request is cancelled.
 - **THEN** they are answered with that request and the day an erasure may run
 - **AND** only that one request stands
 
+<!-- trace:scenario id=g10.shared-users.SC-use rev=1 -->
 #### Scenario: shared-auth-users-SC-38 - A cancel with nothing open changes nothing
 **Serves:** shared-auth-users-US-06 - somebody cancelling from a page that was open before their request closed
 
@@ -650,6 +671,7 @@ stay banned when the request is cancelled.
 - **THEN** no request opens or closes
 - **AND** the account is unchanged
 
+<!-- trace:scenario id=g10.shared-users.SC-4gk rev=1 -->
 #### Scenario: shared-auth-users-SC-39 - A cancel leaves a ban the filing did not apply
 **Serves:** shared-auth-users-US-02 - an operator who banned somebody for conduct and later files and takes back their erasure
 

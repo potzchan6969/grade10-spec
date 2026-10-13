@@ -13,26 +13,41 @@ and load more as the shopper scrolls.
 
 ## Product Tile
 
-🚧 **Whole photo** — the square well shows the full picture; leftover space is
-the well, not a cropped edge. Available, on sale, sold out and in cart all do
-this.
+🚧 **Whole photo** - the square well shows the whole photo, centred and as
+large as it fits; leftover space is the well, not a cropped edge. Where a photo
+reaches into the well's rounded corners, it rounds with them. Available, on
+sale, sold out and in cart all do this. A photo that grows on hover may lose its
+edges until the pointer leaves.
 
-🚧 **No multiply** — the photo is drawn as supplied, not blended into the well.
+🚧 **Photo as supplied** - the photo is not blended into the well. Available,
+on sale, sold out and in cart all do this; a sold-out photo takes its sold-out
+treatment over it.
 
-🚧 **Name opens the product** — when the tile can open a product, the name
-does too, the same way the photo does; a sold-out tile’s name stays inert
-where the tile sells.
+**Name opens the product** - when the tile can open a product, the name
+does too, the same way the photo does, and shows it by an underline on hover
+and on keyboard focus; a sold-out tile's name stays inert where the tile
+sells, and a name that does not open is plain text.
 
-🚧 **A link** — a tile given its product's page is a link to it: it can open
-in a new tab, and its address can be copied —
+🚧 **One stop to open** - the name is the tile's only keyboard stop for
+opening the product and the one control a screen reader announces for it, so
+each product is announced once; the photo opens on a pointer press only.
+
+🚧 **Photo on its own** - used without its tile, the photo opens where a tile
+would, and is its own keyboard stop, named for the product.
+
+🚧 **A link** - a tile that opens, given its product's page, is a link to
+it: it can open in a new tab, and its address can be copied -
 [You May Also Like](/p/grade10-site/store/cross-sell)'s tiles
 
-🚧 **Opens where it does not sell** — on a surface that draws no cart control,
-a sold-out tile still opens its product, sold-out treatment and all —
+**Opens where it does not sell** - on a surface that draws no cart control,
+a sold-out tile still opens its product, sold-out treatment and all -
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
 [Main Page](/p/grade10-site/store/home)'s row of cards
 
-**Cart on a small screen** — where the tile sells, the round cart control
+🚧 **No cart words where it does not sell** - a tile that draws no cart
+control needs no cart word from the surface
+
+**Cart on a small screen** - where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
 viewport with a fine pointer it still appears on hover or keyboard focus.
 
@@ -108,31 +123,36 @@ catalogue itself is empty.
 The tile reports the quantity change and the application updates the cart.
 :::
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-1868" title="Product Listing — the browse page"}
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-1868" title="Product Listing — the browse page — historical, superseded by Storybook"}
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155" title="Product Card"}
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155" title="Product Card — historical, superseded by Storybook"}
 
-::story{id="store-product-listing-productbrowse--default" title="The whole browse surface"}
+::story{id="store-product-listing-blocks-productbrowse--default" title="The whole browse surface"}
 
-::story{id="store-product-listing-productbrowse-states--no-match" title="A search that matched nothing"}
+::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A search that matched nothing"}
 
-::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
+::story{id="store-product-listing-blocks-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
 
-::story{id="store-product-listing-productcardimage--default" title="The full photo in the well"}
+::story{id="store-product-listing-blocks-productcardimage--default" title="The whole photo in the well"}
 
-::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
+::story{id="store-product-listing-blocks-productcardimage--sold-out" title="A sold-out product tile"}
 
-::story{id="store-product-listing-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
+::story{id="store-product-listing-blocks-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
 
 :::detail{title="Product decisions" for="pm"}
 The surface displays what a consuming application supplies and decides none of
-it. Two things it has always done were missing from the map above it, and are
-recorded here rather than quietly folded into a group that does not mean them.
-A third row records a decision about the tile.
+it. The first two rows place two parts of its map; the rest decide the tile.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Responsive layout | Open | The list answers the width it is given, and has since it was written, but no part of the feature set said so. Named as its own part of the map. Confirm that is where it belongs, or fold it somewhere that already means it. | Product |
-| Load more | Open | Reaching the end of the catalogue and waiting for the next products are reported like every other change, and were likewise unmapped. Named as its own part. Same question. | Product |
-| Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round. | Product |
+| Responsive layout | Decided | The list answers the width it is given. It is its own part of the map, as the spec places it, because no other part means it. Not folded into the tile contract. | Product |
+| Load more | Decided | Reaching the end of the catalogue and waiting for the next products are reported like every other change. It is its own part of the map, as the spec places it, because reaching the end is not a choice the shopper makes in the filters or the sort. Not folded into Filters and sort. | Product |
+| Tile as a link | Decided | A tile that opens a product is a link: it opens in a new tab and its address can be copied, like any other. The surface gives the tile its product's page; the listing gives its tiles theirs in its own round, and until then its cards open in place. | Product |
+| Look | Decided | The blocks' stories are the agreed look: the photo unblended and a sold-out tile's dimmed photo growing on hover. The Figma frames are historical. | Design |
+| One stop to open | Decided | The name is the one keyboard stop that opens the product, so a Tab user passes one stop fewer on every tile and a screen reader announces each product once. Ruled out: the photo and the name as two stops for one destination. | Product |
+| Sold-out opens where nothing sells | Decided | A surface that draws no cart control carries the collector on to another product, so it has no reason to stop at a card nobody can buy. Ruled out: a sold-out tile inert everywhere, a dead end on that surface. | Product |
+| The underline means it opens | Decided | A name that opens is underlined on hover and on keyboard focus, and a name that does not open stays plain, so the underline never promises a press that does nothing. Ruled out: an underline on every name. | Product |
+| Whole photo | Decided | The tile shows the whole photo, centred and as large as it fits, so a slab or a box shows whole before its product opens. Where the photo reaches into the well's rounded corners it rounds with them, which is not a crop. Ruled out: cropping the photo to fill the square; growing the photo on hover only inside the well, which shrinks every photo at rest; a small upload at its own size, which draws it small; insetting the photo to clear the rounded corners, which shrinks every square photo. | Product |
+| Photo as supplied | Decided | The photo is not blended into the well. Multiply made a white studio fill read as transparent, and muddied a real catalogue photo once it letterboxes. A white fill shows white inside the grey well. | Product |
+| Measure for the whole photo | Decided | Not measured: the tile now draws the photo it is given. Ruled out: comparing how often slab and box tiles open their product before and after, which can move either way, and a new tile event that records each photo's shape, which adds tracking for a rendering fix. | Product |
 :::

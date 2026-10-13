@@ -122,3 +122,9 @@ that document it while shared product media stays available to every copy.
 **As an** Inventory operator,
 **I want** to remove an available physical unit and its Cert record together,
 **so that** the unit is withdrawn and its Cert-scoped source media cannot be reused.
+
+### grade10-admin-inventory-catalog-US-16: Inventory admin takes out units intaken by mistake
+
+**As an** inventory admin,
+**I want** to take out regular stock or a Cert record that was intaken by mistake and has never moved, from Cert ID details,
+**so that** the stock and the ledger count only the units the shop received.

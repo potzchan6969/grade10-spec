@@ -2,7 +2,7 @@
 title: Points
 spec: grade10-site/loyalty/programme
 order: 1
-reviewed: 2026-09-16
+reviewed: 2026-10-06
 ---
 
 ## Rules
@@ -306,8 +306,9 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | What happens | The date |
 | --- | --- |
 | A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
-| A grant, a correction or a reversal | Unchanged; those points take the date the balance already has |
-| Operator points with nothing live to join | Twelve months from the day they land |
+| A grant or a correction | Unchanged; those points take the date the balance already has |
+| A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
+| Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
 | An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
 | A record older than the window | Unchanged; those points are written already lapsed |
 | The day arrives | Gone; the whole balance is written off, and never revived |
@@ -319,8 +320,8 @@ Every point a member holds lapses on the same day, whatever recorded it.
   latest activity put it
 - **Settled first** — whatever is already dead is written off before the date
   moves, so no date reaches back over a lapse
-- 🚧 **A warning is owed** — the programme records which members are close to
-  losing points; nothing tells them yet —
+- 🚧 **A warning is owed** — the programme works out which members are close
+  to losing points; nothing tells them yet —
   [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders)
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
@@ -368,18 +369,20 @@ lapsed.
 | 2026/06/01 | campaign grant · takes 2027/01/03 · date stays | +100 | 115 |
 | 2027/01/03 | lapse, all of it | −115 | 0 |
 
-A grant moves no date, and neither does an operator correction. Both take the
-date the balance already has, so the member reads one day for everything.
+On a balance with points still live, a grant moves no date, and neither does
+an operator correction. Both take the date the balance already has, so the
+member reads one day for everything.
 :::
 
-:::example{title="A grant to an empty balance starts the date"}
+:::example{title="A grant to an empty balance moves the date out"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
-| 2027/01/03 | lapse | −15 | 0 |
-| 2027/03/08 | goodwill grant → lapses 2028/03/08 | +50 | 50 |
+| 2026/06/01 | correction · date stays 2027/01/03 | −15 | 0 |
+| 2026/07/08 | goodwill grant → lapses 2027/07/08 · date moves out | +50 | 50 |
 
-Nothing was left to join, so the grant names the date itself.
+Nothing was live to join, so the grant lapses twelve months from its own day,
+the later of that and 2027/01/03.
 :::
 
 :::example{title="An operator restarts the window"}
@@ -391,7 +394,7 @@ Nothing was left to join, so the grant names the date itself.
 | 2027/06/01 | lapse, all of it | −115 | 0 |
 
 The restart moves the whole balance, the grant and the earn alike. Nothing
-else moves the date without the member buying or redeeming.
+else moves a live balance's date without the member buying or redeeming.
 :::
 
 :::example{title="A late record shortens nothing"}
@@ -433,11 +436,11 @@ spend rather than lose a balance that was about to lapse.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| What a grant's points live for | Decided | They take the date the balance already has, and push it no further. | Product |
-| A balance with nothing live | Decided | Operator points start the date, twelve months out. | Product |
+| What a grant's points live for | Decided | On a balance with points still live, they take its date and push it no further. | Product |
+| A balance with nothing live | Decided | A grant or a correction lapses on the later of twelve months from its own day and the day still running, and moves that day out, never back (grade10 `packages/loyalty/backend/src/services/ledger/expiry.ts:74-83`, `packages/loyalty/backend/src/repositories/members.ts:27-45`); points a reversal gives back, or points paid at checkout that a refund or an operator returns, go back to the day still running (grade10 `packages/loyalty/backend/src/services/ledger/lots.ts:42`, `packages/loyalty/backend/src/services/ledger/expiry.ts:140`). | Product |
 | Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
 | How long a restart runs | Decided | Twelve months from today, never a day the operator picks. | Product |
 | Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
 | What moving those dates costs | Decided | Nothing; the move ran on staging alone, which holds play data. A production database starts under the one date. | Finance |
-| Warning a member before the day | ❓ Open | Which channel tells them, and how far ahead; who is owed one is recorded — [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders). | Product |
+| Warning a member before the day | Decided | Who is owed one is worked out apart from what tells them - [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders). | Product |
 :::

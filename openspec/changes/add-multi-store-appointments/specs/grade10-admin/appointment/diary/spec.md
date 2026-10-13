@@ -47,6 +47,7 @@ moment the last step lands.
    of its own for any resource that keeps different hours
 4. *Operator* — **Assign a service** to the resources that can take it
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-u7p rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-01 - A new shop offers its first slot
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -54,6 +55,7 @@ moment the last step lands.
 - **WHEN** an operator creates a shop, adds one desk, sets a rule for Monday 10:00 to 14:00, and assigns the service to the desk
 - **THEN** the collector's picker offers the shop's Monday times for that service
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-69a rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-02 - A shop with no assigned resource lists nothing
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -61,6 +63,7 @@ moment the last step lands.
 - **WHEN** a collector picks any service
 - **THEN** the shop is not among those offered
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-lpa rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-03 - Retiring a shop keeps its day readable
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -77,12 +80,14 @@ order its questions, assign per shop the resources it runs on, and retire it.
 A retired service SHALL stay listed under its own filter so its bookings can
 be read.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-9ka rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-04 - A service is created with its shape
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
 - **WHEN** an operator creates a service named Grading with a 30-minute duration, a 15-minute increment, a 10-minute buffer after, 2 hours of notice, a 60-day horizon, a reminder a day ahead, and customer bookable on
 - **THEN** the service appears in the services list, active, with those values
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-6sq rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-05 - Resources are assigned per shop
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -90,6 +95,7 @@ be read.
 - **WHEN** an operator assigns the service to both desks of the first shop and one desk of the second
 - **THEN** the first shop offers the service with a capacity of 2 and the second with a capacity of 1
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-qbg rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-06 - A service is retired
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -98,6 +104,7 @@ be read.
 - **THEN** the collector's list no longer offers it
 - **AND** the booking still reads under the service's name in the bookings list
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-t36 rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-07 - Questions are added in order
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -110,12 +117,14 @@ The console SHALL let an operator holding the manage grant add, edit and
 remove weekly rules and special dates for a shop, and for one of its
 resources, each shown on the shop's own clock.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-l71 rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-08 - A weekly rule is set
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
 - **WHEN** an operator adds a rule for a shop, Tuesdays 09:00 to 18:00
 - **THEN** the rule is listed under Tuesday and the diary offers Tuesday times
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-lol rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-09 - A date is closed
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -123,6 +132,7 @@ resources, each shown on the shop's own clock.
 - **WHEN** an operator closes the coming Monday with a special date
 - **THEN** that Monday is listed as closed and offers nothing
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-2mf rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-10 - A date runs on other hours
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -130,6 +140,7 @@ resources, each shown on the shop's own clock.
 - **WHEN** an operator sets a special date on the coming Monday to 12:00 to 15:00
 - **THEN** that Monday offers times between 12:00 and 15:00 only
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-6tw rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-11 - A resource keeps its own hours
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -143,6 +154,7 @@ The console SHALL let an operator holding the manage grant block a resource
 or a whole shop from one instant to another with a reason, list the blocks
 in force, and remove one.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-abv rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-12 - A resource is blocked with a reason
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -150,12 +162,14 @@ in force, and remove one.
 - **THEN** the day view shows the block in that desk's lane with its reason
 - **AND** no time in that span is offered on that desk
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-i8u rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-13 - The whole shop is blocked
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
 - **WHEN** an operator blocks the shop from 09:00 to 18:00 tomorrow with the reason Stocktake
 - **THEN** every lane shows the block and the collector's picker shows tomorrow as unavailable
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-54d rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-14 - A block is removed
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -171,6 +185,7 @@ and SHALL let the operator step to the previous and next day and pick a date.
 A product booking SHALL show its product and its case reference and SHALL
 offer no move or cancellation from the console.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-pi1 rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-15 - The day lays out lanes
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -178,6 +193,7 @@ offer no move or cancellation from the console.
 - **WHEN** an operator opens that day
 - **THEN** the first lane shows the booking at 10:00 and the second shows the block at 14:00, both in the shop's zone
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-k1g rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-16 - A product booking is read-only
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -186,6 +202,7 @@ offer no move or cancellation from the console.
 - **THEN** it shows the product and the case reference
 - **AND** offers neither a move nor a cancellation
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-s3a rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-17 - The operator steps between days
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -202,12 +219,14 @@ collector has one, and the service's answers; move a direct booking; and
 cancel one after a confirmation. Every refusal the diary answers SHALL be
 shown by name.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-5pv rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-18 - A walk-in is booked at the counter
 **Serves:** grade10-admin-appointment-diary-US-03 - Operator books a visit for a collector at the counter
 
 - **WHEN** an operator books the grading service at 10:00 tomorrow for a collector giving a name and no address
 - **THEN** the booking is live with source `operator`, booked by that operator, and no mail is sent
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-imo rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-19 - The operator names the desk
 **Serves:** grade10-admin-appointment-diary-US-03 - Operator books a visit for a collector at the counter
 
@@ -215,6 +234,7 @@ shown by name.
 - **WHEN** an operator books a visit at 10:00 naming the second desk
 - **THEN** the booking occupies the second desk
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-hxu rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-20 - A direct booking is moved
 **Serves:** grade10-admin-appointment-diary-US-03 - Operator books a visit for a collector at the counter
 
@@ -222,6 +242,7 @@ shown by name.
 - **WHEN** an operator moves it to 14:00
 - **THEN** it is live at 14:00 with the same attendee and answers
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-5p9 rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-21 - A direct booking is cancelled after confirmation
 **Serves:** grade10-admin-appointment-diary-US-03 - Operator books a visit for a collector at the counter
 
@@ -229,6 +250,7 @@ shown by name.
 - **WHEN** an operator chooses to cancel it and confirms
 - **THEN** it is `cancelled` and its resource is offered again
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-ith rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-22 - A full time is refused by name
 **Serves:** grade10-admin-appointment-diary-US-03 - Operator books a visit for a collector at the counter
 
@@ -242,6 +264,7 @@ The console SHALL let an operator holding the manage grant record a live
 booking as completed or as a no-show, from the day and from the bookings
 list, and SHALL offer no further action on a closed booking.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-0xi rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-23 - A visit is marked completed
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -249,6 +272,7 @@ list, and SHALL offer no further action on a closed booking.
 - **WHEN** an operator marks it completed
 - **THEN** its state is `completed` and the day shows it so
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-jzc rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-24 - A visit is marked a no-show
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -256,6 +280,7 @@ list, and SHALL offer no further action on a closed booking.
 - **WHEN** an operator marks it a no-show
 - **THEN** its state is `no_show`
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-6y1 rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-25 - A closed booking offers no action
 **Serves:** grade10-admin-appointment-diary-US-02 - Operator runs a shop's day from the diary
 
@@ -269,6 +294,7 @@ The console SHALL list every booking across shops, newest start first,
 narrowed by shop, service, state and a date range, and searched by attendee
 name or email address, and SHALL open any of them.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-pai rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-26 - The list narrows and searches
 **Serves:** grade10-admin-appointment-diary-US-03 - Operator books a visit for a collector at the counter
 
@@ -283,6 +309,7 @@ read grant and SHALL render no write control to one without the manage
 grant. Every write SHALL be performed on a fresh session and SHALL record one
 audit entry naming the operator, the action and the record.
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-xsz rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-27 - The read grant sees and cannot write
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 
@@ -291,6 +318,7 @@ audit entry naming the operator, the action and the record.
 - **THEN** they see the shops, services, days and bookings
 - **AND** no control that creates, edits, retires, blocks, books, moves, cancels or closes out is rendered
 
+<!-- trace:scenario id=g10adm.appointment-diary.SC-w8r rev=1 -->
 #### Scenario: grade10-admin-appointment-diary-SC-28 - Every write lands an audit entry
 **Serves:** grade10-admin-appointment-diary-US-01 - Operator opens a shop for bookings
 

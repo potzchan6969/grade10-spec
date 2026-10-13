@@ -19,7 +19,7 @@ const LONG_LIST_OPTIONS = Array.from({ length: 52 }, (_, index) => {
 });
 
 const meta = {
-  title: "Components/Select",
+  title: "Design System/Forms/Select",
   component: Select,
   tags: ["autodocs"],
 } satisfies Meta<typeof Select>;

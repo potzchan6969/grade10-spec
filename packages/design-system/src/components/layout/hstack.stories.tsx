@@ -9,7 +9,7 @@ const Box = ({ children }: { children: ReactNode }) => (
 );
 
 const meta = {
-  title: "Components/HStack",
+  title: "Design System/Layout/HStack",
   component: HStack,
   tags: ["autodocs"],
   args: {

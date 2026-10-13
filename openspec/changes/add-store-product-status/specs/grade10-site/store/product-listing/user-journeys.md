@@ -1,9 +1,3 @@
-## Retired
-
-- `grade10-site-store-product-listing-US-06` — The listing no longer caps a
-  requested quantity to stock or discloses the remaining count. Partial-fill
-  feedback is covered by `grade10-site-commerce-product-status-US-02` and
-  `grade10-site-store-cart-validation-US-01`.
 ## Context user journeys
 
 ### grade10-site-store-product-listing-US-01: Collector opens the listing at its own address

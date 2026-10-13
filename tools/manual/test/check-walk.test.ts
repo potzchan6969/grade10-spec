@@ -3,14 +3,13 @@ import { WALK_LAST_SINCE } from "../check/planned.mjs";
 import { demoSchema } from "./demo-schema";
 import { findingsOf, recordStoreFiles } from "./record-store";
 
-/** The plan's last group is the walk, and it names the suite's review, which
- * human QA runs after deployment (`shared-planning-agent-rounds-SC-90`). */
+/** The plan's last group is the walk. It may use the draft suite without
+ * turning downstream human review into a task or dependency. */
 
 const SCHEMA = demoSchema(["proposal", "specs", "tasks"]);
 const CHANGE = "walk-probe";
 
-const REVIEWED =
-  "Uses draft `feature-tcs.md` as its input; human QA reviews cases after deployment (`/tcs-review walk-probe`).";
+const DRAFT_INPUT = "Uses draft `feature-tcs.md` as its planning input.";
 
 const group = (num: number, title: string, prose: string) => [
   `## ${num}. ${title} (grade10-spec)`,
@@ -41,27 +40,24 @@ const plan = (walk: string) =>
     ...group(2, "The walk", walk),
   ]);
 
-describe("the walk group names the suite's review", () => {
+describe("the walk group does not owe a suite-review dependency", () => {
   // Proves part of shared-planning-agent-rounds-US11-TC2-1.
-  it("shared-planning-agent-rounds-SC-90 - refuses a plan whose walk group names no review", async () => {
+  it("shared-planning-agent-rounds-SC-90 - accepts a walk that uses no review dependency", async () => {
     const found = await findingsOf(plan("Needs group 1 landed."), "walk");
-    expect(found).toHaveLength(1);
-    expect(found[0].level).toBe("fail");
-    expect(found[0].path).toBe(`openspec/changes/${CHANGE}/tasks.md`);
-    expect(found[0].reason).toContain("/tcs-review walk-probe");
+    expect(found).toEqual([]);
   });
 
-  it("refuses the template's placeholder in place of this change's review", async () => {
+  it("does not treat a review placeholder as a planning gate", async () => {
     const found = await findingsOf(
       plan(
         "Needs `feature-tcs.md` reviewed (`/tcs-review <change>`) as its input.",
       ),
       "walk",
     );
-    expect(found).toHaveLength(1);
+    expect(found).toEqual([]);
   });
 
-  it("shared-planning-agent-rounds-SC-90 - says nothing where the walk group names the review as its input", async () => {
+  it("says nothing where legacy prose still names review as an input", async () => {
     const found = await findingsOf(
       plan(
         "Needs group 1 landed and `feature-tcs.md` reviewed (`/tcs-review walk-probe`) as its input.",
@@ -88,19 +84,18 @@ describe("the walk group names the suite's review", () => {
   it("reads a group whose title only starts like the walk as another group", async () => {
     const files = tasks([
       ...group(1, "The walk-in form", "Builds the form."),
-      ...group(2, "The walk", REVIEWED),
+      ...group(2, "The walk", DRAFT_INPUT),
     ]);
     expect(await findingsOf(files, "walk")).toEqual([]);
   });
 
-  it("holds every group of a split walk to the review", async () => {
+  it("does not hold split walk groups on review wording", async () => {
     const files = tasks([
-      ...group(1, "The walk — the drop-off", REVIEWED),
+      ...group(1, "The walk — the drop-off", DRAFT_INPUT),
       ...group(2, "The walk — the hand-back", "Needs group 1 landed."),
     ]);
     const found = await findingsOf(files, "walk");
-    expect(found).toHaveLength(1);
-    expect(found[0].reason).toContain("2. The walk — the hand-back");
+    expect(found).toEqual([]);
   });
 
   it("reads the walk behind its repository and owner tags", async () => {
@@ -112,7 +107,7 @@ describe("the walk group names the suite's review", () => {
       "- [ ] 1.1 Walk it",
       "",
     ]);
-    expect(await findingsOf(files, "walk")).toHaveLength(1);
+    expect(await findingsOf(files, "walk")).toEqual([]);
   });
 });
 
@@ -170,7 +165,7 @@ const beside = (own: string | undefined) =>
 describe("a change with walks ends its plan on the walk", () => {
   it("refuses a walked change whose last group is not titled the walk", async () => {
     const found = await findingsOf(
-      owing([...BUILD, ...group(2, "Walk", REVIEWED)], STORIES),
+      owing([...BUILD, ...group(2, "Walk", DRAFT_INPUT)], STORIES),
       "walk_last",
     );
     expect(found).toHaveLength(1);
@@ -183,7 +178,7 @@ describe("a change with walks ends its plan on the walk", () => {
     const found = await findingsOf(
       owing(
         [
-          ...group(1, "The walk", REVIEWED),
+          ...group(1, "The walk", DRAFT_INPUT),
           ...group(2, "The manual", "Writes the page."),
         ],
         STORIES,
@@ -196,7 +191,12 @@ describe("a change with walks ends its plan on the walk", () => {
   it("takes the walk, split or not, behind its tags", async () => {
     for (const title of ["The walk", "The walk - the hand-back", "The Walk"]) {
       const files = owing(
-        [...BUILD, `## 2. ${title} (grade10) (owner: @tester)`, "", REVIEWED],
+        [
+          ...BUILD,
+          `## 2. ${title} (grade10) (owner: @tester)`,
+          "",
+          DRAFT_INPUT,
+        ],
         STORIES,
       );
       expect(await findingsOf(files, "walk_last")).toEqual([]);
@@ -226,7 +226,7 @@ describe("a change with walks ends its plan on the walk", () => {
 
   it("holds no plan opened before the rule", async () => {
     const files = owing(
-      [...BUILD, ...group(2, "Walk", REVIEWED)],
+      [...BUILD, ...group(2, "Walk", DRAFT_INPUT)],
       STORIES,
       "2026-10-02",
     );

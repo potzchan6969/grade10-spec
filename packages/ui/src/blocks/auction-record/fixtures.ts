@@ -84,24 +84,29 @@ const ORDER_ROW_COPY = {
  */
 const WINNER_ORDER_HREF = {
   awaitingAddress:
-    "?path=/story/my-auctions-winner-order-settlement--awaiting-address",
+    "?path=/story/auction-post-bidding-screens-winner-order-setup--awaiting-setup",
   expiredSetup:
-    "?path=/story/my-auctions-winner-order-settlement--expired-setup",
+    "?path=/story/auction-post-bidding-screens-winner-order-setup--expired-setup",
   preparingInvoice:
-    "?path=/story/my-auctions-winner-order-settlement--preparing-invoice",
+    "?path=/story/auction-post-bidding-screens-winner-order-setup--preparing-invoice",
   pendingPayment:
-    "?path=/story/my-auctions-winner-order-payment--pending-payment",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--pending-payment",
   expiredInvoice:
-    "?path=/story/my-auctions-winner-order-payment--expired-invoice",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--expired-invoice",
   partiallyPaid:
-    "?path=/story/my-auctions-winner-order-payment--partially-paid",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--partially-paid",
   paymentVerifying:
-    "?path=/story/my-auctions-winner-order-payment--payment-verifying",
-  processing: "?path=/story/my-auctions-winner-order-delivery--processing",
-  shipped: "?path=/story/my-auctions-winner-order-delivery--shipped",
-  delivered: "?path=/story/my-auctions-winner-order-delivery--delivered",
-  cancelled: "?path=/story/my-auctions-winner-order-closed--cancelled",
-  refunded: "?path=/story/my-auctions-winner-order-closed--refunded",
+    "?path=/story/auction-post-bidding-screens-winner-order-payment--payment-verifying",
+  processing:
+    "?path=/story/auction-post-bidding-screens-winner-order-delivery--processing",
+  shipped:
+    "?path=/story/auction-post-bidding-screens-winner-order-delivery--shipped",
+  delivered:
+    "?path=/story/auction-post-bidding-screens-winner-order-delivery--delivered",
+  cancelled:
+    "?path=/story/auction-post-bidding-screens-winner-order-closed--cancelled",
+  refunded:
+    "?path=/story/auction-post-bidding-screens-winner-order-closed--refunded",
 } as const;
 
 function watchingItem(
@@ -139,7 +144,7 @@ const WATCHING_CAMERA = watchingItem({
   id: "cam",
   title: "1994 Vintage Rangefinder Camera",
   state: "ending_soon",
-  currentBid: "HK$4,800",
+  currentBid: "US$4,800",
   closesAt: "Closes 9 Sep 2026, 21:00 HKT",
   href: "#lot-camera",
 });
@@ -148,7 +153,7 @@ const WATCHING_POSTER = watchingItem({
   id: "poster",
   title: "Signed Tour Poster, 1/50",
   state: "live",
-  currentBid: "HK$1,050",
+  currentBid: "US$1,050",
   closesAt: "Closes 12 Sep 2026, 18:00 HKT",
   href: "#lot-poster",
 });
@@ -159,7 +164,7 @@ const WATCHING_ENDED = watchingItem({
   title: "1986 World Cup Panini Sticker Album",
   state: "ended",
   stateLabel: "Ended",
-  currentBid: "HK$320",
+  currentBid: "US$320",
   closesAt: "Ended 8 Sep 2026, 21:00 HKT",
   href: "#lot-sticker-album",
 });
@@ -169,7 +174,7 @@ const BIDDING_POSTER = biddingItem({
   title: "Signed Tour Poster, 1/50",
   state: "outbid",
   stateLabel: "Outbid",
-  currentBid: "HK$1,050",
+  currentBid: "US$1,050",
   closesAt: "Closes 12 Sep 2026, 18:00 HKT",
   href: "#lot-poster",
 });
@@ -178,7 +183,7 @@ const BIDDING_CHARIZARD = biddingItem({
   title: "1999 Base Set Charizard PSA 9",
   state: "leading",
   stateLabel: "Leading",
-  currentBid: "HK$12,800",
+  currentBid: "US$12,800",
   closesAt: "Closes 17 Sep 2026, 21:00 HKT",
   href: "#lot-charizard",
 });
@@ -190,7 +195,7 @@ const BIDDING_ENDED = biddingItem({
   state: "ended",
   stateLabel: "Didn’t win",
   detail: "Your card was not charged.",
-  currentBid: "HK$890",
+  currentBid: "US$890",
   closesAt: "Ended 7 Sep 2026, 18:00 HKT",
   href: "#lot-wax-pack",
 });
@@ -201,7 +206,7 @@ const BIDDING_WON_AWAITING_ADDRESS = biddingItem({
   title: "1999 Base Set Charizard PSA 9",
   state: "awaiting_address",
   stateLabel: "Awaiting Setup",
-  currentBid: "HK$12,800",
+  currentBid: "US$12,800",
   closesAt: "Confirm by 19 Sep 2026, 21:30 HKT",
   href: WINNER_ORDER_HREF.awaitingAddress,
   copy: ORDER_ROW_COPY,
@@ -213,7 +218,7 @@ const BIDDING_WON_SETUP_OVERDUE = biddingItem({
   title: "1999 Base Set Venusaur PSA 8",
   state: "awaiting_address_expired",
   stateLabel: "Setup Overdue",
-  currentBid: "HK$4,800",
+  currentBid: "US$4,800",
   closesAt: "Setup overdue",
   href: WINNER_ORDER_HREF.expiredSetup,
   copy: ORDER_ROW_COPY,
@@ -224,7 +229,7 @@ const BIDDING_WON_PREPARING_INVOICE = biddingItem({
   title: "1998 Neo Genesis Lugia PSA 10",
   state: "preparing_invoice",
   stateLabel: "Preparing Invoice",
-  currentBid: "HK$9,400",
+  currentBid: "US$9,400",
   closesAt: "Ended 16 Sep 2026, 20:00 HKT",
   href: WINNER_ORDER_HREF.preparingInvoice,
   copy: ORDER_ROW_COPY,
@@ -235,7 +240,7 @@ const BIDDING_WON_PENDING_PAYMENT = biddingItem({
   title: "2000 Skyridge Crystal Charizard PSA 9",
   state: "pending_payment",
   stateLabel: "Pending Payment",
-  currentBid: "HK$21,500",
+  currentBid: "US$21,500",
   closesAt: "Pay by 24 Sep 2026, 12:00 HKT",
   href: WINNER_ORDER_HREF.pendingPayment,
   copy: ORDER_ROW_COPY,
@@ -247,7 +252,7 @@ const BIDDING_WON_PAYMENT_VERIFYING = biddingItem({
   title: "1999 Neo Destiny Dark Tyranitar PSA 9",
   state: "payment_verifying",
   stateLabel: "Payment Verifying",
-  currentBid: "HK$7,200",
+  currentBid: "US$7,200",
   closesAt: "Proof under review",
   href: WINNER_ORDER_HREF.paymentVerifying,
   copy: ORDER_ROW_COPY,
@@ -259,7 +264,7 @@ const BIDDING_WON_EXPIRED = biddingItem({
   title: "1999 Fossil Dragonite Holo PSA 8",
   state: "expired",
   stateLabel: "Payment Overdue",
-  currentBid: "HK$3,600",
+  currentBid: "US$3,600",
   closesAt: "Payment overdue",
   href: WINNER_ORDER_HREF.expiredInvoice,
   copy: ORDER_ROW_COPY,
@@ -270,7 +275,7 @@ const BIDDING_WON_PARTIALLY_PAID = biddingItem({
   title: "1999 Jungle Vaporeon Holo PSA 9",
   state: "partially_paid",
   stateLabel: "Partially Paid",
-  currentBid: "HK$5,100",
+  currentBid: "US$5,100",
   closesAt: "Payment in progress",
   href: WINNER_ORDER_HREF.partiallyPaid,
   copy: ORDER_ROW_COPY,
@@ -281,7 +286,7 @@ const BIDDING_WON_PROCESSING = biddingItem({
   title: "1999 Fossil Dragonite Holo PSA 9",
   state: "processing",
   stateLabel: "Preparing Shipment",
-  currentBid: "HK$4,200",
+  currentBid: "US$4,200",
   closesAt: "Paid 18 Sep 2026",
   href: WINNER_ORDER_HREF.processing,
   copy: ORDER_ROW_COPY,
@@ -292,7 +297,7 @@ const BIDDING_WON_SHIPPED = biddingItem({
   title: "2000 Skyridge Crobat Holo PSA 9",
   state: "shipped",
   stateLabel: "Shipped",
-  currentBid: "HK$2,100",
+  currentBid: "US$2,100",
   closesAt: "Shipped 20 Sep 2026",
   href: WINNER_ORDER_HREF.shipped,
   copy: ORDER_ROW_COPY,
@@ -303,7 +308,7 @@ const BIDDING_WON_DELIVERED = biddingItem({
   title: "1999 Base Set Blastoise PSA 8",
   state: "delivered",
   stateLabel: "Delivered",
-  currentBid: "HK$6,800",
+  currentBid: "US$6,800",
   closesAt: "Delivered 22 Sep 2026",
   href: WINNER_ORDER_HREF.delivered,
   copy: ORDER_ROW_COPY,
@@ -314,7 +319,7 @@ const BIDDING_WON_CANCELLED = biddingItem({
   title: "1999 Jungle Scyther Holo PSA 9",
   state: "cancelled",
   stateLabel: "Cancelled",
-  currentBid: "HK$1,200",
+  currentBid: "US$1,200",
   closesAt: "Cancelled 19 Sep 2026",
   href: WINNER_ORDER_HREF.cancelled,
   copy: ORDER_ROW_COPY,
@@ -325,7 +330,7 @@ const BIDDING_WON_REFUNDED = biddingItem({
   title: "1999 Fossil Kabutops Holo PSA 9",
   state: "refunded",
   stateLabel: "Refunded",
-  currentBid: "HK$2,450",
+  currentBid: "US$2,450",
   closesAt: "Refunded 21 Sep 2026",
   href: WINNER_ORDER_HREF.refunded,
   copy: ORDER_ROW_COPY,
@@ -337,7 +342,7 @@ const BIDDING_DIDNT_WIN = biddingItem({
   state: "ended",
   stateLabel: "Didn’t win",
   detail: "Your card was not charged.",
-  currentBid: "HK$1,850",
+  currentBid: "US$1,850",
   closesAt: "Ended 15 Sep 2026, 19:00 HKT",
   href: "#lot-flareon",
 });

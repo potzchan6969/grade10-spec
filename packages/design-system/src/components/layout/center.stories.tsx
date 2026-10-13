@@ -14,7 +14,7 @@ const Frame = ({ children }: { children: ReactNode }) => (
 );
 
 const meta = {
-  title: "Components/Center",
+  title: "Design System/Layout/Center",
   component: Center,
   tags: ["autodocs"],
   args: {

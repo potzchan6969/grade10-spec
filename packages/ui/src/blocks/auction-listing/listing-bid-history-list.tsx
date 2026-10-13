@@ -1,3 +1,5 @@
+import type { ActivityTimeCopy } from "@grade10/date";
+import { formatActivityAt } from "@grade10/date";
 import {
   Avatar,
   AvatarFallback,
@@ -16,12 +18,7 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { CrownSimple, Info } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  type ActivityTimeCopy,
-  formatActivityAt,
-  type ShippedLocale,
-} from "../../lib/format-datetime";
-import { formatMoney } from "../../lib/format-money";
+import { formatLotMoney } from "../../lib/format-money";
 import { useClockNow } from "./listing-clock";
 import type { ListingBidHistoryRow } from "./types";
 import "./listing-bid-history-list.css";
@@ -32,7 +29,7 @@ const ACTIVITY_TICK_MS = 15_000;
 type ListingBidHistoryListCopy = {
   you?: string;
   empty?: string;
-  /** Accessible name for the closed sold winning-row crown. */
+  /** Accessible name for the closed sold winning-row crown; without it no crown draws. */
   winner?: string;
   /** Explains why an equal-price bid is not the accepted (earlier) one. */
   samePricePriorityTip?: string;
@@ -43,7 +40,7 @@ type ListingBidHistoryListProps = {
   rows: readonly ListingBidHistoryRow[];
   heading?: string;
   currency: string;
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
   /** Resets entrance animation when the bidding lifecycle changes. */
@@ -60,7 +57,7 @@ type BidHistoryRowItemProps = {
   animateEnter: boolean;
   useEnterWrapper: boolean;
   entranceMode: "expand" | "fade";
-  locale: ShippedLocale;
+  locale: string;
   timeZone: string;
   activityTimeCopy: ActivityTimeCopy;
   nowMs: number;
@@ -68,7 +65,7 @@ type BidHistoryRowItemProps = {
 
 function formatRowTime(
   row: ListingBidHistoryRow,
-  locale: ShippedLocale,
+  locale: string,
   timeZone: string,
   activityTimeCopy: ActivityTimeCopy,
   nowMs: number,
@@ -114,7 +111,7 @@ function BidHistoryRowContent({
           tone={recessed ? "secondary" : "primary"}
           weight={recessed ? "regular" : "medium"}
         >
-          {formatMoney(row.amountMinor, currency, { locale })}
+          {formatLotMoney(row.amountMinor, currency, { locale })}
           {row.samePricePriority && copy.samePricePriorityTip ? (
             <Tooltip>
               <TooltipTrigger
@@ -127,9 +124,9 @@ function BidHistoryRowContent({
               <TooltipContent>{copy.samePricePriorityTip}</TooltipContent>
             </Tooltip>
           ) : null}
-          {row.isWinner ? (
+          {row.isWinner && copy.winner ? (
             <span
-              aria-label={copy.winner ?? "Winner"}
+              aria-label={copy.winner}
               className="inline-flex shrink-0 text-primary"
               role="img"
             >

@@ -36,7 +36,7 @@ function AuctionRecordTabs({
               className={cn(
                 "border-b-2 px-3 py-2 text-sm font-medium",
                 activeTab === tab
-                  ? "border-foreground text-foreground"
+                  ? "border-primary-border text-foreground"
                   : "border-transparent text-muted-foreground",
               )}
               key={tab}

@@ -2,5 +2,15 @@
   "taxTooltip": "由 Grade10 按訂單送貨地點設定。部分訂單不設稅項。",
   "contactDialog": {
     "title": "寄信給 Grade10"
+  },
+  "proofFeedback": {
+    "submitted": {
+      "title": "已提交付款證明",
+      "description": "我們會盡快核實你的付款。"
+    },
+    "notSubmitted": {
+      "title": "未能提交付款證明",
+      "description": "沒有儲存任何資料。請再試一次。"
+    }
   }
 }

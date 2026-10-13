@@ -593,8 +593,8 @@
         "message": "為安全起見，簽署連結只在短時間內有效；請向同事索取新的連結。"
       },
       "TOKEN_CONSUMED": {
-        "title": "這條簽署連結已經用過",
-        "message": "如果你已用它簽署，副本在櫃檯，亦在清單頁；否則請向同事索取新的連結。"
+        "title": "這條簽署連結已被取代",
+        "message": "這批文件已另發新連結，只有最新的一條有效。請向同事索取。"
       },
       "TOKEN_CONFLICT": {
         "title": "這條連結已在另一部裝置開啟",
@@ -611,6 +611,10 @@
       "PACKET_COMPLETED": {
         "title": "這批文件已經簽妥",
         "message": "可以關閉這一頁。"
+      },
+      "PACKET_DECLINED": {
+        "title": "沒有簽署任何文件",
+        "message": "沒有簽署任何文件，也沒有付款。在場的同事可以協助你下一步怎樣做。"
       },
       "DOCUMENT_UNKNOWN": {
         "title": "這份文件不屬於今次簽署",
@@ -738,7 +742,6 @@
     "signatureTypedCaption": "輸入式簽名",
     "submitLabel": "簽署{title}",
     "submittingLabel": "正在簽署…",
-    "retryLabel": "再試一次",
     "missingPages": "簽署前請閱讀每一頁。",
     "missingConsent": "請勾選方格，確認你已閱讀。",
     "missingSignature": "請在上方方格內簽名。",
@@ -756,7 +759,26 @@
     "downloadExpiry": "你可在 {when} 前於此畫面下載。之後，身旁的職員可在櫃檯為你列印副本。",
     "sealedIntegrityWarning": "下載的副本與你所簽署文件的指紋碼不符，因此並未儲存。你的簽名已記錄 — 請向身旁的職員索取列印副本。",
     "signedTitle": "你的簽名已記錄",
-    "signedMessage": "文件封存前，還有其他人需要簽署。"
+    "signedMessage": "文件封存前，還有其他人需要簽署。",
+    "disclosureTick": "我已閱讀以上內容，並同意以電子方式審閱及簽署。",
+    "identityChecked": "你的身分證明文件已於 {day} 核實。",
+    "venueLine": "簽署地點：{venue}",
+    "caseLine": "清單 {reference} · {subject}",
+    "caseOnly": "清單 {reference}",
+    "linkClock": "連結尚餘 {remaining} 有效",
+    "readToEndFirst": "請先閱讀至最後一頁",
+    "continueLabel": "繼續簽署",
+    "comesNext": "第 {position} 份，共 {total} 份 — 下一份是{next}",
+    "comesLast": "第 {position} 份，共 {total} 份 — 這是最後一份",
+    "readAgainLabel": "重新閱讀",
+    "signSummary": "{title} — 已閱讀 {viewed}/{pageCount} 頁",
+    "nextUp": "下一份：{title}",
+    "sealedAt": "封存時間：{time}",
+    "sealedMessageMailed": "已簽署的副本在你的清單頁面，並正寄往 {email}。請保留下方的指紋碼 — 它正是這一組文件的識別碼。",
+    "sealedDigest": "{digest} · 封存於 {when}",
+    "nextStepsTitle": "接下來",
+    "nothingMore": "你無需在此裝置上再做任何事。",
+    "doneLabel": "完成 — 請把 iPad 交回"
   },
   "console": {
     "cards": "{count, plural, other {# 張卡}}",

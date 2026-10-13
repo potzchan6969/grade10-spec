@@ -3,7 +3,7 @@ import { XIcon } from "lucide-react";
 import { IconButton } from "./icon-button";
 
 const meta = {
-  title: "Components/IconButton",
+  title: "Design System/Forms/IconButton",
   component: IconButton,
   tags: ["autodocs"],
   args: { children: <XIcon />, "aria-label": "Close" },

@@ -33,6 +33,7 @@ fourth.
 | Cap | 3 ordered slots |
 | Slot contents when complete | One published Active or Upcoming lot, and one front page image uploaded for that slot |
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-fkl rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-01 - A fourth Featured slot is not offered
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 
@@ -60,6 +61,7 @@ time. An incomplete slot SHALL NOT appear. An Ended lot SHALL NOT fill a slot.
 - **WHEN** `/auction` Featured is served
 - **THEN** that slot does not appear as a slide
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-8hv rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-03 - An Ended lot cannot fill a Featured slot
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 
@@ -77,6 +79,7 @@ new upload for that slot. Grade10 SHALL NOT use a listing gallery image or a
 campaign cover as the front page image. Replacing a slot SHALL replace its
 listing and front page image.
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-xez rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-04 - An operator fills a slot with an Active lot and a front page image
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 
@@ -86,6 +89,7 @@ listing and front page image.
 - **THEN** the slot holds that lot and that front page image
 - **AND** that slide may lead `/auction` Featured
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-mag rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-05 - An operator fills a slot with an Upcoming lot and a front page image
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 
@@ -94,6 +98,7 @@ listing and front page image.
   Featured slot
 - **THEN** the slot holds that lot and that front page image
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-l3u rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-06 - One lot cannot occupy two Featured slots
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 
@@ -108,6 +113,7 @@ An operator with Featured access SHALL reorder filled slots; `/auction`
 Featured SHALL follow that order. Clearing a slot SHALL empty its lot and front page image
 so that slide leaves `/auction` Featured.
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-u2e rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-07 - Reordering slots changes Featured order
 **Serves:** grade10-admin-auction-featured-US-02 - Operator orders and clears Featured slots
 
@@ -115,6 +121,7 @@ so that slide leaves `/auction` Featured.
 - **WHEN** an authorized operator reorders them
 - **THEN** `/auction` Featured shows the slides in the new order
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-u1c rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-08 - Clearing a slot removes that slide from Featured
 **Serves:** grade10-admin-auction-featured-US-02 - Operator orders and clears Featured slots
 
@@ -129,6 +136,7 @@ An authorized operator on the Listings tab SHALL open Manage Featured from a
 control beside Create listing. Manage Featured SHALL list the ordered Featured
 slots for fill, replace, reorder and clear.
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-ad7 rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-11 - Manage Featured opens from Listings
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 
@@ -136,6 +144,7 @@ slots for fill, replace, reorder and clear.
 - **WHEN** they activate Manage Featured
 - **THEN** the Manage Featured sub-page shows the ordered Featured slots
 
+<!-- trace:scenario id=g10adm.auction-featured.SC-t75 rev=1 -->
 #### Scenario: grade10-admin-auction-featured-SC-12 - Front page image is not a gallery pick
 **Serves:** grade10-admin-auction-featured-US-01 - Operator fills a Featured slot
 

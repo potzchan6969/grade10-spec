@@ -29,27 +29,31 @@ cart stays absent
 in the header on every surface — including Auction and other non-Store pages —
 so a collector can reach checkout without returning to Store
 
-**Store Locator** — once that page answers and the shop is open, header and
-footer Store Locator lead there; until then the destination stays out of the
-chrome, including on auction-first launch.
+🚧 **Store Locator** — in the header and footer only where the build carries
+[Store Locator](/p/grade10-site/store/store-locator), which waits with the
+store; auction-first chrome has none
 
 ## Account Menu
 
-**Account menu** — signed in, an initial avatar sits above the email, above
-the items: My Auctions and Sign Out on auction launch; My Orders, My Auctions,
-and Membership once Store answers, with Sign Out always last. KYC stays out.
+**Account menu** - signed in, an initial avatar sits above the email, above
+the items: My Auctions and Sign Out on auction launch; My Orders and My
+Auctions once Store answers, with Sign Out always last. KYC stays out.
 
-🚧 **My Orders** — ahead of My Auctions once Store answers, opening
+**Withheld pages** - the menu never offers an item whose page the site
+withholds: My Orders, Profile or Membership
+
+**Profile** - first, opening the account page, wherever the account page is
+carried - [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+
+**My Orders** - ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
 
-**Membership** — ❓ after My Auctions once Store answers; the destination is
-unconfirmed
+**Membership** - after My Auctions wherever the membership page is carried,
+by the rule Profile follows; a later change offers it, and until then the
+menu leaves it out
 
-## No Profile
-
-🚧 **No Profile item** — the menu never offers Profile; there is no Profile
-page. Specs and Storybook that still named Profile as joining once carried
-are corrected here
+**Sign Out on the account page** - the account page offers Sign Out as well,
+wherever it is carried
 
 ## Help
 
@@ -63,46 +67,62 @@ drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
 ## Cart
 
-🚧 **Cart count** — members see the same active-line count on the header and
-cart drawer, including while the drawer is closed. Empty or unknown carts and
-signed-out sessions show no count; the cart control stays available.
-The last verified count stays during a same-member refresh and disappears if
-that check fails.
+🚧 **Cart count** - the header shows a member the same active-line count as the
+cart drawer title, with the drawer open or closed
 
-**Members-only cart** — for a collector with no session, the Cart control
-opens sign-in instead of the drawer; the drawer opens by itself on that
-surface once they sign in, and dismissing the dialog leaves them signed out
-with nothing waiting. A signed-in collector gets the drawer directly. There is
-no cart to show someone signed out.
+🚧 **No count** - an empty or unknown cart shows no count; the Cart control
+stays where it is
+
+🚧 **During a refresh** - the last verified count stays while the same member's
+cart is checked, including after a failed change, and disappears if that check
+fails
+
+🚧 **What counts** - each distinct line counts once, whatever its quantity;
+adjusted lines count, sold-out and unavailable lines do not
+
+🚧 **Member change** - signing out or changing member clears the count at once
+
+🚧 **Updates** - the count refreshes when the member's cart loads, when a cart
+change finishes, saved or failed, when the drawer opens, and on Retry, with the
+drawer open or closed; a change made on another device shows after the next of
+these, not live
+
+**Cart for anyone** - the Cart control opens the drawer whether or not the
+collector is signed in; a guest's drawer and count show the cart this browser
+holds - [Cart Drawer](/p/grade10-site/store/cart)
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
-::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
-::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
-::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
+::story{id="design-system-layout-nav-layout--narrow" title="Nav — narrow (375px)"}
 
-::story{id="components-nav-layout--menu-open" title="Nav — menu open (375px)"}
+::story{id="design-system-layout-nav-layout--menu-open" title="Nav — menu open (375px)"}
 
-::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
+::story{id="design-system-layout-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
-::story{id="site-chrome-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
+::story{id="site-page-shell-blocks-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
 
-::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Collector help | ❓ Open | Help sits in the primary nav (wide and compact), after Store Locator when that item is present and after Auction on auction-first. Opens in a new tab. Provisional host is Mintlify at `https://grade10.mintlify.io/`; confirm the host. | Product |
-| Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability, and its activation follows `require-sign-in-from-nav-cart`; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
+| Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability and opens the drawer for a guest too; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
+| Cart count meaning | Decided | One per distinct active line, whatever its quantity — the same number as the drawer title. Rejected the quantity total, which counts multiples and unavailable lines, and checkout-eligible lines alone, which drop adjusted lines the drawer still shows. The planning round decided it from the drawer-title match on this page. | Product |
+| Cart count updates | Decided | The count refreshes when the member's cart loads, when a cart change finishes, saved or failed, when the drawer opens, and on Retry, with the drawer open or closed; a change made on another device shows after the next of these. Rejected updating only when the drawer opens, and rejected polling or live updates from another device. The planning round decided it from the closed-drawer count on this page. | Product |
+| Cart count during a refresh | Decided | The last verified count for the same member stays while a refresh checks the cart, including after a failed cart update, and hides if that check fails. A first count still unknown stays hidden. Rejected hiding a verified count on every refresh, and keeping a failed or another member's count. | Product |
 | My Orders label and place | Decided | "My Orders", ahead of My Auctions once Store answers; rejected "Your Orders" (parallels the page title instead of My Auctions naming) and appending after My Auctions, before Sign Out. | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
-| Profile in the menu | Decided | Absent on auction launch and once Store answers alike — there is no Profile page. A later page may reintroduce a menu item through optional `onProfile` on `SiteHeader`; Account and Profile stay future work with no plan today. Sign-out on an account page stays with that future page work. Rejected treating Profile as joining once a `profile` gate opens or once Store answers. | Product |
+| My Auction Orders in the menu | Decided | Not offered — and no such page exists: a winner opens each order from its Won row on My Auctions; rejected a second orders item beside My Auctions. | Product |
+| Profile in the menu | Decided | Profile joins first wherever the account page is carried ([Carried Surfaces](/p/grade10-site/site/carried-surfaces)), so it shows only where that page does and `add-account-profile` opens it with the page. The header is the one route to the account page that stays put on every surface. Rejected never offering Profile, which leaves the Account breadcrumbs on My Auctions and the order pages as the only way in. | Product (@tangconst) |
 | Signed-in email | Decided | The menu shows the sign-in email above the items, in place of an "Account" heading, with the same small initial avatar the bidding panel uses for that address. | Product |
-| Membership | ❓ Open | Once Store answers, the menu lists Membership after My Auctions. The destination is unconfirmed. | Product |
+| Membership | Decided | Membership joins after My Auctions wherever the membership page at `/membership` is carried ([Carried Surfaces](/p/grade10-site/site/carried-surfaces)), by the rule Profile follows, so the menu never offers an address a lane withholds. A later change offers it. Rejected waiting for the loyalty programme's own launch, which leaves two rules for two gated account pages. | Product (@tangconst) |
 :::

@@ -32,6 +32,12 @@ address.
   - Hosted handoff: redirects to Shopify's hosted invoice once the session is created
   - Named refusal: a changed line or a provider refusal is named in the drawer, never on a separate page
 
+- Product pictures
+  - Current catalogue: recognises each retained line by its first product picture from the existing live read
+  - Missing picture: preserves the placeholder, amounts and readiness when no picture is supplied
+  - Restored cart: obtains pictures from review rather than persisted intent
+  - Compatible responses: supports legacy and enriched reviewed-line payloads
+
 ## ADDED Requirements
 
 ### Requirement: The signed-in member cart opens over the current site surface
@@ -42,6 +48,7 @@ address. When the drawer closes, the collector SHALL remain at that address.
 A signed-out Cart press follows `require-sign-in-from-nav-cart` and does not
 open a guest drawer.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-omn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-01 - Cart opens without leaving its surface
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -50,6 +57,7 @@ open a guest drawer.
 - **THEN** one cart drawer opens over that surface
 - **AND** the current address does not change
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-za5 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-02 - Closing preserves the current address
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -67,10 +75,12 @@ member cart.
 
 While that read is pending, the drawer SHALL use the loading behavior defined
 by `shared/ui/store-cart` and SHALL NOT present held price or availability as
-confirmed. If the read fails, the drawer SHALL remain unresolved, SHALL keep
-Checkout unavailable, and SHALL tell the collector once during that open. A
-later open SHALL start another read.
+confirmed. If the read fails, the drawer SHALL present the cart as
+`grade10-site/store/cart-validation` requires for a read that cannot complete,
+and SHALL tell the collector once during that open. A later open SHALL start
+another read.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-a52 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-04 - A signed-in collector sees the member cart
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -79,6 +89,7 @@ later open SHALL start another read.
 - **THEN** the drawer reviews that member cart
 - **AND** it does not substitute a guest browser cart
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-tv2 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-05 - Every open starts a current read
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -86,6 +97,7 @@ later open SHALL start another read.
 - **WHEN** the collector opens it again
 - **THEN** the drawer starts a new status-and-price read for the current member cart
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-ti9 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-06 - A read in flight remains unresolved
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -94,6 +106,7 @@ later open SHALL start another read.
 - **THEN** held price and availability are not presented as confirmed
 - **AND** Checkout is unavailable
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-0og rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-07 - A failed read tells the collector once
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -103,6 +116,7 @@ later open SHALL start another read.
 - **AND** held price and availability remain unconfirmed
 - **AND** Checkout remains unavailable
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-lrr rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-08 - Reopening retries a failed read
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -122,13 +136,14 @@ summary from these facts:
 | Subtotal | Current unit price multiplied by confirmed quantity for every line except sold-out and unavailable lines |
 | Shipping | Localized `Calculated at checkout`, with no calculated amount |
 | Estimated total | The accepted current basket quote; subtotal only when no tender is selected and no applied quote exists |
-| Image | Absent while the reviewed cart supplies no authoritative image |
+| Image | First current product picture from the live read; existing placeholder when none is supplied |
 | Promo code | Visible in its closed display-only state; accepts and applies nothing |
 | Points | Existing shared controls supplied from current member quote; accepted credit after applying points |
 
 The drawer SHALL NOT claim a promotion, points credit, shipping amount, tax, or
 other discount unless the existing combined basket quote supplies the accepted current amounts.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-8ln rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-09 - A successful read fills the reviewed summary
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -137,6 +152,7 @@ other discount unless the existing combined basket quote supplies the accepted c
 - **THEN** both retained lines show their current reviewed facts
 - **AND** the subtotal includes the available line and excludes the sold-out line
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-33u rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-10 - Unsupported adjustments remain neutral
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
 
@@ -147,12 +163,158 @@ other discount unless the existing combined basket quote supplies the accepted c
 - **AND** estimated total equals subtotal
 - **AND** no promotion or points credit is applied
 
+### Requirement: Reviewed product pictures follow the current cart
+
+The drawer SHALL show each retained line's first current product picture,
+matching the collection card's picture selection. The existing batched live
+review SHALL supply it without a separate product request per line. The
+application SHALL join picture facts by variant identity only for the current
+cart lines confirmed by that review. Unmatched, removed or unreviewed lines
+SHALL NOT receive another line's picture or stale picture facts.
+
+Picture facts SHALL remain reviewed display data. Stored cart intent and
+cart-write inputs SHALL contain no picture metadata. Restoring an image-free
+member cart SHALL obtain its pictures through a fresh review. Missing pictures
+SHALL leave the existing placeholder, quantities, status, money, badge count
+and checkout readiness unchanged. Catalogue failure SHALL retain the existing
+unresolved-read outcome and Checkout guard.
+
+A picture resource that fails to load after a successful review SHALL NOT
+change the accepted line facts, amounts or checkout readiness. The existing
+browser image presentation remains in effect.
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-0d6 rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-34 - The first current product picture reaches its line
+**Serves:** grade10-site-store-cart-drawer-US-01 - recognising products while reviewing the current cart
+
+- **GIVEN** 2 retained cart lines whose products each have several current catalogue pictures
+- **WHEN** the existing batched live review succeeds
+- **THEN** each line shows its own product's first picture, with the catalogue URL and its query parameters preserved
+- **AND** no separate product request is made for either line
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-vq6 rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-35 - Missing pictures preserve the cart's other facts
+**Serves:** grade10-site-store-cart-drawer-US-01 - reviewing a product whose catalogue supplies no picture
+
+- **GIVEN** a retained product with no catalogue pictures
+- **WHEN** its live review succeeds
+- **THEN** its existing picture placeholder is shown
+- **AND** quantity, status, prices, subtotal, badge count and checkout readiness match the same review without picture enrichment
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-toh rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-36 - Pictures join only to confirmed current lines
+**Serves:** grade10-site-store-cart-drawer-US-02 - editing the cart without mixing product pictures
+
+- **GIVEN** a review whose lines arrive in a different order from the cart, with one removed variant and one current line the review did not confirm
+- **WHEN** the drawer joins the review to the current cart
+- **THEN** each confirmed retained line receives only the picture for its own variant identity
+- **AND** the removed line is absent and the unreviewed line receives no picture from that review
+- **AND** existing quantity and checkout-readiness guards remain in effect
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-4fw rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-37 - Restoring cart intent obtains pictures through review
+**Serves:** grade10-site-store-cart-drawer-US-01 - recognising products after returning to the member cart
+
+- **GIVEN** a member cart restored from intent containing no picture metadata
+- **WHEN** the collector reloads, opens the drawer and its fresh live review succeeds
+- **THEN** current pictures appear on their matching lines
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-gzj rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-42 - A sold-out line retains its product picture
+**Serves:** grade10-site-store-cart-drawer-US-01 - recognising a product that remains in the cart after selling out
+
+- **GIVEN** a sold-out retained line whose product has a current catalogue picture
+- **WHEN** its live review succeeds
+- **THEN** the line shows its own first product picture and existing sold-out treatment
+- **AND** prices, quantity, status, count, totals and checkout readiness remain unchanged
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-3lt rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-43 - An unavailable variant supplies no picture facts
+**Serves:** grade10-site-store-cart-drawer-US-02 - removing a product no longer available in the catalogue
+
+- **GIVEN** a cart line whose variant is unavailable
+- **WHEN** its live review completes
+- **THEN** the reviewed line omits both picture fields
+- **AND** the drawer follows the existing unavailable-line cleanup
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-8ty rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-44 - Picture enrichment leaves intent free of picture metadata
+**Serves:** Product pictures - retaining only cart intent when reviewing or editing a pictured line
+
+- **GIVEN** an existing member cart or guest transport intent without picture metadata
+- **WHEN** the cart is reviewed, its quantity is changed and its intent is saved
+- **THEN** persistence and write inputs retain variant and quantity facts without picture URLs or alt text
+- **AND** picture facts remain current reviewed display data only
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-lbo rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-38 - A failed catalogue read keeps the existing unresolved outcome
+**Serves:** grade10-site-store-cart-drawer-US-01 - reviewing a cart when the shop cannot answer
+
+- **GIVEN** a drawer whose current catalogue read fails
+- **WHEN** it renders that failure
+- **THEN** it keeps the existing unresolved feedback, retry behavior and Checkout guard
+- **AND** picture enrichment does not turn the failure into a successful review or an unavailable-product result
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-h93 rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-45 - A picture resource failure keeps accepted cart facts
+**Serves:** grade10-site-store-cart-drawer-US-01 - reviewing an accepted cart whose picture cannot load
+
+- **GIVEN** a successful live review for an available line with a supplied picture URL
+- **WHEN** the picture resource fails to load in the browser
+- **THEN** price, quantity, status, totals and checkout readiness remain accepted
+- **AND** the cart review is not changed into a failure
+
+### Requirement: Reviewed picture fields are optional and compatible
+
+Reviewed lines SHALL accept these additive display fields. Existing guest and
+member review transports, basket quote and checkout outcomes carrying reviewed
+lines SHALL preserve their existing outcomes and amounts. Guest transport
+compatibility SHALL NOT enable a guest cart or drawer journey.
+
+| Field | Type | Absence And Meaning |
+| --- | --- | --- |
+| imageSrc | Optional string | First current product picture URL; omitted when no picture or live variant exists |
+| imageAlt | Optional string | Catalogue alt text when non-empty; omitted when absent, null or empty |
+
+Legacy responses omitting both fields SHALL decode successfully. Enriched
+responses SHALL decode successfully with both the current and previous
+production response schemas; the previous schema need not retain the added
+fields. Invalid supplied field types SHALL fail current decoding rather than
+being silently treated as absent. The drawer SHALL pass supplied picture facts
+to the existing shared picture contract, including its item-name alt fallback.
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-ier rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-39 - Legacy and enriched responses remain compatible
+**Serves:** Product pictures - carrying review responses across backend and frontend rollout
+
+- **WHEN** guest or member review, basket quote or checkout reviewed-line responses are decoded with legacy fields alone or with valid picture fields added
+- **THEN** both current and previous production response decoders accept them
+- **AND** the current decoder retains supplied picture facts
+- **AND** existing outcomes and amounts remain unchanged
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-2yu rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-40 - Invalid supplied picture fields fail decoding
+**Serves:** Product pictures - refusing malformed reviewed display facts at the response boundary
+
+- **WHEN** a response supplies a non-string image source or alt field, including null
+- **THEN** the current production response decoder refuses the malformed response
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-0wy rev=1 -->
+#### Scenario: grade10-site-store-cart-drawer-SC-41 - Catalogue alt text reaches the shared fallback
+**Serves:** grade10-site-store-cart-drawer-US-01 - recognising a pictured product with or without catalogue alt text
+
+- **WHEN** a reviewed product has a picture with supplied non-empty alt text, or absent, null or empty catalogue alt text
+- **THEN** the supplied non-empty text reaches the picture's alt attribute unchanged
+- **AND** absent, null or empty catalogue alt text uses the line's current item name through the shared contract
+
 ### Requirement: Drawer changes stay on the current cart
 
 A quantity change or removal in the drawer SHALL update the same member cart
-the drawer opened. After loading finishes, unavailable-line cleanup SHALL use
-the removal and single-notice behavior defined by `shared/ui/store-cart`.
+the drawer opened. After loading finishes, the drawer SHALL remove withdrawn
+lines as `grade10-site/store/cart-validation` requires, through the removal
+and single-notice behavior defined by `shared/ui/store-cart`.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-5bv rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-11 - A collector edits the opened cart
 **Serves:** grade10-site-store-cart-drawer-US-02 - Signed-in collector edits the reviewed cart
 
@@ -160,6 +322,7 @@ the removal and single-notice behavior defined by `shared/ui/store-cart`.
 - **WHEN** the collector changes its quantity or removes it
 - **THEN** the current member cart records that change
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-7rs rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-12 - Delisted lines leave once
 **Serves:** grade10-site-store-cart-drawer-US-02 - Signed-in collector edits the reviewed cart
 
@@ -177,8 +340,13 @@ reviewed basket and its accepted tender. The drawer SHALL remain open,
 showing the redirecting state, until it hands the collector to the resulting
 hosted invoice. `grade10-site/store/checkout`'s existing transactional
 recheck at order-write time remains the read that gates this creation; the
-drawer adds no second re-read of its own.
+drawer adds no re-read of its own before creating the session. When that
+recheck or the shop refuses the checkout, the drawer reads the cart again as
+`grade10-site/store/cart-validation` requires. When the store's read itself
+cannot complete, the drawer SHALL follow `grade10-site/store/cart-validation`
+for a read that cannot complete rather than restore Checkout.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-oqn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
 **Serves:** grade10-site-store-cart-drawer-US-03 - Signed-in collector continues from the cart drawer
 
@@ -187,6 +355,7 @@ drawer adds no second re-read of its own.
 - **THEN** the drawer closes
 - **AND** the line's existing Store product address opens
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-xbm rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-15 - Checkout creates the session and hands off to the hosted invoice
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector who presses Proceed to Checkout and reaches the hosted invoice
 
@@ -196,6 +365,7 @@ drawer adds no second re-read of its own.
 - **AND** the drawer remains open on its redirecting state until that redirect succeeds
 - **AND** no separate checkout surface opens
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-5pn rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-28 - A changed line is named and no order is created
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt is refused because a line changed
 
@@ -203,12 +373,15 @@ drawer adds no second re-read of its own.
 - **WHEN** the collector activates Checkout and the checkout session is refused for that line
 - **THEN** the drawer names the affected line
 - **AND** no order is created
-- **AND** the drawer offers to try Checkout again
+- **AND** Checkout is offered again once the cart holds only lines the read
+  confirmed, as `grade10-site/store/cart-validation` requires
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-t6r rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-29 - A provider refusal offers retry with no order created
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt fails for a reason no line names
 
-- **GIVEN** an open cart drawer whose Checkout action is creating a session
+- **GIVEN** an open cart drawer whose Checkout action is creating a session,
+  and whose store read for that checkout returned
 - **WHEN** the checkout provider refuses or fails to create the session for a reason no line names
 - **THEN** the drawer restores Checkout and shows a failed state naming that the attempt did not go through
 - **AND** no order is created
@@ -233,6 +406,7 @@ site's profile address is enabled.
 page, per `grade10-site/store/account-identity`'s consent requirement; the
 drawer SHALL start no check of its own.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-f0v rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-30 - An unverified member's basket at the bar blocks Checkout
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector who tries to check out a basket the bar asks a verified buyer for
 
@@ -250,6 +424,7 @@ drawer SHALL start no check of its own.
 - **AND** activating it opens the account page, where they verify on their own consent
 - **AND** the drawer starts no identity check itself
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-7lx rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-32 - A verified member's basket at or above the bar proceeds without the gate
 **Serves:** grade10-site-store-cart-drawer-US-06 - a verified collector whose basket meets the bar checks out without an extra step
 
@@ -258,6 +433,7 @@ drawer SHALL start no check of its own.
 - **THEN** no verification message or account-page link is shown
 - **AND** the checkout session is created
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-pqf rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-33 - A basket under the bar proceeds regardless of standing
 **Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose basket does not meet the bar checks out without regard to their standing
 
@@ -277,6 +453,7 @@ server ceiling. Applying points SHALL use the combined basket quote and
 persist the accepted choice before presenting it as applied. The drawer SHALL
 NOT debit points or create checkout.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-bim rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-16 - Held promo codes answer the reviewed basket
 **Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
 
@@ -289,6 +466,7 @@ NOT debit points or create checkout.
 - **AND** merely opening the held-code list does not apply a new code
 - **AND** an existing selected code is preserved in the combined quote
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-xhn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-17 - Points offer the existing interactive design
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -297,6 +475,7 @@ NOT debit points or create checkout.
 - **THEN** the shared input, pt suffix, Apply, balance, rate and Use max match the referenced Default story
 - **AND** balance and ceiling come from the live quote rather than story fixtures
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-44a rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-18 - Unresolved reviews receive no stale tender facts
 **Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
 
@@ -305,6 +484,7 @@ NOT debit points or create checkout.
 - **THEN** member-only promo and points facts are not shown
 - **AND** no member-only tender read is required to render the cart review state
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-3yf rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-19 - Tender facts follow the latest reviewed basket
 **Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
 
@@ -338,6 +518,7 @@ A successful persistence followed by a failed refresh SHALL NOT be presented
 as a rollback; stale totals and Checkout SHALL remain unavailable until an
 authoritative reread resolves the accepted choice.
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-k73 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-20 - Apply persists the accepted points choice
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -346,6 +527,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** the accepted points choice is stored with the cart without replacing the code
 - **AND** the Points credit and estimated total use the accepted server quote and no loyalty debit occurs
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-tio rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-21 - Use max and Remove preserve the code
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -354,6 +536,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** Use max applies the current quoted maximum and Remove persists zero points
 - **AND** the selected code remains unchanged and each summary uses its accepted quote
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-qit rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-22 - Invalid input and excessive input have distinct outcomes
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -362,6 +545,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** invalid input does not persist or change the accepted total
 - **AND** a valid whole-number request above the ceiling uses the server-accepted capped amount
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-cui rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-23 - Pending changes prevent duplicate actions and checkout
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -370,6 +554,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** no duplicate tender operation or checkout navigation occurs
 - **AND** the last accepted same-basket summary remains until the operation resolves
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-puc rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-24 - Failures retain the accepted choice
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -378,6 +563,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** a localized error is shown and the prior accepted choice and total remain
 - **AND** no rejected choice is presented as saved or applied
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-pi9 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-25 - Changed context rejects stale results
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -386,6 +572,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** the old response does not change the current view or initiate a stale persistence write
 - **AND** reopening or a cart quantity/removal change reads the current choice and revalidates the new basket before enabling Checkout
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-34h rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-26 - Unavailable points remain unavailable
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
@@ -394,6 +581,7 @@ authoritative reread resolves the accepted choice.
 - **THEN** no positive points action is enabled without a usable quote
 - **AND** no invented balance or saving is shown
 
+<!-- trace:scenario id=g10.store-cart-drawer.SC-fwv rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-27 - Checkout receives the accepted choice
 **Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 

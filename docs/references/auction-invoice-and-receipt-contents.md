@@ -44,7 +44,7 @@ sent invoice does not re-price.
 | **Lot** | The single lot invoiced, named unambiguously — a winner may hold several |
 | **Payment method** | Card or bank transfer |
 | **Sent at** | When the operator sent it, stored in UTC |
-| **Payment deadline** | 7 calendar days from Sent at, stopped while proof is checked. An absolute date and time in the winner's zone, with no countdown |
+| **Payment deadline** | 7 calendar days from Sent at, stopped while proof is checked. On the PDF, an absolute Hong Kong date and time labelled `GMT+8`, with no countdown |
 | **Bill To** | 🚧 From the order's confirmed snapshot — name, company name, phone, address |
 | **Ship To** | 🚧 From the same snapshot, same fields. Both read the same unless the winner unticked Same as delivery address |
 | **Replaced by** | On an invoice a reissue replaced only: the invoice that replaced it |

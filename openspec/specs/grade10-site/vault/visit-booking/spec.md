@@ -247,6 +247,7 @@ or called off SHALL carry that visit's file with it.
 **No visit** - a case the diary holds no visit for SHALL be refused the file
 by name, as not found, and no file SHALL be served.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-hzh rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-22 - Add to calendar serves the visit
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector takes the visit into the calendar they keep their days in
 
@@ -261,6 +262,7 @@ by name, as not found, and no file SHALL be served.
   calendar file
 - **THEN** it is refused and no file is served
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-6qa rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-24 - A moved visit changes the day already on the calendar
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector who moved a visit is left one day on their phone
 
@@ -269,6 +271,7 @@ by name, as not found, and no file SHALL be served.
 - **THEN** the day already on the calendar reads the new slot and no second day
   is added
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-4lt rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-25 - A called-off visit is taken off the calendar
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector who called a visit off is left none
 
@@ -277,12 +280,14 @@ by name, as not found, and no file SHALL be served.
 - **THEN** the file is served as a cancellation of that day and the day is taken
   off the calendar
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-plm rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-26 - The visit's messages carry the file
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector reads the day off the message without opening the case
 
 - **WHEN** the collector is told their visit was booked, moved or called off
 - **THEN** that message carries the visit's calendar file
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-fnz rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-32 - A case never booked is refused the file
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector who asks for a visit that was never booked is told there is none rather than handed an empty day
 
@@ -310,6 +315,7 @@ and loan where they are, and the case SHALL take another booking.
 whether the collector's identity is verified, so a visit can be read beside
 it.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-02u rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-15 - The confirmation takes the picker's place
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector who has just booked reads the shop and the slot where the picker stood
 
@@ -317,6 +323,7 @@ it.
 - **THEN** the answer names the shop and the slot taken
 - **AND** the collector is told by mail
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-ju4 rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-16 - A financed case is told the money follows
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector on the financed lane reads that the money follows the signing
 
@@ -324,6 +331,7 @@ it.
 - **WHEN** its owner reads the case
 - **THEN** it carries the visit and the amount asked for, so the lane is read as financed
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-zqo rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-17 - A storage case is told about the custody agreement alone
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector on the storage lane is promised no money their case never carries
 
@@ -331,6 +339,7 @@ it.
 - **WHEN** its owner reads the case
 - **THEN** it carries the visit and no amount asked for, so the lane is read as storage
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-qpx rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-18 - An unverified collector is offered the check
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector who is not verified is offered the check before the day
 
@@ -338,6 +347,7 @@ it.
 - **WHEN** they read the case
 - **THEN** it carries the visit and that the identity is not verified
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-t70 rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-19 - A verified collector is asked for the item alone
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector who is verified already is asked for nothing but the item
 
@@ -345,6 +355,7 @@ it.
 - **WHEN** they read the case
 - **THEN** it carries the visit and that the identity is verified
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-my4 rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-20 - A standing visit reads the same on the case
 **Serves:** grade10-site-vault-visit-booking-US-04 - the collector coming back to the case reads the visit they booked
 
@@ -353,6 +364,7 @@ it.
 - **THEN** it carries the booking, the shop and the slot
 - **AND** its calendar file is served, and the visit may be moved or called off
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-05h rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-21 - Calling the visit off leaves the case standing
 **Serves:** grade10-site-vault-visit-booking-US-03 - the collector who calls a visit off keeps the case they booked it for
 
@@ -378,6 +390,7 @@ with no slot.
 **A slot already taken** - a slot taken between the read and the take SHALL be
 refused by name, and the slots read again SHALL not include it.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-5cb rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-27 - A move picks another shop
 **Serves:** grade10-site-vault-visit-booking-US-03 - the collector who cannot reach the shop they picked moves the visit to another
 
@@ -385,6 +398,7 @@ refused by name, and the slots read again SHALL not include it.
 - **WHEN** its owner moves the visit to a free slot at another shop
 - **THEN** the case holds the visit at that shop and slot
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-jiy rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-28 - A window with nothing free says so and offers the next
 **Serves:** grade10-site-vault-visit-booking-US-01 - the collector reading a window with nothing free is told so and offered the next
 
@@ -392,6 +406,7 @@ refused by name, and the slots read again SHALL not include it.
 - **WHEN** its slots for that window are read
 - **THEN** no slot is answered
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-16x rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-29 - A slot taken while the collector chose is refused
 **Serves:** grade10-site-vault-visit-booking-US-01 - the collector who lost the slot while choosing is told and reads the rest
 
@@ -399,6 +414,7 @@ refused by name, and the slots read again SHALL not include it.
 - **WHEN** somebody else takes that slot before they book it
 - **THEN** the booking is refused by name and the slots read again do not include it
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-f4c rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-31 - A move never offers the visit's own current slot back
 **Serves:** grade10-site-vault-visit-booking-US-03 - the collector moving a visit reads only slots other than the one they already hold
 
@@ -415,6 +431,7 @@ Where a collector's other case already holds the visit both items come in on.
 carry its own visit, so a case holding none is read beside the live visit its
 lead holds, with that visit's shop and slot.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-fdv rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-30 - A sibling case shows the lead's visit
 **Serves:** grade10-site-vault-visit-booking-US-01 - the collector bringing two items in books the visit once
 

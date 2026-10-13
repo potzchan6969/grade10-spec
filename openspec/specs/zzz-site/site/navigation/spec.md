@@ -63,6 +63,7 @@ never to home. The not-found surface's title and description SHALL be static
 text that never includes the failed address or any other dynamic content, and
 it SHALL offer a control back to home.
 
+<!-- trace:scenario id=zzz.site-navigation.SC-lm3 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-01 - Each view has an address
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -70,6 +71,7 @@ it SHALL offer a control back to home.
   refresh
 - **THEN** that surface renders at that address
 
+<!-- trace:scenario id=zzz.site-navigation.SC-epz rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-02 - A refresh keeps the collector's place
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -77,6 +79,7 @@ it SHALL offer a control back to home.
 - **WHEN** they refresh
 - **THEN** sign-in renders, not home
 
+<!-- trace:scenario id=zzz.site-navigation.SC-h76 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-03 - An unknown address resolves to not-found
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -84,6 +87,7 @@ it SHALL offer a control back to home.
 - **THEN** the not-found surface renders, showing its static title and
   description
 
+<!-- trace:scenario id=zzz.site-navigation.SC-gbj rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-24 - Back to Home leaves the not-found surface for home
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 

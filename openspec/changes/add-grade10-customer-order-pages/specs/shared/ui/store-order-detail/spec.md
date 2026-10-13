@@ -27,12 +27,14 @@ props and the `OrderDetailsAddress`, `OrderDetailsDelivery`,
 
 Each named part SHALL remain renderable outside the `OrderDetails` compound.
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-mbv rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-01 - An application imports the surface
 **Serves:** Detail composition - an application imports the surface
 
 - **WHEN** an application imports every named component and type from the shared UI public entry
 - **THEN** every import resolves
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-ndh rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-02 - A part renders on its own
 **Serves:** Detail composition - a part renders on its own
 
@@ -47,6 +49,7 @@ payment, shipping or pickup address, loyalty, and help sections only when their
 data or action is supplied. It SHALL NOT fetch, navigate, format money, derive
 order status, or invent an absent section.
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-xxz rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-03 - A complete order renders every supplied group
 **Serves:** Detail composition - a complete order renders every supplied group
 
@@ -54,6 +57,7 @@ order status, or invent an absent section.
 - **WHEN** `OrderDetails` renders
 - **THEN** every supplied group appears in the designed order
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-xso rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-04 - Missing optional groups are omitted
 **Serves:** Detail composition - missing optional groups are omitted
 
@@ -69,6 +73,7 @@ progress. It SHALL show Track Order only when tracking is enabled and a callback
 is supplied, and SHALL report activation through that callback. It SHALL NOT
 open a URL or turn an upcoming step into a completed step.
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-9fy rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-05 - Tracking needs both permission and an action
 **Serves:** Optional sections - tracking needs both permission and an action
 
@@ -77,6 +82,7 @@ open a URL or turn an upcoming step into a completed step.
 - **THEN** Track Order appears
 - **AND** activating it reports through the callback
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-5tp rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-06 - Tracking is hidden without an action
 **Serves:** Optional sections - tracking is hidden without an action
 
@@ -103,6 +109,7 @@ associated. Payment, one shipping or pickup address, and loyalty SHALL each
 render independently of the other optional groups. When no sidebar group is
 supplied, `OrderDetails` SHALL omit the sidebar.
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-68a rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-07 - A refund renders without other optional money rows
 **Serves:** Optional sections - a refund renders without other optional money rows
 
@@ -111,6 +118,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **THEN** subtotal, refund, and total appear
 - **AND** discount, points, shipping, and tax rows do not appear
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-5ui rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-08 - Payment can be omitted independently
 **Serves:** Optional sections - payment can be omitted independently
 
@@ -119,6 +127,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **THEN** the summary and address appear
 - **AND** no Payment Method section appears
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-fa7 rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-09 - A paid total renders without a subtotal
 **Serves:** Optional sections - a paid total renders without a subtotal
 
@@ -127,6 +136,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **THEN** the total appears
 - **AND** no Subtotal row appears
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-0al rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-10 - No sidebar facts omit the sidebar
 **Serves:** Optional sections - no sidebar facts omit the sidebar
 
@@ -134,6 +144,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **WHEN** `OrderDetails` renders
 - **THEN** no sidebar or empty sidebar card appears
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-yhb rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-11 - An address needs no recipient placeholder
 **Serves:** Optional sections - an address needs no recipient placeholder
 
@@ -142,6 +153,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **THEN** the supplied address lines appear
 - **AND** no empty or placeholder recipient appears
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-78o rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-12 - An unrecognized payment method needs no logo
 **Serves:** Optional sections - an unrecognized payment method needs no logo
 
@@ -150,6 +162,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **THEN** the text label and masked number appear
 - **AND** no unrelated payment logo appears
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-0ag rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-13 - A wallet label stays associated with its mask
 **Serves:** Optional sections - a wallet label stays associated with its mask
 
@@ -157,6 +170,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **WHEN** the sidebar renders
 - **THEN** the wallet label and masked number appear together in the Payment Method section
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-2ek rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-14 - Applied points credit follows discount
 **Serves:** Optional sections - applied points credit follows discount
 
@@ -166,6 +180,7 @@ supplied, `OrderDetails` SHALL omit the sidebar.
 - **AND** its label names the points deducted
 - **AND** the money credit uses the success credit treatment
 
+<!-- trace:scenario id=g10.shared-store-order-detail.SC-j02 rev=1 -->
 #### Scenario: shared-ui-store-order-detail-SC-15 - Absent points credit omits the Points row
 **Serves:** Optional sections - absent points credit omits the Points row
 

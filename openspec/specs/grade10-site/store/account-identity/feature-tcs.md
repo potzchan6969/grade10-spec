@@ -1,6 +1,6 @@
 # grade10-site/store/account-identity Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-09-05, tcs-rules r2
 
 ## grade10-site-store-account-identity-US1: Collector verifies their identity from their account

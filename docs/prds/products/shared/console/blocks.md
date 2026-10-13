@@ -24,7 +24,8 @@ nothing, in the secondary tone, with no error anywhere.
 
 An irreversible move always confirms in a dialog the surface renders, naming the
 move in the console's own words and offering cancel — never the browser's native
-confirmation. Switching panels announces itself as tabs. Narrowing a dataset is
+confirmation. A move refused after the operator confirms leaves the dialog open
+with the refusal, so the operator reads it and tries again. Switching panels announces itself as tabs. Narrowing a dataset is
 one segmented choice whose selected option is announced, rather than buttons
 distinguished only by styling.
 

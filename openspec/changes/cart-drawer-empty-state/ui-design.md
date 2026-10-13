@@ -7,30 +7,49 @@ still draw `Cart Item Slot` are historical reference only.
 
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
-| Populated | [`Store Cart/CartDrawer` → Default](?path=/story/store-cart-cartdrawer--default) | [Cart](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3831&m=dev), [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
-| Empty | [`Store Cart/CartDrawer` → Empty State](?path=/story/store-cart-cartdrawer--empty-state) | [Cart, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6807&m=dev), [Cart Drawer, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6810&m=dev) |
-| Overflow | [`Store Cart/CartDrawer` → Overflow Items](?path=/story/store-cart-cartdrawer--overflow-items) | — |
-| Loading | [`Store Cart/CartDrawer` → Fetching On Open](?path=/story/store-cart-cartdrawer--fetching-on-open) | — |
+| Populated | [`Store/Cart/Blocks/CartDrawer` → Default](?path=/story/store-cart-blocks-cartdrawer--default) | [Cart](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3831&m=dev), [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
+| Empty | [`Store/Cart/Blocks/CartDrawer` → Empty State](?path=/story/store-cart-blocks-cartdrawer--empty-state) | [Cart, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6807&m=dev), [Cart Drawer, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6810&m=dev) |
+| Overflow | [`Store/Cart/Blocks/CartDrawer` → Overflow Items](?path=/story/store-cart-blocks-cartdrawer--overflow-items) | - |
+| Empty, no description | [`Store/Cart/Blocks/CartDrawer` → Empty State Without Description](?path=/story/store-cart-blocks-cartdrawer--empty-state-without-description) | - |
+| Loading with lines | [`Store/Cart/Blocks/CartDrawer` → Loading With Lines](?path=/story/store-cart-blocks-cartdrawer--loading-with-lines) | - |
+| Loading, no lines | [`Store/Cart/Blocks/CartDrawer` → Loading No Lines](?path=/story/store-cart-blocks-cartdrawer--loading-no-lines) | - |
+| Only delisted lines | [`Store/Cart/Blocks/CartDrawer` → Only Delisted Lines](?path=/story/store-cart-blocks-cartdrawer--only-delisted-lines) | - |
+| Only sold-out lines | [`Store/Cart/Blocks/CartDrawer` → Only Sold Out Lines](?path=/story/store-cart-blocks-cartdrawer--only-sold-out-lines) | - |
+| Mixed line states | [`Store/Cart/Blocks/CartDrawer` → Mixed Line States](?path=/story/store-cart-blocks-cartdrawer--mixed-line-states) | - |
 
-Body-only empty: [`Store Cart/CartDrawerBody` → Empty](?path=/story/store-cart-cartdrawerbody--empty).
+Body-only empty: [`Store/Cart/Blocks/CartDrawerBody` → Empty](?path=/story/store-cart-blocks-cartdrawerbody--empty).
 
 ## Components
 
-- `EmptyState` from `@grade10/design-system` — empty cart body; title and
+- `EmptyState` from `@grade10/design-system` - empty cart body; title and
   optional description; no `actions`.
+- `ShoppingCart` from `@phosphor-icons/react` - the icon inside `EmptyState`,
+  drawn on every empty cart.
 - `CartDrawer`, `CartDrawerHeader`, `CartDrawerBody`, `CartDrawerFooter`,
-  `CartItem` from `@grade10/ui` — compound and parts after `CartItemSlot` is
+  `CartItem` from `@grade10/ui` - compound and parts after `CartItemSlot` is
   removed from the export set.
-- `CartDrawerCopy.emptyTitle` / optional `emptyDescription` — consumer copy.
+- `CartDrawerCopy.emptyTitle` / optional `emptyDescription` - consumer copy;
+  `CartDrawerBodyProps` takes the same two fields.
 
 No new primitive, variant, or token. `EmptyState` already exists.
 
 ## States
 
-| State | Spec scenarios |
-| --- | --- |
-| Items only — no placeholder slots | `shared-ui-store-cart-SC-23` |
-| Overflow scroll | `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-07` |
-| Empty — `EmptyState`, no action, no badge, no footer | `shared-ui-store-cart-SC-25` |
-| Loading — skeletons; empty state hidden | `shared-ui-store-cart-SC-08` |
-| Copy carries `emptyTitle` | `shared-ui-store-cart-SC-22` |
+### Cart drawer
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Items only | The cart's rows; no placeholder rows | `shared-ui-store-cart-SC-23` |
+| Overflow | Every row; the body scrolls with a fade at its edges | `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-07` |
+| Empty | Cart icon, title, description where supplied; no action, no count badge, no footer | `shared-ui-store-cart-SC-25` |
+| Empty, no description | Cart icon and title alone | `shared-ui-store-cart-SC-41` |
+| Body alone, empty | Cart icon, title, description where supplied; no action | `shared-ui-store-cart-SC-44` |
+| Loading with lines | Row, count badge and summary skeletons; Checkout disabled; no empty state | `shared-ui-store-cart-SC-08` |
+| Loading, no lines | Blank body; count badge skeleton; no footer; no empty state | `shared-ui-store-cart-SC-40` |
+| Not read yet | As Loading, no lines, while the consumer has never read the cart and its first read is pending | `shared-ui-store-cart-SC-48` |
+| First read failed | As Not read yet, beside the consumer's Retry that names no line; never the empty state (Q14) | `shared-ui-store-cart-SC-48` |
+| Read empty, check failed | As Empty, beside the consumer's Retry | `shared-ui-store-cart-SC-51` |
+| Only delisted lines | Empty state; one removal toast; no count badge | `shared-ui-store-cart-SC-42` |
+| Only sold-out lines | The lines, marked sold out; footer; no count badge; no empty state | `shared-ui-store-cart-SC-45` |
+| Count | One per line, whatever its quantity; sold-out and unavailable lines left out; an unavailable line still passed is not drawn | `shared-ui-store-cart-SC-05`, `shared-ui-store-cart-SC-49`, `shared-ui-store-cart-SC-50` |
+| Empty copy | `emptyTitle` and optional `emptyDescription` on drawer copy and body props | `shared-ui-store-cart-SC-22` |

@@ -1,6 +1,7 @@
 # grade10-site/auction/listing-media Specification
 
 ## Purpose
+
 How a listing's gallery images get optional alt text and named public sizes
 (`card`, `detail`, `thumb`, `zoom`) on top of the ordered one-to-eight media
 gallery defined by `grade10-admin/auction/listing`, and
@@ -19,10 +20,10 @@ covers image delivery and alt.
 - Operator image upload
   - Accepted types and size: JPEG, PNG, WebP and AVIF within the shared media
     size bound reach storage; anything else is refused
-  - Confirm before store: an operator sees a preview of the selected file and
-    confirms before any bytes leave for the auction service
   - Card-size review with zoom: the admin media manager shows stored images at
     card size and reveals a large zoom preview on hover or focus
+  - Upload on drop or choose: a supported file stores as soon as it is dropped
+    or chosen, without a preview, confirm or discard step
 - Image lifecycle
   - Replace and remove: image mutations follow admin-listing's writable states
     and its refusal to remove the last item after create
@@ -44,9 +45,11 @@ covers image delivery and alt.
   - Catalogue card image: the catalogue shows a listing's first gallery item at
     card size when that item is an image
   - Details page order: the details page shows every gallery image in gallery
-    order, at thumb, detail and zoom sizes
+    order
   - Empty and single cases: one image shows no thumbnail strip, and a listing
     with no images still renders
+  - Strip by width: several images show a left rail when the details gallery is
+    wide enough beside the main frame; stacked keeps previous/next and progress
 
 ## Requirements
 
@@ -115,46 +118,6 @@ requirement covers image items and their alt.
 - **WHEN** an operator uploads an image larger than 104857600 bytes
 - **THEN** the system refuses the upload
 - **AND** the gallery is unchanged
-
-### Requirement: An operator confirms an image before it is stored
-
-The system SHALL NOT send listing-media bytes to the auction service until
-the operator confirms after seeing a preview of the selected file in the
-admin media manager. Choosing a file alone SHALL show that preview for the
-gallery slot being filled or replaced and SHALL leave the stored item for
-that slot unchanged. Discarding the preview SHALL clear the preview, leave
-the gallery unchanged, and SHALL NOT upload. Confirm applies to both adding
-an item and replacing a draft item.
-
-<!-- trace:scenario id=g10.auction-listing-media.SC-6ya rev=1 -->
-#### Scenario: grade10-site-auction-listing-media-SC-06 - Choosing a file shows a preview without uploading
-**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
-
-- **GIVEN** a draft listing with an empty gallery slot the operator is filling
-- **WHEN** an operator selects a JPEG under the media size bound
-- **THEN** the admin media manager shows a preview of that file
-- **AND** the listing still has no new stored image for that slot
-
-<!-- trace:scenario id=g10.auction-listing-media.SC-giq rev=1 -->
-#### Scenario: grade10-site-auction-listing-media-SC-07 - Confirming the preview stores the image
-**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
-
-- **GIVEN** an operator has selected a JPEG for a draft listing gallery slot
-  and sees its preview
-- **WHEN** they confirm the upload
-- **THEN** that slot holds the image
-- **AND** the preview is cleared
-
-<!-- trace:scenario id=g10.auction-listing-media.SC-gop rev=1 -->
-#### Scenario: grade10-site-auction-listing-media-SC-08 - Discarding the preview leaves the gallery unchanged
-**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
-
-- **GIVEN** an operator has selected an image for a draft listing gallery
-  slot and sees its preview
-- **WHEN** they discard the preview without confirming
-- **THEN** the gallery is unchanged
-- **AND** the preview is cleared
-- **AND** no upload was sent
 
 ### Requirement: The admin media manager reviews images at card size with hover zoom
 
@@ -322,8 +285,10 @@ admin-listing; named sizes apply to images only.
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
 - **GIVEN** a published listing with two gallery images
+- **AND** the details gallery is wide enough for a left rail beside the main
+  frame
 - **WHEN** a collector opens that listing
-- **THEN** the thumbnail strip requests size `thumb`
+- **THEN** the thumbnail rail requests size `thumb`
 - **AND** the main frame requests size `detail`
 - **AND** zoom requests size `zoom`
 
@@ -366,11 +331,16 @@ admin-listing, not a physical side named `front`.
 
 The listing details page SHALL show every gallery image attached to the
 listing in gallery order, omitting nothing that is an image item the page
-renders through `ListingGallery`. A listing with one image SHALL NOT present
+renders through `ListingLotGallery`. A listing with one image SHALL NOT present
 thumbnail or previous/next controls as if further images existed. A listing
 with no images SHALL render the rest of the page. Video items in the gallery
 remain admin-listing's concern for playback; this requirement covers the
-sized image slots passed into the shared gallery.
+sized image slots passed into the shared lot gallery.
+
+**Strip by width** - With two or more images, the details page SHALL show a
+left thumbnail rail only when the gallery is wide enough to place that rail
+beside the main frame. When the gallery is stacked, it SHALL hide the rail and
+SHALL keep previous/next and carousel progress.
 
 <!-- trace:scenario id=g10.auction-listing-media.SC-yei rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-26 - Several images appear in gallery order
@@ -381,7 +351,7 @@ sized image slots passed into the shared gallery.
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows three images in the order A, B, C
 
-<!-- trace:scenario id=g10.auction-listing-media.SC-iki rev=1 -->
+<!-- trace:scenario id=g10.auction-listing-media.SC-iki rev=2 -->
 #### Scenario: grade10-site-auction-listing-media-SC-27 - One image has no strip
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -389,8 +359,9 @@ sized image slots passed into the shared gallery.
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows that image
 - **AND** it does not show a thumbnail strip
+- **AND** previous and next are not available
 
-<!-- trace:scenario id=g10.auction-listing-media.SC-70a rev=1 -->
+<!-- trace:scenario id=g10.auction-listing-media.SC-70a rev=2 -->
 #### Scenario: grade10-site-auction-listing-media-SC-28 - No images still shows the listing
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -398,3 +369,96 @@ sized image slots passed into the shared gallery.
 - **WHEN** a collector opens that listing
 - **THEN** the page shows the listing's title and bid panel
 - **AND** the gallery has no image
+- **AND** previous and next are not available
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-5tk rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-29 - Wide details gallery shows a left rail
+**Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
+
+- **GIVEN** a published listing with two or more gallery images
+- **AND** the details gallery is wide enough for a left rail beside the main
+  frame
+- **WHEN** a collector opens that listing
+- **THEN** a thumbnail rail is shown beside the main frame
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-cd3 rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-30 - Stacked details gallery hides the rail
+**Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
+
+- **GIVEN** a published listing with two or more gallery images
+- **AND** the details gallery is stacked and not wide enough for a left rail
+  beside the main frame
+- **WHEN** a collector opens that listing
+- **THEN** no thumbnail rail is shown
+- **AND** previous and next remain available
+- **AND** carousel progress remains available
+
+### Requirement: An operator stores a chosen image without confirmation
+
+The system SHALL store a supported JPEG, PNG, WebP or AVIF when an operator
+drops or chooses it in the admin media manager. It SHALL not require a preview,
+confirm or discard step before storing the file. A replacement SHALL take the
+same immediate path as an added file.
+
+When one drop or file selection contains several files, the system SHALL
+process them one after another in selection order, starting after the last
+item in the current gallery. A file refused for type, size or the eight-item
+cap SHALL remain unstored and SHALL be named with the reason; accepted files
+from the same selection SHALL remain stored.
+
+For direct-upload items, a new gallery order SHALL hold when the operator
+drops the reordered item. While inventory assets are staged, their order SHALL
+continue to wait for the listing's Save.
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-41j rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-31 - Choosing a supported file stores it immediately
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with fewer than eight media items
+- **WHEN** an operator chooses a JPEG under the media size bound
+- **THEN** the image is stored in the gallery immediately
+- **AND** no preview, confirm or discard step is required
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-j5f rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-32 - Several chosen files append in selection order
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing whose gallery already has one item
+- **WHEN** an operator drops three supported images in a known selection order
+- **THEN** the system stores them one after another after the existing item
+- **AND** the gallery keeps the selection order
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-1mk rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-33 - Replacing a file stores immediately
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with a stored image at one gallery position
+- **WHEN** an operator chooses a supported replacement image for that position
+- **THEN** the replacement is stored immediately at that position
+- **AND** the other gallery items are unchanged
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-su1 rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-34 - A mixed selection names each refused file
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with room for two more media items
+- **WHEN** an operator chooses two supported images, a PDF, an oversized image and a file past the eight-item cap
+- **THEN** the supported images are stored
+- **AND** each refused file remains unstored and is named with its refusal reason
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-y9i rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-35 - Direct-upload reorder holds on drop
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with three direct-upload images in gallery order A, B, C
+- **WHEN** an operator drags C before A and drops it
+- **THEN** the gallery order becomes C, A, B without a separate Save action
+
+<!-- trace:scenario id=g10.auction-listing-media.SC-dva rev=1 -->
+#### Scenario: grade10-site-auction-listing-media-SC-36 - Staged inventory order waits for Save
+**Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
+
+- **GIVEN** a draft listing with inventory assets staged but not saved
+- **WHEN** an operator changes their order and leaves the listing without saving
+- **THEN** the stored listing keeps its prior inventory order
+- **AND** the new order applies only after the listing is saved

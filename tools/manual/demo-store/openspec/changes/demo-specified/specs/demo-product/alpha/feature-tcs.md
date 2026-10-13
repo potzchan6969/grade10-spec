@@ -1,6 +1,6 @@
 # demo-product/alpha Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/1
 
 ## alpha-US-01: Reader follows the thing end to end
 

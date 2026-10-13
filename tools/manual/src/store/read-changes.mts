@@ -33,6 +33,7 @@ import {
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import {
+  deltaSections,
   leadingTitle,
   outline,
   type Section,
@@ -40,6 +41,9 @@ import {
   sectionSpan,
   tableRows,
 } from "./markdown.mts";
+
+export { deltaSections };
+
 import { readLandings } from "./read-landings.mts";
 import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -63,6 +67,7 @@ const CHECKBOX = /^\s*-\s*\[( |x|X)\]\s?(.*)$/;
 const BULLET = /^\s*[-*]\s+(.+?)\s*$/;
 const ISSUED_ID = /([a-z0-9][a-z0-9-]*)-(SC|US|TC)-(\d+)/g;
 const DELTA_HEADING = /^(ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements$/;
+const REMOVED_FEATURE_SET = /^REMOVED Feature set$/;
 const REQUIREMENT_HEADING = /^Requirement:\s*(.+?)\s*$/i;
 const FROM_LINE = /^\s*-?\s*FROM:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
 const TO_LINE = /^\s*-?\s*TO:\s*`?###\s*Requirement:\s*(.+?)`?\s*$/;
@@ -277,6 +282,11 @@ function readChange(
       if (landedBy) entry.landedBy = landedBy;
       const reviewed = readIdMap("reviewed", fields.reviewed);
       if (reviewed) entry.reviewed = reviewed;
+      const rewritten = readIdMap(
+        "purpose_rewritten",
+        fields.purpose_rewritten,
+      );
+      if (rewritten) entry.purposeRewritten = rewritten;
       const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
       const awaiting = readAwaiting(fields.awaiting);
@@ -294,7 +304,7 @@ function readChange(
     const sections = outline(proposal);
     const title = leadingTitle(sections);
     if (title) entry.title = title;
-    const body = title ? sections[0].children : sections;
+    const body = proposalBody(sections);
     const why = body.find((section) => /^Why\b/.test(section.heading));
     if (why) entry.why = why.body;
     else {
@@ -567,7 +577,8 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
 
 /**
  * A record key that maps an id to one line — `hands:` against a role,
- * `landed_by:` and `reviewed:` against a schema artifact id.
+ * `landed_by:` and `reviewed:` against a schema artifact id,
+ * `purpose_rewritten:` against a capability path.
  *
  * The line is read as written, normalized only by `normalize`, and an entry
  * with no line is refused by `line` itself rather than read as absent: a blank
@@ -828,6 +839,22 @@ function readSectionLinks(sections: Section[], rel: string): PageSectionRef[] {
   return found;
 }
 
+/** The manual sections a proposal's `## References` link, read as a change
+ * entry's `sections` are: the set `pnpm check:manual` verifies and the change's
+ * open questions are counted on. `rel` is the change's store path. */
+export function proposalSectionLinks(
+  proposal: string,
+  rel: string,
+): PageSectionRef[] {
+  return readSectionLinks(proposalBody(outline(proposal)), rel);
+}
+
+/** A proposal's sections: those under its `# ` title, or the top-level ones
+ * when it has none. */
+function proposalBody(sections: Section[]): Section[] {
+  return leadingTitle(sections) ? sections[0].children : sections;
+}
+
 /**
  * The bullets under a proposal's `## Follow-on changes`, verbatim and in
  * order — what this change was said to make possible next.
@@ -986,10 +1013,15 @@ function readDeltas(
       kinds.push(kind.toUpperCase());
       requirements.push(...deltaRequirements(section, kind, detailed));
     }
-    // A delta that will never name a requirement is broken. One that has not
-    // named one yet is the outline, and the change says so in `awaiting:` —
-    // where the `awaiting` rule keeps reading it until the requirements land.
-    if (kinds.length === 0 && !awaitingSpecs) {
+    // A delta that will never name a requirement is broken, except an explicit
+    // feature-set removal: acceptance folds it without restating an unchanged
+    // requirement. One that has not named either yet is the outline, and the
+    // change says so in `awaiting:` — where the `awaiting` rule keeps reading
+    // it until the requirements land.
+    const removesFeatureSet = deltaSections(text).some((section) =>
+      REMOVED_FEATURE_SET.test(section.heading),
+    );
+    if (kinds.length === 0 && !removesFeatureSet && !awaitingSpecs) {
       fail(
         file,
         new StoreFileError(
@@ -1075,14 +1107,6 @@ function claim(marks: Map<string, IssuedMarks>, text: string): void {
     if ((held[key] ?? 0) < issued) held[key] = issued;
     marks.set(token, held);
   }
-}
-
-/** The `## ` sections of a delta file, with a `# ` title unwrapped — what
- * `openspec archive` splits the file into. */
-export function deltaSections(text: string): Section[] {
-  return outline(text).flatMap((one) =>
-    one.level === 1 ? one.children : [one],
-  );
 }
 
 /** The delta kind a `## ` heading names, when it names one. */

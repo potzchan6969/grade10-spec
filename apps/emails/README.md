@@ -35,7 +35,8 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction close | `/preview/auction/close/lot-closed-didnt-win` |
 | Auction order | `/preview/auction/order/auction-won` |
 | Grading | `/preview/grading/checked-in` |
-| Vault | `/preview/vault/offer-made` |
+| Vault case | `/preview/vault/case/offer-made` |
+| Vault item | `/preview/vault/item/item-vaulted` |
 
 This same preview app — sidebar, linter, spam/compatibility checks — is
 published as a static site on every push to `main` (and on demand) to
@@ -74,18 +75,21 @@ emails/
   grading/                 the collector's letters about a submission
     _components/           GradingLetter, SubmissionLine, CardLines,
                            PickupBlock, preview fixture
-                           the plan's three, the drop-off's six, checked in
+                           the plan's three, checked in
                            (with and without cover), the batch's two, the
                            grades' two, a card not returned / damaged /
                            withdrawn, ready (above and below the threshold),
                            the uncollected rungs, collected
-  vault/                   the collector's letters about a case
-    _components/           VaultLetter, CaseLine, HowToPay, NoticeClause,
-                           ReminderSchedule, preview fixture
-                           the visit's four, the offer's two, custody's
-                           three, the loan's five, falling due's three, the
-                           end of a case's five, the paper, the identity
-                           check
+  vault/                   the collector's letters about a case or an item
+    _components/           VaultLetter, CaseLine, ItemLetter, ItemLine,
+                           HowToPay, NoticeClause, ReminderSchedule
+    fixtures.ts            case preview fixture, NotifyKind table
+    item-fixtures.ts       item preview fixture
+    case/                  the offer's two, custody's three, the loan's
+                           five, falling due's three, the end of a case's
+                           four, the paper, the identity check
+    item/                  the item's four — vaulted, retrieval
+                           requested / approved / declined
 ```
 
 `LetterShell` is the one shell both products write in: heading, greeting,

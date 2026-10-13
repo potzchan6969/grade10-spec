@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { StoreCollectionTile } from "./store-collection-tile";
 
 const meta = {
-  title: "Store Home/StoreCollectionTile",
+  title: "Store/Home/Blocks/StoreCollectionTile",
   component: StoreCollectionTile,
   tags: ["autodocs"],
   args: {

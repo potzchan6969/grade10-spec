@@ -51,7 +51,9 @@ requirements of `shared-ui/auth-user-directory` forward; only the home moved.
   - Create review: after Create on a free email (or when lookup is skipped or fails open), a confirmation previews the trimmed draft; a malformed or off-list email, or a chosen locked role, adds a note on that same confirmation; a clean draft still shows the confirmation; Back returns to the form; confirming then creates
 
 ## Requirements
+
 ### Requirement: The user directory exports
+
 The console package SHALL export, from its public entry, exactly these
 components for the user directory surface: `UserTable`, `UserRolesDialog`,
 `UserModerationDialog`, `UserSessionsDialog`, `UserAccountPanel`,
@@ -163,7 +165,7 @@ consumer already in words, each rendered when supplied and omitted when not.
 #### Scenario: shared-console-user-directory-SC-07 - An operator reads where an account is signed in
 **Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
-- **WHEN** the dialog renders an account's sessions
+- **WHEN** the dialog or the account panel renders an account's sessions
 - **THEN** each is named by its identifier
 - **AND THEN** no authenticating secret is rendered
 
@@ -171,7 +173,7 @@ consumer already in words, each rendered when supplied and omitted when not.
 #### Scenario: shared-console-user-directory-SC-08 - An account holds no sessions
 **Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
-- **WHEN** the dialog renders an account with no sessions
+- **WHEN** the dialog or the account panel renders an account with no sessions
 - **THEN** it says so
 - **AND THEN** the control that ends every session is unavailable
 
@@ -466,7 +468,6 @@ move to the console, which confirms it in `UserModerationDialog`.
 - **THEN** the panel reports the move and collects no confirmation of its own
 - **AND THEN** nothing is reported as confirmed until the moderation dialog reports it
 
-
 ### Requirement: The directory offers create only with a handler
 
 Create is a console-gated move: the components collect the fields and report
@@ -516,6 +517,7 @@ the create handler. A well-formed email whose host is on the list, with no
 chosen locked role, SHALL still show the confirmation when the email is free;
 confirming that review SHALL then call the create handler.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-3w0 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-33 - Create appears only with a create handler
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -523,6 +525,7 @@ confirming that review SHALL then call the create handler.
 - **THEN** Create is not offered
 - **AND THEN** a console that supplies a create handler is offered Create
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-uox rev=1 -->
 #### Scenario: shared-console-user-directory-SC-34 - The create dialog collects console vocabulary
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -532,6 +535,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** the dialog offers no password field
 - **AND THEN** Confirm stays disabled until name, email, and at least one role are present
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-bm5 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-35 - Create success reports the account
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -540,6 +544,7 @@ confirming that review SHALL then call the create handler.
 - **THEN** the dialog reports the created account's identifier
 - **AND THEN** the dialog decides nothing about what is shown next
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-d4y rev=1 -->
 #### Scenario: shared-console-user-directory-SC-36 - Taken email refuses on the form before review
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -551,6 +556,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** choosing open-existing calls `onOpenExisting` with that identifier
 - **AND THEN** the create handler has not run
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-8ij rev=1 -->
 #### Scenario: shared-console-user-directory-SC-37 - Review notes when the email is malformed or off the console list
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -561,6 +567,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** confirming the review calls the create handler
 - **AND THEN** Back from the confirmation returns to the create form and creates nothing
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-iqr rev=1 -->
 #### Scenario: shared-console-user-directory-SC-38 - Review notes when a locked role is selected
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -571,6 +578,7 @@ confirming that review SHALL then call the create handler.
 - **AND THEN** confirming the review calls the create handler
 - **AND THEN** when the email also needs a note, email and locked-role notes appear on the same confirmation
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-aan rev=1 -->
 #### Scenario: shared-console-user-directory-SC-39 - Review opens when the email is free
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
 
@@ -580,4 +588,3 @@ confirming that review SHALL then call the create handler.
 - **THEN** the confirmation opens and the create handler has not run
 - **AND THEN** confirming the review calls the create handler
 - **AND THEN** Back from the confirmation returns to the create form and creates nothing
-

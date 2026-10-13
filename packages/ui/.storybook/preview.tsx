@@ -31,30 +31,12 @@ const preview: Preview = {
     backgrounds: { disable: true }, // body bg comes from the theme tokens
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/i } },
     options: {
-      storySort: {
-        method: "alphabetical",
-        // Primary Auth Sign In journeys first; remaining stories stay
-        // alphabetical within each group via `*`.
-        order: [
-          "Auth Sign In",
-          [
-            "SignInCard",
-            ["Default", "From add to cart", "Link sent", "*"],
-            "SignInEmailForm",
-            ["Default", "Error", "Needs an email", "Sending", "*"],
-            "SignInLinkSent",
-            [
-              "Default",
-              "Resend countdown",
-              "Resending",
-              "Countdown ticks",
-              "*",
-            ],
-            "Link Follow Toasts",
-          ],
-          "*",
-        ],
-      },
+      // Titles A to Z, each file's stories in the order it declares them. The
+      // workbench (`pnpm storybook`) orders by the manual instead.
+      storySort: (a, b) =>
+        a.title === b.title
+          ? 0
+          : a.title.localeCompare(b.title, undefined, { numeric: true }),
     },
     // 'todo' - show a11y violations in the test UI only
     // 'error' - fail CI on a11y violations

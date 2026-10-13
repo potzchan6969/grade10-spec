@@ -1,0 +1,134 @@
+{
+  "version": 2,
+  "change": "shared-auth-audit",
+  "baseline": "e463905ca6d6df870f8af020c6d18e9e32da2f6f5bcc1c3fb3a0b1b4b44fc640",
+  "fingerprint": "78b27d264d0f5e3318ccade84b9a8b29c895d8ad864e32d2d66986f788b1cd9a",
+  "reviewedBy": "@rita-liu",
+  "acceptedAt": "2026-10-05T08:26:58.916Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/shared-auth-audit/decisions.md",
+      "sha256": "a304f2108b85347c25b04e6719148109228d2b6f5db26e41696c9b8fefe5c7ea",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/proposal.md",
+      "sha256": "daf0b1e8a9be405ce6d261db7f6c5e91907ca77d205e64b8c1873de4e290dc4b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/specs/shared/auth/audit/feature-tcs.md",
+      "sha256": "4f4f49f3528bfac702ea47b1a41ae6ac7c668390904ed92998e13dbfffaa8e1c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/specs/shared/auth/audit/spec.md",
+      "sha256": "37c60c75bc8cae67c794fc68d5af25f1c486f3e30df8e9595152fe4b88af65aa",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/specs/shared/auth/audit/user-journeys.md",
+      "sha256": "d00c60937f666849f15dff20fe690bfcd39816d269dc9e5eb97ef15d2e25a979",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/specs/shared/console/audit/feature-tcs.md",
+      "sha256": "dc13663b73c4af722c8796042bd2b760b7b7abef7be609897accbf2ce2d36f50",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/specs/shared/console/audit/spec.md",
+      "sha256": "9ab694bd1059818c2a3a2b3e7abbe524e86d340881ca47697320edd56558adf4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/specs/shared/console/audit/user-journeys.md",
+      "sha256": "ca2b48df48a8ad5ba8d5dc3e2ba4e26797a51e33c0a62f750fe51b477ae6aef7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/tech-design.md",
+      "sha256": "5178ec0e80e33b3aa79ff29aa3331b446504d9197f386d94094ba1881c99b1c8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/shared-auth-audit/ui-design.md",
+      "sha256": "23037272cbbd777f1eac3c3ec99f08d609f5c567d7d6d9d0267b1c3f359d10cb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+      "sha256": "f2136637ae24594191ae06366ff51230fe31f30388e8f86535033a309d166f9e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/spec.md",
+      "sha256": "656dfda94f575c3fe0d49cac3c14b3a21d6f5c66a441e8e50685e6cfc668812f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+      "sha256": "196645f4717c0dbc9558b35fddf2b3c2c7700f55db3e3ec9f9785f7bab7479a4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/feature-tcs.md",
+      "sha256": "dc13663b73c4af722c8796042bd2b760b7b7abef7be609897accbf2ce2d36f50",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/spec.md",
+      "sha256": "7d4232037bc1026d4ad65be5067357e3980d5294beb216192e44bc16a17c3a7f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/user-journeys.md",
+      "sha256": "ca2b48df48a8ad5ba8d5dc3e2ba4e26797a51e33c0a62f750fe51b477ae6aef7",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/shared-auth-audit/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A no-change account find is not recorded",
+        "Requirement: Account create, verify-flip, and delete are recorded",
+        "Requirement: An entry keeps the reason, not secrets",
+        "Requirement: Second-factor enable, disable, and recovery-code regenerate are recorded",
+        "Requirement: The trail is append-only and fail-closed"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A row expands without secrets, and ids can be copied or opened",
+        "Requirement: The chain strip stays quiet until a product fails",
+        "Requirement: The trail filters by product, action, people, result, and days",
+        "Requirement: The trail table names subject, action, and time order"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/console/audit/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -17,7 +17,7 @@
 ### post-sale-US-14: Operator returns money paid after a cancel
 
 **As an** operator,
-**I want** a cancelled order that received a card payment afterwards to be flagged until I record that finance returned the money,
+**I want** a cancelled order that received a card payment afterwards to be flagged until I clear it with a reason,
 **so that** no winner is left paying for a lot they no longer have.
 
 ## MODIFIED User journeys

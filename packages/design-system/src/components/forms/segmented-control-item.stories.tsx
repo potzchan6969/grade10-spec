@@ -4,7 +4,7 @@ import { SegmentedControl } from "./segmented-control";
 import { SegmentedControlItem } from "./segmented-control-item";
 
 const meta = {
-  title: "Components/SegmentedControlItem",
+  title: "Design System/Forms/SegmentedControlItem",
   component: SegmentedControlItem,
   tags: ["autodocs"],
   decorators: [

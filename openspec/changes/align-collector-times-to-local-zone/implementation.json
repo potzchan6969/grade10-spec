@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "6e5e0cd6f518e7ec0197d87576327021a63477de591c8cb7478f0309e7e7a185"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "7ff2461382bba2d24a74fc1dde4b9812e6eff3a9",
+    "capturedAt": "2026-10-06T15:07:51.353Z",
+    "targets": [
+      {
+        "path": "openspec/specs/shared/dates-and-times/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/dates-and-times/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A deadline names its time zone",
+          "Requirement: A message the platform sends states one zone",
+          "Requirement: Each rendering states the zone its surface requires"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/dates-and-times/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Bid history components format activity time"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Dates render in Hong Kong as GMT+8"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

@@ -63,11 +63,13 @@ type SignInCardProps = {
  * pixels: a collector asked to sign in mid-flow keeps the page they were on
  * mounted behind the scrim instead of losing it to a route change.
  *
- * `DialogContent` already carries every value the Figma frame specifies — 448
- * wide, radius 32, padding 24, gap 24 — and `--overlay` already resolves to
- * the `#0A0A0A4D` the scrim is drawn with, so nothing here restates them. The
- * one local override is the body gap: the generic Dialog draws its body at 16
- * and this surface at 24.
+ * `DialogContent` already carries the rest of what the Figma frame specifies —
+ * radius 32, padding 24, gap 24 — and `--overlay` already resolves to the
+ * `#0A0A0A4D` the scrim is drawn with, so nothing here restates them. Two
+ * local overrides: the width, because the generic Dialog caps at 512 and
+ * `Login Dialog` is 448 — a 398 column, inside the 400 Google draws its button
+ * at — and the body gap, which the generic Dialog draws at 16 and this surface
+ * at 24.
  *
  * Which step renders is the consumer's decision — the flow (magic link,
  * OAuth, or any mix) is product state, so the dialog holds no step machine.
@@ -89,7 +91,7 @@ function SignInCard({
     // never asked for.
     <Dialog onOpenChange={(next) => onOpenChange(next)} open={open}>
       <DialogContent
-        className={cn(className)}
+        className={cn("max-w-(--container-md)", className)}
         data-slot="sign-in-card"
         aria-label={copy.title}
       >

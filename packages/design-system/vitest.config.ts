@@ -21,6 +21,7 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          sequence: { groupOrder: 1 },
           fileParallelism: false,
           // One frame for every file: a frame per file raced its own swap, cutting
           // off the next file's import so its iframe could not connect.
@@ -39,6 +40,7 @@ export default defineConfig({
         // runnable when Playwright's chromium is not installed.
         test: {
           name: "contracts",
+          sequence: { groupOrder: 0 },
           include: ["src/**/*.test.ts"],
           environment: "node",
         },

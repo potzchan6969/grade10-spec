@@ -14,25 +14,35 @@ import { cn } from "@grade10/design-system/lib/utils";
  * (same rule as `CheckboxButton`). `RadioListItem` owns that opacity when the
  * control sits beside a label, and resets this one so the row dims once.
  */
-function RadioButton({ className, ...props }: RadioPrimitive.Root.Props) {
+function RadioButton({
+  className,
+  children,
+  ...props
+}: RadioPrimitive.Root.Props) {
   return (
     <RadioPrimitive.Root
+      {...props}
       data-slot="radio-button"
       className={cn(
-        "group/radio flex size-6 shrink-0 items-center justify-center rounded-full outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "group/radio flex outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        children
+          ? "items-start"
+          : "size-6 shrink-0 items-center justify-center rounded-full",
         className,
       )}
-      {...props}
     >
-      <span
-        data-slot="radio-button-ring"
-        className="flex size-4 items-center justify-center rounded-full border border-border bg-input transition-colors group-focus-visible/radio:ring-3 group-focus-visible/radio:ring-ring/50 group-data-disabled/radio:bg-background-subtle"
-      >
-        <RadioPrimitive.Indicator
-          data-slot="radio-button-indicator"
-          className="size-2 rounded-full bg-primary"
-        />
+      <span className="flex size-6 shrink-0 items-center justify-center">
+        <span
+          data-slot="radio-button-ring"
+          className="flex size-4 items-center justify-center rounded-full border border-border bg-input transition-colors group-focus-visible/radio:ring-3 group-focus-visible/radio:ring-ring/50 group-data-disabled/radio:bg-background-subtle"
+        >
+          <RadioPrimitive.Indicator
+            data-slot="radio-button-indicator"
+            className="size-2 rounded-full bg-primary"
+          />
+        </span>
       </span>
+      {children}
     </RadioPrimitive.Root>
   );
 }

@@ -15,7 +15,7 @@ application renders it.
 
 | Capability | What it governs |
 | --- | --- |
-| [`auth/session`](auth/session/spec.md) | Who a signed-in person is: what a product receives when it reads the caller, that sign-in is brand-wide, and how analytics names a visitor. |
+| [`auth/session`](auth/session/spec.md) | Who a signed-in person is: what a product receives when it reads the caller, that a sign-in covers the surface it was made on and no other brand, and how analytics names a visitor. |
 | [`auth/sign-in`](auth/sign-in/spec.md) | How a person signs in: which methods exist, what a success creates, and what a sign-in command does when activated more than once. |
 | [`auth/sign-out`](auth/sign-out/spec.md) | What activating a sign-out control does on any signed-in surface. |
 | [`auth/sessions`](auth/sessions/spec.md) | How an operator lists a person's sessions and ends one or all of them. |

@@ -37,12 +37,12 @@ Collaborators work across several artifact types with distinct authority:
 | Shared compound component | `packages/ui/src/blocks/` |
 | Whole-page preview assemblies | `apps/preview/src/pages/` |
 
-One workflow schema under `openspec/schemas/` governs how changes progress: `grade10-planning`, proposal → specs → user journeys → test cases → ui design → tech design → tasks. Four role skills split it — `/planning-pm`, `/planning-qa`, `/planning-design`, `/planning-dev` — and each teammate writes their own artifacts on the one change and stops.
+The `grade10-planning` schema under `openspec/schemas/` governs the lifecycle. `planning-pm` writes the proposal, decisions and journeys; `planning-design` adds UI design where needed; `planning-dev` coordinates blind cases, technical design, scenarios, tasks, reconciliation and acceptance. App implementation and archive run in the consuming app repository.
 
 Preview and review run through Storybook:
 
-- `pnpm storybook` — page assemblies in `apps/preview`
-- `pnpm storybook:workbench` — assemblies plus both packages' stories (published at https://storybook.grade10-stg.com)
+- `pnpm storybook` — the workbench: every story, by the manual's domains and pages (published at https://storybook.grade10-stg.com); rules in `docs/governance/storybook.md`
+- `pnpm storybook:pages` — page assemblies in `apps/preview` alone
 - `pnpm storybook:design-system` / `pnpm storybook:ui` — focused single-package views
 
 Consuming applications add this repository as a Git submodule, pin a SHA, and implement their own routing, data, stores, and adapters against the shared contracts.
@@ -63,7 +63,7 @@ Consuming applications add this repository as a Git submodule, pin a SHA, and im
 - Shared compound components receive all consumer-owned content, state, and behavior through props; callback props use `on<Event>` names.
 - Components may use internal presentation state; they must not acquire, persist, subscribe to, or orchestrate consumer-owned product state.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand; edit `tokens.json` or `tokens.config.json` and run `pnpm run tokens:build`.
-- Do not add packages beyond `design-system`, `i18n`, and `ui` without a recorded product decision.
+- Do not add packages beyond `design-system`, `i18n`, `ui`, and `date` without a recorded product decision.
 - `@grade10/ui` composes design-system primitives and never imports message catalogs; all content reaches components through props.
 
 **Terminology:** "Stateless" in this repository means app-neutral (no external product-state integration), not free of React hooks or ephemeral UI state.

@@ -1,66 +1,59 @@
-# Integrate Shopify checkout in the frontend
+# Support Cart Header Checkout Integration
 
-**Author:** @kinisworking - 2026-09-28
+**Author:** @kinisworking - 2026-10-07
 
 ## Why
 
-The cart drawer must hand its current basket and accepted tender to the existing
-Shopify checkout flow, then show the existing order outcome after hosted payment.
-The earlier plan incorrectly required backend intent persistence and new
-recovery flows. The product owner narrowed this change to frontend integration.
+The cart drawer already reviews the basket and tender, but Pay still needs to send them through the store's existing checkout request and show its answer. This change connects the drawer to the current backend without changing the backend.
 
-## What changes
+## What Changes
 
-- **Drawer** - Use the live basket and accepted tender already answered by the store; call checkout from the drawer.
-- **Invoice** - Each new Pay submission uses the existing creation flow. Earlier invoices are ignored rather than canceled or reused by the frontend.
-- **Outcomes** - Handle the existing redirect, verification, refusal, settling and failure responses without inventing a backend guarantee.
-- **Return** - Use the existing order surfaces and the Shopify confirmation extension's static Grade10 Your Orders link.
-- **Validation** - Verify frontend behavior against current contract fixtures and record the existing provider integration in staging when authorized.
+- **Current decision** - Review on open, wait for cart and tender writes, and let the existing checkout request make the Pay decision.
+- **Current request** - Send the reviewed lines with their seen prices, the accepted coupon, and positive points or no points field when none are spent.
+- **One Pay at a time** - Accept one Pay per drawer. An answer for an older cart, tender or member opens nothing.
+- **Answers** - Use the existing feedback for refusal, named lines, verification, settling and failure. A lost answer is not retried by itself.
+- **Payment return** - Poll the order, read the cart and tender again once it is paid, and keep the static Your Orders link on both Shopify confirmation pages.
 
-## Non-goals
+## Non-Goals
 
-Backend, database, API, provider, webhook, carrier and settlement changes.
-Intent persistence, request replay, duplicate-invoice prevention, draft search,
-dispatch recovery, operator bind/cancel flows and cart-edit reconciliation.
-Public guest checkout, a separate checkout page and new shared UI exports.
+- **Operations** - No deployment, migration execution, production data operation, provider configuration change or real payment in this planning run.
+- **Surfaces** - No public guest checkout, standalone checkout page, embedded payment form, new order badge or order-specific Shopify return link.
+- **Local workarounds** - No new dependency, duplicate quote/order client, browser-owned invoice authority, local settlement, points hold or variant-based cart deletion.
+- **Backend** - No backend, contract, schema or migration change. Invoice reuse, terminal replay, concurrent Pay, dispatch recovery and durable retirement are [`add-checkout-purchase-safety`](../add-checkout-purchase-safety/proposal.md).
 
-## Product record
+## Product Record
 
 - [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
 
 ## Capabilities
 
-### New
-
-None.
-
 ### Modified
 
-- `grade10-site/store/checkout` - narrow delivery to frontend consumption of the existing backend and remove the unsupported intent-replay contract.
+- `grade10-site/store/checkout` - add the drawer's Pay integration, one Pay at a time and the paid cart refresh. The published requirement "A checkout intent is safe to repeat" is not modified.
+
+### Preserved Dependencies
+
+- **Cart validation** - Keep separate cart-open and payment decisions and refusal behavior.
+- **Order surfaces** - Consume existing customer order-page contracts and status labels; own no edit to the order-status mapping or shared closed status set.
+- **Carrier rates** - Preserve the durable checkout carrier requirement and verify its existing backend implementation.
 
 ## Impact
 
-- **Frontend** - Drawer handoff, existing response handling, order return and Shopify confirmation link.
-- **Backend** - No changes. Existing validation, creation, settlement and cart release are dependencies, not tasks in this plan.
-- **Compatibility** - Keep PR #653's canonical quote, coupon and order clients and deprecated backend aliases unchanged.
-- **Planning** - Preserve acceptance snapshots and the first implementation claim. Retire superseded work explicitly without recycling claimed task addresses.
+- **Applications** - Grade10's drawer and orders; shared store-frontend clients and fixtures; ZZZ and operator adapters remain compatibility consumers.
+- **Backend** - None. The merged cart-header backend is used as it is; its guarantees are verified by `add-checkout-purchase-safety`.
+- **Shared UI** - Reuse existing drawer, order blocks and translations; no new export or badge.
+- **History** - Preserve acceptance snapshots, first implementation baseline, completed tasks and case IDs. New work receives new task addresses; acceptance names the prior fingerprint with `--supersedes`.
 
-No domain impact: existing store domain journeys do not trace checkout outcomes.
+No domain impact: the existing Store domain suite traces catalog and till journeys rather than checkout; the new repeat/edit journeys remain within checkout.
+No product impact: no product-level composed path changes outside checkout return.
+No platform impact: authentication, localization and routing contracts remain unchanged.
 
 ## Decisions
 
-The product owner's answers settle the amendment: no backend changes; a new Pay
-uses the current creation flow and ignores older invoices; the invoice fixes the
-purchase and subsequent cart edits are outside this integration. Existing cart
-cleanup is unchanged.
-
-## Planning Amendment
-
-- **Source** - [Grade10 PR #653](https://github.com/9gag/grade10/pull/653) splits checkout creation from quote, coupon and order reads.
-- **Restart** - The earlier QA1, Dev and QA2 readings are superseded because the feature anchors changed. Fresh independent readings use the frontend scope.
-- **Cleanup** - The incorrect standalone reference is deleted. Backend intent/recovery specifications and delivery tasks are removed from this amendment.
-- **History** - Historical acceptance and implementation records remain intact; this amendment supersedes the contract through the supported acceptance command.
+On 2026-10-09, @kinisworking kept this change to the frontend and moved the backend guarantees to a separate change ([Q24](decisions.md)). It supersedes the 2026-10-07 instruction for this change. The durable requirements are not weakened.
 
 ## References
 
 - [Checkout integration readiness](../../../docs/prds/products/grade10-site/store/checkout.md#integration-readiness)
+- [Technical design](tech-design.md)
+- [Delivery tasks](tasks.md)

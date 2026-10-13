@@ -1,17 +1,9 @@
-## Purpose
+# grade10-site/store/product-listing Specification
 
-What the listing tells a collector about product availability, and how a
-requested quantity reaches cart review.
+## REMOVED Feature set
 
-## Feature set
-
-- Listing availability
-  - Tile rollup: a product is out of stock only when every Shopify variant is
-    out of stock
-  - No stock cue: tiles show availability without counts or scarcity
-- Requested quantity
-  - No browse ceiling: the collector's quantity reaches cart review without a
-    stock-derived maximum
+- Held to the shop's count
+- Said when it is news
 
 ## REMOVED Requirements
 

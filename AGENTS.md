@@ -1,14 +1,47 @@
 # Product specification and design-system repository
 
-This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is intentionally not an application: do not add product data fetching, authentication, routing, stores, or feature orchestration here.
+This repository is the versioned source of truth for product requirements and the design system beneath Grade10 applications. It is not an application: do not add data fetching, authentication, routing, stores, or feature orchestration.
 
 ## Operating principles
 
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
 - Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy the page its Copy table names for the kind of page you are writing. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A case that proves a rule, a state that dresses an outcome and a mechanism belong to the suite, the design record and the architecture doc.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
-- Keep changes reviewable: one product decision or component capability per pull request where practical.
+- Keep changes reviewable: one product decision or component capability per push where practical.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
+
+## Questions and blockers
+
+Use this Clarification Request format whenever human input is needed.
+
+- **Labels** - Put requests for an answer or decision under **Questions**, and required human actions under **Blockers**. Mark optional feedback as optional.
+- **Items** - Use a numbered list, one question or blocker per item, ordered by impact. Open with `**Short title** -` and the exact answer, decision, or action needed, in the reader's words.
+- **Options** - Where alternatives exist, give lettered options with the recommended option first and marked `Recommended`. State the outcome and cost of each; do not invent alternatives for a required action.
+- **Context** - Explain why the answer or action matters and what waits on it. Name the affected journeys, requirements, contracts, or tests; optional feedback must not appear to block work.
+- **Reasons** - Give the supporting evidence, errors, past decisions, or requirements. Quote and link relevant sources, naming decision rows or requirement anchors; use published manual or change pages when available.
+- **Decisions made by Agents** - After the list, state any decisions made without asking and the option taken. Omit this when there are none.
+
+```markdown
+### Questions
+
+1. **<Short title>** - <Exact question or decision needed.>
+   - **A - <Option> - Recommended** - <Outcome and cost.>
+   - **B - <Option>** - <Outcome and cost.>
+   - **Why it matters** - <User or operator consequence.>
+   - **Blocks** - <Work waiting on the answer, or None - optional feedback.>
+   - **Reasons** - <Supporting evidence or quoted decision or requirement, with a source link>.
+
+### Blockers
+
+1. **<Short title>** - <Exact human action needed.>
+   - **Why it matters** - <Why the action is required.>
+   - **Blocks** - <Work that cannot proceed.>
+   - **Reasons** - <Relevant error, evidence, or quoted decision or requirement, with a source link.>
+
+### Decisions made by Agents
+
+- **<Decision>** - <Option taken without asking.>
+```
 
 ## Sources of truth
 
@@ -41,16 +74,16 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | `/workflow-plan`, `planning-pm` | Always |
-| 2 | `decisions.md` | Product manager | `/workflow-plan`, `planning-pm` | Always — goals, non-goals, what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/workflow-plan`, `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `ui-design.md` | Designer, or the PM with the design | `/workflow-design`, `planning-design` | Optional — from the journeys |
-| 5 | `tech-design.md` | Dev in the integrated planning run | `/planning-dev`, `planning-dev` | Every implementation change outside this store — or `design_waived: <why>` |
-| 6 | `specs/<capability>/spec.md` | QA1 outline, Dev scenarios | `/planning-dev`, `planning-dev` | Always — anchors first, scenarios after QA1 and tech design |
-| 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `/planning-dev`, `planning-dev` | Always — blind draft cases before scenarios |
-| 8 | `tasks.md` | Dev in the integrated planning run | `/planning-dev`, `planning-dev` | Before acceptance and implementation |
+| 1 | `proposal.md` | Product manager | `planning-pm` | Always |
+| 2 | `decisions.md` | Product manager | `planning-pm` | Always — goals, non-goals, what the interview settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM with the design | `planning-design` | Optional — from the journeys |
+| 5 | `tech-design.md` | Dev in the integrated planning run | `planning-dev` | Every implementation change outside this store — or `design_waived: <why>` |
+| 6 | `specs/<capability>/spec.md` | QA1 outline, Dev scenarios | `planning-dev` | Always — anchors first, scenarios after QA1 and tech design |
+| 7 | `specs/<capability>/feature-tcs.md` | QA1 cases, QA2 reconciliation | `planning-dev` | Always — blind draft cases before scenarios |
+| 8 | `tasks.md` | Dev in the integrated planning run | `planning-dev` | Before acceptance and implementation |
 
-Each command names its artifact and follows the `workflow-round` skill, which reads its readers from the schema and dispatches them from `.claude/agents/`; `/workflow-build` takes a task group, `/workflow-land` one artifact.
+`planning-pm`, `planning-design` and `planning-dev` are current and independently usable. `workflow-*` are next-version wrappers: they may invoke planning skills and add instructions, but planning skills must not depend on them. Keep planning procedures in `planning-*` until adoption.
 
 The PM writes 1 to 3, and a designer adds 4 where needed. One `/planning-dev` invocation takes frozen anchors through fresh QA1 blind cases, independent Dev technical design, scenarios and tasks, then fresh QA2 reconciliation. The same human resolves requirement, design and plan questions. After a ready `accept-review` and a passing `pnpm accept:preflight <change>`, accept once with `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance publishes requirements before implementation without marking cases approved or executed. An amendment names `--supersedes <old-fingerprint>` and preserves earlier snapshots. The first claim records its durable baseline; archive reconciles its target scope with the current contract, and semantic differences name evidence. Archive makes no second fold; deployment never waits for it. After deployment, human QA classifies cases with `/tcs-review` and uses `/tcs-run-sheet` for manual execution. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
@@ -90,12 +123,12 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 
 ## Design system package
 
-`packages/design-system` (`@grade10/design-system`) holds the theme tokens and the shadcn primitives this repository owns. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. These are the only packages here; do not add another without a recorded product decision.
+`packages/design-system` (`@grade10/design-system`) holds the theme tokens and shadcn primitives. `packages/i18n` (`@grade10/i18n`) holds the message catalogs. `packages/ui` (`@grade10/ui`) holds the shared compound components, composing the design-system primitives one way and never importing the message catalogs — all content reaches its components through props. `packages/date` (`@grade10/date`) holds the date formatters, the typed-day bridge and the date arithmetic, React-free. Add no other package without a recorded product decision.
 
 Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
-- Stories are colocated with each primitive. Run them with `pnpm run storybook:design-system`.
+- Stories sit beside each primitive: [`docs/governance/storybook.md`](docs/governance/storybook.md).
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
 - Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, record it as an OpenSpec change rather than absorbing it into the Code Connect template.
 - The Figma legs (`tokens:import`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
@@ -111,21 +144,20 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm check:manual` after a page, a change, or a suite changes; CI runs it on every push and refuses a change with an unmarked page, application work with no tech design, a capability with no journeys file, a 🚧 line no change delivers, and an id cited in backticks that the store issues nowhere. It warns (`dense`) on a page past the style's budget, tabled under Enforcement in `docs/governance/writing.md`.
+- `pnpm push:main` runs `pnpm check:manual`, `pnpm run validate:changes` and `pnpm run tcs:validate` on what it sends, as CI does; run one alone while drafting. `check:manual` refuses an unmarked page, application work with no tech design, a capability with no journeys file, a 🚧 line no change delivers, and a backticked id the store issues nowhere; it warns (`dense`) past the budget in `docs/governance/writing.md`.
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
 - `pnpm --dir tools/relay test` after anything under `tools/relay/` changes.
-- `pnpm run validate:changes <change-id>` after a change's artifacts change; CI runs it over every change.
-- `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.
 - `pnpm run lint` for repository formatting and static checks.
 - `pnpm run typecheck` after any TypeScript change.
 
-## Pull Requests and Commits
+## Pushes, Pull Requests and Commits
 
+- Push with `pnpm push:main`, not a pull request: it rebases, runs the checks the paths owe and pushes, whatever paths touch. A pull request is for a change its author wants someone to read first (`pnpm push:main --pr`). Settle a conflict as `/spec-push` says.
 - PR labels: use one of `feature`, `bug`, `ci`, `agent`, `enhancement`, `maintenance`, or `documentation`, when labels are available.
 - Commit subjects use the Conventional Commits format. Do not add issue or PR prefixes; repository tooling adds them.
 - Keep commits atomic. Split unrelated implementation, documentation, refactoring, and generated build output into separate commits when practical.

@@ -1,7 +1,7 @@
 # grade10-site/site/page-shell Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-21, tcs-rules r3.0
+**Status:** pending-review · 0/44
+**Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
 
@@ -118,7 +118,7 @@ A viewport 375 CSS pixels wide.
 
 **As a** collector,
 **I want** the header and the footer rendered before the session has resolved,
-with only the account entry updating once it does,
+with only the account entry and the cart count updating once it does,
 **so that** I can start navigating immediately without unrelated chrome
 shifting under me.
 
@@ -152,8 +152,10 @@ shifting under me.
 * The header and footer are rendered.
 * The surface remains in the content region while it loads.
 
-<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=1 covers=g10.site-page-shell.SC-9ud,g10.site-page-shell.SC-yxt -->
-### grade10-site-site-page-shell-US2-TC2-1: The session changes only the account entry
+<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=2 covers=g10.site-page-shell.SC-9ud,g10.site-page-shell.SC-yxt -->
+### grade10-site-site-page-shell-US2-TC2-2: The session changes only the account entry and cart count
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -171,22 +173,25 @@ shifting under me.
 **Pre-conditions:**
 
 * A page rendered while the session was resolving.
+* The header offers Cart.
 
 **Test data:**
 
-| `<session>` |
-| --- |
-| Signed out |
-| Signed in |
+| `<session>` | `<cart count badge>` |
+| --- | --- |
+| Signed out | none |
+| Signed in, no active lines | none |
+| Signed in, 2 active lines | 2, once the cart review completes |
 
 **Steps:**
 
 1. Let the session resolve as <session>.
-2. Inspect the account entry and the rest of the chrome.
+2. Inspect the account entry, the Cart control and the rest of the chrome.
 
 **Expected Results:**
 
 * The account entry matches <session>.
+* The Cart control shows <cart count badge> and keeps its place.
 * No other chrome control appears, disappears, or moves.
 
 ---
@@ -196,13 +201,13 @@ shifting under me.
 **As a** collector,
 **I want** Sign In when I am signed out, and when I am signed in an account
 menu that shows my sign-in email with its small initial avatar above My
-Auctions and Sign Out on auction launch, and My Orders, My Auctions,
-Membership, and Sign Out once Store answers, with Cart in the bar only once
-Store answers,
+Auctions and Sign Out on auction launch, with Profile first wherever the
+account page is carried and My Orders ahead of My Auctions once Store
+answers, and no item whose page the site withholds,
 **so that** one place in the header takes me where I can go for this launch,
 without a second auction-orders link.
 
-<!-- trace:case id=g10.site-page-shell.TC-eek rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
+<!-- trace:case id=g10.site-page-shell.TC-eek rev=1 covers=g10.site-page-shell.SC-0ao -->
 ### grade10-site-site-page-shell-US3-TC1-1: A signed-out collector gets Sign In
 
 **Classification:**
@@ -212,7 +217,7 @@ without a second auction-orders link.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -220,26 +225,26 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* A collector is signed out on an answered site surface.
+* customer is signed out and on <grade10 site url>.
 
 **Steps:**
 
-1. Inspect the account entry in the header.
-2. Activate Sign In.
+1. Read the account entry in the header.
+2. Click Sign In.
 
 **Expected Results:**
 
-* The account entry is a primary Sign In button, not an account icon.
-* Sign-in starts.
+* Step 1: a primary Sign In button, no account icon.
+* Step 2: sign-in opens.
 
-<!-- trace:case id=g10.site-page-shell.TC-bs9 rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC2-1: A signed-in collector reaches the account menu
+<!-- trace:case id=g10.site-page-shell.TC-bs9 rev=2 covers=none -->
+### grade10-site-site-page-shell-US3-TC2-2: A signed-in collector reaches the account menu
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -262,8 +267,8 @@ without a second auction-orders link.
 * The menu offers, in order, Profile, My Orders, My Auctions, and Sign out.
 * The menu does not offer KYC.
 
-<!-- trace:case id=g10.site-page-shell.TC-obx rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC3-1: Sign out remains available from the account path
+<!-- trace:case id=g10.site-page-shell.TC-obx rev=2 covers=g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-04a -->
+### grade10-site-site-page-shell-US3-TC3-2: Sign Out is offered in the menu and on the account page
 
 **Classification:**
 
@@ -280,21 +285,24 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* A signed-in collector has opened the account menu.
+* customer(signed in) is on <grade10 site url>.
+* The site is staging, which carries the account page.
 
 **Steps:**
 
-1. Inspect the account menu.
-2. Activate Sign out.
-3. Inspect the signed-in profile surface.
+1. Navigate to <grade10 site url><lang>/profile.
+2. Read the account page's controls.
+3. Click the account control in the header.
+4. Read the account menu's items.
+5. Click Sign Out in the account menu.
 
 **Expected Results:**
 
-* The account menu offers Sign out.
-* Sign-out starts.
-* The profile also offers Sign out while the collector is signed in.
+* Step 2: the account page offers Sign Out.
+* Step 4: the account menu offers Sign Out.
+* Step 5: the header shows Sign In in place of the account control.
 
-<!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
+<!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-70a -->
 ### grade10-site-site-page-shell-US3-TC4-1: Activating My Orders opens the collector's orders
 
 **Classification:**
@@ -304,7 +312,7 @@ without a second auction-orders link.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
-* **Suites:** smoke, regression
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -312,19 +320,20 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* A collector is signed in on an answered site surface, and Store answers.
+* customer(signed in) is on <grade10 site url>.
+* The site is staging, which answers Store.
 
 **Steps:**
 
-1. Activate the account control.
-2. Activate My Orders.
+1. Click the account control in the header.
+2. Click My Orders in the account menu.
 
 **Expected Results:**
 
-* The collector is taken to `/profile/orders`.
+* Step 2 opens <grade10 site url><lang>/profile/orders.
 
-<!-- trace:case id=g10.site-page-shell.TC-5jl rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC5-1: Account menu omits My Orders before Store answers
+<!-- trace:case id=g10.site-page-shell.TC-5jl rev=3 covers=g10.site-page-shell.SC-u71,g10.site-page-shell.SC-79q -->
+### grade10-site-site-page-shell-US3-TC5-3: Menu without Store omits My Orders and opens on Profile where the account page is carried
 
 **Classification:**
 
@@ -332,7 +341,39 @@ without a second auction-orders link.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** acceptance
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* The site shell renders for a signed-in collector on a build that carries the account page and withholds Store.
+
+**Steps:**
+
+1. Open the account menu.
+2. Read the account menu's items.
+
+**Expected Results:**
+
+* Step 2: the menu lists Profile, My Auctions, then Sign Out.
+* Step 2: no My Orders item.
+
+<!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1 -->
+### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -341,20 +382,29 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* A collector is signed in, and Store does not yet answer.
+* customer(signed in as <collector email>) is on <grade10 site url>.
+* The site is <lane>, which carries neither Store, the account page nor the membership page.
+
+**Test data:**
+
+| <lane> |
+| --- |
+| UAT |
+| Production |
 
 **Steps:**
 
-1. Activate the account control.
-2. Inspect the menu.
+1. Click the account control in the header.
+2. Read the account menu.
 
 **Expected Results:**
 
-* The menu offers Profile, My Auctions, and Sign out.
-* The menu does not offer My Orders.
+* Step 2: a small initial avatar above <collector email>, both above the items.
+* Step 2: My Auctions, then Sign Out, and nothing else.
+* Step 2: no Profile, My Orders or Membership item.
 
-<!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
+<!-- trace:case id=g10.site-page-shell.TC-wll rev=2 covers=g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-3y1 -->
+### grade10-site-site-page-shell-US3-TC7-2: Store-launch account menu puts My Orders ahead of My Auctions
 
 **Classification:**
 
@@ -363,7 +413,7 @@ without a second auction-orders link.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -371,61 +421,23 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* customer(signed in, profile not carried, on an auction-launch surface, Store not yet answered) is on the site.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | The signed-in collector's email address |
+* customer(signed in as <collector email>) is on <grade10 site url>.
+* The site is staging, which answers Store.
 
 **Steps:**
 
-1. Open the account menu from the header.
+1. Click the account control in the header.
+2. Read the account menu.
 
 **Expected Results:**
 
-* The menu label shows `<collector email>` with a small (xs) initial avatar above the items.
-* The menu lists only My Auctions and Sign Out, in that order.
-* The menu does not include Profile, My Orders, Membership, or Cart.
+* Step 2: a small initial avatar above <collector email>, both above the items.
+* Step 2: My Orders immediately before My Auctions.
+* Step 2: Sign Out is the last item.
+* Step 2: no KYC item.
+* Step 2: no item opening <grade10 my auction orders url>.
 
-<!-- trace:case id=g10.site-page-shell.TC-wll rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC7-1: Store-launch account menu adds My Orders and Membership ahead of Sign Out
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-page-shell-US-03
-
-**Pre-conditions:**
-
-* customer(signed in, profile not carried, on a surface once Store answers) is on the site.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | The signed-in collector's email address |
-
-**Steps:**
-
-1. Open the account menu from the header.
-
-**Expected Results:**
-
-* The menu label shows `<collector email>` with its small (xs) initial avatar above the items.
-* The menu lists My Orders, My Auctions, Membership, then Sign Out, in that order.
-* Cart is present in the header bar and the menu does not include Profile.
-
-<!-- trace:case id=g10.site-page-shell.TC-7s9 rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
+<!-- trace:case id=g10.site-page-shell.TC-7s9 rev=1 covers=g10.site-page-shell.SC-m6b -->
 ### grade10-site-site-page-shell-US3-TC8-1: Sign Out item reads in Title Case
 
 **Classification:**
@@ -443,24 +455,25 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* customer(signed in) is on the site with the account menu open.
+* customer(signed in) is on <grade10 site url>.
 
 **Steps:**
 
-1. Read the label of the last item in the account menu.
+1. Click the account control in the header.
+2. Read the last item in the account menu.
 
 **Expected Results:**
 
-* The item reads "Sign Out" in Title Case, not "Sign out" or "SIGN OUT".
+* Step 2: the item reads Sign Out, in Title Case.
 
-<!-- trace:case id=g10.site-page-shell.TC-atw rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC9-1: Account menu label falls back when no sign-in email is supplied
+<!-- trace:case id=g10.site-page-shell.TC-atw rev=2 covers=none -->
+### grade10-site-site-page-shell-US3-TC9-2: Account menu label falls back when no sign-in email is supplied
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -471,24 +484,27 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* customer(signed in, no sign-in email available to the header) is on the site.
+* customer(signed in) is on <grade10 site url>.
+* The header receives no sign-in email for the session.
 
 **Steps:**
 
-1. Open the account menu from the header.
+1. Click the account control in the header.
+2. Read the account menu.
 
 **Expected Results:**
 
-* The menu label shows the configured account-menu fallback label instead of an email, still above My Auctions and Sign Out.
+* Step 2: the account label shows in place of an email.
+* Step 2: My Auctions and Sign Out are still listed.
 
-<!-- trace:case id=g10.site-page-shell.TC-xbu rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC10-1: Activating Membership invokes its handler without opening a withheld route
+<!-- trace:case id=g10.site-page-shell.TC-xbu rev=2 covers=none -->
+### grade10-site-site-page-shell-US3-TC10-2: Activating Membership invokes its handler without opening a withheld route
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -511,13 +527,78 @@ without a second auction-orders link.
 * The supplied Membership handler is invoked.
 * The browser does not navigate to `/membership`, `/join`, or any other membership address.
 
-<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
-### grade10-site-site-page-shell-US3-TC11-1: Profile joins first, ahead of My Orders and Membership, once carried
+<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=3 covers=g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-79q,g10.site-page-shell.SC-o1v -->
+### grade10-site-site-page-shell-US3-TC11-3: Account menu opens on Profile, which opens the account page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in) is on <grade10 site url>.
+* The site is staging, which carries the account page and answers Store.
+
+**Steps:**
+
+1. Click the account control in the header.
+2. Read the account menu's items.
+3. Click Profile in the account menu.
+
+**Expected Results:**
+
+* Step 2: Profile is the first item.
+* Step 2: My Orders comes before My Auctions.
+* Step 2: Sign Out is the last item.
+* Step 3 opens the account page at <grade10 site url><lang>/profile.
+
+<!-- trace:case id=g10.site-page-shell.TC-kw9 rev=1 covers=g10.site-page-shell.SC-agf,g10.site-page-shell.SC-th1 -->
+### grade10-site-site-page-shell-US3-TC12-1: Store menu leaves out the account and membership pages a build withholds
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* The site shell renders for a signed-in collector on a build that answers Store and withholds the account page and the membership page.
+
+**Steps:**
+
+1. Open the account menu.
+2. Read the account menu's items.
+
+**Expected Results:**
+
+* Step 2: the menu lists My Orders, My Auctions, then Sign Out, and nothing else.
+* Step 2: no Profile item.
+* Step 2: no Membership item.
+
+<!-- trace:case id=g10.site-page-shell.TC-74a rev=1 covers=g10.site-page-shell.SC-lcs -->
+### grade10-site-site-page-shell-US3-TC13-1: Activating My Auctions opens My Auctions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
@@ -529,15 +610,16 @@ without a second auction-orders link.
 
 **Pre-conditions:**
 
-* customer(signed in, profile carried, on a surface once Store answers) is on the site.
+* customer(signed in) is on <grade10 site url>.
 
 **Steps:**
 
-1. Open the account menu from the header.
+1. Click the account control in the header.
+2. Click My Auctions in the account menu.
 
 **Expected Results:**
 
-* The menu lists, in order, Profile, My Orders, My Auctions, Membership, then Sign Out.
+* Step 2 opens My Auctions at <grade10 site url><lang>/auction/watchlist.
 
 ---
 
@@ -706,8 +788,8 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 
 * That navigation item is marked as the current page.
 
-<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=1 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-xiu -->
-### grade10-site-site-page-shell-US5-TC2-1: Unlisted surface marks no navigation item
+<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=2 covers=g10.site-page-shell.SC-xiu -->
+### grade10-site-site-page-shell-US5-TC2-2: Unlisted surface marks no navigation item
 
 **Classification:**
 
@@ -723,16 +805,20 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 * **Trace:** grade10-site-site-page-shell-US-05
 
 **Pre-conditions:**
-A collector is on the profile, sign-in, or an unrecognized address.
+
+* customer(signed in) is on <grade10 site url>.
+* The site is staging, which carries the account page.
 
 **Steps:**
 
-1. Navigate to <grade10 profile url> while signed in.
-2. Check the header navigation.
+1. Navigate to <grade10 site url><lang>/profile.
+2. Read the header navigation.
 
 **Expected Results:**
 
-* No navigation item is marked as the current page.
+* Step 2: no navigation item is marked as the current page.
+
+---
 
 ## grade10-site-site-page-shell-US06: Collector opens their cart from the header
 
@@ -872,6 +958,8 @@ empty room, from any surface once Store answers the cart drawer.
 * The cart drawer opens.
 * No sign-in dialog opens.
 
+---
+
 ## grade10-site-site-page-shell-US07: Collector opens Help from the header
 
 **As a** collector,
@@ -988,6 +1076,614 @@ auction-only or full primary nav.
 * The documentation site opens in a new browsing context.
 * The auction page remains open in the original context.
 
+---
+
+## grade10-site-site-page-shell-US8: Collector sees the cart count without opening the drawer
+
+**As a** signed-in collector,
+**I want** the header to show the same active-line count as my cart drawer as my cart changes,
+**so that** I can see how many active lines I hold from any surface without opening the drawer.
+
+<!-- trace:case id=g10.site-page-shell.TC-19a rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC1-1: Reviewed active lines match the drawer title count
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in.
+* The member cart contains the reviewed lines in Test data.
+* Run each row at 375px and 1200px.
+* The cart drawer is closed.
+
+**Test data:**
+
+| Reviewed active lines | Expected count |
+| --- | --- |
+| 1 | 1 |
+| 3 | 3 |
+| 12 | 12 |
+| 50 | 50 |
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Observe the header after the cart review completes.
+3. Click the Cart control.
+
+**Expected Results:**
+
+* Header shows the full active-line count before opening.
+* Header count uses the round brand indicator.
+* Cart control stays reachable, with no horizontal scroll.
+* Drawer title count equals the header count.
+
+<!-- trace:case id=g10.site-page-shell.TC-yv8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC2-1: Quantity and checkout eligibility do not replace active lines
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in.
+* The member cart holds an available line of quantity 3.
+* It holds a line of quantity 2 whose price or quantity the review adjusted, awaiting checkout acknowledgement.
+* It holds one sold-out line and one unavailable line.
+* The cart drawer is closed.
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Observe the header after the cart review completes.
+3. Click the Cart control.
+
+**Expected Results:**
+
+* Header shows 2.
+* Drawer title shows 2.
+
+<!-- trace:case id=g10.site-page-shell.TC-mz6 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC3-1: Cart count follows navigation to Auction
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in.
+* The reviewed cart has active lines.
+* The cart drawer is closed.
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Observe the header count.
+3. Click Auction in the primary navigation.
+4. Observe the header count.
+
+**Expected Results:**
+
+* The Auction header shows the Store count on arrival.
+* No cart review runs on arrival.
+* The drawer remains closed.
+
+<!-- trace:case id=g10.site-page-shell.TC-mv8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC4-1: Adding a line refreshes the closed drawer count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store product url>.
+* The reviewed cart is empty.
+* The cart drawer is closed.
+* The displayed product can be added to the cart.
+
+**Steps:**
+
+1. Click the product add-to-cart control.
+2. Wait for the mutation and cart review to finish.
+3. Observe the header count.
+
+**Expected Results:**
+
+* Header shows 1 active line.
+* The count updates without opening the drawer.
+
+<!-- trace:case id=g10.site-page-shell.TC-wf5 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC5-1: Quantity changes preserve the distinct active-line count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url>.
+* The reviewed cart has one active line, of quantity 1.
+* That line's product tile is on the listing and permits multiple quantities.
+* The cart drawer is closed.
+
+**Steps:**
+
+1. Raise the quantity on that product tile's stepper to 2.
+2. Wait for the mutation and cart review to finish.
+3. Observe the header count.
+4. Click the Cart control.
+
+**Expected Results:**
+
+* Header still shows 1 active line.
+* Drawer title count equals the header count.
+
+<!-- trace:case id=g10.site-page-shell.TC-id6 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC6-1: A cart change made elsewhere shows after the next review
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url>.
+* Header shows 2 reviewed active lines.
+* The cart drawer is closed.
+* <change made elsewhere> has happened since that review.
+
+**Test data:**
+
+| `<change made elsewhere>` | `<reviewed count>` |
+| --- | --- |
+| One active line became unavailable | 1 |
+| The same member added a distinct line from another device | 3 |
+
+**Steps:**
+
+1. Observe the header count.
+2. Click the Cart control.
+3. Wait for the cart review to finish.
+4. Observe the header count and the drawer title.
+
+**Expected Results:**
+
+* Before the review, the header still shows 2.
+* After the review, the header shows <reviewed count>.
+* Drawer title count equals the header count.
+
+<!-- trace:case id=g10.site-page-shell.TC-xq5 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC7-1: An empty reviewed cart retains an unbadged control
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in.
+* The reviewed cart holds <cart without active lines>.
+
+**Test data:**
+
+| `<cart without active lines>` |
+| --- |
+| No lines |
+| Only a sold-out line and an unavailable line |
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Observe the Cart control.
+
+**Expected Results:**
+
+* Cart remains visible without a count badge.
+
+<!-- trace:case id=g10.site-page-shell.TC-70a rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC8-1: Initial unknown count appears only after successful review
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in.
+* Initial cart review is held pending.
+* The member cart contains active lines.
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Observe the Cart control while review is pending.
+3. Allow the cart review to complete.
+4. Observe the Cart control.
+
+**Expected Results:**
+
+* Pending review shows no badge or badge skeleton.
+* Cart remains visible in the same place throughout.
+* Successful review displays the active-line count.
+
+<!-- trace:case id=g10.site-page-shell.TC-fj9 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC9-1: Failed cart review clears the previously known count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url>.
+* Header shows a previously reviewed positive count.
+* The cart drawer is closed.
+* The next cart review cannot complete.
+
+**Steps:**
+
+1. Click the Cart control.
+2. Wait for the cart review to fail.
+3. Observe the header Cart control.
+
+**Expected Results:**
+
+* The previous count badge is absent.
+* Cart remains visible.
+
+<!-- trace:case id=g10.site-page-shell.TC-vv4 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC10-1: Retry restores the count after a failed review
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url> with the cart drawer open.
+* Cart review failed and the header shows no count badge.
+* The next cart review can complete with active lines.
+
+**Steps:**
+
+1. Click Retry on the review failure notice.
+2. Wait for the cart review to finish.
+3. Observe the header Cart control.
+
+**Expected Results:**
+
+* Header shows the newly reviewed active-line count.
+
+<!-- trace:case id=g10.site-page-shell.TC-ux8 rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC11-1: Visitors without a member session never display a cart count
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer's session is <session>.
+
+**Test data:**
+
+| `<session>` |
+| --- |
+| Signed out |
+| Unresolved, with the session read held |
+
+**Steps:**
+
+1. Navigate to <grade10 store url>.
+2. Observe the Cart control.
+
+**Expected Results:**
+
+* Cart remains visible without a count badge.
+
+<!-- trace:case id=g10.site-page-shell.TC-szw rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC12-1: Signing out clears the count before another review
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url>.
+* Header shows a positive member cart count.
+* The member's next cart review will be held pending.
+
+**Steps:**
+
+1. Click the Cart control, then close the drawer while its review is held.
+2. Click Sign Out in the account menu.
+3. Observe the Cart control when the session changes.
+4. Release the held cart review.
+5. Observe the Cart control.
+
+**Expected Results:**
+
+* The previous member count disappears immediately.
+* The released review does not restore a count badge.
+* Cart remains visible without a count badge.
+
+<!-- trace:case id=g10.site-page-shell.TC-rbe rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC13-1: Changing members cannot display the previous member count
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer A has a reviewed cart count of 2.
+* customer B's cart has 1 active line.
+* customer A's next cart review and customer B's first review will be held pending.
+
+**Test data:**
+
+| `<customer A review released>` |
+| --- |
+| Before customer B's review completes |
+| After customer B's review completes |
+
+**Steps:**
+
+1. Navigate to <grade10 store url> as customer A, and wait for the header to show 2.
+2. Click the Cart control, then close the drawer while its review is held.
+3. Sign out, then sign in as customer B.
+4. Observe the Cart control.
+5. Release customer A's review and customer B's review in <customer A review released> order.
+6. Observe the Cart control after each release.
+
+**Expected Results:**
+
+* The count 2 disappears immediately after the session changes.
+* No count badge shows until customer B's review completes.
+* Customer B's completed review shows 1.
+* Customer A's released review never shows 2.
+
+<!-- trace:case id=g10.site-page-shell.TC-yag rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC14-1: Removing the last active line clears the badge
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url>.
+* The reviewed cart has one active line, of quantity 1.
+* That line's product tile is on the listing.
+* The cart drawer is closed.
+
+**Steps:**
+
+1. Lower the quantity on that product tile's stepper to 0.
+2. Wait for the mutation and cart review to finish.
+3. Observe the Cart control.
+
+**Expected Results:**
+
+* Cart remains visible without a count badge.
+
+<!-- trace:case id=g10.site-page-shell.TC-4mi rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC15-1: Same-member refresh retains the last verified count
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in on <grade10 store url> with a verified header count of 2.
+* The cart drawer is closed.
+* The next cart review is held pending.
+
+**Test data:**
+
+| `<cart update>` | `<reviewed count>` |
+| --- | --- |
+| Lowering one line's tile stepper to 0, which succeeds | 1 |
+| Raising one line's tile stepper, which the server refuses and rolls back | 2 |
+
+**Steps:**
+
+1. Make <cart update> and wait for it to settle.
+2. Observe the header while the review is pending.
+3. Release the review and observe the header.
+4. Make another cart update, fail its review, and observe the header.
+
+**Expected Results:**
+
+* Pending review retains 2 without a skeleton.
+* Successful review shows <reviewed count>.
+* Failed review hides the badge while keeping Cart available.
+
+<!-- trace:case id=g10.site-page-shell.TC-mnz rev=1 covers=g10.site-page-shell.SC-6jx,g10.site-page-shell.SC-awn,g10.site-page-shell.SC-8v4,g10.site-page-shell.SC-e9p,g10.site-page-shell.SC-rae,g10.site-page-shell.SC-r0e,g10.site-page-shell.SC-7el,g10.site-page-shell.SC-mzr,g10.site-page-shell.SC-79p,g10.site-page-shell.SC-k7b,g10.site-page-shell.SC-o8b,g10.site-page-shell.SC-b9m,g10.site-page-shell.SC-z8c,g10.site-page-shell.SC-kfr -->
+### grade10-site-site-page-shell-US8-TC16-1: A build without Store shows neither Cart nor a count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-08
+
+**Pre-conditions:**
+
+* customer is signed in with a known positive active-line count.
+* The build is one where Store does not answer.
+
+**Steps:**
+
+1. Navigate to <grade10 auction url>.
+2. Observe the header.
+
+**Expected Results:**
+
+* The header shows no Cart control.
+* The header shows no count badge.
+
 ## Settled
 
 * Help sits in the primary nav for auction-only and full nav (wide and
@@ -1015,3 +1711,142 @@ auction-only or full primary nav.
   joins the menu; the handler-gating granularity for individual items (My
   Orders vs. Membership joining independently) is `shared/ui/site-chrome`'s to
   state, not this capability's.
+* The header count is one per distinct active line in the reviewed basket, whatever its quantity: adjusted lines count, sold-out and unavailable lines do not, and checkout eligibility does not decide it.
+* The count refreshes when the member's cart loads, when a cart change settles, saved or failed, when the drawer opens, and on Retry, with the drawer open or closed; nothing polls, and a change from another device shows after the next of these.
+* The author chose to retain the last verified same-member count while a refresh is pending, including after failed cart updates; failed review hides the badge. Initial unknown counts and previous-member counts remain hidden.
+* Signed-in account entry opens a menu, the sign-in email with its small
+  initial avatar above the items, offering My Auctions and Sign Out on auction
+  launch, Profile first wherever the account page is carried, and My Orders
+  ahead of My Auctions once Store answers - not the account page directly;
+  Sign Out is offered from that menu and from the account page wherever it is
+  carried.
+* Membership follows the membership page by the rule Profile follows, and a
+  later change offers it; until then the menu never offers it.
+* The menu offers no item whose page the site withholds: My Orders, Profile or
+  Membership.
+* The account label in place of the sign-in email is `SiteHeader`'s alone: a
+  signed-in collector always has an email.
+
+## Reconciliation
+
+**Run:** 2026-09-21. Independent scenario and blind suite agents read the proposal, decisions, new journey, and feature outline. The scenario reader additionally read durable page-shell and store-cart requirements; the suite reader was denied requirements, scenarios, archive, and the other reader's draft. UI uses the existing full-digit brand badge; no new visual design. No approved corpus was supplied to the blind pass, so rulebook defaults were used.
+
+**Run:** 2026-10-06, QA2. A fresh reader joined the blind cases and the scenarios on `grade10-site-site-page-shell-US-08` and `grade10-site-site-page-shell-US-02`, read against the Cart section of the page-shell PRD, the decisions, the tech design and the grade10 cart drawer host (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`) for how a review and a retry are reached. No domain, product or platform suite traces either journey: `grade10-site/site` holds no `domain-tcs.md`.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-SC-42` | TC2 holds quantity, adjusted, sold-out and unavailable lines; TC1 compares the drawer title | Folded: TC1, TC2 |
+| `grade10-site-site-page-shell-SC-43` | TC7 named "no active lines" without the all-excluded partition | Folded: TC7 gains the empty and sold-out-plus-unavailable rows; TC14 walks the transition to zero |
+| `grade10-site-site-page-shell-SC-44` | TC1 ran 375px and 1200px but asserted no overflow; a 123-line row exceeded the 50-line cap grade10 holds a cart to (`packages/grade10-store/contracts/src/schemas.ts:422`) | Folded: TC1 tops out at 50 and asserts reachability without horizontal scroll |
+| `grade10-site-site-page-shell-SC-45` | No blind case: once Cart is global, a surface without Cart is a build where Store does not answer | Folded: TC16 walks that build with a known positive count |
+| `grade10-site-site-page-shell-SC-46` | TC1 and TC8 observe the count with the drawer closed | Folded: TC1, TC8 |
+| `grade10-site-site-page-shell-SC-47` | Add, quantity change and remove with the drawer closed | Folded: TC4, TC5, TC14 |
+| `grade10-site-site-page-shell-SC-48` | TC8 kept Cart visible but not in place | Folded: TC8 asserts the same place |
+| `grade10-site-site-page-shell-SC-49` | TC9 and TC10 named a "review control" the site does not have; a review runs on drawer open and a retry from the failure notice | Folded: TC9 opens the drawer, TC10 clicks Retry |
+| `grade10-site-site-page-shell-SC-50` | TC11 covered signed out only | Folded: TC11 gains the unresolved-session row |
+| `grade10-site-site-page-shell-SC-51` | TC12 did not hold a late response | Folded: TC12 releases a held review after sign-out |
+| `grade10-site-site-page-shell-SC-52` | TC13 held only B's review, so a late response from A was not walked | Folded: TC13 releases A's held review before and after B's |
+| `grade10-site-site-page-shell-SC-53` | Pending refresh and failed mutation behaviour needed a decision | Author chose retain while checking for the same member, hide on failure; Q9 and TC15 |
+| `grade10-site-site-page-shell-SC-54` | No blind case reached a change from another device; TC6 walked a line turning unavailable, the same run with a different change | Folded: TC6 takes both changes as rows and asserts the count before the review |
+| `grade10-site-site-page-shell-SC-55` | TC3 named an unnamed surface and did not assert the count arrives without a review | Folded: TC3 moves to Auction and asserts no review on arrival |
+| `grade10-site-site-page-shell-SC-04` | The badge clause adds nothing to the first paint | Durable US2-TC1 holds it |
+| `grade10-site-site-page-shell-SC-05` | The modified requirement lets the session decide the cart count badge, and the badge must not move Cart; durable US2-TC2 said only the account entry changes | Folded: US2-TC2-2, revised with session rows for the badge and the Cart control's place |
+| Q8, the count's meaning | Raised by the shared chrome pass | Settled above; the shared suite records the chrome's half |
+| Q10, the refresh triggers | Settled in decisions | Settled above |
+
+**Run:** 2026-10-06, QA2 second reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD, the decisions and the tech design, and read the grade10 surfaces a case drives: the listing tile's stepper sets a line's quantity and takes it out at zero with the drawer closed (`apps/frontend/grade10/src/pages/store/ProductListingPage.tsx:357`), and the review failure notice carries Retry (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx:275`).
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-SC-42` | TC2 named the partitions but asserted no number, so a quantity total could pass it | Folded: TC2 takes the scenario's basket and asserts `2` on the header and the drawer title |
+| `grade10-site-site-page-shell-SC-47` | TC5 and TC14 named a quantity control and a removal control outside the drawer without saying where; the drawer was not held closed | Folded: both drive the listing tile's stepper with the drawer closed |
+| `grade10-site-site-page-shell-SC-53` | TC15 ran a successful and a failed update as a sentence, not rows, and released a count the refused update could not reach | Folded: TC15 takes the two updates as rows, each with its reviewed count |
+| `grade10-site-site-page-shell-SC-52` | TC13 changed member with no step a collector can take | Folded: TC13 signs out and signs in as B |
+| `grade10-site-site-page-shell-SC-05` | US2-TC2-2 ran per row without saying so | Folded: the per-row line added |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 third reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD and its new refresh decision, the decisions and the tech design, and read how the drawer starts a review (`apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`).
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-SC-51` | TC12 held the member's next review but no step started one, so no late response could arrive | Folded: TC12 opens and closes the drawer to start the held review before signing out |
+| `grade10-site-site-page-shell-SC-52` | TC13 held A's next review with no step that started it, and never showed A's 2 first | Folded: TC13 waits for 2, then opens and closes the drawer to start A's held review before changing member |
+| `grade10-site-site-page-shell-SC-53` | TC15's cart update starts the review it holds; TC9 and TC10 start theirs by opening the drawer and by Retry | Folded: TC15, TC9, TC10 |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-54`, `grade10-site-site-page-shell-SC-55` | Unchanged since the second reading | Folded as recorded above |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 fifth reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD, the decisions, the tech design and `useCartPresentation` in grade10 (`packages/grade10-store/frontend/src/features/orders/cart/presentation/hooks/useCartPresentation.ts:42-70`), which keeps a same-member count while checking and drops it when the basket read or the review fails.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| The refresh requirement | It listed opening the drawer among triggers that run "even while the drawer is closed" | Clarified: loading and settled changes review with the drawer open or closed, and opening the drawer and Retry review too; no case moves |
+| `grade10-site-site-page-shell-SC-49` | A later review on opening the drawer or on Retry restores the count; TC9 fails the drawer-open review, TC10 restores on Retry | Folded: TC9, TC10 |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-50` to `grade10-site-site-page-shell-SC-55` | Unchanged since the third reading | Folded as recorded above |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-06, QA2 sixth reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD, its opening session rule, the decisions and the tech design.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-55` | Unchanged since the fifth reading; each THEN has a case that asserts it | Folded as recorded above |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** 2026-10-07, QA2 seventh reading. A fresh reader re-joined every case and scenario on both journeys against the Cart section of the page-shell PRD, the decisions, the tech design and `useCartPresentation`, mounted once at `apps/frontend/grade10/src/root.tsx:162`, so moving to Auction starts no review.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| US8 section and its cases | Numbered `US08`, against the compact form's no zero-pad (`docs/governance/specs-to-test-cases.md:88`) | Restyled: `grade10-site-site-page-shell-US8` and `US8-TC1-1` to `US8-TC16-1`; durable `US06` and `US07` keep their ids |
+| `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-42` to `grade10-site-site-page-shell-SC-55` | Unchanged since the sixth reading; each case's `covers` names exactly the scenarios serving its journey | Folded as recorded above |
+| Uncovered anchors | Every scenario serving `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-08` is asserted by a case | None |
+| Contradicted readings | No case and scenario disagree, and none disagrees with the page | None |
+
+**Run:** QA1 blind pass, 2026-10-06, for `omit-profile-account-menu`, `grade10-site/site/page-shell`. It rewrote US3-TC3, US3-TC5 and US3-TC11, retired US3-TC2, added a KYC result to US3-TC7, and raised one question, now a row of `decisions.md`'s `## Raised` table. It left no statement of what it read and was denied, so none is claimed here.
+
+**Run:** QA2 reconciliation, 2026-10-06. The blind cases were joined to the delta's scenarios on `grade10-site-site-page-shell-US-03`. Every US3 case is carried in this suite, because each durable marker covered scenarios this change removes; each now covers the scenarios it walks. The journey was corrected to Page Shell · Account Menu, which holds Profile (Q1) and Membership (Q5) open: it names neither, and no case asserts either.
+
+**Run:** QA2 reconciliation rerun, 2026-10-06, after QA1's third round raised Q14 and the scenarios were renumbered. It corrected every scenario id the table cited, retired US3-TC9, moved US3-TC5 to the unit layer, and named UAT in place of Preview in US3-TC6.
+
+**Run:** QA2 reconciliation, third run, 2026-10-06, after Page Shell · Account Menu gained its Withheld pages line and the proposal became neutral on Q1. Every case and scenario was joined again; no disposition moved. It dropped the journeys file's context journeys, which no scenario or case of this change anchors on.
+
+**Run:** QA2 reconciliation, fourth run, 2026-10-06, after the acceptance review's third round. The journey dropped its Cart clause, so `grade10-site-site-page-shell-US3-TC6-1` and `grade10-site-site-page-shell-US3-TC7-2` dropped their Cart results and keep their versions. The three deprecated cases cover none. The two durable Settled lines this change makes false are struck by hand at acceptance. No other disposition moved.
+
+**Run:** QA2 reconciliation, fifth run, 2026-10-06, after the deltas' feature sets kept only the lines they change (Q12). The anchor `grade10-site-site-page-shell-US-03` did not move, and every case and scenario was joined again; no disposition moved. The Context journeys row now gives its reason without the suite warning, which the gate no longer issues for a context journey.
+
+**Run:** QA2 reconciliation, sixth run, 2026-10-06, after the acceptance review's fourth round. `grade10-site-site-page-shell-SC-14` names the account page in place of the profile, so `grade10-site-site-page-shell-US5-TC2-2` follows it, and the journeys file restates `grade10-site-site-page-shell-US-05` as context. `## Settled` drops the line that said Profile and Membership wait on Product: an open question is never settled, and `decisions.md` Q1 and Q5 hold it.
+
+**Run:** QA2 reconciliation, seventh run, 2026-10-06, in a fresh context. Every case and scenario was joined again on `grade10-site-site-page-shell-US-03` and `grade10-site-site-page-shell-US-05`, and every lane and address a case names was checked against grade10 `src/surfaces.ts`. `grade10-site-site-page-shell-US5-TC2-2` walks the unlisted surface alone, so its marker drops `grade10-site-site-page-shell-SC-13`, which the durable `grade10-site-site-page-shell-US5-TC1-1` walks. No disposition moved.
+
+**Applied:** 2026-10-07, the product owner's answers to Q1, Q5 and Q13; not a QA2 reading, which reruns on them. Profile joins first wherever the account page is carried, so `grade10-site-site-page-shell-SC-66` and `grade10-site-site-page-shell-SC-67` are added, `grade10-site-site-page-shell-US3-TC5-3` and `grade10-site-site-page-shell-US3-TC11-3` are unblocked and rewritten, and the journey names Profile. Membership follows its page and a later change offers it, so `## Settled` says so.
+
+**Run:** QA2 reconciliation, eighth run, 2026-10-07, in a fresh context, on the answers to Q1, Q5 and Q13. Every case and scenario was joined again, and every lane a case names was checked against grade10 `src/surfaces.ts:343-399`. `grade10-site-site-page-shell-US3-TC5-3` drops "and nothing else": the build `store-shut.test.tsx` renders carries the membership page, and no scenario closes the menu there, so the result would turn false once a later change offers Membership (Q5). The table now names task 2.2 and `shared-ui-site-chrome-US1-TC17-2`. No other disposition moved.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-US3-TC1-1` | Reached | `grade10-site-site-page-shell-SC-07`; unchanged |
+| `grade10-site-site-page-shell-US3-TC2-2` | Retired, `deprecated`, bumped | It put Profile first, which the removed `grade10-site-site-page-shell-SC-17` stated; the Store menu is `grade10-site-site-page-shell-US3-TC7-2`. Its marker covers none, so a retired case never reads as coverage of `grade10-site-site-page-shell-SC-56` |
+| `grade10-site-site-page-shell-US3-TC3-2` | Reached, bumped | `grade10-site-site-page-shell-SC-08` and `grade10-site-site-page-shell-SC-57`. The account page offers Sign Out only on a build that carries it, so the case runs on staging |
+| `grade10-site-site-page-shell-US3-TC4-1` | Reached | `grade10-site-site-page-shell-SC-64`; unchanged |
+| `grade10-site-site-page-shell-US3-TC5-3` | Rewritten on Q1, moved to unit | Its no-My-Orders result is `grade10-site-site-page-shell-SC-58`. With the account page carried, Profile is first (`grade10-site-site-page-shell-SC-66`), so the no-Profile result became a Profile-first result, and task 2.2 tests that state in `store-shut.test.tsx`. No lane carries the account page and withholds Store (grade10 `src/surfaces.ts:343-399`), so the case runs on the rendered shell with the gates overridden. It does not assert "nothing else": that build carries the membership page, which a later change offers (Q5) |
+| `grade10-site-site-page-shell-US3-TC6-1` | Reached, lane corrected | `grade10-site-site-page-shell-SC-06`, `grade10-site-site-page-shell-SC-58`, `grade10-site-site-page-shell-SC-60` and `grade10-site-site-page-shell-SC-61` on the auction-launch lanes. "Preview" is no lane in the gate table; the rows are UAT, where the walk runs, and Production. Its no-Cart result left with the journey's Cart clause: `grade10-site-site-page-shell-US-04` and `grade10-site-site-page-shell-US-06` own Cart |
+| `grade10-site-site-page-shell-US3-TC7-2` | Reached, rewritten | The blind reading listed Membership after My Auctions, from the journey; Membership follows its own page and a later change offers it (Q5), and no scenario places it, so the result is dropped. Its "no Profile" result needed a lane that answers Store and withholds the account page, which no lane is; it moved to `grade10-site-site-page-shell-US3-TC12-1`. The case runs on staging and walks `grade10-site-site-page-shell-SC-56` and `grade10-site-site-page-shell-SC-61`. Its Cart result left with the journey's Cart clause |
+| `grade10-site-site-page-shell-US3-TC8-1` | Reached | `grade10-site-site-page-shell-SC-62`; unchanged |
+| `grade10-site-site-page-shell-US3-TC9-2` | Retired, `deprecated`, bumped | The label fallback left this capability with Q14: a signed-in session always carries an email, so the fallback is `SiteHeader`'s alone, walked by `shared-ui-site-chrome-US1-TC17-2`. Its marker covers none: the retired `grade10-site-site-page-shell-SC-31` leaves the spec at the fold |
+| `grade10-site-site-page-shell-US3-TC10-2` | Retired, `deprecated`, bumped | `grade10-site-site-page-shell-SC-34` is removed: the app never supplies Membership, and a later change offers it (Q5) with its own case. Its marker covers none, not `grade10-site-site-page-shell-SC-63`, the opposite outcome, which `grade10-site-site-page-shell-US3-TC12-1` walks |
+| `grade10-site-site-page-shell-US3-TC11-3` | Rewritten on Q1 | On staging, which carries the account page, Profile is first and opens it (`grade10-site-site-page-shell-SC-66`, `grade10-site-site-page-shell-SC-67`); the rest of the case is `grade10-site-site-page-shell-SC-56` |
+| `grade10-site-site-page-shell-US3-TC12-1` | Case added | `grade10-site-site-page-shell-SC-59` and `grade10-site-site-page-shell-SC-63` had no case. No lane answers Store and withholds those pages, so the case runs on the rendered shell with the gates overridden, as task 2.2 does |
+| `grade10-site-site-page-shell-US3-TC13-1` | Case added | `grade10-site-site-page-shell-SC-65` had no case, before this change or after it |
+| Raised: Membership in the journey once Store answers | Landed as Q5, journey corrected | The journey named Membership once Store answers and "never a Profile item". Page Shell is the source: the journey names Profile first wherever the account page is carried (Q1), and not Membership, which a later change offers (Q5) |
+| Raised: the label fallback without an email | Landed as Q14, settled | The site always has the email, so page-shell drops the fallback with its scenario and `grade10-site-site-page-shell-US3-TC9-2` retires |
+| Settled: the menu's Membership lines | Retracted | The durable suite settled Membership once Store answers, in two lines, while Membership follows its own page and a later change offers it (Q5). The fold has no rule that removes a durable Settled line, so acceptance strikes both from the durable suite by hand: the line that reads "plus Profile once carried, My Orders and Membership once Store answers", and the line that opens "The account menu's item order under every combination of {Profile carried, Store answers}". This suite's own menu line holds neither phrase. `## Settled` states the menu this change settles, its withheld pages, Membership and the label fallback (Q14) |
+| Journey: Cart in the bar | Dropped | No scenario serving `grade10-site-site-page-shell-US-03` states Cart; `grade10-site-site-page-shell-US-04` and `grade10-site-site-page-shell-US-06` own it, so the clause and the two Cart results left |
+| Context journeys | Dropped, one restated | No scenario or case of this change anchors on US-01, US-02, US-04, US-06 or US-07. `grade10-site-site-page-shell-SC-13` and `grade10-site-site-page-shell-SC-14` serve `grade10-site-site-page-shell-US-05`, so the journeys file restates it as context beside `grade10-site-site-page-shell-US-03`, which the change modifies |
+| `grade10-site-site-page-shell-US5-TC2-2` | Rewritten, bumped | `grade10-site-site-page-shell-SC-14` now reads "the account page". The case opens the account page on staging, which carries it, in place of `<grade10 profile url>`. It asserts no marked item and nothing about a listed surface, so its marker covers `grade10-site-site-page-shell-SC-14` alone |
+| Settled: Profile and Membership wait on Product | Dropped, then restated | A Settled line is read as answered by the next blind pass, so an open question never sits there. Q1 and Q5 are now answered: `## Settled` places Profile in the menu line and states Membership's rule |
+| Scenarios | All reached | Every scenario the delta carries has a case asserting its outcome: `grade10-site-site-page-shell-SC-06` to `grade10-site-site-page-shell-SC-08`, `grade10-site-site-page-shell-SC-13`, `grade10-site-site-page-shell-SC-14` and `grade10-site-site-page-shell-SC-56` to `grade10-site-site-page-shell-SC-67`; `grade10-site-site-page-shell-SC-13` by the durable `grade10-site-site-page-shell-US5-TC1-1` |
+| Contradictions | None | Where a case and a scenario state the same behaviour they agree |
+
+**Run:** removal reconciliation, 2026-10-12, for `remove-my-auction-orders`, `grade10-site/site/page-shell`. The modified requirement drops "or My Auction Orders" from its not-offered rule and from `grade10-site-site-page-shell-SC-56`. No case moves - no case asserted the name, and the menu's closed set is unchanged by it.

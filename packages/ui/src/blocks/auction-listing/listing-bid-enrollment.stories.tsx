@@ -33,7 +33,7 @@ function MockStripePaymentField({ label }: { label: string }) {
 }
 
 const meta = {
-  title: "Auction Listing/Bid enrollment",
+  title: "Auction/Bidding/Blocks/ListingBidEnrollment",
   parameters: { layout: "padded" },
   decorators: [
     (Story) => (

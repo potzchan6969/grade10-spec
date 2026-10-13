@@ -1,0 +1,141 @@
+{
+  "version": 2,
+  "change": "add-winner-order-tax-line",
+  "baseline": "86bce49c30ca9a122d7a17c8e71e5897611c68a0c51994145635f35ac0055013",
+  "fingerprint": "e5e0d868eaeec5c0b670bdd88660e60e9e7f185df5f523fa9642ccbd3c53bea7",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-08T08:48:33.148Z",
+  "supersedes": "3134f795794c14180564e09bfd16538b5a456d21c5d0d8d9e98284bb4a886905",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#payment",
+      "sha256": "d5f6fc05042f3c8fc6d720a0f183d3a3b27c73f576bcbda8dcfeca41b196f01c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice",
+      "sha256": "0a9b48879c06989615f11cd3812db4be9b7d807fe5475359dddf0619f63621f3",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/decisions.md",
+      "sha256": "4bd07940d1a58ac6cbcbcca29f77c4279e0c3adeba30d818883d58b474383b31",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/proposal.md",
+      "sha256": "c5771afb5d68e951518a3389fa48ca65a3e738074e6fb9567a115080cac4eba2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "68965c1dbd0bd75b1d7f85a3066529603af2365ebaf7e2f5aac99f77e500a171",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "753205de3e66180bc9eea565dbf5777d0b7e0c1dc80a2cc1d024ec7715d4a065",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "2acc82d2055ac4a1bd2adf0b9270d155f9f5f3712d529af940fe7843034c8876",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "edc30de9ff4d64b784faf4b6f0366b25d5fedcb1021bd100b8181804fb3e5c8d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "4660d0bc258632b50abb36bc9b46bab9b22275b9968bb0b6d0929401a290fb2c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "96d273ad34ac759c45edf9c48d9015ab4b6df7aa3643f08f6d702921a5b94dba",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/tech-design.md",
+      "sha256": "f85ea81e1fc709ba7583477ab51a9a1a2e1e41cbda5989fb3b36492f2eb2aca0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/ui-design.md",
+      "sha256": "11fcbbe20b872bada31cc294827558949ed187ebd5b6cb1e431b9b53390edad5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "1bfb0a461a1a567c842e2d731ea621fbadf46c4e7602d2ba719253991c804ee4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "87c474120e1abeb1409dbc9ddcd4037886c4550ff31dd09cf3e094de050bc7d7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "37a360bf65ec9ad3e12a2a40e3cd17f1015681963e782505eb0633ae0a2666bf",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "7b8d78af5ac1ad5429e70212a962cfd153989acc251adc67eb12a3bfdfcda60f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "7fe4bc838bf616e4bbc4722669d1e873481e0d2edddb7648008f5e84a06837d5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "bbc928ccc871579d475b786777bd05ff31ebd260305d313b5c3f5e1f4d29cda4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-winner-order-tax-line/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An operator quotes and sends the invoice",
+        "Requirement: An operator reissues a sent invoice"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Invoice fields",
+        "Requirement: Records the winner keeps",
+        "Requirement: Tax before the invoice is sent",
+        "Requirement: Tax info tooltip"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

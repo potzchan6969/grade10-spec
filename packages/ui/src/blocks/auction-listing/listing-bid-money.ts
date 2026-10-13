@@ -1,7 +1,7 @@
 import {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,
-  formatMoney,
+  formatLotMoney,
   parseMoneyInputToMinor,
   toMinorUnits,
 } from "../../lib/format-money";
@@ -126,9 +126,9 @@ export function formatMinimumMaximumCaption(
   currency: string,
   locale?: string,
 ): string {
-  const amount = formatMoney(floor.floorMinor, currency, { locale });
-  const increment = formatMoney(incrementMinor, currency, { locale });
-  const minimumRaise = formatMoney(MINIMUM_MAXIMUM_RAISE_MINOR, currency, {
+  const amount = formatLotMoney(floor.floorMinor, currency, { locale });
+  const increment = formatLotMoney(incrementMinor, currency, { locale });
+  const minimumRaise = formatLotMoney(MINIMUM_MAXIMUM_RAISE_MINOR, currency, {
     locale,
   });
 
@@ -167,27 +167,26 @@ export function sanitizeMoneyDraft(raw: string, _currency: string): string {
   return cleaned.slice(0, dot);
 }
 
-/** Whole major units — any currency — for the lot custom-maximum field. */
-export const CUSTOM_MAXIMUM_MAJOR_CEILING = 9_999_999_999;
+export type CustomMaximumEditOrigin = "typed-append" | "paste" | "replacement";
 
 /**
- * Sanitize the custom maximum draft and restore `previousDraft` when the
- * whole-major result would exceed {@link CUSTOM_MAXIMUM_MAJOR_CEILING}.
+ * Sanitize the custom maximum draft and apply the consumer's currency ceiling.
  * Empty after sanitize is accepted (clear). Exactly at the ceiling is allowed.
  */
 export function sanitizeCustomMaximumDraft(
   raw: string,
   currency: string,
   previousDraft: string,
+  ceilingMinor: number,
+  editOrigin: CustomMaximumEditOrigin,
 ): string {
   const sanitized = sanitizeMoneyDraft(raw, currency);
   if (sanitized === "") return sanitized;
-  try {
-    if (BigInt(sanitized) > BigInt(CUSTOM_MAXIMUM_MAJOR_CEILING)) {
-      return previousDraft;
-    }
-  } catch {
-    return previousDraft;
+
+  const factor = 10n ** BigInt(currencyExponent(currency));
+  const ceilingMajor = BigInt(ceilingMinor) / factor;
+  if (BigInt(sanitized) > ceilingMajor) {
+    return editOrigin === "typed-append" ? previousDraft : String(ceilingMajor);
   }
   return sanitized;
 }

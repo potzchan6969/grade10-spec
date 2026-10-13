@@ -44,7 +44,7 @@ function showToast(args: ToastStoryArgs) {
 }
 
 const meta = {
-  title: "Components/Toast",
+  title: "Design System/Overlays/Toast",
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: {

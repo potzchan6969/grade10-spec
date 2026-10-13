@@ -19,7 +19,8 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
   - Two counts: earning credits the balance and the tier progress; redeeming
     spends only the balance, so spending points never costs a tier
   - Retry safety: a mutation repeated under its own key answers once and
-    records nothing twice
+    records nothing twice; a coupon claim's key answers only while that claim
+    stands
 - Earning and expiry
   - Earn pricing: a money amount becomes points at the programme's rate and
     the member's multiplier, in the rounding order the deployment names
@@ -29,13 +30,17 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
   - Inactivity expiry: the whole balance lapses on one date after the
     inactivity window with no earn and no redemption; either pushes that date
     out, never in
-  - Operator credits: a grant, a correction, a reversal or a reward given
-    outright takes the date the balance already names and pushes it no
-    further; where nothing is live, it starts the window from its own day
+  - Operator credits: a grant, a correction or a reward given outright takes
+    the date the balance already names and pushes it no further; where nothing
+    is live, a grant or a correction lapses on the later of a window from its
+    own day and the day still running, moving that day out and never back
   - Purchase recording: a completed sale reaches the programme exactly once,
     from any channel, even when loyalty is unreachable
   - Refund claw-back: returned money loses the points it earned, never more
     than the member still holds from it, and the tier is judged again at once
+  - Returned points: points a reversal gives back, or points paid at checkout
+    that a refund or an operator returns, rejoin the window already running,
+    even onto a balance brought to nothing, and start no window of their own
 - Tiers and invitations
   - Instant promotion: reaching the threshold promotes at that purchase; the
     next purchase earns at the new rate
@@ -52,9 +57,10 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
     only inside a window
   - Redemption record: what the member paid is kept, so repricing never
     rewrites what an earlier redemption cost
-  - Settlement by kind: a coupon is minted at once; a physical reward waits
-    for collection, and waiting is not a failure; handover completes once
-    and notifies the member
+  - Settlement by kind: every reward is issued as a coupon at once; a
+    physical reward's coupon takes 100% off its own variant, so it completes
+    as an ordinary sale; a code is minted only for the sale that claims it,
+    and a gift at the till is its own line with no code
   - Per-unit rewards: one redemption records quantity times unit price; a
     quantity above the bound is refused by name
   - Points at checkout: points pay part of a bill at the programme's rate,
@@ -62,6 +68,15 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
   - Reversal: an operator's reversal of an unused redemption returns what it
     took under the balance's one date, and nothing into a window that has
     passed; a spent artifact stays spent
+  - Claiming a coupon: a coupon is held by nothing and is spent only by a paid
+    order; claiming it on any sale releases the claim that stood before, and
+    the code minted for that sale is deactivated
+  - Reversal of a claimed coupon: an operator's reversal is refused while a
+    sale is claiming the coupon, and names that sale
+  - Till scope: a reward scoped to named products or a catalog filter is good
+    online only, because a till sale names its goods by variant alone; the menu
+    says so before it is bought, and the till refuses it however it reaches
+    the sale
 - Operator console
   - Permission split: reading a member, moving points, granting and removing
     tiers and editing rewards are held separately
@@ -71,13 +86,20 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
     behind that system's own permission
   - Expiry restart: an operator runs the inactivity window again from today,
     giving a balance more time without the member earning or redeeming
+  - Reward form: kind, discount, scope and combine setting beside the menu
+    entry; a free item is its own choice and reopens as one, and a reward
+    stored with a retired handover keeps it
 - Member surface
   - Membership home: tier, balance, tier progress, the tier period and the one
     date the balance expires on, in one place
   - Private activity: a member's own history without operator reasons, retry
     keys or the pricing behind an entry
   - Deletion: deleting the account ends the membership at once
+  - Coupon wallet: a coupon a sale claims reads as it would unclaimed, and
+    nothing the member or the till panel shows names the sale claiming one
+
 ## Requirements
+
 ### Requirement: One member record per user, created on first activity
 
 The programme SHALL hold exactly one member record per user identity, created
@@ -147,6 +169,12 @@ A retry under the same key SHALL return the original answer without recording
 anything again. The same key carrying different input SHALL be refused as a
 conflict.
 
+A coupon claim's key SHALL answer only while that claim stands. A retry of a
+claim that still stands SHALL answer with that same claim. Once the claim has
+been given back, the same key SHALL make a new claim, because the coupon is
+back in the member's wallet and refusing there would refuse a coupon they can
+see. A claim the shop has already collected SHALL go on refusing a second.
+
 <!-- trace:scenario id=g10.loyalty-programme.SC-sn2 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-10 - A retry is free
 **Serves:** Membership and ledger - a retry is free
@@ -160,6 +188,30 @@ conflict.
 
 - **WHEN** a caller repeats a key with input that differs from the first call
 - **THEN** the call is refused as a conflict
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-br3 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-204 - Asking twice for a claim that stands answers the same claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a sale holding a claim on a coupon
+- **WHEN** the same sale asks for that claim again
+- **THEN** it is answered with the claim it already holds, and the coupon is claimed once
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-ef4 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-235 - A claim given back makes a new claim under the same key
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a sale whose claim on a coupon was given back, leaving the coupon spendable
+- **WHEN** the same sale asks for that coupon again under the same key
+- **THEN** a new claim is made, rather than a refusal
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-z6m rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-236 - A claim the shop collected refuses a second
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a sale whose claim on a coupon the shop collected
+- **WHEN** the same key asks for that coupon again
+- **THEN** it is refused, and the coupon is used once
 
 ### Requirement: The redeemable balance expires after a period of inactivity
 
@@ -179,17 +231,21 @@ SHALL NOT pull a member's expiry earlier than an activity already recorded, so a
 late-arriving record can shorten no balance.
 
 The balance SHALL stop counting at the instant the window passes, without
-waiting for any scheduled process. A refund, a claw-back, an operator
-correction, a campaign grant, or a reward an operator hands over outright SHALL
-NOT reset the window. Points already expired SHALL NOT be revived by later
-activity.
+waiting for any scheduled process. A refund, a claw-back, or a reward an
+operator hands over outright SHALL NOT reset the window, and neither SHALL an
+operator correction or a campaign grant while the member holds a point that is
+still live. Points already expired SHALL NOT be revived by later activity.
 
 A member who holds any redeemable points SHALL have exactly one date on which
-all of them expire. A credit an operator records SHALL take the date the
-member's window already names, whatever date its own event carries. Where the
-member holds no point that is still live, such a credit SHALL start the window
-from its own date instead, which starts no life for anything that has already
-lapsed.
+all of them expire. A grant or a correction an operator records SHALL take the
+date the member's window already names, whatever date its own event carries.
+Where the member holds no point that is still live, such a credit SHALL
+instead expire on the later of an inactivity window after its own date and the
+date the member's window already names, moving the window out to it and never
+back, which starts no life for anything that has already lapsed. Points a reversal gives back, and points paid at checkout
+that a refund or an operator returns, SHALL rejoin the window already running,
+even where the member holds no point that is still live, and SHALL NOT start a
+window of their own.
 
 A reversal SHALL give back only points that still have life. Where the
 member's window has passed, what the debit took SHALL NOT be written back: no
@@ -236,19 +292,19 @@ whole amount it removed.
 - **THEN** the new earning starts a fresh balance and a fresh inactivity window
 - **AND** nothing that expired returns
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-v4d rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-v4d rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-98 - A correction does not extend the balance's life
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** an operator corrects a balance, or a refund claws points back
+- **WHEN** an operator corrects a balance that holds live points, or a refund claws points back
 - **THEN** the member's inactivity window is unchanged
 - **AND** points the correction adds expire with the rest of the balance
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-0nq rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-0nq rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-99 - A campaign grant does not keep the balance alive
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
-- **WHEN** an operator grants campaign points as a reward
+- **WHEN** an operator grants campaign points as a reward to a member who holds live points
 - **THEN** the member's inactivity window is unchanged
 - **AND** the granted points expire with the rest of the balance, on the date that window already names
 
@@ -292,13 +348,14 @@ whole amount it removed.
 - **THEN** it reports how many members it did not reach
 - **AND** the next pass covers them, with no state carried between passes
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-pgz rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-pgz rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-180 - Operator points to an empty balance start the window
 **Serves:** grade10-site-loyalty-programme-US-05 - operator points to an empty balance start the window
 
 - **WHEN** an operator adds points to a member who holds no live points
-- **THEN** those points expire an inactivity window after their own date
-- **AND** a credit whose own date is already an inactivity window past is written already lapsed, and nothing that had lapsed counts again
+- **THEN** those points expire on the later of an inactivity window after their own date and the date the member's window already names
+- **AND** the member's window moves out to that date and never back
+- **AND** a credit whose own date is already an inactivity window past, for a member whose window has also passed, is written already lapsed, and nothing that had lapsed counts again
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-zl6 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-181 - A backdated grant joins the window already running
@@ -322,6 +379,15 @@ whole amount it removed.
 - **WHEN** a payment in points is reversed after the member's window has passed
 - **THEN** no points are written back and the balance stays empty
 - **AND** the answer names the points it could not return, rather than refusing the reversal
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-guq rev=2 -->
+#### Scenario: grade10-site-loyalty-programme-SC-254 - Points given back to a balance brought to nothing keep the running day
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-06` - points given back keep the running day
+
+- **GIVEN** a member whose balance a claw-back or a correction brought to nothing while their window still runs
+- **WHEN** a redemption of theirs is reversed, or points they paid at checkout come back through a refund or an operator's return
+- **THEN** the returned points expire on the date that window already names
+- **AND** the member's inactivity window is unchanged
 
 ### Requirement: A tier ladder is ordered, and refused at boot when it is not
 
@@ -946,8 +1012,8 @@ from, in terms the member can read.
 A signed-in member SHALL be able to see their tier and when it lapses, their
 progress toward retaining it and toward the next earned tier, their redeemable
 balance and when it expires; join if they have not; read their activity; browse
-the reward menu; redeem; and see the coupons they hold, each with its code,
-state and validity period.
+the reward menu; redeem; and see the coupons they hold, each with its state and
+validity period.
 
 Redeeming twice by accident SHALL cost nothing, including when the member
 reloads between attempts.
@@ -966,12 +1032,12 @@ reloads between attempts.
 - **WHEN** a member submits the same redemption twice, with or without a reload in between
 - **THEN** exactly one redemption is recorded
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-l3t rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-l3t rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-148 - A coupon is readable as soon as it is issued
 **Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member completes a redemption
-- **THEN** the coupon's code and validity period are shown to them without a further step
+- **THEN** the coupon and its validity period are shown to them without a further step
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-phf rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-64 - Dates read in the programme's time zone
@@ -1429,24 +1495,34 @@ invalid rather than converted.
 
 ### Requirement: A spent redemption stays spent when its artifact expires
 
-When what a redemption produced — a discount code, an uncollected
-reward — passes its validity unused, the points SHALL NOT return by
-themselves: the member bought it, and letting it lapse is the member's
-responsibility. Points SHALL return only through an explicit operator
-cancellation, recorded with who and why. An artifact that was used SHALL
-never be reversed into points; any remedy for a used artifact is money,
-outside the programme.
+When the coupon a redemption issued passes its own validity unused, the points
+SHALL NOT return by themselves: the member bought it, and letting it lapse is
+the member's responsibility. A discount code minted for one sale is not that
+artifact: when it dies, its coupon goes back to the member's wallet and
+nothing is forfeit. Points SHALL return only through an explicit operator
+cancellation, recorded with who and why. A coupon that was used SHALL never be
+reversed into points; any remedy for a used coupon is money, outside the
+programme.
 
-What members forfeit to expiry SHALL be counted and readable by an
-operator, never silent.
+What members forfeit to expiry SHALL be counted and readable by an operator,
+never silent.
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-dqm rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-dqm rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-120 - An expired unused code returns nothing by itself
 **Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
-- **WHEN** a discount code passes its validity with no use
+- **WHEN** a coupon passes its validity with no use
 - **THEN** the points remain spent
 - **AND** the forfeit is counted where an operator can read it
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-5v5 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-233 - A code that dies with its sale forfeits nothing
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a coupon inside its validity, claimed by an online order that expired, whose code can no longer be collected
+- **WHEN** the programme's clock releases the claim
+- **THEN** the coupon is unused and spendable, rather than lapsed
+- **AND** nothing is counted as forfeit
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-x8s rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-121 - An operator cancellation is the credit path
@@ -1478,10 +1554,11 @@ derive that line, that day, or that tone from a clock or a balance of its own;
 the consumer withholds the line for a member holding no points.
 `RewardMenu` SHALL price each reward in points, state a
 money-off reward's own validity period, and state what its coupon cannot be
-spent without — the basket it has to reach, and the one channel it is good at
-where it names only one. `CouponList` SHALL carry each issued
-coupon — its code where the shop takes one — what it is for, its own expiry,
-and whether it is spent, void or expired.
+spent without — the basket it has to reach, and the one channel it is good at,
+where it is good at only one. `CouponList` SHALL carry each issued
+coupon - what it is for, its own expiry, and whether it is spent, void or
+expired - and a code only where the consumer passes one; a reward coupon
+carries none.
 `ActivityList` SHALL name entries in terms a member reads, name the channel
 each came from, and SHALL NOT carry an operator reason, a retry key, or
 internal pricing.
@@ -1533,15 +1610,23 @@ SHALL require no export of its own.
 - **THEN** the line is rendered in the warning tone, and says what keeps the points
 - **AND** a balance expiring later is rendered in the plain tone
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-ipk rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-243 - A reward coupon carries no code in the coupon list
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
+
+- **GIVEN** a member holding a reward coupon, and a store coupon whose code the consumer passes
+- **WHEN** `CouponList` renders them
+- **THEN** the store coupon shows its code, and the reward coupon shows none
+
 ### Requirement: A reward names a kind, a discount and a scope
 
-Every reward SHALL carry a kind — a product coupon that takes money off, or
-a gift that adds a free line — and a discount and a scope stating what it
+Every reward SHALL carry a kind - a product coupon that takes money off, or
+a gift that adds a free line - and a discount and a scope stating what it
 takes off and where. A product coupon's discount SHALL be a fixed amount, or
-a percentage capped at a maximum discount; its scope SHALL be named products
-or variants, a filter over the catalog's worlds and types, or the whole
-order. A gift SHALL name the variant it adds and SHALL carry a minimum spend
-greater than zero; a product coupon's minimum spend is optional.
+a percentage with an optional maximum discount; its scope SHALL be named
+products or variants, a filter over the catalog's worlds and types, or the
+whole order. A gift SHALL name the variant it adds and SHALL carry a minimum
+spend greater than zero; a product coupon's minimum spend is optional.
 
 Every reward SHALL also state a combine setting: whether its coupon stacks
 with the shop's own product discounts, order discounts and shipping
@@ -1552,15 +1637,24 @@ one case of it.
 
 This definition SHALL be copied onto the coupon a redemption issues,
 unchanged by any later edit to the reward, and SHALL be what the coupon
-takes off wherever it is applied — online or at the till, identically.
+takes off wherever it is applied - online or at the till, identically.
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-qyo rev=1 -->
+A sale at the till names its goods by variant alone, so a product coupon
+scoped to named products or to a catalog filter SHALL be good online only,
+whatever channels it names: the console's reward form SHALL save it for the
+online channel alone, the member's reward menu SHALL state it as good online
+only, the till SHALL show it as online only, staff SHALL NOT be able to apply
+it, and the till SHALL refuse it however it reaches the sale. Neither way a
+coupon reaches a counter sale under "A redemption settles as a coupon,
+whatever the reward" SHALL take such a coupon.
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-qyo rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-152 - A fixed-amount coupon takes a set amount off its scope
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a fixed amount
-- **THEN** that amount comes off the lines its scope matches, online or at
-  the till alike
+- **THEN** that amount comes off the lines its scope matches, online, or at
+  the till where its scope is named variants or the whole order
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-gmn rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-153 - A percentage coupon is capped at its maximum discount
@@ -1570,6 +1664,15 @@ takes off wherever it is applied — online or at the till, identically.
   maximum
 - **THEN** the amount taken off never exceeds that maximum, however large
   the matching lines are
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-0tt rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-247 - A percentage coupon with no maximum takes its whole rate
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **WHEN** a member applies a coupon whose discount is a percentage with no
+  maximum discount
+- **THEN** that percentage comes off every line its scope matches, however
+  large the lines are
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-90a rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-154 - A coupon scoped to a catalog filter matches worlds and types
@@ -1600,12 +1703,85 @@ takes off wherever it is applied — online or at the till, identically.
 - **WHEN** a basket does not yet reach a gift's minimum spend
 - **THEN** the gift is refused until the basket reaches it
 
+<!-- trace:scenario id=g10.loyalty-programme.SC-oqd rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-248 - The till holds a coupon scoped to named products or a filter to online only
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **GIVEN** a member holding a coupon scoped to named products or to a
+  catalog filter, whichever channels the coupon names
+- **WHEN** the member is identified at a till
+- **THEN** the till shows that coupon as online only
+- **AND** staff cannot apply it to the sale
+- **AND** the member presenting it from their own session is refused with
+  `This coupon cannot be used on this sale.`, and the sale's price is
+  unchanged
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-62s rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-245 - The menu states a reward scoped to named products or a filter as online only
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
+
+- **GIVEN** a reward scoped to named products or to a catalog filter,
+  whichever channels it names
+- **WHEN** a member reads the reward menu
+- **THEN** the reward states it is good online only, before any points are
+  spent
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-1bu rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-249 - A reward scoped to named products or a filter is saved for online alone
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **WHEN** an operator scopes a money-off reward to named products or to a
+  catalog filter in the reward form
+- **THEN** the form shows the reward as online only, and offers no channel
+  with the till
+- **AND** saving it saves it for the online channel alone, whichever channel
+  was chosen before
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-rwu rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-250 - A stored reward scoped to named products that names the till is saved online only
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **GIVEN** a reward stored as a product coupon scoped to named products,
+  for online and the till
+- **WHEN** an operator opens it in the reward form and saves it unchanged
+- **THEN** the form shows the reward as online only
+- **AND** it is saved for the online channel alone
+- **AND** moving its scope to named variants or to the whole order before
+  saving shows the channels it was stored with again
+
 ### Requirement: The console's reward form authors a reward's full definition
 
 The operator console's reward form SHALL set a reward's kind, discount,
 scope and combine setting alongside its slug, name, description, cost, stock
-and window, so that creating or editing any reward — including one carrying
-a definition — needs no direct use of an administrative API.
+and window, so that creating or editing any reward - including one carrying
+a definition - needs no direct use of an administrative API.
+
+The form SHALL offer three choices, each saved as one of the two kinds:
+
+| Choice | The operator sets | Minimum spend | Saved as |
+| --- | --- | --- | --- |
+| Money off | A discount and a scope | Optional | A product coupon with that discount and scope |
+| Free item | One variant | Optional | A product coupon at 100%, with no maximum discount, scoped to that variant |
+| Gift with a purchase | One variant | Required | A gift naming that variant |
+
+Moving to one of the three choices from another SHALL open it with nothing
+picked or entered, carrying nothing over from the choice before.
+
+A stored product coupon at 100%, with no maximum discount, scoped to exactly
+one variant SHALL open in the form as a free item, whether the reward is
+opened or duplicated into a new one. Any other stored product coupon SHALL
+open as money off, a capped or wider 100% discount included. A reward stored
+with a handover the programme has retired - a manual handover, or a counter
+collection - SHALL open with no choice made and SHALL keep that handover,
+unchanged, while the fields beside it are edited; once the operator makes one
+of the three choices, it SHALL save as that choice. A duplicate of it SHALL
+open as money off.
+
+The form SHALL save nothing while the choice lacks a part it needs, or
+while the window ends before it starts, and SHALL name what is missing.
+Beside the form, a basket check SHALL state what the reward's coupon would
+take off a basket the operator builds, or why it would not apply, without
+saving the reward.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-7w0 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-158 - A reward with a definition is created from the console alone
@@ -1615,6 +1791,78 @@ a definition — needs no direct use of an administrative API.
   combine setting in the console
 - **THEN** the reward is saved with that definition, with no separate API
   call
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-72a rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-187 - A free item is created from one variant
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **WHEN** an operator chooses Free item, on a new reward or one being
+  edited, picks one variant and saves
+- **THEN** the reward is saved as a product coupon at 100%, with no maximum
+  discount, scoped to that variant
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-2m8 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-253 - A choice moved to from another opens empty
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **GIVEN** an operator who chose Free item and picked one variant
+- **WHEN** they choose Money off
+- **THEN** Money off opens on an amount, with none entered, scoped to named
+  variants, with none picked
+- **AND** choosing Free item again opens it with no variant picked
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-zq0 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-188 - A stored free item reopens as a free item
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **GIVEN** a reward stored as a product coupon at 100%, with no maximum
+  discount, scoped to one variant, with a minimum spend of 50000 HKD minor
+  units
+- **WHEN** an operator opens it, or duplicates it into a new reward
+- **THEN** Free item is chosen, with that variant picked
+- **AND** 50000 HKD minor units is its minimum spend
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-jnr rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-189 - A capped or wider 100% discount stays money off
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **GIVEN** a reward stored as a product coupon at 100% that has a maximum
+  discount, or that is scoped to two variants, or to one named product
+- **WHEN** an operator opens it in the reward form
+- **THEN** Money off is chosen, with that discount and scope
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-ji6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-246 - A reward stored with a retired handover keeps it until a choice is made
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **GIVEN** a reward stored as a manual handover or a counter collection
+- **WHEN** an operator opens it in the reward form
+- **THEN** no choice is made
+- **AND** changing its name and saving keeps that handover, unchanged
+- **AND** duplicating it opens a new reward on Money off
+- **AND** choosing Money off with a discount and a scope, then saving, saves
+  it as a product coupon
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-h6j rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-251 - A reward missing a part is not saved
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **WHEN** an operator saves a reward whose choice lacks a part it needs - a
+  free item or a gift with no variant, money off with no amount or with
+  nothing picked in its scope, a gift with no minimum spend - or whose window
+  ends before it starts
+- **THEN** nothing is saved
+- **AND** the form names what is missing
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-fut rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-252 - The basket check states what the coupon would take off
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
+
+- **GIVEN** a reward in the form whose definition is complete
+- **WHEN** the operator builds a basket in the basket check
+- **THEN** the check states what the coupon would take off that basket, or
+  why it would not apply
+- **AND** the reward is not saved
 
 ### Requirement: A redemption settles as a coupon, whatever the reward
 
@@ -1633,13 +1881,18 @@ A coupon SHALL be usable in the online store, applied to the order without
 the member typing anything. At the counter, a coupon SHALL reach the sale
 inside the till session staff opened for the member, one of two ways: staff
 apply it from the member's open coupons in the panel, or the member presents
-it from their own session and the till scans it. Either way the coupon's
-code SHALL be minted the moment it is chosen, against that session's sale,
-and SHALL be reused for every later plan of the same sale. The member SHALL
+it from their own session and the till scans it. Either way a product
+coupon's code SHALL be minted the moment it is chosen, against that session's
+sale, and SHALL be reused for every later plan of the same sale; a gift SHALL
+reach the sale as its own line and carry no code, as
+`grade10-site/store/discounts` requires. The member SHALL
 be attached to the sale before either way is offered. A coupon SHALL NOT
 apply to an auction purchase, and points SHALL NOT be spent against one. The
 order's one discount-code slot is `grade10-site/store/discounts`' own
 requirement, and a coupon is one case of it.
+
+A coupon SHALL be marked used by a paid order and by nothing else. A coupon on
+a sale nobody paid SHALL never have been spent, whatever became of that sale.
 
 A member SHALL be able to read the coupons they hold — what each is for, its
 validity period, and whether it has been used — and to present one for a
@@ -1656,28 +1909,36 @@ member presents is the code for that sale alone.
   own variant
 - **AND** no separate collection record is created
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-wks rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-wks rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-166 - A coupon reaches the counter by the member presenting it
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
-- **GIVEN** a member holding a coupon, identified at a till and attached to
-  the sale
+- **GIVEN** a member holding a product coupon, identified at a till and
+  attached to the sale
 - **WHEN** they present that coupon from their own session and the till
   scans it
 - **THEN** the sale carries the coupon's cut
 - **AND** the code was minted when the member chose the coupon, not before
 
-<!-- trace:scenario id=g10.loyalty-programme.SC-z32 rev=1 -->
+<!-- trace:scenario id=g10.loyalty-programme.SC-z32 rev=2 -->
 #### Scenario: grade10-site-loyalty-programme-SC-172 - Staff apply a member's coupon from the till session
 **Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
-- **GIVEN** a member holding a coupon, identified at a till and attached to
-  the sale
+- **GIVEN** a member holding a product coupon, identified at a till and
+  attached to the sale
 - **WHEN** staff apply that coupon from the member's open coupons in the
   panel
 - **THEN** the sale carries the coupon's cut
 - **AND** a later plan of the same sale keeps the coupon and mints no
   second code
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-fhj rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-197 - An unpaid sale never spent the coupon
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a coupon carried by a sale that expired, was cancelled, or was abandoned
+- **WHEN** the member reads their coupons
+- **THEN** the coupon is unused
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ve1 rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-160 - A member cannot undo a redemption
@@ -1720,6 +1981,13 @@ order are returned by the refund, which is a separate movement from the
 coupon. A redemption that produced nothing to consume SHALL still be
 reversible on the same terms.
 
+A reversal SHALL be refused while a sale is claiming the coupon, and SHALL
+name that sale, because voiding a coupon whose code a sale can still collect
+would return the points and give the discount. A claim that nothing else ever
+moves SHALL be released on the programme's own clock, so a reversal is never
+refused forever. That clock SHALL outlast every code minted for the claim, so
+it never frees a coupon whose code a sale can still collect.
+
 Returned points SHALL rejoin the redeemable balance under the inactivity
 window already running: a reversal SHALL NOT reset that window, and SHALL
 return nothing to a member whose window has already passed.
@@ -1743,6 +2011,31 @@ redemption actually consumed a unit.
 - **WHEN** an operator reverses a redemption whose coupon has already been used
 - **THEN** the reversal is refused and the points stay spent
 - **AND** the operator is told why
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-m7u rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-198 - A reversal is refused while a sale claims the coupon
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
+
+- **GIVEN** a coupon claimed by a sale that can still collect its code
+- **WHEN** an operator reverses the redemption that issued it
+- **THEN** the reversal is refused, naming that sale
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-jqk rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-199 - A claim nothing moves is released on the programme's clock
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
+
+- **GIVEN** a claim on a coupon that no sale carries, left by a checkout that stopped before its order was written
+- **WHEN** the claim has stood longer than any code minted for it can be collected
+- **THEN** the coupon is spendable again and an operator can reverse the redemption that issued it
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-t6q rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-238 - The clock never frees a coupon whose code is live
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
+
+- **GIVEN** an online order that expired claiming a coupon, with the code minted for it
+- **WHEN** the code can still be collected
+- **THEN** the claim stands, and an operator's reversal is refused naming that order
+- **AND** the claim is released only after the code can no longer be collected
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-0nd rev=1 -->
 #### Scenario: grade10-site-loyalty-programme-SC-167 - A refunded sale does not return the coupon
@@ -1832,3 +2125,228 @@ permission as moving points.
 - **THEN** the balance is unchanged
 - **AND** nothing appears in the member's activity
 
+### Requirement: A coupon is held by nothing, and the newest claim is the only live one
+
+A claim SHALL NOT hold a coupon: until a paid order takes it, a coupon a sale
+claims SHALL be as spendable by its member as it would be unclaimed. No order,
+draft or counter sale SHALL make it unspendable anywhere else, and no surface
+SHALL offer a coupon it would then refuse as unavailable.
+
+Claiming a coupon on a sale SHALL release the claim standing on any other
+sale, in one movement, so that exactly one sale claims a coupon at a time. The
+sale that loses the claim SHALL no longer claim the coupon, and the discount
+code minted for it SHALL be deactivated. An online order that loses the claim
+SHALL be cancelled with the member's other superseded drafts. A counter sale
+SHALL keep its cart, because the shop owns that cart and it can still be
+tendered; a cart that already carries the code, or a gift's line, can still
+collect, and is settled as `grade10-site/store/discounts` requires.
+
+The earlier claim SHALL be released before the new one is made. A claim SHALL
+be refused only where the earlier one cannot be released — an online
+checkout the provider reports collected, one the provider will not close, or
+a sale whose order is not yet written and whose claim is under five minutes
+old, since it may still be submitting — and that refusal SHALL say an
+earlier sale stands rather than say the coupon is unavailable. A code
+the shop will not deactivate SHALL NOT refuse a claim: the shop goes on
+honouring a code a sale already carries whatever becomes of it, so refusing
+there would cost a member their coupon and guard nothing.
+
+A sale that names the shop's allocations SHALL spend a coupon only where the
+shop gave its cut. A paid sale that does not carry the coupon it promised
+SHALL give it back rather than spend it.
+A coupon SHALL be spent once: by the sale that claims it, or, where no sale
+claims it, by a paid sale that carried its cut. How a counter sale that
+carried a coupon its order had given up is settled and reported is
+`grade10-site/store/discounts`' own requirement.
+
+A coupon an ended order has not yet given back SHALL NOT refuse a claim: the
+claim SHALL take it back from that order first, as it does from any earlier
+sale. A claim left by a checkout that stopped before its order was written
+SHALL NOT refuse a claim either once it is five minutes old, past any checkout
+still writing that order: the new claim SHALL release it first. A sale,
+online or at the till, SHALL NOT write its order more than a minute after its
+claim, and SHALL be refused instead, so a release never meets an order still
+being written. That refusal SHALL say the sale took too long and ask for it
+again, never that the coupon is unavailable or the wallet could not be read.
+
+A counter sale SHALL release its claim when another sale claims the coupon,
+when a newer promise retires the sale, or an hour after its last plan,
+whatever coupon it holds. An online order SHALL release its claim when it is
+cancelled. An online order that expires SHALL keep its claim until its code
+can no longer be collected, and the programme's own clock SHALL then release
+it; a claim on another sale meanwhile closes that order first, as it does any
+earlier sale, and is refused by name where it cannot. Every other sale that
+ends SHALL give its claim back itself rather than leave the coupon to the
+programme's clock.
+
+A sale that gave its claim back SHALL be able to claim the coupon again.
+Whether a counter sale can still carry the coupon's cut is
+`grade10-site/store/discounts`' own requirement.
+
+The member SHALL NOT be told that a claim moved, and SHALL NOT be shown which
+sale claims a coupon; a till spend they were already told landed is corrected
+as `grade10-site/store/membership` requires.
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-lbx rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-190 - A coupon on an unfinished checkout is still spendable
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member who chose a coupon at checkout and did not pay
+- **WHEN** they start another checkout and choose the same coupon
+- **THEN** the coupon applies to the new checkout
+- **AND** the earlier order is cancelled and its code deactivated
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-lfq rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-191 - A counter sale keeps its cart and loses its claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose coupon was applied to a counter sale nobody tendered
+- **WHEN** they claim that coupon at an online checkout
+- **THEN** the checkout carries the coupon's cut
+- **AND** the counter sale is not cancelled and keeps its cart, and its code is deactivated
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-m19 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-192 - The counter claims a coupon an open checkout holds
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member with an open online checkout carrying a coupon
+- **WHEN** they present that coupon at a till, or staff apply it from the panel
+- **THEN** the counter sale carries the coupon's cut
+- **AND** the online order is cancelled
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-hxh rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-193 - A second counter takes the coupon from the first
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose coupon is on a sale at one till
+- **WHEN** they present the same coupon at another till
+- **THEN** the second sale carries the cut and the first sale's code is deactivated
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-avv rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-240 - Two sales claiming one coupon at once leave one live claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member holding a coupon no sale claims
+- **WHEN** two sales claim it at the same moment
+- **THEN** neither is told the coupon is unavailable
+- **AND** exactly one code minted for it is live
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-ail rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-194 - A claim is refused where the earlier checkout will not close
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member claiming a coupon carried by an online checkout the provider will not close
+- **WHEN** the claim is made
+- **THEN** it is refused, saying an earlier sale stands rather than that the coupon is unavailable
+- **AND** the earlier checkout keeps the cut
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-fwa rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-201 - A counter sale never refuses a claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member claiming a coupon carried by a counter sale, and a shop that will not deactivate its code
+- **WHEN** the claim is made
+- **THEN** it stands and the new sale carries the cut
+- **AND** the deactivation is retried until the shop agrees, or until the code has run out its own time
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-oc6 rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-202 - A sale that did not carry the coupon gives it back
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a counter sale that promised a coupon and collected without its cut
+- **WHEN** the sale settles
+- **THEN** the coupon is unused and spendable, and nothing is recorded as having come off that sale
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-pxx rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-200 - A coupon on a sale that took money is not moved
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose coupon is carried by an online checkout they have paid, before the store has settled it
+- **WHEN** they claim that coupon on another sale
+- **THEN** the claim is refused, saying an earlier sale stands
+- **AND** the paid checkout keeps the cut
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-h5a rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-239 - A tendered counter sale whose order has not arrived does not refuse a claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a counter sale carrying a member's coupon, tendered, whose paid order has not reached the store
+- **WHEN** the member claims that coupon on another sale
+- **THEN** the claim stands and the new sale carries the cut
+- **AND** the counter sale's code is deactivated
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-f9s rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-195 - A coupon two sales collected is spent once
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a coupon claimed by a later sale, whose earlier counter sale collected its deactivated code
+- **WHEN** both sales are paid, in either order
+- **THEN** the coupon is used once, by the later sale
+- **AND** the earlier sale spends nothing
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-6ok rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-203 - A sale that gave a coupon back can claim it again
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a counter sale whose plan was refused after it claimed a coupon, before any code was minted, so the claim was given back
+- **WHEN** staff plan the same sale again with that coupon
+- **THEN** the claim is made and the sale carries the cut
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-4ph rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-205 - A counter sale that runs out of time gives the coupon back
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a counter sale holding a coupon that the member walked away from
+- **WHEN** an hour passes since the sale's last plan
+- **THEN** the coupon is spendable again, and the sale keeps its cart
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-11m rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-234 - A retired counter sale gives back the coupon it holds
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a counter sale holding one of the member's coupons, nobody tendered
+- **WHEN** the member checks out online with a different coupon, which retires the counter sale
+- **THEN** the coupon the counter sale held is spendable again and its code is deactivated
+- **AND** the counter sale keeps its cart
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-7xj rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-237 - A coupon an ended order still holds is taken back at once
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose online order carrying a coupon was cancelled, before the programme was told to give that coupon back
+- **WHEN** staff apply that coupon at a till
+- **THEN** the sale carries the coupon's cut, rather than being told the coupon is unavailable
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-qhr rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-241 - A claim a stopped checkout left is taken back
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose coupon is claimed by a checkout that stopped before its order was written, more than five minutes ago, past any checkout still writing it
+- **WHEN** they claim that coupon at a till or at an online checkout
+- **THEN** the sale carries the coupon's cut, rather than being told the coupon is unavailable
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-f9r rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-242 - A claim a sale may still be submitting is refused by name
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose coupon is claimed by a sale whose order is not yet written, less than five minutes ago
+- **WHEN** they claim that coupon at a till or at an online checkout
+- **THEN** it is refused, saying an earlier sale stands rather than that the coupon is unavailable
+- **AND** the claim that stood is not released
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-6jz rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-244 - A sale that writes its order a minute after its claim is refused
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** an online checkout or a till sale that claimed a member's coupon and has not yet written its order
+- **WHEN** it comes to write the order more than a minute after the claim
+- **THEN** the sale is refused and no order is written, the member told the checkout took too long and to submit it again, or staff told the sale took too long and to apply it again
+- **AND** the coupon is spendable again
+
+<!-- trace:scenario id=g10.loyalty-programme.SC-lft rev=1 -->
+#### Scenario: grade10-site-loyalty-programme-SC-196 - No member or till surface names the sale claiming a coupon
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
+
+- **GIVEN** a member whose coupon is claimed by a sale
+- **WHEN** they read their coupons, the cart prices them, or staff open the member's panel
+- **THEN** the coupon reads as spendable, as it would unclaimed, and none names the sale claiming it

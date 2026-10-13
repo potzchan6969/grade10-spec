@@ -4,9 +4,9 @@ The sold-out tile's hover and focus state and the row's narrow layout are
 group 7's, settled in code once no frame came (Q49); 1.4's stories draw the
 block as the tile existed then.
 
-- [x] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories and a public-exports test under `packages/ui/src/blocks/` for `grade10-site-store-cross-sell-SC-25`, `grade10-site-store-cross-sell-SC-26`, `shared-ui-store-home-SC-10`, `shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`; the same commit flips `shared-ui-store-home-US1-TC1-1`, `shared-ui-store-product-listing-US1-TC1-1` and `shared-ui-store-product-listing-US1-TC2-1` with `pnpm run tcs:automated <case> --decided-by <the story or test path in this store>`
+- [x] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories and a public-exports test under `packages/ui/src/blocks/` for `grade10-site-store-cross-sell-SC-25`, `grade10-site-store-cross-sell-SC-26`, `shared-ui-store-home-SC-10`, `shared-ui-store-product-listing-SC-92`, and a sold-out tile that opens where it does not sell; the same commit flips `shared-ui-store-home-US1-TC1-1` and `shared-ui-store-product-listing-US1-TC2-1` with `pnpm run tcs:automated <case> --decided-by <the story or test path in this store>`
 - [x] 1.2 Make `shared-ui-store-home-SC-10` pass: `StoreSectionHeaderCopy.browseAll` becomes optional, drawn only where a browse destination is supplied
-- [x] 1.3 Make `shared-ui-store-product-listing-SC-91` and `shared-ui-store-product-listing-SC-92` pass: a `ProductCard` supplied as sold out reports its activation where an activation handler is supplied and no cart handler is — the listing supplies one and stays inert, as `activate-listing-tile-by-name` requires — keeping the sold-out treatment and no cart control; the card's cart words are optional where no cart control is drawn. That change's delta currently makes a sold-out tile's image inert as well as its name, so whichever of the two lands second in `packages/ui` breaks the other's stories: group 1 lands first, and the discriminator is written into that change's modified requirement before that change is built
+- [x] 1.3 Make `shared-ui-store-product-listing-SC-92` pass, and a sold-out tile open where it does not sell: a `ProductCard` supplied as sold out reports its activation where an activation handler is supplied and no cart handler is - the listing supplies one and stays inert - keeping the sold-out treatment and no cart control; the card's cart words are optional where no cart control is drawn. `activate-listing-tile-by-name`'s tile requirement states the sold-out rule and its scenario (Q56); group 1 lands first, and that change's stories cite the scenario
 - [x] 1.4 Make `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` pass: `StoreProductRelatedRail`, `StoreProductRelatedRailProps` and `StoreProductRelatedRailCopy` in `packages/ui/src/blocks/store-product/store-product-related-rail.tsx`, re-exported from the public entry `packages/ui/src/index.ts`, composing `StoreSectionHeader` and one `ProductCard` per card given, in a row, passing no browse-all word and no cart word; stories for the picks-and-similar, one-card, sold-out-pick and narrow states
 - [x] 1.5 Answer `product.youMayAlsoLike` in the shared layer — `en`, `ko`, `zh-Hans`, `zh-Hant`
 - [x] 1.6 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm --dir packages/i18n test`, `pnpm run tcs:validate`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
@@ -54,7 +54,8 @@ is rebuilding, so this group follows that change's page work.
 
 ## 6. The walk (grade10)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review add-store-cross-sell`) as its input.
+The walk names the suite's case ids while every case is `draft`; the ids stay
+whatever a later human verdict records (Q60).
 
 Needs groups 1 to 4, 7, 8 and 9 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and run on the

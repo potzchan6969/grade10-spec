@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "change": "listing-media-upload-on-drop",
+  "baseline": "425e4871c6bd0a22e6cd094997ac1e1b8aeadac116ba9046c44f470ba78a2cc6",
+  "fingerprint": "f3e020f3e8348784c9e1ad1aa2b9f56a50752cff6d85a9e264c40c12f2a8635f",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-06T06:45:21.231Z",
+  "supersedes": "5bc68c01684451d3072a506077d169f6a91c802c769d0e95e6e50ab8710eea2d",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "ffadbc1adf2d7f6a7043925740d952abd5efd94b3302894fe580ec394b69f438",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/listing-media-upload-on-drop/decisions.md",
+      "sha256": "12196243c2cafa2f7c3c4d53a0cfbd45167914355a965822982cd6f92746fb14",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-media-upload-on-drop/proposal.md",
+      "sha256": "9907260e5db951eb79f1d1d9b648b0805be6ab51de1660057afd7f3bcbf87f67",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-media-upload-on-drop/specs/grade10-site/auction/listing-media/feature-tcs.md",
+      "sha256": "f4408fac3f60d62bde40a96a8932d9eeca745af8307960034bb7aa22df8f2f63",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-media-upload-on-drop/specs/grade10-site/auction/listing-media/spec.md",
+      "sha256": "8ad111ef677d3b36e32f488654a2a5a568e2fd7ce99c200216627ff3751b73a4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-media-upload-on-drop/specs/grade10-site/auction/listing-media/user-journeys.md",
+      "sha256": "ad04ba0f96acd7e0322c7ad8adcf959ae249ecd626b789d6f43ff5a73ee0ffbb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/listing-media-upload-on-drop/tech-design.md",
+      "sha256": "ea475c72b49119d40987252ace2043d9fa50d4012a9b051456fc17d643b11878",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+      "sha256": "2e68a589d8be4e53f623e6033aa587f1cbbce243d13112aeb981d10b00c2b05a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+      "sha256": "55cdd77d7ea0f7947225b746d1454f5c199697d869c4b1adce6b4d30071ade29",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+      "sha256": "c753b79cea7ba3e7b6157d881657c40b5905f93f7a76815bac2f8f2bff49c55c",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+      "anchors": [
+        "Feature set"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

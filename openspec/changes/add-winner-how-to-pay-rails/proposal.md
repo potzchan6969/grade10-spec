@@ -1,6 +1,6 @@
 **Author:** @tangconst - 2026-09-22
 
-Product context: [Post-Bidding · Paying](../../../docs/prds/products/grade10-site/auction/post-bidding.md#paying).
+Product context: [Post-Bidding · Bank Transfer Instructions](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions) and [Bank Transfer Proof](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-proof).
 
 ## Why
 
@@ -60,10 +60,13 @@ None.
 - `grade10-site` wires the same entry points when it consumes the change;
   live FPS QR and account values wait on Finance.
 
-## Open Questions
+## Configuration Boundary
 
-- ❓ Live account values and FPS QR asset — Finance (already on the PRD).
+Finance owns the live bank instructions and FPS QR outside source control.
+Issuing a bank-transfer invoice snapshots the approved instructions so the
+winner and the invoice PDF retain one immutable payment destination.
 
 ## References
 
-- [Post-Bidding · Paying](../../../docs/prds/products/grade10-site/auction/post-bidding.md#paying)
+- [Post-Bidding · Bank Transfer Instructions](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-instructions)
+- [Post-Bidding · Bank Transfer Proof](../../../docs/prds/products/grade10-site/auction/post-bidding.md#bank-transfer-proof)

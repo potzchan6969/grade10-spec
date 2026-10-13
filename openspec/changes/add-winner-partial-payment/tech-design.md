@@ -15,11 +15,13 @@ original quote.
 - `packages/grade10-auction/backend/src/services/orderStatus.ts` derives
   `Partially Paid` and suppresses self-service actions.
 - Auction contracts expose the payment history and remaining balance; the
-  admin client owns the collection prompt and the winner client renders the
-  locked record.
+  admin client owns the collection prompt and the overpayment confirmation,
+  and the winner client renders the locked record.
 
 Payment recording runs in one transaction with a per-order lock and is
-idempotent on the operator mutation key. An amount above the original invoice
+idempotent on the operator mutation key. A close as Paid is refused while the
+cumulative total, counting the payment, is below 90% of the original invoice
+total; from 90% the operator chooses to close or keep collecting. An amount above the original invoice
 total requires the explicit overpayment confirmation before the transaction
 records the full amount and closes the invoice. Receipt numbers come from the
 existing audit sequence. No Stripe capture or refund is added.

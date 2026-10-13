@@ -1,4 +1,6 @@
 schema: grade10-planning
 created: 2026-08-28
 promoted_by: "@kinisworking"
-page_waived: "predates the page rule"
+depends_on:
+  - cart-drawer-empty-state
+  - add-shopify-checkout-integration

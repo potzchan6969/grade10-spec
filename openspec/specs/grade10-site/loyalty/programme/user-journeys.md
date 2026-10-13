@@ -59,3 +59,9 @@
 **As an** operator,
 **I want** cancelling a redemption gated by its own permission,
 **so that** being trusted to move points does not also trust me to undo what a member redeemed.
+
+### grade10-site-loyalty-programme-US-11: Member spends a coupon wherever they are, whatever they left open
+
+**As a** member,
+**I want** every coupon I hold to be spendable on the sale in front of me, whatever checkout or counter sale I walked away from,
+**so that** changing my mind never costs me the coupon and never makes me wait.

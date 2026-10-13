@@ -20,18 +20,18 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
 };
 
 const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] = {
-  address: { label: "Address", description: "Sep 24, 2026, 3:12 PM" },
-  invoice: { label: "Invoice", description: "Sep 25, 2026, 10:00 AM" },
-  payment: { label: "Payment", description: "Pay by Oct 2, 2026" },
+  address: { label: "Address", description: "24 Sep 2026, 15:12" },
+  invoice: { label: "Invoice", description: "25 Sep 2026, 10:00" },
+  payment: { label: "Payment", description: "Pay by 2 Oct 2026" },
   shipping: { label: "Shipping" },
   completed: { label: "Completed" },
 };
 
 const INVOICE_LINES = [
-  { label: "Winning Bid", value: "$12,800.00" },
-  { label: "Buyer’s Premium", value: "$2,560.00" },
-  { label: "Shipping & Handling", value: "$180.00" },
-  { label: "Payment Processing Fee", value: "$545.00" },
+  { label: "Winning Bid", value: "HK$12,800.00" },
+  { label: "Buyer’s Premium", value: "HK$2,560.00" },
+  { label: "Shipping & Handling", value: "HK$180.00" },
+  { label: "Payment Processing Fee", value: "HK$545.00" },
 ];
 
 const DELIVERY = {
@@ -40,7 +40,7 @@ const DELIVERY = {
 };
 
 const meta = {
-  title: "Auction Order/AuctionWinnerOrder",
+  title: "Auction/Post Bidding/Blocks/AuctionWinnerOrder",
   component: AuctionWinnerOrder,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -51,7 +51,7 @@ const meta = {
     progress: { current: "payment", steps: STEPS },
     lot: {
       title: "1999 Pokémon Base Set Charizard PSA 9",
-      winningBid: "HK$12,800",
+      winningBid: "US$12,800",
       imageSrc: IMAGE,
       href: "#lot",
       ariaLabel: "1999 Pokémon Base Set Charizard PSA 9 — open lot details",
@@ -63,7 +63,7 @@ const meta = {
       pay: {
         label: "Pay with Card",
         onPress: fn(),
-        deadline: "Pay by Oct 2, 2026, 3:00 PM",
+        deadline: "Pay by 2 Oct 2026, 15:00 HKT",
       },
     },
     paymentMethod: { kind: "text", label: "Card" },
@@ -114,14 +114,14 @@ export const AwaitingSetup: Story = {
       current: "address",
       steps: {
         ...STEPS,
-        address: { label: "Address", description: "Confirm by Sep 26, 2026" },
+        address: { label: "Address", description: "Confirm by 26 Sep 2026" },
         invoice: { label: "Invoice" },
         payment: { label: "Payment" },
       },
     },
     summary: {
       lines: [
-        { label: "Winning Bid", value: "$12,800.00" },
+        { label: "Winning Bid", value: "HK$12,800.00" },
         { label: "Shipping & Handling", value: "TBD", muted: true },
       ],
       total: { label: "Order Total", value: "TBD", muted: true },
@@ -132,7 +132,7 @@ export const AwaitingSetup: Story = {
       confirm: {
         label: "Complete Order Setup",
         onPress: fn(),
-        deadline: "Confirm by Sep 26, 2026, 3:12 PM",
+        deadline: "Confirm by 26 Sep 2026, 15:12",
       },
     },
   },
@@ -177,7 +177,7 @@ export const BankTransferDue: Story = {
         label: "Submit Payment Proof",
         onPress: fn(),
         secondary: { label: "View Bank Details", onPress: fn() },
-        deadline: "Pay by Oct 2, 2026, 3:00 PM",
+        deadline: "Pay by 2 Oct 2026, 15:00 HKT",
       },
     },
     paymentMethod: { kind: "bank", label: "Bank transfer", bankName: "HSBC" },
@@ -215,7 +215,7 @@ export const ProofReturned: Story = {
       {
         title: "Payment proof returned",
         description:
-          "Reason: The transfer receipt is unreadable.\nPayment deadline restarted: Oct 9, 2026, 3:00 PM",
+          "Reason: The transfer receipt is unreadable.\nPayment deadline restarted: 9 Oct 2026, 15:00 HKT",
         status: "warning",
       },
     ],
@@ -257,20 +257,20 @@ export const SetupOverdue: Story = {
       current: "address",
       steps: {
         ...STEPS,
-        address: { label: "Address", description: "Sep 26, 2026" },
+        address: { label: "Address", description: "26 Sep 2026" },
         invoice: { label: "Invoice" },
         payment: { label: "Payment" },
       },
     },
     summary: {
-      lines: [{ label: "Winning Bid", value: "$12,800.00" }],
+      lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
       total: { label: "Order Total", value: "TBD", muted: true },
     },
     paymentMethod: undefined,
     delivery: {
       label: "Delivery address",
       alert: {
-        title: "Missed setup deadline: Sep 26, 2026",
+        title: "Missed setup deadline: 26 Sep 2026",
         status: "warning",
         action: { label: "Contact Us", onPress: fn() },
       },
@@ -285,9 +285,9 @@ export const Delivered: Story = {
       current: "done",
       steps: {
         ...STEPS,
-        payment: { label: "Payment", description: "Sep 27, 2026" },
-        shipping: { label: "Shipping", description: "Sep 29, 2026" },
-        completed: { label: "Completed", description: "Oct 1, 2026" },
+        payment: { label: "Payment", description: "27 Sep 2026" },
+        shipping: { label: "Shipping", description: "29 Sep 2026" },
+        completed: { label: "Completed", description: "1 Oct 2026" },
       },
     },
     summary: {
@@ -313,8 +313,8 @@ export const Shipped: Story = {
       current: "shipping",
       steps: {
         ...STEPS,
-        payment: { label: "Payment", description: "Sep 27, 2026" },
-        shipping: { label: "Shipping", description: "Sep 29, 2026" },
+        payment: { label: "Payment", description: "27 Sep 2026" },
+        shipping: { label: "Shipping", description: "29 Sep 2026" },
       },
       tracking: { code: "SF1234567890", href: "https://www.sf-express.com/" },
     },
@@ -348,7 +348,7 @@ export const Cancelled: Story = {
       },
     ],
     summary: {
-      lines: [{ label: "Winning Bid", value: "$12,800.00" }],
+      lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
       total: { label: "Order Total", value: "—" },
     },
     paymentMethod: undefined,

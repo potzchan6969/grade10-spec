@@ -5,24 +5,23 @@
 Catalogue photos of slabs and boxes are cropped in the listing tile well, so
 the collectible is incomplete until the collector opens the product page.
 
-Metric: listing sessions where the full product is visible on the tile without
-opening the PDP. Unmeasured; this change sets the baseline.
+Metric: none - the tile draws the photo it is given (Q7 in `decisions.md`).
 
 ## What Changes
 
-- **Full photo in the well** — every tile status fits the supplied image inside
-  the square well without cropping. Leftover space is the well, not a cut
-  edge. The photo is not multiplied onto the well; that SHALL is
-  `drop-product-listing-photo-multiply`. Sold-out stays faded. Hover scale on
-  a sold-out tile that still opens stays with `add-store-cross-sell` Q50
+- **Whole photo in the well** - every tile status shows the whole supplied
+  photo inside the square well. Leftover space is the well, not a cut edge, and
+  a photo that reaches into the well's rounded corners rounds with them.
+  Sold-out stays faded
 - Manual page [Product Listing Blocks](/p/shared/ui/store-product-listing)
   marks the outcome
 
 ## Non-Goals
 
-- **Phone cart visibility** — `show-listing-cart-on-touch`
-- **Sort defaults** — `default-listing-sort-to-latest`
-- **Sold-out hover scale** — `add-store-cross-sell` Q50
+- **Phone cart visibility** - `show-listing-cart-on-touch`
+- **Sort defaults** - `default-listing-sort-to-latest`
+- **Photo drawn without multiply** - `drop-product-listing-photo-multiply`
+- **Sold-out hover** - `add-store-cross-sell` Q50
 - **Boneyard skeleton re-capture**
 
 ## Capabilities
@@ -37,16 +36,17 @@ opening the PDP. Unmeasured; this change sets the baseline.
 
 ## Impact
 
-- **`@grade10/ui`** — `ProductCardImage` uses contain fit; Storybook stories
+- **`@grade10/ui`** - `ProductCardImage` uses contain fit; Storybook stories
   show it
-- **Overlap** — `drop-product-listing-photo-multiply` folds no multiply
-  (SC-64); `add-store-cross-sell` Q50 owns hover scale on a sold-out tile
-  that opens. Dev narrows or drops this change's SC-90 so it does not reverse
-  Q50, and does not add a second no-multiply requirement.
-
-## Open questions
-
-- none — Q1–Q3 are in `decisions.md`
+- **grade10 frontend** - the store listing (`ProductListingPage.tsx`) and the
+  store home row (`StoreHomePage.tsx`) in `apps/frontend/grade10`, and the
+  product page's You May Also Like rail (`ProductRelatedRail.tsx` in
+  `packages/grade10-store`), take the change by submodule bump with no code
+  change. The fit shipped ahead of acceptance (b632582fe) and is inside the
+  application's pin
+- **Overlap** - `add-store-cross-sell` Q50 owns hover on a sold-out tile.
+  `drop-product-listing-photo-multiply`, its Q1, owns the photo drawn without
+  multiply (Q3); this change adds no second requirement for it
 
 ## References
 

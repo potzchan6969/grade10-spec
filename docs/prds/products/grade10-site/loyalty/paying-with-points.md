@@ -13,10 +13,10 @@ reviewed: 2026-09-15
 | Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) |
 | Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, credit top-ups, or grading fees |
 | Never pays for | **Shipping or tax** |
-| Cap | **Goods total minus coupons and discount codes** — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused |
+| Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
-| Discount | **One order-level "Points" discount**, outside the order's one-coupon count, so a coupon and points can be used on the same order — [Discounts](/p/grade10-site/store/discounts) |
+| Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) |
 
 ## Online
 
@@ -25,8 +25,8 @@ reviewed: 2026-09-15
   promo code's cut, and an ask past it is trimmed —
   [Cart Drawer](/p/grade10-site/store/cart)
 - **Promised** — the order is recorded with that number, and the Shopify
-  draft order carries it as one fixed-amount discount named "Points"; nothing
-  is deducted and nothing is held
+  draft order carries it as one fixed-amount points discount; nothing is
+  deducted and nothing is held
 - **Paid** — in Shopify's checkout
 - **Debited** — when the paid order lands, once, keyed on the order id; an
   abandoned or cancelled checkout is never debited
@@ -77,10 +77,13 @@ The debit follows what the shop applied, not what was promised.
   member card's QR, from the site or a wallet pass, or types the 8-letter
   short code, the email, or picks the customer already on the cart
 - **Applied** — the shopkeeper chooses points and/or coupons and taps Apply;
-  the extension writes the store's order id on the cart, takes the "Points"
-  amount off the sale, and shows the points spent, the money still due and
+  the extension writes the store's order id on the cart, puts the points
+  discount on the sale, and shows the points spent, the money still due and
   the balance after; no code is minted for the points, and a repeated tap
   spends once
+- 🚧 **Applied again** — a resumed sale puts its points discount back under
+  the title [Rules](/p/grade10-site/loyalty/paying-with-points#rules) names,
+  whatever title it carried
 - **Beside the shop's offer** — points go on beside an automatic offer,
   capped at what the offers leave of the goods; a staff order discount on
   the sale refuses the spend until staff take it off

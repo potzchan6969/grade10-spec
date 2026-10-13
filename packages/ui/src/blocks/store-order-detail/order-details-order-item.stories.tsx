@@ -11,7 +11,7 @@ import { IMAGE, ORDER_DETAILS_COPY } from "./fixtures";
 import { OrderDetailsOrderItem } from "./order-details-order-item";
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsOrderItem",
+  title: "Store/Order Detail/Blocks/OrderDetailsOrderItem",
   component: OrderDetailsOrderItem,
   tags: ["autodocs"],
   // A row only has its table semantics inside the table that owns it.

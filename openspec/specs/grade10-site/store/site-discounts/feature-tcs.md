@@ -1,6 +1,6 @@
 # grade10-site/store/site-discounts Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/3
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 ## grade10-site-store-site-discounts-US1: Collector buys a product carrying an active site discount

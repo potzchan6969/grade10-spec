@@ -12,14 +12,21 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info } from "@phosphor-icons/react";
-import { type FormEvent, type KeyboardEvent, useMemo, useState } from "react";
-import type { ShippedLocale } from "../../lib/format-datetime";
 import {
-  formatMoney,
+  type ClipboardEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  formatLotMoney,
+  formatLotMoneyPrefix,
   formatMoneyNumeric,
-  formatMoneyPrefix,
 } from "../../lib/format-money";
 import {
+  type CustomMaximumEditOrigin,
   isMaximumBelowFloor,
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
@@ -80,7 +87,7 @@ type BidAuthorizationStatus = "idle" | "pending" | "error";
 type ListingQuickMaximumBidActionsProps = {
   copy: ListingQuickMaximumBidActionsCopy;
   view: ListingAuctionBidView;
-  locale: ShippedLocale;
+  locale: string;
   onCommitMaximum: (amountMinor: number) => void;
   /** When true, presets and custom amount stay visible but are not interactive. */
   amountEntryLocked?: boolean;
@@ -130,10 +137,28 @@ function ListingQuickMaximumBidActions({
     null,
   );
   const [customDraft, setCustomDraft] = useState("");
+  const pendingPasteRef = useRef<{
+    raw: string;
+    origin: "paste";
+  } | null>(null);
+  const [previousAuthorizationStatus, setPreviousAuthorizationStatus] =
+    useState(authorizationStatus);
+  // A commit that settles without an error has been accepted: its draft is
+  // spent, and the raised maximum moves the floor above it.
+  if (previousAuthorizationStatus !== authorizationStatus) {
+    setPreviousAuthorizationStatus(authorizationStatus);
+    if (
+      previousAuthorizationStatus === "pending" &&
+      authorizationStatus === "idle"
+    ) {
+      setCustomDraft("");
+      setSelectedPresetKey(null);
+    }
+  }
 
   const presets = useMemo((): MaximumPreset[] => {
     const formatDelta = (deltaMinor: number) =>
-      `$${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
+      `${formatLotMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
       : copy.amountAboveCurrent;
@@ -245,7 +270,7 @@ function ListingQuickMaximumBidActions({
     hasCommittedMaximum && view.viewerMaximumMinor != null
       ? copy.currentMaximum.replace(
           "{amount}",
-          formatMoney(view.viewerMaximumMinor, view.currency, { locale }),
+          formatLotMoney(view.viewerMaximumMinor, view.currency, { locale }),
         )
       : null;
 
@@ -263,7 +288,7 @@ function ListingQuickMaximumBidActions({
     commitMinor != null
       ? actionTemplate.replace(
           "{amount}",
-          formatMoney(commitMinor, view.currency, { locale }),
+          formatLotMoney(commitMinor, view.currency, { locale }),
         )
       : actionTemplate
           .replace(" to {amount}", "")
@@ -271,7 +296,7 @@ function ListingQuickMaximumBidActions({
           .replace(" · {amount}", "")
           .replace("{amount}", "");
 
-  const floorAmountLabel = formatMoney(floorMaximumMinor, view.currency, {
+  const floorAmountLabel = formatLotMoney(floorMaximumMinor, view.currency, {
     locale,
   });
   const customPlaceholder = copy.customAmountPlaceholder.replace(
@@ -286,18 +311,50 @@ function ListingQuickMaximumBidActions({
     setCustomDraft("");
   }
 
+  function handleCustomPaste(event: ClipboardEvent<HTMLInputElement>) {
+    if (amountEntryLocked) return;
+    const pending = {
+      origin: "paste" as const,
+      raw: event.clipboardData.getData("text"),
+    };
+    pendingPasteRef.current = pending;
+    window.setTimeout(() => {
+      if (pendingPasteRef.current === pending) {
+        pendingPasteRef.current = null;
+      }
+    }, 0);
+  }
+
   function handleCustomChange(event: FormEvent<HTMLInputElement>) {
     if (amountEntryLocked) return;
     const target = event.currentTarget;
+    const pendingPaste = pendingPasteRef.current;
+    pendingPasteRef.current = null;
+    const raw =
+      target.value === "" && pendingPaste?.raw
+        ? pendingPaste.raw
+        : target.value;
+    const nativeEvent = event.nativeEvent as InputEvent;
+    const data = nativeEvent.data;
+    const editOrigin: CustomMaximumEditOrigin =
+      pendingPaste?.origin ??
+      (nativeEvent.inputType === "insertText" &&
+      data != null &&
+      /^[0-9]$/.test(data) &&
+      raw === `${customDraft}${data}`
+        ? "typed-append"
+        : "replacement");
     const sanitized = sanitizeCustomMaximumDraft(
-      target.value,
+      raw,
       view.currency,
       customDraft,
+      view.ceilingMinor,
+      editOrigin,
     );
     // Ceiling refuse leaves React state unchanged. A controlled type=number
     // input will keep painting the rejected value unless we reset the DOM.
     if (sanitized === customDraft) {
-      target.value = customDraft;
+      target.value = sanitized;
       return;
     }
     setCustomDraft(sanitized);
@@ -323,7 +380,10 @@ function ListingQuickMaximumBidActions({
       event.preventDefault();
       return;
     }
-    const data = (event.nativeEvent as InputEvent).data;
+    const nativeEvent = event.nativeEvent as InputEvent;
+    if (nativeEvent.inputType === "insertFromPaste") return;
+    pendingPasteRef.current = null;
+    const data = nativeEvent.data;
     if (data === "." || data === ",") {
       event.preventDefault();
     }
@@ -423,9 +483,13 @@ function ListingQuickMaximumBidActions({
           role="group"
         >
           {presets.map((preset) => {
-            const amountLabel = formatMoney(preset.amountMinor, view.currency, {
-              locale,
-            });
+            const amountLabel = formatLotMoney(
+              preset.amountMinor,
+              view.currency,
+              {
+                locale,
+              },
+            );
             const selected =
               !amountEntryLocked && selectedPreset?.key === preset.key;
             const accessibleName = (
@@ -476,9 +540,10 @@ function ListingQuickMaximumBidActions({
           onClear={
             amountEntryLocked || !customActive ? undefined : handleClearCustom
           }
+          onPaste={handleCustomPaste}
           onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
-          prefix={formatMoneyPrefix(view.currency, { locale })}
+          prefix={formatLotMoneyPrefix(view.currency, { locale })}
           status={amountEntryLocked || !customInvalid ? "default" : "error"}
           value={customDraft}
         />

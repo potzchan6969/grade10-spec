@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "799ace5efac9c22fdaa5f00fbc909d17bf2cc0c66303af7a7a6e85556efe2087"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "400aa620fce8ee5c3b6bcb9d17c935e0ac693c43",
+    "capturedAt": "2026-10-07T05:44:59.492Z",
+    "targets": [
+      {
+        "path": "openspec/changes/add-winner-order-tax-line/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An operator quotes and sends the invoice",
+          "Requirement: An operator reissues a sent invoice"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Invoice fields",
+          "Requirement: Records the winner keeps",
+          "Requirement: Tax before the invoice is sent",
+          "Requirement: Tax info tooltip"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

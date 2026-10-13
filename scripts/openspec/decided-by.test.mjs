@@ -59,7 +59,7 @@ function caseSuite({
   return [
     "# demo/alpha Test Cases",
     "",
-    "**Status:** pending-review",
+    "**Status:** pending-review · 0/1",
     "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
     "",
     "## demo-alpha-US1: Collector does the thing",

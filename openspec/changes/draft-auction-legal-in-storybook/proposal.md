@@ -8,14 +8,14 @@ shaped draft wording and page typography before Legal confirms what ships.
 Without a Storybook assembly, review happens only after catalogs and the app
 page change together.
 
-**Metric:** reviewers open Pages/Legal in the workbench and can read draft
+**Metric:** reviewers open Site/Carried Surfaces/Legal in the workbench and can read draft
 Terms and Privacy end to end; live `/legal/terms` and `/legal/privacy` still
 show “Being prepared” until a later change publishes confirmed wording.
 
 ## What Changes
 
 - **Storybook Terms of Service and Privacy Policy page assemblies** under
-  Pages/Legal — site chrome, centred title, two-line last-updated date,
+  Site/Carried Surfaces/Legal — site chrome, centred title, two-line last-updated date,
   section headings and body, with the agreed spacing and type scale
 - **Draft auction-launch copy as a Storybook fixture** — not written into
   `@grade10/i18n` `legal` catalogs
@@ -65,4 +65,4 @@ See `decisions.md`.
 ## References
 
 - [Compliance and Readiness · Outside the code](/p/grade10-site/vault/compliance-and-readiness#outside-the-code)
-- Storybook: `Pages/Legal` → Terms Of Service, Privacy Policy
+- Storybook: `Site/Carried Surfaces/Screens/Legal` → Terms Of Service, Privacy Policy

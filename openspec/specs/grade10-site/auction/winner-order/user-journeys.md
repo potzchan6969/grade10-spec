@@ -98,6 +98,36 @@ current currency minimum,
 **I want** to fill in and confirm a delivery address on the order
 **so that** Grade10 can quote shipping to the right place.
 
+### winner-order-US-21: Winner quotes their order
+
+**As a** winner of an auction lot,
+**I want** my order to have a clear, stable payment reference I can quote,
+**so that** I can reference it when contacting support or making inquiries about my purchase, without a separate order ID.
+
+### winner-order-US-22: Winner reviews invoice and payment details
+
+**As a** winner,
+**I want** my invoice and payment receipts to show stable public references built from my payment reference,
+**so that** I can contact Grade10, make a payment, and reconcile charges without exposing internal system keys.
+
+### winner-order-US-13: Winner learns their order was cancelled
+
+**As a** winner whose order an operator cancelled,
+**I want** Winner Order to say it was cancelled and when, with the lot I won and a way to contact Grade10,
+**so that** I know the order is closed and who to ask about it.
+
+### winner-order-US-20: Winner waits out a partial payment an operator is collecting
+
+**As a** winner whose invoice an operator has started collecting in parts,
+**I want** a locked order with Contact Us and a receipt for every payment made so far,
+**so that** I always have proof of what I have paid, without needing to track a running balance myself.
+
+### winner-order-US-23: Winner gets the address form back
+
+**As a** winner who missed the 48-hour address deadline,
+**I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
+**so that** I can still settle the lot I won once I have told Grade10 where to ship it.
+
 ## Retired
 
 - `winner-order-US-06` - Retired by refused-bid-is-not-a-bid.

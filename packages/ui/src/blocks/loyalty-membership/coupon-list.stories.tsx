@@ -5,7 +5,7 @@ import { CouponList } from "./coupon-list";
 import { COUPONS } from "./fixtures";
 
 const meta = {
-  title: "Loyalty Membership/CouponList",
+  title: "Loyalty/Coupons/Blocks/CouponList",
   component: CouponList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

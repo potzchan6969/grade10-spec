@@ -1,6 +1,8 @@
 import {
   Card,
+  CardAction,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@grade10/design-system/components/display/card";
@@ -17,6 +19,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { cn } from "@grade10/design-system/lib/utils";
+import { CalendarBlank, MapPin } from "@phosphor-icons/react";
 import { type ReactNode, useState } from "react";
 import type { LocaleProps } from "./booking-copy";
 import { BookingStateBadge } from "./booking-state-badge";
@@ -40,6 +44,8 @@ type BookingManageCardProps = LocaleProps & {
   copy: BookingManageCardCopy;
   record: BookingRecord;
   timeZoneLabel?: string;
+  /** The instant the visit is judged against, as epoch milliseconds. */
+  now?: number;
   pending?: boolean;
   error?: ReactNode;
   onMove: () => void;
@@ -48,15 +54,16 @@ type BookingManageCardProps = LocaleProps & {
 };
 
 /**
- * One booking. While it is live the card offers a move and a cancel, and
- * reports the cancel only after the collector confirms it; a closed booking
- * shows its state and offers nothing.
+ * One booking. While it is booked and has not ended the card offers a move
+ * and a cancel, and reports the cancel only after the collector confirms it;
+ * a visit marked in, ended or closed shows its state and offers nothing.
  */
 function BookingManageCard({
   copy,
   record,
   timeZoneLabel,
   locale,
+  now = Date.now(),
   pending = false,
   error,
   onMove,
@@ -64,7 +71,7 @@ function BookingManageCard({
   className,
 }: BookingManageCardProps) {
   const [confirming, setConfirming] = useState(false);
-  const live = record.state === "booked";
+  const open = record.state === "booked" && record.end > now;
 
   function confirmCancel() {
     setConfirming(false);
@@ -72,32 +79,28 @@ function BookingManageCard({
   }
 
   return (
-    <Card className={className} data-slot="booking-manage-card">
-      <CardHeader>
-        <CardTitle>{record.service}</CardTitle>
-        <BookingStateBadge
-          label={copy.state[record.state]}
-          state={record.state}
-        />
+    <Card className={cn("gap-3", className)} data-slot="booking-manage-card">
+      <CardHeader className="items-center">
+        <CardTitle className="text-base leading-snug">
+          {record.service}
+        </CardTitle>
+        <CardAction>
+          <BookingStateBadge
+            label={copy.state[record.state]}
+            state={record.state}
+          />
+        </CardAction>
       </CardHeader>
       <CardContent>
-        <VStack gap="md" hAlign="stretch">
-          <VStack gap="none" hAlign="stretch">
-            <Text as="span" size="xs" tone="secondary">
-              {copy.location}
-            </Text>
-            <Text as="span" weight="medium">
-              {record.location}
-            </Text>
-            <Text as="span" size="sm" tone="secondary">
-              {record.address}
-            </Text>
-          </VStack>
-          <VStack gap="none" hAlign="stretch">
-            <Text as="span" size="xs" tone="secondary">
-              {copy.when}
-            </Text>
-            <Text as="span" weight="medium">
+        <VStack gap="xs" hAlign="stretch">
+          <HStack className="min-w-0" gap="sm" vAlign="start">
+            <span
+              aria-hidden
+              className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-secondary-foreground"
+            >
+              <CalendarBlank size={16} weight="regular" />
+            </span>
+            <Text as="span" size="sm" weight="medium">
               {formatBookingWhen({
                 start: record.start,
                 end: record.end,
@@ -106,7 +109,32 @@ function BookingManageCard({
                 locale,
               })}
             </Text>
-          </VStack>
+          </HStack>
+          <HStack className="min-w-0" gap="sm" vAlign="start">
+            <span
+              aria-hidden
+              className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-secondary-foreground"
+            >
+              <MapPin size={16} weight="regular" />
+            </span>
+            <VStack className="min-w-0" gap="none" hAlign="start">
+              <Text
+                as="span"
+                className="text-secondary-foreground"
+                size="sm"
+                weight="medium"
+              >
+                {record.location}
+              </Text>
+              <Text
+                as="span"
+                className="text-pretty text-secondary-foreground"
+                size="xs"
+              >
+                {record.address}
+              </Text>
+            </VStack>
+          </HStack>
           {error ? (
             <Text
               as="p"
@@ -117,30 +145,32 @@ function BookingManageCard({
               {error}
             </Text>
           ) : null}
-          {live ? (
-            <HStack gap="sm">
-              <Button
-                disabled={pending}
-                onClick={onMove}
-                size="md"
-                type="button"
-                variant="secondary"
-              >
-                {copy.move}
-              </Button>
-              <Button
-                disabled={pending}
-                onClick={() => setConfirming(true)}
-                size="md"
-                type="button"
-                variant="outline"
-              >
-                {copy.cancel}
-              </Button>
-            </HStack>
-          ) : null}
         </VStack>
       </CardContent>
+      {open ? (
+        <CardFooter className="flex-col items-stretch justify-start gap-2 border-border bg-transparent sm:flex-row sm:items-center">
+          <Button
+            className="w-full sm:w-auto"
+            disabled={pending}
+            onClick={onMove}
+            size="md"
+            type="button"
+            variant="outline"
+          >
+            {copy.move}
+          </Button>
+          <Button
+            className="w-full sm:w-auto"
+            disabled={pending}
+            onClick={() => setConfirming(true)}
+            size="md"
+            type="button"
+            variant="ghost"
+          >
+            {copy.cancel}
+          </Button>
+        </CardFooter>
+      ) : null}
       {confirming ? (
         <Dialog onOpenChange={setConfirming} open>
           <DialogContent showCloseButton={false}>

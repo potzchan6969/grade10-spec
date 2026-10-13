@@ -14,8 +14,11 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import YAML from "yaml";
-import { sectionSlug } from "../../../tools/manual/src/api/paths.ts";
+import { RULES } from "../../../tools/manual/check/context.mjs";
+import { parsePage } from "../../../tools/manual/src/content/grammar.ts";
+import { sectionTextOf } from "../../../tools/manual/src/content/sections.ts";
 import {
+  leadingTitle,
   outline,
   sectionSpan,
   trimBlank,
@@ -24,11 +27,33 @@ import {
   deltaKindOf,
   deltaRequirementSections,
   deltaSections,
+  proposalSectionLinks,
   renamedPairs,
 } from "../../../tools/manual/src/store/read-changes.mts";
+import {
+  acceptedSnapshots,
+  describeReuse,
+  reusedInChange,
+} from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
 import { git, textAt } from "../store-main.mjs";
-import { deriveStatus, parseSuite, statusCounts } from "./suites.mjs";
+import { foldGroups, holding, labelOf, splitGroups } from "./feature-set.mjs";
+import { foldChecks, purposeOf } from "./fold-checks.mjs";
+import {
+  formatSuiteStatus,
+  parseSuite,
+  reviewProgress,
+  statusCounts,
+  transitionStatus,
+} from "./suites.mjs";
+
+const TRACE_MARKER_LINE =
+  /^[ \t]*<!--\s*trace:(?:scenario|case)\b[^\n]*-->[ \t]*\n?/gm;
+
+/** Trace markers are stamped onto durable specs by migrations after a
+ * snapshot was taken; a drift check compares wording, so it ignores them. */
+const withoutTraceMarkers = (text) =>
+  (text ?? "").replace(TRACE_MARKER_LINE, "");
 
 const TRACE_MARKER = /<!-- trace:scenario id=(\S+)/g;
 const MARKED_SCENARIO =
@@ -94,25 +119,32 @@ function walkFiles(root, dir, found = []) {
   return found;
 }
 
-function sectionContent(text, anchor) {
-  const roots = outline(text);
-  const all = [];
-  const visit = (sections) =>
-    sections.forEach((section) => {
-      if (sectionSlug(section.heading) === anchor) all.push(section);
-      visit(section.children);
-    });
-  visit(roots);
-  if (all.length === 0) return null;
-  const section = all[0];
-  const span = sectionSpan(
-    text,
-    section.heading,
-    section.level === 1 ? roots : undefined,
+/** The page sections the proposal's `## References` link, each read as the
+ * manual reads it, or why it cannot be: a flow's step headings stay inside a
+ * section, and a `detail` or an `example` - the page's `Product decisions`
+ * among them - is the page's own, so a change never inherits the questions
+ * another left there. */
+function linkedSections(root, changeId) {
+  const rel = `openspec/changes/${changeId}`;
+  const proposal = join(root, rel, "proposal.md");
+  if (!existsSync(proposal)) return [];
+  return proposalSectionLinks(readFileSync(proposal, "utf8"), rel).map(
+    ({ page, slug }) => {
+      const path = `${page}#${slug}`;
+      if (!existsSync(join(root, page)))
+        return { path, error: `${page} does not exist` };
+      let ast;
+      try {
+        ast = parsePage(readFileSync(join(root, page), "utf8"));
+      } catch (error) {
+        return { path, error: `${page}: ${error.message}` };
+      }
+      const content = sectionTextOf({ ast }, slug);
+      return content === undefined
+        ? { path, error: `${page} has no section matching #${slug}` }
+        : { path, content };
+    },
   );
-  // `sectionSpan` searches top-level headings; use the outline's complete raw
-  // block for nested sections so unrelated PRD decisions stay out of scope.
-  return `${"#".repeat(section.level)} ${section.heading}\n${section.raw ? `\n${section.raw}` : ""}`;
 }
 
 function changeContractPaths(root, changeId) {
@@ -143,29 +175,12 @@ function canonicalPlanningContent(path, text) {
     .replace(/\n{3,}/g, "\n\n");
 }
 
-function prdReferences(root, sourcePaths) {
-  const refs = new Map();
-  for (const path of sourcePaths) {
-    const text = readFileSync(join(root, path), "utf8");
-    for (const match of text.matchAll(/docs\/prds\/[\w./-]+\.md#([\w-]+)/g)) {
-      const file = match[0].split("#")[0];
-      const anchor = match[1];
-      if (!existsSync(join(root, file))) continue;
-      refs.set(`${file}${anchor ? `#${anchor}` : ""}`, { file, anchor });
-    }
-  }
-  return [...refs.values()];
-}
-
 function durableFor(root, capability, filename) {
   return join(root, "openspec", "specs", capability, filename);
 }
 
 function requirementBlocks(text) {
-  const top = outline(text).find((section) => section.level === 1);
-  const requirements = top?.children.find(
-    (section) => section.heading === "Requirements",
-  );
+  const requirements = sectionByName(deltaSections(text), "Requirements");
   return new Map(
     (requirements?.children ?? [])
       .filter((section) => /^Requirement:\s*/i.test(section.heading))
@@ -184,17 +199,6 @@ function renderRequirement(
   return `### Requirement: ${name}${body ? `\n\n${body}` : ""}`;
 }
 
-function rootSections(text) {
-  const heading = outline(text).find((section) => section.level === 1);
-  return { heading: heading?.heading ?? "", sections: heading?.children ?? [] };
-}
-
-function documentSections(text) {
-  const roots = outline(text);
-  const title = roots.find((section) => section.level === 1);
-  return title ? title.children : roots;
-}
-
 function renderSection(section) {
   return `${"#".repeat(section.level)} ${section.heading}${section.raw ? `\n\n${section.raw}` : ""}`;
 }
@@ -203,13 +207,58 @@ function sectionByName(sections, name) {
   return sections.find((section) => section.heading === name);
 }
 
+function claimsFeatureSet(sections) {
+  return ["Feature set", "REMOVED Feature set"].some((name) =>
+    sectionByName(sections, name),
+  );
+}
+
 function usId(heading) {
-  return /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(heading)?.[1] ?? null;
+  return (
+    /([a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?)/i.exec(
+      heading,
+    )?.[1] ?? null
+  );
 }
 
 function journeyIds(text) {
-  const section = sectionByName(documentSections(text ?? ""), "User journeys");
+  const section = sectionByName(deltaSections(text ?? ""), "User journeys");
   return new Set((section?.children ?? []).map((one) => usId(one.heading)));
+}
+
+const WALKED_BY = /^\*\*Walked by:\*\*.*(?:\n(?!#).+)*/m;
+
+/** A delta's Walked by line, reason and all, stands where the journeys would,
+ * and may retire the last of them in the same delta; `pnpm check:manual`
+ * refuses a file holding both, so a journey the delta adds or leaves standing
+ * beside it is refused. */
+function refuseBesideWalkedBy(added, standing, capability) {
+  for (const [ids, which] of [
+    [added, "the journeys this delta adds:"],
+    [standing, "the durable journeys"],
+  ])
+    if (ids.length > 0)
+      throw new Error(
+        `${capability}: a Walked by line cannot stand beside ${which} ${ids.join(", ")}`,
+      );
+}
+
+/** A restated, modified or removed journey names one the accepted baseline
+ * holds; one it does not hold would be added, or silently dropped under a
+ * Walked by line. */
+function refuseUnheldJourneys(fromDelta, held, capability) {
+  for (const [name, verb] of [
+    ["Context user journeys", "restated"],
+    ["MODIFIED User journeys", "modified"],
+    ["REMOVED User journeys", "removed"],
+  ])
+    for (const journey of sectionByName(fromDelta, name)?.children ?? []) {
+      const id = usId(journey.heading);
+      if (!id || !held.has(id))
+        throw new Error(
+          `${capability}: ${verb} journey ${id ?? journey.heading} is not in the accepted baseline`,
+        );
+    }
 }
 
 function mergeJourneys(
@@ -219,34 +268,34 @@ function mergeJourneys(
   capability,
   priorText,
 ) {
-  if (/\*\*Walked by:\*\*/.test(deltaText)) return currentText ?? deltaText;
-  const current = currentText ?? deltaText;
-  const currentDoc = {
-    heading: rootSections(current).heading,
-    sections: documentSections(current),
-  };
-  const deltaDoc = { heading: "", sections: documentSections(deltaText) };
-  const currentJourneySection = sectionByName(
-    currentDoc.sections,
-    "User journeys",
+  const fromDelta = deltaSections(deltaText);
+  const ownIds = journeyIds(priorText);
+  refuseUnheldJourneys(
+    fromDelta,
+    new Set([...journeyIds(currentText), ...ownIds]),
+    capability,
   );
+  const walkedBy = WALKED_BY.exec(deltaText)?.[0];
+  const current = currentText ?? deltaText;
+  const currentSections = deltaSections(current);
+  const currentJourneySection = sectionByName(currentSections, "User journeys");
   const live = new Map(
     (currentJourneySection?.children ?? [])
       .filter((section) => usId(section.heading))
       .map((section) => [usId(section.heading), section]),
   );
-  const retired = new Set(readRetiredIds(currentDoc.sections));
+  const retired = new Set(readRetiredIds(currentSections));
   const durableIds = new Set(currentText ? live.keys() : []);
-  const ownIds = journeyIds(priorText);
   const deltaHeld = [
     "User journeys",
     "Context user journeys",
     "ADDED User journeys",
     "MODIFIED User journeys",
   ]
-    .map((name) => sectionByName(deltaDoc.sections, name))
+    .map((name) => sectionByName(fromDelta, name))
     .filter(Boolean);
   const deltaIds = new Set();
+  const added = [];
   for (const section of deltaHeld) {
     for (const journey of section.children) {
       const id = usId(journey.heading);
@@ -256,6 +305,7 @@ function mergeJourneys(
           `${capability}: journey ${id} appears more than once in its delta`,
         );
       deltaIds.add(id);
+      if (section.heading !== "Context user journeys") added.push(id);
       if (
         section.heading === "ADDED User journeys" &&
         durableIds.has(id) &&
@@ -268,28 +318,32 @@ function mergeJourneys(
       retired.delete(id);
     }
   }
-  const removed = sectionByName(deltaDoc.sections, "REMOVED User journeys");
+  const removed = sectionByName(fromDelta, "REMOVED User journeys");
   for (const journey of removed?.children ?? []) {
     const id = usId(journey.heading);
-    if (!id || !live.has(id))
-      throw new Error(
-        `${capability}: removed journey ${id ?? journey.heading} is not in the accepted baseline`,
-      );
     live.delete(id);
     retired.add(id);
   }
+  if (walkedBy) refuseBesideWalkedBy(added, [...live.keys()], capability);
   const rendered = [];
-  if (currentDoc.heading) rendered.push(`# ${currentDoc.heading}`);
+  const title = leadingTitle(outline(current));
+  if (title) rendered.push(`# ${title}`);
   rendered.push("## User journeys");
+  if (walkedBy) rendered.push(walkedBy);
   for (const journey of live.values()) rendered.push(renderSection(journey));
   if (retired.size > 0) {
     rendered.push("## Retired");
-    const oldRetired = sectionByName(currentDoc.sections, "Retired");
+    const oldRetired = sectionByName(currentSections, "Retired");
     const priorLines =
       oldRetired?.raw.split("\n").filter((line) => line.trim() !== "") ?? [];
     const known = new Set(
       priorLines
-        .map((line) => /([a-z0-9][a-z0-9-]*-US-\d+[a-z]?)/i.exec(line)?.[1])
+        .map(
+          (line) =>
+            /([a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?)/i.exec(
+              line,
+            )?.[1],
+        )
         .filter(Boolean),
     );
     for (const id of retired)
@@ -302,23 +356,24 @@ function mergeJourneys(
 
 function readRetiredIds(sections) {
   const retired = sectionByName(sections, "Retired");
-  return [...(retired?.raw.match(/[a-z0-9][a-z0-9-]*-US-\d+[a-z]?/gi) ?? [])];
+  return [
+    ...(retired?.raw.match(
+      /[a-z0-9][a-z0-9.-]*\.US-?\d+[a-z]?|[a-z0-9][a-z0-9-]*-US-?\d+[a-z]?/gi,
+    ) ?? []),
+  ];
 }
 
 function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
-  const deltaSections = rootSections(deltaText).sections;
-  const deltaFeature = sectionByName(deltaSections, "Feature set");
-  const removedFeature = sectionByName(deltaSections, "REMOVED Feature set");
-  const removedGroups = (removedFeature?.raw ?? "")
-    .split("\n")
-    .filter((line) => /^-\s+/.test(line))
-    .map((line) => line.trim());
-  if (!deltaFeature && removedGroups.length === 0) return currentSpec;
+  const delta = deltaSections(deltaText);
+  const deltaFeature = sectionByName(delta, "Feature set");
+  const removedRaw = sectionByName(delta, "REMOVED Feature set")?.raw ?? "";
+  const removing = splitGroups(removedRaw).size > 0;
+  if (!deltaFeature && !removing) return currentSpec;
   const currentFeature = sectionByName(
-    rootSections(currentSpec).sections,
+    deltaSections(currentSpec),
     "Feature set",
   );
-  if (!currentFeature && removedGroups.length > 0)
+  if (!currentFeature && removing)
     throw new Error(
       `${capability}: cannot remove a Feature set group without a durable Feature set`,
     );
@@ -326,83 +381,62 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
     return `${currentSpec.replace(/\n*$/, "\n\n")}## Feature set${deltaFeature.raw ? `\n\n${deltaFeature.raw}` : ""}\n`;
   }
   if (priorText) {
-    const priorFeature = sectionByName(
-      rootSections(priorText).sections,
-      "Feature set",
-    );
-    if (currentFeature?.raw !== priorFeature?.raw)
-      throw new Error(
-        `${capability}: accepted Feature set changed since this amendment began; rebase the delta before acceptance`,
-      );
-  }
-  const splitGroups = (raw) => {
-    const groups = new Map();
-    let items = null;
-    for (const line of raw.split("\n")) {
-      if (/^-\s+/.test(line)) {
-        const group = line.trim();
-        if (!groups.has(group)) groups.set(group, []);
-        items = groups.get(group);
-      } else if (!items || line.trim() === "") continue;
-      else if (/^ {2}-\s+/.test(line) || items.length === 0) items.push([line]);
-      else items.at(-1).push(line);
+    const baseGroups = splitGroups(currentFeature.raw);
+    const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
+    const removedGroups = splitGroups(removedRaw);
+    const priorFeature = sectionByName(deltaSections(priorText), "Feature set");
+    const priorGroups = splitGroups(priorFeature?.raw ?? "");
+    const shape = (items) =>
+      withoutTraceMarkers((items ?? []).flat().join("\n"));
+    const itemShape = (items, label) =>
+      shape((items ?? []).filter((one) => labelOf(one) === label));
+    const touched = new Map();
+    const touch = (group, label) =>
+      touched.set(group, (touched.get(group) ?? new Set()).add(label));
+    for (const [group, items] of deltaGroups) {
+      const current = baseGroups.get(group) ?? [];
+      for (const item of items) {
+        const label = labelOf(item);
+        const same = (one) => shape([one]) === shape([item]);
+        const restated = label
+          ? holding(current, label).length === 1 &&
+            same(current[holding(current, label)[0]])
+          : current.some(same);
+        if (!restated) touch(group, label);
+      }
     }
-    return groups;
-  };
-  const textOf = (item) => item.map((line) => line.trim()).join(" ");
-  const labelOf = (item) => {
-    const text = item[0].trim().replace(/^-\s+/, "");
-    const match = /^\*\*([^*]+?):?\*\*|^([^:`]+):(?=\s|$)/.exec(text);
-    return (match?.[1] ?? match?.[2])?.trim() || null;
-  };
-  const baseGroups = splitGroups(currentFeature?.raw ?? "");
-  const deltaGroups = splitGroups(deltaFeature?.raw ?? "");
-  if (new Set(removedGroups).size !== removedGroups.length)
-    throw new Error(
-      `${capability}: REMOVED Feature set names a root group more than once`,
-    );
-  if (deltaGroups.size === 0 && removedGroups.length === 0) {
+    for (const [group, items] of removedGroups) {
+      if (items.length === 0) touch(group, null);
+      for (const item of items) touch(group, labelOf(item));
+    }
+    for (const [group, labels] of touched) {
+      const drifted = labels.has(null)
+        ? shape(baseGroups.get(group)) !== shape(priorGroups.get(group))
+        : [...labels].some(
+            (label) =>
+              itemShape(baseGroups.get(group), label) !==
+              itemShape(priorGroups.get(group), label),
+          );
+      if (drifted)
+        throw new Error(
+          `${capability}: accepted Feature set group "${group.replace(/^-\s+/, "")}" changed since this amendment began; rebase the delta before acceptance`,
+        );
+    }
+  }
+  if (!removing && splitGroups(deltaFeature.raw).size === 0) {
     if (deltaFeature.raw.trim() === currentFeature.raw.trim())
       return currentSpec;
     throw new Error(
       `${capability}: cannot safely merge this Feature set; use its bullet-group form or rebase a complete compatible result`,
     );
   }
-  for (const [group, deltaItems] of deltaGroups) {
-    if (!baseGroups.has(group)) baseGroups.set(group, []);
-    const items = baseGroups.get(group);
-    const holding = (pool, label) =>
-      label
-        ? pool.flatMap((one, at) => (labelOf(one) === label ? [at] : []))
-        : [];
-    for (const item of deltaItems) {
-      const label = labelOf(item);
-      const matches = holding(items, label);
-      for (const [side, count] of [
-        ["durable", matches.length],
-        ["delta", holding(deltaItems, label).length],
-      ])
-        if (count > 1)
-          throw new Error(
-            `${capability}: Feature set group "${group}" holds label "${label}" more than once in the ${side} spec; make its labels unique before folding`,
-          );
-      if (matches.length === 1) items[matches[0]] = item;
-      else if (!items.some((one) => textOf(one) === textOf(item)))
-        items.push(item);
-    }
-  }
-  for (const group of removedGroups) {
-    if (!baseGroups.has(group))
-      throw new Error(
-        `${capability}: REMOVED Feature set names a root group that does not exist: ${group.replace(/^-\s+/, "")}`,
-      );
-    if (deltaGroups.has(group))
-      throw new Error(
-        `${capability}: Feature set root group cannot be both modified and removed: ${group.replace(/^-\s+/, "")}`,
-      );
-    baseGroups.delete(group);
-  }
-  const body = [...baseGroups]
+  const groups = foldGroups(
+    currentFeature.raw,
+    deltaFeature?.raw ?? "",
+    removedRaw,
+    capability,
+  );
+  const body = [...groups]
     .map(([group, items]) => [group, ...items.flat()].join("\n"))
     .join("\n");
   const rendered = `## Feature set\n\n${body}\n`;
@@ -417,10 +451,6 @@ function mergeFeatureSet(currentSpec, deltaText, capability, priorText) {
   return `${lines.join("\n").replace(/\n*$/, "\n")} `.trimEnd();
 }
 
-function purposeOf(text) {
-  return sectionByName(rootSections(text).sections, "Purpose")?.raw;
-}
-
 function mergePurpose(
   currentSpec,
   deltaPurpose,
@@ -429,10 +459,7 @@ function mergePurpose(
   baseText,
 ) {
   if (!deltaPurpose) return currentSpec;
-  const currentPurpose = sectionByName(
-    rootSections(currentSpec).sections,
-    "Purpose",
-  );
+  const currentPurpose = sectionByName(deltaSections(currentSpec), "Purpose");
   if (
     !priorText &&
     typeof baseText === "string" &&
@@ -442,10 +469,7 @@ function mergePurpose(
       `${capability}: accepted Purpose changed since this delta's Purpose was written; fold the durable Purpose's changes into this delta's Purpose and commit it`,
     );
   if (priorText) {
-    const priorPurpose = sectionByName(
-      rootSections(priorText).sections,
-      "Purpose",
-    );
+    const priorPurpose = sectionByName(deltaSections(priorText), "Purpose");
     if (currentPurpose?.raw !== priorPurpose?.raw) {
       throw new Error(
         `${capability}: accepted Purpose changed since this amendment began; rebase the delta before acceptance`,
@@ -514,9 +538,11 @@ const SUITE_LISTS = ["Raised", "Settled", "Out of suite"];
 const SUITE_SECTIONS = new Set([
   "Background",
   "Reconciliation",
+  "Ungrouped",
   ...SUITE_LISTS,
 ]);
-const JOURNEY_GROUP = /^(.+?-US-?(\d+)([a-z]?))\b/i;
+const JOURNEY_GROUP = /^((?:.+?\.US-?(\d+)([a-z]?)|.+?-US-?(\d+)([a-z]?)))\b/i;
+const WALK_SECTION = /^Walk\b/i;
 
 function paragraphs(text) {
   return (text ?? "")
@@ -532,12 +558,17 @@ function appendMissing(currentText, deltaText) {
   return kept.join("\n\n");
 }
 
+/** A Raised, Settled or Out of suite item that stands for an empty list:
+ * `None`, bulleted or italic or bare, closing there or going on with `yet`,
+ * `for`, a stop, a semicolon or a dash. */
+const PLACEHOLDER = /^(?:[-*]\s+)?\*?None(?:$|[.;:]| yet\b| for\b| [—-] )/;
+
 function listItems(text) {
   const items = [];
   let fresh = true;
   for (const line of (text ?? "").split("\n")) {
     if (line.trim() === "") fresh = true;
-    else if (fresh || /^([-*] |\*None yet\b)/.test(line)) {
+    else if (fresh || /^[-*] /.test(line) || PLACEHOLDER.test(line)) {
       items.push(line);
       fresh = false;
     } else items[items.length - 1] += `\n${line}`;
@@ -549,7 +580,7 @@ function mergeList(currentText, deltaText) {
   const items = [
     ...new Set([...listItems(currentText), ...listItems(deltaText)]),
   ];
-  const real = items.filter((item) => !/^(\*None yet\b|None\.$)/.test(item));
+  const real = items.filter((item) => !PLACEHOLDER.test(item));
   const kept = real.length ? real : items.slice(0, 1);
   const isItem = (item) => /^[-*] /.test(item);
   if (kept.length === 0) return "";
@@ -577,8 +608,11 @@ const RUN_LINE = /^(\*\*Run\b|Run:)/;
 
 /** A run is its `Run` paragraph and what follows until the next one; text
  *  before the first is a run with no heading. A delta run whose heading the
- *  durable suite already holds, or the delta's own headless run, is that run
- *  grown since its last fold and replaces it; any other run is added. */
+ *  durable suite already holds is that run grown since its last fold: it
+ *  takes the run's place, and the durable paragraphs it does not carry stay
+ *  after it, since records appended later without a heading read as part of
+ *  it. A delta run with no heading adds the paragraphs the durable suite does
+ *  not hold, and any other run is added whole. */
 function mergeRuns(currentRuns, deltaRuns) {
   if (!deltaRuns || currentRuns.includes(deltaRuns)) return currentRuns;
   const runsOf = (text) =>
@@ -587,12 +621,17 @@ function mergeRuns(currentRuns, deltaRuns) {
       else runs.at(-1).push(one);
       return runs;
     }, []);
-  const keyOf = (run) => (RUN_LINE.test(run[0]) ? run[0] : "");
+  const headed = (run) => RUN_LINE.test(run[0]);
   const merged = runsOf(currentRuns);
   for (const run of runsOf(deltaRuns)) {
-    const at = merged.findIndex((one) => keyOf(one) === keyOf(run));
-    if (at < 0) merged.push(run);
-    else merged[at] = run;
+    const at = merged.findIndex((one) => headed(run) && one[0] === run[0]);
+    if (at >= 0)
+      merged[at] = [...run, ...merged[at].filter((one) => !run.includes(one))];
+    else if (headed(run)) merged.push(run);
+    else {
+      const missing = run.filter((one) => !merged.flat().includes(one));
+      if (missing.length) merged.push(missing);
+    }
   }
   return merged.map((run) => run.join("\n\n")).join("\n\n");
 }
@@ -633,28 +672,70 @@ function suiteHeader(currentHeader, deltaHeader) {
   return lines.join("\n");
 }
 
-/** The header a fold leaves: a file that was approved and now holds a draft
- *  lapses its `**Reviewed:**` line on the fold's date, so it reads `reopened`. */
-function withDerivedStatus(text, foldedOn) {
+/** The header a fold leaves. Status is a transition from the durable suite's
+ *  approved share to the folded result: a lower share reopens it, an equal
+ *  share keeps an existing reopen, and a recovery returns it to pending until
+ *  every active case is actual. */
+function withTransitionStatus(text, foldedOn, previousText = null) {
   const suite = parseSuite(text);
   const cases = suite.journeys.flatMap((journey) => journey.cases);
   const counts = statusCounts(cases);
-  const lapses =
-    suite.reviewed &&
-    !suite.reviewedLapsed &&
-    deriveStatus(counts, cases.length) !== "approved";
-  const status = deriveStatus(
+  const progress = reviewProgress(counts);
+  const previous = previousText ? parseSuite(previousText) : null;
+  const previousCases = previous
+    ? previous.journeys.flatMap((journey) => journey.cases)
+    : [];
+  const previousProgress = previous
+    ? reviewProgress(statusCounts(previousCases))
+    : null;
+  const status = transitionStatus(
+    previous?.status,
+    previousProgress,
     counts,
     cases.length,
-    Boolean(suite.reviewedLapsed) || lapses,
   );
+  const lapses =
+    suite.reviewed && !suite.reviewedLapsed && status !== "approved";
   const reviewed = lapses
     ? text.replace(/^(\*\*Reviewed:\*\* .*?)[ \t]*$/m, `$1, lapsed ${foldedOn}`)
     : text;
-  return reviewed.replace(/^\*\*Status:\*\* .*$/m, `**Status:** ${status}`);
+  return reviewed.replace(
+    /^\*\*Status:\*\* .*$/m,
+    formatSuiteStatus(status, progress),
+  );
 }
 
-const CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
+const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/i;
+const DISPLAY_CASE_HEADING = /^(\S+\.US-?(\d+)-TC-?(\d+)):/i;
+const LEGACY_CASE_HEADING = /(\S+-TC\d+)-(\d+)\b/i;
+
+function caseHeading(heading) {
+  const display = DISPLAY_CASE_HEADING.exec(heading);
+  if (display)
+    return {
+      id: display[1],
+      tc: Number(display[3]),
+      revision: null,
+      modern: true,
+    };
+  const modern = MODERN_CASE_HEADING.exec(heading);
+  if (modern)
+    return {
+      id: modern[1],
+      tc: Number(modern[3]),
+      revision: null,
+      modern: true,
+    };
+  const legacy = LEGACY_CASE_HEADING.exec(heading);
+  return legacy
+    ? {
+        id: legacy[1],
+        tc: Number(legacy[1].match(/-TC(\d+)$/i)?.[1]),
+        revision: Number(legacy[2]),
+        modern: false,
+      }
+    : null;
+}
 
 const CASE_MARKER = /\n*(<!-- trace:case [^\n]*-->)$/;
 
@@ -665,7 +746,7 @@ const CASE_MARKER = /\n*(<!-- trace:case [^\n]*-->)$/;
 function markedCases(group, capability) {
   const sections = group.children;
   for (const section of sections)
-    if (!CASE_HEADING.test(section.heading))
+    if (!caseHeading(section.heading))
       throw new Error(
         `${capability}: \`### ${section.heading}\` under \`## ${group.heading}\` is not a test case the fold can place; fold it by hand into the change's suite`,
       );
@@ -688,13 +769,24 @@ function markedCases(group, capability) {
  *  to the new revision. An older revision means the change was written
  *  against a suite that has since moved on. */
 function mergeCases(existing, incoming, capability) {
-  const revisionOf = (one) => Number(CASE_HEADING.exec(one.section.heading)[2]);
+  const revisionOf = (one) => {
+    const parsed = caseHeading(one.section.heading);
+    if (!parsed) return null;
+    if (!parsed.modern) return parsed.revision;
+    const marker = /\brev=(\d+)/.exec(one.marker ?? "");
+    return marker ? Number(marker[1]) : null;
+  };
   const cases = new Map(existing.map((one) => [caseNumber(one.section), one]));
   for (const one of incoming) {
     const number = caseNumber(one.section);
     const prior = cases.get(number);
     const rev = revisionOf(one);
-    if (prior && rev < revisionOf(prior))
+    if (
+      prior &&
+      rev !== null &&
+      revisionOf(prior) !== null &&
+      rev < revisionOf(prior)
+    )
       throw new Error(
         `${capability}: ${number}-${rev} is an older revision than the durable suite's ${number}-${revisionOf(prior)}; write the change's case against it`,
       );
@@ -704,17 +796,41 @@ function mergeCases(existing, incoming, capability) {
         : prior?.marker;
     cases.set(number, { ...one, marker: one.marker ?? inherited ?? null });
   }
-  return [...cases.values()];
+  return [...cases.values()].sort((a, b) => {
+    const deprecated = (one) =>
+      /\*\*Status:\*\*\s*deprecated\b/i.test(one.section.raw);
+    return Number(deprecated(a)) - Number(deprecated(b));
+  });
 }
 
 function caseNumber(section) {
-  return CASE_HEADING.exec(section.heading)[1];
+  const parsed = caseHeading(section.heading);
+  if (!parsed) throw new Error(`cannot read case heading: ${section.heading}`);
+  return parsed.modern ? `TC${parsed.tc}` : parsed.id;
 }
 
 /** Each `TC<m>` once in a suite, whatever its revision: the rule
  *  `tcs:validate` holds the store to. */
 function refuseRepeatedCases(text, capability, where, remedy) {
   const seen = new Set();
+  const seenModern = new Set();
+  for (const [, id] of text.matchAll(
+    /^#{3,4}\s+(\S+)\s+\(US-?\d+-TC-?\d+\):/gim,
+  )) {
+    const number = id;
+    if (seenModern.has(number))
+      throw new Error(
+        `${capability}: test case ${number} appears more than once in ${where}; ${remedy}`,
+      );
+    seenModern.add(number);
+  }
+  for (const [, id] of text.matchAll(/^#{3,4}\s+(\S+\.US-?\d+-TC-?\d+):/gim)) {
+    if (seenModern.has(id))
+      throw new Error(
+        `${capability}: test case ${id} appears more than once in ${where}; ${remedy}`,
+      );
+    seenModern.add(id);
+  }
   for (const [, number] of text.matchAll(/^###\s+(\S+-TC\d+)-\d+\b/gim)) {
     if (seen.has(number))
       throw new Error(
@@ -727,13 +843,15 @@ function refuseRepeatedCases(text, capability, where, remedy) {
 function mergeSuite(currentText, deltaText, capability, foldedOn) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(foldedOn ?? ""))
     throw new Error(`${capability}: a suite fold needs its date, YYYY-MM-DD`);
-  if (currentText === null || currentText === undefined) return deltaText;
+  if (currentText === null || currentText === undefined)
+    return withTransitionStatus(deltaText, foldedOn);
   const texts = [currentText, deltaText].map((text) =>
     text.replace(/\r\n/g, "\n"),
   );
-  if (texts[0] === texts[1]) return texts[0];
+  if (texts[0] === texts[1])
+    return withTransitionStatus(texts[0], foldedOn, texts[0]);
   const docs = texts.map((text) => {
-    const sections = documentSections(text);
+    const sections = deltaSections(text);
     const headerEnd = Math.min(
       ...sections.map((section) => section.line),
       text.split("\n").length + 1,
@@ -747,6 +865,7 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
       if (
         section.level === 2 &&
         !SUITE_SECTIONS.has(section.heading) &&
+        !WALK_SECTION.test(section.heading) &&
         !JOURNEY_GROUP.test(section.heading)
       )
         throw new Error(
@@ -756,11 +875,21 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
   });
   const [current, delta] = docs;
   const named = (doc, name) => sectionByName(doc.sections, name)?.raw;
-  const groupsOf = (doc) =>
-    doc.sections.filter(
+  const groupsOf = (doc) => [
+    ...doc.sections.filter(
       (section) => section.level === 2 && JOURNEY_GROUP.test(section.heading),
-    );
-  const groupId = (section) => JOURNEY_GROUP.exec(section.heading)[1];
+    ),
+    ...(
+      doc.sections.find((section) => section.heading === "Ungrouped")
+        ?.children ?? []
+    )
+      .filter(
+        (section) => section.level === 3 && JOURNEY_GROUP.test(section.heading),
+      )
+      .map((section) => ({ ...section, ungrouped: true })),
+  ];
+  const groupId = (section) =>
+    `${section.ungrouped ? "ungrouped:" : ""}${JOURNEY_GROUP.exec(section.heading)[1]}`;
   const ruled = /\n+---$/;
   refuseRepeatedCases(
     texts[0],
@@ -785,13 +914,17 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
       added,
       capability,
     );
-    const rendered = [`## ${incoming.heading}`, body.trim()].filter(Boolean);
+    const rendered = [
+      `${incoming.ungrouped ? "###" : "##"} ${incoming.heading}`,
+      body.trim(),
+    ].filter(Boolean);
     for (const { section, marker } of cases)
       rendered.push(
         `${marker ? `${marker}\n` : ""}${renderSection(section).replace(ruled, "")}`,
       );
     currentGroups.set(groupId(incoming), {
       heading: incoming.heading,
+      ungrouped: incoming.ungrouped,
       render: rendered.join("\n\n"),
     });
   }
@@ -803,18 +936,42 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
     );
   }
   const usOrder = (section) => {
-    const [, , number, letter] = JOURNEY_GROUP.exec(section.heading);
+    const match = JOURNEY_GROUP.exec(section.heading);
+    const number = match[2] ?? match[4];
+    const letter = match[3] ?? match[5];
     return Number(number) + (letter ? letter.charCodeAt(0) / 1000 : 0);
   };
-  const groups = [...currentGroups.values()]
-    .sort((a, b) => usOrder(a) - usOrder(b))
+  const orderedGroups = [...currentGroups.values()].sort(
+    (a, b) => usOrder(a) - usOrder(b),
+  );
+  const normalGroups = orderedGroups
+    .filter((section) => !section.ungrouped)
     .map((section) => section.render ?? renderSection(section));
+  const ungroupedGroups = orderedGroups
+    .filter((section) => section.ungrouped)
+    .map((section) => section.render ?? renderSection(section));
+  const groups = [
+    ...normalGroups,
+    ...(ungroupedGroups.length
+      ? [`## Ungrouped\n\n${ungroupedGroups.join("\n\n")}`]
+      : []),
+  ];
   const separator = [current, delta].some((doc) =>
     groupsOf(doc).some((section) => ruled.test(section.raw)),
   )
     ? "\n\n---\n\n"
     : "\n\n";
   const parts = [suiteHeader(current.header, delta.header)];
+  const walks = (
+    delta.sections.some(
+      (section) => section.level === 2 && WALK_SECTION.test(section.heading),
+    )
+      ? delta.sections
+      : current.sections
+  ).filter(
+    (section) => section.level === 2 && WALK_SECTION.test(section.heading),
+  );
+  parts.push(...walks.map((section) => renderSection(section)));
   const background = appendMissing(
     named(current, "Background"),
     named(delta, "Background"),
@@ -840,7 +997,11 @@ function mergeSuite(currentText, deltaText, capability, foldedOn) {
     named(delta, "Out of suite"),
   );
   if (outOfSuite) parts.push(`## Out of suite\n\n${outOfSuite}`);
-  const merged = withDerivedStatus(`${parts.join("\n\n")}\n`, foldedOn);
+  const merged = withTransitionStatus(
+    `${parts.join("\n\n")}\n`,
+    foldedOn,
+    texts[0],
+  );
   refuseRepeatedCases(
     merged,
     capability,
@@ -860,16 +1021,10 @@ function foldOne(
   const durableExists = existsSync(durablePath);
   let durable = durableExists ? readFileSync(durablePath, "utf8") : "";
   const original = durable;
-  const delta = outline(deltaText).find((section) => section.level === 1);
-  if (!delta) throw new Error(`${capability}: delta has no title`);
-  if (!durableExists) durable = `# ${delta.heading}\n`;
-  const durableTop = outline(durable).find((section) => section.level === 1);
-  const deltaPurpose = delta.children.find(
-    (section) => section.heading === "Purpose",
-  );
-  const existingPurpose = durableTop?.children.find(
-    (section) => section.heading === "Purpose",
-  );
+  const delta = deltaSections(deltaText);
+  if (!durableExists) durable = `# ${capability} Specification\n`;
+  const deltaPurpose = sectionByName(delta, "Purpose");
+  const existingPurpose = sectionByName(deltaSections(durable), "Purpose");
   if (!existingPurpose && !deltaPurpose)
     throw new Error(
       `${capability}: new durable spec needs a Purpose section before acceptance`,
@@ -881,20 +1036,14 @@ function foldOne(
     priorText,
     baseText,
   );
-  const deltaFeatureSet = delta.children.find(
-    (section) => section.heading === "Feature set",
-  );
-  const deltaRemovedFeatureSet = delta.children.some(
-    (section) => section.heading === "REMOVED Feature set",
-  );
-  if (deltaFeatureSet || deltaRemovedFeatureSet)
+  if (claimsFeatureSet(delta))
     durable = mergeFeatureSet(durable, deltaText, capability, priorText);
   const requirements = new Map(requirementBlocks(durable));
   const priorRequirements =
     priorText === null ? new Map() : requirementBlocks(priorText);
-  const sameRequirement = (left, right) => left?.raw === right?.raw;
-  const sections = deltaSections(deltaText);
-  for (const section of sections) {
+  const sameRequirement = (left, right) =>
+    withoutTraceMarkers(left?.raw) === withoutTraceMarkers(right?.raw);
+  for (const section of delta) {
     const kind = deltaKindOf(section.heading);
     if (!kind) continue;
     if (kind === "renamed") {
@@ -1027,47 +1176,13 @@ function durableWhenPurposeWritten(root, deltaPath, durablePath) {
   return textAt(root, written, durablePath) ?? "";
 }
 
-function previousDurableSnapshots(root, changeId) {
-  const current = join(
-    root,
-    "openspec",
-    "changes",
-    changeId,
-    "acceptance.json",
-  );
-  if (!existsSync(current)) return new Map();
-  try {
-    const accepted = JSON.parse(readFileSync(current, "utf8"));
-    const file = join(
-      root,
-      "openspec",
-      "changes",
-      changeId,
-      "acceptance",
-      `${accepted.fingerprint}.snapshots.json`,
-    );
-    if (!existsSync(file)) return new Map();
-    const snapshots = JSON.parse(readFileSync(file, "utf8"));
-    return new Map(
-      (snapshots.files ?? [])
-        .filter((entry) => entry.role === "durable-result")
-        .map((entry) => [
-          entry.path,
-          Buffer.from(entry.contentBase64, "base64").toString("utf8"),
-        ]),
-    );
-  } catch {
-    return new Map();
-  }
-}
-
 function contractOutputs(root, changeId, foldedOn) {
   const dir = join(root, "openspec", "changes", changeId);
   const deltas = walkFiles(root, join(dir, "specs"))
     .filter((path) => path.endsWith("/spec.md"))
     .sort();
   const outputs = new Map();
-  const prior = previousDurableSnapshots(root, changeId);
+  const prior = acceptedSnapshots(root, changeId, "durable-result");
   for (const path of deltas) {
     const relativeCapability = path
       .slice(`openspec/changes/${changeId}/specs/`.length)
@@ -1133,19 +1248,11 @@ export function contractTargets(root, changeId) {
     .sort();
   for (const deltaPath of deltas) {
     const deltaText = readFileSync(join(root, deltaPath), "utf8");
-    const delta = outline(deltaText).find((section) => section.level === 1);
+    const sections = deltaSections(deltaText);
     const anchors = new Set();
-    if (delta?.children.some((section) => section.heading === "Purpose"))
-      anchors.add("Purpose");
-    if (
-      delta?.children.some(
-        (section) =>
-          section.heading === "Feature set" ||
-          section.heading === "REMOVED Feature set",
-      )
-    )
-      anchors.add("Feature set");
-    for (const section of deltaSections(deltaText)) {
+    if (sectionByName(sections, "Purpose")) anchors.add("Purpose");
+    if (claimsFeatureSet(sections)) anchors.add("Feature set");
+    for (const section of sections) {
       const kind = deltaKindOf(section.heading);
       if (!kind) continue;
       if (kind === "renamed") {
@@ -1255,7 +1362,11 @@ export function contractTargetDiffs(targets, baselineText, currentText) {
   return differences;
 }
 
-export function acceptanceReadiness(root, changeId) {
+export function acceptanceReadiness(
+  root,
+  changeId,
+  sections = linkedSections(root, changeId),
+) {
   const dir = join(root, "openspec", "changes", changeId);
   const errors = [];
   const required = [
@@ -1301,6 +1412,8 @@ export function acceptanceReadiness(root, changeId) {
   );
   if (deltas.length === 0 && manifest.skip_specs !== true)
     errors.push("there are no delta specs to accept");
+  for (const { file, reuse } of reusedInChange(root, changeId))
+    errors.push(`${file}: ${describeReuse(reuse)}`);
   for (const path of deltas) {
     const capabilityDir = dirname(join(root, path));
     for (const file of ["user-journeys.md", "feature-tcs.md"]) {
@@ -1321,10 +1434,25 @@ export function acceptanceReadiness(root, changeId) {
             .replace(/<!--[\s\S]*?-->/g, "")
             .trim()
         : "";
+      const tableRows = body
+        .split("\n")
+        .filter(
+          (line) =>
+            /^\s*\|/.test(line) &&
+            !/^\s*\|(?:\s*:?-{3,}:?\s*\|)+\s*$/.test(line),
+        );
+      const incompleteTable =
+        tableRows.length === 1 ||
+        tableRows.slice(1).some((line) =>
+          line
+            .split("|")
+            .slice(1, -1)
+            .some((cell) => cell.trim() === ""),
+        );
       if (
         !reconciliation ||
         body === "" ||
-        /^\s*\|\s*(?:Raised|Disposition|Question)\s*\|/im.test(body) ||
+        incompleteTable ||
         /^\s*\|\s*<!--/m.test(
           suite
             .split("\n")
@@ -1338,18 +1466,13 @@ export function acceptanceReadiness(root, changeId) {
     }
   }
   const sourcePaths = changeContractPaths(root, changeId);
-  const prds = prdReferences(root, sourcePaths);
   const scoped = sourcePaths.map((path) => [
     path,
     canonicalPlanningContent(path, readFileSync(join(root, path), "utf8")),
   ]);
-  for (const { file, anchor } of prds) {
-    const page = readFileSync(join(root, file), "utf8");
-    const section = sectionContent(page, anchor);
-    if (section === null)
-      errors.push(`${file} has no section matching #${anchor}`);
-    else scoped.push([`${file}#${anchor}`, section]);
-  }
+  for (const { path, content, error } of sections)
+    if (error) errors.push(error);
+    else scoped.push([path, content]);
   const unresolved = (content) => {
     const visible = content
       .replace(/<!--[\s\S]*?-->/g, "")
@@ -1404,7 +1527,7 @@ export function baselineFingerprint(baseline) {
   return HASH(json([...baseline].sort((a, b) => a.path.localeCompare(b.path))));
 }
 
-function fingerprintArtifacts(root, changeId, outputs) {
+function fingerprintArtifacts(root, changeId, outputs, sections) {
   const sourcePaths = changeContractPaths(root, changeId);
   const snapshots = [];
   const artifacts = sourcePaths.map((path) => ({
@@ -1428,14 +1551,9 @@ function fingerprintArtifacts(root, changeId, outputs) {
     });
     snapshots.push({ path, role: "durable-result", content });
   }
-  for (const { file, anchor } of prdReferences(root, sourcePaths)) {
-    const text = readFileSync(join(root, file), "utf8");
-    const selected = anchor ? sectionContent(text, anchor) : text;
-    if (selected === null)
-      throw new Error(`${file} has no section matching #${anchor}`);
-    const path = anchor ? `${file}#${anchor}` : file;
-    artifacts.push({ path, sha256: HASH(selected), role: "prd-source" });
-    snapshots.push({ path, role: "prd-source", content: selected });
+  for (const { path, content } of sections) {
+    artifacts.push({ path, sha256: HASH(content), role: "prd-source" });
+    snapshots.push({ path, role: "prd-source", content });
   }
   return {
     artifacts: artifacts.sort(
@@ -1452,7 +1570,8 @@ export function prepareAcceptance(
   changeId,
   { foldedOn = new Date().toISOString().slice(0, 10) } = {},
 ) {
-  const readiness = acceptanceReadiness(root, changeId);
+  const sections = linkedSections(root, changeId);
+  const readiness = acceptanceReadiness(root, changeId, sections);
   if (readiness.length > 0)
     throw new Error(
       `Acceptance is blocked:\n${readiness.map((line) => `- ${line}`).join("\n")}`,
@@ -1462,6 +1581,7 @@ export function prepareAcceptance(
     root,
     changeId,
     outputs,
+    sections,
   );
   const targets = contractTargets(root, changeId);
   const identity = {
@@ -1483,51 +1603,141 @@ export function prepareAcceptance(
   };
 }
 
-/** The checks a folded store must pass, run before anything is written in a
- *  copy of `openspec/` that holds the fold, beside links to the rest of the
- *  store that the checks read: `tcs:validate` as the
- *  `suites` CI job runs it, and that every trace marker in a file the fold
- *  writes sits directly above its heading. The rest of `trace validate` is
- *  not asked: a change's markers repeat in the durable files it folds into
- *  until it archives. `command(args, cwd)` runs `pnpm` with `args`. */
-export function validateFoldedSuites(prepared, command) {
+/** A copy of the store that holds the fold, beside links to the rest of it,
+ *  for the checks that read a whole store. Its `.git` names the store's git
+ *  directory by absolute path, since a submodule's relative `gitdir:` line
+ *  resolves nowhere from the copy. The caller removes it. */
+function foldedTree(prepared) {
+  const entries = readdirSync(prepared.root);
+  const gitFile =
+    entries.includes(".git") && `gitdir: ${gitDir(prepared.root)}\n`;
   const tree = mkdtempSync(join(tmpdir(), "folded-store-"));
+  for (const entry of entries)
+    if (entry === "openspec")
+      cpSync(join(prepared.root, entry), join(tree, entry), {
+        recursive: true,
+      });
+    else if (entry === ".git") writeFileSync(join(tree, entry), gitFile);
+    else symlinkSync(join(prepared.root, entry), join(tree, entry));
+  for (const [path, content] of prepared.outputs) {
+    mkdirSync(dirname(join(tree, path)), { recursive: true });
+    writeFileSync(join(tree, path), content);
+  }
+  return tree;
+}
+
+function gitDir(root) {
+  const dir = git(root, ["rev-parse", "--absolute-git-dir"]);
+  if (!dir) throw new Error(`${root}: git cannot resolve its .git`);
+  return dir;
+}
+
+/** `pnpm run check:manual` prints a `FAIL  <rule title>` heading over each
+ *  rule's rows; one failure per rule, named by its key. */
+function manualFailures(output) {
+  const found = [];
+  let current = null;
+  for (const line of output.split("\n")) {
+    const head = /^FAIL {2}(.+)$/.exec(line);
+    if (head) {
+      current = {
+        rule: `check:manual/${RULES.find((rule) => rule.title === head[1])?.key ?? head[1]}`,
+        level: "fail",
+        detail: [],
+      };
+      found.push(current);
+    } else if (current && /^ {6}\S/.test(line))
+      current.detail.push(line.trim());
+    else current = null;
+  }
+  return found.map((one) => ({ ...one, detail: one.detail.join("\n") }));
+}
+
+/** Every check `spec:accept` holds a change to, run on the fold before
+ *  anything is written, so `accept:preflight` and `spec:accept` refuse the
+ *  same changes: `validate:changes`, the fold's own checks, `tcs:validate`
+ *  on a copy of the store that holds the fold, the trace markers of the
+ *  files the fold writes, and `check:manual` on that copy with the
+ *  acceptance recorded - the store-wide rules (`overlap`, `issued`) that a
+ *  change accepted beside another one breaks. Nothing stops at the first
+ *  finding. Returns `{ failures, warnings }`, each `{ rule, detail }`.
+ *  `command(args, cwd)` runs `pnpm` with `args`. */
+export function acceptanceGate(prepared, command) {
+  const failures = [];
+  const warnings = [];
+  const refuse = (rule, detail) => failures.push({ rule, detail });
+  const run = (rule, args) => {
+    const result = command(args, prepared.root);
+    if (result.status === 0) return null;
+    return `${result.stdout ?? ""}${result.stderr ?? ""}`.trim() || rule;
+  };
+  const changes = run("validate:changes", [
+    "run",
+    "validate:changes",
+    prepared.changeId,
+  ]);
+  if (changes) refuse("validate:changes", changes);
+  for (const finding of foldChecks(prepared))
+    (finding.level === "warn" ? warnings : failures).push(finding);
+  const tree = foldedTree(prepared);
   try {
-    for (const entry of readdirSync(prepared.root))
-      if (entry === "openspec")
-        cpSync(join(prepared.root, entry), join(tree, entry), {
-          recursive: true,
-        });
-      else symlinkSync(join(prepared.root, entry), join(tree, entry));
-    for (const [path, content] of prepared.outputs) {
-      mkdirSync(dirname(join(tree, path)), { recursive: true });
-      writeFileSync(join(tree, path), content);
-    }
-    const result = command(
-      ["run", "tcs:validate", "--root", tree, "--require-suites"],
-      prepared.root,
-    );
-    if (result.status !== 0)
-      throw new Error(
-        `tcs:validate refused the folded store:\n${result.stdout ?? ""}${result.stderr ?? ""}`,
-      );
+    const suites = run("tcs:validate", [
+      "run",
+      "tcs:validate",
+      "--root",
+      tree,
+      "--require-suites",
+    ]);
+    if (suites) refuse("tcs:validate", suites);
     const markers = parseTraceGraph({ storeRoot: tree }).issues.filter(
       (issue) =>
         issue.code === "marker-adjacency" &&
         prepared.outputs.has(relative(tree, issue.file)),
     );
     if (markers.length > 0)
-      throw new Error(
-        `trace markers in the folded files sit away from their headings:\n${markers
+      refuse(
+        "trace-markers",
+        markers
           .map(
             (issue) =>
-              `- ${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
+              `${relative(tree, issue.file)}:${issue.line} [${issue.code}] ${issue.message}`,
           )
-          .join("\n")}`,
+          .join("\n"),
       );
+    try {
+      const recorded = join(
+        tree,
+        "openspec",
+        "changes",
+        prepared.changeId,
+        "acceptance.json",
+      );
+      writeAcceptance(tree, prepared, {
+        reviewedBy: "accept:preflight",
+        supersedes: existsSync(recorded)
+          ? JSON.parse(readFileSync(recorded, "utf8")).fingerprint
+          : null,
+      });
+    } catch (error) {
+      refuse("acceptance", error.message);
+    }
+    const manual = command(["run", "check:manual", tree], prepared.root);
+    if (manual.status !== 0) {
+      const output = `${manual.stdout ?? ""}${manual.stderr ?? ""}`;
+      const named = manualFailures(output);
+      if (named.length > 0) failures.push(...named);
+      else refuse("check:manual", output.trim() || "check:manual failed");
+    }
   } finally {
     rmSync(tree, { recursive: true, force: true });
   }
+  return { failures, warnings };
+}
+
+export function formatFindings(findings) {
+  return findings
+    .map((one) => `- [${one.rule}] ${one.detail.replaceAll("\n", "\n    ")}`)
+    .join("\n");
 }
 
 export function runPnpm(args, cwd) {
@@ -1930,11 +2140,9 @@ export function acceptChange(
       );
   };
   try {
-    validate(
-      ["run", "validate:changes", changeId],
-      "validate:changes before fold",
-    );
-    validateFoldedSuites(prepared, command);
+    const { failures } = acceptanceGate(prepared, (args) => command(args));
+    if (failures.length > 0)
+      throw new Error(`Acceptance refused:\n${formatFindings(failures)}`);
     for (const [path, content] of prepared.outputs) {
       const target = join(root, path);
       preserve(target);
@@ -1963,4 +2171,10 @@ export function acceptChange(
   }
 }
 
-export { contractOutputs, json as prettyJson, mergeFeatureSet, mergeSuite };
+export {
+  contractOutputs,
+  json as prettyJson,
+  mergeFeatureSet,
+  mergeSuite,
+  requirementBlocks,
+};

@@ -1,0 +1,196 @@
+{
+  "version": 2,
+  "change": "activate-listing-tile-by-name",
+  "baseline": "e683e77112088dafc253c1e41383715f7d02d89a36632e19f48b74673a22aed3",
+  "fingerprint": "7bba7e4ec935928c2198aa751dc77ead5ea68b075900d469df018e09c20ca7d2",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:00:48.605Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/product-listing.md#product-tile",
+      "sha256": "923297979e6d3f3b9578d8f1fe2d50cf9e7e21335ac3d112186fd43a31d226c5",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-product-listing.md#product-tile",
+      "sha256": "da812b55f66e8ac5f97cb72b899a08138ae8ed0f93d26b359da1b3bd89c951e5",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/decisions.md",
+      "sha256": "955112562e1fb7a8753acb7730e09345388219d3bc53bec922f4aeb4024db283",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/proposal.md",
+      "sha256": "82957030341a1fbd1a64915508ddcc4f75ff37a9b07827c3253a672c56be8379",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "6c73a7e394d6cfe00a0f7f622627102ab491d861e99741f98c8072c5d111d229",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/product-listing/feature-tcs.md",
+      "sha256": "304024a727b3818cf1a0e0eb1c26d9035e49fc85c1b0dbeea879fbeff908f6dc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "3d3fa63af180bb48c08ac7a78cd03fd4c46f0bfef75654704696fb53ceb7d501",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "8e7b85741658b645a55098a0fae72a5ea6340c283219452721eeff046832d38e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/product-page/feature-tcs.md",
+      "sha256": "fdcd9e9ae8c855a0d1bf45428096568422f12ee10260d5d6bb4030a6e7ba5060",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "c95794ea2d5df68cc6f32d39888d2bb71d89b3b0986824b1623906abb5b1cc89",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "95c292d027234d9a3b475be53c45a15f87b5e15d1a39043d481c238561fb1bb7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "ee8783f2d0da54bf024b66fc9c9b1e1dc2351b032e947ba02875081a5a3e6a44",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "086e65b7992c58c005d050afacba193012b958c027004b12cf467fc0a3af5c6f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/tech-design.md",
+      "sha256": "dadb67e52c3d7d102c2eaf96310da8dec08eb179b1118bd369091944628d9af5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/ui-design.md",
+      "sha256": "c06a843fb7b58b691d68ee6896e555963ca2462a8a076d3b2eef2dbc8a75fe4c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "sha256": "6bc363c6e3ab53def931ff4a044089c51ad836c33d4b68c454b6082fd8239948",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+      "sha256": "1293948a8e0236986ea02008feba8c93060c3e7722eb53b96331880911877306",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "sha256": "8c47820b3b551550bfd1234b86e53bb35ecf21da794ead5ade8f912dbd91f79a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "sha256": "aed9cbc15115df64a0a7d75eb6368da2e4310e4d7fc31883cc34c8d6b71b338d",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+      "sha256": "7aa9c4539aef0f41a0f3fbe93e7f8baf97d8838f7601bef25c31704bcc61f1f2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "sha256": "786cdc3fe7ad665da2229fb54956cdc50339baa8e90ff5ba4cbbfa05fe523f51",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "sha256": "b1467319208d3359791ba82a03c97bbac5d369c9118d6da113a41fcc1b53849b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "sha256": "c04850a5958cade2fa3223fbc7a8665c471f08c558098a376e1b92192909d6fc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "sha256": "041234e18632240375683e34c591c4740b1f5fe20ff5689b00b82e8fa61c1370",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "sha256": "e559465a238193f9dcc56c616a625f40d558f6ef1a26e9f015caf1c889aa4cfb",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/activate-listing-tile-by-name/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A card on the listing opens its own product page"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A card is reached from the storefront"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/product-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The product card image displays photo, sale, sold-out, and cart overlay",
+        "Requirement: The product list displays product tiles and delegates every product action"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-product-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -97,6 +97,7 @@ say that nothing remains behind them.
 - **WHEN** a correction is read in the register
 - **THEN** it names the kind and the record it reverses
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-h86 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-25 - One kind is read against one line of the statement
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -104,6 +105,7 @@ say that nothing remains behind them.
 - **WHEN** the register is narrowed to advances
 - **THEN** every row is an advance, and no repayment and no correction is listed
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-wgs rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-26 - The kind and the method narrow together
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -112,6 +114,7 @@ say that nothing remains behind them.
 - **WHEN** the register is narrowed to repayments and to transfer
 - **THEN** every row is a repayment taken by transfer
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-uzx rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-27 - A range with nothing recorded in it says so
 **Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
@@ -242,6 +245,7 @@ worklist SHALL never let one hide the other.
 - **WHEN** the arrears are read
 - **THEN** each row carries its own currency, and no row is read in the book's default currency
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-dgv rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-28 - A row carries what it takes to chase the borrower
 **Serves:** grade10-admin-vault-money-book-US-05 - shop staff pick who to chase first before working the list
 
@@ -253,6 +257,7 @@ worklist SHALL never let one hide the other.
   sent with the day it gives to pay by, and the day the last reminder was sent,
   and no name
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-lzq rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-29 - The loan behind longest is read first
 **Serves:** grade10-admin-vault-money-book-US-03 - shop staff open the list and chase the borrower who has run latest
 
@@ -261,6 +266,7 @@ worklist SHALL never let one hide the other.
 - **THEN** they are ordered longest overdue first, judged on the due date the
   advance fixed
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-zp0 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-30 - Two loans due the same day both survive the page boundary
 **Serves:** grade10-admin-vault-money-book-US-03 - shop staff page to the end of the list without losing a borrower
 
@@ -270,6 +276,7 @@ worklist SHALL never let one hide the other.
 - **THEN** each loan is listed exactly once, and neither of the two sharing a due
   date is skipped or repeated
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-ucd rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-31 - Without a vault grant the arrears are refused
 **Serves:** grade10-admin-vault-money-book-US-03 - shop staff reach the list on the grant the counter already holds
 
@@ -323,6 +330,7 @@ unit, and SHALL never be summed across currencies.
 **What it answers over** - the figure SHALL answer the range as narrowed, so a
 register narrowed to one case answers that case alone.
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-ykd rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-13 - What the range took out is advances less repayments
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -331,6 +339,7 @@ register narrowed to one case answers that case alone.
 - **WHEN** the register is read
 - **THEN** it answers 300000 HKD minor units out of the business
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-8ea rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-14 - A corrected advance nets to nothing
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -339,6 +348,7 @@ register narrowed to one case answers that case alone.
 - **WHEN** the register is read
 - **THEN** it answers 0 HKD minor units out of the business
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-jz6 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-15 - Two currencies answer one figure each
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -369,6 +379,7 @@ count SHALL read zero and the list SHALL hold no row.
 **Who reads them** - the figures SHALL sit on the vault read grant, with the
 list they sum.
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-fao rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-16 - The arrears are counted, summed and counted again for the notice
 **Serves:** grade10-admin-vault-money-book-US-05 - shop staff pick who to chase first before working the list
 
@@ -378,6 +389,7 @@ list they sum.
 - **THEN** they are read with four loans in arrears, the outstanding summed
   across the four, and three carrying no notice
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-lzi rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-17 - What is outstanding is summed in each currency
 **Serves:** grade10-admin-vault-money-book-US-05 - shop staff pick who to chase first before working the list
 
@@ -386,6 +398,7 @@ list they sum.
 - **THEN** what is outstanding is given per currency, each in its own unit, and
   no figure covers both
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-xz0 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-18 - Nothing late reads zero
 **Serves:** grade10-admin-vault-money-book-US-03 - shop staff open the list on a day when nobody is behind
 
@@ -417,6 +430,7 @@ be offered.
 naming who asked for it, when, the narrowing they asked under, and how many
 records were served, and SHALL never write the records themselves.
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-wco rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-20 - The file answers the range as narrowed
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -424,6 +438,7 @@ records were served, and SHALL never write the records themselves.
 - **WHEN** the controller takes it out as a file
 - **THEN** the file holds those repayments and no advance and no correction
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-1d0 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-21 - The file stops where the register's page stops
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -431,6 +446,7 @@ records were served, and SHALL never write the records themselves.
   read
 - **THEN** it is refused by name and no file is served
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-tck rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-22 - A range holding nothing offers no file
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 
@@ -438,6 +454,7 @@ records were served, and SHALL never write the records themselves.
 - **WHEN** the register is read
 - **THEN** no file is offered
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-xv3 rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-23 - Taking the range out is written down like a search
 **Serves:** The export - whoever reviews the audit chain later reads who took the firm's money records out and under what narrowing
 
@@ -445,6 +462,7 @@ records were served, and SHALL never write the records themselves.
 - **THEN** one audit record names who asked, when, the narrowing and how many
   records were served, and holds none of the records
 
+<!-- trace:scenario id=g10adm.vault-money-book.SC-4kg rev=1 -->
 #### Scenario: grade10-admin-vault-money-book-SC-24 - Staff cannot take the register out
 **Serves:** grade10-admin-vault-money-book-US-04 - the controller reads the period against the statement before taking it out of the console
 

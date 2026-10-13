@@ -11,6 +11,8 @@ HTMLElement.prototype.focus = function focus(options?: FocusOptions) {
   nativeFocus.call(this, { ...options, preventScroll: true });
 };
 
+// Storybook's preview module must export its configuration, not component APIs.
+/* eslint-disable react-refresh/only-export-components */
 function MotionBoundary({
   children,
   paused,
@@ -69,13 +71,13 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
-    /* Read top-down: the assemblies this workbench owns, then the compound
-     * components they are built from, then the primitives underneath. */
     options: {
-      storySort: {
-        method: "alphabetical",
-        order: ["Pages", "*", "Components"],
-      },
+      // Titles A to Z, each file's stories in the order it declares them. The
+      // workbench (`pnpm storybook`) orders by the manual instead.
+      storySort: (a, b) =>
+        a.title === b.title
+          ? 0
+          : a.title.localeCompare(b.title, undefined, { numeric: true }),
     },
 
     a11y: {

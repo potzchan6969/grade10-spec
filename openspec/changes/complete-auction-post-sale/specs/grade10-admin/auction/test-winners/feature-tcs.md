@@ -1,17 +1,18 @@
 # grade10-admin/auction/test-winners Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:** grade10-admin-auction-test-winners-SC-13 — held by the admin console's bundle check, which fails a production build that carries the Test tab's code
 
-## grade10-admin-auction-test-winners-US1: Test winners for QA
+## g10adm.auction-test-winners.US1: Test winners for QA
 
 **As an** operator testing the winner's order,
 **I want** a winner of a closed lot I can sign in as, made in one step,
 **so that** I walk the order by hand without bidding and waiting for a close.
 
-### grade10-admin-auction-test-winners-US1-TC7-1: One action makes a winner waiting on setup
+<!-- trace:case id=g10adm.auction-test-winners.TC-7qq rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC7: One action makes a winner waiting on setup
 
 **Classification:**
 
@@ -44,7 +45,8 @@
 * The account at that address has not signed in.
 * The inbox holds the auction-won letter for that lot, sent to that address.
 
-### grade10-admin-auction-test-winners-US1-TC8-1: Production, or a missing grant, makes nothing
+<!-- trace:case id=g10adm.auction-test-winners.TC-abd rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC8: Production, or a missing grant, makes nothing
 
 Runs once per row of **Test data**.
 
@@ -81,7 +83,8 @@ Runs once per row of **Test data**.
 * Grade10 gives the row's **Answer**.
 * No account, lot or order is made.
 
-### grade10-admin-auction-test-winners-US1-TC9-1: An address not the operator's tagged one, or holding a signed-in account, is refused
+<!-- trace:case id=g10adm.auction-test-winners.TC-p4o rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC9: An address not the operator's tagged one, or holding a signed-in account, is refused
 
 Runs once per row of **Test data**.
 
@@ -120,7 +123,8 @@ Runs once per row of **Test data**.
 * Grade10 gives the row's **The refusal**.
 * No account, lot or order is made.
 
-### grade10-admin-auction-test-winners-US1-TC10-1: The same address makes one test winner
+<!-- trace:case id=g10adm.auction-test-winners.TC-3qi rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC10: The same address makes one test winner
 
 **Classification:**
 
@@ -150,7 +154,8 @@ Runs once per row of **Test data**.
 * Grade10 returns the order it made the first time.
 * One account, one lot and one order exist for that address.
 
-### grade10-admin-auction-test-winners-US1-TC11-1: A past close up to 30 days back, at the limit included, opens an overdue order
+<!-- trace:case id=g10adm.auction-test-winners.TC-47e rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC11: A past close up to 30 days back, at the limit included, opens an overdue order
 
 Runs once per row of **Test data**.
 
@@ -187,7 +192,8 @@ Runs once per row of **Test data**.
 
 * The order reads the row's **The order reads**.
 
-### grade10-admin-auction-test-winners-US1-TC12-1: A close beyond 30 days back or in the future is refused
+<!-- trace:case id=g10adm.auction-test-winners.TC-b5b rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC12: A close beyond 30 days back or in the future is refused
 
 Runs once per row of **Test data**.
 
@@ -224,7 +230,8 @@ Runs once per row of **Test data**.
 * Grade10 refuses it.
 * No account, lot or order is made.
 
-### grade10-admin-auction-test-winners-US1-TC13-1: The test lot takes no bid, its order cancelled or not
+<!-- trace:case id=g10adm.auction-test-winners.TC-uu2 rev=1 covers=g10adm.auction-test-winners.SC-pxq,g10adm.auction-test-winners.SC-wfn,g10adm.auction-test-winners.SC-kfc,g10adm.auction-test-winners.SC-ibc,g10adm.auction-test-winners.SC-0fh,g10adm.auction-test-winners.SC-qka,g10adm.auction-test-winners.SC-9cm,g10adm.auction-test-winners.SC-fb4,g10adm.auction-test-winners.SC-y07 -->
+### g10adm.auction-test-winners.US1-TC13: The test lot takes no bid, its order cancelled or not
 
 **Classification:**
 
@@ -254,7 +261,8 @@ Runs once per row of **Test data**.
 * Grade10 refuses both bids.
 * Each lot is still closed, with its winning bid unchanged.
 
-### grade10-admin-auction-test-winners-US1-TC14-1: The emailed link signs in as the test winner, and a new one can be sent
+<!-- trace:case id=g10adm.auction-test-winners.TC-69r rev=1 covers=g10adm.auction-test-winners.SC-90p,g10adm.auction-test-winners.SC-3rj -->
+### g10adm.auction-test-winners.US1-TC14: The emailed link signs in as the test winner, and a new one can be sent
 
 **Classification:**
 
@@ -287,7 +295,8 @@ Runs once per row of **Test data**.
 * A new sign-in email reaches the inbox.
 * The new link signs in as the test account and opens its order.
 
-### grade10-admin-auction-test-winners-US1-TC15-1: Winners lists test winners newest first
+<!-- trace:case id=g10adm.auction-test-winners.TC-ohr rev=1 covers=g10adm.auction-test-winners.SC-qra,g10adm.auction-test-winners.SC-xvn -->
+### g10adm.auction-test-winners.US1-TC15: Winners lists test winners newest first
 
 **Classification:**
 
@@ -320,7 +329,8 @@ Runs once per row of **Test data**.
 * Winners offers no cancel or delete.
 * Open order opens that order in Orders.
 
-### grade10-admin-auction-test-winners-US1-TC16-1: Without both grants Winners names the access it needs
+<!-- trace:case id=g10adm.auction-test-winners.TC-nom rev=1 covers=g10adm.auction-test-winners.SC-qra,g10adm.auction-test-winners.SC-xvn -->
+### g10adm.auction-test-winners.US1-TC16: Without both grants Winners names the access it needs
 
 **Classification:**
 
@@ -360,3 +370,5 @@ Runs once per row of **Test data**.
 - **Folded:** the decisions' raised rows each landed as scenarios - Q19 as `grade10-admin-auction-test-winners-SC-20` and `grade10-admin-auction-test-winners-SC-21`, and Q18 as `grade10-admin-auction-test-winners-SC-19` and the cancelled row of `grade10-admin-auction-test-winners-SC-22`.
 - **Covered:** `-SC-11` ← `US1-TC7-1`; `-SC-12` ← `US1-TC8-1`; `-SC-14` and `-SC-15` ← `US1-TC9-1`; `-SC-16` ← `US1-TC10-1`; `-SC-17` ← `US1-TC11-1`; `-SC-18` ← `US1-TC12-1`; `-SC-19` ← `US1-TC13-1`; `-SC-20` and `-SC-21` ← `US1-TC14-1`; `-SC-22` ← `US1-TC15-1`; `-SC-23` ← `US1-TC16-1` and the staging row of `US1-TC8-1`.
 - **Out of suite:** `grade10-admin-auction-test-winners-SC-13`, held by the admin console's bundle check.
+
+**Run:** 2026-10-06, QA2. A fresh reader joined all thirteen scenarios and the ten cases on their anchors. Each case asserts the THEN of the scenarios named for it above, and none carries behaviour the requirements do not state: `US1-TC14-1`'s private-window prompt and `US1-TC15-1`'s missing cancel follow the Feature set's Private window and Worked as any order leaves. No case is rejected or raised, and no scenario is uncovered.

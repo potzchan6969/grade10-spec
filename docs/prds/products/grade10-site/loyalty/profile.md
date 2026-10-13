@@ -2,20 +2,24 @@
 title: Profile
 spec: grade10-site/loyalty/programme
 order: 6
-reviewed: 2026-09-16
+reviewed: 2026-10-06
 ---
 
 An account is a member. The membership is run from `/membership`; the
-account itself, its name, email and mobile number, is on
+collector's name, bio and email are shown on
 [the account profile](/p/grade10-site/account/profile).
 
 ## Behind the Account
 
 | Record | System | Holds | Made |
 | --- | --- | --- | --- |
-| Account | The identity system | Name, email, mobile number, sign-in | At registration |
+| Account | The identity system | Name, email, sign-in | At registration |
+| Account profile | The store | The name chosen for the shop, bio, mobile number | The first time the store writes for the account |
 | Member | The programme | An opaque user id, the ledger, the tier | With the account |
 | Shopify customer | The shop | The same opaque key in a customer metafield, never the account id | Paired behind the account, once the email is verified |
+
+🚧 **Avatar** — the account profile also holds the avatar a collector chooses
+for the shop — [Profile](/p/grade10-site/account/profile)
 
 :::flow{title="From registration to a paired member"}
 ## *Member* — **Registers**
@@ -41,7 +45,9 @@ removed from the product. The code still carries them and is to be removed.
 
 ## Purchases Before the Account
 
-A sale made as a guest is not lost: it earns once it has an owner.
+A sale rung up at the till as a guest is not lost: it earns once it has an
+owner. An order placed through the site's guest checkout never earns -
+[Checkout](/p/grade10-site/store/checkout#guest-checkout).
 
 - **Customer on the sale** — a guest who gave the shop their email has a
   Shopify customer; when an account with that verified email is paired to
@@ -49,6 +55,9 @@ A sale made as a guest is not lost: it earns once it has an owner.
 - **By an operator** — a sale with no customer, or the wrong one, is
   attributed by hand with the evidence recorded; one claim lives at a time,
   and a wrong one is revoked and re-attributed
+- **Walk-in** — a paid till sale with no member and no customer on it is
+  marked a walk-in by an operator, and stops asking for a link; a member who
+  shows the receipt later can still be linked, and the link clears the mark
 - **Earns as if theirs** — the earning is priced as it was when the money
   landed, and any refund since is replayed in order —
   [Points](/p/grade10-site/loyalty/points)
@@ -58,7 +67,7 @@ A sale made as a guest is not lost: it earns once it has an owner.
 | Section | Shows |
 | --- | --- |
 | Membership | Tier · points to spend · points earned this year toward the next tier · tier renews · points active until · expiring soon |
-| Your member card | The QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
+| Your member card | The member's name, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
@@ -74,7 +83,7 @@ A sale made as a guest is not lost: it earns once it has an owner.
 ❓ Whether "Points to spend" and "Points earned this year" are the launch
 names.
 
-::story{id="loyalty-membership-membershipsummary--default" title="Tier, balance and progress"}
+::story{id="loyalty-profile-blocks-membershipsummary--default" title="Tier, balance and progress"}
 
 ## Member Card
 
@@ -98,9 +107,9 @@ names.
 The same card can be added to a phone wallet —
 [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card).
 
-::story{id="loyalty-membership-membercard--default" title="The member card"}
+::story{id="loyalty-profile-blocks-membercard--default" title="The member card"}
 
-::story{id="loyalty-membership-membercard--already-used" title="A code a till has taken"}
+::story{id="loyalty-profile-blocks-membercard--already-used" title="A code a till has taken"}
 
 ## Histories
 

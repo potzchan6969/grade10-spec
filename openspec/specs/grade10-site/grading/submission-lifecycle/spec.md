@@ -152,6 +152,7 @@ statuses it names:
 - **WHEN** any move is asked of it
 - **THEN** it is refused by name and the submission does not change
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-8dw rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-02 - The page reads the status in the collector's words
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector follows one submission from planned to home without asking the shop
 
@@ -160,6 +161,7 @@ statuses it names:
 - **THEN** the page reads With the grader
 - **AND** no internal name for the status appears anywhere on the page
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-xwm rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-03 - One card's exception leaves the status alone
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector follows one submission from planned to home without asking the shop
 
@@ -185,6 +187,7 @@ link the shop emailed, and by nobody else.
 - **An id nobody was issued** - a submission id the shop never issued SHALL be
   answered the same way.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-1rg rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-52 - A reader who is neither the collector nor the link reads not found
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector follows their own submission, and a stranger with the address reads nothing
 
@@ -193,6 +196,7 @@ link the shop emailed, and by nobody else.
 - **THEN** the site's not-found page is shown
 - **AND** nothing on it says whether that submission exists
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-3gk rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-60 - A plan kept signed out opens its page on the link it was kept with
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector follows their own submission with no account
 
@@ -218,6 +222,7 @@ status.
 - **An ended submission** - a `cancelled` or `expired` submission SHALL leave
   the rail at the stage it ended on, and SHALL show no chip.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-05o rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-04 - The rail stands at the status's stage
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector sees how far the cards have got without reading a date
 
@@ -225,6 +230,7 @@ status.
 - **WHEN** the collector opens the submission page
 - **THEN** the rail stands at Handed in, with Planned and Booked done and Sent, Graded, Back and Home still to come
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-ge7 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-05 - The chip names the grader while the cards are away
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector reads whose move it is rather than asking the shop
 
@@ -232,6 +238,7 @@ status.
 - **WHEN** the collector reads the chip
 - **THEN** it says the cards are with that grader, and not that they are with the shop
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-nev rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-06 - An ended submission stays where it ended
 **Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector who called the submission off reads that it went no further
 
@@ -240,6 +247,7 @@ status.
 - **THEN** the rail stands at Booked and goes no further
 - **AND** no chip is shown
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-17s rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-53 - The word, the chip and the rail are one status's row
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector reads where the cards are in three places that never disagree
 
@@ -265,6 +273,7 @@ of what the grader has published and of the clock.
 - **Nothing to do** - from `sent` to `returned` the page SHALL offer the
   collector no act.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-k5p rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-07 - A grader's stage reaches the page unchanged
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector reads the grader's own progress instead of a shop paraphrase
 
@@ -272,6 +281,7 @@ of what the grader has published and of the clock.
 - **WHEN** staff record the grader's published stage
 - **THEN** the page shows that stage in the grader's own words
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-kui rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-08 - The estimate counts from the day the batch left
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector knows when to expect the cards back
 
@@ -279,6 +289,7 @@ of what the grader has published and of the clock.
 - **WHEN** the collector opens the submission page
 - **THEN** the return estimate is counted from that ship day
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-fda rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-09 - Past the estimate the page says so
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector learns the cards are late without writing to the shop
 
@@ -287,6 +298,7 @@ of what the grader has published and of the clock.
 - **THEN** the page says the grader is running late and names it
 - **AND** the submission is still With the grader
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-s5n rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-10 - A new return date is told the day it is set
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector hears a slipped date from the shop rather than finding it
 
@@ -295,6 +307,7 @@ of what the grader has published and of the clock.
 - **THEN** the page shows the new date that day
 - **AND** the collector is told the same day
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-5t2 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-11 - Nothing to do while the cards are away
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector is never shown a button the shop would refuse
 
@@ -334,6 +347,7 @@ A card SHALL carry exactly one outcome at a time, from this set:
   `ready` until that card is handed back, and its hand-back receipt SHALL name
   the card still out.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-mp1 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-12 - One card's outcome is one line on that card
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector reads each card's own story on the submission page
 
@@ -342,6 +356,7 @@ A card SHALL carry exactly one outcome at a time, from this set:
 - **THEN** that card shows Moved up a level with the money it changes
 - **AND** the other three cards show their own outcomes and no such line
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-mcw rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-13 - Three cards are ready while one did not come back
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector collects the cards that came back without waiting on the one that did not
 
@@ -350,6 +365,7 @@ A card SHALL carry exactly one outcome at a time, from this set:
 - **THEN** the submission becomes ready to collect
 - **AND** the three cards that came back are collectable
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-ejt rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-14 - A card the grader holds keeps the submission ready
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector takes the slabs that came back and reads what is still out
 
@@ -375,6 +391,7 @@ the window is the batch's.
 - **Nothing left to send** - a withdrawal that takes the submission's last card
   SHALL cancel the submission, and the collector SHALL be told.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-szy rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-15 - A card is pulled from the bag before the batch closes
 **Serves:** grade10-site-grading-submission-lifecycle-US-02 - the collector who changed their mind gets one card back at the counter
 
@@ -383,6 +400,7 @@ the window is the batch's.
 - **THEN** that card reads Withdrawn, its fee and cover come back at the till against a receipt
 - **AND** the other three cards go on to the grader
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-fln rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-16 - A closed batch takes the withdrawal away
 **Serves:** grade10-site-grading-submission-lifecycle-US-02 - the collector learns the window has shut rather than asking for the impossible
 
@@ -390,6 +408,7 @@ the window is the batch's.
 - **WHEN** the collector opens the submission page
 - **THEN** no card offers to be withdrawn
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-5ig rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-54 - The last withdrawal cancels the submission
 **Serves:** grade10-site-grading-submission-lifecycle-US-02 - the collector who asks for every card back is left with nothing open in their name
 
@@ -411,6 +430,7 @@ explained on the page, and the shop does not argue the grade.
   that a review is a new submission at the grader's review fee, asked for at the
   counter.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-hct rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-17 - An ungraded card carries the grader's code and note
 **Serves:** grade10-site-grading-submission-lifecycle-US-03 - the collector learns what the grader found rather than asking the shop
 
@@ -418,6 +438,7 @@ explained on the page, and the shop does not argue the grade.
 - **WHEN** the collector opens the submission page
 - **THEN** that card shows the grader's code and its note, and says the fee stands
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-6hk rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-18 - A card below its minimum grade comes back raw
 **Serves:** grade10-site-grading-submission-lifecycle-US-03 - the collector who set a minimum grade reads why the card is not in a slab
 
@@ -425,6 +446,7 @@ explained on the page, and the shop does not argue the grade.
 - **WHEN** the batch is received and the outcome recorded
 - **THEN** the card reads Minimum grade not met, comes back raw, and says the fee stands
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-l1l rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-19 - A review is a new submission
 **Serves:** grade10-site-grading-submission-lifecycle-US-03 - the collector who disagrees with a grade is told where to ask
 
@@ -451,6 +473,7 @@ rule reaches the card's fee line and the cover line beside it alike.
 - **Said on the page** - the page SHALL show what came back and the outcome it
   came back for.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-sip rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-20 - A refused card is never charged
 **Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector pays for the cards the shop took in and for no others
 
@@ -459,6 +482,7 @@ rule reaches the card's fee line and the cover line beside it alike.
 - **THEN** that card's fee and cover come back at the till
 - **AND** the page names the refund and the refusal it came back for
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-92h rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-21 - The fee stands on a card that came back raw
 **Serves:** grade10-site-grading-submission-lifecycle-US-03 - the collector reads that the raw card was still graded work
 
@@ -466,6 +490,7 @@ rule reaches the card's fee line and the cover line beside it alike.
 - **WHEN** the collector reads that card's money
 - **THEN** its fee stands and no refund is offered
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-ie0 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-22 - A refund goes back the way the fee was paid
 **Serves:** grade10-site-grading-submission-lifecycle-US-02 - the collector gets the money back where they paid it
 
@@ -488,6 +513,7 @@ collector was quoted before booking, and nothing else.
 - **A gap** - a grader invoice that differs from the pinned sheet SHALL NOT move
   what the collector owes.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-iwf rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-23 - The upcharge is told the day the grades post
 **Serves:** grade10-site-grading-submission-lifecycle-US-04 - the collector learns what to settle before coming in, not at the counter
 
@@ -495,6 +521,7 @@ collector was quoted before booking, and nothing else.
 - **WHEN** the grades are recorded
 - **THEN** the page and the collector's message name the difference between the two levels as due at the counter before collection, that day
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-7ku rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-24 - The pinned sheet's difference is the figure charged
 **Serves:** grade10-site-grading-submission-lifecycle-US-04 - the collector is charged the figure they were quoted before booking
 
@@ -519,6 +546,7 @@ bring, and what to settle.
 - **Nothing due** - where nothing is owed the page SHALL say so rather than show
   a figure of zero.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-47a rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-25 - The pickup card carries the code, the hours and what is due
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector walks in once and leaves with the slabs
 
@@ -527,6 +555,7 @@ bring, and what to settle.
 - **THEN** it shows a four-digit code, the shop's hours, that no booking is needed, and one figure to settle
 - **AND** the same code is in the ready message
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-70x rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-26 - Nothing is handed back while money is due
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector settles at the counter before the slabs come out
 
@@ -534,6 +563,7 @@ bring, and what to settle.
 - **WHEN** the collector comes in with the code
 - **THEN** the hand-back is refused by name until the figure is settled at the counter
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-6wa rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-27 - A ready submission owing nothing says so
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector knows to bring no money
 
@@ -556,6 +586,7 @@ cards to nobody else.
 - **Below the threshold** - at or below that figure the code and the name SHALL
   release the cards.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-l1n rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-28 - Above the threshold an ID is matched and nothing is kept
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector brings an ID because the page told them to
 
@@ -564,6 +595,7 @@ cards to nobody else.
 - **THEN** the page and the counter ask for an ID matching the name
 - **AND** nothing from the ID is kept on the submission
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-g8q rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-29 - Below the threshold the code and the name release the cards
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector is not asked for papers they do not need
 
@@ -571,6 +603,7 @@ cards to nobody else.
 - **WHEN** the collector comes in with the code
 - **THEN** the pickup card asks for no ID, and the code and the name release the cards
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-a1i rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-30 - Anybody else is turned away
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector knows a forwarded code releases nothing
 
@@ -593,6 +626,7 @@ person arrives.
 - **A full name or nobody** - a naming with no name SHALL be refused, and the
   submission SHALL stay with nobody named.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-w2k rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-31 - Naming somebody is logged and sends nothing
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector sends somebody else in their place
 
@@ -601,6 +635,7 @@ person arrives.
 - **THEN** the page shows that person as the named collector
 - **AND** the submission's history carries the naming, and no message is sent
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-0xf rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-32 - A second name replaces the first
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector changes their mind about who comes in
 
@@ -608,6 +643,7 @@ person arrives.
 - **WHEN** the collector names a different person
 - **THEN** only the second person is named, and the first is released to nobody
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-qjs rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-33 - Naming is refused once the cards are collected
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector reads why the card is no longer offered
 
@@ -615,6 +651,7 @@ person arrives.
 - **WHEN** the collector tries to name somebody
 - **THEN** it is refused by name as already collected
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-bpr rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-55 - An empty name names nobody
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector never sends somebody in on a name the page never took
 
@@ -623,6 +660,7 @@ person arrives.
 - **THEN** the naming is refused
 - **AND** the submission still has nobody named
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-9u0 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-56 - Removing the named person leaves nobody named
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector takes back the name they gave and comes in themselves
 
@@ -651,6 +689,7 @@ that is a vault case rather than storage on the submission.
 - **On the receipt** - the hand-back receipt SHALL say the card went to the
   vault.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-qjj rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-34 - A slab left at the counter becomes a vault case
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector leaves a slab with the shop rather than carrying it home
 
@@ -659,6 +698,7 @@ that is a vault case rather than storage on the submission.
 - **THEN** that card reads Vaulted and links its case
 - **AND** it is not counted for storage on the submission, and the receipt says it went to the vault
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-3it rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-63 - A vault reference that matches no case reads as plain text
 **Serves:** grade10-site-grading-submission-lifecycle-US-06 - the collector leaves a slab with the shop rather than carrying it home
 
@@ -699,6 +739,7 @@ became ready to collect.
   be sent no reminder, notice or ready message, and SHALL read as ended; no
   status of its own is added.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-ud7 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-35 - The rungs are counted from the ready day
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who has not come in is nudged before being charged
 
@@ -707,6 +748,7 @@ became ready to collect.
 - **THEN** a reminder has gone at each rung and nothing has been charged
 - **AND** the page shows each rung with the day it falls
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-9ig rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-36 - The notice gives its pinned period from its posting date
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector is given written warning before anything else
 
@@ -715,6 +757,7 @@ became ready to collect.
 - **THEN** the page shows the posting date and gives 90 days from it
 - **AND** the collector is emailed the same day
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-tlh rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-37 - After the notice's days the cards are still the collector's
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector can still come in, or vault the slabs, after the notice
 
@@ -722,6 +765,7 @@ became ready to collect.
 - **WHEN** the collector opens the submission page
 - **THEN** the cards are still theirs to collect, storage is still accruing, and the page offers the vault instead
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-opz rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-57 - Naming a collector does not pause the ladder
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who says somebody is coming is still nudged and still charged for the wait
 
@@ -730,6 +774,7 @@ became ready to collect.
 - **THEN** the rungs still count from the ready day and the storage is still accruing
 - **AND** only a card collected, vaulted or paid out has left the ladder
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-det rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-64 - A rung falls on the shop's day
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who has not come in is nudged before being charged
 
@@ -737,6 +782,7 @@ became ready to collect.
 - **WHEN** the ladder is read
 - **THEN** the first reminder falls on 31 January on the shop's clock, whatever the hour the ready day ended in UTC
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-duo rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-65 - A submission whose every card is paid out climbs no rung
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector whose cards are all settled is not chased for cards the shop no longer holds
 
@@ -763,6 +809,7 @@ cards the shop still holds.
   collection, as one line per card held, the hand-in's own convention: one
   store line to one card.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-x12 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-38 - A part month counts whole
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector reads what the wait has cost so far
 
@@ -770,6 +817,7 @@ cards the shop still holds.
 - **WHEN** the collector reads what is due
 - **THEN** the storage is 12000 HKD minor units, one month started for each of the four cards
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-jli rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-39 - Cards no longer at the shop are not counted
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector is charged only for the cards the shop is holding
 
@@ -777,6 +825,7 @@ cards the shop still holds.
 - **WHEN** the collector reads what is due
 - **THEN** the storage is 6000 HKD minor units, for the two cards still held
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-5ht rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-66 - Storage months come round on the day storage began
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector reads what the wait has cost so far
 
@@ -784,6 +833,7 @@ cards the shop still holds.
 - **WHEN** what is due is read on 1 May
 - **THEN** the storage is 6000 HKD minor units, two months started
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-vez rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-67 - A card the grader held starts its storage from the day it came back
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector is not charged storage for the months a card spent with the grader
 
@@ -791,6 +841,7 @@ cards the shop still holds.
 - **WHEN** what is due is read on 15 April
 - **THEN** the other cards owe storage from 1 April and the held card owes none until 30 May
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-7wl rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-40 - Storage is settled before the cards are handed back
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector settles the wait at the counter and takes the slabs
 
@@ -820,6 +871,7 @@ shop, and the collector waits on nobody else's claim.
   payout and the fee are then due, repaid at the till before the card is
   handed back.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-5vp rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-41 - A lost card is paid out at its declared value with its fee back
 **Serves:** grade10-site-grading-submission-lifecycle-US-05 - the collector is made whole for a card that never came back
 
@@ -828,6 +880,7 @@ shop, and the collector waits on nobody else's claim.
 - **THEN** the collector is paid 800000 HKD minor units with the card's fee refunded beside it and the cover kept, within 14 days of that day
 - **AND** the page shows the payout, its route and its reference
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-7qs rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-42 - A damaged card is told the same day
 **Serves:** grade10-site-grading-submission-lifecycle-US-05 - the collector hears about a damaged card from the shop rather than at the counter
 
@@ -835,6 +888,7 @@ shop, and the collector waits on nobody else's claim.
 - **WHEN** a card is recorded as damaged
 - **THEN** the collector is told that day, with the payout it owes
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-hmg rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-43 - A card that turns up reverses its payout
 **Serves:** grade10-site-grading-submission-lifecycle-US-05 - the collector gets the card back and the page says what happened to the money
 
@@ -843,6 +897,7 @@ shop, and the collector waits on nobody else's claim.
 - **THEN** the payout is reversed on the same record
 - **AND** the card is back on the submission with its outcome, and the page shows the reversal
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-1ve rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-68 - A card that turns up is repaid before it goes home
 **Serves:** grade10-site-grading-submission-lifecycle-US-05 - the collector gets the card back and the page says what happened to the money
 
@@ -869,6 +924,7 @@ graded.
 - **A second hand-back** - a submission whose held card comes back later SHALL be
   closed by that second hand-back, and both receipts SHALL stay on the record.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-ko4 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-44 - The record carries the grade, the cert and the papers
 **Serves:** grade10-site-grading-submission-lifecycle-US-09 - the collector keeps the proof of what was graded
 
@@ -877,6 +933,7 @@ graded.
 - **THEN** each slab shows its grade in the grader's words, its grader, its cert and a look-up link, with its hand-back photograph
 - **AND** the three documents are there, each with its fingerprint and a download
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-6ch rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-45 - A collected slab is never the shop's stock
 **Serves:** grade10-site-grading-submission-lifecycle-US-09 - the collector's slab stays theirs and is read from one place
 
@@ -885,6 +942,7 @@ graded.
 - **THEN** the grade, the grader and the cert are read from the submission's record
 - **AND** the slab is in no catalogue of the shop's
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-pry rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-46 - The held card's return closes the submission
 **Serves:** grade10-site-grading-submission-lifecycle-US-09 - the collector comes back for the last card and the record is whole
 
@@ -914,6 +972,7 @@ nothing.
   card SHALL cancel the submission at the counter, the collector SHALL be told
   there, and no message SHALL be sent.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-bed rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-47 - Cancelling takes the drop-off with it
 **Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector calls the whole thing off from one page
 
@@ -922,6 +981,7 @@ nothing.
 - **THEN** the submission is cancelled and its drop-off is cancelled with it
 - **AND** the page says nothing was paid and nothing is owed
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-kds rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-48 - Cancelling is refused once the cards are in
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector is not offered a cancel the counter would refuse
 
@@ -929,6 +989,7 @@ nothing.
 - **WHEN** the collector opens the submission page
 - **THEN** no cancel is offered, and a cancel asked for is refused by name
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-gh0 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-49 - A submission nobody books expires on its own
 **Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector who never came back is left owing nothing
 
@@ -937,6 +998,7 @@ nothing.
 - **THEN** the submission is expired, the rail stands at Planned
 - **AND** nothing was paid, nothing is owed, and the cards were never handed in
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-3jh rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-58 - The last card refused at the counter cancels the submission
 **Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector leaves the counter with their cards and nothing open in their name
 
@@ -945,6 +1007,7 @@ nothing.
 - **THEN** the submission is cancelled and the collector is told at the counter
 - **AND** no message is sent, and nothing was paid and nothing is owed
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-zwq rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-61 - Cancel is withheld once the visit's start time comes or the counter checks or refuses a card
 **Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector is not offered a cancel the counter would refuse
 
@@ -982,6 +1045,7 @@ something the shop would refuse.
   `booked` SHALL save the same submission and never a second one, and SHALL
   book nothing: booking is the submission page's.
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-qt5 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-50 - Each status offers its own acts and no others
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector reads one page and sees only what they can do now
 
@@ -990,6 +1054,7 @@ something the shop would refuse.
 - **THEN** it offers naming, changing and removing a collector, and vaulting a slab
 - **AND** it offers no edit of the list and no withdrawal
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-bfx rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-51 - An act on a submission that has moved is refused
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector who acted on a stale page is told rather than surprised
 
@@ -997,6 +1062,7 @@ something the shop would refuse.
 - **WHEN** they ask to withdraw a card
 - **THEN** it is refused by name and no card is withdrawn
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-ikp rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-59 - The counter owns the list from the first card it checks or refuses
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector at the counter is never offered an edit the shop would refuse
 
@@ -1008,6 +1074,7 @@ something the shop would refuse.
 - **AND** the edit and the paste are refused by name, and the cards, their
   photographs and the refusal's words stay as the counter wrote them
 
+<!-- trace:scenario id=g10.grading-submission-lifecycle.SC-jx6 rev=1 -->
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-62 - Editing a kept list saves the same submission and books nothing
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector changes the list before hand-in without starting again
 

@@ -29,12 +29,52 @@ state and can follow a safe carrier address when one is supplied
 🚧 **Read states** — loading, localized failure with Retry, and not-found stay
 distinct at the same address
 
+## Guest Order Link
+
+A guest order opens at `grade10.com/orders/<order-id>`, from the link in
+Shopify's order confirmation email or Continue on its thank-you page. Grade10 sends
+no email of its own. The link carries its secret after `#`, so no server or
+log sees it.
+
+- **No account** - the link opens the order for whoever holds it; nothing
+  asks them to sign in
+- **Same page** - the same order facts, progress and tracking as a member's
+  order
+- **Wrong link** - an unknown order, a member's order or a wrong secret all
+  show not-found
+- **Not indexed** - search engines are told not to index the address
+- **Where the link comes from** - the order carries it, and the View order
+  button in Shopify's order emails opens it. Thank you's Continue reaches it
+  through [Back From Checkout](#back-from-checkout)
+
+## Back From Checkout
+
+The Continue button on Shopify's Thank you page always goes to the bare
+checkout host, which sends it to `grade10.com/orders/latest`. That page opens
+the order this browser last sent to Shopify.
+
+- **Guest** - their private order page, link and secret included
+- **Member** - the order under their profile
+- **Nothing remembered** - a signed-in member sees their order list; anyone
+  else sees the store
+- **One day** - the browser forgets the order a day after checkout, and as
+  soon as Continue has used it; a new checkout replaces it
+- **Another device** - a buyer who pays on a different device lands on the
+  fallback. A guest's link still arrives in Shopify's confirmation email
+- **Not indexed** - search engines are told not to index the address
+
 ## Order Summary
 
-🚧 When the settled order applied points, Order Summary shows a **Points**
-credit after Discount — label names how many were deducted (for example
-`Points (100 pts)`), value is the money credit in the same success style as the
-cart drawer — and omits that row when no points were applied.
+🚧 **Points** — when the shop names the settled order's points discount, under
+either points title ([Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules)),
+Order Summary shows a Points credit after Discount: the label names how many
+were deducted (for example `Points (100 pts)`), and the value is the money
+credit in the same success style as the cart drawer
+
+🚧 **No Points row** — on an order whose shop named no points discount, even
+where its points were debited from the rest of the applied total, because that
+figure can hold money staff took off by hand; the debit still shows as Points
+put toward a purchase — [Histories](/p/grade10-site/loyalty/profile#histories)
 
 **Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
 except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
@@ -42,8 +82,8 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 
 ## Designs
 
-::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}
+::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="One order, in detail"}
 
-::story{id="store-order-detail-orderdetails--with-points-credit" title="Points credit on the summary"}
+::story{id="store-order-detail-blocks-orderdetails--with-points-credit" title="Points credit on the summary"}
 
-::story{id="store-order-detail-orderdetails--no-optional-groups" title="An order with only supplied facts"}
+::story{id="store-order-detail-blocks-orderdetails--no-optional-groups" title="An order with only supplied facts"}

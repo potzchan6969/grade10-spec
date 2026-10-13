@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "7a2528b25e7c03309cecdf6c5691caf3a46f1250d48e7632ddcccc67ccea3986"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "d515dd5c49c03c42744965e8dca6de772ee459ac",
+    "capturedAt": "2026-10-06T18:13:20.868Z",
+    "targets": [
+      {
+        "path": "openspec/changes/close-overdue-address-confirmation/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Only an operator settles an expired invoice"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The address deadline gates the winner's address write"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A missed address deadline closes the address form",
+          "Requirement: The payment deadline is fixed when the invoice is sent"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

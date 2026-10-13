@@ -4,7 +4,7 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { SignInLinkSent } from "./sign-in-link-sent";
 
 const meta = {
-  title: "Auth Sign In/SignInLinkSent",
+  title: "Auth/Sign In/Blocks/SignInLinkSent",
   component: SignInLinkSent,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

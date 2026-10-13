@@ -97,14 +97,14 @@ The operative rule, from the ownership table: **a component may not offer a vari
 
 ## Blocks and views
 
-Three homes, and the first that fits is the answer:
+Three homes, and the first that fits is the answer. Where each one's stories go in the workbench, and how screens, states, flows and prototypes are drawn: [Storybook](storybook.md).
 
 
 | It is                                                 | Home                                                     | Preview                                                      |
 | ----------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
 | A primitive                                           | `packages/design-system/src/components/<group>/`         | `pnpm run storybook:design-system`                           |
 | A compound block a capability spec names              | `packages/ui/src/blocks/<product-context>-<capability>/` | `pnpm run storybook:ui`                                      |
-| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages`, via `pnpm run storybook:workbench` |
+| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages/<domain>/<feature>/`, via `pnpm storybook` |
 
 
 `packages/ui/src/blocks/` is one flat level of **capability** directories. The namespace is the capability, never the page: a page is an assembly, so its sections belong to the capabilities they express and the page itself never gets a directory. If the capability's directory exists, the block joins it; if the spec exists but no directory does, create one; if no spec exists, the spec comes first.
@@ -172,7 +172,7 @@ Recorded so they are not mistaken for coverage. The full lists are in [`design-c
 
 Each artifact is the sole authority over exactly one thing and no artifact owns two — the table in [`design-code-sync.md`, "Ownership"](design-code-sync.md#ownership), with the designer's pre-flight checklist at ["For designers: before you create or change a component"](design-code-sync.md#for-designers-before-you-create-or-change-a-component).
 
-On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, decisions and journeys, then a designer adds optional UI design** — `/workflow-plan` and `/workflow-design`, following the corresponding planning skills. One `/planning-dev` invocation runs fresh isolated QA1, Dev and QA2 contexts: QA1 drafts cases blind to scenarios, Dev writes technical design and requirement scenarios, and QA2 reconciles them against the frozen anchors. An anchor change invalidates both readings and restarts them in fresh contexts. The same human answers questions and accepts once with the preflight fingerprint; acceptance publishes the durable contract before implementation. `/workflow-specify`, `/workflow-tech` and `/workflow-tasks` are compatibility routes to that integrated planning invocation. Each artifact stays in the same change, because engineering never opens a change in the application repository.
+On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, decisions and journeys, then a designer adds optional UI design** — `/workflow-plan` and `/workflow-design`, following the corresponding planning skills. One `/planning-dev` invocation runs fresh isolated QA1, Dev and QA2 contexts: QA1 drafts cases blind to scenarios, Dev writes technical design and requirement scenarios, and QA2 reconciles them against the frozen anchors. An anchor change restarts both readings for its affected dependencies, following [Planning and Review Efficiency](planning-review-efficiency.md#planning-restarts). The same human answers questions and accepts once with the preflight fingerprint; acceptance publishes the durable contract before implementation. `/workflow-specify`, `/workflow-tech` and `/workflow-tasks` are compatibility routes to that integrated planning invocation. Each artifact stays in the same change, because engineering never opens a change in the application repository.
 
 Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim` / `unclaim` / `done` / `undone` run from the application repository and each push one commit to this store's `main`. A checkmark goes in after the code is pushed, not when it is written. Format, the who-writes-what table, and the silent parser failures: [`task-ownership.md`](task-ownership.md).
 
@@ -190,7 +190,7 @@ Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim`
 
 Never resolve a mismatch by editing the `.figma.ts` template to agree with the code. The template maps names; papering over a disagreement there deletes the only evidence of it. A warning you intend to keep belongs in a change with a reason, not in the run log.
 
-Then the normal loop: if the statement is testable it belongs in `openspec/specs/<product>/<domain>/<capability>/spec.md`, published at acceptance through an `openspec/changes/` delta; if it explains a product judgment that outlives the change, it belongs in the capability page's `Product decisions` block ([`prd-and-openspec.md`, "Fast decision guide"](prd-and-openspec.md#fast-decision-guide)). Implement group by group with `/workflow-build`, following `.claude/skills/openspec-apply-change/SKILL.md`'s rules, and keep the checkboxes honest. After engineering verification, record `implementation.json` and archive before deployment; archive does not fold again. After deployment, human QA reviews with `/tcs-review` and uses `/tcs-run-sheet` for manual execution when needed ([`specs-to-test-cases.md`](specs-to-test-cases.md)).
+Then the normal loop: if the statement is testable it belongs in `openspec/specs/<product>/<domain>/<capability>/spec.md`, published at acceptance through an `openspec/changes/` delta; if it explains a product judgment that outlives the change, it belongs in the capability page's `Product decisions` block ([`prd-and-openspec.md`, "Fast decision guide"](prd-and-openspec.md#fast-decision-guide)). Implement group by group with `/workflow-build`, and keep the checkboxes honest. After engineering verification, record `implementation.json` and archive before deployment; archive does not fold again. After deployment, human QA reviews with `/tcs-review` and uses `/tcs-run-sheet` for manual execution when needed ([`specs-to-test-cases.md`](specs-to-test-cases.md)).
 
 Before handing off:
 

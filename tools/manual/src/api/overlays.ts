@@ -154,13 +154,15 @@ export function idleDaysOf(
 }
 
 /** The suite's verdict: approved once no suite of the change is left to
- * review, a draft while one is. A change with no suite wears no chip — there
- * is nothing to say about a verdict nobody has been asked for. */
+ * review, including a retired suite with no active cases; a draft while one
+ * is. A change with no suite wears no chip. */
 function verdictOf(
   suites: ChangeSuite[] | undefined,
 ): SuiteVerdict | undefined {
   if (!suites || suites.length === 0) return undefined;
-  return suites.every((one) => one.status === "approved")
+  return suites.every(
+    (one) => one.status === "approved" || one.status === "retired",
+  )
     ? "approved"
     : "draft";
 }

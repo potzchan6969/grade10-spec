@@ -87,12 +87,14 @@ carried: `GradingCardAddition`, `GradingCardListCap`, `GradingCardListCopy`,
 `GradingUncollectedLadderCopy`, `GradingUncollectedLadderProps`,
 `GradingUpchargeWarning` and `GradingVaultCase`.
 
+<!-- trace:scenario id=g10.shared-grading-submission.SC-8at rev=1 -->
 #### Scenario: shared-ui-grading-submission-SC-01 - An application imports the grading blocks
 **Serves:** The export contract - the store carries no grading collector block until the screens are designed again
 
 - **WHEN** the shared UI package's public entry is read
 - **THEN** it exports none of the components and types named above
 
+<!-- trace:scenario id=g10.shared-grading-submission.SC-b0c rev=1 -->
 #### Scenario: shared-ui-grading-submission-SC-02 - The drop-off composes the booking blocks
 **Serves:** The export contract - the drop-off views compose the booking blocks
 
@@ -100,6 +102,7 @@ carried: `GradingCardAddition`, `GradingCardListCap`, `GradingCardListCopy`,
 - **THEN** it exports no grading-named shop picker, day and time picker,
   details form, confirmation or manage card
 
+<!-- trace:scenario id=g10.shared-grading-submission.SC-4dl rev=1 -->
 #### Scenario: shared-ui-grading-submission-SC-71 - A line carrying a value is the consumer's to fill
 **Serves:** The export contract - no grading block is left whose lines a consumer fills
 

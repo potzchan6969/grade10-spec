@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "change": "launch-wallet-passes",
+  "baseline": "ba375538824eeb0d853df943a84a3df2ca90ff462a1695b4069d3fcbf0217aa9",
+  "fingerprint": "92696fb16c71ce1060603bae54bdd71cf972ce36ecf19255d89a1901adf1ed84",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:57:05.382Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/wallet-member-card.md#adding-and-ending",
+      "sha256": "21dc515cab28f962b6a43a89dc2b23caffe3dfe189b83b8ce8efc192ca8cda56",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/wallet-member-card.md#wallets",
+      "sha256": "5be4a07b7d4bcefafb213b283740f1438abd4cd53d26a6c72b76ab32fc8033c9",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/launch-wallet-passes/decisions.md",
+      "sha256": "659ceb0e8ec473cc982a27d766fcfa2fa923098805d928b30a75d072567b3119",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/launch-wallet-passes/proposal.md",
+      "sha256": "22b3c28d2c1a1e46ee6704fe8c4d785e1ac68dcb65462e0fdeac18f4338435e5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/launch-wallet-passes/specs/grade10-site/store/wallet-member-card/feature-tcs.md",
+      "sha256": "189db7658159735f942175a1d2fe5c68c0a4fe4c71e3533ef17fa08854bee9dd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/launch-wallet-passes/specs/grade10-site/store/wallet-member-card/spec.md",
+      "sha256": "9708e51dcc17ad2a38dfdc717b19e72808b0e9df341ace034bcba54cb70da03d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/launch-wallet-passes/specs/grade10-site/store/wallet-member-card/user-journeys.md",
+      "sha256": "178c6e681502b78575b8a0e4ec87dc4701fed6d6337891aae7553ecb218dc193",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/launch-wallet-passes/tech-design.md",
+      "sha256": "e6ff06ee894639210b93546c75dd664fdf469b5d0c25ae160a5426c14c8e16b5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/wallet-member-card/feature-tcs.md",
+      "sha256": "8ab9fccadd5df584b9c9c966a7150699f5d1c7299f5762bc02fedce2ce263062",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/wallet-member-card/spec.md",
+      "sha256": "88914641051793e89694183ef79853acf0c1b714def0962ff719055c89c466b7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/wallet-member-card/user-journeys.md",
+      "sha256": "61d9eed32949addecc9298b56bbd5a5ba1661f9b9cb5118aa17526b3ad513b17",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/store/wallet-member-card/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/wallet-member-card/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A half-configured wallet says which secret is missing",
+        "Requirement: An operator ends a member's pass from the console"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/wallet-member-card/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

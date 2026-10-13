@@ -1,6 +1,6 @@
 # grade10-admin/grading/counter Test Cases
 
-**Status:** in-review
+**Status:** pending-review · 0/116
 **Drafts styled:** 2026-09-29, tcs-rules r4
 
 **Out of suite:**
@@ -24,10 +24,11 @@
 ## grade10-admin-grading-counter-US1: Operator opens the shop and sees what every submission waits for
 
 **As a** member of shop staff starting a shift,
-**I want** the queue cut by what each submission waits for, today's drop-offs in a strip, and a badge naming why a row needs me,
+**I want** the queue cut by what each submission waits for, today's submissions, and a badge naming why a row needs me,
 **so that** I work the counter without being emailed anything.
 
-### grade10-admin-grading-counter-US1-TC1-1: The seven views cut submissions by exactly what they wait for
+<!-- trace:case id=g10adm.grading-counter.TC-d7j rev=2 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
+### grade10-admin-grading-counter-US1-TC1-2: The seven views cut submissions by exactly what they wait for
 
 **Classification:**
 
@@ -65,15 +66,16 @@
 * Step 3 lists the `ready` submission and no other seeded one.
 * Step 4 lists the `collected`, `cancelled` and `expired` submissions together, and none of them appears in another view.
 * Each seeded submission is listed by exactly one of the six status views.
-* Every row carries the submission id, the collector, the cards, the grader and level, the status word, the visit, when it was last touched and what it is waiting on.
+* Every row carries the submission id, the collector, the cards, the grader and level, the status word, when it was last touched and what it is waiting on.
 
+<!-- trace:case id=g10adm.grading-counter.TC-aw2 rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC2-1: The Today strip lists the day's drop-offs in slot order
 
 **Classification:**
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** none
@@ -97,6 +99,7 @@
 * The strip lists the two drop-offs in slot order, each with its time, collector, id, cards, and grader and level.
 * One line under them says that pickups walk in.
 
+<!-- trace:case id=g10adm.grading-counter.TC-jnd rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC3-1: A row's badge names the wait and clears once it no longer applies
 
 **Classification:**
@@ -130,6 +133,7 @@
 * Step 2 shows the Batch closes today badge.
 * Step 4 no longer shows that badge on the same row, recomputed from the submission's own dates rather than a value somebody has to clear.
 
+<!-- trace:case id=g10adm.grading-counter.TC-28a rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC4-1: The counter tiles summarise closing, with graders, ready, and to settle
 
 **Classification:**
@@ -164,6 +168,7 @@
 * The Ready, uncollected tile reads 4, of which 1 is past 30 days.
 * The To settle tile reads 95000 minor units (HKD 950.00), 35000 plus 60000, over 2 submissions.
 
+<!-- trace:case id=g10adm.grading-counter.TC-swj rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC5-1: A view with no submissions shows its empty state
 
 **Classification:**
@@ -193,6 +198,7 @@
 
 * Closed shows its empty state rather than a blank table, and every other view is still offered.
 
+<!-- trace:case id=g10adm.grading-counter.TC-36h rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC6-1: A view past 50 rows pages instead of overflowing
 
 Runs once per row of **Test data**.
@@ -234,6 +240,7 @@ Runs once per row of **Test data**.
 * Step 3, in row A, loads the 51st row without repeating any row already shown; in row B, no next page is offered.
 * Each page shows how many rows stand behind the cut and whether more remain.
 
+<!-- trace:case id=g10adm.grading-counter.TC-bnt rev=1 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
 ### grade10-admin-grading-counter-US1-TC7-1: A read-grant holder sees no row action beyond Open
 
 **Classification:**
@@ -264,7 +271,8 @@ Runs once per row of **Test data**.
 
 * Open is the only action offered; no hand-in, hand-back or settings act shows on the row.
 
-### grade10-admin-grading-counter-US1-TC8-1: The Today cut is made on the shop's own day, not the server's
+<!-- trace:case id=g10adm.grading-counter.TC-2fg rev=2 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
+### grade10-admin-grading-counter-US1-TC8-2: The Today cut is made on the shop's own day, not the server's
 
 **Classification:**
 
@@ -284,8 +292,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds `grading:read`) is on <grade10 admin grading queue url>.
-* The time is between 00:00 and 07:59 on the shop's own day, `Asia/Hong_Kong`, so the date in Coordinated Universal Time is still the day before.
-* The collector has booked a drop-off for later that day on the site, at <grade10 grading url>, so its submission is `booked`.
+* A submission is seeded at `booked`, as *Seeding a submission* says, opened a minute past the shop's midnight, `Asia/Hong_Kong`, when the date in Coordinated Universal Time was still the day before; the shop's day is at least three minutes old.
 
 **Steps:**
 
@@ -295,10 +302,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 lists the submission booked for later that day on the shop's own calendar day, `Asia/Hong_Kong`.
-* Step 3 shows the row's Visit today badge, agreeing with the Today cut.
+* Step 2 lists the submission opened just past the shop's midnight, on the shop's own calendar day, `Asia/Hong_Kong`.
+* Step 3 shows the submission's reference on the row.
 
-### grade10-admin-grading-counter-US1-TC9-1: A planned submission with no drop-off booked is in no view
+<!-- trace:case id=g10adm.grading-counter.TC-too rev=2 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
+### grade10-admin-grading-counter-US1-TC9-2: A planned submission is in no view
 
 **Classification:**
 
@@ -318,7 +326,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds `grading:read`) is on <grade10 admin grading queue url>.
-* A submission is seeded at `planned`, as *Seeding a submission* says, with no drop-off booked, and the tester has noted its reference.
+* A submission is seeded at `planned`, as *Seeding a submission* says, and the tester has noted its reference.
 
 **Steps:**
 
@@ -329,7 +337,8 @@ Runs once per row of **Test data**.
 
 * The planned submission is in none of them; the collector's own list holds it.
 
-### grade10-admin-grading-counter-US1-TC10-1: Nothing about a submission is emailed or pushed to staff
+<!-- trace:case id=g10adm.grading-counter.TC-z3t rev=2 covers=g10adm.grading-counter.SC-9l0,g10adm.grading-counter.SC-h3e,g10adm.grading-counter.SC-yss,g10adm.grading-counter.SC-2dw,g10adm.grading-counter.SC-pux,g10adm.grading-counter.SC-vj8,g10adm.grading-counter.SC-0zy,g10adm.grading-counter.SC-cc0,g10adm.grading-counter.SC-y4w -->
+### grade10-admin-grading-counter-US1-TC10-2: Nothing about a submission is emailed or pushed to staff
 
 **Classification:**
 
@@ -354,22 +363,23 @@ Runs once per row of **Test data**.
 1. Receive the first submission's batch, as *Receiving with an exception* says with no exception, so it becomes `ready`.
 2. Read each staff address's letters, as *Reading a letter* says.
 3. Navigate to <grade10 admin grading queue url>.
-4. Read the tiles, the strip and the three submissions' rows.
+4. Read the tiles and the three submissions' rows.
 
 **Expected Results:**
 
 * No email and no push reaches any member of staff.
-* The queue's badges, its tiles and the day's strip carry all three instead.
+* The queue's badges and its tiles carry all three instead.
 
 ---
 
 ## grade10-admin-grading-counter-US2: Operator hands a booked list in at the counter
 
 **As a** member of shop staff with a collector at the desk,
-**I want** to find the booking, or write a walk-in's list with them, check each card and photograph it, confirm the level fits every declared value, show the agreement on the iPad, take the fee and any cover line at the till only once it is sealed, and print the labels and hand in with the intake receipt going out, the submission staying booked and the cards going home if no line was paid,
+**I want** to open the submission a visit started, or write a walk-in's list with them, check each card and photograph it, confirm the level fits every declared value, show the agreement on the iPad, take the fee and any cover line at the till only once it is sealed, and print the labels and hand in with the intake receipt going out, the submission staying booked and the cards going home if no line was paid,
 **so that** the cards are sealed in the bag with a receipt in one visit and nothing was paid for a card nobody checked.
 
-### grade10-admin-grading-counter-US2-TC1-1: The day's booking opens its submission and starts the visit at the desk
+<!-- trace:case id=g10adm.grading-counter.TC-nup rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC1-2: A booked submission opens its hand-in runbook from Today
 
 **Classification:**
 
@@ -387,18 +397,19 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds `grading:operate`) is on <grade10 admin grading queue url>.
-* A submission is seeded at `booked`, as *Seeding a submission* says, with `appointmentAt` earlier on the shop's own day; its visit has not been started at the desk.
+* A submission is seeded at `booked`, as *Seeding a submission* says, opened earlier on the shop's own day.
 
 **Steps:**
 
-1. Click the submission in the strip of the day's drop-offs.
-2. Click Start at the desk.
+1. Click Today.
+2. Click the submission's reference.
 
 **Expected Results:**
 
-* Step 1 opens the hand-in runbook at Not handed in yet.
-* Step 2 starts the visit and offers the card checks.
+* Step 1 lists the submission.
+* Step 2 opens the hand-in runbook at the card check, with no Start at the desk step.
 
+<!-- trace:case id=g10adm.grading-counter.TC-5av rev=1 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
 ### grade10-admin-grading-counter-US2-TC2-1: A walk-in's list is written at the desk, card by card, with the collector
 
 **Classification:**
@@ -442,7 +453,8 @@ Runs once per row of **Test data**.
 * The runbook proceeds from Not handed in yet with the two cards listed.
 * The Money tab prices the cards on PSA Regular's fee as it stands at the hand-in.
 
-### grade10-admin-grading-counter-US2-TC3-1: A card is checked present, condition-noted and photographed front and back
+<!-- trace:case id=g10adm.grading-counter.TC-pdw rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC3-2: A card is checked present, condition-noted and photographed front and back
 
 **Classification:**
 
@@ -461,7 +473,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says.
 * The collector's page for the submission is open at <grade10 grading submission url>.
 
 **Test data:**
@@ -483,7 +495,8 @@ Runs once per row of **Test data**.
 * Step 2 shows the note as typed in place of "Nothing noted."
 * Step 4 shows both photographs on the collector's page.
 
-### grade10-admin-grading-counter-US2-TC4-1: A card at the level's declared-value ceiling passes the level check
+<!-- trace:case id=g10adm.grading-counter.TC-qdz rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC4-2: A card at the level's declared-value ceiling passes the level check
 
 **Classification:**
 
@@ -502,7 +515,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with one card of the declared value below, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with one card of the declared value below, as *Seeding a submission* says.
 
 **Test data:**
 
@@ -521,7 +534,8 @@ Runs once per row of **Test data**.
 
 * The banner reads every declared value inside the ceiling, the at-ceiling card counted as fitting.
 
-### grade10-admin-grading-counter-US2-TC5-1: A card above the level's ceiling is marked and moves to a second submission or is refused
+<!-- trace:case id=g10adm.grading-counter.TC-yce rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC5-2: A card above the level's ceiling is marked and moves to a second submission or is refused
 
 Runs once per row of **Test data**.
 
@@ -542,7 +556,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with two cards of 300000 minor units (HKD 3,000.00) each, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Value with two cards of 300000 minor units (HKD 3,000.00) each, as *Seeding a submission* says.
 * Value's ceiling is 390000 minor units (HKD 3,900.00), as the stack seeds it.
 
 **Test data:**
@@ -562,7 +576,8 @@ Runs once per row of **Test data**.
 * The row is marked above Value's ceiling and refused at Value by name.
 * Staff are offered to move the card to a second submission or refuse it; the rest of the list is unaffected.
 
-### grade10-admin-grading-counter-US2-TC6-1: The agreement is not mintable while a card is unchecked
+<!-- trace:case id=g10adm.grading-counter.TC-z7k rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC6-2: The agreement is not mintable while a card is unchecked
 
 **Classification:**
 
@@ -581,7 +596,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with three cards, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with three cards, as *Seeding a submission* says.
 * Two cards are checked, Present ticked and both photographs taken; the third is neither checked nor refused.
 
 **Steps:**
@@ -592,7 +607,8 @@ Runs once per row of **Test data**.
 
 * The step names the unchecked card as the reason the agreement cannot be minted.
 
-### grade10-admin-grading-counter-US2-TC7-1: The agreement mints once every card is checked
+<!-- trace:case id=g10adm.grading-counter.TC-j89 rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC7-2: The agreement mints once every card is checked
 
 **Classification:**
 
@@ -611,7 +627,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with two cards, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with two cards, as *Seeding a submission* says.
 * Both cards are checked, Present ticked and both photographs taken.
 * The shop's iPad is at the desk with a browser open.
 
@@ -626,7 +642,8 @@ Runs once per row of **Test data**.
 * Step 1 offers Show on iPad and Copy link with the 30-minute line.
 * Step 3 shows the schedule of cards as checked, on the collector's device.
 
-### grade10-admin-grading-counter-US2-TC8-1: The till opens only once the agreement is sealed, one line per card and a cover line where the level carries one
+<!-- trace:case id=g10adm.grading-counter.TC-82p rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC8-2: The till opens only once the agreement is sealed, one line per card and a cover line where the level carries one
 
 **Classification:**
 
@@ -643,7 +660,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Express with the two cards below, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` at Express with the two cards below, as *Seeding a submission* says.
 * Both cards are checked, Present ticked and both photographs taken; the agreement is not yet sealed.
 * The shop's iPad is at the desk, and the collector signs on it when asked.
 
@@ -671,7 +688,8 @@ Runs once per row of **Test data**.
 * Step 3 opens the till with one Grading Service line per card at 120000 minor units (HKD 1,200.00) and one cover line per card at 1.5% of its declared value, 3000 and 6000 minor units.
 * Step 4 writes the order back one fee line to each card in list order, a cover line beside each.
 
-### grade10-admin-grading-counter-US2-TC9-1: No hand-in without a paid line leaves the submission booked and the cards with the collector
+<!-- trace:case id=g10adm.grading-counter.TC-w9c rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC9-2: No hand-in without a paid line leaves the submission booked and the cards with the collector
 
 **Classification:**
 
@@ -701,9 +719,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 is refused by name; the submission stays `booked`, the seal still stands, and the cards go home with the collector.
-* The runbook offers to run the till again or wait for another drop-off.
+* The runbook offers to run the till again or wait for another visit.
 
-### grade10-admin-grading-counter-US2-TC10-1: The safe's cap refuses a hand-in that would carry it past the cap
+<!-- trace:case id=g10adm.grading-counter.TC-7cd rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC10-2: The safe's cap refuses a hand-in that would carry it past the cap
 
 **Classification:**
 
@@ -742,8 +761,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 is refused by name, naming the safe's cap, and the counter offers Book the next drop-off.
+* Step 1 is refused by name, naming the safe's cap, and the counter offers Book the next visit.
 
+<!-- trace:case id=g10adm.grading-counter.TC-48j rev=1 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
 ### grade10-admin-grading-counter-US2-TC11-1: Labels, seal and check-in move the submission from Booked to Handed in
 
 **Classification:**
@@ -781,7 +801,8 @@ Runs once per row of **Test data**.
 * Step 3 reads Handed in: the submission moved `booked → checked_in`.
 * Step 4 is the intake receipt, with the signed agreement.
 
-### grade10-admin-grading-counter-US2-TC12-1: A second submission on the same visit runs its own hand-in runbook
+<!-- trace:case id=g10adm.grading-counter.TC-1jv rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC12-2: A second submission on the same visit runs its own hand-in runbook
 
 **Classification:**
 
@@ -800,20 +821,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for the first of two submissions on one drop-off today: the collector booked the drop-off for the first on the site, at <grade10 grading url>, and brought a second list to that same drop-off there.
-* The first submission's visit is started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for the first of two submissions opened from one visit today, the second for a list the collector brought to that same visit.
 
 **Steps:**
 
-1. Click the second submission where the runbook names it under the visit.
+1. Open the second submission.
 2. On the second submission's runbook, check its cards, tick Present and take both photographs for each, without touching the first.
 3. Read its level check and its Take payment step.
 
 **Expected Results:**
 
 * The second submission runs its own hand-in runbook, its own level check and its own till line, without depending on the first submission's state.
-* Each runbook names the other submission under the visit.
 
+<!-- trace:case id=g10adm.grading-counter.TC-zqu rev=1 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
 ### grade10-admin-grading-counter-US2-TC13-1: Check in is refused while the agreement is unsealed
 
 **Classification:**
@@ -843,6 +863,7 @@ Runs once per row of **Test data**.
 * The check-in is refused by name, naming the unsealed agreement.
 * The submission stays `booked` and the cards stay with the collector.
 
+<!-- trace:case id=g10adm.grading-counter.TC-7b0 rev=1 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
 ### grade10-admin-grading-counter-US2-TC14-1: An order recorded on another submission is refused, and a replay answers the first its own lines
 
 **Classification:**
@@ -884,7 +905,8 @@ Runs once per row of **Test data**.
 * Step 2 is refused by name, naming the Express submission as the one holding the order, and the Regular submission shows no fee line and no new timeline entry.
 * Step 3 writes nothing and shows the Express submission's own line from step 1.
 
-### grade10-admin-grading-counter-US2-TC15-1: The desk reads the safe before the first card is checked
+<!-- trace:case id=g10adm.grading-counter.TC-nfy rev=2 covers=g10adm.grading-counter.SC-0sq,g10adm.grading-counter.SC-lbh,g10adm.grading-counter.SC-tsj,g10adm.grading-counter.SC-w0j,g10adm.grading-counter.SC-1ek,g10adm.grading-counter.SC-1wd,g10adm.grading-counter.SC-92s,g10adm.grading-counter.SC-2rk,g10adm.grading-counter.SC-imm,g10adm.grading-counter.SC-xas -->
+### grade10-admin-grading-counter-US2-TC15-2: The desk reads the safe before the first card is checked
 
 **Classification:**
 
@@ -905,8 +927,8 @@ Runs once per row of **Test data**.
 
 * The safe's declared cap is written as below, as *Writing a money setting* says, on a stack holding no other `checked_in`, `returned` or `ready` submission.
 * The safe holds the declared value below: one submission seeded at `checked_in` at Super Express, as *Seeding a submission* says, with eight cards, seven of 3900000 minor units and one of 2600000.
-* A further submission is seeded at `booked` with one card of the declared total below, its visit today, no card checked.
-* admin(holds `grading:operate`) is on <grade10 admin grading url>'s Today strip.
+* A further submission is seeded at `booked` with one card of the declared total below, opened today, no card checked.
+* admin(holds `grading:operate`) is on <grade10 admin grading url>'s Today view.
 
 **Test data:**
 
@@ -919,12 +941,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Click the booked submission on the Today strip to open its hand-in.
+1. Click the booked submission in Today to open its hand-in.
 2. Read the runbook's first step.
 
 **Expected Results:**
 
-* Step 2 reads, by name, that the list would carry the safe past its cap, and offers Book the next drop-off.
+* Step 2 reads, by name, that the list would carry the safe past its cap, and offers Book the next visit.
 * No card can be checked, and the till step is not offered.
 
 ---
@@ -935,7 +957,8 @@ Runs once per row of **Test data**.
 **I want** to refuse it with one of three reasons and a line in the collector's words that shows on their page and the receipt, the list and the fee dropping to the cards that go on and a line already paid refunded at the till,
 **so that** one card never charges the collector or holds the others.
 
-### grade10-admin-grading-counter-US3-TC1-1: A card is refused with each of the three collector-facing reasons
+<!-- trace:case id=g10adm.grading-counter.TC-iqt rev=2 covers=g10adm.grading-counter.SC-aco,g10adm.grading-counter.SC-mma,g10adm.grading-counter.SC-cmm,g10adm.grading-counter.SC-51f,g10adm.grading-counter.SC-dcy,g10adm.grading-counter.SC-dxp,g10adm.grading-counter.SC-m00 -->
+### grade10-admin-grading-counter-US3-TC1-2: A card is refused with each of the three collector-facing reasons
 
 Runs once per row of **Test data**.
 
@@ -954,7 +977,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with two cards, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with two cards, as *Seeding a submission* says.
 * The collector's page for the submission is open at <grade10 grading submission url>.
 
 **Test data:**
@@ -981,7 +1004,8 @@ Runs once per row of **Test data**.
 * Steps 5 and 7 show the words exactly as typed, on the submission page and on the receipt.
 * The card is never charged: step 6's till carries no line for it.
 
-### grade10-admin-grading-counter-US3-TC2-1: Refuse stays disabled until a reason and the collector's words are given
+<!-- trace:case id=g10adm.grading-counter.TC-mv4 rev=2 covers=g10adm.grading-counter.SC-aco,g10adm.grading-counter.SC-mma,g10adm.grading-counter.SC-cmm,g10adm.grading-counter.SC-51f,g10adm.grading-counter.SC-dcy,g10adm.grading-counter.SC-dxp,g10adm.grading-counter.SC-m00 -->
+### grade10-admin-grading-counter-US3-TC2-2: Refuse stays disabled until a reason and the collector's words are given
 
 Runs once per row of **Test data**.
 
@@ -1002,7 +1026,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked`, as *Seeding a submission* says.
 
 **Test data:**
 
@@ -1022,6 +1046,7 @@ Runs once per row of **Test data**.
 
 * Refuse this card stays disabled.
 
+<!-- trace:case id=g10adm.grading-counter.TC-obk rev=1 covers=g10adm.grading-counter.SC-aco,g10adm.grading-counter.SC-mma,g10adm.grading-counter.SC-cmm,g10adm.grading-counter.SC-51f,g10adm.grading-counter.SC-dcy,g10adm.grading-counter.SC-dxp,g10adm.grading-counter.SC-m00 -->
 ### grade10-admin-grading-counter-US3-TC3-1: A refused card's fee never charges, and the till lists only the cards that go on
 
 **Classification:**
@@ -1055,6 +1080,7 @@ Runs once per row of **Test data**.
 * The till lists one Grading Service line per remaining card only; the refused card is never charged.
 * Step 3 labels, seals in and checks in the other two cards, the fee standing for those two alone.
 
+<!-- trace:case id=g10adm.grading-counter.TC-rc2 rev=1 covers=g10adm.grading-counter.SC-aco,g10adm.grading-counter.SC-mma,g10adm.grading-counter.SC-cmm,g10adm.grading-counter.SC-51f,g10adm.grading-counter.SC-dcy,g10adm.grading-counter.SC-dxp,g10adm.grading-counter.SC-m00 -->
 ### grade10-admin-grading-counter-US3-TC4-1: A refused line already paid is refunded at the till
 
 **Classification:**
@@ -1092,7 +1118,8 @@ Runs once per row of **Test data**.
 * The Notice adds a refund line of 60000 minor units (HKD 600.00) at the till, back the way it was paid.
 * Step 3 takes the refund of 60000 minor units at the till against the submission, naming the card and the line it refunds.
 
-### grade10-admin-grading-counter-US3-TC5-1: Refusing a submission's only remaining card is named on the Notice
+<!-- trace:case id=g10adm.grading-counter.TC-lh4 rev=2 covers=g10adm.grading-counter.SC-aco,g10adm.grading-counter.SC-mma,g10adm.grading-counter.SC-cmm,g10adm.grading-counter.SC-51f,g10adm.grading-counter.SC-dcy,g10adm.grading-counter.SC-dxp,g10adm.grading-counter.SC-m00 -->
+### grade10-admin-grading-counter-US3-TC5-2: Refusing a submission's only remaining card is named on the Notice
 
 **Classification:**
 
@@ -1111,7 +1138,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with one card, as *Seeding a submission* says, its visit started with Start at the desk.
+* admin(holds `grading:operate`) is on <grade10 admin grading submission url> for a submission seeded at `booked` with one card, as *Seeding a submission* says.
 * The collector's last letter is noted, as *Reading a letter* says.
 
 **Steps:**
@@ -1131,6 +1158,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-counter.TC-t6y rev=1 covers=g10adm.grading-counter.SC-aco,g10adm.grading-counter.SC-mma,g10adm.grading-counter.SC-cmm,g10adm.grading-counter.SC-51f,g10adm.grading-counter.SC-dcy,g10adm.grading-counter.SC-dxp,g10adm.grading-counter.SC-m00 -->
 ### grade10-admin-grading-counter-US3-TC6-1: A card declared above the courier's cover is refused at the check
 
 **Classification:**
@@ -1177,6 +1205,7 @@ Runs once per row of **Test data**.
 **I want** to take the pickup code and the name, glance at an ID above the threshold and keep nothing, settle the upcharge and the storage accrued at the till, tick each item as it is handed over and inspected, photograph each slab, and show the receipt on the iPad, a second hand-back closing a submission whose card the grader held,
 **so that** the submission closes on a sealed receipt with nothing outstanding.
 
+<!-- trace:case id=g10adm.grading-counter.TC-r2b rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC1-1: The pickup code and the name are matched against the submission page
 
 **Classification:**
@@ -1210,6 +1239,7 @@ Runs once per row of **Test data**.
 * Step 3 matches the code to the submission and the given name to the collector on the page.
 * Step 3 opens the runbook at Settle, what is due.
 
+<!-- trace:case id=g10adm.grading-counter.TC-li5 rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC2-1: Above the threshold, the counter glances at an ID and keeps nothing
 
 Runs once per row of **Test data**.
@@ -1252,6 +1282,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the ID line.
 * Step 4's receipt records that an ID was matched to the name, keeping no document number, no photograph and no document kind.
 
+<!-- trace:case id=g10adm.grading-counter.TC-l7q rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC3-1: At the threshold, the code and the name alone release the cards
 
 **Classification:**
@@ -1291,6 +1322,7 @@ Runs once per row of **Test data**.
 
 * No ID line is offered at exactly the figure: above the threshold is more than the figure, never the figure itself. The matched code and name alone release the cards.
 
+<!-- trace:case id=g10adm.grading-counter.TC-vu6 rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC4-1: A wrong pickup code is refused on the field
 
 **Classification:**
@@ -1327,6 +1359,7 @@ Runs once per row of **Test data**.
 
 * The field refuses the code; nothing releases.
 
+<!-- trace:case id=g10adm.grading-counter.TC-dqc rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC5-1: The upcharge and the storage accrued are settled at the till before anything is handed over
 
 **Classification:**
@@ -1366,6 +1399,7 @@ Runs once per row of **Test data**.
 * Step 2 ticks nothing and names 72000 minor units still due.
 * Step 3 takes payment before any item can be ticked over.
 
+<!-- trace:case id=g10adm.grading-counter.TC-gtu rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC6-1: Nothing due ticks the Settle step through without opening the till
 
 **Classification:**
@@ -1396,6 +1430,7 @@ Runs once per row of **Test data**.
 
 * The step is ticked with nothing to take; Hand over and check proceeds without opening the till.
 
+<!-- trace:case id=g10adm.grading-counter.TC-et9 rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC7-1: Each item is ticked as handed over and inspected, each slab photographed
 
 **Classification:**
@@ -1431,6 +1466,7 @@ Runs once per row of **Test data**.
 * Step 2 attaches one photograph to the slab; the raw card takes no photograph.
 * Step 4 shows the slab's photograph and each item as handed over.
 
+<!-- trace:case id=g10adm.grading-counter.TC-m05 rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC8-1: The receipt is refused while anything is due or an item is unticked
 
 **Classification:**
@@ -1461,6 +1497,7 @@ Runs once per row of **Test data**.
 
 * The step names the unticked item as the reason the receipt cannot be minted.
 
+<!-- trace:case id=g10adm.grading-counter.TC-tp0 rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC9-1: Closing on the sealed receipt moves the submission from Ready to Collected
 
 **Classification:**
@@ -1494,6 +1531,7 @@ Runs once per row of **Test data**.
 * Step 2 reads Back with you: the submission moved `ready → collected`.
 * Step 3: the record stays on the collector's page.
 
+<!-- trace:case id=g10adm.grading-counter.TC-elb rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC10-1: A second hand-back closes a submission whose card the grader held
 
 **Classification:**
@@ -1530,6 +1568,7 @@ Runs once per row of **Test data**.
 * The runbook opens at who is collecting, taking the code and the name again, and the ID glance where the declared total is above the threshold.
 * Closing it moves the submission to `collected` on its own receipt, separate from the first.
 
+<!-- trace:case id=g10adm.grading-counter.TC-58a rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC11-1: A card the grader still holds cannot be ticked and is named on the receipt
 
 **Classification:**
@@ -1564,6 +1603,7 @@ Runs once per row of **Test data**.
 * Steps 1 and 2: the held card's row reads as still out and cannot be ticked.
 * Step 4: the sealed receipt names that card as still with the grader, and the submission stays `ready`.
 
+<!-- trace:case id=g10adm.grading-counter.TC-1un rev=1 covers=g10adm.grading-counter.SC-3s8,g10adm.grading-counter.SC-xct,g10adm.grading-counter.SC-eak,g10adm.grading-counter.SC-o99,g10adm.grading-counter.SC-m60,g10adm.grading-counter.SC-f99,g10adm.grading-counter.SC-4zl,g10adm.grading-counter.SC-ekx,g10adm.grading-counter.SC-r90,g10adm.grading-counter.SC-77c -->
 ### grade10-admin-grading-counter-US4-TC12-1: A wrong pickup code is refused as often as it is typed
 
 **Classification:**
@@ -1613,6 +1653,7 @@ Runs once per row of **Test data**.
 **I want** the hand-back step to read the person named on the submission page and the receipt to record that they collected, and the counter to refuse anyone who is neither the collector nor that person, code or no code, with no override to press,
 **so that** a named person leaves with the cards and a forwarded email never walks out with somebody's slabs while the collector can name them from their phone.
 
+<!-- trace:case id=g10adm.grading-counter.TC-05h rev=1 covers=g10adm.grading-counter.SC-90l,g10adm.grading-counter.SC-u6y,g10adm.grading-counter.SC-x8k,g10adm.grading-counter.SC-vhz -->
 ### grade10-admin-grading-counter-US5-TC1-1: A named person is read from the page and recorded on the receipt as who collected
 
 **Classification:**
@@ -1654,6 +1695,7 @@ Runs once per row of **Test data**.
 * Step 2 matches the named person, not the collector.
 * Step 4's receipt records that person, not the collector, as who collected.
 
+<!-- trace:case id=g10adm.grading-counter.TC-i9q rev=1 covers=g10adm.grading-counter.SC-90l,g10adm.grading-counter.SC-u6y,g10adm.grading-counter.SC-x8k,g10adm.grading-counter.SC-vhz -->
 ### grade10-admin-grading-counter-US5-TC2-1: Somebody who is neither the collector nor the named person is turned away, code or no code
 
 **Classification:**
@@ -1687,6 +1729,7 @@ Runs once per row of **Test data**.
 
 * The name matches neither the collector nor the named person; the runbook turns them away even though the code is correct, offers no override, and says the collector can name a person from their own page.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ysm rev=1 covers=g10adm.grading-counter.SC-90l,g10adm.grading-counter.SC-u6y,g10adm.grading-counter.SC-x8k,g10adm.grading-counter.SC-vhz -->
 ### grade10-admin-grading-counter-US5-TC3-1: No release override is offered to any grant
 
 **Classification:**
@@ -1716,6 +1759,7 @@ Runs once per row of **Test data**.
 
 * No override control is offered, including to the `grading:approve` holder.
 
+<!-- trace:case id=g10adm.grading-counter.TC-psk rev=1 covers=g10adm.grading-counter.SC-90l,g10adm.grading-counter.SC-u6y,g10adm.grading-counter.SC-x8k,g10adm.grading-counter.SC-vhz -->
 ### grade10-admin-grading-counter-US5-TC4-1: The collector renames the pickup person from their own device before hand-back
 
 **Classification:**
@@ -1754,6 +1798,7 @@ Runs once per row of **Test data**.
 
 * Step 2 shows the newly named person as who the hand-back step will match.
 
+<!-- trace:case id=g10adm.grading-counter.TC-zmh rev=1 covers=g10adm.grading-counter.SC-90l,g10adm.grading-counter.SC-u6y,g10adm.grading-counter.SC-x8k,g10adm.grading-counter.SC-vhz -->
 ### grade10-admin-grading-counter-US5-TC5-1: The collector remains an accepted pickup identity alongside a named person
 
 **Classification:**
@@ -1794,6 +1839,7 @@ Runs once per row of **Test data**.
 **I want** to open a vault case for it from the hand-back step once the balance is settled, the receipt saying the card went to the vault,
 **so that** the collector leaves with the case open and no second visit.
 
+<!-- trace:case id=g10adm.grading-counter.TC-5ah rev=1 covers=g10adm.grading-counter.SC-o4e,g10adm.grading-counter.SC-j26 -->
 ### grade10-admin-grading-counter-US6-TC1-1: Open a vault case is disabled until the balance is settled
 
 **Classification:**
@@ -1825,6 +1871,7 @@ Runs once per row of **Test data**.
 
 * Open a vault case is disabled, the unpaid upcharge named on the step as the reason.
 
+<!-- trace:case id=g10adm.grading-counter.TC-and rev=1 covers=g10adm.grading-counter.SC-o4e,g10adm.grading-counter.SC-j26 -->
 ### grade10-admin-grading-counter-US6-TC2-1: A slab opens a vault case from the same hand-back step once settled
 
 **Classification:**
@@ -1858,6 +1905,7 @@ Runs once per row of **Test data**.
 
 * The vault case opens under the collector's account, on the same visit, with no second appointment.
 
+<!-- trace:case id=g10adm.grading-counter.TC-87e rev=1 covers=g10adm.grading-counter.SC-o4e,g10adm.grading-counter.SC-j26 -->
 ### grade10-admin-grading-counter-US6-TC3-1: The hand-back receipt names a vaulted card as gone to the vault
 
 **Classification:**
@@ -1892,6 +1940,7 @@ Runs once per row of **Test data**.
 * The receipt names the vaulted card as gone to the vault and the other item as collected in person.
 * The other item ticks and hands over independently of the vaulted slab.
 
+<!-- trace:case id=g10adm.grading-counter.TC-mvm rev=1 covers=g10adm.grading-counter.SC-o4e,g10adm.grading-counter.SC-j26 -->
 ### grade10-admin-grading-counter-US6-TC4-1: Vaulting one item does not block ticking the rest of the submission's items
 
 **Classification:**
@@ -1929,6 +1978,7 @@ Runs once per row of **Test data**.
 **I want** to withdraw one card until the batch closes, refunding its POS line and releasing it against a hand-back receipt,
 **so that** the card leaves the intake bag with a record and the rest go on.
 
+<!-- trace:case id=g10adm.grading-counter.TC-q8f rev=1 covers=g10adm.grading-counter.SC-7xq,g10adm.grading-counter.SC-0n7 -->
 ### grade10-admin-grading-counter-US7-TC1-1: A card is withdrawn at Handed in before the batch closes
 
 **Classification:**
@@ -1973,6 +2023,7 @@ Runs once per row of **Test data**.
 * Step 5: the card is released against its own withdrawal receipt naming that one card, separate from the submission's eventual full receipt.
 * Step 6: the remaining two cards stay in the batch and go on to the grader.
 
+<!-- trace:case id=g10adm.grading-counter.TC-19n rev=1 covers=g10adm.grading-counter.SC-7xq,g10adm.grading-counter.SC-0n7 -->
 ### grade10-admin-grading-counter-US7-TC2-1: Withdrawing refunds the card's own POS line
 
 **Classification:**
@@ -2008,6 +2059,7 @@ Runs once per row of **Test data**.
 
 * A refund of 60000 minor units (HKD 600.00) is recorded at the till, back the way the fee was paid.
 
+<!-- trace:case id=g10adm.grading-counter.TC-6ev rev=1 covers=g10adm.grading-counter.SC-7xq,g10adm.grading-counter.SC-0n7 -->
 ### grade10-admin-grading-counter-US7-TC3-1: The withdrawal is offered against a hand-back receipt naming that one card
 
 **Classification:**
@@ -2037,6 +2089,7 @@ Runs once per row of **Test data**.
 
 * The card is released against its own withdrawal receipt naming that one card, separate from the submission's eventual full receipt.
 
+<!-- trace:case id=g10adm.grading-counter.TC-znx rev=1 covers=g10adm.grading-counter.SC-7xq,g10adm.grading-counter.SC-0n7 -->
 ### grade10-admin-grading-counter-US7-TC4-1: Withdraw is absent once the batch has closed
 
 **Classification:**
@@ -2068,6 +2121,7 @@ Runs once per row of **Test data**.
 
 * Withdraw is not offered on any card row.
 
+<!-- trace:case id=g10adm.grading-counter.TC-5w7 rev=1 covers=g10adm.grading-counter.SC-7xq,g10adm.grading-counter.SC-0n7 -->
 ### grade10-admin-grading-counter-US7-TC5-1: Withdrawing one card leaves the rest of the submission going on to the grader
 
 **Classification:**
@@ -2106,6 +2160,7 @@ Runs once per row of **Test data**.
 **I want** to waive the difference the sheet charged with a reason and a second approve holder who is not me, once the cards are back,
 **so that** nobody can write off money alone and the collector's due drops to nothing before they collect.
 
+<!-- trace:case id=g10adm.grading-counter.TC-6qc rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC1-1: An upcharge is waived with a reason and a second approve holder
 
 **Classification:**
@@ -2149,6 +2204,7 @@ Runs once per row of **Test data**.
 * Step 4 records the waiver against the card, with the reason, admin A as the recorder and admin B as the approver.
 * The collector's due drops by 60000 minor units (HKD 600.00) before collection.
 
+<!-- trace:case id=g10adm.grading-counter.TC-fwb rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC2-1: Waive is absent until the cards are back
 
 Runs once per row of **Test data**.
@@ -2190,6 +2246,7 @@ Runs once per row of **Test data**.
 
 * The act is absent; nothing offers to write off before the cards are back.
 
+<!-- trace:case id=g10adm.grading-counter.TC-2gc rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC3-1: The recorder cannot approve their own waiver
 
 **Classification:**
@@ -2222,6 +2279,7 @@ Runs once per row of **Test data**.
 * The approval is refused by name: the recorder cannot approve their own request.
 * No waiver is written and the due is unchanged.
 
+<!-- trace:case id=g10adm.grading-counter.TC-lql rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC4-1: A waiver refuses a second person who does not hold `grading:approve`
 
 **Classification:**
@@ -2254,6 +2312,7 @@ Runs once per row of **Test data**.
 * The approval is refused by name, naming `grading:approve`.
 * No waiver is written and the due is unchanged.
 
+<!-- trace:case id=g10adm.grading-counter.TC-qba rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC5-1: A waived upcharge is filed under the submission on the audit chain
 
 **Classification:**
@@ -2284,6 +2343,7 @@ Runs once per row of **Test data**.
 
 * The waiver, its reason and both admins' names appear as an event filed under the submission.
 
+<!-- trace:case id=g10adm.grading-counter.TC-92b rev=1 covers=g10adm.grading-counter.SC-cae,g10adm.grading-counter.SC-nkf,g10adm.grading-counter.SC-2iq,g10adm.grading-counter.SC-1zq,g10adm.grading-counter.SC-wab -->
 ### grade10-admin-grading-counter-US8-TC6-1: A card's storage is waived as an upcharge is, and the waiver names its kind
 
 **Classification:**
@@ -2334,6 +2394,7 @@ Runs once per row of **Test data**.
 **I want** to record a payout at the declared value, with the fee refunded, for a card not returned or damaged, on its own record with a second approve holder, at the till or by transfer, inside the window, and to reverse it on that record if the card turns up,
 **so that** the collector is paid without waiting on the shop's claim and the money book shows what went out and why.
 
+<!-- trace:case id=g10adm.grading-counter.TC-dpq rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC1-1: A payout is recorded at the declared value with the fee refunded, by either route
 
 Runs once per row of **Test data**.
@@ -2379,6 +2440,7 @@ Runs once per row of **Test data**.
 * Step 4 records the row's declared value and refunds the row's fee, on its own record with admin A as the recorder and admin B as the approver, by the row's route.
 * Row B's record carries the transfer's reference.
 
+<!-- trace:case id=g10adm.grading-counter.TC-yxh rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC2-1: A payout past its settlement window is marked on the dialog
 
 **Classification:**
@@ -2419,6 +2481,7 @@ Runs once per row of **Test data**.
 * The dialog marks that the window has passed.
 * Step 3 asks for the payout although the window has passed.
 
+<!-- trace:case id=g10adm.grading-counter.TC-6dl rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC3-1: A payout is reversed on its own record when the card turns up
 
 **Classification:**
@@ -2453,6 +2516,7 @@ Runs once per row of **Test data**.
 
 * Step 4 shows the reversal written on the same record, the payout itself left as it was, and the card back on the submission.
 
+<!-- trace:case id=g10adm.grading-counter.TC-i1z rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC4-1: The recorder cannot approve their own payout
 
 **Classification:**
@@ -2485,6 +2549,7 @@ Runs once per row of **Test data**.
 * The approval is refused by name: the recorder cannot approve their own request.
 * No payout and no refund is written.
 
+<!-- trace:case id=g10adm.grading-counter.TC-rha rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC5-1: A payout is filed under the submission on the audit chain
 
 **Classification:**
@@ -2517,6 +2582,7 @@ Runs once per row of **Test data**.
 
 * The payout, its route, its amount and both admins' names appear as an event filed under the submission.
 
+<!-- trace:case id=g10adm.grading-counter.TC-4sx rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC6-1: A payout still owed past its window badges its row on the queue
 
 **Classification:**
@@ -2549,6 +2615,7 @@ Runs once per row of **Test data**.
 
 * The row badges the payout as past its window, derived at the read from the batch's received day.
 
+<!-- trace:case id=g10adm.grading-counter.TC-au1 rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC7-1: A card already carrying a live payout refuses a second
 
 **Classification:**
@@ -2582,6 +2649,7 @@ Runs once per row of **Test data**.
 * The second payout is refused by name, naming the payout the card already carries.
 * Nothing is written and the first record is untouched.
 
+<!-- trace:case id=g10adm.grading-counter.TC-60y rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC8-1: A payout request nobody has approved moves no money
 
 **Classification:**
@@ -2618,6 +2686,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-counter.TC-x7b rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC9-1: A reversed payout is repaid at the till before the card goes home
 
 **Classification:**
@@ -2658,6 +2727,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-counter.TC-til rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC10-1: A transfer payout is stamped received by its own act
 
 **Classification:**
@@ -2700,6 +2770,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-counter.TC-u8z rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC11-1: A transfer not yet received badges its row and counts in To settle
 
 **Classification:**
@@ -2740,6 +2811,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-counter.TC-94a rev=1 covers=g10adm.grading-counter.SC-nbg,g10adm.grading-counter.SC-o9q,g10adm.grading-counter.SC-kdi,g10adm.grading-counter.SC-g7t,g10adm.grading-counter.SC-kiz,g10adm.grading-counter.SC-2z1,g10adm.grading-counter.SC-qcm,g10adm.grading-counter.SC-nyo,g10adm.grading-counter.SC-ewk,g10adm.grading-counter.SC-n5p,g10adm.grading-counter.SC-5wb -->
 ### grade10-admin-grading-counter-US9-TC12-1: A card found after collection is handed back on its own
 
 **Classification:**
@@ -2786,6 +2858,7 @@ Runs once per row of **Test data**.
 **I want** per card the intake id, the declared value, the level and the one it was moved to, the grade and cert in the grader's words and the outcome, the money as paid, due, refunded and paid out with the till's references, and the timeline with the grader's stages in its words,
 **so that** the till and the record say the same figure and I can answer a collector on the phone from one screen.
 
+<!-- trace:case id=g10adm.grading-counter.TC-5mj rev=1 covers=g10adm.grading-counter.SC-n6l,g10adm.grading-counter.SC-hwv,g10adm.grading-counter.SC-2lg,g10adm.grading-counter.SC-rrl,g10adm.grading-counter.SC-9rj,g10adm.grading-counter.SC-x5b -->
 ### grade10-admin-grading-counter-US10-TC1-1: The Cards tab reads intake id, declared value, level, grade and outcome per card
 
 **Classification:**
@@ -2823,6 +2896,7 @@ Runs once per row of **Test data**.
 
 * The row shows the intake id, the declared value, the original level and the level moved to, the grade in the grader's words (for example `PSA 10 GEM MT`) and its cert, and its outcome.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ish rev=1 covers=g10adm.grading-counter.SC-n6l,g10adm.grading-counter.SC-hwv,g10adm.grading-counter.SC-2lg,g10adm.grading-counter.SC-rrl,g10adm.grading-counter.SC-9rj,g10adm.grading-counter.SC-x5b -->
 ### grade10-admin-grading-counter-US10-TC2-1: The Money tab shows paid, due, refunded and paid out with the till's own references
 
 **Classification:**
@@ -2862,6 +2936,7 @@ Runs once per row of **Test data**.
 * Paid at hand-in shows 240000 minor units (HKD 2,400.00) over four lines, each naming the till's reference and its card.
 * To settle shows the upcharge and storage lines separately, totalling 72000 minor units (HKD 720.00).
 
+<!-- trace:case id=g10adm.grading-counter.TC-13a rev=1 covers=g10adm.grading-counter.SC-n6l,g10adm.grading-counter.SC-hwv,g10adm.grading-counter.SC-2lg,g10adm.grading-counter.SC-rrl,g10adm.grading-counter.SC-9rj,g10adm.grading-counter.SC-x5b -->
 ### grade10-admin-grading-counter-US10-TC3-1: The till and the record say the same figure
 
 **Classification:**
@@ -2891,6 +2966,7 @@ Runs once per row of **Test data**.
 
 * The paid amount on the Money tab matches the POS order's total exactly.
 
+<!-- trace:case id=g10adm.grading-counter.TC-47i rev=1 covers=g10adm.grading-counter.SC-n6l,g10adm.grading-counter.SC-hwv,g10adm.grading-counter.SC-2lg,g10adm.grading-counter.SC-rrl,g10adm.grading-counter.SC-9rj,g10adm.grading-counter.SC-x5b -->
 ### grade10-admin-grading-counter-US10-TC4-1: The header answers the phone with what is due, what came back ungraded, and the batch
 
 **Classification:**
@@ -2921,6 +2997,7 @@ Runs once per row of **Test data**.
 
 * The header shows the summary, the status word, declared in total, the upcharge to settle, the ungraded card, and the batch it is in.
 
+<!-- trace:case id=g10adm.grading-counter.TC-rb4 rev=1 covers=g10adm.grading-counter.SC-n6l,g10adm.grading-counter.SC-hwv,g10adm.grading-counter.SC-2lg,g10adm.grading-counter.SC-rrl,g10adm.grading-counter.SC-9rj,g10adm.grading-counter.SC-x5b -->
 ### grade10-admin-grading-counter-US10-TC5-1: The collector's email, phone and click-to-chat templates are reachable from the header
 
 **Classification:**
@@ -2951,6 +3028,7 @@ Runs once per row of **Test data**.
 * Step 1 shows the email and phone with a WhatsApp click-to-chat entry.
 * Step 2 opens the chat pre-filled with a staff-pressed template, never sent automatically.
 
+<!-- trace:case id=g10adm.grading-counter.TC-7co rev=1 covers=g10adm.grading-counter.SC-n6l,g10adm.grading-counter.SC-hwv,g10adm.grading-counter.SC-2lg,g10adm.grading-counter.SC-rrl,g10adm.grading-counter.SC-9rj,g10adm.grading-counter.SC-x5b -->
 ### grade10-admin-grading-counter-US10-TC6-1: A submission id that does not resolve shows the console's not-found line
 
 **Classification:**
@@ -2994,6 +3072,7 @@ Runs once per row of **Test data**.
 **I want** the agreement to be mintable only once every card is checked and the receipt only once the balance is settled and every item is ticked, one document each time on a 30-minute link, and to show any sealed document on the iPad, copy its link or send it or the grades email again,
 **so that** nothing is handed over to sign that the shop could not be held to, and a collector who lost an email gets the same sealed copy.
 
+<!-- trace:case id=g10adm.grading-counter.TC-fac rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC1-1: One document is live on the link at a time, for 30 minutes
 
 **Classification:**
@@ -3026,6 +3105,7 @@ Runs once per row of **Test data**.
 * Step 2 shows a 30-minute countdown.
 * Step 3 shows the link expired; step 4 issues a new one, never two live links at once.
 
+<!-- trace:case id=g10adm.grading-counter.TC-heg rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC2-1: Minting is refused in production while a fact the document prints is unset
 
 **Classification:**
@@ -3054,6 +3134,7 @@ Runs once per row of **Test data**.
 
 * The seal refuses, naming the unset fact; nothing is offered to sign.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ctm rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC3-1: A sealed document reopens on the iPad from the Documents tab
 
 **Classification:**
@@ -3087,6 +3168,7 @@ Runs once per row of **Test data**.
 * The tab lists the agreement, the intake receipt and the hand-back receipt, each with its fingerprint.
 * Showing it again reopens the same sealed copy, not a new mint.
 
+<!-- trace:case id=g10adm.grading-counter.TC-54a rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC4-1: A sealed document's link is copied instead of shown on iPad
 
 **Classification:**
@@ -3117,6 +3199,7 @@ Runs once per row of **Test data**.
 
 * The link copies to the clipboard for handing to the collector another way, on the same 30-minute rule.
 
+<!-- trace:case id=g10adm.grading-counter.TC-jvx rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC5-1: Send again resends a sealed document, or the grades email, unchanged
 
 **Classification:**
@@ -3148,6 +3231,7 @@ Runs once per row of **Test data**.
 
 * The signed document is re-sent to the collector's email as the same sealed copy, with no re-mint.
 
+<!-- trace:case id=g10adm.grading-counter.TC-77v rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC6-1: Before hand-in, the Documents tab shows nothing sealed
 
 **Classification:**
@@ -3178,6 +3262,7 @@ Runs once per row of **Test data**.
 
 * The tab shows nothing sealed yet.
 
+<!-- trace:case id=g10adm.grading-counter.TC-o9d rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC7-1: A failed send is flagged with its reason and Send again offered
 
 Runs once per row of **Test data**.
@@ -3215,6 +3300,7 @@ Runs once per row of **Test data**.
 
 * The failed letter is flagged with its reason; Send again is offered on it only to the row's operate holder.
 
+<!-- trace:case id=g10adm.grading-counter.TC-hfs rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC8-1: An agreement sealed before the hand-in is not sent again
 
 **Classification:**
@@ -3248,6 +3334,7 @@ Runs once per row of **Test data**.
 * Step 1 lists the agreement with its fingerprint and offers no Send again on it.
 * Step 2 is refused by name, and the collector's mailbox receives nothing.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ntq rev=1 covers=g10adm.grading-counter.SC-p78,g10adm.grading-counter.SC-qzs,g10adm.grading-counter.SC-h13,g10adm.grading-counter.SC-swq,g10adm.grading-counter.SC-ye7,g10adm.grading-counter.SC-rth,g10adm.grading-counter.SC-2hl,g10adm.grading-counter.SC-8ni,g10adm.grading-counter.SC-ccd -->
 ### grade10-admin-grading-counter-US11-TC9-1: The hand-back receipt is refused while a balance is due
 
 **Classification:**
@@ -3292,6 +3379,7 @@ Runs once per row of **Test data**.
 **I want** a submission uncollected past the notice day to ask me for the notice, and to record the posting date and the tracking once it is in the post, the email going the same day and the notice period counting from that date,
 **so that** the notice is a fact with a date on it and nothing after it runs off a guess.
 
+<!-- trace:case id=g10adm.grading-counter.TC-8x8 rev=1 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC1-1: A submission ready past the notice day asks staff for the notice
 
 Runs once per row of **Test data**.
@@ -3336,6 +3424,7 @@ Runs once per row of **Test data**.
 * Step 2's row and step 3's submission page read the row's outcome: the Notice due badge in row A, no Notice due badge in row B.
 * Step 4 is no notice: nothing has been sent without staff.
 
+<!-- trace:case id=g10adm.grading-counter.TC-slm rev=1 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC2-1: Posting the notice records the posting date and tracking; the email goes the same day
 
 **Classification:**
@@ -3376,6 +3465,7 @@ Runs once per row of **Test data**.
 * The posting date and tracking appear on the timeline.
 * The notice email goes out the same day.
 
+<!-- trace:case id=g10adm.grading-counter.TC-lhs rev=1 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC3-1: Record is disabled while the posting date or tracking is missing
 
 **Classification:**
@@ -3408,6 +3498,7 @@ Runs once per row of **Test data**.
 
 * Record stays disabled, naming the missing tracking field.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ikq rev=2 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC4-2: The notice period runs from the posting date, not the notice day
 
 **Classification:**
@@ -3449,6 +3540,7 @@ Runs once per row of **Test data**.
 
 * The 90 days are counted from day 183, the posting date, not from day 186, the day it was entered.
 
+<!-- trace:case id=g10adm.grading-counter.TC-aa8 rev=2 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC5-2: Nothing more is offered once the notice period passes
 
 **Classification:**
@@ -3480,6 +3572,7 @@ Runs once per row of **Test data**.
 
 * No further notice or disposal act is offered; storage keeps accruing and the cards stay in the safe.
 
+<!-- trace:case id=g10adm.grading-counter.TC-edm rev=1 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC6-1: The notice's address is read only by an operate holder, and only while the notice is due
 
 **Classification:**
@@ -3520,6 +3613,7 @@ Runs once per row of **Test data**.
 * Step 2: refused by name, with the day the notice falls due.
 * Step 3: refused by name.
 
+<!-- trace:case id=g10adm.grading-counter.TC-gg3 rev=1 covers=g10adm.grading-counter.SC-3i7,g10adm.grading-counter.SC-lz5,g10adm.grading-counter.SC-3er,g10adm.grading-counter.SC-0c4,g10adm.grading-counter.SC-8y2,g10adm.grading-counter.SC-y6m,g10adm.grading-counter.SC-6gr,g10adm.grading-counter.SC-3gz -->
 ### grade10-admin-grading-counter-US12-TC7-1: Cards ready a month badge as uncollected, worked out at the read
 
 **Classification:**
@@ -3559,7 +3653,8 @@ Runs once per row of **Test data**.
 **I want** every event on the timeline with the figures it carried and the grader's stages in its words, staff-only entries kept from the collector, and every action filed under the submission on the audit chain,
 **so that** the record can be tested rather than believed.
 
-### grade10-admin-grading-counter-US13-TC1-1: The timeline lists every event with the figures it carried
+<!-- trace:case id=g10adm.grading-counter.TC-o3v rev=2 covers=g10adm.grading-counter.SC-uf6,g10adm.grading-counter.SC-xzo,g10adm.grading-counter.SC-v27,g10adm.grading-counter.SC-xku -->
+### grade10-admin-grading-counter-US13-TC1-2: The timeline lists every event with the figures it carried
 
 **Classification:**
 
@@ -3578,18 +3673,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A submission of one card at Regular, its fee paid at hand-in, is received with that card moved to Express, as *Receiving with an exception* says, and its upcharge of 60000 minor units (HKD 600.00) is waived: asked for by admin A with a reason and approved by admin B.
-* The submission is then collected at the counter, its hand-back closed on a sealed receipt.
+* A submission of two cards at Regular, its fee paid by card at hand-in, is received with its first card moved to Express, as *Receiving with an exception* says, and its upcharge of 60000 minor units (HKD 600.00) is waived: asked for by admin A with a reason and approved by admin B.
+* The batch's receiving is finished.
 * admin(holds `grading:read`) is on <grade10 admin grading submission url> for it.
 
 **Steps:**
 
-1. Click the Timeline tab.
+1. Click the Activity tab.
 
 **Expected Results:**
 
-* Every event from booking to collection is listed in order, each with the figures it carried and who did it — the paid amount, the upcharge and the waiver's reason among them.
+* The submission's plan is listed once, with its card count and level.
+* The payment, the move up a level and the waived upcharge are each listed with the figures they carried: the amount paid by card, and the upcharge's amount and card.
+* The waiver also names its reason, that admin A asked and a colleague approved.
+* No entry reads as missing a fact.
 
+<!-- trace:case id=g10adm.grading-counter.TC-h5l rev=1 covers=g10adm.grading-counter.SC-uf6,g10adm.grading-counter.SC-xzo,g10adm.grading-counter.SC-v27,g10adm.grading-counter.SC-xku -->
 ### grade10-admin-grading-counter-US13-TC2-1: The grader's stages appear on the timeline in the grader's own words
 
 **Classification:**
@@ -3627,6 +3726,7 @@ Runs once per row of **Test data**.
 
 * The stage appears in the grader's own words, not rephrased by the console.
 
+<!-- trace:case id=g10adm.grading-counter.TC-oif rev=1 covers=g10adm.grading-counter.SC-uf6,g10adm.grading-counter.SC-xzo,g10adm.grading-counter.SC-v27,g10adm.grading-counter.SC-xku -->
 ### grade10-admin-grading-counter-US13-TC3-1: Staff-only entries stay off the collector's page
 
 **Classification:**
@@ -3659,6 +3759,7 @@ Runs once per row of **Test data**.
 * Step 2 does not show that entry anywhere on the collector's page.
 * Step 3's letters do not carry the entry.
 
+<!-- trace:case id=g10adm.grading-counter.TC-1c4 rev=1 covers=g10adm.grading-counter.SC-uf6,g10adm.grading-counter.SC-xzo,g10adm.grading-counter.SC-v27,g10adm.grading-counter.SC-xku -->
 ### grade10-admin-grading-counter-US13-TC4-1: Every action on the submission is filed under it on the audit chain
 
 **Classification:**
@@ -3696,9 +3797,10 @@ Runs once per row of **Test data**.
 ## grade10-admin-grading-counter-US14: Operator's acts follow the grant they hold and the status in front of them
 
 **As a** member of shop staff,
-**I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel only on the collector's word and never once the visit starts or a card is checked or refused, refused independently when the submission has moved under me,
+**I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel only on the collector's word and never once a card is checked or refused, refused independently when the submission has moved under me,
 **so that** I am never shown a button that will only be refused, and two of us at one counter cannot leave a submission where neither meant.
 
+<!-- trace:case id=g10adm.grading-counter.TC-jrv rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC1-1: An operate-grant holder sees only the acts that grant covers
 
 **Classification:**
@@ -3729,6 +3831,7 @@ Runs once per row of **Test data**.
 
 * Waive the upcharge and Payout are absent; only the acts `grading:operate` covers are offered.
 
+<!-- trace:case id=g10adm.grading-counter.TC-qdy rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC2-1: Cancel is never offered once the cards have left
 
 **Classification:**
@@ -3761,6 +3864,7 @@ Runs once per row of **Test data**.
 * Cancel is not offered on any status from `checked_in` onward.
 * Step 2 is refused by name.
 
+<!-- trace:case id=g10adm.grading-counter.TC-rvd rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC3-1: A stale act is refused by name when the submission moved under the operator
 
 **Classification:**
@@ -3793,6 +3897,7 @@ Runs once per row of **Test data**.
 
 * Admin B's act is refused by name, naming that the submission has moved; the panel re-reads the current state rather than overwriting it.
 
+<!-- trace:case id=g10adm.grading-counter.TC-syb rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC4-1: A read-grant holder is offered no act on any tab
 
 **Classification:**
@@ -3826,6 +3931,7 @@ Runs once per row of **Test data**.
 * Every tab offers reading only; no act appears on any of the three.
 * Step 4 is refused by name.
 
+<!-- trace:case id=g10adm.grading-counter.TC-zoh rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC5-1: An approve-grant holder sees the operate acts as well as the approve-only ones
 
 **Classification:**
@@ -3858,6 +3964,7 @@ Runs once per row of **Test data**.
 
 * Step 1 offers the hand-back, the `grading:operate` act, and step 2 offers Waive the upcharge, the `grading:approve` act: the acts of both grants offered together on the one submission.
 
+<!-- trace:case id=g10adm.grading-counter.TC-3cq rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC6-1: Production asks for the second factor before any grading surface opens
 
 **Classification:**
@@ -3886,6 +3993,7 @@ Runs once per row of **Test data**.
 
 * The second factor is required before the surface opens.
 
+<!-- trace:case id=g10adm.grading-counter.TC-opz rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC7-1: One verification covers the next act for twelve hours
 
 **Classification:**
@@ -3915,7 +4023,8 @@ Runs once per row of **Test data**.
 
 * Neither act asks for the second factor again; the session stays verified for 12 hours from the verification.
 
-### grade10-admin-grading-counter-US14-TC8-1: Staff cancel a booked submission on the collector's word
+<!-- trace:case id=g10adm.grading-counter.TC-wtp rev=2 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
+### grade10-admin-grading-counter-US14-TC8-2: Staff cancel a booked submission on the collector's word
 
 **Classification:**
 
@@ -3934,23 +4043,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector has booked a drop-off for later today on the site, at <grade10 grading url>, so its submission is `booked`, its visit not started and none of its cards checked or refused; the collector has asked the shop to call it off.
+* A submission is seeded at `booked`, as *Seeding a submission* says, with none of its cards checked or refused; the collector has asked the shop to call it off.
 * admin(holds `grading:operate`) is on <grade10 admin grading submission url> for it, with `?view=record`, and has noted the collector's last letter, as *Reading a letter* says.
 
 **Steps:**
 
 1. Click Cancel on the submission.
 2. Click Yes, cancel in the confirm.
-3. On <grade10 admin audit url>, pull the trail for the submission's id.
+3. Click the Activity tab.
 4. Read the collector's last letter again.
 
 **Expected Results:**
 
-* Step 2: the submission reads Cancelled, and its drop-off is cancelled in the diary with it.
-* Step 3: the cancel is on the trail, with the operator who made it.
+* Step 2: the submission reads Cancelled, and no drop-off section shows.
+* Step 3: the cancel is listed, with the operator who made it.
 * Step 4: no message about the cancel was sent.
 
-### grade10-admin-grading-counter-US14-TC9-1: Cancel is withheld once the visit's start time comes or a card is checked or refused
+<!-- trace:case id=g10adm.grading-counter.TC-8xo rev=2 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
+### grade10-admin-grading-counter-US14-TC9-2: Cancel is withheld once a card is checked or refused
 
 Runs once per row of **Test data**.
 
@@ -3971,16 +4081,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A `booked` submission stands in the row's state. For Start time come it is seeded at `booked`, as *Seeding a submission* says, with the default anchors, its visit's start time an hour or more past; for the other two rows the collector booked a drop-off for later today on the site, at <grade10 grading url>, and the desk clicked Start at the desk early and acted as the row says.
+* A `booked` submission is seeded as *Seeding a submission* says, and the desk has acted on it as the row says.
 * admin(holds `grading:operate`) has <grade10 admin grading submission url> for it open with `?view=record` in a second tab, loaded before the row's state was reached.
 
 **Test data:**
 
 | State | The desk |
 | --- | --- |
-| Start time come | the visit's start time has come; no card checked or refused |
-| Card checked early | before the visit's start time, the desk started early and checked one card, with both intake photographs |
-| Card refused early | before the visit's start time, the desk started early and refused the first card, with its reason |
+| Card checked | the desk checked one card, with both intake photographs |
+| Card refused | the desk refused the first card, with its reason |
 
 **Steps:**
 
@@ -3994,6 +4103,7 @@ Runs once per row of **Test data**.
 
 ---
 
+<!-- trace:case id=g10adm.grading-counter.TC-32a rev=1 covers=g10adm.grading-counter.SC-m3l,g10adm.grading-counter.SC-wfj,g10adm.grading-counter.SC-zwe,g10adm.grading-counter.SC-ldu,g10adm.grading-counter.SC-ld3,g10adm.grading-counter.SC-x8l,g10adm.grading-counter.SC-edx,g10adm.grading-counter.SC-4rb,g10adm.grading-counter.SC-tiv -->
 ### grade10-admin-grading-counter-US14-TC10-1: A read holder is offered no act on a batch
 
 **Classification:**
@@ -4038,6 +4148,7 @@ Runs once per row of **Test data**.
 **I want** every clock, cap, fee sheet and threshold the pages run on to be a setting I read and change in the console under `grading:approve`, a money setting taking a second person, filed under its own audit subject, and reaching only submissions not yet booked,
 **so that** confirming a default is a decision I record and not a release I wait for, and no signed paper changes under a collector.
 
+<!-- trace:case id=g10adm.grading-counter.TC-b1h rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC1-1: Every setting is read with its default and its owner
 
 **Classification:**
@@ -4068,6 +4179,7 @@ Runs once per row of **Test data**.
 
 * The table lists every setting with its current value, the owner who confirms it, and the pinned line explaining where a change takes effect.
 
+<!-- trace:case id=g10adm.grading-counter.TC-w3k rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC2-1: A clock is edited in place with a single saveable field
 
 **Classification:**
@@ -4109,6 +4221,7 @@ Runs once per row of **Test data**.
 * Step 3 saves the field in place with no second-person dialog.
 * Step 4 shows the entry under the settings subject, naming the key, 21, 25 and the writer.
 
+<!-- trace:case id=g10adm.grading-counter.TC-gg8 rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC3-1: A money setting requires a reason and a second approve holder
 
 **Classification:**
@@ -4152,6 +4265,7 @@ Runs once per row of **Test data**.
 * Step 3's row waits on a second approver; step 5's row reads 3500, carrying admin A's and admin B's names.
 * The audit entry is filed under `settings`, not under any submission.
 
+<!-- trace:case id=g10adm.grading-counter.TC-zxp rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC4-1: The recorder cannot approve their own settings change
 
 **Classification:**
@@ -4182,6 +4296,7 @@ Runs once per row of **Test data**.
 
 * Step 1 is refused by name, and step 2's row still waits on a second approver.
 
+<!-- trace:case id=g10adm.grading-counter.TC-c5k rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC5-1: A changed setting reaches only submissions not yet booked
 
 **Classification:**
@@ -4223,6 +4338,7 @@ Runs once per row of **Test data**.
 * Step 2 still shows the old 3000 minor units (HKD 30.00) fee, unchanged.
 * Step 3 shows the new 3500 minor units (HKD 35.00) fee.
 
+<!-- trace:case id=g10adm.grading-counter.TC-if9 rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC6-1: An operate-grant holder sees the settings table read-only
 
 **Classification:**
@@ -4254,6 +4370,7 @@ Runs once per row of **Test data**.
 * The table reads, but no field opens for editing.
 * Step 3 is refused by name.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ntn rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC7-1: An unset fact is marked on Settings with its readiness owner
 
 **Classification:**
@@ -4283,6 +4400,7 @@ Runs once per row of **Test data**.
 
 * The unset row is marked as a bracketed value, naming its owner on the readiness line.
 
+<!-- trace:case id=g10adm.grading-counter.TC-ace rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC8-1: A read that needs a setting nobody has written is refused by name
 
 **Classification:**
@@ -4312,6 +4430,7 @@ Runs once per row of **Test data**.
 * The read is refused by name, naming that setting and its owner.
 * No value compiled into the code is used in its place.
 
+<!-- trace:case id=g10adm.grading-counter.TC-fui rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC9-1: The reference rate is written by one approve holder, and nought is refused
 
 Runs once per row of **Test data**.
@@ -4353,6 +4472,7 @@ Runs once per row of **Test data**.
 * The second save is refused, naming the reference rate, and 7.90 stays.
 * Step 4 reads the USD sale at 7.90.
 
+<!-- trace:case id=g10adm.grading-counter.TC-2t0 rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC10-1: A fee-sheet change reaches only what is not yet booked
 
 **Classification:**
@@ -4394,6 +4514,7 @@ Runs once per row of **Test data**.
 * Step 2's till prices each card at the fee before, 60000 minor units: the booked submission is untouched.
 * Step 3's till prices each card at the fee after, 70000 minor units: the planned submission is priced on the new row when it books.
 
+<!-- trace:case id=g10adm.grading-counter.TC-xml rev=1 covers=g10adm.grading-counter.SC-c3e,g10adm.grading-counter.SC-vb8,g10adm.grading-counter.SC-7dr,g10adm.grading-counter.SC-6gs,g10adm.grading-counter.SC-62a,g10adm.grading-counter.SC-8fi,g10adm.grading-counter.SC-oe8,g10adm.grading-counter.SC-ach,g10adm.grading-counter.SC-osf,g10adm.grading-counter.SC-xnx -->
 ### grade10-admin-grading-counter-US15-TC11-1: A seeded figure no owner approved holds the seal in production
 
 **Classification:**
@@ -4438,30 +4559,30 @@ Runs once per row of **Test data**.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `grade10-admin-grading-counter-US1-TC1-1` | Covered | `grade10-admin-grading-counter-SC-02`; one expected result added so the case also reaches `grade10-admin-grading-counter-SC-86`, the fields a row is worked from |
-| `grade10-admin-grading-counter-US1-TC2-1` | Folded, one reading dropped | The strip in slot order reached no scenario and is folded as `grade10-admin-grading-counter-SC-85`. The claim that a submission ready for pickup shows on the strip's pickups line is a misreading: the strip carries the day's booked drop-offs and one line saying that pickups walk in, so that expected result and its pre-condition are dropped |
+| `grade10-admin-grading-counter-US1-TC1-2` | Covered | `grade10-admin-grading-counter-SC-02`; one expected result added so the case also reaches `grade10-admin-grading-counter-SC-86`, the fields a row is worked from; `<v>` 2: the queue has no Visit column (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US1-TC2-1` | Folded, one reading dropped | The strip in slot order reached no scenario and is folded as `grade10-admin-grading-counter-SC-85`. The claim that a submission ready for pickup shows on the strip's pickups line is a misreading: the strip carries the day's booked drop-offs and one line saying that pickups walk in, so that expected result and its pre-condition are dropped; deprecated: the queue has no day strip, and the Today cut is what was opened that day (`add-multi-store-appointments`, `grade10-admin-grading-counter-SC-85`) |
 | `grade10-admin-grading-counter-US1-TC3-1` | Covered | `grade10-admin-grading-counter-SC-06`, `grade10-admin-grading-counter-SC-10` |
 | `grade10-admin-grading-counter-US1-TC4-1` | Folded | The ready and settle tiles are `grade10-admin-grading-counter-SC-12`, `grade10-admin-grading-counter-SC-13`; the batch closing and with-graders tiles reached no scenario and are folded as `grade10-admin-grading-counter-SC-87` |
 | `grade10-admin-grading-counter-US1-TC5-1` | Covered | `grade10-admin-grading-counter-SC-05` |
 | `grade10-admin-grading-counter-US1-TC6-1` | Covered | `grade10-admin-grading-counter-SC-04` |
 | `grade10-admin-grading-counter-US1-TC7-1` | Covered | `grade10-admin-grading-counter-SC-75` |
-| `grade10-admin-grading-counter-US2-TC1-1` | Covered | `grade10-admin-grading-counter-SC-14` |
+| `grade10-admin-grading-counter-US2-TC1-2` | Covered | `grade10-admin-grading-counter-SC-14`; `<v>` 2: a booked submission opens from Today with no Start at the desk step (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-US2-TC2-1` | Covered | `grade10-admin-grading-counter-SC-15` |
-| `grade10-admin-grading-counter-US2-TC3-1` | Covered | `grade10-admin-grading-counter-SC-16` |
-| `grade10-admin-grading-counter-US2-TC5-1` | Covered | `grade10-admin-grading-counter-SC-17` |
-| `grade10-admin-grading-counter-US2-TC6-1` | Covered | `grade10-admin-grading-counter-SC-42` |
-| `grade10-admin-grading-counter-US2-TC7-1` | Covered | `grade10-admin-grading-counter-SC-42`, `grade10-admin-grading-counter-SC-45` |
-| `grade10-admin-grading-counter-US2-TC8-1` | Covered | `grade10-admin-grading-counter-SC-18`, `grade10-admin-grading-counter-SC-19` |
-| `grade10-admin-grading-counter-US2-TC9-1` | Covered | `grade10-admin-grading-counter-SC-23` |
-| `grade10-admin-grading-counter-US2-TC10-1` | Covered | `grade10-admin-grading-counter-SC-24` |
+| `grade10-admin-grading-counter-US2-TC3-2` | Covered | `grade10-admin-grading-counter-SC-16`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC5-2` | Covered | `grade10-admin-grading-counter-SC-17`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC6-2` | Covered | `grade10-admin-grading-counter-SC-42`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC7-2` | Covered | `grade10-admin-grading-counter-SC-42`, `grade10-admin-grading-counter-SC-45`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC8-2` | Covered | `grade10-admin-grading-counter-SC-18`, `grade10-admin-grading-counter-SC-19`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC9-2` | Covered | `grade10-admin-grading-counter-SC-23`; `<v>` 2: the next booking is a visit, the diary's (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC10-2` | Covered | `grade10-admin-grading-counter-SC-24`; `<v>` 2: the next booking is a visit, the diary's (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-US2-TC11-1` | Covered | `grade10-admin-grading-counter-SC-20` |
-| `grade10-admin-grading-counter-US2-TC12-1` | Covered | `grade10-admin-grading-counter-SC-21` |
-| `grade10-admin-grading-counter-US2-TC4-1` | Folded | A card declared exactly at the level's ceiling is the boundary of step 3's refusal and reached no scenario; folded as `grade10-admin-grading-counter-SC-88` |
-| `grade10-admin-grading-counter-US3-TC1-1` | Covered | `grade10-admin-grading-counter-SC-25` |
-| `grade10-admin-grading-counter-US3-TC2-1` | Covered | `grade10-admin-grading-counter-SC-26` |
+| `grade10-admin-grading-counter-US2-TC12-2` | Covered | `grade10-admin-grading-counter-SC-21`; `<v>` 2: no Start at the desk step; the booking is a visit, and runbooks do not name each other (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC4-2` | Folded | A card declared exactly at the level's ceiling is the boundary of step 3's refusal and reached no scenario; folded as `grade10-admin-grading-counter-SC-88`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US3-TC1-2` | Covered | `grade10-admin-grading-counter-SC-25`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US3-TC2-2` | Covered | `grade10-admin-grading-counter-SC-26`; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-US3-TC3-1` | Covered | `grade10-admin-grading-counter-SC-28` |
 | `grade10-admin-grading-counter-US3-TC4-1` | Covered | `grade10-admin-grading-counter-SC-27` |
-| `grade10-admin-grading-counter-US3-TC5-1` | Raised, answered, folded | The blind pass could not tell what the submission becomes when its last card is refused. Answered: the counter cancels it from `booked` at the desk and tells the collector there, and no message is sent. Folded as `grade10-admin-grading-counter-SC-89`, added to the case, and landed as Q75 |
+| `grade10-admin-grading-counter-US3-TC5-2` | Raised, answered, folded | The blind pass could not tell what the submission becomes when its last card is refused. Answered: the counter cancels it from `booked` at the desk and tells the collector there, and no message is sent. Folded as `grade10-admin-grading-counter-SC-89`, added to the case, and landed as Q75; `<v>` 2: no Start at the desk step (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-US4-TC1-1` | Covered | `grade10-admin-grading-counter-SC-29` |
 | `grade10-admin-grading-counter-US4-TC2-1` | Covered | `grade10-admin-grading-counter-SC-30` |
 | `grade10-admin-grading-counter-US4-TC3-1` | **Covered by `grade10-admin-grading-counter-SC-31`, corrected** | The requirement said at or above while `grade10-site/grading/submission-lifecycle` said above. Above is more than the figure, as the lifecycle's Q85 rules, so the scenario and the case now stand at exactly 1000000 HKD minor units on the no-ID side |
@@ -4514,7 +4635,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US12-TC3-1` | Covered | `grade10-admin-grading-counter-SC-66` |
 | `grade10-admin-grading-counter-US12-TC4-2` | Covered | `grade10-admin-grading-counter-SC-67`; `<v>` 2: the period is the 90 pinned at signing |
 | `grade10-admin-grading-counter-US12-TC5-2` | Covered | `grade10-admin-grading-counter-SC-68`; `<v>` 2: the period is the 90 pinned at signing |
-| `grade10-admin-grading-counter-US13-TC1-1` | Covered | `grade10-admin-grading-counter-SC-56` |
+| `grade10-admin-grading-counter-US13-TC1-2` | Covered | `grade10-admin-grading-counter-SC-56`; `<v>` 2: the plan opens the timeline now that no booking does, and the walk reads it up to the finished receiving (`add-multi-store-appointments`) |
 | `grade10-admin-grading-counter-US13-TC2-1` | Covered | `grade10-admin-grading-counter-SC-58` |
 | `grade10-admin-grading-counter-US13-TC3-1` | Covered, deferred at review | `grade10-admin-grading-counter-SC-57`; the letters step was added at review. Still `draft`: no act or surface marks a timeline entry staff-only, so no tester can reach the case's starting state; the spec's author owes it |
 | `grade10-admin-grading-counter-US13-TC4-1` | Covered | `grade10-admin-grading-counter-SC-80` |
@@ -4530,9 +4651,9 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-US15-TC5-1` | Covered | `grade10-admin-grading-counter-SC-73`; it walks the storage fee, not the fee sheet, so `grade10-admin-grading-counter-SC-72` and `grade10-admin-grading-counter-SC-74` went to a case of their own at review |
 | `grade10-admin-grading-counter-US15-TC6-1` | Covered | `grade10-admin-grading-counter-SC-76` |
 | `grade10-admin-grading-counter-US15-TC7-1` | Folded | A setting nobody has written being marked on the settings page with its owner reached no scenario; folded as `grade10-admin-grading-counter-SC-98` |
-| `grade10-admin-grading-counter-SC-01` | Case added | `grade10-admin-grading-counter-US1-TC8-1` — the Today cut made on the shop's own day while the date in Coordinated Universal Time is still yesterday's |
-| `grade10-admin-grading-counter-SC-03` | Case added | `grade10-admin-grading-counter-US1-TC9-1` — a `planned` submission in none of the views |
-| `grade10-admin-grading-counter-SC-77` | Case added | `grade10-admin-grading-counter-US1-TC10-1` — no email and no push to staff over a shift |
+| `grade10-admin-grading-counter-SC-01` | Case added | `grade10-admin-grading-counter-US1-TC8-2` — the Today cut made on the shop's own day while the date in Coordinated Universal Time is still yesterday's; `<v>` 2: a submission opened just past the shop's midnight is cut into Today, with no Visit today badge, since the diary owns the visit (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-SC-03` | Case added | `grade10-admin-grading-counter-US1-TC9-2` — a `planned` submission in none of the views; `<v>` 2: the plan is held back whether or not a visit is booked, since the diary owns the visit (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-SC-77` | Case added | `grade10-admin-grading-counter-US1-TC10-2` — no email and no push to staff over a shift |
 | `grade10-admin-grading-counter-SC-22` | Case added | `grade10-admin-grading-counter-US2-TC13-1` — check in refused while the agreement is unsealed |
 | `grade10-admin-grading-counter-SC-101` | Case added | `grade10-admin-grading-counter-US2-TC14-1` — an order recorded on one submission refused on another at a second level, and a replay on the first answering its own lines |
 | `grade10-admin-grading-counter-SC-102` | Case added | `grade10-admin-grading-counter-US11-TC8-1` — an agreement sealed before the hand-in, which no letter has carried, not offered again and a send of it refused by name |
@@ -4545,9 +4666,9 @@ Runs once per row of **Test data**.
 | `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |
 | `grade10-admin-grading-counter-SC-104` | Case added, added after the run | `grade10-admin-grading-counter-US15-TC9-1`: the staff-set reference rate decided outside the blind pass; it prices nothing a collector pays, so one approve holder writes it and nought is refused |
 | `grade10-admin-grading-counter-SC-105` | Case added, added after the run | `grade10-admin-grading-counter-US12-TC6-1`: decided outside the blind pass; the address is personal data, so only a holder who may post the notice reads it, and only while the notice is due |
-| `grade10-admin-grading-counter-SC-106` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC8-1`: decided outside the blind pass; staff cancel on the collector's word inside the collector's own window, the drop-off going with it, filed on the audit chain and no message sent |
-| `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-1`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once the visit's start time comes or a card is checked or refused, a desk that started early included, and the desk refuses the cards instead |
-| `grade10-admin-grading-counter-SC-108` | Case added, added after the run | `grade10-admin-grading-counter-US2-TC15-1`: decided at landing; the desk reads the safe's cap before the first card is checked, and a list the safe cannot take is turned to the next drop-off before the till opens |
+| `grade10-admin-grading-counter-SC-106` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC8-2`: decided outside the blind pass; staff cancel on the collector's word inside the collector's own window, filed on the audit chain and no message sent; `<v>` 2: the cancel touches no diary visit, and the trail is read on the Activity tab (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-SC-107` | Case added, added after the run | `grade10-admin-grading-counter-US14-TC9-2`: decided outside the blind pass; one window for both hands, so the console withholds Cancel once a card is checked or refused, and the desk refuses the cards instead |
+| `grade10-admin-grading-counter-SC-108` | Case added, added after the run | `grade10-admin-grading-counter-US2-TC15-2`: decided at landing; the desk reads the safe's cap before the first card is checked, and a list the safe cannot take is turned to the next visit before the till opens |
 | `grade10-admin-grading-counter-SC-109` | Case added, added after the run | `grade10-admin-grading-counter-US8-TC6-1`: decided at landing; a card's storage is waived by the same two people as an upcharge, and the waiver names its kind so each kind nets against its own |
 | `grade10-admin-grading-counter-SC-91` | Case added at review | `grade10-admin-grading-counter-US4-TC12-1` — three wrong codes, each refused on the field and on the timeline, nothing closing the field, and the ID glance as the fallback; `grade10-admin-grading-counter-US4-TC4-1` asserts one wrong code only |
 | `grade10-admin-grading-counter-SC-43` | Case added at review | `grade10-admin-grading-counter-US11-TC9-1` — the receipt refused by name before the iPad while storage is unpaid; `grade10-admin-grading-counter-US4-TC8-1`'s run has only an unticked item |
@@ -4565,13 +4686,15 @@ Runs once per row of **Test data**.
 | A card found after collection | Case added at the acceptance review | `grade10-admin-grading-counter-US9-TC12-1`: decided by the product owner, 2026-10-01, stated by `grade10-admin-grading-counter-SC-114` |
 | The batch acts behind the operate grant | Case added at the acceptance review | `grade10-admin-grading-counter-US14-TC10-1`: the grant table named no batch act though the worker gates them on `grading:operate`; stated by `grade10-admin-grading-counter-SC-116` |
 | A seeded figure with no approver at the seal | Case added at the acceptance review | `grade10-admin-grading-counter-US15-TC11-1`: decided by the product owner, 2026-10-01, stated by `grade10-admin-grading-counter-SC-115` |
+| `grade10-admin-grading-counter-US2-TC15-2` | Revised | `<v>` 2: read from Today, not a strip; the next booking is a visit (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US14-TC9-2` | Revised | `<v>` 2: the visit's start time no longer gates Cancel, only a checked or refused card (`add-multi-store-appointments`) |
 
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `grade10-admin-grading-counter-US1-TC10-1` | Nothing is asserted: a person works a shift with the mailbox and the push notifications open and reads that neither carried any of the three submissions |
-| `grade10-admin-grading-counter-US2-TC8-1` | The till is the shop's own point of sale; a person runs the order there and reads the lines written back against it |
+| `grade10-admin-grading-counter-US1-TC10-2` | Nothing is asserted: a person works a shift with the mailbox and the push notifications open and reads that neither carried any of the three submissions; `<v>` 2: the queue has no day strip (`add-multi-store-appointments`) |
+| `grade10-admin-grading-counter-US2-TC8-2` | The till is the shop's own point of sale; a person runs the order there and reads the lines written back against it |
 | `grade10-admin-grading-counter-US2-TC11-1` | One label per card leaves a printer at the desk, and the bag is sealed by hand |
 | `grade10-admin-grading-counter-US4-TC2-1` | An identity document is glanced at across the counter; the test is that nothing about it reaches a screen or a record |
 | `grade10-admin-grading-counter-US9-TC1-1` | Row B leaves the till: a person makes the bank transfer and reads its reference onto the record |

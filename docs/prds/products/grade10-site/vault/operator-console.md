@@ -126,6 +126,15 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   beside what the collector was told
 - **Before the act** — the make-offer, vault and payout dialogs state the
   rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
+- 🚧 **A loan's clock** - beside the status, a live loan past its due date
+  reads `N days past due`, in calendar days on the brand's calendar as the
+  collector's Past due stage counts them; once a forfeiture notice stands it
+  reads `pay by <date>`, the brand's day the notice named, instead
+- 🚧 **Cancel visit asks first** - naming the slot on the clock of the shop
+  it is booked at, with that shop's zone, the address the collector is
+  emailed at, and that the case keeps its status
+- 🚧 **Send forfeiture notice asks first** - naming the address the notice
+  goes to and the date to pay by it sets, in the destructive tone
 - **The item's facts** — the Case tab shows and edits the register's
   category, title, description, grader, grade and cert once it has the item,
   which it gets when the valuation starts, and says registration is pending
@@ -213,6 +222,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
 | Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
 | The rule is shown before the refusal | Decided | The make-offer, vault and payout dialogs state the bound, the precondition and what the recording fixes before the operator sends; the worker's refusal stands unchanged behind them | Product |
+| An email or a deadline asks first | Decided | Cancel visit and Send forfeiture notice confirm before they act, because an email to the customer and a legal deadline should never follow a misplaced press; an undo after the press was rejected, since the email has already left | Owner |
+| A loan's clock in the case header | Decided | A late loan reads its days past due, then the date to pay by once a notice stands, as a clock beside the status. Not a badge saying the case waits on staff, because a case runs a clock once terms are accepted; not a new status, because overdue is the loan's arithmetic; not the Payouts tab alone, which staff cannot open | Owner |
+| No countdown before the due date | Decided | The header reads nothing on a loan inside its term: nothing waits on the shop, and the header already states what is owed | Owner |
 | The counter works a checklist | Decided | The Case tab opens on the visit's steps in order, and Forfeit is withheld with its reason in words rather than drawn as a stepper, because a shop of three learns the flow from the screen rather than from a manual | Product |
 | Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
 | A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
@@ -232,7 +244,8 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
 | Grader, grade and cert on a valuation | Decided | Read from the item register beside the amount and the note — [Items](/p/grade10-admin/inventory/items#facts) | Owner |
 | Valuation record | Deferred | A second valuer, a condition report and counter photographs | Product |
-| Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
+| Locker registry and stock-take | Decided | Shops and lockers become sites and storage units in inventory's locations, with caps and counts, and a move between shops ships as a transfer - [Locations](/p/grade10-admin/inventory/locations) - decided under the owner's delegation, 2026-10-08. Damage and loss stay deferred | Owner |
+| A locker before the units are set up | Decided | The locker staff type is kept as the shop's storage unit it names, by its label, its name or its place in the shop; text no unit answers to is kept as typed. The item goes into that unit in inventory, where a cap refuses it - decided under the owner's delegation, 2026-10-10 | Product |
 | Forfeited stock | Decided | A forfeited item leaves custody, written `out`, and is held as the shop's stock; the chain keeps the figure it settled and the rest is inventory's. It is not sold before Legal names the lending regime — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Owner |
 | Staff notifications | Decided | The queue is the inbox: badges, counts, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
 | A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |

@@ -297,7 +297,7 @@ function ProgressCard({
           <h2 className="min-w-0 text-base leading-6 font-medium text-foreground">
             {copy.orderProgress}
           </h2>
-          {progress.tracking ? (
+          {progress.tracking?.href ? (
             <Link
               className="min-w-0 shrink tabular-nums"
               href={progress.tracking.href}
@@ -309,6 +309,10 @@ function ProgressCard({
             >
               {progress.tracking.code}
             </Link>
+          ) : progress.tracking ? (
+            <span className="min-w-0 shrink tabular-nums text-sm font-normal text-secondary-foreground">
+              {progress.tracking.code}
+            </span>
           ) : null}
         </HStack>
         {/*

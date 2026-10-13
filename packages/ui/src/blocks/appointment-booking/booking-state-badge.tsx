@@ -3,9 +3,10 @@ import type { BookingRecordState } from "./types";
 
 const VARIANT: Record<
   BookingRecordState,
-  "success" | "default" | "warning" | "outline"
+  "success" | "info" | "default" | "warning" | "outline"
 > = {
   booked: "success",
+  checked_in: "info",
   completed: "default",
   cancelled: "outline",
   no_show: "warning",

@@ -1,15 +1,13 @@
-import { getMessages } from "@grade10/i18n";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import type { BookingConfirmationCopy } from "./booking-confirmation";
 import type { BookingDetailsFormCopy } from "./booking-details-form";
-import type { BookingListCopy } from "./booking-list";
 import type { BookingLocationPickerCopy } from "./booking-location-picker";
 import type { BookingManageCardCopy } from "./booking-manage-card";
 import type { BookingServicePickerCopy } from "./booking-service-picker";
 import type { BookingSlotPickerCopy } from "./booking-slot-picker";
-import type { BookingStepsCopy } from "./booking-steps";
 import type { BookingSummaryCopy } from "./booking-summary";
 import type {
+  BookingAnswerLine,
   BookingDay,
   BookingLocation,
   BookingQuestion,
@@ -18,68 +16,109 @@ import type {
   BookingService,
   BookingSlot,
 } from "./types";
-
-const { common } = getMessages("grade10", "en");
+import {
+  CONSULTATION_QUESTIONS,
+  GRADING_QUESTIONS,
+  VAULT_DROP_OFF_QUESTIONS,
+} from "./visit-questions";
 
 /** Hong Kong, September 2026: the calendar every fixture is drawn on. */
 const FIXTURE_MONTH = "2026-09";
-const FIXTURE_TIME_ZONE_LABEL = "Hong Kong time";
 /** 1 Sep 2026 12:00 in Hong Kong. */
 const FIXTURE_BOOKING_NOW_MS = Date.UTC(2026, 8, 1, 4, 0);
 
 const STATE_LABELS: Record<BookingRecordState, string> = {
   booked: "Booked",
+  checked_in: "Checked in",
   cancelled: "Cancelled",
-  completed: "Completed",
-  no_show: "No show",
+  completed: "Visited",
+  no_show: "Missed",
 };
 
-const FORMAT_QUESTION: BookingQuestion = {
-  id: "format",
-  label: "Is the card raw or slabbed?",
-  kind: "choice",
-  options: ["Raw", "Slabbed"],
-  required: true,
-};
-
-const CARD_QUESTION: BookingQuestion = {
-  id: "card",
-  label: "Which card are you bringing?",
-  kind: "text",
-  required: false,
-};
+/** One question of each kind, for the form that draws all six. */
+const ALL_KINDS_QUESTIONS: readonly BookingQuestion[] = [
+  {
+    key: "tag",
+    label: "Collector tag",
+    kind: "short_text",
+    required: false,
+    placeholder: "Collector tag",
+  },
+  {
+    key: "story",
+    label: "Story",
+    kind: "long_text",
+    required: false,
+    placeholder: "Tell us more",
+  },
+  {
+    key: "value",
+    label: "Value",
+    kind: "number",
+    required: false,
+    placeholder: "10,000",
+  },
+  {
+    key: "size",
+    label: "Size",
+    kind: "select",
+    options: ["small", "large"],
+    optionLabels: { small: "Small", large: "Large" },
+    required: false,
+    placeholder: "Pick a size",
+  },
+  {
+    key: "handover",
+    label: "Handover",
+    kind: "radio",
+    options: ["pickup", "dropoff"],
+    optionLabels: { pickup: "Pickup", dropoff: "Drop-off" },
+    required: false,
+  },
+  {
+    key: "bring",
+    label: "Bringing",
+    kind: "checkboxes",
+    options: ["sleeves", "binder", "id"],
+    optionLabels: { sleeves: "Sleeves", binder: "Binder", id: "Photo ID" },
+    required: false,
+  },
+];
 
 const GRADING_SERVICE: BookingService = {
   id: "svc_grading",
   slug: "grading",
-  name: "Card grading",
-  description: "Bring a card in and have it graded at the desk.",
+  name: "Grading Submission",
+  description: "Tell us a bit about the items you plan to submit for grading.",
   durationLabel: "30 min",
-  questions: [FORMAT_QUESTION, CARD_QUESTION],
+  questions: GRADING_QUESTIONS,
+};
+
+const VAULTING_SERVICE: BookingService = {
+  id: "svc_vault_drop_off",
+  slug: "vault-drop-off",
+  name: "Vault Drop-Off",
+  description: "Help us prepare for your item intake and security logging.",
+  durationLabel: "30 min",
+  questions: VAULT_DROP_OFF_QUESTIONS,
 };
 
 const CONSULTATION_SERVICE: BookingService = {
   id: "svc_consultation",
   slug: "consultation",
-  name: "Collection consultation",
-  description: "Talk through a collection with a specialist.",
+  name: "Store/Auction Listing",
+  description:
+    "Let us know what you would like to discuss with our specialists.",
   durationLabel: "60 min",
-  questions: [],
+  questions: CONSULTATION_QUESTIONS,
 };
 
-const CENTRAL: BookingLocation = {
-  id: "loc_central",
-  slug: "central",
-  name: "Grade10 Central",
-  address: "12 Queen’s Road Central, Hong Kong",
-  timeZone: FIXTURE_TIME_ZONE,
-};
-
-const KOWLOON: BookingLocation = {
-  id: "loc_kowloon",
-  slug: "kowloon",
-  name: "Grade10 Kowloon",
-  address: "88 Nathan Road, Tsim Sha Tsui",
+/** Same shop as Store Locator / free pickup. */
+const CAUSEWAY_BAY: BookingLocation = {
+  id: "loc_causeway_bay",
+  slug: "causeway-bay",
+  name: "Hong Kong Grade10 Store",
+  address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
   timeZone: FIXTURE_TIME_ZONE,
 };
 
@@ -106,19 +145,31 @@ const SEPTEMBER_3_SLOTS: readonly BookingSlot[] = [
 
 const LIVE_RECORD: BookingRecord = {
   id: "bk_live",
-  service: "Card grading",
-  location: "Grade10 Central",
-  address: "12 Queen’s Road Central, Hong Kong",
+  service: "Grading Submission",
+  location: "Hong Kong Grade10 Store",
+  address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
   timeZone: FIXTURE_TIME_ZONE,
   start: Date.UTC(2026, 8, 3, 2, 15),
   end: Date.UTC(2026, 8, 3, 2, 45),
   state: "booked",
 };
 
+const CHECKED_IN_RECORD: BookingRecord = {
+  ...LIVE_RECORD,
+  id: "bk_checked_in",
+  state: "checked_in",
+};
+
+/** What the grading service's live booking was answered with. */
+const LIVE_ANSWERS: readonly BookingAnswerLine[] = [
+  { key: "company", label: "Preferred grading company", answer: "PSA" },
+  { key: "bring", label: "Bringing", answer: ["Sleeves", "Binder"] },
+];
+
 const LATER_RECORD: BookingRecord = {
   ...LIVE_RECORD,
   id: "bk_later",
-  service: "Collection consultation",
+  service: "Store/Auction Listing",
   start: Date.UTC(2026, 8, 10, 6, 0),
   end: Date.UTC(2026, 8, 10, 7, 0),
 };
@@ -134,30 +185,19 @@ const COMPLETED_RECORD: BookingRecord = {
 const CANCELLED_RECORD: BookingRecord = {
   ...LIVE_RECORD,
   id: "bk_cancelled",
-  location: "Grade10 Kowloon",
-  address: "88 Nathan Road, Tsim Sha Tsui",
+  location: "Hong Kong Grade10 Store",
+  address: "13 Pak Sha Road, Causeway Bay, Hong Kong",
   start: Date.UTC(2026, 8, 5, 3, 0),
   end: Date.UTC(2026, 8, 5, 3, 30),
   state: "cancelled",
 };
 
-const STEPS_COPY: BookingStepsCopy = {
-  steps: {
-    service: "Service",
-    location: "Shop",
-    day: "Day",
-    time: "Time",
-    details: "Details",
-  },
-  back: common.back,
-};
-
 const SERVICE_PICKER_COPY: BookingServicePickerCopy = {
-  title: "What are you coming in for?",
+  title: "Choose a Service",
 };
 
 const LOCATION_PICKER_COPY: BookingLocationPickerCopy = {
-  title: "Which shop?",
+  title: "Shop",
 };
 
 const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
@@ -165,28 +205,32 @@ const SLOT_PICKER_COPY: BookingSlotPickerCopy = {
   timeTitle: "Pick a time",
   previousMonth: "Previous month",
   nextMonth: "Next month",
-  weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   timesIn: "Times in",
   pickADay: "Pick a day to see its times.",
   noTimes: "Nothing is free on this day any more.",
 };
 
 const DETAILS_FORM_COPY: BookingDetailsFormCopy = {
-  title: "Your details",
+  title: "Your Details",
   name: "Name",
   email: "Email",
   phone: "Phone",
-  notes: "Anything we should know?",
+  phonePlaceholder: "+852 12345678",
+  countrySearchPlaceholder: "e.g. United States",
   optional: "optional",
   nameMissing: "Tell us your name.",
   emailMissing: "Tell us where to send the confirmation.",
   emailInvalid: "That doesn’t look like an email address.",
-  answerMissing: "Pick one to continue.",
-  submit: "Book the visit",
+  phoneMissing: "Enter a phone number.",
+  phoneRequired: "Add a phone number. The shop calls before this visit.",
+  bookingAs: "Booking as",
+  answerMissing: "This is needed to continue.",
+  choose: "Choose",
+  submit: "Confirm Appointment",
 };
 
 const SUMMARY_COPY: BookingSummaryCopy = {
-  title: "Your visit",
+  title: "Your Visit",
   service: "Service",
   location: "Shop",
   when: "When",
@@ -198,6 +242,8 @@ const CONFIRMATION_COPY: BookingConfirmationCopy = {
   service: "Service",
   location: "Shop",
   when: "When",
+  beforeYouCome: "Before you come",
+  answers: "What you told us",
   manage: "Move or cancel this visit",
   calendar: "Add to calendar",
 };
@@ -215,31 +261,20 @@ const MANAGE_CARD_COPY: BookingManageCardCopy = {
   cancelKeep: "Keep it",
 };
 
-const LIST_COPY: BookingListCopy = {
-  upcomingHeading: "Upcoming",
-  pastHeading: "Past",
-  emptyTitle: "No visits yet",
-  emptyDescription: "Book a visit and it shows up here.",
-  open: "Open",
-  state: STATE_LABELS,
-};
-
 export {
+  ALL_KINDS_QUESTIONS,
   CANCELLED_RECORD,
-  CARD_QUESTION,
-  CENTRAL,
+  CAUSEWAY_BAY,
+  CHECKED_IN_RECORD,
   COMPLETED_RECORD,
   CONFIRMATION_COPY,
   CONSULTATION_SERVICE,
   DETAILS_FORM_COPY,
   FIXTURE_BOOKING_NOW_MS,
   FIXTURE_MONTH,
-  FIXTURE_TIME_ZONE_LABEL,
-  FORMAT_QUESTION,
   GRADING_SERVICE,
-  KOWLOON,
   LATER_RECORD,
-  LIST_COPY,
+  LIVE_ANSWERS,
   LIVE_RECORD,
   LOCATION_PICKER_COPY,
   MANAGE_CARD_COPY,
@@ -248,6 +283,6 @@ export {
   SERVICE_PICKER_COPY,
   SLOT_PICKER_COPY,
   STATE_LABELS,
-  STEPS_COPY,
   SUMMARY_COPY,
+  VAULTING_SERVICE,
 };

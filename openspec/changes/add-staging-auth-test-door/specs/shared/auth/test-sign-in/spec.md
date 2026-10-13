@@ -43,6 +43,7 @@ Which run the door acts for, and what a refused call leaves behind.
 - **A refused call** — a call the door refuses SHALL change nothing: no
   account, no role, no ban, no link, no limit
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-xog rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-01 - The door acts for its own workflow
 **Serves:** Who may call - the run that may reach the door
 
@@ -51,6 +52,7 @@ Which run the door acts for, and what a refused call leaves behind.
 - **WHEN** it calls a move on a tester address
 - **THEN** the door carries out that move
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-gpm rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-02 - Another workflow in this repository is refused
 **Serves:** Who may call - proving the repository is not enough
 
@@ -59,6 +61,7 @@ Which run the door acts for, and what a refused call leaves behind.
 - **THEN** the door refuses the call
 - **AND** nothing is changed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-sy2 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-03 - A run a pull request started is refused
 **Serves:** Who may call - proving the repository is not enough
 
@@ -68,6 +71,7 @@ Which run the door acts for, and what a refused call leaves behind.
 - **THEN** the door refuses the call
 - **AND** nothing is changed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-57d rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-32 - The door's own workflow off the main branch is refused
 **Serves:** Who may call - the run that may reach the door
 
@@ -77,6 +81,7 @@ Which run the door acts for, and what a refused call leaves behind.
 - **THEN** the door refuses the call
 - **AND** nothing is changed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-6c0 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-04 - A dispatch no reviewer approved is refused
 **Serves:** Who may call - the run that may reach the door
 
@@ -86,6 +91,7 @@ Which run the door acts for, and what a refused call leaves behind.
 - **THEN** the door refuses the call
 - **AND** nothing is changed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-93o rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-05 - A caller that is not this repository's Actions is refused
 **Serves:** Who may call - every other caller is refused
 
@@ -118,6 +124,7 @@ Which addresses the door acts on, and what it creates to act on one.
   address; the mail goes the ordinary way. Whether a catch-all inbox takes it
   is Ops, not this door
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-4tc rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-06 - An address a run minted is acted on
 **Serves:** Testers - any address under the tester domain
 
@@ -126,6 +133,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** the door carries out that move
 - **AND** it does not require that address to have been named before
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-n68 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-07 - An address outside the tester domain is refused
 **Serves:** Testers - an address outside the domain is refused
 
@@ -134,6 +142,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** the door refuses the call
 - **AND** that address is unchanged
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-y6k rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-30 - An address under a subdomain of the tester domain is refused
 **Serves:** Testers - an address outside the domain is refused
 
@@ -142,6 +151,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** the door refuses the call
 - **AND** that address is unchanged
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-wse rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-31 - Two addresses differing only by a plus tag are two subjects
 **Serves:** Testers - any address under the tester domain
 
@@ -150,6 +160,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **WHEN** the door's own workflow captures the first one's last sign-in mail
 - **THEN** it receives that address's link, not the other's
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-u90 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-34 - An address whose domain is in mixed case is acted on
 **Serves:** Testers - any address under the tester domain
 
@@ -158,6 +169,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **WHEN** the door's own workflow calls a move on it
 - **THEN** the door carries out that move
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-o4r rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-08 - A move naming no address is refused
 **Serves:** Testers - every move names an address
 
@@ -165,6 +177,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** the door refuses the call
 - **AND** it acts on no address
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-q44 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-09 - A ban creates the account of an address that never signed in
 **Serves:** Testers - an account is created when a move needs one
 
@@ -173,6 +186,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** an account exists for that address
 - **AND** that account is banned
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-1xt rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-10 - A prepare creates the account of an address that never signed in
 **Serves:** Testers - an account is created when a move needs one
 
@@ -181,6 +195,7 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** an account exists for that address
 - **AND** that account holds `admin`
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-bap rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-11 - A sign-in mail to a tester address is sent the ordinary way
 **Serves:** Testers - any address under the tester domain
 
@@ -208,6 +223,7 @@ What the door hands back in place of a mailbox.
 - **The link itself** — capture SHALL NOT change the link: its five-minute
   lifetime and its one-time use stay as `shared/auth/sign-in` sets them
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-w6r rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-12 - Capture returns the last link for the address
 **Serves:** What the job may do - capture the link without a mailbox
 
@@ -217,6 +233,7 @@ What the door hands back in place of a mailbox.
 - **AND** no mailbox is opened
 - **AND** following that link signs in on the terms `shared/auth/sign-in` sets
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-a82 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-13 - Capture of an address with no send returns no link
 **Serves:** What the job may do - capture the link without a mailbox
 
@@ -225,6 +242,7 @@ What the door hands back in place of a mailbox.
 - **THEN** the call is not refused
 - **AND** no link comes back
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-tjs rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-14 - Capture ignores a later send to another address
 **Serves:** What the job may do - capture the link without a mailbox
 
@@ -234,6 +252,7 @@ What the door hands back in place of a mailbox.
   mail
 - **THEN** it receives the first address's link, not the second's
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-i3g rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-15 - A second capture returns the same link
 **Serves:** What the job may do - capture the link without a mailbox
 
@@ -245,6 +264,7 @@ What the door hands back in place of a mailbox.
   again
 - **THEN** it receives that same link
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-fdk rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-29 - A mail older than fifteen minutes is no longer capturable
 **Serves:** What the job may do - capture the link without a mailbox
 
@@ -270,6 +290,7 @@ How the job walks an expired follow without the wall clock.
 - **The account** — aging SHALL NOT change the account and SHALL NOT create a
   session
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-xo7 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-16 - An aged link no longer signs in
 **Serves:** What the job may do - age the unused link so an expired follow can be walked
 
@@ -280,6 +301,7 @@ How the job walks an expired follow without the wall clock.
 - **AND** the caller waited out no part of the five minutes
 - **AND** the account for that address is unchanged
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-xe4 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-17 - A used link is unchanged by aging
 **Serves:** What the job may do - age the unused link so an expired follow can be walked
 
@@ -289,6 +311,7 @@ How the job walks an expired follow without the wall clock.
 - **THEN** that link is unchanged
 - **AND** the session it created stands
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-bj0 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-18 - An address with no unused link ages none
 **Serves:** What the job may do - age the unused link so an expired follow can be walked
 
@@ -307,6 +330,7 @@ How the job walks a banned follow without the Users desk.
 - **No desk** — the ban SHALL need no operator, no session, and no grant on
   the Users desk
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-21a rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-19 - A banned tester address cannot sign in
 **Serves:** What the job may do - ban the address so a banned follow can be walked
 
@@ -326,6 +350,7 @@ How a console case reaches a signed-in admin.
   link is followed, so the session that follow creates holds it
 - **No session** — prepare SHALL NOT sign that address in
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-tfs rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-20 - A prepared address signs in as an admin
 **Serves:** What the job may do - prepare the address so it holds `admin`
 
@@ -345,6 +370,7 @@ How a suite asks for mail after mail without being held as an attacker.
 - **Everyone else** — the limits themselves SHALL stand: another address's
   wait and another caller's cap SHALL be unchanged
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-cy4 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-21 - A cleared address is sent a second mail at once
 **Serves:** What the job may do - clear the sign-in limits so a suite is not throttled
 
@@ -355,6 +381,7 @@ How a suite asks for mail after mail without being held as an attacker.
 - **THEN** a second mail is sent
 - **AND** the caller waited out no part of the wait between two mails
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-to0 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-33 - A cleared caller may ask past the count
 **Serves:** What the job may do - clear the sign-in limits so a suite is not throttled
 
@@ -365,6 +392,7 @@ How a suite asks for mail after mail without being held as an attacker.
 - **AND** it asks for another sign-in link for that address
 - **THEN** that mail is sent
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-dcz rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-22 - Clearing leaves another address's wait standing
 **Serves:** What the job may do - clear the sign-in limits so a suite is not throttled
 
@@ -386,6 +414,7 @@ Where the door answers, and which door stays shut beside it.
 - **The disposable door** — the disposable `/dev` door SHALL stay closed on
   staging: a call to it SHALL be refused
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-tx7 rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-23 - The door on preview is refused
 **Serves:** Closed - preview stays closed
 
@@ -395,6 +424,7 @@ Where the door answers, and which door stays shut beside it.
 - **THEN** the call is refused
 - **AND** nothing is changed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-56z rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-24 - The door on production is refused
 **Serves:** Closed - production stays closed
 
@@ -404,6 +434,7 @@ Where the door answers, and which door stays shut beside it.
 - **THEN** the call is refused
 - **AND** nothing is changed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-u3l rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-25 - The disposable door on staging is refused
 **Serves:** Closed - `/dev` on staging stays closed
 
@@ -424,6 +455,7 @@ What the door will not do for the caller it accepts.
   address mints one
 - **No seed** — the door SHALL refuse a store or an auction seed
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-i2h rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-26 - A session mint is refused
 **Serves:** Closed - the job does not mint a session without following the mail
 
@@ -433,6 +465,7 @@ What the door will not do for the caller it accepts.
 - **THEN** the call is refused
 - **AND** no session is created
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-d7r rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-27 - An unban is refused
 **Serves:** Closed - the job does not unban
 
@@ -441,6 +474,7 @@ What the door will not do for the caller it accepts.
 - **THEN** the call is refused
 - **AND** the account is still banned
 
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-9gy rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-28 - A store or auction seed is refused
 **Serves:** Closed - the job does not seed store or auction data
 

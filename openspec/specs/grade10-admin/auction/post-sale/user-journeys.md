@@ -1,10 +1,10 @@
 ## User journeys
 
-### post-sale-US-01: Operator works the listing queue by outcome
+### post-sale-US-01: Operator works the orders worklist by segment
 
 **As an** auction operator,
-**I want** each listing labelled with one outcome I can filter, with rows that need me highlighted,
-**so that** I work awaiting wire without mixing it with a Stripe capture.
+**I want** every won lot's order in one worklist, split into segments with counts and searchable by any of its codes or the winner's email,
+**so that** I open what needs me first without scanning orders that are waiting on the winner.
 
 ### post-sale-US-08: Operator reconstructs an order's history
 
@@ -22,31 +22,31 @@ payments that failed,
 ### post-sale-US-05: Operator quotes and sends a winner's invoice
 
 **As an** operator,
-**I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
+**I want** to price Shipping & Handling, and Insurance and Tax when the lot needs them, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
-### post-sale-US-02: Operator closes out a won listing
+### post-sale-US-02: Operator works one order from its own page
 
 **As an** auction operator,
-**I want** the listing's winner, payment, shipment, and trail on one detail,
-**so that** I can contact the winner without Stripe identifiers and leave a comment next to a capture.
+**I want** each order on its own page, leading with its status, the rule behind it and the one thing to do next, with its whole history on one timeline,
+**so that** I act on an order, or hand it to a colleague by its link, without piecing it together from several screens.
 
 ### post-sale-US-03: Operator collects payment
 
 **As a** payment operator,
-**I want** a wire to release the card hold, a capture to mark Paid via Stripe, and a manual record to mark Paid via Manual,
-**so that** a second paid attempt is refused and staff without the grant cannot collect.
+**I want** every payment that reaches an order recorded, and one the invoice did not expect flagged for me,
+**so that** no money a winner sends is dropped, and I know what to check or have finance return.
 
 ### post-sale-US-04: Operator records in-house shipment
 
 **As a** shipment operator,
-**I want** shipment to follow paid, then started, then completed,
-**so that** finance cannot ship, publishing does not need the shipment grant, and recording an address does not ship.
+**I want** to record dispatch with the carrier and the tracking number, then delivery with the carrier's proof, on the order,
+**so that** the winner can follow the lot, and only someone allowed to ship records a shipment.
 
 ### post-sale-US-06: Operator sees which lots are still in extended bidding
 
 **As an** auction operator,
-**I want** the queue to label a lot still taking bids past its scheduled close,
+**I want** the Listings table to mark a lot still taking bids past its scheduled close,
 **so that** I can tell a lot running long from one that closed on time.
 
 ### post-sale-US-11: Operator adds a missing billing address before sending
@@ -78,3 +78,33 @@ payments that failed,
 **As an** operator,
 **I want** Setup Overdue and Payment Overdue as queue outcomes,
 **so that** I find deadline-missed orders the same way the winner's Status names them.
+
+### post-sale-US-13: Operator cancels an order knowing what follows
+
+**As an** operator with payment processing,
+**I want** to pick why I am cancelling and see what the cancel sets off before I confirm, then reach the lot to relist it,
+**so that** I never cancel by surprise and every cancellation can be counted by reason.
+
+### post-sale-US-14: Operator returns money paid after a cancel
+
+**As an** operator,
+**I want** a cancelled order that received a card payment afterwards to be flagged until I clear it with a reason,
+**so that** no winner is left paying for a lot they no longer have.
+
+### post-sale-US-12: Operator collects a lot's price across more than one payment
+
+**As a** payment operator working an invoice a winner cannot pay in one go,
+**I want** to record each payment as it arrives, smaller than the balance owed, and see the order until it is settled,
+**so that** every partial payment ends up correctly recorded without me tracking the balance outside Grade10.
+
+### post-sale-US-19: Operator settles an expired invoice
+
+**As an** operator,
+**I want** an expired invoice settled only in the admin portal, and a card payment started in time to count,
+**so that** a winner who paid just before the deadline is never expired, and one who paid after it is never charged.
+
+### post-sale-US-18: Operator reopens the address form
+
+**As an** operator,
+**I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
+**so that** a winner who got in touch can finish the order without me cancelling the lot.

@@ -38,6 +38,30 @@ describe("in-flight changes", () => {
     expect(change.created).toBe("2026-01-01");
   });
 
+  it("reads a feature-set removal as an acceptance delta", () => {
+    const [entry] = readChanges(
+      writeStore({
+        "openspec/changes/remove-feature/proposal.md":
+          "# Remove feature\n\n## Why\n\nIt conflicts.\n",
+        "openspec/changes/remove-feature/specs/demo/alpha/spec.md": [
+          "# Alpha",
+          "",
+          "## REMOVED Feature set",
+          "",
+          "- Upload",
+          "  - Confirm before store:",
+          "",
+        ].join("\n"),
+      }),
+      NO_GIT,
+      null,
+    );
+    expect(entry.error).toBeUndefined();
+    expect(entry.deltas).toEqual([
+      { spec: "demo/alpha", kinds: [], requirements: [] },
+    ]);
+  });
+
   it("takes title and why from the proposal", () => {
     expect(change.title).toBe("Add the thing");
     expect(change.why).toBe(

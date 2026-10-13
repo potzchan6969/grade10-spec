@@ -107,6 +107,7 @@ SHALL NOT read as having none.
 **Unreadable** - where the submissions cannot be read the home SHALL say so in
 its own words and list nothing.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-yns rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-01 - The first visit prices grading before a name is given
 **Serves:** grade10-site-grading-submission-plan-US-01 - a collector who has never used the shop reads the price before giving a name
 
@@ -115,6 +116,7 @@ its own words and list nothing.
   drop-off without a list are all shown
 - **AND** neither way in asks for an account
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-90m rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-02 - A home still reading says nothing about how many there are
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector opening the home to find a plan they left
 
@@ -123,6 +125,7 @@ its own words and list nothing.
 - **THEN** no submission is listed
 - **AND** the page does not say they have none
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-p75 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-03 - A home that cannot read the submissions says so
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector opening the home to find a plan they left
 
@@ -131,6 +134,7 @@ its own words and list nothing.
 - **THEN** the failure is shown in the page's own words
 - **AND** no submission is listed
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-hpb rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-46 - A collector who has planned nothing is told so
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector signing in to find a submission they have never made
 
@@ -139,6 +143,7 @@ its own words and list nothing.
 - **THEN** the home says they have none
 - **AND** starting a submission is offered
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-z5h rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-47 - Every grader with active levels shows its own sheet
 **Serves:** grade10-site-grading-submission-plan-US-01 - a collector comparing what two graders charge before starting anything
 
@@ -184,6 +189,7 @@ The sheet opens on these figures, in HKD minor units:
 | Super Express | 3900000 | 20 | 240000 | 150 basis points of the declared value | 2 weeks |
 | Bulk | 150000 | 20 to 100 | 18000 | none | 10 weeks |
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-d03 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-04 - The sheet reads as a row per level
 **Serves:** grade10-site-grading-submission-plan-US-01 - a collector reading the price sheet before starting anything
 
@@ -192,6 +198,7 @@ The sheet opens on these figures, in HKD minor units:
 - **THEN** every level shows its declared value up to, its cards a submission,
   its fee a card and its weeks back
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-48z rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-05 - Only Express and Super Express carry a cover rate
 **Serves:** grade10-site-grading-submission-plan-US-01 - a collector reading what the cover line costs before starting anything
 
@@ -200,6 +207,7 @@ The sheet opens on these figures, in HKD minor units:
   the declared value
 - **AND** Value, Regular and Bulk show no cover line
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-6qn rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-06 - A grader nobody has priced still shows its levels
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector picking between graders
 
@@ -208,6 +216,7 @@ The sheet opens on these figures, in HKD minor units:
 - **THEN** its levels are listed and marked as carrying no figures
 - **AND** none of them can be picked for a submission
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-a00 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-07 - A card worth more than any level takes goes to the counter
 **Serves:** grade10-site-grading-submission-plan-US-01 - a collector with a card worth more than the sheet prices
 
@@ -215,6 +224,7 @@ The sheet opens on these figures, in HKD minor units:
 - **THEN** the card is not priced
 - **AND** the collector is told to ask at the counter
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-e76 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-48 - The signed-out home's sheet names the counter for a card above the top ceiling
 **Serves:** grade10-site-grading-submission-plan-US-01 - a collector with a card worth more than the sheet prices, reading the home before giving a name
 
@@ -251,6 +261,7 @@ it, offering both adding a card and pasting a list.
 **Removing a card** - a card on the list SHALL be removable, and the cards left
 SHALL be unchanged.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-prc rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-08 - The wizard shows which step the collector is on
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector working through the three steps with a handful of cards
 
@@ -266,6 +277,7 @@ SHALL be unchanged.
   be changed for this submission alone
 - **AND** a collector who is not signed in is asked for all three
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-ku6 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-49 - Starting a submission opens the cards step with nothing on it
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector starting their list from the home
 
@@ -273,6 +285,7 @@ SHALL be unchanged.
 - **THEN** the cards step opens with no card listed
 - **AND** adding a card and pasting a list are both offered
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-7xf rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-50 - A card removed leaves the rest of the list alone
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector taking a card back off the list they are writing
 
@@ -305,6 +318,7 @@ every card SHALL be kept as typed and marked as unasked rather than unmatched,
 the declared value SHALL still be asked for, and no step SHALL wait on the
 reference.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-bph rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-10 - A matched card carries the reference's name and its sales
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector adding a card by name and reading what it sells for
 
@@ -314,6 +328,7 @@ reference.
 - **AND** recent sales at ungraded, PSA 9 and PSA 10 are shown beside it as a
   reference and not as a valuation
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-r4q rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-11 - A name the reference does not answer for is kept
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector listing a card the catalogue does not hold
 
@@ -321,6 +336,7 @@ reference.
 - **THEN** the card is listed in the name as typed
 - **AND** no reference sales are shown for it
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-0wj rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-12 - The reference out of reach delays nothing
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector listing cards while the catalogue cannot be asked
 
@@ -330,6 +346,7 @@ reference.
   unmatched
 - **AND** the declared value is still asked for and the list can be finished
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-w4r rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-51 - A card added by hand is matched the way a pasted line is
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector adding by hand a card the reference does not answer for
 
@@ -362,6 +379,7 @@ and this SHALL be said where the minimum grade is set.
 **Carried to the review** - a card's minimum grade SHALL be shown beside it on
 the review's schedule.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-fik rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-13 - A card with no declared value holds the step
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector whose pasted lines came in without values
 
@@ -370,6 +388,7 @@ the review's schedule.
 - **THEN** it is refused
 - **AND** the refusal names that one card is without a value
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-7h7 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-14 - A minimum grade is carried and costs nothing
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector who will not have a card slabbed below PSA 9
 
@@ -377,6 +396,7 @@ the review's schedule.
 - **THEN** the card carries that minimum grade on the review's schedule
 - **AND** the fee for that card is the level's fee a card, unchanged
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-fp6 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-52 - A list with no card on it holds the step
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector who opens the wizard and lists nothing
 
@@ -419,6 +439,7 @@ count has already left Bulk the only open level.
 **Above the top ceiling** - a line declared above the grader's top ceiling
 SHALL be sent to the counter rather than named for a second submission.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-j6g rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-15 - A paste reports what became of every line
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector pasting many cards at once
 
@@ -427,6 +448,7 @@ SHALL be sent to the counter rather than named for a second submission.
   above the level's ceiling, or skipped
 - **AND** the counts are shown before the cards are added
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-40a rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-16 - A line naming a card already listed is skipped
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector pasting a list that repeats a card they already added
 
@@ -442,6 +464,7 @@ SHALL be sent to the counter rather than named for a second submission.
 - **THEN** the matched, kept as typed, without a value, above the ceiling and
   skipped counts add up to 30
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-34a rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-18 - A paste still works while the reference is out of reach
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector pasting a list while the catalogue cannot be asked
 
@@ -450,6 +473,7 @@ SHALL be sent to the counter rather than named for a second submission.
 - **THEN** every line is marked as unasked rather than kept as typed
 - **AND** the cards can still be added
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-22f rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-19 - A paste over twenty lines names Bulk and its visit
 **Serves:** grade10-site-grading-submission-plan-US-04 - a dealer pasting a box of cards
 
@@ -459,6 +483,7 @@ SHALL be sent to the counter rather than named for a second submission.
   about 10 weeks, up to 100 cards
 - **AND** it says the drop-off takes the longer visit
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-oiv rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-53 - A paste with nothing in it adds nothing
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector who opens the paste and pastes nothing
 
@@ -466,6 +491,7 @@ SHALL be sent to the counter rather than named for a second submission.
 - **WHEN** the collector reads it
 - **THEN** no outcome is reported and nothing is offered to add
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-ful rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-54 - A pasted line above every level's ceiling goes to the counter
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector pasting a card worth more than the sheet prices, before a level is picked
 
@@ -494,6 +520,7 @@ exactly 20 SHALL leave every level open.
 allows SHALL be refused, and the refusal SHALL say that the rest go in a second
 submission on another day.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-g1c rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-20 - The twenty-first card leaves Bulk the only level open
 **Serves:** grade10-site-grading-submission-plan-US-04 - a dealer whose box passes twenty cards
 
@@ -502,6 +529,7 @@ submission on another day.
 - **THEN** Value, Regular, Express and Super Express are closed by the count
 - **AND** Bulk is open
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-rjw rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-21 - The card past the cap is refused, not dropped from a list
 **Serves:** grade10-site-grading-submission-plan-US-04 - a dealer with more cards than one submission takes
 
@@ -510,6 +538,7 @@ submission on another day.
 - **THEN** it is refused
 - **AND** the refusal says the rest go in a second submission on another day
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-8gr rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-55 - Twenty cards leave every level open
 **Serves:** grade10-site-grading-submission-plan-US-04 - a dealer whose list stops at the twenty the sheet allows
 
@@ -517,6 +546,7 @@ submission on another day.
 - **WHEN** the collector reads the levels
 - **THEN** Value, Regular, Express, Super Express and Bulk are all open
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-diu rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-56 - The hundredth card is added at Bulk's cap
 **Serves:** grade10-site-grading-submission-plan-US-04 - a dealer filling one submission to the cap
 
@@ -539,6 +569,7 @@ second submission handed in on the same drop-off.
 **The rest carry on** - the remaining cards SHALL stay on the list at the
 chosen level.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-46m rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-22 - A card above Bulk's ceiling is moved, not refused
 **Serves:** grade10-site-grading-submission-plan-US-04 - a dealer whose box holds one card worth more than Bulk takes
 
@@ -577,6 +608,7 @@ leave the service step.
 **None picked** - no level picked SHALL show no estimate and SHALL NOT let the
 collector leave the service step.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-a3o rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-23 - One grader and one level cover the whole list
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector picking the grader and the level for their list
 
@@ -584,6 +616,7 @@ collector leave the service step.
 - **THEN** all four cards are on that submission at PSA Regular
 - **AND** no card on it carries another grader or another level
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-9yc rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-24 - A level closed by a declared value names the card
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector working out why a level is not offered
 
@@ -594,6 +627,7 @@ collector leave the service step.
   390000 HKD minor units
 - **AND** Regular is open
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-wfm rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-25 - A level closed by the count names the count
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector working out why Bulk is not offered
 
@@ -602,6 +636,7 @@ collector leave the service step.
 - **THEN** Bulk is closed and names that it starts at 20 cards and the list
   holds four
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-bzg rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-26 - Every level closed sends the collector to the counter
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector whose card is worth more than every level takes
 
@@ -611,6 +646,7 @@ collector leave the service step.
 - **AND** the collector is told to ask at the counter and cannot leave the
   service step
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-xoj rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-27 - No level picked, no estimate
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector who has not yet picked a level
 
@@ -618,6 +654,7 @@ collector leave the service step.
 - **THEN** no estimate is shown
 - **AND** the collector cannot leave the service step
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-qbf rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-57 - An open level reads its ceiling, its fee and its weeks back
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector reading what each open level takes and costs
 
@@ -649,6 +686,7 @@ from the day the batch leaves and never from the day the plan is made.
 **Where it is paid** - the estimate SHALL say that everything on it is paid at
 the counter.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-vy8 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-28 - Four cards at Regular estimate at four times the fee
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector reading what their list will cost
 
@@ -657,6 +695,7 @@ the counter.
 - **THEN** it reads 240000 HKD minor units, being 4 times 60000 HKD minor units
 - **AND** it carries no cover line
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-w4u rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-29 - A covered level prices cover per card on the declared value
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector reading what cover adds at Express
 
@@ -665,6 +704,7 @@ the counter.
 - **THEN** the cover line for that card is 12750 HKD minor units
 - **AND** the total is 132750 HKD minor units
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-w6e rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-30 - The weeks back are counted from the day the cards leave
 **Serves:** grade10-site-grading-submission-plan-US-05 - a collector reading when the cards come back
 
@@ -736,6 +776,7 @@ instead. A booking or a join sent for a plan with no level SHALL be refused by
 name before the diary is asked, so no visit is taken and the plan holds no
 drop-off.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-h3s rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-31 - The review totals the declared value, the fee and the cover
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector reading the whole submission back before booking
 
@@ -746,6 +787,7 @@ drop-off.
 - **AND** the fee reads 240000 HKD minor units
 - **AND** the cover reads 18750 HKD minor units
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-6u8 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-32 - A card that could grade above the ceiling is warned about per card
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector choosing a level knowing what a high grade would cost
 
@@ -759,6 +801,7 @@ drop-off.
 - **AND** Express at 120000 HKD minor units a card is named as what the higher
   level would cost now
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-21y rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-33 - No card above the ceiling, no warning
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector whose cards are all inside the level they picked
 
@@ -767,6 +810,7 @@ drop-off.
 - **WHEN** the review is read
 - **THEN** no upcharge warning is shown
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-hym rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-60 - A USD sale is read in HKD at the rate staff set
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector choosing a level knowing what a high grade would cost
 
@@ -780,12 +824,14 @@ drop-off.
   to, and the difference of 60000 HKD minor units as due at the counter before
   collection
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-8zk rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-34 - The five good-to-know lines are read before booking
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector meeting the agreement's terms before the counter
 
 - **WHEN** a collector reads the review
 - **THEN** all five good-to-know lines are shown, in the order above
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-i18 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-35 - Booking is refused until the statement is ticked
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector agreeing to the collection statement before a visit is taken
 
@@ -794,6 +840,7 @@ drop-off.
 - **THEN** it is refused
 - **AND** booking is offered again once the statement is ticked
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-93c rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-58 - Saving the plan for later needs no tick
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector who reads the review and leaves without booking
 
@@ -802,6 +849,7 @@ drop-off.
 - **THEN** the plan is kept with the statement unticked
 - **AND** booking the drop-off is the only thing that was refused
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-rsr rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-61 - A plan kept unticked asks for the statement before its drop-off
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector picking a plan back up to book its visit
 
@@ -814,6 +862,7 @@ drop-off.
 - **AND** once the statement is ticked the days are offered, and the booking
   made carries the tick, so the plan holds its drop-off and its tick together
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-vqr rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-63 - A plan kept with no level asks for one before its drop-off
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector picking up a plan kept before a level was picked
 
@@ -827,6 +876,7 @@ drop-off.
   for, and the page asks for the statement before any day, as for any plan
   kept unticked
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-s0l rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-62 - A plan kept from a ticked review opens on the picker with nothing asked
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector who ticked the statement on the review is not asked again
 
@@ -885,6 +935,7 @@ estimate, the day it is kept until, and the offer to book the drop-off.
 **Signing in** - signing in with the same email and no password SHALL list
 every submission under that email, open and closed.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-3d2 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-38 - Leaving the wizard keeps the plan and the daily sweep mails its link
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector who stops halfway and wants to finish another day
 
@@ -893,6 +944,7 @@ every submission under that email, open and closed.
 - **THEN** the plan is kept
 - **AND** a link to it is emailed to that address once, by the sweep
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-hk7 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-39 - The emailed link opens the plan on another device
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector finishing on a second device
 
@@ -900,6 +952,7 @@ every submission under that email, open and closed.
 - **THEN** the plan opens
 - **AND** no account and no password are asked for
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-ad7 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-40 - A plan cannot be kept without an email
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector who asks to finish later before giving an address
 
@@ -908,6 +961,7 @@ every submission under that email, open and closed.
 - **THEN** the email is asked for
 - **AND** the plan is kept once it is given
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-r30 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-41 - Signing in lists every submission under that email
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector finding an old submission without a second list
 
@@ -916,6 +970,7 @@ every submission under that email, open and closed.
 - **THEN** all three are listed, open and closed
 - **AND** each one opens its own page
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-xnp rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-42 - A reopened plan reads back its list and what it costs
 **Serves:** grade10-site-grading-submission-plan-US-06 - a collector picking a plan back up to book its visit
 
@@ -947,6 +1002,7 @@ and SHALL offer starting a submission again.
 **Booking an expired plan** - booking a drop-off for a plan that has expired
 SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-e27 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-43 - A plan nobody has booked is nudged once at twenty-one days
 **Serves:** grade10-site-grading-submission-plan-US-08 - a collector who planned a submission and booked nothing
 
@@ -955,6 +1011,7 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **THEN** the collector is nudged once, with the link to the plan
 - **AND** the plan says the day it is kept until
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-vzu rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-44 - A plan nobody has booked expires at thirty days owing nothing
 **Serves:** grade10-site-grading-submission-plan-US-08 - a collector who never came back to the list they made
 
@@ -964,6 +1021,7 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **AND** the plan says nothing was paid and nothing is owed
 - **AND** starting a submission again is offered
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-tuf rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-45 - Booking a plan that expired meanwhile is refused by name
 **Serves:** grade10-site-grading-submission-plan-US-08 - a collector booking from a review left open past the expiry
 
@@ -972,6 +1030,7 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **THEN** it is refused by name
 - **AND** the collector is offered starting a submission again
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-5af rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-59 - A plan with a drop-off booked does not expire
 **Serves:** grade10-site-grading-submission-plan-US-08 - a collector whose visit is booked weeks ahead of the day it falls due
 
@@ -980,6 +1039,7 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **THEN** the plan does not expire
 - **AND** no nudge and no expiry message is sent
 
+<!-- trace:scenario id=g10.grading-submission-plan.SC-l55 rev=1 -->
 #### Scenario: grade10-site-grading-submission-plan-SC-64 - A cancelled visit restarts the plan's clock and its nudge
 **Serves:** grade10-site-grading-submission-plan-US-08 - a collector who booked, then cancelled, is warned again before the plan lets go
 

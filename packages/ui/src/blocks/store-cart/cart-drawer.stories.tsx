@@ -15,6 +15,7 @@ import {
   SAMPLE_HELD_PROMO_CODES,
   STORY_POINTS_MAX_HKD,
   storyCartEstimatedTotal,
+  storyPromoLabel,
 } from "./fixtures";
 import type {
   CartItemSummary,
@@ -37,22 +38,22 @@ function pointsCreditHkd(points: PointsState): number | null {
  * Product / Cart / Cart Drawer (`4735:6493` & `4674:3831`).
  *
  * Composition and end-to-end flows only. Layer-owned states live on:
- * - [`CartDrawerHeader`](?path=/docs/store-cart-cartdrawerheader--docs) — badge / close / badge bones
- * - [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs) — overflow / empty / mixed list
- * - [`CartDrawerFooter`](?path=/docs/store-cart-cartdrawerfooter--docs) — promo (type + held), points, checkout
- * - [`CartItem`](?path=/docs/store-cart-cartitem--docs) — sold out / adjusted / row bones
+ * - [`CartDrawerHeader`](?path=/docs/store-cart-blocks-cartdrawerheader--docs) — badge / close / badge bones
+ * - [`CartDrawerBody`](?path=/docs/store-cart-blocks-cartdrawerbody--docs) — overflow / empty / mixed list
+ * - [`CartDrawerFooter`](?path=/docs/store-cart-blocks-cartdrawerfooter--docs) — promo (type + held), points, checkout
+ * - [`CartItem`](?path=/docs/store-cart-blocks-cartitem--docs) — sold out / adjusted / row bones
  *
  * `Default` is the one interactive composed story (promo sheet + points).
  * Typed/held/points state matrix stays on CartDrawerFooter.
  * Site-sale × promo combine modes:
- * [`Auto Discount`](?path=/docs/store-cart-cartdrawer-auto-discount--docs).
+ * [`Auto Discount`](?path=/docs/store-cart-blocks-cartdrawer-auto-discount--docs).
  *
  * App handoff: checkout is members-only (no guest checkout). Wire
  * `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto the Shopify
  * draft; `onCheckout` redirects. Copy must say promo code, not coupon.
  */
 const meta = {
-  title: "Store Cart/CartDrawer",
+  title: "Store/Cart/Blocks/CartDrawer",
   component: CartDrawer,
   tags: ["autodocs"],
   parameters: {
@@ -134,7 +135,7 @@ export const Default: Story = {
           setSelectedHeldId(id);
           setPromo({
             status: "applied",
-            code: code.label,
+            label: storyPromoLabel(code.label),
             discountAmount: discount.amount,
           });
           setTotal(
@@ -147,7 +148,7 @@ export const Default: Story = {
             setSelectedHeldId(result.heldId);
             setPromo({
               status: "applied",
-              code: result.label,
+              label: storyPromoLabel(result.label),
               discountAmount: result.amount,
             });
             setTotal(

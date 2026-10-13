@@ -1,6 +1,6 @@
 # shared/planning/agent-rounds Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/40
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## shared-planning-agent-rounds-US10: Product manager keeps their page through the build
@@ -9,6 +9,7 @@
 **I want** a line a build round puts on my page to reach me as a question with the line quoted, in a message that is mine,
 **so that** my page says what I decided and I never learn of an edit from a diff.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-rrq rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC1-1: A line a build round puts on the page arrives as a question
 
 **Classification:**
@@ -40,6 +41,7 @@
 * It quotes the line as it read before and as it reads after, as a ❓.
 * The line on the page carries ❓, not an unmarked line.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-swa rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC2-1: The product manager's answer is what the page says
 
 **Classification:**
@@ -71,6 +73,7 @@
 * The line reads what the product manager answered, no longer ❓.
 * The answer and the product manager's handle are recorded.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-68c rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC3-1: Several lines on one page arrive in one message
 
 **Classification:**
@@ -102,6 +105,7 @@
 * Each of the three lines is quoted before and after, as a ❓.
 * Each line on the page carries ❓.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-z6s rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC4-1: A round that touches no product line sends the product manager nothing
 
 **Classification:**
@@ -132,6 +136,7 @@
 * No message reaches the product manager for the round.
 * The engineer's summary carries no page question.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-o71 rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC5-1: Another hand cannot decide a line on the product manager's page
 
 **Classification:**
@@ -163,6 +168,7 @@
 * The line is unchanged and still ❓.
 * The question stays open on the product manager.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-7uc rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC6-1: A landing never turns the page question into a decided line
 
 **Classification:**
@@ -194,6 +200,7 @@
 * No line on the page reads as decided by the round: the line is ❓ or absent.
 * Nothing records the round as having decided the line.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ju7 rev=1 covers=g10.shared-agent-rounds.SC-ffr,g10.shared-agent-rounds.SC-rw1 -->
 ### shared-planning-agent-rounds-US10-TC7-1: A page written first for a new capability resolves
 
 **Classification:**
@@ -229,13 +236,14 @@
 
 ---
 
-## shared-planning-agent-rounds-US11: QA is asked when the suite lands
+## shared-planning-agent-rounds-US11: QA reviews after deployment
 
-**As a** QA engineer,
-**I want** to be asked to review the suite on the landing that puts it up for review, and to know the walk names my review as its input,
-**so that** the review is on time and no walk carries an id I have not signed.
+**As a** product manager,
+**I want** human QA to review suites after deployment without a review task blocking delivery,
+**so that** requirements can fold and implementation can ship while case classification remains explicit downstream work.
 
-### shared-planning-agent-rounds-US11-TC1-1: The requirements' landing tells QA the suite is up for review
+<!-- trace:case id=g10.shared-agent-rounds.TC-ruo rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
+### shared-planning-agent-rounds-US11-TC1-1: The requirements' landing leaves suite review downstream
 
 **Classification:**
 
@@ -255,20 +263,21 @@
 
 * <change>'s `spec.md` and `feature-tcs.md` are drafted on its branch, the suite `pending-review`.
 * admin(product manager of <change>) is in <change thread>.
-* admin(qa of <change>) is in <change thread>.
 
 **Steps:**
 
 1. Say land for the requirements in <change thread>, as the product manager.
-2. Read the messages addressed to QA.
+2. Read the change's current hand and messages.
 3. Check `main`.
 
 **Expected Results:**
 
-* QA receives a message that is theirs, in the same landing, naming the suite and that it is up for review.
+* The change stays with the product manager at Specified.
+* QA receives no review task or turn message from the landing.
 * `spec.md` and `feature-tcs.md` are on `main` together.
 
-### shared-planning-agent-rounds-US11-TC2-1: The walk group names QA's review as its input
+<!-- trace:case id=g10.shared-agent-rounds.TC-i5v rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
+### shared-planning-agent-rounds-US11-TC2-1: The walk uses the draft suite without a review dependency
 
 **Classification:**
 
@@ -287,7 +296,6 @@
 **Pre-conditions:**
 
 * <change>'s `tasks.md` is drafted on its branch, and its `feature-tcs.md` is `pending-review` on `main`.
-* admin(qa of <change>) is in <change thread>.
 
 **Steps:**
 
@@ -296,9 +304,10 @@
 
 **Expected Results:**
 
-* The walk group names the review of `feature-tcs.md` as its input.
-* No other group names the review.
+* The walk group names the draft `feature-tcs.md` as planning input.
+* No task or group requires `/tcs-review` before acceptance, the fold, implementation, the walk or archive.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-fs6 rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
 ### shared-planning-agent-rounds-US11-TC3-1: A walk citing a draft case id is refused in the application repository
 
 **Classification:**
@@ -330,6 +339,7 @@
 * The tick is refused.
 * The output names <case id> and says its case is still `draft`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-o1e rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
 ### shared-planning-agent-rounds-US11-TC4-1: The same walk passes once QA has signed the case
 
 **Classification:**
@@ -360,6 +370,7 @@
 
 * No refusal names <case id>.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-uuk rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
 ### shared-planning-agent-rounds-US11-TC5-1: One draft id among signed ones refuses the walk
 
 **Classification:**
@@ -390,6 +401,7 @@
 * The walk is refused.
 * The output names the `draft` id alone.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lg3 rev=1 covers=g10.shared-agent-rounds.SC-rad,g10.shared-agent-rounds.SC-xw0,g10.shared-agent-rounds.SC-5kc,g10.shared-agent-rounds.SC-wiw,g10.shared-agent-rounds.SC-psm -->
 ### shared-planning-agent-rounds-US11-TC6-1: A suite's Manual table outside the reconciliation is refused where it is written
 
 Runs once per row of **Test data**.
@@ -440,6 +452,7 @@ Runs once per row of **Test data**.
 **I want** the group's row to land through the command with the tests it names in the application repository, and to be refused when a cited test carries no such id,
 **so that** the record is written the same way for every group and never credits a file for what it does not prove.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-7l4 rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC1-1: An application group's row lands from the application clone
 
 **Classification:**
@@ -474,6 +487,7 @@ Runs once per row of **Test data**.
 * The row lands with the path as written; the group's tag says which repository holds it.
 * Nothing is refused, and the reply names the row.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-l03 rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC2-1: A Manual row naming a walk in the application repository is not checked here
 
 **Classification:**
@@ -506,6 +520,7 @@ Runs once per row of **Test data**.
 * The row is skipped: no refusal names the case or the path.
 * The walk's case ids are checked where the application repository ticks the group, not here.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-yvj rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC3-1: A test path the application clone holds no file at is refused
 
 **Classification:**
@@ -539,6 +554,7 @@ Runs once per row of **Test data**.
 * The landing is refused, naming <missing test path> and the root it looked in.
 * No row lands, and `main` is unchanged.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-qpq rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC4-1: A cited test that does not carry the credited id is refused
 
 Runs once per row of **Test data**.
@@ -581,6 +597,7 @@ Runs once per row of **Test data**.
 * The landing is refused, naming <application test> and <credited id>.
 * Nothing lands on `main`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-1mb rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC5-1: A test citing several ids is credited for the one the row names
 
 **Classification:**
@@ -612,6 +629,7 @@ Runs once per row of **Test data**.
 
 * The row lands, crediting <application test> for <credited id>.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-jjy rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC6-1: A lane that did not run says so first and keeps its tasks unticked
 
 **Classification:**
@@ -644,6 +662,7 @@ Runs once per row of **Test data**.
 * <task group>'s tasks are unticked, and nothing but the engineer's hand keeps them so.
 * Each Manual row naming the walk reads `to be walked in` the walk.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-t4a rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC7-1: A later row saying the lane ran ticks the tasks
 
 **Classification:**
@@ -676,6 +695,7 @@ Runs once per row of **Test data**.
 * <task group>'s tasks are ticked, and the Manual rows say what the walk reached.
 * The earlier row is unchanged.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-vgq rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC8-1: A reader or verifier on a fallback model is named in the row
 
 Runs once per row of **Test data**.
@@ -715,6 +735,7 @@ Runs once per row of **Test data**.
 * The perspectives cell names the agent from the table with `(fallback)`.
 * An agent that ran on its own model carries no suffix.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-80t rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC10-1: A reader the fallback could not run stops the round
 
 **Classification:**
@@ -745,6 +766,7 @@ Runs once per row of **Test data**.
 * No summary is posted; one reply names <a reader of the round> as the reader the round lacks.
 * No row lands, and nothing reaches `main`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-lpe rev=1 covers=g10.shared-agent-rounds.SC-1qt,g10.shared-agent-rounds.SC-g5b,g10.shared-agent-rounds.SC-vus,g10.shared-agent-rounds.SC-lek,g10.shared-agent-rounds.SC-t06,g10.shared-agent-rounds.SC-zua -->
 ### shared-planning-agent-rounds-US12-TC9-1: A group is read by the readers of what it lands
 
 Runs once per row of **Test data**.
@@ -794,6 +816,7 @@ Runs once per row of **Test data**.
 **I want** the summary to show my moves alone, a held row for me to arrive with everything the answer needs quoted, and one reply to carry my answer and my remarks,
 **so that** I decide from the message and never open a file to check a count.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-n30 rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC1-1: The summary shows a hand only the moves that are theirs
 
 **Classification:**
@@ -824,6 +847,7 @@ Runs once per row of **Test data**.
 * Hand B's held row is not in it.
 * No footer tells any other hand to land.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-ilp rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC2-1: A held row for another hand is its own reply with the facts quoted
 
 **Classification:**
@@ -854,6 +878,7 @@ Runs once per row of **Test data**.
 * It quotes the row, the sentence it would put on the page and the two decision rows it touches.
 * Hand B can answer from the reply without opening a file.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-o6n rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC3-1: A held row sent again is one message, not two
 
 **Classification:**
@@ -883,6 +908,7 @@ Runs once per row of **Test data**.
 * Hand B has one reply for the row.
 * The reply still quotes the row, the page sentence and the decision rows.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-v0l rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC4-1: One reply carries an answer and remarks, and the remark comes back first
 
 **Classification:**
@@ -915,6 +941,7 @@ Runs once per row of **Test data**.
 * The remark is applied, and its result comes back to hand A.
 * Nothing has landed on `main`.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-l5e rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC5-1: A finding several readers filed is one row naming them
 
 **Classification:**
@@ -945,6 +972,7 @@ Runs once per row of **Test data**.
 * The finding is one row, naming both readers.
 * One verdict stands on it; no second verdict on the same finding disagrees.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-l6m rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC6-1: A round of one reader still verifies itself
 
 **Classification:**
@@ -975,6 +1003,7 @@ Runs once per row of **Test data**.
 * The finding was argued and the row says what stood.
 * The row names no verifier: the one reader argued its own findings.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-2j3 rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC7-1: A hand with no move in a round is sent no summary
 
 **Classification:**
@@ -1003,6 +1032,7 @@ Runs once per row of **Test data**.
 
 * No summary and no held row reach hand B.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-rtx rev=1 covers=g10.shared-agent-rounds.SC-bwk,g10.shared-agent-rounds.SC-eh0,g10.shared-agent-rounds.SC-ocy,g10.shared-agent-rounds.SC-6ut -->
 ### shared-planning-agent-rounds-US13-TC8-1: The summary quotes what a test asserts, not its count
 
 **Classification:**
@@ -1040,6 +1070,7 @@ Runs once per row of **Test data**.
 **I want** the first round to ask me the few questions that change what is built, one of them whether to do it now, with the defaults it applied listed,
 **so that** I spend the round on decisions, not confirmations.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-gip rev=1 covers=g10.shared-agent-rounds.SC-lv8 -->
 ### shared-planning-agent-rounds-US14-TC1-1: The first round asks about three questions, one whether to do it now
 
 **Classification:**
@@ -1074,6 +1105,7 @@ Runs once per row of **Test data**.
 * One asks whether to do it now.
 * The held choice is a ❓ row, not listed as a default.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-zm0 rev=1 covers=g10.shared-agent-rounds.SC-lv8 -->
 ### shared-planning-agent-rounds-US14-TC2-1: The defaults the round applied are listed as decided by the round
 
 **Classification:**
@@ -1106,6 +1138,7 @@ Runs once per row of **Test data**.
 * Each listed default is a decisions row marked decided by the round, not by the product manager.
 * A choice the held test holds is a ❓ row, not a row decided by the round.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-id9 rev=1 covers=g10.shared-agent-rounds.SC-lv8 -->
 ### shared-planning-agent-rounds-US14-TC3-1: One reply overturns a listed default
 
 **Classification:**
@@ -1137,6 +1170,7 @@ Runs once per row of **Test data**.
 * The row for <default> records the product manager's value and their handle.
 * The reply says which artifacts are read again.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-3mp rev=1 covers=g10.shared-agent-rounds.SC-lv8 -->
 ### shared-planning-agent-rounds-US14-TC4-1: A sentence that settles everything is still asked whether to do it now
 
 **Classification:**
@@ -1167,6 +1201,7 @@ Runs once per row of **Test data**.
 * The reply asks whether to do it now.
 * The reply asks that one question alone, and none asks to confirm what the sentence said.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-f0a rev=1 covers=g10.shared-agent-rounds.SC-lv8 -->
 ### shared-planning-agent-rounds-US14-TC5-1: A fact the sentence states is not asked back as a question
 
 **Classification:**
@@ -1206,6 +1241,7 @@ Runs once per row of **Test data**.
 **I want** a design I have written to land with a dated wait on the frame I have not drawn yet,
 **so that** the requirements are drawn from what is written and the wait is read, not refused.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-0p4 rev=1 covers=g10.shared-agent-rounds.SC-bgg -->
 ### shared-planning-agent-rounds-US15-TC1-1: A written design's wait on its frame stands
 
 **Classification:**
@@ -1238,6 +1274,7 @@ Runs once per row of **Test data**.
 * No finding refuses the wait for the design being written.
 * The wait is listed under the change's waits with its date and what is missing.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-w65 rev=1 covers=g10.shared-agent-rounds.SC-bgg -->
 ### shared-planning-agent-rounds-US15-TC2-1: A wait that names nothing is refused
 
 **Classification:**
@@ -1277,6 +1314,7 @@ Runs once per row of **Test data**.
 **I want** the check to name two in-flight changes that fold one requirement, however each has headed its block,
 **so that** I read both before I build on either, instead of finding the second at the archive.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-bk1 rev=1 covers=g10.shared-agent-rounds.SC-nrs -->
 ### shared-planning-agent-rounds-US16-TC1-1: An ADDED block against a MODIFIED one of the same name is named to both
 
 **Classification:**
@@ -1310,6 +1348,7 @@ Runs once per row of **Test data**.
 * <other change>'s file is named with <change> and its heading `MODIFIED`.
 * The check fails.
 
+<!-- trace:case id=g10.shared-agent-rounds.TC-5p5 rev=1 covers=g10.shared-agent-rounds.SC-nrs -->
 ### shared-planning-agent-rounds-US16-TC2-1: Two deltas on different requirements are not named to each other
 
 **Classification:**
@@ -1378,8 +1417,8 @@ case, in these words, and what a person walks beyond it:
 | `shared-planning-agent-rounds-US10-TC4-1` | a person runs a round touching no product line, reads the product manager's thread for silence, and reads the engineer's summary for no page question |
 | `shared-planning-agent-rounds-US10-TC5-1` | a person answers another hand's page question, opens the page to confirm the line is unchanged and still ❓, and reads the refusal keeping the question open on the product manager, as `run-a-round-on-every-artifact`'s Told once has it |
 | `shared-planning-agent-rounds-US10-TC6-1` | the skill's tests hold the rule that a landing holds nothing on a page question; a person lands the group, reads the line's mark and reads `decisions.md` for no record of the round deciding it |
-| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing tells QA once, naming the suite's path, its case count and the review. The words' tests prove the message itself, and the manual's walk proves QA's turn on My turn and on the change page. A person says `land`, reads the thread and checks `main` for `spec.md` and `feature-tcs.md` landed together |
-| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group names the review, in the template and in a plan; a person reads the plan's other groups and confirms none of them names the review |
+| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing keeps Specified with the product manager and creates no QA turn. A person says `land`, reads the thread and checks `main` for `spec.md` and `feature-tcs.md` landed together |
+| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group uses the draft suite without a review dependency; a person reads the plan's groups and confirms none requires review before delivery |
 | `shared-planning-agent-rounds-US11-TC3-1` | the tick's tests decide the refusal of a draft id over a fixture store; a person runs `pnpm plan done` on a walk group whose spec cites one |
 | `shared-planning-agent-rounds-US11-TC4-1` | the tick's tests decide the pass once the case is `actual`; a person signs the case with `/tcs-review` and runs the tick again |
 | `shared-planning-agent-rounds-US11-TC5-1` | the tick's tests decide one draft id among signed ones; a person reads the refusal naming that id alone |

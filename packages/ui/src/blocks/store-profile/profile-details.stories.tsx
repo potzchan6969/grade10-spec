@@ -4,7 +4,7 @@ import { FIXTURE_MEMBER_SINCE } from "../../lib/datetime-fixtures";
 import { ProfileDetails } from "./profile-details";
 
 const meta = {
-  title: "Store Profile/ProfileDetails",
+  title: "Account/Profile/Blocks/ProfileDetails",
   component: ProfileDetails,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

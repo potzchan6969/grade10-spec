@@ -27,12 +27,21 @@ One round per artifact, and one per task group while the change is building.
 
 - 🚧 **Your word lands it** — nothing reaches `main` without your word, and
   whose is recorded
-- 🚧 **A question, not a guess** — what moves scope, is costly to undo, needs a
-  fact only you have, or divides the options by more than a task group of work
-  is asked, never chosen: a numbered row in the change's decisions with the
-  agent's recommendation, or a `❓` line on the page; every other preference the
-  round decides on the best option, says so, and one reply from you overturns
-  it
+- 🚧 **A question, not a guess** — a question raised by a reading or met by
+  the round that moves scope, is costly to undo, needs a fact only you have, or
+  divides the options by more than a task group of work is asked, never chosen:
+  a numbered row in the change's decisions with the agent's recommendation, or
+  a `❓` line on the page; every other closes on its recommendation as decided
+  by the round, citing the page line where one settles it, and one reply from
+  you overturns it
+- 🚧 **A raised question comes with its recommendation** — the blind reading
+  still raises each point its input did not settle, with the options and the
+  one it recommends; a reading that raises nothing has failed
+- 🚧 **A question about a look never holds a feature** — the feature ships an
+  interim built from the store's existing blocks and tokens; a look that needs
+  a new variant, token or block ships without that look; the question waits on
+  the designer in one change per capability, listed under them on
+  [Pending](/pending)
 - 🚧 **One sentence plans the change** — the first message drafts every artifact
   of the chain, each from the one before it and each read by its perspectives,
   and lands nothing; you read the held questions, not seven documents
@@ -47,9 +56,14 @@ One round per artifact, and one per task group while the change is building.
   then independently writes the technical design, requirements, scenarios and
   tasks from the same anchors; QA2 reads both outputs and reconciles coverage,
   testability, task coverage and technical contradictions
-- 🚧 **One human resolves every question** — the same named human answers all
-  product questions QA2 raises before accepting the plan; a remaining question
-  holds acceptance
+- 🚧 **One human resolves what stays open** — a question stays open only when
+  the test in **A question, not a guess** holds it; the same named human
+  answers each before accepting the plan, and an open one holds acceptance
+- 🚧 **The engineer challenges the tech design** — there is no tech PIC: the
+  engineer who will build the change challenges the proposed system, its data
+  flow and its rejected options before the plan is accepted, and the human who
+  accepts judges the requirements and the suite whole; a question the tech
+  design cannot settle is a Raised row, never a dated wait
 - 🚧 **About three questions** — the first round asks what changes what is
   built, none of it trivial, one question whether to do it now, and lists the
   rest it decided as decided by the round
@@ -73,9 +87,9 @@ One round per artifact, and one per task group while the change is building.
   change's thread, and the change's stage decides whether it is extended, held
   for its product manager, or depended on by a new change
 - 🚧 **Every later hand answers in the thread** — the turn message points at it
-- 🚧 **The frames come from you** — a designer's ask carries the frame links; a
-  draft that needs a frame nobody drew writes a dated wait on the designer,
-  never a screen in prose
+- 🚧 **The frames come from you** — your ask carries the frame links; a look a
+  feature needs that no frame covers ships as the interim, and the frame waits
+  on you in your own change, never on the feature
 - 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
 - 🚧 **The button says it for you** — a summary waiting on your word carries
   `Confirm <artifact>`; a press is that word, said by whoever pressed, and the
@@ -182,6 +196,28 @@ An artifact is drawn from what is before it, the page's marks first.
   carries a case of the change ticking it that is still draft is refused; a
   draft another change left in the same file is that change's to sign
 
+## Ids
+
+A journey, a scenario and a case each keep one id for life once it lands on
+`main`, and no id is issued twice.
+
+- **Two branches at once** - the first to land keeps its ids; the second is
+  refused at its landing, naming each journey or scenario id another change
+  or `main` already holds
+- 🚧 **The next id** - issued by a command from the branch and the published
+  `main`, never counted by hand: a journey or scenario number within its
+  capability, a case number within its journey, or a letter beside a named id
+- 🚧 **Moving a branch's ids** - the refusal names the one command that moves
+  the branch's own ids above `main`'s, with every case id and citation built
+  from them in the change
+- 🚧 **Case numbers** - a case number another change or `main` holds is
+  refused the same way, at every suite level
+- 🚧 **Acceptance reads `main`** - an id `main` holds is refused before a
+  change is accepted; a change accepted on its branch and beaten to the
+  landing moves its ids and is accepted again
+- 🚧 **One record, one id** - a scenario or a case copied into a second change
+  keeps the trace id it already holds, however its title is reworded
+
 ## Checks
 
 - 🚧 **A page first, for a new capability** — a page naming a capability an
@@ -214,21 +250,24 @@ An artifact is drawn from what is before it, the page's marks first.
 The owner's brief asks that the product manager start with what is wanted and
 agents refine the rest, that the tech PIC and the designer review what agents
 propose, and that every step passes through layers of checks. The brief is
-[the blueprint](/references/delivery-workflow-blueprint).
+[the blueprint](/references/delivery-workflow-blueprint). The tech PIC's review now falls to the engineer who builds the change.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Who drafts | Decided | The change's agent drafts every artifact from the proposal to the code; a person answers, remarks and lands. | Product, Engineering |
 | Challenge and verify | Decided | QA1 writes the blind cases; Dev independently writes design and requirements; QA2 reconciles their outputs; the simpler-thing reader checks each draft. | Product, QA, Engineering |
+| The tech design's reader | Decided | The engineer who will build the change challenges the tech design before acceptance; the tech PIC is retired, and a question it cannot settle is a Raised row. | Product |
 | Questions | Decided | Numbered rows in the change's decisions, or `❓` lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
 | Read again | Decided | A landing reads every artifact after it, in order; 🚧 what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
-| Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
+| Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the engineering readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |
 | Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
-| Who is asked, and when | Decided | Each hand reads a message that is theirs; one human resolves all planning questions before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
+| Who is asked, and when | Decided | Each hand reads a message that is theirs; the blind reading raises every unsettled point with a recommendation, and QA2 closes each one the held test does not hold; one human resolves every planning question still open before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
+| A question about a look | Decided | The feature ships an interim built from the store's existing blocks and tokens; the question waits on the designer in one change per capability and never holds a feature's acceptance. | Product, Design |
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
-| A run-sheet failure | ❓ Open | Whether a failed row on the run sheet reaches the change's thread on its own, or QA writes the sentence there; today it is QA's sentence, read as a remark. Recommended: QA's sentence in the thread, naming the case id, and the sheet left as the record of the walk. | QA, Product |
+| Ids | Decided | Issued from the branch and the published `main`; the branch that lands second moves its own, and acceptance reads `main`; no reservation file and no id that carries its change. | Engineering |
+| A run-sheet failure | Decided | QA writes the sentence in the change's thread, naming the case id, and the sheet stays the record of the walk; no new sender. | QA, Product |
 :::

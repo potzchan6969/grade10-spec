@@ -15,13 +15,17 @@ import { CartDrawerFooter, CartPromoSheet } from "./cart-drawer";
 import {
   applyTypedPromoInStories,
   DEFAULT_CART_COPY,
+  follows,
   formatStoryCreditHkd,
+  orderDiscountRows,
   parseStoryMoney,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_INAPPLICABLE_ONLY,
   SAMPLE_HELD_PROMO_CODES,
+  STORY_ORDER_DISCOUNT,
   STORY_POINTS_MAX_HKD,
   storyCartEstimatedTotal,
+  storyPromoLabel,
 } from "./fixtures";
 import type { HeldPromoCode, PointsState, PromoState } from "./types";
 
@@ -81,7 +85,7 @@ function FooterWithPromoNest({
  * checkout CTA (`4791:2773`).
  *
  * Enter/held-list UI lives on the nested `CartPromoSheet` hosted by
- * [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs) (or the nest host
+ * [`CartDrawer`](?path=/docs/store-cart-blocks-cartdrawer--docs) (or the nest host
  * in these stories). Shopper copy uses **promo code** only — never coupon.
  * `PromoState` `applied` is for order-level codes; a product coupon updates the
  * matching line’s `couponCode` / `price` instead — not a footer discount row.
@@ -92,7 +96,7 @@ function FooterWithPromoNest({
  * held section).
  */
 const meta = {
-  title: "Store Cart/CartDrawerFooter",
+  title: "Store/Cart/Blocks/CartDrawerFooter",
   component: CartDrawerFooter,
   tags: ["autodocs"],
   decorators: container,
@@ -201,7 +205,7 @@ export const PromoAppliedSuccess: Story = {
   args: {
     promoState: {
       status: "applied",
-      code: "GRADE10",
+      label: storyPromoLabel("GRADE10"),
       discountAmount: "−HK$4,270.00",
     },
     estimatedTotal: "HK$38,430.00",
@@ -342,7 +346,7 @@ export const PartialCallbackMatrix: Story = {
             estimatedTotal="HK$38,430.00"
             promoState={{
               status: "applied",
-              code: "WELCOME100",
+              label: storyPromoLabel("WELCOME100"),
               discountAmount: "−HK$4,270.00",
             }}
             pointsState={null}
@@ -743,7 +747,7 @@ export const PromoAndPointsStacked: Story = {
   args: {
     promoState: {
       status: "applied",
-      code: "SAVE10",
+      label: storyPromoLabel("SAVE10"),
       discountAmount: "−HK$4,270.00",
     },
     pointsState: {
@@ -756,6 +760,53 @@ export const PromoAndPointsStacked: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Discount (SAVE10)")).toBeInTheDocument();
     expect(canvas.getByText("Points")).toBeInTheDocument();
+  },
+};
+
+/** Order-class site discount — its own row after Subtotal, no Remove */
+export const OrderDiscount: Story = {
+  args: {
+    orderDiscounts: [STORY_ORDER_DISCOUNT],
+    estimatedTotal: "HK$38,430.00",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [row] = orderDiscountRows(canvasElement);
+    expect(within(row).getByText(STORY_ORDER_DISCOUNT.label)).toBeVisible();
+    expect(within(row).getByText(STORY_ORDER_DISCOUNT.amount)).toBeVisible();
+    expect(within(row).queryByRole("button")).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Remove" }),
+    ).not.toBeInTheDocument();
+    expect(follows(canvas.getByText("Subtotal"), row)).toBe(true);
+    expect(
+      follows(
+        row,
+        canvas.getByRole("button", { name: /Select or enter code/i }),
+      ),
+    ).toBe(true);
+  },
+};
+
+/** Order discount, then the applied code and points — only those two remove */
+export const OrderDiscountWithPromoAndPoints: Story = {
+  args: {
+    orderDiscounts: [STORY_ORDER_DISCOUNT],
+    promoState: {
+      status: "applied",
+      label: storyPromoLabel("WELCOME100"),
+      discountAmount: "−HK$100.00",
+    },
+    pointsState: { status: "applied", amountLabel: "−HK$120.00" },
+    estimatedTotal: "HK$38,210.00",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [row] = orderDiscountRows(canvasElement);
+    expect(within(row).queryByRole("button")).not.toBeInTheDocument();
+    expect(canvas.getAllByRole("button", { name: "Remove" })).toHaveLength(2);
+    expect(follows(row, canvas.getByText("Discount (WELCOME100)"))).toBe(true);
+    expect(canvas.getByText("HK$38,210.00")).toBeInTheDocument();
   },
 };
 
@@ -778,7 +829,7 @@ export const InteractiveMember: Story = {
       setSelectedHeldId(id);
       setPromo({
         status: "applied",
-        code: code.label,
+        label: storyPromoLabel(code.label),
         discountAmount: applied.amount,
       });
       setTotal(
@@ -807,7 +858,7 @@ export const InteractiveMember: Story = {
                 setSelectedHeldId(result.heldId);
                 setPromo({
                   status: "applied",
-                  code: result.label,
+                  label: storyPromoLabel(result.label),
                   discountAmount: result.amount,
                 });
                 setTotal(
@@ -1109,7 +1160,7 @@ export const TenderPendingAppliedPoints: Story = {
     tenderPending: true,
     promoState: {
       status: "applied",
-      code: "TEN-OFF",
+      label: storyPromoLabel("TEN-OFF"),
       discountAmount: "−HK$4,270.00",
     },
     pointsState: { status: "applied", amountLabel: "HK$120.00" },
@@ -1136,7 +1187,7 @@ export const Loading: Story = {
     loading: true,
     promoState: {
       status: "applied",
-      code: "GRADE10",
+      label: storyPromoLabel("GRADE10"),
       discountAmount: "−HK$4,270.00",
     },
     pointsState: {

@@ -82,7 +82,7 @@ const STORE_LAUNCH_COLUMNS = [
     links: [
       {
         label: "Store Locator",
-        href: "?path=/story/pages-store-locator-page--default",
+        href: "?path=/story/store-store-locator-screens-store-locator--default",
       },
       DOCS_LINK,
     ],
@@ -98,7 +98,7 @@ const COPY = {
 };
 
 const meta = {
-  title: "Components/Footer",
+  title: "Design System/Layout/Footer",
   component: Footer,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

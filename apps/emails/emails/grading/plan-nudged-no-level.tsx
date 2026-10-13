@@ -24,12 +24,12 @@ export default function PlanNudgedNoLevelEmail({
 
   return (
     <GradingLetter
-      cta={{ href: previewSubmission.url, label: "Book the drop-off" }}
+      cta={{ href: previewSubmission.url, label: "Open your list" }}
       footer={previewFooter}
       greeting={`Hi ${previewSubmission.collectorName},`}
       heading={`Still here: ${cardCount} cards`}
-      lead={`You planned this submission on ${hkDate(plannedAt)} and no drop-off is booked yet. The list is kept until ${hkDate(keptUntil)}; nothing is paid until you hand the cards in.`}
-      preheader={`Your list is kept until ${hkDate(keptUntil)}. Book the drop-off when you are ready.`}
+      lead={`You planned this submission on ${hkDate(plannedAt)} and the cards have not been handed in yet. The list is kept until ${hkDate(keptUntil)}; nothing is paid until you hand the cards in.`}
+      preheader={`Your list is kept until ${hkDate(keptUntil)}. Bring the cards in when you are ready.`}
       submission={{ ...previewSubmissionLine, grader: null, level: null }}
     >
       <FactsGroup
@@ -42,12 +42,9 @@ export default function PlanNudgedNoLevelEmail({
         ]}
       />
       <Note>
-        Book the drop-off from the page when you are ready. The list, the values
-        and the level can change until the cards are checked in.
-      </Note>
-      <Note>
-        Booked in one sitting? Then this email is not sent: the drop-off
-        confirmation carries the link instead.
+        Bring the cards to the shop when you are ready; the desk checks them in
+        against this list. The list, the values and the level can change until
+        then.
       </Note>
     </GradingLetter>
   );

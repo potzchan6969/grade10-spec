@@ -4,15 +4,14 @@ import { createHash } from "node:crypto";
 import {
   existsSync,
   mkdirSync,
-  mkdtempSync,
   readFileSync,
   renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
-import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
+import { sandbox } from "./fixtures/accept-sandbox.mjs";
 import {
   acceptanceReadiness,
   acceptChange,
@@ -28,35 +27,6 @@ import {
 
 const CHANGE = "build-alpha";
 const hash = (text) => createHash("sha256").update(text).digest("hex");
-
-function sandbox() {
-  const root = mkdtempSync(join(tmpdir(), "spec-accept-"));
-  const files = {
-    "openspec/changes/build-alpha/.openspec.yaml": "schema: grade10-planning\n",
-    "openspec/changes/build-alpha/proposal.md":
-      "# Build alpha\n\n## Why\n\nLet a reader search.\n\n[Product decisions](docs/prds/products/site/alpha.md#product-decisions)\n",
-    "openspec/changes/build-alpha/decisions.md":
-      "## Decisions\n\n| Q | Decided |\n| --- | --- |\n| Q1 | Search stays local to the capability. |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n",
-    "openspec/changes/build-alpha/tech-design.md":
-      "# Technical design\n\nThe store owns the contract.\n",
-    "openspec/changes/build-alpha/tasks.md":
-      "## 1. Store contract (grade10-spec)\n\n- [ ] 1.1 Add search\n- [ ] 1.2 Verify output\n",
-    "openspec/changes/build-alpha/specs/site/search/spec.md":
-      "# Search\n\n## Purpose\n\nReaders find items.\n\n## Feature set\n\n### Search\n\nThe reader enters a query.\n\n## ADDED Requirements\n\n### Requirement: Search results\n\nThe system SHALL return matching items.\n\n#### Scenario: site-search-SC-01 - Results match\n\n- **WHEN** a reader searches\n- **THEN** matching items appear\n",
-    "openspec/changes/build-alpha/specs/site/search/user-journeys.md":
-      "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n",
-    "openspec/changes/build-alpha/specs/site/search/feature-tcs.md":
-      "# Search test cases\n\n## Settled\n\nThe query is case insensitive.\n\n## Reconciliation\n\nThe blind reading agreed with the feature set.\n",
-    "docs/prds/products/site/alpha.md":
-      "# Alpha\n\n## Product decisions\n\nSearch results stay within the selected capability.\n\n## Measurement\n\nCount successful searches.\n",
-  };
-  for (const [path, content] of Object.entries(files)) {
-    const target = join(root, path);
-    mkdirSync(dirname(target), { recursive: true });
-    writeFileSync(target, content);
-  }
-  return { root, files };
-}
 
 function applyOutputs(root, prepared) {
   for (const [path, content] of prepared.outputs) {
@@ -169,6 +139,127 @@ The system SHALL return updated matching items.
       path: "openspec/specs/site/search/spec.md",
       anchors: ["Feature set", "Requirement: Search results"],
     },
+  );
+});
+
+// The change template starts at `## Purpose`, so a delta written from it
+// carries no title: its top-level sections are its sections.
+const untitled = (files) =>
+  files["openspec/changes/build-alpha/specs/site/search/spec.md"].replace(
+    /^# Search\n\n/,
+    "",
+  );
+
+test("an untitled delta for a new capability takes its title from its path and claims what it moves", () => {
+  const { root, files } = sandbox();
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/specs/site/search/spec.md"),
+    untitled(files),
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(
+    folded,
+    /^# site\/search Specification\n\n## Purpose\n\nReaders find items\./,
+  );
+  assert.match(folded, /## Feature set\n\n### Search/);
+  assert.match(folded, /### Requirement: Search results/);
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Purpose", "Requirement: Search results"],
+  );
+});
+
+// A delta's own title names the change, not the capability: every durable
+// spec, and the skeleton `openspec archive` writes, is titled from its path.
+test("a titled delta for a new capability takes its title from its path", () => {
+  const { root, files } = sandbox();
+  writeFileSync(
+    join(root, SEARCH_DELTA, "spec.md"),
+    `# Search — delta\n\n${untitled(files)}`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^# site\/search Specification\n\n## Purpose\n/);
+  assert.doesNotMatch(folded, /Search — delta/);
+});
+
+test("an untitled delta folds its feature set and requirements under the durable title", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    `# Search
+
+## Purpose
+
+Readers find items.
+
+## Feature set
+
+- Current basket
+  - Review: live
+
+## Requirements
+
+### Requirement: Search results
+
+The system SHALL return matching items.
+`,
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "spec.md"),
+    `## Feature set
+
+- Saved searches
+  - Recall: one tap
+
+## ADDED Requirements
+
+### Requirement: Saved searches
+
+The system SHALL recall a saved search.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-04").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(folded, /^# Search\n\n## Purpose\n\nReaders find items\./);
+  assert.match(folded, /- Current basket[\s\S]*- Saved searches/);
+  assert.match(
+    folded,
+    /Requirement: Search results[\s\S]*Requirement: Saved searches/,
+  );
+  assert.deepEqual(
+    contractTargets(root, CHANGE).find(
+      (target) => target.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Requirement: Saved searches"],
+  );
+});
+
+test("an untitled delta's uncommitted Purpose edit skips the drift check and says why", (t) => {
+  const { root, files } = sandbox();
+  const deltaPath = join(root, SEARCH_DELTA, "spec.md");
+  writeFileSync(deltaPath, untitled(files));
+  git(root, "init", "-q");
+  commitAll(root, "delta written");
+  writeFileSync(
+    deltaPath,
+    untitled(files).replace("Readers find items.", "Readers find more items."),
+  );
+  const warn = t.mock.method(console, "warn", () => {});
+  prepareAcceptance(root, CHANGE);
+  assert.match(
+    warn.mock.calls.map((call) => call.arguments.join(" ")).join("\n"),
+    /site\/search\/spec\.md: Purpose drift not checked - its Purpose has uncommitted edits/,
   );
 });
 
@@ -311,25 +402,215 @@ The system SHALL let the member pay through the frontend.
   );
 });
 
+test("a group renamed through REMOVED keeps its place in the folded outline", () => {
+  const { root } = sandbox();
+  const durablePath = join(root, "openspec/specs/site/search/spec.md");
+  const deltaPath = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  mkdirSync(dirname(durablePath), { recursive: true });
+  writeFileSync(
+    durablePath,
+    `# Discounts
+
+## Purpose
+
+A discount reaches the order.
+
+## Feature set
+
+- One discount-code slot
+  - At most one applies per order
+- An ephemeral code, minted once
+  - Minted when an order claims it
+- Two channels
+  - The same mechanism online and at the till
+
+## Requirements
+
+### Requirement: Codes work
+
+The system SHALL mint codes.
+`,
+  );
+  writeFileSync(
+    deltaPath,
+    `# Discounts
+
+## Feature set
+
+- One discount code or coupon per order
+  - At most one applies per order
+- An ephemeral code, minted once
+  - Settled: a sale is settled against what it carried
+- A new group
+  - Listed after every group the durable spec holds
+
+## REMOVED Feature set
+
+- One discount-code slot
+
+## MODIFIED Requirements
+
+### Requirement: Codes work
+
+The system SHALL mint codes once.
+`,
+  );
+
+  const folded = contractOutputs(root, CHANGE, "2026-10-06").get(
+    "openspec/specs/site/search/spec.md",
+  );
+  const groups = folded.match(/^- .+$/gm);
+  assert.deepEqual(groups, [
+    "- One discount code or coupon per order",
+    "- An ephemeral code, minted once",
+    "- Two channels",
+    "- A new group",
+  ]);
+});
+
+/** Points the proposal at one section of a page with this body. */
+function linkSection(root, files, anchor, body) {
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/proposal.md"),
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#scope",
+      `alpha.md#${anchor}`,
+    ),
+  );
+  writeFileSync(
+    join(root, "docs/prds/products/site/alpha.md"),
+    `---\ntitle: Alpha\n---\n\n${body}`,
+  );
+}
+
 // A page link resolves on the id the manual renders the heading with, so a
 // link `pnpm check:manual` accepts is one acceptance can scope.
 test("a page anchor resolves on the manual's heading id", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "a-card-s-outcome",
+    "## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
+// A section reads as the manual draws it: the page's `Product decisions`
+// block is the page's own, and a flow's steps are the section's lines.
+test("a page's last section ends before its Product decisions block", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "cart",
+    `## Cart
+
+Members see the cart count.
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Help | ❓ Open | Where help sits. | Product |
+:::
+`,
+  );
+  const section = prepareAcceptance(root, CHANGE).snapshots.find(
+    (one) => one.path === "docs/prds/products/site/alpha.md#cart",
+  );
+  assert.match(section.content, /Members see the cart count/);
+  assert.doesNotMatch(section.content, /Where help sits/);
+});
+
+test("a section runs past the step headings of a flow it holds", () => {
+  const { root, files } = sandbox();
+  linkSection(
+    root,
+    files,
+    "the-wizard",
+    `## The Wizard
+
+:::flow{title="Planning a submission"}
+## The cards
+The collector picks the cards.
+:::
+
+❓ Whether the wizard has pages.
+
+## Fees
+
+Every plan shows its fee.
+`,
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /alpha\.md#the-wizard still carries an unresolved TBC or ❓ decision/,
+  );
+});
+
+// Acceptance reads the sections `pnpm check:manual` verifies: the proposal's
+// `## References`. A page cited anywhere else is prose, not scope.
+test("acceptance scopes only the page sections the proposal's References link", () => {
   const { root, files } = sandbox();
   const proposal = join(root, "openspec/changes/build-alpha/proposal.md");
   writeFileSync(
     proposal,
     files["openspec/changes/build-alpha/proposal.md"].replace(
-      "alpha.md#product-decisions",
-      "alpha.md#a-card-s-outcome",
+      "Let a reader search.",
+      "Let a reader search, as [Measurement](../../../docs/prds/products/site/alpha.md#product-decisions) counts it.",
     ),
   );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
+  assert.deepEqual(
+    prepareAcceptance(root, CHANGE)
+      .snapshots.filter((one) => one.role === "prd-source")
+      .map((one) => one.path),
+    ["docs/prds/products/site/alpha.md#scope"],
+  );
+
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "site/alpha.md#scope",
+      "site/gone.md#scope",
+    ),
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /docs\/prds\/products\/site\/gone\.md does not exist/,
+  );
+
+  writeFileSync(
+    proposal,
+    files["openspec/changes/build-alpha/proposal.md"].replace(
+      "alpha.md#scope",
+      "alpha.md#nowhere",
+    ),
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /docs\/prds\/products\/site\/alpha\.md has no section matching #nowhere/,
+  );
+});
+
+test("a linked page that breaks the manual's grammar is one blocker among the rest", () => {
+  const { root } = sandbox();
   writeFileSync(
     join(root, "docs/prds/products/site/alpha.md"),
-    "# Alpha\n\n## A Card's Outcome\n\n❓ Whether a card is kept.\n",
+    "## Scope\n\nSearch results stay within the selected capability.\n",
   );
-  assert.throws(
-    () => prepareAcceptance(root, CHANGE),
-    /alpha\.md#a-card-s-outcome still carries an unresolved TBC or ❓ decision/,
+  rmSync(join(root, "openspec/changes/build-alpha/tasks.md"));
+  const errors = acceptanceReadiness(root, CHANGE).join("\n");
+  assert.match(errors, /required artifact is missing: .*tasks\.md/);
+  assert.match(
+    errors,
+    /docs\/prds\/products\/site\/alpha\.md: .*must start with `---` frontmatter/,
   );
 });
 
@@ -479,6 +760,85 @@ test("acceptance keeps the durable journeys of a file with no title", () => {
   );
 });
 
+const SPEC_TEMPLATE = new URL(
+  "../../openspec/schemas/grade10-planning/templates/spec.md",
+  import.meta.url,
+);
+const TEMPLATE_FILL = [
+  [
+    "One or two sentences",
+    "Readers find items. They search the catalogue by the words they type.",
+  ],
+  ["group name", "Search"],
+  ["Name: why this item exists", "Query: find an item by its words"],
+  ["requirement name", "Search results"],
+  ["requirement text", "The system SHALL return the items the query matches."],
+  ["scenario name", "Results match"],
+  ["<app>.<domain>-<capability>.US<n>", "site.search-search.US1"],
+  ["the walk this rule sits on", "a reader searches"],
+  ["condition", "a reader searches"],
+  ["expected outcome", "matching items appear"],
+];
+
+/** The spec template as it stands, each comment the fill knows filled and
+ * every other comment on a line of its own dropped; a comment inside a line
+ * is a placeholder, and one the fill does not know fails. */
+function deltaFromTemplate() {
+  return readFileSync(SPEC_TEMPLATE, "utf8")
+    .replace(/<!--([\s\S]*?)-->/g, (comment, inner, at, text) => {
+      const lead = inner.trim();
+      const fill = TEMPLATE_FILL.find(([key]) => lead.startsWith(key));
+      const before = text.slice(text.lastIndexOf("\n", at) + 1, at);
+      const after = text.slice(at + comment.length).split("\n", 1)[0];
+      const alone = before.trim() === "" && after.trim() === "";
+      assert.ok(fill || alone, `fill the template placeholder "${lead}"`);
+      return fill?.[1] ?? "";
+    })
+    .replaceAll("<app>", "site")
+    .replaceAll("<domain>", "search")
+    .replaceAll("<capability>", "search");
+}
+
+test("a change written from the spec template folds into a new durable spec", () => {
+  const { root } = sandbox();
+  writeFileSync(join(root, SEARCH_DELTA, "spec.md"), deltaFromTemplate());
+  const prepared = prepareAcceptance(root, CHANGE);
+  const durable = prepared.outputs.get("openspec/specs/site/search/spec.md");
+  assert.match(durable, /^# site\/search Specification\n/);
+  assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
+  assert.match(durable, /## Feature set\n\n- Search\n {2}- Query: find/);
+  assert.match(durable, /### Requirement: Search results/);
+  assert.match(
+    durable,
+    /#### Scenario: site.search-search.SC1 - Results match/,
+  );
+  assert.deepEqual(
+    prepared.contractTargets.find(
+      (one) => one.path === "openspec/specs/site/search/spec.md",
+    ).anchors,
+    ["Feature set", "Purpose", "Requirement: Search results"],
+  );
+});
+
+test("a change written from the spec template folds onto a durable spec", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "spec.md",
+    "# site/search Specification\n\n## Purpose\n\nReaders find items.\n\n## Feature set\n\n- Browse\n  - Shelf: see every item\n\n## Requirements\n\n### Requirement: Shelf\n\nThe system SHALL list every item.\n",
+  );
+  writeFileSync(join(root, SEARCH_DELTA, "spec.md"), deltaFromTemplate());
+  const durable = prepareAcceptance(root, CHANGE).outputs.get(
+    "openspec/specs/site/search/spec.md",
+  );
+  assert.match(durable, /^# site\/search Specification\n/);
+  assert.match(durable, /## Purpose\n\nReaders find items\. They search/);
+  assert.match(durable, /- Browse\n {2}- Shelf: see every item/);
+  assert.match(durable, /- Search\n {2}- Query: find an item by its words/);
+  assert.match(durable, /### Requirement: Shelf/);
+  assert.match(durable, /### Requirement: Search results/);
+});
+
 function writeDurable(root, name, content) {
   const target = join(root, "openspec/specs/site/search", name);
   mkdirSync(dirname(target), { recursive: true });
@@ -505,6 +865,82 @@ function commitAll(root, message) {
 
 const SEARCH_DELTA = "openspec/changes/build-alpha/specs/site/search";
 
+test("a delta's Walked by line replaces the durable one, reason and all", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n**Walked by:** nobody on their own - the old\nsurfaces compose it.\n\n## Retired\n\n- `site-search-US-01` - Retired by an earlier change.\n",
+  );
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## Retired\n\n- `site-search-US-01` - Retired by an earlier change.\n",
+  );
+});
+
+test("a delta that retires the last journeys may declare Walked by in their place", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## REMOVED User journeys\n\n### site-search-US-01: Reader opens search\n",
+  );
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n\n## Retired\n\n- `site-search-US-01` - Retired by build-alpha.\n",
+  );
+});
+
+test("a Walked by line beside the journeys its own delta adds is refused, durable file or none", () => {
+  for (const durable of [
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the old reason.\n",
+    undefined,
+  ]) {
+    const { root } = sandbox();
+    if (durable) writeDurable(root, "user-journeys.md", durable);
+    writeFileSync(
+      join(root, SEARCH_DELTA, "user-journeys.md"),
+      "# Search journeys\n\n**Walked by:** nobody on their own - the new reason.\n\n## ADDED User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+    );
+    assert.throws(
+      () => contractOutputs(root, CHANGE, "2026-10-04"),
+      /site\/search: a Walked by line cannot stand beside the journeys this delta adds: site-search-US-01/,
+      String(durable),
+    );
+  }
+});
+
+test("a new capability walked by nobody folds to its title and the Walked by line", () => {
+  const { root } = sandbox();
+  assert.equal(
+    contractOutputs(root, CHANGE, "2026-10-04").get(
+      "openspec/specs/site/search/user-journeys.md",
+    ),
+    "# Search journeys\n\n## User journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n",
+  );
+});
+
+test("a Walked by line over durable journeys is refused", () => {
+  const { root } = sandbox();
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "# Search journeys\n\n## User journeys\n\n### site-search-US-01: Reader opens search\n\nFirst journey.\n",
+  );
+  assert.throws(
+    () => contractOutputs(root, CHANGE, "2026-10-04"),
+    /site\/search: a Walked by line cannot stand beside the durable journeys site-search-US-01/,
+  );
+});
+
 test("an added journey that reuses a durable journey id is refused", () => {
   const { root } = sandbox();
   writeDurable(
@@ -520,6 +956,29 @@ test("an added journey that reuses a durable journey id is refused", () => {
     () => prepareAcceptance(root, CHANGE),
     /added journey site-search-US-02 already exists.*renumber/,
   );
+});
+
+test("a restated, modified or removed journey the baseline does not hold is refused, walked by nobody included", () => {
+  const { root } = sandbox();
+  const walkedByNobody =
+    "# Search journeys\n\n**Walked by:** nobody on their own - the feature set routes its anchors.\n";
+  writeDurable(root, "user-journeys.md", walkedByNobody);
+  for (const [kind, verb] of [
+    ["Context user", "restated"],
+    ["MODIFIED User", "modified"],
+    ["REMOVED User", "removed"],
+  ]) {
+    writeFileSync(
+      join(root, SEARCH_DELTA, "user-journeys.md"),
+      `${walkedByNobody}\n## ${kind} journeys\n\n### site-search-US-01: Search contract\n`,
+    );
+    assert.throws(
+      () => prepareAcceptance(root, CHANGE),
+      new RegExp(
+        `${verb} journey site-search-US-01 is not in the accepted baseline`,
+      ),
+    );
+  }
 });
 
 test("a test case id already held by another durable journey is refused", () => {
@@ -539,24 +998,108 @@ test("a test case id already held by another durable journey is refused", () => 
   );
 });
 
-test("a retitled journey group and case replace their durable copies by id", () => {
+const SEARCH_SUITE =
+  "# Search cases\n\n## site-search-US2: Reader uses search\n\n<!-- trace:case id=g.search.TC-a1 rev=1 covers=g.search.SC-a1 -->\n### site-search-US2-TC1-1: Old case title\n\nOld coverage.\n\n### site-search-US2-TC2-1: Kept case\n\nKept coverage.\n\n## Reconciliation\n\nExisting reconciliation.\n";
+
+test("a story or case that hands a durable id to something new is refused", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US2: Reader saves a search\n\n### site-search-US2-TC1-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  const errors = acceptanceReadiness(root, CHANGE).join("\n");
+  assert.match(
+    errors,
+    /story site-search-US2 reuses the durable story's id for "Reader saves a search", where the durable story is "Reader uses search"/,
+  );
+  assert.match(
+    errors,
+    /case site-search-US2-TC1 reuses the durable case's id for "Saved search reopens", where the durable case is "Old case title"; give the new case the next unused TC number/,
+  );
+  assert.throws(() => prepareAcceptance(root, CHANGE), /Acceptance is blocked/);
+});
+
+test("a journey restated under another title is refused", () => {
   const { root } = sandbox();
   writeDurable(
     root,
-    "feature-tcs.md",
-    "# Search cases\n\n## site-search-US2: Reader uses search\n\n### site-search-US2-TC1-1: Old case title\n\nOld coverage.\n\n### site-search-US2-TC2-1: Kept case\n\nKept coverage.\n\n## Reconciliation\n\nExisting reconciliation.\n",
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader uses search\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## User journeys\n\n### site-search-US-02: Reader saves a search\n\nNew journey.\n",
+  );
+  assert.match(
+    acceptanceReadiness(root, CHANGE).join("\n"),
+    /journey site-search-US-02 reuses the durable journey's id for "Reader saves a search".*under `## MODIFIED User journeys`/,
+  );
+});
+
+test("a case revised under its durable marker and a story under MODIFIED User journeys replace their durable copies", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader uses search\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## MODIFIED User journeys\n\n### site-search-US-02: Reader searches and saves\n\nRevised journey.\n",
   );
   writeFileSync(
     join(root, SEARCH_DELTA, "feature-tcs.md"),
-    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n### site-search-US2-TC1-1: New case title\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n<!-- trace:case id=g.search.TC-a1 rev=2 covers=g.search.SC-a1 -->\n### site-search-US2-TC1-2: New case title\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
   );
   const suite = prepareAcceptance(root, CHANGE).outputs.get(
     "openspec/specs/site/search/feature-tcs.md",
   );
   assert.match(suite, /## site-search-US2: Reader searches and saves/);
   assert.doesNotMatch(suite, /Reader uses search|Old case title/);
-  assert.match(suite, /site-search-US2-TC1-1: New case title/);
+  assert.match(suite, /site-search-US2-TC1-2: New case title/);
   assert.match(suite, /site-search-US2-TC2-1: Kept case/);
+});
+
+test("a story heading that lagged its journey may take the journey's title the change restates", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  writeDurable(
+    root,
+    "user-journeys.md",
+    "## User journeys\n\n### site-search-US-02: Reader searches and saves\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "user-journeys.md"),
+    "## Context user journeys\n\n### site-search-US-02: Reader searches and saves\n\nExisting journey.\n",
+  );
+  writeFileSync(
+    join(root, SEARCH_DELTA, "feature-tcs.md"),
+    "# Search cases\n\n## site-search-US2: Reader searches and saves\n\n### site-search-US2-TC3-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
+});
+
+test("a change may retitle a case it added at its previous acceptance", () => {
+  const { root } = sandbox();
+  writeDurable(root, "feature-tcs.md", SEARCH_SUITE);
+  const suitePath = join(root, SEARCH_DELTA, "feature-tcs.md");
+  writeFileSync(
+    suitePath,
+    "# Search cases\n\n## site-search-US3: Reader saves a search\n\n### site-search-US3-TC1-1: Saved search reopens\n\nNew coverage.\n\n## Reconciliation\n\nThe cases reconcile.\n",
+  );
+  const first = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, first);
+  writeAcceptance(root, first, { reviewedBy: "@pm" });
+  writeFileSync(
+    suitePath,
+    readFileSync(suitePath, "utf8").replace(
+      "Saved search reopens",
+      "Saved search reopens with its filters",
+    ),
+  );
+  assert.deepEqual(acceptanceReadiness(root, CHANGE), []);
 });
 
 test("a first acceptance refuses a Purpose written before the durable Purpose last changed", () => {
@@ -731,6 +1274,32 @@ test("acceptance rejects incomplete rename instructions and unresolved visible c
   );
 });
 
+test("acceptance accepts a populated reconciliation table and rejects its empty template", () => {
+  const populated = sandbox();
+  const suitePath = join(
+    populated.root,
+    "openspec/changes/build-alpha/specs/site/search/feature-tcs.md",
+  );
+  writeFileSync(
+    suitePath,
+    "# Search test cases\n\n## Reconciliation\n\n| Raised | Disposition |\n| --- | --- |\n| The blind reading found a gap | Folded into the requirement |\n",
+  );
+  assert.deepEqual(acceptanceReadiness(populated.root, CHANGE), []);
+
+  const empty = sandbox();
+  writeFileSync(
+    join(
+      empty.root,
+      "openspec/changes/build-alpha/specs/site/search/feature-tcs.md",
+    ),
+    "# Search test cases\n\n## Reconciliation\n\n| Raised | Disposition |\n| --- | --- |\n",
+  );
+  assert.match(
+    acceptanceReadiness(empty.root, CHANGE).join("\n"),
+    /needs a completed ## Reconciliation with dispositions/,
+  );
+});
+
 test("a skip_specs change accepts an empty contract target scope", () => {
   const { root } = sandbox();
   rmSync(join(root, `openspec/changes/${CHANGE}/specs`), { recursive: true });
@@ -816,6 +1385,51 @@ test("concurrent edits to the accepted requirement cause an explicit amendment c
   );
   assert.equal(verifyAcceptance(root, CHANGE).ok, true);
   assert.equal(accepted.fingerprint.length, 64);
+});
+
+const SEARCH_MARKER =
+  "<!-- trace:scenario id=g10.site-search.SC-a1b rev=1 -->\n#### Scenario:";
+
+function amendAfterDurableEdit(edit, markDelta = false) {
+  const { root } = sandbox();
+  const first = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, first);
+  writeAcceptance(root, first, { reviewedBy: "@pm" });
+  const durable = join(root, "openspec/specs/site/search/spec.md");
+  writeFileSync(durable, edit(readFileSync(durable, "utf8")));
+  const delta = join(
+    root,
+    "openspec/changes/build-alpha/specs/site/search/spec.md",
+  );
+  writeFileSync(
+    delta,
+    readFileSync(delta, "utf8")
+      .replace("return matching items", "return ranked matching items")
+      .replace("#### Scenario:", markDelta ? SEARCH_MARKER : "#### Scenario:"),
+  );
+  return root;
+}
+
+test("an amendment passes when the durable spec gained trace markers after acceptance", () => {
+  const root = amendAfterDurableEdit(
+    (text) => text.replace("#### Scenario:", SEARCH_MARKER),
+    true,
+  );
+  assert.doesNotThrow(() => prepareAcceptance(root, CHANGE));
+});
+
+test("an amendment still refuses a wording change made to the durable spec after acceptance, markers or not", () => {
+  const root = amendAfterDurableEdit(
+    (text) =>
+      text
+        .replace("#### Scenario:", SEARCH_MARKER)
+        .replace("matching items", "ranked items"),
+    true,
+  );
+  assert.throws(
+    () => prepareAcceptance(root, CHANGE),
+    /changed since this amendment began|changed since the accepted baseline/,
+  );
 });
 
 test("v2 snapshots preserve planning provenance without locking later working-artifact edits", () => {
@@ -1103,13 +1717,14 @@ test("spec:accept commits folded files and acceptance only after both validators
       return { status: 0, stdout: "", stderr: "" };
     },
   });
-  assert.equal(commands.length, 4);
+  assert.equal(commands.length, 5);
   assert.equal(commands[0], `run validate:changes ${CHANGE}`);
   assert.match(
     commands[1],
     /^run tcs:validate --root \S+folded-store-\S+ --require-suites$/,
   );
-  assert.deepEqual(commands.slice(2), [
+  assert.match(commands[2], /^run check:manual \S+folded-store-\S+$/);
+  assert.deepEqual(commands.slice(3), [
     "check:manual",
     `run validate:changes ${CHANGE}`,
   ]);
@@ -1146,7 +1761,7 @@ test("spec:accept rolls back every durable and acceptance file when validation r
         expectedBaseline: before.baselineFingerprint,
         runCommand() {
           calls += 1;
-          return calls === 3
+          return calls === 4
             ? { status: 1, stdout: "manual refusal", stderr: "" }
             : { status: 0, stdout: "", stderr: "" };
         },
@@ -1157,7 +1772,7 @@ test("spec:accept rolls back every durable and acceptance file when validation r
     assert.equal(existsSync(join(root, path)), false);
   }
   assert.equal(verifyAcceptance(root, CHANGE).ok, false);
-  assert.deepEqual(calls, 3);
+  assert.deepEqual(calls, 4);
 });
 
 test("spec:accept validates the folded store in a copy and writes nothing when it fails", () => {
@@ -1179,7 +1794,7 @@ test("spec:accept validates the folded store in a copy and writes nothing when i
           return { status: 1, stdout: "TC1 appears more than once" };
         },
       }),
-    /tcs:validate refused the folded store:\nTC1 appears more than once/,
+    /\[tcs:validate\] TC1 appears more than once/,
   );
   assert.equal(
     folded,
@@ -1203,7 +1818,7 @@ test("spec:accept refuses a folded file whose trace marker is out of place", () 
         expectedBaseline: before.baselineFingerprint,
         runCommand: () => ({ status: 0 }),
       }),
-    /trace markers in the folded files sit away from their headings:\n- openspec\/specs\/site\/search\/feature-tcs\.md:\d+ \[marker-adjacency\]/,
+    /\[trace-markers\] openspec\/specs\/site\/search\/feature-tcs\.md:\d+ \[marker-adjacency\]/,
   );
   for (const [path] of before.outputs)
     assert.equal(existsSync(join(root, path)), false);
@@ -1253,6 +1868,27 @@ test("suite fold puts a revised case where its earlier revision stood", () => {
     merged,
     /<!-- trace:case id=g\.search\.TC-a1 rev=2 [^\n]*-->\n### site-search-US1-TC2-2:/,
   );
+});
+
+test("suite fold puts deprecated cases at the bottom of their journey", () => {
+  const merged = merge(
+    suiteOf(
+      group(
+        1,
+        caseBlock("site-search-US1-TC1-1", "actual"),
+        caseBlock("site-search-US1-TC2-1", "deprecated"),
+        caseBlock("site-search-US1-TC3-1", "draft"),
+      ),
+    ),
+    suiteOf(group(1, caseBlock("site-search-US1-TC4-1", "actual"))),
+  );
+  const order = [...merged.matchAll(/^### (\S+):/gm)].map((one) => one[1]);
+  assert.deepEqual(order, [
+    "site-search-US1-TC1-1",
+    "site-search-US1-TC3-1",
+    "site-search-US1-TC4-1",
+    "site-search-US1-TC2-1",
+  ]);
 });
 
 test("suite fold keeps the marker above a journey's first case when the change rewrites the journey", () => {
@@ -1316,18 +1952,28 @@ test("suite fold needs its date", () => {
   );
 });
 
-test("suite fold drops a None. placeholder once the other side lists items", () => {
-  const merged = merge(
-    suiteOf(
-      group(1, caseBlock("site-search-US1-TC1-1")),
-      "## Settled\n\n- Kept.",
-    ),
-    suiteOf(
-      group(2, caseBlock("site-search-US2-TC1-1")),
-      "## Settled\n\nNone.",
-    ),
-  );
-  assert.match(merged, /## Settled\n\n- Kept\.\n$/);
+test("suite fold drops a None placeholder, however worded, once the other side lists items", () => {
+  for (const placeholder of [
+    "None.",
+    "None yet.",
+    "None yet - the first blind pass on these two journeys.",
+    "*None yet — suite pending review.*",
+    "- None; this change introduces no unresolved product question.",
+    "- None for this slice.",
+    "- None — no earlier review decision is being carried into this change.",
+  ]) {
+    const merged = merge(
+      suiteOf(
+        group(1, caseBlock("site-search-US1-TC1-1")),
+        "## Settled\n\n- Kept.",
+      ),
+      suiteOf(
+        group(2, caseBlock("site-search-US2-TC1-1")),
+        `## Settled\n\n${placeholder}`,
+      ),
+    );
+    assert.match(merged, /## Settled\n\n- Kept\.\n$/, placeholder);
+  }
 });
 
 test("suite fold refuses a case older than the durable revision", () => {
@@ -1363,7 +2009,7 @@ test("suite fold lapses the Reviewed line of an approved suite it adds a draft t
     reviewed(suiteOf(group(1, caseBlock("site-search-US1-TC1-1", "actual")))),
     suiteOf(group(2, caseBlock("site-search-US2-TC1-1"))),
   );
-  assert.match(merged, /^\*\*Status:\*\* reopened$/m);
+  assert.match(merged, /^\*\*Status:\*\* reopened · 1\/2$/m);
   assert.match(
     merged,
     /^\*\*Reviewed:\*\* 2026-09-29, tcs-rules r4, lapsed 2026-10-02$/m,
@@ -1379,7 +2025,7 @@ test("suite fold keeps the Reviewed line of a suite that stays approved", () => 
     reviewed(suiteOf(group(1, caseBlock("site-search-US1-TC1-1", "actual")))),
     suiteOf(group(2, caseBlock("site-search-US2-TC1-1", "actual"))),
   );
-  assert.match(merged, /^\*\*Status:\*\* approved$/m);
+  assert.match(merged, /^\*\*Status:\*\* approved · 2\/2$/m);
   assert.match(merged, /^\*\*Reviewed:\*\* 2026-09-29, tcs-rules r4$/m);
 });
 
@@ -1407,7 +2053,7 @@ test("suite fold renders the delta's Background before the first journey", () =>
   );
   assert.match(
     merged,
-    /\*\*Status:\*\* pending-review\n\n## Background\n\nEvery case signs in\.\n\n## site-search-US1/,
+    /\*\*Status:\*\* pending-review · 0\/2\n\n## Background\n\nEvery case signs in\.\n\n## site-search-US1/,
   );
 });
 
@@ -1494,28 +2140,25 @@ const foldRuns = (current, delta) => {
   return merged.slice(merged.indexOf("## Reconciliation"));
 };
 
-for (const heading of [
-  "**Run:** first.",
-  "Run: first.",
-  "**Run** — first.",
-  "",
-]) {
-  test(`suite fold takes a reconciliation run the change grew, rather than repeating it (${heading || "no heading"})`, () => {
+for (const heading of ["**Run:** first.", "Run: first.", "**Run** — first."]) {
+  test(`suite fold takes a reconciliation run the change grew, rather than repeating it (${heading})`, () => {
+    const table = runOf("", "`site-search-US1-TC1-1`");
     assert.equal(
-      foldRuns(
-        [runOf(heading, "`site-search-US1-TC1-1`")],
-        [
-          runOf(
-            heading,
-            "`site-search-US1-TC1-1`, corrected",
-            "`site-search-US1-TC2-1`",
-          ),
-        ],
-      ),
-      `## Reconciliation\n\n${runOf(heading, "`site-search-US1-TC1-1`, corrected", "`site-search-US1-TC2-1`")}\n`,
+      foldRuns([heading, table], [heading, table, "- **Raised:** none."]),
+      `## Reconciliation\n\n${heading}\n\n${table}\n\n- **Raised:** none.\n`,
     );
   });
 }
+
+test("suite fold keeps a reworded reconciliation paragraph beside the old one", () => {
+  assert.equal(
+    foldRuns(
+      [runOf("**Run:** first.", "`site-search-US1-TC1-1`")],
+      [runOf("**Run:** first.", "`site-search-US1-TC1-1`, corrected")],
+    ),
+    `## Reconciliation\n\n${runOf("**Run:** first.", "`site-search-US1-TC1-1`, corrected")}\n\n${runOf("", "`site-search-US1-TC1-1`")}\n`,
+  );
+});
 
 test("suite fold takes a grown reconciliation run in place and adds a new one after it", () => {
   const first = (...rows) => runOf("**Run:** first.", ...rows);
@@ -1523,9 +2166,34 @@ test("suite fold takes a grown reconciliation run in place and adds a new one af
   assert.equal(
     foldRuns(
       [first("`site-search-US1-TC1-1`")],
-      [first("`site-search-US1-TC1-1`, corrected"), second],
+      [first("`site-search-US1-TC1-1`"), "- **Raised:** none.", second],
     ),
-    `## Reconciliation\n\n${first("`site-search-US1-TC1-1`, corrected")}\n\n${second}\n`,
+    `## Reconciliation\n\n${first("`site-search-US1-TC1-1`")}\n\n- **Raised:** none.\n\n${second}\n`,
+  );
+});
+
+test("suite fold keeps the headless records an earlier run absorbed when that run is folded again", () => {
+  const first = runOf("**Run:** first.", "`site-search-US1-TC1-1`");
+  const orphan = runOf("", "`site-search-US1-TC2-1`");
+  const later = runOf("**Run:** later.", "`site-search-US1-TC3-1`");
+  assert.equal(
+    foldRuns([first, orphan, later], [first, "- **Raised:** none."]),
+    `## Reconciliation\n\n${first}\n\n- **Raised:** none.\n\n${orphan}\n\n${later}\n`,
+  );
+});
+
+test("suite fold appends a headless delta reconciliation rather than replacing the durable one", () => {
+  const lead = runOf("", "`site-search-US1-TC1-1`");
+  const first = runOf("**Run:** first.", "`site-search-US1-TC2-1`");
+  const headless = runOf("", "`site-search-US1-TC3-1`");
+  const once = foldRuns([lead, first], [headless]);
+  assert.equal(
+    once,
+    `## Reconciliation\n\n${lead}\n\n${first}\n\n${headless}\n`,
+  );
+  assert.equal(
+    foldRuns([lead, first, headless], [headless, "- **Raised:** none."]),
+    `## Reconciliation\n\n${lead}\n\n${first}\n\n${headless}\n\n- **Raised:** none.\n`,
   );
 });
 
@@ -1579,7 +2247,7 @@ test("suite fold derives the file Status from the merged cases", () => {
       "approved",
     ),
   );
-  assert.match(merged, /^\*\*Status:\*\* in-review$/m);
+  assert.match(merged, /^\*\*Status:\*\* pending-review · 1\/2$/m);
 });
 
 test("suite fold keeps the later dated header line and the rule closing the journeys", () => {
@@ -1716,7 +2384,7 @@ test("suite fold of the vault erasure suite with grading's delta keeps every sec
   );
   assert.ok(
     merged.startsWith(
-      "# grade10-site/vault/retention-and-erasure Test Cases\n\n**Status:** in-review\n**Drafts styled:** 2026-09-29, tcs-rules r4\n\n## Background",
+      "# grade10-site/vault/retention-and-erasure Test Cases\n\n**Status:** pending-review · 10/41\n**Drafts styled:** 2026-09-29, tcs-rules r4\n\n## Background",
     ),
   );
   assert.deepEqual(headings, [
@@ -1729,7 +2397,7 @@ test("suite fold of the vault erasure suite with grading's delta keeps every sec
     "Settled",
     "Reconciliation",
   ]);
-  assert.match(merged, /^\*\*Status:\*\* in-review$/m);
+  assert.match(merged, /^\*\*Status:\*\* pending-review · 10\/41$/m);
   assert.doesNotMatch(merged, /None yet/);
   assert.equal(merged.match(/^Run: 2026-09-22/gm).length, 2);
   assert.match(merged, /walked here and given cases\.\n\n\| Case or scenario/);
@@ -1859,6 +2527,54 @@ test("feature set fold removes an explicitly retired root group", () => {
   );
 });
 
+test("feature set fold puts a renamed group where the group it replaces stood", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Alpha\n  - A: one\n- Beta\n  - B: two\n- Gamma\n  - C: three\n",
+    ),
+    `# Roles
+
+## Feature set
+
+- Beta prime
+  - B: two
+
+## REMOVED Feature set
+
+- Beta
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.deepEqual(merged.match(/^- .+$/gm), [
+    "- Alpha",
+    "- Beta prime",
+    "- Gamma",
+  ]);
+});
+
+test("feature set fold removes a labelled item without retiring its root group", () => {
+  const merged = mergeFeatureSet(
+    featureSpec(
+      "- Operator image upload\n  - Confirm before store: preview then confirm\n  - Upload on drop or choose: store immediately\n",
+    ),
+    `# Roles
+
+## REMOVED Feature set
+
+- Operator image upload
+  - Confirm before store:
+`,
+    "shared/auth/roles",
+    null,
+  );
+  assert.match(
+    merged,
+    /- Operator image upload\n {2}- Upload on drop or choose: store immediately/,
+  );
+  assert.doesNotMatch(merged, /Confirm before store/);
+});
+
 test("feature set fold permits a removal-only delta", () => {
   const merged = mergeFeatureSet(
     featureSpec(
@@ -1878,4 +2594,47 @@ test("feature set fold permits a removal-only delta", () => {
     merged,
     /Safe repetition and recovery|Reuse: one invoice/,
   );
+});
+
+const amendFeatures = (prior, durable, delta) =>
+  mergeFeatureSet(
+    featureSpec(durable),
+    `# Roles\n\n## Feature set\n\n${delta}\n## MODIFIED Requirements\n`,
+    "shared/auth/roles",
+    featureSpec(prior),
+  );
+
+test("an amendment folds its Feature set groups while others added groups and items after acceptance", () => {
+  const prior = "- Closed role set\n  - Named roles: user, admin\n";
+  const durable =
+    "- Closed role set\n  - Named roles: user, admin\n  - Unknown: dropped\n- Audit\n  - Trail: kept\n";
+  const merged = amendFeatures(
+    prior,
+    durable,
+    "- Closed role set\n  - Named roles: user, staff, admin\n",
+  );
+  assert.match(merged, /Named roles: user, staff, admin/);
+  assert.match(merged, /Unknown: dropped/);
+  assert.match(merged, /- Audit\n {2}- Trail: kept/);
+});
+
+test("an amendment still refuses a Feature set item another change edited after acceptance", () => {
+  const prior = "- Closed role set\n  - Named roles: user, admin\n";
+  const durable = "- Closed role set\n  - Named roles: user, admin, owner\n";
+  assert.throws(
+    () =>
+      amendFeatures(
+        prior,
+        durable,
+        "- Closed role set\n  - Named roles: user, staff, admin\n",
+      ),
+    /Feature set group "Closed role set" changed since this amendment began/,
+  );
+});
+
+test("an amendment passes when it restates a Feature set item another change reworded after acceptance", () => {
+  const prior = "- Closed role set\n  - Named roles: user, admin\n";
+  const durable = "- Closed role set\n  - Named roles: user, admin, owner\n";
+  const merged = amendFeatures(prior, durable, durable);
+  assert.match(merged, /Named roles: user, admin, owner/);
 });

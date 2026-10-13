@@ -3,7 +3,7 @@ import { expect } from "storybook/test";
 import { StepIndicator } from "./step-indicator";
 
 const meta = {
-  title: "Components/StepIndicator",
+  title: "Design System/Display/StepIndicator",
   component: StepIndicator,
   tags: ["autodocs"],
   argTypes: {

@@ -50,7 +50,6 @@ import {
   commaList,
   currentRulesRev,
   decisionsBeside,
-  deriveStatus,
   dirsHolding,
   domainPrefix,
   FILE_STATUSES,
@@ -59,8 +58,12 @@ import {
   issuedPrefix,
   LEGACY_TYPES,
   levelOf,
+  modernDomainPrefix,
+  modernFeaturePrefix,
+  modernProductPrefix,
   PROPERTIES,
   parseSuite,
+  parseWalks,
   productPrefix,
   prop,
   readDomainIds,
@@ -68,9 +71,11 @@ import {
   readProductIds,
   readSpecIds,
   revCmp,
+  reviewProgress,
   revText,
   ROOT as STORE_ROOT,
   SUITE_NAMES,
+  snapshotStatuses,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -194,7 +199,23 @@ function checkManualRows(root, text, cases, err) {
   }
 }
 
-function checkSuite(root, filePath, rulesRev) {
+function caseTraceMarker(text, headingLine) {
+  const lines = text.split("\n");
+  let index = headingLine - 2;
+  while (index >= 0 && lines[index].trim() === "") index -= 1;
+  const marker =
+    /^<!--\s*trace:case\s+id=(\S+)\s+rev=(\S+)(?:\s+covers=(\S+))?\s*-->$/.exec(
+      lines[index] ?? "",
+    );
+  if (!marker) return null;
+  return {
+    id: marker[1],
+    revision: marker[2],
+    covers: marker[3] ?? null,
+  };
+}
+
+function checkSuite(root, filePath, rulesRev, allCases) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
@@ -218,9 +239,110 @@ function checkSuite(root, filePath, rulesRev) {
         : level === "domain"
           ? domainPrefix(root, dir)
           : (issuedPrefix(spec) ?? basename(dir));
+  const capabilities = new Set([capability]);
+  if (level === "platform") capabilities.add("platform");
+  if (level === "product") capabilities.add(modernProductPrefix(root, dir));
+  if (level === "domain") capabilities.add(modernDomainPrefix(root, dir));
+  if (level === "feature") capabilities.add(modernFeaturePrefix(root, dir));
+  const specJourneyIds = new Set(spec?.journeys?.keys() ?? []);
+  if (level === "feature" && spec) {
+    for (const id of spec.journeys.keys()) {
+      const match = /(?:US-?)(\d+)$/i.exec(id);
+      if (match)
+        specJourneyIds.add(
+          `${modernFeaturePrefix(root, dir)}.US${Number(match[1])}`,
+        );
+    }
+  }
   const err = (line, msg) => record("error", rel, line, msg);
   const errApp = (line, msg) => record("error", rel, line, msg, true);
   const warn = (line, msg) => record("warning", rel, line, msg);
+
+  // Walk references are intentionally checked separately from case parsing.
+  // A compact ref resolves in this suite. A composed walk may use a full
+  // stable id to reference a lower-level case in another suite. The case
+  // definition remains the authority for the observation; prose pairing checks
+  // carry no id and are not interpreted here.
+  if (parseWalks(text).length > 0) {
+    const walkCases = new Map();
+    const lines = text.split("\n");
+    let pendingMarker = null;
+    for (let i = 0; i < lines.length; i++) {
+      const marker = /^<!--\s*trace:case\s+id=(\S+)\s+/.exec(lines[i]);
+      if (marker) {
+        pendingMarker = marker[1];
+        continue;
+      }
+      const modern = /^(?:###|####)\s+(\S+)\s+\(US-?(\d+)-TC-?(\d+)\):/.exec(
+        lines[i],
+      );
+      const display = !modern
+        ? /^(?:###|####)\s+(\S+\.US-?(\d+)-TC-?(\d+)):\s*/.exec(lines[i])
+        : null;
+      const legacy =
+        !modern && !display
+          ? /^###\s+\S+-US-?(\d+)-TC-?(\d+)(?:-\d+)?:/.exec(lines[i])
+          : null;
+      if (!modern && !display && !legacy) continue;
+      const id = modern?.[1] ?? display?.[1] ?? pendingMarker;
+      if (id) {
+        const stable = id.slice(id.lastIndexOf(".") + 1).toLowerCase();
+        walkCases.set(stable, {
+          journeyNum: Number(modern?.[2] ?? display?.[2] ?? legacy?.[1]),
+          tcNum: Number(modern?.[3] ?? display?.[3] ?? legacy?.[2]),
+          line: i + 1,
+        });
+      }
+      pendingMarker = null;
+    }
+    for (const walk of parseWalks(text)) {
+      for (const ref of walk.refs) {
+        const localCase =
+          ref.caseId &&
+          level === "feature" &&
+          ref.caseId
+            .toLowerCase()
+            .startsWith(`${modernFeaturePrefix(root, dir).toLowerCase()}.`)
+            ? walkCases.get(ref.caseId.split(".").at(-1).toLowerCase())
+            : null;
+        const found = localCase
+          ? { ...localCase, level, rel }
+          : ref.caseId
+            ? (allCases.get(ref.caseId) ??
+              allCases.get(ref.caseId.toLowerCase()))
+            : walkCases.get(ref.id);
+        if (!found) {
+          err(
+            ref.line,
+            `walk \`${walk.title}\` references \`${ref.caseId ?? ref.id}\`, but no case definition with that stable id exists in the ${ref.caseId ? "store" : "suite"}`,
+          );
+          continue;
+        }
+        if (
+          ref.caseId &&
+          level === "feature" &&
+          (found.level !== level || found.rel !== rel)
+        )
+          err(
+            ref.line,
+            `feature walk \`${walk.title}\` references a case outside this capability: \`${ref.caseId}\``,
+          );
+        if (ref.caseId && found.level !== level) {
+          const rank = { feature: 0, domain: 1, product: 2, platform: 3 };
+          if (rank[found.level] >= rank[level])
+            err(
+              ref.line,
+              `walk \`${walk.title}\` references \`${ref.caseId}\` from ${found.level} level, but a ${level} walk may reference only a lower-level case`,
+            );
+        }
+        if (found.journeyNum !== ref.journeyNum || found.tcNum !== ref.tcNum)
+          err(
+            ref.line,
+            `walk \`${walk.title}\` references \`${ref.id}\` as US${ref.journeyNum}-TC${ref.tcNum}, but the case is US${found.journeyNum}-TC${found.tcNum}`,
+          );
+      }
+    }
+  }
 
   // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
   // in-flight change names what decides it, whatever day the change opened.
@@ -242,6 +364,8 @@ function checkSuite(root, filePath, rulesRev) {
     }[level];
     err(1, missingScope);
   }
+  if (spec?.groupsError)
+    err(1, `the feature set does not fold: ${spec.groupsError}`);
 
   const cases = [];
   for (const j of suite.journeys) for (const tc of j.cases) cases.push(tc);
@@ -255,21 +379,41 @@ function checkSuite(root, filePath, rulesRev) {
     );
 
   const counts = statusCounts(cases);
-  const derived = deriveStatus(
-    counts,
-    cases.length,
-    Boolean(suite.reviewedLapsed),
-  );
+  const progress = reviewProgress(counts);
+  const allowed = snapshotStatuses(counts, cases.length);
   if (
     suite.status &&
     FILE_STATUSES.includes(suite.status) &&
-    suite.status !== derived
+    !allowed.includes(suite.status)
   )
     err(
-      1,
-      `file status is \`${suite.status}\` but its cases imply \`${derived}\` ` +
+      suite.statusLine ?? 1,
+      `file status is \`${suite.status}\` but this snapshot allows ${allowed.map((one) => `\`${one}\``).join(" or ")} ` +
         `(${counts.draft} draft, ${counts.actual} actual, ${counts.deprecated} deprecated) — ` +
-        "the file status is derived, never chosen",
+        "the writer preserves whether incomplete review progress regressed",
+    );
+  if (suite.status === "retired" && suite.reviewProgress)
+    err(
+      suite.statusLine ?? 1,
+      "a `retired` suite carries no active-case ratio — write `**Status:** retired`",
+    );
+  if (
+    suite.status &&
+    suite.status !== "retired" &&
+    suite.reviewProgress === null
+  )
+    err(
+      suite.statusLine ?? 1,
+      "status is missing its compact `actual/(total - deprecated)` progress, for example `**Status:** pending-review · 3/10`",
+    );
+  if (
+    suite.reviewProgress &&
+    (suite.reviewProgress.actual !== progress.actual ||
+      suite.reviewProgress.reviewable !== progress.reviewable)
+  )
+    err(
+      suite.statusLine ?? 1,
+      `status says ${suite.reviewProgress.actual}/${suite.reviewProgress.reviewable}, but its cases are ${progress.actual}/${progress.reviewable} actual/(total - deprecated)`,
     );
 
   // --- the blind reading's own output ------------------------------------
@@ -316,12 +460,16 @@ function checkSuite(root, filePath, rulesRev) {
       suite.draftsStyled.line,
       `claims tcs-rules ${revText(suite.draftsStyled.rev)}, but the store is at ${revText(rulesRev)}`,
     );
-  if (derived === "approved" && !suite.reviewed)
+  if (suite.status === "approved" && !suite.reviewed)
     err(
       1,
       "is approved but carries no `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` line",
     );
-  if (derived === "approved" && suite.reviewed && suite.reviewedRev === null)
+  if (
+    suite.status === "approved" &&
+    suite.reviewed &&
+    suite.reviewedRev === null
+  )
     warn(
       suite.reviewedLine ?? 1,
       "was approved before the rules revision was recorded — its cases keep their wording, " +
@@ -337,12 +485,12 @@ function checkSuite(root, filePath, rulesRev) {
       suite.reviewedLine ?? 1,
       `claims it was approved under tcs-rules ${revText(suite.reviewedRev)}, but the store is at ${revText(rulesRev)}`,
     );
-  if (derived === "approved" && suite.reviewedLapsed)
+  if (suite.status === "approved" && suite.reviewedLapsed)
     err(
       suite.reviewedLine ?? 1,
       "is approved again but its `**Reviewed:**` line still reads lapsed — write it fresh: `**Reviewed:** <today>, tcs-rules r<n>`",
     );
-  if (derived !== "approved" && suite.reviewed && !suite.reviewedLapsed)
+  if (suite.status !== "approved" && suite.reviewed && !suite.reviewedLapsed)
     err(
       suite.reviewedLine ?? 1,
       "carries a `**Reviewed:**` line but is not approved — a file that falls out of `approved` keeps the line and adds `, lapsed <YYYY-MM-DD>`",
@@ -352,29 +500,43 @@ function checkSuite(root, filePath, rulesRev) {
     err(1, `written in an older shape: ${shape}`);
 
   // --- journeys ----------------------------------------------------------
+  // A case under no journey heading is in no journey's count, so the review
+  // progress would disagree with the file and say nothing about why.
+  for (const orphan of suite.orphans)
+    err(
+      orphan.line,
+      `case \`${orphan.id}\` sits under no journey heading — put its \`## <scope>.US<n>: <title>\` heading and three-line story before it, the line a walk rewrite or a merge may have dropped`,
+    );
   const seenJourneys = new Set();
+  const seenCaseIds = new Set();
   for (const j of suite.journeys) {
-    if (j.hyphenated)
+    if (level !== "feature" && j.hyphenated)
       warn(
         j.line,
-        `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings are compact (e.g. \`${j.capability}-US${j.num}\`)`,
+        `journey heading \`${j.raw}\` uses the spec's hyphenated id; suite headings use the display form (e.g. \`${j.capability}.US${j.num}\`)`,
       );
-    if (j.capability !== capability)
+    if (!capabilities.has(j.capability))
       err(
         j.line,
-        `journey heading names capability \`${j.capability}\`, but this spec issues \`${capability}-\``,
+        `journey heading names capability \`${j.capability}\`, but this suite accepts \`${[...capabilities].join("` or `")}\``,
       );
-    const canonical = `${j.capability}-US-${String(j.num).padStart(2, "0")}`;
-    const alternate = `${j.capability}-US-${j.num}`;
-    if (seenJourneys.has(j.num))
-      err(j.line, `journey ${j.num} appears more than once`);
-    seenJourneys.add(j.num);
-    const retired =
-      spec?.retired?.has(canonical) || spec?.retired?.has(alternate);
+    const journeyIds = [
+      j.raw,
+      `${j.capability}-US-${String(j.num).padStart(2, "0")}`,
+      `${j.capability}-US-${j.num}`,
+      `${j.capability}.US${j.num}`,
+      `${modernFeaturePrefix(root, dir)}.US${j.num}`,
+    ];
+    if (!j.ungrouped) {
+      if (seenJourneys.has(j.num))
+        err(j.line, `journey ${j.num} appears more than once`);
+      seenJourneys.add(j.num);
+    }
+    const retired = journeyIds.some((id) => spec?.retired?.has(id));
     if (retired && statusCounts(j.cases).deprecated !== j.cases.length)
       err(
         j.line,
-        `journey \`${canonical}\` is retired, so every case under it is deprecated`,
+        `journey \`${j.raw}\` is retired, so every case under it is deprecated`,
       );
     else if (
       level === "feature" &&
@@ -382,26 +544,23 @@ function checkSuite(root, filePath, rulesRev) {
       !retired &&
       !spec.unwalked &&
       spec.journeys.size > 0 &&
-      !spec.journeys.has(canonical) &&
-      !spec.journeys.has(alternate)
+      !journeyIds.some((id) => specJourneyIds.has(id))
     )
-      err(
-        j.line,
-        `journey \`${canonical}\` is not defined in the spec beside it`,
-      );
+      err(j.line, `journey \`${j.raw}\` is not defined in the spec beside it`);
     // A capability nobody walks carries exactly one section. More than one
     // would have to be numbered by a feature set group's position, and an
     // issued case id is permanent.
     if (level === "feature" && spec?.unwalked && j.num !== 1)
       err(
         j.line,
-        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
+        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}.US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
       );
     const story = new Set(j.story);
     if (
-      !(story.has("as a") || story.has("as an")) ||
-      !story.has("i want") ||
-      !story.has("so that")
+      !j.ungrouped &&
+      (!(story.has("as a") || story.has("as an")) ||
+        !story.has("i want") ||
+        !story.has("so that"))
     )
       err(
         j.line,
@@ -413,14 +572,33 @@ function checkSuite(root, filePath, rulesRev) {
     const seenTc = new Set();
     for (const tc of j.cases) {
       const at = tc.line;
+      const marker = caseTraceMarker(text, at);
+      if (
+        marker?.covers === null &&
+        prop(tc, "Status").toLowerCase() !== "deprecated"
+      ) {
+        const approvedActual =
+          suite.status === "approved" && prop(tc, "Status") === "actual";
+        const message = approvedActual
+          ? `case \`${tc.id}\` is not export-eligible — QA2 must add post-hoc scenario links before export`
+          : `case \`${tc.id}\` has no post-hoc scenario links — QA2 must reconcile it before approval`;
+        if (approvedActual) err(at, message);
+        else warn(at, message);
+      }
+      if (seenCaseIds.has(tc.id))
+        err(at, `case id \`${tc.id}\` appears more than once in this suite`);
+      seenCaseIds.add(tc.id);
       if (tc.journeyScoped) {
         if (tc.hyphenated)
           warn(
             at,
-            `case id \`${tc.id}\` uses the older hyphenated form; current is \`<capability>-US<n>-TC<m>-<v>\``,
+            `case id \`${tc.id}\` uses the legacy hyphenated form; current is \`<scope>.US<n>-TC<m>\``,
           );
-        if (tc.capability !== capability)
-          err(at, `case id \`${tc.id}\` names capability \`${tc.capability}\``);
+        if (!capabilities.has(tc.capability))
+          err(
+            at,
+            `case id \`${tc.id}\` names capability \`${tc.capability}\`; this suite accepts \`${[...capabilities].join("` or `")}\``,
+          );
         if (tc.journeyNum !== j.num)
           err(
             at,
@@ -429,10 +607,12 @@ function checkSuite(root, filePath, rulesRev) {
         if (seenTc.has(tc.tcNum))
           err(at, `TC${tc.tcNum} appears more than once under ${j.raw}`);
         seenTc.add(tc.tcNum);
-        if (tc.version === null)
-          warn(at, `case \`${tc.id}\` carries no version suffix`);
-        else if (tc.version < 1)
-          err(at, `case \`${tc.id}\` has version ${tc.version}`);
+        if (!tc.modern) {
+          if (tc.version === null)
+            warn(at, `case \`${tc.id}\` carries no version suffix`);
+          else if (tc.version < 1)
+            err(at, `case \`${tc.id}\` has version ${tc.version}`);
+        }
       }
 
       for (const [name, vocab, multi, optional] of PROPERTIES) {
@@ -575,7 +755,7 @@ function checkSuite(root, filePath, rulesRev) {
           if (spec.scenarios.has(id)) {
             warn(
               at,
-              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the anchor the case walks — a journey id (\`${capability}-US-<n>\`), or a \`## Feature set\` root group where nobody walks the capability`,
+              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the anchor the case walks — a journey id (\`${capability}.US<n>\`), or a \`## Feature set\` root group where nobody walks the capability`,
             );
             continue;
           }
@@ -625,7 +805,8 @@ function checkSuite(root, filePath, rulesRev) {
 
   if (spec && level === "feature") {
     for (const [id] of spec.journeys) {
-      const num = Number(id.match(/-US-(\d+)$/)?.[1]);
+      if (spec.context.has(id)) continue;
+      const num = Number(id.match(/(?:\.US-?|-US-?)(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
         warn(1, `spec journey \`${id}\` has no section in this suite`);
     }
@@ -633,7 +814,7 @@ function checkSuite(root, filePath, rulesRev) {
 
   checkManualRows(root, text, cases, err);
 
-  return { rel, suite, counts, derived, cases: cases.length };
+  return { rel, suite, counts, progress, cases: cases.length };
 }
 
 // ---------------------------------------------------------------------------
@@ -664,8 +845,8 @@ const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;
 /** Every `<product>` and `<product>/<domain>` the store actually has, so a
- *  trace id can be read back to the product and domain that issued it. Ids are
- *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
+ *  trace id can be read back to the product and domain that issued it. Human
+ *  ids are `<app>.<domain>-<capability>.US<n>` and every segment may itself hold a
  *  hyphen, so the only safe parse is the longest known prefix. */
 const specsRoot = join(ROOT, "openspec", "specs");
 const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(
@@ -701,6 +882,7 @@ const longestPrefix = (id, list) =>
     .sort((a, b) => b.length - a.length)[0] ?? null;
 const productOf = (traceId) => longestPrefix(traceId, PRODUCTS);
 const domainOf = (traceId) => longestPrefix(traceId, DOMAINS);
+const allSuites = findSuites(ROOT);
 const suites = findSuites(ROOT, args.scope);
 const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
 
@@ -752,6 +934,12 @@ if (suites.length === 0) {
 }
 
 const index = caseIndex(ROOT, suites);
+const allCaseIndex = new Map(
+  [...caseIndex(ROOT, allSuites)].map(([id, value]) => [
+    id.toLowerCase(),
+    value,
+  ]),
+);
 
 if (args.captureBaseline) {
   const out = {};
@@ -803,7 +991,9 @@ if (args.swept) {
   process.exit(1);
 }
 
-const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
+const summaries = suites.map((p) =>
+  checkSuite(ROOT, p, rulesRev, allCaseIndex),
+);
 
 // --- every journey is walked by a product user or outside agent ---------
 // The classes are the store's two product users. An outside agent such as a
@@ -969,15 +1159,17 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
           break;
         body += ` ${next.trim()}`;
       }
-      const ids = [...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g)].map(
-        (m) => m[1],
-      );
+      const ids = [
+        ...body.matchAll(
+          /`((?:[\w-]+-e2e-US\d+-TC\d+-\d+)|(?:[\w.-]+\.TC-[0-9a-z]+)|(?:[\w.-]+\.US-?\d+-TC-?\d+))`/gi,
+        ),
+      ].map((m) => m[1]);
       if (ids.length === 0) {
         record(
           "error",
           rel,
           i + 1,
-          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<product>-<domain>-e2e-US<n>-TC<m>-<v>`",
+          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<scope>.TC-<sequence>`",
         );
         continue;
       }
@@ -1002,11 +1194,9 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   }
 }
 
-// --- a case's <v> and its trace rev are one number ----------------------
-// `<v>` in the case id and `rev` on its `trace:case` marker both count the
-// times what the case verifies has changed. Two counters for one fact drift -
-// the migration stamped `rev=1` over cases already at `-2` - so where a case
-// carries a marker, the two agree.
+// --- legacy case versions and trace revisions ----------------------------
+// Modern headings take their version only from the adjacent marker's `rev`.
+// Legacy headings retain the old suffix check until each suite migrates.
 for (const p of suites) {
   const lines = readFileSync(p, "utf8").split("\n");
   const rel = relative(ROOT, p);
@@ -1015,13 +1205,20 @@ for (const p of suites) {
     if (!marker) continue;
     let j = i + 1;
     while (j < lines.length && lines[j].trim() === "") j++;
-    const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
-    if (!heading || heading[2] === marker[1]) continue;
+    const modern = /^(?:###|####)\s+(\S+)\s+\(US-?\d+-TC-?\d+\):/.exec(
+      lines[j] ?? "",
+    );
+    const display = /^(?:###|####)\s+(\S+\.US-?\d+-TC-?\d+):/.exec(
+      lines[j] ?? "",
+    );
+    const legacy = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+    if (modern || display) continue;
+    if (!legacy || legacy[2] === marker[1]) continue;
     record(
       "error",
       rel,
       j + 1,
-      `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      `legacy case heading \`${legacy[1]}\` carries suffix ${legacy[2]}, but its trace marker carries \`rev=${marker[1]}\` — migration must preserve the marker rev`,
     );
   }
 }
@@ -1105,7 +1302,7 @@ const w = Math.max(...summaries.map((s) => s.rel.length));
 for (const s of summaries) {
   const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
   console.log(
-    `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
+    `  ${s.rel.padEnd(w + 2)}${cyan((s.suite.status ?? "missing").padEnd(17))}${dim(`${s.progress.actual}/${s.progress.reviewable} approved; ${tally}`)}`,
   );
 }
 

@@ -8,7 +8,7 @@
 
 ## ADDED User journeys
 
-### winner-order-US-12: Winner waits out a partial payment an operator is collecting
+### winner-order-US-20: Winner waits out a partial payment an operator is collecting
 
 **As a** winner whose invoice an operator has started collecting in parts,
 **I want** a locked order with Contact Us and a receipt for every payment made so far,

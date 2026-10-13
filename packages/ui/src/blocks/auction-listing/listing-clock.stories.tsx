@@ -38,7 +38,7 @@ const renderCount = (element: HTMLElement) =>
   Number(element.getAttribute("data-renders"));
 
 const meta = {
-  title: "Auction Listing/Clock",
+  title: "Auction/Bidding/Blocks/ListingCountdownDisplay",
   component: ListingCountdownDisplay,
   parameters: {
     layout: "padded",

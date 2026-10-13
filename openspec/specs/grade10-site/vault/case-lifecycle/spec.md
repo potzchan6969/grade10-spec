@@ -328,6 +328,7 @@ keep those documents readable to its owner after it ends.
 **Nothing left to do** - an ended case SHALL take no move, as every terminal
 status.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-u1t rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-20 - A declined case reads the reason staff gave
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector learns why the shop would not take the item
 
@@ -335,6 +336,7 @@ status.
 - **WHEN** its owner reads it
 - **THEN** it carries the ending, the day it closed and the reason verbatim
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-qy1 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-21 - A cancelled case names who called it off
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector sees whether they or the shop closed the case
 
@@ -343,6 +345,7 @@ status.
 - **THEN** it carries that staff called it off and the day
 - **AND** it carries the offer that closed and the visit cancelled with it
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-kil rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-22 - An expired case reads one wording and names its clock on the timeline
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector who stopped answering reads what ended the case
 
@@ -350,6 +353,7 @@ status.
 - **WHEN** their owners read them
 - **THEN** both carry the expired ending, and each carries the clock that ran out
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-fp8 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-23 - A forfeited case names the figure and the notice
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the borrower reads what the item settled and the notice behind it
 
@@ -392,6 +396,7 @@ case's history.
 or a packet out, with no visit ahead of it - SHALL read as waiting on the
 collector, with the day the 30-day clock would call it off.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-8ne rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-24 - An offer that ran out reads as run out
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is not left answering an offer nobody can honour
 
@@ -400,6 +405,7 @@ collector, with the day the 30-day clock would call it off.
 - **THEN** it reads that the offer ran out, naming its amount and the day
 - **AND** the case is still `offer_made`, open for another offer, and an answer to the closed offer is refused by name
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-8m9 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-25 - A declined offer leaves the request open
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who said no reads that the shop may still offer again
 
@@ -408,6 +414,7 @@ collector, with the day the 30-day clock would call it off.
 - **THEN** it reads that they declined, naming the figure and the day
 - **AND** the case is being valued, the booked visit stands, and the collector may still call the request off
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-5rw rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-26 - A missed visit reads on the case
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who missed a slot reads that the case is still theirs to book
 
@@ -416,6 +423,7 @@ collector, with the day the 30-day clock would call it off.
 - **THEN** it reads that the visit was missed, naming the slot
 - **AND** the case stands where it stood and takes another booking
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-bnt rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-27 - An ask for the item back reads on the case
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who asked for their item reads what happens next
 
@@ -424,6 +432,7 @@ collector, with the day the 30-day clock would call it off.
 - **THEN** it reads the ask and the day it was recorded
 - **AND** the case takes a pickup booking, and the same ask sent again records nothing
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-whn rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-28 - A case with no visit ahead asks for one
 **Serves:** grade10-site-vault-case-lifecycle-US-02 - the collector is told what will end the case before it ends
 
@@ -432,6 +441,7 @@ collector, with the day the 30-day clock would call it off.
 - **THEN** it reads as waiting on them
 - **AND** it names the day the 30-day clock would call the case off
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-77l rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-40 - A case meeting two facts reads the later one
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is given one thing to do next, not two
 
@@ -500,6 +510,7 @@ and the case read the same answer.
 **Read, never written** - neither the stage nor whose the item is SHALL be
 stored on the case.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-3v2 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-30 - A financed case walks eight stages
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector reads how far along the case is without counting statuses
 
@@ -508,6 +519,7 @@ stored on the case.
 - **THEN** it reads eight stages from Request to Home, with Vault in progress
 - **AND** every earlier stage reads as done and every later one as still to come
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-yvx rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-31 - A storage case walks six
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector on the storage lane is shown no stage their case never takes
 
@@ -516,6 +528,7 @@ stored on the case.
 - **THEN** it reads six stages, with no Offer and no Loan stage
 - **AND** Valued reads as the stage in progress
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-dub rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-32 - An ended case stops at the stage it ended on
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector sees where the case had reached when it closed
 
@@ -524,6 +537,7 @@ stored on the case.
 - **THEN** Agreed reads as the stage in progress
 - **AND** the ending is carried beside it
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-e7l rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-33 - A case waiting on the collector says so
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector can tell at a glance which cases need them
 
@@ -531,6 +545,7 @@ stored on the case.
 - **WHEN** its owner reads it
 - **THEN** it reads that the case is waiting on them
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-vgv rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-34 - A held item reads the same on the list and the case
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector reads one answer for where the item is, wherever they look
 
@@ -538,6 +553,7 @@ stored on the case.
 - **WHEN** its owner reads their own cases and then the case
 - **THEN** both read that the item is with us, naming the day it has been held since
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-ftn rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-38 - A vaulted case reads With us on either lane
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector whose item is in the vault reads one answer, whichever lane they walk
 
@@ -545,6 +561,7 @@ stored on the case.
 - **WHEN** its owner reads it
 - **THEN** it reads that the item is with us, naming the day it has been held since
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-6ug rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-35 - A released case reads collected
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector who took the item home reads that the case is done
 
@@ -552,6 +569,7 @@ stored on the case.
 - **WHEN** its owner reads it
 - **THEN** it reads that the item was collected, naming the day
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-a3h rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-36 - An ended case reads closed
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector reads that nothing is held for them any more
 
@@ -587,6 +605,7 @@ account keeps nothing of it.
   cancelled, told and kept as any case, and a cancel sent against a read made
   while it was unsent SHALL be refused by name as a case that moved.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-68t rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-41 - A walk-in typed wrong is cancelled and leaves nothing
 **Serves:** grade10-site-vault-case-lifecycle-US-06 - the operator undoes a draft opened under the wrong address
 
@@ -597,6 +616,7 @@ account keeps nothing of it.
 - **AND** staff's Closed view lists it under its reference, its item reading as erased and no collector named
 - **AND** nobody is emailed
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-8rr rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-42 - The walk-in opens again under the right address
 **Serves:** grade10-site-vault-case-lifecycle-US-06 - the operator serves the customer under the address they meant
 
@@ -611,6 +631,7 @@ account keeps nothing of it.
 - **WHEN** the clocks are read
 - **THEN** the case is `expired`, the account lists nothing of it among its own cases, and nobody is told
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-vc1 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-44 - The collector's own cancel keeps the draft on their list
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector calls off a request staff opened for them
 
@@ -619,6 +640,7 @@ account keeps nothing of it.
 - **THEN** the case is `cancelled` and stays on their own cases as a cancelled request
 - **AND** nobody is emailed
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-plk rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-45 - A walk-in the collector sent is cancelled as any case
 **Serves:** grade10-site-vault-case-lifecycle-US-06 - the operator cancels a walk-in that is no longer a draft
 
@@ -627,6 +649,7 @@ account keeps nothing of it.
 - **THEN** the case is `cancelled` and stays on the collector's own cases with its photographs
 - **AND** the collector is told, as on any case
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-6aa rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-46 - A cancel read before the collector sent is refused
 **Serves:** grade10-site-vault-case-lifecycle-US-06 - the counter and the collector act on one walk-in at once
 
@@ -642,6 +665,7 @@ account keeps nothing of it.
 - **WHEN** the clocks are read on day 8, and again on day 13
 - **THEN** on day 8 the draft stands, and by day 13 it has run out, been removed from the account, and nobody was told
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-hir rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-48 - Staff's cancel removes the draft after someone signed in
 **Serves:** grade10-site-vault-case-lifecycle-US-06 - a sign-in at a mistyped address does not keep someone else's draft
 
@@ -670,6 +694,7 @@ move that does it, and SHALL never wait on the register to commit a move:
   expiry before custody SHALL tell the register nothing; an item registered at
   the valuation stays registered, not marked, under its collector.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-hpb rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-49 - Starting the valuation registers the item
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff start valuing a request and the register gains the item
 
@@ -677,6 +702,7 @@ move that does it, and SHALL never wait on the register to commit a move:
 - **WHEN** staff start its valuation
 - **THEN** the register holds a trading card titled "Charizard card" owned by Ana Wong, not marked
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-01y rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-50 - Vaulting marks the item, and release ends the mark
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff put the item in a locker and later hand it back
 
@@ -686,6 +712,7 @@ move that does it, and SHALL never wait on the register to commit a move:
 - **WHEN** the item is later released, or the case unwound from the vault
 - **THEN** the vault's mark is closed and the owner is unchanged
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-1ku rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-51 - A forfeit hands the item to the lender
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff forfeit a late loan's collateral
 
@@ -708,6 +735,7 @@ move that does it, and SHALL never wait on the register to commit a move:
 - **WHEN** its advance is taken back and the case returns to `vaulted`
 - **THEN** the register still holds one open mark for the case and nothing else is told
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-lln rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-58 - A case that ends before custody leaves its item registered
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff decline or cancel a case they have started valuing
 
@@ -735,6 +763,7 @@ item. The line and the refusal SHALL name the owner by name for a holder of
 `kyc:read`, the read on the audit log, and by the account's short id
 otherwise.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-17k rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-54 - Another owner withholds Prepare documents
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff learn before the paper is printed that the slab is registered to someone else
 
@@ -743,6 +772,7 @@ otherwise.
 - **THEN** Prepare documents is not offered, and a line names Ben Lee and links the item
 - **AND** for staff without `kyc:read` the line names Ben Lee's short id instead
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-tqz rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-55 - A prepare under another owner is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - the register's owner changed after the tab was opened
 
@@ -751,6 +781,7 @@ otherwise.
 - **THEN** it is refused, naming Ben Lee and linking the item, and the case stays where it was
 - **AND** for staff without `kyc:read` the refusal names Ben Lee's short id instead
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-zb0 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-56 - A prepare the register cannot answer is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff are told why the paper could not be printed
 
@@ -758,6 +789,7 @@ otherwise.
 - **WHEN** staff prepare the documents
 - **THEN** it is refused, saying the register cannot be read now, and nothing is rendered
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-6yn rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-57 - A prepare before the register holds the item is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff are told the item is still being registered
 
@@ -765,6 +797,7 @@ otherwise.
 - **WHEN** staff prepare the documents
 - **THEN** it is refused, saying the item is still being registered, and nothing is rendered
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-01t rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-59 - A prepare registers an item nothing has registered yet
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff prepare the papers of a case valued before the vault's deploy
 
@@ -772,6 +805,7 @@ otherwise.
 - **WHEN** staff prepare the documents
 - **THEN** the item is registered under the case's collector and the custody agreement prints its facts
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-hhb rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-60 - A prepare on a retired item is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff restore an item retired by mistake before its papers are printed
 
@@ -781,6 +815,7 @@ otherwise.
 - **WHEN** staff restore the item and prepare the documents again
 - **THEN** the packet is prepared
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-q4b rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-61 - A release receipt the register refuses is refused by name
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - staff are told why the hand-back paper could not be printed
 
@@ -814,6 +849,7 @@ unchanged.
 **Read back** - a case called off SHALL read as an ended case on the next
 read, naming the collector as who called it off.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-69a rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-16 - Calling a request off names what it closes
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector ends a request they opened rather than asking staff to
 
@@ -821,6 +857,7 @@ read, naming the collector as who called it off.
 - **WHEN** its owner calls the request off
 - **THEN** the answer names the offer it closed and the visit it cancelled
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-7se rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-17 - A confirmed call-off ends the case and reads back
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector sees their request closed where they closed it
 
@@ -829,6 +866,7 @@ read, naming the collector as who called it off.
 - **THEN** the case is `cancelled`, the offer is closed and the visit is cancelled
 - **AND** the next read of the case reads it as ended, naming the collector as who called it off
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-4jt rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-37 - A confirmation names only what stands open
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector is not told the request closes something it never held
 
@@ -836,6 +874,7 @@ read, naming the collector as who called it off.
 - **WHEN** its owner calls the request off
 - **THEN** the answer names no closed offer and no cancelled visit
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-daj rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-18 - Asking for the item back is recorded once
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector asks for their item and reads that the ask stands
 
@@ -844,6 +883,7 @@ read, naming the collector as who called it off.
 - **THEN** the ask is recorded against the case once
 - **AND** the second answers with the case and records nothing
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-zjg rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-19 - A refused move leaves the confirmation open
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is told why the act they asked for did not run
 
@@ -864,6 +904,7 @@ same case not found.
 **No distinction** - the refusal SHALL carry nothing that tells the two
 apart.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-oo5 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-39 - Another collector's case reads as not found
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who opens a case that is not theirs learns nothing about it
 

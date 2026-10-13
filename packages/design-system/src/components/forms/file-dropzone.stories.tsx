@@ -88,7 +88,7 @@ function CombinedDemo() {
 }
 
 const meta = {
-  title: "Components/FileDropzone",
+  title: "Design System/Forms/FileDropzone",
   tags: ["autodocs"],
   parameters: { layout: "padded" },
 } satisfies Meta;

@@ -1,15 +1,11 @@
-## Context user journeys
-
-### grade10-site-auction-account-record-US-08: Winner opens settlement from My Auctions
-
-**As a** winner,
-**I want** every Won row to open Winner Order without helper clutter,
-**so that** I can continue settlement without reading contact copy on the table.
-
-**Walked by note:** the durable account-record journeys still own open-lot standing; this change journey covers the Storybook Won-entry and calm-row slice.
-
 ## ADDED User journeys
 
 ## MODIFIED User journeys
+
+### grade10-site-auction-account-record-US-08: Winner revisits a partially paid order
+
+**As a** winner,
+**I want** a partially paid Won row to open Winner Order,
+**so that** I can revisit settlement while an operator collects the payment.
 
 ## REMOVED User journeys

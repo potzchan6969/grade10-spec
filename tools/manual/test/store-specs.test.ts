@@ -265,6 +265,57 @@ describe("the shape a change's journeys file is written in", () => {
     ]);
   });
 
+  it("reads modern and legacy journey ids with their full story", () => {
+    const entry = journeys(
+      [
+        "## User journeys",
+        "",
+        story("g10.auction-bidder-suspension.US1", "A modern journey"),
+        story("alpha-US-02", "A legacy journey"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(
+      entry.journeys?.map(({ id, title, text }) => ({ id, title, text })),
+    ).toEqual([
+      {
+        id: "g10.auction-bidder-suspension.US1",
+        title: "A modern journey",
+        text: "**As a** collector,\n**I want** the thing,\n**so that** it is done.",
+      },
+      {
+        id: "alpha-US-02",
+        title: "A legacy journey",
+        text: "**As a** collector,\n**I want** the thing,\n**so that** it is done.",
+      },
+    ]);
+  });
+
+  it("refuses malformed modern journey ids and headings", () => {
+    for (const heading of [
+      "g10.auction-bidder-suspension.US-1: A malformed id",
+      "g10.auction-bidder-suspension.US1 A missing colon",
+    ]) {
+      const entry = journeys(
+        [
+          "## User journeys",
+          "",
+          `### ${heading}`,
+          "",
+          "**As a** collector,",
+          "**I want** the thing,",
+          "**so that** it is done.",
+        ].join("\n"),
+      );
+      expect(entry.journeysError).toEqual({
+        file: JOURNEYS,
+        line: 3,
+        message:
+          "a journey heading is `### <scope>.US<n>: <title>` or the legacy `### <capability>-US-<n>: <title>`",
+      });
+    }
+  });
+
   it("holds a file whose delta sections are all empty", () => {
     const entry = journeys(
       [

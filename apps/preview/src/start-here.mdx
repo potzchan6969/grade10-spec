@@ -1,0 +1,48 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Start Here" />
+
+# Start Here
+
+This Storybook is where a feature is drawn before an app builds it: its
+screens, every state, and the journeys between them. The sidebar reads like
+the [manual](https://spec.grade10-stg.com): domain, then feature, then what
+you are looking at.
+
+## Reading the Sidebar
+
+- **Appointment › Booking** — a domain and a feature, the same words as the manual's page
+- **Screens** — the feature's screens, such as Book Visit, with one story per state
+- **Flows** — a journey or behaviour played through as a sequence
+- **Prototypes** — directions to choose from, flipped with a picker
+- **Parts** — pieces drawn for this feature only
+- **Blocks** — shared components an app imports, with their states
+- **Design System** — primitives: buttons, fields, dialogs, by group
+
+Every docs page links its feature's manual page at the top. A button on a
+screen opens the next screen's story, so a journey can be clicked through the
+way a collector walks it.
+
+## Asking an Agent
+
+Name the feature, the kind and the state, in plain words:
+
+- `Appointment › Booking: add a "No slots this month" state to Book Visit`
+- `Vault › Portfolio: draw the "Retrieval requested" state of the asset card from <Figma link>`
+- `Store › Cart: walk adding an item through to checkout as a flow`
+- `Vault › Portfolio: /prototype three empty states`
+- `Show me every state of Book Visit at 375px`
+
+The agent finds the manual page, places the story, names each state with the
+words of the change's `ui-design.md`, checks it and sends back one link per
+story. A rule found while drawing goes onto the manual page first, marked 🚧
+or ❓.
+
+## Commands
+
+- **`pnpm storybook`** — opens this Storybook at http://localhost:6006
+- **`pnpm storybook:check`** — holds every story to the sidebar's rules
+- **`pnpm test:stories`** — plays every story in a browser
+
+The rules: `docs/governance/storybook.md`. The published copy of `main`:
+[storybook.grade10-stg.com](https://storybook.grade10-stg.com).

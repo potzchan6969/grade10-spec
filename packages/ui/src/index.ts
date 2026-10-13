@@ -13,11 +13,6 @@ export {
   type BookingDetailsFormProps,
 } from "./blocks/appointment-booking/booking-details-form";
 export {
-  BookingList,
-  type BookingListCopy,
-  type BookingListProps,
-} from "./blocks/appointment-booking/booking-list";
-export {
   BookingLocationPicker,
   type BookingLocationPickerCopy,
   type BookingLocationPickerProps,
@@ -38,37 +33,131 @@ export {
   type BookingSlotPickerProps,
 } from "./blocks/appointment-booking/booking-slot-picker";
 export {
-  BookingSteps,
-  type BookingStepsCopy,
-  type BookingStepsProps,
-} from "./blocks/appointment-booking/booking-steps";
-export {
   BookingSummary,
   type BookingSummaryCopy,
   type BookingSummaryProps,
 } from "./blocks/appointment-booking/booking-summary";
 export type {
+  BookingAnswerLine,
   BookingAnswers,
   BookingDay,
   BookingDetailsValues,
   BookingLocation,
   BookingQuestion,
+  BookingQuestionKind,
   BookingRecord,
   BookingRecordState,
   BookingService,
   BookingSlot,
-  BookingStep,
 } from "./blocks/appointment-booking/types";
+export type {
+  VisitAct,
+  VisitCancelReason,
+  VisitFact,
+  VisitFullDayShop,
+  VisitLateChoice,
+  VisitListRow,
+  VisitTone,
+  VisitWaitService,
+  VisitWaitShop,
+} from "./blocks/appointment-visit/types";
+// shared/ui/appointment-visit
+export {
+  VisitActRow,
+  type VisitActRowProps,
+} from "./blocks/appointment-visit/visit-act-row";
+export {
+  VisitBody,
+  type VisitBodyCopy,
+  type VisitBodyProps,
+  type VisitNoticeCopy,
+} from "./blocks/appointment-visit/visit-body";
+export {
+  VisitBookedPass,
+  type VisitBookedPassCopy,
+  type VisitBookedPassProps,
+} from "./blocks/appointment-visit/visit-booked-pass";
+export {
+  VisitCancelPanel,
+  type VisitCancelPanelCopy,
+  type VisitCancelPanelProps,
+} from "./blocks/appointment-visit/visit-cancel-panel";
+export {
+  VisitFacts,
+  type VisitFactsCopy,
+  type VisitFactsProps,
+} from "./blocks/appointment-visit/visit-facts";
+export {
+  VisitFullDay,
+  type VisitFullDayCopy,
+  type VisitFullDayProps,
+} from "./blocks/appointment-visit/visit-full-day";
+export {
+  VisitLatePanel,
+  type VisitLatePanelCopy,
+  type VisitLatePanelProps,
+} from "./blocks/appointment-visit/visit-late-panel";
+export {
+  VisitLinkOpensNothing,
+  type VisitLinkOpensNothingCopy,
+  type VisitLinkOpensNothingProps,
+} from "./blocks/appointment-visit/visit-link-opens-nothing";
+export {
+  VisitList,
+  type VisitListCopy,
+  type VisitListProps,
+} from "./blocks/appointment-visit/visit-list";
+export {
+  VisitMovePanel,
+  type VisitMovePanelCopy,
+  type VisitMovePanelProps,
+} from "./blocks/appointment-visit/visit-move-panel";
+export {
+  VisitPass,
+  type VisitPassCopy,
+  type VisitPassProps,
+} from "./blocks/appointment-visit/visit-pass";
+export {
+  VisitPhaseHeader,
+  type VisitPhaseHeaderCopy,
+  type VisitPhaseHeaderProps,
+} from "./blocks/appointment-visit/visit-phase-header";
+export {
+  VisitReconnecting,
+  type VisitReconnectingCopy,
+  type VisitReconnectingProps,
+} from "./blocks/appointment-visit/visit-reconnecting";
+export {
+  type VisitRefusal,
+  VisitRefusedBook,
+  type VisitRefusedBookCopy,
+  type VisitRefusedBookProps,
+} from "./blocks/appointment-visit/visit-refused-book";
+export {
+  VisitTicketBody,
+  type VisitTicketBodyCopy,
+  type VisitTicketBodyProps,
+} from "./blocks/appointment-visit/visit-ticket-body";
+export {
+  VisitWaitBody,
+  type VisitWaitBodyCopy,
+  type VisitWaitBodyProps,
+  type VisitWaitNoticeCopy,
+} from "./blocks/appointment-visit/visit-wait-body";
 // shared/ui/invoice-and-receipt-pdf
 export {
   InvoicePdf,
+  type InvoicePdfBankRails,
   type InvoicePdfCopy,
   type InvoicePdfData,
   type InvoicePdfLineItem,
   type InvoicePdfRenderOptions,
+  type InvoicePdfReplacement,
 } from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
 export type {
   PdfDocumentCopy,
+  PdfItemRow,
+  PdfItemTotal,
   PdfLineItem,
   PdfPartyAddress,
 } from "./blocks/auction-invoice-and-receipt-pdf/pdf-document";
@@ -131,7 +220,6 @@ export {
 } from "./blocks/auction-listing/listing-bid-enrollment";
 export { ListingBidHistoryList } from "./blocks/auction-listing/listing-bid-history-list";
 export {
-  CUSTOM_MAXIMUM_MAJOR_CEILING,
   formatMinimumMaximumCaption,
   isMaximumBelowFloor,
   minNextBidMinor,
@@ -233,19 +321,6 @@ export {
   auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
 export {
-  AuctionOrderEmpty,
-  type AuctionOrderEmptyProps,
-} from "./blocks/auction-order/auction-order-empty";
-export {
-  AuctionOrderList,
-  type AuctionOrderListProps,
-} from "./blocks/auction-order/auction-order-list";
-export {
-  AuctionOrderRow,
-  type AuctionOrderRowCopy,
-  type AuctionOrderRowProps,
-} from "./blocks/auction-order/auction-order-row";
-export {
   AuctionPhoneField,
   type AuctionPhoneFieldProps,
 } from "./blocks/auction-order/auction-phone-field";
@@ -310,6 +385,12 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared/ui/consignment-mine
+export {
+  ConsignmentSellerLine,
+  type ConsignmentSellerLineCopy,
+  type ConsignmentSellerLineProps,
+} from "./blocks/consignment-mine/consignment-seller-line";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
@@ -357,11 +438,6 @@ export {
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared/ui/page-blocks
-export {
-  EmptyPanel,
-  type EmptyPanelCopy,
-  type EmptyPanelProps,
-} from "./blocks/page-blocks/empty-panel";
 export {
   FactCard,
   type FactCardCopy,
@@ -425,6 +501,7 @@ export type {
   CartItemStatus,
   CartItemSummary,
   HeldPromoCode,
+  OrderDiscountRow,
   PointsState,
   PromoNotice,
   PromoState,
@@ -614,33 +691,6 @@ export {
   type ProfileFormProps,
 } from "./blocks/store-profile/profile-form";
 export type { ProfileFormValues } from "./blocks/store-profile/types";
-export {
-  ACTIVITY_RELATIVE_MAX_MS,
-  type ActivityTimeCopy,
-  formatActivityAt,
-  formatAuctionClosed,
-  formatAuctionDeadline,
-  formatAuctionMoment,
-  formatAuctionOpens,
-  formatClosedAt,
-  formatCollectorDeadline,
-  formatDay,
-  formatDeadline,
-  formatEvent,
-  formatListingClosed,
-  formatListingEnds,
-  formatListingOpens,
-  formatLocalDay,
-  formatLocalMoment,
-  formatLocalTime,
-  formatMoment,
-  formatRelativeAt,
-  isPastActivityCap,
-  JUST_NOW_MAX_MS,
-  resolveActivityNow,
-  resolveShippedLocale,
-  type ShippedLocale,
-} from "./lib/format-datetime";
 export {
   currencyExponent,
   DEFAULT_LISTING_CURRENCY,

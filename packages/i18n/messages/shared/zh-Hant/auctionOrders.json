@@ -13,6 +13,15 @@
   "payInvoice": "支付發票",
   "viewDetail": "查看詳情",
   "contactUs": "聯絡我們",
+  "setup": {
+    "fee": {
+      "card": "信用卡手續費約為 3.4% 加固定金額",
+      "bankTransfer": "銀行轉帳手續費會列在你的發票上"
+    },
+    "cardUnavailable": "目前尚未提供 {currency} 信用卡付款。",
+    "paymentUnavailable": "目前尚未提供 {currency} 付款方式。"
+  },
+  "cancelledOn": "已於 {date} 取消",
   "insuranceTooltip": "運輸途中按訂單金額的 0.9% 計算。",
   "taxLabel": "稅項",
   "buyersPremiumTooltip": "成交價的 20%，或該貨幣的最低額（取較高者）。",
@@ -21,12 +30,14 @@
   "contactDialog": {
     "to": "收件人",
     "subject": "主旨",
+    "cancelledSubject": "拍品 {lotTitle}：訂單已取消",
     "message": "訊息",
     "copyAddress": "複製地址",
     "addressCopied": "已複製地址",
     "copySubject": "複製主旨",
     "subjectCopied": "已複製主旨",
     "copyMessage": "複製訊息",
+    "copied": "已複製",
     "messageCopied": "已複製訊息",
     "copyAddressManual": "請手動複製地址",
     "copySubjectManual": "請手動複製主旨",

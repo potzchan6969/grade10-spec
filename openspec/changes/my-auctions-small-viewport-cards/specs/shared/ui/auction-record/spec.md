@@ -80,6 +80,7 @@ label, the table row SHALL show the application-supplied no-standing
 placeholder rather than inventing a state badge; on the card surface the
 Status badge MAY be omitted instead of showing that placeholder.
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-v8o rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
 **Serves:** The record surface exports - an application imports the surface
 
@@ -88,6 +89,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-ko6 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
 **Serves:** The record surface exports - a part is reused alone
 
@@ -96,6 +98,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **THEN** it renders and behaves as specified, with no missing-context error
   and no requirement to supply page props
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-s5k rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-08 - Bidding is read before Watching
 **Serves:** The record surface exports - bidding is read before Watching
 
@@ -105,6 +108,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **THEN** the bidding lots appear before the watching-only lots in one list
 - **AND** no Bidding or Watching section heading appears
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-ea6 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-11 - The title badge shows the row count
 **Serves:** The record surface exports - the title badge shows the row count
 
@@ -112,6 +116,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **WHEN** it renders
 - **THEN** the badge beside the page title shows 4
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-zan rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-12 - Watch-only standing shows the placeholder
 **Serves:** The record surface exports - watch-only standing shows the placeholder
 
@@ -121,6 +126,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **THEN** Status shows that placeholder
 - **AND** it does not invent a badge label
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-08a rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-13 - A bid row omits Unwatch when not supplied
 **Serves:** The record surface exports - a bid row omits Unwatch when not supplied
 
@@ -130,6 +136,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **THEN** Email alerts are shown
 - **AND** Unwatch is absent
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-dft rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-17 - Below md each lot is a card without sideways scroll
 **Serves:** The record surface exports - small-viewport cards
 
@@ -142,6 +149,7 @@ Status badge MAY be omitted instead of showing that placeholder.
   the page content
 - **AND** the table column header row is not shown
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-3me rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-18 - From md the five-column table remains
 **Serves:** The record surface exports - table from md
 
@@ -149,6 +157,7 @@ Status badge MAY be omitted instead of showing that placeholder.
 - **WHEN** it renders from the `md` breakpoint up
 - **THEN** the lots appear in one five-column table with the column header row
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-kn1 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-19 - Below md the whole card opens the lot or order
 **Serves:** The record surface exports - card hit target
 

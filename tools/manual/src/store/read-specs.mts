@@ -48,13 +48,14 @@ const REQUIREMENT = "Requirement:";
 const SCENARIO_HEADING = new RegExp(
   `^Scenario:\\s*(?:(${SCENARIO_ID.source})\\s+-\\s+)?(.+)$`,
 );
-const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
-/** A case id is journey-scoped, `<capability>-US<n>-TC<m>-<v>`
- * (`docs/governance/specs-to-test-cases.md`, Naming). Older suites still
- * carry the hyphenated `-US-<n>-TC-<m>` and the flat `<capability>-TC-<n>`,
- * and both stay readable: an issued id is permanent, so a suite is never
- * renumbered to a newer shape. */
-const CASE_HEADING =
+const MODERN_JOURNEY_ID = "[a-z0-9][a-z0-9.-]*\\.US\\d+";
+const LEGACY_JOURNEY_ID = "[a-z0-9][a-z0-9-]*-US-\\d+";
+const JOURNEY_ID_SOURCE = `(?:${MODERN_JOURNEY_ID}|${LEGACY_JOURNEY_ID})`;
+const JOURNEY_HEADING = new RegExp(`^(${JOURNEY_ID_SOURCE}):\\s*(.+)$`);
+/** A case heading displays its stable marker id and suite-local reference.
+ * Older headings stay readable during migration. */
+const MODERN_CASE_HEADING = /^(\S+)\s+\(US-?\d+-TC-?\d+\):\s*(.+)$/;
+const LEGACY_CASE_HEADING =
   /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
 /** The anchor a scenario serves, on its own line under the heading and above
  * `**GIVEN**` / `**WHEN**`. Machine-read up to the first dash; the prose after
@@ -73,18 +74,18 @@ const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
 const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
 const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
 /** What a `**Trace:**` names: the journey the case walks, in the spec's
- * canonical `-US-<n>` form. A scenario id is the older shape, and still
- * resolves — the suite beside a spec that predates journeys traces those. */
+ * modern `.US<n>` or legacy `-US-<n>` form. A scenario id is the older shape,
+ * and still resolves — the suite beside a spec that predates journeys traces
+ * those. */
 const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
-/** Derived from the cases, never chosen: every case `draft` is
- * `pending-review`, a first verdict makes it `in-review`, no `draft` left
- * makes it `approved`, and a draft in a file that was approved makes it
- * `reopened`. */
+/** Persistent file statuses. Historical archives may still say `in-review`;
+ * the reader normalizes that old partial-review meaning to `pending-review`.
+ */
 const SUITE_STATUSES: ReadonlySet<TestSuiteStatus> = new Set([
   "pending-review",
-  "in-review",
   "reopened",
   "approved",
+  "retired",
 ]);
 const CASE_STATUSES: ReadonlySet<TestCaseStatus> = new Set([
   "draft",
@@ -278,7 +279,7 @@ export function readJourney(section: Section): Journey {
   if (!match) {
     throw new StoreFileError(
       section.line,
-      "a journey heading is `### <capability>-US-<n>: <title>`",
+      "a journey heading is `### <scope>.US<n>: <title>` or the legacy `### <capability>-US-<n>: <title>`",
     );
   }
   return { id: match[1], title: match[2], text: section.body.trimEnd() };
@@ -361,7 +362,7 @@ const REMOVED_JOURNEYS = "REMOVED User journeys";
 /** Where that tombstone lands. A change writes `## REMOVED User journeys`;
  * archive turns it into a one-line `## Retired` entry in the durable file. */
 const RETIRED_JOURNEYS = "Retired";
-const JOURNEY_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
+const JOURNEY_ID = new RegExp(JOURNEY_ID_SOURCE, "g");
 
 /**
  * A `user-journeys.md`, whole: the journey-bearing sections, each holding a
@@ -504,7 +505,8 @@ export function readTestCases(text: string): TestSuite {
   const found: { section: Section; id: string; title: string }[] = [];
   const visit = (sections: Section[]): void => {
     for (const section of sections) {
-      const match = CASE_HEADING.exec(section.heading);
+      const modern = MODERN_CASE_HEADING.exec(section.heading);
+      const match = modern ?? LEGACY_CASE_HEADING.exec(section.heading);
       if (match) {
         found.push({ section, id: match[1], title: match[2] });
         continue;
@@ -613,7 +615,23 @@ function suiteStatus(roots: Section[]): TestSuiteStatus {
       "a test-case file needs a `# ` title before its `**Status:**`",
     );
   }
-  return enumProp(head, "Status", SUITE_STATUSES);
+  const found = /^\*\*Status:\*\*\s*(\S+?)(?:\s*·\s*\d+\/\d+)?\s*$/m.exec(
+    head.body,
+  )?.[1];
+  if (found === undefined) {
+    throw new StoreFileError(
+      head.line,
+      `\`${head.heading}\` has no \`**Status:**\``,
+    );
+  }
+  if (found === "in-review") return "pending-review";
+  if (!SUITE_STATUSES.has(found as TestSuiteStatus)) {
+    throw new StoreFileError(
+      head.line,
+      `\`${head.heading}\` is \`**Status:** ${found}\`, which is not ${orList(SUITE_STATUSES)}`,
+    );
+  }
+  return found as TestSuiteStatus;
 }
 
 function caseStatus(section: Section): TestCaseStatus {

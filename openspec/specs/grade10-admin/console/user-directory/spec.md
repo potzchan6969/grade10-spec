@@ -332,6 +332,7 @@ the create grant.
 `user:create`, and SHALL refuse a non-`user` role when the session lacks
 `user:set-role`, under the same rules as `shared/auth/users`.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-8z1 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-20 - An operator creates an account and its panel opens
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
 
@@ -342,6 +343,7 @@ the create grant.
 - **AND** confirming the review opens that account's panel beside the list
 - **AND** the panel shows that name, email, and `admin`
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-v25 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-21 - Create is not offered without user:create
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
 
@@ -349,6 +351,7 @@ the create grant.
 - **WHEN** they open Users
 - **THEN** Create is not offered
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-dz7 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-22 - Duplicate email offers opening the existing account
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
 
@@ -361,6 +364,7 @@ the create grant.
 - **AND** no second Auth row holds that email
 - **AND** Create was not called
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-z2a rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-23 - Create with only user:create stands up a plain user
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
 
@@ -371,6 +375,7 @@ the create grant.
 - **AND** confirming the review opens that account's panel beside the list
 - **AND** the panel shows roles `user` only
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-dcl rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-24 - Users create review notes a malformed or off-list email
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
 
@@ -381,6 +386,7 @@ the create grant.
 - **AND** confirming the review creates the account
 - **AND** Back returns to the create form and creates nothing
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-xr8 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-25 - Users create review notes when the role is admin
 **Serves:** grade10-admin-console-user-directory-US-04 - Admin creates an account from Users
 

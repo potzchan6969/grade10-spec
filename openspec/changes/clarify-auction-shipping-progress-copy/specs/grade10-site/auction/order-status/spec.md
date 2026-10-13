@@ -1,3 +1,5 @@
+# grade10-site/auction/order-status Specification
+
 ## Feature set
 
 - Derived order status
@@ -58,6 +60,9 @@ Refunded.
 <!-- trace:scenario id=g10.auction-order-status.SC-aj3 rev=1 -->
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
 **Serves:** Derived order status - a paid, undispatched order is Preparing Shipment
+
+The scenario title is historical for its permanent trace identity. Its normative
+Given, When and Then use the current Preparing Shipment vocabulary.
 
 - **GIVEN** an auction order with invoice status `paid` and fulfilment status
   `unfulfilled`
@@ -123,7 +128,7 @@ Refunded.
 
 The statuses in this capability SHALL apply to auction orders alone. Grade10
 SHALL NOT merge them with, alias them to, or map them onto the badges in
-`grade10-site/store/order-status`. A label name the two sets share SHALL NOT
+`grade10-site/commerce/order-status`. A label name the two sets share SHALL NOT
 imply shared meaning, and no surface SHALL derive one from the other.
 
 <!-- trace:scenario id=g10.auction-order-status.SC-1o2 rev=1 -->

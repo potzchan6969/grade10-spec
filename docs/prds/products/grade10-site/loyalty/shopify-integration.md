@@ -16,7 +16,7 @@ records the order, and the programme moves the balance once.
 | Stage | Online | At the till |
 | --- | --- | --- |
 | Where points are chosen | The store's own `/checkout` page | The terminal, inside an identified session |
-| What carries the discount | One "Points" order discount on the draft order | The same "Points" amount off the cart |
+| What carries the discount | 🚧 One order discount titled "Deduction from Points" on the draft order; "Points", the title older orders carry, counts as the same discount | The same discount on the cart |
 | Who takes the money | Shopify's invoice page | The counter, in Shopify POS |
 | How the paid order is found | The draft is read back for the order it became | The store's order id on the cart |
 | When points leave the balance | On the paid order, once, scaled to what the shop applied | The same |
@@ -58,9 +58,8 @@ Every online checkout is a Shopify draft order and its invoice.
 | The draft carries | As |
 | --- | --- |
 | Member | The draft's customer, so a customer-scoped code evaluates |
-| Points | One fixed-amount order discount named "Points" |
-| Product and gift coupons | Per-unit line discounts named "Coupon" |
-| Order coupon | The draft's discount code |
+| Points | One fixed-amount order discount |
+| Coupon | The draft's one discount code — minted for that checkout for a product or gift coupon, the operator's own for an order coupon |
 | Prices | None on the lines — the shop prices at payment |
 | Shipping | None — the invoice page prices it |
 
@@ -85,7 +84,7 @@ Every online checkout is a Shopify draft order and its invoice.
 On the store's own `/checkout` page, before Shopify has seen the basket.
 
 ## *Store* — **Draft order created**
-The member is the draft's customer, the points are one fixed-amount order discount named "Points", each product or gift coupon is a per-unit line discount named "Coupon", and an order code goes on as the draft's own discount code. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
+The member is the draft's customer, the points are one fixed-amount order discount, and the coupon goes on as its discount code, minted for that checkout where it is a product or gift coupon. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
 
 ```json
 {
@@ -93,18 +92,14 @@ The member is the draft's customer, the points are one fixed-amount order discou
     "lineItems": [
       {
         "variantId": "gid://shopify/ProductVariant/44556677889900",
-        "quantity": 2,
-        "appliedDiscount": {
-          "valueType": "FIXED_AMOUNT", "value": 2.5,
-          "title": "Coupon", "description": "Coupon"
-        }
+        "quantity": 2
       }
     ],
     "appliedDiscount": {
       "valueType": "FIXED_AMOUNT", "value": 12,
       "title": "Points", "description": "Points"
     },
-    "discountCodes": ["G10-WELCOME-20"],
+    "discountCodes": ["RWD-7K2P9QXM"],
     "purchasingEntity": { "customerId": "gid://shopify/Customer/7788990011" },
     "customAttributes": [
       { "key": "grade10_order_id", "value": "0f6c2c1e-6a0a-4c33-9d2a-1e6b0e2f9c11" }
@@ -113,7 +108,7 @@ The member is the draft's customer, the points are one fixed-amount order discou
 }
 ```
 
-A coupon's discount is per unit, so 2.5 on a quantity of 2 is the $5 the line loses; 12 is the whole $12 of points. No points leave the balance and no stock is held; a reward coupon is held against the order and freed if it is never paid — [Coupons](/p/grade10-site/loyalty/coupons)
+The points are the whole $12; the coupon's $5 comes off by its code when the shop prices the order. No points leave the balance, no stock is held, and no coupon is spent until the order is paid — [Coupons](/p/grade10-site/loyalty/coupons)
 
 ## *Shopify* — **Invoice link issued**
 The shop answers with the draft and the link the member pays at. The draft's id is recorded before that link leaves, so no payment can arrive on an order the store cannot bind.
@@ -130,12 +125,11 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
   "name": "#G10-10482",
   "cart_token": null,
   "currency": "HKD",
-  "subtotal_price": "19.50",
-  "current_total_discounts": "20.50",
+  "subtotal_price": "23.00",
+  "current_total_discounts": "17.00",
   "discount_applications": [
     { "title": "Points" },
-    { "title": "Coupon" },
-    { "code": "G10-WELCOME-20" }
+    { "code": "RWD-7K2P9QXM" }
   ],
   "line_items": [
     {
@@ -144,8 +138,7 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
       "price": "20.00",
       "discount_allocations": [
         { "amount": "12.00", "discount_application_index": 0 },
-        { "amount": "5.00", "discount_application_index": 1 },
-        { "amount": "3.50", "discount_application_index": 2 }
+        { "amount": "5.00", "discount_application_index": 1 }
       ]
     }
   ],
@@ -155,7 +148,7 @@ The webhook, signed over its own bytes. Each discount names itself, and each lin
 }
 ```
 
-The store finds its points by the title "Points", whatever case the shop wrote it in
+The store finds its points by either points title — [Paying with Points](/p/grade10-site/loyalty/paying-with-points#rules) — in any letter case, with or without spaces around it. An order whose discounts carry neither title is read like one that names none: the applied total less every other instrument, never more than promised — [Discounts](/p/grade10-site/store/discounts#the-sale-step-by-step)
 
 ## *Store* — **Order marked paid**
 The bytes are verified, the delivery is deduped on Shopify's webhook id, and the draft is read back for the order it became, because a paid invoice carries no cart token. The qualifying goods are priced once and the order event is written with the status in one transaction, so a redelivery writes nothing.
@@ -166,7 +159,7 @@ The bytes are verified, the delivery is deduped on Shopify's webhook id, and the
   "kind": "paid",
   "sourceRef": "9c1e4a70-6f83-4d02-b6a1-0e3f5c9d21ab",
   "userId": "usr_01J8ZQ4X7K",
-  "earningMinor": 1950,
+  "earningMinor": 2300,
   "currency": "HKD",
   "occurredAt": "2026-09-10T04:21:07.113Z"
 }
@@ -222,7 +215,9 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 - **A refund before the order** — one naming an order not yet recorded
   fetches and records that order first
 - **Attribution** — through the customer on the sale, or later by an operator
-  where the sale was rung up before the member joined
+  where the sale was rung up before the member joined; a sale nobody can own
+  is marked a walk-in instead —
+  [Purchases Before the Account](/p/grade10-site/loyalty/profile#purchases-before-the-account)
 
 ## POS Extension
 
@@ -232,12 +227,18 @@ The loyalty terminal is a Shopify POS UI extension.
 | --- | --- | --- |
 | Home tile | Opens the modal; badges only "membership unavailable" | Never |
 | Modal | Identify, read the panel, spend, confirm a collection | Through a session |
-| Customer details badge | Name, tier and balance for any paired customer staff find in Shopify's own search | Never |
+| Customer details badge | The member's name, tier and balance for any paired customer staff find in Shopify's own search | Never |
 
 - **Three apps** — development, staging and production, each extension-only
   with no server, no scopes and no admin access of its own; a manager
   activates a version per location and pins the tile
 - **The sale always goes on** — every refusal leaves staff in a normal sale
+
+### Member Name
+
+- **The member's name** - on the badge and in the modal, the one the site
+  shows, sent whole; 會員 while the account service cannot name them -
+  [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card#on-the-pass)
 
 ### Session
 
@@ -266,10 +267,8 @@ The loyalty terminal is a Shopify POS UI extension.
   goods covers the amount — [Discounts](/p/grade10-site/store/discounts)
 - **Plan** — one sale row per session, rewritten on every plan, capped at 20
   plans in 5 minutes
-- **Discount on the cart** — the store's order id first, then the "Points"
-  fixed discount; the promise is trimmed to what the cart shows
-- 🚧 **Title** — "Deduction from Points"; "Points", the title older orders
-  carry, counts as the same discount
+- **Discount on the cart** — the store's order id first, then the points
+  discount; the promise is trimmed to what the cart shows
 - **Shown before it commits** — points spent, money still due, balance after
   and points this sale will earn, priced by the platform
 - **Confirm** — the button locks while it runs, so a double tap spends once
@@ -293,7 +292,7 @@ One arm answers, and the store opens a session on it: 10 minutes, bound to the s
 Points and coupons, priced against the lines the terminal claims. The store writes one sale row per session and rewrites it on every later plan.
 
 ## *Shopify* — **Cart carries the discount**
-The store's order id goes onto the cart first, then the "Points" amount comes off it. A sale carrying the id and less money off settles only what the shop took off; money off with no id is a discount the store cannot bind to a sale.
+The store's order id goes onto the cart first, then the points discount goes on. A sale carrying the id and less money off settles only what the shop took off; money off with no id is a discount the store cannot bind to a sale.
 
 ```json
 {
@@ -340,7 +339,7 @@ Nobody is identified, or the terminal is off, or the programme did not answer. S
 No order id on the cart, so there is no promise to bind to.
 
 ## *Store* — **Recorded with no owner**
-The sale is recorded with its goods priced and nobody named. A customer on the sale is looked at again on every pass — 5 minutes after the sale, then hourly, and given up on after 30 days.
+The sale is recorded with its goods priced and nobody named. A customer on the sale is looked at again on every pass — 5 minutes after the sale, then hourly, and given up on after 30 days. A customer that never finds a member in that time is logged as an error, so a pairing that failed is seen.
 
 ## *Loyalty* — **Earns when the sale is paired**
 The earn is priced on the goods that sale settled, whenever the sale gets an owner. Past the 30 days an operator claims the sale by hand, with what they saw recorded beside their name — [Purchases Before the Account](/p/grade10-site/loyalty/profile#purchases-before-the-account)
@@ -348,7 +347,7 @@ The earn is priced on the goods that sale settled, whenever the sale gets an own
 
 :::flow{title="At the till" case="Undone before tender" diagram="assets/diagrams/shopify-till-undone.svg"}
 ## *Shopkeeper* — **Takes the benefits off**
-The gift lines, then the coupon discounts, then the "Points" discount, and the store's order id last, because a sale paid while the id is on the cart still binds to its row. The id stays on while a coupon code is on the sale, because Shopify will not remove one code at a time.
+The gift lines, then the coupon discounts, then the points discount, and the store's order id last, because a sale paid while the id is on the cart still binds to its row. The id stays on while a coupon code is on the sale, because Shopify will not remove one code at a time.
 
 ## *Store* — **Promise dropped**
 The terminal reports what the sale still shows, and the row is trimmed to it: the points come off the row whether or not the discount came off the cart. Nothing was debited, because nothing was held.
@@ -425,4 +424,30 @@ on is the owner's call.
 - **References** —
   [the Shopify membership and POS plan](/references/shopify-membership-pos)
   and [the POS extension notes](/references/shopify-pos-extension)
+:::
+
+:::detail{title="Product decisions" for="pm"}
+Shopify takes the money and shows the discounts; the programme moves the
+balance once, on the paid order. What a member and a shopkeeper read about
+their points is therefore what Shopify shows: the till's cart, the receipt and
+the paid order. A discount title that reads as a count of points makes each of
+them work out what the line means.
+
+**Not in scope.** A balance, a tier or a coupon held in Shopify. Relabelling
+the site's checkout summary row, the cart drawer footer or the till panel's row
+for the points spent. Retitling orders already paid.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| New title paid | Share of points orders promised after both channels write "Deduction from Points" that are paid under that title; every one. | Product |
+| Expired till promises | Till promises that expire unpaid, per week; no higher after the title changes than before. | Product |
+
+**Decisions.**
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Title | Decided | "Deduction from Points", the owner's choice, because "Points" reads as a count of points rather than money taken off. English, like "Coupon": a discount title is one value written into Shopify and is not translated. | Product |
+| Older title | Decided | "Points" counts as the same discount for as long as orders exist, because a paid order keeps the title it was paid with. | Product |
 :::

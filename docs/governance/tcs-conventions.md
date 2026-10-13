@@ -1,19 +1,29 @@
 # Test Case Conventions
 
-How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.md) holds the contract — ids, properties, levels, what a case may claim — and this file holds the house style that sits on top of it. `/spec-to-tcs` writes every draft to it; `/tcs-review` restyles drafts to it before a review starts, and adds to it when a review ends.
+How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.md) holds creation, coverage, traceability, lifecycle and validation; this is the one shared file for writing style. `/spec-to-tcs` writes every draft to it; `/tcs-review` restyles drafts to it before a review starts, and adds to it when a review ends. No other file may define a competing writing convention.
 
 ## How This File Grows
 
-- **Only a writing rule is a candidate** — when a `/tcs-review` ends, each change the reviewer made to a case is read for the rule it suggests about how a case is written, and that rule is offered back as one line: what was changed, and the rule. The reviewer confirms, rewords or refuses each one; nothing lands unasked
+- **Only a reusable writing rule is a candidate** — when a `/tcs-review` ends, offer a convention only when a confirmed, reusable rule about how a case is written emerged. A case-specific edit, product fact, or style change with no reusable rule produces no candidate and no convention follow-up
 - **A fact is not a candidate** — a change naming one product's page, control, label, status value or behaviour, where a value is read, or how a state is reached stays in the case it was made to, and is not offered. `## Setup Recipes` and `## Where Things Are` take no line from a review
-- **A confirmed line applies everywhere** — it lands under `## Store-wide` by default. Only a line worded in one domain's vocabulary is scoped narrower, and then the review says why and asks the reviewer which scope
+- **A confirmed line has store-wide scope by default** — it lands under `## Store-wide` unless its wording is explicitly domain-specific. How that scope is applied to existing cases follows **A confirmed line applies at once** below
 - **Refused lines land under `## Refused`** — the next review reads that section and does not offer the same pattern again
 - **One line per convention** — `- <YYYY-MM-DD>, <suite path>: <the pattern, as a rule>`. A line that needs an example names an approved case id rather than pasting one
 - **Narrower wins** — a capability line beats a store-wide one for that capability's suites
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule the contract; a line that contradicts [`specs-to-test-cases.md`](specs-to-test-cases.md) is reported and the contract followed
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
-- **A confirmed line applies at once** — when the review that confirmed it ends: to the reviewed file, its remaining drafts and its `actual` cases still `manual`; and to every other suite in the same domain folder, its `actual` cases still `manual`, unasked, in its own commit, skipping a suite with an open `tcs-review/*` branch or pull request. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
+- **A confirmed line applies at once** — when the review that confirmed it ends, apply it to the reviewed suite's remaining drafts and its manual `actual` cases. A same-domain propagation may update other cases in a separately listed style-only follow-up, preserving purpose, expected results, trace, status, test-data meaning and automation links; a semantic change waits for that suite's review. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
 - **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
+
+## Before Adding a Convention
+
+Every candidate from a review passes this gate before it is offered to the reviewer.
+
+1. **Classify the candidate** — confirm that it changes only how a case is written: title, wording, step shape, result shape, pre-condition, placeholder, test-data presentation, actor wording or layout
+2. **Check the core rulebook** — compare it with [`specs-to-test-cases.md`](specs-to-test-cases.md). A candidate that changes anchors, formal coverage, scenario links, case ownership, suite levels, lifecycle, export eligibility, validation or the number of cases is a core-rule change, not a convention
+3. **Check existing conventions** — search `## Store-wide`, the applicable scope under `## Domains, Products and Capabilities`, and `## Refused`. A duplicate, narrower conflict or refused pattern is not offered silently
+4. **Resolve conflicts explicitly** — a direct contradiction is reported to the reviewer with both rules named. The existing core rule wins; no new convention is written until the core rule is changed through its governance path
+5. **Record one line only after consent** — confirmed rules use the existing dated-line format, with the scope and reason when narrower than store-wide
 
 ## Store-wide
 
@@ -33,6 +43,24 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 - **One action per step** — "sign in, open settings, change the password" is three; a continuous flow with one outcome stays one case
 - **The arrival may be the first result** — `The listing loads` tells "could not get there" from "wrong"; a case whose results are only the arrival is not a case
 - **Plain words, no internal names** — `Click the collection tile`, not `dispatch the tile's click handler`
+
+### Walks
+
+- **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
+- **Concrete starting state** — name the actor, the surface or URL, and the seeded state the tester needs; never write only `Reset the fixture to each case's Pre-conditions` or another instruction to look elsewhere
+- **Bound test data** — put the values or the exact fixture descriptions the route uses in the walk; never write only `Use each case's Test data` or `Type the query from Test data`
+- **Executable waiting point** — when a route waits for a state change, the starting state names the surface where the tester waits; if the spec does not name that surface, mark the gap with `❓` and leave the source step unchanged
+- **Independent short route** — group cases when they share the actor or session, surface, and one continuous route; use actual branches or data rows for fixture differences that can be prepared together, and split when a case needs a different state, setup recipe or page path
+- **Practical walk size** — a coherent walk carries at least 2 and normally no more than about 25 cases; use fewer only when the suite has no adjacent compatible route, and split before setup or route length makes the walk expensive to run
+- **Numbered route steps** — use a numbered item for each action the tester performs or reads; keep the action separate from the result it produces
+- **Route observations** — nest `-` bullets under the numbered step where the tester records an existing case's observation; end every observation with that case's full human-facing heading id, such as `g10.auction-bidder-suspension.US1-TC1`
+- **Route branches** — use `a.` and `b.` under the preceding numbered step only for actual alternative routes; each branch carries its own nested observations and case references, and a branch never creates a new observation
+- **Case references** — use the full human-facing case heading id in a walk; the full case definition remains in its owning suite
+- **No walk description** — a `*-tcs.md` walk carries setup, data and route only; generic explanation belongs in this file or its template
+- **Complete case results** — the case definition remains the complete record of its Expected Results. A walk may repeat the result needed at that route point so a human knows what to record, but may not add or remove an assertion
+- **Shared setup** — shared walk data saves human tester effort; it never makes a case depend on another case's result
+- **Out-of-scope cases** — the tester follows the route unchanged and skips the out-of-scope reference and its checking
+- **Several walks** — a case may be referenced by several walks. Each reference names only an observation already present in that case; a walk cannot create a new observation
 
 ### Pre-conditions
 
@@ -62,17 +90,26 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Placeholders
 
-- **Self-describing, in the store's words** — `<grade10 browse listing url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or a bare `<store url>` where the store runs more than one brand
+- **Self-describing, in the store's words** — `<g10 auction url>`, `<g10adm url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or an undeclared abbreviation
 - **For the value, not the thing** — where the spec names a control, name what the tester clicks
 - **Consistent within a suite** — one surface, one placeholder
-- **Never wrapped, never capitalised** — rewrite the sentence instead
+- **Never capitalised** — rewrite a sentence that would put a placeholder first
+- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: Write a **Test data** field reference as an inline-code placeholder, such as `<lot_1>`, in pre-conditions, steps and expected results; use the same name throughout.
 
 ### Test data
 
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
+- **Rows with one checking** — keep one row when values share the same purpose, route and expected checking. Use separate rows when the expected provider answer or checking differs; use separate cases when the purpose differs
+- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: In a `Field | Value` table, `Field` is a plain name such as `lot_1`. `Value` states the exact value or the conditions a fixture must meet. A test walk binds the name to a concrete value meeting that row, and expected results refer to the binding rather than pasting the row's description.
 - 2026-09-25, grade10-site/auction/domain-tcs.md: A value that is not a boundary states an assumption and the range the requirement accepts, for example `HKD 800.00 or JPY 8000 or USD 8.00 (any price > 500 minor units)`. A boundary keeps its exact number and adds a readable reading. An exact reading has no tilde: `1800s (30mins)`. Use `~` only when that reading has a remainder: `1024b (1KiB or ~1KB)`. The exact number stays, so the reading never moves the bound.
-- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `grade10-site-auction-auction-US2-TC12-1` does. The expected result states the formula that equals it. A step does not state the outcome.
+- 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `g10.auction-auction.US2-TC12` does. The expected result states the formula that equals it. A step does not state the outcome.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
+- 2026-10-06, shared/auth/users/feature-tcs.md: When a rule names a class of values, for example any role other than `user`, the test data takes two members of the class as rows; two are enough.
+- 2026-10-07, shared/auth/audit/feature-tcs.md: A case manual QA can run walks the product flow that reaches the write, such as a guest checkout for a trusted-product create, not the call behind it.
+- 2026-10-07, shared/auth/audit/feature-tcs.md: A case that needs a dependency mocked to refuse has Testability `automation` alone; nobody can make the refusal by hand.
+- 2026-10-08, shared/auth/roles/feature-tcs.md: A case's pre-condition puts each record in the state where the control the case uses, or looks for, would otherwise show.
+- 2026-10-08, shared/auth/roles/feature-tcs.md: Where the screen states the rule before the act, the expected result reads what it states, met or unmet, beside the act's outcome.
+- 2026-10-08, shared/auth/roles/feature-tcs.md: When a case reads one record and later creates another of the same kind, the expected result names which one it means.
 
 ### Actors
 
@@ -120,6 +157,19 @@ A card for sale whose world, language and collectible type no other product for 
 
 **Holds for:** staging.
 
+### Put a card in the Main Page's merchandised row
+
+A card among the 5 that the Main Page's merchandised row shows.
+
+1. Open the Main Page and note the first collection tile in its grid.
+2. In the staging shop's admin, go to Products > Collections and open that collection.
+3. Add the card to the collection.
+4. Set the collection's sort to Manually and drag the card into its first 5 products.
+5. Click Save.
+6. Wait 60 seconds past the save, then reload the Main Page until the row shows the card.
+
+**Holds for:** staging.
+
 ### Sell a card out
 
 A card the catalogue lists with nothing for sale.
@@ -149,6 +199,8 @@ Lines scoped narrower than the store, one `###` per scope, by its path (`grade10
 ### grade10-site/auction
 
 - 2026-09-25, grade10-site/auction/domain-tcs.md: Two bidders use separate sessions. A maximum is entered in the custom maximum on the bid panel.
+- 2026-10-12, grade10-site/auction: For numeric test data, choose a representative value different from the linked scenario's example when the rule accepts a range or equivalence partition. Keep the scenario value when it is a boundary, tier threshold, equality or comparison value, computed fixture, or the specification gives no valid alternate range; bind any derived expected value to the row or formula.
+- 2026-10-13, grade10-site/auction: Every minor-unit test-data fixture uses a compact major-price reading: replaceable values use `HKD280 (range: 1000–79999 minor units)`, source-defined open bounds use `HKD70 (range: >0 minor units)`, and boundary, equality, derived, configured or otherwise fixed values use `HKD10 (fixed ...)`. Omit trailing `.00` for whole major amounts; keep non-zero fractional digits. These readings guide fixture selection and do not assert the product's display text.
 
 ## Refused
 

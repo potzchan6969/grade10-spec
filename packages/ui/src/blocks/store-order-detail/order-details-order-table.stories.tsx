@@ -3,7 +3,7 @@ import { FILLED_LINES, ORDER_DETAILS_COPY } from "./fixtures";
 import { OrderDetailsOrderTable } from "./order-details-order-table";
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsOrderTable",
+  title: "Store/Order Detail/Blocks/OrderDetailsOrderTable",
   component: OrderDetailsOrderTable,
   tags: ["autodocs"],
   args: {

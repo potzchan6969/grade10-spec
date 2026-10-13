@@ -38,12 +38,18 @@ new event cannot ship silent:
 - 🚧 **Silence on purpose** — a card refused at the counter is told at the
   counter and shows on the receipt; naming a collector sends no email, History
   on the page logs it
-- 🚧 **The drop-off's messages are grading's** — booked, moved, cancelled,
+- ❓ **The drop-off's messages are grading's** — booked, moved, cancelled,
   missed and the day before are sent by the submission; the diary sends none
-  for a product booking — [Appointments](/p/grade10-site/appointment)
+  for a product booking — [Appointments](/p/grade10-site/appointment); or,
+  for a drop-off the collector books as their own visit, the diary's
+  confirmation, day-before and moved or cancelled mail until staff transfer
+  it, and grading's from the hand-in — [Messages](/p/grade10-site/appointment/visit#messages)
 - 🚧 **The footer** — the submission id and its summary, the custodian's
   registered name trading as Grade10, the shop and its address, the complaints
   contact, and that dates and times are Hong Kong time
+- 🚧 **Hong Kong time named** - the footer's line reads "Dates and times are
+  Hong Kong time (GMT+8).", the label every other message the platform sends
+  carries ([Dates and Times](/p/platform/shared/dates-and-times))
 - 🚧 **A failed send is kept** — every message rides the vault's retry ladder
   and parks with its reason —
   [Collector Pages](/p/grade10-site/vault/collector-pages)

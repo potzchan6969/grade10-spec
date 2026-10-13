@@ -1,0 +1,136 @@
+{
+  "version": 2,
+  "change": "print-case-reference-on-vault-paper",
+  "baseline": "31eb1e63a9d2445e2d20711f98b7bc692344c2cf102c949ef14640376e5906b2",
+  "fingerprint": "54e5382a83e21ceb22ec06978ea375f43cded9fa75a39870818fbc940fba0c7f",
+  "reviewedBy": "@ecchochan",
+  "acceptedAt": "2026-10-07T03:05:34.962Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/vault/documents-and-signing.md#document-terms",
+      "sha256": "642c99d49c281d09b390f98240cb309c11e3bc5e8f4d8043483b914b7a61c1ba",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/decisions.md",
+      "sha256": "2ce3c8f998c9a16d5415bccb79405cb3a3fc98b80ecd1a5e9adcd5da196928d5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/proposal.md",
+      "sha256": "2b10faf728f68fe2c65ece0f2f1303b1a4f79710a8a2514a8f820a34d13056f7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "bf89b13417b59ea8b90d7b60c96195dbc7c8df2e4d437ca9d88cba6fc26fa8e4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "ec637db787418e0d31ec5f81aba0efd9637e8ed6e8ab10aac0c436e13de62d22",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "e713d7f536ed4387f59c5cb73f27f9e52f001638f0ec870d0d96caa180bbcf87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "sha256": "1c22ae38b0371986f56345518f00da63ded860d25ce0920342ee64ad9ab8c044",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "sha256": "3938ce2682464e1e804984308ec56885931e28869aab2fff9cdbc7a8a0709624",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "sha256": "d27d38de879c098734ae5ae69b429b03db3c8a3f87369d61a9e893a781bc83c2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/specs/grade10-site/vault/domain-tcs.md",
+      "sha256": "b476c45c19c7885345943cbd7f3d876e7ef850d349fb36b6547f2e0cd74af094",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/print-case-reference-on-vault-paper/tech-design.md",
+      "sha256": "4304411397e4770132b0eb3a605a820468f6094f468a86955280afff048b023d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "sha256": "ac38ca127e9d06d4939571c98783779e519af464d332edcfe54235b26d9ba9b3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "sha256": "d3d81daa9b368dec5714888d1dd7b28fd47acf8f870bdcccd58bcf0741a27f2c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "sha256": "34cf9bd88f57fb03b7e6cc7f75a0b585cbf61d85aac7ef16e7aa6b03bd343e14",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "sha256": "6d7d34159bce1399135ef0f88fbc5934cba55b5b8246936755125ea9875787e3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "sha256": "47e99388cf321fbe16686db7caf1fe608bfadb249e16cd8a0d97f8eff8a2c024",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "sha256": "5840b560382835d76b0363c0fa730d3660e0a562163d13f748ba804ab6c740a6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/domain-tcs.md",
+      "sha256": "b476c45c19c7885345943cbd7f3d876e7ef850d349fb36b6547f2e0cd74af094",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A case carries a six-character reference"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/case-intake/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A document names the case by its reference"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/documents-and-signing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/vault/domain-tcs.md",
+      "anchors": []
+    }
+  ]
+}

@@ -2,12 +2,13 @@
 
 ### Winner Order — Order Progress (Shipped / Delivered)
 
-Storybook: `My Auctions/Winner Order/Delivery/Shipped` and **Delivered**.
+Storybook: `Auction/Post Bidding/Screens/Winner Order/Delivery/Shipped` and **Delivered**.
 
 Header **Order Progress**. When fulfilment is `fulfilled` with a tracking
 number, the tracking number sits as a secondary Link with an external arrow
 trailing icon, opening the carrier tracking URL in a new tab. No Track
-shipment button. No carrier name in the header.
+shipment button. No carrier name in the header. When the operator recorded no
+tracker link, the number is plain text.
 
 **Shipped** — current step Shipped; tracking link present.
 
@@ -25,6 +26,7 @@ shipment button. No carrier name in the header.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Shipped with tracking | Tracking number link in Order Progress | `winner-order-SC-20` |
-| Delivered with tracking | Same tracking number link | `winner-order-SC-221` |
+| Shipped with tracking | Tracking number link in Order Progress | `winner-order-SC-251` |
+| Delivered with tracking | Same tracking number link | `winner-order-SC-252` |
+| Shipped, no tracker link | Tracking number as plain text; no carrier name, no Track shipment control | `winner-order-SC-276` |
 | No tracking yet | Header title only | **Out of suite:** Preparing Shipment before dispatch |

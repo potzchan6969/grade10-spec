@@ -24,14 +24,19 @@ it.
 - Account control
   - Session-aware entry: a primary Sign In button when signed out, the
     account icon when signed in
-  - Account menu: signed in, the icon opens Profile, My Auctions, and Sign
-    out; My Orders joins between Profile and My Auctions once Store answers;
-    the profile also offers Sign out
+  - Account menu: signed in, the sign-in email with its initial avatar above
+    My Auctions and Sign Out; Profile joins first wherever the account page is
+    carried, and My Orders ahead of My Auctions once Store answers; Sign Out
+    stays last; KYC and any item whose page the site
+    withholds stay out
+  - Account page sign-out: the account page offers Sign Out wherever it is
+    carried
 - Members-only cart
   - Sign-in before the cart: the Cart control opens sign-in while no session
     is signed in, and the drawer stays closed
   - The cart the ask was for: the drawer opens by itself once the session
     arrives, and nothing is left waiting when the ask is dismissed
+  - Active-line count: header and drawer agree without opening the drawer; unknown and signed-out counts stay hidden
 - Links only to real surfaces
   - Controls with surfaces behind them: search and cart stay absent until the
     site answers them
@@ -88,9 +93,11 @@ region.
 The site SHALL render the header and the footer before the session has
 resolved. The account entry's presentation and destination SHALL depend on the
 session: signed out shows a primary Sign In button; signed in shows the account
-icon that opens the account menu. What the Cart control opens SHALL depend on
-it too, and nothing else in the chrome SHALL. No chrome control SHALL appear,
-disappear, or move when the session arrives.
+icon that opens the account menu. What the Cart control opens and whether its
+count badge appears SHALL depend on the session too, and nothing else in the
+chrome SHALL. No chrome control SHALL appear, disappear, or move when the
+session arrives. The cart count badge SHALL NOT change the presence or
+position of the Cart control.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-9ud rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
@@ -100,7 +107,7 @@ disappear, or move when the session arrives.
 - **THEN** the header and the footer are already rendered
 - **AND** the content region shows that the surface is loading
 
-<!-- trace:scenario id=g10.site-page-shell.SC-yxt rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-yxt rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-05 - No layout shift when the session arrives
 **Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
@@ -109,6 +116,8 @@ disappear, or move when the session arrives.
 - **THEN** the account entry matches the session (Sign In when signed out,
   account icon when signed in)
 - **AND** no other chrome control appears, disappears, or moves
+- **AND** a cart count badge that later appears for a signed-in member leaves
+  the Cart control where it was
 
 ### Requirement: The account control leads where the collector can go
 
@@ -117,7 +126,8 @@ session has resolved. When the collector is signed out, it SHALL be a primary
 Sign In button that leads to sign-in. When the collector is signed in, it SHALL
 be the account icon that opens the account menu.
 
-Signing out SHALL be offered from the account menu and on the profile.
+Signing out SHALL be offered from the account menu, and on the account page
+wherever the site carries it.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-m3w rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-06 - Signed in
@@ -135,13 +145,14 @@ Signing out SHALL be offered from the account menu and on the profile.
 - **WHEN** they activate Sign In
 - **THEN** they arrive at sign-in
 
-<!-- trace:scenario id=g10.site-page-shell.SC-e9z rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-e9z rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-08 - Sign-out has one home
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
-- **WHEN** any surface renders for a signed-in collector
-- **THEN** the account menu offers Sign out
-- **AND** the profile offers Sign out
+- **GIVEN** a signed-in collector on a build that carries the account page
+- **WHEN** they open the account menu, and then the account page
+- **THEN** the account menu offers Sign Out
+- **AND** the account page offers Sign Out
 
 ### Requirement: The header shows only controls this site has surfaces for
 
@@ -237,11 +248,11 @@ SHALL mark none when the current address belongs to no navigation item.
 - **WHEN** the header renders
 - **THEN** that navigation item is marked as the current page
 
-<!-- trace:scenario id=g10.site-page-shell.SC-xiu rev=1 -->
+<!-- trace:scenario id=g10.site-page-shell.SC-xiu rev=2 -->
 #### Scenario: grade10-site-site-page-shell-SC-14 - A collector is on an unlisted surface
 **Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
 
-- **GIVEN** a collector on the profile, sign-in, or an unrecognized address
+- **GIVEN** a collector on the account page, sign-in, or an unrecognized address
 - **WHEN** the header renders
 - **THEN** no navigation item is marked as the current page
 
@@ -302,122 +313,6 @@ behaviour so the new tab is isolated from the opener.
 - **THEN** Help is reachable in the drawer among the primary items after Auction
   on auction-only nav, or after Store Locator when that item is present
 - **AND** activating it opens the documentation site in a new browsing context
-
-### Requirement: Signed-in collectors open account destinations from the header menu
-
-The account control of a signed-in collector opens a menu of destinations.
-
-**The menu** - When the collector is signed in, activating the account
-control SHALL open a menu that shows their sign-in email with its small
-initial avatar above the items, falling back to the account label when no
-email is available. The menu SHALL offer My Auctions and Sign Out. Where the
-profile is carried, Profile SHALL join first. Once Store answers, the menu
-SHALL also offer My Orders, between Profile and My Auctions where Profile is
-offered, or otherwise before My Auctions, and Membership after My Auctions.
-Until Store answers, the menu SHALL NOT offer My Orders or Membership.
-
-**Each item** - Activating Profile, where it is offered, SHALL take them to
-the profile. Activating My Orders, where it is offered, SHALL take them to
-My Orders. Activating My Auctions SHALL take them to My Auctions. Activating
-Membership, where it is offered, SHALL invoke Membership's handler and SHALL
-NOT navigate to a membership address the site withholds. Activating Sign Out
-SHALL start sign-out.
-
-**Sign Out label** - The menu's sign-out item SHALL read "Sign Out".
-
-**Not offered** - The menu SHALL NOT offer KYC until it is in scope for the
-header.
-
-**Profile sign-out** - Wherever the profile is carried, it SHALL continue to
-offer sign-out as well.
-
-<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-17 - Account menu lists auction-first destinations
-**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
-
-- **GIVEN** a signed-in collector, the profile is carried, and Store answers
-- **WHEN** they activate the account control
-- **THEN** the menu shows their sign-in email with its small initial avatar above the items
-- **AND** the menu offers Profile, My Orders, My Auctions, Membership, and Sign Out, in that order
-- **AND** the menu does not offer KYC
-
-<!-- trace:scenario id=g10.site-page-shell.SC-04a rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-18 - Sign out from the menu
-**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
-
-- **GIVEN** a signed-in collector with the account menu open
-- **WHEN** they activate Sign Out
-- **THEN** sign-out starts
-- **AND** the profile still offers sign-out when they are signed in
-
-<!-- trace:scenario id=g10.site-page-shell.SC-u71 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-27 - Account menu omits My Orders before Store answers
-**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu before Store answers
-
-- **GIVEN** a signed-in collector, the profile is carried, and Store does not yet answer
-- **WHEN** they activate the account control
-- **THEN** the menu shows their sign-in email with its small initial avatar above the items
-- **AND** the menu offers Profile, My Auctions, and Sign Out, in that order
-- **AND** the menu does not offer My Orders or Membership
-
-<!-- trace:scenario id=g10.site-page-shell.SC-agf rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-28 - Account menu omits Profile once Store answers
-**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
-
-- **GIVEN** a signed-in collector, the profile is not carried, and Store answers
-- **WHEN** they activate the account control
-- **THEN** the menu offers My Orders, My Auctions, Membership, and Sign Out
-- **AND** the menu does not offer Profile
-
-<!-- trace:scenario id=g10.site-page-shell.SC-n9c rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-29 - Account menu omits Profile and My Orders before Store answers
-**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
-
-- **GIVEN** a signed-in collector, the profile is not carried, and Store does not yet answer
-- **WHEN** they activate the account control
-- **THEN** the menu offers My Auctions and Sign Out
-- **AND** the menu does not offer Profile, My Orders, or Membership
-
-<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-30 - Account menu shows the sign-in email and avatar
-**Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
-
-- **GIVEN** a signed-in collector with a sign-in email
-- **WHEN** they activate the account control
-- **THEN** the menu shows their sign-in email with its small initial avatar above the items
-
-<!-- trace:scenario id=g10.site-page-shell.SC-qby rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-31 - Account menu falls back to the account label without a sign-in email
-**Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
-
-- **GIVEN** a signed-in collector whose sign-in email is not available
-- **WHEN** they activate the account control
-- **THEN** the menu shows the account label above the items in place of an email
-
-<!-- trace:scenario id=g10.site-page-shell.SC-q9i rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-32 - Account menu offers Membership after My Auctions once Store answers
-**Serves:** grade10-site-site-page-shell-US-03 - reaching Membership from the same menu once Store answers
-
-- **GIVEN** a signed-in collector and Store answers
-- **WHEN** they activate the account control
-- **THEN** Membership appears after My Auctions and before Sign Out
-
-<!-- trace:scenario id=g10.site-page-shell.SC-m6b rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-33 - Sign Out reads in Title Case
-**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
-
-- **GIVEN** a signed-in collector with the account menu open
-- **WHEN** they view the menu
-- **THEN** the last item reads "Sign Out"
-
-<!-- trace:scenario id=g10.site-page-shell.SC-x1n rev=1 -->
-#### Scenario: grade10-site-site-page-shell-SC-34 - Activating Membership invokes its handler without a withheld route
-**Serves:** grade10-site-site-page-shell-US-03 - reaching Membership from the same menu once Store answers
-
-- **GIVEN** a signed-in collector, Store answers, and Membership is offered
-- **WHEN** they activate Membership
-- **THEN** the supplied Membership handler is invoked
-- **AND** the browser does not navigate to a membership address the site withholds
 
 ### Requirement: Compact viewports reach navigation through the menu drawer
 
@@ -498,3 +393,307 @@ drawer.
 - **WHEN** they activate the Cart control
 - **THEN** the cart drawer opens
 - **AND** no sign-in dialog opens
+
+### Requirement: The header shows the member cart's reviewed active-line count
+
+On every surface whose header offers Cart, the site SHALL supply the header
+and drawer title with the same active-line count from the current member's
+reviewed basket. Each distinct active line SHALL count once, irrespective of
+quantity. Active lines include `default` and `adjusted` lines and exclude
+`soldOut` and `unavailable` lines. Checkout eligibility alone SHALL NOT
+determine the count.
+
+The header SHALL show the full positive count in wide and compact layouts.
+It SHALL show no count badge when the reviewed basket has no active lines.
+The count SHALL NOT introduce a Cart control on a surface that omits it.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-6jx rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-42 - Active lines count once
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector on a surface whose header offers Cart
+- **AND** their reviewed basket has a `default` line with quantity `3`, an
+  `adjusted` line with quantity `2`, a `soldOut` line, and an `unavailable` line
+- **WHEN** the header displays the reviewed count
+- **THEN** the header badge displays `2`
+- **AND** the drawer title displays `2` when showing that same reviewed basket
+
+<!-- trace:scenario id=g10.site-page-shell.SC-awn rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-43 - No active lines means no badge
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector on a surface whose header offers Cart
+- **WHEN** their basket review succeeds with an empty basket or only sold-out
+  and unavailable lines
+- **THEN** the header has no count badge
+- **AND** the Cart control remains available
+
+<!-- trace:scenario id=g10.site-page-shell.SC-8v4 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-44 - The full count survives a compact header
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose reviewed basket has `50` active lines
+- **WHEN** a surface whose header offers Cart renders at a wide viewport or
+  at `375` CSS pixels wide
+- **THEN** its Cart badge displays `50`, without truncation
+- **AND** the Cart control remains reachable without horizontal overflow
+
+<!-- trace:scenario id=g10.site-page-shell.SC-e9p rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-45 - A count does not add an unanswered Cart control
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** an auction-first build, whose header offers no Cart because Store
+  does not answer the cart drawer
+- **WHEN** a signed-in member whose cart holds active lines opens any surface
+- **THEN** the header displays neither a Cart control nor its count badge
+
+<!-- trace:scenario id=g10.site-page-shell.SC-rae rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-55 - The count follows the collector to another surface
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose Store header shows `2` active lines
+- **WHEN** they move to Auction, whose header offers Cart once Store answers
+- **THEN** the Auction header's Cart badge displays `2`
+- **AND** showing it needs neither a new review nor opening the drawer
+
+### Requirement: The cart count refreshes without opening the drawer
+
+The site SHALL review the member's basket on cart hydration and after settled
+cart mutations, with the drawer open or closed, and when the drawer opens and
+on retry after a failed review. Once review succeeds, the header SHALL reflect
+that reviewed basket without requiring the collector to open the drawer.
+
+Before the member has a verified count, pending hydration or review SHALL
+show no badge. During a later review for the same member, the header SHALL
+retain that member's last verified count until the review completes, including
+when the refresh follows a failed cart update. A failed review SHALL hide the
+badge; a successful review SHALL replace it with the newly verified count.
+The header SHALL NOT show a badge skeleton or invent a count from unreviewed lines.
+
+The site SHALL NOT poll for, or subscribe to, cart changes made elsewhere.
+A change made on another device SHALL appear after the next review.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-r0e rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-46 - Hydration supplies the count with the drawer closed
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose cart has not finished hydration
+- **AND** the cart drawer stays closed
+- **WHEN** hydration and basket review complete with `2` active lines
+- **THEN** the header badge displays `2` without opening the drawer
+
+<!-- trace:scenario id=g10.site-page-shell.SC-7el rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-47 - Settled mutations refresh the closed drawer's count
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector with `2` reviewed active lines
+- **AND** the cart drawer is closed
+- **WHEN** a cart mutation settles and the resulting basket is reviewed
+- **THEN** adding a distinct active line changes the header count to `3`
+- **AND** removing one of the original active lines instead changes it to `1`
+- **AND** changing only an active line's quantity instead keeps it at `2`
+- **AND** none of these outcomes requires opening the drawer
+
+<!-- trace:scenario id=g10.site-page-shell.SC-mzr rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-48 - An unknown count has no badge
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a surface whose header offers Cart
+- **WHEN** the current member has no verified count and cart hydration or
+  basket review is pending
+- **THEN** the header displays no count badge or badge skeleton
+- **AND** the Cart control remains available in the same position
+
+<!-- trace:scenario id=g10.site-page-shell.SC-79p rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-49 - Failed review clears the count until review succeeds
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose header showed `2` active lines
+- **WHEN** review of their current basket fails
+- **THEN** the header displays no count badge
+- **AND** a later review, on opening the drawer or on retry, that succeeds
+  with `1` active line restores a badge displaying `1`
+- **AND** the Cart control stays available throughout
+
+<!-- trace:scenario id=g10.site-page-shell.SC-k7b rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-53 - Same-member refresh retains the verified count
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** the current member's header shows a verified count of `2`
+- **WHEN** another review starts, including after a failed cart update
+- **THEN** the badge keeps showing `2` while that review is pending
+- **AND** a successful review replaces it with the resulting active-line count
+- **AND** a failed review hides the badge instead
+- **AND** switching members or signing out still clears the count immediately
+
+<!-- trace:scenario id=g10.site-page-shell.SC-o8b rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-54 - A change from another device shows after the next review
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in collector whose header shows `2` active lines
+- **AND** the same member adds a distinct line from another device
+- **WHEN** no review of the basket runs on this device
+- **THEN** the header keeps showing `2`
+- **AND** opening the drawer reviews the basket, and the header and the drawer
+  title both display `3`
+
+### Requirement: The cart count belongs only to the current member
+
+The site SHALL omit the count while the session is unresolved or signed out.
+When session ownership changes, it SHALL clear the previous member's count
+immediately and await the current member's reviewed basket. A late response
+for a previous session SHALL NOT restore or replace the current count.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-b9m rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-50 - Signed-out and unresolved sessions have no count
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a surface whose header offers Cart
+- **WHEN** its session is unresolved or signed out
+- **THEN** the header displays no count badge
+- **AND** the Cart control remains available under its existing sign-in rule
+
+<!-- trace:scenario id=g10.site-page-shell.SC-z8c rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-51 - Signing out clears the previous member's count
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** a signed-in member whose header displays `2` active lines
+- **WHEN** they sign out
+- **THEN** the badge disappears immediately
+- **AND** a late basket response from that signed-in session cannot restore it
+
+<!-- trace:scenario id=g10.site-page-shell.SC-kfr rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-52 - Another member never inherits a count
+**Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
+
+- **GIVEN** member A's header showed `2` active lines and their review is pending
+- **WHEN** session ownership changes to member B
+- **THEN** the header omits the badge until member B's own basket is reviewed
+- **AND** a successful review of B's basket with `1` active line displays `1`
+- **AND** a late response from A cannot replace B's count before or after that review
+
+### Requirement: Signed-in collectors open what the build carries from the account menu
+
+The account control of a signed-in collector opens a menu of destinations.
+
+**The menu** - When the collector is signed in, activating the account
+control SHALL open a menu that shows the small initial avatar of their
+sign-in email, then the email, above the items. The menu SHALL offer My
+Auctions and Sign Out, with Sign Out last. Once Store answers, the menu SHALL
+also offer My Orders, immediately before My Auctions. Wherever the site
+carries the account page, the menu SHALL also offer Profile, as its first
+item.
+
+**Withheld pages** - The menu SHALL NOT offer an item whose page the site
+withholds: My Orders until Store answers, Profile where the account page is
+withheld, and Membership where the membership page is withheld.
+
+**Each item** - Activating Profile SHALL take them to the account page.
+Activating My Orders SHALL take them to My Orders at `/profile/orders`.
+Activating My Auctions SHALL take them to My Auctions. Activating Sign Out
+SHALL start sign-out.
+
+**Sign Out label** - The menu's sign-out item SHALL read "Sign Out".
+
+**Not offered** - The menu SHALL NOT offer KYC.
+
+<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=3 -->
+#### Scenario: grade10-site-site-page-shell-SC-56 - Account menu once Store answers
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
+
+- **GIVEN** a signed-in collector and Store answers
+- **WHEN** they activate the account control
+- **THEN** My Orders comes immediately before My Auctions
+- **AND** Sign Out is the last item
+- **AND** the menu does not offer KYC
+
+<!-- trace:scenario id=g10.site-page-shell.SC-04a rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-57 - Sign out from the menu
+**Serves:** grade10-site-site-page-shell-US-03 - leaving the session from the header
+
+- **GIVEN** a signed-in collector with the account menu open
+- **WHEN** they activate Sign Out
+- **THEN** sign-out starts
+
+<!-- trace:scenario id=g10.site-page-shell.SC-u71 rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-58 - Account menu omits My Orders before Store answers
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu before Store answers
+
+- **GIVEN** a signed-in collector and Store does not yet answer
+- **WHEN** they activate the account control
+- **THEN** the menu offers My Auctions, and Sign Out as the last item
+- **AND** the menu does not offer My Orders
+
+<!-- trace:scenario id=g10.site-page-shell.SC-agf rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-59 - Account menu omits Profile where the account page is withheld
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build without the account page
+
+- **GIVEN** a signed-in collector, Store answers, and the site withholds the account page
+- **WHEN** they activate the account control
+- **THEN** the menu opens on My Orders
+- **AND** the menu does not offer Profile
+
+<!-- trace:scenario id=g10.site-page-shell.SC-n9c rev=2 -->
+#### Scenario: grade10-site-site-page-shell-SC-60 - The auction-launch account menu
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on auction launch
+
+- **GIVEN** a signed-in collector on a build that withholds Store, the account
+  page and the membership page, as the auction launch does
+- **WHEN** they activate the account control
+- **THEN** the menu offers My Auctions and Sign Out, in that order, and no other item
+
+<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-61 - Account menu shows the sign-in email and avatar
+**Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
+
+- **GIVEN** a signed-in collector
+- **WHEN** they activate the account control
+- **THEN** the menu shows the small initial avatar of their sign-in email, then the email, above the items
+
+<!-- trace:scenario id=g10.site-page-shell.SC-m6b rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-62 - Sign Out reads in Title Case
+**Serves:** grade10-site-site-page-shell-US-03 - leaving the session from the header
+
+- **GIVEN** a signed-in collector with the account menu open
+- **WHEN** they view the menu
+- **THEN** the last item reads "Sign Out"
+
+<!-- trace:scenario id=g10.site-page-shell.SC-th1 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-63 - Account menu omits Membership where the membership page is withheld
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build without the membership page
+
+- **GIVEN** a signed-in collector, Store answers, and the site withholds the membership page
+- **WHEN** they activate the account control
+- **THEN** the menu does not offer Membership
+
+<!-- trace:scenario id=g10.site-page-shell.SC-70a rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-64 - My Orders opens order history
+**Serves:** grade10-site-site-page-shell-US-03 - reaching order history from the header
+
+- **GIVEN** a signed-in collector, Store answers, and the account menu is open
+- **WHEN** they activate My Orders
+- **THEN** they arrive at My Orders at `/profile/orders`
+
+<!-- trace:scenario id=g10.site-page-shell.SC-lcs rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-65 - My Auctions opens My Auctions
+**Serves:** grade10-site-site-page-shell-US-03 - reaching My Auctions from the header
+
+- **GIVEN** a signed-in collector with the account menu open
+- **WHEN** they activate My Auctions
+- **THEN** they arrive at My Auctions
+
+<!-- trace:scenario id=g10.site-page-shell.SC-79q rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-66 - Account menu opens on Profile where the account page is carried
+**Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu on a build with the account page
+
+- **GIVEN** a signed-in collector on a build that carries the account page
+- **WHEN** they activate the account control
+- **THEN** Profile is the first item
+
+<!-- trace:scenario id=g10.site-page-shell.SC-o1v rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-67 - Profile opens the account page
+**Serves:** grade10-site-site-page-shell-US-03 - reaching the account page from the header
+
+- **GIVEN** a signed-in collector on a build that carries the account page, with the account menu open
+- **WHEN** they activate Profile
+- **THEN** they arrive at the account page

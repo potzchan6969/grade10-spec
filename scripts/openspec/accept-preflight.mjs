@@ -1,38 +1,44 @@
 #!/usr/bin/env node
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { cliArgs } from "./lib/args.mjs";
 import {
-  prepareAcceptance,
-  runPnpm,
-  validateFoldedSuites,
-} from "./lib/acceptance.mjs";
+  changeClusters,
+  changeStacks,
+  formatClusters,
+  formatStacks,
+} from "./lib/clusters.mjs";
+import { formatPreflight, preflightChange } from "./lib/preflight.mjs";
 
 const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
-const args = process.argv.slice(2);
-const rootAt = args.indexOf("--root");
-const root = rootAt < 0 ? HERE : args[rootAt + 1];
-if (rootAt >= 0) args.splice(rootAt, 2);
-const changeId = args[0];
-if (!changeId || args.length !== 1) {
+const args = cliArgs();
+const take = (flag) => {
+  const at = args.indexOf(flag);
+  if (at < 0) return null;
+  const [, value] = args.splice(at, 2);
+  return value ?? "";
+};
+const root = take("--root") ?? HERE;
+const flag = (name) => {
+  const at = args.indexOf(name);
+  if (at >= 0) args.splice(at, 1);
+  return at >= 0;
+};
+const clusters = flag("--clusters");
+const stacks = flag("--stacks");
+const listed = take("--changes");
+const changeIds = [
+  ...new Set([...(listed ?? "").split(","), ...args].filter(Boolean)),
+];
+if (clusters) console.log(formatClusters(changeClusters(root)));
+if (stacks) console.log(formatStacks(changeStacks(root, changeIds)));
+if ((clusters || stacks) && changeIds.length === 0) process.exit(0);
+if (changeIds.length === 0 || listed === "") {
   console.error(
-    "usage: pnpm run accept:preflight <change-id> [--root <store>]",
+    "usage: pnpm run accept:preflight <change-id>... [--changes a,b,c] [--clusters] [--stacks] [--root <store>]",
   );
   process.exit(2);
 }
-try {
-  const prepared = prepareAcceptance(root, changeId);
-  const validation = runPnpm(["run", "validate:changes", changeId], root);
-  if (validation.status !== 0)
-    throw new Error(
-      `validate:changes refused acceptance:\n${validation.stdout ?? ""}${validation.stderr ?? ""}`,
-    );
-  validateFoldedSuites(prepared, runPnpm);
-  console.log(`${changeId} is ready to fold and accept.`);
-  console.log(`Fingerprint: ${prepared.fingerprint}`);
-  console.log(`Baseline: ${prepared.baselineFingerprint}`);
-  console.log(`Durable files to write: ${prepared.outputs.size}`);
-  for (const path of prepared.outputs.keys()) console.log(`  ${path}`);
-} catch (error) {
-  console.error(error.message);
-  process.exitCode = 1;
-}
+const results = changeIds.map((id) => preflightChange(root, id));
+console.log(formatPreflight(results));
+process.exitCode = results.some((one) => one.failures.length > 0) ? 1 : 0;

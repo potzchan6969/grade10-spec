@@ -1,6 +1,3 @@
 ## User journeys
 
-**Walked by:** nobody on their own - a component contract; collectors open a
-product from the listing through `grade10-site/store/product-listing` (and the
-ZZZ listing that composes the same surface), whose journeys already cover
-opening a product from a tile.
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/store/home`, `grade10-site/store/product-listing` and `grade10-site/store/cross-sell`, which compose the surface

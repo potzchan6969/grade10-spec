@@ -9,7 +9,7 @@ line means. The owner chose "Deduction from Points".
 
 The measure: **every points order promised after the switch is paid with a
 discount titled "Deduction from Points"**, and till promises that expire
-unpaid do not rise during the rollout.
+unpaid, per week, are no higher after the title changes than before.
 
 ## What Changes
 
@@ -18,16 +18,20 @@ unpaid do not rise during the rollout.
 - **A discount titled "Points" still counts as the member's points.** Carts,
   parked sales and unpaid drafts written before the switch carry it, and
   paid orders keep it forever; every reader accepts both titles.
+- **Every reader finds the points discount the same way.** At the till, only
+  the sale's one fixed custom order discount counts under either title, and
+  only on a sale carrying the store's order id; a points title staff keyed on
+  a sale without it leaves the panel with no points, no coupon and no Apply.
+  A paid order whose discounts carry neither title is debited the applied
+  total less every other instrument, never more than promised. A resumed
+  sale applied again takes "Deduction from Points".
 - **Every reader knows the new title before anything writes it.** The store
   and the till first accept both titles while still writing "Points"; both
   writers switch only once no till older than that runs at any location.
 
 ## Non-Goals
 
-- Labels for the same money on the site — the checkout summary row and the
-  cart drawer footer — stay as they are.
-- The till panel's own row for the points spent keeps its label.
-- Orders already paid keep the title they were paid with.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
@@ -52,5 +56,9 @@ unpaid do not rise during the rollout.
 
 ## References
 
-- [Shopify Integration · POS Extension](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#pos-extension)
-- [Paying with Points](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md)
+- [Paying with Points · Rules](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md#rules)
+- [Shopify Integration · Two Channels, One Pipeline](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#two-channels-one-pipeline)
+- [Shopify Integration · Online Checkout](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#online-checkout)
+- [Store Discounts · The Sale, Step by Step](../../../docs/prds/products/grade10-site/store/discounts.md#the-sale-step-by-step)
+- [Store Discounts · Undo](../../../docs/prds/products/grade10-site/store/discounts.md#undo)
+- [Order Details · Order Summary](../../../docs/prds/products/grade10-site/store/order-detail.md#order-summary)

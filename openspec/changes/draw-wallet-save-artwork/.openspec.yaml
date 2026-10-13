@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-10-07
+hands:
+  pm: "@ecchochan"
+depends_on:
+  - launch-wallet-passes
+  - add-account-profile
+awaiting:
+  specs: 2026-10-08, the WalletPassLinks contract, from /planning-dev now R1 is answered - @ecchochan

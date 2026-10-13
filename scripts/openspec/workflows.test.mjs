@@ -9,14 +9,17 @@
  * text and as YAML — `openspec-version.test.mjs` reads a workflow the same
  * way for the CLI's pin.
  *
- * Two cases reach wider: every workflow whose steps read a change's plan,
- * held to running on the push that ticks a task group, and every workflow
- * that skips that push, held to skipping the plan alone. Each trigger's
- * filter is read the way the code host reads it, through a glob matcher
- * small enough to hold here.
+ * Four cases reach wider: every workflow whose steps read a change's plan,
+ * held to running on the push that ticks a task group; every workflow that
+ * skips that push, held to skipping the plan alone; every check a pull
+ * request runs, held to cancelling on pull requests alone; and the Test
+ * workflow's jobs, held to skipping only what they do not read. Each
+ * trigger's filter is read the way the code host reads it, through a glob
+ * matcher small enough to hold here.
  */
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: a workflow's `${{ … }}` is GitHub's own expression, quoted here exactly as the file writes it.
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -29,11 +32,51 @@ const read = (path) => readFileSync(join(ROOT, path), "utf8");
 const WORKFLOWS = ".github/workflows";
 const NOTIFY = ".github/workflows/proposal-notify.yml";
 const DIGEST = ".github/workflows/digest.yml";
+const AUTO_FIX = ".github/workflows/auto-fix-ci.yml";
 
 const notifyText = read(NOTIFY);
 const digestText = read(DIGEST);
 const notify = YAML.parse(notifyText);
 const digest = YAML.parse(digestText);
+
+test("Auto-fix CI claims one attempt per target commit", () => {
+  const workflow = YAML.parse(read(AUTO_FIX));
+  const target = workflow.jobs.repair.steps.find(
+    (step) => step.name === "Resolve repair target",
+  );
+  const repairSteps = workflow.jobs.repair.steps.filter((step) =>
+    step.name?.startsWith("Run Cursor repair"),
+  );
+
+  assert.match(workflow.concurrency.group, /pull_request\.head\.sha/);
+  assert.match(workflow.concurrency.group, /workflow_run\.head_sha/);
+  assert.doesNotMatch(workflow.concurrency.group, /github\.run_id/);
+  assert.equal(workflow.concurrency["cancel-in-progress"], false);
+  assert.equal(workflow.permissions.statuses, "write");
+  assert.match(target.run, /commits\/\$sha\/status/);
+  assert.match(target.run, /ci\/auto-fix-attempt/);
+  assert.match(target.run, /\[ "\$attempted" -eq 0 \] \|\| skip/);
+  assert.match(target.run, /repos\/\$repo\/statuses\/\$sha/);
+  assert.equal(repairSteps.length, 1);
+
+  const diagnostics = workflow.jobs.repair.steps.find(
+    (step) => step.name === "Upload repair diagnostics",
+  );
+  assert.equal(
+    diagnostics.if,
+    "always() && steps.target.outputs.repairable == 'true'",
+  );
+  assert.equal(diagnostics.uses, "actions/upload-artifact@v4");
+  for (const file of [
+    "cursor.json",
+    "cursor.stderr.log",
+    "verify.log",
+    "lint.log",
+  ])
+    assert.ok(diagnostics.with.path.includes(file), file);
+  assert.equal(diagnostics.with["retention-days"], 7);
+  assert.match(repairSteps[0].run, /cursor\.stderr\.log/);
+});
 
 /** Every `actions/cache` step of one job, restore and save alike. */
 const cacheSteps = (job) =>
@@ -110,9 +153,11 @@ const FIXTURE_PLAN =
   "tools/manual/demo-store/openspec/changes/add-thing/tasks.md";
 for (const path of [TEMPLATE, FIXTURE_PLAN])
   assert.ok(existsSync(join(ROOT, path)), `${path} is not there`);
-/** The three workflows that skip the tick's push: the set the skip case holds,
- * named so a workflow leaving it says so. */
-const SKIPPING = ["test.yml", "typecheck.yml", "design-sync.yml"];
+/** The workflows that skip the tick's push: the set the skip case holds,
+ * named so a workflow leaving it says so. Test is not one: its checks are
+ * required on pull requests, and a required check whose workflow never runs
+ * stays pending, so its jobs filter themselves. */
+const SKIPPING = ["typecheck.yml", "design-sync.yml"];
 
 /** Any line of a workflow that sets a prefix fallback, comments — which say
  * why there is none — left out. */
@@ -181,17 +226,47 @@ test("both workflows run the node this store runs", () => {
   }
 });
 
-test("a page landing is a push the notifier reads", () => {
-  // A page's own lines are what an artifact is read against, so landing one
-  // can put a fresh artifact behind and its hand is told about it.
-  assert.ok(
-    notify.on.push.paths.includes("docs/prds/**"),
-    "the notifier does not run on a page landing",
+test("the notifier runs once the manual and the viewer deployed, and only then", () => {
+  // The Manual workflow deploys the manual and the OpenSpec viewer in one job,
+  // so its success is both being live; a message sent before it would link a
+  // page that does not yet show what the message says.
+  assert.equal(notify.on.push, undefined, "the notifier still runs on a push");
+  assert.deepEqual(notify.on.workflow_run, {
+    workflows: ["Manual"],
+    types: ["completed"],
+    branches: ["main"],
+  });
+  assert.equal(YAML.parse(read(".github/workflows/manual.yml")).name, "Manual");
+  assert.match(notify.jobs.notify.if, /workflow_run\.conclusion == 'success'/);
+  assert.match(notify.jobs.notify.if, /workflow_run\.event == 'push'/);
+  assert.match(notify.jobs.notify.if, /workflow_run\.head_branch == 'main'/);
+  // The deployed head, never `github.sha`, which under `workflow_run` is
+  // whatever `main` holds when the run starts.
+  assert.equal(
+    notify.jobs.notify.steps.find((step) => step.name === "Checkout").with.ref,
+    "${{ github.event.workflow_run.head_sha }}",
   );
-  for (const path of ["openspec/changes/**", "openspec/specs/**"]) {
-    assert.ok(notify.on.push.paths.includes(path), path);
+  assert.doesNotMatch(notifyText, /github\.sha\b|github\.event\.before/);
+});
+
+test("the notifier verifies the run listing before choosing the last deployed head", () => {
+  const step = notify.jobs.notify.steps.find((one) => one.id === "range");
+  assert.doesNotMatch(step.run, /status=success/);
+  assert.equal(step.env.RUN_ID, "${{ github.event.workflow_run.id }}");
+  assert.match(step.run, /select-deployed-base\.mjs/);
+  assert.match(step.run, /"\$RUN_ID" "\$RUN_NUMBER" "\$HEAD_SHA"/);
+  assert.match(step.run, /git merge-base --is-ancestor "\$base" "\$HEAD_SHA"/);
+});
+
+test("the manual deploys on every push the notifier reads", () => {
+  // A page landing can put an artifact behind, and its hand is told; a change
+  // moving is a milestone. Each must start a deploy, or the notifier never
+  // wakes for it.
+  const manual = YAML.parse(read(".github/workflows/manual.yml"));
+  for (const path of ["docs/prds/**", "openspec/**"]) {
+    assert.ok(manual.on.push.paths.includes(path), path);
   }
-  assert.deepEqual(notify.on.push.branches, ["main"]);
+  assert.deepEqual(manual.on.push.branches, ["main"]);
 });
 
 test("the channel post falls back to the store's own channel", () => {
@@ -242,7 +317,7 @@ test("shared-planning-agent-rounds-SC-84 - a workflow that reads a plan runs on 
 
 test("a workflow that skips the tick skips a change's plan alone, never the template", () => {
   // The tick's push carries a change's `tasks.md` and nothing else, which the
-  // test, typecheck and design-sync workflows have no reason to run on. The
+  // typecheck and design-sync workflows have no reason to run on. The
   // template of the same name is code the store's tests read, so a filter
   // written for the tick may not catch it.
   // Chosen by what the filter does, not by how it is spelled: a workflow
@@ -256,7 +331,7 @@ test("a workflow that skips the tick skips a change's plan alone, never the temp
   assert.deepEqual(
     skipping.map(([path]) => path.slice(WORKFLOWS.length + 1)).sort(),
     [...SKIPPING].sort(),
-    "the workflows that skip the tick's push are not the three the store names",
+    "the workflows that skip the tick's push are not the ones the store names",
   );
   for (const [path, workflow] of skipping) {
     for (const [name, trigger] of pathTriggers(workflow)) {
@@ -288,4 +363,97 @@ test("the glob matcher reads the patterns the workflows write", () => {
   assert.equal(globMatches("docs/prds/**", "docs/prd/a.md"), false);
   assert.equal(globMatches("*.md", "README.md"), true);
   assert.equal(globMatches("*.md", "docs/README.md"), false);
+});
+
+test("a check a pull request runs cancels on pull requests alone", () => {
+  // A push to main cancelled by the next one leaves no verdict on the commit
+  // that may have broken main, so every run off a pull request keys its own
+  // group.
+  const group =
+    "${{ github.event_name == 'pull_request' && github.ref || github.run_id }}";
+  const checks = workflows().filter(
+    ([, workflow]) => workflow.on?.pull_request !== undefined,
+  );
+
+  assert.ok(checks.some(([path]) => path.endsWith("/lint.yml")));
+  for (const [path, workflow] of checks) {
+    if (!workflow.concurrency?.["cancel-in-progress"]) continue;
+    assert.ok(
+      workflow.concurrency.group.endsWith(group),
+      `${path} shares a concurrency group across pushes to main`,
+    );
+  }
+});
+
+test("Test's jobs skip only what they do not read", () => {
+  const test = YAML.parse(read(`${WORKFLOWS}/test.yml`));
+  const step = test.jobs.changes.steps.find(({ id }) => id === "diff");
+  const docsOnly = new RegExp(step.env.DOCS_ONLY);
+
+  for (const path of [
+    PLAN,
+    "openspec/changes/some-change/proposal.md",
+    "docs/prds/a/b.md",
+  ])
+    assert.ok(docsOnly.test(path), `${path} reaches the Playwright jobs`);
+  for (const path of [
+    TEMPLATE,
+    FIXTURE_PLAN,
+    "openspec/specs/a/spec.md",
+    "packages/ui/src/a.tsx",
+    "tools/manual/src/a.ts",
+    "package.json",
+  ])
+    assert.equal(
+      docsOnly.test(path),
+      false,
+      `${path} skips the Playwright jobs`,
+    );
+
+  // Skipped on `false` alone, so a failed filter runs them rather than
+  // reading green.
+  for (const name of ["stories", "walk"]) {
+    assert.equal(test.jobs[name].needs, "changes", name);
+    assert.equal(
+      test.jobs[name].if,
+      "${{ !cancelled() && needs.changes.outputs.code != 'false' }}",
+      name,
+    );
+  }
+  const planOnly = new RegExp(step.env.PLAN_ONLY);
+  assert.ok(planOnly.test(PLAN), "the tick's push runs catalogs");
+  for (const path of [
+    TEMPLATE,
+    FIXTURE_PLAN,
+    "openspec/changes/some-change/proposal.md",
+  ])
+    assert.equal(planOnly.test(path), false, `${path} skips catalogs`);
+  for (const [name, command] of [
+    ["manual", "pnpm run test:manual"],
+    ["openspec", "pnpm run test:openspec"],
+    ["catalogs", "pnpm run test:catalogs"],
+  ]) {
+    assert.equal(test.jobs[name].needs, "changes", name);
+    assert.equal(
+      test.jobs[name].if,
+      "${{ !cancelled() && needs.changes.outputs.plan != 'true' }}",
+      name,
+    );
+    assert.equal(test.jobs[name].steps.at(-1).run, command, name);
+  }
+  assert.equal(test.jobs["catalogs-tests"], undefined);
+
+  const scripts = JSON.parse(read("package.json")).scripts;
+  assert.equal(scripts["test:manual"], "pnpm --dir tools/manual run test");
+  assert.match(scripts["test:catalogs"], /--filter '!@grade10\/manual'/);
+  assert.match(scripts.test, /test:scripts/);
+  assert.match(scripts.test, /test:openspec/);
+  assert.match(step.run, /git diff --no-renames --name-only/);
+  const parsed = spawnSync("bash", ["-n"], {
+    input: step.run,
+    encoding: "utf8",
+  });
+  assert.equal(parsed.status, 0, parsed.stderr);
+  assert.equal(test.on.push["paths-ignore"], undefined);
+  assert.equal(test.on.pull_request, null);
 });

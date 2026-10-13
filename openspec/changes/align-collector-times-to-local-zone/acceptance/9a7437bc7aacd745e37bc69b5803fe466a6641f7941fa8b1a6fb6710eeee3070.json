@@ -1,0 +1,182 @@
+{
+  "version": 2,
+  "change": "align-collector-times-to-local-zone",
+  "baseline": "e2097e11c5d6367f2ae6a30fc06ea86412d594e068d77a78e66f516f0414a833",
+  "fingerprint": "9a7437bc7aacd745e37bc69b5803fe466a6641f7941fa8b1a6fb6710eeee3070",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-07T09:54:53.822Z",
+  "supersedes": "6e5e0cd6f518e7ec0197d87576327021a63477de591c8cb7478f0309e7e7a185",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/grading/messages.md#messages",
+      "sha256": "bf0477f10e734ebcc6428b4b0d8d0ee031eba85f79cb0f8432927666aa7705c6",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/vault/collector-pages.md#messages",
+      "sha256": "4fb015434792b3884d4c1b63fdb5063c920ed1356d0903cf22025c1462e1ed7e",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/auction-listing.md#bid-history",
+      "sha256": "138f425b12df243bb7f4e95869bc4fca7981614f24b4e3311a6678c8cb55b008",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/decisions.md",
+      "sha256": "f640ea9474849a1a095ddbe0d4ae1690be422a7c1b7cacbf65e25c17295553cf",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/proposal.md",
+      "sha256": "d15cbf87374cd0d637d99ad6e764583b1c67ee98b608a7772520cb778908232c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/dates-and-times/feature-tcs.md",
+      "sha256": "c19b7df9ccdbf01dd01e0f41aa8450b58915372f9bd1be1d337ab7c673d5b9a6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/dates-and-times/spec.md",
+      "sha256": "e682db7a4d6ad87be0398b50f3429d3d8062610a87cd4af6947703de839ece49",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/dates-and-times/user-journeys.md",
+      "sha256": "d0ddd17edc8f11020e01898ccc544f427dd7f982161709b1fccdfc17f9ba66b8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "0e67fcd6b5d8fe558379fec0532691933a9c59909e4af571b93563de345ecb6f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "6c8f1f2a957742f0ff6a65728cb7e2b25e09865d638da917b4247df7fd086e4f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "sha256": "94371f6976856fb639179c81f1bdcd92d0f50d40f926486a62a944cdbfdf9105",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "sha256": "b196c70edab9f0c140fe982f4890d31c87622f6074a72db49340e4da045801d6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "sha256": "7151f9ffacb3e818197516f58cec1f0b899a9901191daf7db7b30fac6d0f6f01",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-collector-times-to-local-zone/tech-design.md",
+      "sha256": "8ed159ef01068accb799873507644eba2673d91154eb39069a1c238dad17f077",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/dates-and-times/feature-tcs.md",
+      "sha256": "b85d7b3fa15d718543866a19ca74a5d706614ae1f282b17246b8168201904acc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/dates-and-times/spec.md",
+      "sha256": "8cf4dd22f16199d0fbc20af439c71b43a917835e395233fad4c9ceed52f669da",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/dates-and-times/user-journeys.md",
+      "sha256": "d0ddd17edc8f11020e01898ccc544f427dd7f982161709b1fccdfc17f9ba66b8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "4c9a7e47e20614ceb96422cfa3cf41aa56b957f207e5dd1ffa58f4a88df6e974",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "1bbb07951f1c273a90afe74d62e517b7497b4bed546adb70d3f4ccf52b025a6c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "sha256": "33d192c734e1a757c2e31270d1552c0f1c391bbd86e181d5d3084a5d953f1746",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "sha256": "cf6d30bcac279cb2c78c354d1a1c5cd039299056cc08d5b6812e8c9db1adc1ed",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "sha256": "7151f9ffacb3e818197516f58cec1f0b899a9901191daf7db7b30fac6d0f6f01",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/shared/dates-and-times/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/dates-and-times/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A deadline names its time zone",
+        "Requirement: A local moment renders for collectors without naming UTC",
+        "Requirement: A message the platform sends states one zone",
+        "Requirement: Each rendering states the zone its surface requires"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/dates-and-times/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Bid history components format activity time"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Dates render in Hong Kong as GMT+8"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/invoice-and-receipt-pdf/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -5,5 +5,23 @@
   "bioLabel": "소개",
   "editLabel": "프로필 수정",
   "emptyBio": "아직 소개가 없습니다.",
-  "memberSince": "{date}부터 함께하고 있습니다"
+  "memberSince": "{date}부터 함께하고 있습니다",
+  "consignments": {
+    "view": {
+      "new": "요청 접수됨",
+      "toprice": "입고됨",
+      "tosign": "서명 대기",
+      "tolist": "서명 완료",
+      "onsale": "판매 중",
+      "sold": "판매됨",
+      "payout": "지급 예정",
+      "ended": "종료: 다음 단계를 선택하세요",
+      "returning": "반송 중",
+      "closed": "완료"
+    },
+    "sellerLine": "판매자: {name}",
+    "sellerLineSub": "Grade10을 통해 판매하는 수집가입니다. 카드 보관, 결제 및 반품은 저희가 처리합니다.",
+    "lotSellerLine": "위탁자: {name}",
+    "lotSellerLineSub": "Grade10 경매를 통해 판매합니다. 카드 보관, 결제 및 인도는 저희가 처리합니다."
+  }
 }

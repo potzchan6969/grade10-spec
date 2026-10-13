@@ -11,10 +11,15 @@
  * the schema declares none: an empty round dispatches nobody, which is a
  * schema with a hole in it rather than something to skip past quietly.
  *
+ * Each reader also runs on the model `.claude/agents/README.md` names: `opus`
+ * where a task group's or the tech design's round can dispatch it, because
+ * those readings are held to the principles and read code; `sonnet`
+ * everywhere else.
+ *
  * `--root` reads a store other than this one, which is how the tests reach
- * either refusal: this store's own schema takes neither.
+ * each refusal: this store's own schema takes none.
  */
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "../openspec/lib/args.mjs";
@@ -45,13 +50,37 @@ if (agents.size === 0) {
   process.exit(1);
 }
 
+const onCode = new Set(
+  [
+    ...(schema.artifacts.find(({ id }) => id === "tech-design")?.perspectives ??
+      []),
+    ...schema.apply,
+  ].map(({ agent }) => agent),
+);
+
 let failures = 0;
 for (const agent of [...agents].sort()) {
-  if (existsSync(join(root, agent))) {
-    console.log(`[PASS] the schema's reader ${agent} resolves`);
-  } else {
+  if (!existsSync(join(root, agent))) {
     console.error(
       `[FAIL] the schema names the reader ${agent}, which resolves to nothing`,
+    );
+    failures += 1;
+    continue;
+  }
+  console.log(`[PASS] the schema's reader ${agent} resolves`);
+  const front = /^---\n([\s\S]*?)\n---/.exec(
+    readFileSync(join(root, agent), "utf8"),
+  )?.[1];
+  const model = /^model:\s*(\S+)/m.exec(front ?? "")?.[1] ?? "no model";
+  const wanted = onCode.has(agent) ? "opus" : "sonnet";
+  if (model === wanted) {
+    console.log(`[PASS] ${agent} runs on ${wanted}`);
+  } else {
+    const why = onCode.has(agent)
+      ? "a task group's or the tech design's round dispatches it"
+      : "no task group's or tech design's round dispatches it";
+    console.error(
+      `[FAIL] ${agent} runs on ${model}; ${why}, so it runs on ${wanted}`,
     );
     failures += 1;
   }

@@ -6,10 +6,10 @@ disable-model-invocation: true
 
 # Dev help
 
-Kept until the team has adopted the line commands (`Q84` of
-`run-a-round-on-every-artifact`). The tables below are the pre-workflow
-line, printed as they stood; the line today is `/workflow-plan` to
-`/workflow-land`, tabled in `AGENTS.md`.
+The current planning flow is `planning-pm`, `planning-design` where needed,
+then `planning-dev`. `/workflow-plan` through `/workflow-land` are next-version
+wrappers, not prerequisites for the planning skills. Suggest them only when
+that next-version workflow is requested.
 
 Print both tables below as-is, then suggest the next skill from this session.
 Do **not** run, attach, or start the suggested skill. The contributor
@@ -29,15 +29,16 @@ sentence.
 | `/planning-design` | `ui-design.md`: screens to Figma frames, exports named exactly, states tied to scenarios. | Same. | "Write the UI design for the watchlist drawer." |
 | `/planning-dev` | One run: QA1 blind draft cases, Dev technical design and scenarios, QA2 reconciliation, human clarification, acceptance and publication before implementation. | Same. | "Plan and accept `auction-auto-bidding`; I am implementing it." |
 | `/accept-review` | After QA2, before `pnpm spec:accept`: the PRD pages, designs, deltas and durable specs must agree. Reports a verdict; edits nothing. `/planning-dev` runs it. | Same. | "Is `auction-auto-bidding` ready to accept?" |
-| `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | `/openspec-apply-change`. | "Implement the tasks in `auction-auto-bidding`." |
-| `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. | No equivalent; `/openspec-apply-change`, then review by hand. | `/implement-then-review auction-auto-bidding` |
+| `/accept-batch` | More than two changes waiting on acceptance at once: runs every gate once, stacks the changes, settles the open items from one decision rule, then applies, reviews and lands each stack. The human still runs `pnpm spec:accept` on each change. The store holds it; the application repository has no copy. | Same. | "Take the five changes waiting on acceptance to Ready to accept." |
+| `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | Next-version wrapper: `/workflow-build`. | "Implement the tasks in `auction-auto-bidding`." |
+| `/implement-then-review` | Same as `/implement`, then `/review-changes` when the last slice is green. | No current equivalent; `/workflow-build` belongs to the next-version workflow. | `/implement-then-review auction-auto-bidding` |
 | `/tdd` | The red → green loop. `/implement` already runs the work through it; invoke when you want the loop on its own. | Same. | "Build the bid-increment helper test-first." |
 | `/reconcile-figma-annotations` | Interactive, evidence-pinned review of spec-owned Figma annotation drift, selective acceptance, verification, and optional local commit. | Same. | "Review spec-owned Figma annotation drift." |
 | `/commit` | Local commits, `type(domain):`. Only when invoked. Chain `/pr-push` in the same message to publish. | Same. | `/commit` |
 | `/pr-push` | Create a `<type>/<short-description>` branch (`feat/`, `fix/`, `build/`, etc.) when publishable work is on `main`, then push it and ensure an open PR. Commits dirty files that belong on the PR; irrelevant dirty files do not block. Push updated submodules before this repo. Only when invoked. Re-run; rewrite the description only when this session changed code. | Same. | `/commit` then `/pr-push`, one message |
-| `/spec-push` | Land the branch here: rebase onto `main`, settle conflicts by reading the change, merge the PR. A change reaches the application repo only once it is on `main`. | Same. | `/spec-push` |
+| `/spec-push` | Land commits here with `pnpm push:main`: rebase onto `main`, settle conflicts by reading the change, run the fast gate, push. Every path lands on `main`; `--pr` opts into a pull request. A change reaches the application repo only once it is on `main`. | Same. | `/spec-push` |
 | `/review-changes` | Two-axis review (Standards and Spec) since a fixed point. | No equivalent; review by hand. | `/review-changes` since the branch point |
-| `/archive-change` | Implementation is complete and verified. Archive the accepted change; its contract was published at acceptance, and deployment does not wait for archive. | `/openspec-archive-change`. | "The proxy-bidding implementation is verified - archive it." |
+| `/archive-change` | Implementation is complete and verified. Archive the accepted change; its contract was published at acceptance, and deployment does not wait for archive. | App archive runs in the app repository; store closeout follows `docs/governance/prd-and-openspec.md`. | "The proxy-bidding implementation is verified - archive it." |
 
 ## Design to code
 
@@ -49,6 +50,12 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | `/design-system-primitives` | A primitive's variants, sizes, or states, or its Code Connect template. The Figma component set is the contract; a component may not offer a rung the design does not define. | "Add a `destructive` variant to Button." |
 | `/design-tokens` | A token value moved — pull a designer's change in, rebuild the theme CSS, push values back. Never hand-edit the generated CSS. | "Design moved the primary colour — pull it in and rebuild the theme CSS." |
 | `/design-sync-check` | `design-sync:check` failed, the nightly reported drift, or Dev Mode is emitting something wrong. Triage what it printed. | "`design-sync:check` is failing — triage what it printed." |
+
+## Storybook
+
+| Invoke | When | Example |
+| --- | --- | --- |
+| `/storybook-workbench` | A screen, a state, a click-through journey, a flow or a prototype drawn in the workbench, titled by the manual's domain and page. | "Appointment › Booking: add a 'No slots this month' state to Book Visit." |
 
 ## Email
 

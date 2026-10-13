@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RadioButton } from "./radio-button";
 
 const meta = {
-  title: "Components/RadioButton",
+  title: "Design System/Forms/RadioButton",
   component: RadioButton,
   tags: ["autodocs"],
   // The control is a leaf: a RadioGroup owns the selected value, so every story

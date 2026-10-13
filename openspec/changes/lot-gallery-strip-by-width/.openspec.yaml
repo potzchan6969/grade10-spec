@@ -1,2 +1,8 @@
 schema: grade10-planning
 created: 2026-09-28
+hands:
+  dev: "@htonyl"
+reviewed:
+  decisions: 8d209779
+  tech-design: 825d09f3
+  specs: 0bf2e61e

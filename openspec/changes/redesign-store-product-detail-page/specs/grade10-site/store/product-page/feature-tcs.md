@@ -1,6 +1,6 @@
 # grade10-site/store/product-page Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/6
 **Drafts styled:** 2026-09-10, tcs-rules r3.0
 
 ## grade10-site-store-product-page-US6: Collector reviews a product's catalogue context
@@ -10,7 +10,8 @@
 and item facts,
 **so that** I can understand what is available before I decide to buy.
 
-### grade10-site-store-product-page-US6-TC1-1: Product page shows ordered media and price context
+<!-- trace:case id=g10.store-product-page.TC-otm rev=2 covers=g10.store-product-page.SC-n6k,g10.store-product-page.SC-dd3,g10.store-product-page.SC-h7c -->
+### grade10-site-store-product-page-US6-TC1-2: Product page shows ordered media and price context
 
 **Classification:**
 
@@ -49,8 +50,9 @@ and item facts,
 
 * The media gallery renders both images for <product_1> in catalogue order with descriptive alternative text.
 * The purchase context shows current price <current price> and greater compare-at price <compare-at price>.
-* The purchase context says only <available quantity> remain.
+* The purchase context says nothing about how many remain.
 
+<!-- trace:case id=g10.store-product-page.TC-jw5 rev=1 covers=g10.store-product-page.SC-n6k,g10.store-product-page.SC-dd3,g10.store-product-page.SC-h7c -->
 ### grade10-site-store-product-page-US6-TC2-1: Product without images shows an accessible placeholder
 
 **Classification:**
@@ -87,6 +89,7 @@ and item facts,
 * The media gallery renders one accessible placeholder for <product_2>.
 * The media gallery renders no empty image and no image URL made by the page.
 
+<!-- trace:case id=g10.store-product-page.TC-4bp rev=1 covers=g10.store-product-page.SC-n6k,g10.store-product-page.SC-dd3,g10.store-product-page.SC-h7c -->
 ### grade10-site-store-product-page-US6-TC3-1: Supplied item facts and static fulfilment copy render without invented product metadata
 
 **Classification:**
@@ -135,6 +138,7 @@ and item facts,
 **I want** to expand and collapse a long product description where it is shown,
 **so that** I can read the full description without leaving the product page.
 
+<!-- trace:case id=g10.store-product-page.TC-wpt rev=1 covers=g10.store-product-page.SC-yaj -->
 ### grade10-site-store-product-page-US7-TC1-1: Long description expands and collapses in place
 
 **Classification:**
@@ -184,6 +188,7 @@ and item facts,
 **I want** to choose a quantity and add it from the product page,
 **so that** I can buy the quantity I chose while staying on the product.
 
+<!-- trace:case id=g10.store-product-page.TC-ux8 rev=1 covers=g10.store-product-page.SC-lqp -->
 ### grade10-site-store-product-page-US8-TC1-1: Chosen quantity adds while the page stays put
 
 **Classification:**
@@ -238,7 +243,8 @@ and item facts,
 **I want** a product with no available item to keep its price and say that it is sold out,
 **so that** I can tell an unavailable product from a broken purchase page.
 
-### grade10-site-store-product-page-US9-TC1-1: Sold-out product keeps prices and disables purchase
+<!-- trace:case id=g10.store-product-page.TC-aww rev=2 covers=g10.store-product-page.SC-xny -->
+### grade10-site-store-product-page-US9-TC1-2: Sold-out product keeps prices and disables purchase
 
 **Classification:**
 
@@ -256,13 +262,13 @@ and item facts,
 **Pre-conditions:**
 
 * customer is on <grade10 store url>.
-* The catalogue holds <product_6> whose one product item is unavailable for sale.
+* The catalogue holds <product_6> whose one product item is sold out.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product_6> | Product whose one item is unavailable for sale |
+| <product_6> | Product whose one item is sold out |
 
 **Steps:**
 
@@ -273,6 +279,15 @@ and item facts,
 
 **Expected Results:**
 
-* The product remains priced and is marked unavailable.
-* The purchase action is disabled and labelled sold out.
+* The product remains priced and reads Sold out.
+* The purchase action is disabled and reads Sold out.
 * No control can add <product_6> to the cart.
+
+## Reconciliation
+
+**Run:** Update on 2026-10-06, from `add-store-product-status`, which this
+change rebases onto (`add-store-product-status` decisions Q5). SC-13 moved to
+rev 2: the page says nothing about how many remain, as product status
+requires. US6-TC1 moved to rev 2 to expect the same. US9-TC1 moved to rev 2:
+the item is sold out and reads Sold out, rather than unavailable, which names
+a withdrawn cart line. QA2 reruns on this suite.

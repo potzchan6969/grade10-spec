@@ -1,0 +1,80 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "78d21d5ec06ecc6f80055d5038ff9ad0d02960aff29b8ad21779fe0386f89dcb"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "168a049a55214edb34548fcc764533588ea33656",
+    "capturedAt": "2026-10-08T06:37:36.745Z",
+    "targets": [
+      {
+        "path": "openspec/changes/clarify-auction-shipping-progress-copy/ui-design.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: A winner reads their own payment and shipment state"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Every visible lot has one external lot status"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: Auction order status is independent of store order status",
+          "Requirement: Order status is derived, never written"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Winner Order shows five progress steps"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

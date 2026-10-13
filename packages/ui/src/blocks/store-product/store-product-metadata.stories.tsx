@@ -8,7 +8,7 @@ import {
 import { StoreProductMetadata } from "./store-product-metadata";
 
 const meta = {
-  title: "Store Product/Product Metadata",
+  title: "Store/Product Page/Blocks/StoreProductMetadata",
   component: StoreProductMetadata,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

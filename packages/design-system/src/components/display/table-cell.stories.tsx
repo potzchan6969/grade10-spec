@@ -4,7 +4,7 @@ import { TableCell } from "./table-cell";
 import { TableRow } from "./table-row";
 
 const meta = {
-  title: "Components/TableCell",
+  title: "Design System/Display/TableCell",
   component: TableCell,
   tags: ["autodocs"],
   // A part only has its table semantics inside the parts that own it.

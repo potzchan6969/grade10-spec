@@ -91,7 +91,7 @@ Add pure customer-order projections beside the order presentation layer:
 | Payment method | typed payment instrument | optional `OrderDetailsPayment` |
 | Tracking target | tracking URL string or null | safe absolute `https` URL or null |
 
-The status badge comes from `grade10-site/store/order-status`; these pages
+The status badge comes from `grade10-site/commerce/order-status`; these pages
 consume that frontend rule and do not copy it. Formatting stays at the
 application boundary where locale is known. Arithmetic uses minor units before
 formatting. Both pages display a trimmed, non-empty `orderName` when supplied
@@ -202,10 +202,13 @@ no Korean entries are added because Korean is a ZZZ locale.
   story fixtures in `@grade10/ui`, map only typed order facts in Grade10, and
   make a later contract change the prerequisite for line promos, line issues,
   product media, pickup facts, loyalty amounts, or order promo labels.
-- **[Risk] The points acceptance has no current Store source field.** - Do not
-  derive the credit or deducted count from another money field. Resolve the
-  typed contract boundary before claiming the points scenario; otherwise keep
-  the Points row absent and record the dependency.
+- **[Risk] The points credit has a source only where the shop named the points
+  discount.** - The Store read takes it from the allocation the shop named
+  under a points title (grade10
+  `packages/grade10-store/backend/src/services/orders/readOrder.ts`
+  `pointsCreditOf`), never from the fallback that subtracts every other
+  discount, so an order whose shop named no points discount shows no Points
+  row, as Order Details' No Points row line states.
 - **[Risk] Shipping address and payment data escape the owner surface.** → Keep
   both projections detail-only, exclude them from logs and analytics, and rely
   on the existing owner-scoped read and not-found treatment.

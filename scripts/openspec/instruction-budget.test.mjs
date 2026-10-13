@@ -19,24 +19,19 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // Words. AGENTS.md loads on every path; each `rules.<artifact>` block loads on
 // that artifact's path through the CLI. The schema instruction and template are
 // the rules' home on the artifact path, so a block holds what only it says.
-// 2500 until the lifecycle grew its eighth artifact. The table of artifacts is
-// the one thing AGENTS.md cannot link away — an agent that reads nothing else
-// reads it — so a row costs what a row costs, and the raise buys a little
-// headroom rather than a blank cheque. 2660 once Design Override put the
-// agreed look in the one file every agent reads before it builds.
-const AGENTS_BUDGET = 2660;
+// The clarification format lives in AGENTS.md. Transfer 310 words from the
+// round-summary allowance so the combined budget stays unchanged.
+const AGENTS_BUDGET = 2970;
 // The `workflow-round` skill loads on every artifact of every change, and the seven
 // line skills load it rather than restating it, so it carries the procedure
 // for all of them. 3200 is its size after the pass that gave the landing,
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
-// The round's conduct: the skill's step 5 loads it every round, to lay out the
-// summary, so it costs what the skill costs. 922 is its size once the skill's
-// restatements of it became links.
-const ROUND_SUMMARY_BUDGET = 922;
+// The round summary links to AGENTS.md for the clarification format.
+const ROUND_SUMMARY_BUDGET = 970;
 // The skills a line command loads: the seven command skills a hand invokes,
-// and the four role skills each of those loads for its rules, beside `workflow-round`,
+// and the three role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
 // size after the pass that gave its rules one home - `Q84` for the role
 // skills, the overlap pass for the command ones: the next rule earns its words
@@ -50,14 +45,17 @@ const SKILLS_BUDGET = {
   // 178 after the enforcement audit's pass cut its three rules to a pointer
   // at the instruction that holds them.
   "workflow-tasks": 178,
-  "workflow-build": 472,
+  // 560 after absorbing apply rules; the combined build/apply load shrinks.
+  "workflow-build": 560,
   // 366 once the whole-change landing's command took its own line.
   "workflow-land": 366,
   "planning-pm": 2740,
-  "planning-qa": 4446,
-  "planning-design": 1868,
+  // 1879 after design questions link to the shared clarification-request
+  // shape instead of defining a competing one.
+  "planning-design": 1879,
   // 1050 after the engineer lane gained its hand-off and archive guidance.
-  "planning-dev": 1050,
+  // 1170 after the sweep, review preflight and cluster reconciliation steps.
+  "planning-dev": 1170,
 };
 const RULES_BUDGET = {
   // 150 after the proposal lane gained its PRD and metric guardrails.
@@ -271,10 +269,10 @@ test("every slash name a skill or a governance page writes resolves to a skill",
   );
 });
 
-// The three skills task 3.10 kept until the line is adopted (`Q84`). Each
+// The remaining skills task 3.10 kept until the line is adopted (`Q84`). Each
 // exists and opens naming the `/workflow-<artifact>` skill that replaced it.
 // This list empties at this change's archive.
-const KEPT_SKILLS = ["dev-help", "openspec-propose", "spec-push"];
+const KEPT_SKILLS = ["dev-help", "spec-push"];
 
 test("each kept skill exists and opens naming its workflow replacement", () => {
   for (const name of KEPT_SKILLS) {

@@ -16,6 +16,10 @@ more can be loaded are decided by the application.
   - Reusable parts: each part renders without `ProductBrowse`
 - Tile contract
   - Supplied facts: price, sold-out, cart action, and image are displayed as given
+  - Supplied address: a tile that opens is a link to the address it is given
+  - One way in: the photo and the name open the product alike, where the tile opens
+  - Photo as supplied: the photo draws as supplied in every tile status, never blended into the well
+  - Whole photo: the square well shows the whole supplied photo, in every status; the well, not a cropped edge, fills what the photo leaves
 - Selling is opt-in
   - Supplied handler: the cart control is drawn where the consumer can act on a quantity, and nowhere else
   - No standing default: a control is never drawn over nothing, so a press cannot be swallowed
@@ -38,7 +42,9 @@ more can be loaded are decided by the application.
 - What is left, said
   - Supplied remaining count: the card displays how many are left, in the consumer's own words
   - Consumer decides when: the card shows what it is given and judges nothing about scarcity
+
 ## Requirements
+
 ### Requirement: The listing surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
@@ -96,6 +102,22 @@ formatted original price, sold-out condition, and in-cart condition with its
 supplied count. It SHALL report tile activation and cart quantity changes
 through named callbacks, each identifying the product.
 
+A tile SHALL open where the consumer supplies a tile-activation callback or
+the product's address, unless the product is sold out and the consumer also
+supplies a cart handler: a sold-out tile opens where the tile does not sell,
+keeping its sold-out treatment and offering no cart action. Where a tile
+opens, the product image and the product name SHALL open it alike: each
+activates the callback where one is supplied, and a tile given an address and
+no callback opens as a link to that address, whose plain press the browser
+follows. Where a tile does not open, the image and the name SHALL remain
+inert.
+
+Where the tile opens, the name SHALL be the tile's one keyboard stop that
+opens the product and the one control assistive technology announces for it,
+taking the keys its native control takes; the image SHALL open on a pointer
+press and SHALL NOT be a stop. A name that opens SHALL show it by an underline
+on hover and on keyboard focus; a name that does not open SHALL be plain text.
+
 A tile SHALL NOT offer a wishlist control.
 
 A tile SHALL NOT display metadata badges such as collection, series, or
@@ -151,6 +173,70 @@ product is sold out, or hold a cart quantity.
 
 - **WHEN** a product tile renders
 - **THEN** no collection, series, or region badge appears on it
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-7pj rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-87 - The product name activates the tile
+**Serves:** Tile contract - the product name activates the tile
+
+- **GIVEN** a product that is not sold out and a tile-activation callback
+- **WHEN** a shopper activates the product name
+- **THEN** tile activation is reported once, identifying that product
+- **AND** activating the product image reports the same activation once more
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-d3u rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-88 - A sold-out tile stays inert where it sells
+**Serves:** Tile contract - a sold-out tile stays inert where it sells
+
+- **GIVEN** a product supplied as sold out, a cart handler, a tile-activation callback and its address
+- **WHEN** a shopper presses the product name and the product image
+- **THEN** no tile activation is reported and nothing opens
+- **AND** neither the name nor the image is offered as a link or a control
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-e9w rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-89 - No activation without a callback or an address
+**Serves:** Tile contract - no activation without a callback or an address
+
+- **GIVEN** a product that is not sold out, no tile-activation callback and no address
+- **WHEN** a shopper presses the product name and the product image
+- **THEN** nothing opens
+- **AND** neither the name nor the image is offered as a control
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-14a rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-100 - A tile given its address alone is a link
+**Serves:** Tile contract - a tile given its address alone is a link
+
+- **GIVEN** a product that is not sold out, its address, and no tile-activation callback
+- **WHEN** the tile renders
+- **THEN** the product name is a link to that address
+- **AND** a plain press on the name or on the image opens that address
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-t2f rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-97 - A sold-out tile opens where it does not sell
+**Serves:** Tile contract - a sold-out tile opens where it does not sell
+
+- **GIVEN** a product supplied as sold out, a tile-activation callback and no cart handler
+- **WHEN** a shopper activates the product name, then the product image
+- **THEN** tile activation is reported once for each, identifying that product
+- **AND** the tile keeps the sold-out treatment and offers no cart control
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ou9 rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-98 - A tile has one stop to open
+**Serves:** Accessibility - a tile has one stop to open
+
+- **GIVEN** a product that is not sold out, a tile-activation callback and a cart handler
+- **WHEN** a shopper moves through the tile with the Tab key
+- **THEN** the product name is the one stop that opens the product, the cart control keeps its own stop, and the product image is no stop
+- **AND** assistive technology announces one control named for the product
+- **AND** Enter or Space on the focused name reports tile activation once
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-30a rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-99 - The name shows that it opens
+**Serves:** Tile contract - the name shows that it opens
+
+- **GIVEN** a tile that opens, and a tile that does not
+- **WHEN** a shopper hovers over each name and moves keyboard focus through each tile
+- **THEN** the name that opens is underlined on hover and on keyboard focus, and plain at rest
+- **AND** the name that does not open is plain text throughout and takes no focus
 
 ### Requirement: The product list adapts its column count to the available width
 
@@ -586,7 +672,7 @@ control. Where one is supplied and the product is available and not in the
 cart:
 
 - on a wide viewport with a fine pointer and hover, the cart control SHALL
-  appear on pointer hover and when the image receives keyboard focus, and
+  appear on pointer hover and when keyboard focus moves into the image, and
   SHALL be hidden otherwise
 - on a coarse pointer, where hover is not available, or below the wide
   listing breakpoint, the cart control SHALL remain visible without hover
@@ -606,6 +692,11 @@ The cart control's accessible names SHALL come from the supplied copy. The
 image SHALL contain no default, fallback, or built-in copy.
 
 `ProductCardImage` SHALL be renderable on its own, outside `ProductCard`.
+Used on its own, the image SHALL open where a tile would: given an activation
+callback or the product's address, unless the product is sold out and a cart
+handler is supplied. Where it opens on its own, it SHALL be one control the
+keyboard reaches, named by the product name supplied with it; inside a
+product card, the tile's requirement makes it a pointer target.
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-uoy rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-46 - No image source
@@ -649,12 +740,12 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the requested quantity is reported once
 - **AND** the in-cart condition is unchanged until the consumer supplies a new one
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-yv9 rev=1 -->
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-yv9 rev=2 -->
 #### Scenario: shared-ui-store-product-listing-SC-51 - Keyboard reveals the cart control
 **Serves:** Tile contract - keyboard reveals the cart control
 
 - **GIVEN** an available product that is not in the cart
-- **WHEN** a shopper moves keyboard focus onto the image
+- **WHEN** a shopper moves keyboard focus into the image
 - **THEN** the cart control is displayed and can be activated from the keyboard
 - **AND** the focused control is visibly indicated
 
@@ -664,6 +755,16 @@ image SHALL contain no default, fallback, or built-in copy.
 
 - **WHEN** an application renders the product card image without a product card
 - **THEN** it renders and behaves as specified, with no missing-context error
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-7v7 rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-101 - The image used alone opens by the tile's rule, as its own stop
+**Serves:** Accessibility - the image used alone opens by the tile's rule, as its own stop
+
+- **GIVEN** the product card image rendered without a product card, with the product's name and a tile-activation callback
+- **WHEN** a shopper moves keyboard focus to the image and presses Enter
+- **THEN** focus stops on the image, announced as one control named for the product
+- **AND** tile activation is reported once
+- **AND** the same image given a sold-out product and a cart handler as well is no control, and pressing it reports nothing
 
 <!-- trace:scenario id=g10.shared-store-product-listing.SC-ck1 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-53 - The stepper collapses after blur or pointer leave
@@ -682,15 +783,16 @@ image SHALL contain no default, fallback, or built-in copy.
 - **WHEN** a shopper activates the collapsed control
 - **THEN** the inline quantity stepper is displayed on the same pill
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-ezf rev=1 -->
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ezf rev=2 -->
 #### Scenario: shared-ui-store-product-listing-SC-55 - A surface that does not sell
 **Serves:** Tile contract - a surface that does not sell
 
 - **GIVEN** an available product rendered without a way to report a quantity change
-- **WHEN** a shopper hovers the image and moves keyboard focus onto it
+- **WHEN** a shopper hovers the image and moves keyboard focus through the tile
 - **THEN** no cart control is displayed at either moment
 - **AND** the product's own activation still reports
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-zkz rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-65 - Coarse pointer keeps the cart visible
 **Serves:** Responsive layout - coarse pointer keeps the cart visible
 
@@ -699,6 +801,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the cart control is displayed without hover
 - **AND** it can be activated
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-y4d rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-66 - Narrow viewport keeps the cart visible
 **Serves:** Responsive layout - narrow viewport keeps the cart visible
 
@@ -791,3 +894,90 @@ nothing left to be running out of.
 - **THEN** no remaining count is displayed
 - **AND** the sold-out treatment and its supplied label are displayed
 
+### Requirement: A tile drawn without a cart control needs no cart words
+
+A tile's cart words SHALL be accepted absent where no cart control is drawn,
+so a surface that does not sell names no cart word.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-rzq rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-92 - A tile drawn without a cart control needs no cart words
+**Serves:** Selling is opt-in - a surface that does not sell names no cart word
+
+- **WHEN** a tile renders with no cart quantity handler and copy carrying no cart words
+- **THEN** the tile renders its image, name and prices
+- **AND** no cart word is required of the consumer
+
+### Requirement: A tile given its product's address is a link to it
+
+A tile that opens SHALL be a link to its product's address where the consumer
+supplies one, its photo and its name alike, so its address can be copied and a
+press with a modifier key opens it where the browser puts it, a new tab or a
+new window, reporting nothing. A plain press SHALL still report the tile's
+activation where a handler is supplied, in place of the link's own
+navigation. A tile that does not open SHALL be no link, address or not.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-iye rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-93 - A tile given its address is a link to it
+**Serves:** Tile contract - a tile opens its product the way any link opens
+
+- **GIVEN** a tile that opens, supplied with its product's address and a handler for its activation
+- **WHEN** it renders
+- **THEN** its photo and its name are links to that address
+- **AND** a plain press reports the activation once and does not follow the link
+- **AND** a press with a modifier key reports nothing and is left to the browser
+
+### Requirement: The product photo is drawn as supplied
+
+The product card image SHALL NOT blend the supplied photo into the well in any
+tile status: available, on sale, in cart or sold out. A sold-out photo takes
+the sold-out treatment over that unblended photo.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ws9 rev=2 -->
+#### Scenario: shared-ui-store-product-listing-SC-64 - An available, on-sale or in-cart photo is drawn as supplied
+**Serves:** Tile contract - a tile's photo shows in its well as the shop supplied it
+
+- **GIVEN** a product with a supplied photo that is available, on sale or in the cart
+- **WHEN** its product card image is rendered
+- **THEN** the photo is not blended into the well
+- **AND** a white fill in the photo shows white inside the grey well
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ta3 rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-64a - A sold-out photo takes the sold-out treatment unblended
+**Serves:** Tile contract - a sold-out tile's photo shows as supplied under its sold-out treatment
+
+- **GIVEN** a product with a supplied photo that is sold out
+- **WHEN** its product card image is rendered, whether or not it opens
+- **THEN** the photo is not blended into the well
+- **AND** the sold-out treatment is displayed over it
+
+### Requirement: The product photo fits inside the well
+
+The product card image SHALL show the whole supplied photo inside the clipped
+square well in every tile status: available, on sale, sold out and in cart.
+The photo SHALL be centred in the well and scaled, up or down, until it meets
+the two edges along its longer side. Where the photo is not square, the well's
+background SHALL fill the rest. No edge of the photo SHALL be cropped while the
+tile is at rest. Where the photo reaches into the well's rounded corners, it
+SHALL follow their curve; that is not a crop. Where the tile grows its photo
+on hover, the well MAY clip the grown photo until the hover ends.
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-8fs rev=3 -->
+#### Scenario: shared-ui-store-product-listing-SC-63 - The whole photo is visible
+**Serves:** Tile contract - the whole photo is visible
+
+- **GIVEN** a product supplied with a photo that is not square, whose corners clear the well's rounded corners
+- **WHEN** the image renders at rest, whether available, on sale, sold out, or in cart
+- **THEN** the entire photo is visible inside the well
+- **AND** no edge of the photo is cropped by the well
+- **AND** the photo is centred and meets the two edges of the well along its longer side, enlarged where it is smaller than the well
+- **AND** the well's own background shows in the space the photo leaves
+
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-vsm rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-63a - A photo that reaches the well's corners rounds with them
+**Serves:** Tile contract - a photo that reaches into the well's rounded corners rounds with them
+
+- **GIVEN** a product supplied with a square photo, or one close enough to square that its corners reach into the well's rounded corners
+- **WHEN** the image renders at rest
+- **THEN** the photo is centred and meets the two edges of the well along its longer side, all four where it is square
+- **AND** where it reaches into the well's rounded corners, it follows their curve
+- **AND** no other part of the photo is cropped by the well

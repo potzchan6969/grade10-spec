@@ -1,0 +1,107 @@
+{
+  "version": 2,
+  "change": "align-reward-editor-design",
+  "baseline": "16a94edd7530241cd7cfa7aff83f14ed952c6bacc6b5194976f3c4157fcbccb3",
+  "fingerprint": "926095b52ffc73e68d4984f5dee29c44556036c3d7e9a01a55b3ec5b40f3c0c7",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T11:53:11.698Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/coupons.md#refusals",
+      "sha256": "81c0b8a0bc252a38e2b5a68d211edf9bd4d1664151aa2ec27062e3c28073b88f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/coupons.md#validity",
+      "sha256": "50dc6588e04ff13903442cbb445701ff614aafce22fe1341d14583c3a7a6b8e9",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/operator-console.md#authoring-a-reward",
+      "sha256": "9a8780c40a2778b8f54b120d066fd11b271725f877115a79859b6a0819a2b3df",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/rewards.md#reward-shop",
+      "sha256": "0560d2328c85af0b5028204b770940d7fdf4698c57bbbd3cdb4939eacfaf8443",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/loyalty/rewards.md#reward-types",
+      "sha256": "21e2ea5099353b9b5525cb4cceb8704cea6d26ea9540666ac3f1799abbc83061",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/decisions.md",
+      "sha256": "97d433b385674ccbd729938eaff2e96361485799e0ee9a85eca0a1be589c0466",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/proposal.md",
+      "sha256": "a68c4c0628caa9670d9ea433feaea355a0ac342579e0709decae15e4fb63a477",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "630dd84354c58043a351dfac83047c62f18e1ab7e4f1d491c6e10aa0573bb380",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "d46a0615bd1b66d8050936a3b8e0bd8daa3ba9806c58fe1f976f631a7926b00b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "e511602f61f4ae326604503f9481746804a8f9f2348e067ef8182e635a986378",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/tech-design.md",
+      "sha256": "5b8938764479adcaaf9f86b65e7a745dba15087568d7900d9874f5268e839395",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/align-reward-editor-design/ui-design.md",
+      "sha256": "a444caac4a758a633c395d2eb091464c966c980fe18d2affc584ae9bf642ed29",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "sha256": "15572213b92e887da76da0b310e5fc1202afa30125819c3d9f87f4475c020547",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "sha256": "91a8067769a780b2faf466183b88fa6b6e01d117d11379aa11a75a37f2570d54",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "sha256": "e280bf67d7cd72f58917ce0ac1c65c72ce11ebfdf87dd38f43814a24c82ab966",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/align-reward-editor-design/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: A reward names a kind, a discount and a scope",
+        "Requirement: The console's reward form authors a reward's full definition"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/loyalty/programme/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

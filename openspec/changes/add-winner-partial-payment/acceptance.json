@@ -1,0 +1,244 @@
+{
+  "version": 2,
+  "change": "add-winner-partial-payment",
+  "baseline": "edb9bff13a929a52072e31896798a33797916e327f8a969a05d28232f6805a3a",
+  "fingerprint": "694486fabc3a2d1ad42901e5d956461688e0224c1abea5d7f1afdfe43b1136af",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-08T08:49:22.801Z",
+  "supersedes": "b373ca5adbfdaf7c0d21b3a65c3207d0a935625d8cff364f46f8d5fbee470d81",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#manual-payment-collection",
+      "sha256": "521f80c7103eb8ccfc2cac1369bc3826533e17a5812e741d7071f6d68089e5dd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#post-sale-queue",
+      "sha256": "37e5d05d356567ff1fd174c9e8bf9a7c5d4f852d7dd2f9860b9b594ed3432191",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications",
+      "sha256": "86d369fa522dee382c180b5845212dda99cfd60bfbfcbfe9d298d46ddb35634d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#partial-payment",
+      "sha256": "a23b466bb07a0761d5865f8ccbd8f2e10cb9dd63df6c82f0b99b474ec4183db1",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/post-bidding.md#partially-paid",
+      "sha256": "c1f54c1faa8218a1f44ea4e1b7e489a7cc29a493f209ec82a630cb7b36d4176d",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/decisions.md",
+      "sha256": "3f231a44c8b43c57352e94c9c7d6e64144ea7931c595a4bed7072a8745f40042",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/proposal.md",
+      "sha256": "20ffb8d5d987d81374e75c81a9acd4729fdd99f87e6a2296d3a8b48fb5519576",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "dcd0acef56ffbdff1d9925c023436daef7d4008fbc1377ab5778274aa365bd89",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "10815b15bc6c6ca81450ce982a5f2136d1fdbb8523a4556fd801673b71c6ed97",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "120a0fdd16fc1677b5f5b1a2575010a2b6038f82d417d56e75d5ac4987e640a0",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "bb81d3aa0e5f94ab269191f8a7a3135987615ce4402539a05ab45797ab02981c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "d1449cedd7b85bba07f21e465c05626224f7765b0dff1110a3a81e544f902707",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "ac68c7ce26c0c74844b2950e08ee09a26911030c452104cb29d3d083f3a4aa87",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "sha256": "17fd5cd4bd79e62d8a4f89618db84f992f18645f1f5603e32b09fdfb085c63fb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/order-status/spec.md",
+      "sha256": "79e5c5ae91515174d83c56c541d733284f4f3181cfdf2e258557af76807b9678",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/order-status/user-journeys.md",
+      "sha256": "20d822d302d8f104d0b0a330ea949b5da332ce9952db30c2c8db60bca3554eec",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "7d18b7d0a5aaf70e729de58d2ee53040dfe288d200adf5f7f602b3cb6c97ffa2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "54ab3f2f7770821c1f1bd35447add42db5a5af7c92493990f52cb106ec3b5d03",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "597f4dc404b2c32e8993526c28553e70da39bfe01e297aaa27c8eefb01139011",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/tech-design.md",
+      "sha256": "55fdfad535b65076e97f651ddd888c0583b6dbe886d31754b56b55375c2833c7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-winner-partial-payment/ui-design.md",
+      "sha256": "9e30db4499682db5d9da679656e1238f70fd0e9edd81887510b6fb2f82cc05d6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "sha256": "63ff5cd4bd9784deb9337008c4d02783d024c213eee65f2549329e3b94f694f4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "sha256": "e47de6d71214f4f6d9f93940e64ec79a1f235b0334dcd370cb5be859b88c0e09",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "sha256": "37a360bf65ec9ad3e12a2a40e3cd17f1015681963e782505eb0633ae0a2666bf",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "sha256": "de6c9a7902d796d1f454bde9cdd6c4c9b230116cc49f7f55fb2635047e4bd813",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "sha256": "654e1647ab49808197a7cacdb191910e7ac87c8f3e59ebae08938133291971c5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "sha256": "a4fc7585d53da0a06a0cfd89b772b16cc952563d1765d45ee1b112211767313f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "sha256": "527b2ec3a0f46542ddcb9da1807da40b689d59f06a3891ea5401cf31e234279a",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+      "sha256": "457d992a3c78ba0194b6ca273301830d26a9dc30d7380e3a2d01a0bcf8dd2035",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+      "sha256": "519ba02c8a66587255b9ad463c730985c2f5e36890286f09b5386dad7b61dd94",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "sha256": "7b8d78af5ac1ad5429e70212a962cfd153989acc251adc67eb12a3bfdfcda60f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "sha256": "7fe4bc838bf616e4bbc4722669d1e873481e0d2edddb7648008f5e84a06837d5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "sha256": "bbc928ccc871579d475b786777bd05ff31ebd260305d313b5c3f5e1f4d29cda4",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-winner-partial-payment/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Closing tolerance is explicit and preserves payments",
+        "Requirement: Operators can record an ordered partial-payment history",
+        "Requirement: Reissue and Cancel are refused once a payment is recorded"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/post-sale/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: My Auctions keeps a partially paid Won row linked to the order"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/account-record/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Recorded money derives Partially Paid and closes self-service"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/order-status/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Winner Order shows a locked partially paid record"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/winner-order/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

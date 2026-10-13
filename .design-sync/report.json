@@ -1,10 +1,13 @@
 {
-  "generatedAt": "2026-09-29T07:36:16.607Z",
+  "generatedAt": "2026-10-12T16:58:25.488Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
     "AcutionRecordCard": "warn",
     "Alert": "warn",
+    "Asset Custody & Documents": "warn",
+    "Asset Details": "warn",
+    "Asset Summary": "warn",
     "Auction": "warn",
     "Auctions / Category Button": "warn",
     "Avatar": "skipped",
@@ -24,6 +27,7 @@
     "Collection Card": "warn",
     "Combobox": "warn",
     "Container": "warn",
+    "Detail row": "ok",
     "Dialog": "ok",
     "Dialog Header": "skipped",
     "Dropdown Menu": "ok",
@@ -84,10 +88,11 @@
     "Segmented Control Item": "skipped",
     "Stat": "warn",
     "Status Indicator": "skipped",
-    "Step": "warn",
+    "Step": "ok",
     "Step Indicator": "ok",
-    "Stepper": "ok",
+    "Stepper": "skipped",
     "Stepper Input": "ok",
+    "Submission Item Card": "warn",
     "Switch": "ok",
     "Tab": "warn",
     "Tab List": "warn",
@@ -100,6 +105,9 @@
     "Toast": "ok",
     "Toast / Close": "skipped",
     "Tooltip": "ok",
+    "Vault Asset Card": "warn",
+    "Vault Asset List": "warn",
+    "Vault Asset Status": "warn",
     "auth-sign-in: sign-in-card/body": "ok",
     "auth-sign-in: sign-in-card/legal": "ok",
     "auth-sign-in: sign-in-email-form/section": "ok",
@@ -860,6 +868,57 @@
     "7006-5172": "Tab",
     "7006-5190": "Tab List",
     "7006-5204": "Tab List",
+    "7021-1379": "---",
+    "7025-2": "Vault",
+    "7025-2927": "Detail Row",
+    "7029-2": "Vaulted Asset",
+    "7035-268": "Detail row",
+    "7038-29": "Link",
+    "7038-32": "Link",
+    "7038-35": "Link",
+    "7038-38": "Link",
+    "7038-41": "Link",
+    "7038-44": "Link",
+    "7038-47": "Link",
+    "7038-50": "Link",
+    "7038-53": "Link",
+    "7046-48": "Step",
+    "7046-5415": "Stepper",
+    "7046-5420": "Stepper",
+    "7046-56": "Step",
+    "7054-5061": "Asset Custody & Documents",
+    "7054-5062": "Asset Custody & Documents",
+    "7054-5063": "Asset Custody & Documents",
+    "7054-5729": "Asset Details",
+    "7054-5768": "Asset Summary",
+    "7054-5864": "Vaulted Asset Components",
+    "7054-6185": "Asset Details",
+    "7054-6186": "Asset Details",
+    "7054-6854": "Asset Summary",
+    "7054-6855": "Asset Summary",
+    "7054-7072": "Vaulted Asset (Raw)",
+    "7068-10059": "Vault Asset Status",
+    "7068-10079": "_note-29891791557525939",
+    "7068-10249": "Vault Asset Card",
+    "7068-10250": "Vault Asset Card",
+    "7068-7718": "Vault Portfolio",
+    "7068-8263": "Vault Asset Card",
+    "7068-9957": "Vault Asset Status",
+    "7068-9960": "Vault Asset Status",
+    "7068-9963": "Vault Asset Status",
+    "7077-10664": "Vault Portfolio Components",
+    "7077-10761": "Vault Asset List",
+    "7077-10911": "Vault Asset List",
+    "7077-10912": "Vault Asset List",
+    "7077-11209": "Vault Asset Card",
+    "7077-11303": "Vault Asset List",
+    "7077-11880": "Vault Asset List",
+    "7077-12136": "Vault Asset Card",
+    "7115-4101": "Submission",
+    "7115-4309": "Submission Item Card",
+    "7115-4594": "Submission Item Card",
+    "7115-4595": "Submission Item Card",
+    "7117-1554": "Vaulted Asset / Request Retrieval",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -897,6 +956,15 @@
     ],
     "Alert": [
       "packages/design-system/src/components/display/alert.figma.ts: emits variant, which packages/design-system/src/components/display/alert.tsx does not name — the Dev Mode snippet would not compile"
+    ],
+    "Asset Custody & Documents": [
+      "Asset Custody & Documents: no code component (looked for src/components/**/assetcustodydocuments.tsx or assetcustodydocuments.tsx)"
+    ],
+    "Asset Details": [
+      "Asset Details: no code component (looked for src/components/**/assetdetails.tsx or assetdetails.tsx)"
+    ],
+    "Asset Summary": [
+      "Asset Summary: no code component (looked for src/components/**/assetsummary.tsx or assetsummary.tsx)"
     ],
     "Auction": [
       "Auction: no code component (looked for src/components/**/auction.tsx or auction.tsx)"
@@ -998,8 +1066,8 @@
     "Stat": [
       "Stat: no code component (looked for src/components/**/stat.tsx or stat.tsx)"
     ],
-    "Step": [
-      "Step.upcoming: no getEnum('upcoming') in any template — this Figma axis reaches no code prop"
+    "Submission Item Card": [
+      "Submission Item Card: no code component (looked for src/components/**/submissionitemcard.tsx or submissionitemcard.tsx)"
     ],
     "Tab": [
       "Tab: no code component (looked for src/components/**/tab.tsx or tab.tsx)"
@@ -1011,6 +1079,15 @@
       "Text Area.status: no getEnum('status') in any template — this Figma axis reaches no code prop",
       "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
       "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
+    ],
+    "Vault Asset Card": [
+      "Vault Asset Card: no code component (looked for src/components/**/vaultassetcard.tsx or vaultassetcard.tsx)"
+    ],
+    "Vault Asset List": [
+      "Vault Asset List: no code component (looked for src/components/**/vaultassetlist.tsx or vaultassetlist.tsx)"
+    ],
+    "Vault Asset Status": [
+      "Vault Asset Status: no code component (looked for src/components/**/vaultassetstatus.tsx or vaultassetstatus.tsx)"
     ]
   }
 }

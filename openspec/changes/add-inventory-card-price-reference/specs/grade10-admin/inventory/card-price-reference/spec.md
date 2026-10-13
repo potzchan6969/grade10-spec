@@ -48,6 +48,7 @@ an existing tag or create one inline while creating or editing a product.
 | Label | Required trimmed text; case-insensitively unique |
 | Created at | Set when the tag is first created; immutable |
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-76a rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-01 - Operator creates a tagged Collectible Card
 **Serves:** grade10-admin-inventory-card-price-reference-US-01 - Inventory admin classifies a card product
 
@@ -57,6 +58,7 @@ an existing tag or create one inline while creating or editing a product.
 - **THEN** Grade10 persists the product and its three controlled-role tags
 - **AND** each product read returns its collectible type and tags
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-3pc rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-02 - Product missing a required tag role is refused
 **Serves:** grade10-admin-inventory-card-price-reference-US-01 - Inventory admin classifies a card product
 
@@ -92,6 +94,7 @@ an unconfirmed match, or a provider id already attached to another product.
 | Confirmed at | Set when the operator confirms or replaces the match |
 | Confirmed by | Operator user id that confirmed or replaced the match |
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-d8q rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-03 - Operator confirms a PriceCharting search match
 **Serves:** grade10-admin-inventory-card-price-reference-US-01 - Inventory admin classifies a card product
 
@@ -100,6 +103,7 @@ an unconfirmed match, or a provider id already attached to another product.
 - **THEN** Grade10 persists the canonical link and selected stable provider id
 - **AND** future price reads use that confirmed identity
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-rvp rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-04 - Non-card product cannot attach PriceCharting
 **Serves:** grade10-admin-inventory-card-price-reference-US-01 - Inventory admin classifies a card product
 
@@ -138,6 +142,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
 | Freshness | Fresh for 24 hours; stale thereafter unless a valid shorter auction refresh succeeds |
 | Retention | Current cache only; no historical observations |
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-h9s rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-05 - Operator reads a fresh PSA-focused price reference
 **Serves:** grade10-admin-inventory-card-price-reference-US-02 - Inventory admin reads a current card reference
 
@@ -148,6 +153,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
   each supplied PSA-oriented grade in USD minor units
 - **AND** returns the successful fetch time and fresh state
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-i6m rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-06 - Expired regular cache refreshes before display
 **Serves:** grade10-admin-inventory-card-price-reference-US-02 - Inventory admin reads a current card reference
 
@@ -157,6 +163,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
 - **THEN** Grade10 requests a current provider result before answering
 - **AND** replaces the cached result only when the request succeeds
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-13p rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-07 - Failed refresh preserves and labels stale data
 **Serves:** grade10-admin-inventory-card-price-reference-US-02 - Inventory admin reads a current card reference
 
@@ -166,6 +173,7 @@ state; when no successful result exists, it SHALL return an unavailable state.
 - **THEN** Grade10 returns the last successful values with their fetch time
 - **AND** identifies the result as stale
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-wjl rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-08 - Active auction requests shorter refresh eligibility
 **Serves:** grade10-admin-inventory-card-price-reference-US-02 - Inventory admin reads a current card reference
 
@@ -208,6 +216,7 @@ PriceCharting references in one transaction. If any row cannot be created,
 Grade10 SHALL create none of the batch. A successful import SHALL not fetch a
 price; the normal price-cache policy applies to its new products.
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-2k9 rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-10 - Operator previews a valid card CSV
 **Serves:** grade10-admin-inventory-card-price-reference-US-03 - Inventory admin imports card products
 
@@ -218,6 +227,7 @@ price; the normal price-cache policy applies to its new products.
   PriceCharting candidate for confirmation
 - **AND** creates no product, inventory snapshot, or confirmed reference
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-5dl rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-11 - Invalid CSV row blocks confirmation
 **Serves:** grade10-admin-inventory-card-price-reference-US-03 - Inventory admin imports card products
 
@@ -228,6 +238,7 @@ price; the normal price-cache policy applies to its new products.
 - **THEN** Grade10 identifies the invalid row and reason
 - **AND** refuses confirmation and creates no product from the CSV
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-uot rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-12 - Operator confirms every PriceCharting match
 **Serves:** grade10-admin-inventory-card-price-reference-US-03 - Inventory admin imports card products
 
@@ -236,6 +247,7 @@ price; the normal price-cache policy applies to its new products.
 - **THEN** Grade10 marks the preview ready for commit
 - **AND** retains the selected canonical link and stable provider id for each row
 
+<!-- trace:scenario id=g10adm.inventory-card-price-reference.SC-lmn rev=1 -->
 #### Scenario: grade10-admin-inventory-card-price-reference-SC-13 - Import commits every reviewed row atomically
 **Serves:** grade10-admin-inventory-card-price-reference-US-03 - Inventory admin imports card products
 

@@ -30,7 +30,7 @@
       "lane": "ended",
       "col": 0,
       "type": "security",
-      "label": "A claim is held",
+      "label": "A coupon is claimed",
       "sublabel": "one sale, one coupon",
       "width": 156
     },
@@ -58,7 +58,16 @@
       "col": 2,
       "type": "database",
       "label": "The outbox",
-      "sublabel": "retried until it lands",
+      "sublabel": "retried until past the sweep",
+      "width": 172
+    },
+    {
+      "id": "next",
+      "lane": "gone",
+      "col": 2,
+      "type": "backend",
+      "label": "The next claim",
+      "sublabel": "once the claim is five minutes old",
       "width": 172
     },
     {
@@ -114,6 +123,21 @@
     },
     {
       "from": "guard",
+      "to": "back",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "top"
+    },
+    {
+      "from": "guard",
+      "to": "next",
+      "label": "where the checkout stopped",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "next",
       "to": "back",
       "variant": "dashed",
       "fromSide": "right",

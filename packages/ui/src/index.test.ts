@@ -77,6 +77,74 @@ const GRADING_TYPES = [
   "GradingVaultCase",
 ];
 
+const VISIT_AND_CONSIGNMENT_BLOCKS = [
+  "VisitActRow",
+  "VisitBody",
+  "VisitBookedPass",
+  "VisitCancelPanel",
+  "VisitFacts",
+  "VisitFullDay",
+  "VisitLatePanel",
+  "VisitLinkOpensNothing",
+  "VisitList",
+  "VisitMovePanel",
+  "VisitPass",
+  "VisitPhaseHeader",
+  "VisitReconnecting",
+  "VisitRefusedBook",
+  "VisitTicketBody",
+  "VisitWaitBody",
+  "ConsignmentSellerLine",
+];
+
+const VISIT_AND_CONSIGNMENT_TYPES = [
+  "VisitAct",
+  "VisitActRowProps",
+  "VisitBodyCopy",
+  "VisitBodyProps",
+  "VisitBookedPassCopy",
+  "VisitBookedPassProps",
+  "VisitCancelPanelCopy",
+  "VisitCancelPanelProps",
+  "VisitCancelReason",
+  "VisitFact",
+  "VisitFactsCopy",
+  "VisitFactsProps",
+  "VisitFullDayCopy",
+  "VisitFullDayProps",
+  "VisitFullDayShop",
+  "VisitLateChoice",
+  "VisitLatePanelCopy",
+  "VisitLatePanelProps",
+  "VisitLinkOpensNothingCopy",
+  "VisitLinkOpensNothingProps",
+  "VisitListCopy",
+  "VisitListProps",
+  "VisitListRow",
+  "VisitMovePanelCopy",
+  "VisitMovePanelProps",
+  "VisitNoticeCopy",
+  "VisitPassCopy",
+  "VisitPassProps",
+  "VisitPhaseHeaderCopy",
+  "VisitPhaseHeaderProps",
+  "VisitReconnectingCopy",
+  "VisitReconnectingProps",
+  "VisitRefusal",
+  "VisitRefusedBookCopy",
+  "VisitRefusedBookProps",
+  "VisitTicketBodyCopy",
+  "VisitTicketBodyProps",
+  "VisitTone",
+  "VisitWaitBodyCopy",
+  "VisitWaitBodyProps",
+  "VisitWaitNoticeCopy",
+  "VisitWaitService",
+  "VisitWaitShop",
+  "ConsignmentSellerLineCopy",
+  "ConsignmentSellerLineProps",
+];
+
 /* The collector's vault screens left the site for a new design, and the
  * store's blocks for them went with them. */
 const RETIRED_VAULT_NAMES = [
@@ -136,5 +204,15 @@ describe("the package entry", () => {
     const blocks = readdirSync(new URL("./blocks", import.meta.url));
 
     expect(blocks).not.toContain("vault-case");
+  });
+  it("exports the visit and consignment blocks and their types", () => {
+    expect(
+      VISIT_AND_CONSIGNMENT_BLOCKS.filter((name) => !(name in publicEntry)),
+    ).toEqual([]);
+    expect(
+      [...VISIT_AND_CONSIGNMENT_BLOCKS, ...VISIT_AND_CONSIGNMENT_TYPES].filter(
+        (name) => !exported(name),
+      ),
+    ).toEqual([]);
   });
 });

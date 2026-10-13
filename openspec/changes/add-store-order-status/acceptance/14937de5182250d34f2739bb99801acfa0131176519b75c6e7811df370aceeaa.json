@@ -1,0 +1,148 @@
+{
+  "version": 2,
+  "change": "add-store-order-status",
+  "baseline": "bca1397b9f11d3db0a899a4cdde883d7ef9a8543c54f6fe46cbe5bbacce728db",
+  "fingerprint": "14937de5182250d34f2739bb99801acfa0131176519b75c6e7811df370aceeaa",
+  "reviewedBy": "ecchochan",
+  "acceptedAt": "2026-10-07T12:08:28.461Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/commerce/order-status.md#badges",
+      "sha256": "09195785a8a358a33e3dbaea1eeb194124e316db6c7dcd9d4f11d74b02ac9899",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/commerce/order-status.md#pickup",
+      "sha256": "b8b86e26985d4be61c99c3ea88dac5cd20cbf7597ccee8935d791bc0e4a65e74",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/commerce/order-status.md#secondary-note",
+      "sha256": "e7c883a78eac1bc90fb1c939fa36b6bae1679c7943074d66a5344dce2ed552c1",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/commerce/order-status.md#updates-from-shopify",
+      "sha256": "ae7922429d7e55be651605124789b0ee093f89f8f36ee51e91d60653766a22ee",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/shipping.md#today",
+      "sha256": "7fe9d9c928496826965451e762425418adbf207f6c1ff90a6c3eb73db7e83f5f",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/decisions.md",
+      "sha256": "202b40458510a5d865b3ba2b96a6f710e02798fff82206ca7b0adba7e8795223",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/proposal.md",
+      "sha256": "b9b47a90468dec93b9a1b3d41afb21004bec878e9861277c9430809f31d5d377",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/specs/grade10-site/commerce/order-status/feature-tcs.md",
+      "sha256": "7239af7dfdfa9dd02ebf9b82e73b739918aa552b47f8a5c3bc11f751af1732d2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/specs/grade10-site/commerce/order-status/spec.md",
+      "sha256": "9eab0c6157290c7e865dcbad0579fb0a590d87969980864a8982696d15df735a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/specs/grade10-site/commerce/order-status/user-journeys.md",
+      "sha256": "62f925a6d6a64fab4e2750d6ad597a1b80092d37191225813d054ca21b7da3fc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/specs/shared/ui/store-order-history/feature-tcs.md",
+      "sha256": "43cecc36539ce91af48c2cfc6e47ffbd26d6bd4cb8571e1701a97efd0e82e455",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/specs/shared/ui/store-order-history/spec.md",
+      "sha256": "bb84c192947172458e5a95073a9e482af9e85532e22bfc57c12e826ba1e696aa",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/specs/shared/ui/store-order-history/user-journeys.md",
+      "sha256": "cf9ed4afd098468a75622e6be3ff2f5f274349e58aa107e84f9919eb3a67f96c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-order-status/tech-design.md",
+      "sha256": "b544a15983b1662f7554e25aeb54c5332cf522d9ec27ad7cf3510b959d67b50a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/order-status/feature-tcs.md",
+      "sha256": "7239af7dfdfa9dd02ebf9b82e73b739918aa552b47f8a5c3bc11f751af1732d2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/order-status/spec.md",
+      "sha256": "64a831a220677abf935136ff475c577bc7aa7069440c159198f7feb83997115b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/order-status/user-journeys.md",
+      "sha256": "62f925a6d6a64fab4e2750d6ad597a1b80092d37191225813d054ca21b7da3fc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-history/feature-tcs.md",
+      "sha256": "5b4dee8330f530d016ecc0d267a5a97a7f5675ea7c0291e34cb5801e912ee451",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-history/spec.md",
+      "sha256": "30d647f0e685188babe51f97109d55613a00dce13de4114e4c468270e610af8c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-history/user-journeys.md",
+      "sha256": "cf9ed4afd098468a75622e6be3ff2f5f274349e58aa107e84f9919eb3a67f96c",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/commerce/order-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/order-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A secondary note clarifies a confirmed combination",
+        "Requirement: Completed reports a concluded order, not a delivery",
+        "Requirement: Every surface showing order status derives it from this mapping",
+        "Requirement: One badge resolves by ordered precedence",
+        "Requirement: Order status reads a named vocabulary of Shopify facts",
+        "Requirement: Pickup is not emitted in this phase"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/commerce/order-status/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-history/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-history/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Order status maps the six Status-set variants"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-order-history/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

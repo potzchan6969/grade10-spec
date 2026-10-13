@@ -1,9 +1,9 @@
 # shared/ui/store-order-detail Test Cases
 
-**Status:** pending-review
+**Status:** pending-review · 0/12
 **Drafts styled:** 2026-09-28, tcs-rules r4
 
-## shared-ui-store-order-detail-US1: Shared Order Details component contract
+## g10.shared-store-order-detail.US1: Shared Order Details component contract
 
 **Walked by:** nobody on their own — Store applications inherit this component contract, and the Grade10 order-detail journey reaches it
 
@@ -11,7 +11,8 @@
 **I want** supplied order facts and optional sections to render without invented data,
 **so that** each Store application can present an honest order detail.
 
-### shared-ui-store-order-detail-US1-TC1-1: Public order detail parts render independently
+<!-- trace:case id=g10.shared-store-order-detail.TC-rzf rev=1 covers=g10.shared-store-order-detail.SC-mbv,g10.shared-store-order-detail.SC-ndh,g10.shared-store-order-detail.SC-xxz,g10.shared-store-order-detail.SC-xso -->
+### g10.shared-store-order-detail.US1-TC1: Public order detail parts render independently
 
 **Classification:**
 
@@ -42,7 +43,8 @@
 * Each named component renders with its supplied props.
 * A reusable part rendered outside the compound does not require missing compound context.
 
-### shared-ui-store-order-detail-US1-TC2-1: Supplied order facts render in the designed order
+<!-- trace:case id=g10.shared-store-order-detail.TC-75e rev=1 covers=g10.shared-store-order-detail.SC-mbv,g10.shared-store-order-detail.SC-ndh,g10.shared-store-order-detail.SC-xxz,g10.shared-store-order-detail.SC-xso -->
+### g10.shared-store-order-detail.US1-TC2: Supplied order facts render in the designed order
 
 **Classification:**
 
@@ -72,7 +74,8 @@
 * Every supplied optional group appears in the designed order.
 * The block does not fetch, navigate, format money or derive status while rendering.
 
-### shared-ui-store-order-detail-US1-TC3-1: Missing groups leave no empty presentation
+<!-- trace:case id=g10.shared-store-order-detail.TC-00g rev=1 covers=g10.shared-store-order-detail.SC-mbv,g10.shared-store-order-detail.SC-ndh,g10.shared-store-order-detail.SC-xxz,g10.shared-store-order-detail.SC-xso -->
+### g10.shared-store-order-detail.US1-TC3: Missing groups leave no empty presentation
 
 **Classification:**
 
@@ -101,7 +104,8 @@
 * The supplied header and lines render.
 * No heading, placeholder, empty card or empty sidebar stands in for an absent group.
 
-### shared-ui-store-order-detail-US1-TC4-1: Tracking action reports only through its callback
+<!-- trace:case id=g10.shared-store-order-detail.TC-ksl rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC4: Tracking action reports only through its callback
 
 **Classification:**
 
@@ -132,7 +136,8 @@
 * Activating it reports through the supplied callback.
 * The shared block does not open a URL or convert an upcoming step into a completed step.
 
-### shared-ui-store-order-detail-US1-TC5-1: Tracking stays hidden without an action
+<!-- trace:case id=g10.shared-store-order-detail.TC-vml rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC5: Tracking stays hidden without an action
 
 **Classification:**
 
@@ -161,7 +166,8 @@
 * Track Order does not appear.
 * The remaining supplied delivery steps remain visible.
 
-### shared-ui-store-order-detail-US1-TC6-1: Supplied money rows stay independent
+<!-- trace:case id=g10.shared-store-order-detail.TC-xq0 rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC6: Supplied money rows stay independent
 
 **Classification:**
 
@@ -191,7 +197,8 @@
 * Discount, points, shipping and tax do not render.
 * The summary does not create a zero or placeholder row for an absent amount.
 
-### shared-ui-store-order-detail-US1-TC7-1: A partial address renders supplied lines only
+<!-- trace:case id=g10.shared-store-order-detail.TC-z6e rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC7: A partial address renders supplied lines only
 
 **Classification:**
 
@@ -220,7 +227,8 @@
 * Every supplied address line appears.
 * No empty or placeholder recipient appears.
 
-### shared-ui-store-order-detail-US1-TC8-1: Payment identity stays truthful across provider shapes
+<!-- trace:case id=g10.shared-store-order-detail.TC-k1r rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC8: Payment identity stays truthful across provider shapes
 
 **Classification:**
 
@@ -258,7 +266,8 @@
 * An unrecognized provider remains visible through its supplied text or mask without a guessed logo.
 * A wallet label and its mask remain visibly associated.
 
-### shared-ui-store-order-detail-US1-TC9-1: Points credit follows the discount row
+<!-- trace:case id=g10.shared-store-order-detail.TC-7mq rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC9: Points credit follows the discount row
 
 **Classification:**
 
@@ -288,7 +297,8 @@
 * Its label names the points deducted.
 * Its money value uses the success credit treatment.
 
-### shared-ui-store-order-detail-US1-TC10-1: Absent points credit leaves no Points row
+<!-- trace:case id=g10.shared-store-order-detail.TC-q0e rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC10: Absent points credit leaves no Points row
 
 **Classification:**
 
@@ -317,7 +327,8 @@
 * Discount renders.
 * No Points row appears.
 
-### shared-ui-store-order-detail-US1-TC11-1: Payment can be omitted independently
+<!-- trace:case id=g10.shared-store-order-detail.TC-dmc rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC11: Payment can be omitted independently
 
 **Classification:**
 
@@ -346,7 +357,8 @@
 * The summary and shipping address render.
 * No Payment Method heading, card or placeholder appears.
 
-### shared-ui-store-order-detail-US1-TC12-1: A paid total renders without a subtotal
+<!-- trace:case id=g10.shared-store-order-detail.TC-zo5 rev=1 covers=g10.shared-store-order-detail.SC-9fy,g10.shared-store-order-detail.SC-5tp,g10.shared-store-order-detail.SC-68a,g10.shared-store-order-detail.SC-5ui,g10.shared-store-order-detail.SC-fa7,g10.shared-store-order-detail.SC-0al,g10.shared-store-order-detail.SC-yhb,g10.shared-store-order-detail.SC-78o,g10.shared-store-order-detail.SC-0ag,g10.shared-store-order-detail.SC-2ek,g10.shared-store-order-detail.SC-j02 -->
+### g10.shared-store-order-detail.US1-TC12: A paid total renders without a subtotal
 
 **Classification:**
 

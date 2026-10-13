@@ -12,7 +12,7 @@ import {
 import { OrderDetailsSidebar } from "./order-details-sidebar";
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsSidebar",
+  title: "Store/Order Detail/Blocks/OrderDetailsSidebar",
   component: OrderDetailsSidebar,
   tags: ["autodocs"],
   args: {

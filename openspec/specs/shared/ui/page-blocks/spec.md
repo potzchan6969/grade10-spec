@@ -65,6 +65,7 @@ carries: `card` on `FactCard`, `stack` on `FactCardSkeleton`, `list` on
 `NoteList` and `empty-state` on `EmptyPanel`. `StageRail`'s root SHALL carry
 none, and the design system's stepper inside it keeps `stepper`.
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-zu0 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-01 - An application imports the page blocks
 **Serves:** The export contract - site pages build from one set rather than drawing their own
 
@@ -73,6 +74,7 @@ none, and the design system's stepper inside it keeps `stepper`.
 - **THEN** the import resolves
 - **AND** no other component is exported for this capability
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-pmq rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-02 - No block reaches past its props
 **Serves:** The export contract - every state of a page block is reached from props alone
 
@@ -99,6 +101,7 @@ An empty list of rows SHALL draw no table, the same as no rows. The space
 between the lead, the rows and the body SHALL be the consumer's `gap`: `sm`,
 the default, or `md`.
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-8a9 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-03 - A card with every part reads them in order
 **Serves:** Reading facts - a vault page lays out a fact the case meets
 
@@ -110,6 +113,7 @@ the default, or `md`.
 - **AND** the rows are one table named by the rows label, one row per label
   and value
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-k2o rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-04 - Rows alone name their table by the title
 **Serves:** Reading facts - a vault page shows figures and nothing else
 
@@ -118,6 +122,7 @@ the default, or `md`.
 - **THEN** the table is named by the title
 - **AND** nothing but the table is drawn under the title
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-dan rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-05 - No rows draws no table
 **Serves:** Reading facts - a vault page shows words with no figures
 
@@ -133,6 +138,7 @@ inside one busy status named by its label, each placeholder hidden from a
 screen reader, so a reader hears one line rather than one per placeholder. A
 count below one SHALL be refused with an error naming the count.
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-ynk rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-06 - Two loading cards are one status
 **Serves:** Reading facts - a vault page waits for its cases
 
@@ -141,6 +147,7 @@ count below one SHALL be refused with an error naming the count.
 - **AND** one busy status is announced, named by the label
 - **AND** no placeholder is announced on its own
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-v4l rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-07 - A count below one is refused
 **Serves:** Reading facts - a page never waits on nothing
 
@@ -157,6 +164,7 @@ Before you come ends without one on the storage lane and keeps one between
 its third and fourth lines on the financed lane. An empty list SHALL draw
 nothing.
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-l8d rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-08 - Dividers fall between two lines on both lanes
 **Serves:** Listing notes - a vault page lists what to do before a visit
 
@@ -167,12 +175,14 @@ nothing.
 - **AND** the storage lane's third line carries no divider, and the financed
   lane's third carries one
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-df6 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-09 - A line keeps its link
 **Serves:** Listing notes - a collector not yet verified reads where to verify
 
 - **WHEN** `NoteList` is given a line holding a link, then more words
 - **THEN** the line holds the link to its address, then the words
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-44p rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-10 - An empty list draws nothing
 **Serves:** Listing notes - a vault page with nothing to list
 
@@ -196,6 +206,7 @@ refused with an error naming it. On a screen narrower than its stages, the
 rail SHALL scroll sideways inside itself, never the page, and SHALL take
 focus so a keyboard can scroll it.
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-t28 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-11 - The financed lane at Signed
 **Serves:** How far along - a borrower reads how far the case has come
 
@@ -205,6 +216,7 @@ focus so a keyboard can scroll it.
 - **AND** Signed is in progress and the one current step
 - **AND** Vault, Loan and Home read still to come
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-pim rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-12 - The storage lane holds six stages
 **Serves:** How far along - a storage case reads its own lane
 
@@ -213,6 +225,7 @@ focus so a keyboard can scroll it.
 - **THEN** six stages are drawn, Vault in progress
 - **AND** Request, Valued, Agreed and Signed read done, Home still to come
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-zd9 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-13 - The wizard's first step
 **Serves:** How far along - a collector reads where the request wizard is
 
@@ -221,6 +234,7 @@ focus so a keyboard can scroll it.
 - **THEN** Describe is in progress
 - **AND** Photograph and Review read still to come
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-naf rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-14 - An ended case stays at its stage
 **Serves:** How far along - a collector reads where a closed case stopped
 
@@ -229,6 +243,7 @@ focus so a keyboard can scroll it.
 - **THEN** Offer is in progress with Declined under it
 - **AND** every stage after Offer reads still to come
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-vqx rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-15 - A stage the rail does not hold is refused
 **Serves:** How far along - a rail never draws a case at a stage its lane skips
 
@@ -237,6 +252,7 @@ focus so a keyboard can scroll it.
 - **THEN** it throws an error naming the stage it was given
 - **AND** no rail is drawn
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-4c5 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-16 - A narrow screen scrolls the rail
 **Serves:** How far along - a borrower on a phone reads every stage
 
@@ -249,6 +265,7 @@ focus so a keyboard can scroll it.
 `EmptyPanel` SHALL draw the design system's empty state with the title it is
 given, the line under it when given, and the consumer's actions when given.
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-kyu rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-17 - An empty panel with a way out
 **Serves:** Nothing here yet - a collector with no submissions reads how to start one
 
@@ -256,6 +273,7 @@ given, the line under it when given, and the consumer's actions when given.
 - **THEN** the title reads, with no line under it
 - **AND** pressing Start reports it to the consumer
 
+<!-- trace:scenario id=g10.shared-page-blocks.SC-33c rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-18 - A consumer finds a block by its slot
 **Serves:** The export contract - a page's tests and walks find its parts by name
 

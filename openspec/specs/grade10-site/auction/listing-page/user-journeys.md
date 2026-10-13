@@ -76,3 +76,22 @@ disagrees with what the document carried.
 **As a** bidder,
 **I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
 **so that** I am never shown a result the auction has not decided.
+
+### grade10-site-auction-listing-page-US-10: Collector quotes a published lot
+
+**As a** collector browsing a listing,
+**I want** to reference and share a lot by its title and URL,
+**so that** I can discuss it with others and return to it easily.
+
+### grade10-site-auction-listing-page-US-11: Collector contacts support about a lot
+
+**As a** collector contacting support about a lot,
+**I want** support to quickly identify which lot I'm referring to,
+**so that** my inquiry is resolved faster without having to copy listing URLs or titles.
+
+### grade10-site-auction-listing-page-US-15: Collector tells Recent Bids rivals apart by avatar letter
+
+**As a** collector,
+**I want** each Recent Bids avatar on the lot to show that bidder's email
+initial while the label stays Bidder N,
+**so that** I can tell who bid what without reading a name or email.

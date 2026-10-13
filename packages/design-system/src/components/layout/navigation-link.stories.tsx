@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { NavigationLink } from "./navigation-link";
 
 const meta = {
-  title: "Components/NavigationLink",
+  title: "Design System/Layout/NavigationLink",
   component: NavigationLink,
   tags: ["autodocs"],
   args: { children: "Nav", href: "#" },

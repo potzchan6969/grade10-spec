@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import { Hr, Link, Text } from "react-email";
 
 export type EmailFooterProps = {
-  whyYouGotThis: string;
+  /** Why the reader received the letter. Omit for a footer without it. */
+  whyYouGotThis?: string;
   brandName?: string;
   canUnsubscribe?: boolean;
   /** Signed-in mute surface for this auction's email alerts. */
@@ -56,17 +57,19 @@ export function EmailFooter({
   return (
     <>
       <Hr className="my-6 border-stroke" />
-      <Text className="mb-2 mt-0 text-sm leading-base text-fg-2">
-        {whyYouGotThis}
-        {canUnsubscribe && alertsUrl ? (
-          <>
-            {" "}
-            <Link className="text-fg-2" href={alertsUrl}>
-              Manage alerts
-            </Link>
-          </>
-        ) : null}
-      </Text>
+      {whyYouGotThis ? (
+        <Text className="mb-2 mt-0 text-sm leading-base text-fg-2">
+          {whyYouGotThis}
+          {canUnsubscribe && alertsUrl ? (
+            <>
+              {" "}
+              <Link className="text-fg-2" href={alertsUrl}>
+                Manage alerts
+              </Link>
+            </>
+          ) : null}
+        </Text>
+      ) : null}
       {copyright ? (
         <Text className="m-0 text-sm leading-base text-fg-3">
           © {new Date().getFullYear()} {brandName}.

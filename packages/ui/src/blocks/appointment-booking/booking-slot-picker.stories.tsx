@@ -1,11 +1,10 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE } from "../../lib/datetime-fixtures";
 import { BookingSlotPicker } from "./booking-slot-picker";
 import {
   FIXTURE_MONTH,
-  FIXTURE_TIME_ZONE_LABEL,
   SEPTEMBER_3_SLOTS,
   SEPTEMBER_DAYS,
   SLOT_PICKER_COPY,
@@ -14,7 +13,7 @@ import {
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Appointment Booking/BookingSlotPicker",
+  title: "Appointment/Booking/Blocks/BookingSlotPicker",
   component: BookingSlotPicker,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -27,7 +26,6 @@ const meta = {
     selectedDate: "2026-09-03",
     slots: { status: "ready", data: SEPTEMBER_3_SLOTS },
     timeZone: FIXTURE_TIME_ZONE,
-    timeZoneLabel: FIXTURE_TIME_ZONE_LABEL,
     onMonthChange: fn(),
     onSelectDay: fn(),
     onSelectSlot: fn(),
@@ -42,19 +40,63 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Times in Hong Kong time")).toBeInTheDocument();
-    expect(canvas.getByText("September 2026")).toBeInTheDocument();
+    expect(canvas.getByText("Times in HKT")).toBeInTheDocument();
+    expect(canvas.getByRole("combobox", { name: /month/i })).toHaveTextContent(
+      "Sep",
+    );
+    expect(canvas.queryByRole("combobox", { name: /year/i })).toBeNull();
+    expect(canvas.getByText("2026")).toBeVisible();
+    await userEvent.click(canvas.getByRole("combobox", { name: /month/i }));
+    const monthList = await within(canvasElement.ownerDocument.body).findByRole(
+      "listbox",
+    );
+    expect(
+      within(monthList)
+        .getAllByRole("option")
+        .map((option) => option.textContent),
+    ).toEqual(["September", "October"]);
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() => {
+      expect(
+        within(canvasElement.ownerDocument.body).queryByRole("listbox"),
+      ).toBeNull();
+    });
+    expect(canvas.getByRole("grid")).toBeVisible();
 
-    const sunday = canvas.getByRole("button", { name: "6" });
+    const sunday = canvas.getByRole("button", { name: /September 6th, 2026/ });
     expect(sunday).toBeDisabled();
-    expect(sunday).toHaveAttribute("aria-pressed", "false");
+    expect(canvas.getByRole("gridcell", { selected: true })).toHaveTextContent(
+      "3",
+    );
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Sep 3, Thurs" }),
+    ).toBeVisible();
 
-    await userEvent.click(canvas.getByRole("button", { name: "4" }));
-    expect(args.onSelectDay).toHaveBeenCalledWith("2026-09-04");
-
-    expect(canvas.queryByRole("button", { name: "11:00" })).toBeNull();
+    expect(canvas.queryByRole("radio", { name: /^11:00/ })).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "10:15" }));
     expect(args.onSelectSlot).toHaveBeenCalledWith(SEPTEMBER_3_SLOTS[1]);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: /September 4th, 2026/ }),
+    );
+    expect(args.onSelectDay).toHaveBeenCalledWith("2026-09-04");
+  },
+};
+
+/** Picking the ticked day or time again reports again, so Back then Continue
+ * is never stuck. */
+export const Repick: Story = {
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: /September 3rd, 2026/ }),
+    );
+    expect(args.onSelectDay).toHaveBeenCalledTimes(1);
+    expect(args.onSelectDay).toHaveBeenLastCalledWith("2026-09-03");
+    const time = canvas.getByRole("button", { name: "10:15" });
+    await userEvent.click(time);
+    await userEvent.click(time);
+    expect(args.onSelectSlot).toHaveBeenCalledTimes(2);
   },
 };
 
@@ -75,6 +117,9 @@ export const LastMonth: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Next month" })).toBeDisabled();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
+    ).toBeVisible();
     expect(
       canvas.getByText("Pick a day to see its times."),
     ).toBeInTheDocument();
@@ -102,5 +147,17 @@ export const Failed: Story = {
     expect(
       canvas.queryByText("Nothing is free on this day any more."),
     ).toBeNull();
+  },
+};
+
+/** A label the consumer passes replaces the zone's short name, as the drop-off page does. */
+export const LabelFromTheConsumer: Story = {
+  args: { timeZoneLabel: "Hong Kong Standard Time" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText("Times in Hong Kong Standard Time"),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("Times in HKT")).not.toBeInTheDocument();
   },
 };

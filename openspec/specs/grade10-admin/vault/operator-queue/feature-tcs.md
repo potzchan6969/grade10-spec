@@ -1,15 +1,16 @@
 # grade10-admin/vault/operator-queue Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Status:** pending-review · 26/114
+**Drafts styled:** 2026-10-07, tcs-rules r4
 
 ## grade10-admin-vault-operator-queue-US1: Operator opens the shop and sees what is waiting
 
 **As a** member of shop staff starting a shift,
-**I want** the queue cut by what each case is waiting for, with today's visits and a badge saying why a case needs me,
+**I want** the queue cut by what each case is waiting for, with a badge saying why a case needs me,
 **so that** I can work the counter without being emailed anything.
 
-### grade10-admin-vault-operator-queue-US1-TC1-1: Queue row names the case's identity and status fields
+<!-- trace:case id=g10adm.vault-operator-queue.TC-bwg rev=2 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
+### grade10-admin-vault-operator-queue-US1-TC1-2: Queue row names the case's identity and status fields
 
 **Classification:**
 
@@ -36,9 +37,10 @@
 
 **Expected Results:**
 
-* The row names the case's reference, the item's name, the collector's word for the status, the lane, the amount asked, the visit, and when it was last touched.
+* The row names the case's reference, the item's name, the collector's word for the status, the lane, the amount asked, and when it was last touched. No visit shows on the row.
 * The status shown is the collector's word, never the raw status id.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-hcu rev=1 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
 ### grade10-admin-vault-operator-queue-US1-TC2-1: Each queue cut lists only its own statuses
 
 Runs once per row of **Test data**.
@@ -81,7 +83,8 @@ Runs once per row of **Test data**.
 * Only cases at the cut's own statuses in **Test data** appear.
 * No case at another cut's status appears in this cut.
 
-### grade10-admin-vault-operator-queue-US1-TC3-1: Row badge names why a case waits on a person
+<!-- trace:case id=g10adm.vault-operator-queue.TC-8ww rev=2 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
+### grade10-admin-vault-operator-queue-US1-TC3-2: Row badge names why a case waits on a person
 
 Runs once per row of **Test data**.
 
@@ -112,7 +115,6 @@ Runs once per row of **Test data**.
 | An offer that ran out | Offer lapsed |
 | A parked message | Message parked |
 | A document seen under another account | Document seen before |
-| A visit today | Visit today |
 | The collector is the one waited on | Collector |
 
 **Steps:**
@@ -123,6 +125,7 @@ Runs once per row of **Test data**.
 
 * The row's badge reads the value named in **Test data**.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-gfo rev=1 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
 ### grade10-admin-vault-operator-queue-US1-TC4-1: Valuation-stalled badge appears past 7 days, not at them
 
 Runs once per row of **Test data**.
@@ -159,6 +162,7 @@ Runs once per row of **Test data**.
 
 * The badge matches **Test data**.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-h49 rev=1 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
 ### grade10-admin-vault-operator-queue-US1-TC5-1: The queue shows it is still loading
 
 **Classification:**
@@ -188,6 +192,7 @@ Runs once per row of **Test data**.
 
 * The view shows a pending status and no rows.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ioi rev=1 covers=g10adm.vault-operator-queue.SC-77a,g10adm.vault-operator-queue.SC-90m,g10adm.vault-operator-queue.SC-9ub,g10adm.vault-operator-queue.SC-uo6,g10adm.vault-operator-queue.SC-bd3,g10adm.vault-operator-queue.SC-6lc -->
 ### grade10-admin-vault-operator-queue-US1-TC6-1: The queue reports a failed read
 
 **Classification:**
@@ -225,6 +230,7 @@ Runs once per row of **Test data**.
 **I want** to find a case by the customer's number, address or case id,
 **so that** somebody standing in front of me is served without my being able to walk the whole customer list.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xod rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC1-1: Exact contact search finds the case
 
 Runs once per row of **Test data**.
@@ -263,6 +269,7 @@ Runs once per row of **Test data**.
 
 * The collector's case is the only result.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-09o rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC2-1: A phone number matches however it is typed
 
 Runs once per row of **Test data**.
@@ -304,6 +311,7 @@ Runs once per row of **Test data**.
 
 * The collector's case is the only result, matched on the canonical E.164 number.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-t2e rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC3-1: A case id prefix finds the matching case
 
 **Classification:**
@@ -333,6 +341,7 @@ Runs once per row of **Test data**.
 
 * The case whose id starts with the typed characters is a result.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-af0 rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC4-1: A contact substring does not match
 
 **Classification:**
@@ -362,6 +371,7 @@ Runs once per row of **Test data**.
 
 * The collector's case is not a result.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ax5 rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC5-1: A search with no match shows none
 
 **Classification:**
@@ -391,6 +401,7 @@ Runs once per row of **Test data**.
 
 * The search shows no matching case.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-u6z rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC6-1: A search is recorded on the audit trail without the term
 
 **Classification:**
@@ -421,6 +432,7 @@ Runs once per row of **Test data**.
 * The audit trail records who searched, when, that the term was a phone number, and how many cases matched.
 * The audit trail entry does not record the term itself.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-c2r rev=1 covers=g10adm.vault-operator-queue.SC-02a,g10adm.vault-operator-queue.SC-bol,g10adm.vault-operator-queue.SC-m6s,g10adm.vault-operator-queue.SC-4px,g10adm.vault-operator-queue.SC-i1e,g10adm.vault-operator-queue.SC-ehn -->
 ### grade10-admin-vault-operator-queue-US2-TC7-1: Reading the queue leaves no audit entry
 
 **Classification:**
@@ -460,6 +472,7 @@ Runs once per row of **Test data**.
 **I want** each tab to offer exactly the acts this case's status allows,
 **so that** I cannot be shown a button that will only be refused.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-0mn rev=1 covers=g10adm.vault-operator-queue.SC-skv,g10adm.vault-operator-queue.SC-jmv,g10adm.vault-operator-queue.SC-4bx,g10adm.vault-operator-queue.SC-ld3,g10adm.vault-operator-queue.SC-tog -->
 ### grade10-admin-vault-operator-queue-US3-TC1-1: Case tabs shown match the operator's grants
 
 Runs once per row of **Test data**.
@@ -477,7 +490,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -498,6 +511,7 @@ Runs once per row of **Test data**.
 
 * Only the tabs named in **Test data** are shown.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-0uh rev=1 covers=g10adm.vault-operator-queue.SC-skv,g10adm.vault-operator-queue.SC-jmv,g10adm.vault-operator-queue.SC-4bx,g10adm.vault-operator-queue.SC-ld3,g10adm.vault-operator-queue.SC-tog -->
 ### grade10-admin-vault-operator-queue-US3-TC2-1: Each tab offers only the acts this case's status allows
 
 Runs once per row of **Test data**.
@@ -515,7 +529,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -538,6 +552,7 @@ Runs once per row of **Test data**.
 * Every act in the row's Offered column is offered.
 * No act in the row's Not offered column is offered.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-12a rev=1 covers=g10adm.vault-operator-queue.SC-skv,g10adm.vault-operator-queue.SC-jmv,g10adm.vault-operator-queue.SC-4bx,g10adm.vault-operator-queue.SC-ld3,g10adm.vault-operator-queue.SC-tog -->
 ### grade10-admin-vault-operator-queue-US3-TC3-1: A withheld act names what it is waiting for
 
 **Classification:**
@@ -553,7 +568,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -567,6 +582,7 @@ Runs once per row of **Test data**.
 
 * The line names what the act is waiting for, in words.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-p8j rev=1 covers=g10adm.vault-operator-queue.SC-skv,g10adm.vault-operator-queue.SC-jmv,g10adm.vault-operator-queue.SC-4bx,g10adm.vault-operator-queue.SC-ld3,g10adm.vault-operator-queue.SC-tog -->
 ### grade10-admin-vault-operator-queue-US3-TC4-1: The worker refuses an act on its own
 
 **Classification:**
@@ -582,7 +598,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -597,6 +613,7 @@ Runs once per row of **Test data**.
 * The worker refuses the act.
 * The page re-reads and no longer offers it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-9u7 rev=1 covers=g10adm.vault-operator-queue.SC-skv,g10adm.vault-operator-queue.SC-jmv,g10adm.vault-operator-queue.SC-4bx,g10adm.vault-operator-queue.SC-ld3,g10adm.vault-operator-queue.SC-tog -->
 ### grade10-admin-vault-operator-queue-US3-TC5-1: Production asks for the second factor, staging does not
 
 Runs once per row of **Test data**.
@@ -610,11 +627,9 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-03
-
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
 
 **Pre-conditions:**
 
@@ -635,6 +650,7 @@ Runs once per row of **Test data**.
 
 * Whether a second factor is asked for matches **Test data**.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-6po rev=1 covers=g10adm.vault-operator-queue.SC-skv,g10adm.vault-operator-queue.SC-jmv,g10adm.vault-operator-queue.SC-4bx,g10adm.vault-operator-queue.SC-ld3,g10adm.vault-operator-queue.SC-tog -->
 ### grade10-admin-vault-operator-queue-US3-TC6-1: The Case tab's item section follows the case's status
 
 Runs once per row of **Test data**.
@@ -683,6 +699,7 @@ Runs once per row of **Test data**.
 everything we hold,
 **so that** anybody can be told which vault an item is sitting in.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-3im rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC1-1: Confirm vaulted requires the shop, treats the locker as optional
 
 Runs once per row of **Test data**.
@@ -700,7 +717,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -723,6 +740,7 @@ Runs once per row of **Test data**.
 * The result matches the outcome named in **Test data**.
 * On success, the item's custody row names the shop, and the locker where one was named.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-4pr rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC2-1: Held items list everything in a locker, per shop, oldest first
 
 **Classification:**
@@ -738,7 +756,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -753,7 +771,8 @@ Runs once per row of **Test data**.
 * Every item currently in a locker is listed, with the shop it is held at.
 * The rows run oldest held first.
 
-### grade10-admin-vault-operator-queue-US4-TC3-1: Held-items tiles count the vault's holdings
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ixb rev=2 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
+### grade10-admin-vault-operator-queue-US4-TC3-2: Held-items tiles count the vault's holdings
 
 **Classification:**
 
@@ -768,11 +787,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:read) is on the Held items view, and the vault holds items across more than one shop, some with a loan running and some waiting for a pickup.
+* admin(holds vault:read) is on the Held items view, and the vault holds items across more than one shop, some with a loan running.
 
 **Steps:**
 
@@ -780,10 +799,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* One tile counts everything in the vault, per shop.
-* One tile counts items with a loan running.
-* One tile counts items waiting for a pickup.
+* One tile counts everything in the vault, and the per-shop counts add up to it.
+* One tile counts items with a loan running, and reads None where there are none.
+* The tiles are these two; none counts pickups.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-kir rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC4-1: Filtering held items by shop narrows the list
 
 **Classification:**
@@ -799,7 +819,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -813,6 +833,7 @@ Runs once per row of **Test data**.
 
 * Only that shop's items remain in the list.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-48j rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC5-1: Held items with nothing in a locker shows the empty state
 
 **Classification:**
@@ -828,7 +849,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -842,6 +863,7 @@ Runs once per row of **Test data**.
 
 * The list shows nothing is held.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-a8a rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC6-1: A move between lockers is written on the movement log
 
 **Classification:**
@@ -857,7 +879,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -873,6 +895,7 @@ Runs once per row of **Test data**.
 * Step 1 succeeds.
 * The log's newest row names the move, the new locker, when it happened, and who moved it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xgb rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC7-1: The held-items read reports its own loading and failure
 
 Runs once per row of **Test data**.
@@ -909,7 +932,8 @@ Runs once per row of **Test data**.
 
 * The view shows what **Test data** names.
 
-### grade10-admin-vault-operator-queue-US4-TC8-1: A held row names what the item is carrying
+<!-- trace:case id=g10adm.vault-operator-queue.TC-y6r rev=2 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
+### grade10-admin-vault-operator-queue-US4-TC8-2: A held row names what the item is carrying
 
 **Classification:**
 
@@ -926,7 +950,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds vault:read) is on the Held items view, with one item held under a live loan and another whose pickup is booked.
+* admin(holds vault:read) is on the Held items view, with one item held under a live loan and another repaid.
 
 **Steps:**
 
@@ -934,8 +958,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Each row names the case reference, the item, the shop, the locker, the day it was taken in, how many days it has been held, the status in the collector's word, what is outstanding on it, and whether a pickup is booked.
+* Each row names the case reference, the item, the shop, the locker, the day it was taken in, how many days it has been held, the status in the collector's word, and what is outstanding on it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-9z9 rev=1 covers=g10adm.vault-operator-queue.SC-96r,g10adm.vault-operator-queue.SC-1uj,g10adm.vault-operator-queue.SC-4c4,g10adm.vault-operator-queue.SC-1ij,g10adm.vault-operator-queue.SC-4h9,g10adm.vault-operator-queue.SC-j43,g10adm.vault-operator-queue.SC-0nd -->
 ### grade10-admin-vault-operator-queue-US4-TC9-1: A case that took a known slab vaults that item, not a second
 
 **Classification:**
@@ -974,6 +999,7 @@ Runs once per row of **Test data**.
 **I want** the six characters a customer reads out to find their case,
 **so that** I need not ask for their phone number or email.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-uzl rev=1 covers=g10adm.vault-operator-queue.SC-ybs,g10adm.vault-operator-queue.SC-76n,g10adm.vault-operator-queue.SC-qhf -->
 ### grade10-admin-vault-operator-queue-US5-TC1-1: A reference prefix finds the matching case
 
 **Classification:**
@@ -1003,6 +1029,7 @@ Runs once per row of **Test data**.
 
 * The case carrying that reference is a result.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-jmh rev=1 covers=g10adm.vault-operator-queue.SC-ybs,g10adm.vault-operator-queue.SC-76n,g10adm.vault-operator-queue.SC-qhf -->
 ### grade10-admin-vault-operator-queue-US5-TC2-1: The full six-character reference finds exactly the one case
 
 **Classification:**
@@ -1032,6 +1059,7 @@ Runs once per row of **Test data**.
 
 * Exactly the case carrying that reference is the result.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xgg rev=1 covers=g10adm.vault-operator-queue.SC-ybs,g10adm.vault-operator-queue.SC-76n,g10adm.vault-operator-queue.SC-qhf -->
 ### grade10-admin-vault-operator-queue-US5-TC3-1: A reference prefix matching nothing shows no case
 
 **Classification:**
@@ -1061,6 +1089,7 @@ Runs once per row of **Test data**.
 
 * The search reads "No case answers to that."
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-omw rev=1 covers=g10adm.vault-operator-queue.SC-ybs,g10adm.vault-operator-queue.SC-76n,g10adm.vault-operator-queue.SC-qhf -->
 ### grade10-admin-vault-operator-queue-US5-TC4-1: A reference search is recorded on the same audit trail as any other search
 
 **Classification:**
@@ -1093,13 +1122,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-vault-operator-queue-US6: Operator reads the shop's day at a glance
+## grade10-admin-vault-operator-queue-US6: Operator reads the shop's load at a glance
 
 **As a** member of shop staff starting a shift,
-**I want** a count on every view and today's visits in slot order,
+**I want** a count on every view and the cases waiting on staff first,
 **so that** I know the day's load before I open a case.
 
-### grade10-admin-vault-operator-queue-US6-TC1-1: The landing view opens on the Today cut
+<!-- trace:case id=g10adm.vault-operator-queue.TC-alu rev=2 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
+### grade10-admin-vault-operator-queue-US6-TC1-2: The landing view opens on Needs staff
 
 **Classification:**
 
@@ -1110,15 +1140,14 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:read) navigates to <grade10 admin vault queue url> for the first time this visit, and more than one visit falls on the shop's day today.
+* admin(holds vault:read) navigates to <grade10 admin vault queue url> for the first time this visit, and cases wait on staff and others do not.
 
 **Steps:**
 
@@ -1126,10 +1155,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The view opens already on the Today cut.
-* Today's visits are listed in slot order.
+* The view opens already on Needs staff.
+* Only the cases waiting on staff are listed.
 * The cut's own count is shown.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-4i4 rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
 ### grade10-admin-vault-operator-queue-US6-TC2-1: Every cut's selector carries its own count
 
 **Classification:**
@@ -1159,22 +1189,22 @@ Runs once per row of **Test data**.
 
 * Every cut shows how many cases it holds, before it is opened.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-yfj rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
 ### grade10-admin-vault-operator-queue-US6-TC3-1: A Today row names the visit, the case and its status
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -1188,7 +1218,8 @@ Runs once per row of **Test data**.
 
 * The row shows the visit's time, the collector's name and the case's reference, the lane, and the collector's word for the status.
 
-### grade10-admin-vault-operator-queue-US6-TC4-1: The Today cut with no visits today reads none
+<!-- trace:case id=g10adm.vault-operator-queue.TC-tf0 rev=2 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
+### grade10-admin-vault-operator-queue-US6-TC4-2: A view with no case reads none
 
 **Classification:**
 
@@ -1205,16 +1236,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds vault:read) is on <grade10 admin vault queue url>, and no visit falls on the shop's day today.
+* admin(holds vault:read) is on <grade10 admin vault queue url>, and no case waits on staff.
 
 **Steps:**
 
-1. Open the Today cut.
+1. Open the Needs staff view.
 
 **Expected Results:**
 
-* The block reads no visits today.
+* The view says it holds no case, and its count reads none.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-jpr rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
 ### grade10-admin-vault-operator-queue-US6-TC5-1: Load more adds the next page and updates the counts shown
 
 **Classification:**
@@ -1244,6 +1276,7 @@ Runs once per row of **Test data**.
 * Step 2 adds the next page's rows to the list.
 * "showing m" grows by the page it loaded, and "n in this view" stays the backlog count.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-0vr rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
 ### grade10-admin-vault-operator-queue-US6-TC6-1: The load-more control reflects whether more rows remain
 
 Runs once per row of **Test data**.
@@ -1280,13 +1313,14 @@ Runs once per row of **Test data**.
 
 * The control matches **Test data**.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-kh5 rev=1 covers=g10adm.vault-operator-queue.SC-5zv,g10adm.vault-operator-queue.SC-2bi,g10adm.vault-operator-queue.SC-q25 -->
 ### grade10-admin-vault-operator-queue-US6-TC7-1: Today is the shop's own day, not the day in Coordinated Universal Time
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1310,13 +1344,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-vault-operator-queue-US7: Operator walks the visit in order
+## grade10-admin-vault-operator-queue-US7: Operator walks the counter's case in order
 
 **As a** member of shop staff with a customer at the counter,
-**I want** the case to list the visit's steps in order, tick each as it lands, and say why an act is not offered yet,
+**I want** the case to list the counter's steps in order, tick each as it lands, and say why an act is not offered yet,
 **so that** a shop of three runs the flow from the screen rather than from memory.
 
-### grade10-admin-vault-operator-queue-US7-TC1-1: The Case tab opens on today's visit as an ordered checklist
+<!-- trace:case id=g10adm.vault-operator-queue.TC-92x rev=2 covers=g10adm.vault-operator-queue.SC-i5p,g10adm.vault-operator-queue.SC-on2,g10adm.vault-operator-queue.SC-a0m,g10adm.vault-operator-queue.SC-fzi,g10adm.vault-operator-queue.SC-ffw -->
+### grade10-admin-vault-operator-queue-US7-TC1-2: The Case tab opens on the counter's case as an ordered checklist
 
 **Classification:**
 
@@ -1331,11 +1366,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:operate) is on the Case tab of a case with a visit today.
+* admin(holds vault:operate) is on the Case tab of a case opened at the counter, its identity check recorded.
 
 **Steps:**
 
@@ -1343,11 +1378,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The tab opens on the visit's seven steps, in order.
-* Every step already landed is ticked.
-* The current step's button is offered.
+* The tab opens on seven steps, in order: identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item.
+* The identity step is ticked.
+* The inspect-and-value step's button is offered.
 
-### grade10-admin-vault-operator-queue-US7-TC2-1: A step not yet reachable says why it is not offered
+<!-- trace:case id=g10adm.vault-operator-queue.TC-nj3 rev=2 covers=g10adm.vault-operator-queue.SC-i5p,g10adm.vault-operator-queue.SC-on2,g10adm.vault-operator-queue.SC-a0m,g10adm.vault-operator-queue.SC-fzi,g10adm.vault-operator-queue.SC-ffw -->
+### grade10-admin-vault-operator-queue-US7-TC2-2: A step not yet reachable says why it is not offered
 
 **Classification:**
 
@@ -1362,11 +1398,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:operate) is on the Case tab of a case with a visit today, at a step earlier than the checklist's last.
+* admin(holds vault:operate) is on the Case tab of a financed case opened at the counter, its packet prepared and not signed.
 
 **Steps:**
 
@@ -1374,9 +1410,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The later step says in words why it is not offered yet.
+* The step that vaults the item offers no button and says it waits for the packet to be signed.
 
-### grade10-admin-vault-operator-queue-US7-TC3-1: The storage lane's checklist skips the loan-only terms step
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ddz rev=2 covers=g10adm.vault-operator-queue.SC-i5p,g10adm.vault-operator-queue.SC-on2,g10adm.vault-operator-queue.SC-a0m,g10adm.vault-operator-queue.SC-fzi,g10adm.vault-operator-queue.SC-ffw -->
+### grade10-admin-vault-operator-queue-US7-TC3-2: The storage lane's checklist skips the loan-only terms step
 
 **Classification:**
 
@@ -1391,11 +1428,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:operate) is on the Case tab of a storage-lane case with a visit today.
+* admin(holds vault:operate) is on the Case tab of a storage-lane case opened at the counter.
 
 **Steps:**
 
@@ -1403,10 +1440,12 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* The checklist holds six steps.
 * The terms step reads custody terms.
 * No key-terms or loan-agreement step appears.
 
-### grade10-admin-vault-operator-queue-US7-TC4-1: A case with no visit today shows no checklist
+<!-- trace:case id=g10adm.vault-operator-queue.TC-lbt rev=2 covers=g10adm.vault-operator-queue.SC-i5p,g10adm.vault-operator-queue.SC-on2,g10adm.vault-operator-queue.SC-a0m,g10adm.vault-operator-queue.SC-fzi,g10adm.vault-operator-queue.SC-ffw -->
+### grade10-admin-vault-operator-queue-US7-TC4-2: A case the customer opened online shows no checklist
 
 **Classification:**
 
@@ -1421,11 +1460,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:operate) is on the Case tab of a case with no visit booked today.
+* admin(holds vault:operate) is on the Case tab of a case the collector sent online.
 
 **Steps:**
 
@@ -1433,9 +1472,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* The Overview tab shows.
 * The checklist panel is absent.
 
-### grade10-admin-vault-operator-queue-US7-TC5-1: Ticking a step's act makes the next step current
+<!-- trace:case id=g10adm.vault-operator-queue.TC-hib rev=2 covers=g10adm.vault-operator-queue.SC-i5p,g10adm.vault-operator-queue.SC-on2,g10adm.vault-operator-queue.SC-a0m,g10adm.vault-operator-queue.SC-fzi,g10adm.vault-operator-queue.SC-ffw -->
+### grade10-admin-vault-operator-queue-US7-TC5-2: Ticking a step's act makes the next step current
 
 **Classification:**
 
@@ -1450,11 +1491,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
-* admin(holds vault:operate) is on the Case tab of a case with a visit today, on a step whose act this operator may send.
+* admin(holds vault:operate) is on the Case tab of a storage-lane case opened at the counter, its identity recorded and its valuation set.
 
 **Steps:**
 
@@ -1462,17 +1503,19 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The step just sent is ticked.
-* The following step becomes current, with its own button offered.
+* The custody-terms step is ticked.
+* The prepare-documents step becomes current, with its own button offered.
 
 ---
 
 ## grade10-admin-vault-operator-queue-US8: Operator reads why a late loan cannot be forfeited yet
 
 **As a** member of shop staff,
-**I want** the custody tab to say in words why Forfeit is not offered — not before the cure date, the notice sent on which day,
+**I want** the custody tab to say in words why Forfeit is not offered — not
+before the cure date, the notice sent on which day,
 **so that** I never take an item a day early.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-v2p rev=1 covers=g10adm.vault-operator-queue.SC-cby,g10adm.vault-operator-queue.SC-ngn,g10adm.vault-operator-queue.SC-xep,g10adm.vault-operator-queue.SC-oxk,g10adm.vault-operator-queue.SC-g9x -->
 ### grade10-admin-vault-operator-queue-US8-TC1-1: Forfeit is withheld before the due date
 
 **Classification:**
@@ -1503,6 +1546,7 @@ Runs once per row of **Test data**.
 * Forfeit is not offered.
 * The reason names that the case is not past the due date.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-2te rev=1 covers=g10adm.vault-operator-queue.SC-cby,g10adm.vault-operator-queue.SC-ngn,g10adm.vault-operator-queue.SC-xep,g10adm.vault-operator-queue.SC-oxk,g10adm.vault-operator-queue.SC-g9x -->
 ### grade10-admin-vault-operator-queue-US8-TC2-1: Forfeit is withheld with no notice sent
 
 **Classification:**
@@ -1532,6 +1576,7 @@ Runs once per row of **Test data**.
 * The reason names that no written notice has been sent.
 * Send notice is offered.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-tmb rev=1 covers=g10adm.vault-operator-queue.SC-cby,g10adm.vault-operator-queue.SC-ngn,g10adm.vault-operator-queue.SC-xep,g10adm.vault-operator-queue.SC-oxk,g10adm.vault-operator-queue.SC-g9x -->
 ### grade10-admin-vault-operator-queue-US8-TC3-1: Forfeit is withheld while the notice's cure runs
 
 **Classification:**
@@ -1560,6 +1605,7 @@ Runs once per row of **Test data**.
 * Forfeit is not offered.
 * The reason names the cure date given to the borrower and the day the notice was sent.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-yg6 rev=1 covers=g10adm.vault-operator-queue.SC-cby,g10adm.vault-operator-queue.SC-ngn,g10adm.vault-operator-queue.SC-xep,g10adm.vault-operator-queue.SC-oxk,g10adm.vault-operator-queue.SC-g9x -->
 ### grade10-admin-vault-operator-queue-US8-TC4-1: Forfeit becomes available once the cure date passes
 
 **Classification:**
@@ -1587,6 +1633,7 @@ Runs once per row of **Test data**.
 
 * Forfeit is offered, with its reason field.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-pwu rev=1 covers=g10adm.vault-operator-queue.SC-cby,g10adm.vault-operator-queue.SC-ngn,g10adm.vault-operator-queue.SC-xep,g10adm.vault-operator-queue.SC-oxk,g10adm.vault-operator-queue.SC-g9x -->
 ### grade10-admin-vault-operator-queue-US8-TC5-1: The Custody tab lists what the collector was told
 
 **Classification:**
@@ -1614,14 +1661,55 @@ Runs once per row of **Test data**.
 
 * Each message sent is listed with its date and channel.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-fe2 rev=1 covers=g10adm.vault-operator-queue.SC-xep -->
+### grade10-admin-vault-operator-queue-US8-TC6-1: Custody tab cure date matches the confirmed date to pay by
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-08
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_2>` | A live loan 5 days past its due date, no forfeiture notice sent |
+| `<brand time zone>` | The time zone of the brand's calendar |
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Note the date to pay by the confirmation names.
+3. Confirm the send.
+4. Read the reason the Custody tab gives for withholding Forfeit.
+
+**Expected Results:**
+
+* Forfeit is not offered.
+* The reason's cure date equals the date to pay by noted at step 2.
+* The reason names today on the `<brand time zone>` calendar as the day the notice was sent.
+
 ---
 
 ## grade10-admin-vault-operator-queue-US9: Operator reads the identity state the record names
 
-**As a** member of shop staff arranging a visit,
+**As a** member of shop staff working a case,
 **I want** the identity panel to say Verified, Out, Stalled, Refused, Lapsed or None,
 **so that** I know whether to send the check again, wait, or do it at the counter.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xkz rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### grade10-admin-vault-operator-queue-US9-TC1-1: The identity panel names the record's state
 
 Runs once per row of **Test data**.
@@ -1663,6 +1751,7 @@ Runs once per row of **Test data**.
 * Beside the state the panel names the day the record holds for it.
 * No state beyond the six the record defines is shown.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ooz rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### grade10-admin-vault-operator-queue-US9-TC2-1: The Verified state names who performed the check and when
 
 **Classification:**
@@ -1678,7 +1767,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1692,6 +1781,7 @@ Runs once per row of **Test data**.
 
 * The panel reads Verified, naming who performed the check and when.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-5vm rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### grade10-admin-vault-operator-queue-US9-TC3-1: Viewing the identity photograph needs the identity-read grant
 
 **Classification:**
@@ -1707,7 +1797,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-vault-operator-queue-US-09
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/counter.spec.ts`
 
 **Pre-conditions:**
 
@@ -1721,6 +1811,7 @@ Runs once per row of **Test data**.
 
 * View photograph is not offered.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-zxo rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### grade10-admin-vault-operator-queue-US9-TC4-1: Recording over a Refused identity records the reason and who gave it
 
 **Classification:**
@@ -1749,6 +1840,7 @@ Runs once per row of **Test data**.
 * The recording succeeds.
 * The case shows the override beside the decline, with the reason and who gave it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-3jw rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### grade10-admin-vault-operator-queue-US9-TC5-1: Recording over a Refused identity without a reason is refused
 
 **Classification:**
@@ -1776,6 +1868,7 @@ Runs once per row of **Test data**.
 
 * The recording is refused.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-qti rev=1 covers=g10adm.vault-operator-queue.SC-xz7,g10adm.vault-operator-queue.SC-rz1,g10adm.vault-operator-queue.SC-fw0,g10adm.vault-operator-queue.SC-3z5,g10adm.vault-operator-queue.SC-k4s -->
 ### grade10-admin-vault-operator-queue-US9-TC6-1: A submitted check reads Out until the identity check reads it stalled
 
 **Classification:**
@@ -1816,6 +1909,7 @@ photos,
 **so that** a customer with no request on their phone is served on the spot,
 and the draft waits for them to send it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-p4n rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC1-1: A walk-in for a new address opens a draft under a new account
 
 **Classification:**
@@ -1867,6 +1961,7 @@ and the draft waits for them to send it.
 * Step 6 lists the draft as any draft reads there.
 * The draft's collector reads as the handle of `<walk-in email>`; no name was asked for on the form.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-u0u rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC2-1: A walk-in for an address nobody has signed in to opens under that account and renames nothing
 
 **Classification:**
@@ -1915,6 +2010,7 @@ and the draft waits for them to send it.
 * `<account_1>` still carries the name `<held name>`.
 * Step 4 lists the draft among `<account_1>`'s vault cases.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-vyx rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC3-1: The statement is shown before the address and the open keeps its version
 
 **Classification:**
@@ -1948,6 +2044,7 @@ and the draft waits for them to send it.
 * The draft records that the statement was shown at the counter, at `<statement version>`.
 * The draft records no tick by the collector; the collector's own tick is still owed at the send.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-iqc rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC4-1: Production refuses a walk-in while the collection statement is unwritten
 
 **Classification:**
@@ -1980,6 +2077,7 @@ and the draft waits for them to send it.
 * No draft is opened, and no account is created for `<walk-in email>`.
 * Nothing is emailed to `<walk-in email>`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-3hf rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC5-1: Outside production an unwritten statement reads Being prepared and the walk-in opens
 
 **Classification:**
@@ -2013,6 +2111,7 @@ and the draft waits for them to send it.
 * Step 2 says the collection statement is being prepared.
 * Step 3 opens the draft on its own page.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ntv rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC6-1: A walk-in for an address someone has signed in to is refused
 
 **Classification:**
@@ -2056,6 +2155,7 @@ and the draft waits for them to send it.
 * The form keeps the email, the facts and the photograph typed.
 * No draft is opened, no second account exists for <signed-in email>, and nothing is emailed to it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-qht rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC7-1: A walk-in counts against the account's three unsent drafts
 
 Runs once per row of **Test data**.
@@ -2098,6 +2198,7 @@ Runs once per row of **Test data**.
 * The outcome matches the row.
 * A refusal reads as the cap's own refusal, not a walk-in refusal of its own.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-srd rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC8-1: Opening a walk-in emails nothing
 
 **Classification:**
@@ -2138,6 +2239,7 @@ Runs once per row of **Test data**.
 * Step 3 finds no message about the case: no case, no reference, no sign-in link.
 * Step 4 shows no message owed or parked for the draft.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-rae rev=2 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC9-2: Photos on the walk-in form stop at the limit of ten and can be removed
 
 **Classification:**
@@ -2177,6 +2279,7 @@ Runs once per row of **Test data**.
 * Step 2 finds no way to add another; the gallery still holds ten.
 * Step 3 leaves nine, reading 9 of 10, and a way to add one returns.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-csn rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC10-1: The worker's refusal of a field reads beside that field
 
 Runs once per row of **Test data**.
@@ -2217,6 +2320,7 @@ Runs once per row of **Test data**.
 * The rest of the form keeps what was typed.
 * No draft opens.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-uzm rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC11-1: Opening holds the form and opens one draft
 
 **Classification:**
@@ -2251,6 +2355,7 @@ Runs once per row of **Test data**.
 * Step 2 sends nothing more.
 * Step 4 lists one draft for `<walk-in email>`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-vgy rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC12-1: Only an operate holder can open a walk-in
 
 Runs once per row of **Test data**.
@@ -2292,6 +2397,7 @@ Runs once per row of **Test data**.
 * Step 1 matches the row's Open a walk-in shown.
 * Step 2 matches the row's direct call; a refusal opens no draft and creates no account.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-50a rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC13-1: A walk-in opens with no photograph and the send still needs one
 
 **Classification:**
@@ -2329,6 +2435,7 @@ Runs once per row of **Test data**.
 * Step 1 opens the draft, and the form asked for no contact number.
 * Step 2 is refused until the draft holds a photograph.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-fh4 rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC14-1: Staff photograph only an unsent draft staff opened
 
 **Classification:**
@@ -2359,6 +2466,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused by name, and `<case_1>` is unchanged.
 * Step 2 attaches the photograph to `<case_2>`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-l20 rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC15-1: A malformed address is refused beside the email field before anything is sent
 
 Runs once per row of **Test data**.
@@ -2414,6 +2522,7 @@ Runs once per row of **Test data**.
 * Step 5 clears the refusal once the address is whole, the field not yet left, and Open case becomes available.
 * Step 6 opens the draft for `<walk-in email>` on its own page.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-i6v rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC16-1: A loan of zero is refused beside the loan field before anything is sent
 
 Runs once per row of **Test data**.
@@ -2476,6 +2585,7 @@ Runs once per row of **Test data**.
 * Step 8 clears it once `<smallest loan>` is whole; Open case becomes available.
 * Step 9 opens the draft on its own page, financed, asking `<smallest loan>`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-89x rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC17-1: Choosing Storage only sets a refused loan of zero aside
 
 **Classification:**
@@ -2519,6 +2629,7 @@ Runs once per row of **Test data**.
 * Step 3 shows the refusal beside the loan field again.
 * Step 5 opens the draft on its own page, storage only, asking no loan.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-oib rev=1 covers=g10adm.vault-operator-queue.SC-vri,g10adm.vault-operator-queue.SC-mvr,g10adm.vault-operator-queue.SC-rkk,g10adm.vault-operator-queue.SC-9is,g10adm.vault-operator-queue.SC-8w3,g10adm.vault-operator-queue.SC-d45,g10adm.vault-operator-queue.SC-or8,g10adm.vault-operator-queue.SC-us4,g10adm.vault-operator-queue.SC-bsk,g10adm.vault-operator-queue.SC-icq,g10adm.vault-operator-queue.SC-03h,g10adm.vault-operator-queue.SC-xu5,g10adm.vault-operator-queue.SC-wqo,g10adm.vault-operator-queue.SC-q6y,g10adm.vault-operator-queue.SC-wjv,g10adm.vault-operator-queue.SC-cgu,g10adm.vault-operator-queue.SC-jcc -->
 ### grade10-admin-vault-operator-queue-US10-TC18-1: Text that is not an amount keeps the field's own refusal
 
 Runs once per row of **Test data**.
@@ -2570,6 +2681,7 @@ Runs once per row of **Test data**.
 **so that** I can greet the customer and tell two customers' cases apart
 without opening each one.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-bv9 rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC1-1: Queue and held-item rows name each case's collector
 
 Runs once per row of **Test data**.
@@ -2612,6 +2724,7 @@ Runs once per row of **Test data**.
 * A link beside each name opens that collector's page.
 * The rest of each row reads as before.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-per rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC2-1: An account the walk-in created reads by its email handle until the customer names themselves
 
 **Classification:**
@@ -2645,6 +2758,7 @@ Runs once per row of **Test data**.
 * Step 1 reads `mei.ling.walkin`.
 * Step 3 reads Ho Mei Ling, with no change made on the case.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-p86 rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC3-1: A name the account service cannot answer reads as unavailable and the list stands
 
 **Classification:**
@@ -2680,6 +2794,7 @@ Runs once per row of **Test data**.
 * Every other field on every row reads as it does with names answered, and both lists load in full.
 * Step 2 narrows the list to that collector; the row's link opens their collector page.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-kx8 rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC4-1: A reader without the identity grant sees no collector column
 
 **Classification:**
@@ -2713,6 +2828,7 @@ Runs once per row of **Test data**.
 * Every other field reads as before this change.
 * The read carries no collector name.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-f5e rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC5-1: The collector-name read refuses a caller without the identity grant
 
 **Classification:**
@@ -2742,6 +2858,7 @@ Runs once per row of **Test data**.
 * The call is refused for the missing identity grant.
 * No name comes back.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-2pj rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC6-1: The overdue rows keep the reference and the contact, with no name
 
 **Classification:**
@@ -2770,6 +2887,7 @@ Runs once per row of **Test data**.
 * The row names the case reference, the item and the contact the case holds.
 * The row names no collector.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-zfg rev=1 covers=g10adm.vault-operator-queue.SC-lnp,g10adm.vault-operator-queue.SC-e22,g10adm.vault-operator-queue.SC-msu,g10adm.vault-operator-queue.SC-00c,g10adm.vault-operator-queue.SC-t8q -->
 ### grade10-admin-vault-operator-queue-US11-TC7-1: A list that names collectors is on the audit chain
 
 **Classification:**
@@ -2811,6 +2929,7 @@ collector,
 **so that** I can see everything one customer has with us without being able
 to search the customer list by name.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-bpi rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC1-1: A collector's name narrows the list to that collector
 
 Runs once per row of **Test data**.
@@ -2855,6 +2974,7 @@ Runs once per row of **Test data**.
 * The address carries `<collector_A>`'s user id.
 * Step 4 lists all four rows again and the address no longer carries the collector.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-myy rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC2-1: A narrowed address opened afresh narrows the same way
 
 **Classification:**
@@ -2891,6 +3011,7 @@ Runs once per row of **Test data**.
 
 * The view lists only `<collector_A>`'s two rows, with their name above them and a count of 2.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ucj rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC3-1: A collector with nothing in the narrowed list reads none
 
 **Classification:**
@@ -2923,6 +3044,7 @@ Runs once per row of **Test data**.
 * Step 2 says the collector holds no case in this list, with their name above and a count reading none.
 * The control clearing the collector is still offered.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-c0i rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC4-1: The queue offers no way to find a collector by name
 
 **Classification:**
@@ -2955,6 +3077,7 @@ Runs once per row of **Test data**.
 * Step 1 finds no field to type a collector into.
 * Step 2 finds no case.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-mil rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC5-1: Reading one collector's cases is on the audit chain
 
 **Classification:**
@@ -2986,6 +3109,7 @@ Runs once per row of **Test data**.
 * One entry records who read `<collector_A>`'s cases, when, and `<collector_A>`'s id.
 * No name or email appears in any column of it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-f1e rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC6-1: An address narrowed to nobody reads as a collector holding no case
 
 Runs once per row of **Test data**.
@@ -3025,6 +3149,7 @@ Runs once per row of **Test data**.
 
 * Every cut says the collector holds no case in it, and every count reads none.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-32a rev=1 covers=g10adm.vault-operator-queue.SC-tjf,g10adm.vault-operator-queue.SC-8mz,g10adm.vault-operator-queue.SC-q78,g10adm.vault-operator-queue.SC-z5x,g10adm.vault-operator-queue.SC-gij,g10adm.vault-operator-queue.SC-xda -->
 ### grade10-admin-vault-operator-queue-US12-TC7-1: The Overdue view stays whole while the queue is narrowed
 
 **Classification:**
@@ -3064,6 +3189,7 @@ Runs once per row of **Test data**.
 the register already knows, its facts filled in,
 **so that** one slab never has two records and nobody types its facts twice.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-pf9 rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC1-1: A walk-in naming a known slab takes the register's item
 
 Runs once per row of **Test data**.
@@ -3109,6 +3235,7 @@ Runs once per row of **Test data**.
 * The Case tab reads `<item_1>`'s facts and links `<item_1>`.
 * The register holds no second item with PSA and `AB12345`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-s3l rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC2-1: A slab the register does not know is registered when the valuation starts
 
 **Classification:**
@@ -3145,6 +3272,7 @@ Runs once per row of **Test data**.
 * Before step 5 the register holds no item with PSA and `AB99999`.
 * Step 6 finds one item under the account at `<walk-in email>`, carrying PSA, 9 and `AB99999`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-bcc rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC3-1: A known slab owned by someone else is found naming its owner
 
 Runs once per row of **Test data**.
@@ -3188,6 +3316,7 @@ Runs once per row of **Test data**.
 * The draft opens under the account at `<walk-in email>` and takes `<item_2>`.
 * `<item_2>` is still owned by `<collector B>`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-oac rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC4-1: A known slab another case marks refuses the walk-in
 
 **Classification:**
@@ -3223,6 +3352,7 @@ Runs once per row of **Test data**.
 * No draft is opened.
 * Step 5 opens `<case_3>`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-gvm rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC5-1: A retired slab reads as retired at the walk-in
 
 **Classification:**
@@ -3259,6 +3389,7 @@ Runs once per row of **Test data**.
 * Step 3 shows `<item_4>` reading as retired.
 * Step 7 lists `<item_4>` under retired and one new live item carrying PSA and `AB44444`.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ba3 rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC6-1: The register unreachable at the walk-in keeps what was typed
 
 **Classification:**
@@ -3292,6 +3423,7 @@ Runs once per row of **Test data**.
 * The email, grader and cert typed are still in the form.
 * Step 3 shows `<item_1>`'s facts.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-fcn rev=1 covers=g10adm.vault-operator-queue.SC-knz,g10adm.vault-operator-queue.SC-s8n,g10adm.vault-operator-queue.SC-z22,g10adm.vault-operator-queue.SC-nyo,g10adm.vault-operator-queue.SC-5z0,g10adm.vault-operator-queue.SC-qjf,g10adm.vault-operator-queue.SC-jor -->
 ### grade10-admin-vault-operator-queue-US20-TC7-1: Starting a valuation naming a known slab takes the register's item
 
 **Classification:**
@@ -3339,6 +3471,7 @@ collector's request kept as they sent it, and to show registration pending
 until it does,
 **so that** the case and the register never tell two stories about one item.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-yfe rev=1 covers=g10adm.vault-operator-queue.SC-pfx,g10adm.vault-operator-queue.SC-54k,g10adm.vault-operator-queue.SC-2vm,g10adm.vault-operator-queue.SC-ned,g10adm.vault-operator-queue.SC-0bj -->
 ### grade10-admin-vault-operator-queue-US21-TC1-1: The Case tab says registration is pending before the valuation
 
 **Classification:**
@@ -3369,6 +3502,7 @@ until it does,
 * The section says the item is registered when the valuation starts.
 * The section offers no Edit and links no item.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-etq rev=1 covers=g10adm.vault-operator-queue.SC-pfx,g10adm.vault-operator-queue.SC-54k,g10adm.vault-operator-queue.SC-2vm,g10adm.vault-operator-queue.SC-ned,g10adm.vault-operator-queue.SC-0bj -->
 ### grade10-admin-vault-operator-queue-US21-TC2-1: The Case tab shows and edits the register's facts
 
 **Classification:**
@@ -3416,6 +3550,7 @@ until it does,
 * Step 5 opens `<item_6>`, reading the new facts and this staff member as its last editor.
 * Step 6 still reads `<request title>` as the collector sent it.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-z8m rev=1 covers=g10adm.vault-operator-queue.SC-pfx,g10adm.vault-operator-queue.SC-54k,g10adm.vault-operator-queue.SC-2vm,g10adm.vault-operator-queue.SC-ned,g10adm.vault-operator-queue.SC-0bj -->
 ### grade10-admin-vault-operator-queue-US21-TC3-1: Without the inventory write the Case tab facts read only
 
 **Classification:**
@@ -3445,6 +3580,7 @@ until it does,
 
 * The section reads the register's facts and offers no Edit.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-wo3 rev=1 covers=g10adm.vault-operator-queue.SC-pfx,g10adm.vault-operator-queue.SC-54k,g10adm.vault-operator-queue.SC-2vm,g10adm.vault-operator-queue.SC-ned,g10adm.vault-operator-queue.SC-0bj -->
 ### grade10-admin-vault-operator-queue-US21-TC4-1: The register unreachable fails the facts section alone
 
 **Classification:**
@@ -3477,6 +3613,7 @@ until it does,
 * The rest of the Case tab, its acts and timeline, still loads.
 * Step 2 shows `<item_6>`'s facts.
 
+<!-- trace:case id=g10adm.vault-operator-queue.TC-s0y rev=1 covers=g10adm.vault-operator-queue.SC-pfx,g10adm.vault-operator-queue.SC-54k,g10adm.vault-operator-queue.SC-2vm,g10adm.vault-operator-queue.SC-ned,g10adm.vault-operator-queue.SC-0bj -->
 ### grade10-admin-vault-operator-queue-US21-TC5-1: A treasurer's Case tab names the register's grant
 
 **Classification:**
@@ -3509,11 +3646,1053 @@ until it does,
 
 ---
 
+## grade10-admin-vault-operator-queue-US22: Operator cancels a visit knowing the collector is told
+
+**As a** member of shop staff,
+**I want** cancelling a case's visit to ask me first, naming the slot on the
+shop's clock and saying the collector is emailed,
+**so that** a misplaced press never tells a customer their visit is off.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-h1b rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC1-1: Confirming the cancellation cancels the visit and emails the collector
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_1>.
+* The tester can read `<collector inbox>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<case_1>` | A `vaulted` case with a visit booked at `<booked shop>` for `<visit slot>`, holding `<collector address>` |
+| `<booked shop>` | The shop the visit is booked at |
+| `<visit slot>` | A slot at least one day ahead, on `<booked shop>`'s clock |
+| `<collector address>` | The email address on `<case_1>` |
+| `<collector inbox>` | The mailbox of `<collector address>` |
+
+**Steps:**
+
+1. Click the control that cancels the visit.
+2. Read the confirmation.
+3. Confirm the cancellation.
+4. Reload the case page.
+5. Open `<collector inbox>`.
+
+**Expected Results:**
+
+* Step 1 opens a confirmation; the visit is still booked behind it.
+* The confirmation names `<visit slot>` on `<booked shop>`'s clock, with its zone.
+* The confirmation says the collector is emailed at `<collector address>`.
+* The confirmation says the case keeps its status.
+* Its two choices read `Keep visit` and `Cancel visit`.
+* After step 4 the case shows no booked visit, still `vaulted`.
+* `<collector inbox>` holds one email saying the visit is cancelled.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-yzp rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC2-1: Cancellation confirmation names the slot on the booked shop's clock
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_2>.
+* The brand's zone is `Asia/Hong_Kong`.
+* The tester's device clock is set to `<device zone>`.
+
+**Test data:**
+
+| `<case_2>` visit booked at | Slot on the booked shop's clock | `<device zone>` | Confirmation names |
+| --- | --- | --- | --- |
+| A shop on `Asia/Hong_Kong` | 23:30 on `<slot date>` | UTC+0 | 23:30 on `<slot date>`, `Asia/Hong_Kong` |
+| A shop on `Asia/Hong_Kong` | 00:30 on `<slot date>` | UTC-5 | 00:30 on `<slot date>`, `Asia/Hong_Kong` |
+| A shop on `Asia/Tokyo` | 10:00 on `<slot date>` | `Asia/Hong_Kong` | 10:00 on `<slot date>`, `Asia/Tokyo`, never 09:00 |
+
+**Steps:**
+
+1. Click the control that cancels the visit.
+2. Read the slot the confirmation names.
+3. Dismiss the confirmation.
+
+**Expected Results:**
+
+* The confirmation names the slot and zone in the row's Confirmation names column, date included.
+* After step 3 the visit is still booked.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-nu8 rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC3-1: Dismissing the cancellation keeps the visit and emails nobody
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_1>.
+* The tester can read `<collector inbox>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<case_1>` | A case with a visit booked at `<booked shop>` for `<visit slot>` |
+| `<visit slot>` | A slot at least one day ahead, on `<booked shop>`'s clock |
+| `<collector inbox>` | The mailbox of the collector who owns `<case_1>` |
+
+**Steps:**
+
+1. Click the control that cancels the visit.
+2. Dismiss the confirmation.
+3. Reload the case page.
+4. Open `<collector inbox>`.
+
+**Expected Results:**
+
+* After step 3 the case still shows the visit at `<visit slot>`.
+* `<collector inbox>` holds no cancellation email.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-fax rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC4-1: Cancellation confirmation for a case with no address says nobody is emailed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_3>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<case_3>` | A case with a visit booked and no email address |
+
+**Steps:**
+
+1. Click the control that cancels the visit.
+2. Read the confirmation.
+3. Dismiss the confirmation.
+
+**Expected Results:**
+
+* The confirmation says nobody is emailed.
+* The confirmation names no address.
+* After step 3 the visit is still booked.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-fe8 rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC5-1: A refused cancellation stays in the open confirmation
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_1> in `<session A>`.
+* admin(holds vault:operate) is on the case page of <case_1> in `<session B>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<case_1>` | A case with a visit booked, at a status the case may be cancelled from |
+| `<session A>` | The tester's first browser session |
+| `<session B>` | A second browser session |
+
+**Steps:**
+
+1. In `<session A>`, click the control that cancels the visit.
+2. In `<session B>`, cancel `<case_1>` from the Case tab.
+3. In `<session A>`, confirm the cancellation.
+
+**Expected Results:**
+
+* After step 3 a refusal shows inside the confirmation.
+* The confirmation stays open.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-sp3 rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC6-1: A visit cancelled in another session opens no confirmation
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_1> in `<session A>`, showing the visit.
+* The visit of <case_1> was cancelled in `<session B>` after `<session A>` loaded the page.
+* The tester can read `<collector inbox>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<case_1>` | A case with a visit booked |
+| `<session A>` | The tester's first browser session |
+| `<session B>` | A second browser session |
+| `<collector inbox>` | The mailbox of the email address on `<case_1>` |
+
+**Steps:**
+
+1. In `<session A>`, click the control that cancels the visit.
+2. Open `<collector inbox>`.
+
+**Expected Results:**
+
+* No confirmation opens.
+* `<session A>` redraws the case with no booked visit.
+* `<collector inbox>` holds only the one cancellation email `<session B>` caused.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-p2b rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC7-1: A visit moved in another session is named at its new slot
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of <case_1> in `<session A>`, showing `<visit slot>`.
+* The visit of <case_1> was moved to `<new slot>` in `<session B>` after `<session A>` loaded the page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<case_1>` | A case with a visit booked at a shop on `Asia/Hong_Kong` |
+| `<visit slot>` | 10:00 on 15 June 2026, on the shop's clock |
+| `<new slot>` | 14:00 on 16 June 2026, on the shop's clock |
+| `<session A>` | The tester's first browser session |
+| `<session B>` | A second browser session |
+
+**Steps:**
+
+1. In `<session A>`, click the control that cancels the visit.
+2. Read the slot the confirmation names.
+3. Dismiss the confirmation.
+
+**Expected Results:**
+
+* The confirmation names `<new slot>`, `Asia/Hong_Kong`.
+* The confirmation does not name `<visit slot>`.
+* After step 3 the case shows the visit at `<new slot>`.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-a54 rev=1 covers=none -->
+### grade10-admin-vault-operator-queue-US22-TC8-1: Cancel visit opens no confirmation when the case or its shop cannot be read
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-22
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the case page of the row's case, showing its visit.
+* The row's condition holds.
+* The tester can read `<collector inbox>`.
+
+**Test data:**
+
+| Case | Condition |
+| --- | --- |
+| `<case_1>`, a case with a visit booked | Network conditions are manipulated to fail the case's fresh read |
+| `<case_4>`, a case with a visit at a shop the console's list of shops does not hold | none |
+
+`<collector inbox>` is the mailbox of the email address on the row's case.
+
+**Steps:**
+
+1. Click the control that cancels the visit.
+2. Open `<collector inbox>`.
+
+**Expected Results:**
+
+* A failure shows beside the cancel control.
+* No confirmation opens, and no slot is named on the brand's zone.
+* The case still shows its visit.
+* `<collector inbox>` holds no cancellation email.
+
+---
+
+## grade10-admin-vault-operator-queue-US23: Operator checks the forfeiture notice before it goes
+
+**As a** member of shop staff,
+**I want** sending the forfeiture notice to ask me first, naming the address it
+goes to and the date to pay by it sets,
+**so that** a legal deadline never starts on a misplaced press, and I know who
+will read it.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-9xk rev=1 covers=g10adm.vault-operator-queue.SC-5hv,g10adm.vault-operator-queue.SC-1bh -->
+### grade10-admin-vault-operator-queue-US23-TC1-1: Confirming the notice sends it to the named address and sets the date to pay by
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+* The tester can read `<notice address>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_2>` | A live loan 5 days past its due date, no forfeiture notice sent |
+| `<notice address>` | The email address on `<loan_2>`'s case |
+| `<send date>` | Today on the `<brand time zone>` calendar |
+| `<cure period>` | 14 days, the brand's notice period |
+| `<brand time zone>` | The time zone of the brand's calendar |
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Read the confirmation.
+3. Confirm the send.
+4. Read the case header.
+5. Open `<notice address>`.
+
+**Expected Results:**
+
+* Step 1 opens a confirmation; no notice is sent behind it.
+* The confirmation is in the destructive tone and names `<notice address>`.
+* The confirmation names the date to pay by: `<send date>` plus `<cure period>`.
+* After step 3, Send forfeiture notice is no longer offered.
+* The header names the same date to pay by as the confirmation.
+* `<notice address>` holds one forfeiture notice naming that date to pay by.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-ku8 rev=1 covers=g10adm.vault-operator-queue.SC-o3p -->
+### grade10-admin-vault-operator-queue-US23-TC2-1: Notice date to pay by is counted on the brand's calendar at the day boundary
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+* The clock is set to `<now>` and the tester's device clock to `<device zone>`.
+
+**Test data:**
+
+| `<now>` on the brand's calendar | `<device zone>` date at `<now>` | Confirmation's date to pay by |
+| --- | --- | --- |
+| 00:30 on `<day D>` | `<day D>` minus 1 | `<day D>` plus `<cure period>` |
+| 23:30 on `<day D>` | `<day D>` plus 1 | `<day D>` plus `<cure period>` |
+| 23:30 on `<day D>`, 00:30 on `<day D>` plus 1 in Tokyo, `<loan_2>` kept at a shop on `Asia/Tokyo` | `<day D>` | `<day D>` plus `<cure period>`, never one day later |
+
+`<loan_2>` is a live loan 5 days past its due date with no forfeiture notice sent; `<cure period>` is 14 days, the brand's notice period; the brand's zone is `Asia/Hong_Kong`.
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Read the date to pay by the confirmation names.
+3. Dismiss the confirmation.
+
+**Expected Results:**
+
+* The confirmation names the row's date to pay by.
+* After step 3, Send forfeiture notice is still offered.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-92p rev=1 covers=g10adm.vault-operator-queue.SC-wro -->
+### grade10-admin-vault-operator-queue-US23-TC3-1: Dismissing the notice confirmation sends nothing and starts no deadline
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+* The tester can read `<notice address>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_2>` | A live loan 5 days past its due date, no forfeiture notice sent |
+| `<notice address>` | The email address on `<loan_2>`'s case |
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Dismiss the confirmation.
+3. Reload the case page.
+4. Read the case header.
+5. Read the Custody tab.
+6. Open `<notice address>`.
+
+**Expected Results:**
+
+* The header still counts 5 days past due, with no date to pay by.
+* The Custody tab still offers Send forfeiture notice.
+* The Custody tab's reason still names that no notice has been sent.
+* `<notice address>` holds no forfeiture notice.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-0cq rev=1 covers=g10adm.vault-operator-queue.SC-mu0 -->
+### grade10-admin-vault-operator-queue-US23-TC4-1: A day turning before the send names the later date to pay by
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+* The clock is set to 23:59 on `<day D>` on the brand's calendar.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_2>` | A live loan 5 days past its due date, no forfeiture notice sent |
+| `<cure period>` | 14 days, the brand's notice period |
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Read the date to pay by the confirmation names.
+3. Advance the clock to 00:01 on `<day D>` plus 1.
+4. Confirm the send.
+5. Read the case header.
+
+**Expected Results:**
+
+* The confirmation names `<day D>` plus `<cure period>`.
+* After step 4 no second confirmation opens.
+* The header reads pay by `<day D>` plus 1 plus `<cure period>`.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-8k5 rev=1 covers=g10adm.vault-operator-queue.SC-jnl -->
+### grade10-admin-vault-operator-queue-US23-TC5-1: Notice confirmation for a case with no address says nobody is emailed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_6>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_6>` | A live loan past its due date, no forfeiture notice sent, no email address |
+| `<send date>` | Today on the brand's calendar |
+| `<cure period>` | 14 days, the brand's notice period |
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Read the confirmation.
+3. Dismiss the confirmation.
+
+**Expected Results:**
+
+* The confirmation says nobody is emailed.
+* The confirmation names no address.
+* The confirmation names the date to pay by: `<send date>` plus `<cure period>`.
+* After step 3, Send forfeiture notice is still offered.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-0ae rev=1 covers=g10adm.vault-operator-queue.SC-ekb -->
+### grade10-admin-vault-operator-queue-US23-TC6-1: With no notice period the confirmation says so and holds the refusal
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* The brand has no notice period set.
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_2>` | A live loan 5 days past its due date, no forfeiture notice sent |
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Read the confirmation.
+3. Confirm the send.
+4. Read the confirmation.
+5. Dismiss the confirmation.
+6. Read the Custody tab.
+
+**Expected Results:**
+
+* The confirmation says no date to pay by can be named without a notice period.
+* After step 3 a refusal shows inside the confirmation, which stays open.
+* After step 5 the Custody tab still offers Send forfeiture notice, with no notice listed.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xek rev=1 covers=g10adm.vault-operator-queue.SC-kbm -->
+### grade10-admin-vault-operator-queue-US23-TC7-1: A notice sent in another session opens no confirmation
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2> in `<session A>`, offering Send forfeiture notice.
+* A forfeiture notice naming `<date to pay by>` was sent on <loan_2> in `<session B>` after `<session A>` loaded the page.
+* The tester can read `<notice address>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_2>` | A live loan 5 days past its due date |
+| `<date to pay by>` | The date the notice from `<session B>` named |
+| `<notice address>` | The email address on `<loan_2>`'s case |
+| `<session A>` | The tester's first browser session |
+| `<session B>` | A second browser session |
+
+**Steps:**
+
+1. In `<session A>`, click Send forfeiture notice.
+2. Read the Custody tab.
+3. Open `<notice address>`.
+
+**Expected Results:**
+
+* No confirmation opens.
+* The Custody tab shows the notice sent, naming `<date to pay by>`.
+* Send forfeiture notice is no longer offered.
+* `<notice address>` holds one forfeiture notice.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xgf rev=1 covers=g10adm.vault-operator-queue.SC-rtl -->
+### grade10-admin-vault-operator-queue-US23-TC8-1: A failed read opens no notice confirmation
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-23
+
+**Pre-conditions:**
+
+* admin(holds vault:approve) is on the Custody tab of <loan_2>.
+* The row's condition holds.
+* The tester can read `<notice address>`.
+
+**Test data:**
+
+| Condition |
+| --- |
+| Network conditions are manipulated to fail the case's fresh read |
+| Network conditions are manipulated to fail the fresh read of the brand's notice period |
+
+`<loan_2>` is a live loan 5 days past its due date with no forfeiture notice sent; `<notice address>` is the email address on its case.
+
+**Steps:**
+
+1. Click Send forfeiture notice on the Custody tab.
+2. Open `<notice address>`.
+
+**Expected Results:**
+
+* A failure shows beside Send forfeiture notice.
+* No confirmation opens.
+* The Custody tab still offers Send forfeiture notice.
+* `<notice address>` holds no forfeiture notice.
+
+---
+
+## grade10-admin-vault-operator-queue-US24: Operator reads how late a loan is from the case header
+
+**As a** member of shop staff,
+**I want** the case header to say how many days a live loan is past its due
+date, and the date to pay by once a forfeiture notice stands,
+**so that** I know where a late loan stands the moment I open its case,
+without the money grant.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-2m8 rev=1 covers=g10adm.vault-operator-queue.SC-syo,g10adm.vault-operator-queue.SC-jhz -->
+### grade10-admin-vault-operator-queue-US24-TC1-1: Header counts the days a live loan is past due, at the limit
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on the vault queue.
+* `<loan_1>` has no forfeiture notice sent.
+
+**Test data:**
+
+| `<loan_1>` due date, on the brand's calendar | Header reads |
+| --- | --- |
+| Tomorrow | No clock |
+| Today | No clock |
+| Yesterday | 1 day past due |
+| 30 days ago | 30 days past due |
+
+**Steps:**
+
+1. Open the case of `<loan_1>`.
+2. Read the case header.
+
+**Expected Results:**
+
+* The case opens on its header.
+* The header reads as the row's Header reads column.
+* The header names no date to pay by.
+* No badge says the case waits on staff for being late.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-6aw rev=1 covers=g10adm.vault-operator-queue.SC-j1h -->
+### grade10-admin-vault-operator-queue-US24-TC2-1: Header names the date to pay by once a notice stands
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on the vault queue.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_3>` | A live loan 20 days past its due date, a forfeiture notice sent `<notice sent>` |
+| `<notice sent>` | 6 days ago on the brand's calendar |
+| `<date to pay by>` | `<notice sent>` plus `<cure period>` |
+| `<cure period>` | 14 days, the brand's notice period |
+
+**Steps:**
+
+1. Open the case of `<loan_3>`.
+2. Read the case header.
+3. Open the Custody tab.
+4. Read the cure date the reason names.
+
+**Expected Results:**
+
+* The header names `<date to pay by>`.
+* The header shows no days-past-due count beside it.
+* The Custody tab's cure date equals the header's date to pay by.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-vc8 rev=1 covers=g10adm.vault-operator-queue.SC-fgo -->
+### grade10-admin-vault-operator-queue-US24-TC3-1: Header clock shows without the money grant
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* `<operator>` is signed in to the admin and on the vault queue.
+
+**Test data:**
+
+| `<operator>` | Case opened | Header reads | Payouts tab |
+| --- | --- | --- | --- |
+| admin(staff, holds vault:read, not vault:payout) | `<loan_1>`, a live loan 5 days past due, no notice | 5 days past due | Not offered |
+| admin(staff, holds vault:read, not vault:payout) | `<loan_3>`, a live loan with a notice sent 6 days ago | `<loan_3>`'s date to pay by | Not offered |
+| admin(treasurer, holds vault:read and vault:payout) | `<loan_1>` | 5 days past due | Offered |
+
+**Steps:**
+
+1. Open the row's case.
+2. Read the case header.
+
+**Expected Results:**
+
+* The case opens for every row.
+* The header reads as the row's Header reads column.
+* The Payouts tab is as the row's Payouts tab column.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-xjx rev=1 covers=g10adm.vault-operator-queue.SC-9xn,g10adm.vault-operator-queue.SC-4es -->
+### grade10-admin-vault-operator-queue-US24-TC4-1: Days past due are counted on the brand's calendar at the day boundary
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on the vault queue.
+* The brand's zone is `Asia/Hong_Kong`.
+* The clock is set to `<now>` and the tester's device clock to `<device zone>`.
+* `<loan_4>` is a live loan due on `<due day>`, no forfeiture notice sent, kept at `<shop>`.
+
+**Test data:**
+
+| `<now>` on the brand's calendar | `<shop>` | `<device zone>` date at `<now>` | Header reads |
+| --- | --- | --- | --- |
+| 00:30 on `<due day>` plus 1 | A shop on `Asia/Hong_Kong` | `<due day>` | 1 day past due |
+| 23:30 on `<due day>` | A shop on `Asia/Hong_Kong` | `<due day>` plus 1 | No clock |
+| 23:30 on `<due day>` plus 3 | A shop on `Asia/Hong_Kong` | `<due day>` plus 4 | 3 days past due |
+| 23:30 on `<due day>`, 00:30 on `<due day>` plus 1 in Tokyo | A shop on `Asia/Tokyo` | `<due day>` plus 1 | No clock |
+
+**Steps:**
+
+1. Open the case of `<loan_4>`.
+2. Read the case header.
+
+**Expected Results:**
+
+* The header reads as the row's Header reads column.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-5r8 rev=1 covers=g10adm.vault-operator-queue.SC-6jj -->
+### grade10-admin-vault-operator-queue-US24-TC5-1: Header carries no clock on a case with no running loan
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on the vault queue.
+
+**Test data:**
+
+| `<case_5>` |
+| --- |
+| A storage case in the vault |
+| A loan repaid in full 10 days after its due date |
+| A forfeited case whose notice named a date to pay by |
+
+**Steps:**
+
+1. Open the case of `<case_5>`.
+2. Read the case header.
+
+**Expected Results:**
+
+* The header shows no days-past-due count.
+* The header names no date to pay by.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-x4b rev=1 covers=g10adm.vault-operator-queue.SC-b6w -->
+### grade10-admin-vault-operator-queue-US24-TC6-1: Header keeps the date to pay by after it has passed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on the vault queue.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_7>` | A live loan whose forfeiture notice named `<date to pay by>` |
+| `<date to pay by>` | Yesterday on the brand's calendar |
+
+**Steps:**
+
+1. Open the case of `<loan_7>`.
+2. Read the case header.
+
+**Expected Results:**
+
+* The header reads pay by `<date to pay by>`.
+* The header shows no days-past-due count.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-4sx rev=1 covers=g10adm.vault-operator-queue.SC-g7w -->
+### grade10-admin-vault-operator-queue-US24-TC7-1: Header count takes no grace days off
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* The brand's grace is set to 3 days.
+* admin(holds vault:read) is on the vault queue.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_8>` | A live loan due 2 days ago on the brand's calendar, no forfeiture notice sent |
+
+**Steps:**
+
+1. Open the case of `<loan_8>`.
+2. Read the case header.
+
+**Expected Results:**
+
+* The header reads 2 days past due.
+
+<!-- trace:case id=g10adm.vault-operator-queue.TC-6bs rev=1 covers=g10adm.vault-operator-queue.SC-sn7 -->
+### grade10-admin-vault-operator-queue-US24-TC8-1: Date to pay by reads the brand's day at a shop on another zone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-operator-queue-US-24
+
+**Pre-conditions:**
+
+* The brand's zone is `Asia/Hong_Kong`.
+* admin(holds vault:read) is on the vault queue.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<loan_9>` | A live loan kept at a shop on `Asia/Tokyo`, whose forfeiture notice named 15 December 2026 |
+
+**Steps:**
+
+1. Open the case of `<loan_9>`.
+2. Read the case header.
+
+**Expected Results:**
+
+* The header reads pay by 15 Dec 2026.
+* The header does not read 16 Dec.
+
+---
+
 ## Settled
 
 - The boundary between Out and Stalled is `grade10-site/e-kyc/hosted-verification`'s, not the console's: the panel reads the state that capability holds and decides none of its own.
-- The held list carries three figures, the first broken down by shop, each counting everything the filter in force holds; there is no fourth figure counting shops.
-- The visit checklist walks the seven steps the counter works, six of them on a case that borrows nothing.
+- The held list carries two figures, the first broken down by shop, each counting everything the filter in force holds; there is no fourth figure counting shops.
+- The checklist walks the seven steps the counter works on a case opened there, six of them on a case that borrows nothing.
+- The console offers no Today view, no pickup tile and no Cancel visit: booking and the day's visits belong to the diary (`add-multi-store-appointments`), so `US6-TC3-1`, `US6-TC7-1` and `US22-TC1-1` to `US22-TC8-1` are `deprecated`, and their requirement is gone.
 - A pending or failed read is the panel's own status rather than a rule, so no scenario is owed for it.
 - A reference search leaves the same trail as any other search: the trail rule already names what kind of term it was, and no scenario of its own is owed for the reference.
 - A term of two to six characters of the reference's alphabet is searched as a reference and one of seven or more as a case-id prefix, so one term is never both kinds.
@@ -3542,9 +4721,9 @@ until it does,
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `grade10-admin-vault-operator-queue-US1-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-27` and `grade10-admin-vault-operator-queue-SC-28`: the row reads the collector's word and carries the reference |
+| `grade10-admin-vault-operator-queue-US1-TC1-2` | Reconciled | `grade10-admin-vault-operator-queue-SC-27` and `grade10-admin-vault-operator-queue-SC-28`: the row reads the collector's word and carries the reference; `<v>` 2: the row has no visit, which the diary owns (`add-multi-store-appointments`) |
 | `grade10-admin-vault-operator-queue-US1-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-02` |
-| `grade10-admin-vault-operator-queue-US1-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-03` for the stalled valuation and `grade10-admin-vault-operator-queue-SC-29` for the collector badge; the rest of the badge table is the durable requirement's |
+| `grade10-admin-vault-operator-queue-US1-TC3-2` | Reconciled, `<v>` 2 | `grade10-admin-vault-operator-queue-SC-03` for the stalled valuation and `grade10-admin-vault-operator-queue-SC-29` for the collector badge; the rest of the badge table is the durable requirement's |
 | `grade10-admin-vault-operator-queue-US1-TC4-1` | Corrected | the durable rule badges a valuation untouched for *more* than 7 days, which `grade10-admin-vault-operator-queue-SC-03` walks at 8; the row expecting the badge at exactly 7 days moved past it |
 | `grade10-admin-vault-operator-queue-US1-TC5-1`, `grade10-admin-vault-operator-queue-US1-TC6-1`, `grade10-admin-vault-operator-queue-US4-TC7-1` | Kept, no scenario | presentation only: a pending or failed read is decided by the panel's colocated test, and the ui-design Loading and Error rows carry that same disposition |
 | `grade10-admin-vault-operator-queue-US2-TC1-1`, `grade10-admin-vault-operator-queue-US2-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-07` |
@@ -3560,27 +4739,27 @@ until it does,
 | `grade10-admin-vault-operator-queue-US3-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-11` |
 | `grade10-admin-vault-operator-queue-US4-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-18`; the locker's optionality is the durable requirement's, which this change does not reopen |
 | `grade10-admin-vault-operator-queue-US4-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-19` |
-| `grade10-admin-vault-operator-queue-US4-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-43`, with the tiles at three and the first broken down per shop — Q54 |
+| `grade10-admin-vault-operator-queue-US4-TC3-2` | Reconciled | `grade10-admin-vault-operator-queue-SC-43`, with the first tile broken down per shop — Q54; `<v>` 2: two tiles, the pickup tile gone with the vault's booking (`add-multi-store-appointments`) |
 | `grade10-admin-vault-operator-queue-US4-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-44` |
 | `grade10-admin-vault-operator-queue-US4-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-46` |
 | `grade10-admin-vault-operator-queue-US4-TC6-1` | Folded | `grade10-admin-vault-operator-queue-SC-49`, under the new requirement *The custody tab reads back where the item has been*: the movement log is drawn on the design, required by the durable movement rule, and was proved by no scenario |
-| `grade10-admin-vault-operator-queue-SC-45` | Case added | `grade10-admin-vault-operator-queue-US4-TC8-1`: the held row's nine fields |
+| `grade10-admin-vault-operator-queue-SC-45` | Case added | `grade10-admin-vault-operator-queue-US4-TC8-2`: the held row's eight fields; `<v>` 2: the row names no pickup (`add-multi-store-appointments`) |
 | `grade10-admin-vault-operator-queue-SC-39` | Reconciled | `grade10-admin-vault-operator-queue-US9-TC1-1`'s Out row: a check invited and not yet read as stalled reads Out, with the day it went and the two acts beside it |
 | `grade10-admin-vault-operator-queue-US5-TC1-1`, `grade10-admin-vault-operator-queue-US5-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-24` |
 | `grade10-admin-vault-operator-queue-US5-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-26` |
 | `grade10-admin-vault-operator-queue-US5-TC4-1` | Covered | the requirement's own trail sentence names what kind of term it was, and the durable `grade10-admin-vault-operator-queue-SC-08` walks the entry a search writes |
-| `grade10-admin-vault-operator-queue-US6-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-22` |
+| `grade10-admin-vault-operator-queue-US6-TC1-2` | Reconciled | `grade10-admin-vault-operator-queue-SC-22`; `<v>` 2: the landing view is Needs staff (`add-multi-store-appointments`) |
 | `grade10-admin-vault-operator-queue-US6-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-21` |
-| `grade10-admin-vault-operator-queue-US6-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-22` for the cut and its order, `grade10-admin-vault-operator-queue-SC-27` and `grade10-admin-vault-operator-queue-SC-28` for the row's word and reference |
-| `grade10-admin-vault-operator-queue-US6-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-23` |
+| `grade10-admin-vault-operator-queue-US6-TC3-1` | Deprecated | the Today cut is gone (`add-multi-store-appointments`); was `grade10-admin-vault-operator-queue-SC-22` for the cut and its order, `grade10-admin-vault-operator-queue-SC-27` and `grade10-admin-vault-operator-queue-SC-28` for the row's word and reference |
+| `grade10-admin-vault-operator-queue-US6-TC4-2` | Reconciled | `grade10-admin-vault-operator-queue-SC-23`; `<v>` 2: a view with no case reads none, since no Today cut remains (`add-multi-store-appointments`) |
 | `grade10-admin-vault-operator-queue-US6-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-21`, and the durable paging requirement's `grade10-admin-vault-operator-queue-SC-05` |
 | `grade10-admin-vault-operator-queue-US6-TC6-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-06` |
-| `grade10-admin-vault-operator-queue-SC-01` | Case added | `grade10-admin-vault-operator-queue-US6-TC7-1`: the Today cut on the shop's day while the date in Coordinated Universal Time is still yesterday's |
-| `grade10-admin-vault-operator-queue-US7-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-30`; the seven steps are the ones board A03 names — Q55 |
-| `grade10-admin-vault-operator-queue-US7-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-31` |
-| `grade10-admin-vault-operator-queue-US7-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-32`; the storage lane walks six of the seven |
-| `grade10-admin-vault-operator-queue-US7-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-33` |
-| `grade10-admin-vault-operator-queue-US7-TC5-1` | Folded | `grade10-admin-vault-operator-queue-SC-50`: a step ticking on its act and handing the next one on was in the requirement's bullets and proved by no scenario |
+| `grade10-admin-vault-operator-queue-SC-01` | Case added | `grade10-admin-vault-operator-queue-US6-TC7-1`: the Today cut on the shop's day while the date in Coordinated Universal Time is still yesterday's; deprecated, the cut is gone (`add-multi-store-appointments`) |
+| `grade10-admin-vault-operator-queue-US7-TC1-2` | Reconciled, `<v>` 2 | the checklist keys on a case opened at the counter, not a visit today (`add-multi-store-appointments`); `grade10-admin-vault-operator-queue-SC-30`; the seven steps are the ones board A03 names — Q55 |
+| `grade10-admin-vault-operator-queue-US7-TC2-2` | Reconciled, `<v>` 2 | as `US7-TC1-2` (`add-multi-store-appointments`); `grade10-admin-vault-operator-queue-SC-31` |
+| `grade10-admin-vault-operator-queue-US7-TC3-2` | Reconciled, `<v>` 2 | as `US7-TC1-2` (`add-multi-store-appointments`); `grade10-admin-vault-operator-queue-SC-32`; the storage lane walks six of the seven |
+| `grade10-admin-vault-operator-queue-US7-TC4-2` | Reconciled, `<v>` 2 | a case the customer opened online shows none (`add-multi-store-appointments`); `grade10-admin-vault-operator-queue-SC-33` |
+| `grade10-admin-vault-operator-queue-US7-TC5-2` | Folded, `<v>` 2 | as `US7-TC1-2` (`add-multi-store-appointments`); `grade10-admin-vault-operator-queue-SC-50`: a step ticking on its act and handing the next one on was in the requirement's bullets and proved by no scenario |
 | `grade10-admin-vault-operator-queue-US8-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-34` |
 | `grade10-admin-vault-operator-queue-US8-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-35` |
 | `grade10-admin-vault-operator-queue-US8-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-36` |
@@ -3686,11 +4865,46 @@ until it does,
 - **Contradicted** - `grade10-admin-vault-operator-queue-US10-TC17-1`, QA2's own addition, read the refusal back at once when a loan is chosen again; a loan field built again is untouched, so the console draws no refusal until it is typed in or left, and a refusal drawn on the first keystroke would break Q4. Q8 now clears the refusal on a lane change and keeps the amount, and the case leaves the field to read it again. Otherwise every QA1 outcome agrees with the delta, `tech-design.md` and the worker's amount rule, but for the `0.` keystroke corrected above, which is the money field's standing behaviour and no scenario's
 - **Uncovered anchors** - none: `grade10-admin-vault-operator-queue-SC-96` by `grade10-admin-vault-operator-queue-US10-TC16-1`, and the Feature set's new leaf by `grade10-admin-vault-operator-queue-US10-TC16-1`, `grade10-admin-vault-operator-queue-US10-TC17-1` and `grade10-admin-vault-operator-queue-US10-TC18-1`
 
+**Run:** QA2, 2026-10-07, a rerun after the feature set named the brand's calendar for a loan's dates. QA1 wrote 12 blind cases from the frozen outline, journeys US-08 and US-22 to US-24, the proposal, decisions Q1 to Q23 with the `## Raised` table, and the Operator Console page; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and the archive. QA2 joined them with Dev's SC-97 to SC-121 and SC-142 to SC-145, the tech design and the tasks. No domain suite sits above the capability, and the product suite traces none of the four journeys.
+
+| Blind case or scenario | Disposition |
+| --- | --- |
+| `US8-TC6-1` | **Folded:** the durable SC-36 for the reason's cure date and the day the notice went; the same date as the confirm is SC-112's, walked under US-23 |
+| `US22-TC1-1` | **Deprecated:** the console no longer cancels a visit; the diary owns it (`add-multi-store-appointments`) |
+| `US22-TC2-1` | **Deprecated:** the console no longer cancels a visit; the diary owns it (`add-multi-store-appointments`) |
+| `US22-TC3-1` | **Deprecated:** the console no longer cancels a visit; the diary owns it (`add-multi-store-appointments`) |
+| `US23-TC1-1` | **Folded:** SC-110 and SC-112; joined the destructive tone; the control's label corrected to Send forfeiture notice and the address to the case's own (Q12) |
+| `US23-TC2-1` | **Folded:** SC-145; a row added for a case kept at a shop on `Asia/Tokyo` |
+| `US23-TC3-1` | **Folded:** SC-111 |
+| `US24-TC1-1` | **Folded:** SC-97 and SC-99; joined no waits-on-staff badge; grant set to `vault:read` |
+| `US24-TC2-1` | **Folded:** SC-100 |
+| `US24-TC3-1` | **Folded:** SC-104; the rows name the staff and treasurer roles and joined the Payouts tab |
+| `US24-TC4-1` | **Folded:** SC-98 and SC-143; a row added for a case kept at a shop on `Asia/Tokyo` |
+| `US24-TC5-1` | **Folded:** SC-102; rows added for a storage case and a forfeited case (Q10) |
+| SC-108, SC-109, SC-116, SC-117 | **Deprecated:** the console no longer cancels a visit; the diary owns it (`add-multi-store-appointments`): `US22-TC4-1` to `US22-TC7-1` |
+| SC-118, SC-119 | **Deprecated:** the console no longer cancels a visit; the diary owns it (`add-multi-store-appointments`): `US22-TC8-1` |
+| SC-113, SC-114, SC-115, SC-120, SC-121 | **Uncovered by QA1:** `US23-TC4-1` to `US23-TC8-1` added |
+| SC-101, SC-103, SC-144 | **Uncovered by QA1:** `US24-TC6-1`, `US24-TC7-1` and `US24-TC8-1` added |
+| Rejected cases | none |
+| Contradicted readings | none |
+| Uncovered scenarios | none |
+
+- **Address, and none on file** - settled by Q12 and Q23: the case's own address, and a case with none says nobody is emailed while the notice still runs; SC-108 and SC-114
+- **After the date to pay by** - settled by Q11: the header still reads `pay by <date>`, and the Custody tab offers Forfeit as the durable SC-51 walks; SC-101
+- **On the due date** - settled by Q9 and the requirement's table: no clock on or before the due date, `1 day past due` the day after; `US24-TC1-1`'s Today row
+- **Forfeited or repaid** - settled by Q10: no clock; SC-102
+- **A visit gone or moved, and a second press** - settled by Q19 and Q20: the press reads the case afresh, a visit gone or a notice standing opens no confirm; SC-116, SC-117 and SC-120. A visit whose slot has passed is cancelled or refused by `grade10-site/vault/visit-booking`, and a refusal shows in the open confirm, SC-109
+- **Resend** - settled by the non-goal and Q16: Send again asks nothing; a second notice from a stale page is Q20's
+- **A failure after confirming** - settled by the requirements' fifth step: the refusal shows in the open confirm, which stays open; SC-109 and SC-115. A failed fresh read is Q21's, SC-118 and SC-121
+- **The booked shop's zone** - settled by Q17; SC-142
+- **The grant** - settled by the page's Permissions table: Cancel visit is `vault:operate`, the notice `vault:approve`, and the clock `vault:read` with no `vault:payout`
+
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `grade10-admin-vault-operator-queue-US1-TC3-1` | The walk proves the lapsed-offer row alone; the stalled-valuation row needs the case's own clock moved seven days, and the parked-message and document-seen-before rows need a message the retry ladder has given up on and a document seen under another account — a person drives these |
+| `grade10-admin-vault-operator-queue-US3-TC5-1` | No walk asks for the second factor: the sign-in walks run on the staging stack where it is optional, and production's requirement is read on a production sign-in by a person |
+| `grade10-admin-vault-operator-queue-US1-TC3-2` | The walk proves the lapsed-offer row alone; the stalled-valuation row needs the case's own clock moved seven days, and the parked-message and document-seen-before rows need a message the retry ladder has given up on and a document seen under another account — a person drives these |
 | `grade10-admin-vault-operator-queue-US9-TC1-1` | Only the provider puts a check into its own stages, so a person drives a sandbox check to stand a case at each of the six states and reads the panel against them |
 | `grade10-admin-vault-operator-queue-US9-TC4-1` | Only the provider sandbox puts a check into Refused; a person drives it there and records the override with its reason |
 | `grade10-admin-vault-operator-queue-US9-TC5-1` | As above, recorded with no reason |

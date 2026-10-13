@@ -1,16 +1,16 @@
+import type { ActivityTimeCopy } from "@grade10/date";
+import { formatDay, formatMoment } from "@grade10/date";
 import { getMessages } from "@grade10/i18n";
-import type { ActivityTimeCopy } from "./format-datetime";
-import {
-  formatDay,
-  formatDeadline,
-  formatListingClosed,
-  formatListingOpens,
-  formatMoment,
-} from "./format-datetime";
 
 export const FIXTURE_SHIPPED_LOCALE = "en" as const;
 export const FIXTURE_TIME_ZONE = "Asia/Hong_Kong";
+export const FIXTURE_ALT_TIME_ZONE = "America/New_York";
 export const FIXTURE_NOW_MS = Date.UTC(2026, 7, 21, 12, 0);
+
+const viewerClock = {
+  locale: FIXTURE_SHIPPED_LOCALE,
+  timeZone: FIXTURE_TIME_ZONE,
+};
 
 export const FIXTURE_ACTIVITY_TIME_COPY: ActivityTimeCopy = getMessages(
   "grade10",
@@ -33,24 +33,18 @@ export const FIXTURE_BALANCE_EXPIRY_SOON_AT_MS = Date.UTC(2026, 8, 9);
 export const FIXTURE_TIER_RENEWAL_AT_MS = Date.UTC(2027, 2, 1);
 export const FIXTURE_MEMBER_SINCE_AT_MS = Date.UTC(2024, 2, 12);
 
-export const FIXTURE_AUCTION_DEADLINE = formatDeadline(
-  FIXTURE_AUCTION_ENDS_AT_MS,
+export const FIXTURE_ORDER_PLACED_DAY = formatDay(
+  FIXTURE_ORDER_PLACED_AT_MS,
+  viewerClock,
 );
-export const FIXTURE_AUCTION_OPENS_DEADLINE = formatDeadline(
-  FIXTURE_AUCTION_OPENS_AT_MS,
+export const FIXTURE_ORDER_SHIPPED_DAY = formatDay(
+  FIXTURE_ORDER_SHIPPED_AT_MS,
+  viewerClock,
 );
-export const FIXTURE_AUCTION_CLOSED = formatListingClosed(
-  FIXTURE_AUCTION_CLOSED_AT_MS,
-);
-export const FIXTURE_AUCTION_OPENS = formatListingOpens(
-  FIXTURE_AUCTION_OPENS_AT_MS,
-);
-export const FIXTURE_BID_LANDED_AT = formatMoment(FIXTURE_BID_LANDED_AT_MS);
-export const FIXTURE_ORDER_PLACED_DAY = formatDay(FIXTURE_ORDER_PLACED_AT_MS);
-export const FIXTURE_ORDER_SHIPPED_DAY = formatDay(FIXTURE_ORDER_SHIPPED_AT_MS);
-export const FIXTURE_REFUND_DAY = formatDay(FIXTURE_REFUND_AT_MS);
+export const FIXTURE_REFUND_DAY = formatDay(FIXTURE_REFUND_AT_MS, viewerClock);
 export const FIXTURE_MEMBER_FIRST_USE_AT = formatMoment(
   FIXTURE_MEMBER_FIRST_USE_AT_MS,
+  viewerClock,
 );
 export const FIXTURE_PLACED_ON = `Placed on ${FIXTURE_ORDER_PLACED_DAY}`;
 export const FIXTURE_PLACED_ON_WITH_PERIOD = `Placed on ${FIXTURE_ORDER_PLACED_DAY}.`;

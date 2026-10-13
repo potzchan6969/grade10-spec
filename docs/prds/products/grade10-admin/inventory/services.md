@@ -1,0 +1,131 @@
+---
+title: Services and Hand-offs
+order: 6
+---
+
+## Values
+
+| Service | Its mark | Opens | Closes |
+| --- | --- | --- | --- |
+| Vault | a vault case | when the valuation starts | at release, unwind or forfeit |
+| Grading | a grading card on a submission | at hand-in | at hand-back, or a hand-off |
+| Consignment | a consignment | when its agreement is signed | when the item is sold and paid out, or goes back |
+| Auction | a lot | when the listing takes the item | when the lot is unsold or called off, or its buyer takes the item |
+| Store | a store listing | when the item goes on sale | when it sells or comes off sale |
+
+## Marks That Share an Item
+
+A mark is a service acting on an item. Three kinds share one item; every
+other mark stands alone.
+
+- **A consignment with its sale** - a consignment and its auction lot, or a
+  consignment and its store listing
+- **A card in a vault case** - consignment refuses it until its vault case
+  is released
+- ❓ Product - **Selling from the vault** - whether the consignor releases
+  the vault case first, or the case stays under the sale and passes to the
+  buyer
+- **One sale at a time** - an auction lot or a store listing, never both
+- **Someone else's item sells under a consignment** - an auction lot or a
+  store listing on an item the house does not own needs the owner's live
+  consignment
+- **Standing alone** - a card at grading takes no other mark; any other pair
+  waits for one mark to close, or passes the item by a hand-off
+- **A financed case** - an item in a financed vault case takes no sale
+  until the case is released, by default, repaid or not; an admin may let a
+  sale repay the loan first from the proceeds
+
+## Applying an Item
+
+- **From the item page** - staff apply an item to a service, each service
+  offered or withheld with the reason in words -
+  [Inventory Console](/p/grade10-admin/inventory/console#the-item-page)
+- **Ask first** - a service asks before it marks, and a refusal names the
+  rule and the mark in the way, such as `With PSA on submission 5TW8HN`
+- **What a service does is mirrored** - inventory records what a service did
+  under its mark and never refuses it, as the register does for the vault -
+  [Items](/p/grade10-admin/inventory/items#marks)
+- **Paper behind every mark** - an item the house holds for someone else is
+  always under a signed agreement of a service holding it
+
+## Hand-offs
+
+A hand-off passes an item from one service to the next in one act: one mark
+closes and the next opens, and the item stays in custody with no release, no
+new intake and no new label.
+
+- **Paper first** - the next service's agreement is signed before the first
+  mark closes
+- **The owner decides** - or staff, for an item the house owns
+- ❓ Product — **Where a hand-off starts** - the item page lists each
+  hand-off its open marks allow, offered or withheld with the reason, and
+  opens the next service's page to prepare its agreement; the act is the
+  next service's, 2026-10-10
+
+| From | To | When |
+| --- | --- | --- |
+| Grading, ready | Vault | at hand-back - [Grading Console](/p/grade10-admin/grading/console#hand-back) |
+| Grading, ready | Consignment to the store or the auction | at hand-back |
+| Auction, won and paid | The winner's vault case | the winner picks keep in the vault at setup |
+| Auction, unsold or cancelled | Consignment to the store, or the vault | the consignor picks |
+| Store, ended unsold | Consignment to the auction, or the vault | the consignor picks |
+| Vault, storage lane | The store, or grading | the owner asks; the vault case ends |
+
+- **Keep in the vault** - the winner passes the identity check and signs the
+  custody agreement on their own phone; the auction's mark holds the item
+  until then, and the vault case opens on the item where it sits. The winner
+  of a consigned lot collects it first, and the case opens on an item they own
+- **Collect at a shop** - a winner may collect the item in person instead of
+  a delivery - [Intake and Release](/p/grade10-admin/inventory/intake#release)
+- ❓ Legal - **A forfeited item** - who sells an item the lender owns
+
+## A Sale
+
+- **The owner moves** - when an item leaves to its buyer, or is kept in the
+  vault for them, the service that sold it moves the owner and closes its
+  mark; a sale is recorded by hand only when the channel did not report it
+- **A consigned lot** - closes when its buyer takes the item, delivered or
+  collected, and moves no owner; consignment moves it
+- ❓ Product - **A house lot's owner** - whether it moves when the winner
+  takes the item, as a consigned lot's does, or when the order is paid
+- **A refund puts it back** - when a sale is refunded after the item left to
+  its buyer, the service that sold it moves the owner back and reopens its
+  mark, so the item can go on sale again
+- **House stock settles** - a paid order sells the lot's stock hold -
+  [Products and Stock](/p/grade10-admin/inventory/catalog#intake)
+
+:::detail{title="Product decisions" for="pm"}
+Only the vault marks the items it acts on. Nothing stops a card at the
+grader from being listed, or one card from going on sale twice; the one
+passage between services, grading into the vault, rests on a typed case
+reference nobody checks; and a sale moves no owner. The owner asks that any
+item can go to any service, and from one service to the next. The design is
+[Inventory and Services Design](/references/inventory-and-services-design).
+
+**Users.** Staff applying an item and passing it on; the services that mark
+items; owners, who decide where their item goes next.
+
+**Not in scope.** A collector applying their own item online, which waits
+for a collector's page of their items; selling an item that secures a live
+loan.
+
+**Measurement.** Items held for someone else with no live mark, held at
+zero; marks refused by name; hand-offs completed in one visit.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Every service marks | Decided | Grading, consignment, the auction and the store mark the items they act on, as the vault does; the store sells a consigned item under the consignment's mark - decided under the owner's delegation, 2026-10-08 | Product |
+| Ask before marking | Decided | A service asks before it marks and is refused by name; what it then does under its mark is mirrored and never refused - decided under the owner's delegation, 2026-10-08 | Engineering |
+| Which marks share an item | Decided | A consignment with its sale; one sale at a time - decided under the owner's delegation, 2026-10-08. A storage-lane vault case under a sale waits on Selling from the vault, below | Product |
+| A hand-off is one act | Decided | Paper first, the owner decides, and the item never leaves custody - decided under the owner's delegation, 2026-10-08 | Product |
+| A sale settles itself | Decided | The selling service moves the owner and closes its mark; a sale is recorded by hand only when the channel did not report it - decided under the owner's delegation, 2026-10-08 | Product |
+| Selling from the vault | ❓ Open | Whether the consignor releases the vault case first, or a storage-lane item sells from the vault and its case passes to the buyer, as decided by the owner on 2026-10-08; no case can pass to a buyer yet, so until decided consignment refuses a card in a vault case until it is released | Product |
+| A live loan and a sale | Decided | A setting, by default no sale until the loan is repaid; the other choice lets the proceeds repay it first - decided by the owner, 2026-10-08. A financed case blocks a sale until it is released, since the vault tells inventory nothing on a payout or a repayment - decided by the owner, 2026-10-11 | Product |
+| The vault takes an item over | Decided | A slab at grading and a won lot pass into the vault case in one act once its custody agreement is executed; grading reads the case from the item rather than a typed reference, which stays only for a card handed in before cards were items - decided under the owner's delegation, 2026-10-10 | Product |
+| Consignment takes an item over | Decided | Adding an item another service holds - grading's card, a lot or a listing ended unsold, a storage vault case - names that mark, and the hand-off runs when the consignment agreement is sealed - decided under the owner's delegation, 2026-10-10 | Product |
+| A lot of an item | Decided | A lot whose product links one item asks before it is published; its mark opens when it goes live and closes sold when its order is paid, moving the owner to the winner, or unsold when nobody won or the order is cancelled, or withdrawn when the lot is called off - decided under the owner's delegation, 2026-10-10 | Product |
+| A consigned lot | Decided | Closes sold when its buyer takes the item, delivered or collected, and moves no owner; consignment moves it - decided under the owner's delegation, 2026-10-11 | Product |
+| When a house lot's owner moves | ❓ Open | Whether a house lot moves its owner when the winner takes the item, as a consigned lot does, or when its order is paid, as the row above says | Product |
+| A card going home | Decided | The grading mark closes at hand-back or withdrawal and the item leaves custody; a card the grader did not return closes lost and stays on the register - decided under the owner's delegation, 2026-10-10 | Product |
+| A forfeited item for sale | ❓ Open | Who sells an item the lender owns | Legal |
+:::

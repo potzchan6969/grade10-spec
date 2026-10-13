@@ -1,0 +1,130 @@
+{
+  "version": 2,
+  "change": "lot-gallery-strip-by-width",
+  "baseline": "83e973a5f63211160868421920962c813cdd41c8435d3d2ebe33f898fdc439c8",
+  "fingerprint": "d079c5b9afa4e5a1b8ab7476cae36883a4bf70d24532e94a8c243e78684eda78",
+  "reviewedBy": "htonyl",
+  "acceptedAt": "2026-10-06T04:48:58.893Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#auction-details",
+      "sha256": "82273fecc4cacaad83c8d77999bd3590e645b560dbdb3e7eb3eaacd526c1406c",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/auction-listing.md#gallery",
+      "sha256": "854a4f14720dc7f92587d41b2a56141dbfcc701279e2fd25ce79275f0a30eff9",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/decisions.md",
+      "sha256": "0b45e4f02d1a76912c72b71b82dbdca4ff93b64324a992b5ae9c3d39feddd0d2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/proposal.md",
+      "sha256": "bd4e70a183fc0dee8800dfbe06861b42c9585a9ae7af2729668b83f1f55483ca",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/specs/grade10-site/auction/listing-media/feature-tcs.md",
+      "sha256": "76cea6d26b21f6ef6e1850937da7ec41e04feda9b2b03e72202183f623480500",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/specs/grade10-site/auction/listing-media/spec.md",
+      "sha256": "1be459e6f6856778507b5fd76afce6336cec863cb588b74570909ed853dda398",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/specs/grade10-site/auction/listing-media/user-journeys.md",
+      "sha256": "332410033fdeb4f2ac04c1e379e919c16a782e39892ce57c9de689c73e5d6e79",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "a470a71be31bc78878ceccbbb5c2386dde361d57398e63e5ddff9154e211850e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "095d50c0d79a5ec2b326c7256f0351b58cde61130172e783c26ba3918ff86e15",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "468efde620f0fe3d6b244a807b53931b40d7e254bf417072a5ebc9229f66dd06",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/lot-gallery-strip-by-width/tech-design.md",
+      "sha256": "a6da18a4755d82f90b8954b1e756e2df08e889e9c949935d257da48de53770e9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+      "sha256": "618ece3cf1697a2f786b0347443cbf119195509f6c6911b82f93deb24ede72b6",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+      "sha256": "772fbf8b23451118d3a6f0fd4455d1b23f9a5813f9c965d839182ea0d44126d5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+      "sha256": "c753b79cea7ba3e7b6157d881657c40b5905f93f7a76815bac2f8f2bff49c55c",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "ceac594daf9a6fc7c11b44f33736028a8221cac0ef98a1b3b2af4890c979ce2b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "227def7eeb91e2197fc8f015cd006ae1f5323dbbac6d929aa718f5635fb3bfe9",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "526ea66fb4aba2f9a1092c8cce58e9bacf41a5bb2aa04d9627e0a89671215a79",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Each gallery image is published at named sizes",
+        "Requirement: The details page shows gallery images in order"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: ListingLotGallery shows a left rail only when wide enough"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

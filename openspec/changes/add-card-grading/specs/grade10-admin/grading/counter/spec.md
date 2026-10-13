@@ -152,6 +152,7 @@ more remain, read rather than inferred from the page being full.
 **Nothing to show** - a view with no row SHALL say so and SHALL still offer
 every cut.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-9l0 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-01 - Today is the shop's day
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -159,12 +160,14 @@ every cut.
 - **WHEN** the Today view is read
 - **THEN** the drop-off's submission is in it
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-h3e rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-02 - Every status has exactly one home
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
 - **WHEN** the six status views are read together
 - **THEN** every status but `planned` appears in exactly one of them
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-yss rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-03 - A plan nobody booked stays off the queue
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -172,6 +175,7 @@ every cut.
 - **WHEN** every view is read
 - **THEN** it is in none of them
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-2dw rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-04 - A page resumes where the last one stopped
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -180,6 +184,7 @@ every cut.
 - **THEN** the second begins after the last row of the first, with no row seen twice and none skipped
 - **AND** each answer says how many rows stand behind the cut and whether more remain
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-pux rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-05 - A view with nothing in it says so
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -187,6 +192,7 @@ every cut.
 - **WHEN** it is read
 - **THEN** it says there is nothing in it, and every other cut is still offered
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-vj8 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-85 - The day's strip carries the drop-offs in slot order
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -227,6 +233,7 @@ own dates, never stored, and the console and the worker SHALL derive them the
 same way. Every day count above SHALL be read from its setting rather than
 compiled in.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-0zy rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-06 - A drop-off today badges the row
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -234,6 +241,7 @@ compiled in.
 - **WHEN** the queue is read
 - **THEN** its row badges the visit today
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-3i7 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-07 - Cards ready a month badge as uncollected
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -241,6 +249,7 @@ compiled in.
 - **WHEN** the queue is read
 - **THEN** its row badges it uncollected for 30 days
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-lz5 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-08 - Cards ready six months ask for the notice
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -248,6 +257,7 @@ compiled in.
 - **WHEN** the Ready view is read
 - **THEN** its row badges the notice as due
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-nbg rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-09 - A payout nobody made in its window badges itself
 **Serves:** grade10-admin-grading-counter-US-09 - the approver sees a payout still owed on a card that did not come back
 
@@ -269,6 +279,7 @@ compiled in.
 - **WHEN** the queue is read
 - **THEN** the submission's row badges the message as not sent
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-cc0 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-86 - A row is worked from without opening the submission
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -288,6 +299,7 @@ The queue SHALL carry these four:
 | Ready, uncollected | the submissions ready and uncollected, and how many have been ready more than 30 days |
 | To settle | the sum of what is due in HKD minor units - unpaid upcharges, storage and repayments of a reversed payout - how many submissions owe it, and how many transfer payouts are unconfirmed |
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-3er rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-12 - The ready tile counts what is still in the safe
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -295,6 +307,7 @@ The queue SHALL carry these four:
 - **WHEN** the queue is read
 - **THEN** the ready tile counts four, of which one is past 30 days
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-n6l rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-13 - The settle tile sums what is owed
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector about what is still owed
 
@@ -302,6 +315,7 @@ The queue SHALL carry these four:
 - **WHEN** the queue is read
 - **THEN** the settle tile reads 55000 HKD minor units over two submissions
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-o9q rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-112 - A transfer not yet received badges its row and counts in To settle
 **Serves:** grade10-admin-grading-counter-US-09 - the approver sees a transfer payout the bank has not yet shown
 
@@ -309,6 +323,7 @@ The queue SHALL carry these four:
 - **WHEN** the queue is read
 - **THEN** the first payout's row badges Transfer unconfirmed, the second's does not, and the settle tile counts one transfer unconfirmed
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-y4w rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-87 - The closing and with-graders tiles read the batches
 **Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
 
@@ -355,6 +370,7 @@ level, SHALL be refused by name with nothing written, and recording the order
 again on the submission that claimed it SHALL answer that submission's own
 lines.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-0sq rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-14 - The day's booking opens its submission
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -362,6 +378,7 @@ lines.
 - **WHEN** the operator opens it from the day's strip and starts the visit at the desk
 - **THEN** its submission's hand-in runbook opens at the card check
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-lbh rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-15 - A walk-in's list is written at the desk
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a list in at the desk from somebody who booked nothing
 
@@ -369,6 +386,7 @@ lines.
 - **WHEN** the operator opens a submission at the desk and adds the cards one at a time with them
 - **THEN** the submission is handed in from the same runbook, with the fee sheet pinned to it at the hand-in
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-tsj rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-16 - A card is checked with its two photographs
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -376,6 +394,7 @@ lines.
 - **THEN** the card reads as checked with the note as typed
 - **AND** both photographs show on the collector's submission page
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-aco rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-17 - A card above the level's ceiling cannot be checked in at that level
 **Serves:** grade10-admin-grading-counter-US-03 - the operator finds one card the chosen level will not carry
 
@@ -383,6 +402,7 @@ lines.
 - **WHEN** the operator checks a card declared at 8000000 HKD minor units
 - **THEN** the card is refused at that level by name, and is offered a second submission at a higher level or a refusal
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-mma rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-113 - A card declared above the courier's cover is refused at the check
 **Serves:** grade10-admin-grading-counter-US-03 - the operator finds one card no parcel could carry
 
@@ -390,6 +410,7 @@ lines.
 - **WHEN** the operator checks a card declared at 35000000 HKD minor units
 - **THEN** the card is refused by name, naming the courier's cover, and is not offered a higher level
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-w0j rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-18 - The till opens only on the sealed agreement
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -397,6 +418,7 @@ lines.
 - **WHEN** the operator looks for the fee step
 - **THEN** taking the fee is not offered, and the reason is on the step
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-1ek rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-19 - One paid line to one card, and a cover line where the level carries one
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -405,6 +427,7 @@ lines.
 - **THEN** four fee lines of 15000 HKD minor units are written back, one to each card in list order, with a cover line beside each
 - **AND** recording the same order again writes nothing and answers those lines
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-1wd rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-20 - Labels, the sealed bag and the intake receipt
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -419,6 +442,7 @@ lines.
 - **WHEN** the operator opens either runbook
 - **THEN** it names the other under the visit, and each is checked, signed, paid and checked in on its own
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-92s rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-88 - A card declared at the level's ceiling is checked in at that level
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -426,6 +450,7 @@ lines.
 - **WHEN** the operator checks a card declared at 390000 HKD minor units
 - **THEN** the card is checked in at that level, the ceiling being the highest declared value the level carries
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-2rk rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-101 - An order recorded on another submission is refused
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -457,6 +482,7 @@ included. The desk SHALL read the cap before the first card is checked, and
 SHALL book the next drop-off rather than open the till when the list would
 pass it.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-imm rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-22 - An unsealed agreement refuses the hand-in
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -464,6 +490,7 @@ pass it.
 - **WHEN** the operator checks the cards in
 - **THEN** it is refused by name and the submission stays `booked`
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-xas rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-23 - No paid line, no hand-in
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -509,12 +536,14 @@ and handed in unchanged, and the refused card stays with the collector.
 hand in, the counter SHALL cancel the submission from `booked` at the desk and
 tell the collector there; no message SHALL be sent.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-cmm rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-25 - A card the grader would not take is refused in the collector's words
 **Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
 
 - **WHEN** the operator refuses a card for the grader not taking it, typing the line the collector will read
 - **THEN** the card leaves the list with that line on the submission page and on the intake receipt, word for word
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-51f rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-26 - A refusal needs a reason and the words
 **Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
 
@@ -522,6 +551,7 @@ tell the collector there; no message SHALL be sent.
 - **WHEN** the operator looks for the refuse action
 - **THEN** it is not offered until both are given
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-dcy rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-27 - A line already paid comes back at the till
 **Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
 
@@ -529,6 +559,7 @@ tell the collector there; no message SHALL be sent.
 - **WHEN** the operator refuses that card
 - **THEN** a refund of 15000 HKD minor units is taken at the till against the submission, naming the card and the line it refunds
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-dxp rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-28 - One refusal never holds the others
 **Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
 
@@ -536,6 +567,7 @@ tell the collector there; no message SHALL be sent.
 - **WHEN** the hand-in runs on
 - **THEN** three cards are labelled, sealed in and checked in, and the fee stands for those three alone
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-m00 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-89 - Refusing the last card cancels the submission at the desk
 **Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
 
@@ -572,6 +604,7 @@ second hand-back SHALL close it when that card comes back. That second
 hand-back SHALL run step 1 again, and step 2 where the threshold asks for it,
 as every hand-back does.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-3s8 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-29 - The code and the name open the hand-back
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -579,6 +612,7 @@ as every hand-back does.
 - **WHEN** the operator enters the pickup code and the name of the person at the desk, and both match the collector
 - **THEN** the runbook opens at what is due
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-xct rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-30 - Above the threshold an ID is glanced at and nothing is kept
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -587,6 +621,7 @@ as every hand-back does.
 - **THEN** the step asks for an identity document matching the name
 - **AND** the receipt records only that an ID was matched, holding no number, no image and no document kind
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-eak rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-31 - At or below the threshold no document is asked for
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -594,6 +629,7 @@ as every hand-back does.
 - **WHEN** the operator works the hand-back
 - **THEN** the code and the name release the cards, with no identity document asked for
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-o99 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-32 - What is due is taken before anything is handed over
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -601,6 +637,7 @@ as every hand-back does.
 - **WHEN** the operator opens the hand-over step before taking them at the till
 - **THEN** nothing may be ticked, and the step names what is still due
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-m60 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-33 - Each item is ticked and each slab photographed
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -608,6 +645,7 @@ as every hand-back does.
 - **WHEN** the operator ticks each item as it is handed over and inspected, photographing each slab
 - **THEN** each item reads as handed over, and its photograph shows on the collector's submission page
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-f99 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-34 - A card the grader still holds is not handed over
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -615,6 +653,7 @@ as every hand-back does.
 - **WHEN** the hand-back is worked
 - **THEN** the held card's row reads as still out and cannot be ticked, and the receipt names it
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-4zl rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-35 - The submission closes on the sealed receipt
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -622,6 +661,7 @@ as every hand-back does.
 - **WHEN** the operator hands the packet over
 - **THEN** the submission moves to `collected` and the record stays on the collector's page
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ekx rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-36 - A second hand-back closes the submission
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -629,6 +669,7 @@ as every hand-back does.
 - **WHEN** the operator works the hand-back over that one item and seals its receipt
 - **THEN** the submission moves to `collected`
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-r90 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-90 - A second hand-back reads who is collecting again
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -658,12 +699,14 @@ recorded on the submission's timeline. Where the collector cannot produce the
 code, the counter MAY read the ID glance against the collector's own name
 instead.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-90l rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-37 - A wrong code is refused on the field
 **Serves:** grade10-admin-grading-counter-US-05 - the operator releases the cards to the right person or to nobody
 
 - **WHEN** the operator enters a code that is not this submission's
 - **THEN** it is refused on the field and no step below it opens
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-u6y rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-38 - The named person collects, and the receipt says so
 **Serves:** grade10-admin-grading-counter-US-05 - the operator releases the cards to the right person or to nobody
 
@@ -671,6 +714,7 @@ instead.
 - **WHEN** that person comes in with the code and the operator reads their name against the page
 - **THEN** the hand-back runs, and the sealed receipt records that they collected
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-x8k rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-39 - Anybody else is turned away, with no override
 **Serves:** grade10-admin-grading-counter-US-05 - the operator releases the cards to the right person or to nobody
 
@@ -678,6 +722,7 @@ instead.
 - **WHEN** somebody else comes in holding the pickup code
 - **THEN** the counter turns them away, offers no override, and says the collector may name a person from their own page
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-77c rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-91 - A wrong code is refused as often as it is typed
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
@@ -687,6 +732,7 @@ instead.
 - **AND** each of the three refusals is on the submission's timeline
 - **AND** the counter offers the ID glance against the collector's own name instead
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-vhz rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-92 - The collector collects although another person is named
 **Serves:** grade10-admin-grading-counter-US-05 - the operator releases the cards to the right person or to nobody
 
@@ -706,6 +752,7 @@ submission.
 **What it records** - the card SHALL be recorded as having gone to the vault
 instead of over the counter, and the hand-back receipt SHALL say so.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-o4e rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-40 - A settled balance opens the vault case
 **Serves:** grade10-admin-grading-counter-US-06 - the operator keeps a slab for the collector instead of handing it over
 
@@ -713,6 +760,7 @@ instead of over the counter, and the hand-back receipt SHALL say so.
 - **WHEN** the operator opens a vault case for one slab from the hand-over step
 - **THEN** that card is recorded as gone to the vault, and the receipt says so
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-j26 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-41 - An unsettled balance holds the vault case
 **Serves:** grade10-admin-grading-counter-US-06 - the operator keeps a slab for the collector instead of handing it over
 
@@ -738,6 +786,7 @@ runs for 30 minutes, shown on the iPad or copied.
 **Unset facts** - in production, minting SHALL be refused by name while any
 fact the document prints has not been set.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-p78 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-42 - An unchecked card holds the agreement
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -745,6 +794,7 @@ fact the document prints has not been set.
 - **WHEN** the operator mints the submission agreement
 - **THEN** it is refused by name, and the step says which step is unfinished
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-qzs rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-43 - A balance due holds the receipt
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -752,6 +802,7 @@ fact the document prints has not been set.
 - **WHEN** the operator mints the hand-back receipt
 - **THEN** it is refused by name before the iPad is offered
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-h13 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-44 - An unticked item holds the receipt
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -759,12 +810,14 @@ fact the document prints has not been set.
 - **WHEN** the operator mints the hand-back receipt
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-swq rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-45 - One document, one link, thirty minutes
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
 - **WHEN** the operator mints a document
 - **THEN** one link is answered, shown on the iPad or copied, and it stops working 30 minutes after it was minted
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ye7 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-46 - A fact nobody has set refuses the mint in production
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -800,6 +853,7 @@ no fingerprint and sealing nothing new.
 **Nothing sealed yet** - a submission carrying no sealed document SHALL say so
 rather than list an empty set of documents.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-rth rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-48 - A sealed document is shown or copied at the counter
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -807,12 +861,14 @@ rather than list an empty set of documents.
 - **WHEN** the operator opens the documents
 - **THEN** each is listed with its fingerprint, and each can be shown on the iPad or its link copied
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-2hl rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-49 - A collector who lost the email is sent the same copy
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
 - **WHEN** the operator sends a sealed document to the collector again
 - **THEN** the collector is sent the copy already sealed, with the same fingerprint
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-8ni rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-102 - A document no letter has carried is not offered again
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -821,6 +877,7 @@ rather than list an empty set of documents.
 - **THEN** the agreement is listed with its fingerprint and is not offered to send again
 - **AND** a send of it is refused by name, and nothing is sent
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ccd rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-93 - A submission with nothing sealed says so
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -847,6 +904,7 @@ recorded, line for line.
 **Nothing to open** - a submission id no submission holds SHALL be answered by
 the console's not-found line rather than an empty screen.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-hwv rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-50 - The header answers the phone
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
 
@@ -854,6 +912,7 @@ the console's not-found line rather than an empty screen.
 - **WHEN** the operator opens it
 - **THEN** the header carries the summary, the status word, the declared total, what is due, the ungraded card and the batch
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-2lg rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-51 - The cards tab carries each card's record
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
 
@@ -861,6 +920,7 @@ the console's not-found line rather than an empty screen.
 - **WHEN** the operator reads the cards tab
 - **THEN** each card names its intake id, declared value, level and the level it was moved to, its grade and certificate in the grader's words, and its outcome
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-rrl rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-52 - The money tab and the till say the same figure
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
 
@@ -868,12 +928,14 @@ the console's not-found line rather than an empty screen.
 - **WHEN** the operator reads the money tab
 - **THEN** it shows 60000 HKD minor units paid over four lines, each naming the till's reference and its card
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-9rj rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-53 - Staff reach the collector from the header
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
 
 - **WHEN** the operator opens a submission
 - **THEN** the header carries the collector's email and phone and the click-to-chat templates staff press
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-x5b rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-94 - A submission id that resolves to nothing says so
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
 
@@ -894,6 +956,7 @@ SHALL be refunded at the till, and the card SHALL be released to the collector
 against its own withdrawal receipt. The rest of the cards SHALL stay in the
 batch.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-7xq rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-54 - A withdrawal refunds the line and releases the card
 **Serves:** grade10-admin-grading-counter-US-07 - the operator gives one card back before the batch leaves
 
@@ -902,6 +965,7 @@ batch.
 - **THEN** the card is recorded as withdrawn, 15000 HKD minor units are refunded at the till, and the card is released against its own withdrawal receipt
 - **AND** the other cards stay in the batch
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-0n7 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-55 - A closed batch takes the withdrawal away
 **Serves:** grade10-admin-grading-counter-US-07 - the operator gives one card back before the batch leaves
 
@@ -922,6 +986,7 @@ timeline in the grader's own words, unchanged.
 **Staff only** - which entries a collector sees SHALL be worked out at the
 read, and a staff-only entry SHALL reach no collector surface and no letter.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-uf6 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-56 - One submission's history is one read
 **Serves:** grade10-admin-grading-counter-US-13 - the admin reconstructs a submission held in a dispute
 
@@ -929,6 +994,7 @@ read, and a staff-only entry SHALL reach no collector surface and no letter.
 - **WHEN** its timeline is read
 - **THEN** every one of those events is on it, in order, with the figures each carried and who did it
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-xzo rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-57 - A staff-only entry never reaches the collector
 **Serves:** grade10-admin-grading-counter-US-13 - the admin reconstructs a submission held in a dispute
 
@@ -936,6 +1002,7 @@ read, and a staff-only entry SHALL reach no collector surface and no letter.
 - **WHEN** the collector's submission page and the letters sent about it are read
 - **THEN** the entry appears in neither
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-v27 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-58 - The grader's stage stands in its own words
 **Serves:** grade10-admin-grading-counter-US-13 - the admin reconstructs a submission held in a dispute
 
@@ -968,6 +1035,7 @@ and its kind, upcharge or storage, so that what is due nets each kind against
 its own waivers. A storage waiver SHALL be at most the storage accrued and
 unsettled on that card when it is asked; storage accruing after it stays due.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-cae rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-59 - A waiver takes a second approve holder
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
@@ -975,12 +1043,14 @@ unsettled on that card when it is asked; storage accruing after it stays due.
 - **WHEN** an approve holder waives it with a reason and a second approve holder who is not them
 - **THEN** the waiver is recorded against the card, and what is due drops to nothing
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-nkf rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-60 - The recorder cannot be the approver
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
 - **WHEN** an approve holder approves a waiver they asked for themselves
 - **THEN** it is refused by name and nothing is written
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-2iq rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-61 - Nothing is waived before the cards are back
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
@@ -988,6 +1058,7 @@ unsettled on that card when it is asked; storage accruing after it stays due.
 - **WHEN** an approve holder reads the money tab
 - **THEN** waiving the upcharge is not offered
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-1zq rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-109 - A card's storage is waived as an upcharge is, and the waiver names its kind
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
@@ -996,6 +1067,7 @@ unsettled on that card when it is asked; storage accruing after it stays due.
 - **THEN** the waiver is recorded against that card as a storage waiver
 - **AND** that card's storage drops to nothing, its upcharge is still due, and the other three cards' storage is still due
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-wab rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-95 - A second approver without the grant is refused
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge or a card's storage with a second person
 
@@ -1003,6 +1075,7 @@ unsettled on that card when it is asked; storage accruing after it stays due.
 - **WHEN** they approve that waiver on their own console
 - **THEN** the console's grant check refuses it by name, naming `grading:approve`, before any act runs, and nothing is written
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-kdi rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-103 - A request alone moves no money
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1049,6 +1122,7 @@ recorded; a payout by transfer SHALL be stamped received only by a later Mark
 received act on that record, by an approve holder, which moves no money and
 SHALL be refused by name on a payout already received.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-g7t rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-62 - A payout pays the declared value and refunds the fee
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1056,6 +1130,7 @@ SHALL be refused by name on a payout already received.
 - **WHEN** an approve holder records a payout at the till with a second approve holder who is not them
 - **THEN** the record carries 400000 HKD minor units at the till, the fee refund of 15000 HKD minor units beside it, the card, the recorder and the approver
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-kiz rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-63 - A card carries one live payout
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1063,6 +1138,7 @@ SHALL be refused by name on a payout already received.
 - **WHEN** an approve holder records a second payout on it
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-2z1 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-64 - A card that turns up is a reversal on the record
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1070,6 +1146,7 @@ SHALL be refused by name on a payout already received.
 - **WHEN** an approve holder reverses the payout with a reason and a second approve holder
 - **THEN** the reversal is written on that record, the payout itself is left as it was, and the card is back on the submission
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-qcm rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-110 - A reversed payout is repaid at the till before the card goes home
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1077,6 +1154,7 @@ SHALL be refused by name on a payout already received.
 - **WHEN** the hand-back is prepared
 - **THEN** 415000 HKD minor units are due on the submission, settled at the till, and the card is not handed back until they are paid
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-nyo rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-114 - A card found after collection is handed back on its own
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1085,6 +1163,7 @@ SHALL be refused by name on a payout already received.
 - **THEN** 415000 HKD minor units are settled at the till, a hand-back receipt is minted for that card alone, and it is handed over or vaulted
 - **AND** the submission still reads `collected`
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ewk rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-96 - A payout by transfer carries its reference
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1092,6 +1171,7 @@ SHALL be refused by name on a payout already received.
 - **WHEN** an approve holder records the payout by bank transfer with a second approve holder who is not them
 - **THEN** the record carries the transfer as its route with the transfer's reference, and the card's fee refunded beside it
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-n5p rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-111 - A transfer payout is stamped received by its own act
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1099,6 +1179,7 @@ SHALL be refused by name on a payout already received.
 - **WHEN** both are read, then an approve holder marks the transfer received, then marks it again
 - **THEN** the till payout reads received from its recording and the transfer reads not yet received until the act, after which it reads received with the day and who marked it, and the second mark is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-5wb rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-97 - A payout recorded late says it is late
 **Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
 
@@ -1136,6 +1217,7 @@ recorded.
 further, the cards stay the collector's at the shop, and the storage fee goes
 on accruing.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-0c4 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-65 - The notice is asked for from the queue
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -1143,6 +1225,7 @@ on accruing.
 - **WHEN** the operator reads the Ready view
 - **THEN** its row asks for the notice, and nothing has been sent without them
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-8y2 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-66 - The posting date and the tracking are recorded together
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -1150,6 +1233,7 @@ on accruing.
 - **WHEN** the operator records it with a posting date and no tracking
 - **THEN** recording is not offered until the tracking is given
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-y6m rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-105 - The address is read by who may post the notice, and only while it is due
 **Serves:** grade10-admin-grading-counter-US-12 - the operator posting the notice reads the address it goes to, and nobody else does
 
@@ -1161,6 +1245,7 @@ on accruing.
   refused by name with the day its notice falls due, and the read holder is
   refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-6gr rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-67 - The notice period runs from the posting date
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -1169,6 +1254,7 @@ on accruing.
 - **THEN** the 90 days are counted from the posting date, not from the day it was entered
 - **AND** the collector is emailed the notice on the day it is recorded
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-3gz rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-68 - Nothing further is offered after the notice period
 **Serves:** grade10-admin-grading-counter-US-12 - the operator works the Ready view and sees who has left their cards
 
@@ -1209,6 +1295,7 @@ its own subject, `settings`, rather than under a submission.
 **Unset on the page** - the settings page SHALL mark every setting no owner has
 written, naming the owner who owes it.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-c3e rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-69 - A setting nobody has written stops the read
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1216,6 +1303,7 @@ written, naming the owner who owes it.
 - **WHEN** a surface that needs it is read
 - **THEN** the read is refused by name, naming that setting, and no other value is used in its place
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-vb8 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-115 - A seeded figure no owner approved holds the seal in production
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1224,18 +1312,21 @@ written, naming the owner who owes it.
 - **THEN** the seal is refused by name, naming the notice period, and nothing is sealed
 - **AND** once an approve holder approves the 90 days, the next seal goes through
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-7dr rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-70 - A money setting takes a second approve holder
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
 - **WHEN** an approve holder writes the safe's declared cap as 30000000 HKD minor units with a second approve holder who is not them
 - **THEN** the setting is written, carrying both names
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-6gs rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-71 - A settings write is filed under its own subject
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
 - **WHEN** an approve holder changes the notice day
 - **THEN** the audit chain carries the write under the settings subject, naming the key, the old value, the new value, the writer and the approver
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-62a rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-104 - The reference rate takes one approve holder, and nought is refused
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1244,6 +1335,7 @@ written, naming the owner who owes it.
 - **AND WHEN** they write the rate as 0
 - **THEN** the write is refused, naming the reference rate, and the rate stays at 7.90
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-8fi rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-98 - A setting nobody has written is marked on the settings page
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1267,6 +1359,7 @@ days and the ID glance threshold.
 **Reach** - a settings write SHALL reach only submissions not yet booked, and
 SHALL change no figure already pinned.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-oe8 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-72 - The fee sheet is pinned at booking
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1274,6 +1367,7 @@ SHALL change no figure already pinned.
 - **WHEN** an approve holder later writes that fee as 18000 HKD minor units
 - **THEN** the booked submission is still priced at 15000 HKD minor units at the till
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ach rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-73 - Every figure the agreement prints is pinned at signing
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1282,6 +1376,7 @@ SHALL change no figure already pinned.
 - **THEN** the storage accrued on that submission is still worked out at 3000 HKD minor units per card per month
 - **AND** a notice period written later leaves that submission on the period it was sealed with
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-osf rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-74 - A change reaches only what is not yet booked
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1309,6 +1404,7 @@ the acts of each.
 **Nothing is sent to staff** - no email or push SHALL go to staff: the queue's
 badges, its tiles and the day's strip are the whole signal.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-m3l rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-75 - The console shows only what the operator may do
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1316,6 +1412,7 @@ badges, its tiles and the day's strip are the whole signal.
 - **WHEN** they open a submission
 - **THEN** no act requiring another grant is offered, and sending one is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-wfj rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-116 - A read holder is offered no act on a batch
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1323,6 +1420,7 @@ badges, its tiles and the day's strip are the whole signal.
 - **WHEN** they open the batches and a batch's receive page
 - **THEN** no ship, stage, re-estimate, arrive, manifest, scan, exception or finish act is offered, and sending one is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-zwe rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-76 - Only an approve holder edits the settings
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1336,6 +1434,7 @@ badges, its tiles and the day's strip are the whole signal.
 - **WHEN** a submission becomes ready, runs late or falls due for the notice
 - **THEN** no email or push goes to any member of staff, and the queue's badges, tiles and day strip carry it instead
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-xnx rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-99 - A read holder opens the settings and changes nothing
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -1343,6 +1442,7 @@ badges, its tiles and the day's strip are the whole signal.
 - **WHEN** they open the settings
 - **THEN** every setting is listed with its value and the owner who confirms it, no field opens, and sending a write is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ldu rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-100 - An operator is offered every grant they hold
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1383,6 +1483,7 @@ its id.
 An act with nowhere to write its entry SHALL be refused rather than performed
 unrecorded.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-xku rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-80 - One submission's trail is one query
 **Serves:** grade10-admin-grading-counter-US-13 - the admin reconstructs a submission held in a dispute
 
@@ -1430,6 +1531,7 @@ of what the console offered, when the submission has moved since the console
 read it; the submission SHALL be left as the other operator wrote it, and the
 console SHALL read it again.
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-ld3 rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-82 - The console offers only what the status allows
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1437,6 +1539,7 @@ console SHALL read it again.
 - **WHEN** its tabs are read
 - **THEN** no act that runs only before hand-in is offered
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-x8l rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-83 - Cancel is gone once the cards have left
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1444,6 +1547,7 @@ console SHALL read it again.
 - **WHEN** an operator looks for cancel
 - **THEN** it is offered nowhere, and sending it is refused by name
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-edx rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-84 - The worker refuses what a stale console offers
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
@@ -1451,6 +1555,7 @@ console SHALL read it again.
 - **WHEN** the other sends an act the submission no longer allows
 - **THEN** it is refused by name, the submission keeps what the first operator wrote, and the console reads it again
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-4rb rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-106 - Staff cancel a booked submission on the collector's word
 **Serves:** grade10-admin-grading-counter-US-14 - the operator calls a submission off for a collector who asked
 
@@ -1464,6 +1569,7 @@ console SHALL read it again.
   who did it
 - **AND** the collector is sent no message
 
+<!-- trace:scenario id=g10adm.grading-counter.SC-tiv rev=1 -->
 #### Scenario: grade10-admin-grading-counter-SC-107 - Cancel is withheld once the visit's start time comes or a card is checked or refused
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 

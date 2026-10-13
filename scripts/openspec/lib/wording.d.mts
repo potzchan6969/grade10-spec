@@ -12,10 +12,9 @@ import type {
   Stage,
 } from "../../../tools/manual/src/api/types.ts";
 
-/** The change as a message reads it: the id a command is written with, the
- * stage the sentence names and the suites QA's turn at Specified names by
- * path and case count. */
-export type WordedChange = Pick<ChangeEntry, "id" | "suites"> & {
+/** The change as a message reads it: the id a command is written with and the
+ * stage the sentence names. */
+export type WordedChange = Pick<ChangeEntry, "id"> & {
   stage: Stage;
 };
 
