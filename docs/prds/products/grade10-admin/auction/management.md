@@ -95,8 +95,9 @@ the card is in the winner's hands. The collector's half is
   and gallery. The draft takes its own stock hold on Save, gets its own slug
   and listing code, sets its own window, and carries no bids or history from
   the closed one. Campaign, reserve, extension, taxonomy and sandbox start as
-  on any new draft. Relist shows on an Unsold listing only, to an operator who
-  can operate auctions; nothing is stored until Save. It shows on the
+  on any new draft. Relist shows on an Unsold listing, never on one a
+  collector won, to an operator who can operate auctions; nothing is stored
+  until Save. It shows on the
   listing's row in the Listings table, once its stock was released, and not
   on a listing in a campaign or one already relisted. A consigned lot is
   relisted from its consignment, and reads Relist from consignment with its
@@ -119,6 +120,18 @@ the card is in the winner's hands. The collector's half is
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
+- 🚧 **Internal bid** - on a created or published listing, an admin sets a
+  house maximum and the time Grade10 commits it, from the start to the
+  scheduled close. Until that time both can
+  change or be removed. After it, the time is fixed and the amount can go up
+  until the close, or down only where the leader and the current bid stay as
+  they are. A maximum already short of the next bid at its time is not placed,
+  and the admin sees that. Only operators who may see a secret floor see it;
+  other operators see the house's bids and orders labelled House. Relist does not carry it
+- 🚧 **Internal bidder win** - a lot an internal bidder wins opens its order
+  and invoice for that internal bidder, flagged internal; an operator sends the
+  invoice, lets it expire and cancels the order. Staff read the buyer as House;
+  only a reserve holder sees the listing flagged as the internal bidder's win
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change
 - 🚧 **Open order** - a won lot's row opens its order in Orders
@@ -545,6 +558,8 @@ settings.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
+| Internal bid | 🚧 In flight | One house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see its bids labelled House, each with its own time; never its amount, or its commit time before it bids. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
+| House win | 🚧 In flight | Collectors read the lot as sold; its order and invoice go to the internal bidder, flagged internal, and an operator lets the invoice expire and cancels the order. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |

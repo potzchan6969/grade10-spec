@@ -13,6 +13,11 @@ from, and the record and letters that follow their lots.
 Every Grade10 listing is absolute — no reserve and no buy-now price — and the
 highest accepted bid at the close wins it.
 
+🚧 An admin may protect a lot with an internal bid: a house maximum, hidden
+from collectors, that Grade10 commits at a set time and then bids like any
+other maximum. A lot an internal bidder wins reads sold to collectors, and its
+order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/internal-bid)
+
 | Rule | Value |
 | --- | --- |
 | Bidding window | From the scheduled start to the recorded close |
@@ -88,8 +93,11 @@ increment is 100:
 
 - **Private** — a leading maximum is never public; another bidder learns it
   only by beating it
-- **Raise only** — a maximum goes up at any time and never down, because
-  lowering would withdraw a commitment others have bid against
+- **Raise only** — a collector's maximum goes up at any time and never down,
+  because lowering would withdraw a commitment others have bid against
+- 🚧 **House maximum lowered** - the house maximum may go down, only while the
+  leader and the current bid stay as they are and never below a bid already
+  placed for the house
 - **Own standing** — a bidder reads their maximum, the current bid and whether
   they lead; never another bidder's maximum, identity or card
 - **A bid Grade10 places is a bid** — it counts in the bid count and the
@@ -437,7 +445,7 @@ inbox.
 | Losing bidder | Bid and did not win | Confirms the outcome and that the card was not charged, so a lost lot is not read as a charge. |
 | Auction operator | A dispute about who led, or a collector who says they were never told | Reads each maximum with when it was accepted, and which letters went to that address. |
 
-**Not in scope.** Reserve prices. Lowering or withdrawing a maximum, or
+**Not in scope.** Reserve prices. Lowering or withdrawing a collector's maximum, or
 retracting a bid — a placed bid is binding. Nudging a bidder to raise. A
 general account payment manager, or changing the card after the first bid on a
 lot. Push, SMS or in-app alerts; a digest across listings; one-click
@@ -460,14 +468,15 @@ surface.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Absolute sale | Decided | No reserve and no buy-now price; the highest accepted bid at the close wins. | Product |
+| Absolute sale | 🚧 In flight | No reserve and no buy-now price; the highest accepted bid at the close wins, and that bid may be the house's internal bid. The house bids under a listing pseudonym and is not disclosed; Legal confirms the auction terms wording before release. Replaces "No reserve and no buy-now price; the highest accepted bid at the close wins." Disclosing the house bid was ruled out, because it tells a collector when to stop. | Product (@htonyl) |
+| Internal bid, lowered | 🚧 In flight | A house maximum already committed may go down only when the leader and the current bid stay as they are, and never below a bid already placed for the house. Collector maximums stay raise only. | Product (@htonyl) |
 | Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product |
 | A bid counts when accepted | Decided | A bid stands when it is judged under the lot's lock, and nothing waits on the card. Replaces "a bid counts when its payment confirms", which kept a pending bid and an Authorizing… state. | Product |
 | My Auctions price | Decided | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product |
 | Resolve | Decided | Second-highest maximum plus the listing increment, capped at the leader's maximum; equal maxima, the earlier leads; one resulting price, never intermediate bids. | Product |
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; every row tied on amount with a row above it shows an Info tip in the amount tone (when maximums match, the earlier one leads), at the current price and at any older tie lower down. Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Public Recent bids avatar | Decided | Each public Recent Bids avatar shows one letter from the bidder email local part (first A-Z or 0-9, uppercased; `B` when none or the email is erased). Readable label stays Bidder N. Full email and name stay private. Separate public field from the label. | Product (@mason5991) |
-| Hidden cap, raise only | Decided | A leading maximum is not public and can go up but never down. | Product |
+| Hidden cap, raise only | Decided | A leading maximum is not public; a collector's can go up but never down. | Product |
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 5,000,000,000. The custom field uses that same ceiling. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
