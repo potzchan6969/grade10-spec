@@ -531,7 +531,7 @@ Runs once per row of **Test data**.
 * Step 3 `<new photo outcome>`.
 * Step 4 `<old photo outcome>`.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-3sh rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-3sh rev=2 -->
 ### g10.store-shelf-scanning.US1-TC13: An hour with no new photo does no work
 
 **Classification:**
@@ -565,7 +565,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2's run learned no photo and rebuilt nothing.
+* Step 2's run stopped before preparing any photo to learn.
+* Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-mg3 rev=1 covers=g10.store-shelf-scanning.SC-cz6 -->
 ### g10.store-shelf-scanning.US1-TC14: A photo that failed to learn is tried again after 24 hours
@@ -1050,7 +1051,7 @@ Runs once per row of **Test data**.
 * Step 2's version is step 1's.
 * Step 3 holds no photo of a store product queued since step 1.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-gu0 rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-gu0 rev=2 -->
 ### g10.store-shelf-scanning.US1-TC26: The hourly photo run stops when its model differs from the scanner's
 
 **Classification:**
@@ -1078,8 +1079,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2's run failed, naming the model mismatch, before preparing any photo to learn.
-* Step 2's run learned no photo and rebuilt nothing.
+* Step 2's run failed before preparing any photo to learn.
+* Step 2's failure names both models, the photo run's and the scanner's.
+* Step 2's run sent the scanner no photo, learned none and rebuilt nothing.
 
 ---
 
@@ -1132,7 +1134,7 @@ Runs once per row of **Test data**.
 * Step 2's link is `<link>`.
 * Step 3 opens the page with no sign-in asked.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-d64 rev=1 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-d64 rev=2 -->
 ### g10.store-shelf-scanning.US2-TC2: The store page link follows an address the shop changed
 
 **Classification:**
@@ -1163,13 +1165,16 @@ Runs once per row of **Test data**.
 
 1. In the staging shop's admin, set `<card_1>`'s handle to `<new handle>`; note the time.
 2. 360s (6mins) later, reload `<g10 scan link>`.
-3. Point the camera at `<card_1>`.
+3. Point the camera at `<card_1>` and read the label over the card.
 4. Open the store page link.
+5. Read the scanner's items for the grade10 store.
 
 **Expected Results:**
 
+* Step 3's label shows `<card_1>` with no chip counting matches.
 * Step 4 opens `<grade10 store url>/store/products/<new handle>`.
 * Step 4's page is `<card_1>`'s.
+* Step 5 holds one item for `<card_1>`.
 
 <!-- trace:case id=g10.store-shelf-scanning.TC-fp5 rev=1 -->
 ### g10.store-shelf-scanning.US2-TC3: The store page link of a picked listing opens that listing
@@ -1795,7 +1800,7 @@ Runs once per row of **Test data**.
 * Step 4 refuses the photo.
 * Step 5 shows `<card_1>`'s photos unchanged.
 
-<!-- trace:case id=g10.store-shelf-scanning.TC-dci rev=2 -->
+<!-- trace:case id=g10.store-shelf-scanning.TC-dci rev=3 -->
 ### g10.store-shelf-scanning.US7-TC4: A scan shows nothing the store page does not
 
 Runs once per row of **Test data**.
@@ -1820,12 +1825,12 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<product>` |
-| --- |
-| A raw card with a count of 7 for sale |
-| A raw card with a count of 0, sold out |
-| A raw card with a count of 7 under a running automatic discount |
-| A house-stock PSA slab with a count of 1, scanned by its label |
+| `<product>` | `<values>` |
+| --- | --- |
+| A raw card with a count of 7 for sale | title, price, Available, store page link |
+| A raw card with a count of 0, sold out | title, price, Sold out, store page link |
+| A raw card with a count of 7 under a running automatic discount | title, the price the shopper pays, Sale badge, Available, store page link |
+| A house-stock PSA slab with a count of 1, scanned by its label | title, price, Available, store page link, grade, cert |
 
 **Steps:**
 
@@ -1835,6 +1840,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* Step 2 shows `<values>` and nothing else.
 * Step 2 shows no stock count.
 * Each value at step 2 but grade, cert and Sale badge reads on the page at step 3.
 
