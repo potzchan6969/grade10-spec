@@ -7,7 +7,7 @@ verdict: Not ready - 1 blocker
 
 PR: https://github.com/9gag/grade10-spec/pull/1155
 
-Review is blocked at the required preflight gate. The final acceptance preflight and current-tree manual check both fail on 43 in-flight-mark findings, all on the unrelated `docs/prds/products/grade10-admin/console/daily-reminder.md`. The baseline-only manual snapshot reports the same 43 findings, which confirms they predate this change; its four snapshot-only issued-ID findings do not occur in the current-tree check. The acceptance preflight lists no other blocker among the change's 51 durable targets. The structural review preflight is ready with no blockers, and strict change validation reports no errors (446 warnings).
+Review is blocked at the required preflight gate. The final acceptance preflight and current-tree manual check both fail on 43 in-flight-mark findings, all on the unrelated `docs/prds/products/grade10-admin/console/daily-reminder.md`. The baseline-only manual snapshot reports the same 43 findings, which confirms they predate this change; its four snapshot-only issued-ID findings do not occur in the current-tree check. The acceptance preflight lists no other blocker among the change's 51 durable targets. The structural review preflight is ready with no blockers, and strict change validation reports no errors. Case validation reports no errors and 446 warnings.
 
 The accept-review procedure stops semantic review when acceptance preflight is blocked. QA2 reports document repairs to the prior review's six substantive findings, but this independent review did not reach semantic revalidation. No prior finding is claimed as independently verified or fixed here.
 
