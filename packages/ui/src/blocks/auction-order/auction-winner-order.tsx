@@ -323,6 +323,10 @@ function ProgressCard({
           className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           data-slot="winner-order-progress-rail"
           ref={railRef}
+          // The rail scrolls on a phone; a keyboard reaches it to scroll too.
+          aria-label={copy.orderProgress}
+          role="region"
+          tabIndex={0}
         >
           <Stepper
             aria-label={copy.orderProgress}
