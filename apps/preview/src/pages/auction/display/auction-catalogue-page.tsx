@@ -7,6 +7,10 @@ import {
   type FeaturedAuctionsBannerSlide,
   SiteHeader,
 } from "@grade10/ui";
+import {
+  FIXTURE_SHIPPED_LOCALE,
+  FIXTURE_TIME_ZONE,
+} from "@grade10/ui/lib/datetime-fixtures";
 import { useReducedMotion } from "motion/react";
 import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { AUCTION_SITE_HEADER } from "../../auction-lot-details-content";
@@ -312,16 +316,20 @@ function AuctionCataloguePage({
             />
           ) : featuredLayout === "pair" ? (
             <FeaturedAuctionsPair
+              locale={FIXTURE_SHIPPED_LOCALE}
               lots={featured}
               onToggle={toggleWatch}
+              timeZone={FIXTURE_TIME_ZONE}
               watched={watched}
             />
           ) : (
             <FeaturedAuctions
               loading={pageLoading}
+              locale={FIXTURE_SHIPPED_LOCALE}
               lots={featured}
               onToggle={toggleWatch}
               revealed={pageIsRevealed}
+              timeZone={FIXTURE_TIME_ZONE}
               watched={watched}
             />
           )
@@ -391,8 +399,10 @@ function AuctionCataloguePage({
                         <AuctionLotCard
                           heading
                           loading
+                          locale={FIXTURE_SHIPPED_LOCALE}
                           lot={SKELETON_FIXTURE_LOT}
                           onToggle={() => {}}
+                          timeZone={FIXTURE_TIME_ZONE}
                           watched={false}
                         />
                       </li>
