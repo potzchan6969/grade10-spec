@@ -34,7 +34,9 @@ type Story = StoryObj<typeof meta>;
 const BANK_PENDING_CONTENT = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
   body: "Your invoice is ready. Pay by bank transfer before the deadline.",
-  setupPaymentMethod: "Bank transfer",
+  setupPaymentMethod: "FPS",
+  paymentRail: "fps",
+  settlementCurrency: "HKD",
   primaryCta: "Submit Payment Proof",
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
@@ -125,7 +127,7 @@ export const PendingPaymentBankTransfer: Story = {
 
 /**
  * USD-settled invoice — bank transfer chosen; View Bank Details offers
- * Hong Kong + International, no FPS.
+ * International via SWIFT was selected.
  */
 export const PendingPaymentUsdBankTransfer: Story = {
   name: "Pending Payment — USD Bank Transfer",
@@ -158,11 +160,10 @@ export const PendingPaymentUsdBankTransfer: Story = {
       return within(found);
     });
     expect(dialog.getByText("US$16,340.00")).toBeVisible();
-    expect(
-      dialog.getByRole("tab", { name: "Hong Kong", selected: true }),
-    ).toBeVisible();
-    expect(dialog.getByRole("tab", { name: "International" })).toBeVisible();
-    expect(dialog.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
+    expect(dialog.queryByRole("tab")).not.toBeInTheDocument();
+    expect(dialog.getByText("SWIFT / BIC")).toBeVisible();
+    expect(dialog.queryByText("Branch code")).not.toBeInTheDocument();
+    expect(dialog.queryByText("FPS ID")).not.toBeInTheDocument();
   },
 };
 
@@ -242,7 +243,7 @@ export const SubmitBankPaymentProof: Story = {
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
-    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getAllByText("FPS").length).toBeGreaterThan(0);
     expect(
       sidebar.queryByRole("link", { name: "Receipt PDF" }),
     ).not.toBeInTheDocument();
@@ -310,7 +311,7 @@ export const PaymentVerifying: Story = {
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(sidebar.getByText("Payment method")).toBeVisible();
-    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getAllByText("FPS").length).toBeGreaterThan(0);
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     const infoAlert = canvas.getByRole("alert");
@@ -370,7 +371,7 @@ export const PartiallyPaid: Story = {
       sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment method")).toBeVisible();
-    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getAllByText("FPS").length).toBeGreaterThan(0);
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
       sidebar.getByRole("link", { name: "Receipt · P1 PDF" }),

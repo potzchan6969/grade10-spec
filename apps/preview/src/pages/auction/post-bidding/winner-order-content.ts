@@ -1,6 +1,9 @@
 import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
-import type { WinnerOrderSettlementCurrency } from "./winner-order-setup-dialog";
+import type {
+  WinnerOrderBankRail,
+  WinnerOrderSettlementCurrency,
+} from "./winner-order-setup-dialog";
 
 export type WinnerOrderStatus =
   | "awaiting_address"
@@ -66,13 +69,14 @@ export type WinnerOrderContent = {
   body: string;
   addressLabel: string;
   addressValue: string | null;
-  /** Chosen during setup — card or bank transfer label. */
+  /** Payment rail chosen during setup. */
   setupPaymentMethod?: string | null;
   /**
-   * Currency the invoice was issued in (chosen at setup). HKD invoices draw
-   * FPS + Hong Kong rails; USD draws Hong Kong + SWIFT. Defaults to HKD.
+   * Currency the invoice was issued in (chosen at setup).
    */
   settlementCurrency?: WinnerOrderSettlementCurrency;
+  /** The one bank rail selected for this invoice, when paid by transfer. */
+  paymentRail?: WinnerOrderBankRail;
   billingLabel?: string;
   billingValue?: string | null;
   invoiceLines: WinnerOrderInvoiceLine[] | null;
@@ -462,7 +466,9 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         billingLabel: "Billing address",
         billingValue: ADDRESS,
-        paymentMethod: "Bank transfer",
+        paymentMethod: "FPS",
+        settlementCurrency: "HKD",
+        paymentRail: "fps",
         invoiceLines: BANK_TRANSFER_INVOICE_LINES,
         invoiceId: INVOICE_ID,
         primaryCta: null,
@@ -483,7 +489,9 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         billingLabel: "Billing address",
         billingValue: ADDRESS,
-        paymentMethod: "Bank transfer",
+        paymentMethod: "FPS",
+        settlementCurrency: "HKD",
+        paymentRail: "fps",
         invoiceLines: BANK_TRANSFER_INVOICE_LINES,
         invoiceId: INVOICE_ID,
         primaryCta: null,
@@ -615,8 +623,9 @@ export const WINNER_ORDER_CONTENTS: Record<
 export const WINNER_ORDER_USD_BANK_TRANSFER_CONTENT: WinnerOrderContent = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
   body: "Your invoice is ready. Pay by bank transfer before the deadline.",
-  setupPaymentMethod: "Bank transfer",
+  setupPaymentMethod: "International via SWIFT",
   settlementCurrency: "USD",
+  paymentRail: "swift",
   primaryCta: "Submit Payment Proof",
   invoiceLines: USD_BANK_TRANSFER_INVOICE_LINES,
 };

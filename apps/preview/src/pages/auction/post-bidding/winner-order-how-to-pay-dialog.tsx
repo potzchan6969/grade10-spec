@@ -1,10 +1,4 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -18,160 +12,15 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import {
-  type ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import type { ReactNode } from "react";
 import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
-import type { WinnerOrderSettlementCurrency } from "./winner-order-setup-dialog";
+import type { WinnerOrderBankRail } from "./winner-order-setup-dialog";
 
 const REFERENCE_WARNING =
   "Enter this reference in your bank app’s Memo or Remarks field. Missing it delays verification." as const;
 
 const OUR_NOTE =
   "In your bank app, choose OUR for transfer fees so we receive the full order total." as const;
-
-/** Tailwind `sm` — hug + scroll below; full-width shared track from here up. */
-const WIDE_TAB_QUERY = "(min-width: 640px)";
-
-function useWideTabTrack() {
-  const [wide, setWide] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return window.matchMedia(WIDE_TAB_QUERY).matches;
-  });
-
-  useEffect(() => {
-    const media = window.matchMedia(WIDE_TAB_QUERY);
-    const onChange = () => setWide(media.matches);
-    onChange();
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
-  }, []);
-
-  return wide;
-}
-
-const TAB_PANEL_CLASS =
-  "absolute inset-0 mt-0 overflow-x-clip overflow-y-auto overscroll-contain" as const;
-
-function activeRailPanel(frame: HTMLElement): HTMLElement | null {
-  return frame.querySelector<HTMLElement>('[role="tabpanel"][tabindex="0"]');
-}
-
-/** Content height of the active rail, free of the frame's current size. */
-function measureRailContent(panel: HTMLElement, width: number): number {
-  const clone = panel.cloneNode(true) as HTMLElement;
-  clone.style.cssText = `position:absolute;inset:auto;left:-10000px;top:0;right:auto;bottom:auto;visibility:hidden;height:auto;max-height:none;overflow:visible;width:${width}px;pointer-events:none;`;
-  clone.removeAttribute("hidden");
-  document.body.appendChild(clone);
-  const height = clone.scrollHeight;
-  clone.remove();
-  return height;
-}
-
-function measureRailAvailable(frame: HTMLDivElement): number {
-  const dialog = frame.closest<HTMLElement>('[data-slot="dialog-content"]');
-  if (!dialog) return Number.POSITIVE_INFINITY;
-  const max = Number.parseFloat(getComputedStyle(dialog).maxHeight);
-  if (!Number.isFinite(max)) return Number.POSITIVE_INFINITY;
-
-  // Height is transitioning, so a synchronous read would still see the old
-  // box. Drop the transition, collapse the frame, and read the dialog chrome.
-  const previous = {
-    transition: frame.style.transition,
-    height: frame.style.height,
-  };
-  const panels = [...frame.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
-  const previousDisplay = panels.map((panel) => panel.style.display);
-  frame.style.transition = "none";
-  frame.style.height = "0px";
-  for (const panel of panels) panel.style.display = "none";
-  const chrome = dialog.offsetHeight;
-  frame.style.height = previous.height;
-  // Commit the restored height before the class transition turns back on,
-  // or the next change interpolates from this collapsed 0.
-  void dialog.offsetHeight;
-  frame.style.transition = previous.transition;
-  panels.forEach((panel, index) => {
-    panel.style.display = previousDisplay[index] ?? "";
-  });
-  return Math.max(0, max - chrome);
-}
-
-function applyRailHeight(frame: HTMLDivElement, animate: boolean) {
-  const panel = activeRailPanel(frame);
-  const width = frame.clientWidth;
-  if (!panel || width <= 0) return;
-  const content = measureRailContent(panel, width);
-  const available = measureRailAvailable(frame);
-  if (content <= 0) return;
-  const target = Math.min(content, available);
-  if (target <= 0) return;
-  const next = `${target}px`;
-  const current = frame.style.height;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!animate || reduce || current === "" || current === next) {
-    frame.style.transition = "none";
-    frame.style.height = next;
-    void frame.offsetHeight;
-    frame.style.transition = "";
-    return;
-  }
-
-  frame.style.height = current;
-  void frame.offsetHeight;
-  frame.style.height = next;
-}
-
-function RailFrame({
-  rail,
-  animateContent,
-  children,
-}: {
-  rail: string;
-  animateContent: boolean;
-  children: ReactNode;
-}) {
-  const frameRef = useRef<HTMLDivElement>(null);
-  const laidOut = useRef(false);
-
-  useLayoutEffect(() => {
-    const frame = frameRef.current;
-    if (!frame || rail.length === 0) return;
-    applyRailHeight(frame, laidOut.current);
-    laidOut.current = true;
-  }, [rail]);
-
-  useLayoutEffect(() => {
-    const frame = frameRef.current;
-    if (!frame) return;
-    const onResize = () => applyRailHeight(frame, false);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  return (
-    <div
-      className="relative min-h-0 overflow-hidden transition-[height] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-      ref={frameRef}
-    >
-      <div
-        className={
-          animateContent
-            ? "h-full animate-in fade-in-0 duration-200 motion-reduce:animate-none"
-            : "h-full"
-        }
-        key={rail}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 type WinnerOrderHowToPayDialogProps = {
   open: boolean;
@@ -180,11 +29,8 @@ type WinnerOrderHowToPayDialogProps = {
   /** Collector-facing invoice ID — shown as DialogSubtext. */
   invoiceId?: string;
   transferReference?: string;
-  /**
-   * Currency the operator invoiced in. HKD offers FPS + Hong Kong;
-   * USD offers Hong Kong + SWIFT.
-   */
-  settlementCurrency?: WinnerOrderSettlementCurrency;
+  /** The single bank rail selected for this invoice. */
+  paymentRail: WinnerOrderBankRail;
 };
 
 /**
@@ -198,36 +44,8 @@ function WinnerOrderHowToPayDialog({
   amountDue = WINNER_ORDER_BANK_DETAILS.totalAmountDue,
   invoiceId,
   transferReference = WINNER_ORDER_BANK_DETAILS.transferReference,
-  settlementCurrency = "HKD",
+  paymentRail,
 }: WinnerOrderHowToPayDialogProps) {
-  const showFps = settlementCurrency === "HKD";
-  const showSwift = settlementCurrency === "USD";
-  const [rail, setRail] = useState(showFps ? "fps" : "local");
-  const tabScrollRef = useRef<HTMLDivElement>(null);
-  const [animateSwap, setAnimateSwap] = useState(false);
-  const wideTrack = useWideTabTrack();
-
-  // Keep the active tab in view when the rail changes on a narrow scrollport.
-  useLayoutEffect(() => {
-    if (wideTrack) return;
-    const scroller = tabScrollRef.current;
-    if (!scroller || rail.length === 0) return;
-    const active = scroller.querySelector<HTMLElement>(
-      '[data-slot="tabs-trigger"][data-active]',
-    );
-    if (!active) return;
-    const scrollerBox = scroller.getBoundingClientRect();
-    const activeBox = active.getBoundingClientRect();
-    const pad = 12;
-    const left = activeBox.left - scrollerBox.left + scroller.scrollLeft;
-    const right = left + activeBox.width;
-    if (left - pad < scroller.scrollLeft) {
-      scroller.scrollLeft = Math.max(0, left - pad);
-    } else if (right + pad > scroller.scrollLeft + scroller.clientWidth) {
-      scroller.scrollLeft = right + pad - scroller.clientWidth;
-    }
-  }, [rail, wideTrack]);
-
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent
@@ -240,8 +58,10 @@ function WinnerOrderHowToPayDialog({
             <DialogSubtext>Invoice: {invoiceId}</DialogSubtext>
           ) : null}
         </DialogHeader>
-        {/* scroll-fade on DialogBody clips the pill tab shadow; panels own scroll. */}
-        <DialogBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible [mask-image:none]">
+        <DialogBody
+          className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto"
+          tabIndex={0}
+        >
           <div className="flex w-full shrink-0 flex-col gap-1">
             <span className="text-sm leading-5 text-secondary-foreground">
               Amount due
@@ -251,171 +71,105 @@ function WinnerOrderHowToPayDialog({
             </span>
           </div>
 
-          <Tabs
-            className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-2 overflow-visible"
-            onValueChange={(next) => {
-              if (next != null) {
-                setAnimateSwap(true);
-                setRail(next);
-              }
-            }}
-            value={rail}
-          >
-            {/* Narrow: hug labels, size=sm, scroll. Wide (sm+): full-width
-                shared track at size=md. Inner/bleed padding keeps the pill
-                shadow visible. */}
-            <div
-              className={
-                wideTrack
-                  ? "w-full min-w-0 shrink-0 overflow-visible pt-2 pb-5"
-                  : "-mx-5 min-w-0 shrink-0 touch-pan-x overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-              }
-              ref={tabScrollRef}
-            >
-              <div
-                className={wideTrack ? "w-full" : "flex w-max px-5 pt-2 pb-5"}
-              >
-                <TabsList
-                  className={
-                    wideTrack
-                      ? "w-full overflow-visible"
-                      : "w-max overflow-visible"
-                  }
-                  fullWidth={wideTrack}
-                  size={wideTrack ? "md" : "sm"}
-                >
-                  {showFps ? (
-                    <TabsTrigger
-                      className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
-                      value="fps"
-                    >
-                      FPS
-                    </TabsTrigger>
-                  ) : null}
-                  <TabsTrigger
-                    className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
-                    value="local"
+          <div className="min-h-0 w-full flex-1">
+            {paymentRail === "fps" ? (
+              <RailPanel>
+                <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5">
+                  <VStack
+                    className="w-full shrink-0 items-center justify-center sm:w-auto"
+                    gap="sm"
                   >
-                    Hong Kong
-                  </TabsTrigger>
-                  {showSwift ? (
-                    <TabsTrigger
-                      className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
-                      value="swift"
+                    <FpsQrPlaceholder />
+                    <Text
+                      className="text-center text-secondary-foreground sm:max-w-36"
+                      size="sm"
                     >
-                      International
-                    </TabsTrigger>
-                  ) : null}
-                </TabsList>
-              </div>
-            </div>
-
-            <RailFrame animateContent={animateSwap} rail={rail}>
-              {showFps ? (
-                <TabsContent className={TAB_PANEL_CLASS} value="fps">
-                  <RailPanel>
-                    <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-stretch sm:gap-5">
-                      <VStack
-                        className="w-full shrink-0 items-center justify-center sm:w-auto"
-                        gap="sm"
-                      >
-                        <FpsQrPlaceholder />
-                        <Text
-                          className="text-center text-secondary-foreground sm:max-w-36"
-                          size="sm"
-                        >
-                          Open your banking app and scan this QR
-                        </Text>
-                      </VStack>
-                      <VStack
-                        className="min-w-0 flex-1 border-t border-border pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5"
-                        gap="sm"
-                        hAlign="stretch"
-                      >
-                        <DetailRow
-                          label="FPS ID"
-                          value={WINNER_ORDER_BANK_DETAILS.fpsId}
-                        />
-                        <DetailRow
-                          label="Account name"
-                          value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
-                        />
-                        <PaymentReferenceBand value={transferReference} />
-                      </VStack>
-                    </div>
-                  </RailPanel>
-                </TabsContent>
-              ) : null}
-
-              <TabsContent className={TAB_PANEL_CLASS} value="local">
-                <RailPanel>
-                  <DetailList>
+                      Open your banking app and scan this QR
+                    </Text>
+                  </VStack>
+                  <VStack
+                    className="min-w-0 flex-1 border-t border-border pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5"
+                    gap="sm"
+                    hAlign="stretch"
+                  >
                     <DetailRow
-                      label="Bank name"
-                      value={WINNER_ORDER_BANK_DETAILS.bankName}
+                      label="FPS ID"
+                      value={WINNER_ORDER_BANK_DETAILS.fpsId}
                     />
-                    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-                      <DetailRow
-                        label="Bank code"
-                        value={WINNER_ORDER_BANK_DETAILS.bankCode}
-                      />
-                      <DetailRow
-                        label="Branch code"
-                        value={WINNER_ORDER_BANK_DETAILS.branchCode}
-                      />
-                    </div>
                     <DetailRow
-                      label="Account number"
-                      value={WINNER_ORDER_BANK_DETAILS.accountNumber}
+                      label="Account name"
+                      value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
                     />
                     <PaymentReferenceBand value={transferReference} />
-                  </DetailList>
-                </RailPanel>
-              </TabsContent>
-
-              {showSwift ? (
-                <TabsContent className={TAB_PANEL_CLASS} value="swift">
-                  <RailPanel>
-                    <DetailList>
-                      <DetailRow
-                        label="Beneficiary name"
-                        value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
-                      />
-                      <DetailRow
-                        label="Beneficiary address"
-                        value={WINNER_ORDER_BANK_DETAILS.beneficiaryAddress}
-                      />
-                      <DetailRow
-                        label="Bank name"
-                        value={WINNER_ORDER_BANK_DETAILS.bankName}
-                      />
-                      <DetailRow
-                        label="Bank address"
-                        value={WINNER_ORDER_BANK_DETAILS.bankAddress}
-                      />
-                      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-                        <DetailRow
-                          label="SWIFT / BIC"
-                          value={WINNER_ORDER_BANK_DETAILS.swiftCode}
-                        />
-                        <DetailRow
-                          label="Account number / IBAN"
-                          value={WINNER_ORDER_BANK_DETAILS.accountNumber}
-                        />
-                      </div>
-                      <PaymentReferenceBand value={transferReference} />
-                      <Alert
-                        dismissible={false}
-                        layout="inline"
-                        status="warning"
-                        title={OUR_NOTE}
-                      />
-                    </DetailList>
-                  </RailPanel>
-                </TabsContent>
-              ) : null}
-            </RailFrame>
-          </Tabs>
+                  </VStack>
+                </div>
+              </RailPanel>
+            ) : null}
+            {paymentRail === "hk_local" ? (
+              <RailPanel>
+                <DetailList>
+                  <DetailRow
+                    label="Bank name"
+                    value={WINNER_ORDER_BANK_DETAILS.bankName}
+                  />
+                  <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                    <DetailRow
+                      label="Bank code"
+                      value={WINNER_ORDER_BANK_DETAILS.bankCode}
+                    />
+                    <DetailRow
+                      label="Branch code"
+                      value={WINNER_ORDER_BANK_DETAILS.branchCode}
+                    />
+                  </div>
+                  <DetailRow
+                    label="Account number"
+                    value={WINNER_ORDER_BANK_DETAILS.accountNumber}
+                  />
+                  <PaymentReferenceBand value={transferReference} />
+                </DetailList>
+              </RailPanel>
+            ) : null}
+            {paymentRail === "swift" ? (
+              <RailPanel>
+                <DetailList>
+                  <DetailRow
+                    label="Beneficiary name"
+                    value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
+                  />
+                  <DetailRow
+                    label="Beneficiary address"
+                    value={WINNER_ORDER_BANK_DETAILS.beneficiaryAddress}
+                  />
+                  <DetailRow
+                    label="Bank name"
+                    value={WINNER_ORDER_BANK_DETAILS.bankName}
+                  />
+                  <DetailRow
+                    label="Bank address"
+                    value={WINNER_ORDER_BANK_DETAILS.bankAddress}
+                  />
+                  <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                    <DetailRow
+                      label="SWIFT / BIC"
+                      value={WINNER_ORDER_BANK_DETAILS.swiftCode}
+                    />
+                    <DetailRow
+                      label="Account number / IBAN"
+                      value={WINNER_ORDER_BANK_DETAILS.accountNumber}
+                    />
+                  </div>
+                  <PaymentReferenceBand value={transferReference} />
+                  <Alert
+                    dismissible={false}
+                    layout="inline"
+                    status="warning"
+                    title={OUR_NOTE}
+                  />
+                </DetailList>
+              </RailPanel>
+            ) : null}
+          </div>
         </DialogBody>
         <DialogFooter>
           <DialogClose
