@@ -211,13 +211,28 @@ export const CompleteSetupFlow: Story = {
     await waitFor(() => {
       expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
-    // HKD and card are preselected — Continue is enabled immediately.
-    expect(modal.getByRole("button", { name: "HKD" })).toHaveAttribute(
+    // The winner chooses the settlement currency and payment method.
+    const hkd = modal.getByRole("button", { name: "HKD" });
+    expect(modal.getByRole("button", { name: "USD" })).toHaveAttribute(
       "aria-pressed",
-      "true",
+      "false",
     );
+    expect(hkd).toHaveAttribute("aria-pressed", "false");
+    expect(modal.queryByRole("radio")).not.toBeInTheDocument();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+
+    await userEvent.click(hkd);
+    const card = await waitFor(() => {
+      const found = modal.getByRole("radio", { name: /^Card\b/i });
+      expect(found).toBeVisible();
+      return found;
+    });
+    expect(card).not.toBeChecked();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+    await userEvent.click(card);
     await waitFor(() => {
-      expect(modal.getByRole("radio", { name: /Card/i })).toBeChecked();
+      expect(card).toBeChecked();
+      expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
     });
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
 
@@ -326,13 +341,28 @@ export const AddNewAddressSetupFlow: Story = {
     await waitFor(() => {
       expect(picker.getByText("Step 2 of 3")).toBeVisible();
     });
-    // HKD and card are preselected — Continue is enabled immediately.
-    expect(picker.getByRole("button", { name: "HKD" })).toHaveAttribute(
+    // The winner chooses the settlement currency and payment method.
+    const hkd = picker.getByRole("button", { name: "HKD" });
+    expect(picker.getByRole("button", { name: "USD" })).toHaveAttribute(
       "aria-pressed",
-      "true",
+      "false",
     );
+    expect(hkd).toHaveAttribute("aria-pressed", "false");
+    expect(picker.queryByRole("radio")).not.toBeInTheDocument();
+    expect(picker.getByRole("button", { name: "Continue" })).toBeDisabled();
+
+    await userEvent.click(hkd);
+    const card = await waitFor(() => {
+      const found = picker.getByRole("radio", { name: /^Card\b/i });
+      expect(found).toBeVisible();
+      return found;
+    });
+    expect(card).not.toBeChecked();
+    expect(picker.getByRole("button", { name: "Continue" })).toBeDisabled();
+    await userEvent.click(card);
     await waitFor(() => {
-      expect(picker.getByRole("radio", { name: /Card/i })).toBeChecked();
+      expect(card).toBeChecked();
+      expect(picker.getByRole("button", { name: "Continue" })).toBeEnabled();
     });
     await userEvent.click(picker.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
