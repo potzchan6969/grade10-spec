@@ -1,16 +1,255 @@
 # grade10-site/auction/auto-bidding Test Cases
 
 **Status:** pending-review · 4/24
-**Drafts styled:** 2026-10-02, tcs-rules r4
+**Drafts styled:** 2026-10-12, tcs-rules r5
 
-## grade10-site-auction-auto-bidding-US1: Collector commits a maximum on an open listing
+## Walk 1: Collector commits a maximum on an open listing
 
-**As a** collector,
-**I want** to commit the most I will pay and raise it later,
-**so that** Grade10 bids for me only as far as needed to lead.
+**Starting state:**
 
-<!-- trace:case id=g10.auction-auto-bidding.TC-0x8 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC1-1: First maximum opens bidding at the starting price
+- An open listing in the row's currency, starting price 0, with no maximum committed.
+- customer is signed in with a card linked and is on that listing's page.
+- An open listing in the row's currency, starting price 0, in the row's standing.
+- customer B is signed in with a card linked.
+- An open listing in the row's currency, starting price 0, extension duration 0, scheduled close 10 minutes ahead.
+- customer A committed the row's maximum before the scheduled close, the only maximum on the listing.
+- `<listing_1>` starts at 0 `HKD`, and customer A's maximum `<user A maximum>` stands alone at `<opening price>`.
+- customer B(card linked) is signed in on a separate session, on the lot page for `<listing_1>`.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| Item | Currency: USD; Starting price: USD56 (range: 100–9999 minor units); Maximum: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Starting price: HKD28 (range: 1000–79999 minor units); Maximum: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Starting price: JPY2,350 (range: 100–14999 minor units); Maximum: JPY23,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Current bid: USD235 (range: 10000–49999 minor units); Minimum increment: USD25 (fixed tier increment); Attempted maximum: USD245 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Current bid: HKD280 (range: 1000–79999 minor units); Minimum increment: HKD30 (fixed tier increment); Attempted maximum: HKD300 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Current bid: JPY23,500 (range: 15000–74999 minor units); Minimum increment: JPY2,500 (fixed tier increment); Attempted maximum: JPY24,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Committed maximum: USD235 (range: 10000–49999 minor units); Raised maximum: USD470 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Committed maximum: HKD280 (range: 1000–79999 minor units); Raised maximum: HKD560 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Committed maximum: JPY23,500 (range: 15000–74999 minor units); Raised maximum: JPY47,000 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Committed maximum: USD470 (range: 10000–49999 minor units); Attempted maximum: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Committed maximum: HKD560 (range: 1000–79999 minor units); Attempted maximum: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Committed maximum: JPY47,000 (range: 15000–74999 minor units); Attempted maximum: JPY23,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Maximum: USD1 (fixed boundary or equality), exactly the minimum; Lowest increment: USD1 (fixed boundary or equality); Current bid after: USD1 (fixed derived value) |
+| Item | Currency: USD; Maximum: USD500 (fixed tier boundary), in the USD 500 tier; Lowest increment: USD1 (fixed boundary or equality); Current bid after: USD1 (fixed derived value) |
+| Item | Currency: HKD; Maximum: HKD10 (fixed boundary or equality), exactly the minimum; Lowest increment: HKD10 (fixed boundary or equality); Current bid after: HKD10 (fixed derived value) |
+| Item | Currency: HKD; Maximum: HKD920 (range: 80000–399999 minor units), in the HKD 800 tier; Lowest increment: HKD10 (fixed boundary or equality); Current bid after: HKD10 (fixed derived value) |
+| Item | Currency: JPY; Maximum: JPY100 (fixed boundary or equality), exactly the minimum; Lowest increment: JPY100 (fixed boundary or equality); Current bid after: JPY100 (fixed derived value) |
+| Item | Currency: JPY; Maximum: JPY47,000 (range: 15000–74999 minor units), in the JPY 15,000 tier; Lowest increment: JPY100 (fixed boundary or equality); Current bid after: JPY100 (fixed derived value) |
+| Item | Currency: USD; Standing: No maximum committed; Minimum next bid: USD1 (range: 100–9999 minor units); Customer B's attempted maximum: USD0.99 (range: 1–99 minor units) |
+| Item | Currency: HKD; Standing: No maximum committed; Minimum next bid: HKD10 (range: 1000–79999 minor units); Customer B's attempted maximum: HKD9.99 (range: 1–999 minor units) |
+| Item | Currency: JPY; Standing: No maximum committed; Minimum next bid: JPY100 (range: 100–14999 minor units); Customer B's attempted maximum: JPY99 (range: 1–99 minor units) |
+| Item | Currency: USD; Lowest increment: USD1 (fixed boundary or equality); Winning bid: USD1 (fixed boundary or equality) |
+| Item | Currency: HKD; Lowest increment: HKD10 (fixed boundary or equality); Winning bid: HKD10 (fixed boundary or equality) |
+| Item | Currency: JPY; Lowest increment: JPY100 (fixed boundary or equality); Winning bid: JPY100 (fixed boundary or equality) |
+| HKD10 (fixed tier increment), the opening price | Refused, naming HKD20 (fixed derived value); current bid stays `<opening price>`, customer A leads |
+| HKD20 (fixed derived value), the opening price plus one increment | Accepted; current bid HKD30 (fixed derived value), `<user B maximum>` plus 1000; customer A leads |
+| Field | Value |
+| `<listing_1>` | An open HKD listing, starting price 0, scheduled close more than an hour away |
+| `<user A maximum>` | HKD470 (range: 1000–79999 minor units) |
+| `<opening price>` | HKD10 (fixed tier increment), the lowest HKD increment |
+
+### Route
+
+1. Navigate to `<an open listing url>` priced in the row's currency.
+   - Grade10 accepts the commitment. g10.auction-auto-bidding.US1-TC1
+2. Enter the row's maximum.
+   - The current bid is the row's starting price. g10.auction-auto-bidding.US1-TC1
+3. Confirm the commitment.
+   - Customer leads. g10.auction-auto-bidding.US1-TC1
+4. Navigate to `<an open listing url>` priced in the row's currency.
+5. Enter the row's attempted maximum.
+6. Confirm the commitment.
+7. Check the current bid and the leader.
+   - Grade10 refuses the commitment. g10.auction-auto-bidding.US1-TC2
+   - The current bid and the leader are unchanged. g10.auction-auto-bidding.US1-TC2
+8. Enter the row's raised maximum.
+   - Grade10 accepts the raise. g10.auction-auto-bidding.US1-TC3
+9. Confirm the raise.
+   - Customer still leads. g10.auction-auto-bidding.US1-TC3
+10. Check who leads and the current bid.
+   - The current bid is unchanged. g10.auction-auto-bidding.US1-TC3
+11. Enter the row's attempted maximum.
+12. Confirm the commitment.
+13. Check the committed maximum.
+   - Grade10 refuses it. g10.auction-auto-bidding.US1-TC4
+   - Customer's committed maximum remains the row's committed maximum. g10.auction-auto-bidding.US1-TC4
+14. Enter the row's maximum in the custom maximum on the bid panel.
+15. Confirm the commitment.
+16. Read the current bid, the leader, the bid count and Recent Bids.
+   - Grade10 accepts the commitment. g10.auction-auto-bidding.US1-TC5
+   - The current bid is 0 plus the currency's lowest increment, the row's current bid after, not 0. g10.auction-auto-bidding.US1-TC5
+   - The current bid is not the increment of the tier the maximum sits in. g10.auction-auto-bidding.US1-TC5
+   - The bid count reads 1, and Recent Bids shows one bid at the row's current bid after. g10.auction-auto-bidding.US1-TC5
+   - Customer leads. g10.auction-auto-bidding.US1-TC5
+17. As customer B, submit the row's attempted maximum on the listing.
+   - Grade10 refuses the commitment, naming the row's minimum next bid. g10.auction-auto-bidding.US1-TC6
+18. Read the API response.
+   - No maximum is recorded for customer B. g10.auction-auto-bidding.US1-TC6
+19. Read the listing's current bid, leader and committed maxima.
+   - The current bid and the leader are as the row's standing gives them. g10.auction-auto-bidding.US1-TC6
+20. Wait until the scheduled close passes with no further commitment.
+21. Read the listing's state, winner and winning bid.
+   - The listing is closed. g10.auction-auto-bidding.US1-TC7
+   - Customer A wins. g10.auction-auto-bidding.US1-TC7
+   - The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0. g10.auction-auto-bidding.US1-TC7
+22. As customer B, enter the row's `<user B maximum>` in the custom maximum on the bid panel.
+23. Confirm the commitment.
+   - is the row's outcome. g10.auction-auto-bidding.US1-TC8
+24. Read the current bid, the leader and Recent Bids.
+   - reads the row's current bid and leader, and `<user A maximum>` appears nowhere. g10.auction-auto-bidding.US1-TC8
+
+## Walk 2: Collector reads their own maximum and standing
+
+**Starting state:**
+
+- No additional setup is named by these cases.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| Item | Currency: USD; Committed maximum: USD470 (range: 10000–49999 minor units); Current bid: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Committed maximum: HKD560 (range: 1000–79999 minor units); Current bid: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Committed maximum: JPY47,000 (range: 15000–74999 minor units); Current bid: JPY23,500 (range: 15000–74999 minor units) |
+| Item | Currency: USD; Customer A's maximum: USD470 (range: 10000–49999 minor units); Current bid: USD235 (range: 10000–49999 minor units) |
+| Item | Currency: HKD; Customer A's maximum: HKD560 (range: 1000–79999 minor units); Current bid: HKD280 (range: 1000–79999 minor units) |
+| Item | Currency: JPY; Customer A's maximum: JPY47,000 (range: 15000–74999 minor units); Current bid: JPY23,500 (range: 15000–74999 minor units) |
+| Customer C's maximum | JPY60,000 (range: 15000–74999 minor units) |
+
+### Route
+
+1. Open the listing.
+   - Customer sees their own maximum, the row's committed maximum. g10.auction-auto-bidding.US2-TC1
+   - Customer sees the current bid, the row's value, as a separate fact. g10.auction-auto-bidding.US2-TC1
+   - Customer sees that they lead. g10.auction-auto-bidding.US2-TC1
+2. Open the listing.
+   - Customer sees that they do not lead. g10.auction-auto-bidding.US2-TC2
+   - Customer's own committed maximum is unchanged. g10.auction-auto-bidding.US2-TC2
+3. Sign in as customer B.
+   - The facts carry the current bid, the row's value. g10.auction-auto-bidding.US2-TC3
+4. Open the listing's public facts.
+   - The facts do not carry, and do not allow deriving, customer A's maximum, the row's value. g10.auction-auto-bidding.US2-TC3
+5. Commit a maximum of JPY60,000 (range: 15000–74999 minor units) as customer C.
+   - Grade10 accepts customer C's commitment. g10.auction-auto-bidding.US2-TC4
+6. Read customer C's standing.
+   - Customer C is reported as not leading. g10.auction-auto-bidding.US2-TC4
+7. Read the listing's public bid history.
+   - The public history records customer C's accepted action followed by customer B's automatic response, both at JPY60,000 (fixed derived value). g10.auction-auto-bidding.US2-TC4
+
+## Walk 3: Collector competes through two maxima and adjacent checks
+
+**Starting state:**
+
+- No additional setup is named by these cases.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| Item | `<customer B maximum>`: JPY500 (range: 100–14999 minor units); Resolved current bid: JPY600 (fixed derived value); Resolved leader: customer A |
+| Item | `<customer B maximum>`: JPY700 (range: 100–14999 minor units); Resolved current bid: JPY800 (fixed derived value); Resolved leader: customer A |
+| Item | `<customer B maximum>`: JPY950 (range: 100–14999 minor units); Resolved current bid: JPY1,000 (fixed derived value); Resolved leader: customer A |
+| Item | `<customer B maximum>`: JPY1,001 (range: 100–14999 minor units); Resolved current bid: JPY1,001 (fixed derived value); Resolved leader: customer B |
+| Item | `<customer B maximum>`: JPY1,100 (range: 100–14999 minor units); Resolved current bid: JPY1,100 (fixed derived value); Resolved leader: customer B |
+| Item | `<customer B maximum>`: JPY1,120 (range: 100–14999 minor units); Resolved current bid: JPY1,100 (fixed derived value); Resolved leader: customer B |
+| Customer B's raised maximum | JPY34,000 (range: 15000–74999 minor units) |
+| Customer A's raised maximum | JPY34,000 (range: 15000–74999 minor units) |
+| Customer A's raised maximum | JPY60,000 (range: 15000–74999 minor units) |
+| Customer B's maximum | JPY920,000 (range: 750000–1499999 minor units) |
+| Customer C's maximum | JPY60,000 (range: 15000–74999 minor units) |
+
+### Route
+
+1. Commit `<customer B maximum>` as customer B.
+2. Read the listing's current bid and leader.
+   - The current bid matches the row's resolved current bid. g10.auction-auto-bidding.US3-TC1
+   - The leader matches the row's resolved leader. g10.auction-auto-bidding.US3-TC1
+   - Grade10 accepts no intermediate bid between the previous current bid and the resolved one. g10.auction-auto-bidding.US3-TC1
+3. Raise customer B's maximum to JPY34,000 (range: 15000–74999 minor units).
+   - Customer A still leads. g10.auction-auto-bidding.US3-TC2
+4. Read the listing's leader and current bid.
+   - The current bid is JPY35,000 (fixed derived value). g10.auction-auto-bidding.US3-TC2
+5. Raise customer A's maximum to JPY34,000 (range: 15000–74999 minor units).
+   - Customer B still leads. g10.auction-auto-bidding.US3-TC3
+6. Read the listing's leader and current bid.
+   - The current bid is JPY35,000 (fixed derived value). g10.auction-auto-bidding.US3-TC3
+7. Raise customer A's maximum to JPY60,000 (range: 15000–74999 minor units).
+   - Customer A leads. g10.auction-auto-bidding.US3-TC4
+8. Read the listing's leader and current bid.
+   - The current bid is JPY51,000 (fixed derived value). g10.auction-auto-bidding.US3-TC4
+9. Commit a maximum of JPY920,000 (range: 750000–1499999 minor units) as customer B.
+   - Customer B leads. g10.auction-auto-bidding.US3-TC5
+10. Read the listing's leader and current bid.
+   - The current bid is JPY920,000 (fixed derived value), not higher. g10.auction-auto-bidding.US3-TC5
+11. Commit a maximum of JPY60,000 (range: 15000–74999 minor units) as customer C.
+   - Customer B remains the leader. g10.auction-auto-bidding.US3-TC6
+12. Read the listing's leader and current bid.
+   - The current bid is JPY60,000 (fixed derived value). g10.auction-auto-bidding.US3-TC6
+13. Read the public bid history's ordering and timestamps.
+   - The history records customer C's accepted action at JPY60,000 (range: 15000–74999 minor units), then customer B's automatic response at JPY60,000 (fixed derived value), both in the same resolution timestamp group. g10.auction-auto-bidding.US3-TC6
+14. Open that listing's bid history.
+   - Each commitment shows its bidder, its maximum, and its Accepted At. g10.auction-auto-bidding.US4-TC1
+
+## Walk 4: Collector's auto-bid counts as a bid
+
+**Starting state:**
+
+- customer A(card linked) leads `<listing_3>` with a committed maximum of `<user A maximum>`, at `<leader price>`.
+- customer B(card linked, no bid on `<listing_3>`) is signed in on a separate session.
+- `<listing_1>` is in extended bidding.
+- customer A leads `<listing_1>` with a committed maximum of `<user A maximum>`.
+- customer B is signed in with a card saved and is on `<listing_1>`.
+- `<listing_2>` is open, and its only bidder, customer A, committed a maximum before the scheduled close and leads at the starting price.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| `<listing_3>` | An open HKD listing taking bids, led by customer A |
+| `<leader price>` | HKD280 (range: 1000–79999 minor units), the starting price |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<user B maximum>` | HKD340 (range: 1000–79999 minor units), below `<user A maximum>` |
+| `<increment>` | HKD10 (fixed tier increment), the HK$0 tier at `<user B maximum>` |
+| `<user A raise>` | HKD920 (range: 80000–399999 minor units) |
+| `<listing_1>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
+| `<extension duration>` | 1800 seconds |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
+| `<bid time>` | The moment customer B confirms |
+| `<listing_2>` | An open listing, scheduled close 20:00 UTC, extension duration 1800 seconds |
+
+### Route
+
+1. Read the listing's bid count.
+   - The bid count includes that bid. g10.auction-auto-bidding.US5-TC5
+2. Read the listing's bid history.
+   - The history shows it as placed on that bidder's behalf, not as a manual bid. g10.auction-auto-bidding.US5-TC5
+3. Let time pass with no further commitment accepted.
+   - Grade10 places no further bid on either bidder's behalf. g10.auction-auto-bidding.US5-TC6
+4. Read the current bid and whether Grade10 placed any further bid.
+   - The current bid is unchanged. g10.auction-auto-bidding.US5-TC6
+5. As customer B, commit `<user B maximum>` on `<listing_3>`.
+6. Read the API response and `<listing_3>`'s bids.
+   - customer A leads at `<user B maximum>` plus `<increment>`, and that bid is recorded as placed on customer A's behalf. g10.auction-auto-bidding.US5-TC7
+7. As customer A, raise the maximum to `<user A raise>`.
+8. Read the API response.
+   - accepts the raise on the auction's rules alone, with no wait on the card provider, and Your maximum reads `<user A raise>`. g10.auction-auto-bidding.US5-TC7
+9. Read both customers' card activity at the card provider.
+   - nothing is held or charged on either card. g10.auction-auto-bidding.US5-TC7
+10. As customer B, commit a maximum of `<user B maximum>` at `<bid time>`.
+11. Read the current bid and Time left.
+12. Wait until the new close passes with no further commitment.
+   - Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`. g10.auction-auto-bidding.US5-TC8
+   - No further bid is placed on either maximum before the close. g10.auction-auto-bidding.US5-TC8
+13. Wait for 20:00 UTC.
+   - The listing is in extended bidding. g10.auction-auto-bidding.US5-TC9
+14. Read the listing's state and recorded close.
+   - The recorded close reads 20:30 UTC. g10.auction-auto-bidding.US5-TC9
+
+### g10.auction-auto-bidding.US1-TC1: First maximum opens bidding at the starting price
 
 Runs once per row of **Test data**.
 
@@ -36,9 +275,9 @@ An open listing with no bids, with the row's starting price.
 
 | Currency | Starting price | Maximum |
 | --- | --- | --- |
-| USD | 20000 minor units (USD 200.00) | 50000 minor units (USD 500.00) |
-| HKD | 20000 minor units (HKD 200.00) | 50000 minor units (HKD 500.00) |
-| JPY | 20000 minor units (JPY 20,000) | 50000 minor units (JPY 50,000) |
+| USD | USD56 (range: 100–9999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD28 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY2,350 (range: 100–14999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -53,7 +292,7 @@ An open listing with no bids, with the row's starting price.
 * Customer leads.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7gl rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC2-1: Maximum below the minimum next bid is refused
+### g10.auction-auto-bidding.US1-TC2: Maximum below the minimum next bid is refused
 
 Runs once per row of **Test data**.
 
@@ -79,9 +318,9 @@ An open listing whose current bid and minimum increment match the row.
 
 | Currency | Current bid | Minimum increment | Attempted maximum |
 | --- | --- | --- | --- |
-| USD | 22500 minor units (USD 225.00) | 2500 minor units (USD 25.00) | 24000 minor units (USD 240.00) |
-| HKD | 22500 minor units (HKD 225.00) | 2500 minor units (HKD 25.00) | 24000 minor units (HKD 240.00) |
-| JPY | 22500 minor units (JPY 22,500) | 2500 minor units (JPY 2,500) | 24000 minor units (JPY 24,000) |
+| USD | USD235 (range: 10000–49999 minor units) | USD25 (range: 100–9999 minor units) | USD245 (range: 10000–49999 minor units) |
+| HKD | HKD280 (range: 1000–79999 minor units) | HKD30 (range: 1000–79999 minor units) | HKD300 (range: 1000–79999 minor units) |
+| JPY | JPY23,500 (range: 15000–74999 minor units) | JPY2,500 (range: 100–14999 minor units) | JPY24,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -96,7 +335,7 @@ An open listing whose current bid and minimum increment match the row.
 * The current bid and the leader are unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-9qy rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC3-1: Leader raises their own maximum
+### g10.auction-auto-bidding.US1-TC3: Leader raises their own maximum
 
 Runs once per row of **Test data**.
 
@@ -122,9 +361,9 @@ customer(leads with a committed maximum matching the row) is on that open listin
 
 | Currency | Committed maximum | Raised maximum |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 80000 minor units (USD 800.00) |
-| HKD | 50000 minor units (HKD 500.00) | 80000 minor units (HKD 800.00) |
-| JPY | 50000 minor units (JPY 50,000) | 80000 minor units (JPY 80,000) |
+| USD | USD235 (range: 10000–49999 minor units) | USD470 (range: 10000–49999 minor units) |
+| HKD | HKD280 (range: 1000–79999 minor units) | HKD560 (range: 1000–79999 minor units) |
+| JPY | JPY23,500 (range: 15000–74999 minor units) | JPY47,000 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -139,7 +378,7 @@ customer(leads with a committed maximum matching the row) is on that open listin
 * The current bid is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-vq3 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6 -->
-### grade10-site-auction-auto-bidding-US1-TC4-1: Lowering a maximum is refused
+### g10.auction-auto-bidding.US1-TC4: Lowering a maximum is refused
 
 Runs once per row of **Test data**.
 
@@ -165,9 +404,9 @@ customer(has a committed maximum matching the row) is on that open listing's pag
 
 | Currency | Committed maximum | Attempted maximum |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 30000 minor units (USD 300.00) |
-| HKD | 50000 minor units (HKD 500.00) | 30000 minor units (HKD 300.00) |
-| JPY | 50000 minor units (JPY 50,000) | 30000 minor units (JPY 30,000) |
+| USD | USD470 (range: 10000–49999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD560 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -181,7 +420,7 @@ customer(has a committed maximum matching the row) is on that open listing's pag
 * Customer's committed maximum remains the row's committed maximum.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-j8v rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC5-1: Lone maximum on a zero start stands at the lowest increment
+### g10.auction-auto-bidding.US1-TC5: Lone maximum on a zero start stands at the lowest increment
 
 Runs once per row of **Test data**.
 
@@ -209,12 +448,12 @@ Runs once per row of **Test data**.
 
 | Currency | Maximum | Lowest increment | Current bid after |
 | --- | --- | --- | --- |
-| USD | 100 minor units (USD 1.00), exactly the minimum | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| USD | 50000 minor units (USD 500.00), in the USD 500 tier | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| HKD | 1000 minor units (HKD 10.00), exactly the minimum | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| HKD | 100000 minor units (HKD 1,000.00), in the HKD 800 tier | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| JPY | 100 minor units (JPY 100), exactly the minimum | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
-| JPY | 50000 minor units (JPY 50,000), in the JPY 15,000 tier | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
+| USD | USD1 (fixed boundary or equality), exactly the minimum | USD1 (fixed boundary or equality) | USD1 (range: 100–9999 minor units) |
+| USD | USD500 (fixed tier boundary), in the USD 500 tier | USD1 (range: 100–9999 minor units) | USD1 (range: 100–9999 minor units) |
+| HKD | HKD10 (fixed boundary or equality), exactly the minimum | HKD10 (fixed boundary or equality) | HKD10 (range: 1000–79999 minor units) |
+| HKD | HKD920 (range: 80000–399999 minor units), in the HKD 800 tier | HKD10 (range: 1000–79999 minor units) | HKD10 (range: 1000–79999 minor units) |
+| JPY | JPY100 (fixed boundary or equality), exactly the minimum | JPY100 (fixed boundary or equality) | JPY100 (range: 100–14999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units), in the JPY 15,000 tier | JPY100 (range: 100–14999 minor units) | JPY100 (range: 100–14999 minor units) |
 
 **Steps:**
 
@@ -231,7 +470,7 @@ Runs once per row of **Test data**.
 * Customer leads.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-65a rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC6-1: Maximum one minor unit below the minimum on a zero start is refused
+### g10.auction-auto-bidding.US1-TC6: Maximum one minor unit below the minimum on a zero start is refused
 
 Runs once per row of **Test data**.
 
@@ -259,9 +498,9 @@ Runs once per row of **Test data**.
 
 | Currency | Standing | Minimum next bid | Customer B's attempted maximum |
 | --- | --- | --- | --- |
-| USD | No maximum committed | 100 minor units (USD 1.00) | 99 minor units (USD 0.99) |
-| HKD | No maximum committed | 1000 minor units (HKD 10.00) | 999 minor units (HKD 9.99) |
-| JPY | No maximum committed | 100 minor units (JPY 100) | 99 minor units (JPY 99) |
+| USD | No maximum committed | USD1 (range: 100–9999 minor units) | USD0.99 (range: 1–99 minor units) |
+| HKD | No maximum committed | HKD10 (range: 1000–79999 minor units) | HKD9.99 (range: 1–999 minor units) |
+| JPY | No maximum committed | JPY100 (range: 100–14999 minor units) | JPY99 (range: 1–99 minor units) |
 
 **Steps:**
 
@@ -276,7 +515,7 @@ Runs once per row of **Test data**.
 * The current bid and the leader are as the row's standing gives them.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-y4r rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC7-1: Lone bidder wins a zero-start lot at the lowest increment
+### g10.auction-auto-bidding.US1-TC7: Lone bidder wins a zero-start lot at the lowest increment
 
 Runs once per row of **Test data**.
 
@@ -298,15 +537,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * An open listing in the row's currency, starting price 0, extension duration 0, scheduled close 10 minutes ahead.
-* customer A committed a maximum of 50000 minor units before the scheduled close, the only maximum on the listing.
+* customer A committed the row's maximum before the scheduled close, the only maximum on the listing.
 
 **Test data:**
 
 | Currency | Lowest increment | Winning bid |
 | --- | --- | --- |
-| USD | 100 minor units (USD 1.00) | 100 minor units (USD 1.00) |
-| HKD | 1000 minor units (HKD 10.00) | 1000 minor units (HKD 10.00) |
-| JPY | 100 minor units (JPY 100) | 100 minor units (JPY 100) |
+| USD | USD1 (range: 100–9999 minor units) | USD1 (range: 100–9999 minor units) |
+| HKD | HKD10 (range: 1000–79999 minor units) | HKD10 (range: 1000–79999 minor units) |
+| JPY | JPY100 (range: 100–14999 minor units) | JPY100 (range: 100–14999 minor units) |
 
 **Steps:**
 
@@ -320,7 +559,7 @@ Runs once per row of **Test data**.
 * The winning bid is 0 plus the currency's lowest increment, the row's winning bid, not 0.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-ic0 rev=1 covers=g10.auction-auto-bidding.SC-71q,g10.auction-auto-bidding.SC-ec3,g10.auction-auto-bidding.SC-2eu,g10.auction-auto-bidding.SC-6h6,g10.auction-auto-bidding.SC-arw,g10.auction-auto-bidding.SC-qbr,g10.auction-auto-bidding.SC-9mj,g10.auction-auto-bidding.SC-zw7 -->
-### grade10-site-auction-auto-bidding-US1-TC8-1: Second maximum on a zero start must clear one increment above the opening price
+### g10.auction-auto-bidding.US1-TC8: Second maximum on a zero start must clear one increment above the opening price
 
 Runs once per row of **Test data**.
 
@@ -348,14 +587,14 @@ Runs once per row of **Test data**.
 
 | `<user B maximum>` | Outcome |
 | --- | --- |
-| 1000 minor units (HKD 10.00), the opening price | Refused, naming 2000 minor units (HKD 20.00); current bid stays `<opening price>`, customer A leads |
-| 2000 minor units (HKD 20.00), the opening price plus one increment | Accepted; current bid 3000 minor units (HKD 30.00), `<user B maximum>` plus 1000; customer A leads |
+| HKD10 (range: 1000–79999 minor units), the opening price | Refused, naming HKD20 (range: 1000–79999 minor units); current bid stays `<opening price>`, customer A leads |
+| HKD20 (fixed derived value), the opening price plus one increment | Accepted; current bid HKD30 (fixed derived value), `<user B maximum>` plus 1000; customer A leads |
 
 | Field | Value |
 | --- | --- |
 | `<listing_1>` | An open HKD listing, starting price 0, scheduled close more than an hour away |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<opening price>` | 1000 minor units (HKD 10.00), the lowest HKD increment |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<opening price>` | HKD10 (fixed tier increment), the lowest HKD increment |
 
 **Steps:**
 
@@ -370,14 +609,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-auto-bidding-US2: Collector reads their own maximum and standing
+## g10.auction-auto-bidding.US2: Collector reads their own maximum and standing
 
 **As a** collector,
 **I want** to see my own maximum, the current bid, and whether I lead,
 **so that** I know where I stand without my cap being shown to anyone else.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-mjs rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC1-1: Bidder reads their own commitment apart from the current bid
+### g10.auction-auto-bidding.US2-TC1: Bidder reads their own commitment apart from the current bid
 
 Runs once per row of **Test data**.
 
@@ -403,9 +642,9 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 
 | Currency | Committed maximum | Current bid |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) |
-| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) |
-| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) |
+| USD | USD470 (range: 10000–49999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD560 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -418,7 +657,7 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 * Customer sees that they lead.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-13a rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC2-1: Overtaken bidder sees that they no longer lead
+### g10.auction-auto-bidding.US2-TC2: Overtaken bidder sees that they no longer lead
 
 **Classification:**
 
@@ -448,7 +687,7 @@ customer(has been overtaken on an open listing) is on that listing's page.
 * Customer's own committed maximum is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7io rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC3-1: Leader's maximum is not disclosed to another bidder
+### g10.auction-auto-bidding.US2-TC3: Leader's maximum is not disclosed to another bidder
 
 Runs once per row of **Test data**.
 
@@ -474,9 +713,9 @@ customer A(leads with a committed maximum matching the row) is on a listing whos
 
 | Currency | Customer A's maximum | Current bid |
 | --- | --- | --- |
-| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) |
-| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) |
-| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) |
+| USD | USD470 (range: 10000–49999 minor units) | USD235 (range: 10000–49999 minor units) |
+| HKD | HKD560 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units) |
+| JPY | JPY47,000 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units) |
 
 **Steps:**
 
@@ -489,7 +728,9 @@ customer A(leads with a committed maximum matching the row) is on a listing whos
 * The facts do not carry, and do not allow deriving, customer A's maximum, the row's value.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-nmi rev=1 covers=g10.auction-auto-bidding.SC-nqo,g10.auction-auto-bidding.SC-dmo,g10.auction-auto-bidding.SC-x57,g10.auction-auto-bidding.SC-eiw -->
-### grade10-site-auction-auto-bidding-US2-TC4-1: A tie is accepted and reported as not leading
+### g10.auction-auto-bidding.US2-TC4: A tie is accepted and reported as not leading
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -507,17 +748,17 @@ customer A(leads with a committed maximum matching the row) is on a listing whos
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads an HKD listing with a committed maximum of 60000 minor units).
+customer B(leads an HKD listing with a committed maximum of HKD600 (range: 1000–79999 minor units)).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer C's maximum | 60000 minor units |
+| Customer C's maximum | HKD600 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Commit a maximum of 60000 minor units as customer C.
+1. Commit a maximum of HKD600 (range: 1000–79999 minor units) as customer C.
 2. Read customer C's standing.
 3. Read the listing's public bid history.
 
@@ -525,11 +766,11 @@ customer B(leads an HKD listing with a committed maximum of 60000 minor units).
 
 * Grade10 accepts customer C's commitment.
 * Customer C is reported as not leading.
-* The public history records customer C's accepted action followed by customer B's automatic response, both at 60000 minor units.
+* The public history records customer C's accepted action followed by customer B's automatic response, both at HKD600 (fixed derived value).
 
 ---
 
-## grade10-site-auction-auto-bidding-US3: Collector competes through two maxima
+## g10.auction-auto-bidding.US3: Collector competes through two maxima
 
 **As a** collector,
 **I want** the current bid to come from the two highest maxima,
@@ -537,7 +778,7 @@ customer B(leads an HKD listing with a committed maximum of 60000 minor units).
 with whoever committed first.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-1qu rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC1-1: Current bid resolves from the leader's and challenger's maxima
+### g10.auction-auto-bidding.US3-TC1: Current bid resolves from the leader's and challenger's maxima
 
 Runs once per row of **Test data**.
 
@@ -557,18 +798,18 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-An open HKD listing where customer A leads with a committed maximum of 1000 minor units, the current bid is 400 minor units, and the applicable increment is 100 minor units.
+An open HKD listing where customer A leads with a committed maximum of HKD10 (range: 1000–79999 minor units), the current bid is HKD4 (range: 1–999 minor units), and the applicable increment is HKD1 (fixed tier increment).
 
 **Test data:**
 
 | `<customer B maximum>` | Resolved current bid | Resolved leader |
 | --- | --- | --- |
-| 500 minor units | 600 minor units | customer A |
-| 700 minor units | 800 minor units | customer A |
-| 950 minor units | 1000 minor units | customer A |
-| 1001 minor units | 1001 minor units | customer B |
-| 1100 minor units | 1100 minor units | customer B |
-| 1120 minor units | 1100 minor units | customer B |
+| HKD5 (range: 1–999 minor units) | HKD6 (fixed derived value) | customer A |
+| HKD7 (range: 1–999 minor units) | HKD8 (fixed derived value) | customer A |
+| HKD9.50 (range: 1–999 minor units) | HKD10 (fixed boundary or equality) | customer A |
+| HKD10.01 (range: 1000–79999 minor units) | HKD10.01 (fixed derived value) | customer B |
+| HKD11 (range: 1000–79999 minor units) | HKD11 (fixed derived value) | customer B |
+| HKD11.20 (range: 1000–79999 minor units) | HKD11 (fixed derived value) | customer B |
 
 **Steps:**
 
@@ -582,7 +823,9 @@ An open HKD listing where customer A leads with a committed maximum of 1000 mino
 * Grade10 accepts no intermediate bid between the previous current bid and the resolved one.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-hpg rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC2-1: Challenger raises again and still stays below the leader
+### g10.auction-auto-bidding.US3-TC2: Challenger raises again and still stays below the leader
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -600,26 +843,28 @@ An open HKD listing where customer A leads with a committed maximum of 1000 mino
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer A(leads an HKD listing at a current bid of 23500 minor units), and customer B's existing maximum is 22500 minor units.
+customer A(leads an HKD listing at a current bid of HKD280 (range: 1000–79999 minor units)), and customer B's existing maximum is HKD270 (range: 1000–79999 minor units).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer B's raised maximum | 30000 minor units |
+| Customer B's raised maximum | HKD340 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Raise customer B's maximum to 30000 minor units.
+1. Raise customer B's maximum to HKD340 (range: 1000–79999 minor units).
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer A still leads.
-* The current bid is 31000 minor units.
+* The current bid is HKD350 (fixed derived value).
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-29q rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC3-1: Overtaken bidder raises but stays below the new leader
+### g10.auction-auto-bidding.US3-TC3: Overtaken bidder raises but stays below the new leader
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -637,26 +882,28 @@ customer A(leads an HKD listing at a current bid of 23500 minor units), and cust
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads an HKD listing with a committed maximum of 50000 minor units), having overtaken customer A.
+customer B(leads an HKD listing with a committed maximum of HKD560 (range: 1000–79999 minor units)), having overtaken customer A.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer A's raised maximum | 30000 minor units |
+| Customer A's raised maximum | HKD340 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Raise customer A's maximum to 30000 minor units.
+1. Raise customer A's maximum to HKD340 (range: 1000–79999 minor units).
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer B still leads.
-* The current bid is 31000 minor units.
+* The current bid is HKD350 (fixed derived value).
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-s1n rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC4-1: Overtaken bidder raises past the current leader
+### g10.auction-auto-bidding.US3-TC4: Overtaken bidder raises past the current leader
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -674,26 +921,28 @@ customer B(leads an HKD listing with a committed maximum of 50000 minor units), 
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads an HKD listing with a committed maximum of 50000 minor units), having overtaken customer A.
+customer B(leads an HKD listing with a committed maximum of HKD560 (range: 1000–79999 minor units)), having overtaken customer A.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer A's raised maximum | 60000 minor units |
+| Customer A's raised maximum | HKD640 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Raise customer A's maximum to 60000 minor units.
+1. Raise customer A's maximum to HKD640 (range: 1000–79999 minor units).
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer A leads.
-* The current bid is 51000 minor units.
+* The current bid is HKD570 (fixed derived value).
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-wr4 rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC5-1: The current bid cannot exceed the new leader's own maximum
+### g10.auction-auto-bidding.US3-TC5: The current bid cannot exceed the new leader's own maximum
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -711,26 +960,28 @@ customer B(leads an HKD listing with a committed maximum of 50000 minor units), 
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer A(leads an HKD listing with a committed maximum of 800000 minor units).
+customer A(leads an HKD listing with a committed maximum of HKD8,400 (range: 800000–3999999 minor units)).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer B's maximum | 810000 minor units |
+| Customer B's maximum | HKD9,200 (range: 800000–3999999 minor units) |
 
 **Steps:**
 
-1. Commit a maximum of 810000 minor units as customer B.
+1. Commit a maximum of HKD9,200 (range: 800000–3999999 minor units) as customer B.
 2. Read the listing's leader and current bid.
 
 **Expected Results:**
 
 * Customer B leads.
-* The current bid is 810000 minor units, not higher.
+* The current bid is HKD9,200 (fixed derived value), not higher.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-7oh rev=1 covers=g10.auction-auto-bidding.SC-arz,g10.auction-auto-bidding.SC-5mw,g10.auction-auto-bidding.SC-hvc,g10.auction-auto-bidding.SC-wgx,g10.auction-auto-bidding.SC-edj,g10.auction-auto-bidding.SC-bqs,g10.auction-auto-bidding.SC-xwb,g10.auction-auto-bidding.SC-n5u,g10.auction-auto-bidding.SC-52s -->
-### grade10-site-auction-auto-bidding-US3-TC6-1: Equal maximum keeps the earlier leader and orders both public records together
+### g10.auction-auto-bidding.US3-TC6: Equal maximum keeps the earlier leader and orders both public records together
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -748,36 +999,36 @@ customer A(leads an HKD listing with a committed maximum of 800000 minor units).
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
 
 **Pre-conditions:**
-customer B(leads with a committed maximum of 60000 minor units).
+customer B(leads with a committed maximum of HKD600 (range: 1000–79999 minor units)).
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| Customer C's maximum | 60000 minor units |
+| Customer C's maximum | HKD600 (range: 1000–79999 minor units) |
 
 **Steps:**
 
-1. Commit a maximum of 60000 minor units as customer C.
+1. Commit a maximum of HKD600 (range: 1000–79999 minor units) as customer C.
 2. Read the listing's leader and current bid.
 3. Read the public bid history's ordering and timestamps.
 
 **Expected Results:**
 
 * Customer B remains the leader.
-* The current bid is 60000 minor units.
-* The history records customer C's accepted action at 60000 minor units, then customer B's automatic response at 60000 minor units, both in the same resolution timestamp group.
+* The current bid is HKD600 (fixed derived value).
+* The history records customer C's accepted action at HKD600 (range: 1000–79999 minor units), then customer B's automatic response at HKD600 (fixed derived value), both in the same resolution timestamp group.
 
 ---
 
-## grade10-site-auction-auto-bidding-US4: Operator traces every committed maximum
+## g10.auction-auto-bidding.US4: Operator traces every committed maximum
 
 **As an** operator,
 **I want** to read every committed maximum and when it was accepted,
 **so that** I can answer a dispute about who committed what.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-de4 rev=1 covers=g10.auction-auto-bidding.SC-aqd -->
-### grade10-site-auction-auto-bidding-US4-TC1-1: Operator reads every committed maximum to answer a dispute
+### g10.auction-auto-bidding.US4-TC1: Operator reads every committed maximum to answer a dispute
 
 **Classification:**
 
@@ -805,14 +1056,14 @@ admin(holds `auction:operate`) is on <grade10 auction admin listings url>. That 
 
 ---
 
-## grade10-site-auction-auto-bidding-US5: Collector's auto-bid counts as a bid
+## g10.auction-auto-bidding.US5: Collector's auto-bid counts as a bid
 
 **As a** collector,
 **I want** every bid Grade10 places for me to count as a bid,
 **so that** my auto-bids keep a lot open during extended bidding as a manual bid would.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-dhr rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC1-1: The hold is the maximum, not the current bid
+### g10.auction-auto-bidding.US5-TC1: The hold is the maximum, not the current bid
 
 Runs once per row of **Test data**.
 
@@ -851,7 +1102,7 @@ An open listing whose current bid matches the row.
 * Exactly one active authorization exists for that bidder and listing.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-5xp rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC2-1: A raise that cannot be authorized changes nothing
+### g10.auction-auto-bidding.US5-TC2: A raise that cannot be authorized changes nothing
 
 Runs once per row of **Test data**.
 
@@ -891,7 +1142,7 @@ customer A(leads with a committed maximum matching the row). The card authorizat
 * The leader and the current bid are unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-hqr rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC3-1: An auto-bid step needs no new card check
+### g10.auction-auto-bidding.US5-TC3: An auto-bid step needs no new card check
 
 Runs once per row of **Test data**.
 
@@ -931,7 +1182,7 @@ customer A(leads with an authorized maximum matching the row) while the current 
 * Customer A's authorization remains the row's maximum.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-rmo rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC5-1: An auto bid is counted and recorded on the bidder's behalf
+### g10.auction-auto-bidding.US5-TC5: An auto bid is counted and recorded on the bidder's behalf
 
 **Classification:**
 
@@ -962,7 +1213,7 @@ Grade10 has raised a bidder's bid on their behalf.
 * The history shows it as placed on that bidder's behalf, not as a manual bid.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-zjt rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC6-1: Standing maxima do not keep bidding on their own
+### g10.auction-auto-bidding.US5-TC6: Standing maxima do not keep bidding on their own
 
 **Classification:**
 
@@ -993,7 +1244,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * The current bid is unchanged.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-s4f rev=2 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC7-2: Committing, auto-bidding and raising take nothing from the card
+### g10.auction-auto-bidding.US5-TC7: Committing, auto-bidding and raising take nothing from the card
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1020,11 +1273,11 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 | Field | Value |
 | --- | --- |
 | `<listing_3>` | An open HKD listing taking bids, led by customer A |
-| `<leader price>` | 20000 minor units (HKD 200.00), the starting price |
-| `<user A maximum>` | 50000 minor units (HKD 500.00) |
-| `<user B maximum>` | 30000 minor units (HKD 300.00), below `<user A maximum>` |
-| `<increment>` | 1000 minor units (HKD 10.00), the HK$0 tier at `<user B maximum>` |
-| `<user A raise>` | 80000 minor units (HKD 800.00) |
+| `<leader price>` | HKD280 (range: 1000–79999 minor units), the starting price |
+| `<user A maximum>` | HKD560 (range: 1000–79999 minor units) |
+| `<user B maximum>` | HKD340 (range: 1000–79999 minor units), below `<user A maximum>` |
+| `<increment>` | HKD10 (fixed tier increment), the HK$0 tier at `<user B maximum>` |
+| `<user A raise>` | HKD920 (range: 80000–399999 minor units) |
 
 **Steps:**
 
@@ -1041,7 +1294,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Step 5: nothing is held or charged on either card.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-y3w rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC8-1: Auto bid during extended bidding restarts the timer once
+### g10.auction-auto-bidding.US5-TC8: Auto bid during extended bidding restarts the timer once
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1070,8 +1325,8 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 | --- | --- |
 | `<listing_1>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
 | `<extension duration>` | 1800 seconds |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
+| `<user B maximum>` | HKD5,700 (range: 400000–799999 minor units), below `<user A maximum>` |
 | `<bid time>` | The moment customer B confirms |
 
 **Steps:**
@@ -1086,7 +1341,9 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * No further bid is placed on either maximum before the close.
 
 <!-- trace:case id=g10.auction-auto-bidding.TC-wqa rev=1 covers=g10.auction-auto-bidding.SC-kr7,g10.auction-auto-bidding.SC-9i5,g10.auction-auto-bidding.SC-44a,g10.auction-auto-bidding.SC-nwr,g10.auction-auto-bidding.SC-0yu -->
-### grade10-site-auction-auto-bidding-US5-TC9-1: Maximum committed before the close starts extended bidding
+### g10.auction-auto-bidding.US5-TC9: Maximum committed before the close starts extended bidding
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -1130,6 +1387,14 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 - A raise is accepted or refused on the auction's rules alone; a raise refused for a card reason no longer exists, and its case is deprecated.
 - An auto-bid step's price is US3's to assert; with no card check left to tell it apart, the US5 case that read it is deprecated.
 
+### Archived fold records
+
+- Archived suites are reconciliation evidence only; they are not regeneration input.
+- **2026-09-16-default-auction-bid-holds-off** — `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`
+- **2026-09-17-revise-auction-extended-bidding** — `grade10-site-auction-auto-bidding-US5-TC4-2` → `g10.auction-auto-bidding.US5`; `grade10-site-auction-auto-bidding-US5-TC7-1` → `g10.auction-auto-bidding.US5-TC7`
+- **2026-10-02-relay-auction-live-state** — `grade10-site-auction-auto-bidding-US1-TC5-1` → `g10.auction-auto-bidding.US1-TC5`; `grade10-site-auction-auto-bidding-US1-TC6-1` → `g10.auction-auto-bidding.US1-TC6`; `grade10-site-auction-auto-bidding-US1-TC7-1` → `g10.auction-auto-bidding.US1-TC7`; `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`
+- **2026-10-03-refused-bid-is-not-a-bid** — `grade10-site-auction-auto-bidding-US1-TC8-1` → `g10.auction-auto-bidding.US1-TC8`; `grade10-site-auction-auto-bidding-US5-TC1-1` → `g10.auction-auto-bidding.US5-TC1`; `grade10-site-auction-auto-bidding-US5-TC2-1` → `g10.auction-auto-bidding.US5-TC2`; `grade10-site-auction-auto-bidding-US5-TC3-1` → `g10.auction-auto-bidding.US5-TC3`; `grade10-site-auction-auto-bidding-US5-TC7-2` → `g10.auction-auto-bidding.US5-TC7`
+
 ## Reconciliation
 
 **Run:** QA2 reconciliation 2026-10-01 for change `relay-auction-live-state`, joining QA1's blind cases with Dev's delta scenarios on `grade10-site-auction-auto-bidding-US-01`. Read the change's `proposal.md`, `decisions.md` (Q16 to Q30), `tech-design.md`, `tasks.md`, this delta `spec.md`, `user-journeys.md` and `domain-tcs.md`. QA1 had read the frozen anchors only.
@@ -1147,10 +1412,10 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 
-- **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `grade10-site-auction-auto-bidding-US5-TC7-2`
+- **Folded in** - `grade10-site-auction-auto-bidding-SC-25` and the accepted raise of `grade10-site-auction-auto-bidding-SC-32` by `g10.auction-auto-bidding.US5-TC7`
 - **Covered at domain** - `g10.auction-dmn.US4-TC3` reads the refusal and the bid form's words of `grade10-site-auction-auto-bidding-SC-32`'s second half, a maximum not raised
-- **Revised** - `grade10-site-auction-auto-bidding-US5-TC7-2` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `grade10-site-auction-auto-bidding-US1-TC8-1` loses the hold switch pre-condition only, `<v>` kept
-- **Deprecated** - `grade10-site-auction-auto-bidding-US5-TC1-1`, `grade10-site-auction-auto-bidding-US5-TC2-1` and `grade10-site-auction-auto-bidding-US5-TC3-1`, with the hold requirement
+- **Revised** - `g10.auction-auto-bidding.US5-TC7` reads that nothing is taken from the card; its marker drops grade10-site-auction-auto-bidding-SC-19, grade10-site-auction-auto-bidding-SC-20 and grade10-site-auction-auto-bidding-SC-21 and covers `grade10-site-auction-auto-bidding-SC-32`. `g10.auction-auto-bidding.US1-TC8` loses the hold switch pre-condition only, `<v>` kept
+- **Deprecated** - `g10.auction-auto-bidding.US5-TC1`, `g10.auction-auto-bidding.US5-TC2` and `g10.auction-auto-bidding.US5-TC3`, with the hold requirement
 - **Raised** - none
 - **Contradicted** - none
-- **Uncovered anchors** - none; the Feature set's No card hold leaf by `grade10-site-auction-auto-bidding-US5-TC7-2`
+- **Uncovered anchors** - none; the Feature set's No card hold leaf by `g10.auction-auto-bidding.US5-TC7`

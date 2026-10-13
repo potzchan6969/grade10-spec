@@ -7,163 +7,291 @@
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer(signed in) watches `<lot_1>` with email alerts on.
+- The account's Auction email alerts master is on.
+- The clock is moved to `<moment>`.
+- customer(signed out in this browser) has received Bidding has opened for `<lot_1>`.
+- customer(signed in) watches `<lot_1>`, with alerts as the row gives.
+- The clock is moved past `<lot_1>`'s scheduled start.
+- `<lot_1>` was called off after Bidding opens in 24 hours was sent.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_1>` | A published lot whose bidding has not started |
+| `<opening warning>` | 86400s (24 hours) before the scheduled start |
+| Moment | Letter |
+| `<opening warning>` | Bidding opens in 24 hours |
+| The scheduled start | Bidding has opened |
+| `<lot_1>` | A lot taking bids, watched by this collector with email alerts on |
+| Lot email alerts | Auction email alerts master |
+| Off | On |
+| On | Off |
+| `<lot_1>` | A lot called off before its scheduled start |
 
 ### Route
 
-1. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC1`
-2. Open the letter. `g10.auction-notifications.US1-TC2`
-3. Click the listing action. `g10.auction-notifications.US1-TC2`
-4. Back in the letter, click Manage alerts. `g10.auction-notifications.US1-TC2`
-5. Complete sign-in from the offer. `g10.auction-notifications.US1-TC2`
-6. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC3`
-7. Read the collector's My Auctions. `g10.auction-notifications.US1-TC3`
-8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US1-TC4`
+1. Read the mail sent to the collector's registered email.
+   - Exactly one copy of the row's letter, about `<lot_1>`. g10.auction-notifications.US1-TC1
+   - It goes to the account's registered email. g10.auction-notifications.US1-TC1
+2. Open the letter.
+   - subject, heading, lot block and footer name `<lot_1>`. g10.auction-notifications.US1-TC2
+   - the footer says email alerts are on for this auction. g10.auction-notifications.US1-TC2
+3. Click the listing action.
+   - `<lot_1 url>` opens; the link carries `utm_source=email` and `utm_medium=auction_notification`. g10.auction-notifications.US1-TC2
+4. Back in the letter, click Manage alerts.
+   - sign-in is offered first; no alert is changed. g10.auction-notifications.US1-TC2
+5. Complete sign-in from the offer.
+   - My Auctions opens; `<lot_1>` is still watched, alerts on. g10.auction-notifications.US1-TC2
+6. Read the mail sent to the collector's registered email.
+   - neither opening letter was sent for `<lot_1>`. g10.auction-notifications.US1-TC3
+7. Read the collector's My Auctions.
+   - `<lot_1>` is still watched. g10.auction-notifications.US1-TC3
+8. Read the mail sent to the collector's registered email.
+   - Bidding has opened was not sent for `<lot_1>`. g10.auction-notifications.US1-TC4
 
 ## Walk 2: Collector returns before a lot closes
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer A watches `<lot_2>`, email alerts off for `<lot_2>`, master on.
+- customer A watches `<lot_2>`, email alerts on for `<lot_2>`, Auction email alerts master off.
+- customer A watches or bid on `<lot_3>`, email alerts on.
+- `<lot_3>` is in extended bidding, its moved close more than an hour away.
+- customer(signed in) relates to `<lot_2>` as the row gives, email alerts on.
+- The clock is moved to `<closing warning>`.
+- customer A watches `<lot_3>` with email alerts on and has received Bidding closes in 24 hours.
+- customer B(enrolled to bid) is ready to bid on `<lot_3>`.
+- customer watches `<lot_2>` with email alerts on.
+- The clock is moved to 3600s (1 hour) before the scheduled close.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_2>` | A lot taking bids, scheduled to close more than 24 hours away |
+| `<lot_3>` | A lot in extended bidding |
+| `<lot_2>` | A lot taking bids, not in extended bidding |
+| `<closing warning>` | 86400s (24 hours) before the scheduled close |
+| Relationship | Letters |
+| Watch only | One Bidding closes in 24 hours |
+| Bid, not watched before | One Bidding closes in 24 hours |
+| Watched, then bid | One Bidding closes in 24 hours |
+| Bid, then unwatched, alerts still on | One Bidding closes in 24 hours |
+| `<lot_3>` | A lot taking bids, inside its last minutes before the scheduled close |
+| `<late bid>` | The next valid bid, placed inside the extension window |
 
 ### Route
 
-1. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC5`
-2. Move the clock to 3600s (1 hour) before the scheduled close. `g10.auction-notifications.US2-TC5`
-3. Read the mail sent to customer A. `g10.auction-notifications.US2-TC5`
-4. Move the clock to 86400s (24 hours) before the scheduled close. `g10.auction-notifications.US2-TC6`
-5. Read the mail sent to customer A. `g10.auction-notifications.US2-TC6`
-6. Move the clock to 3600s (1 hour) before the moved close. `g10.auction-notifications.US2-TC9`
-7. Read the mail sent to customer A. `g10.auction-notifications.US2-TC9`
-8. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC11`
-9. As customer B, place `<late bid>`. `g10.auction-notifications.US2-TC12`
-10. Move the clock to 86400s (24 hours) before the moved close. `g10.auction-notifications.US2-TC12`
-11. Read the mail sent to customer A. `g10.auction-notifications.US2-TC12`
-12. Read the mail sent to the collector's registered email. `g10.auction-notifications.US2-TC13`
+1. Move the clock to 86400s (24 hours) before the scheduled close.
+2. Move the clock to 3600s (1 hour) before the scheduled close.
+3. Read the mail sent to customer A.
+   - No Bidding closes in 24 hours letter for `<lot_2>`. g10.auction-notifications.US2-TC5
+   - No closing reminder at the one-hour mark. g10.auction-notifications.US2-TC5
+4. Move the clock to 86400s (24 hours) before the scheduled close.
+5. Read the mail sent to customer A.
+   - No Bidding closes in 24 hours letter for `<lot_2>`. g10.auction-notifications.US2-TC6
+6. Move the clock to 3600s (1 hour) before the moved close.
+7. Read the mail sent to customer A.
+   - No closing reminder at the one-hour mark before the moved close. g10.auction-notifications.US2-TC9
+8. Read the mail sent to the collector's registered email.
+   - The row's letters, about `<lot_2>`, and no other copy. g10.auction-notifications.US2-TC11
+9. As customer B, place `<late bid>`.
+10. Move the clock to 86400s (24 hours) before the moved close.
+11. Read the mail sent to customer A.
+   - One Extended bidding has started letter for `<lot_3>`. g10.auction-notifications.US2-TC12
+   - No second Bidding closes in 24 hours letter. g10.auction-notifications.US2-TC12
+12. Read the mail sent to the collector's registered email.
+   - No closing reminder was sent for `<lot_2>` at the one-hour mark. g10.auction-notifications.US2-TC13
 
 ## Walk 3: Collector raises after being outbid
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer A leads `<lot_4>` with email alerts on, maximum equal to the current bid.
+- customer B(enrolled to bid) uses a separate session.
+- customer A leads `<lot_4>` with email alerts on and a maximum above `<customer B bid>`.
+- customer A leads `<lot_4>`, with email alerts off for `<lot_4>`.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_4>` | A lot taking bids, led by customer A |
+| `<customer B bid>` | The next valid bid on `<lot_4>` |
+| `<customer B bid>` | The next valid bid on `<lot_4>`, below customer A's maximum |
 
 ### Route
 
-1. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC1`
-2. Read the mail sent to customer A. `g10.auction-notifications.US3-TC1`
-3. Read the mail sent to customer B. `g10.auction-notifications.US3-TC1`
-4. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC2`
-5. Read the mail sent to customer A. `g10.auction-notifications.US3-TC2`
-6. As customer B, place `<customer B bid>`. `g10.auction-notifications.US3-TC3`
-7. Read the mail sent to customer A. `g10.auction-notifications.US3-TC3`
-8. Open customer A's My Auctions. `g10.auction-notifications.US3-TC3`
+1. As customer B, place `<customer B bid>`.
+2. Read the mail sent to customer A.
+   - one You have been outbid letter for `<lot_4>`. g10.auction-notifications.US3-TC1
+   - no New bid letter for this bid. g10.auction-notifications.US3-TC1
+3. Read the mail sent to customer B.
+   - no letter about customer B's own bid. g10.auction-notifications.US3-TC1
+4. As customer B, place `<customer B bid>`.
+   - customer A still leads `<lot_4>`. g10.auction-notifications.US3-TC2
+5. Read the mail sent to customer A.
+   - No You have been outbid letter was sent to customer A. g10.auction-notifications.US3-TC2
+6. As customer B, place `<customer B bid>`.
+7. Read the mail sent to customer A.
+   - no letter was sent for `<lot_4>`. g10.auction-notifications.US3-TC3
+8. Open customer A's My Auctions.
+   - `<lot_4>` reads Outbid; the bid stands. g10.auction-notifications.US3-TC3
 
 ## Walk 4: Collector hears a new bid on a lot they bid on
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer A bid on `<lot_5>` earlier, was outbid and told so, email alerts on.
+- customer B leads `<lot_5>`.
+- customer D watches `<lot_5>` without bidding, email alerts on.
+- customer C(enrolled to bid) uses a separate session.
+- New-bid sending is held until the steps below finish.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_5>` | A lot taking bids, with bids from customer A and customer B |
+| `<customer C bid>` | The next valid bid on `<lot_5>`, above customer B's maximum |
+| `<lot_5>` | A lot taking bids, with an earlier bid from customer A |
+| `<bids>` | Three accepted bids from customers B and C, each the next valid bid |
 
 ### Route
 
-1. As customer C, place `<customer C bid>`. `g10.auction-notifications.US4-TC1`
-2. Read the mail sent to customers A, B, C and D. `g10.auction-notifications.US4-TC1`
-3. Place `<bids>` in turn. `g10.auction-notifications.US4-TC2`
-4. Release sending. `g10.auction-notifications.US4-TC2`
-5. Read the mail sent to customer A. `g10.auction-notifications.US4-TC2`
+1. As customer C, place `<customer C bid>`.
+2. Read the mail sent to customers A, B, C and D.
+   - customer A: one New bid letter naming `<customer C bid>`. g10.auction-notifications.US4-TC1
+   - customer B: You have been outbid only. g10.auction-notifications.US4-TC1
+   - customer C: no letter about their own bid. g10.auction-notifications.US4-TC1
+   - customer D: no New bid letter. g10.auction-notifications.US4-TC1
+3. Place `<bids>` in turn.
+4. Release sending.
+5. Read the mail sent to customer A.
+   - One New bid letter for `<lot_5>`. g10.auction-notifications.US4-TC2
+   - It names the leading bid after the last of `<bids>`. g10.auction-notifications.US4-TC2
 
 ## Walk 5: Operator looks up what a collector was sent
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_1>`.
+- customer B was sent Bidding has opened for `<lot_1>`.
+- admin(auction operator) is on `<grade10 auction send log url>`.
+- customer C was never sent auction mail.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_1>` | A lot customer A and customer B watch |
+| `<customer A email>` | customer A's registered email |
+| `<customer C email>` | customer C's registered email |
 
 ### Route
 
-1. Filter by `<customer A email>`. `g10.auction-notifications.US5-TC1`
-2. Read each row. `g10.auction-notifications.US5-TC1`
-3. Filter by `<customer C email>`. `g10.auction-notifications.US5-TC2`
+1. Filter by `<customer A email>`.
+   - two rows, both customer A's; none of customer B's. g10.auction-notifications.US5-TC1
+2. Read each row.
+   - each row shows message type, recipient email, `<lot_1>` and Sent At. g10.auction-notifications.US5-TC1
+   - no row shows or opens the letter body. g10.auction-notifications.US5-TC1
+3. Filter by `<customer C email>`.
+   - No rows show; the log says nothing was sent. g10.auction-notifications.US5-TC2
 
 ## Walk 6: Collector who lost hears the lot closed
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer A bid on `<lot_6>`, email alerts on, and does not lead.
+- customer B leads `<lot_6>`.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_6>` to close.
+- customer A watched `<lot_6>`, then bid on it, email alerts on, and does not lead.
+- customer B watches `<lot_6>`, email alerts on, and leads it.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_6>` | A lot taking bids, with bids from customer A and customer B, about to close |
+| `<customer A bid>` | customer A's highest bid on `<lot_6>` |
+| `<winning bid>` | customer B's winning bid at the close |
+| `<lot_6>` | A lot taking bids, watched and bid on by customer A, led by customer B, about to close |
+| `<lot_6>` | A lot taking bids, watched and led by customer B, about to close |
 
 ### Route
 
-1. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC1`
-2. Read the mail sent to customer A. `g10.auction-notifications.US6-TC1`
-3. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC2`
-4. Read the mail sent to customer A. `g10.auction-notifications.US6-TC2`
-5. Let `<lot_6>` close with customer B winning. `g10.auction-notifications.US6-TC3`
-6. Read the mail sent to customer B. `g10.auction-notifications.US6-TC3`
+1. Let `<lot_6>` close with customer B winning.
+   - One You did not win letter for `<lot_6>`. g10.auction-notifications.US6-TC1
+2. Read the mail sent to customer A.
+   - It names Winning bid as `<winning bid>` and Their bid as `<customer A bid>`. g10.auction-notifications.US6-TC1
+3. Let `<lot_6>` close with customer B winning.
+   - Exactly one close letter: You did not win. g10.auction-notifications.US6-TC2
+4. Read the mail sent to customer A.
+   - No Lot watched, sold letter. g10.auction-notifications.US6-TC2
+5. Let `<lot_6>` close with customer B winning.
+   - No You did not win, Lot watched, sold or Lot watched, ended letter. g10.auction-notifications.US6-TC3
+6. Read the mail sent to customer B.
+   - Only the auction-won order letter arrives. g10.auction-notifications.US6-TC3
 
 ## Walk 7: Watcher hears a sold lot ended
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer D watches `<lot_7>`, email alerts on, and never bid on it.
+- customer B leads `<lot_7>`.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_7>` to close.
+- customer D watches `<lot_7>`, never bid on it, with alerts as the row gives.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_7>` | A lot taking bids, led by customer B, about to close |
+| `<winning bid>` | customer B's winning bid at the close |
+| Off | On |
+| On | Off |
+| Field | Value |
 
 ### Route
 
-1. Let `<lot_7>` close with customer B winning. `g10.auction-notifications.US7-TC1`
-2. Read the mail sent to customer D. `g10.auction-notifications.US7-TC1`
-3. Let `<lot_7>` close with customer B winning. `g10.auction-notifications.US7-TC2`
-4. Read the mail sent to customer D. `g10.auction-notifications.US7-TC2`
+1. Let `<lot_7>` close with customer B winning.
+   - One Lot watched, sold letter for `<lot_7>`. g10.auction-notifications.US7-TC1
+2. Read the mail sent to customer D.
+   - It names Sold for as `<winning bid>`. g10.auction-notifications.US7-TC1
+3. Let `<lot_7>` close with customer B winning.
+4. Read the mail sent to customer D.
+   - No Lot watched, sold letter was sent. g10.auction-notifications.US7-TC2
 
 ## Walk 8: Collector hears a no-bids close as ended only
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- customer D watches `<lot_8>`, email alerts on, and never bid on it.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_8>` to close.
+- customer D and customer E watch `<lot_8>`, email alerts on, and never bid on it.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_8>` | A lot taking bids with no bids, about to close |
 
 ### Route
 
-1. Let `<lot_8>` close with no bids. `g10.auction-notifications.US8-TC1`
-2. Read the mail sent to customer D. `g10.auction-notifications.US8-TC1`
-3. Let `<lot_8>` close with no bids. `g10.auction-notifications.US8-TC2`
-4. Read every letter sent for `<lot_8>`. `g10.auction-notifications.US8-TC2`
+1. Let `<lot_8>` close with no bids.
+2. Read the mail sent to customer D.
+   - One Lot watched, ended letter for `<lot_8>`. g10.auction-notifications.US8-TC1
+   - Subject, preheader and body say the lot ended. g10.auction-notifications.US8-TC1
+   - None says unsold, did not sell or no sale. g10.auction-notifications.US8-TC1
+   - No Sold for, Winning bid or Highest bid shows. g10.auction-notifications.US8-TC1
+3. Let `<lot_8>` close with no bids.
+4. Read every letter sent for `<lot_8>`.
+   - Only Lot watched, ended letters, one each to customer D and customer E. g10.auction-notifications.US8-TC2
+   - No You did not win letter. g10.auction-notifications.US8-TC2
+   - No Lot watched, sold letter. g10.auction-notifications.US8-TC2
 
-## g10.auction-notifications.US1: Collector hears a watched lot is opening
-
-**As a** collector,
-**I want** to be emailed as a watched lot opens,
-**so that** I can come back and bid without sitting on the page.
-
-`<!-- trace:case id=g10.auction-notifications.TC-b0t rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->`
 ### g10.auction-notifications.US1-TC1: Watcher is mailed 24 hours before and at the opening
 
 Runs once per row of **Test data**.

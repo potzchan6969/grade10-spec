@@ -47,9 +47,15 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 ### Walks
 
 - **Walk shape** — `## Walk <n>: <title>`, followed by `**Starting state:**`, optional `**Shared test data:**`, and `### Route`
-- **Route checks** — use a `-` bullet for a normal validation and put the full case heading reference at the end: `g10.auction-bidder-suspension.US1-TC1`
-- **Route branches** — use `a.` and `b.` for actual alternative conditions, with the expected result and case reference on the same line; do not use a branch to create a new observation
-- **Case references** — use the full human-facing case heading id, such as `g10.auction-bidder-suspension.US1-TC1`, in a walk; the full case definition remains in its owning suite
+- **Concrete starting state** — name the actor, the surface or URL, and the seeded state the tester needs; never write only `Reset the fixture to each case's Pre-conditions` or another instruction to look elsewhere
+- **Bound test data** — put the values or the exact fixture descriptions the route uses in the walk; never write only `Use each case's Test data` or `Type the query from Test data`
+- **Executable waiting point** — when a route waits for a state change, the starting state names the surface where the tester waits; if the spec does not name that surface, mark the gap with `❓` and leave the source step unchanged
+- **Independent short route** — group cases when they share the actor or session, surface, and one continuous route; use actual branches or data rows for fixture differences that can be prepared together, and split when a case needs a different state, setup recipe or page path
+- **Practical walk size** — a coherent walk carries at least 2 and normally no more than about 25 cases; use fewer only when the suite has no adjacent compatible route, and split before setup or route length makes the walk expensive to run
+- **Numbered route steps** — use a numbered item for each action the tester performs or reads; keep the action separate from the result it produces
+- **Route observations** — nest `-` bullets under the numbered step where the tester records an existing case's observation; end every observation with that case's full human-facing heading id, such as `g10.auction-bidder-suspension.US1-TC1`
+- **Route branches** — use `a.` and `b.` under the preceding numbered step only for actual alternative routes; each branch carries its own nested observations and case references, and a branch never creates a new observation
+- **Case references** — use the full human-facing case heading id in a walk; the full case definition remains in its owning suite
 - **No walk description** — a `*-tcs.md` walk carries setup, data and route only; generic explanation belongs in this file or its template
 - **Complete case results** — the case definition remains the complete record of its Expected Results. A walk may repeat the result needed at that route point so a human knows what to record, but may not add or remove an assertion
 - **Shared setup** — shared walk data saves human tester effort; it never makes a case depend on another case's result
@@ -193,6 +199,8 @@ Lines scoped narrower than the store, one `###` per scope, by its path (`grade10
 ### grade10-site/auction
 
 - 2026-09-25, grade10-site/auction/domain-tcs.md: Two bidders use separate sessions. A maximum is entered in the custom maximum on the bid panel.
+- 2026-10-12, grade10-site/auction: For numeric test data, choose a representative value different from the linked scenario's example when the rule accepts a range or equivalence partition. Keep the scenario value when it is a boundary, tier threshold, equality or comparison value, computed fixture, or the specification gives no valid alternate range; bind any derived expected value to the row or formula.
+- 2026-10-13, grade10-site/auction: Every minor-unit test-data fixture uses a compact major-price reading: replaceable values use `HKD280 (range: 1000–79999 minor units)`, source-defined open bounds use `HKD70 (range: >0 minor units)`, and boundary, equality, derived, configured or otherwise fixed values use `HKD10 (fixed ...)`. Omit trailing `.00` for whole major amounts; keep non-zero fractional digits. These readings guide fixture selection and do not assert the product's display text.
 
 ## Refused
 

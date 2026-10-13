@@ -3,65 +3,163 @@
 **Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Resolve a deadline suspension without restoring bidding
+## Walk 1: Collector who misses a deadline loses their auction standing
 
 **Starting state:**
 
-- `customer` is signed in with one pending auction invoice and two open lots.
+- `customer` has `<invoice_1>` pending, unpaid and due shortly.
+- `customer` is signed in.
+- `<lot_1>` is open and `customer` holds `<maximum_1>` on it.
+- `<lot_2>` is open and `customer` has no bid on it.
+- `customer` is suspended and holds one outstanding invoice.
+- The invoice is payable.
+- `customer` is suspended from auctions.
+- `<expired_invoice_1>` belongs to `customer` and its payment deadline has passed.
+- `admin` holds `auction:moderate` and can reissue the invoice.
+- `customer` is suspended from auctions and signed out.
+- `<store_item_1>` is available to buy.
+- `<loyalty_action_1>` is available to the customer.
+- `<account_record_1>` belongs to `customer`.
+- `customer` won `<won_lot_1>` before the suspension.
+- `customer` is suspended because another auction invoice expired.
 
 **Shared test data:**
 
-| Field | Value |
+| Item | Value |
 | --- | --- |
-| `<invoice_1>` | Pending invoice whose payment deadline is about to pass |
-| `<lot_1>` | Open lot where `customer` holds a standing maximum |
-| `<lot_2>` | Open lot where `customer` has no bid |
-| `<won_lot_1>` | Lot `customer` won before a different invoice caused the suspension |
+| Item | `<invoice_1>`: Pending invoice whose deadline passes unpaid; `<invoice_2>`: None; `<lot_1>`: Open lot led by `customer`; `<maximum_1>`: Standing maximum held by `customer`; `<lot_2>`: Open lot with no bid from `customer`; Account record: The suspension names `<invoice_1>` and its reason |
+| Item | `<invoice_1>`: Pending invoice whose deadline passes unpaid; `<invoice_2>`: Paid invoice; `<lot_1>`: Open lot led by `customer`; `<maximum_1>`: Standing maximum held by `customer`; `<lot_2>`: Open lot with no bid from `customer`; Account record: The suspension names `<invoice_1>`; `<invoice_2>` remains paid |
+| Payable invoice that belongs to the suspended customer | Open lot where the customer has no standing maximum |
+| Item | `<expired_invoice_1>`: Expired auction invoice belonging to the suspended customer; `<reissued_invoice_1>`: The same invoice after its payment deadline is reissued; `<open_lot_1>`: Open lot on which the suspended customer has no standing maximum |
+| Item | `<store_item_1>`: Available store item; `<loyalty_action_1>`: Earn or redeem action available to the customer; `<account_record_1>`: Customer's auction suspension or invoice record |
+| Item | `<won_lot_1>`: Lot won by `customer` before a different auction invoice caused the suspension |
 
 ### Route
 
-1. Wait for `<invoice_1>`'s payment deadline to pass, then read the notice and account record.
-   - The account is suspended, the new auction actions are refused, and the notice explains what is owed and how to resolve it. `g10.auction-bidder-suspension.US1-TC1`
-2. Pay `<invoice_1>` in full.
-   - The invoice becomes `paid`, but bidding remains refused and the suspension remains visible. `g10.auction-bidder-suspension.US1-TC2`
-3. As `admin`, reissue an expired invoice; as `customer`, pay the reissued invoice and try to bid.
-   - The reissued invoice can be paid, but bidding remains refused and the suspension remains visible. `g10.auction-bidder-suspension.US1-TC7`
-4. As `customer`, open <g10 store url>, <g10 loyalty url> and <g10 auction account record url>, then try to bid.
-   - Sign-in, store, loyalty and account-record access remain available; only the auction action is refused. `g10.auction-bidder-suspension.US1-TC8`
-5. Open `<won_lot_1>` and its auction order.
-   - The won lot remains won and its invoice remains payable. `g10.auction-bidder-suspension.US1-TC4`
+1. Wait for `<invoice_1>`'s payment deadline to pass.
+   - The raise at step 3 is refused. g10.auction-bidder-suspension.US1-TC1
+2. Open <g10 auction url>.
+   - The bid at step 4 is refused. g10.auction-bidder-suspension.US1-TC1
+3. Try to raise `<maximum_1>` on `<lot_1>`.
+   - The collector sees the outstanding amount and how to resolve the suspension. g10.auction-bidder-suspension.US1-TC1
+4. Try to place a bid on `<lot_2>`.
+   - The account record shows the suspension, its reason and `<invoice_1>`. g10.auction-bidder-suspension.US1-TC1
+5. Open <g10 auction account record url>.
+   - The account record matches the row's `Account record` value. g10.auction-bidder-suspension.US1-TC1
+6. Sign in as `customer`.
+7. Open the auction order for `<invoice_1>`.
+8. Pay `<invoice_1>` in full.
+9. Open <g10 auction url>.
+10. Try to commit a maximum on `<lot_4>`.
+11. Open <g10 auction account record url>.
+   - The payment is accepted and the invoice becomes `paid`. g10.auction-bidder-suspension.US1-TC2
+   - The maximum at step 5 is refused. g10.auction-bidder-suspension.US1-TC2
+   - The account record still shows the suspension and its reason. g10.auction-bidder-suspension.US1-TC2
+12. As `admin`, open `<expired_invoice_1>`.
+13. Reissue `<expired_invoice_1>` as `<reissued_invoice_1>` with a new payment deadline.
+14. As `customer`, open `<reissued_invoice_1>` and pay it in full.
+15. Open <g10 auction url>.
+16. Try to commit a maximum on `<open_lot_1>`.
+17. Open <g10 auction account record url>.
+   - The reissued invoice is payable and the payment is accepted. g10.auction-bidder-suspension.US1-TC7
+   - The maximum at step 5 is refused. g10.auction-bidder-suspension.US1-TC7
+   - The account record still shows the suspension and its reason after the invoice is paid. g10.auction-bidder-suspension.US1-TC7
+18. Sign in as `customer`.
+   - Sign-in is accepted. g10.auction-bidder-suspension.US1-TC8
+19. Open <g10 store url>, browse `<store_item_1>` and complete its purchase.
+   - The store item can be browsed and purchased. g10.auction-bidder-suspension.US1-TC8
+20. Open <g10 loyalty url> and complete `<loyalty_action_1>`.
+   - The loyalty action is accepted. g10.auction-bidder-suspension.US1-TC8
+21. Open <g10 auction account record url> and read `<account_record_1>`.
+   - The account record remains readable. g10.auction-bidder-suspension.US1-TC8
+22. Open <g10 auction url> and try to commit a maximum on an open lot.
+   - The maximum at step 5 is refused; the suspension does not block non-auction account access. g10.auction-bidder-suspension.US1-TC8
+23. Open <g10 auction url>.
+24. Open `<won_lot_1>`.
+25. Open its auction order.
+   - `<won_lot_1>` is still won by `customer`. g10.auction-bidder-suspension.US1-TC4
+   - Its invoice remains payable. g10.auction-bidder-suspension.US1-TC4
 
-## Walk 2: Operate the suspension lifecycle
+## Walk 2: Bidder competes on a lot whose leader is suspended
 
 **Starting state:**
 
-- `admin(holds auction:moderate)` can open <g10adm users url>; `customer` is signed in and not suspended.
+- `<lot_3>` is open and led by `customer A` at HKD340 (range: 1000–79999 minor units).
+- `customer A` holds a maximum of HKD560 (range: 1000–79999 minor units) on `<lot_3>`.
+- `customer A` has an auction invoice whose payment deadline is shortly due.
+- `customer B` can bid on `<lot_3>`.
+- `customer A` is suspended.
+- `customer A` holds the highest maximum on `<lot_5>`.
+- `<lot_5>` is about to close.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_5>` to close.
 
 **Shared test data:**
 
-| Field | Value |
+| Item | Value |
 | --- | --- |
-| `<operator_reason>` | A reason visible to operators but not to the collector |
-| `<invoice_3>` | Pending auction invoice whose deadline passes after the operator suspension |
-| `<reopen_lot_1>` | Open lot on which the reinstated customer may commit a maximum |
+| Item | `<lot_3>`: Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units); Event after suspension: No new bid; Expected lot state: `customer A` still leads at the same price and history |
+| Item | `<lot_3>`: Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units); Event after suspension: `customer B` commits a maximum of HKD470 (range: 1000–79999 minor units); Expected lot state: Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
+| Item | `<lot_5>`: Open lot whose highest standing maximum belongs to suspended `customer A` |
 
 ### Route
 
-1. As `admin`, suspend `customer` with `<operator_reason>` and read the collector-facing notice.
-   - The account cannot bid, the operator record keeps the reason, and the collector does not see it. `g10.auction-bidder-suspension.US3-TC1`
-2. Wait for `<invoice_3>`'s payment deadline to pass, then read the account record.
-   - The account remains one suspension with both causes recorded. `g10.auction-bidder-suspension.US3-TC2`
-3. As `admin`, reinstate `customer`; as `customer`, commit a maximum on `<reopen_lot_1>`.
-   - Bidding is accepted and the suspension remains in account history. `g10.auction-bidder-suspension.US3-TC3`
+1. Open `<lot_3>` and note its bid history.
+2. Wait for `customer A`'s payment deadline to pass.
+3. Perform the row's `Event after suspension`.
+4. Reload `<lot_3>`.
+   - `customer A` still leads `<lot_3>` at HKD340 (fixed unchanged value). g10.auction-bidder-suspension.US2-TC1
+   - The leader, price and bid history match the row's `Expected lot state` value. g10.auction-bidder-suspension.US2-TC1
+5. Wait for `<lot_5>` to close.
+6. Sign in as `customer A`.
+7. Open the auction order for `<lot_5>`.
+   - `customer A` wins `<lot_5>`. g10.auction-bidder-suspension.US2-TC3
+   - The auction order has its own invoice and payment deadline. g10.auction-bidder-suspension.US2-TC3
 
-## g10.auction-bidder-suspension.US1: Collector who misses a deadline loses their auction standing
+## Walk 3: Collector suspended by an operator learns they can no longer bid
 
-**As a** collector who let a payment deadline pass,
-**I want** to be told plainly that I can no longer bid, what I still owe, and
-how to resolve it,
-**so that** I understand what I can still do and what it takes to bid again.
+**Starting state:**
 
-<!-- trace:case id=g10.auction-bidder-suspension.TC-7ui rev=2 -->
+- `admin(holds auction:moderate)` can open <g10adm users url>.
+- `customer` is not suspended and is signed in.
+- `customer` is suspended by an operator.
+- `customer` has `<invoice_3>` pending and due shortly.
+- `admin(holds auction:moderate)` has reviewed the suspension.
+- `customer` is suspended and its account record shows the suspension.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| `Payment review: overdue invoice` | The account record shows the reason, who suspended the account and when |
+| `Manual review: policy exception` | The account record shows the reason, who suspended the account and when |
+| Item | `<invoice_3>`: Pending auction invoice whose payment deadline passes after the operator suspension |
+| Item | `<reopen_lot_1>`: Open lot on which the reinstated customer may commit a maximum |
+
+### Route
+
+1. As `admin`, open <g10adm users url>.
+2. Suspend `customer` with `<operator_reason>`.
+3. As `customer`, open the suspension notice.
+4. Open <g10 auction account record url>.
+5. Open <g10 auction url> and try to commit a maximum.
+   - The account record matches the row's `Operator record` value. g10.auction-bidder-suspension.US3-TC1
+   - The notice and collector account record say `customer` cannot bid and how to contact Grade10. g10.auction-bidder-suspension.US3-TC1
+   - Neither collector-facing surface shows `<operator_reason>`. g10.auction-bidder-suspension.US3-TC1
+   - The maximum at step 5 is refused. g10.auction-bidder-suspension.US3-TC1
+6. Wait for `<invoice_3>`'s payment deadline to pass.
+   - The account remains one suspension. g10.auction-bidder-suspension.US3-TC2
+7. Open <g10 auction account record url>.
+   - The account record shows both causes. g10.auction-bidder-suspension.US3-TC2
+8. As `admin`, open <g10adm users url>.
+9. Reinstate `customer`.
+10. As `customer`, open <g10 auction url>.
+11. Commit a maximum on `<reopen_lot_1>`.
+12. Open <g10 auction account record url>.
+   - The operator can reinstate `customer`. g10.auction-bidder-suspension.US3-TC3
+   - Grade10 accepts the maximum at step 4. g10.auction-bidder-suspension.US3-TC3
+   - The account record no longer blocks bidding for the reinstated account. g10.auction-bidder-suspension.US3-TC3
+   - The suspension and its reason remain as history. g10.auction-bidder-suspension.US3-TC3
+
 ### g10.auction-bidder-suspension.US1-TC1: Deadline suspension refuses new auction actions
 
 **Classification:**
@@ -112,6 +210,8 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.auction-bidder-suspension.TC-0fv rev=1 -->
 ### g10.auction-bidder-suspension.US1-TC2: Settling an invoice does not reinstate bidding
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** blocker
@@ -153,6 +253,8 @@ Runs once per row of **Test data**.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-3no rev=1 -->
 ### g10.auction-bidder-suspension.US1-TC7: Reissuing an invoice does not reinstate bidding
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -196,6 +298,8 @@ Runs once per row of **Test data**.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-ixs rev=1 -->
 ### g10.auction-bidder-suspension.US1-TC8: Suspension leaves non-auction account access available
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -241,6 +345,8 @@ Runs once per row of **Test data**.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-kz8 rev=1 -->
 ### g10.auction-bidder-suspension.US1-TC4: A won lot remains payable after suspension
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -407,8 +513,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_3>` is open and led by `customer A` at 30000 HKD minor units.
-* `customer A` holds a maximum of 50000 HKD minor units on `<lot_3>`.
+* `<lot_3>` is open and led by `customer A` at HKD340 (range: 1000–79999 minor units).
+* `customer A` holds a maximum of HKD560 (range: 1000–79999 minor units) on `<lot_3>`.
 * `customer A` has an auction invoice whose payment deadline is shortly due.
 * `customer B` can bid on `<lot_3>`.
 
@@ -416,8 +522,8 @@ Runs once per row of **Test data**.
 
 | `<lot_3>` | Event after suspension | Expected lot state |
 | --- | --- | --- |
-| Open lot led by `customer A` at 30000 HKD minor units | No new bid | `customer A` still leads at the same price and history |
-| Open lot led by `customer A` at 30000 HKD minor units | `customer B` commits a maximum of 40000 HKD minor units | Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
+| Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units) | No new bid | `customer A` still leads at the same price and history |
+| Open lot led by `customer A` at HKD340 (range: 1000–79999 minor units) | `customer B` commits a maximum of HKD470 (range: 1000–79999 minor units) | Auto-bidding records the valid `customer B` bid; `customer A` still leads and suspension adds no history entry |
 
 **Steps:**
 
@@ -428,11 +534,13 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `customer A` still leads `<lot_3>` at 30000 HKD minor units.
+* `customer A` still leads `<lot_3>` at HKD340 (fixed unchanged value).
 * The leader, price and bid history match the row's `Expected lot state` value.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-yp6 rev=1 -->
 ### g10.auction-bidder-suspension.US2-TC3: Standing maximum wins after suspension
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -558,6 +666,8 @@ Runs once per row of **Test data**.
 <!-- trace:case id=g10.auction-bidder-suspension.TC-ao5 rev=1 -->
 ### g10.auction-bidder-suspension.US3-TC2: A missed deadline records a second cause
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** major
@@ -594,6 +704,8 @@ Runs once per row of **Test data**.
 
 <!-- trace:case id=g10.auction-bidder-suspension.TC-l1f rev=1 -->
 ### g10.auction-bidder-suspension.US3-TC3: Operator reinstatement restores bidding
+
+Runs once per row of **Test data**.
 
 **Classification:**
 

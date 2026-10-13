@@ -3,107 +3,343 @@
 **Status:** pending-review · 7/33
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-
-## Walk 1: Reach My Auctions and read bidding rows
-
-**Starting state:**
-
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. No case depends on another case's result.
-
-### Route
-
-1. Click the Watch control → Navigate to `<my auctions url>` → Wait until `<lot_5>`'s bidding starts, then reload `<my auctions url>` → Click `<lot_5>`'s row. `g10.auction-account-record.US1-TC1`
-2. Navigate to `<my auctions url>`. `g10.auction-account-record.US1-TC2`
-3. Navigate to `<my auctions url>` → Click the catalogue offer. `g10.auction-account-record.US1-TC3`
-4. Navigate to `<my auctions url>` → Click retry. `g10.auction-account-record.US1-TC4`
-5. Navigate to `<my auctions url>` → Complete sign-in from the offer. `g10.auction-account-record.US1-TC5`
-6. Navigate to `<my auctions url>` → Find `<lot>`'s row. `g10.auction-account-record.US2-TC1`
-7. As customer B, place `<customer B bid>` → As customer A, reload `<my auctions url>`. `g10.auction-account-record.US2-TC2`
-8. Wait for the next refresh of `<lot_6>`'s row. `g10.auction-account-record.US2-TC3`
-9. Place `<low raise>` → Note `<lot_7>`'s current bid on its page → Navigate to `<my auctions url>` → Find `<lot_7>`'s row. `g10.auction-account-record.US2-TC4`
-10. Navigate to `<my auctions url>` and note the title count → Navigate to `<lot_8 url>` and place `<low bid>` → Navigate to `<my auctions url>` → Open the Active, Upcoming and Ended tabs in turn. `g10.auction-account-record.US2-TC5`
-11. Type `<refused bid>` into the custom maximum on the bid panel → Confirm the bid → Navigate to `<my auctions url>` → Find `<lot_6>`'s row in the Active tab. `g10.auction-account-record.US2-TC6`
-
----
-
-## Walk 2: Follow a won or lost lot
+## Walk 1: Reach My Auctions and read bidding rows — phase 1
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- customer(signed in) is on `<lot_5 url>`.
+- customer(signed in) has bookmarked every lot in `<lot_a>`, `<lot_b>`, `<lot_c>`, `<lot_d>`, `<lot_e>`, and nothing else.
+- customer(signed in, has never watched or bid on a lot).
+- customer(signed in) watches `<lot_1>`.
+- The My Auctions read is mocked to fail once, then succeed.
+- customer(signed out) has watched lots under their account.
+- customer A(signed in) has bid on `<lot>`, in the state its row gives.
+- customer A(signed in) leads `<lot_6>` and is on `<my auctions url>`.
+- customer B(signed in, enrolled to bid) is on `<lot_6 url>` in a separate session.
+- customer A(signed in) has bid on `<lot_6>` and is on `<my auctions url>`.
+- The refresh of `<lot_6>`'s bid and close is mocked to fail.
+- ❓ The spec does not identify the surface where the tester waits for `<lot_6>` to close.
+- customer A(signed in) has bid on `<lot_7>`, in the state its row gives, and is on `<lot_7 url>`.
+- customer A(signed in, enrolled to bid) has neither watched nor bid on `<lot_8>`.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| lot_5 | A published lot whose bidding has not started, scheduled to open inside the test window |
+| Item | Lot: `<lot_a>`; Bookmark: Bid; Close: Open, closes in 3 days |
+| Item | Lot: `<lot_b>`; Bookmark: Bid; Close: Open, closes in 1 day |
+| Item | Lot: `<lot_c>`; Bookmark: Watch only; Close: Open, closes in 2 days |
+| Item | Lot: `<lot_d>`; Bookmark: Watch only; Close: Open, closes in 5 hours |
+| Item | Lot: `<lot_e>`; Bookmark: Watch only; Close: Closed yesterday |
+| lot_1 | An open lot taking bids, watched by this collector |
+| Open, customer A leads | Leading |
+| Open, customer B leads | Outbid, with the next valid bid |
+| lot_6 | An open lot taking bids, led by customer A with no maximum above the current bid |
+| customer B bid | The next valid bid shown on customer B's bid panel |
+| lot_6 | An open lot taking bids, bid on by customer A |
+| Field | Value |
+| lot_7 | An open HKD lot taking bids |
+| low raise | One minor unit below the next valid bid shown on customer A's bid panel |
+| lot_8 | An open HKD lot taking bids |
+| low bid | One minor unit below the next valid bid shown on customer A's bid panel |
 
 ### Route
 
-1. Navigate to `<my auctions url>` → Read `<lot>`'s row. `g10.auction-account-record.US3-TC2`
-2. As customer B, navigate to `<my auctions url>`. `g10.auction-account-record.US3-TC4`
-3. Navigate to `<my auctions url>` → Find `<lot>`'s row. `g10.auction-account-record.US3-TC5`
-4. Read Status on each row. `g10.auction-account-record.US3-TC20`
-5. Navigate to `<my auctions url>` → Select the Ended tab and find `<lot>`'s row. `g10.auction-account-record.US4-TC1`
+1. Click the Watch control.
+2. Navigate to `<my auctions url>`.
+   - `<lot_5>` shows once, Your Standing `--`. g10.auction-account-record.US1-TC1
+3. Wait until `<lot_5>`'s bidding starts, then reload `<my auctions url>`.
+   - `<lot_5>` is still listed. g10.auction-account-record.US1-TC1
+4. Click `<lot_5>`'s row.
+   - `<lot_5 url>` opens, taking bids. g10.auction-account-record.US1-TC1
+5. Navigate to `<my auctions url>`.
+   - The title count reads 5. g10.auction-account-record.US1-TC2
+   - Rows read, top down: `<lot_b>`, `<lot_a>`, `<lot_d>`, `<lot_c>`, `<lot_e>`. g10.auction-account-record.US1-TC2
+   - Each lot shows once. g10.auction-account-record.US1-TC2
+6. Navigate to `<my auctions url>`.
+   - the page says nothing is bookmarked; no error shows. g10.auction-account-record.US1-TC3
+7. Click the catalogue offer.
+   - the auction catalogue opens. g10.auction-account-record.US1-TC3
+8. Navigate to `<my auctions url>`.
+   - the page says the read failed; it does not read as empty. g10.auction-account-record.US1-TC4
+   - no catalogue offer shows. g10.auction-account-record.US1-TC4
+9. Click retry.
+   - `<lot_1>` is listed. g10.auction-account-record.US1-TC4
+10. Navigate to `<my auctions url>`.
+   - sign-in is offered; no bookmarked lot shows. g10.auction-account-record.US1-TC5
+11. Complete sign-in from the offer.
+   - the collector returns to My Auctions, showing their own lots. g10.auction-account-record.US1-TC5
+12. Navigate to `<my auctions url>`.
+13. Find `<lot>`'s row.
+   - Your Standing reads the row's value. g10.auction-account-record.US2-TC1
+   - Current bid reads `<lot>`'s current bid. g10.auction-account-record.US2-TC1
+   - For Outbid, the next valid bid equals current bid plus its increment. g10.auction-account-record.US2-TC1
+14. As customer B, place `<customer B bid>`.
+   - `<lot_6>` reads Outbid, with the next valid bid. g10.auction-account-record.US2-TC2
+15. As customer A, reload `<my auctions url>`.
+   - Current bid reads `<customer B bid>`. g10.auction-account-record.US2-TC2
+16. Wait for the next refresh of `<lot_6>`'s row.
+   - `<lot_6>`'s current bid and close are shown as not current. g10.auction-account-record.US2-TC3
+17. Place `<low raise>`.
+   - shows the refusal on the bid panel. g10.auction-account-record.US2-TC4
+18. Note `<lot_7>`'s current bid on its page.
+19. Navigate to `<my auctions url>`.
+20. Find `<lot_7>`'s row.
+   - Your Standing reads the row's value. g10.auction-account-record.US2-TC4
+   - Current bid reads the bid noted at step 2, never `<low raise>`. g10.auction-account-record.US2-TC4
+21. Navigate to `<my auctions url>` and note the title count.
+22. Navigate to `<lot_8 url>` and place `<low bid>`.
+   - shows the refusal on the bid panel. g10.auction-account-record.US2-TC5
+23. Navigate to `<my auctions url>`.
+24. Open the Active, Upcoming and Ended tabs in turn.
+   - No tab holds a row for `<lot_8>`. g10.auction-account-record.US2-TC5
+   - The title count equals the count noted at step 1. g10.auction-account-record.US2-TC5
+25. Type `<refused bid>` into the custom maximum on the bid panel.
 
----
+## Walk 2: Reach My Auctions and read bidding rows and adjacent checks
+
+**Starting state:**
+
+- customer A(signed in, enrolled to bid) bid on `<lot_6>` and `<lot_7>`, and customer B has since outbid them on `<lot_6>`.
+- customer A is on `<lot_6 url>`.
+- customer(signed in) won `<lot>`, whose proof was under check.
+- An operator then took the row's action.
+- customer A won `<lot_12>`, which reads Payment Verifying.
+- customer B(signed in) uses a separate session.
+- customer(signed in) won `<lot>`, whose order is in the row's state.
+- customer(winner) is on My Auctions with both rows from `<won_preparing_shipment>`, `<won_shipped>`.
+- customer A(signed in) bid on `<lot>`, which ended as its row gives.
+
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| lot_6 | An open HKD lot led by customer B, closing after `<lot_7>` |
+| lot_7 | An open HKD lot customer A bid on, closing before `<lot_6>` |
+| current bid | HK$5,460 (range: 400000–799999 minor units) |
+| increment | HK$80 (fixed tier increment), the HK$4,000 tier |
+| next minimum | `<current bid>` plus `<increment>`, HK$5,540 (fixed derived value) |
+| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` |
+| Returned the proof | Won, Pending Payment |
+| Confirmed the payment | Won, Processing |
+| lot_12 | customer A's won lot, proof under check |
+| Delivery not yet set up, inside the setup window | Won, Awaiting Setup |
+| Set up, invoice not yet issued | Won, Preparing Invoice |
+| Invoice issued, unpaid, inside the payment window | Won, Pending Payment |
+| Payment proof waiting for an operator | Won, Payment Verifying |
+| Collected in parts, balance outstanding | Won, Partially Paid |
+| Row | State |
+| `<won_preparing_shipment>` | A won listing with invoice `paid` and fulfilment `unfulfilled` |
+| `<won_shipped>` | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation |
+| Closed with customer B winning | Didn't win |
+| Called off by Grade10 | Didn't win |
+
+### Route
+
+1. Confirm the bid.
+   - the bid form says Minimum bid is `<next minimum>`. g10.auction-account-record.US2-TC6
+2. Navigate to `<my auctions url>`.
+3. Find `<lot_6>`'s row in the Active tab.
+   - Your Standing reads Outbid, with the next valid bid `<next minimum>`. g10.auction-account-record.US2-TC6
+   - Current bid reads `<current bid>`. g10.auction-account-record.US2-TC6
+   - `<lot_6>` still sits below `<lot_7>`, as before step 1. g10.auction-account-record.US2-TC6
+   - No row reads Bid submitted or Bid not accepted. g10.auction-account-record.US2-TC6
+4. Navigate to `<my auctions url>`.
+5. Read `<lot>`'s row.
+   - Your Standing reads the row's value. g10.auction-account-record.US3-TC2
+6. As customer B, navigate to `<my auctions url>`.
+   - No `<lot_12>` row shows. g10.auction-account-record.US3-TC4
+7. Navigate to `<my auctions url>`.
+   - Your Standing reads the row's value. g10.auction-account-record.US3-TC5
+8. Find `<lot>`'s row.
+   - The row offers View order. g10.auction-account-record.US3-TC5
+9. Read Status on each row.
+   - `<won_preparing_shipment>` reads Preparing Shipment with the `default` status badge. g10.auction-account-record.US3-TC20
+   - `<won_shipped>` reads Shipped with the `default` status badge. g10.auction-account-record.US3-TC20
+10. Navigate to `<my auctions url>`.
+11. Select the Ended tab and find `<lot>`'s row.
+   - Your Standing reads the row's value. g10.auction-account-record.US4-TC1
+   - The row says the card was not charged. g10.auction-account-record.US4-TC1
+   - No amount is shown as charged. g10.auction-account-record.US4-TC1
 
 ## Walk 3: Watch and bid from auction surfaces
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- customer(signed in, not watching `<lot_1>`, no bid on `<lot_1>`) is on `<lot_1 url>`.
+- customer(signed in, not watching `<lot_1>`, no bid on `<lot_1>`) is on `<grade10 auction catalogue url>`.
+- customer A(signed in) watches `<lot_1>`.
+- customer B(signed in, never watched or bid on `<lot_1>`) uses a separate session.
+- customer(signed in, enrolled to bid, not watching `<lot_2>`, no bid on `<lot_2>`) is on `<lot_2 url>`.
+- customer(signed in, enrolled to bid, watching `<lot_3>`, no bid on `<lot_3>`) is on `<lot_3 url>`.
+- The collector also watches `<lot_4>` without bidding.
+- customer(signed in, enrolled to bid, not watching `<lot_5>`, no bid on `<lot_5>`) is on `<lot_5 url>`.
+- The account is in the row's state.
+- The title count on `<my auctions url>` is noted.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| lot_1 | An open lot taking bids, not watched and not bid on by this collector |
+| lot_1 | An open lot taking bids, watched by customer A only |
+| lot_2 | An open lot taking bids, with no bid from this collector and no other bidder |
+| first bid | The next valid bid shown on the bid panel |
+| lot_3 | An open lot taking bids, watched by this collector, closing after `<lot_4>` |
+| lot_4 | An open lot taking bids, watch-only for this collector, closing before `<lot_3>` |
+| first bid | The next valid bid shown on `<lot_3>`'s bid panel |
+| Item | Account state: Bidding allowed; `<typed bid>`: HK$140, below `<opening price>`; The bid form says: Minimum bid is `<opening price>` |
+| Item | Account state: Bidding suspended by an operator; `<typed bid>`: HK$280, `<opening price>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
+| Item | Account state: Field; `<typed bid>`: Value |
+| Item | Account state: lot_5; `<typed bid>`: An open HKD lot with no bid from anyone |
+| Item | Account state: opening price; `<typed bid>`: HK$280 (range: 1000–79999 minor units), the starting price |
 
 ### Route
 
-1. Click the Watch control → Click View My Auctions in the toast → Find the `<lot_1>` row. `g10.auction-account-record.US5-TC1`
-2. Click the watch control on `<lot_1>`'s card, bottom right of the image → Navigate to `<my auctions url>`. `g10.auction-account-record.US5-TC2`
-3. As customer B, navigate to `<my auctions url>` → As customer B, navigate to `<lot_1 url>` → As customer B, open the page source of `<lot_1 url>`. `g10.auction-account-record.US5-TC3`
-4. Place `<first bid>` from the bid panel → Reload `<lot_2 url>` → Navigate to `<my auctions url>`. `g10.auction-account-record.US6-TC1`
-5. Place `<first bid>` from the bid panel → Navigate to `<my auctions url>`. `g10.auction-account-record.US6-TC2`
-6. Type `<typed bid>` into the custom maximum on the bid panel → Confirm the bid → Reload `<lot_5 url>` → Navigate to `<my auctions url>`. `g10.auction-account-record.US6-TC3`
+1. Click the Watch control.
+   - a toast says email alerts are on, with View My Auctions. g10.auction-account-record.US5-TC1
+2. Click View My Auctions in the toast.
+   - My Auctions opens; the title count includes `<lot_1>`. g10.auction-account-record.US5-TC1
+3. Find the `<lot_1>` row.
+   - `<lot_1>` shows once, with key image, title and close. g10.auction-account-record.US5-TC1
+   - Your Standing reads `--`. g10.auction-account-record.US5-TC1
+   - Email alerts switch is on; Unwatch is offered. g10.auction-account-record.US5-TC1
+4. Click the watch control on `<lot_1>`'s card, bottom right of the image.
+   - the card's control reads Watching. g10.auction-account-record.US5-TC2
+5. Navigate to `<my auctions url>`.
+   - `<lot_1>` shows once, Your Standing `--`, email alerts on. g10.auction-account-record.US5-TC2
+6. As customer B, navigate to `<my auctions url>`.
+   - `<lot_1>` is not listed. g10.auction-account-record.US5-TC3
+7. As customer B, navigate to `<lot_1 url>`.
+   - the control reads Watch; no watch count shows. g10.auction-account-record.US5-TC3
+8. As customer B, open the page source of `<lot_1 url>`.
+   - no watch count and no watcher's identity appear. g10.auction-account-record.US5-TC3
+9. Place `<first bid>` from the bid panel.
+   - one toast says email alerts are on. g10.auction-account-record.US6-TC1
+10. Reload `<lot_2 url>`.
+   - no alerts toast shows. g10.auction-account-record.US6-TC1
+11. Navigate to `<my auctions url>`.
+   - `<lot_2>` shows once, Your Standing Leading. g10.auction-account-record.US6-TC1
+   - Email alerts switch is on; no Unwatch is offered. g10.auction-account-record.US6-TC1
+12. Place `<first bid>` from the bid panel.
+   - `<lot_3>` shows once, Your Standing Leading, no Unwatch. g10.auction-account-record.US6-TC2
+13. Navigate to `<my auctions url>`.
+   - `<lot_3>` sits above `<lot_4>`: bid rows before watch-only. g10.auction-account-record.US6-TC2
+14. Type `<typed bid>` into the custom maximum on the bid panel.
+15. Confirm the bid.
+   - the bid form says the row's words, and no alerts toast shows. g10.auction-account-record.US6-TC3
+16. Reload `<lot_5 url>`.
+   - the watch control offers Watch, not locked to watching. g10.auction-account-record.US6-TC3
+17. Navigate to `<my auctions url>`.
+   - `<lot_5>` is not listed in any tab. g10.auction-account-record.US6-TC3
+   - the title count is the one noted. g10.auction-account-record.US6-TC3
 
----
-
-## Walk 4: Filter rows and read close results
+## Walk 4: Filter rows and read close results — phase 1
 
 **Starting state:**
 
-- The actor and fixture state for each case is established from that case's own pre-conditions. Reset between cases when the state differs.
+- customer(signed in) watches `<listing_1>`, `<listing_2>` and `<listing_3>`.
+- customer(signed in) watches `<listing_1>`, a listing whose bidding has not opened.
+- customer(signed in) watches only open listings.
+- customer(signed in) watches `<listing_3>`, a published listing that has closed.
+- customer(winner) has a Won row whose auction order is available.
+- customer owns a Won lot whose order is Partially Paid.
+- customer A(signed in) bid on `<lot_9>`, which closed with customer B winning.
+- customer(signed in) has both Won rows from `<lot_10>`, `<lot_11>`.
+- customer(signed in) won `<lot>`, in the row's state.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| listing_1 | A published listing whose bidding has not opened |
+| listing_2 | A published listing whose bidding is open |
+| listing_3 | A published listing that has closed |
+| lot_9 | A closed lot won by customer B |
+| Row | State |
+| `<lot_10>` | A won lot whose order reads Payment Overdue |
+| `<lot_11>` | A won lot whose order reads Awaiting Setup inside the setup window |
+| Item | Order state: Setup deadline (48 hours from close) passed, setup incomplete; Your Standing: Won, Setup Overdue; Not: Awaiting Setup |
+| Item | Order state: Payment deadline (7 days from invoice send) passed, unpaid; Your Standing: Won, Payment Overdue; Not: Pending Payment |
 
 ### Route
 
-1. Navigate to `<grade10 my auctions url>` → Open the Upcoming tab → Open the Ended tab. `g10.auction-account-record.US7-TC1`
-2. Navigate to `<grade10 my auctions url>` → Wait until `<listing_1>` bidding opens → Reload `<grade10 my auctions url>`. `g10.auction-account-record.US7-TC2`
-3. Navigate to `<grade10 my auctions url>` → Open the Upcoming tab. `g10.auction-account-record.US7-TC3`
-4. Navigate to `<grade10 my auctions url>` → Open the Ended tab → Click the Email alerts control on `<listing_3>`. `g10.auction-account-record.US7-TC4`
-5. Navigate to `<grade10 my auctions url>` → Select the order entry point on the Won row. `g10.auction-account-record.US7-TC5`
-6. Open My Auctions and read the Won row → Select View order. `g10.auction-account-record.US8-TC1`
-7. Navigate to `<my auctions url>` → Read `<lot_9>`'s row. `g10.auction-account-record.US8-TC2`
-8. Navigate to `<my auctions url>` → Read `<lot_10>` and `<lot_11>`'s rows. `g10.auction-account-record.US8-TC3`
-9. Navigate to `<my auctions url>` → Read `<lot>`'s row. `g10.auction-account-record.US9-TC1`
-10. Navigate to `<grade10 my auctions url>` → Find `<lot_2>`'s row and read its tab and Your Standing → Let recording the close resume → Reload `<grade10 my auctions url>` → Find `<lot_2>`'s row and read Your Standing. `g10.auction-account-record.US10-TC2`
-11. As customer B, navigate to `<grade10 my auctions url>` → Find `<lot_3>`'s row in the Active tab. `g10.auction-account-record.US10-TC3`
+1. Navigate to `<grade10 my auctions url>`.
+   - shows the Active tab, listing only `<listing_2>`. g10.auction-account-record.US7-TC1
+2. Open the Upcoming tab.
+   - Title badge shows 3. g10.auction-account-record.US7-TC1
+   - lists only `<listing_1>`; step 3 lists only `<listing_3>`. g10.auction-account-record.US7-TC1
+3. Open the Ended tab.
+4. Navigate to `<grade10 my auctions url>`.
+5. Wait until `<listing_1>` bidding opens.
+6. Reload `<grade10 my auctions url>`.
+   - `<listing_1>` is listed in the Active tab. g10.auction-account-record.US7-TC2
+   - `<listing_1>` is not listed in the Upcoming tab. g10.auction-account-record.US7-TC2
+7. Navigate to `<grade10 my auctions url>`.
+8. Open the Upcoming tab.
+   - The Upcoming tab shows its no-lots empty state. g10.auction-account-record.US7-TC3
+9. Navigate to `<grade10 my auctions url>`.
+10. Open the Ended tab.
+11. Click the Email alerts control on `<listing_3>`.
+   - The Email alerts control is disabled. g10.auction-account-record.US7-TC4
+   - The alert setting for `<listing_3>` is unchanged. g10.auction-account-record.US7-TC4
+12. Navigate to `<grade10 my auctions url>`.
+   - The matching auction order opens. g10.auction-account-record.US7-TC5
+13. Select the order entry point on the Won row.
+   - My Auctions performs no payment, address, or order-status write. g10.auction-account-record.US7-TC5
+14. Open My Auctions and read the Won row.
+   - The row status is Partially Paid with its warning treatment. g10.auction-account-record.US8-TC1
+15. Select View order.
+   - View order opens the Partially Paid Winner Order. g10.auction-account-record.US8-TC1
+16. Navigate to `<my auctions url>`.
+   - Your Standing reads Didn't win, and the row says the card was not charged. g10.auction-account-record.US8-TC2
+17. Read `<lot_9>`'s row.
+   - No View order is offered. g10.auction-account-record.US8-TC2
+18. Navigate to `<my auctions url>`.
+19. Read `<lot_10>` and `<lot_11>`'s rows.
+   - `<lot_10>` reads Won, Payment Overdue, and offers View order. g10.auction-account-record.US8-TC3
+   - `<lot_10>` has no helper line and no way to reach Grade10 on the row. g10.auction-account-record.US8-TC3
+   - `<lot_11>` reads Won, Awaiting Setup, and offers View order. g10.auction-account-record.US8-TC3
+   - `<lot_11>` has no confirm-address helper line on the row. g10.auction-account-record.US8-TC3
+20. Navigate to `<my auctions url>`.
+21. Read `<lot>`'s row.
+   - Your Standing reads the row's value, never the Not column. g10.auction-account-record.US9-TC1
+   - The row offers View order. g10.auction-account-record.US9-TC1
+   - Lot, close and current bid read as on any Won row. g10.auction-account-record.US9-TC1
+22. Navigate to `<grade10 my auctions url>`.
+23. Find `<lot_2>`'s row and read its tab and Your Standing.
+24. Let recording the close resume.
+25. Reload `<grade10 my auctions url>`.
 
----
+## Walk 5: Filter rows and read close results — phase 2
 
-## g10.auction-account-record.US1: Mark a listing now and find it again later
+**Starting state:**
 
-**As a** collector,
-**I want** to watch listings I am interested in before bidding opens,
-**so that** I can find them again when it does without searching the catalogue a second time.
+- customer A(signed in) leads `<lot_2>`.
+- `<lot_2>`'s close has passed, and recording it is held back.
+- customer B(signed in) bid `<customer B bid>` on `<lot_3>`.
+- customer A has since raised `<lot_3>`'s current bid to `<current bid>`.
 
-<!-- trace:case id=g10.auction-account-record.TC-3pj rev=1 covers=g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-5we -->
+**Shared test data:**
+
+| Item | Value |
+| --- | --- |
+| lot_2 | An HKD lot led by customer A, its close passed and not yet recorded |
+| lot_3 | An open HKD lot, its close more than an hour away |
+| customer B bid | HKD1,180 (range: 80000–399999 minor units) |
+| current bid | HKD1,300 (range: 80000–399999 minor units), above `<customer B bid>` |
+
+### Route
+
+1. Find `<lot_2>`'s row and read Your Standing.
+   - At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win. g10.auction-account-record.US10-TC2
+   - At step 5 the row is in the Ended tab and Your Standing reads Won. g10.auction-account-record.US10-TC2
+2. As customer B, navigate to `<grade10 my auctions url>`.
+   - Current bid reads `<current bid>`, not `<customer B bid>`. g10.auction-account-record.US10-TC3
+3. Find `<lot_3>`'s row in the Active tab.
+   - Your Standing reads Outbid, with the next valid bid. g10.auction-account-record.US10-TC3
+
 ### g10.auction-account-record.US1-TC1: A lot watched before it opens is found when it opens
 
 **Classification:**
@@ -515,10 +751,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | lot_6 | An open HKD lot led by customer B, closing after `<lot_7>` |
 | lot_7 | An open HKD lot customer A bid on, closing before `<lot_6>` |
-| current bid | 530000 minor units (HK$5,300) |
-| increment | 8000 minor units (HK$80), the HK$4,000 tier |
-| next minimum | `<current bid>` plus `<increment>`, 538000 minor units (HK$5,380) |
-| refused bid | HK$5,300, equal to `<current bid>`, below `<next minimum>` |
+| current bid | HK$5,460 (range: 400000–799999 minor units) |
+| increment | HK$80 (fixed tier increment), the HK$4,000 tier |
+| next minimum | `<current bid>` plus `<increment>`, HK$5,540 (fixed derived value) |
+| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` |
 
 **Steps:**
 
@@ -1018,13 +1254,13 @@ Runs once per row of **Test data**.
 
 | Account state | `<typed bid>` | The bid form says |
 | --- | --- | --- |
-| Bidding allowed | HK$100, below `<opening price>` | Minimum bid is `<opening price>` |
-| Bidding suspended by an operator | HK$200, `<opening price>` | Bidding is suspended on this account. Contact Us to resolve it. |
+| Bidding allowed | HK$140, below `<opening price>` | Minimum bid is `<opening price>` |
+| Bidding suspended by an operator | HK$280, `<opening price>` | Bidding is suspended on this account. Contact Us to resolve it. |
 
 | Field | Value |
 | --- | --- |
 | lot_5 | An open HKD lot with no bid from anyone |
-| opening price | 20000 minor units (HK$200), the starting price |
+| opening price | HK$280 (range: 1000–79999 minor units), the starting price |
 
 **Steps:**
 
@@ -1545,8 +1781,8 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | lot_3 | An open HKD lot, its close more than an hour away |
-| customer B bid | 100000 minor units |
-| current bid | 120000 minor units, above `<customer B bid>` |
+| customer B bid | HKD1,180 (range: 80000–399999 minor units) |
+| current bid | HKD1,300 (range: 80000–399999 minor units), above `<customer B bid>` |
 
 **Steps:**
 

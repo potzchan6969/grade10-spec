@@ -7,63 +7,85 @@
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- A closed lot with a winner whose order derives as Preparing Shipment.
+- customer(winner of `<lot_1>`) is signed in.
+- The order for `<lot_1>` is awaiting payment.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| `<lot_1>` | A lot this customer won, order awaiting payment |
 
 ### Route
 
-1. Read external lot status. `g10.auction-lot-status.US1-TC1`
-2. Navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US1-TC2`
-3. Read the row for `<lot_1>`. `g10.auction-lot-status.US1-TC2`
+1. Read external lot status.
+   - External lot status is Ended. g10.auction-lot-status.US1-TC1
+2. Navigate to `<grade10 my auctions url>`.
+   - The lot status is Ended. g10.auction-lot-status.US1-TC2
+3. Read the row for `<lot_1>`.
+   - Your Standing shows the order status. g10.auction-lot-status.US1-TC2
 
-## Walk 2: Collector does not find draft or called-off lots in browse or search
+## Walk 2: Collector does not find draft or called-off lots in browse or search and adjacent checks
 
 **Starting state:**
 
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
+- `<lot>` is in the state the row names.
+- `<lot_5>` ended with no winner.
+- customer(signed in) watches `<lot_2>` and `<lot_3>`.
+- `<lot_2>` ended with no winner.
+- `<lot_3>` was called off.
+- `<lot_2>` ended with no winner, and a collector watches it.
+- `<lot_3>` was called off, and that collector watches it.
+- A published listing has canonical address `<listing_url>` and code `<listing_code>`.
+- customer A and customer B are signed in on separate sessions.
+- customer A bid on `<lot_4>`.
+- customer B watched `<lot_4>` and did not bid.
+- `<lot_4>` was called off.
 
 **Shared test data:**
 
-- Use each case's declared **Test data**. No case depends on another case's result.
+| Item | Value |
+| --- | --- |
+| Item | `<lot>`: A draft lot, never published |
+| Item | `<lot>`: A published lot an operator called off |
+| Item | `<lot>`: Field; Value 2: Value |
+| Item | `<lot>`: `<lot_5>`; Value 2: A published lot whose bidding ended with no winner |
+| `<lot_2>` | A watched lot whose bidding ended with no winner |
+| `<lot_3>` | A watched lot an operator called off |
+| lot_2 | A watched lot whose bidding ended with no winner |
+| lot_3 | A watched lot an operator called off |
+| `<lot_4>` | A lot customer A bid on and customer B watched, then called off |
 
 ### Route
 
-1. Navigate to `<grade10 auction catalogue url>`. `g10.auction-lot-status.US2-TC1`
-2. Read the All auctions list. `g10.auction-lot-status.US2-TC1`
-3. Search the catalogue for the title of `<lot>`. `g10.auction-lot-status.US2-TC1`
-4. Navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US2-TC2`
-5. Read the list. `g10.auction-lot-status.US2-TC2`
-6. Read the API response for the public listing data. `g10.auction-lot-status.US2-TC3`
-7. Call the listing off. `g10.auction-lot-status.US2-TC4`
-8. Search the catalogue and browse for the listing. `g10.auction-lot-status.US2-TC4`
-9. Open `<listing_url>` directly. `g10.auction-lot-status.US2-TC4`
-10. Try `<listing_code>` as an address. `g10.auction-lot-status.US2-TC4`
+1. Navigate to `<grade10 auction catalogue url>`.
+   - `<lot>` is not in All auctions. g10.auction-lot-status.US2-TC1
+2. Read the All auctions list.
+   - Search does not find `<lot>`. g10.auction-lot-status.US2-TC1
+3. Search the catalogue for the title of `<lot>`.
+   - `<lot_5>` is in All auctions, status Ended. g10.auction-lot-status.US2-TC1
+4. Navigate to `<grade10 my auctions url>`.
+   - `<lot_3>` is not in the list. g10.auction-lot-status.US2-TC2
+5. Read the list.
+   - `<lot_2>` is in the list, status Ended. g10.auction-lot-status.US2-TC2
+6. Read the API response for the public listing data.
+   - `<lot_3>` is not included. g10.auction-lot-status.US2-TC3
+   - `<lot_2>` is included, external lot status Ended. g10.auction-lot-status.US2-TC3
+7. Call the listing off.
+   - Catalogue and search do not return the listing. g10.auction-lot-status.US2-TC4
+8. Search the catalogue and browse for the listing.
+   - `<listing_url>` still serves the public listing page. g10.auction-lot-status.US2-TC4
+9. Open `<listing_url>` directly.
+   - The listing code does not resolve as an address. g10.auction-lot-status.US2-TC4
+10. Try `<listing_code>` as an address.
+   - The canonical URL and code remain reserved. g10.auction-lot-status.US2-TC4
+11. In customer A's session, navigate to `<grade10 my auctions url>`.
+   - lists `<lot_4>`, and the row says Your card was not charged. g10.auction-lot-status.US3-TC1
+   - 's row names no card hold, release or authorization. g10.auction-lot-status.US3-TC1
+12. In customer B's session, navigate to `<grade10 my auctions url>`.
+   - does not list `<lot_4>`. g10.auction-lot-status.US3-TC1
 
-## Walk 3: Bidder sees what happened to a called-off lot
-
-**Starting state:**
-
-- Reset the fixture to each case's declared **Pre-conditions** before running it.
-
-**Shared test data:**
-
-- Use each case's declared **Test data**. No case depends on another case's result.
-
-### Route
-
-1. In customer A's session, navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US3-TC1`
-2. In customer B's session, navigate to `<grade10 my auctions url>`. `g10.auction-lot-status.US3-TC1`
-
-## g10.auction-lot-status.US1: Collector sees whether a lot can still be bid on
-
-**As a** collector,
-**I want** every lot to show whether it is Upcoming, Active or Ended,
-**so that** I can see at a glance whether I can still bid on it.
-
-`<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->`
 ### g10.auction-lot-status.US1-TC1: Preparing Shipment maps to Ended
 
 **Classification:**
