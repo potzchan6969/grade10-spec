@@ -12,5 +12,5 @@ ui_waived: existing auction and inventory media dialogs already use the shared
   gallery; this change adds no new screen or design state
 reviewed:
   decisions: a7eaa90b
-  user-journeys: 89b380ff
+  user-journeys: 6d97feab
   tasks: 4c26c493
