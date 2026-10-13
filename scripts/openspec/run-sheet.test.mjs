@@ -50,7 +50,6 @@ import {
   matchesChangedScope,
   selectCases,
   surfacePrefill,
-  walkBand,
 } from "./lib/select-cases.mjs";
 import { isAutomated, parseSuite, parseWalks } from "./lib/suites.mjs";
 
@@ -582,7 +581,7 @@ test("a run table prints once per value row, with the cell in square brackets", 
   );
   assert.equal(
     at(rows[0], "Pre-conditions"),
-    "<subject account> holds [The session naming the site].",
+    "`<subject account>` holds `<session to end>`.",
   );
   assert.equal(
     at(rows[0], "Test data"),
@@ -594,16 +593,16 @@ test("a run table prints once per value row, with the cell in square brackets", 
   assert.equal(at(rows[0], "Steps").includes("Runs once per row"), false);
 });
 
-test("shared Field | Value stays in the cell, and a plain column is not filled into the sentence", () => {
+test("shared Field | Value fills steps on each row; preconditions keep placeholders", () => {
   const rows = caseRows(perRowCase(1));
   assert.equal(rows.length, 2);
   assert.equal(
     at(rows[1], "Pre-conditions"),
-    "customer is on <grade10 sign-in url> naming [<zzz sign-in url>], signed out.",
+    "customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out.",
   );
   assert.equal(
     at(rows[1], "Steps"),
-    "1. Submit <collector email> at the email step.\n2. Follow the link.",
+    "1. Submit [collector@example.com, an address with an account] at the email step.\n2. Follow the link.",
   );
   assert.equal(
     at(rows[1], "Expected results"),
@@ -619,7 +618,7 @@ test("shared Field | Value stays in the cell, and a plain column is not filled i
   );
 });
 
-test("a name inside a run cell stays, and the shared name in the sentence stays", () => {
+test("a filled cell is not recursively expanded; shared slots outside it are filled", () => {
   const [row] = caseRows(perRowCase(2));
   assert.equal(
     at(row, "Steps"),
@@ -627,11 +626,11 @@ test("a name inside a run cell stays, and the shared name in the sentence stays"
   );
   assert.equal(
     at(row, "Expected results"),
-    "The person enters [the same account, not a second one].\nNo second account exists for <link-created email>.",
+    "The person enters [the same account, not a second one].\nNo second account exists for [collector-link@example.com, an account created by an emailed link].",
   );
   assert.equal(
     at(row, "Pre-conditions"),
-    "<link-created email> has an account created by an emailed link.",
+    "`<link-created email>` has an account created by an emailed link.",
   );
   assert.equal(
     at(row, "Test data"),
@@ -643,20 +642,23 @@ test("a header matches case-sensitively, so Closed lot does not fill <closed lot
   const [row] = caseRows(perRowCase(3));
   assert.equal(
     at(row, "Pre-conditions"),
-    "<closed lot> is closed as the row states.",
+    "`<closed lot>` is closed as the row states.",
   );
-  assert.equal(at(row, "Steps"), "1. Navigate to <closed lot url>.");
+  assert.equal(at(row, "Steps"), "1. Navigate to `<closed lot url>`.");
   assert.equal(
     at(row, "Test data"),
     "Closed lot: Sold, with a winner\nViewer: customer(signed in)",
   );
 });
 
-test("a column table without the per-row line stays one row, unfilled", () => {
+test("a single-row column table fills a case without expanding it", () => {
   const rows = caseRows(perRowCase(4));
   assert.equal(rows.length, 1);
-  assert.equal(at(rows[0], "Steps"), "1. End <session to end>.");
-  assert.equal(at(rows[0], "Expected results"), "<session to end> is gone.");
+  assert.equal(at(rows[0], "Steps"), "1. End [The session naming the site].");
+  assert.equal(
+    at(rows[0], "Expected results"),
+    "[The session naming the site] is gone.",
+  );
 });
 
 test("a per-row case adds one grid line per value row", () => {
@@ -968,10 +970,10 @@ test("journeys of two files fold under their capability paths", () => {
   const caps = lines
     .map((line, i) => (line.kind === "capability" ? rows[i][0] : null))
     .filter(Boolean);
-  assert.deepEqual(caps, ["shared/auth/sign-out", "demo/thing/widget"]);
+  assert.deepEqual(caps, ["demo/thing/widget", "shared/auth/sign-out"]);
 });
 
-test("a run walks shared, Grade10 site, the store, admin, then ZZZ", () => {
+test("a run follows specs folder order rather than fixed product bands", () => {
   const paths = [
     "openspec/specs/zzz-admin/site/home/feature-tcs.md",
     "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
@@ -993,22 +995,15 @@ test("a run walks shared, Grade10 site, the store, admin, then ZZZ", () => {
   assert.deepEqual(
     inReadingOrder(picked).map((one) => one.read.rel),
     [
-      "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+      "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
       "openspec/specs/grade10-site/analytics/home/feature-tcs.md",
       "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
       "openspec/specs/grade10-site/store/checkout/feature-tcs.md",
-      "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
-      "openspec/specs/zzz-site/site/home/feature-tcs.md",
+      "openspec/specs/shared/auth/sign-in/feature-tcs.md",
       "openspec/specs/zzz-admin/site/home/feature-tcs.md",
+      "openspec/specs/zzz-site/site/home/feature-tcs.md",
     ],
   );
-  assert.equal(
-    walkBand(
-      "openspec/changes/some-change/specs/grade10-site/store/checkout/feature-tcs.md",
-    ),
-    2,
-  );
-  assert.equal(walkBand("openspec/specs/demo/thing/widget/feature-tcs.md"), 6);
 });
 
 test("admin banners use the fall orange, product banners the noble green", () => {
@@ -1186,4 +1181,146 @@ test("shared-planning-agent-rounds-SC-78 - a left-out case naming no test says s
     "  demo-thing-widget-US1-TC9-1 - decided by no named test",
     "  demo-thing-widget-US1-TC8-1 - scripts/a.test.mjs, tools/manual/test/b.test.ts",
   ]);
+});
+
+test("a single shared setup fills Steps and Expected, never Pre-conditions", () => {
+  const one = candidates[0];
+  const tc = {
+    ...one.tc,
+    perRow: false,
+    preconditions: "customer(not watching `<lot_2>`) is on <lot_2 url>.",
+    tables: [
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["lot_2", "An open lot taking bids"],
+          ["first bid", "The next valid bid shown on the bid panel"],
+        ],
+      },
+    ],
+    stepTexts: [
+      "Place `<first bid>` from the bid panel.",
+      "Reload <lot_2 url>.",
+    ],
+    expectedTexts: ["<lot_2> shows once, Your Standing Leading."],
+  };
+  const [row] = caseRows({ ...one, tc });
+  assert.equal(
+    at(row, "Steps"),
+    "1. Place [The next valid bid shown on the bid panel] from the bid panel.\n2. Reload `<lot_2 url>`.",
+  );
+  assert.equal(
+    at(row, "Expected results"),
+    "[An open lot taking bids] shows once, Your Standing Leading.",
+  );
+  assert.equal(
+    at(row, "Pre-conditions"),
+    "customer(not watching `<lot_2>`) is on `<lot_2 url>`.",
+  );
+});
+
+test("trace marker suffix is printed without changing the selected id", () => {
+  const marked = parseSuite(
+    SUITE.replace(
+      "### demo-thing-widget-US1-TC1-1:",
+      "<!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=3 covers=g10.auction-bid-increments.SC-vqb -->\n### demo-thing-widget-US1-TC1-1:",
+    ),
+  );
+  const tc = marked.journeys[0].cases[0];
+  assert.equal(tc.markerId, "g10.auction-bid-increments.TC-kyx");
+  assert.equal(tc.markerRev, 3);
+  assert.equal(marked.journeys[0].cases[1].markerId, null);
+  assert.equal(
+    at(caseRow({ ...candidates[0], tc }), "Case ID"),
+    "demo-thing-widget-US1-TC1-1 (TC-kyx)",
+  );
+  assert.equal(tc.id, "demo-thing-widget-US1-TC1-1");
+});
+
+test("unsorted selection is grouped once by folder and numerically by US and TC", () => {
+  const read = {
+    rel: "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+    capabilityId: "grade10-site/auction/listing-page",
+    level: "feature",
+  };
+  const picked = [
+    [12, 20],
+    [1, 12],
+    [2, 1],
+    [12, 1],
+    [1, 2],
+    [1, 1],
+  ].map(([us, tc]) => ({
+    read,
+    tc: {
+      ...candidates[0].tc,
+      perRow: false,
+      journeyNum: us,
+      tcNum: tc,
+      id: `g10.auction-listing-page.US${us}-TC${tc}`,
+      journey: {
+        raw: `g10.auction-listing-page.US${us}`,
+        title: `Journey ${us}`,
+      },
+    },
+  }));
+  const grid = buildGrid(picked);
+  assert.deepEqual(
+    grid.lines
+      .filter((line) => line.kind === "case")
+      .map((line) => line.one.tc.id),
+    [
+      "g10.auction-listing-page.US1-TC1",
+      "g10.auction-listing-page.US1-TC2",
+      "g10.auction-listing-page.US1-TC12",
+      "g10.auction-listing-page.US2-TC1",
+      "g10.auction-listing-page.US12-TC1",
+      "g10.auction-listing-page.US12-TC20",
+    ],
+  );
+  assert.equal(
+    grid.lines.filter((line) => line.kind === "capability").length,
+    1,
+  );
+  assert.equal(grid.rows[0][0], "grade10-site/auction/listing-page");
+  assert.deepEqual(
+    grid.lines
+      .filter((line) => line.kind === "journey")
+      .map((line) => line.key),
+    [
+      "g10.auction-listing-page.US1",
+      "g10.auction-listing-page.US2",
+      "g10.auction-listing-page.US12",
+    ],
+  );
+});
+
+test("explicit duplicate ids print only once", () => {
+  const result = selectCases(candidates, {
+    ids: [candidates[0].tc.id, candidates[0].tc.id],
+  });
+  assert.equal(result.picked.length, 1);
+});
+
+test("several values for one shared field stay visible without choosing an arbitrary value", () => {
+  const one = candidates[0];
+  const tc = {
+    ...one.tc,
+    perRow: false,
+    tables: [
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["media type", "JPEG"],
+          ["media type", "PNG"],
+          ["lot", "An open lot"],
+        ],
+      },
+    ],
+    stepTexts: ["Upload <media type> to <lot>."],
+    expectedTexts: ["<media type> is accepted."],
+  };
+  const [row] = caseRows({ ...one, tc });
+  assert.equal(at(row, "Steps"), "1. Upload `<media type>` to [An open lot].");
+  assert.equal(at(row, "Expected results"), "`<media type>` is accepted.");
 });

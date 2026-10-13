@@ -6,10 +6,8 @@
  *   pnpm run tcs:run-sheet -- --suites regression --name regression --dry-run
  *   pnpm run tcs:run-sheet -- --cases-file /tmp/pick.txt --name auction-signin
  *
- * A run tab is a snapshot, not a mirror: it is written once, pinned to a
- * commit, and never resynced. So a case that later changes, or is deprecated,
- * leaves the tab alone - the tab says what was tested, and the markdown under
- * git says what the case is now.
+ * Trial runs can be reprinted after confirmation. Finalized runs are pinned
+ * snapshots; merged run manifests permanently prohibit overwriting them.
  *
  * Nothing reads a marked tab back into the store. A run's results live in the
  * sheet, and the Summary tab counts them with live formulas.
@@ -29,7 +27,8 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname } from "node:path";
 import { cliArgs } from "./lib/args.mjs";
 import {
   BODY_FOREGROUND,
@@ -61,22 +60,33 @@ import {
   tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
+  assertRunTab,
+  candidatesAt,
+  cellRows,
+  invalidatePublishedRun,
+  mergedRecord,
+  parseRecordRows,
+  RECORD_HEADERS,
+  RECORD_TAB,
+  recordCells,
+  refreshMain,
+  selectionSnapshot,
+  transition,
+  validateRecord,
+} from "./lib/run-sheet-records.mjs";
+import {
   automatedGateOf,
   buildGrid,
+  displayCaseId,
   inReadingOrder,
-  readCandidates,
   selectCases,
 } from "./lib/select-cases.mjs";
 import { prop, ROOT } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
-const bold = (s) => c("1", s);
 const dim = (s) => c("2", s);
 const red = (s) => c("31", s);
-const green = (s) => c("32", s);
-const yellow = (s) => c("33", s);
-const cyan = (s) => c("36", s);
 
 const API = "https://sheets.googleapis.com/v4/spreadsheets";
 
@@ -101,7 +111,13 @@ Flags:
   --exclude-automated Leave out cases an automated test already covers
   --sandbox           Write to TCS_SHEET_SANDBOX_ID instead of TCS_SHEET_ID
   --overwrite <id>    Rewrite that run's tab and its Summary block (same id)
-  --sha <sha>         Commit to record; defaults to the current HEAD
+  --finalize <id>     Confirm latest TCs and export a finalized production record
+  --reopen <id>       Explicitly cancel finalization before reprinting
+  --copy-run <id>     Use a merged run's ids for a new run against latest TCs
+  --confirmed <hash>  Fingerprint a human confirmed (required to print/finalize)
+  --exclusions-file <path> JSON array of {id, reason} for intentional exclusions
+  --record-output <path> Write the run manifest here (CI uploads an artifact)
+  --sha <sha>         Source revision for dry-run; real writes use latest main
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID (or sandbox)
   --dry-run           Print what would be written and touch no network
   --help              Print this help and exit
@@ -126,6 +142,12 @@ function parseArgs(argv) {
     sha: null,
     sheet: null,
     dryRun: false,
+    finalize: null,
+    reopen: null,
+    copyRun: null,
+    confirmed: null,
+    exclusionsFile: null,
+    recordOutput: null,
   };
   const takes = {
     "--name": "name",
@@ -139,6 +161,12 @@ function parseArgs(argv) {
     "--sha": "sha",
     "--sheet": "sheet",
     "--overwrite": "overwrite",
+    "--finalize": "finalize",
+    "--reopen": "reopen",
+    "--copy-run": "copyRun",
+    "--confirmed": "confirmed",
+    "--exclusions-file": "exclusionsFile",
+    "--record-output": "recordOutput",
   };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -216,20 +244,24 @@ function printRegister(titles, summaryValues) {
   return `Tabs:\n${tabs}\nSummary Run IDs:\n${runs}`;
 }
 
-function headSha() {
+function headSha(ref = "HEAD") {
   try {
-    return execFileSync("git", ["rev-parse", "HEAD"], {
-      cwd: ROOT,
-      encoding: "utf8",
-    }).trim();
+    return execFileSync(
+      "git",
+      ["rev-parse", "--verify", "--end-of-options", `${ref}^{commit}`],
+      {
+        cwd: ROOT,
+        encoding: "utf8",
+      },
+    ).trim();
   } catch {
     return "unknown";
   }
 }
 
-function changedPathsSince(sha) {
+function changedPathsSince(sha, target = "HEAD") {
   try {
-    return execFileSync("git", ["diff", "--name-only", sha, "HEAD"], {
+    return execFileSync("git", ["diff", "--name-only", sha, target], {
       cwd: ROOT,
       encoding: "utf8",
     })
@@ -300,13 +332,6 @@ const putValues = (token, id, range, rows, raw = true) =>
     token,
     `/${id}/values/${encodeURIComponent(range)}?valueInputOption=${raw ? "RAW" : "USER_ENTERED"}`,
     { method: "PUT", body: { values: rows } },
-  );
-
-const appendValues = (token, id, range, rows) =>
-  call(
-    token,
-    `/${id}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
-    { method: "POST", body: { values: rows } },
   );
 
 /**
@@ -401,15 +426,6 @@ async function writeRunTab(token, spreadsheetId, tab, rows, lines) {
   ]);
   await batchUpdate(token, spreadsheetId, dressing(sheetId, lines));
   return sheetId;
-}
-
-/** The next run id: one past the highest the Summary tab already records. */
-async function nextRunId(token, id) {
-  const read = await values(token, id, `${quoteTab(SUMMARY_TAB)}!A2:A`);
-  const ids = (read.values ?? [])
-    .map((row) => Number(row[0]))
-    .filter((n) => Number.isFinite(n));
-  return ids.length === 0 ? 1 : Math.max(...ids) + 1;
 }
 
 /** Runs of contiguous rows sharing a key, as `[start, end)` 0-based indices. */
@@ -708,10 +724,6 @@ function dressing(sheetId, lines) {
 }
 
 /** `'Summary'!A6:P9` → the 0-based row the block starts at. */
-function startRowOf(updatedRange) {
-  const match = /![A-Z]+(\d+)/.exec(String(updatedRange ?? ""));
-  return match ? Number(match[1]) - 1 : null;
-}
 
 /**
  * A run's four Summary rows as one block: one band, identity merged down the
@@ -802,249 +814,501 @@ function summaryDressing(sheetId, startRow, rows, runId) {
 
 const args = parseArgs(cliArgs());
 args.env = envOf(args.env);
-if (!args.env)
-  die("--env is staging or production", "Omit it to default to staging.");
-if (!args.name) {
-  help();
-  die("--name is required: it names the run and the tab.");
-}
+if (!args.env) die("--env is staging or production");
+const actionCount = [
+  args.overwrite,
+  args.finalize,
+  args.reopen,
+  args.copyRun,
+].filter(Boolean).length;
+if (actionCount > 1)
+  die("Use one of --overwrite, --finalize, --reopen or --copy-run");
+if (args.dryRun && (args.finalize || args.reopen))
+  die(
+    "--finalize and --reopen need the live run registry; use --dry-run for selections",
+  );
+if (args.sandbox && (args.finalize || args.reopen || args.copyRun))
+  die("Run finalization and copy manifests are production-sheet operations");
+if (!args.name && !args.finalize && !args.reopen) die("--name is required");
+if (args.sha && !args.dryRun)
+  die("--sha is only for dry-run; real runs use latest main");
 if (args.cases && args.changedSince)
+  die("--changed-since cannot be combined with explicit cases");
+if (
+  args.copyRun &&
+  (args.cases ||
+    args.changedSince ||
+    args.suites ||
+    args.priority ||
+    args.level ||
+    args.scope)
+)
   die(
-    "--changed-since cannot be combined with --cases or --cases-file",
-    "Use one explicit case list, or let the commit scope resolve the list.",
-  );
-const hasFilter = Boolean(
-  args.suites || args.priority || args.level || args.changedSince,
-);
-if (!args.cases && !hasFilter)
-  die(
-    "no selection",
-    "Give --cases or --cases-file with the exact ids, or a filter such as\n" +
-      "--suites regression. --scope alone narrows the files read; it selects nothing.",
+    "--copy-run supplies the selection; do not combine it with selection filters",
   );
 
-const changedPaths = args.changedSince
-  ? changedPathsSince(args.changedSince)
-  : null;
-if (args.changedSince && changedPaths.length === 0)
-  die(
-    `no files changed since \`${args.changedSince}\``,
-    "Use a wider baseline commit, or pass explicit case ids.",
-  );
+let sha = headSha(args.sha ?? "HEAD");
+let candidates;
+let token;
+let sheets = [];
+let titles = [];
+let summaryValues = [];
+let summarySheetId;
+let registry = new Map();
+let current = null;
+let currentRow = null;
+let copiedFrom = null;
 
-const candidates = readCandidates(ROOT, args.scope);
-const {
-  picked: unordered,
-  refused,
-  missing,
-} = selectCases(candidates, {
-  ids: args.cases,
-  suites: args.suites,
-  priority: args.priority,
-  level: args.level,
-  includeDraft: args.includeDraft,
-  includeAutomated: args.includeAutomated,
-  changedPaths,
-});
-const picked = inReadingOrder(unordered);
-
-if (missing.length > 0)
-  die(
-    missing.length === 1
-      ? "1 case id names no case in the store"
-      : `${missing.length} case ids name no case in the store`,
-    missing.map((id) => `  ${id}`).join("\n") +
-      "\n\nA run tab may only hold cases the store states. Fix the list, or widen --scope.",
-  );
-
-const drafts = picked.filter(
-  (one) => prop(one.tc, "Status") === "draft",
-).length;
-// Left out by default, taken with the flag - said either way, and said as
-// zero rather than left unsaid, so a run's own printout is what proves the
-// gate ran (`shared-planning-agent-rounds-SC-61`). The count and the line are
-// `automatedGateOf`'s, beside the gate whose refusals they read.
-const {
-  leftOut: automatedLeftOut,
-  leftOutLines: automatedLeftOutLines,
-  line: automatedLine,
-} = automatedGateOf({
-  picked,
-  refused,
-  includeAutomated: args.includeAutomated,
-});
-
-console.log(
-  `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
-);
-if (args.changedSince)
-  console.log(
-    dim(
-      `Changed-since scope: ${changedPaths.length} file${changedPaths.length === 1 ? "" : "s"} after ${args.changedSince}`,
-    ),
-  );
-console.log(dim(automatedLine));
-// Each one by name, with what decides it: the count says the gate ran, and
-// these say where to read what it ran on (Q72).
-for (const line of automatedLeftOutLines) console.log(dim(line));
-if (picked.length === 0) {
-  // Split by reason, so a selection refused for its status alone never hints
-  // at the wrong flag: the two gates are read one at a time, and each names
-  // its own way past it.
-  const byStatus = refused.filter((one) => one.reason === "status").length;
-  const parts = [];
-  if (byStatus > 0) parts.push(`${byStatus} refused by the status gate`);
-  if (automatedLeftOut > 0) parts.push(`${automatedLeftOut} already automated`);
-  console.log(
-    yellow("Nothing selected."),
-    dim(
-      `\n  ${candidates.length} cases read${args.scope ? ` under "${args.scope}"` : ""}` +
-        (parts.length > 0 ? `; ${parts.join(", ")}.` : ".") +
-        (byStatus > 0 && !args.includeDraft
-          ? "\n  Most of the store is still `draft`; pass --include-draft to walk drafts."
-          : "") +
-        (automatedLeftOut > 0 && !args.includeAutomated
-          ? "\n  Every match is already automated; omit --exclude-automated to walk them."
-          : ""),
-    ),
-  );
-  process.exit(0);
+async function readRegistry() {
+  if (!sheets.some((one) => one.properties.title === RECORD_TAB))
+    return new Map();
+  const read = await values(token, args.sheet, quoteTab(RECORD_TAB));
+  return parseRecordRows(read.values ?? []);
 }
 
-const byFile = runsOf(picked, (one) => one.read.rel);
-for (const run of byFile) {
-  console.log(`  ${bold(run.key)}`);
-  for (const one of picked.slice(run.start, run.end)) {
-    const status = prop(one.tc, "Status");
-    console.log(
-      `    ${cyan(one.tc.id.padEnd(48))}${status === "draft" ? yellow("draft  ") : dim("actual ")}${one.tc.title}`,
-    );
+async function ensureRecordSheet(columns = 26) {
+  const found = sheets.find((one) => one.properties.title === RECORD_TAB);
+  if (!found) {
+    const made = await batchUpdate(token, args.sheet, [
+      {
+        addSheet: {
+          properties: {
+            title: RECORD_TAB,
+            hidden: true,
+            gridProperties: { columnCount: columns },
+          },
+        },
+      },
+    ]);
+    sheets.push({ properties: made.replies[0].addSheet.properties });
+    await putValues(token, args.sheet, `${quoteTab(RECORD_TAB)}!A1`, [
+      RECORD_HEADERS,
+    ]);
+    await batchUpdate(token, args.sheet, [
+      {
+        addProtectedRange: {
+          protectedRange: {
+            range: { sheetId: made.replies[0].addSheet.properties.sheetId },
+            description: "Run provenance: edited by the writer",
+            warningOnly: false,
+          },
+        },
+      },
+    ]);
   }
+  if (found && (found.properties.gridProperties?.columnCount ?? 26) < columns) {
+    await batchUpdate(token, args.sheet, [
+      {
+        updateSheetProperties: {
+          properties: {
+            sheetId: found.properties.sheetId,
+            gridProperties: { columnCount: columns },
+          },
+          fields: "gridProperties.columnCount",
+        },
+      },
+    ]);
+  }
+  return sheets.find((one) => one.properties.title === RECORD_TAB).properties
+    .sheetId;
 }
 
-const sha = args.sha ?? headSha();
-const date = new Date().toISOString().slice(0, 10);
-const { rows, lines } = buildGrid(picked);
-const journeys = lines.filter((line) => line.kind === "journey").length;
+async function recordRequest(record, row = null) {
+  const columns =
+    sheets.find((one) => one.properties.title === RECORD_TAB)?.properties
+      .gridProperties?.columnCount ?? 26;
+  const cells = recordCells(record, { columns });
+  const sheetId = await ensureRecordSheet(cells.length);
+  const rows = cellRows([cells]);
+  return row
+    ? {
+        updateCells: {
+          start: { sheetId, rowIndex: row - 1, columnIndex: 0 },
+          rows,
+          fields: "userEnteredValue",
+        },
+      }
+    : { appendCells: { sheetId, rows, fields: "userEnteredValue" } };
+}
 
-if (args.dryRun) {
+async function saveRecord(record, row = null) {
+  await batchUpdate(token, args.sheet, [await recordRequest(record, row)]);
+}
+
+function exportRecord(record) {
+  if (args.recordOutput) {
+    mkdirSync(dirname(args.recordOutput), { recursive: true });
+    writeFileSync(args.recordOutput, `${JSON.stringify(record, null, 2)}\n`);
+    console.log(`Record: ${args.recordOutput}`);
+  }
+  console.log(`Run ID: ${record.runId} · ${record.state} · ${record.tab}`);
+  console.log(`Fingerprint: ${record.snapshot.fingerprint}`);
   console.log(
-    `\n${green("✓")} dry run — nothing written.  ${dim(`${journeys} journey banner${journeys === 1 ? "" : "s"}, ${rows.length} rows, ${args.env}, would record commit ${sha.slice(0, 12)}${args.overwrite ? `, would overwrite run ${args.overwrite}` : ""}${args.sandbox ? ", sandbox" : ""}`)}`,
+    `https://docs.google.com/spreadsheets/d/${record.spreadsheetId}/edit#gid=${record.sheetId}`,
   );
-  process.exit(0);
 }
 
-args.sheet = resolveSpreadsheet(args);
-const token = process.env.GOOGLE_ACCESS_TOKEN;
-if (!token)
-  die(
-    "no GOOGLE_ACCESS_TOKEN",
-    "In CI, `google-github-actions/auth` sets it. Locally:\n" +
-      "  export GOOGLE_ACCESS_TOKEN=$(gcloud auth print-access-token \\\n" +
-      "    --impersonate-service-account=<sa>@<project>.iam.gserviceaccount.com \\\n" +
-      "    --scopes=https://www.googleapis.com/auth/spreadsheets)",
-  );
-
-const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
-const sheets = meta.sheets ?? [];
-const titles = sheets.map((s) => s.properties.title);
-const summarySheetId = await ensureSummary(token, args.sheet, sheets);
-const summaryRead = await values(
-  token,
-  args.sheet,
-  `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}`,
-);
-const summaryValues = summaryRead.values ?? [];
-
-let runId;
-let tab;
-let overwriteAt = null;
-if (args.overwrite != null && String(args.overwrite).trim() !== "") {
-  const found = locateRun(summaryValues, titles, args.overwrite);
-  if (!found.ok) die(found.why, printRegister(titles, summaryValues));
-  runId = Number(args.overwrite);
-  tab = found.tab;
-  overwriteAt = found.startRow;
-} else {
-  runId = await nextRunId(token, args.sheet);
-  tab = tabTitle(runId, slug(args.name));
-  if (titles.includes(tab))
+try {
+  if (!args.dryRun) {
+    args.sheet = resolveSpreadsheet(args);
+    token = process.env.GOOGLE_ACCESS_TOKEN;
+    if (!token)
+      die(
+        "no GOOGLE_ACCESS_TOKEN",
+        "Dispatch run-sheet.yml; CI holds the credentials.",
+      );
+    sha = refreshMain(ROOT);
+    candidates = candidatesAt(ROOT, sha);
+    const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
+    sheets = meta.sheets ?? [];
+    titles = sheets.map((one) => one.properties.title);
+    if (sheets.some((one) => one.properties.title === SUMMARY_TAB)) {
+      const read = await values(
+        token,
+        args.sheet,
+        `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}`,
+      );
+      summaryValues = read.values ?? [];
+    }
+    if (!args.sandbox) registry = await readRegistry();
+    const target = args.overwrite ?? args.finalize ?? args.reopen;
+    if (target) {
+      if (!args.sandbox && mergedRecord(ROOT, args.sheet, target))
+        die(`Run ${target} is merged; create a new run instead`);
+      if (!args.sandbox) {
+        const entry = registry.get(Number(target));
+        if (!entry)
+          die(
+            `Run ${target} predates the run registry; it cannot be overwritten or finalized. Create a new run.`,
+          );
+        current = entry.record;
+        currentRow = entry.row;
+        if (current.spreadsheetId !== args.sheet)
+          die("Registry spreadsheet identity mismatch");
+        assertRunTab(current, sheets);
+      }
+      const found = locateRun(summaryValues, titles, target);
+      if (!found.ok) die(found.why, printRegister(titles, summaryValues));
+      if (current && found.tab !== current.tab)
+        die(
+          "Summary and run registry disagree",
+          printRegister(titles, summaryValues),
+        );
+    }
+    if (args.finalize && current.state === "finalized") {
+      exportRecord(current);
+      console.log("Already finalized; no Sheet write and no new record.");
+      process.exit(0);
+    }
+    if (args.reopen) {
+      const next = transition(current, "reopen");
+      invalidatePublishedRun(ROOT, current);
+      refreshMain(ROOT);
+      if (mergedRecord(ROOT, args.sheet, current.runId))
+        die(
+          `Run ${current.runId} merged during reopening; no Sheet changes made`,
+        );
+      await saveRecord(next, currentRow);
+      exportRecord(next);
+      console.log(
+        "Finalization cancelled. Remove the old unmerged print commit before publishing a replacement.",
+      );
+      process.exit(0);
+    }
+  } else {
+    candidates = candidatesAt(ROOT, sha);
+  }
+  if (args.copyRun) {
+    args.sheet = resolveSpreadsheet(args);
+    const source = mergedRecord(ROOT, args.sheet, args.copyRun);
+    if (!source) die(`No merged manifest for run ${args.copyRun}`);
+    args.cases = source.snapshot.selected.map((one) => one.id);
+    args.includeDraft = source.snapshot.options.includeDraft;
+    args.includeAutomated = source.snapshot.options.includeAutomated;
+    copiedFrom = { spreadsheetId: source.spreadsheetId, runId: source.runId };
+  }
+  if (args.finalize) {
+    Object.assign(args, {
+      name: current.snapshot.name,
+      env: current.snapshot.env,
+      selection: current.snapshot.selection,
+      ...current.snapshot.options,
+      cases: current.snapshot.selected.map((one) => one.id),
+    });
+  }
+  if (
+    !args.cases &&
+    !(
+      args.suites ||
+      args.priority ||
+      args.level ||
+      args.scope ||
+      args.changedSince
+    )
+  )
     die(
-      `cannot write \`${tab}\`: a tab is already named that`,
-      printRegister(titles, summaryValues) +
-        "\n\nDelete or rename the spare in the UI, then dispatch again.",
+      "No selection. Use explicit cases, property filters or --changed-since.",
     );
-}
-
-const payload = summaryRows({
-  runId,
-  tab,
-  date,
-  name: args.name,
-  selection:
-    args.selection ??
-    (args.changedSince ? `changed since ${args.changedSince}` : ""),
-  env: args.env,
-  sha,
-});
-
-let sheetId;
-if (overwriteAt !== null) {
-  const existing = sheets.find((s) => s.properties.title === tab);
-  if (!existing)
+  const changedPaths =
+    args.changedSince && !args.finalize
+      ? changedPathsSince(args.changedSince, sha)
+      : null;
+  if (changedPaths?.length === 0)
+    die(`No files changed since ${args.changedSince}`);
+  const scoped = args.scope
+    ? candidates.filter((one) => one.read.rel.includes(args.scope))
+    : candidates;
+  const {
+    picked: unordered,
+    refused,
+    missing,
+  } = selectCases(scoped, {
+    ids: args.cases,
+    suites: args.suites,
+    priority: args.priority,
+    level: args.level,
+    includeDraft: args.includeDraft,
+    includeAutomated: args.includeAutomated,
+    changedPaths,
+  });
+  if (missing.length)
+    die("Case ids missing from latest accepted suites", missing.join("\n"));
+  if (args.cases && refused.length)
     die(
-      `Summary names \`${tab}\` for run ${runId}; no tab has that title`,
+      "Explicit cases refused; revise and confirm the selection",
+      refused.map((one) => `${one.id}: ${one.why}`).join("\n"),
+    );
+  const excluded = args.finalize
+    ? current.snapshot.excluded
+    : args.exclusionsFile
+      ? JSON.parse(readFileSync(args.exclusionsFile, "utf8"))
+      : (current?.snapshot.excluded ?? []);
+  if (!Array.isArray(excluded))
+    die("Exclusions must be an array of {id, reason}");
+  const excludedIds = new Set(excluded.map((one) => one.id));
+  const picked = inReadingOrder(
+    args.cases
+      ? unordered
+      : unordered.filter((one) => !excludedIds.has(one.tc.id)),
+  );
+  if (!picked.length)
+    die(
+      "Nothing selected",
+      "Drafts require --include-draft; deprecated cases cannot be printed.",
+    );
+  const candidateIds = new Set(candidates.map((one) => one.tc.id));
+  const priorIds = new Set(
+    current?.snapshot.selected.map((one) => one.id) ?? [],
+  );
+  for (const one of excluded)
+    if (!args.finalize && !candidateIds.has(one.id) && !priorIds.has(one.id))
+      die(`Excluded id names no case: ${one.id}`);
+  if (current && !args.finalize && args.cases) {
+    const kept = new Set(picked.map((one) => one.tc.id));
+    const explained = new Set(excluded.map((one) => one.id));
+    const eligible = new Set(
+      selectCases(scoped, {
+        ids: [...priorIds],
+        includeDraft: args.includeDraft,
+        includeAutomated: args.includeAutomated,
+      }).picked.map((one) => one.tc.id),
+    );
+    for (const id of priorIds)
+      if (!kept.has(id) && !explained.has(id) && eligible.has(id))
+        die(`Intentional exclusion ${id} needs a reason in --exclusions-file`);
+  }
+  const snapshot = selectionSnapshot(picked, {
+    ...args,
+    selection:
+      args.selection ??
+      current?.snapshot.selection ??
+      (args.changedSince ? `changed since ${args.changedSince}` : ""),
+    excluded,
+  });
+  const { rows, lines } = buildGrid(picked);
+  const automated = automatedGateOf({
+    picked,
+    refused,
+    includeAutomated: args.includeAutomated,
+  });
+  console.log(
+    `Run sheet: ${picked.length} selected cases, ${picked.filter((one) => prop(one.tc, "Status") === "draft").length} draft`,
+  );
+  console.log(automated.line);
+  for (const line of automated.leftOutLines) console.log(line);
+  for (const run of runsOf(picked, (one) => one.read.rel)) {
+    console.log(run.key);
+    for (const one of picked.slice(run.start, run.end))
+      console.log(`  ${displayCaseId(one.tc)}: ${one.tc.title}`);
+  }
+  for (const one of snapshot.excluded)
+    console.log(`Excluded: ${one.id} — ${one.reason}`);
+  console.log(`Fingerprint: ${snapshot.fingerprint}`);
+  console.log(`Source commit: ${sha}`);
+  if (args.dryRun) {
+    console.log(`Dry run: ${rows.length} rows; nothing written.`);
+    process.exit(0);
+  }
+  if (args.finalize) {
+    const finalized = transition(current, "finalize", {
+      snapshot,
+      confirmed: args.confirmed,
+    });
+    const next = { ...finalized, sourceCommit: sha };
+    const located = locateRun(summaryValues, titles, args.finalize);
+    const summaryId = sheets.find((one) => one.properties.title === SUMMARY_TAB)
+      .properties.sheetId;
+    await batchUpdate(token, args.sheet, [
+      await recordRequest(next, currentRow),
+      {
+        updateCells: {
+          start: {
+            sheetId: summaryId,
+            rowIndex: located.startRow,
+            columnIndex: SUMMARY_SHA_COL,
+          },
+          rows: cellRows([[sha]]),
+          fields: "userEnteredValue",
+        },
+      },
+    ]);
+    exportRecord(next);
+    console.log(
+      "Finalized. Download the artifact and run tcs:run-record to create its single commit.",
+    );
+    process.exit(0);
+  }
+  if (args.confirmed !== snapshot.fingerprint)
+    die(
+      "Selection fingerprint is not confirmed",
+      "Dry-run latest main, show the list, then pass --confirmed <fingerprint> after the person's yes.",
+    );
+  const found = args.overwrite
+    ? locateRun(summaryValues, titles, args.overwrite)
+    : null;
+  if (current) {
+    const result = transition(current, "print", { snapshot });
+    if (result === "unchanged") {
+      console.log("Unchanged: no Sheet write and no commit.");
+      exportRecord(current);
+      process.exit(0);
+    }
+  }
+  const runId = args.overwrite
+    ? Number(args.overwrite)
+    : Math.max(
+        0,
+        ...summaryValues
+          .slice(1)
+          .map((row) => Number(row[0]))
+          .filter(Number.isFinite),
+      ) + 1;
+  if (!args.sandbox && mergedRecord(ROOT, args.sheet, runId))
+    die(`Run ${runId} is already merged`);
+  if (!args.sandbox && !args.overwrite && registry.has(runId))
+    die(
+      `Summary and run registry disagree: run ${runId} is already registered`,
+      "Restore the Summary rows before printing; no run has been replaced.",
+    );
+  const tab = tabTitle(runId, slug(args.name));
+  if (titles.includes(tab) && tab !== found?.tab)
+    die(`Tab '${tab}' is occupied`, printRegister(titles, summaryValues));
+  summarySheetId = await ensureSummary(token, args.sheet, sheets);
+  const temporaryTab = found
+    ? `_trial-${runId}-${snapshot.fingerprint.slice(0, 12)}`
+    : tab;
+  if (titles.includes(temporaryTab))
+    die(
+      `Temporary tab '${temporaryTab}' already exists`,
       printRegister(titles, summaryValues),
     );
-  await batchUpdate(token, args.sheet, [
-    { deleteSheet: { sheetId: existing.properties.sheetId } },
-  ]);
-  sheetId = await writeRunTab(token, args.sheet, tab, rows, lines);
-  await putValues(
+  const sheetId = await writeRunTab(
     token,
     args.sheet,
-    `${quoteTab(SUMMARY_TAB)}!A${overwriteAt + 1}`,
-    payload,
-    false,
+    temporaryTab,
+    rows,
+    lines,
   );
-} else {
-  sheetId = await writeRunTab(token, args.sheet, tab, rows, lines);
-  const appended = await appendValues(
-    token,
-    args.sheet,
-    `${quoteTab(SUMMARY_TAB)}!A1`,
-    payload,
-  );
-  const after = await values(
-    token,
-    args.sheet,
-    `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}`,
-  );
-  const placed = locateRun(after.values ?? [], [...titles, tab], runId);
-  const blockStart = placed.ok
-    ? placed.startRow
-    : startRowOf(appended.updates?.updatedRange);
-  if (blockStart !== null)
-    await batchUpdate(
-      token,
-      args.sheet,
-      summaryDressing(summarySheetId, blockStart, SURFACES.length, runId),
+  const payload = summaryRows({
+    runId,
+    tab,
+    date: new Date().toISOString().slice(0, 10),
+    name: args.name,
+    selection: snapshot.selection,
+    env: args.env,
+    sha,
+  });
+  const record = args.sandbox
+    ? null
+    : validateRecord({
+        version: 1,
+        state: "trial",
+        spreadsheetId: args.sheet,
+        runId,
+        sheetId,
+        tab,
+        sourceCommit: sha,
+        snapshot,
+        copiedFrom: copiedFrom ?? current?.copiedFrom ?? null,
+      });
+  const requests = [];
+  if (found) {
+    const old = sheets.find((one) => one.properties.title === found.tab);
+    requests.push(
+      { deleteSheet: { sheetId: old.properties.sheetId } },
+      {
+        updateSheetProperties: {
+          properties: { sheetId, title: tab },
+          fields: "title",
+        },
+      },
+      {
+        updateCells: {
+          start: {
+            sheetId: summarySheetId,
+            rowIndex: found.startRow,
+            columnIndex: 0,
+          },
+          rows: cellRows(payload, {
+            formulaColumns: SUMMARY_COLUMNS.map((_, index) => index).slice(
+              SUMMARY_COLUMNS.indexOf("Total"),
+              SUMMARY_SHA_COL,
+            ),
+          }),
+          fields: "userEnteredValue",
+        },
+      },
     );
+  } else {
+    const blockStart = Math.max(summaryValues.length, 1);
+    requests.push(
+      {
+        appendCells: {
+          sheetId: summarySheetId,
+          rows: cellRows(payload, {
+            formulaColumns: SUMMARY_COLUMNS.map((_, index) => index).slice(
+              SUMMARY_COLUMNS.indexOf("Total"),
+              SUMMARY_SHA_COL,
+            ),
+          }),
+          fields: "userEnteredValue",
+        },
+      },
+      ...summaryDressing(summarySheetId, blockStart, SURFACES.length, runId),
+    );
+  }
+  if (record) requests.push(await recordRequest(record, currentRow));
+  // All updates validate together. A failed request leaves the old run intact.
+  // https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate
+  await batchUpdate(token, args.sheet, requests);
+  if (record) exportRecord(record);
+  else
+    console.log(
+      `Sandbox: https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`,
+    );
+  console.log(
+    `Printed ${lines.filter((line) => line.kind === "case").length} rows. Trial only; no commit created.`,
+  );
+} catch (error) {
+  die(error.message);
 }
-
-const cases = lines.filter((line) => line.kind === "case").length;
-console.log(
-  `\n${green("✓")} ${overwriteAt !== null ? "rewrote" : "wrote"} ${bold(tab)}  ${dim(`${cases} cases under ${journeys} journey banner${journeys === 1 ? "" : "s"}, ${args.env}, commit ${sha.slice(0, 12)}`)}`,
-);
-console.log(
-  `  ${dim(`https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`)}`,
-);
-console.log(
-  `\n${dim(`Mark ${SURFACES.join(", ")} and Notes. Prefill follows Testability: a surface that cannot answer starts at n/a.`)}`,
-);
-console.log(
-  `${dim("The case and its classification are locked. Sort inside the Walk filter view, not the sheet.")}`,
-);
-console.log(
-  `${dim("Do not rename or delete the tab — the Summary rows point at it by name.")}\n`,
-);
