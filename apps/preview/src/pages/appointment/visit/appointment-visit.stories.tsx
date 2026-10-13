@@ -6,13 +6,16 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import {
   type BookingSlot,
+  type VisitAct,
   VisitBody,
   type VisitBodyCopy,
   VisitBookedPass,
   VisitCancelPanel,
   type VisitCancelReason,
+  type VisitFact,
   VisitLinkOpensNothing,
   VisitMovePanel,
+  type VisitTone,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ReactNode, useState } from "react";
@@ -54,9 +57,13 @@ import {
   PICK_ANOTHER_ACT,
   RECONNECTING_COPY,
   SERVICE,
+  SHOP_CLOSED_COPY,
   TOLD_ROWS,
+  VAULT_FACTS,
   VISIT_FACTS,
   VISIT_NAME,
+  WITH_GRADING_COPY,
+  WITH_VAULT_COPY,
 } from "./appointment-visit-content";
 
 type VisitState =
@@ -67,7 +74,10 @@ type VisitState =
   | "cancelledYou"
   | "cancelledShop"
   | "reconnecting"
-  | "linkOpensNothing";
+  | "linkOpensNothing"
+  | "withGrading"
+  | "withVault"
+  | "shopClosed";
 
 type Panel = "move" | "cancel";
 
@@ -225,6 +235,36 @@ const ENDED: Record<
   },
 };
 
+/** Phases past the pass: the cards or item went on, or the shop shut for the day. */
+const PHASE_PAGES: Record<
+  "withGrading" | "withVault" | "shopClosed",
+  {
+    copy: VisitBodyCopy;
+    tone: VisitTone;
+    acts: readonly VisitAct[];
+    facts: readonly VisitFact[];
+  }
+> = {
+  withGrading: {
+    copy: WITH_GRADING_COPY,
+    tone: "ink",
+    acts: [MINE_ACT],
+    facts: VISIT_FACTS,
+  },
+  withVault: {
+    copy: WITH_VAULT_COPY,
+    tone: "ink",
+    acts: [MINE_ACT],
+    facts: VAULT_FACTS,
+  },
+  shopClosed: {
+    copy: SHOP_CLOSED_COPY,
+    tone: "warn",
+    acts: [PICK_ANOTHER_ACT],
+    facts: endedFacts(true),
+  },
+};
+
 function AppointmentVisitPage({ state }: { state: VisitState }) {
   if (state === "linkOpensNothing") {
     return (
@@ -233,6 +273,24 @@ function AppointmentVisitPage({ state }: { state: VisitState }) {
           bookHref={BOOK_HREF}
           copy={LINK_OPENS_NOTHING_COPY}
           mineHref={MINE_HREF}
+        />
+      </VisitShell>
+    );
+  }
+  if (
+    state === "withGrading" ||
+    state === "withVault" ||
+    state === "shopClosed"
+  ) {
+    const phase = PHASE_PAGES[state];
+    return (
+      <VisitShell>
+        <VisitBody
+          acts={phase.acts}
+          copy={phase.copy}
+          facts={phase.facts}
+          onDismiss={() => {}}
+          tone={phase.tone}
         />
       </VisitShell>
     );
@@ -363,6 +421,59 @@ export const LinkOpensNothing: Story = {
     const canvas = within(canvasElement);
     expect(
       canvas.getByRole("heading", { name: "This link doesn’t open a visit" }),
+    ).toBeVisible();
+  },
+};
+
+/** Sent to grading: no pass and no Directions, and grading's own mail follows. */
+export const WithGrading: Story = {
+  args: { state: "withGrading" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { name: "Your cards are with grading" }),
+    ).toBeVisible();
+    expect(canvas.queryByText("Your pass")).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Directions" })).toBeNull();
+    const crumbs = canvas.getByRole("navigation", { name: "Breadcrumb" });
+    const [mine, ...rest] = canvas
+      .getAllByRole("link", { name: "My visits" })
+      .filter((link) => !crumbs.contains(link));
+    expect(rest).toHaveLength(0);
+    expect(mine).toBeVisible();
+  },
+};
+
+/** Sent to the vault: no pass, and the vault's own mail follows. */
+export const WithTheVault: Story = {
+  args: { state: "withVault" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { name: "Your item is with the vault" }),
+    ).toBeVisible();
+    expect(canvas.queryByText("Your pass")).toBeNull();
+    expect(canvas.getByText("Vault Drop-Off")).toBeVisible();
+  },
+};
+
+/** The shop is shut for the day: the closure's reason, and Pick another time. */
+export const ShopClosed: Story = {
+  args: { state: "shopClosed" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", {
+        name: "The shop is closed for your visit",
+      }),
+    ).toBeVisible();
+    expect(
+      canvas.getByText(
+        "Signal 8 or black rain: we close while it’s up and email you.",
+      ),
+    ).toBeVisible();
+    expect(
+      canvas.getByRole("link", { name: "Pick another time" }),
     ).toBeVisible();
   },
 };

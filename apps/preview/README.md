@@ -8,6 +8,7 @@ shopper meets it, rather than as a catalogue of parts.
 pnpm storybook                 # the workbench: every story, by domain and feature
 pnpm storybook:pages           # the page assemblies alone
 pnpm test:stories:app          # the assemblies, in Chromium
+pnpm storybook:coverage        # what each feature holds; coverage.yaml says why some hold none
 ```
 
 The workbench build is published on every push to `main` (and on demand) to
@@ -22,7 +23,8 @@ load. `.storybook/` is the page assemblies alone. `.storybook-workbench/`
 extends it — same addons, same preview, re-exported rather than restated — with
 both packages' colocated stories read in place and the Start Here page, so a
 feature's screens sit beside the blocks they compose, in the manual's order
-([`docs/governance/storybook.md`](../../docs/governance/storybook.md)). Nothing is copied into this workspace; `pnpm
+([`docs/governance/storybook.md`](../../docs/governance/storybook.md)), each
+docs page linked to its manual page and each flow's journeys listed under it. Nothing is copied into this workspace; `pnpm
 storybook:ui` and `pnpm storybook:design-system` remain the focused
 single-package views.
 

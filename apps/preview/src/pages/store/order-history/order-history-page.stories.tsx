@@ -6,7 +6,8 @@ import {
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { OrderHistory, SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, waitFor, within } from "storybook/test";
+import { useState } from "react";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import {
   navigateToStory,
@@ -15,36 +16,85 @@ import {
 import {
   ACTIVE_ORDERS,
   ORDER_HISTORY_COPY,
+  ORDER_HISTORY_READ_COPY,
+  ORDER_HISTORY_READ_MS,
   PAST_ORDERS,
+  PENDING_ACTIVE_ORDERS,
 } from "./order-history-content";
+import {
+  OrderHistoryLoadingCards,
+  OrderHistoryReadFailed,
+} from "./order-history-states";
 
 /**
  * Order History as a store assembles it: `SiteHeader`, shared `OrderHistory`,
  * and `Footer`. Content and the Active/Past split live here — the compound
- * only renders what it is given.
+ * only renders what it is given. While the first read is in flight the page
+ * says so, and a failed read offers Retry, which reads again.
  */
-function OrderHistoryPage({ empty = false }: { empty?: boolean }) {
+function OrderHistoryPage({
+  empty = false,
+  pendingTotal = false,
+  read: initialRead = "filled",
+}: {
+  empty?: boolean;
+  /** An active order whose total is not settled yet. */
+  pendingTotal?: boolean;
+  /** The first read: `loading` shows skeletons, `failed` offers Retry. */
+  read?: "filled" | "loading" | "failed";
+}) {
+  const [read, setRead] = useState(initialRead);
+
+  const retry = () => {
+    setRead("loading");
+    window.setTimeout(() => setRead("filled"), ORDER_HISTORY_READ_MS);
+  };
+
+  const breadcrumbs = (
+    <Breadcrumbs>
+      <BreadcrumbItem href="#account">Account</BreadcrumbItem>
+      <BreadcrumbSeparator />
+      <BreadcrumbItem current>Your Orders</BreadcrumbItem>
+    </Breadcrumbs>
+  );
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
       <div className="flex w-full flex-1 justify-center">
-        <OrderHistory
-          activeOrders={empty ? [] : ACTIVE_ORDERS}
-          breadcrumbs={
-            <Breadcrumbs>
-              <BreadcrumbItem href="#account">Account</BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem current>Your Orders</BreadcrumbItem>
-            </Breadcrumbs>
-          }
-          copy={ORDER_HISTORY_COPY}
-          pastOrders={empty ? [] : PAST_ORDERS}
-          onShopNow={() => {}}
-          onTrackOrder={(orderId) => {
-            window.open(`https://example.com/track/${orderId}`, "_blank");
-          }}
-          onViewDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
-        />
+        {read === "filled" ? (
+          <OrderHistory
+            activeOrders={
+              empty ? [] : pendingTotal ? PENDING_ACTIVE_ORDERS : ACTIVE_ORDERS
+            }
+            breadcrumbs={breadcrumbs}
+            copy={ORDER_HISTORY_COPY}
+            pastOrders={empty ? [] : PAST_ORDERS}
+            onShopNow={() => {}}
+            onTrackOrder={(orderId) => {
+              window.open(`https://example.com/track/${orderId}`, "_blank");
+            }}
+            onViewDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
+          />
+        ) : (
+          <div className="flex w-full max-w-4xl flex-col gap-8 px-8 py-12">
+            {breadcrumbs}
+            <h1 className="text-3xl font-bold text-foreground">
+              {ORDER_HISTORY_COPY.title}
+            </h1>
+            {read === "loading" ? (
+              <OrderHistoryLoadingCards
+                label={ORDER_HISTORY_READ_COPY.loading}
+              />
+            ) : (
+              <OrderHistoryReadFailed
+                message={ORDER_HISTORY_READ_COPY.failed}
+                onRetry={retry}
+                retryLabel={ORDER_HISTORY_READ_COPY.retry}
+              />
+            )}
+          </div>
+        )}
       </div>
       <Footer {...STORE_FOOTER} />
     </div>
@@ -105,5 +155,48 @@ export const Empty: Story = {
     expect(
       canvas.queryByRole("heading", { level: 2, name: "Active Orders" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** The first read has not settled: the page says it is loading, with no empty-state claim. */
+export const Loading: Story = {
+  args: { read: "loading" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { level: 1, name: "Your Orders" }),
+    ).toBeVisible();
+    expect(
+      canvas.getByText(ORDER_HISTORY_READ_COPY.loading),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("No orders yet")).toBeNull();
+  },
+};
+
+/** The order read failed: the page offers Retry, which reads the orders again. */
+export const RecoverableFailure: Story = {
+  args: { read: "failed" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText(ORDER_HISTORY_READ_COPY.failed),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText("No orders yet")).toBeNull();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Retry" }));
+    await waitFor(() =>
+      expect(canvas.getByRole("button", { name: "Track Order" })).toBeVisible(),
+    );
+  },
+};
+
+/** An active order with no settled total says so, and shows no zero amount. */
+export const PendingTotal: Story = {
+  args: { pendingTotal: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(orderHistoryRevealed(canvasElement)).toBe(true));
+    expect(canvas.getByText("Total: Pending")).toBeVisible();
+    expect(canvas.queryByText(/Total: HK\$0/)).toBeNull();
   },
 };

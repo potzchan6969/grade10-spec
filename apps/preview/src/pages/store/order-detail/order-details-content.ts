@@ -137,4 +137,89 @@ const ORDER_DETAILS_CONTENT = {
   },
 };
 
-export { ORDER_DETAILS_CONTENT };
+/** A web order with one line refunded: the paid total stays, the refund shows apart. */
+const PARTIAL_REFUND_CONTENT = {
+  ...ORDER_DETAILS_CONTENT,
+  orderId: "Order #G10-10455",
+  status: "completed" as const,
+  lines: [
+    {
+      id: "refund-line-1",
+      product: "Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)",
+      subtotal: "HK$780",
+      quantity: "1",
+      total: "HK$780",
+      imageSrc: IMAGE,
+      imageAlt: "Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)",
+    },
+    {
+      id: "refund-line-2",
+      product: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      subtotal: "HK$105",
+      quantity: "1",
+      total: "HK$105",
+      imageSrc: IMAGE,
+      imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      lineStatus: "refunded" as const,
+      statusMessage: FIXTURE_REFUND_MESSAGE,
+      struckThrough: true,
+    },
+  ] satisfies readonly OrderDetailsLineItem[],
+  summary: {
+    subtotal: { label: "Subtotal", value: "HK$885.00" },
+    refund: { label: "Refund", value: "−HK$105.00" },
+    total: { label: "Total", value: "HK$885.00" },
+  } satisfies OrderDetailsSummary,
+};
+
+/** A point-of-sale order: the paid total only, with no web fields invented. */
+const POINT_OF_SALE_CONTENT = {
+  copy: ORDER_DETAILS_COPY,
+  orderId: "Order #G10-10290",
+  status: "completed" as const,
+  placedOn: FIXTURE_PLACED_ON_WITH_PERIOD,
+  placedOnDateTime: "2026-08-12",
+  needHelp: { href: "#" },
+  delivery: undefined,
+  lines: [] satisfies readonly OrderDetailsLineItem[],
+  summary: {
+    total: { label: "Total", value: "HK$1,050.00" },
+  } satisfies OrderDetailsSummary,
+  payment: undefined,
+  shippingAddress: undefined,
+};
+
+/** A web order paid partly with points: a Points row after the discount names the points used. */
+const POINTS_CREDIT_CONTENT = {
+  ...ORDER_DETAILS_CONTENT,
+  summary: {
+    subtotal: { label: "Subtotal", value: "HK$1,759.50" },
+    discount: { label: "Discount (SUMMER10)", value: "−HK$175.95" },
+    points: { label: "Points (100 pts)", value: "−HK$100.00" },
+    shipping: { label: "Shipping", value: "HK$50.00" },
+    total: { label: "Total", value: "HK$1,533.55" },
+  } satisfies OrderDetailsSummary,
+};
+
+/** Draft words for the detail read states, not yet in `@grade10/i18n`. */
+const ORDER_DETAILS_READ_COPY = {
+  loading: "Loading order",
+  notFoundTitle: "We couldn’t find this order",
+  notFoundDescription:
+    "Check the order number, or find the order in your orders.",
+  backToOrders: "Back to Your Orders",
+  failed: "We couldn’t load this order.",
+  retry: "Retry",
+};
+
+/** How long a retried order read takes in the workbench. */
+const ORDER_DETAILS_READ_MS = 400;
+
+export {
+  ORDER_DETAILS_CONTENT,
+  ORDER_DETAILS_READ_COPY,
+  ORDER_DETAILS_READ_MS,
+  PARTIAL_REFUND_CONTENT,
+  POINT_OF_SALE_CONTENT,
+  POINTS_CREDIT_CONTENT,
+};

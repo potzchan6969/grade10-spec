@@ -26,6 +26,12 @@ function getStandingText(
 }
 
 export const Countdown: Story = {
+  parameters: {
+    journeys: [
+      "grade10-site-auction-auction-US-11",
+      "grade10-site-auction-auction-US-12",
+    ],
+  },
   render: () => <BidPanelCountdownDemo />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -65,6 +71,14 @@ export const Countdown: Story = {
 };
 
 export const Bidding: Story = {
+  parameters: {
+    journeys: [
+      "grade10-site-auction-auction-US-02",
+      "grade10-site-auction-auto-bidding-US-01",
+      "grade10-site-auction-auto-bidding-US-02",
+      "grade10-site-auction-auto-bidding-US-03",
+    ],
+  },
   render: () => <BidPanelBiddingDemo />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -135,6 +149,15 @@ export const Bidding: Story = {
 };
 
 export const Interactive: Story = {
+  parameters: {
+    journeys: [
+      "grade10-site-auction-bid-panel-enrollment-US-01",
+      "grade10-site-auction-bid-panel-enrollment-US-02",
+      "grade10-site-auction-bid-panel-enrollment-US-03",
+      "grade10-site-auction-bid-panel-enrollment-US-04",
+      "grade10-site-auction-bid-panel-enrollment-US-05",
+    ],
+  },
   render: () => (
     <div className="mx-auto w-full max-w-md p-8">
       <ListingBidEnrollmentInteractiveDemo />
