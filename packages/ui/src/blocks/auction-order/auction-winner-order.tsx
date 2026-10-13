@@ -323,9 +323,7 @@ function ProgressCard({
           className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           data-slot="winner-order-progress-rail"
           ref={railRef}
-          // The rail scrolls on a phone; a keyboard reaches it to scroll too.
-          aria-label={copy.orderProgress}
-          role="region"
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: the rail scrolls sideways on a narrow screen, and a scroll container takes focus so a keyboard can scroll it.
           tabIndex={0}
         >
           <Stepper
