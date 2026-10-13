@@ -1,6 +1,6 @@
 # g10.auction-dmn Test Cases
 
-**Status:** reopened · 12/27
+**Status:** reopened · 11/27
 **Reviewed:** 2026-09-29, tcs-rules r4, lapsed 2026-10-02
 **Drafts styled:** 2026-10-10, tcs-rules r5
 
@@ -218,7 +218,8 @@
 - customer B is signed in with a linked card, on a separate session, and can bid on `<listing_14>`.
 - The catalogue publishes no lot under `<no lot address>`.
 - `<lot_1>` was published and listed in the catalogue, then an operator called it off.
-- customer has `<lot_1 address>` saved from when `<lot_1>` was published.
+- customer A bid on `<lot_1>` before it was called off, and has `<lot_1 address>` saved from when `<lot_1>` was published.
+- `<lot_2>` is a complete draft holding `<lot_1>`'s released slug, with a different title.
 - customer A leads `<listing_15>` at `<final price>` with maximum `<user A maximum>`.
 - customer B committed `<user B maximum>` on `<listing_15>` and was outbid.
 - customer A and customer B are signed in on separate sessions, both on the lot page for `<listing_15>`.
@@ -270,21 +271,29 @@
 10. Search the catalogue for the title of `<lot_1>`.
    - `<lot_1>` does not appear in the catalogue. g10.auction-dmn.US11-TC1
 11. Navigate to `<lot_1 address>`.
-   - response status is 200 and `<lot_1>`'s public listing page is on screen. `<!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->` g10.auction-dmn.US11-TC1
-12. Wait through the recorded close on both pages, without reloading.
+   - The response is 404 and Page not found is shown. `<!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->` g10.auction-dmn.US11-TC1
+12. As admin(holds auction:operate), create and publish `<lot_2>`, then, as customer A, navigate to `<lot_1 address>`.
+   - The response is 200 and shows `<lot_2>`'s page with its own title. g10.auction-dmn.US11-TC1
+13. As customer A, navigate to `<grade10 my auctions url>` and read `<lot_1>`'s row.
+   - `<lot_1>` stays in My Auctions with its original bids and history, says the card was not charged and has no link to `<lot_2>`. g10.auction-dmn.US11-TC1
+14. As admin(holds auction:operate), read `<lot_1>`'s code and reopen `<lot_1>`.
+   - `<lot_1>` keeps its original code and shows canceled. g10.auction-dmn.US11-TC1
+15. As customer A, search the catalogue for `<lot_1>`'s original title.
+   - `<lot_1>` stays out of public browse and watchlist. g10.auction-dmn.US11-TC1
+16. Wait through the recorded close on both pages, without reloading.
    - Once the close passes, both pages read Closed with no result until the close is recorded. g10.auction-dmn.US12-TC1
-13. As customer A, read the lot's state.
+17. As customer A, read the lot's state.
    - reads Won and step 3 reads Did not win, with Highest bid `<final price>` on both. g10.auction-dmn.US12-TC1
-14. As customer B, read the lot's state.
-15. As customer A, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
+18. As customer B, read the lot's state.
+19. As customer A, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
    - 's row reads Won, with Current bid `<final price>`. g10.auction-dmn.US12-TC1
-16. As customer B, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
+20. As customer B, navigate to `<my auctions url>`, select the Ended tab and find `<listing_15>`'s row.
    - 's row reads Didn't win, with Current bid `<final price>`, not `<user B maximum>`. g10.auction-dmn.US12-TC1
    - 's row reads "Your card was not charged.". g10.auction-dmn.US12-TC1
-17. Wait through the recorded close on both pages, without reloading.
-18. As customer A, read the lot's state once the result shows.
+21. Wait through the recorded close on both pages, without reloading.
+22. As customer A, read the lot's state once the result shows.
    - reads Won, with Highest bid `<final price>`. g10.auction-dmn.US12-TC2
-19. As customer C, read `<listing_16>`'s card.
+23. As customer C, read `<listing_16>`'s card.
    - Once the close passes, customer A's page reads Closed with no result until the close is recorded. g10.auction-dmn.US12-TC2
    - Until then, customer C's card shows its existing closed state with `<final price>` and no result. g10.auction-dmn.US12-TC2
    - 's card reads Ended and names when it ended, with no watch control. g10.auction-dmn.US12-TC2
@@ -339,6 +348,8 @@ catalogue and the listing page show,
 * Step 2 shows a preview of `<product>` and stores nothing until step 3.
 * `<product>` is stored as the gallery's first item and shows at card size in the media manager.
 * The catalogue card for `<listing_1>` shows `<product>` at card size, with `<alt text>` as its accessible name.
+
+---
 
 ## g10.auction-dmn.US2: Collector picks a lot out of the catalogue and opens it
 
@@ -479,6 +490,8 @@ Runs once per row of **Test data**.
 * Every lot the catalogue holds is listed as an absolute URL of the serving environment.
 * No sitemap entry carries an unfilled parameter in place of a lot.
 
+---
+
 ## g10.auction-dmn.US3: Collector links a card and places a first bid
 
 **As a** collector,
@@ -585,6 +598,8 @@ Runs once per row of **Test data**.
 * Step 4 shows no entry for `<listing_4>`.
 * Step 5 shows no row for `<listing_4>`.
 
+---
+
 ## g10.auction-dmn.US4: Collector commits a maximum and is bid to the lead
 
 **As a** collector,
@@ -640,6 +655,8 @@ from my card until I win.
 * After step 2 user A still leads and Highest bid reads `<user B maximum>` plus `<increment>`.
 * User A reads Your maximum, Highest bid and their standing as three separate facts.
 * After step 4 user B leads at `<user A maximum>` plus `<increment>`, with no bids recorded at the amounts in between.
+
+---
 
 ## g10.auction-dmn.US5: Collector learns they were outbid and finds it in their bids
 
@@ -733,6 +750,8 @@ from my card until I win.
 * The user's own rows read as You and user B stays a listing pseudonym with no maximum shown.
 * Step 2 lands on `<listing_10>`'s own page.
 
+---
+
 ## g10.auction-dmn.US6: Collector shares a lot link
 
 **As a** collector,
@@ -778,6 +797,8 @@ from my card until I win.
 * The served gallery, description and standing stay on screen, with no loading placeholder over them.
 * Time left counts on from the served value rather than jumping or blanking.
 * Highest bid still reads `<current bid>` once scripts have finished loading.
+
+---
 
 ## g10.auction-dmn.US7: Collector watches a late bid push the close out
 
@@ -936,6 +957,8 @@ from my card until I win.
 * The slide still reads LIVE BIDDING, with no Extended label.
 * Neither reads `<device skew>` off, and neither page reloaded.
 
+---
+
 ## g10.auction-dmn.US8: Collector's private bidding facts stay private
 
 **As a** collector,
@@ -1079,6 +1102,8 @@ it.
 * Highest bid reads `<price after B>`, and customer B leads.
 * Step 4 shows nothing held or charged on either card.
 
+---
+
 ## g10.auction-dmn.US9: Collector meets a lot that is not there
 
 **As a** collector,
@@ -1206,34 +1231,39 @@ it.
 * One accepted bid, one hold, and one history entry stand for that bid.
 * No bid, hold, release, capture or order state is duplicated.
 
+---
+
 ## g10.auction-dmn.US11: Collector follows an old link to a hidden lot
 
 **As a** collector,
 **I want** a called-off lot gone from browse and search,
-**so that** a saved address still opens it.
+**so that** its former address answers the current lot or Page not found.
 
-`<!-- trace:case id=g10.auction-dmn.TC-dw9 rev=2 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw,g10.auction-listing-page.SC-ajz -->`
-### g10.auction-dmn.US11-TC1: Called-off lot leaves the catalogue and keeps its address
+<!-- trace:case id=g10.auction-dmn.TC-dw9 rev=4 covers=g10.auction-lot-status.SC-pe2 -->
+### g10.auction-dmn.US11-TC1: Released address follows its new public holder
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-lot-status-US-02, grade10-site-auction-listing-page-US-03
+* **Trace:** grade10-site-auction-lot-status-US-02, grade10-site-auction-listing-page-US-03, grade10-site-auction-listing-page-US-01, grade10-site-auction-lot-status-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/domain.spec.ts`
 
 **Pre-conditions:**
 
 * `<lot_1>` was published and listed in the catalogue, then an operator called it off.
-* customer has `<lot_1 address>` saved from when `<lot_1>` was published.
+* customer A bid on `<lot_1>` before call off.
+* `<original_code>` is its reserved code from admin.
+* The account history was recorded before call off.
+* customer A has `<lot_1 address>` saved from when `<lot_1>` was published.
+* `<lot_2>` is a complete draft holding the released slug, with a different title.
 
 **Test data:**
 
@@ -1241,19 +1271,39 @@ it.
 | --- | --- |
 | lot_1 | A lot that was published, listed in the catalogue, then called off by an operator |
 | lot_1 address | The address of `<lot_1>` from when it was published |
+| lot_2 | A replacement draft with the same slug and a different title |
 
 **Steps:**
 
 1. Navigate to `<grade10 auction url>`.
 2. Search the catalogue for the title of `<lot_1>`.
 3. Navigate to `<lot_1 address>`.
+4. As customer A, read `<lot_1>` in My Auctions.
+5. As admin(holds auction:operate), read `<lot_1>`'s code.
+6. Create `<lot_2>`.
+7. Publish `<lot_2>`.
+8. As customer A, navigate to `<lot_1 address>`.
+9. Navigate to `<grade10 my auctions url>`.
+10. As admin(holds auction:operate), reopen `<lot_1>`.
+11. As customer A, search its original title in the catalogue.
 
 **Expected Results:**
 
 * Step 2: `<lot_1>` does not appear in the catalogue.
-* Step 3: response status is 200 and `<lot_1>`'s public listing page is on screen.
+* Step 3 returns 404 and Page not found.
+* Step 8 returns 200 and `<lot_2>`'s page.
+* Step 8 shows `<lot_2>`'s title, not `<lot_1>`'s.
+* Step 9 still lists `<lot_1>` for customer A.
+* Steps 4 and 9 retain `<lot_1>`'s original bids/history.
+* Both rows say the card was not charged.
+* Neither row links to `<lot_2>`.
+* Step 5 keeps `<original_code>` reserved on `<lot_1>`.
+* The replacement has a different code.
+* Step 10 shows canceled with `<original_code>` unchanged.
+* Step 11 does not find `<lot_1>`.
+* `<lot_1>` stays out of public browse and watchlist after reuse.
 
-`<!-- review-note 2026-09-29, listing-page: SC-11 (g10.auction-listing-page.SC-vl7, "the control acts on the addressed lot and no other") has no feature-level case — no user journey walks two-lot isolation. Consider a domain case exercising that watching lot A from lot A's page does not watch lot B when watching cases are added to this suite. -->`
+---
 
 ## g10.auction-dmn.US12: Bidders follow a lot through its close to their record
 
@@ -1358,6 +1408,8 @@ it.
 * Step 2 reads Won, with Highest bid `<final price>`.
 * Step 3's card reads Ended and names when it ended, with no watch control.
 * Neither page reloaded.
+
+---
 
 ## g10.auction-dmn.US13: Collectors bid against a house maximum through the close
 
@@ -1468,6 +1520,8 @@ it.
 * Step 2: Time left reads <extension duration> from customer B's bid.
 * Step 4 reads Won, with Highest bid <final price>.
 * Step 5's row reads Won with View order, Current bid <final price>.
+
+---
 
 ## Ungrouped
 
@@ -1724,3 +1778,18 @@ it.
 - **Rejected** - none
 - **Raised** - none
 - **Uncovered anchors** - none
+
+**Run:** QA2, 2026-10-12. QA1 used frozen bundle `02ba99d366a1f619b3df386916067b23a31ec77462132a92d7eddd4bd474713f`. QA2 read both independent readings, all 3 deltas, the complete feature maps, current and durable journeys, durable context, and the linked owner decisions. Case dispositions were recorded before scenario links.
+
+- **Disposition** - TC-dw9@4 checks the original code and no-charge bidder history before and after reuse, with public removal and replacement lookup. It does not drive cancellation, the non-bidder session or full metadata/hydration, so it receives no scenario link for those outcomes. SC14 is fully checked by lot-status TC-byf@3; SC55 by listing-page TC-2it@3. The other 26 inherited cases retain their identities, bodies and classifications.
+- **Coverage** - Complete case and scenario dispositions, source locations, anchor coverage and carried baseline findings are in the QA2 handoff. Missing scenario links are explicit gaps, not inferred coverage.
+- **Decision** - All called-off original slugs are reusable, including earlier records. The eligible current holder answers; otherwise the address is not found. Codes stay reserved and do not become public routes. Bidder history stays with the original listing. Q1-Q4 are settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
+
+**Run:** QA2 repair pass, 2026-10-13, after the re-key to durable case ids and the lot-status Bidder exception repair. Read the 3 deltas, their journeys and the durable site and admin auction suites. Cases were reconciled against the delta scenarios' trace ids; no scenario text shaped a case, and only bodies the pass read were linked.
+
+- **Disposition** - TC-dw9@4 now carries one link, SC07 (the catalogue and search no longer list the called-off lot). It was linked to SC06, SC07, SC08, SC13, SC-11, SC54 and SC55. None of the others is asserted by this route: it has no draft or unsold control (SC06), no watchlist step (SC08), no listing-data read (SC-11), no code-only request (SC13), no client navigation or client lookup (SC54) and no served metadata or hydration read (SC55). The earlier line that the case received no link is corrected by this one. Those scenarios stay covered by TC-7m2@4, TC-x03@2, TC-2it@3 and durable lot-status cases.
+- **Coverage** - No uncovered scenario at this level. The case asserts the new outcome: 404 before reuse, the new holder's page after reuse, the bidder row unchanged, the code reserved. It is the one domain case on the released-address path and is traced at domain by US-02, US-03 and US-01.
+- **Contradictions** - None in this delta: all 3 durable walks are carried and Walk 3 steps 7-15 match TC-dw9@4. The old case title and 200 result are replaced.
+- **Decision** - None new. Q1-Q4 stay settled.
+- **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.

@@ -18,7 +18,7 @@ the card is in the winner's hands. The collector's half is
 | Bid floor | The currency's price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
 | Title | Required at create; **1 to 200** characters |
 | Copy | Optional; at most **4,000** characters |
-| Slug | **1 to 64** characters, lower-case words joined by hyphens, unique among every listing |
+| Slug | **1 to 64** characters, lower-case words joined by hyphens, unique among the listings that hold one; a called-off listing holds none |
 | Quantity | **1 to 500** units of the chosen product; **1** when a product is picked |
 | Extension | **1,800 seconds** when omitted; **0** turns extended bidding off; an optional cap, and a cap below the duration is a hard final deadline |
 | Gallery | **1 to 8** images or videos of at most **100 MiB** each, stored as uploaded; a draft may hold none |
@@ -81,8 +81,9 @@ the card is in the winner's hands. The collector's half is
   it each field its publish still needs
 - 🚧 **Call off** - any time before the close, bids or not; the stock is
   released and the listing leaves browse and search. Its former address is
-  available for another listing. Its listing code stays reserved and never
-  resolves as a route; explicit hard deletion is outside this rule
+  available for another listing, and so is the address of a listing called
+  off earlier. Its listing code stays reserved and never resolves as a route;
+  explicit hard deletion is outside this rule
 - **Unsold close** — a listing that closes with no winner releases its
   stock hold at that moment, and the units are available again. The listing's page says the stock was released, with
   the date. An operator does nothing to get the stock back — [Products and

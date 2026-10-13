@@ -1,3 +1,113 @@
+## Pending Operation Delivery
+
+The [pending contract](specs/grade10-site/store/cart-drawer/spec.md) follows
+[Q20-Q21](decisions.md). This section governs the pending increment; the
+completed delivery notes below retain their earlier task scope.
+
+### Context
+
+The application sources were read on 2026-10-13 in the Grade10 workspace.
+
+| Source | Finding |
+| --- | --- |
+| `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx` | `tenderPending` mixes actual tender work with `tenderReadFailed`, `awaitingConfirmation` and summary presentation. Quantity, removal and product handlers do not share its guard. |
+| `useCart` and `useCartReview` | Cart reads expose `isFetching`; cart writes expose `isUpdating`; review exposes checking and failed states. Review checking can also mean a disabled first query. Cached lines can stay visible during a read. |
+| `useCartTender` | Serialized member writes expose `persistencePending`. The saved-choice query does not expose its fetching flag to the host. `ready` alone cannot distinguish an active read from a failed first read. |
+| `useBasketQuote` | A cached quote can remain ready while fetching, and `stale` can mean fetching, placeholder data or failure. The host needs the actual fetching flag separately. |
+| Host tender mapping | The current host obtains held-code eligibility and member points/basket ceiling from `useBasketQuote`. It does not mount separate eligibility/points reads. No `useSpendableCoupons` symbol remains; retained `usePointsTender` returns a full query with `isFetching`. |
+| `packages/ui/src/blocks/store-cart/cart-drawer.tsx` | The body and `CartItem` lack a pending prop. Footer and nested sheet accept `tenderPending`; the drawer forwards it there. Removal has a delayed presentation callback. The header and nested-sheet Back remain dismissal controls. |
+
+### Decisions
+
+- **Shared input** - Add optional `interactionPending?: boolean`, default
+  false, to `CartDrawerProps`, `CartDrawerBodyProps`, `CartItemProps` and
+  `CartDrawerFooterProps`, plus the already-exported `CartPromoSheetProps`.
+  The compound forwards it to the body, items, footer and promo sheet;
+  standalone consumers pass it to the existing public parts. No new export,
+  variant, token or dependency. The header receives no pending prop because
+  its only action dismisses the drawer.
+- **Compatibility** - Keep `tenderPending` and its existing tender-only
+  meaning. Footer and sheet use `interactionPending || tenderPending` in
+  addition to their existing local verifying and redirecting guards. Body
+  actions use `interactionPending`; existing callers that omit the new prop
+  retain their behavior. `loading` and `summaryLoading` still choose bones,
+  and `checkoutDisabled` still withholds payment for unresolved facts.
+- **Actual work** - Derive Grade10's interaction input from current-member
+  cart fetching and updating, review fetching, saved-tender fetching, basket
+  quote fetching (including its held-code eligibility and points/ceiling
+  answers), imperative open/Retry refreshes, tender proposal/persistence/
+  confirmation and checkout creation. Expose additive `isFetching` from
+  `useCartReview`, `useCartTender` and `useBasketQuote`, preserving existing callers. Count
+  explicit operations until their promises settle; query failure and stale
+  data or disabled queries alone do not count. A separately mounted optional
+  eligibility/points read, if a consumer already has one, contributes its
+  actual fetching flag; this host adds none. Unrelated page queries do not
+  enter this input.
+- **Overlaps** - OR independent active signals rather than clearing one
+  common boolean when the first promise ends. Imperative action tokens hold
+  the guard continuously across quote, persistence and confirming read;
+  release each in `finally`. A rejected confirming read ends its token while
+  the existing failed-data guard continues withholding unsupported actions.
+- **Same-turn activation** - Guard each host action before changing
+  disclosure state, cart intent or navigation. Set an immediate ref before
+  dispatch as well as publishing pending for the component; mutation/query
+  state alone appears too late to reject two callbacks in one turn.
+- **Controls** - Use native disabled semantics on buttons and inputs, and
+  guard callback entry points for pointer, Enter, Space, value-change and
+  delayed removal in both compound and standalone parts. Check the current
+  pending input before local edit state changes as well as before action
+  callbacks. On pending updates, clear undispatched removal timers and exit
+  bookkeeping; the timer also checks the latest pending input before dispatch.
+  A retained row returns from its removal animation, with no queued retry.
+  Preserve the immediate reduced-motion path and existing timer cleanup on
+  row removal and unmount. These refs and timers own presentation only;
+  operation state and completion remain consumer-owned.
+  Keep the existing delisted cleanup as read-driven work, distinct from user
+  removal; begin it only after read work finishes and include its writes in
+  the host's actual pending state.
+- **Dismissal** - Keep the header, nested-sheet Back, outside press and
+  Escape outside the interaction guard. Preserve sheet-first dismissal,
+  focus handling and scrolling. The existing
+  `onPromoStateChange({ status: "collapsed" })` transition from Back,
+  outside press or Escape is dismissal and remains callable; suppress edit,
+  opening and action proposals rather than every call to this callback.
+  Standalone `CartPromoSheet.onClose` also remains callable. Do not make the
+  entire Drawer inert.
+- **Context** - Retain member, basket and open-generation guards on tender answers.
+  Closing invalidates tender-view publication but does not release a sent operation's
+  token early. A same-member reopen observes outstanding writes or checkout
+  work and reads the persisted choice again; a different member never
+  inherits the earlier member's results. No action is replayed on clearing.
+  Q22 and checkout Q35 preserve current successful checkout navigation after
+  dismissal. Its request identity does not use the tender-view opening guard;
+  plain close or reopen does not make that checkout answer stale.
+- **Checkout owner** - This change builds the shared guard and host mapping.
+  `add-shopify-checkout-integration` retains checkout request/answer ownership
+  and verifies that its pending Pay joins this input. Its stale-answer tests
+  change cart/tender from another tab or session while this drawer is pending.
+
+| Rejected | Reason |
+| --- | --- |
+| Treating `loading`, missing data or a failed read as actual pending | A terminal failure would keep Retry and dismissal-independent actions blocked |
+| Expanding legacy `tenderPending` to every item action | Existing consumers would receive an unrelated behavior change |
+| Overlay, pointer-only mask or inert drawer | Keyboard callbacks or dismissal would not satisfy the contract |
+| New busy service, data client or persistence state | Existing hooks and local promise lifetimes provide the needed facts |
+
+### Delivery Order
+
+Land shared tests and the optional contract in this store first. Grade10
+advances its gitlink, then maps actual operations and guards host callbacks.
+The checkout increment consumes that same guard; it adds no competing pending
+state. The final walks exercise pending, overlaps, recovery and dismissal.
+
+### Risks / Trade-offs
+
+- **False busy** - Verify terminal errors clear actual pending with deferred
+  reads, while `checkoutDisabled` and absent callbacks retain data safety
+- **Early release** - Hold tokens through chained reads and preserve query/
+  mutation signals when another operation settles or the drawer closes
+- **Missed activation** - Exercise keyboard, open promo sheet, delayed removal
+  and same-turn calls at both shared and host boundaries
 ## Current Product Picture Delivery
 
 The approved thumbnail extension supersedes the image exclusion and the

@@ -1,4 +1,4 @@
-## User journeys
+## ADDED User journeys
 
 ### grade10-site-store-cart-drawer-US-01: Signed-in collector opens the current cart over the page
 
@@ -35,3 +35,21 @@
 **As a** signed-in collector,
 **I want** to pay for my reviewed cart from the drawer itself,
 **so that** I reach Shopify's hosted invoice without a second page.
+
+### g10.store-cart-drawer.US7: Collector waits for the current drawer operation
+
+**As a** signed-in collector whose cart drawer is reading, saving or starting checkout,
+**I want** its actions to wait until that work finishes,
+**so that** another cart change or checkout cannot start before its current answer is ready.
+
+### g10.store-cart-drawer.US8: Collector continues after a drawer operation ends
+
+**As a** signed-in collector whose drawer operation succeeds or fails,
+**I want** the drawer to offer the actions its current facts allow, including recovery when needed,
+**so that** I can continue or retry without a completed request leaving the drawer stuck.
+
+### g10.store-cart-drawer.US9: Collector leaves a pending drawer
+
+**As a** signed-in collector whose drawer is waiting for an operation,
+**I want** Close, backdrop click and Escape to keep working,
+**so that** I can return to the page without waiting for that operation to finish.

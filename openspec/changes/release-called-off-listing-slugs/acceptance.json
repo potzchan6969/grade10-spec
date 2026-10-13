@@ -1,0 +1,210 @@
+{
+  "version": 2,
+  "change": "release-called-off-listing-slugs",
+  "baseline": "1562fda28251b7e2912abb05e918e6621954294a65199c453bd041c25293d5ff",
+  "fingerprint": "7b9a9acff61fe5fc56e1df87d6511f04d9daff3d1c2a7f01cca5fb7838fd7f53",
+  "reviewedBy": "@htonyl",
+  "acceptedAt": "2026-10-13T04:06:43.111Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "63159524f2c3943d3dc368061b4f8fc6830bf9f0d4a2239bb88608ca42d552e7",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#auction-details",
+      "sha256": "68f01393e3cd8a0c7cfa5721e8024c5473844aaef7edd8a5cffda949ba9bd6a6",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#lot-status",
+      "sha256": "f3bb27b241e9a2479907e2224bb26762207283ce57c279e058cb70a1c21c7794",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/decisions.md",
+      "sha256": "effe1681238a78ba1f1022ac14924af3791ed0b8231293878ad0ac28fc49ea40",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/proposal.md",
+      "sha256": "fc0b515e6920dad414233f54c6e2fca4d3c30e8d732f36f48f283a921c84b61d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "993eda34b9ab1aeb589e533854ec44d1534ae01165b0698cdf9db9be3fbb48b3",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "c35e90d74d366243afa6c72e668acb746417fd3bc83f60b84805e70ecd71d98e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "0cb9f59ffb9038514c3f878eb89a4f5bae2af840039a1f8635b560a0722c9e1c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "83f4ccd207663689b1a84c19d3e1c6cdf6eda193c3ce68b41626b3d5cb1d6e65",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "ebe33364189982d86322ef57fbfd82c3124ba902128c00d8894129e6e955c93f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "8b896e999414425a4a5b089cac04c3e6955355c9926514704c83a4d97c366bc9",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "56a672d4008c8f256dd1f63f9aa5f7bcf53d491d054d086fd278be80d469f464",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "589e85d88febf07ffdc370ca5ff78fb9c7a643b418a712e12287adc24cfd643b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/lot-status/feature-tcs.md",
+      "sha256": "ca1b22ff9c92a751730b7fd03ce5c52f42044af1a1412d2c40c6084fa677d26d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/lot-status/spec.md",
+      "sha256": "2efdfb1613eda23cdd3c4b8ec1afcd16b426e52c0821ed7d33dec9d301487603",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/specs/grade10-site/auction/lot-status/user-journeys.md",
+      "sha256": "1f0393936bca07355c2e6cd1ef67215e0a99b2856b12f24f8003b39a81f78511",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/release-called-off-listing-slugs/tech-design.md",
+      "sha256": "c2f742597644a7d70f40852f7dcc40ae43d9ae6a4d902dd71fb8106eab888a02",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "d818ab45f09553714883b06b222ea7899b348e7e0507766055230abf365e271b",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "aec33c60d14e8f61373df227ef904ac93ba5d895d36bcbf497a8f2476a5340f8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "cf4b66f0c1754a8a6ea0976aeaa229376f6599d9899e99d2041b40af57e48ec5",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "a577da2a4bfb12fcb6a22cb98ccf37ac62d9eab3588a4f482565ffb26ff00e51",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "sha256": "17baabaac11fd47364358640e3003c5eb95ad5dd9bf17b5c3cdee799bbd55d8e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "16bfe60e9efcc84fd5f4c28bd5aae10f23c47cd4527e6e3fcfbda2e39be25560",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "f8458cecb59e3cacf3fd9598f521078a393bfc06ea8b0c0048cd6e3d688bfff2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "401e87206110bdec150b875afb513c6e780330b841370d179ee58966f45d0857",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+      "sha256": "fad7caa0de29f591327500b35bdf5bfdc94a09225732a0e740aaae4992563378",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+      "sha256": "8717abdb90b98b57a2597287da11fd0ee3f1a73d72b6c099772a965a9242cf0e",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+      "sha256": "a2675f5271d9f91f867423a5470a50135a9ec938b5091431c3d462325878dd99",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Operator may call off a listing that has not closed",
+        "Requirement: Slug is the listing's public lookup key"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: An address that names no lot is refused",
+        "Requirement: Listing code remains separate from public address lookup",
+        "Requirement: The listing code is only exposed through the canonical address"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Collectors never see hidden lots",
+        "Requirement: Every visible lot has one external lot status",
+        "Requirement: Hidden lots have no public address"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/lot-status/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

@@ -16,6 +16,11 @@
 - Listing data
   - Status in the listing data: every page uses the same value
 
+## REMOVED Feature set
+
+- Hidden lots
+  - Never shown:
+
 ## MODIFIED Requirements
 
 ### Requirement: Every visible lot has one external lot status
@@ -144,7 +149,8 @@ code SHALL NOT provide an alternate route. A draft remains unavailable.
 
 **Bidder exception** - A collector who bid on a called-off lot SHALL still see
 it in My Auctions, where the row says their card was not charged, per
-`grade10-site/auction/account-record`. No other collector SHALL see it.
+`grade10-site/auction/account-record`. That row SHALL NOT open another lot
+that now holds the former address. No other collector SHALL see it.
 
 <!-- trace:scenario id=g10.auction-lot-status.SC-me0 rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
@@ -199,4 +205,4 @@ it in My Auctions, where the row says their card was not charged, per
 
 - **GIVEN** a collector bid on a called-off lot whose former slug now belongs to a different public lot
 - **WHEN** the bidder opens My Auctions
-- **THEN** their called-off lot remains recorded with the existing no-charge result; it is not replaced by the new slug holder, and a collector who did not bid cannot see that called-off record
+- **THEN** their called-off lot remains recorded with the existing no-charge result; it is not replaced by the new slug holder and opens no lot at the reused address, and a collector who did not bid cannot see that called-off record

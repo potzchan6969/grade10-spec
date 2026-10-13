@@ -34,6 +34,7 @@ optional alt live in `grade10-site/auction/listing-media`.
 - Call off
   - Before close: an operator withdraws a listing that has not closed
   - Closed is frozen: a closed listing cannot be rewritten here
+  - Reusable address: call off releases the original slug for another listing
 - Gallery
   - One to eight uploads: images or videos, stored as uploaded, ordered, first item as the catalogue card
   - Combined sources: selected product assets and listing-only uploads form one ordered gallery
@@ -289,10 +290,11 @@ listing's public address `/auction/listings/<slug>`.
   refused, including when the other listing is `closed` or `settled`. A
   listing rewriting its own slug to the same value is not a collision. A
   `canceled` listing SHALL NOT keep the slug it held before cancel: that
-  original value is free for another listing.
+  original value is free for another listing. This applies to listings called
+  off before or after this rule is delivered.
 - Slug SHALL be writable while `draft` or `created`. A write of slug on a
   `published`, `closed`, `settled`, or `canceled` listing SHALL be refused,
-  except the rewrite Grade10 applies when the listing is canceled.
+  except the release Grade10 applies when the listing is canceled.
 - A collector SHALL receive a `published`, `closed`, or `settled` listing by
   opening `/auction/listings/<slug>`. A slug that names no such listing
   SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT
@@ -372,6 +374,22 @@ listing's public address `/auction/listings/<slug>`.
 - **WHEN** an operator sets slug to `charizard-psa-9-copy`
 - **THEN** Grade10 refuses the write
 - **AND** `/auction/listings/charizard-psa-9` still returns that listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-xck rev=1 -->
+#### Scenario: g10adm.auction-listing.SC155 - Field exit and Save accept a released address
+**Serves:** grade10-admin-auction-listing-US-73 - the operator selects an available address before saving
+
+- **GIVEN** a called-off listing formerly used slug charizard-psa-9 and no listing now holds it
+- **WHEN** an operator leaves Slug with charizard-psa-9 on another draft and saves
+- **THEN** the editor reports available and Save stores that slug on the draft without exposing the called-off listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-yml rev=1 -->
+#### Scenario: g10adm.auction-listing.SC156 - Existing called-off addresses become reusable
+**Serves:** grade10-admin-auction-listing-US-03 - the operator creates a replacement for an earlier withdrawn lot
+
+- **GIVEN** a listing called off before this rule was delivered previously held charizard-psa-9
+- **WHEN** an operator saves and creates another complete draft using charizard-psa-9
+- **THEN** the new listing holds the slug and becomes created; the old listing retains its listing code and bidder history without retaining that slug
 
 ### Requirement: Prices and window are writable before publish
 
@@ -735,14 +753,16 @@ opened and whether or not it has accepted bids. Cancel of a `created`
 listing SHALL be allowed even when a publish at is still in the future;
 Grade10 SHALL NOT later publish a listing that was canceled.
 
-When the listing has a canonical slug, cancel SHALL preserve it unchanged.
-The slug SHALL remain permanently reserved and the canceled listing SHALL
-continue to answer at `/auction/listings/<canonical slug>` with its public
-listing page. Call off removes the listing from browse and search; it does not
-make the canonical address inaccessible or release it for reuse. A listing
-with no slug SHALL stay without one.
-The same URL-preservation rule SHALL apply when Grade10 cancels the listing
-because its sale was canceled.
+When the listing has a slug, cancel SHALL release its original value as part
+of the same successful cancellation. The canceled listing SHALL NOT retain
+that slug or answer at its former address. Grade10 SHALL NOT create an alias,
+redirect, or alternate public address for the called-off listing. A listing
+with no slug SHALL stay without one. The same release rule SHALL apply when
+Grade10 cancels the listing because its campaign was canceled.
+
+Cancel SHALL preserve the listing code, its permanent reservation and the
+bidder's account record. Closed and settled listing slugs SHALL remain
+reserved.
 
 Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
@@ -805,18 +825,16 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains canceled
 
-<!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=1 -->
+<!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=2 -->
 #### Scenario: grade10-admin-auction-listing-SC-42 - Cancel rewrites the slug and frees the original
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
-- **GIVEN** a published listing whose id is
-  `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is
-  `charizard-psa-9`
+- **GIVEN** a published listing whose slug is charizard-psa-9
 - **WHEN** an authorized operator calls it off
-- **THEN** Grade10 keeps slug `charizard-psa-9`
-- **AND** `/auction/listings/charizard-psa-9` continues to return that listing
-- **AND** the slug remains unavailable to every later listing
+- **THEN** Grade10 releases charizard-psa-9 for another listing
+- **AND** the listing no longer answers at that address
 - **AND** the listing is absent from browse and search
+- **AND** its listing code and bidder history are retained
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-lj7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-43 - Cancel of a draft with no slug does not invent one
@@ -837,6 +855,22 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains published
 - **AND** its slug is unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-euk rev=1 -->
+#### Scenario: g10adm.auction-listing.SC157 - Campaign cancellation releases each called-off address
+**Serves:** grade10-admin/auction/campaign#grade10-admin-auction-campaign-US-05 - the operator withdraws the campaign and its remaining lots
+
+- **GIVEN** a campaign contains draft, created and published listings with slugs and a closed listing
+- **WHEN** the operator cancels the campaign and its eligible listings are called off
+- **THEN** each successfully called-off listing releases its original slug under the listing cancel rules; the closed listing retains its slug and outcome
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ejg rev=1 -->
+#### Scenario: g10adm.auction-listing.SC158 - Competing drafts reserve one released address
+**Serves:** grade10-admin-auction-listing-US-73 - the operator receives the authoritative result when another draft saves first
+
+- **GIVEN** a called-off listing has released charizard-psa-9 and two drafts select it
+- **WHEN** the operators save both drafts concurrently
+- **THEN** at most one draft holds charizard-psa-9; the other Save is refused as reserved and leaves its stored slug unchanged
 
 ### Requirement: A closed listing cannot be rewritten here
 

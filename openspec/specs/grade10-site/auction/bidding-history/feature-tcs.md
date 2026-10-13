@@ -1051,37 +1051,6 @@ Runs once per row of **Test data**.
 * Customer A's following movement is marked automatic.
 * Both records read as one step.
 
-<!-- trace:case id=g10.auction-bidding-history.TC-ybl rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
-### g10.auction-bidding-history.US3-TC3: Failed attempt sits beside unchanged auction state
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** none
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-bidding-history-US-03
-
-**Pre-conditions:**
-
-* A collector's attempt fails while another bidder remains leading.
-
-**Steps:**
-
-1. Navigate to <grade10 bids url>.
-2. Open that listing's combined history.
-3. Check the accepted price and leading pseudonym.
-
-**Expected Results:**
-
-* The failed private event appears at its authoritative time with its safe reason.
-* The auction's accepted price and leading pseudonym remain unchanged.
-
 <!-- trace:case id=g10.auction-bidding-history.TC-mug rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
 ### g10.auction-bidding-history.US3-TC4: Full retained history remains pageable
 
@@ -1208,6 +1177,37 @@ Runs once per row of **Test data**.
 * Step 2 matches the row's public history, under listing pseudonyms.
 * The leader matches the row.
 * Where the row names B's account history, step 3 matches it.
+
+<!-- trace:case id=g10.auction-bidding-history.TC-ybl rev=1 covers=g10.auction-bidding-history.SC-pbt,g10.auction-bidding-history.SC-9ii,g10.auction-bidding-history.SC-k4s,g10.auction-bidding-history.SC-dtm,g10.auction-bidding-history.SC-uqt,g10.auction-bidding-history.SC-kwx,g10.auction-bidding-history.SC-09w,g10.auction-bidding-history.SC-usg,g10.auction-bidding-history.SC-oyw,g10.auction-bidding-history.SC-4lm,g10.auction-bidding-history.SC-vc4 -->
+### g10.auction-bidding-history.US3-TC3: Failed attempt sits beside unchanged auction state
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bidding-history-US-03
+
+**Pre-conditions:**
+
+* A collector's attempt fails while another bidder remains leading.
+
+**Steps:**
+
+1. Navigate to <grade10 bids url>.
+2. Open that listing's combined history.
+3. Check the accepted price and leading pseudonym.
+
+**Expected Results:**
+
+* The failed private event appears at its authoritative time with its safe reason.
+* The auction's accepted price and leading pseudonym remain unchanged.
 
 ---
 
