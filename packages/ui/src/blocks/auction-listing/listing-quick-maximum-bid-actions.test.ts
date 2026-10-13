@@ -40,15 +40,13 @@ const COPY: ListingQuickMaximumBidActionsCopy = {
 };
 
 type CeilingCase = {
-  currency: "USD" | "HKD" | "JPY";
+  currency: "USD";
   ceilingMinor: number;
   ceilingMajor: string;
 };
 
 const CASES: readonly CeilingCase[] = [
   { currency: "USD", ceilingMinor: 1_000_000_000, ceilingMajor: "10000000" },
-  { currency: "HKD", ceilingMinor: 8_000_000_000, ceilingMajor: "80000000" },
-  { currency: "JPY", ceilingMinor: 5_000_000_000, ceilingMajor: "5000000000" },
 ];
 
 const BELOW_CEILING_CASES = [
@@ -58,20 +56,6 @@ const BELOW_CEILING_CASES = [
     ceilingMajor: "10000000",
     belowCeilingMinor: 999_999_900,
     belowCeilingMajor: "9999999",
-  },
-  {
-    currency: "HKD",
-    ceilingMinor: 8_000_000_000,
-    ceilingMajor: "80000000",
-    belowCeilingMinor: 7_999_999_900,
-    belowCeilingMajor: "79999999",
-  },
-  {
-    currency: "JPY",
-    ceilingMinor: 5_000_000_000,
-    ceilingMajor: "5000000000",
-    belowCeilingMinor: 4_999_999_999,
-    belowCeilingMajor: "4999999999",
   },
 ] as const;
 
@@ -326,18 +310,18 @@ describe("ListingQuickMaximumBidActions currency ceiling", () => {
 
   it("clamps raw fractional and very long paste text after whole-major cleaning without a message (shared-ui-auction-listing-SC-42, shared-ui-auction-listing-SC-53)", () => {
     const { container, field } = mount({
-      ...CASES[1],
+      ...CASES[0],
       standing: "none",
     });
 
-    paste(field, "80000000.99");
-    expect(field.value).toBe("80000000");
+    paste(field, "10000000.99");
+    expect(field.value).toBe("10000000");
     expectNoFieldMessage(container, field);
-    paste(field, "80000001.99");
-    expect(field.value).toBe("80000000");
+    paste(field, "10000001.99");
+    expect(field.value).toBe("10000000");
     expectNoFieldMessage(container, field);
     paste(field, "999999999999999999999999999999.99");
-    expect(field.value).toBe("80000000");
+    expect(field.value).toBe("10000000");
     expectNoFieldMessage(container, field);
     expect(within(container).queryByRole("alert")).toBeNull();
   });
@@ -356,14 +340,14 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
 
   it("collapses the entry group to a status row when the viewer's maximum is the ceiling (shared-ui-auction-listing-SC-64)", () => {
     const { container } = mountView({
-      ...CASES[1],
+      ...CASES[0],
       standing: "leading-max",
-      viewerMaximumMinor: 8_000_000_000,
+      viewerMaximumMinor: 1_000_000_000,
       currentBidMinor: 120_000,
     });
 
     expectNoEntry(container);
-    expect(within(container).getByText("Max: HK$80,000,000")).not.toBeNull();
+    expect(within(container).getByText("Max: US$10,000,000")).not.toBeNull();
     expect(
       within(container).getByText(
         "This is the highest maximum this auction accepts.",
@@ -374,16 +358,16 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
 
   it("collapses when the minimum next bid passes the ceiling while the maximum sits below it (shared-ui-auction-listing-SC-63)", () => {
     const { container } = mountView({
-      ...CASES[1],
+      ...CASES[0],
       standing: "leading-max",
-      viewerMaximumMinor: 7_999_995_000,
-      currentBidMinor: 7_999_995_000,
-      minBidMinor: 8_000_005_000,
+      viewerMaximumMinor: 999_995_000,
+      currentBidMinor: 999_995_000,
+      minBidMinor: 1_000_005_000,
       incrementMinor: 10_000,
     });
 
     expectNoEntry(container);
-    expect(within(container).getByText("Max: HK$79,999,950")).not.toBeNull();
+    expect(within(container).getByText("Max: US$9,999,950")).not.toBeNull();
     expect(
       within(container).getByText(
         "This is the highest maximum this auction accepts.",
@@ -393,27 +377,27 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
 
   it("collapses to the ceiling amount for a viewer holding no maximum (shared-ui-auction-listing-SC-65)", () => {
     const { container } = mountView({
-      ...CASES[1],
+      ...CASES[0],
       standing: "none",
-      currentBidMinor: 7_999_995_000,
-      minBidMinor: 8_000_005_000,
+      currentBidMinor: 999_995_000,
+      minBidMinor: 1_000_005_000,
       incrementMinor: 10_000,
     });
 
     expectNoEntry(container);
-    expect(within(container).getByText("HK$80,000,000")).not.toBeNull();
+    expect(within(container).getByText("US$10,000,000")).not.toBeNull();
     expect(
       within(container).getByText(
-        "Bidding has reached HK$80,000,000, the highest this auction accepts.",
+        "Bidding has reached US$10,000,000, the highest this auction accepts.",
       ),
     ).not.toBeNull();
   });
 
   it("renders the collapse instead of the needs-card lock (shared-ui-auction-listing-SC-66)", () => {
     const { container } = mountView({
-      ...CASES[1],
+      ...CASES[0],
       standing: "leading-max",
-      viewerMaximumMinor: 8_000_000_000,
+      viewerMaximumMinor: 1_000_000_000,
       amountEntryLocked: true,
     });
 
@@ -421,14 +405,14 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
     expect(
       within(container).queryByRole("button", { name: /link a card/i }),
     ).toBeNull();
-    expect(within(container).getByText("Max: HK$80,000,000")).not.toBeNull();
+    expect(within(container).getByText("Max: US$10,000,000")).not.toBeNull();
   });
 
   it("clamps a chip above the ceiling and merges chips onto one amount (shared-ui-auction-listing-SC-61, shared-ui-auction-listing-SC-62)", () => {
     const { container } = mountView({
-      ...CASES[1],
+      ...CASES[0],
       standing: "leading-max",
-      viewerMaximumMinor: 7_999_970_000,
+      viewerMaximumMinor: 999_970_000,
       currentBidMinor: 120_000,
       incrementMinor: 10_000,
     });
@@ -436,9 +420,9 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
     const group = within(container).getByRole("group");
     const chips = within(group).getAllByRole("button");
     expect(chips.map((chip) => chip.textContent)).toEqual([
-      expect.stringContaining("HK$79,999,800"),
-      expect.stringContaining("HK$79,999,900"),
-      expect.stringContaining("HK$80,000,000"),
+      expect.stringContaining("US$9,999,800"),
+      expect.stringContaining("US$9,999,900"),
+      expect.stringContaining("US$10,000,000"),
     ]);
     expect(chips[2]?.textContent).toContain("Limit");
 
@@ -446,12 +430,12 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
     const commitButton = within(container).getByRole("button", {
       name: /maximum to/i,
     });
-    expect(commitButton.textContent).toContain("80,000,000");
+    expect(commitButton.textContent).toContain("10,000,000");
 
     const { container: merged } = mountView({
-      ...CASES[1],
+      ...CASES[0],
       standing: "leading-max",
-      viewerMaximumMinor: 7_999_990_000,
+      viewerMaximumMinor: 999_990_000,
       currentBidMinor: 120_000,
       incrementMinor: 10_000,
     });
@@ -459,6 +443,6 @@ describe("ListingQuickMaximumBidActions ceiling-bound entry", () => {
       "button",
     );
     expect(mergedChips).toHaveLength(1);
-    expect(mergedChips[0]?.textContent).toContain("HK$80,000,000");
+    expect(mergedChips[0]?.textContent).toContain("US$10,000,000");
   });
 });

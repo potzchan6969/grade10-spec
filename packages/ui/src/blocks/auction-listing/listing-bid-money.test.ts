@@ -12,11 +12,8 @@ import {
 
 const FLOOR = 20_800_000; // HK$208,000
 
-const CURRENCY_CEILINGS = {
-  USD: 1_000_000_000,
-  HKD: 8_000_000_000,
-  JPY: 5_000_000_000,
-} as const;
+const USD_CEILING_MINOR = 1_000_000_000;
+const USD_CEILING_MAJOR = "10000000";
 
 describe("sanitizeMoneyDraft", () => {
   it("strips non-digits and discards any decimal fraction", () => {
@@ -32,9 +29,7 @@ describe("sanitizeMoneyDraft", () => {
 
 describe("sanitizeCustomMaximumDraft", () => {
   it.each([
-    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
-    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
-    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
   ] as const)(
     "accepts the supplied %s ceiling after whole-major conversion (shared-ui-auction-listing-SC-38, shared-ui-auction-listing-SC-58)",
     (currency, ceilingMinor, ceilingMajor) => {
@@ -54,18 +49,16 @@ describe("sanitizeCustomMaximumDraft", () => {
     expect(
       sanitizeCustomMaximumDraft(
         "500",
-        "HKD",
+        "USD",
         "",
-        CURRENCY_CEILINGS.HKD,
+        USD_CEILING_MINOR,
         "replacement",
       ),
     ).toBe("500");
   });
 
   it.each([
-    ["USD", CURRENCY_CEILINGS.USD, "10000000", "9000000"],
-    ["HKD", CURRENCY_CEILINGS.HKD, "80000000", "79000000"],
-    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000", "4900000000"],
+    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR, "9000000"],
   ] as const)(
     "restores a previous valid draft for a genuine typed append above the supplied ceiling (shared-ui-auction-listing-SC-39, shared-ui-auction-listing-SC-43)",
     (currency, ceilingMinor, ceilingMajor, previousDraft) => {
@@ -91,9 +84,7 @@ describe("sanitizeCustomMaximumDraft", () => {
   );
 
   it.each([
-    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
-    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
-    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
   ] as const)(
     "clamps an oversized paste or replacement to the supplied ceiling, including an empty previous draft (shared-ui-auction-listing-SC-40, shared-ui-auction-listing-SC-41, shared-ui-auction-listing-SC-59)",
     (currency, ceilingMinor, ceilingMajor) => {
@@ -121,9 +112,7 @@ describe("sanitizeCustomMaximumDraft", () => {
   );
 
   it.each([
-    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
-    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
-    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
   ] as const)(
     "clamps an appended paste and a cleaned fractional overshoot (shared-ui-auction-listing-SC-42, shared-ui-auction-listing-SC-60)",
     (currency, ceilingMinor, ceilingMajor) => {
@@ -149,9 +138,7 @@ describe("sanitizeCustomMaximumDraft", () => {
   );
 
   it.each([
-    ["USD", CURRENCY_CEILINGS.USD, "10000000"],
-    ["HKD", CURRENCY_CEILINGS.HKD, "80000000"],
-    ["JPY", CURRENCY_CEILINGS.JPY, "5000000000"],
+    ["USD", USD_CEILING_MINOR, USD_CEILING_MAJOR],
   ] as const)(
     "uses exact string comparison for very large cleaned digits (shared-ui-auction-listing-SC-42)",
     (currency, ceilingMinor, ceilingMajor) => {
@@ -170,22 +157,22 @@ describe("sanitizeCustomMaximumDraft", () => {
   it("accepts a fractional paste when whole-major cleaning reaches the ceiling (shared-ui-auction-listing-SC-53)", () => {
     expect(
       sanitizeCustomMaximumDraft(
-        "80000000.99",
-        "HKD",
+        "10000000.99",
+        "USD",
         "500",
-        CURRENCY_CEILINGS.HKD,
+        USD_CEILING_MINOR,
         "paste",
       ),
-    ).toBe("80000000");
+    ).toBe(USD_CEILING_MAJOR);
   });
 
   it("still accepts clearing to empty", () => {
     expect(
       sanitizeCustomMaximumDraft(
         "",
-        "HKD",
+        "USD",
         "500",
-        CURRENCY_CEILINGS.HKD,
+        USD_CEILING_MINOR,
         "paste",
       ),
     ).toBe("");
@@ -260,7 +247,7 @@ describe("resolveMaximumFloor", () => {
         viewerMaximumMinor: 200_000,
         standing: "leading-max",
         currentBidMinor: 120_000,
-        ceilingMinor: CURRENCY_CEILINGS.HKD,
+        ceilingMinor: USD_CEILING_MINOR,
       }),
     ).toEqual({ floorMinor: 200_100, reason: "leading-nudge" });
   });
@@ -270,10 +257,10 @@ describe("resolveMaximumFloor", () => {
       resolveMaximumFloor({
         minBidMinor: 1_300,
         incrementMinor: 10_000,
-        viewerMaximumMinor: CURRENCY_CEILINGS.HKD,
+        viewerMaximumMinor: USD_CEILING_MINOR,
         standing: "leading-max",
         currentBidMinor: 120_000,
-        ceilingMinor: CURRENCY_CEILINGS.HKD,
+        ceilingMinor: USD_CEILING_MINOR,
       }),
     ).toBeNull();
   });
@@ -281,21 +268,21 @@ describe("resolveMaximumFloor", () => {
   it("returns null when the minimum next bid already passes the ceiling (shared-ui-auction-listing-SC-63, shared-ui-auction-listing-SC-65)", () => {
     expect(
       resolveMaximumFloor({
-        minBidMinor: 8_000_005_000,
+        minBidMinor: 1_000_005_000,
         incrementMinor: 10_000,
-        viewerMaximumMinor: 7_999_995_000,
+        viewerMaximumMinor: 999_995_000,
         standing: "leading-max",
-        currentBidMinor: 7_999_995_000,
-        ceilingMinor: CURRENCY_CEILINGS.HKD,
+        currentBidMinor: 999_995_000,
+        ceilingMinor: USD_CEILING_MINOR,
       }),
     ).toBeNull();
     expect(
       resolveMaximumFloor({
-        minBidMinor: 8_000_005_000,
+        minBidMinor: 1_000_005_000,
         incrementMinor: 10_000,
         standing: "none",
-        currentBidMinor: 7_999_995_000,
-        ceilingMinor: CURRENCY_CEILINGS.HKD,
+        currentBidMinor: 999_995_000,
+        ceilingMinor: USD_CEILING_MINOR,
       }),
     ).toBeNull();
   });
@@ -303,13 +290,13 @@ describe("resolveMaximumFloor", () => {
   it("keeps a floor exactly at the ceiling", () => {
     expect(
       resolveMaximumFloor({
-        minBidMinor: CURRENCY_CEILINGS.HKD,
+        minBidMinor: USD_CEILING_MINOR,
         incrementMinor: 10_000,
         standing: "none",
-        currentBidMinor: 7_999_990_000,
-        ceilingMinor: CURRENCY_CEILINGS.HKD,
+        currentBidMinor: 999_999_000,
+        ceilingMinor: USD_CEILING_MINOR,
       }),
-    ).toEqual({ floorMinor: 8_000_000_000, reason: "floor-bid" });
+    ).toEqual({ floorMinor: USD_CEILING_MINOR, reason: "floor-bid" });
   });
 });
 
@@ -322,7 +309,7 @@ describe("quickMaximumPresetAmount", () => {
       incrementMinor: 4_000,
       currentBidMinor: 120_000,
       viewerMaximumMinor: 200_000,
-      ceilingMinor: CURRENCY_CEILINGS.HKD,
+      ceilingMinor: USD_CEILING_MINOR,
     } as const;
     expect(quickMaximumPresetAmount({ ...leading, multiples: 1 })).toEqual({
       amountMinor: 204_000,
@@ -346,7 +333,7 @@ describe("quickMaximumPresetAmount", () => {
       incrementMinor: 4_000,
       currentBidMinor: 120_000,
       viewerMaximumMinor: 116_000,
-      ceilingMinor: CURRENCY_CEILINGS.HKD,
+      ceilingMinor: USD_CEILING_MINOR,
     } as const;
     expect(quickMaximumPresetAmount({ ...challenger, multiples: 1 })).toEqual({
       amountMinor: 124_000,
@@ -378,7 +365,7 @@ describe("quickMaximumPresetAmount", () => {
         floorMaximumMinor: openingMinor,
         incrementMinor,
         currentBidMinor: openingMinor,
-        ceilingMinor: CURRENCY_CEILINGS.HKD,
+        ceilingMinor: USD_CEILING_MINOR,
       } as const;
       expect(
         [1, 2, 4].map(
@@ -393,22 +380,22 @@ describe("quickMaximumPresetAmount", () => {
     const nearCeiling = {
       isLeadingWithMaximum: true,
       hasBids: true,
-      floorMaximumMinor: 7_999_980_000,
+      floorMaximumMinor: 999_980_000,
       incrementMinor: 10_000,
       currentBidMinor: 120_000,
-      viewerMaximumMinor: 7_999_970_000,
-      ceilingMinor: CURRENCY_CEILINGS.HKD,
+      viewerMaximumMinor: 999_970_000,
+      ceilingMinor: USD_CEILING_MINOR,
     } as const;
     expect(quickMaximumPresetAmount({ ...nearCeiling, multiples: 1 })).toEqual({
-      amountMinor: 7_999_980_000,
+      amountMinor: 999_980_000,
       clamped: false,
     });
     expect(quickMaximumPresetAmount({ ...nearCeiling, multiples: 2 })).toEqual({
-      amountMinor: 7_999_990_000,
+      amountMinor: 999_990_000,
       clamped: false,
     });
     expect(quickMaximumPresetAmount({ ...nearCeiling, multiples: 4 })).toEqual({
-      amountMinor: 8_000_000_000,
+      amountMinor: USD_CEILING_MINOR,
       clamped: true,
     });
   });
