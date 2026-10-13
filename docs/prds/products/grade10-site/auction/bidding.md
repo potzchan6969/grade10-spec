@@ -150,7 +150,7 @@ any maximum.
 | Refused when | What the bid form says |
 | --- | --- |
 | Below the next minimum | **Minimum bid is** the minimum |
-| Above the currency's ceiling | 🚧 No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
+| Above the currency's ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
 | Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
 | At or above the bar without a verified identity | Where to verify; the auction hears nothing of the bid |
 | No linked card | **Link a card to bid.** |
@@ -181,7 +181,7 @@ Blocks](/p/shared/ui/auction-listing).
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** of the winning bid, the rate only, always on; the amount first appears on the invoice |
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
-| Custom maximum | 🚧 Whole major units only, up to the currency's bid ceiling; extra typed digits stop, and an oversized paste or replacement becomes the ceiling silently |
+| Custom maximum | Whole major units only, up to the currency's bid ceiling; extra typed digits stop, and an oversized paste or replacement becomes the ceiling silently |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Chips beyond the ceiling | 🚧 A quick bid above the ceiling is offered at the ceiling, captioned as the limit; duplicates collapse to one chip |
 | Nothing left to offer | 🚧 Their maximum at the ceiling, or the lot's next minimum above it, collapses the chips, custom field and bid action to the amount reached and a limit line; the buyer-fee line stays |

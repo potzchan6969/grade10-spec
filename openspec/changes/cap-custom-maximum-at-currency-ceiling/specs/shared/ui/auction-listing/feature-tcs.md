@@ -25,9 +25,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -71,9 +73,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -117,9 +121,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -159,9 +165,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -208,9 +216,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -254,9 +264,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -305,9 +317,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 
@@ -350,9 +364,11 @@ Runs once per row of **Test data**, in both set and raise modes.
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/custom-maximum-ceiling.spec.ts`
 
 **Pre-conditions:**
 

@@ -15,7 +15,7 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 | --- | --- |
 | Buyer fee on the panel | 🚧 **20%** on top of the winning bid, always on, never behind a tooltip |
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment |
-| Custom maximum | 🚧 Whole major units only, up to the listing currency's [bid ceiling](/p/grade10-site/auction/bidding#auction-logic) |
+| Custom maximum | Whole major units only, up to the listing currency's [bid ceiling](/p/grade10-site/auction/bidding#auction-logic) |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
 | Empty bid count | **No bids yet** while the lot is open; **No bids** when it is closed |
 | Lot title under the breadcrumb | Smaller title size on a small viewport; larger from tablet |
@@ -103,7 +103,7 @@ cancelled.
 
 - **Whole units only** — a typed decimal mark is refused, and a pasted
   fraction keeps its whole major units with no rounding
-- 🚧 **Ceiling** - extra typed digits stop at the listing currency's bid ceiling; an oversized paste or replacement becomes that ceiling, without a maximum-bid message
+- **Ceiling** - extra typed digits stop at the listing currency's bid ceiling; an oversized paste or replacement becomes that ceiling, without a maximum-bid message
 - 🚧 **Quick bids** — three chips at 1×, 2× and 4× the listing increment:
   from the current bid when the collector does not lead, from their committed
   maximum when they do; before any bid, chip 1× is the opening price itself
