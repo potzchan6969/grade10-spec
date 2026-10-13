@@ -297,8 +297,10 @@ on winner, In transit, Closed and All, opening on Needs action.
   it; an address recorded by phone asks for billing too, same as delivery by
   default
 - 🚧 **Invoice in the settlement currency** — the winner chooses USD or HKD at
-  order setup, and the operator sends the invoice in that currency. For an HKD
-  order the operator enters the HKD amounts; Grade10 holds no exchange rate
+  order setup, and the invoice is issued in that currency. The operator types
+  every amount in USD, the bank transfer fee included; for an HKD order Grade10
+  converts each line at the fixed rate and shows the operator no rate —
+  [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
 - 🚧 **Payment Processing Fee** - a card invoice's fee is Grade10's own: the
   Stripe card rule for the order's currency, grossed up so Grade10 keeps the
   Subtotal whole, read-only with the rule it came from. With no card rule for

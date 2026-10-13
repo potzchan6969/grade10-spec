@@ -199,22 +199,12 @@ hours of the close.
   account's language, as the rest of the site does
 
 - 🚧 **Fee range wording** — card reads `Card fee about {percentage}% + a fixed
-  amount`, the percentage of the rule of the currency picked; bank transfer reads `Bank fee set on your invoice` and names no
-  amount, because the operator sets that fee
+  amount`, the percentage of the rule of the currency picked; bank transfer
+  reads `Bank fee set on your invoice` and names no amount, because the
+  operator sets that fee
 - 🚧 **One-time address after a reload** — an unsaved one-time address stays
   on the order after leaving and returning, until the winner confirms or the
   setup deadline passes
-- 🚧 **Settlement currency** — the winner chooses USD or HKD before the payment
-  method, HKD first, and each currency remembers the method last picked in it;
-  the winning bid stays in USD, and the operator issues the invoice in the
-  chosen currency. Grade10 holds no exchange rate, so the operator sets the
-  HKD amounts
-- 🚧 **Methods by currency** — USD offers card, Hong Kong bank transfer and
-  overseas transfer by SWIFT; HKD offers card, FPS and Hong Kong bank
-  transfer. View Bank Details shows only the rails of the order's currency
-- ❓ **Rate, rounding and disclosure** — how the operator reaches an HKD
-  amount, how it rounds, and whether the invoice prints the USD winning bid
-  beside it; Finance and Product confirm
 - 🚧 **Card where Finance set a rule** — card is offered only in a currency
   with a card fee rule; in USD and JPY until Finance sets one, the choice
   reads that card is not yet available, per [Auction Management · Payment
@@ -706,8 +696,6 @@ a second payment provider, and changes to the bid-time rules.
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
 | Payment fee wording | 🚧 In flight | Card reads `Card fee about 3.4% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. Chosen over showing no figure for either. | Product (@tangconst) |
-| Settlement currency | 🚧 In flight | Lots and bids are USD alone; a winner settles in USD or HKD, chosen at order setup. HKD settlement is new: the operator issues the invoice in HKD, so Grade10 holds no exchange rate. Chosen over a rate in Payment Settings and over converting automatically at setup, which put a rate and its rounding on Finance before launch. Any other display currency later converts from USD. | Product (@tangconst) |
-| Methods by settlement currency | 🚧 In flight | USD: card, Hong Kong bank transfer, SWIFT. HKD: card, FPS, Hong Kong bank transfer. | Product (@tangconst) |
 | Card in USD and JPY | 🚧 In flight | Card launches without a rule in USD and JPY: until Finance saves one, a winner in that currency is not offered card and reads why. Chosen over holding launch for Finance's rates and over charging no card fee. | Finance |
 | Settlement currency | 🚧 In flight | The winner picks USD or HKD at order setup, nothing preselected, fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
 | HKD conversion | 🚧 In flight | One fixed rate, 7.85 HKD to 1 USD, rounded up, never shown; the USD winning bid is not printed on an HKD invoice or receipt. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
