@@ -44,6 +44,25 @@ type AuctionWinnerOrderLine = {
   tooltip?: string;
 };
 
+type AuctionSettlementCurrency = "USD" | "HKD";
+
+type AuctionPaymentRail = "fps" | "hk_local" | "swift";
+
+type AuctionWinnerOrderPaymentChoice = {
+  value: "card" | AuctionPaymentRail;
+  label: string;
+  feeRange: string;
+  unavailable?: string;
+};
+
+type AuctionWinnerOrderBankDetails = {
+  rail: AuctionPaymentRail;
+  title: string;
+  rows: readonly { label: string; value: string }[];
+  qrSrc?: string;
+  note?: string;
+};
+
 type AuctionWinnerOrderProps = {
   copy: AuctionWinnerOrderCopy;
   title: string;
@@ -75,6 +94,8 @@ type AuctionWinnerOrderProps = {
   summary: {
     lines: readonly AuctionWinnerOrderLine[];
     total: Omit<AuctionWinnerOrderLine, "tooltip"> | null;
+    convertedTotal?: Omit<AuctionWinnerOrderLine, "tooltip">;
+    convertedFee?: Omit<AuctionWinnerOrderLine, "tooltip">;
     invoicePdf?: AuctionWinnerOrderPdf;
     refund?: { title: string; onView?: () => void };
     alert?: AuctionWinnerOrderAlert;
@@ -99,6 +120,26 @@ type AuctionWinnerOrderProps = {
     confirm?: AuctionWinnerOrderAction & { deadline?: string };
   };
   billing?: { label: string; value: string };
+  settlementCurrency?: {
+    label: string;
+    options: readonly {
+      value: AuctionSettlementCurrency;
+      label: string;
+    }[];
+    value: AuctionSettlementCurrency | null;
+    onChange: (value: AuctionSettlementCurrency) => void;
+  };
+  paymentChoices?: {
+    label: string;
+    byCurrency: Record<
+      AuctionSettlementCurrency,
+      readonly AuctionWinnerOrderPaymentChoice[]
+    >;
+    value: AuctionWinnerOrderPaymentChoice["value"] | null;
+    onChange: (value: AuctionWinnerOrderPaymentChoice["value"]) => void;
+    none?: string;
+  };
+  bankDetails?: AuctionWinnerOrderBankDetails;
 };
 
 type AuctionAddressKind = "personal" | "company";
@@ -170,8 +211,12 @@ export type {
   AuctionAddressKind,
   AuctionWinnerOrderAction,
   AuctionWinnerOrderAlert,
+  AuctionPaymentRail,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderLine,
+  AuctionSettlementCurrency,
+  AuctionWinnerOrderBankDetails,
+  AuctionWinnerOrderPaymentChoice,
   AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,

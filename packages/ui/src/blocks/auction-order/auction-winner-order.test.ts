@@ -132,6 +132,13 @@ if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
   });
 }
 
+if (typeof window !== "undefined" && typeof window.PointerEvent !== "function") {
+  Object.defineProperty(window, "PointerEvent", {
+    configurable: true,
+    value: class PointerEvent extends MouseEvent {},
+  });
+}
+
 afterEach(() => {
   for (const { root, container } of roots.splice(0)) {
     act(() => root.unmount());
@@ -284,7 +291,10 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     const card = canvas.getByRole("radio", { name: /^Card\b/i });
 
     expect(canvas.getByText("Card is not yet available in USD")).not.toBeNull();
-    expect((card as HTMLButtonElement).disabled).toBe(true);
+    expect(
+      card.parentElement?.querySelector<HTMLInputElement>('input[type="radio"]')
+        ?.disabled,
+    ).toBe(true);
     act(() => card.click());
     expect(onPaymentChange).not.toHaveBeenCalled();
   });

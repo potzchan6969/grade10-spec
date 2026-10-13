@@ -158,7 +158,6 @@ export const PreparingInvoice: Story = {
       deliveryAddressBlock(canvasElement).getByText(/Wan Chai/),
     ).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
     expect(canvas.getByText("Tax")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);

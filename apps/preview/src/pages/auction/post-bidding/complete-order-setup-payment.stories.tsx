@@ -182,3 +182,33 @@ export const UsdOnly: Story = {
     expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
   },
 };
+
+/** A missing USD card fee rule leaves card unavailable but keeps bank rails. */
+export const UsdWithoutCardRule: Story = {
+  name: "USD without a card rule",
+  args: { cardFeePercentages: { HKD: 3.4 } },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Payment Method");
+    const modal = within(dialog);
+    await userEvent.click(modal.getByRole("button", { name: "USD" }));
+
+    const card = await waitFor(() => {
+      const choice = modal.getByRole("radio", { name: /^Card\b/i });
+      expect(choice).toBeVisible();
+      return choice;
+    });
+    expect(card).toHaveAttribute("aria-disabled", "true");
+    expect(
+      modal.getByText("Card is not yet available in USD"),
+    ).toBeVisible();
+    expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
+    expect(
+      modal.getByRole("radio", { name: /^International via SWIFT\b/ }),
+    ).toBeVisible();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+
+    await userEvent.click(modal.getByRole("radio", { name: /^HK Local\b/ }));
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+  },
+};

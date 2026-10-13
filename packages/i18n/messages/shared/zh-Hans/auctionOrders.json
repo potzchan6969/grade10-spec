@@ -14,12 +14,30 @@
   "viewDetail": "查看详情",
   "contactUs": "联系我们",
   "setup": {
+    "settlementCurrency": "结算货币",
+    "currency": {
+      "usd": "USD",
+      "hkd": "HKD"
+    },
+    "paymentMethod": "付款方式",
+    "paymentRail": {
+      "card": "信用卡",
+      "fps": "FPS",
+      "hkLocal": "香港本地转账",
+      "swift": "国际 SWIFT 汇款"
+    },
     "fee": {
       "card": "信用卡手续费约为 3.4% 加固定金额",
-      "bankTransfer": "银行转账手续费会列在你的发票上"
+      "bankTransfer": "银行转账手续费会列在你的发票上",
+      "noFee": "无手续费"
     },
     "cardUnavailable": "目前暂不支持使用 {currency} 信用卡付款。",
     "paymentUnavailable": "目前暂不支持以 {currency} 付款。"
+  },
+  "summary": {
+    "usdTotal": "订单总额",
+    "settlementTotal": "订单总额",
+    "paymentProcessingFee": "付款处理费"
   },
   "cancelledOn": "已于 {date} 取消",
   "insuranceTooltip": "运输途中按订单金额的 0.9% 计算。",

@@ -171,7 +171,7 @@ export type WinnerOrderBankRail = Exclude<
 >;
 
 /** Settlement currency the winner picks at Payment Method — USD or HKD. */
-type WinnerOrderSettlementCurrency = "USD" | "HKD";
+export type WinnerOrderSettlementCurrency = "USD" | "HKD";
 
 export type WinnerOrderSetupResult = {
   delivery: string;
@@ -900,6 +900,13 @@ function WinnerOrderSetupDialog({
                     className="gap-3"
                     onValueChange={(value) => {
                       if (
+                        value === "card" &&
+                        cardFeePercentages != null &&
+                        cardFeePercentages[settlementCurrency] == null
+                      ) {
+                        return;
+                      }
+                      if (
                         value === "card" ||
                         value === "fps" ||
                         value === "hk_local" ||
@@ -912,10 +919,17 @@ function WinnerOrderSetupDialog({
                   >
                     <div className="flex w-full flex-col gap-2">
                       <RadioCard
+                        disabled={
+                          cardFeePercentages != null &&
+                          cardFeePercentages[settlementCurrency] == null
+                        }
                         description={
-                          cardFeePercentages?.[settlementCurrency] == null
-                            ? FEE_RANGE_CARD
-                            : `Card fee about ${cardFeePercentages[settlementCurrency]}% + a fixed amount`
+                          cardFeePercentages != null &&
+                          cardFeePercentages[settlementCurrency] == null
+                            ? `Card is not yet available in ${settlementCurrency}`
+                            : cardFeePercentages?.[settlementCurrency] == null
+                              ? FEE_RANGE_CARD
+                              : `Card fee about ${cardFeePercentages[settlementCurrency]}% + a fixed amount`
                         }
                         title="Card"
                         value="card"
@@ -1172,5 +1186,5 @@ function WinnerOrderSetupDialog({
   );
 }
 
-export type { WinnerOrderSettlementCurrency, WinnerOrderSetupDialogProps };
+export type { WinnerOrderSetupDialogProps };
 export { WinnerOrderSetupDialog };

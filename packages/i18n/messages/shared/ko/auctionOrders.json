@@ -14,12 +14,30 @@
   "viewDetail": "상세 보기",
   "contactUs": "문의하기",
   "setup": {
+    "settlementCurrency": "결제 통화",
+    "currency": {
+      "usd": "USD",
+      "hkd": "HKD"
+    },
+    "paymentMethod": "결제 방법",
+    "paymentRail": {
+      "card": "카드",
+      "fps": "FPS",
+      "hkLocal": "홍콩 현지 송금",
+      "swift": "국제 SWIFT 송금"
+    },
     "fee": {
       "card": "카드 수수료는 약 3.4%에 고정 금액이 추가됩니다.",
-      "bankTransfer": "송금 수수료는 청구서에서 확인할 수 있습니다."
+      "bankTransfer": "송금 수수료는 청구서에서 확인할 수 있습니다.",
+      "noFee": "수수료 없음"
     },
     "cardUnavailable": "{currency} 통화에서는 아직 카드 결제를 이용할 수 없습니다.",
     "paymentUnavailable": "현재 {currency} 통화로는 결제를 이용할 수 없습니다."
+  },
+  "summary": {
+    "usdTotal": "주문 합계",
+    "settlementTotal": "주문 합계",
+    "paymentProcessingFee": "결제 처리 수수료"
   },
   "cancelledOn": "{date}에 취소됨",
   "insuranceTooltip": "운송 중 주문 금액의 0.9%입니다.",
