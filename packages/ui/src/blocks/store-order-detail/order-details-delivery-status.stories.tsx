@@ -9,7 +9,7 @@ import { OrderDetailsDeliveryStatus } from "./order-details-delivery-status";
 import { resolveDeliverySteps } from "./resolve-delivery-steps";
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsDeliveryStatus",
+  title: "Store/Order Detail/Blocks/OrderDetailsDeliveryStatus",
   component: OrderDetailsDeliveryStatus,
   tags: ["autodocs"],
   args: {

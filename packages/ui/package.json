@@ -13,7 +13,7 @@
     "build-storybook": "storybook build",
     "test:stories": "vitest run",
     "code-connect:publish": "figma connect publish --exit-on-unreadable-files",
-    "bones:build": "boneyard-js build \"http://localhost:6010/iframe.html?id=store-product-listing-productcard--boneyard-capture&viewMode=story&globals=mode:dark;colorTheme:grade10\" --force --no-scan"
+    "bones:build": "boneyard-js build \"http://localhost:6010/iframe.html?id=store-product-listing-blocks-productcard--boneyard-capture&viewMode=story&globals=mode:dark;colorTheme:grade10\" --force --no-scan"
   },
   "exports": {
     ".": "./src/index.ts",

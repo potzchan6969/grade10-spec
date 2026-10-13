@@ -21,7 +21,7 @@ function Held(props: VisitLatePanelProps) {
 }
 
 const meta = {
-  title: "Appointment Visit/VisitLatePanel",
+  title: "Appointment/Visit/Blocks/VisitLatePanel",
   component: VisitLatePanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

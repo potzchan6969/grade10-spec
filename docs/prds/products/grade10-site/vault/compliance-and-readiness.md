@@ -86,7 +86,7 @@ it; no statute here is asserted.
   contact; no licence line prints until Legal writes one
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
   still read “Being prepared” on the live site. An auction-launch draft for
-  review lives in Storybook under Pages/Legal, not in the message catalogs
+  review lives in Storybook under Site/Carried Surfaces/Legal, not in the message catalogs
 - **Counsel's wording on those pages** — the Terms, the Privacy Policy and
   the collection statement are counsel's, readiness item 3; production refuses
   the statement's send while it is unwritten

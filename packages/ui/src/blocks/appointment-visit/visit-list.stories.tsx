@@ -4,7 +4,7 @@ import { LIST_COPY, PAST_ROWS, UPCOMING_ROWS } from "./fixtures";
 import { VisitList } from "./visit-list";
 
 const meta = {
-  title: "Appointment Visit/VisitList",
+  title: "Appointment/Visit/Blocks/VisitList",
   component: VisitList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

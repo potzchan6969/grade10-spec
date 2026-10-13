@@ -26,8 +26,8 @@ application provides the callback that owns the navigation
 
 ## Designs
 
-::story{id="store-order-detail-orderdetails--item-coupon" title="A complete order detail"}
+::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="A complete order detail"}
 
-::story{id="store-order-detail-orderdetails--no-optional-groups" title="Only supplied order facts"}
+::story{id="store-order-detail-blocks-orderdetails--no-optional-groups" title="Only supplied order facts"}
 
-::story{id="store-order-detail-orderdetailssidebar--paid-total-only" title="A paid total without a subtotal"}
+::story{id="store-order-detail-blocks-orderdetailssidebar--paid-total-only" title="A paid total without a subtotal"}

@@ -4,7 +4,7 @@ import { expect, within } from "storybook/test";
 import { Button } from "./button";
 
 const meta = {
-  title: "Components/Button",
+  title: "Design System/Forms/Button",
   component: Button,
   tags: ["autodocs"],
   args: { children: "Button" },

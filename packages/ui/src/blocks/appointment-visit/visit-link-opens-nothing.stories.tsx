@@ -4,7 +4,7 @@ import { BOOK_HREF, LINK_OPENS_NOTHING_COPY, MINE_HREF } from "./fixtures";
 import { VisitLinkOpensNothing } from "./visit-link-opens-nothing";
 
 const meta = {
-  title: "Appointment Visit/VisitLinkOpensNothing",
+  title: "Appointment/Visit/Blocks/VisitLinkOpensNothing",
   component: VisitLinkOpensNothing,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

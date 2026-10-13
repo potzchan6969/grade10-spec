@@ -7,7 +7,7 @@ import {
 } from "./breadcrumbs";
 
 const meta = {
-  title: "Components/Breadcrumbs",
+  title: "Design System/Display/Breadcrumbs",
   component: Breadcrumbs,
   tags: ["autodocs"],
 } satisfies Meta<typeof Breadcrumbs>;

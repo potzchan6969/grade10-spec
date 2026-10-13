@@ -7,7 +7,7 @@ import {
 } from "./product-browse.story-shared";
 
 const meta = {
-  title: "Store Product Listing/ProductBrowse",
+  title: "Store/Product Listing/Blocks/ProductBrowse",
   component: ProductBrowse,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

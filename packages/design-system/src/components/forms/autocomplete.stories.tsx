@@ -55,7 +55,7 @@ const TAGS: Suggestion[] = [
  * Menu with group labels (`6554:5962`) and empty state.
  */
 const meta = {
-  title: "Components/Autocomplete",
+  title: "Design System/Forms/Autocomplete",
   component: Autocomplete,
   tags: ["autodocs"],
   decorators: [

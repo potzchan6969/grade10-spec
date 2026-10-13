@@ -7,17 +7,17 @@ still draw `Cart Item Slot` are historical reference only.
 
 | Surface | Storybook (SoT) | Figma (historical) |
 | --- | --- | --- |
-| Populated | [`Store Cart/CartDrawer` → Default](?path=/story/store-cart-cartdrawer--default) | [Cart](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3831&m=dev), [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
-| Empty | [`Store Cart/CartDrawer` → Empty State](?path=/story/store-cart-cartdrawer--empty-state) | [Cart, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6807&m=dev), [Cart Drawer, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6810&m=dev) |
-| Overflow | [`Store Cart/CartDrawer` → Overflow Items](?path=/story/store-cart-cartdrawer--overflow-items) | - |
-| Empty, no description | [`Store Cart/CartDrawer` → Empty State Without Description](?path=/story/store-cart-cartdrawer--empty-state-without-description) | - |
-| Loading with lines | [`Store Cart/CartDrawer` → Loading With Lines](?path=/story/store-cart-cartdrawer--loading-with-lines) | - |
-| Loading, no lines | [`Store Cart/CartDrawer` → Loading No Lines](?path=/story/store-cart-cartdrawer--loading-no-lines) | - |
-| Only delisted lines | [`Store Cart/CartDrawer` → Only Delisted Lines](?path=/story/store-cart-cartdrawer--only-delisted-lines) | - |
-| Only sold-out lines | [`Store Cart/CartDrawer` → Only Sold Out Lines](?path=/story/store-cart-cartdrawer--only-sold-out-lines) | - |
-| Mixed line states | [`Store Cart/CartDrawer` → Mixed Line States](?path=/story/store-cart-cartdrawer--mixed-line-states) | - |
+| Populated | [`Store/Cart/Blocks/CartDrawer` → Default](?path=/story/store-cart-blocks-cartdrawer--default) | [Cart](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3831&m=dev), [Cart Drawer](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493&m=dev) |
+| Empty | [`Store/Cart/Blocks/CartDrawer` → Empty State](?path=/story/store-cart-blocks-cartdrawer--empty-state) | [Cart, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6807&m=dev), [Cart Drawer, empty](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4799-6810&m=dev) |
+| Overflow | [`Store/Cart/Blocks/CartDrawer` → Overflow Items](?path=/story/store-cart-blocks-cartdrawer--overflow-items) | - |
+| Empty, no description | [`Store/Cart/Blocks/CartDrawer` → Empty State Without Description](?path=/story/store-cart-blocks-cartdrawer--empty-state-without-description) | - |
+| Loading with lines | [`Store/Cart/Blocks/CartDrawer` → Loading With Lines](?path=/story/store-cart-blocks-cartdrawer--loading-with-lines) | - |
+| Loading, no lines | [`Store/Cart/Blocks/CartDrawer` → Loading No Lines](?path=/story/store-cart-blocks-cartdrawer--loading-no-lines) | - |
+| Only delisted lines | [`Store/Cart/Blocks/CartDrawer` → Only Delisted Lines](?path=/story/store-cart-blocks-cartdrawer--only-delisted-lines) | - |
+| Only sold-out lines | [`Store/Cart/Blocks/CartDrawer` → Only Sold Out Lines](?path=/story/store-cart-blocks-cartdrawer--only-sold-out-lines) | - |
+| Mixed line states | [`Store/Cart/Blocks/CartDrawer` → Mixed Line States](?path=/story/store-cart-blocks-cartdrawer--mixed-line-states) | - |
 
-Body-only empty: [`Store Cart/CartDrawerBody` → Empty](?path=/story/store-cart-cartdrawerbody--empty).
+Body-only empty: [`Store/Cart/Blocks/CartDrawerBody` → Empty](?path=/story/store-cart-blocks-cartdrawerbody--empty).
 
 ## Components
 

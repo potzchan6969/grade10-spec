@@ -13,7 +13,7 @@ import {
 const SRC = "https://github.com/shadcn.png";
 
 const meta = {
-  title: "Components/Avatar",
+  title: "Design System/Display/Avatar",
   component: Avatar,
   tags: ["autodocs"],
   args: { size: "lg" },

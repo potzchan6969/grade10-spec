@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { mkdir, mkdtemp, rename, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { affectedPageStories, slackPayload } from "./changed-page-links.mjs";
+import {
+  affectedPageStories,
+  changedFiles,
+  slackPayload,
+} from "./changed-page-links.mjs";
 
 async function fixture(files) {
   const root = await mkdtemp(join(tmpdir(), "storybook-links-"));
@@ -392,4 +397,36 @@ test("links the story count and keeps hierarchy separators outside the link", ()
     },
     type: "section",
   });
+});
+
+test("reads a moved story file as a move, not a removal and an addition", async () => {
+  const root = await mkdtemp(join(tmpdir(), "changed-page-links-"));
+  const git = (...args) =>
+    execFileSync("git", args, { cwd: root, encoding: "utf8" });
+  git("init", "-q", "-b", "main");
+  git("config", "user.email", "test@example.com");
+  git("config", "user.name", "Test");
+  await mkdir(join(root, "apps/preview/src/pages/store/home"), {
+    recursive: true,
+  });
+  await writeFile(
+    join(root, "apps/preview/src/pages/store-home.stories.tsx"),
+    'const meta = { title: "Pages/Store" };\nexport default meta;\nexport const Default = {};\n',
+  );
+  git("add", ".");
+  git("commit", "-q", "-m", "base");
+  await rename(
+    join(root, "apps/preview/src/pages/store-home.stories.tsx"),
+    join(root, "apps/preview/src/pages/store/home/store-home.stories.tsx"),
+  );
+  git("add", "-A");
+  git("commit", "-q", "-m", "move");
+
+  assert.deepEqual(await changedFiles("HEAD~1", "HEAD", root), [
+    { path: "apps/preview/src/pages/store-home.stories.tsx", status: "R" },
+    {
+      path: "apps/preview/src/pages/store/home/store-home.stories.tsx",
+      status: "M",
+    },
+  ]);
 });

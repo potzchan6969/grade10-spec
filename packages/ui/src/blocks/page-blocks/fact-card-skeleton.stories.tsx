@@ -4,7 +4,7 @@ import { FactCardSkeleton } from "./fact-card-skeleton";
 import { LOADING_LABEL } from "./fixtures";
 
 const meta = {
-  title: "Page Blocks/FactCardSkeleton",
+  title: "Site/Page Shell/Blocks/FactCardSkeleton",
   component: FactCardSkeleton,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

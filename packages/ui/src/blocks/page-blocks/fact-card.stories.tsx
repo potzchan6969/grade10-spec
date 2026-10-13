@@ -18,7 +18,7 @@ import {
 } from "./fixtures";
 
 const meta = {
-  title: "Page Blocks/FactCard",
+  title: "Site/Page Shell/Blocks/FactCard",
   component: FactCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

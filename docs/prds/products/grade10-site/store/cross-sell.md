@@ -54,13 +54,13 @@ the similar cards follow
 
 ## Designs
 
-::story{id="store-product-related-rail--picks-and-similar" title="The rail under a card"}
+::story{id="store-cross-sell-blocks-storeproductrelatedrail--picks-and-similar" title="The rail under a card"}
 
-::story{id="store-product-related-rail--sold-out-pick-opens" title="A sold-out pick, still open"}
+::story{id="store-cross-sell-blocks-storeproductrelatedrail--sold-out-pick-opens" title="A sold-out pick, still open"}
 
-::story{id="store-product-related-rail--one-card" title="One card is enough"}
+::story{id="store-cross-sell-blocks-storeproductrelatedrail--one-card" title="One card is enough"}
 
-::story{id="store-product-related-rail--narrow" title="On a narrow screen"}
+::story{id="store-cross-sell-blocks-storeproductrelatedrail--narrow" title="On a narrow screen"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector who reaches a card and does not buy it leaves with nothing else to

@@ -4,7 +4,7 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { EmptyPanel } from "./empty-panel";
 
 const meta = {
-  title: "Page Blocks/EmptyPanel",
+  title: "Site/Page Shell/Blocks/EmptyPanel",
   component: EmptyPanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

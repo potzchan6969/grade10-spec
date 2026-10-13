@@ -32,7 +32,7 @@ const breadcrumbs = (
 );
 
 const meta = {
-  title: "Store Order Detail/OrderDetails",
+  title: "Store/Order Detail/Blocks/OrderDetails",
   component: OrderDetails,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

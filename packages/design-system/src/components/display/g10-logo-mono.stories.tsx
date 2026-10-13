@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { G10LogoMono } from "./g10-logo-mono";
 
 const meta = {
-  title: "Components/G10LogoMono",
+  title: "Design System/Display/G10LogoMono",
   component: G10LogoMono,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

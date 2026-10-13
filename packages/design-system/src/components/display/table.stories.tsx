@@ -6,7 +6,7 @@ import { TableHeader } from "./table-header";
 import { TableRow } from "./table-row";
 
 const meta = {
-  title: "Components/Table",
+  title: "Design System/Display/Table",
   component: Table,
   tags: ["autodocs"],
 } satisfies Meta<typeof Table>;

@@ -127,6 +127,10 @@ jobs:
           git fetch --quiet --no-tags --depth=1 origin +refs/heads/main:refs/remotes/origin/main
           pnpm run check:manual
 
+      - name: Check stories
+        if: ${{ !cancelled() }}
+        run: pnpm run storybook:check
+
       - name: Check diagrams
         if: ${{ !cancelled() }}
         run: pnpm run diagrams:check

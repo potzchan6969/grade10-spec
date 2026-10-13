@@ -7,7 +7,7 @@ import { CAUSEWAY_BAY, LOCATION_PICKER_COPY } from "./fixtures";
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Appointment Booking/BookingLocationPicker",
+  title: "Appointment/Booking/Blocks/BookingLocationPicker",
   component: BookingLocationPicker,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -8,7 +8,7 @@ import { NAV_BASE_ARGS, NAV_ITEMS } from "./nav.story-shared";
 const cartSlotClick = fn();
 
 const meta = {
-  title: "Components/Nav/Overview",
+  title: "Design System/Layout/Nav/Overview",
   component: Nav,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

@@ -13,7 +13,7 @@ import {
 } from "./drawer";
 
 const meta = {
-  title: "Components/Drawer",
+  title: "Design System/Overlays/Drawer",
   component: Drawer,
   tags: ["autodocs"],
   parameters: {

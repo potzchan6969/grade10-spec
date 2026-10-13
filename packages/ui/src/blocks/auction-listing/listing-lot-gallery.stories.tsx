@@ -41,7 +41,7 @@ const THREE_IMAGES = [
 ] as const;
 
 const meta = {
-  title: "Auction Listing/ListingLotGallery",
+  title: "Auction/Display/Blocks/ListingLotGallery",
   component: ListingLotGallery,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

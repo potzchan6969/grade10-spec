@@ -4,7 +4,7 @@ import { TableHead } from "./table-head";
 import { TableHeader } from "./table-header";
 
 const meta = {
-  title: "Components/TableHeader",
+  title: "Design System/Display/TableHeader",
   component: TableHeader,
   tags: ["autodocs"],
   // A part only has its table semantics inside the parts that own it.

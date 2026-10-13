@@ -128,7 +128,7 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 Use the `design-system-primitives` skill whenever creating or changing a primitive under `packages/design-system/src/components/`.
 
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
-- Stories are colocated with each primitive. Run them with `pnpm run storybook:design-system`.
+- Stories sit beside each primitive: [`docs/governance/storybook.md`](docs/governance/storybook.md).
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
 - Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, record it as an OpenSpec change rather than absorbing it into the Code Connect template.
 - The Figma legs (`tokens:import`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.

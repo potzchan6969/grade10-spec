@@ -76,7 +76,7 @@ Stock reads as a yes or no, never a count.
 The second buy takes nothing; the balance stays at 200.
 :::
 
-::story{id="loyalty-membership-rewardmenu--default" title="The reward shop"}
+::story{id="loyalty-rewards-blocks-rewardmenu--default" title="The reward shop"}
 
 ## Using a Reward
 

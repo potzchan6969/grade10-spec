@@ -36,7 +36,7 @@ so redefining the reward never rewrites a coupon a member already holds —
 🚧 **The picture** - the coupon list shown here draws no code and no copy
 action, since a reward coupon carries none
 
-::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
+::story{id="loyalty-coupons-blocks-couponlist--default" title="The coupons a member holds"}
 
 ## Applying one
 

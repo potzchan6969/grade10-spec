@@ -95,23 +95,23 @@ no cart to show someone signed out.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
-::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
-::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
-::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
-::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
+::story{id="design-system-layout-nav-layout--narrow" title="Nav — narrow (375px)"}
 
-::story{id="components-nav-layout--menu-open" title="Nav — menu open (375px)"}
+::story{id="design-system-layout-nav-layout--menu-open" title="Nav — menu open (375px)"}
 
-::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
+::story{id="design-system-layout-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
-::story{id="site-chrome-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
+::story{id="site-page-shell-blocks-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
 
-::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |

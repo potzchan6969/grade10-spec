@@ -50,7 +50,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Default story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Default story at `<shared ui storybook url>`.
 2. Reach `<cart_1>` as **Reached by** says.
 3. Look at the drawer body.
 4. Look at the drawer title and the footer.
@@ -86,7 +86,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Overflow Items story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Overflow Items story at `<shared ui storybook url>`.
 2. Look at the top and bottom edges of the drawer body.
 3. Scroll the drawer body halfway.
 4. Look at the top and bottom edges again.
@@ -129,7 +129,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Empty State story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Empty State story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title and the close control.
 4. Look below the body for the footer.
@@ -173,7 +173,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title.
 
@@ -211,7 +211,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Empty State Without Description story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Empty State Without Description story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 
 **Expected Results:**
@@ -248,7 +248,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Only Sold Out Lines story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Only Sold Out Lines story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title and the footer.
 
@@ -289,7 +289,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Default story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Default story at `<shared ui storybook url>`.
 2. Click the remove control on each line in turn.
 3. Look at the drawer body.
 4. Look at the drawer title and below the body.
@@ -330,7 +330,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawerBody Empty story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawerBody Empty story at `<shared ui storybook url>`.
 2. Look at the body.
 
 **Expected Results:**
@@ -369,7 +369,7 @@ showing skeletons while that read is in flight,
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Loading With Lines story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Loading With Lines story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title and the footer.
 
@@ -409,7 +409,7 @@ showing skeletons while that read is in flight,
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Loading No Lines story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Loading No Lines story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title and below the body.
 4. In the Controls panel, set `loading` to false.
@@ -605,7 +605,7 @@ sells.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Unavailable Items Removed story at `<shared ui storybook url>` and click Open Cart.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Unavailable Items Removed story at `<shared ui storybook url>` and click Open Cart.
 2. Wait until the skeletons clear.
 3. Look at the drawer body.
 4. Look at the toasts.
@@ -717,7 +717,7 @@ sells.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Only Delisted Lines story at `<shared ui storybook url>` and click Open Cart.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Only Delisted Lines story at `<shared ui storybook url>` and click Open Cart.
 2. Wait until the skeletons clear.
 3. Look at the drawer body.
 4. Look at the drawer title, below the body, and the toasts.
@@ -805,7 +805,7 @@ sells.
 
 **Steps:**
 
-1. Navigate to the Store Cart/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
+1. Navigate to the Store/Cart/Blocks/CartDrawer Mixed Line States story at `<shared ui storybook url>`.
 2. Look at the drawer body.
 3. Look at the drawer title.
 

@@ -29,7 +29,7 @@ Start Storybook from each worktree with the same command:
 pnpm storybook
 ```
 
-The root launcher asks the operating system for an available port before it starts Storybook and prints that port and the local URL. To choose a stable port, pass it through to Storybook:
+The root launcher opens the workbench on port 6006, the port `.mcp.json` points agents at, and asks the operating system for another when 6006 is taken; it prints the port it chose. To choose a stable port, pass it through to Storybook:
 
 ```bash
 pnpm storybook -- --port 6010

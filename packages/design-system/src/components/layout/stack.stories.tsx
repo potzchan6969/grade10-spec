@@ -9,7 +9,7 @@ const Box = ({ children }: { children: ReactNode }) => (
 );
 
 const meta = {
-  title: "Components/Stack",
+  title: "Design System/Layout/Stack",
   component: Stack,
   tags: ["autodocs"],
   args: {

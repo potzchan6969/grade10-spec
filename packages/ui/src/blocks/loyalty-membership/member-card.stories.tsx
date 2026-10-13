@@ -6,7 +6,7 @@ import { FALLBACK_CODE, MEMBER_TOKEN } from "./fixtures";
 import { MemberCard } from "./member-card";
 
 const meta = {
-  title: "Loyalty Membership/MemberCard",
+  title: "Loyalty/Profile/Blocks/MemberCard",
   component: MemberCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -97,14 +97,14 @@ The operative rule, from the ownership table: **a component may not offer a vari
 
 ## Blocks and views
 
-Three homes, and the first that fits is the answer:
+Three homes, and the first that fits is the answer. Where each one's stories go in the workbench, and how screens, states, flows and prototypes are drawn: [Storybook](storybook.md).
 
 
 | It is                                                 | Home                                                     | Preview                                                      |
 | ----------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
 | A primitive                                           | `packages/design-system/src/components/<group>/`         | `pnpm run storybook:design-system`                           |
 | A compound block a capability spec names              | `packages/ui/src/blocks/<product-context>-<capability>/` | `pnpm run storybook:ui`                                      |
-| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages`, via `pnpm run storybook:workbench` |
+| An assembly — a page, put together once for one route | The **consuming application**                            | `apps/preview/src/pages/<domain>/<feature>/`, via `pnpm storybook` |
 
 
 `packages/ui/src/blocks/` is one flat level of **capability** directories. The namespace is the capability, never the page: a page is an assembly, so its sections belong to the capabilities they express and the page itself never gets a directory. If the capability's directory exists, the block joins it; if the spec exists but no directory does, create one; if no spec exists, the spec comes first.

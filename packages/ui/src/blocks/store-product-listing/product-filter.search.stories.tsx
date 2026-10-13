@@ -7,7 +7,7 @@ import {
 } from "./product-filter.story-shared";
 
 const meta = {
-  title: "Store Product Listing/ProductFilter/Search",
+  title: "Store/Product Listing/Blocks/ProductFilter/Search",
   component: ProductFilter,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -4,7 +4,7 @@ import { ORDER_DETAILS_COPY } from "./fixtures";
 import { OrderDetailsHeader } from "./order-details-header";
 
 const meta = {
-  title: "Store Order Detail/OrderDetailsHeader",
+  title: "Store/Order Detail/Blocks/OrderDetailsHeader",
   component: OrderDetailsHeader,
   tags: ["autodocs"],
   args: {

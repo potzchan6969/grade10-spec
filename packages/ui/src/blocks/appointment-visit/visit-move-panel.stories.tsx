@@ -10,7 +10,7 @@ import { MOVE_PANEL_COPY } from "./fixtures";
 import { VisitMovePanel } from "./visit-move-panel";
 
 const meta = {
-  title: "Appointment Visit/VisitMovePanel",
+  title: "Appointment/Visit/Blocks/VisitMovePanel",
   component: VisitMovePanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

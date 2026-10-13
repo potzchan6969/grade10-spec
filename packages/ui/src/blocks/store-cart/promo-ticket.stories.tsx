@@ -8,7 +8,7 @@ const applicable = SAMPLE_HELD_PROMO_CODES.find((c) => c.applicable)!;
 const inapplicable = SAMPLE_HELD_PROMO_CODES.find((c) => !c.applicable)!;
 
 const meta = {
-  title: "Store Cart/PromoTicket",
+  title: "Store/Cart/Blocks/PromoTicket",
   component: PromoTicket,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

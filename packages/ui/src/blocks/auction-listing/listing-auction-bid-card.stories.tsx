@@ -153,7 +153,7 @@ function liveView(
 const noop = () => undefined;
 
 const meta = {
-  title: "Auction Listing/ListingAuctionBidCard",
+  title: "Auction/Bidding/Blocks/ListingAuctionBidCard",
   component: ListingAuctionBidCard,
   tags: ["autodocs"],
   parameters: {
@@ -161,7 +161,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The listing bid card. The consumer owns product state and every action. Enrollment states, countdown, bidding flows, and callback contracts live on [Bid Panel Docs](?path=/docs/auction-listing-bid-panel--docs).",
+          "The listing bid card. The consumer owns product state and every action. Enrollment states, countdown, bidding flows, and callback contracts live on [Bid Panel Docs](?path=/docs/auction-bidding-bid-panel--docs).",
       },
     },
   },

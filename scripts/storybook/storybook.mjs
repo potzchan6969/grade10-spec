@@ -11,12 +11,19 @@ function hasPortArgument(args) {
   );
 }
 
-function findAvailablePort() {
+/** Storybook's own port, so `.mcp.json`'s endpoint answers when it is free. */
+const PREFERRED_PORT = 6006;
+
+function findAvailablePort(port = 0) {
   return new Promise((resolve, reject) => {
     const server = createServer();
 
-    server.once("error", reject);
-    server.listen(0, "127.0.0.1", () => {
+    server.once("error", (error) =>
+      port && error.code === "EADDRINUSE"
+        ? findAvailablePort(0).then(resolve, reject)
+        : reject(error),
+    );
+    server.listen(port, "127.0.0.1", () => {
       const address = server.address();
       if (!address || typeof address === "string") {
         server.close();
@@ -52,9 +59,13 @@ if (storybookArguments[0] === "--dir") {
 }
 
 if (!hasPortArgument(storybookArguments)) {
-  const port = await findAvailablePort();
+  const port = await findAvailablePort(PREFERRED_PORT);
   storybookArguments.push("--port", String(port));
-  console.log(`Starting Storybook on an available port: ${port}`);
+  console.log(
+    port === PREFERRED_PORT
+      ? `Starting Storybook on port ${port}; agents reach it at http://localhost:${port}/mcp`
+      : `Port ${PREFERRED_PORT} is taken; starting Storybook on ${port}, and its agent endpoint at http://localhost:${port}/mcp`,
+  );
 }
 
 const pnpm = process.platform === "win32" ? "pnpm.cmd" : "pnpm";

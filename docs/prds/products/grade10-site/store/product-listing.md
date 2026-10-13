@@ -163,11 +163,11 @@ A location past 3 seconds asks the mirror for the copy's number, and takes the c
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952" title="Filter panel"}
 
-::story{id="pages-store-product-list-page--default" title="The listing, whole"}
+::story{id="store-product-listing-product-list--default" title="The listing, whole"}
 
-::story{id="store-product-listing-productbrowse-states--no-match" title="A narrowing nothing matches"}
+::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A narrowing nothing matches"}
 
-::story{id="store-product-listing-productbrowse-states--empty-catalog" title="A catalogue with nothing in it"}
+::story{id="store-product-listing-blocks-productbrowse-states--empty-catalog" title="A catalogue with nothing in it"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector arrives knowing what they collect — a world, a kind of card — and

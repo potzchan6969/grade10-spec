@@ -19,7 +19,7 @@ function InvoicePdfPreview({ data }: { data: InvoicePdfData }) {
 }
 
 const meta = {
-  title: "Auction Invoice And Receipt Pdf/InvoicePdf",
+  title: "Auction/Post Bidding/Blocks/InvoicePdf",
   component: InvoicePdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

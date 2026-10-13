@@ -19,10 +19,10 @@ const container: Decorator[] = [
  * Owns per-row visuals: default/stepper, catalogue sale, product coupon, sold
  * out, quantity adjusted, and row bones. Product coupons show the code on the
  * line with the discounted unit price — not as a footer discount row.
- * List composition lives on [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs).
+ * List composition lives on [`CartDrawerBody`](?path=/docs/store-cart-blocks-cartdrawerbody--docs).
  */
 const meta = {
-  title: "Store Cart/CartItem",
+  title: "Store/Cart/Blocks/CartItem",
   component: CartItem,
   tags: ["autodocs"],
   decorators: container,

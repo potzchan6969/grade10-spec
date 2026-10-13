@@ -5,7 +5,7 @@ import { BookingSummary } from "./booking-summary";
 import { LIVE_RECORD, SUMMARY_COPY } from "./fixtures";
 
 const meta = {
-  title: "Appointment Booking/BookingSummary",
+  title: "Appointment/Booking/Blocks/BookingSummary",
   component: BookingSummary,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

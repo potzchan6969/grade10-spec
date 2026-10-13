@@ -40,7 +40,7 @@ const DELIVERY = {
 };
 
 const meta = {
-  title: "My Auctions/Winner Order/AuctionWinnerOrder",
+  title: "Auction/Post Bidding/Blocks/AuctionWinnerOrder",
   component: AuctionWinnerOrder,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

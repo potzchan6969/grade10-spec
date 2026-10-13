@@ -3,7 +3,7 @@
 ### Store listing
 
 Use the existing listing composition in the PRD's
-`pages-store-product-list-page--default` Storybook story and the registered
+`store-product-listing-product-list--default` Storybook story and the registered
 [Product List page frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-1868).
 Keep the established page layout; the product-status requirement controls what
 availability information the listing shows.
@@ -11,7 +11,7 @@ availability information the listing shows.
 ### Product details
 
 Use the existing product-detail composition in the PRD's
-`pages-store-product-detail-page--docs` Storybook story and the registered
+`store-product-page-product-detail--docs` Storybook story and the registered
 [Product Detail page frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-2423).
 Keep the established one-item page: show the price and availability of its
 sellable item, without a shopper-facing variant chooser or variant title.
@@ -27,8 +27,8 @@ not treated as current.
 ### Cart drawer
 
 Use the existing Cart Drawer composition in the PRD's
-`store-cart-cartdrawer--default` and
-`store-cart-cartdrawer--unavailable-items-removed` Storybook stories. Cart
+`store-cart-blocks-cartdrawer--default` and
+`store-cart-blocks-cartdrawer--unavailable-items-removed` Storybook stories. Cart
 layout remains owned by the existing cart capability. Checkout starts from the
 drawer, with no separate checkout page, so the checkout-time review, refusal
 and retry states below show in the drawer before the collector leaves for

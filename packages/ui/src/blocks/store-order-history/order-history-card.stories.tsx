@@ -13,7 +13,7 @@ import { OrderHistoryLineItem } from "./order-history-line-item";
 const CARD_FRAME = "w-[960px] max-w-full";
 
 const meta = {
-  title: "Store Order History/OrderHistoryCard",
+  title: "Store/Order History/Blocks/OrderHistoryCard",
   component: OrderHistoryCard,
   tags: ["autodocs"],
   args: {

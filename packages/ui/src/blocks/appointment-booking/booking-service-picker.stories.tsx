@@ -12,7 +12,7 @@ import {
 const { common } = getMessages("grade10", "en");
 
 const meta = {
-  title: "Appointment Booking/BookingServicePicker",
+  title: "Appointment/Booking/Blocks/BookingServicePicker",
   component: BookingServicePicker,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

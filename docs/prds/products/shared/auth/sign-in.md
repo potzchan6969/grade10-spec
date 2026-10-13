@@ -98,17 +98,17 @@ the page exactly as it was.
 
 🚧 **A console session does not withhold it** - the prompt is the site's and reads the site's session, so a person signed in on the console only is still offered it on the site.
 
-::story{id="auth-sign-in-signinemailform--default" title="The email step"}
+::story{id="auth-sign-in-blocks-signinemailform--default" title="The email step"}
 
-::story{id="auth-sign-in-signinemailform--link-request-running" title="The send in flight"}
+::story{id="auth-sign-in-blocks-signinemailform--link-request-running" title="The send in flight"}
 
-::story{id="auth-sign-in-link-follow-toasts--expired" title="Expired link toast"}
+::story{id="auth-sign-in-blocks-linkfollowtoasts--expired" title="Expired link toast"}
 
-::story{id="auth-sign-in-link-follow-toasts--no-longer-works" title="Link no longer works toast"}
+::story{id="auth-sign-in-blocks-linkfollowtoasts--no-longer-works" title="Link no longer works toast"}
 
-::story{id="auth-sign-in-link-follow-toasts--banned" title="Banned account toast"}
+::story{id="auth-sign-in-blocks-linkfollowtoasts--banned" title="Banned account toast"}
 
-::story{id="auth-sign-in-link-follow-toasts--different-account" title="Different account toast"}
+::story{id="auth-sign-in-blocks-linkfollowtoasts--different-account" title="Different account toast"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
 

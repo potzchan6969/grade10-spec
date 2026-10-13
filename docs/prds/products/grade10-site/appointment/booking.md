@@ -45,11 +45,11 @@ leaves holding a link that manages it.
 
 ## Designs
 
-::story{id="appointment-booking-bookingslotpicker--default" title="Picking a day and a time"}
+::story{id="appointment-booking-blocks-bookingslotpicker--default" title="Picking a day and a time"}
 
-::story{id="appointment-booking-bookingdetailsform--default" title="The details step"}
+::story{id="appointment-booking-blocks-bookingdetailsform--default" title="The details step"}
 
-::story{id="appointment-booking-bookingconfirmation--default" title="The confirmation"}
+::story{id="appointment-booking-blocks-bookingconfirmation--default" title="The confirmation"}
 
 Every step, state and phone frame: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd).
 

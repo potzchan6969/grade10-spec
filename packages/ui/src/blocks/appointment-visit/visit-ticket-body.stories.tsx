@@ -12,7 +12,7 @@ import {
 import { VisitTicketBody } from "./visit-ticket-body";
 
 const meta = {
-  title: "Appointment Visit/VisitTicketBody",
+  title: "Appointment/Visit/Blocks/VisitTicketBody",
   component: VisitTicketBody,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -5,7 +5,7 @@ import { AUCTION_STORE_BASE_ARGS } from "./site-header.auction-store.story-share
 import { ACCOUNT_EMAIL } from "./site-header.story-shared";
 
 const meta = {
-  title: "Site Chrome/SiteHeader/Auction & Store/Account menu",
+  title: "Site/Page Shell/Blocks/SiteHeader/Auction & Store/Account menu",
   component: SiteHeader,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

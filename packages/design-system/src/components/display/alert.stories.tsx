@@ -12,7 +12,7 @@ const defaultActions = (
 );
 
 const meta = {
-  title: "Components/Alert",
+  title: "Design System/Display/Alert",
   component: Alert,
   tags: ["autodocs"],
   args: {

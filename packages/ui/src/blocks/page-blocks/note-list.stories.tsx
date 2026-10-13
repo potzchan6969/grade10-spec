@@ -11,7 +11,7 @@ import {
 import { NoteList } from "./note-list";
 
 const meta = {
-  title: "Page Blocks/NoteList",
+  title: "Site/Page Shell/Blocks/NoteList",
   component: NoteList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

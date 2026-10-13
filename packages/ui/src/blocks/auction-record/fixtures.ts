@@ -84,24 +84,26 @@ const ORDER_ROW_COPY = {
  */
 const WINNER_ORDER_HREF = {
   awaitingAddress:
-    "?path=/story/my-auctions-winner-order-settlement--awaiting-address",
+    "?path=/story/auction-post-bidding-winner-order-setup--awaiting-setup",
   expiredSetup:
-    "?path=/story/my-auctions-winner-order-settlement--expired-setup",
+    "?path=/story/auction-post-bidding-winner-order-setup--expired-setup",
   preparingInvoice:
-    "?path=/story/my-auctions-winner-order-settlement--preparing-invoice",
+    "?path=/story/auction-post-bidding-winner-order-setup--preparing-invoice",
   pendingPayment:
-    "?path=/story/my-auctions-winner-order-payment--pending-payment",
+    "?path=/story/auction-post-bidding-winner-order-payment--pending-payment",
   expiredInvoice:
-    "?path=/story/my-auctions-winner-order-payment--expired-invoice",
+    "?path=/story/auction-post-bidding-winner-order-payment--expired-invoice",
   partiallyPaid:
-    "?path=/story/my-auctions-winner-order-payment--partially-paid",
+    "?path=/story/auction-post-bidding-winner-order-payment--partially-paid",
   paymentVerifying:
-    "?path=/story/my-auctions-winner-order-payment--payment-verifying",
-  processing: "?path=/story/my-auctions-winner-order-delivery--processing",
-  shipped: "?path=/story/my-auctions-winner-order-delivery--shipped",
-  delivered: "?path=/story/my-auctions-winner-order-delivery--delivered",
-  cancelled: "?path=/story/my-auctions-winner-order-closed--cancelled",
-  refunded: "?path=/story/my-auctions-winner-order-closed--refunded",
+    "?path=/story/auction-post-bidding-winner-order-payment--payment-verifying",
+  processing:
+    "?path=/story/auction-post-bidding-winner-order-delivery--processing",
+  shipped: "?path=/story/auction-post-bidding-winner-order-delivery--shipped",
+  delivered:
+    "?path=/story/auction-post-bidding-winner-order-delivery--delivered",
+  cancelled: "?path=/story/auction-post-bidding-winner-order-closed--cancelled",
+  refunded: "?path=/story/auction-post-bidding-winner-order-closed--refunded",
 } as const;
 
 function watchingItem(

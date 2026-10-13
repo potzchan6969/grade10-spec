@@ -10,7 +10,7 @@ import {
 } from "./fixtures";
 
 const meta = {
-  title: "Appointment Booking/BookingManageCard",
+  title: "Appointment/Booking/Blocks/BookingManageCard",
   component: BookingManageCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

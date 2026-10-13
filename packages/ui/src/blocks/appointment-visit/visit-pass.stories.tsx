@@ -4,7 +4,7 @@ import { VISIT_NAME, VISIT_PASS_COPY } from "./fixtures";
 import { VisitPass } from "./visit-pass";
 
 const meta = {
-  title: "Appointment Visit/VisitPass",
+  title: "Appointment/Visit/Blocks/VisitPass",
   component: VisitPass,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

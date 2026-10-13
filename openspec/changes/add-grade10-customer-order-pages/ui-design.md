@@ -11,9 +11,9 @@
 ### Order Details
 
 **Source of truth:** Storybook —
-`Store Order Detail/OrderDetailsSidebar/WithPointsCredit` and
+`Store/Order Detail/Blocks/OrderDetailsSidebar/WithPointsCredit` and
 `WithoutPointsCredit`, and the composed
-`Store Order Detail/OrderDetails/WithPointsCredit`.
+`Store/Order Detail/Blocks/OrderDetails/WithPointsCredit`.
 
 [Order Details — Product / Order](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4835-1654&m=dev)
 is historical reference only; it does not show the Points credit row and is not

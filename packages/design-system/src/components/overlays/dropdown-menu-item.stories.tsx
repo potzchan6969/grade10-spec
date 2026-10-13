@@ -7,7 +7,7 @@ import { DropdownMenuItem } from "./dropdown-menu-item";
 const leading = <Star aria-hidden size={14} />;
 
 const meta = {
-  title: "Components/DropdownMenuItem",
+  title: "Design System/Overlays/DropdownMenuItem",
   component: DropdownMenuItem,
   tags: ["autodocs"],
   decorators: [

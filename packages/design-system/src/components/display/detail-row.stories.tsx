@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { DetailRow } from "./detail-row";
 
 const meta = {
-  title: "Components/DetailRow",
+  title: "Design System/Display/DetailRow",
   component: DetailRow,
   tags: ["autodocs"],
   args: {

@@ -8,7 +8,7 @@ import {
 } from "./product-list-header.story-shared";
 
 const meta = {
-  title: "Store Product Listing/ProductListHeader",
+  title: "Store/Product Listing/Blocks/ProductListHeader",
   component: ProductListHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -4,7 +4,7 @@ import { MINE_HREF } from "./fixtures";
 import { VisitRefusedBook } from "./visit-refused-book";
 
 const meta = {
-  title: "Appointment Visit/VisitRefusedBook",
+  title: "Appointment/Visit/Blocks/VisitRefusedBook",
   component: VisitRefusedBook,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

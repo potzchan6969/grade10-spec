@@ -5,8 +5,8 @@ application and ships nothing: it exists so a whole page can be reviewed as a
 shopper meets it, rather than as a catalogue of parts.
 
 ```bash
-pnpm storybook                 # the page assemblies alone
-pnpm storybook:workbench       # those assemblies plus both packages' stories
+pnpm storybook                 # the workbench: every story, by domain and feature
+pnpm storybook:pages           # the page assemblies alone
 pnpm test:stories:app          # the assemblies, in Chromium
 ```
 
@@ -20,10 +20,9 @@ pnpm run storybook:deploy:staging             # needs CLOUDFLARE_API_TOKEN
 Two Storybook configs live here, and they differ only in which stories they
 load. `.storybook/` is the page assemblies alone. `.storybook-workbench/`
 extends it — same addons, same preview, re-exported rather than restated — with
-both packages' colocated stories read in place, so the sidebar carries the
-assemblies, then the `@grade10/ui` compound components, then the
-`@grade10/design-system` primitives, and a primitive can be opened beside the
-page that composes it. Nothing is copied into this workspace; `pnpm
+both packages' colocated stories read in place and the Start Here page, so a
+feature's screens sit beside the blocks they compose, in the manual's order
+([`docs/governance/storybook.md`](../../docs/governance/storybook.md)). Nothing is copied into this workspace; `pnpm
 storybook:ui` and `pnpm storybook:design-system` remain the focused
 single-package views.
 
@@ -37,7 +36,8 @@ Assemblies — whole pages composed from `@grade10/design-system` primitives and
 both, which is what makes it the right home for a page.
 
 It also plays the part of a consuming store: every string, every filter group,
-and every product is supplied from `src/pages/store-content.ts`, and the state
+and every product is supplied from `src/pages/store-content.ts` and each
+feature's own `*-content.ts`, and the state
 loop for filters, sort, page, and cart lives in the page component. Neither
 package holds any of it, so if a page renders correctly here, an application
 can render it the same way.
@@ -56,11 +56,12 @@ requirements is how `packages/design-system/src/pages/` went wrong.
 
 ## Adding a page
 
-1. Put the content in `src/pages/<page>-content.ts`. Never import it from a
-   package: content that lives in a package is content a second store would
-   inherit.
-2. Write `src/pages/<page>.stories.tsx` with a component that owns the state
+1. Put the content in `src/pages/<domain>/<feature>/<page>-content.ts`, the
+   manual's slugs. Never import it from a package: content that lives in a
+   package is content a second store would inherit.
+2. Write `<page>.stories.tsx` beside it, titled `<Domain>/<Feature>/<Screen>`
+   ([`docs/governance/storybook.md`](../../docs/governance/storybook.md)), with a component that owns the state
    and passes it down. Declare `layout: "fullscreen"` in its meta; the default
    here is `centered`, so that the primitives and compound components the
    combined view borrows frame as they do in their own Storybook.
-3. Run `pnpm test:stories:app`.
+3. Run `pnpm storybook:check` and `pnpm test:stories:app`.

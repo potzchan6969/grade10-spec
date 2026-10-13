@@ -3,7 +3,7 @@ import { expect, within } from "storybook/test";
 import { VisitPhaseHeader } from "./visit-phase-header";
 
 const meta = {
-  title: "Appointment Visit/VisitPhaseHeader",
+  title: "Appointment/Visit/Blocks/VisitPhaseHeader",
   component: VisitPhaseHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

@@ -93,7 +93,7 @@ const openDialogDecorator: Decorator = (Story) => {
 };
 
 const meta = {
-  title: "Auction Listing/ListingUserBidHistory",
+  title: "Auction/Bidding/Blocks/ListingUserBidHistory",
   component: ListingUserBidHistory,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

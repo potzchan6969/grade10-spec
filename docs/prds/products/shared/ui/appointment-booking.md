@@ -19,13 +19,13 @@ imports them and supplies the words, the diary's answers and the callbacks.
 - **`BookingManageCard`** — one visit, with a move and a confirmed cancel
   while it is live
 
-::story{id="appointment-booking-bookingslotpicker--default" title="The slot picker"}
+::story{id="appointment-booking-blocks-bookingslotpicker--default" title="The slot picker"}
 
-::story{id="appointment-booking-bookingslotpicker--failed" title="A failed read is not an empty day"}
+::story{id="appointment-booking-blocks-bookingslotpicker--failed" title="A failed read is not an empty day"}
 
-::story{id="appointment-booking-bookingmanagecard--live" title="A live visit"}
+::story{id="appointment-booking-blocks-bookingmanagecard--live" title="A live visit"}
 
-::story{id="appointment-booking-bookingmanagecard--closed" title="A closed visit"}
+::story{id="appointment-booking-blocks-bookingmanagecard--closed" title="A closed visit"}
 
 ## Time Zone
 

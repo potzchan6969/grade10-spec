@@ -31,9 +31,9 @@ row of cards. Links people already hold still land here.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-11875" title="Merchandised row"}
 
-::story{id="pages-store-store-home-page--default" title="The main page, whole"}
+::story{id="store-home-store-home--default" title="The main page, whole"}
 
-::story{id="store-home-storecollectiongrid--default" title="The collection grid"}
+::story{id="store-home-blocks-storecollectiongrid--default" title="The collection grid"}
 
 :::detail{title="Product decisions" for="pm"}
 The front door is a shop window: it shows what the shop leads with, and a

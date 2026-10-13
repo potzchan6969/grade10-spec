@@ -127,17 +127,17 @@ The tile reports the quantity change and the application updates the cart.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155" title="Product Card — historical, superseded by Storybook"}
 
-::story{id="store-product-listing-productbrowse--default" title="The whole browse surface"}
+::story{id="store-product-listing-blocks-productbrowse--default" title="The whole browse surface"}
 
-::story{id="store-product-listing-productbrowse-states--no-match" title="A search that matched nothing"}
+::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A search that matched nothing"}
 
-::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
+::story{id="store-product-listing-blocks-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
 
-::story{id="store-product-listing-productcardimage--default" title="The whole photo in the well"}
+::story{id="store-product-listing-blocks-productcardimage--default" title="The whole photo in the well"}
 
-::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
+::story{id="store-product-listing-blocks-productcardimage--sold-out" title="A sold-out product tile"}
 
-::story{id="store-product-listing-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
+::story{id="store-product-listing-blocks-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
 
 :::detail{title="Product decisions" for="pm"}
 The surface displays what a consuming application supplies and decides none of

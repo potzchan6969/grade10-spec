@@ -4,7 +4,8 @@
  * Every path lands on `main` directly, shared or not: teammates push `main`
  * rather than open pull requests, so the gate that runs before the push is
  * what checks the paths. Planning text owes the planning checks, a status file
- * owes only its change's validation, and the agent instructions owe parity.
+ * owes only its change's validation, stories and whatever cites them owe the
+ * story check, and the agent instructions owe parity.
  */
 
 /** Files a planning tool rewrites to record where a change stands. */
@@ -15,6 +16,9 @@ const PLANNING = /^(openspec\/|docs\/)/;
 const AGENT =
   /^(\.claude\/|\.codex\/|\.cursor\/|(AGENTS|AGENT|CLAUDE|GEMINI)\.md$)/;
 const CHANGE = /^openspec\/changes\/(?!archive\/)([^/]+)\//;
+/** Where a story lives, or a story id is cited. */
+const STORIES =
+  /^(apps\/preview\/|packages\/ui\/src\/|packages\/design-system\/src\/|docs\/|openspec\/)/;
 
 /**
  * `{ checks }` for the paths a push sends: what the gate runs, cheapest first.
@@ -33,6 +37,8 @@ export function classify(paths) {
     checks.push({ id: "changes" }, { id: "test-cases" }, { id: "manual" });
   }
 
+  if (paths.some((path) => STORIES.test(path) && !STATUS.test(path)))
+    checks.push({ id: "stories" });
   if (paths.some((path) => AGENT.test(path))) checks.push({ id: "parity" });
   return { checks };
 }

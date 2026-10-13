@@ -12,7 +12,7 @@ The collector's vault screens were taken off the site in `retire-vault-collector
 - **Asset detail page** — one vaulted item, graded or raw: gallery, status, estimated value since intake, value-potential callout for raw items, details (grade, cert with verification, vault storage id, location, condition), custody log, and documents.
 - **Actions on an item** — `List for Auction`, `List for Sale`, `Submit for Grading` on raw items, and `Request Retrieval`.
 - **Documents** — each document on the item opens or downloads; a grading-institute report opens the institute's own site in a new tab.
-- **Storybook first** — the surfaces land in `apps/preview` as `Pages/Vault/*` stories composing design-system primitives; product routes follow when the flow is settled.
+- **Storybook first** — the surfaces land in `apps/preview` as `Vault/*` stories composing design-system primitives; product routes follow when the flow is settled.
 
 ## Non-Goals
 
@@ -30,7 +30,7 @@ None. The retired case-flow screens stay retired; their requirements live in the
 
 ## Impact
 
-- `apps/preview` — `Pages/Vault/*` page and block stories, fixtures in `vault-content.ts`.
+- `apps/preview` — `Vault/*` page and block stories, fixtures in `vault-content.ts`.
 - `packages/design-system` — existing primitives only (`Badge`, `Card`, `Alert`, `Button`, `Link`, `Tabs`, `Stepper`, `Step`); `Alert` honors a custom icon on any status.
 - `packages/ui` — `ListingLotGallery` gains a per-image label rendered beside the counter.
 - No product routes, data fetching or backend contract yet — the screens are the design reference for the flow they mount.

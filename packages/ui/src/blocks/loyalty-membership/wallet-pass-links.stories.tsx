@@ -19,7 +19,7 @@ const apple = {
 };
 
 const meta = {
-  title: "Loyalty membership/WalletPassLinks",
+  title: "Loyalty/Wallet Member Card/Blocks/WalletPassLinks",
   component: WalletPassLinks,
   args: {
     copy,

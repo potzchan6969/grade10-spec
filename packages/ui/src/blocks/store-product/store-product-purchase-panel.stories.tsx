@@ -11,7 +11,7 @@ import { StoreProductPurchasePanel } from "./store-product-purchase-panel";
 const ADD_MS = 400;
 
 const meta = {
-  title: "Store Product/Purchase Panel",
+  title: "Store/Product Page/Blocks/StoreProductPurchasePanel",
   component: StoreProductPurchasePanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

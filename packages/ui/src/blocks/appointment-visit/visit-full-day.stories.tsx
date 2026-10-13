@@ -4,7 +4,7 @@ import { FULL_DAY_COPY, FULL_DAY_SHOPS, WAIT_HREF } from "./fixtures";
 import { VisitFullDay } from "./visit-full-day";
 
 const meta = {
-  title: "Appointment Visit/VisitFullDay",
+  title: "Appointment/Visit/Blocks/VisitFullDay",
   component: VisitFullDay,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

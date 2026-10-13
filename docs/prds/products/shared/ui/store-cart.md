@@ -100,29 +100,29 @@ replaced the sale, the sale returns to the lines while it still runs.
 🚧 **Held, cannot apply** - a held code that cannot apply on this cart is
 listed apart from the ones that can, muted with its reason and no Apply.
 
-::story{id="store-cart-cartitem--sale-price" title="A line on the site sale"}
+::story{id="store-cart-blocks-cartitem--sale-price" title="A line on the site sale"}
 
-::story{id="store-cart-cartitem--product-coupon" title="A product coupon on the line"}
+::story{id="store-cart-blocks-cartitem--product-coupon" title="A product coupon on the line"}
 
-::story{id="store-cart-cartdrawer-auto-discount--refuse" title="A refused promo on the site sale"}
+::story{id="store-cart-blocks-cartdrawer-auto-discount--refuse" title="A refused promo on the site sale"}
 
-::story{id="store-cart-cartdrawer-auto-discount--stack" title="A promo stacked on the site sale"}
+::story{id="store-cart-blocks-cartdrawer-auto-discount--stack" title="A promo stacked on the site sale"}
 
-::story{id="store-cart-cartdrawer-auto-discount--replace" title="A promo that replaces the site sale"}
+::story{id="store-cart-blocks-cartdrawer-auto-discount--replace" title="A promo that replaces the site sale"}
 
-::story{id="store-cart-cartdrawer-auto-discount--fallback-after-remove" title="The site sale back after the promo is removed"}
+::story{id="store-cart-blocks-cartdrawer-auto-discount--fallback-after-remove" title="The site sale back after the promo is removed"}
 
-::story{id="store-cart-cartdrawer-auto-discount--product-sale-with-order-discount" title="A site sale on one line beside an order discount"}
+::story{id="store-cart-blocks-cartdrawer-auto-discount--product-sale-with-order-discount" title="A site sale on one line beside an order discount"}
 
-::story{id="store-cart-cartdrawerfooter--order-discount" title="An order discount under the Subtotal"}
+::story{id="store-cart-blocks-cartdrawerfooter--order-discount" title="An order discount under the Subtotal"}
 
-::story{id="store-cart-promoticket--not-applicable" title="A held code that cannot apply"}
+::story{id="store-cart-blocks-promoticket--not-applicable" title="A held code that cannot apply"}
 
-::story{id="store-cart-cartdrawer--default" title="The drawer with items"}
+::story{id="store-cart-blocks-cartdrawer--default" title="The drawer with items"}
 
-::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
+::story{id="store-cart-blocks-cartdrawer--empty-state" title="An empty cart"}
 
-::story{id="store-cart-cartdrawer--fetching-on-open" title="The skeleton state while the drawer re-reads prices"}
+::story{id="store-cart-blocks-cartdrawer--fetching-on-open" title="The skeleton state while the drawer re-reads prices"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Historical Figma — superseded by Storybook"}
 

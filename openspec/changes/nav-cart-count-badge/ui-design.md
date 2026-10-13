@@ -2,11 +2,11 @@
 
 ### Site header with cart count
 
-Layout SoT: Storybook `site-chrome-siteheader-auction-store-cart-count--empty-no-badge`,
-`site-chrome-siteheader-auction-store-cart-count--count-1`,
-`site-chrome-siteheader-auction-store-cart-count--count-3`,
-`site-chrome-siteheader-auction-store-cart-count--count-123`, and
-`site-chrome-siteheader-auction-store-cart-count--compact-count-3`.
+Layout SoT: Storybook `site-page-shell-blocks-siteheader-auction-store-cart-count--empty-no-badge`,
+`site-page-shell-blocks-siteheader-auction-store-cart-count--count-1`,
+`site-page-shell-blocks-siteheader-auction-store-cart-count--count-3`,
+`site-page-shell-blocks-siteheader-auction-store-cart-count--count-123`, and
+`site-page-shell-blocks-siteheader-auction-store-cart-count--compact-count-3`.
 
 Figma `Nav` (`4171:9937`) remains an early chrome reference only — Storybook
 is the layout source of truth for the cart count overlay (same rule as
@@ -14,7 +14,7 @@ auction-first site header).
 
 ### Design-system Nav cart slot
 
-Layout SoT: Storybook under `Components/Nav/` for the built-in cart control
+Layout SoT: Storybook under `Design System/Layout/Nav/` for the built-in cart control
 without a count. Compound headers that need a count replace that control via
 `cartSlot` — composition lives on `SiteHeader`, not on `Nav`.
 

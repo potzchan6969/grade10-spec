@@ -48,8 +48,8 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 
 ## Designs
 
-::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}
+::story{id="store-order-detail-blocks-orderdetails--item-coupon" title="One order, in detail"}
 
-::story{id="store-order-detail-orderdetails--with-points-credit" title="Points credit on the summary"}
+::story{id="store-order-detail-blocks-orderdetails--with-points-credit" title="Points credit on the summary"}
 
-::story{id="store-order-detail-orderdetails--no-optional-groups" title="An order with only supplied facts"}
+::story{id="store-order-detail-blocks-orderdetails--no-optional-groups" title="An order with only supplied facts"}

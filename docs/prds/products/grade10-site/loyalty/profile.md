@@ -81,7 +81,7 @@ A sale made as a guest is not lost: it earns once it has an owner.
 ❓ Whether "Points to spend" and "Points earned this year" are the launch
 names.
 
-::story{id="loyalty-membership-membershipsummary--default" title="Tier, balance and progress"}
+::story{id="loyalty-profile-blocks-membershipsummary--default" title="Tier, balance and progress"}
 
 ## Member Card
 
@@ -105,9 +105,9 @@ names.
 The same card can be added to a phone wallet —
 [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card).
 
-::story{id="loyalty-membership-membercard--default" title="The member card"}
+::story{id="loyalty-profile-blocks-membercard--default" title="The member card"}
 
-::story{id="loyalty-membership-membercard--already-used" title="A code a till has taken"}
+::story{id="loyalty-profile-blocks-membercard--already-used" title="A code a till has taken"}
 
 ## Histories
 

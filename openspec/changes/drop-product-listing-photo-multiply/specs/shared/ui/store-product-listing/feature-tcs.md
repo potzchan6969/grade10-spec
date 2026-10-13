@@ -36,9 +36,9 @@ Runs once per row of **Test data**.
 
 | Tile status | Story | Photo |
 | --- | --- | --- |
-| Available | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--default` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| On sale | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--sale` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| In cart | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--in-cart` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| Available | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--default` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| On sale | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sale` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| In cart | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--in-cart` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
 
 **Steps:**
 
@@ -81,8 +81,8 @@ Runs once per row of **Test data**.
 
 | Where the tile is | Story | Photo |
 | --- | --- | --- |
-| A surface that sells, where the tile stays inert | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--sold-out` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
-| A surface that does not sell, where the tile opens | `<grade10 ui storybook url>?path=/story/store-product-listing-productcardimage--sold-out-with-handler` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| A surface that sells, where the tile stays inert | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sold-out` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
+| A surface that does not sell, where the tile opens | `<grade10 ui storybook url>?path=/story/store-product-listing-blocks-productcardimage--sold-out-with-handler` | `<white-fill photo url>`, a product photo on a white studio fill, wider than it is tall |
 
 **Steps:**
 

@@ -51,6 +51,12 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | `/design-tokens` | A token value moved — pull a designer's change in, rebuild the theme CSS, push values back. Never hand-edit the generated CSS. | "Design moved the primary colour — pull it in and rebuild the theme CSS." |
 | `/design-sync-check` | `design-sync:check` failed, the nightly reported drift, or Dev Mode is emitting something wrong. Triage what it printed. | "`design-sync:check` is failing — triage what it printed." |
 
+## Storybook
+
+| Invoke | When | Example |
+| --- | --- | --- |
+| `/storybook-workbench` | A screen, a state, a click-through journey, a flow or a prototype drawn in the workbench, titled by the manual's domain and page. | "Appointment › Booking: add a 'No slots this month' state to Book Visit." |
+
 ## Email
 
 | Invoke | When | Example |

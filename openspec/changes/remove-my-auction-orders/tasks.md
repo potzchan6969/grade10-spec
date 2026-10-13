@@ -8,4 +8,4 @@
 
 ## 2. The walk
 
-- [ ] 2.1 My Auctions' Won rows still open their Winner Order stories, and the `Auction Order/` group is gone: `AuctionWinnerOrder` sits under `My Auctions/Winner Order`, `AuctionAddressForm` under `My Auctions/Winner Order/Setup/Complete Order Setup` (`grade10-site-auction-account-record-SC-55`)
+- [ ] 2.1 My Auctions' Won rows still open their Winner Order stories, and the `Auction Order/` group is gone: `AuctionWinnerOrder` sits under `Auction/Post Bidding/Blocks/AuctionWinnerOrder`, `AuctionAddressForm` under `Auction/Post Bidding/Blocks/AuctionAddressForm` (`grade10-site-auction-account-record-SC-55`)

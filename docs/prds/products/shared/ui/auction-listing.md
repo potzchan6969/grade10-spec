@@ -130,11 +130,11 @@ cancelled.
   window, and while the lot is in extended bidding the Time left label reads
   **Time left (extended)**
 
-::story{id="auction-listing-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
+::story{id="auction-bidding-blocks-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
-::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
+::story{id="auction-bidding-blocks-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
 
-::story{id="auction-listing-listinglotmeta--default" title="The details section"}
+::story{id="auction-display-blocks-listinglotmeta--default" title="The details section"}
 
 :::detail{title="Code map" for="engineer"}
 - **Blocks** — `ListingLotHeader`, `ListingGallery`, `ListingAuctionBidCard`,
