@@ -1,0 +1,70 @@
+name: Finalized run records
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  statuses: write
+  id-token: write
+
+concurrency:
+  group: tcs-run-sheet
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      # Execute only main's checker. The candidate checkout is read as data.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: trusted
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: candidate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.14.1
+      - name: Refresh main
+        working-directory: candidate
+        run: git fetch origin main
+      - name: Detect run manifests
+        id: changes
+        working-directory: candidate
+        run: |
+          if git diff --name-only origin/main...HEAD -- docs/test-runs | grep -q '\.json$'; then
+            echo "records=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "records=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: google-github-actions/auth@v2
+        if: steps.changes.outputs.records == 'true'
+        id: auth
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/spreadsheets.readonly
+      - name: Verify the live finalized records
+        id: verify
+        if: steps.changes.outputs.records == 'true'
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          TCS_SHEET_ID: ${{ vars.TCS_SHEET_ID }}
+        run: node trusted/scripts/openspec/verify-run-record.mjs --root candidate
+      - name: Publish the current run status
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          RECORDS: ${{ steps.changes.outputs.records }}
+          VERIFIED: ${{ steps.verify.outcome }}
+        run: |
+          state=failure
+          if [ "$RECORDS" = "false" ] || [ "$VERIFIED" = "success" ]; then state=success; fi
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$RUN_HEAD_SHA" \
+            -f state="$state" -f context=tcs/run-finalized \
+            -f description="Finalized run manifests match the live registry"

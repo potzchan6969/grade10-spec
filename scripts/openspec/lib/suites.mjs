@@ -658,6 +658,7 @@ export function parseSuite(text) {
   let journey = null;
   let tc = null;
   let ungrouped = false;
+  let caseMarker = null;
 
   const pushCase = () => {
     if (tc && journey) journey.cases.push(tc);
@@ -672,6 +673,12 @@ export function parseSuite(text) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    const marker = line.match(/^<!--\s*trace:case\s+id=(\S+)\s+rev=(\d+)/);
+    if (marker) {
+      caseMarker = { id: marker[1], rev: Number(marker[2]) };
+      continue;
+    }
+    if (/^##\s/.test(line)) caseMarker = null;
 
     const meta = line.match(/^##\s+(Raised|Settled|Reconciliation)\s*$/);
     if (meta) {
@@ -817,6 +824,8 @@ export function parseSuite(text) {
         suite.legacy.add("case ids that are not `<scope>.US<n>-TC<m>`");
       tc = {
         id,
+        markerId: caseMarker?.id ?? null,
+        markerRev: caseMarker?.rev ?? null,
         capability: journeyScoped?.[1] ?? null,
         journeyNum: journeyScoped ? Number(journeyScoped[2]) : null,
         tcNum: journeyScoped ? Number(journeyScoped[3]) : null,
@@ -856,6 +865,7 @@ export function parseSuite(text) {
         // the classification block" is measured from.
         propLine: null,
       };
+      caseMarker = null;
       continue;
     }
 

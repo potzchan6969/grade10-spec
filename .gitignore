@@ -62,3 +62,6 @@ tools/manual/.vitest-attachments/
 
 # Builders' live git worktrees, never repository content.
 .claude/worktrees/
+
+# Downloaded or generated run receipts are not finalized run manifests.
+/.run-sheet-output/

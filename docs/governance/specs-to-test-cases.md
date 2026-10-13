@@ -64,7 +64,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **An escalated or deferred row is written here as well as in `decisions.md`** — that file archives with the change and is folded nowhere, so a row landing only there leaves the next blind pass with no record of what was asked. The landing says what was decided; this section says what the run did with the case, and `## Settled` carries the answer forward
 - **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
 - **Covered at domain** — a scenario the feature run left to a domain case names that case, and the domain case is its verifier the way a higher-level suite is for **Out of suite**. It names a case, not a scenario, so the id survives the archive strip; if the domain case is later deprecated or rewritten, the feature suite owes the case back
-- **Manual names what a person drives** — `### Manual` carries a `| Manual | Why |` table, one row per case no automated test decides, and that row is where the reason lives. The row names the part a person walks — a message typed in a thread, a tab in the run spreadsheet, a deploy. Where a test already proves some of it, the row names that test and what the case walks beyond it. An automated case names its test on the case itself, on its Decided-by line, and is left off the run sheet
+- **Manual names what a person drives** — `### Manual` carries a `| Manual | Why |` table, one row per case no automated test decides, and that row is where the reason lives. The row names the part a person walks — a message typed in a thread, a tab in the run spreadsheet, a deploy. Where a test already proves some of it, the row names that test and what the case walks beyond it. An automated case names its test on the case itself, on its Decided-by line, and remains eligible for the run sheet unless explicitly excluded
 - **A credited test carries the case id** — a legend above the table binds each name a row uses to a path, `` - <name> - `<path>`, in this store `` or `` in the application repository ``; a test in this store that a row credits cites the row's case id, and `pnpm run tcs:validate` refuses one that does not, and a legend path this store does not hold; a path in the application repository is checked where that repository ticks the group
 - **A row waiting on a walk names it** — a row whose walk nobody has run yet reads `to be walked in <the walk>`, and the run that runs the lane rewrites the rows to what the walk reached
 - **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; acceptance and `/tcs-review` strip them from the durable suite, leaving the dispositions and the reasons
@@ -502,8 +502,8 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | `planning-dev` skill | Integrated QA1, Dev and QA2 planning, then acceptance and publication |
 | `pnpm run tcs:validate` | validates the suite contract and anchor coverage; errors on malformed headers, duplicate or invalid ids, unresolved anchor traces, invalid properties/order, empty Expected Results, invalid actors, invalid composed levels, broken Decided-by paths, invalid **Covered at domain** ids, and an `approved` suite whose `actual` case is still anchor-only; warns on QA2-pending scenario links, legacy shape, archived cases left behind, duplicate-purpose candidates and a mocked state with no automation plan; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
 | `pnpm run tcs:stale` | suites whose drafts sit below the current revision, each owed a regenerate; a report, never a sweep |
-| `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | resolves a request to an explicit case-id list, dry-runs it, and dispatches the run tab once a person confirms |
-| `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--sandbox` uses `TCS_SHEET_SANDBOX_ID`; `--overwrite <id>` rewrites that run; `--env` is `staging` or `production` and defaults to staging; `--dry-run` prints the selection and touches no network |
+| `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | selects and confirms coverage, prints a trial, and finalizes its snapshot |
+| `pnpm run tcs:run-sheet` | prints a confirmed selection or manages a run snapshot; see the [run-sheet skill](../../.claude/skills/tcs-run-sheet/SKILL.md) for flags and dispatch |
 | `pnpm run tcs:automated <case-id…> --decided-by <path>` | flips one or more cases' Automation status to `automated`, in place, in whichever suite file holds them, writing the Decided-by line in the same edit; refuses a flip of an in-flight change's case that names no path; pushes nothing — the walk's own commit carries the flip |
 
 ### Validator Outcomes
@@ -515,24 +515,14 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 
 ## The Run Sheet
 
-A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
+A manual pass lives in a Google Sheet. The [run-sheet skill](../../.claude/skills/tcs-run-sheet/SKILL.md)
+owns selection, confirmation, printing and finalization.
 
-- **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
-- **`actual` only** — `--include-draft` takes drafts and stone-grey-bands them; a `deprecated` case never crosses
-- **A run includes automated cases** unless the person asked to leave them out. `--exclude-automated` leaves them out and still says how many, named, with what decides each
-- **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated. A change-scoped run records the requested change, affected capabilities and source commit in its run metadata. The person confirms that list before a tab is written
-- **Production unless they asked for the sandbox** — `--sandbox` writes to `TCS_SHEET_SANDBOX_ID`. That id is a repository variable, never in the code
-- **An occupied title is a refusal** — a new run whose tab name already exists is not written and is not given a `-2` suffix. `--overwrite <id>` recreates that run's tab and rewrites its four Summary rows in place, and only after a person names the id. If Summary and the tabs disagree, the writer prints both and stops
-- **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile` and `Notes` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
-- **A capability is a row, then a journey** — the file path (`shared/auth/sign-in`) above the journeys in that file, each journey above its cases, each with a collapsible group. Sorting happens inside the tab's filter view, which leaves the rows where they are
-- **Four surfaces, one vocabulary** — `to_do`, `pass`, `fail`, `blocked`, `skipped`, `n/a`. Prefill follows **Testability**, then **Automation status** on a mixed case: `manual` only → Web and Mobile `to_do`, Auto `n/a`; `automation` only → Web and Mobile `n/a`, Auto `to_do` even when no script has landed; `automation, manual` → Web and Mobile `to_do`, Auto `to_do` if status is `automated` else `n/a`. `n/a` is a surface that cannot answer; `skipped` is an answer somebody chose not to take, and only `n/a` is left out of the pass rate
-- **The Summary tab is the register** — four rows per run, one per surface, grouped under the first. Identity, env and the commit sit once, on that first row, with the SHA at the far right. No filter view: a register is read, not sorted
-- **Nothing returns** — no result reaches the store, and no suite carries one
-- **CI holds the credentials** — the `Run sheet` workflow mints a short-lived token from the repository's own OIDC identity; no service-account key exists
-- **The layout is code** — `scripts/openspec/lib/run-sheet-layout.mjs`, not a template tab inside the spreadsheet
-- **Renaming or deleting a tab cannot be prevented** — Sheets protects cells, not tabs. The Summary row then reads `tab missing`, and its provenance survives
-
-❓ Open: recording a tab somebody deleted.
+- **Snapshot** — a finalized run is pinned to the accepted-suite commit confirmed by a person. Later suite changes leave it alone. A merged run cannot be rewritten; another pass is a new run
+- **Eligibility** — actual cases and automated cases are eligible. Drafts require an explicit request; deprecated cases never print
+- **Selection** — every request resolves to an ordered list of case ids confirmed before writing. Intentional exclusions carry reasons
+- **Provenance** — a production run records spreadsheet and tab identity, run id, environment, source commit, requested scope, selected case ids and exclusions. Finalization produces one [manifest](../../.claude/skills/tcs-run-sheet/SKILL.md#run-records) commit per run; trial prints produce none
+- **Execution** — results stay in Sheets. Suites and run manifests carry no execution record
 
 ## See Also
 
