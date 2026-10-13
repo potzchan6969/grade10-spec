@@ -761,7 +761,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; QA1 output and report; Dev report; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
+**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
 
 - `TC-0fv` rev3 covers SC-o11: payment does not lift suspension; a 50500 USD minor raise against the standing 50000 USD minor maximum is refused, the existing maximum remains, and a new maximum on another lot is refused.
 - `TC-stk` rev3 covers SC-tsa and SC-yn5: in the USD bid race, 40000 USD minor against 50000 USD minor resolves at 40500 USD minor using the USD 500 minor increment. The no-bid fixture retains its 30000 USD minor lead. This corrects the prior inconsistent 340 result.

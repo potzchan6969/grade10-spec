@@ -490,9 +490,8 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+**Cases** - All 12 cases remain draft. `TC-2ed@1` covers SC-vqb and SC-w8f; `TC-kyx@2` SC-ijk; `TC-n6d@3` SC-mn9 and SC-u6t; `TC-9do@3` SC-b2w; `TC-4ox@3` SC-c1v and SC-pd0; `TC-d9d@3` SC-hm3; `TC-dfw@3` SC-xnb; `TC-dlk@3` SC-pd0; `TC-y0l@1` remains unlinked; `TC-fdc@1` covers SC-60d, SC-5ea and SC-gq8; `TC-sze@1` SC-xjw and SC-tke; and `TC-pn8@2` SC-ws7. `TC-9do` was repaired in place at rev3 with a USD 104.99 bid against a USD 105.00 opening price and an explicit minimum-price refusal. `TC-fdc` includes an unsupported EUR create attempt as well as HKD and JPY. USD schedule fixtures follow the current tier arithmetic.
 
-### Focused QA2 - 2026-10-14
+**Scenario coverage** - All 16 scenarios are covered by the linked cases. `TC-y0l` remains unlinked because its broader exploratory route has no complete matching scenario; narrower changed requirements are covered elsewhere. Unsupported EUR schedule writes also have admin listing coverage. The durable suite's old JPY maximum row remains an archive reconciliation item, not a current delta gap.
 
-- **Feature set:** The prepared fold removes the retired USD/HKD/JPY fixed-policy schedule and per-currency ceiling. It retains one USD schedule for every lot and one USD 10,000,000 ceiling. This resolves the bid-increments feature-set finding against decision Q4 and the current PRD.
-- **Coverage:** No requirement, scenario, journey, case ID, or case text changed. The 12 active draft cases and all 16 current scenarios remain as reconciled in the existing ledger. `TC-y0l` remains intentionally unlinked because its broader exploratory route is not fully stated by one scenario; the durable suite's old JPY maximum row remains an archive reconciliation item, not a current delta-scenario gap. No wider case or coverage claim is added.
+**Feature set** - The change removes the retired USD/HKD/JPY fixed schedules and per-currency ceiling. It retains one USD schedule and a USD 10,000,000 ceiling. No requirement, scenario, journey, case ID or case text changed in this fold.

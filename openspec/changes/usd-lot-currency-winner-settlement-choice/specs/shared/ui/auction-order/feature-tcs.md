@@ -383,4 +383,6 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+**Cases** - All 11 cases remain drafts. `TC-2fz@1` covers SC-cdc; `TC-3cr@1` SC-8j6; `TC-giz@1` and `TC-kiy@1` SC-7if; `TC-bu1@3` SC-z03 and SC-m7x; `TC-p6m@2` SC-hc5; `TC-62a@1` SC-pd1; `TC-pm2@1` SC-nxj; `TC-y6r@1` SC-bzz; `TC-mvr@1` SC-k6i; and `TC-9r5@1` SC-8eq. `TC-25` asserts USD methods Card, HK Local and SWIFT without FPS, and HKD methods Card, FPS and HK Local without SWIFT. `TC-26` checks each HKD bank rail separately.
+
+**Scenario coverage** - Eleven of 16 scenarios are covered. `SC-xdd` and `SC-tm6` use the public-exports test; `SC-10a` uses durable `TC-g9u` and `TC-l1e`; `SC-i3e` uses durable `TC-1f8`; and `SC-qb6` uses durable `TC-fjf`. These scenarios describe unchanged behavior. `TC-giz` and `TC-kiy` fully assert the USD/HKD method partition and separate bank rails.

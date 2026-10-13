@@ -1539,7 +1539,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** QA2 2026-10-14, independent reconciliation of the blind QA1 cases against the current Dev scenarios and original journey anchors. Read proposal, decisions and `## Raised`, relevant revised PRDs, journeys, tech design, current and durable winner-order specs and suites, and `docs/governance/specs-to-test-cases.md`; QA1's report and pre-QA2 READY receipt were read as review inputs. The revised cases were not derived from scenarios. Case dispositions are recorded before the post-hoc links below. Full case-level evidence is [qa2-winner.md](../../../../qa2-winner.md).
+**Run:** QA2 2026-10-14, independent reconciliation of the blind QA1 cases against the current Dev scenarios and original journey anchors. Read proposal, decisions and `## Raised`, relevant revised PRDs, journeys, tech design, current and durable winner-order specs and suites, and `docs/governance/specs-to-test-cases.md`; QA1's report and pre-QA2 READY receipt were read as review inputs. The revised cases were not derived from scenarios. Case dispositions are recorded before the post-hoc links below.
 
 | Scenario | Disposition and evidence |
 | --- | --- |
@@ -1592,3 +1592,46 @@ Runs once per row of **Test data**.
 **Contradictions:** None found in current winner-order sources. SC-95's historical title is explicitly retained in its active spec and the body requires one picked rail. SC-302's current scenario and TC-one agree at 39,300 minor HKD fee and 142,400 minor HKD total. SC-277 and Q20 agree on automatic HKD/FPS at close without setup.
 
 **Case lifecycle:** All new or changed cases remain `draft`; case IDs are preserved. Ten cases were revised within their existing anchors: TC-n3p, TC-w18, TC-eu8, TC-9v4, TC-4dz, TC-rwy, TC-x85, TC-ac5, TC-nf6 and TC-vwm.
+
+### Blind-case dispositions
+
+| Case | Disposition |
+| --- | --- |
+| `TC-n3p` | Repair in US8 anchor: vary the USD minimum by row and assert exact USD2,500/200/500/3,000 and USD1.01/0/0.20/1.21 outcomes; rev 3. |
+| `TC-zt4` | Retain; the USD1 minimum example remains within US8 and has no exact matching scenario fixture. |
+| `TC-dd3` | Retain; calculation boundary case remains a draft. It does not assert invoice-send route. |
+| `TC-i06` | Retain; fully checks the sent and reissued premium transition. |
+| `TC-xji` | Retain; the HKD conversion of premium and USD minimum is required by US8, but no scenario states this combined outcome. |
+| `TC-w18` | Repair within US9: drive HKD/FPS setup, invoice send, then the FPS details dialog; it covers SC-181 and SC-299. It remains a duplicate candidate with TC-vvf; rev 4. |
+| `TC-eu8` | Repair within US9: start from a USD-won order, choose currency and rail, inspect offered choices before confirm, then assert the persisted bank-transfer rail and Preparing Invoice; covers SC-90 for HKD/FPS. Rev 3. |
+| `TC-9v4` | Repair US9 assertion to include SWIFT memo warning and no copy controls on bank detail rows; rev 5. Covers SC-95, SC-182 and SC-183. |
+| `TC-vvf` | Retain; precise FPS dialog case is a duplicate candidate after TC-w18 was repaired; no cover link assigned. |
+| `TC-x85` | Repair within US3: add the exact SC-40 operator quote/send route and no-premium-input assertion while retaining SC-41/42 rows; rev 3. |
+| `TC-4dz` | Repair within US1: retain the FPS row and add the HK Local row for Card-to-rail change, confirming each recorded rail; rev 3, covers SC-93. |
+| `TC-csb` | Retain; covers no-card-rule outcomes for HKD and USD, including the HKD rail choices. |
+| `TC-ayp` | Retain; setup choices are unselected and fully assert SC-278. |
+| `TC-79a` | Retain; USD/HKD invoice rows verify the selected settlement-currency pricing and line conversions for SC-281. |
+| `TC-8ea` | Retain; HKD-sent invoice write to USD is refused and HKD remains, matching SC-282. |
+| `TC-a61` | Retain; missing-currency confirmation and unchanged order match SC-279. |
+| `TC-x0r` | Retain; confirms HKD and Preparing Invoice, matching SC-280. |
+| `TC-flb` | Retain; operator pre-send currency correction and winner write refusal match SC-300. |
+| `TC-r4x` | Retain; invoice reissue in USD preserves replaced HKD invoice, matching SC-301. |
+| `TC-52z` | Retain; exact USD and HKD method sets match SC-293 and SC-294. |
+| `TC-7j7` | Retain; asserts clearing only, not refusal of confirmation, so no SC-295 link. |
+| `TC-vje` | Retain; full switch-clear-and-refuse path matches SC-295. |
+| `TC-rwy` | Repair within US25: retain the Card row and add HK Local as a second still-offered method, covering SC-296; rev 2. |
+| `TC-2ac` | Retain; invalid method confirmation refusal and no persisted setup state match SC-298. |
+| `TC-jfi` | Retain; HKD fee wording and no-selection assertions match SC-91. |
+| `TC-pes` | Retain; details-availability rows match SC-92 and SC-226. |
+| `TC-a8g` | Retain; currency-specific fee ranges match SC-303. |
+| `TC-ac5` | Repair within US26: assert exact SC-283/284/285 fixtures and invoice PDF disclosure for SC-288; rev 3. |
+| `TC-nf6` | Repair within US26: set SC-289 total/payment fixture and assert receipt plus payment-confirmed letter outputs; rev 3. |
+| `TC-9dm` | Retain; post-selection letters assert settlement-currency amounts and the pre-selection won-lot exception; no single scenario covers this full set. |
+| `TC-q56` | Retain; refund currency is required by the anchor but no scenario covers it. |
+| `TC-3ly` | Retain; exact HKD card-fee rule, fee and payable total match SC-286. |
+| `TC-uz6` | Retain; unit conversion cases cover SC-283/284 values but scenario links go to invoice route case TC-ac5; keep unit test unlinked. |
+| `TC-k5y` | Retain; no-rate assertions exceed scenario-specific surfaces but the anchor and requirement prohibit rate disclosure anywhere. It has no full scenario THEN match. |
+| `TC-one` | Retain; USD-typed bank transfer fee conversion and sum match SC-302. |
+| `TC-vwm` | Repair within US27: retain exact card row and add bank-transfer row for the same source amounts, asserting its HKD subtotal without a card fee; rev 3, covers SC-290 and SC-304. |
+| `TC-7qs` | Retain; USD-only total and absence of HKD subtotal/fee match SC-291. |
+| `TC-17a` | Retain; pre-send absence of HKD total plus USD lot-card bid match SC-292. |

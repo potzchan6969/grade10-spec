@@ -573,4 +573,6 @@ Runs once in set mode and once in raise mode.
 
 ## Reconciliation
 
-See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+**Cases** - All 14 cases remain drafts. `TC-fb2@4` covers SC-9e0 and SC-q3n; `TC-ygd@3` SC-8ym; `TC-35i@3` SC-wdd; `TC-jr1@3` SC-z2x and SC-qdv; `TC-bfp@3` SC-y2e; `TC-hsy@3` SC-xxl; `TC-ftm@3` SC-z2x; `TC-g02@3` SC-6n7; `TC-dej@2` SC-huw; `TC-w4r@2` SC-atq; `TC-9rx@2` SC-v6g and SC-1mi; `TC-5dh@2` SC-cfl; `TC-swf@2` SC-rnz; and `TC-oem@1` SC-2wv. `TC-fb2` was repaired in place at rev4 to assert the exact 1,000,000,000 USD-minor-unit callback in both set and raise routes. No case was added.
+
+**Scenario coverage** - The 16 linked scenarios are fully asserted. `SC-7o5`, `SC-t9f`, `SC-2s5` and `SC-dv0` remain out of suite and are exercised by their existing durable cases. Those unchanged durable rows still have older HKD/JPY fixtures for archive reconciliation. Automated `Decided by` labels on draft cases are not execution evidence. `TC-19` remains a draft manual case after the callback repair. No contradictory assertion remains.

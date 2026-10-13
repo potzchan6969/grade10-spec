@@ -3032,7 +3032,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; QA1 output and report; Dev report; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
+**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
 
 - `TC-5ps` rev3 covers SC-7c2: on the live USD lot, the accepted high maximum is 130000 USD minor and the viewer's next bid is 132500 USD minor, from current 120000 USD minor and the USD increment tier.
 - The changed scenario preserves the listing journey and the universal USD bid contract. No PRD, journey, feature-root, or durable-baseline contradiction was found. The changed listing scenario does not assert the 20% premium; that behavior stays with its owning bid and post-bid suites.

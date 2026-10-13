@@ -668,7 +668,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with the current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline. Full case ledger and source paths: `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-admin.md`.
+**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with the current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline.
 
 - **Retained:** All active case IDs, revisions, routes and classifications remain. All 14 active cases are draft.
 - **Covered:** `SC-159` by `US74-TC1`; `SC-160` by `US3-TC25`; `SC-164` by `US74-TC2`; `SC-165` and `SC-57` by `US74-TC3`; `SC-161` by `US74-TC4`; `SC-162` by `US74-TC5`. The EUR API row asserts `SC-57`'s refusal and unchanged-draft THEN. The active `SC-57` body asserts API behavior; its historical title and serving-anchor wording also mention the form, but the scenario's THEN does not assert a form refusal.

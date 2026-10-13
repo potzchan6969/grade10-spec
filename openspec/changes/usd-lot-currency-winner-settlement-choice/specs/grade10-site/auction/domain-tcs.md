@@ -1771,6 +1771,8 @@ it.
 
 ## Reconciliation
 
-See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+**Current cases** - `TC-k4p@3` covers winner-order SC-ug0 and SC-fq4. Its reopened sent order shows USD lines 101.00, 20.20 and 10.01; converted HKD lines 793.00, 159.00 and 79.00; USD subtotal 131.21; HKD subtotal 1,031.00; HKD gross-up fee 38.73 outside both subtotals; and payable 1,069.73 HKD. It checks that no HKD total or fee appears before confirmation and invoice creation.
 
-This R5 reconciliation also applies the selective bid-fixture corrections listed in `/private/tmp/qa2-1155-domain-r5-report.md`. TC-k4p stays at rev3 with the exact USD/HKD totals, fee and post-send timing. TC-wrl stays draft with `automation, manual` testability and manual automation status while its current-bid range is corrected.
+`TC-wrl` remains draft with `automation, manual` testability and manual automation status. Its corrected current-bid range is 30,000 to 30,500 USD minor units. The domain cases do not claim full coverage of other site feature scenarios based on representative cases.
+
+**Planned verification** - Tasks 7.7-7.9 cover schedule outcomes and auction-history reads. Task 7.10 covers the live bid, Outbid state and 132,500 USD-minor next minimum in SC-43. Planned tasks are not execution evidence. No product test or approval is claimed.

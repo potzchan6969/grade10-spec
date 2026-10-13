@@ -160,4 +160,12 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+**Cases** - `TC-zsd@3`, `TC-5gi@3`, and `TC-49i@2` remain drafts. `TC-49i` adds the $14,999.00 below-bar row within its existing case. No case identity changed.
+
+| Scenario | Case and disposition |
+| --- | --- |
+| SC-d78 | `TC-zsd` covers the verified bid at the threshold. |
+| SC-uhh, SC-l64 | `TC-5gi` covers the held unverified bid at or above the threshold, its form guidance, and the absence of a recorded bid. |
+| SC-ndj, SC-99a | `TC-49i` covers the below-threshold route without verification checks or standing reads. |
+
+All five scenarios on `grade10-site-auction-auction-US-04` are covered. The identity-store-absent bar requirement remains an unchanged gap. It has no scenario in this change and no durable case. The existing launch check verifies the USD 15,000 bar configuration value.

@@ -460,7 +460,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Reconciled the blind cases with current delta scenarios against the single feature root. Read the current PRD, decisions including Q29, journeys, delta requirements, technical design and durable baseline. Full case ledger and source paths: `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-admin.md`.
+**Run:** Independent QA2, 2026-10-14. Reconciled the blind cases with current delta scenarios against the single feature root. Read the current PRD, decisions including Q29, journeys, delta requirements, technical design and durable baseline.
 
 - **Retained:** All 12 active case IDs, revisions and routes remain draft. The normal winner setup case remains separate from test-winner creation; it checks that settlement and method are selected through ordinary setup.
 - **Covered:** `SC-24` is fully asserted by `US1-TC18`; it refuses HKD, JPY and other non-USD bid currencies atomically.

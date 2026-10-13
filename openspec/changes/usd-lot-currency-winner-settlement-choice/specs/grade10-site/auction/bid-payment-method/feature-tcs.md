@@ -760,7 +760,7 @@ Runs once for the sole supported bid currency.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. This pass read the frozen QA1 bundle, Dev report, current PRD, decisions, journeys, delta requirements, technical design, tasks, durable baseline and existing cases. The scenario and case ledger is in `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-context.md`.
+**Run:** Independent QA2, 2026-10-14. This pass read the frozen QA1 bundle, current PRD, decisions, journeys, delta requirements, technical design, tasks, durable baseline and existing cases.
 
 - **Anchors:** The active linked-card journeys US-01 and US-02 retain actual cases. The changed premium-disclosure journey US-04 has two draft cases. Existing deprecated cases remain historical.
 - **Coverage:** TC-lbz rev2 fully asserts premium rate disclosure on the bid panel and covers SC-x21. TC-nvs rev2 fully asserts the universal USD rate and covers SC-oeb, including no HKD or JPY rate. Both cases remain draft; no execution or approval is claimed.

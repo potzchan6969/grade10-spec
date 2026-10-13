@@ -383,7 +383,7 @@
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Reconciled the current admin domain cross-feature cases with the changed feature suites, current delta scenarios and durable baseline. Full case ledger and source paths: `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-admin.md`.
+**Run:** Independent QA2, 2026-10-14. Reconciled the current admin domain cross-feature cases with the changed feature suites, current delta scenarios and durable baseline.
 
 - **Retained:** Existing domain case IDs, revisions and routes remain; active cases stay draft and deprecated history remains deprecated.
 - **US3:** The normal winner chooses HKD/FPS before the operator quotes in USD and sends the HKD invoice. This remains distinct from internal winner handling.

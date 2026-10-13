@@ -415,7 +415,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline. Full case ledger and source paths: `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-admin.md`.
+**Run:** Independent QA2, 2026-10-14. Reconciled the QA1 blind cases with current delta scenarios against the frozen anchors. Read the current PRD, decisions, journeys, delta requirements, technical design and durable baseline.
 
 - **Retained:** All 11 active case IDs, revisions, routes and classifications remain draft. All payment-settings anchors have active cases.
 - **Coverage:** The single USD premium minimum, the USD/HKD-only card-rule mapping and separate per-currency rules remain asserted by the retained cases. No case claims a JPY card rule or premium minimum.

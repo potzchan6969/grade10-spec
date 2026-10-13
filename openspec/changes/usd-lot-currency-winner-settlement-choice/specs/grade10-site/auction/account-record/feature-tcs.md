@@ -1894,7 +1894,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; QA1 output and report; Dev report; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
+**Run:** Independent QA2, 2026-10-14. Inputs: frozen QA1 packet digest `4c0f429bb19757925c710ded1fb89c06410660e6ea5b14302f9d2fe2303ce858`; current PRDs, decisions, frozen journeys, delta scenarios, feature roots, task list, durable baseline, and existing suite. The QA1 case review remained blind to Dev scenarios. Dispositions below use only existing journey anchors.
 
 - `TC-w62` rev3 covers SC-dsc: both Outbid and Leading rows keep the live current price at 30000 USD minor after the refused 30300 raise; floor is 30500 USD minor.
 - `TC-y6p` rev3 covers SC-fao: the Active row shows the live current price 120000 USD minor, above customer B's 100000 USD minor bid.

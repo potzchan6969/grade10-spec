@@ -266,4 +266,6 @@
 
 ## Reconciliation
 
-See `openspec/changes/usd-lot-currency-winner-settlement-choice/qa2-site-shared.md` for this QA2 run’s full case and scenario dispositions, coverage limits, and remaining unchanged gap.
+**Cases** - All seven cases remain drafts. `TC-8bw@3` covers SC-pyd; `TC-5o0@3` covers SC-tfm and SC-3mo; `TC-ew9@1` remains unlinked; `TC-vxo@2` covers SC-16k; `TC-l6s@2` SC-0e7; `TC-xsq@2` SC-7qg; and `TC-i7q@1` remains unlinked. Rows use the USD schedule and winning-bid fixtures, with exact converted HKD values where required. The reissue case preserves the prior letter and asserts the payment-reminder letter.
+
+**Scenario coverage** - All six current delta scenarios are covered: SC-pyd, SC-tfm, SC-3mo, SC-16k, SC-0e7 and SC-7qg. Later reminders and the internal bidder no-letter case have no delta scenarios and remain unlinked. At invoice send and reissue, the active post-sale delta names the payment-reminder letter. The separate invoice-reissued letter was removed by product decision; the feature-set term “invoice” means the payment reminder sent with the invoice.
