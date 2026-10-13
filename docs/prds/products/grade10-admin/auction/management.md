@@ -450,7 +450,7 @@ money is not necessarily the person who dispatches cards.
 
 ## Payment Settings
 
-The buyer-premium minimums and the Stripe card fee rule that prices a card
+The buyer-premium minimum and the Stripe card fee rule that prices a card
 invoice's payment processing fee, as the Payment settings tab under
 `/auction`. A bank transfer invoice's fee is the operator's own, per
 [Auction Management · Payment](#payment); Payment Settings holds no rule for
@@ -489,7 +489,7 @@ it.
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
 | 🚧 Opening Orders, an order and its proof files, and commenting; attaching a proof file takes the grant of its action | `auction:read` - reading | `staff`, `finance`, `treasurer` and `admin` |
 | Sending and reissuing an invoice, recording a payment, checking proof, cancelling, reopening, recording or changing setup | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
-| 🚧 Clearing a flag, and Payment Settings: the premium minimums and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
+| 🚧 Clearing a flag, and Payment Settings: the premium minimum and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
 | Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
 | 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
