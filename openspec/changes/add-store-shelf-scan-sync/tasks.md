@@ -21,7 +21,7 @@
 - [ ] 3.5 Show an item's grade and cert chips only on a label read, from `grader`, `data.grade` and `cert` (`g10.store-shelf-scanning.SC39`, `g10.store-shelf-scanning.SC43`)
 - [ ] 3.6 Verify: `pnpm --dir apps/backend/grade10/tcg-ar test` and `test:e2e`
 
-## 4. Inventory slab facts (grade10)
+## 4. Inventory slab facts (grade10) (owner: @ecchochan)
 
 - [ ] 4.1 Tests, in their own commit before the code: `slabsOf` answers live slabs by item id and by label code, leaves out retired and slab-less items and unknown ids, refuses more than 500, and returns no owner or price
 - [ ] 4.2 Add `StoreItemSlabs` and its types and `getStoreSlabsService()` to `@grade10/inventory-contracts/items`; export the entrypoint from `apps/backend/grade10/inventory`
