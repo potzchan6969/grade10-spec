@@ -2,6 +2,7 @@
 title: Cart Drawer
 spec: grade10-site/store/cart-drawer
 order: 4
+reviewed: 2026-10-14
 ---
 
 The Cart Drawer opens over the page the collector is on: they check what is in
