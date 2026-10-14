@@ -1567,9 +1567,11 @@ Runs once per row of **Test data**.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** g10.store-cart-drawer.US9
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/store/cart-drawer-pending.spec.ts`
 
 **Pre-conditions:**
 

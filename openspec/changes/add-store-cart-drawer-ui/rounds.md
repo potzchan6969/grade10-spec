@@ -1,0 +1,17 @@
+# Rounds
+
+One row per round: what it read, who read it, what stood and what it asked.
+Written by the landing, in the landing's own commit.
+
+| Round | Artifact | Perspectives | Stood | Asked | Tests |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 1 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The catalog overlay and its supported-locale vocabulary landed. | - | i18n tests; typecheck; build |
+| 2 | 2 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The shared drawer was integrated with the signed-in Store cart and its existing review boundary. | - | focused cart, shell, route and locale tests; typecheck; lint; build |
+| 3 | 3 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The Cart Drawer product record and related manual records were published; the acceptance shelf remains open. | - | check:manual |
+| 4 | 4 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | Read-only tender context is scoped to the current reviewed basket and does not leak stale results. | - | focused hook and shell tests; typecheck; lint; build |
+| 5 | 5 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | Interactive promo and points tender actions, pending states and checkout handoff landed through the existing drawer contract. | - | focused tests; typecheck; lint; test; build |
+| 6 | 6 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The Cart Points product record stayed aligned with the delivered interactive points behavior. | - | feature-suite and manual validation |
+| 7 | 7 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The shared tender-pending contract landed before its application consumer. | - | shared component tests; UI typecheck; Storybook build |
+| 8 | 8 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | Checkout creation, refusal recovery and the verification-bar gate moved into the drawer. | - | focused cart, route and E2E tests; typecheck; lint; build |
+| 9 | 9 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The Cart Drawer and Checkout product records were aligned with direct checkout creation. | - | check:manual |
+| 17 | 17 | missing-pieces; code-smell; conventions; reader; qa; operations; simpler; verifier | The pending-operation Playwright walk passed the cart-write overlap, promo-quote failure recovery, and pending-read dismissal routes at 375px and 1280px, including locale, keyboard Escape and scroll preservation. The existing checkout walk now asserts that a pending write keeps quantity unchanged and disabled. `g10.store-cart-drawer.US9-TC1` is fully decided by the walk and is automated. The remaining pending cases stay manual/draft: `g10.store-cart-drawer.US7-TC1` through `US7-TC3`, `US8-TC1` through `US8-TC3`, `US9-TC2` through `US9-TC4`, `shared.ui-store-cart.US19-TC4` through `US19-TC7`, and `shared.ui-store-cart.US20-TC1` through `US20-TC2`. Existing US1-US6 and durable discount journeys retain their existing walks and dispositions. | - | `g10.store-cart-drawer.US9-TC1`: `grade10:apps/frontend/grade10/e2e/tests/store/cart-drawer-pending.spec.ts`; pending walk: `grade10:apps/frontend/grade10/e2e/tests/store/cart-drawer-pending.spec.ts`; checkout compatibility: `grade10:apps/frontend/grade10/e2e/tests/store/checkout-integration.spec.ts` |
