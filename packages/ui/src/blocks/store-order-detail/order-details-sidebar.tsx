@@ -160,7 +160,7 @@ function OrderDetailsSidebar({
         {hasSummary ? (
           <VStack
             className={cn(
-              "w-full bg-background-subtle p-6",
+              "w-full bg-background-subtle p-4 sm:p-6",
               // Only separate summary from secondary groups — avoid stacking
               // with the Card edge when summary is the sole section.
               hasSecondaryGroups && "border-b border-border",
@@ -232,7 +232,7 @@ function OrderDetailsSidebar({
           </VStack>
         ) : null}
         {hasSecondaryGroups ? (
-          <VStack className="w-full p-6" gap="lg" hAlign="stretch">
+          <VStack className="w-full p-4 sm:p-6" gap="lg" hAlign="stretch">
             {hasPayment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">

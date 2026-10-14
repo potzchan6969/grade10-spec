@@ -61,11 +61,11 @@ function OrderDetailsOrderItem({
       data-slot="order-details-order-item"
       data-struck-through={struckThrough || undefined}
     >
-      <TableCell className="min-w-0 flex-1">
+      <TableCell className="min-w-32 flex-1">
         <HStack className="min-w-0 flex-1" gap="md" vAlign="center">
           <div
             aria-hidden={imageSrc ? undefined : true}
-            className="relative size-12 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted"
+            className="relative size-10 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted sm:size-12"
             data-slot="order-details-order-item-image"
           >
             {imageSrc ? (
@@ -76,42 +76,36 @@ function OrderDetailsOrderItem({
               />
             ) : null}
           </div>
-          {lineStatus != null || couponCode != null ? (
-            <VStack className="min-w-0 flex-1" gap="xs" hAlign="stretch">
-              <p className="w-full text-sm leading-5 font-medium text-foreground">
-                {product}
-              </p>
-              {couponCode != null ? (
-                <HStack className="w-full" gap="xs" vAlign="center">
-                  <span
-                    aria-hidden
-                    className="shrink-0 text-secondary-foreground"
-                  >
-                    <Tag size={14} weight="bold" />
-                  </span>
-                  <span className="text-xs leading-4 text-secondary-foreground">
-                    {couponCode}
-                  </span>
-                </HStack>
-              ) : null}
-              {lineStatus != null ? (
-                <HStack className="w-full flex-wrap" gap="xs" vAlign="center">
-                  <OrderHistoryStatus status={lineStatus}>
-                    {statusLabel}
-                  </OrderHistoryStatus>
-                  {statusMessage ? (
-                    <p className="min-w-0 flex-1 text-xs leading-4 text-secondary-foreground">
-                      {statusMessage}
-                    </p>
-                  ) : null}
-                </HStack>
-              ) : null}
-            </VStack>
-          ) : (
-            <p className="min-w-0 flex-1 text-sm leading-5 font-medium text-foreground">
+          <VStack className="min-w-0 flex-1" gap="xs" hAlign="stretch">
+            <p className="w-full text-sm leading-5 font-medium text-foreground">
               {product}
             </p>
-          )}
+            {couponCode != null ? (
+              <HStack className="w-full" gap="xs" vAlign="center">
+                <span
+                  aria-hidden
+                  className="shrink-0 text-secondary-foreground"
+                >
+                  <Tag size={14} weight="bold" />
+                </span>
+                <span className="text-xs leading-4 text-secondary-foreground">
+                  {couponCode}
+                </span>
+              </HStack>
+            ) : null}
+            {lineStatus != null ? (
+              <HStack className="w-full flex-wrap" gap="xs" vAlign="center">
+                <OrderHistoryStatus status={lineStatus}>
+                  {statusLabel}
+                </OrderHistoryStatus>
+                {statusMessage ? (
+                  <p className="min-w-0 basis-full text-xs leading-4 text-secondary-foreground sm:basis-auto sm:flex-1">
+                    {statusMessage}
+                  </p>
+                ) : null}
+              </HStack>
+            ) : null}
+          </VStack>
         </HStack>
       </TableCell>
       {/* biome-ignore lint/plugin: column width matches Figma Table Head 88px */}

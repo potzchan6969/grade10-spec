@@ -1097,43 +1097,45 @@ function CartDrawerFooter({
         </CartAmountSkeleton>
       </HStack>
 
-      <Button
-        size="lg"
-        variant="default"
-        disabled={
-          loading ||
-          summaryLoading ||
-          tenderPending ||
-          checkoutDisabled ||
-          isRedirecting
-        }
-        loading={isRedirecting}
-        onClick={handleCheckout}
-        className="w-full"
-      >
-        {isRedirecting ? copy.checkoutRedirecting : copy.checkoutButton}
-      </Button>
+      <VStack gap="sm" className="w-full">
+        <Button
+          size="lg"
+          variant="default"
+          disabled={
+            loading ||
+            summaryLoading ||
+            tenderPending ||
+            checkoutDisabled ||
+            isRedirecting
+          }
+          loading={isRedirecting}
+          onClick={handleCheckout}
+          className="w-full"
+        >
+          {isRedirecting ? copy.checkoutRedirecting : copy.checkoutButton}
+        </Button>
 
-      {onSignIn && copy.signInAction ? (
-        <div className="flex w-full flex-wrap items-baseline justify-center gap-x-1 text-sm font-normal leading-5 text-secondary-foreground">
-          {copy.signInPrompt ? <span>{copy.signInPrompt}</span> : null}
-          <Link
-            render={<button type="button" />}
-            size="sm"
-            disabled={
-              loading ||
-              summaryLoading ||
-              tenderPending ||
-              checkoutDisabled ||
-              isRedirecting
-            }
-            onClick={onSignIn}
-          >
-            {copy.signInAction}
-          </Link>
-          {copy.signInSuffix ? <span>{copy.signInSuffix}</span> : null}
-        </div>
-      ) : null}
+        {onSignIn && copy.signInAction ? (
+          <div className="flex w-full flex-wrap items-baseline justify-center gap-x-1 text-sm font-normal leading-5 text-secondary-foreground">
+            {copy.signInPrompt ? <span>{copy.signInPrompt}</span> : null}
+            <Link
+              render={<button type="button" />}
+              size="sm"
+              disabled={
+                loading ||
+                summaryLoading ||
+                tenderPending ||
+                checkoutDisabled ||
+                isRedirecting
+              }
+              onClick={onSignIn}
+            >
+              {copy.signInAction}
+            </Link>
+            {copy.signInSuffix ? <span>{copy.signInSuffix}</span> : null}
+          </div>
+        ) : null}
+      </VStack>
     </VStack>
   );
 }
