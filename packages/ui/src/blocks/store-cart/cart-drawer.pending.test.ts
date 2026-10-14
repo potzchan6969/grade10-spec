@@ -137,7 +137,7 @@ function footerProps(overrides: Record<string, unknown> = {}) {
 }
 
 describe("shared store-cart pending operations", () => {
-  it("blocks every item action while interactionPending is true (SC64)", () => {
+  it("blocks every item action while interactionPending is true (g10.shared-store-cart.SC64)", () => {
     const onClickProduct = vi.fn();
     const onQuantityChange = vi.fn();
     const onRemove = vi.fn();
@@ -181,7 +181,7 @@ describe("shared store-cart pending operations", () => {
     expect(onRemove).not.toHaveBeenCalled();
   });
 
-  it("forwards pending to the body, keeps it scrollable, and cancels delayed removal (SC64, SC66, SC69)", () => {
+  it("forwards pending to the body, keeps it scrollable, and cancels delayed removal (g10.shared-store-cart.SC64, g10.shared-store-cart.SC66, g10.shared-store-cart.SC69)", () => {
     vi.useFakeTimers();
     const onRemoveItem = vi.fn();
     const { container, rerender } = mount(
@@ -237,7 +237,7 @@ describe("shared store-cart pending operations", () => {
     expect(onRemoveItem).not.toHaveBeenCalled();
   });
 
-  it("blocks footer actions and preserves accepted values and entered points (SC64)", () => {
+  it("blocks footer actions and preserves accepted values and entered points (g10.shared-store-cart.SC64)", () => {
     const onPromoStateChange = vi.fn();
     const onRemovePromo = vi.fn();
     const onPointsStateChange = vi.fn();
@@ -317,7 +317,7 @@ describe("shared store-cart pending operations", () => {
     expect(container.textContent).toContain("HK$24,500.00");
   });
 
-  it("blocks applied tender removal and disclosure while pending, then restores only allowed actions (SC67, SC68)", () => {
+  it("blocks applied tender removal and disclosure while pending, then restores only allowed actions (g10.shared-store-cart.SC67, g10.shared-store-cart.SC68)", () => {
     const onPromoStateChange = vi.fn();
     const onRemovePromo = vi.fn();
     const onPointsStateChange = vi.fn();
@@ -412,7 +412,7 @@ describe("shared store-cart pending operations", () => {
     expect(onPointsStateChange).not.toHaveBeenCalled();
   });
 
-  it("keeps an open promo sheet readable and dismissible while blocking edits and navigation (SC65, SC66)", () => {
+  it("keeps an open promo sheet readable and dismissible while blocking edits and navigation (g10.shared-store-cart.SC65, g10.shared-store-cart.SC66)", () => {
     const onClose = vi.fn();
     const onPromoStateChange = vi.fn();
     const onApplyPromo = vi.fn(() => true);
@@ -502,7 +502,7 @@ describe("shared store-cart pending operations", () => {
     ).not.toBeNull();
   });
 
-  it("keeps compound dismissal available and forwards interaction pending to every layer (SC64, SC66)", () => {
+  it("keeps compound dismissal available and forwards interaction pending to every layer (g10.shared-store-cart.SC64, g10.shared-store-cart.SC66)", () => {
     const onClose = vi.fn();
     const onPromoStateChange = vi.fn();
     const onRemoveItem = vi.fn();
