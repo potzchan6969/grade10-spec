@@ -215,3 +215,35 @@ coverage and metadata findings outside this change.
 **Status:** Not ready to accept. No acceptance record, published revision, or
 implementation claim is made. The product owner's acceptance command waits for
 the store-wide suite gate and the required push of this Purpose repair.
+
+## Identifier Namespace Rerun
+
+**Run:** 2026-10-14, bounded planning-dev and acceptance-review rerun after the
+active cart-drawer delta was repaired to use the durable
+`g10.store-cart-drawer.*` namespace. The durable cart-drawer suite was not
+edited.
+
+**QA1:** The six journey anchors and 43 existing cart cases retain their
+behavior and lifecycle. Legacy active-delta headings now map to the durable
+journey and case anchors (`US1` through `US6`); no new behavior case is owed.
+
+**Dev:** The repair is mechanical identifier alignment across
+`user-journeys.md`, `spec.md` and `feature-tcs.md`. Existing `trace:case` ids,
+scenario ids, requirement text and implementation behavior are unchanged.
+
+**QA2:** The scoped cart-drawer and shared suites validate without identifier
+errors. `git diff --check` passes, and the diff contains no changes to
+`trace:case` marker ids. The remaining draft and post-hoc coverage warnings
+are nonblocking and do not alter this change's contract.
+
+**Acceptance review:** Fresh review scope identity is
+`84792ceff97daeaf13bec74fd8d721a9681f6a723e705226c173c5ea51a0d85b`; the
+durable baseline remains
+`1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052`. The
+review ledger is `Ready to accept`. `pnpm accept:preflight
+add-store-cart-drawer-ui` exits 0 with fingerprint
+`5c6a7673141167cd8247b117625f3ecde887aad76df81e5699e74231b1fea7ce`.
+
+**Status:** Ready for product-owner acceptance. No acceptance record,
+published revision or implementation claim is made until the product owner
+runs `pnpm spec:accept` with that fresh baseline fingerprint.

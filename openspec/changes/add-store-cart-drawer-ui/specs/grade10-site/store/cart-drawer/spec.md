@@ -46,7 +46,7 @@ same drawer, as `grade10-site/site/page-shell` states.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-omn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-01 - Cart opens without leaving its surface
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** a signed-in collector on any surface whose header offers Cart
 - **WHEN** they activate Cart
@@ -55,7 +55,7 @@ same drawer, as `grade10-site/site/page-shell` states.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-za5 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-02 - Closing preserves the current address
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** an open cart drawer over any surface
 - **WHEN** the drawer closes
@@ -76,7 +76,7 @@ another read.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-a52 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-04 - A signed-in collector sees the member cart
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** a signed-in collector whose member cart holds a line
 - **WHEN** they open the cart drawer
@@ -85,7 +85,7 @@ another read.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-tv2 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-05 - Every open starts a current read
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** a cart drawer whose previous open completed
 - **WHEN** the collector opens it again
@@ -93,7 +93,7 @@ another read.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-ti9 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-06 - A read in flight remains unresolved
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** an opening cart drawer whose status-and-price read has not answered
 - **WHEN** the drawer renders
@@ -102,7 +102,7 @@ another read.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-0og rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-07 - A failed read tells the collector once
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** an open cart drawer whose status-and-price read fails
 - **WHEN** the unresolved drawer renders more than once during that open
@@ -112,7 +112,7 @@ another read.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-lrr rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-08 - Reopening retries a failed read
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** a collector who closed the drawer after its read failed
 - **WHEN** they open the drawer again
@@ -138,7 +138,7 @@ other discount unless the existing combined basket quote supplies the accepted c
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-8ln rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-09 - A successful read fills the reviewed summary
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** a cart with one available line and one sold-out line
 - **WHEN** the drawer's status-and-price read succeeds
@@ -147,7 +147,7 @@ other discount unless the existing combined basket quote supplies the accepted c
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-33u rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-10 - Unsupported adjustments remain neutral
-**Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
+**Serves:** g10.store-cart-drawer.US1 - Signed-in collector opens the current cart over the page
 
 - **GIVEN** a successful cart read with no applied quote
 - **WHEN** the drawer shows its summary
@@ -164,7 +164,7 @@ and single-notice behavior defined by `shared/ui/store-cart`.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-5bv rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-11 - A collector edits the opened cart
-**Serves:** grade10-site-store-cart-drawer-US-02 - Signed-in collector edits the reviewed cart
+**Serves:** g10.store-cart-drawer.US2 - Signed-in collector edits the reviewed cart
 
 - **GIVEN** an available line in an open reviewed cart
 - **WHEN** the collector changes its quantity or removes it
@@ -172,7 +172,7 @@ and single-notice behavior defined by `shared/ui/store-cart`.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-7rs rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-12 - Delisted lines leave once
-**Serves:** grade10-site-store-cart-drawer-US-02 - Signed-in collector edits the reviewed cart
+**Serves:** g10.store-cart-drawer.US2 - Signed-in collector edits the reviewed cart
 
 - **GIVEN** a completed cart read with more than one unavailable line
 - **WHEN** the drawer applies its post-loading cleanup
@@ -196,7 +196,7 @@ for a read that cannot complete rather than restore Checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-oqn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
-**Serves:** grade10-site-store-cart-drawer-US-03 - Signed-in collector continues from the cart drawer
+**Serves:** g10.store-cart-drawer.US3 - Signed-in collector continues from the cart drawer
 
 - **GIVEN** an open reviewed cart with a retained line
 - **WHEN** the collector activates that line
@@ -205,7 +205,7 @@ for a read that cannot complete rather than restore Checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-xbm rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-15 - Checkout creates the session and hands off to the hosted invoice
-**Serves:** grade10-site-store-cart-drawer-US-06 - a collector who presses Proceed to Checkout and reaches the hosted invoice
+**Serves:** g10.store-cart-drawer.US6 - a collector who presses Proceed to Checkout and reaches the hosted invoice
 
 - **GIVEN** an open cart drawer whose status-and-price read is current and whose reviewed basket carries its accepted tender
 - **WHEN** the collector activates Checkout and the checkout session is created
@@ -215,7 +215,7 @@ for a read that cannot complete rather than restore Checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-5pn rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-28 - A changed line is named and no order is created
-**Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt is refused because a line changed
+**Serves:** g10.store-cart-drawer.US6 - a collector whose checkout attempt is refused because a line changed
 
 - **GIVEN** an open cart drawer whose reviewed basket contains a line the shop has since changed
 - **WHEN** the collector activates Checkout and the checkout session is refused for that line
@@ -226,7 +226,7 @@ for a read that cannot complete rather than restore Checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-t6r rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-29 - A provider refusal offers retry with no order created
-**Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose checkout attempt fails for a reason no line names
+**Serves:** g10.store-cart-drawer.US6 - a collector whose checkout attempt fails for a reason no line names
 
 - **GIVEN** an open cart drawer whose Checkout action is creating a session,
   and whose store read for that checkout returned
@@ -256,7 +256,7 @@ drawer SHALL start no check of its own.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-f0v rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-30 - An unverified member's basket at the bar blocks Checkout
-**Serves:** grade10-site-store-cart-drawer-US-06 - a collector who tries to check out a basket the bar asks a verified buyer for
+**Serves:** g10.store-cart-drawer.US6 - a collector who tries to check out a basket the bar asks a verified buyer for
 
 - **GIVEN** a signed-in collector whose standing is not verified and whose reviewed basket totals 12000000 HKD minor units or more
 - **WHEN** they activate Checkout
@@ -275,7 +275,7 @@ drawer SHALL start no check of its own.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-7lx rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-32 - A verified member's basket at or above the bar proceeds without the gate
-**Serves:** grade10-site-store-cart-drawer-US-06 - a verified collector whose basket meets the bar checks out without an extra step
+**Serves:** g10.store-cart-drawer.US6 - a verified collector whose basket meets the bar checks out without an extra step
 
 - **GIVEN** a signed-in collector whose standing is verified and whose reviewed basket totals 12000000 HKD minor units or more
 - **WHEN** they activate Checkout
@@ -284,7 +284,7 @@ drawer SHALL start no check of its own.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-pqf rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-33 - A basket under the bar proceeds regardless of standing
-**Serves:** grade10-site-store-cart-drawer-US-06 - a collector whose basket does not meet the bar checks out without regard to their standing
+**Serves:** g10.store-cart-drawer.US6 - a collector whose basket does not meet the bar checks out without regard to their standing
 
 - **GIVEN** a signed-in collector's reviewed basket totals less than 12000000 HKD minor units
 - **WHEN** they activate Checkout
@@ -304,7 +304,7 @@ NOT debit points or create checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-bim rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-16 - Held promo codes answer the reviewed basket
-**Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
+**Serves:** g10.store-cart-drawer.US4 - Signed-in collector reads tender choices for the reviewed basket
 
 - **GIVEN** a signed-in collector whose cart review succeeds
 - **AND** the member holds one applicable promo code and one inapplicable code
@@ -317,7 +317,7 @@ NOT debit points or create checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-xhn rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-17 - Points offer the existing interactive design
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** a successful current member cart review and usable points quote
 - **WHEN** the collector opens Use points
@@ -326,7 +326,7 @@ NOT debit points or create checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-44a rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-18 - Unresolved reviews receive no stale tender facts
-**Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
+**Serves:** g10.store-cart-drawer.US4 - Signed-in collector reads tender choices for the reviewed basket
 
 - **GIVEN** a signed-in collector whose cart review is pending or failed
 - **WHEN** the cart drawer renders
@@ -335,7 +335,7 @@ NOT debit points or create checkout.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-3yf rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-19 - Tender facts follow the latest reviewed basket
-**Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
+**Serves:** g10.store-cart-drawer.US4 - Signed-in collector reads tender choices for the reviewed basket
 
 - **GIVEN** a signed-in collector whose drawer has shown promo and points facts for a reviewed basket
 - **WHEN** the cart changes or the drawer closes and opens again
@@ -369,7 +369,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-k73 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-20 - Apply persists the accepted points choice
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** a reviewed member basket with an existing selected code
 - **WHEN** the collector applies a valid whole-number amount and quote and persistence succeed
@@ -378,7 +378,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-tio rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-21 - Use max and Remove preserve the code
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** a current quote with a usable points ceiling and selected code
 - **WHEN** the collector uses Use max, then Remove, with both operations succeeding
@@ -387,7 +387,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-qit rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-22 - Invalid input and excessive input have distinct outcomes
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** current member points controls
 - **WHEN** the collector submits blank, zero, negative, fractional, non-numeric or non-finite input, or an amount above the ceiling
@@ -396,7 +396,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-cui rev=2 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-23 - Pending changes prevent duplicate actions and checkout
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** a points change awaiting quote or persistence completion
 - **WHEN** the collector tries a cart edit, another tender action, disclosure, product/account navigation or Checkout
@@ -405,7 +405,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-puc rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-24 - Failures retain the accepted choice
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** a same-basket accepted choice and total
 - **WHEN** the next points quote is refused or fails, or persistence fails
@@ -414,7 +414,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-pi9 rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-25 - Changed context rejects stale results
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** an unresolved points read or change
 - **WHEN** the member or basket changes, or the drawer closes before the response arrives
@@ -423,7 +423,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-34h rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-26 - Unavailable points remain unavailable
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** zero available points, a zero ceiling, a non-programme member, or an unanswered points quote
 - **WHEN** the drawer renders
@@ -432,7 +432,7 @@ authoritative reread resolves the accepted choice.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-fwv rev=1 -->
 #### Scenario: grade10-site-store-cart-drawer-SC-27 - Checkout receives the accepted choice
-**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+**Serves:** g10.store-cart-drawer.US5 - Collector chooses points before leaving the cart
 
 - **GIVEN** a successfully persisted points choice with its existing code
 - **WHEN** the collector reloads or activates Checkout
