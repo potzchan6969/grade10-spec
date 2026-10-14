@@ -1619,23 +1619,27 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(signed in, holds a default shipping address) leads `<listing_1>`.
+* customer(signed in, holds a default shipping address) leads `<listing_1_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | A listing taking bids, led by this collector, closing within a minute |
+| listing_1_1 | A listing taking bids, led by this collector, closing within a minute; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Wait for `<listing_1>` to close.
-2. Navigate to `<winner order url>` for `<listing_1>`.
+1. Wait for `<listing_1_1>` to close.
+2. Navigate to `<winner order url>` for `<listing_1_1>`.
 3. Read Order Summary.
 
 **Expected Results:**
 
-* Step 2: one Winner Order exists for `<listing_1>`.
+* Step 2: one Winner Order exists for `<listing_1_1>`.
 * Step 3: Shipping & Handling, Insurance and Tax read TBD.
 * Step 3: no charge is marked as an estimate.
 
@@ -1657,18 +1661,22 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(signed in, no default shipping address) leads `<listing_1>`.
+* customer(signed in, no default shipping address) leads `<listing_2_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | A listing taking bids, led by this collector, closing within a minute |
+| listing_2_1 | A listing taking bids, led by this collector, closing within a minute; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Wait for `<listing_1>` to close.
-2. Navigate to `<winner order url>` for `<listing_1>`.
+1. Wait for `<listing_2_1>` to close.
+2. Navigate to `<winner order url>` for `<listing_2_1>`.
 3. Try to pay.
 
 **Expected Results:**
@@ -1695,13 +1703,17 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_prefilled>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_3_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_prefilled>` | An unpaid order whose delivery address is pre-filled from the account default, not confirmed |
+| winner_order_3_1 | An unpaid order whose delivery address is pre-filled from the account default, not confirmed; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -1730,18 +1742,22 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_unpaid>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_4_1>`.
 * `<address_far>` is saved on the account.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_4_1 | An unpaid HKD order, total `<total before>`; bind its identity only | · |
+| address_far | Far: a saved address whose shipping and insurance cost `<difference>` more; bind the address name only | · |
+| total before | HKD3,280 | (fixed derived value) |
+| difference | HKD50 | (range: 1000–79999 minor units) |
+| total after | HKD 3,330.00 | `<total before>` plus `<difference>` |
+
 | Field | Value |
 | --- | --- |
-| `<order_unpaid>` | An unpaid HKD order, total `<total before>` |
-| `<address_far>` | Far: a saved address whose shipping and insurance cost `<difference>` more; bind the address name only |
-| `<total before>` | HKD3,280 (fixed derived value) |
-| `<difference>` | HKD50 (range: 1000–79999 minor units) |
-| `<total after>` | HKD 3,330.00: `<total before>` plus `<difference>` |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -1772,25 +1788,25 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer A(card linked) leads `<listing_1>`, bidding on the card on file.
+* customer A(card linked) leads `<listing_5_1>`, bidding on the card on file.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | A listing taking bids, led by customer A, closing within a minute |
-| `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
+| listing_5_1 | A listing taking bids, led by customer A, closing within a minute; bind its identity only |
+| card | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
 
 **Steps:**
 
-1. Wait for `<listing_1>` to close.
-2. Read customer A's authorizations and charges for `<listing_1>` at the card provider.
-3. Once the invoice for `<listing_1>` is sent, pay it by card through hosted Checkout with `<card>`.
-4. Read customer A's card transactions for `<listing_1>` again.
+1. Wait for `<listing_5_1>` to close.
+2. Read customer A's authorizations and charges for `<listing_5_1>` at the card provider.
+3. Once the invoice for `<listing_5_1>` is sent, pay it by card through hosted Checkout with `<card>`.
+4. Read customer A's card transactions for `<listing_5_1>` again.
 
 **Expected Results:**
 
-* Step 2 shows no authorization and no charge for `<listing_1>`.
+* Step 2 shows no authorization and no charge for `<listing_5_1>`.
 * Step 3 opens hosted Checkout for the invoice total.
 * Step 4 shows one charge, for the invoice total.
 
@@ -1812,16 +1828,20 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_unpaid>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_6_1>`.
 * `<card_declining>` is mocked to decline.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_unpaid>` | An unpaid order inside its payment deadline |
-| `<card_declining>` | A card the provider declines |
-| `<card_good>` | A card the provider accepts |
+| winner_order_6_1 | An unpaid order inside its payment deadline; bind its identity only |
+| card_declining | A card the provider declines |
+| card_good | A card the provider accepts |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -1851,21 +1871,25 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* `<listing_4>` was extended twice and closed with a winner at `<recorded_close>`.
+* `<listing_7_1>` was extended twice and closed with a winner at `<recorded_close>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_4>` | A listing whose close moved twice under extended bidding |
-| `<recorded_close>` | 2026-09-03T12:00:00Z, the recorded (moved) close |
-| `<payment_deadline>` | 2026-09-10T12:00:00Z: `<recorded_close>` plus 604800s (7 days) |
-| `<pdf_deadline>` | 2026-09-10 20:00 GMT+8: `<payment_deadline>` in GMT+8 |
-| `<local_deadline>` | 2026-09-10 08:00 EDT: `<payment_deadline>` in America/New_York |
+| listing_7_1 | A listing whose close moved twice under extended bidding; bind its identity only |
+| recorded_close | 2026-09-03T12:00:00Z, the recorded (moved) close |
+| payment_deadline | 2026-09-10T12:00:00Z: `<recorded_close>` plus 604800s (7 days) |
+| pdf_deadline | 2026-09-10 20:00 GMT+8: `<payment_deadline>` in GMT+8 |
+| local_deadline | 2026-09-10 08:00 EDT: `<payment_deadline>` in America/New_York |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Read the payment deadline on `<listing_4>`'s invoice.
+1. Read the payment deadline on `<listing_7_1>`'s invoice.
 2. Open `<winner order url>` in a browser set to America/New_York.
 
 **Expected Results:**
@@ -1891,20 +1915,24 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(signed in, no saved shipping address) won `<order_unpaid>`.
+* customer(signed in, no saved shipping address) won `<winner_order_8_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_unpaid>` | An unpaid order inside its setup window |
-| `<address_home>` | A shipping address named Home |
-| `<address_work>` | A shipping address named Work |
+| winner_order_8_1 | An unpaid order inside its setup window; bind its identity only |
+| address_home | A shipping address named Home |
+| address_work | A shipping address named Work |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Save `<address_home>` and `<address_work>` to the account address book.
-2. Navigate to `<winner order url>` for `<order_unpaid>`.
+2. Navigate to `<winner order url>` for `<winner_order_8_1>`.
 3. Open the delivery address picker.
 
 **Expected Results:**
@@ -1936,14 +1964,18 @@ For the invoice checks, run once per row below.
 
 | Field | Value |
 | --- | --- |
-| `<address_home>` | A saved shipping address named Home |
-| `<address_work>` | A saved shipping address named Work |
-| `<order_new>` | An order opened after step 1 |
+| address_home | A saved shipping address named Home |
+| address_work | A saved shipping address named Work |
+| winner_order_9_1 | An order opened after step 1; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Set `<address_work>` as the default.
-2. Navigate to `<winner order url>` for `<order_new>`.
+2. Navigate to `<winner order url>` for `<winner_order_9_1>`.
 
 **Expected Results:**
 
@@ -1968,20 +2000,24 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) confirmed `<address_home>` on `<order_unpaid>`.
+* customer(winner) confirmed `<address_home>` on `<winner_order_10_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_unpaid>` | An unpaid order whose delivery address is `<address_home>` |
-| `<address_home>` | A saved shipping address named Home |
-| `<new street>` | A different address line 1 |
+| winner_order_10_1 | An unpaid order whose delivery address is `<address_home>`; bind its identity only |
+| address_home | A saved shipping address named Home |
+| new street | A different address line 1 |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Edit `<address_home>`'s address line 1 to `<new street>` in the address book.
-2. Navigate to `<winner order url>` for `<order_unpaid>`.
+2. Navigate to `<winner order url>` for `<winner_order_10_1>`.
 
 **Expected Results:**
 
@@ -2006,14 +2042,14 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) confirmed `<address_work>` on `<order_unpaid>`.
+* customer(winner) confirmed `<address_work>` on `<winner_order_11_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_unpaid>` | An unpaid order whose delivery address is `<address_work>` |
-| `<address_work>` | A saved shipping address named Work |
+| winner_order_11_1 | An unpaid order whose delivery address is `<address_work>`; bind its identity only |
+| address_work | A saved shipping address named Work |
 
 **Steps:**
 
@@ -2021,7 +2057,7 @@ For the invoice checks, run once per row below.
 
 **Expected Results:**
 
-* The winner is asked to choose another address for `<order_unpaid>`.
+* The winner is asked to choose another address for `<winner_order_11_1>`.
 * `<address_work>` stays available while the order uses it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nsg rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
@@ -2042,13 +2078,17 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_setup>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_12_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_12_1 | An order inside its setup window, setup incomplete; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -2080,13 +2120,17 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_setup>`, Complete Order Setup open.
+* customer(winner) is on `<winner order url>` for `<winner_order_13_1>`, Complete Order Setup open.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_13_1 | An order inside its setup window, setup incomplete; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -2116,13 +2160,13 @@ For the invoice checks, run once per row below.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+* customer(winner) is on delivery Add Address for `<winner_order_14_1>`, Personal selected.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_14_1 | An order inside its setup window, setup incomplete; bind its identity only |
 
 **Steps:**
 
@@ -2154,24 +2198,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`, with the form mode and missing field in the row.
+* customer(winner) is on delivery Add Address for `<winner_order_15_1>`, with form mode `<form mode>` and missing field `<missing field>`.
 
 **Test data:**
 
-| Form mode | Missing field | Phone country | Phone digits | Company Name |
+| `<form mode>` | `<missing field>` | `<phone country>` | `<phone digits>` | `<company name>` |
 | --- | --- | --- | --- | --- |
 | Company | Company Name | United States | 4155550100 | (empty) |
 | Personal | Phone | United States | (empty) | Not shown |
 | Personal | Phone | (not chosen) | 4155550100 | Not shown |
 
+| Field | Value |
+| --- | --- |
+| winner_order_15_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Fill the fields from **Test data**.
+1. Prepare mode `<form mode>`, phone country `<phone country>`, phone digits `<phone digits>` and Company Name `<company name>` where shown; leave `<missing field>` unset.
 2. Click confirm.
 
 **Expected Results:**
 
-* The confirm is refused, with a message beside the missing field.
+* The confirm is refused, with a message beside `<missing field>`.
 * No address is saved or applied to the order.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qwo rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
@@ -2192,13 +2240,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+* customer(winner) is on delivery Add Address for `<winner_order_16_1>`, Personal selected.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_16_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | First name | Alex |
 | Last name | Chen |
 | Phone country | United Kingdom |
@@ -2210,7 +2258,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Fill the fields from **Test data**.
+1. Fill First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Postal code `<Postal code>`.
 2. Click confirm.
 
 **Expected Results:**
@@ -2236,13 +2284,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+* customer(winner) is on delivery Add Address for `<winner_order_17_1>`, Personal selected.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_17_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | First name | Alex |
 | Last name | Chen |
 | Phone country | United States |
@@ -2251,11 +2299,11 @@ Runs once per row of **Test data**.
 | Town or city | San Francisco |
 | Address line 1 | 100 Market St |
 | Postal code | 94105 |
-| `<stored phone>` | +14155550100 |
+| stored phone | +14155550100 |
 
 **Steps:**
 
-1. Fill the fields from **Test data**.
+1. Fill First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Postal code `<Postal code>`, stored phone `<stored phone>`.
 2. Click confirm.
 3. Read the phone on the order's delivery address.
 
@@ -2282,13 +2330,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`, Personal selected.
+* customer(winner) is on delivery Add Address for `<winner_order_18_1>`, Personal selected.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_18_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | First name | Alex |
 | Last name | Chen |
 | Phone country | United States |
@@ -2302,7 +2350,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Fill the fields from **Test data**.
+1. Fill First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Address line 2 `<Address line 2>`, State or province `<State or province>`, Postal code `<Postal code>`.
 2. Click confirm.
 3. Read the order's delivery address.
 
@@ -2329,13 +2377,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`.
+* customer(winner) is on delivery Add Address for `<winner_order_19_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_19_1 | An order inside its setup window, setup incomplete; bind its identity only |
 
 **Steps:**
 
@@ -2366,23 +2414,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, has an address in the row) is on `<winner order url>` for `<order_setup>`, Complete Order Setup open.
+* customer(winner, has saved address `<address fixture>` of type `<address type>`) is on `<winner order url>` for `<winner_order_20_1>`, Complete Order Setup open.
 
 **Test data:**
 
-| Address type | Title | Address fixture |
+| `<address type>` | `<address title>` | `<address fixture>` |
 | --- | --- | --- |
 | Personal | Alex Chen | Saved personal address with street, city or region, country, phone and postal code |
 | Company | Northwind Collectibles | Saved company address with recipient Alex Chen, street, city or region, country, phone and postal code |
 
+| Field | Value |
+| --- | --- |
+| winner_order_20_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
 1. Open the delivery address picker.
-2. Read the address card from **Test data**.
+2. Read the card for `<address fixture>`.
 
 **Expected Results:**
 
-* The title matches the row's expected address type.
+* The title reads `<address title>` for the `<address type>` address.
 * The body shows street, city or region, and country.
 * The body shows no postal code and no phone.
 
@@ -2404,13 +2460,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on delivery Add Address for `<order_setup>`.
+* customer(winner) is on delivery Add Address for `<winner_order_21_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_21_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | Kind | Company |
 | Company Name | Northwind Collectibles |
 | First name | Alex |
@@ -2425,7 +2481,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click Company.
-2. Fill the fields from **Test data**.
+2. Fill Kind `<Kind>`, Company Name `<Company Name>`, First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Postal code `<Postal code>`.
 3. Click confirm.
 4. Reopen the delivery address picker.
 
@@ -2452,13 +2508,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_setup>`, reading Awaiting Setup.
+* customer(winner) is on `<winner order url>` for `<winner_order_22_1>`, reading Awaiting Setup.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_22_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | Kind | Company |
 | Company Name | Northwind Collectibles |
 | First name | Alex |
@@ -2470,10 +2526,14 @@ Runs once per row of **Test data**.
 | Country or region | United States |
 | Billing | Same as delivery, left ticked |
 
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
 1. Open Complete Order Setup.
-2. Enter the delivery address from **Test data**.
+2. Enter Kind `<Kind>`, Company Name `<Company Name>`, First name `<First name>`, Last name `<Last name>`, Phone `<Phone>`, Address line 1 `<Address line 1>`, Town or city `<Town or city>`, Postal code `<Postal code>`, Country or region `<Country or region>`, Billing `<Billing>`, winner order url `<winner order url>`.
 3. Confirm setup.
 4. Read Delivery and Billing on Order Summary.
 
@@ -2500,14 +2560,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_with_insurance>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_23_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_with_insurance>` | An order whose sent invoice includes Insurance |
-| `<insurance_amount>` | The Insurance amount on that invoice |
+| winner_order_23_1 | An order whose sent invoice includes Insurance; bind its identity only |
+| insurance_amount | The Insurance amount on that invoice |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -2537,13 +2601,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_pre_invoice>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_24_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_pre_invoice>` | An order whose invoice is not yet sent |
+| winner_order_24_1 | An order whose invoice is not yet sent; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -2573,13 +2641,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_without_insurance>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_25_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_without_insurance>` | An order whose sent invoice has no Insurance |
+| winner_order_25_1 | An order whose sent invoice has no Insurance; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -2607,24 +2679,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_2>` holds listing code `<code_1>`.
-* `<listing_3>` is a draft whose internal id hashes to `<code_1>`.
+* `<listing_26_1>` holds listing code `<code_1>`.
+* `<listing_26_2>` is a draft whose internal id hashes to `<code_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<code_1>` | A listing code in use |
+| code_1 | A listing code in use |
+
+| Field | Value |
+| --- | --- |
+| listing_26_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+| listing_26_2 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 
 **Steps:**
 
-1. Publish `<listing_3>`.
-2. Read `<listing_3>`'s listing code.
+1. Publish `<listing_26_2>`.
+2. Read `<listing_26_2>`'s listing code.
 3. Change the hash method, then read both listing codes.
 
 **Expected Results:**
 
-* Step 2: `<listing_3>` holds a code other than `<code_1>`, hashed again with a counter.
+* Step 2: `<listing_26_2>` holds a code other than `<code_1>`, hashed again with a counter.
 * Step 2: `L` and 5 characters; no `0`, `O`, `1`, `I` or lower case.
 * Step 3: both listings keep their codes.
 
@@ -2646,15 +2723,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_preparing>`.
-* An operator changed `<order_preparing>` to `<address_work>` and bank transfer.
+* customer(winner) is on `<winner order url>` for `<winner_order_27_1>`.
+* An operator changed `<winner_order_27_1>` to `<address_work>` and bank transfer.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_preparing>` | An HKD order reading Preparing Invoice, home address and card confirmed |
-| `<address_work>` | A saved address named Work |
+| winner_order_27_1 | An HKD order reading Preparing Invoice, home address and card confirmed; bind its identity only |
+| address_work | A saved address named Work |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -2684,19 +2765,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) confirmed `<address_work>` on `<order_preparing>`.
+* customer(winner) confirmed `<address_work>` on `<winner_order_28_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_preparing>` | An order reading Preparing Invoice, `<address_work>` confirmed |
-| `<address_work>` | A saved address named Work |
+| winner_order_28_1 | An order reading Preparing Invoice, `<address_work>` confirmed; bind its identity only |
+| address_work | A saved address named Work |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Archive `<address_work>` in the address book.
-2. Navigate to `<winner order url>` for `<order_preparing>`.
+2. Navigate to `<winner order url>` for `<winner_order_28_1>`.
 
 **Expected Results:**
 
@@ -2723,6 +2808,14 @@ Runs once per row of **Test data**.
 
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
 * The Country/Region picker is closed.
+
+* The winner order under test is `<winner_order_29_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_29_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -2754,6 +2847,14 @@ Runs once per row of **Test data**.
 
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
 
+* The winner order under test is `<winner_order_30_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_30_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Look at the country or region field label beside the picker.
@@ -2783,6 +2884,14 @@ Runs once per row of **Test data**.
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
 * The Country/Region picker is closed with the fixture default Hong Kong selected.
 
+* The winner order under test is `<winner_order_31_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_31_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Read the Country/Region field without opening the popup.
@@ -2811,6 +2920,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
+
+* The winner order under test is `<winner_order_32_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_32_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -2843,16 +2960,22 @@ Runs once per row of **Test data**.
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
 * The Country/Region picker is open on a long A–Z list.
 
+* The winner order under test is `<winner_order_33_1>`.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Typed query | hong |
 
+| Field | Value |
+| --- | --- |
+| winner_order_33_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Focus the open Country/Region picker.
-2. Type the query from **Test data**.
+2. Type `<Typed query>`.
 
 **Expected Results:**
 
@@ -2888,7 +3011,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the Autocomplete.
-2. Type the query from **Test data**.
+2. Type `<Typed query>`.
 
 **Expected Results:**
 
@@ -2916,15 +3039,21 @@ Runs once per row of **Test data**.
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
 * The Country/Region picker is open.
 
+* The winner order under test is `<winner_order_35_1>`.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | Typed query | zzzz-not-a-country |
 
+| Field | Value |
+| --- | --- |
+| winner_order_35_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Type the query from **Test data**.
+1. Type `<Typed query>`.
 
 **Expected Results:**
 
@@ -2953,20 +3082,26 @@ Runs once per row of **Test data**.
 * customer(winner) is on Winner Order setup with delivery Add Address open.
 * The Country/Region picker is open.
 
+* The winner order under test is `<winner_order_36_1>`.
+
 **Test data:**
 
-| Query partition | Typed query | Matching result |
+| Query partition | `<typed query>` | `<matching result>` |
 | --- | --- | --- |
 | Early alphabet | afg | Afghanistan, or the catalogue name that matches |
 | Late alphabet | zim | Zimbabwe, or the catalogue name that matches |
 
+| Field | Value |
+| --- | --- |
+| winner_order_36_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Type the query from **Test data**.
+1. Type `<typed query>`.
 
 **Expected Results:**
 
-* The matching country appears in the filtered list.
+* The country `<matching result>` appears in the filtered list.
 * Unrelated country names outside the query are not shown.
 
 <!-- trace:case id=g10.auction-winner-order.TC-r90 rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
@@ -2990,6 +3125,8 @@ Runs once per row of **Test data**.
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
 * The Country/Region picker is closed on the fixture default.
 
+* The winner order under test is `<winner_order_37_1>`.
+
 **Test data:**
 
 | Field | Value |
@@ -2997,10 +3134,14 @@ Runs once per row of **Test data**.
 | Typed query | united king |
 | Country or region | United Kingdom |
 
+| Field | Value |
+| --- | --- |
+| winner_order_37_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Open the Country/Region picker.
-2. Type the query from **Test data**.
+2. Type `<Typed query>`.
 3. Select United Kingdom from the filtered matches.
 
 **Expected Results:**
@@ -3031,6 +3172,14 @@ Runs once per row of **Test data**.
 * Country/Region has no value selected.
 * Other required address fields that the form needs are filled.
 
+* The winner order under test is `<winner_order_38_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_38_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Activate Confirm or Use This Address with Country/Region empty.
@@ -3059,6 +3208,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `customer(winner)` is on Winner Order setup with delivery Add Address open.
+
+* The winner order under test is `<winner_order_39_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_39_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -3090,6 +3247,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an auction order whose invoice has not been sent.
 
+* The winner order under test is `<winner_order_40_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_40_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Open Winner Order.
@@ -3120,6 +3285,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner) holds a paid auction order whose invoice includes Tax of HKD70 (range: >0 minor units).
+
+* The winner order under test is `<winner_order_41_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_41_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -3154,6 +3327,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds a paid auction order whose operator added no Tax.
 
+* The winner order under test is `<winner_order_42_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_42_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Open Winner Order and read Order Summary.
@@ -3186,6 +3367,14 @@ Runs once per row of **Test data**.
 * admin(operator with payment-processing) is on a card order in Preparing Invoice.
 * The order's lines before Tax total HKD3,280 (fixed derived value).
 
+* The winner order under test is `<winner_order_43_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_43_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Add Tax of HKD70 (range: >0 minor units).
@@ -3217,8 +3406,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Grade10 holds no bank details for the currency in the row.
-* customer(winner) holds an auction order in that currency in Awaiting Setup.
+* Grade10 holds no bank details for the currency `<settlement currency>`.
+* customer(winner) holds an auction order in `<settlement currency>` in Awaiting Setup.
+
+* The winner order under test is `<winner_order_44_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| settlement currency | The supported settlement currency with no bank details in this fixture; bind its currency code only |
+| winner_order_44_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -3255,22 +3453,28 @@ Runs once per row of **Test data**. The method can change until the winner confi
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
 * customer(winner) holds an auction order in HKD in Awaiting Setup, with card chosen and not yet confirmed.
 
+* The winner order under test is `<winner_order_45_1>`.
+
 **Test data:**
 
-| New rail | Expected recorded method |
+| `<new rail>` | `<recorded method>` |
 | --- | --- |
 | FPS | bank transfer on FPS |
 | HK Local | bank transfer on HK Local |
 
+| Field | Value |
+| --- | --- |
+| winner_order_45_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Change the choice to the row's rail.
+1. Change the choice to `<new rail>`.
 2. Confirm the home address.
 3. Reload the order.
 
 **Expected Results:**
 
-* The order records the row's bank transfer rail, not card.
+* The order records `<recorded method>`, not card.
 * The order reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-miy rev=1 covers=g10.auction-winner-order.SC-wn1 -->
@@ -3293,6 +3497,14 @@ Runs once per row of **Test data**. The method can change until the winner confi
 
 * Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
 * customer(winner) holds an auction order in HKD in Awaiting Setup.
+
+* The winner order under test is `<winner_order_46_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_46_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -3324,27 +3536,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds no card fee rule in the row's currency.
+* Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds no card fee rule in `<settlement currency>`.
 * customer(winner) holds an order won in USD in Awaiting Setup with a saved home address.
+
+* The winner order under test is `<winner_order_47_1>`.
 
 **Test data:**
 
-| Settlement currency | Rails offered |
+| `<settlement currency>` | `<offered rails>` |
 | --- | --- |
 | HKD | FPS, HK Local |
 | USD | HK Local, International via SWIFT |
 
+| Field | Value |
+| --- | --- |
+| winner_order_47_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Choose the home address and the row's settlement currency, and reach the payment method choice.
+1. Choose the home address and `<settlement currency>`, and reach the payment method choice.
 2. Try to choose card.
 3. Send Grade10 a setup confirmation carrying the home address and card.
 4. Reload the order.
 
 **Expected Results:**
 
-* Card reads that it is not yet available in the row's currency, and cannot be chosen.
-* The row's rails are offered.
+* Card reads that it is not yet available in `<settlement currency>`, and cannot be chosen.
+* The rails `<offered rails>` are offered.
 * Grade10 refuses the confirmation.
 * The order holds no delivery address and no method.
 
@@ -3368,6 +3586,14 @@ Runs once per row of **Test data**.
 
 * Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
 * customer(winner) holds an auction order in USD in Awaiting Setup.
+
+* The winner order under test is `<winner_order_48_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_48_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -3401,6 +3627,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) whose account language is Traditional Chinese is on delivery Add Address of an auction order in Awaiting Setup.
 
+* The winner order under test is `<winner_order_49_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_49_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Open the Country/Region picker and read the names.
@@ -3431,38 +3665,48 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` is led as the row states, its recorded close a few minutes away, and no further bid is coming.
-* `<listing_1>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, which holds `<house billing address>`.
-* customer A(signed in, holds a default shipping address, email alerts on) bid on `<listing_1>` as the row states.
-* admin(auction operator) is on <grade10 auction send log url>.
+* `<listing_50_1>` is prepared with this bidding state: `<bidding at close>`, its recorded close a few minutes away, and no further bid is coming.
+* `<listing_50_1>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, which holds `<house billing address>`.
+* customer A(signed in, holds a default shipping address, email alerts on) bid on `<listing_50_1>` as described by `<bidding at close>`.
+* admin(auction operator) is on `<grade10 auction send log url>`.
+
+* The winner order under test is `<winner_order_50_1>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | A published HKD listing in no campaign, starting price 400000 minor units (HK$4,000.00) |
-| `<house maximum>` | 600000 minor units (HK$6,000.00), the listing's committed internal bid |
-| `<internal bidder>` | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test |
-| `<house billing address>` | A Hong Kong address with every required field: name "Grade10 Stock Room", 1 Test Road, Central, Hong Kong |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_50_1 | A published HKD listing in no campaign, starting price 400000 minor units (HK$4,000.00); bind its identity only | · |
+| house maximum | 600000 minor units | (HK$6,000.00), the listing's committed internal bid |
+| internal bidder | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test | · |
+| house billing address | A Hong Kong address with every required field: name "Grade10 Stock Room", 1 Test Road, Central, Hong Kong | · |
 
-| Row | Bidding at the close | Order for `<listing_1>` after the close | Auction-won letters for `<listing_1>` |
+| Row | `<bidding at close>` | `<order after close>` | `<auction won letters>` |
 | --- | --- | --- | --- |
 | House over a collector | The house leads at 508000 under `<house maximum>`, over customer A's maximum of 500000 | One, `<internal bidder>`'s, flagged internal, winning bid 508000, delivery and billing address `<house billing address>`, bank transfer, Preparing Invoice | None |
 | House alone | The house leads at 400000 under `<house maximum>`, with no collector bid | One, `<internal bidder>`'s, flagged internal, winning bid 400000, delivery and billing address `<house billing address>`, bank transfer, Preparing Invoice | None |
 | Collector over the house | customer A leads at 608000 with maximum 700000, over `<house maximum>` | One, customer A's, not flagged internal, winning bid 608000, Awaiting Setup | One, to customer A |
 
+| Field | Value |
+| --- | --- |
+| winner_order_50_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Wait until `<listing_1>`'s recorded close passes.
-2. Read the orders the API holds for `<listing_1>`.
-3. As customer A, read My Auctions' row for `<listing_1>` from the API.
-4. Filter the send log by `<listing_1>` and read the rows from the close.
+1. Wait until `<listing_50_1>`'s recorded close passes.
+2. Read the orders the API holds for `<listing_50_1>`.
+3. As customer A, read My Auctions' row for `<listing_50_1>` from the API.
+4. Filter the send log by `<listing_50_1>` and read the rows from the close.
 
 **Expected Results:**
 
-* Step 2 holds exactly one order, the row's order.
+* Step 2 holds exactly one order, the order described by `<order after close>`.
 * Step 3: in a House row, no order is linked to customer A; in the Collector row, customer A's row links that one order.
-* Step 4 reads the row's auction-won letters.
+* Step 4 reads `<auction won letters>`.
 * Step 4 holds no row addressed to `<internal bidder>`'s email label: no won, address or setup letter.
 
 ### g10.auction-winner-order.US1-TC15: A company address without Company Name is refused (folded into g10.auction-winner-order.US1-TC16)
@@ -3686,14 +3930,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_paid>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_51_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_51_1 | An HKD order paid in full at `<final amount>`; bind its identity only | · |
+| final amount | HKD3,330 | (range: 80000–399999 minor units) |
+
 | Field | Value |
 | --- | --- |
-| `<order_paid>` | An HKD order paid in full at `<final amount>` |
-| `<final amount>` | HKD3,330 (range: 80000–399999 minor units) |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -3724,14 +3972,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_paid>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_52_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_52_1 | An HKD order with invoice total `<total>`, paid by one payment of `<total>`; bind its identity only | · |
+| total | HKD1,080 | (fixed derived value) |
+
 | Field | Value |
 | --- | --- |
-| `<order_paid>` | An HKD order with invoice total `<total>`, paid by one payment of `<total>` |
-| `<total>` | HKD1,080 (fixed derived value) |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -3760,21 +4012,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_parts>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_53_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_53_1 | An HKD order with invoice total `<total>`, paid `<payment 1>` then `<payment 2>`; bind its identity only | · |
+| total | HKD 1 | 080.00 |
+| payment 1 | HKD 420.00 | · |
+| payment 2 | HKD 310.00 | · |
+
+| Receipt | `<previous payments>` | `<current payment received>` | `<remaining balance due>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| First | 0 | HKD 420.00 | HKD 660.00 | `<remaining balance due>`: `<total>` − `<payment 1>` |
+| Second | HKD 420.00 | HKD 310.00 | HKD 350.00 | `<remaining balance due>`: `<total>` − `<payment 1>` − `<payment 2>` |
+
 | Field | Value |
 | --- | --- |
-| `<order_parts>` | An HKD order with invoice total `<total>`, paid `<payment 1>` then `<payment 2>` |
-| `<total>` | HKD 1,080.00 |
-| `<payment 1>` | HKD 420.00 |
-| `<payment 2>` | HKD 310.00 |
-
-| Receipt | Previous Payments | Current Payment Received | Remaining Balance Due |
-| --- | --- | --- | --- |
-| First | 0 | HKD 420.00 | HKD 660.00: `<total>` − `<payment 1>` |
-| Second | HKD 420.00 | HKD 310.00 | HKD 350.00: `<total>` − `<payment 1>` − `<payment 2>` |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -3784,7 +4040,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: both receipts are listed on one row, oldest first.
-* Step 2: each shows Original Invoice Total `<total>` and its row's values.
+* Step 2: each shows Original Invoice Total `<total>` with Previous Payments `<previous payments>`, Current Payment Received `<current payment received>` and Remaining Balance Due `<remaining balance due>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gss rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
 ### g10.auction-winner-order.US2-TC6: A receipt that closes within tolerance reads zero left
@@ -3804,16 +4060,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_tolerance>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_54_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_54_1 | An HKD order, total `<total>`, paid `<paid before>`, then closed Paid by an operator recording `<closing payment>` within the closing tolerance; bind its identity only | · |
+| total | HKD 1 | 080.00 |
+| paid before | HKD 960.00 | · |
+| closing payment | HKD 60.00 | · |
+
 | Field | Value |
 | --- | --- |
-| `<order_tolerance>` | An HKD order, total `<total>`, paid `<paid before>`, then closed Paid by an operator recording `<closing payment>` within the closing tolerance |
-| `<total>` | HKD 1,080.00 |
-| `<paid before>` | HKD 960.00 |
-| `<closing payment>` | HKD 60.00 |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -3843,15 +4103,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_over>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_55_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_55_1 | An HKD order, total `<total>`, with an operator-confirmed payment of `<payment>`; bind its identity only | · |
+| total | HKD 1 | 080.00 |
+| payment | HKD 1 | 190.00 |
+
 | Field | Value |
 | --- | --- |
-| `<order_over>` | An HKD order, total `<total>`, with an operator-confirmed payment of `<payment>` |
-| `<total>` | HKD 1,080.00 |
-| `<payment>` | HKD 1,190.00 |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -3881,20 +4145,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_three>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_56_1>`.
 * The second payment was later refunded or reversed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_three>` | An HKD order, total HKD 1,080.00, paid HKD 220.00, HKD 310.00, HKD 140.00 in that order, one receipt each |
+| winner_order_56_1 | An HKD order, total HKD 1,080.00, paid HKD 220.00, HKD 310.00, HKD 140.00 in that order, one receipt each; bind its identity only |
 
-| Receipt | Previous Payments | Current Payment Received | Remaining Balance Due |
+| Receipt | `<previous payments>` | `<current payment received>` | `<remaining balance due>` |
 | --- | --- | --- | --- |
 | First | 0 | HKD 220.00 | HKD 860.00 |
 | Second | HKD 220.00 | HKD 310.00 | HKD 550.00 |
 | Third | HKD 530.00 | HKD 140.00 | HKD 410.00 |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -3902,7 +4170,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Each still shows its row's values.
+* Each receipt still shows Previous Payments `<previous payments>`, Current Payment Received `<current payment received>` and Remaining Balance Due `<remaining balance due>`.
 * No receipt was reissued.
 
 <!-- trace:case id=g10.auction-winner-order.TC-4zy rev=3 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
@@ -3923,20 +4191,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_shipped>` and `<order_shipped_no_link>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_57_1>` and `<winner_order_57_2>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_shipped>` | A paid order dispatched with a carrier, `<tracking number>` and a recorded tracker link |
-| `<order_shipped_no_link>` | A paid order dispatched with a carrier and `<tracking number>`, and no tracker link |
+| winner_order_57_1 | A paid order dispatched with a carrier, `<tracking number>` and a recorded tracker link; bind its identity only |
+| winner_order_57_2 | A paid order dispatched with a carrier and `<tracking number>`, and no tracker link; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| tracking number | The shipment tracking number on the seeded order; bind its number only |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Read the shipment section of `<order_shipped>`.
+1. Read the shipment section of `<winner_order_57_1>`.
 2. Click `<tracking number>`.
-3. Read the shipment section of `<order_shipped_no_link>`.
+3. Read the shipment section of `<winner_order_57_2>`.
 
 **Expected Results:**
 
@@ -3962,21 +4235,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_shipped>` is dispatched.
+* `<winner_order_58_1>` is dispatched.
 * The carrier delivery feed is mocked to report delivery with `<handover time>` and `<signature>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_shipped>` | A paid, dispatched order |
-| `<handover time>` | The handover timestamp in the carrier's report |
-| `<signature>` | The signature image in the carrier's report |
+| winner_order_58_1 | A paid, dispatched order; bind its identity only |
+| handover time | The handover timestamp in the carrier's report |
+| signature | The signature image in the carrier's report |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Wait for the delivery report to be processed.
-2. Navigate to `<winner order url>` for `<order_shipped>`.
+2. Navigate to `<winner order url>` for `<winner_order_58_1>`.
 3. Open the delivery proof.
 
 **Expected Results:**
@@ -4001,17 +4278,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_verifying>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_59_1>`.
 * admin(holds payment-processing) confirms its proof at `<confirm time>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_59_1 | An HKD order, invoice `INV-202609-LK7P2Q-02`, total `<total>`, reading Payment Verifying; bind its identity only | · |
+| total | HKD3,290 | (fixed derived value) |
+| confirm time | 2026-09-30T16:30:00Z, October in Hong Kong | · |
+| receipt id | `REC-202610-LK7P2Q-02-P1` | · |
+
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | An HKD order, invoice `INV-202609-LK7P2Q-02`, total `<total>`, reading Payment Verifying |
-| `<total>` | HKD3,290 (fixed derived value) |
-| `<confirm time>` | 2026-09-30T16:30:00Z, October in Hong Kong |
-| `<receipt id>` | `REC-202610-LK7P2Q-02-P1` |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4041,7 +4322,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_paid>` is paid, with a replaced invoice, a current invoice and a receipt.
+* `<winner_order_60_1>` is paid, with a replaced invoice, a current invoice and a receipt.
 * Its winner deleted the account a year after payment.
 * The clock is 6 years after payment, inside the 7-year retention.
 
@@ -4049,11 +4330,11 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_paid>` | A paid order whose invoice was once reissued |
+| winner_order_60_1 | A paid order whose invoice was once reissued; bind its identity only |
 
 **Steps:**
 
-1. Retrieve `<order_paid>`'s documents from the archive.
+1. Retrieve `<winner_order_60_1>`'s documents from the archive.
 
 **Expected Results:**
 
@@ -4077,24 +4358,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_paid>` was paid by card; its receipt ID is `<receipt id>`.
+* `<winner_order_61_1>` was paid by card; its receipt ID is `<receipt id>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_paid>` | A card-paid order |
-| `<receipt id>` | `REC-202609-LK7P2Q-01-P1` |
+| winner_order_61_1 | A card-paid order; bind its identity only |
+| receipt id | `REC-202609-LK7P2Q-01-P1` |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Deliver the same payment confirmation for `<order_paid>` again.
-2. Open the receipt on `<winner order url>` for `<order_paid>`.
+1. Deliver the same payment confirmation for `<winner_order_61_1>` again.
+2. Open the receipt on `<winner order url>` for `<winner_order_61_1>`.
 
 **Expected Results:**
 
 * The receipt ID is still `<receipt id>`.
-* No second receipt ID or audit number exists for `<order_paid>`.
+* No second receipt ID or audit number exists for `<winner_order_61_1>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-uox rev=1 covers=g10.auction-winner-order.SC-h7d -->
 ### g10.auction-winner-order.US2-TC13: Shipped Order Progress opens the carrier tracker (folded into g10.auction-winner-order.US2-TC12)
@@ -4155,14 +4440,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for the order in the row.
+* customer(winner) is on `<winner order url>` for an order in `<order state>`, prepared as follows: `<fixture setup>`.
+
+* The winner order under test is `<winner_order_62_1>`.
 
 **Test data:**
 
-| Order state | Fixture |
+| `<order state>` | `<fixture setup>` |
 | --- | --- |
 | Shipped | Paid, fulfilment fulfilled, delivery not confirmed, tracker link present |
 | Delivered | Paid, fulfilment fulfilled, delivery confirmed, tracker link present |
+
+| Field | Value |
+| --- | --- |
+| winner_order_62_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| carrier tracking url | The public carrier tracking URL for this fixture; bind its URL only |
+| tracking number | The shipment tracking number on the seeded order; bind its number only |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4173,7 +4470,7 @@ Runs once per row of **Test data**.
 
 * Order Progress shows `<tracking number>` as an external link with an arrow icon.
 * Order Progress shows no Track shipment button or carrier name.
-* Step 2 opens `<carrier tracking URL>` in a new tab.
+* Step 2 opens `<carrier tracking url>` in a new tab.
 <!-- trace:case id=g10.auction-winner-order.TC-nmg rev=1 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0,g10.auction-winner-order.SC-h7d,g10.auction-winner-order.SC-k4r -->
 ### g10.auction-winner-order.US2-TC55: Preparing Shipment pings Shipping with Preparing to ship
 
@@ -4192,13 +4489,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_preparing_shipment>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_63_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_preparing_shipment>` | A paid order with fulfilment `unfulfilled` |
+| winner_order_63_1 | A paid order with fulfilment `unfulfilled`; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4231,13 +4532,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_shipped>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_64_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_shipped>` | A paid, fulfilled order with a ship date, a tracking number and a recorded tracker link |
+| winner_order_64_1 | A paid, fulfilled order with a ship date, a tracking number and a recorded tracker link; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4268,14 +4573,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<untracked-link order>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_65_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<untracked-link order>` | A paid order with fulfilment fulfilled and a tracking number, where the operator recorded no tracker link |
-| `<tracking number>` | The tracking number recorded for `<untracked-link order>` |
+| winner_order_65_1 | A paid order with fulfilment fulfilled and a tracking number, where the operator recorded no tracker link; bind its identity only |
+| tracking number | The tracking number recorded for `<winner_order_65_1>` |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4306,13 +4615,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_shipped_no_link>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_66_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_shipped_no_link>` | A paid, fulfilled order with a ship date and a tracking number, and no recorded tracker link |
+| winner_order_66_1 | A paid, fulfilled order with a ship date and a tracking number, and no recorded tracker link; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4355,15 +4668,21 @@ Runs once per row of **Test data**.
 * admin(operator with payment-processing) holds a USD order in Preparing Invoice; its winning bid is `<winning_bid>` and it has no other invoice lines.
 * Auction Payment settings holds the USD premium minimum `<premium_minimum>`.
 
+* The winner order under test is `<winner_order_67_1>`.
+
 **Test data:**
 
-| `<winning_bid>` | `<premium_minimum>` | `<buyers_premium>` | `<final_amount>` | Rule |
-| --- | --- | --- | --- | --- |
-| USD1,350 (range: 80000-399999 minor units) | USD0 | USD270.00 | USD1,620.00 | 20% of the winning bid |
-| USD10.03 (fixed boundary) | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up |
-| USD10.02 (fixed boundary) | USD0 | USD2.00 | USD12.02 | 20% is 200.4 minor units, rounded half up |
-| USD50 (fixed fixture) | USD20 (fixed configured value) | USD20.00 | USD70.00 | The minimum, higher than 20% (USD10) |
-| USD2,500 (fixed scenario fixture) | USD200.00 (fixed configured value) | USD500.00 | USD3,000.00 | 20% of the winning bid; operator does not enter it |
+| `<winning_bid>` | `<premium_minimum>` | `<buyers_premium>` | `<final_amount>` | Rule | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| USD1,350 | USD0 | USD270.00 | USD1 | 20% of the winning bid | `<winning_bid>`: (range: 80000-399999 minor units); `<final_amount>`: 620.00 |
+| USD10.03 | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up | `<winning_bid>`: (fixed boundary) |
+| USD10.02 | USD0 | USD2.00 | USD12.02 | 20% is 200.4 minor units, rounded half up | `<winning_bid>`: (fixed boundary) |
+| USD50 | USD20 | USD20.00 | USD70.00 | The minimum, higher than 20% (USD10) | `<winning_bid>`: (fixed fixture); `<premium_minimum>`: (fixed configured value) |
+| USD2,500 | USD200.00 | USD500.00 | USD3 | 20% of the winning bid; operator does not enter it | `<winning_bid>`: (fixed scenario fixture); `<premium_minimum>`: (fixed configured value); `<final_amount>`: 000.00 |
+
+| Field | Value |
+| --- | --- |
+| winner_order_67_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -4409,9 +4728,21 @@ Runs once per row of **Test data**.
 * customer(winner) holds an order in Pending Payment, with invoice status.
   `pending` or `expired`.
 
+* The winner order under test is `<winner_order_68_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_68_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 
 **Expected Results:**
 
@@ -4470,12 +4801,24 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an order in Pending Payment.
 
+* The winner order under test is `<winner_order_69_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_69_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 2. Click Pay Now.
 3. Wait until the payment session times out.
-4. Return to `<grade10 auction order url>`.
+4. Return to `<winner order url>`.
 
 **Expected Results:**
 
@@ -4503,9 +4846,21 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds a Pending Payment order whose last payment session was abandoned.
 
+* The winner order under test is `<winner_order_70_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_70_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 2. Click Pay Now.
 
 **Expected Results:**
@@ -4534,9 +4889,21 @@ Runs once per row of **Test data**.
 * customer(winner) completed a hosted card session, but the authenticated.
   auction-order read model has not yet recorded the invoice as paid.
 
+* The winner order under test is `<winner_order_71_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_71_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 
 **Expected Results:**
 
@@ -4564,9 +4931,21 @@ Runs once per row of **Test data**.
 * customer(winner) holds an order whose authenticated auction-order read model.
   returns invoice status `paid` and fulfilment status `unfulfilled`.
 
+* The winner order under test is `<winner_order_72_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_72_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 
 **Expected Results:**
 
@@ -4595,9 +4974,21 @@ Runs once per row of **Test data**.
 * customer(winner) is suspended from bidding and holds an order whose invoice.
   is `pending`.
 
+* The winner order under test is `<winner_order_73_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_73_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 2. Read the alerts under the listing.
 3. Choose Pay what is owed.
 
@@ -4632,13 +5023,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_74_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| winner_order_74_1 | An order whose payment deadline passed unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4668,13 +5063,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_cancelled>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_75_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_cancelled>` | An unpaid order an operator cancelled |
+| winner_order_75_1 | An unpaid order an operator cancelled; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4711,13 +5110,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_setup_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_76_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup_overdue>` | An order whose setup deadline, 172800s (48 hours) after the close, passed with setup incomplete |
+| winner_order_76_1 | An order whose setup deadline, 172800s (48 hours) after the close, passed with setup incomplete; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -4751,6 +5154,14 @@ Runs once per row of **Test data**.
 * customer(winner) holds an auction order in USD in Awaiting Setup, whose listing closed 48 hours ago, with setup not confirmed.
 * admin(operator with payment processing).
 
+* The winner order under test is `<winner_order_77_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_77_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. As the winner, open the order.
@@ -4781,6 +5192,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) added a one-time delivery address to an auction order without saving it and did not confirm before the setup deadline.
 * admin(operator with payment processing) reopened its setup after the deadline passed.
+
+* The winner order under test is `<winner_order_78_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_78_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -4816,17 +5235,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A USD winner's sent invoice has no other lines.
+* A USD winner's sent invoice has winning bid `<winning bid>`, configured minimum `<premium minimum>` and no other lines.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Winning bid | USD minimum | Buyer's Premium | Final amount |
-| --- | --- | --- | --- |
-| USD2,400 (fixed fixture) | USD0 | USD480.00 | USD2,880.00 |
-| USD2,500 (fixed fixture) | USD200.00 | USD500.00 | USD3,000.00 |
-| USD1.01 (fixed boundary) | USD0 | USD0.20 | USD1.21 |
+| `<winning bid>` | `<premium minimum>` | `<buyers premium>` | `<final amount>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| USD2,400 | USD0 | USD480.00 | USD2 | `<winning bid>`: (fixed fixture); `<final amount>`: 880.00 |
+| USD2,500 | USD200.00 | USD500.00 | USD3 | `<winning bid>`: (fixed fixture); `<final amount>`: 000.00 |
+| USD1.01 | USD0 | USD0.20 | USD1.21 | `<winning bid>`: (fixed boundary) |
 
 **Steps:**
 
@@ -4834,8 +5251,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Each row's premium is the greater of 20% of its winning bid, rounded half up, or its USD minimum.
-* Each row's final amount includes the Buyer's Premium.
+* The premium `<buyers premium>` is the greater of 20% of `<winning bid>`, rounded half up, or `<premium minimum>`.
+* The final amount `<final amount>` includes `<buyers premium>`.
 * For the USD1.01 row, the premium is USD0.20, an integer count of USD minor units.
 
 <!-- trace:case id=g10.auction-winner-order.TC-zt4 rev=2 -->
@@ -4860,10 +5277,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD1 (range: >0 minor units) |
-| `<minimum premium>` | USD1 (fixed configured minimum) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winning bid | USD1 | (range: >0 minor units) |
+| minimum premium | USD1 | (fixed configured minimum) |
 
 **Steps:**
 
@@ -4895,10 +5312,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD10.03 (fixed boundary: 20% is a half minor unit away from a whole one) |
-| `<premium>` | USD2.01: 20% is 200.6 minor units, rounded half up |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winning bid | USD10.03 | (fixed boundary: 20% is a half minor unit away from a whole one) |
+| premium | USD2.01 | 20% is 200.6 minor units, rounded half up |
 
 **Steps:**
 
@@ -4926,21 +5343,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_2>`'s invoice was sent while the USD minimum was 0.
+* `<winner_order_82_1>`'s invoice was sent while the USD minimum was 0.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<order_2>` | A USD order won at USD7, invoice sent with premium `<sent premium>` |
-| `<sent premium>` | USD1.40: 20% of USD7 |
-| `<new minimum>` | USD20 (fixed configured value) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_82_1 | A USD order won at USD7, invoice sent with premium `<sent premium>`; bind its identity only | · |
+| sent premium | USD1.40 | 20% of USD7 |
+| new minimum | USD20 | (fixed configured value) |
 
 **Steps:**
 
 1. Set the USD premium minimum to `<new minimum>`.
-2. Read the API response for `<order_2>`'s sent invoice.
-3. Reissue `<order_2>`'s invoice.
+2. Read the API response for `<winner_order_82_1>`'s sent invoice.
+3. Reissue `<winner_order_82_1>`'s invoice.
 4. Read the API response for the reissued invoice.
 
 **Expected Results:**
@@ -4970,11 +5387,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD1 (range: >0 minor units) |
-| `<minimum premium>` | USD1 (fixed configured minimum) |
-| `<exchange rate>` | 7.85 HKD per USD |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winning bid | USD1 | (range: >0 minor units) |
+| minimum premium | USD1 | (fixed configured minimum) |
+| exchange rate | 7.85 HKD per USD | · |
 
 **Steps:**
 
@@ -5014,6 +5431,14 @@ Runs once per row of **Test data**.
 * Outside production, Grade10 holds FPS bank details and Payment Settings holds an HKD card fee rule.
 * customer(winner) holds an HKD auction order in Awaiting Setup with a saved home address.
 
+* The winner order under test is `<winner_order_84_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_84_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Choose HKD and FPS, then confirm the home address.
@@ -5047,13 +5472,23 @@ Runs once per row of **Test data**.
 
 * customer(winner) is on `<winner order url>` for `<order bt>`.
 
+* The winner order under test is `<winner_order_85_1>`.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<time left>` | 2 days 6 hours (194400s) before the payment deadline |
-| `<proof>` | One PDF under 5 MB |
+| order bt | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| time left | 2 days 6 hours (194400s) before the payment deadline |
+| proof | One PDF under 5 MB |
+
+| Field | Value |
+| --- | --- |
+| winner_order_85_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5090,11 +5525,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_86_1>`.
 
 **Test data:**
 
-| Files |
+| `<proof files>` |
 | --- |
 | 1 JPEG (lower limit) |
 | 1 PNG |
@@ -5103,12 +5538,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| winner_order_86_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Click Submit Payment Proof.
-2. Choose the row's files.
+2. Choose `<proof files>`.
 3. Submit, then accept the confirm step.
 
 **Expected Results:**
@@ -5136,23 +5575,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_87_1>`.
 
 **Test data:**
 
-| Files |
+| `<proof files>` |
 | --- |
 | 0 files |
 | 4 files, each allowed and under 5 MB |
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| winner_order_87_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Click Submit Payment Proof.
-2. Choose the row's files.
+2. Choose `<proof files>`.
 3. Submit.
 
 **Expected Results:**
@@ -5178,14 +5621,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_88_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<proof>` | One PDF of 5242880 bytes (5 MiB), at the limit |
+| winner_order_88_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+| proof | One PDF of 5242880 bytes (5 MiB), at the limit |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5218,11 +5665,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_89_1>`.
 
 **Test data:**
 
-| Files |
+| `<proof files>` |
 | --- |
 | A GIF image |
 | A Word document |
@@ -5230,12 +5677,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| winner_order_89_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Click Submit Payment Proof.
-2. Choose the row's files.
+2. Choose `<proof files>`.
 3. Submit.
 
 **Expected Results:**
@@ -5263,12 +5714,22 @@ Runs once per row of **Test data**.
 
 * customer(winner) is on `<winner order url>` for `<order bt>`.
 
+* The winner order under test is `<winner_order_90_1>`.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<proof>` | Two PNG files |
+| order bt | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| proof | Two PNG files |
+
+| Field | Value |
+| --- | --- |
+| winner_order_90_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5302,13 +5763,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_verifying>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_91_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | An order reading Payment Verifying |
+| winner_order_91_1 | An order reading Payment Verifying; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5337,17 +5802,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_verifying>` reads Payment Verifying for customer A.
+* `<winner_order_92_1>` reads Payment Verifying for customer A.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | customer A's order, proof uploaded, reading Payment Verifying |
+| winner_order_92_1 | customer A's order, proof uploaded, reading Payment Verifying; bind its identity only |
 
 **Steps:**
 
-1. As customer A, send a second proof upload for `<order_verifying>` through the API.
+1. As customer A, send a second proof upload for `<winner_order_92_1>` through the API.
 
 **Expected Results:**
 
@@ -5374,14 +5839,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A's order is in the state named in the row.
+* customer A's order is in the state `<order state>`.
+
+* The order is prepared as follows: `<fixture setup>`.
+
+* The winner order under test is `<winner_order_93_1>`.
 
 **Test data:**
 
-| Order state | Fixture |
+| `<order state>` | `<fixture setup>` |
 | --- | --- |
 | Payment Verifying | Proof uploaded, order reads Payment Verifying |
 | Pending Payment | Sent bank-transfer invoice, order reads Pending Payment |
+
+| Field | Value |
+| --- | --- |
+| winner_order_93_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -5390,7 +5863,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The payment is refused; no charge is made.
-* The order still reads the state named in the row.
+* The order still reads the state `<order state>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-3c9 rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
 ### g10.auction-winner-order.US9-TC11: Proof upload is not offered where it does not apply
@@ -5412,15 +5885,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_94_1>`.
+
+* The order has this setup: `<order state>`.
 
 **Test data:**
 
-| Order state |
+| `<order state>` |
 | --- |
 | Preparing Invoice, bank transfer chosen |
 | Card invoice sent, unpaid |
 | Bank-transfer invoice paid |
+
+| Field | Value |
+| --- | --- |
+| winner_order_94_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5448,18 +5931,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_95_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt_overdue>` | A bank-transfer order past its payment deadline, unpaid |
+| winner_order_95_1 | A bank-transfer order past its payment deadline, unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Open the payment area.
-2. Send a proof upload for `<order_bt_overdue>` through the API.
+2. Send a proof upload for `<winner_order_95_1>` through the API.
 
 **Expected Results:**
 
@@ -5484,24 +5971,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_bt>` belongs to customer A.
+* `<winner_order_96_1>` belongs to customer A.
 * customer B is signed in, in a separate session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| winner_order_96_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
 
 **Steps:**
 
-1. As customer B, send a proof upload for `<order_bt>` through the API.
-2. As customer B, request `<order_bt>`'s proof.
+1. As customer B, send a proof upload for `<winner_order_96_1>` through the API.
+2. As customer B, request `<winner_order_96_1>`'s proof.
 
 **Expected Results:**
 
 * Both requests are refused.
-* `<order_bt>` still reads Pending Payment.
+* `<winner_order_96_1>` still reads Pending Payment.
 
 <!-- trace:case id=g10.auction-winner-order.TC-q03 rev=2 covers=g10.auction-winner-order.SC-uxu -->
 ### g10.auction-winner-order.US9-TC14: An upload cut off part-way leaves the invoice pending
@@ -5524,12 +6011,22 @@ Runs once per row of **Test data**.
 * customer(winner) is on `<winner order url>` for `<order bt>`.
 * The connection is set to drop during upload.
 
+* The winner order under test is `<winner_order_97_1>`.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<proof>` | Three allowed files under 5 MB |
+| order bt | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
+| proof | Three allowed files under 5 MB |
+
+| Field | Value |
+| --- | --- |
+| winner_order_97_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5563,19 +6060,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_bt>`'s invoice is sent.
+* `<winner_order_98_1>`'s invoice is sent.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<listing code>` | LK7P2Q, the listing's code |
-| `<reference>` | LK7P2Q01: `<listing code>` then the two-digit invoice count |
+| winner_order_98_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+| listing code | LK7P2Q, the listing's code |
+| reference | LK7P2Q01: `<listing code>` then the two-digit invoice count |
 
 **Steps:**
 
-1. Read `<order_bt>`'s bank reference.
+1. Read `<winner_order_98_1>`'s bank reference.
 
 **Expected Results:**
 
@@ -5601,14 +6098,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bt>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_99_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<proof>` | One PDF of 5242881 bytes (5 MiB + 1 byte) with two small PNGs |
+| winner_order_99_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+| proof | One PDF of 5242881 bytes (5 MiB + 1 byte) with two small PNGs |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5641,14 +6142,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A's `<order_bt>` reads Pending Payment.
+* customer A's `<winner_order_100_1>` reads Pending Payment.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<proof>` | An executable renamed to .pdf |
+| winner_order_100_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+| proof | An executable renamed to .pdf |
 
 **Steps:**
 
@@ -5677,18 +6178,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_verifying>` reached Payment Verifying before its payment deadline.
+* `<winner_order_101_1>` reached Payment Verifying before its payment deadline.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | An order reading Payment Verifying, no operator action yet |
+| winner_order_101_1 | An order reading Payment Verifying, no operator action yet; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Move the clock past the original payment deadline.
-2. Open `<winner order url>` for `<order_verifying>` as its winner.
+2. Open `<winner order url>` for `<winner_order_101_1>` as its winner.
 
 **Expected Results:**
 
@@ -5712,22 +6217,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<order_bt>` and `<order_card>`) is signed in.
+* customer(winner of `<winner_order_102_1>` and `<winner_order_102_2>`) is signed in.
 * The browser may use the clipboard.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bt>` | An HKD order with a sent bank-transfer invoice, reading Pending Payment |
-| `<reference>` | LK7P2Q01, `<order_bt>`'s bank reference |
-| `<order_card>` | An order with a sent card invoice, unpaid |
+| winner_order_102_1 | An HKD order with a sent bank-transfer invoice, reading Pending Payment; bind its identity only |
+| reference | LK7P2Q01, `<winner_order_102_1>`'s bank reference |
+| winner_order_102_2 | An order with a sent card invoice, unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Open `<winner order url>` for `<order_bt>`.
+1. Open `<winner order url>` for `<winner_order_102_1>`.
 2. Click the copy control beside the bank reference, then paste.
-3. Open `<winner order url>` for `<order_card>`.
+3. Open `<winner order url>` for `<winner_order_102_2>`.
 
 **Expected Results:**
 
@@ -5754,7 +6263,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is signed in on `<winner order url>` for `<pending bank-transfer order>`.
+* customer(winner) is signed in on `<winner order url>` for `<winner_order_103_1>`.
 * Submit Payment Proof is open.
 
 **Test data:**
@@ -5764,6 +6273,14 @@ Runs once per row of **Test data**.
 | Proof submission in progress | Cancel |
 | HEIC conversion in progress | Escape |
 | Proof submission in progress | Overlay dismiss |
+
+| Field | Value |
+| --- | --- |
+| winner_order_103_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5797,27 +6314,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Grade10 holds the sample bank details for each rail outside production, and Payment Settings holds a card fee rule in the row's currency.
+* Grade10 holds the sample bank details for each rail outside production, and Payment Settings holds a card fee rule in `<settlement currency>`.
 * customer(winner) holds an order won in USD in Awaiting Setup with a saved home address.
+
+* The winner order under test is `<winner_order_104_1>`.
 
 **Test data:**
 
-| Settlement currency | Rail |
+| `<settlement currency>` | `<rail>` |
 | --- | --- |
 | HKD | FPS |
 | HKD | HK Local |
 | USD | International via SWIFT |
 
+| Field | Value |
+| --- | --- |
+| winner_order_104_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Choose the row's settlement currency and read the method choices.
-2. Confirm the delivery address with the row's rail.
+1. Choose `<settlement currency>` and read the method choices.
+2. Confirm the delivery address with `<rail>`.
 3. Reload the order.
 
 **Expected Results:**
 
-* Step 1: Card and the row's rails are offered, none selected.
-* Step 3: the order records bank transfer on the row's rail and reads Preparing Invoice.
+* Step 1: Card and the `<rail>` option are offered, none selected.
+* Step 3: the order records bank transfer on `<rail>` and reads Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-bmd rev=1 covers=g10.auction-winner-order.SC-8dl -->
 ### g10.auction-winner-order.US9-TC23: The choice shows each method's fee wording, neither selected
@@ -5839,6 +6362,14 @@ Runs once per row of **Test data**.
 
 * Grade10 holds HKD bank details, and Payment Settings holds an HKD card fee rule.
 * customer(winner) holds an auction order in HKD in Awaiting Setup.
+
+* The winner order under test is `<winner_order_105_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_105_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -5869,17 +6400,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is signed in on `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+* customer(winner) is signed in on `<winner order url>` for `<winner_order_106_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<pending_bank_transfer_order>` | An auction order whose invoice was sent for bank transfer and is pending |
+| winner_order_106_1 | An auction order whose invoice was sent for bank transfer and is pending; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Open `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+1. Open `<winner order url>` for `<winner_order_106_1>`.
 2. Read Order summary.
 3. Choose View Bank Details.
 4. Close View Bank Details.
@@ -5909,13 +6444,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is signed in on `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+* customer(winner) is signed in on `<winner order url>` for `<winner_order_107_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<pending_bank_transfer_order>` | An HKD auction order whose invoice was sent for FPS and is pending |
+| winner_order_107_1 | An HKD auction order whose invoice was sent for FPS and is pending; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -5948,15 +6487,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on Winner Order for `<pending_bank_transfer_order>`, whose invoice is pending and picked rail is the row's rail.
+* customer(winner) is on Winner Order for `<winner_order_108_1>`, whose invoice is pending and picked rail is `<rail>`.
+
+* The invoice is in `<settlement currency>` on rail `<rail>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<pending_bank_transfer_order>` | An auction order whose invoice was sent for the row's rail and is pending |
-| Row 1 | HKD order, HK Local |
-| Row 2 | USD order, International via SWIFT |
+| winner_order_108_1 | An auction order whose invoice was sent for `<rail>` and is pending; bind its identity only |
+
+| `<settlement currency>` | `<rail>` |
+| --- | --- |
+| HKD | HK Local |
+| USD | International via SWIFT |
 
 **Steps:**
 
@@ -5966,11 +6510,11 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No card Pay control is offered on the bank transfer invoice.
-* No rail tabs show, and only the row's rail shows.
+* No rail tabs show, and only `<rail>` shows.
 * No bank-detail row has a copy control.
 * HK Local shows bank name, bank code, branch code, full account number including bank and branch code, then payment reference.
 * SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference and memo warning, then the OUR charges note after the reference.
-* Only the row's rail shows.
+* Only `<rail>` shows.
 
 <!-- trace:case id=g10.auction-winner-order.TC-xmr rev=1 covers=g10.auction-winner-order.SC-c6t,g10.auction-winner-order.SC-6v5,g10.auction-winner-order.SC-sd5,g10.auction-winner-order.SC-v59,g10.auction-winner-order.SC-8dl,g10.auction-winner-order.SC-bmm,g10.auction-winner-order.SC-bsl,g10.auction-winner-order.SC-fgj,g10.auction-winner-order.SC-7jw,g10.auction-winner-order.SC-ymi,g10.auction-winner-order.SC-67v,g10.auction-winner-order.SC-uxu,g10.auction-winner-order.SC-7nh,g10.auction-winner-order.SC-zbt,g10.auction-winner-order.SC-zx9,g10.auction-winner-order.SC-tf6,g10.auction-winner-order.SC-oii,g10.auction-winner-order.SC-fm9,g10.auction-winner-order.SC-8q1,g10.auction-winner-order.SC-bb1,g10.auction-winner-order.SC-8uw,g10.auction-winner-order.SC-ddi -->
 ### g10.auction-winner-order.US9-TC25: Submit Payment Proof is proof-only
@@ -5990,7 +6534,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is signed in on `<the winner's auction order url>` for `<pending_bank_transfer_order>`.
+* customer(winner) is signed in on `<winner order url>` for `<winner_order_109_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_109_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6063,15 +6617,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_returned>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_110_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_returned>` | A bank-transfer order whose proof an operator returned with `<external reason>` and `<internal reason>` |
-| `<external reason>` | Amount received does not match |
-| `<internal reason>` | A note for operators only |
+| winner_order_110_1 | A bank-transfer order whose proof an operator returned with `<external reason>` and `<internal reason>`; bind its identity only |
+| external reason | Amount received does not match |
+| internal reason | A note for operators only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6101,14 +6659,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_returned>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_111_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_returned>` | A bank-transfer order whose proof was returned, inside its deadline |
-| `<proof>` | One new PDF under 5 MB |
+| winner_order_111_1 | A bank-transfer order whose proof was returned, inside its deadline; bind its identity only |
+| proof | One new PDF under 5 MB |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6140,18 +6702,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_verifying>` reads Payment Verifying with the row's `<time left>` kept.
+* `<winner_order_112_1>` reads Payment Verifying with `<time left>` kept.
 
 **Test data:**
 
-| Time left |
-| --- |
-| 60s (1 minute) |
-| 604740s (6 days 23 hours 59 minutes) |
+| `<time left>` | Fixture notes |
+| --- | --- |
+| 60s | `<time left>`: (1 minute) |
+| 604740s | `<time left>`: (6 days 23 hours 59 minutes) |
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | A bank-transfer order reading Payment Verifying |
+| winner_order_112_1 | A bank-transfer order reading Payment Verifying; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| return time | The fixture timestamp when the operator returns the proof; bind its datetime only |
 
 **Steps:**
 
@@ -6160,7 +6726,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The deadline is `<return time>` plus the row's time left.
+* The deadline is `<return time>` plus `<time left>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-zew rev=1 covers=g10.auction-winner-order.SC-xdj,g10.auction-winner-order.SC-o2b,g10.auction-winner-order.SC-adl,g10.auction-winner-order.SC-tt1 -->
 ### g10.auction-winner-order.US10-TC5: A return adds no grace once the time left runs out
@@ -6180,13 +6746,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_returned_late>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_113_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_returned_late>` | A bank-transfer order returned with 60s left, and that minute has passed |
+| winner_order_113_1 | A bank-transfer order returned with 60s left, and that minute has passed; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6215,14 +6785,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_verifying>` was returned once, uploaded again with `<time left 2>` kept, and reads Payment Verifying.
+* `<winner_order_114_1>` was returned once, uploaded again with `<time left 2>` kept, and reads Payment Verifying.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | A bank-transfer order on its second check |
-| `<time left 2>` | The time left at the second upload |
+| winner_order_114_1 | A bank-transfer order on its second check; bind its identity only |
+| time left 2 | The time left at the second upload |
+
+| Field | Value |
+| --- | --- |
+| return time | The fixture timestamp when the operator returns the proof; bind its datetime only |
 
 **Steps:**
 
@@ -6251,18 +6825,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) chose bank transfer and uploaded proof for `<order_verifying>`.
+* customer(winner) chose bank transfer and uploaded proof for `<winner_order_115_1>`.
 * An operator returned the proof with `<return reason>`.
-* customer is on `<order_verifying>`'s Winner Order page.
+* customer is on `<winner_order_115_1>`'s Winner Order page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline |
-| `<time left>` | 2 days (172800s), a time inside the 7-day payment window |
-| `<return reason>` | The reason text the operator entered for the winner |
-| `<return time>` | 18 hours after the upload |
+| winner_order_115_1 | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline; bind its identity only |
+| time left | 2 days (172800s), a time inside the 7-day payment window |
+| return reason | The reason text the operator entered for the winner |
+| return time | 18 hours after the upload |
 
 **Steps:**
 
@@ -6294,17 +6868,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner)'s proof for `<order_verifying>` was returned with `<first reason>`.
+* customer(winner)'s proof for `<winner_order_116_1>` was returned with `<first reason>`.
 * The winner uploaded proof again, and it was returned with `<second reason>`.
-* customer is on `<order_verifying>`'s Winner Order page.
+* customer is on `<winner_order_116_1>`'s Winner Order page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | An order paid by bank transfer, inside its payment window |
-| `<first reason>` | Amount does not match |
-| `<second reason>` | Reference missing from the transfer |
+| winner_order_116_1 | An order paid by bank transfer, inside its payment window; bind its identity only |
+| first reason | Amount does not match |
+| second reason | Reference missing from the transfer |
 
 **Steps:**
 
@@ -6334,15 +6908,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) uploaded proof for `<order_verifying>`; no letter was sent on upload.
+* customer(winner) uploaded proof for `<winner_order_117_1>`; no letter was sent on upload.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_verifying>` | An order paid by bank transfer, `<time left>` before its payment deadline at upload |
-| `<time left>` | 2 days (172800s) |
-| `<return reason>` | The reason text the operator enters for the winner |
+| winner_order_117_1 | An order paid by bank transfer, `<time left>` before its payment deadline at upload; bind its identity only |
+| time left | 2 days (172800s) |
+| return reason | The reason text the operator enters for the winner |
 
 **Steps:**
 
@@ -6381,13 +6955,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on Complete Order Setup for `<order_setup>`.
+* customer(winner) is on Complete Order Setup for `<winner_order_118_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_118_1 | An order inside its setup window, setup incomplete; bind its identity only |
 
 **Steps:**
 
@@ -6420,23 +6994,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on billing Add Address for `<order_setup>`, with the form mode and missing field in the row.
+* customer(winner) is on billing Add Address for `<winner_order_119_1>`, with form mode `<form mode>` and missing field `<missing field>`.
 
 **Test data:**
 
-| Form mode | Missing field | Phone country | Phone digits | Company Name |
+| `<form mode>` | `<missing field>` | `<phone country>` | `<phone digits>` | `<company name>` |
 | --- | --- | --- | --- | --- |
 | Personal | Phone | Canada | (empty) | Not shown |
 | Company | Company Name | Canada | 4165550100 | (empty) |
 
+| Field | Value |
+| --- | --- |
+| winner_order_119_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Fill the fields from **Test data**.
+1. Prepare mode `<form mode>`, phone country `<phone country>`, phone digits `<phone digits>` and Company Name `<company name>` where shown; leave `<missing field>` unset.
 2. Click confirm.
 
 **Expected Results:**
 
-* The confirm is refused, with a message beside the missing field.
+* The confirm is refused, with a message beside `<missing field>`.
 * The order's billing address is unchanged.
 <!-- trace:case id=g10.auction-winner-order.TC-dno rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
 ### g10.auction-winner-order.US11-TC3: A company billing address without Company Name is refused (folded into g10.auction-winner-order.US11-TC2)
@@ -6501,14 +7079,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on Complete Order Setup for `<order_setup>`, delivery confirmed to `<address_sf>`.
+* customer(winner) is on Complete Order Setup for `<winner_order_120_1>`, delivery confirmed to `<address_sf>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_sf>` | A personal address for Alex Chen, 100 Market St, San Francisco |
+| winner_order_120_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_sf | A personal address for Alex Chen, 100 Market St, San Francisco |
 | Kind | Company |
 | Company Name | Northwind Billing Ltd |
 | First name | Alex |
@@ -6524,7 +7102,7 @@ Runs once per row of **Test data**.
 
 1. Untick Same as delivery address.
 2. Open billing Add Address.
-3. Fill the billing fields from **Test data**.
+3. Fill address_sf `<address_sf>`, Kind `<Kind>`, Company Name `<Company Name>`, First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Postal code `<Postal code>`.
 4. Confirm billing.
 
 **Expected Results:**
@@ -6551,6 +7129,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner) is on billing Add Address of an auction order in Awaiting Setup, after unticking Same as delivery address.
+
+* The winner order under test is `<winner_order_121_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_121_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -6583,6 +7169,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
 * On it, after unticking Same as delivery address, they added a one-time billing address without saving it, and have not confirmed.
+
+* The winner order under test is `<winner_order_122_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_122_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -6621,13 +7215,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<winner_order_123_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_123_1 | An order inside its setup window, setup incomplete; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6657,13 +7255,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<winner_order_124_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_124_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | First name | Jordan |
 | Last name | Lee |
 | Phone country | United States |
@@ -6673,11 +7271,15 @@ Runs once per row of **Test data**.
 | Address line 1 | 350 5th Ave |
 | Postal code | 10118 |
 
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
 1. Open the delivery address picker.
 2. Click Add new address.
-3. Fill the fields from **Test data**, Save this address for future orders unticked.
+3. Fill First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Postal code `<Postal code>`, winner order url `<winner order url>`, Save this address for future orders unticked.
 4. Confirm the address for this order.
 5. Open the account address book.
 
@@ -6704,13 +7306,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on delivery Add new address for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on delivery Add new address for `<winner_order_125_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_125_1 | An order inside its setup window, setup incomplete; bind its identity only |
 | Kind | Company |
 | Company Name | (empty) |
 | First name | Jordan |
@@ -6725,7 +7327,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Click Company.
-2. Fill the fields from **Test data**, Save this address for future orders unticked.
+2. Fill Kind `<Kind>`, Company Name `<Company Name>`, First name `<First name>`, Last name `<Last name>`, Phone country `<Phone country>`, Phone digits `<Phone digits>`, Country or region `<Country or region>`, Town or city `<Town or city>`, Address line 1 `<Address line 1>`, Postal code `<Postal code>`, Save this address for future orders unticked.
 3. Click confirm.
 
 **Expected Results:**
@@ -6752,13 +7354,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<winner_order_126_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
+| winner_order_126_1 | An order inside its setup window, setup incomplete; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6787,14 +7393,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<winner_order_127_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_new>` | A complete personal shipping address not in the book |
+| winner_order_127_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_new | A complete personal shipping address not in the book |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6827,14 +7437,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<winner_order_128_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_new>` | A complete personal shipping address not in the book |
+| winner_order_128_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_new | A complete personal shipping address not in the book |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6865,14 +7479,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, five saved shipping addresses) is on `<winner order url>` for `<winner_order_129_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_new>` | A complete personal shipping address not in the book |
+| winner_order_129_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_new | A complete personal shipping address not in the book |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6904,14 +7522,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner, four saved shipping addresses) is on `<winner order url>` for `<order_setup>`.
+* customer(winner, four saved shipping addresses) is on `<winner order url>` for `<winner_order_130_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_new>` | A complete personal shipping address not in the book |
+| winner_order_130_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_new | A complete personal shipping address not in the book |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -6950,14 +7572,18 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<address_home>` | A saved address named Home, used by no unpaid order |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_new>` | A complete personal shipping address not in the book |
+| address_home | A saved address named Home, used by no unpaid order |
+| winner_order_131_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_new | A complete personal shipping address not in the book |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Remove `<address_home>` from the address book.
-2. Navigate to `<winner order url>` for `<order_setup>`.
+2. Navigate to `<winner order url>` for `<winner_order_131_1>`.
 3. Click Add new address in the delivery picker and enter `<address_new>`.
 4. Click Save this address for future orders.
 
@@ -6990,8 +7616,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<address_home>` | A saved address named Home |
-| `<new street>` | A different address line 1 |
+| address_home | A saved address named Home |
+| new street | A different address line 1 |
 
 **Steps:**
 
@@ -7023,14 +7649,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner) holds six saved shipping addresses, seeded from before the cap.
-* customer is on `<winner order url>` for `<order_setup>`.
+* customer is on `<winner order url>` for `<winner_order_133_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup>` | An order inside its setup window, setup incomplete |
-| `<address_new>` | A complete personal shipping address not in the book |
+| winner_order_133_1 | An order inside its setup window, setup incomplete; bind its identity only |
+| address_new | A complete personal shipping address not in the book |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7063,6 +7693,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an auction order in Awaiting Setup, its setup deadline not passed.
 * On it, they added a one-time delivery address without saving it, and have not confirmed.
+
+* The winner order under test is `<winner_order_134_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_134_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -7103,7 +7741,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<cancelled order>`) is on Winner Order.
+* customer(winner of `<winner_order_135_1>`) is on Winner Order.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_135_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -7142,14 +7786,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_refunded>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_136_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_refunded>` | A paid order refunded to the card, with an operator note |
-| `<refund amount>` | The amount returned |
+| winner_order_136_1 | A paid order refunded to the card, with an operator note; bind its identity only |
+| refund amount | The amount returned |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7191,14 +7839,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_overpaid>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_137_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_overpaid>` | A paid order where the difference over the total was returned |
-| `<difference>` | The amount returned |
+| winner_order_137_1 | A paid order where the difference over the total was returned; bind its identity only |
+| difference | The amount returned |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7238,13 +7890,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_138_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| winner_order_138_1 | An order whose payment deadline passed unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7273,13 +7929,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_139_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| winner_order_139_1 | An order whose payment deadline passed unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7308,14 +7968,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_setup_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_140_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_setup_overdue>` | An order past its setup deadline, no invoice issued |
-| `<listing_title>` | The listing title on that order |
+| winner_order_140_1 | An order past its setup deadline, no invoice issued; bind its identity only |
+| listing_title | The listing title on that order; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7344,14 +8008,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_141_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
-| `<invoice_id>` | That order's invoice id |
+| winner_order_141_1 | An order whose payment deadline passed unpaid; bind its identity only |
+| invoice_id | That order's invoice id |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7380,15 +8048,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_partially_paid>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_142_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_partially_paid>` | An order reading Partially Paid, with one receipt |
-| `<invoice_id>` | That order's invoice id |
-| `<receipt_ids>` | That invoice's receipt ids |
+| winner_order_142_1 | An order reading Partially Paid, with one receipt; bind its identity only |
+| invoice_id | That order's invoice id |
+| receipt_ids | That invoice's receipt ids |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7419,14 +8091,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_partially_paid_many>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_143_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_partially_paid_many>` | An order reading Partially Paid, with three receipts |
-| `<receipt_ids>` | Every receipt id on that invoice, oldest first |
+| winner_order_143_1 | An order reading Partially Paid, with three receipts; bind its identity only |
+| receipt_ids | Every receipt id on that invoice, oldest first |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7456,13 +8132,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_144_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| winner_order_144_1 | An order whose payment deadline passed unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7492,13 +8172,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_145_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| winner_order_145_1 | An order whose payment deadline passed unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7528,14 +8212,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_146_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
-| `<winner_question>` | A short question typed into Message |
+| winner_order_146_1 | An order whose payment deadline passed unpaid; bind its identity only |
+| winner_question | A short question typed into Message |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7567,16 +8255,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_147_1>`.
 * The browser may use the clipboard.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
-| `<invoice_id>` | That order's invoice id |
-| `<winner_question>` | A short question typed into Message |
+| winner_order_147_1 | An order whose payment deadline passed unpaid; bind its identity only |
+| invoice_id | That order's invoice id |
+| winner_question | A short question typed into Message |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7609,15 +8301,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_148_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
-| `<invoice_id>` | That order's invoice id |
-| `<winner_question>` | A short question typed into Message |
+| winner_order_148_1 | An order whose payment deadline passed unpaid; bind its identity only |
+| invoice_id | That order's invoice id |
+| winner_question | A short question typed into Message |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7649,14 +8345,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_149_1>`.
 * The browser may use the clipboard.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
+| winner_order_149_1 | An order whose payment deadline passed unpaid; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7688,15 +8388,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_payment_overdue_reissued>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_150_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_payment_overdue_reissued>` | An order payment-overdue after its invoice was reissued |
-| `<current_invoice_id>` | The current invoice id |
-| `<replaced_invoice_id>` | The replaced invoice id |
+| winner_order_150_1 | An order payment-overdue after its invoice was reissued; bind its identity only |
+| current_invoice_id | The current invoice id |
+| replaced_invoice_id | The replaced invoice id |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7726,15 +8430,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_cancelled>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_151_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_cancelled>` | An order an operator cancelled, with a category and note |
-| `<listing_title>` | That order's listing title |
-| `<invoice_id>` | That order's invoice id |
+| winner_order_151_1 | An order an operator cancelled, with a category and note; bind its identity only |
+| listing_title | That order's listing title; bind its identity only |
+| invoice_id | That order's invoice id |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7768,6 +8476,14 @@ Runs once per row of **Test data**.
 * Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
 * customer(winner) holds an auction order in USD in Awaiting Setup.
 
+* The winner order under test is `<winner_order_152_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_152_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Open the order and choose Contact Us.
@@ -7799,6 +8515,14 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an auction order in Setup Overdue, whose payment access is closed.
 * The browser may use the clipboard.
+
+* The winner order under test is `<winner_order_153_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_153_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -7838,14 +8562,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<winner order url>` for `<order_bank_refunded>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_154_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_bank_refunded>` | A paid order refunded by bank transfer, no operator note |
-| `<bank reference>` | The provider reference the operator recorded |
+| winner_order_154_1 | A paid order refunded by bank transfer, no operator note; bind its identity only |
+| bank reference | The provider reference the operator recorded |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -7886,9 +8614,21 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an order in Awaiting Setup.
 
+* The winner order under test is `<winner_order_155_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_155_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 2. Read the page from the header to the sidebar.
 
 **Expected Results:**
@@ -7951,9 +8691,21 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an order in Preparing Invoice.
 
+* The winner order under test is `<winner_order_156_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_156_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 
 **Expected Results:**
 
@@ -7980,6 +8732,8 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an order in Awaiting Setup.
 
+* The winner order under test is `<winner_order_157_1>`.
+
 **Test data:**
 
 | Field | Value |
@@ -7988,9 +8742,18 @@ Runs once per row of **Test data**.
 | Phone | `<a phone number of unusual length and format>` |
 | Company Name, Address Line 2, Apt./Suite/Building | Empty |
 
+| Field | Value |
+| --- | --- |
+| winner_order_157_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| a phone number of unusual length and format | The unusual-length and unusual-format phone fixture; bind its literal input only |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 2. Fill the address form with **Test data**.
 3. Click Confirm.
 
@@ -8019,9 +8782,21 @@ Runs once per row of **Test data**.
 
 * customer(winner) holds an order in Awaiting Setup.
 
+* The winner order under test is `<winner_order_158_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_158_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Navigate to `<grade10 auction order url>`.
+1. Navigate to `<winner order url>`.
 2. Fill every required field except Town/City and Postal Code.
 3. Click Confirm.
 
@@ -8057,7 +8832,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<partially-paid order>`) is on Winner Order.
+* customer(winner of `<winner_order_159_1>`) is on Winner Order.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_159_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -8098,6 +8879,14 @@ Runs once per row of **Test data**.
 
 * One winning order has a card invoice and another has a bank-transfer invoice.
 
+* The winner order under test is `<winner_order_160_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_160_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Open each invoice and its order.
@@ -8127,7 +8916,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The latest invoice for payment reference `LK423` is `IN-LK42399`.
+* The latest invoice for payment reference `<payment reference>` is `<current invoice id>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| next invoice id | IN-LK423100 |
+| current invoice id | IN-LK42399 |
+| payment reference | LK423 |
 
 **Steps:**
 
@@ -8136,8 +8933,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The new invoice ID is `IN-LK423100`.
-* The payment reference remains `LK423`.
+* The new invoice ID is `<next invoice id>`.
+* The payment reference remains `<payment reference>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ehf rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
 ### g10.auction-winner-order.US21-TC3: Listing-code allocation retries a projection collision
@@ -8187,7 +8984,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A listing and its order already store payment reference `LK423`.
+* A listing and its order already store payment reference `<payment reference>`.
+
+* The winner order under test is `<winner_order_163_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| payment reference | LK423 |
+| winner_order_163_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -8196,7 +9002,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Both continue to use `LK423`.
+* Both continue to use `<payment reference>`.
 * No new listing receives a retained code.
 
 <!-- trace:case id=g10.auction-winner-order.TC-azi rev=1 covers=g10.auction-winner-order.SC-6pw,g10.auction-winner-order.SC-n8j,g10.auction-winner-order.SC-upc,g10.auction-winner-order.SC-g6f,g10.auction-winner-order.SC-1pz -->
@@ -8217,7 +9023,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A listing has payment reference `LK423`.
+* A listing has payment reference `<payment reference>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| payment reference | LK423 |
 
 **Steps:**
 
@@ -8254,17 +9066,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An order has invoice `IN-LK42301`, then reissued invoice `IN-LK42302`, with payment reference `LK423`.
+* An order has invoice `<original invoice id>`, then reissued invoice `<current invoice id>`, with payment reference `<payment reference>`.
+
+* The winner order under test is `<winner_order_165_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| original invoice id | IN-LK42301 |
+| current invoice id | IN-LK42302 |
+| payment reference | LK423 |
+| winner_order_165_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Look up the order by each invoice ID and by `LK423`.
+1. Look up the order by each invoice ID and by `<payment reference>`.
 2. Open both invoice PDFs.
 
 **Expected Results:**
 
 * Each lookup finds the same order.
-* The replacement invoice names the replaced invoice and keeps `LK423`.
+* The replacement invoice names the replaced invoice and keeps `<payment reference>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-mr5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
 ### g10.auction-winner-order.US22-TC2: A finalized payment receives the new receipt identifier
@@ -8284,8 +9107,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An invoice is `IN-LK42302` for payment reference `LK423`.
+* An invoice is `<current invoice id>` for payment reference `<payment reference>`.
 * A full or partial payment for that invoice has finalized.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| current invoice id | IN-LK42302 |
+| payment reference | LK423 |
 
 **Steps:**
 
@@ -8316,7 +9146,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A historical receipt ID is `REC-202609-LK7P2Q-01-P1`.
+* A historical receipt ID is `<historical receipt id>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| historical receipt id | REC-202609-LK7P2Q-01-P1 |
 
 **Steps:**
 
@@ -8325,7 +9161,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The historical receipt ID remains `REC-202609-LK7P2Q-01-P1`.
+* The historical receipt ID remains `<historical receipt id>`.
 * No receipt ID is created for the refund, reversal or void.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gs5 rev=1 covers=g10.auction-winner-order.SC-r8w,g10.auction-winner-order.SC-k31,g10.auction-winner-order.SC-4mt,g10.auction-winner-order.SC-sjx,g10.auction-winner-order.SC-q9s,g10.auction-winner-order.SC-ly9,g10.auction-winner-order.SC-dsa,g10.auction-winner-order.SC-l1s -->
@@ -8383,16 +9219,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` closed at its recorded close and no delivery address is confirmed on its order.
-* customer(winner of `<listing_1>`) is on `<the winner's auction order url>` at `<one minute before close>`.
+* `<listing_169_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* customer(winner of `<listing_169_1>`) is on `<winner order url>` at `<one minute before close>`.
+
+* The winner order under test is `<winner_order_169_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
+| listing_169_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
 | Entrance closes | 2026-09-05T12:00:00Z |
-| `<one minute before close>` | 2026-09-05T11:59:00Z |
+| one minute before close | 2026-09-05T11:59:00Z |
+
+| Field | Value |
+| --- | --- |
+| winner_order_169_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+| listing_169_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -8423,15 +9270,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` closed at its recorded close and no delivery address is confirmed on its order.
-* customer(winner of `<listing_1>`) is on `<the winner's auction order url>` at `<the address deadline>`.
+* `<listing_170_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* customer(winner of `<listing_170_1>`) is on `<winner order url>` at `<the address deadline>`.
+
+* The winner order under test is `<winner_order_170_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
-| `<the address deadline>` | 2026-09-05T12:00:00Z |
+| listing_170_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
+| the address deadline | 2026-09-05T12:00:00Z |
+
+| Field | Value |
+| --- | --- |
+| winner_order_170_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+| listing_170_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -8462,17 +9320,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
+* `<listing_171_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
   has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
 * An operator reopened the address form at `<the reopen>`.
-* customer(winner of `<listing_1>`) is on `<the winner's auction order url>`.
+* customer(winner of `<listing_171_1>`) is on `<winner order url>`.
+
+* The winner order under test is `<winner_order_171_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<the reopen>` | 2026-09-07T09:00:00Z |
+| the reopen | 2026-09-07T09:00:00Z |
 | New address deadline | 2026-09-09T09:00:00Z |
+
+| Field | Value |
+| --- | --- |
+| winner_order_171_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+| listing_171_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -8503,8 +9372,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
-* customer(winner of `<listing_1>`) is signed in.
+* `<listing_172_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
+* customer(winner of `<listing_172_1>`) is signed in.
+
+* The winner order under test is `<winner_order_172_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_172_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+| listing_172_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 
 **Steps:**
 
@@ -8535,15 +9413,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<listing_1>`, `<listing_5>` and `<listing_6>`) won three listings that closed at different datetimes.
+* customer(winner of `<listing_173_1>`, `<listing_173_2>` and `<listing_173_3>`) won three listings that closed at different datetimes.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
-| `<listing_5>` recorded close | 2026-09-03T18:30:00Z |
-| `<listing_6>` recorded close | 2026-09-04T09:15:00Z |
+| listing_173_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
+| listing_173_2>` recorded close | 2026-09-03T18:30:00Z; bind its identity only |
+| listing_173_3>` recorded close | 2026-09-04T09:15:00Z; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| listing_173_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+| listing_173_2 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+| listing_173_3 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 
 **Steps:**
 
@@ -8575,8 +9459,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<sent-invoice order>` carries a confirmed delivery address and an invoice sent at 2026-09-05T09:00:00Z, inside the address window.
-* customer(winner of `<sent-invoice order>`) is on `<the winner's auction order url>`.
+* `<winner_order_174_1>` carries a confirmed delivery address and an invoice sent at 2026-09-05T09:00:00Z, inside the address window.
+* customer(winner of `<winner_order_174_1>`) is on `<winner order url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_174_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -8607,8 +9501,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<expired-invoice order>`'s invoice is `expired` and its address was confirmed and is locked.
-* customer(winner of `<expired-invoice order>`) is on `<the winner's auction order url>`.
+* `<winner_order_175_1>`'s invoice is `expired` and its address was confirmed and is locked.
+* customer(winner of `<winner_order_175_1>`) is on `<winner order url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_175_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -8639,14 +9543,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<missed-deadline order>`'s address deadline has passed with no address confirmed.
-* customer(winner of `<missed-deadline order>`) is signed in.
+* `<winner_order_176_1>`'s address deadline has passed with no address confirmed.
+* customer(winner of `<winner_order_176_1>`) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_176_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. Open the account address book.
 2. Edit the saved home address and save a new work address.
-3. Return to `<the winner's auction order url>`.
+3. Return to `<winner order url>`.
 
 **Expected Results:**
 
@@ -8672,8 +9586,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<missed-deadline order>`'s address deadline has passed.
+* `<winner_order_177_1>`'s address deadline has passed.
 * An operator holds payment-processing.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_177_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -8704,7 +9624,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<extended listing>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
-* customer(winner of `<extended listing>`) is on `<the winner's auction order url>`.
+* customer(winner of `<extended listing>`) is on `<winner order url>`.
+
+* The winner order under test is `<winner_order_178_1>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_178_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
+| Field | Value |
+| --- | --- |
+| extended listing | The extended listing fixture described by the pre-conditions; bind its value only |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -8775,24 +9708,32 @@ Runs once per row of **Test data**.
 
 * A winner is on order setup with an address and billing address ready.
 
+* The USD winning bid is `<usd winning bid minor units>` minor units, with premium `<usd premium minor units>` minor units.
+
+* The winner order under test is `<winner_order_180_1>`.
+
 **Test data:**
 
-| Settlement currency | Hammer price in USD minor units | Premium in USD minor units | Expected invoice amounts |
+| `<settlement currency>` | `<usd winning bid minor units>` | `<usd premium minor units>` | `<invoice amounts>` |
 | --- | ---: | ---: | --- |
 | USD | 250000 | 50000 | Winning Bid 250000 USD; Buyer's Premium 50000 USD; total 300000 USD |
 | HKD | 250000 | 50000 | Winning Bid 1962500 HKD; Buyer's Premium 392500 HKD; total 2356500 HKD |
 
+| Field | Value |
+| --- | --- |
+| winner_order_180_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Choose the row's settlement currency.
+1. Choose `<settlement currency>`.
 2. Choose a payment method offered for it.
 3. Confirm the order setup.
 4. Read the invoice currency and order total.
 
 **Expected Results:**
 
-* The invoice shows the row's winning bid, premium and total in the row's currency, with no conversion for USD.
-* When the row is HKD, its converted lines use 7.85 and round up to whole HKD; no USD amount is printed.
+* The invoice shows the amounts `<invoice amounts>` in `<settlement currency>`, with no conversion for USD.
+* When `<settlement currency>` is HKD, its converted lines use 7.85 and round up to whole HKD; no USD amount is printed.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8ea rev=1 covers=g10.auction-winner-order.SC-k63 -->
 ### g10.auction-winner-order.US24-TC3: Sent invoice locks the chosen currency
@@ -8843,19 +9784,19 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_4>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_182_1>` in Awaiting Setup with a saved home address.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_4>` | An order won in USD, in Awaiting Setup |
+| winner_order_182_1 | An order won in USD, in Awaiting Setup; bind its identity only |
 
 **Steps:**
 
 1. Choose the home address as the delivery address and as the billing address, and choose no settlement currency.
 2. Send Grade10 a setup confirmation carrying both addresses and no currency.
-3. Reload `<order_4>`.
+3. Reload `<winner_order_182_1>`.
 
 **Expected Results:**
 
@@ -8881,22 +9822,26 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_5>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_183_1>` in Awaiting Setup with a saved home address.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_5>` | An order won in USD, in Awaiting Setup |
+| winner_order_183_1 | An order won in USD, in Awaiting Setup; bind its identity only |
 | Currency | HKD |
 | Method | FPS |
 
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
+
 **Steps:**
 
-1. Open `<the winner's auction order url>` for `<order_5>`.
+1. Open `<winner order url>` for `<winner_order_183_1>`.
 2. Choose the home address, choose HKD and choose FPS.
 3. Confirm the home address.
-4. Reload `<order_5>`.
+4. Reload `<winner_order_183_1>`.
 
 **Expected Results:**
 
@@ -8922,19 +9867,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(operator with payment-processing) holds `<order_6>` in Preparing Invoice, whose winner confirmed HKD and bank transfer on HK Local.
-* customer(winner) holds `<order_6>`.
+* admin(operator with payment-processing) holds `<winner_order_184_1>` in Preparing Invoice, whose winner confirmed HKD and bank transfer on HK Local.
+* customer(winner) holds `<winner_order_184_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_6>` | An order in Preparing Invoice, settled in HKD by bank transfer on HK Local |
+| winner_order_184_1 | An order in Preparing Invoice, settled in HKD by bank transfer on HK Local; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
 1. As the operator, change the settlement currency to USD with the reason `Winner picked the wrong currency`.
-2. As the winner, open `<the winner's auction order url>` for `<order_6>` and read the order.
+2. As the winner, open `<winner order url>` for `<winner_order_184_1>` and read the order.
 3. As the winner, send Grade10 a request to change the currency to HKD.
 4. Read the order again.
 
@@ -8963,15 +9912,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(operator with payment-processing) holds `<order_7>`, whose pending invoice was sent in HKD for bank transfer on HK Local.
+* admin(operator with payment-processing) holds `<winner_order_185_1>`, whose pending invoice was sent in HKD for bank transfer on HK Local.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<order_7>` | An order won at `<winning bid>`, with a pending HKD invoice |
-| `<winning bid>` | USD100.00 (fixed derived value), 10000 minor units |
-| `<winning bid HKD>` | HKD785.00 (fixed derived value), 78500 minor units |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_185_1 | An order won at `<winning bid>`, with a pending HKD invoice; bind its identity only | · |
+| winning bid | USD100.00 | (fixed derived value), 10000 minor units |
+| winning bid HKD | HKD785.00 | (fixed derived value), 78500 minor units |
 
 **Steps:**
 
@@ -9014,21 +9963,27 @@ Runs once per row of **Test data**.
 
 * A winner is on order setup with USD and HKD settlement choices.
 
+* The winner order under test is `<winner_order_186_1>`.
+
 **Test data:**
 
-| Currency | Offered methods |
+| `<currency>` | `<offered methods>` |
 | --- | --- |
 | USD | Card, HK Local, International via SWIFT |
 | HKD | Card, FPS, HK Local |
 
+| Field | Value |
+| --- | --- |
+| winner_order_186_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Choose the row's currency.
+1. Choose `<currency>`.
 2. Read all payment method choices.
 
 **Expected Results:**
 
-* Exactly the methods in the row are offered.
+* Exactly `<offered methods>` are offered.
 * Each bank rail is a separate choice.
 * No method from the other currency is offered.
 
@@ -9081,13 +10036,13 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_6>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_188_1>` in Awaiting Setup with a saved home address.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_6>` | An order won in USD, in Awaiting Setup |
+| winner_order_188_1 | An order won in USD, in Awaiting Setup; bind its identity only |
 
 **Steps:**
 
@@ -9095,7 +10050,7 @@ Runs once per row of **Test data**.
 2. Change the settlement currency to HKD.
 3. Read the payment method choice.
 4. Confirm the home address without choosing a method.
-5. Reload `<order_6>`.
+5. Reload `<winner_order_188_1>`.
 
 **Expected Results:**
 
@@ -9123,24 +10078,24 @@ Runs once per row of **Test data**. Switching currency keeps a still-offered met
 
 **Pre-conditions:**
 
-* A winner selected the row's method for USD, and that method is offered for HKD.
+* A winner selected `<selected method>` for USD, and that method is offered for HKD.
 
 **Test data:**
 
-| Selected method | Expected after switch |
+| `<selected method>` | `<expected selection>` |
 | --- | --- |
 | Card | Card remains selected |
 | HK Local | HK Local remains selected |
 
 **Steps:**
 
-1. Select the row's method for USD.
+1. Select `<selected method>` for USD.
 2. Switch settlement currency to HKD.
 3. Read the selected payment method.
 
 **Expected Results:**
 
-* The row's method remains selected because HKD still offers it.
+* `<expected selection>` because HKD still offers `<selected method>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-2ac rev=1 covers=g10.auction-winner-order.SC-rge -->
 ### g10.auction-winner-order.US25-TC5: A confirmation carrying a method the currency does not offer is refused
@@ -9163,20 +10118,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in USD and in HKD.
-* customer(winner) holds `<order_8>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_190_1>` in Awaiting Setup with a saved home address.
 
 **Test data:**
 
-| Settlement currency | Rail sent | Why this row |
+| `<settlement currency>` | `<rail>` | Why this row |
 | --- | --- | --- |
 | USD | FPS | FPS is offered in HKD only |
 | HKD | International via SWIFT | SWIFT is offered in USD only |
 
+| Field | Value |
+| --- | --- |
+| winner_order_190_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Choose the home address and the row's settlement currency.
-2. Send Grade10 a setup confirmation carrying the home address and the row's rail.
-3. Reload `<order_8>`.
+1. Choose the home address and `<settlement currency>`.
+2. Send Grade10 a setup confirmation carrying the home address and `<rail>`.
+3. Reload `<winner_order_190_1>`.
 
 **Expected Results:**
 
@@ -9202,13 +10161,13 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Outside production, Grade10 holds the sample bank details for each rail, and Payment Settings holds a card fee rule in HKD.
-* customer(winner) holds `<order_9>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_191_1>` in Awaiting Setup with a saved home address.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_9>` | An order won in USD, in Awaiting Setup |
+| winner_order_191_1 | An order won in USD, in Awaiting Setup; bind its identity only |
 
 **Steps:**
 
@@ -9242,24 +10201,30 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Payment Settings holds a card fee rule in HKD.
-* customer(winner) holds `<order_10>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_192_1>` in Awaiting Setup with a saved home address.
+
+* The environment is `<environment>`, with bank details prepared as `<bank details setup>`.
 
 **Test data:**
 
-| Where | Bank details Grade10 holds | Methods offered | Rail sent |
+| `<environment>` | `<bank details setup>` | `<offered methods>` | `<rail>` |
 | --- | --- | --- | --- |
 | Outside production | HK Local only | Card, HK Local | FPS |
 | Production, before Finance confirms an account | None | Card | FPS |
 
+| Field | Value |
+| --- | --- |
+| winner_order_192_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
 1. Choose the home address and HKD, and read the payment method choice.
-2. Send Grade10 a setup confirmation carrying the home address and the row's rail.
-3. Reload `<order_10>`.
+2. Send Grade10 a setup confirmation carrying the home address and `<rail>`.
+3. Reload `<winner_order_192_1>`.
 
 **Expected Results:**
 
-* Step 1 offers exactly the row's methods.
+* Step 1 offers exactly `<offered methods>`.
 * FPS is not offered.
 * Step 2 is refused.
 * Step 3 reads the order holding no delivery address and no method.
@@ -9283,15 +10248,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Payment Settings holds a USD card fee rule of `<usd rate>` and an HKD card fee rule of `<hkd rate>`.
-* customer(winner) holds `<order_8>` in Awaiting Setup with a saved home address.
+* customer(winner) holds `<winner_order_193_1>` in Awaiting Setup with a saved home address.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_8>` | An order won in USD, in Awaiting Setup |
-| `<usd rate>` | 4.4% and a fixed amount (fixed configured value) |
-| `<hkd rate>` | 3.4% and a fixed amount (fixed configured value) |
+| winner_order_193_1 | An order won in USD, in Awaiting Setup; bind its identity only |
+| usd rate | 4.4% and a fixed amount (fixed configured value) |
+| hkd rate | 3.4% and a fixed amount (fixed configured value) |
 
 **Steps:**
 
@@ -9330,34 +10295,38 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The USD premium minimum is USD0.
-* customer(winner) is on `<the winner's auction order url>` for `<order_hkd>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_194_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_194_1 | A listing won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent; bind its identity only | · |
+| winner_order_194_2 | A listing won at USD100.00, settled in HKD by FPS, invoice sent; bind its identity only | · |
+| winner_order_194_3 | A listing won at USD101.00, settled in HKD by FPS, invoice sent; bind its identity only | · |
+| winner_order_194_4 | A listing won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee; bind its identity only | · |
+| winning bid HKD exact | HK$793.00 | (fixed derived value), 79,300 minor units |
+| premium HKD exact | HK$159.00 | (fixed derived value), 15,900 minor units |
+| shipping HKD exact | HK$79.00 | (fixed derived value), 7,900 minor units |
+| subtotal HKD exact | HK$1,031.00 | (fixed derived value), 103,100 minor units |
+| winning bid | USD250 | (fixed fixture): USD250 x 7.85 is 1962.5, rounded up to HK$1,963 |
+| premium | USD50 | (fixed derived value): 20% of `<winning bid>`, premium minimum USD0; HK$393 after rounding up 392.5 |
+| shipping | USD12 | (fixed fixture): HK$95 after rounding up 94.2 |
+| total HKD | HK$2,451 | 1,963 + 393 + 95, each line rounded up, then summed |
+| Whole-total value | HK$2,450 | USD312 x 7.85 is 2449.2, rounded up (the wrong total) |
+
 | Field | Value |
 | --- | --- |
-| `<order_hkd>` | A listing won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent |
-| `<order_hkd_exact>` | A listing won at USD100.00, settled in HKD by FPS, invoice sent |
-| `<order_hkd_fraction>` | A listing won at USD101.00, settled in HKD by FPS, invoice sent |
-| `<order_hkd_lines>` | A listing won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee |
-| `<winning bid HKD exact>` | HK$793.00 (fixed derived value), 79,300 minor units |
-| `<premium HKD exact>` | HK$159.00 (fixed derived value), 15,900 minor units |
-| `<shipping HKD exact>` | HK$79.00 (fixed derived value), 7,900 minor units |
-| `<subtotal HKD exact>` | HK$1,031.00 (fixed derived value), 103,100 minor units |
-| `<winning bid>` | USD250 (fixed fixture): USD250 x 7.85 is 1962.5, rounded up to HK$1,963 |
-| `<premium>` | USD50 (fixed derived value): 20% of `<winning bid>`, premium minimum USD0; HK$393 after rounding up 392.5 |
-| `<shipping>` | USD12 (fixed fixture): HK$95 after rounding up 94.2 |
-| `<total HKD>` | HK$2,451: 1,963 + 393 + 95, each line rounded up, then summed |
-| Whole-total value | HK$2,450: USD312 x 7.85 is 2449.2, rounded up (the wrong total) |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
-1. Open `<order_hkd>`'s invoice.
+1. Open `<winner_order_194_1>`'s invoice.
 2. Read Buyer's Premium, Shipping & Handling and the total.
-3. Open `<order_hkd_exact>`'s invoice and read its Winning Bid.
-4. Open `<order_hkd_fraction>`'s invoice and read its Winning Bid.
-5. Open `<order_hkd>`'s invoice PDF.
-6. Open `<order_hkd_lines>`'s invoice and read its lines and total.
+3. Open `<winner_order_194_2>`'s invoice and read its Winning Bid.
+4. Open `<winner_order_194_3>`'s invoice and read its Winning Bid.
+5. Open `<winner_order_194_1>`'s invoice PDF.
+6. Open `<winner_order_194_4>`'s invoice and read its lines and total.
 
 **Expected Results:**
 
@@ -9365,8 +10334,8 @@ Runs once per row of **Test data**.
 * The total reads `<total HKD>`, not the whole-total value.
 * Every amount reads in HKD, and no USD amount appears.
 * No USD winning bid is printed.
-* `<order_hkd_exact>`'s Winning Bid is 78,500 minor units in HKD.
-* `<order_hkd_fraction>`'s Winning Bid is 79,300 minor units in HKD, not 79,285.
+* `<winner_order_194_2>`'s Winning Bid is 78,500 minor units in HKD.
+* `<winner_order_194_3>`'s Winning Bid is 79,300 minor units in HKD, not 79,285.
 * Step 5: every amount in the invoice PDF reads in HKD, the Winning Bid is 78,500 minor units, and no USD amount or conversion rate appears.
 * Step 6: Winning Bid is `<winning bid HKD exact>`, Buyer's Premium is `<premium HKD exact>`, Shipping & Handling is `<shipping HKD exact>`, and the total is `<subtotal HKD exact>`, the sum of the rounded lines.
 
@@ -9417,17 +10386,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Grade10 sent letters about `<order_hkd>`, which is settled in HKD and has a sent invoice.
+* Grade10 sent letters about `<winner_order_196_1>`, which is settled in HKD and has a sent invoice.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_hkd>` | An order settled in HKD with a sent invoice of HK$2,451 |
+| winner_order_196_1 | An order settled in HKD with a sent invoice of HK$2,451; bind its identity only |
 
 **Steps:**
 
-1. Read each letter Grade10 sent for `<order_hkd>`.
+1. Read each letter Grade10 sent for `<winner_order_196_1>`.
 
 **Expected Results:**
 
@@ -9453,14 +10422,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<the winner's auction order url>` for `<order_hkd_refunded>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_197_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_197_1 | An order settled in HKD, paid in full, with a part refund `<refund>`; bind its identity only | · |
+| refund | HK$100 | (any whole HK$ amount below the amount paid) |
+
 | Field | Value |
 | --- | --- |
-| `<order_hkd_refunded>` | An order settled in HKD, paid in full, with a part refund `<refund>` |
-| `<refund>` | HK$100 (any whole HK$ amount below the amount paid) |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -9490,15 +10463,19 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Payment Settings holds a USD card fee rule of 4.4% and USD0.30, and an HKD card fee rule of 3.4% and HK$2.35.
-* `<order_card>` is settled in HKD by card, with its invoice sent.
-* customer(winner) is on `<the winner's auction order url>` for `<order_card>`.
+* `<winner_order_198_1>` is settled in HKD by card, with its invoice sent.
+* customer(winner) is on `<winner order url>` for `<winner_order_198_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_198_1 | A listing won at USD101.00, with a USD20.20 premium and USD10.01 Shipping & Handling, settled in HKD by card; bind its identity only | · |
+| HKD Subtotal | HK$1,031.00 | (fixed derived value): HK$793 bid + HK$159 premium + HK$79 Shipping & Handling |
+
 | Field | Value |
 | --- | --- |
-| `<order_card>` | A listing won at USD101.00, with a USD20.20 premium and USD10.01 Shipping & Handling, settled in HKD by card |
-| HKD Subtotal | HK$1,031.00 (fixed derived value): HK$793 bid + HK$159 premium + HK$79 Shipping & Handling |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -9535,11 +10512,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<usd amount>` | `<hkd amount>` | Why this row |
-| --- | --- | --- |
-| USD100.00 (fixed boundary) | HK$785 | Exact: 785.00, nothing to round |
-| USD100.01 (fixed boundary) | HK$786 | 785.0785 rounds up, not to nearest |
-| USD0.01 (fixed boundary) | HK$1 | 0.0785 rounds up to one whole HK$ |
+| `<usd amount>` | `<hkd amount>` | Why this row | Fixture notes |
+| --- | --- | --- | --- |
+| USD100.00 | HK$785 | Exact: 785.00, nothing to round | `<usd amount>`: (fixed boundary) |
+| USD100.01 | HK$786 | 785.0785 rounds up, not to nearest | `<usd amount>`: (fixed boundary) |
+| USD0.01 | HK$1 | 0.0785 rounds up to one whole HK$ | `<usd amount>`: (fixed boundary) |
 
 **Steps:**
 
@@ -9567,18 +10544,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<order_hkd_paid>` is settled in HKD and paid in full, and Grade10 sent letters about it.
+* `<winner_order_200_1>` is settled in HKD and paid in full, and Grade10 sent letters about it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_hkd_paid>` | An order settled in HKD whose invoice of HK$2,451 was paid in full |
+| winner_order_200_1 | An order settled in HKD whose invoice of HK$2,451 was paid in full; bind its identity only |
 
 **Steps:**
 
 1. Read the settlement currency choice before picking HKD on a new order.
-2. Read Order Summary on `<order_hkd_paid>`.
+2. Read Order Summary on `<winner_order_200_1>`.
 3. Read its invoice.
 4. Read its receipt.
 5. Read each letter sent for it.
@@ -9605,16 +10582,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<the winner's auction order url>` for `<order_fee>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_201_1>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_201_1 | An order settled in HKD by bank transfer on HK Local whose invoice lines total HKD1,031.00, with a bank transfer fee typed in USD; bind its identity only | · |
+| bank transfer fee | USD50.00 | (fixed boundary or equality), 5000 minor units, which converts to HKD392.50 before rounding |
+| fee HKD | HKD393.00 | (fixed derived value), 39300 minor units |
+| total HKD | HKD1,424.00 | (fixed derived value), 142400 minor units |
+
 | Field | Value |
 | --- | --- |
-| `<order_fee>` | An order settled in HKD by bank transfer on HK Local whose invoice lines total HKD1,031.00, with a bank transfer fee typed in USD |
-| `<bank transfer fee>` | USD50.00 (fixed boundary or equality), 5000 minor units, which converts to HKD392.50 before rounding |
-| `<fee HKD>` | HKD393.00 (fixed derived value), 39300 minor units |
-| `<total HKD>` | HKD1,424.00 (fixed derived value), 142400 minor units |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
@@ -9655,25 +10636,37 @@ Runs once per row of **Test data**.
 
 * The winner selected HKD and two pending invoices have USD bid, premium and Shipping & Handling lines: one bank-transfer order and one card order.
 
+* Payment Settings uses HKD card rule `<card rule>`.
+
+* The winner order under test is `<winner_order_202_1>`.
+
 **Test data:**
 
-| Payment method | USD line | HKD line |
-| --- | --- | ---: |
-| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79,300; 15,900; 7,900 minor; subtotal 103,100 minor |
-| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79,300; 15,900; 7,900 minor; subtotal 103,100 minor |
-| HKD card rule | 3.4% + 235 minor | Card fee 3,873 minor; payable total 106,973 minor |
+| `<payment method>` | `<usd line facts>` | `<hkd line facts>` | Fixture notes |
+| --- | --- | ---: | --- |
+| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79 | `<hkd line facts>`: 300; 15,900; 7,900 minor; subtotal 103,100 minor |
+| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79 | `<hkd line facts>`: 300; 15,900; 7,900 minor; subtotal 103,100 minor |
+
+| Field | Value |
+| --- | --- |
+| card rule | 3.4% + 235 minor units |
+| card fee | 3873 HKD minor units |
+| card amount payable | 106973 HKD minor units |
+| usd subtotal | 13121 USD minor units |
+| hkd subtotal | 103100 HKD minor units |
+| winner_order_202_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read each row's Order Summary from top to bottom.
-2. Read each row's amount payable.
+1. Read each Order Summary from top to bottom: `<usd line facts>`, then `<hkd line facts>` for `<payment method>`.
+2. Read the amount payable for `<payment method>`.
 
 **Expected Results:**
 
 * Both rows list the bid, premium and Shipping & Handling lines in USD.
-* Both rows show the USD subtotal of 13,121 minor units before the HKD subtotal of 103,100 minor units.
-* The bank-transfer row has no card fee and has an amount payable of 103,100 minor units in HKD.
-* The card row shows the HKD card fee of 3,873 minor units after the separator below both totals; its amount payable is 106,973 minor units in HKD and includes the fee, with no USD fee line.
+* Both rows show the USD subtotal of `<usd subtotal>` before the HKD subtotal of `<hkd subtotal>`.
+* The bank-transfer row has no card fee and has an amount payable of `<hkd subtotal>` in HKD.
+* The card row shows the HKD card fee of `<card fee>` after the separator below both totals; its amount payable is `<card amount payable>` in HKD and includes the fee, with no USD fee line.
 
 <!-- trace:case id=g10.auction-winner-order.TC-7qs rev=1 covers=g10.auction-winner-order.SC-59h -->
 ### g10.auction-winner-order.US27-TC2: USD summary shows one USD total
@@ -9722,13 +10715,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner) is on `<the winner's auction order url>` for `<order_hkd_unsent>`.
+* customer(winner) is on `<winner order url>` for `<winner_order_204_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<order_hkd_unsent>` | A listing won at USD250 (fixed fixture), settled in HKD, setup confirmed, invoice not sent |
+| winner_order_204_1 | A listing won at USD250 (fixed fixture), settled in HKD, setup confirmed, invoice not sent; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| winner order url | The URL of the winner order or listing used by this case; bind its URL only |
 
 **Steps:**
 
