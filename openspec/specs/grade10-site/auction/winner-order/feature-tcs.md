@@ -4157,7 +4157,7 @@
 51. Open `<winner_order_194_2>`'s invoice and read its Winning Bid.
 52. Open `<winner_order_194_3>`'s invoice and read its Winning Bid.
 53. Open `<winner_order_194_1>`'s invoice PDF.
-   - Step 53: every amount in the invoice PDF reads in HKD, the Winning Bid is 78,500 minor units, and no USD amount or conversion rate appears. `g10.auction-winner-order.US26-TC1`
+   - Step 53: every amount in the invoice PDF reads in HKD, the Winning Bid is 196,300 minor units (HKD1,963), and no USD amount or conversion rate appears. `g10.auction-winner-order.US26-TC1`
 54. Open `<winner_order_194_4>`'s invoice and read its lines and total.
    - Buyer's Premium reads HK$393 and Shipping & Handling reads HK$95. `g10.auction-winner-order.US26-TC1`
    - The total reads `<total HKD>`, not `<Whole-total value>`. `g10.auction-winner-order.US26-TC1`
@@ -12963,7 +12963,7 @@ Runs once per row of **Test data**.
 * No USD winning bid is printed.
 * `<winner_order_194_2>`'s Winning Bid is 78,500 minor units in HKD.
 * `<winner_order_194_3>`'s Winning Bid is 79,300 minor units in HKD, not 79,285.
-* Step 5: every amount in the invoice PDF reads in HKD, the Winning Bid is 78,500 minor units, and no USD amount or conversion rate appears.
+* Step 5: every amount in the invoice PDF reads in HKD, the Winning Bid is 196,300 minor units (HKD1,963), and no USD amount or conversion rate appears.
 * Step 6: Winning Bid is `<winning bid HKD exact>`, Buyer's Premium is `<premium HKD exact>`, Shipping & Handling is `<shipping HKD exact>`, and the total is `<subtotal HKD exact>`, the sum of the rounded lines.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nf6 rev=3 covers=g10.auction-winner-order.SC-vvm -->
