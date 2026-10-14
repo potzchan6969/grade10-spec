@@ -3104,9 +3104,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -3560,9 +3562,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
