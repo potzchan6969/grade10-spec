@@ -420,29 +420,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's caller is signed in and holds `user:ban`.
-* The row's subject holds `admin` and is unbanned.
+* `<caller>` is signed in and holds `user:ban`.
+* `<subject>` holds `admin` and is unbanned.
 
 **Test data:**
 
-| Caller | Subject | Outcome |
-| --- | --- | --- |
-| admin(role `support`, holds `user:ban`) | `<admin user id>` | Ban is refused. The account stays unbanned. |
-| admin(holds `admin` and `user:ban`) | `<peer admin user id>`, a different account | Ban is refused. The account stays unbanned. |
+| `<caller>` | `<subject>` | `<expected outcome>` | Fixture notes |
+| --- | --- | --- | --- |
+| admin(role `support`, holds `user:ban`) | `<admin user id>` | Ban is refused. The account stays unbanned. | · |
+| admin(holds `admin` and `user:ban`) | `<peer admin user id>` | Ban is refused. The account stays unbanned. | Subject differs from the signed-in caller |
 
 | Field | Value |
 | --- | --- |
-| admin user id | The signed-in admin account; bind its user id only |
+| admin user id | The unbanned account holding `admin` targeted by the support caller; bind its user id only |
 | grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 | peer admin user id | The other admin account in this fixture; bind its user id only |
 
 **Steps:**
 
-1. On `<grade10 admin users url>`, try to ban the row's subject.
+1. On `<grade10 admin users url>`, try to ban `<subject>`.
 
 **Expected Results:**
 
-* The directory answers as the row's outcome states.
+* The directory answers with this outcome: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-users.TC-ka8 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC6-1: Last admin cannot be banned
