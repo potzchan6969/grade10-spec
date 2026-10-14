@@ -3,6 +3,8 @@ import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
   CartDrawer,
   type CartItemSummary,
+  type HeldPromoCode,
+  type OrderDiscountRow,
   type PointsState,
   type PromoState,
   SiteHeader,
@@ -45,6 +47,13 @@ type CartDrawerPageProps = {
   delistOnOpen?: boolean;
   /** Signed-out drawer: guest checkout primary, sign-in line, public codes, no points. */
   guest?: boolean;
+  /** Order-level discounts the shop priced, each in its own summary row. */
+  orderDiscounts?: readonly OrderDiscountRow[];
+  /** The promo row as the drawer opens. */
+  promoState?: PromoState;
+  /** The member's held codes; defaults to the stand-in wallet. */
+  heldPromoCodes?: readonly HeldPromoCode[];
+  pointsBalanceLabel?: string;
 };
 
 /**
@@ -63,11 +72,15 @@ function CartDrawerPage({
   reviewFailed = false,
   delistOnOpen = false,
   guest = false,
+  orderDiscounts,
+  promoState = { status: "collapsed" },
+  heldPromoCodes = HELD_PROMO_CODES,
+  pointsBalanceLabel = POINTS_BALANCE_LABEL,
 }: CartDrawerPageProps) {
   const [open, setOpen] = useState(true);
   const [items, setItems] = useState(initialItems);
   const [points, setPoints] = useState(pointsState);
-  const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
+  const [promo, setPromo] = useState<PromoState>(promoState);
 
   useEffect(() => {
     if (!reviewFailed) return;
@@ -125,12 +138,13 @@ function CartDrawerPage({
         }
         checkoutDisabled={checkoutDisabled}
         onFetchStatusAndPrice={delistOnOpen ? fetchStatusAndPrice : undefined}
+        orderDiscounts={orderDiscounts}
         promoState={promo}
         onPromoStateChange={setPromo}
-        heldPromoCodes={guest ? null : HELD_PROMO_CODES}
+        heldPromoCodes={guest ? null : heldPromoCodes}
         publicPromoCodes={PUBLIC_PROMO_CODES}
         pointsState={guest ? null : points}
-        pointsBalanceLabel={POINTS_BALANCE_LABEL}
+        pointsBalanceLabel={pointsBalanceLabel}
         onPointsStateChange={setPoints}
         onApplyPoints={(amount) => {
           const credit = Number(amount.replace(/[^0-9]/g, ""));
