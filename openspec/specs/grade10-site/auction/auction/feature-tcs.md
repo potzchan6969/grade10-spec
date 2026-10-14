@@ -170,52 +170,71 @@
 
 - The user is signed in on `<a verified account>` with `<card>` saved, and is on `<listing_12>`.
 - `<listing_12>` is live, inside its window, and its minimum next bid is `<bar>`.
-- The user is signed in with `<card>` saved on an account whose standing is the one the row names, holds no bid on `<listing_12>`, and is on `<listing_12>`.
-- The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_13>`.
-- `<listing_13>` is live, inside its window, in HKD, and its minimum next bid is at or below the bid amount the row names.
+- The user is signed in with `<card>` saved on an account whose standing is `<account_standing>`, holds no bid on `<listing_12>`, and is on `<listing_12>`.
+- The user is signed in with `<card>` saved on an account whose standing is `<account_standing>`, and is on `<listing_13>`.
+- `<listing_13>` is live, inside its window, in USD, and its minimum next bid is at or below `<bid_amount>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<a verified account>` | An account whose standing is `verified` on the day of the bid |
-| `<card>` | Visa ending 4242 |
-| `<bar>` | HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
-| `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
-| `<bid at the bar>` | HKD120,000 (fixed boundary or equality), equal to `<bar>` |
-| Item | Standing: `unverified`; Bid amount: HKD120,000 (fixed boundary or equality), exactly `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: `unverified`; Bid amount: HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: `expired`; Bid amount: HKD120,000 (fixed boundary or equality), exactly `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: `expired`; Bid amount: HKD125,000 (range: 8000000–8000000000 minor units), any bid above `<bar>`; Outcome: Refused; no bid recorded |
-| Item | Standing: Field; Bid amount: Value |
-| Item | Standing: `<card>`; Bid amount: Visa ending 4242 |
-| Item | Standing: `<bar>`; Bid amount: HKD120,000 (fixed configured value), the bar Grade10 sets on a bid |
-| Item | Standing: `<listing_12>`; Bid amount: A live HKD listing whose minimum next bid is `<bar>` |
-| Item | Standing: `unverified`; Bid amount: HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
-| Item | Standing: `expired`; Bid amount: HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
-| Item | Standing: `verified`; Bid amount: HKD5,210 (range: 400000–799999 minor units), any bid below `<bar>`; Outcome: Forwarded as any other; no standing read |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US4-TC1 | a verified account | An account whose standing is `verified` on the day of the bid | · |
+| g10.auction-auction.US4-TC1 | card | Visa ending 4242 | · |
+| g10.auction-auction.US4-TC1 | bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
+| g10.auction-auction.US4-TC1 | listing_12 | A live USD listing whose minimum next bid is `<bar>` | · |
+| g10.auction-auction.US4-TC1 | bid at the bar | USD15,000 | (fixed boundary or equality), equal to `<bar>` |
+
+| Case | `<account_standing>` | `<bid_amount>` | Outcome | Fixture notes |
+| --- | --- | --- | --- | --- |
+| g10.auction-auction.US4-TC2 | `unverified` | USD15,000 | Refused; no bid recorded | `<bid_amount>`: (fixed boundary or equality), exactly `<bar>` |
+| g10.auction-auction.US4-TC2 | `unverified` | USD15,200 | Refused; no bid recorded | `<bid_amount>`: (range: >1500000 minor units), above `<bar>` |
+| g10.auction-auction.US4-TC2 | `expired` | USD15,000 | Refused; no bid recorded | `<bid_amount>`: (fixed boundary or equality), exactly `<bar>` |
+| g10.auction-auction.US4-TC2 | `expired` | USD15,200 | Refused; no bid recorded | `<bid_amount>`: (range: >1500000 minor units), above `<bar>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US4-TC2 | card | Visa ending 4242 | · |
+| g10.auction-auction.US4-TC2 | bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
+| g10.auction-auction.US4-TC2 | listing_12 | A live USD listing whose minimum next bid is `<bar>` | · |
+
+| Case | `<account_standing>` | `<bid_amount>` | Outcome | Fixture notes |
+| --- | --- | --- | --- | --- |
+| g10.auction-auction.US4-TC3 | `unverified` | USD520 | Forwarded; no standing read | `<bid_amount>`: (range: >0 and <1500000 minor units) |
+| g10.auction-auction.US4-TC3 | `expired` | USD520 | Forwarded; no standing read | `<bid_amount>`: (range: >0 and <1500000 minor units) |
+| g10.auction-auction.US4-TC3 | `verified` | USD520 | Forwarded; no standing read | `<bid_amount>`: (range: >0 and <1500000 minor units) |
+| g10.auction-auction.US4-TC3 | `unverified` | USD14,999.00 | Forwarded; no standing read | `<bid_amount>`: (fixed boundary or equality), one dollar below `<bar>` |
+| g10.auction-auction.US4-TC3 | `unverified` | USD14,999.99 | Forwarded; no standing read | `<bid_amount>`: (fixed boundary or equality), one cent below `<bar>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US4-TC3 | card | Visa ending 4242 | · |
+| g10.auction-auction.US4-TC3 | bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US4-TC3 | listing_13 | A live USD listing inside its bidding window, minimum next bid at or below `<bid_amount>`; bind its identity only |
 
 ### Route
 
 1. Enter `<bid at the bar>` in the bid field and select **Place Bid**.
-   - The bid is forwarded and accepted as any other - no refusal names a verified identity. g10.auction-auction.US4-TC1
 2. Read Highest bid and the bid count.
-   - Highest bid reads `<bid at the bar>`, and the bid count rises by one. g10.auction-auction.US4-TC1
 3. Read `<card>`'s activity at the card provider.
-   - shows nothing held or charged on `<card>`. g10.auction-auction.US4-TC1
-4. Enter the bid amount the row names in the bid field and select **Place Bid**.
+   - The bid is forwarded and accepted as any other - no refusal names a verified identity. g10.auction-auction.US4-TC1
+   - Highest bid reads `<bid at the bar>`, and the bid count rises by one. g10.auction-auction.US4-TC1
+   - Step 3 shows nothing held or charged on `<card>`. g10.auction-auction.US4-TC1
+4. Enter `<bid_amount>` in the bid field and select **Place Bid**.
 5. Read the refusal on the bid form.
 6. Reload `<listing_12>` and read Highest bid and the bid count.
 7. Navigate to `<my auctions url>` and look for `<listing_12>`.
-   - shows no row for `<listing_12>`. g10.auction-auction.US4-TC2
+   - Step 7 shows no row for `<listing_12>`. g10.auction-auction.US4-TC2
 8. Navigate to `<grade10 bids url>` and look for `<listing_12>`.
-   - The bid is refused as needing a verified identity, and the refusal says where to verify from the account. g10.auction-auction.US4-TC2
-   - Highest bid and the bid count are unchanged - the auction records no bid. g10.auction-auction.US4-TC2
-   - shows no entry for `<listing_12>`. g10.auction-auction.US4-TC2
-9. Enter the bid amount the row names in the bid field and select **Place Bid**.
+   - The bid is refused as needing a verified identity, and the form says: Bids this high need a verified identity. Verify from your account, then bid again. g10.auction-auction.US4-TC2
+   - Highest bid and the bid count are unchanged; the auction records no bid. g10.auction-auction.US4-TC2
+   - Step 8 shows no entry for `<listing_12>`. g10.auction-auction.US4-TC2
+9. Enter `<bid_amount>` in the bid field and select **Place Bid**.
 10. Read Highest bid.
 11. Read the calls the run made to the identity store.
-   - The bid is forwarded and accepted as any other, and Highest bid reads the bid amount the row names. g10.auction-auction.US4-TC3
+   - The bid is forwarded and accepted, and Highest bid reads `<bid_amount>`. g10.auction-auction.US4-TC3
    - No standing was read. g10.auction-auction.US4-TC3
 
 ## Walk 4: Collector reads the catalogue in one order
@@ -223,44 +242,44 @@
 **Starting state:**
 
 - The catalogue lists `<listing_14>`, `<listing_15>` and `<listing_16>`.
-- The catalogue lists the six lots in `<listing_17>`, `<listing_18>`, `<listing_19>`, `<listing_20>`, `<listing_21>`, `<listing_22>`.
+- The catalogue lists the six listings in `<listing_17>`, `<listing_18>`, `<listing_19>`, `<listing_20>`, `<listing_21>`, `<listing_22>`.
 - `<listing_23>` and `<listing_24>` are both Active and close at the same time.
-- The Auction catalogue holds more lots than one page lists.
+- The Auction catalogue holds more listings than one page lists.
 - customer is able to open `<grade10 auction catalogue url>`.
 - No complete Featured slot is set.
-- At least one lot is visible in All auctions.
+- At least one listing is visible in All auctions.
 - customer is on `<grade10 auction catalogue url>`.
 - Featured may be present or absent.
 - At least one complete Featured slot is set.
-- No lots are available for All auctions.
-- At least one complete Featured slot is set for `<featured lot>`.
-- `<featured lot>` is among the lots a collector can see.
+- No listings are available for All auctions.
+- At least one complete Featured slot is set for `<featured listing>`.
+- `<featured listing>` is among the listings a collector can see.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
-| `<listing_14>` | An Active lot whose close is 18:00 UTC |
-| `<listing_15>` | An Upcoming lot whose start is 19:00 UTC |
-| `<listing_16>` | An Ended lot that closed at 12:00 UTC, before `<listing_14>` closes |
-| `<listing_17>` | An Active lot closing at 18:00 UTC |
-| `<listing_18>` | An Active lot closing at 19:00 UTC |
-| `<listing_19>` | An Upcoming lot starting on 2026-10-01 |
-| `<listing_20>` | An Upcoming lot starting on 2026-10-02 |
-| `<listing_21>` | An Ended lot that closed on 2026-09-22 |
-| `<listing_22>` | An Ended lot that closed on 2026-09-15 |
-| `<listing_23>` | An Active lot closing at 18:00 UTC |
-| `<listing_24>` | An Active lot closing at 18:00 UTC, a different lot record from `<listing_23>` |
-| `<featured lot>` | A published lot that fills a complete Featured slot |
+| `<listing_14>` | An Active listing whose close is 18:00 UTC |
+| `<listing_15>` | An Upcoming listing whose start is 19:00 UTC |
+| `<listing_16>` | An Ended listing that closed at 12:00 UTC, before `<listing_14>` closes |
+| `<listing_17>` | An Active listing closing at 18:00 UTC |
+| `<listing_18>` | An Active listing closing at 19:00 UTC |
+| `<listing_19>` | An Upcoming listing starting on 2026-10-01 |
+| `<listing_20>` | An Upcoming listing starting on 2026-10-02 |
+| `<listing_21>` | An Ended listing that closed on 2026-09-22 |
+| `<listing_22>` | An Ended listing that closed on 2026-09-15 |
+| `<listing_23>` | An Active listing closing at 18:00 UTC |
+| `<listing_24>` | An Active listing closing at 18:00 UTC, a different listing record from `<listing_23>` |
+| `<featured listing>` | A published listing that fills a complete Featured slot |
 
 ### Route
 
-1. Navigate to <grade10 auction catalogue url>.
+1. Navigate to `<grade10 auction catalogue url>`.
    - `<listing_14>` is listed before `<listing_15>`. g10.auction-auction.US5-TC1
-2. Read the lots in listed order.
+2. Read the listings in listed order.
    - `<listing_15>` is listed before `<listing_16>`. g10.auction-auction.US5-TC1
-3. Navigate to <grade10 auction catalogue url>.
-4. Read the lots in listed order.
+3. Navigate to `<grade10 auction catalogue url>`.
+4. Read the listings in listed order.
    - `<listing_17>` is listed before `<listing_18>`. g10.auction-auction.US5-TC2
    - `<listing_19>` is listed before `<listing_20>`. g10.auction-auction.US5-TC2
    - `<listing_21>` is listed before `<listing_22>`. g10.auction-auction.US5-TC2
@@ -269,13 +288,13 @@
    - `<listing_23>` and `<listing_24>` are in the same order both times. g10.auction-auction.US5-TC3
 7. Read the API response one page at a time to the end.
 8. Read the API response for the whole catalogue.
-   - Both readings list the lots in the same order. g10.auction-auction.US5-TC4
-   - No lot is listed twice. g10.auction-auction.US5-TC4
-   - No lot is missing. g10.auction-auction.US5-TC4
+   - Both readings list the listings in the same order. g10.auction-auction.US5-TC4
+   - No listing is listed twice. g10.auction-auction.US5-TC4
+   - No listing is missing. g10.auction-auction.US5-TC4
 9. Navigate to `<grade10 auction catalogue url>`.
    - No Featured band is present. g10.auction-auction.US5-TC5
 10. Read the page sections.
-   - All auctions is shown with lots in the catalogue resting order. g10.auction-auction.US5-TC5
+   - All auctions is shown with listings in the catalogue resting order. g10.auction-auction.US5-TC5
 11. Read the catalogue page for category chrome.
    - There is no Categories heading, no category tiles, and no busy filter chrome. g10.auction-auction.US5-TC6
    - The only sections are Featured when set, then All auctions. g10.auction-auction.US5-TC6
@@ -283,10 +302,10 @@
    - Featured still shows the curated slide or slides. g10.auction-auction.US5-TC7
 13. Read the Featured band and the All auctions area.
    - All auctions shows a message that there are no auctions. g10.auction-auction.US5-TC7
-14. Read the Featured band for `<featured lot>`.
-   - `<featured lot>` appears in Featured and again in All auctions. g10.auction-auction.US5-TC8
-15. Read All auctions for `<featured lot>` and the list order.
-   - All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible lot. g10.auction-auction.US5-TC8
+14. Read the Featured band for `<featured listing>`.
+   - `<featured listing>` appears in Featured and again in All auctions. g10.auction-auction.US5-TC8
+15. Read All auctions for `<featured listing>` and the list order.
+   - All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible listing. g10.auction-auction.US5-TC8
 
 ## Walk 5: Collector reads the catalogue in one order
 
@@ -294,14 +313,14 @@
 
 - customer is able to open `<grade10 auction catalogue url>`.
 - customer is on `<grade10 auction catalogue url>`.
-- All auctions holds more lots than the first batch shows.
-- An Upcoming lot is among All auctions.
+- All auctions holds more listings than the first batch shows.
+- An Upcoming listing is among All auctions.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
-| `<upcoming lot>` | A published Upcoming lot on All auctions |
+| `<upcoming listing>` | A published Upcoming listing on All auctions |
 
 ### Route
 
@@ -309,14 +328,14 @@
 2. Read the document canonical and share address.
    - Canonical and share address are `/auction` with no category query. g10.auction-auction.US5-TC9
 3. Read the first batch of All auctions cards.
-4. Scroll near the end of the shown lots.
-   - shows Boneyard skeleton cards below the lots already shown, or the next batch lands without pagination controls. g10.auction-auction.US5-TC10
+4. Scroll near the end of the shown listings.
+   - shows Boneyard skeleton cards below the listings already shown, or the next batch lands without pagination controls. g10.auction-auction.US5-TC10
 5. Wait for the next batch.
-   - shows additional lots below the first batch. g10.auction-auction.US5-TC10
+   - shows additional listings below the first batch. g10.auction-auction.US5-TC10
    - Lots from step 1 stay visible. g10.auction-auction.US5-TC10
    - The combined list stays in the catalogue resting order. g10.auction-auction.US5-TC10
    - No pagination controls appear. g10.auction-auction.US5-TC10
-6. Find `<upcoming lot>` on All auctions.
+6. Find `<upcoming listing>` on All auctions.
    - The card shows no starting bid and no money amount. g10.auction-auction.US5-TC11
 7. Read its card for money and countdown.
    - The card shows Opens in from the served open. g10.auction-auction.US5-TC11
@@ -326,50 +345,65 @@
 **Starting state:**
 
 - customer is on `<grade10 auction catalogue url>`.
-- Exactly one complete Featured slot is set for a published Active lot with its front page image.
-- customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured lot>` visible.
-- The served current bid for `<featured lot>` is `<bid before>`.
-- One complete Featured slot is set for the row's lot.
+- Exactly one complete Featured slot is set for `<featured listing>` with `<front page image>`.
+- customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured listing>` visible.
+- The served current bid for `<featured listing>` is `<bid before>`.
+- One complete Featured slot is set for a listing in `<listing_status>`, with countdown target `<served_time>`.
 - customer is able to open `<grade10 auction catalogue url>`.
-- Three complete Featured slots are set in operator order `<lot A>`, `<lot B>`, `<lot C>`.
-- The only Featured slot holds an eligible lot and no front page image, or a front page image and no lot.
+- Three complete Featured slots are set in operator order `<listing A>`, `<listing B>`, `<listing C>`.
+- The only Featured slot holds an eligible listing and no front page image, or a front page image and no listing.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<featured lot>` | A published Active lot bound to the only complete Featured slot |
-| `<front page image>` | The front page image uploaded for that slot |
-| `<featured lot>` | A published Active lot on a complete Featured slide |
-| `<bid before>` | The current bid amount shown on the slide |
-| `<bid after>` | A **higher** served current bid for the same lot after first paint |
-| Item | Lot status: Active; Served time: Served close; Countdown: Relative Ends in to the served close |
-| Item | Lot status: Upcoming; Served time: Served open; Countdown: Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
-| `<lot A>` | Published Active or Upcoming lot in Featured slot 1 |
-| `<lot B>` | Published Active or Upcoming lot in Featured slot 2 |
-| `<lot C>` | Published Active or Upcoming lot in Featured slot 3 |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US6-TC1 | featured listing | A published Active listing bound to the only complete Featured slot |
+| g10.auction-auction.US6-TC1 | front page image | The front page image uploaded for that slot |
+| g10.auction-auction.US6-TC1 | featured listing title | The public title of `<featured listing>`; bind the title only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US6-TC2 | featured listing | A published Active listing on a complete Featured slide |
+| g10.auction-auction.US6-TC2 | bid before | The current bid amount shown on the slide |
+| g10.auction-auction.US6-TC2 | bid after | A **higher** served current bid for the same listing after first paint |
+
+| Case | `<listing_status>` | `<served_time>` | `<expected_countdown>` |
+| --- | --- | --- | --- |
+| g10.auction-auction.US6-TC3 | Active | `<served_close>` | Relative Ends in to the served close |
+| g10.auction-auction.US6-TC3 | Upcoming | `<served_open>` | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US6-TC3 | served_close | The effective close returned for the Active listing; bind its datetime only |
+| g10.auction-auction.US6-TC3 | served_open | The scheduled opening returned for the Upcoming listing; bind its datetime only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US6-TC4 | listing A | Published Active or Upcoming listing in Featured slot 1 |
+| g10.auction-auction.US6-TC4 | listing B | Published Active or Upcoming listing in Featured slot 2 |
+| g10.auction-auction.US6-TC4 | listing C | Published Active or Upcoming listing in Featured slot 3 |
 
 ### Route
 
 1. Navigate to `<grade10 auction catalogue url>`.
-   - Featured band is present with one slide. g10.auction-auction.US6-TC1
 2. Read the Featured band and the single slide.
-   - The slide shows `<front page image>` as banner and slab, the lot title, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now. g10.auction-auction.US6-TC1
+   - Featured band is present with one slide. g10.auction-auction.US6-TC1
+   - The slide shows `<front page image>` as banner and slab, the title `<featured listing title>`, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now. g10.auction-auction.US6-TC1
 3. Read the current bid on the Featured slide after first paint.
-   - shows `<bid before>`. g10.auction-auction.US6-TC2
-4. Let the served current bid for `<featured lot>` become `<bid after>`.
+   - Step 3 shows `<bid before>`. g10.auction-auction.US6-TC2
+4. Let the served current bid for `<featured listing>` become `<bid after>`.
 5. Read the current bid on the Featured slide.
-   - shows `<bid after>` with a rolling number as the amount increases. g10.auction-auction.US6-TC2
+   - Step 5 shows `<bid after>` with a rolling number as the amount increases. g10.auction-auction.US6-TC2
 6. Navigate to `<grade10 auction catalogue url>`.
-   - The countdown matches the row (Ends in or Opens in). g10.auction-auction.US6-TC3
 7. Read the countdown and status chrome on the Featured slide.
+   - The countdown matches this expected display: `<expected_countdown>`. g10.auction-auction.US6-TC3
    - Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount. g10.auction-auction.US6-TC3
 8. Navigate to `<grade10 auction catalogue url>`.
 9. Read the Featured slides from first to last.
-   - Featured shows three slides in order `<lot A>`, then `<lot B>`, then `<lot C>`. g10.auction-auction.US6-TC4
+   - Featured shows three slides in order `<listing A>`, then `<listing B>`, then `<listing C>`. g10.auction-auction.US6-TC4
 10. Navigate to `<grade10 auction catalogue url>`.
-   - No Featured band is shown. g10.auction-auction.US6-TC5
 11. Read whether a Featured band is present.
+   - No Featured band is shown. g10.auction-auction.US6-TC5
    - All auctions is the catalogue content below the page chrome. g10.auction-auction.US6-TC5
 
 ## Walk 7: Collector advances Featured slides
@@ -377,116 +411,139 @@
 **Starting state:**
 
 - customer is on `<grade10 auction catalogue url>`.
-- Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+- Two complete Featured slots are set for `<listing A>` then `<listing B>`.
 - customer is on `<grade10 auction catalogue url>` at a small viewport (below `md`).
-- Three complete Featured slots are set for `<lot A>`, `<lot B>`, `<lot C>` in that order.
+- Three complete Featured slots are set for `<listing A>`, `<listing B>`, `<listing C>` in that order.
 - Exactly one complete Featured slot is set.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<lot A>` | Published lot in Featured slot 1 |
-| `<lot B>` | Published lot in Featured slot 2 |
-| `<lot C>` | Published lot in Featured slot 3 |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US7-TC1 | listing A | Published listing in Featured slot 1 |
+| g10.auction-auction.US7-TC1 | listing B | Published listing in Featured slot 2 |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US7-TC4 | listing A | Published listing in Featured slot 1 |
+| g10.auction-auction.US7-TC4 | listing B | Published listing in Featured slot 2 |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US7-TC2 | listing A | Published listing in Featured slot 1 |
+| g10.auction-auction.US7-TC2 | listing B | Published listing in Featured slot 2 |
+| g10.auction-auction.US7-TC2 | listing C | Published listing in Featured slot 3 |
 
 ### Route
 
-1. Read the visible Featured lot.
-   - shows `<lot A>`. g10.auction-auction.US7-TC1
+1. Read the visible Featured listing.
+   - Step 1 shows `<listing A>`. g10.auction-auction.US7-TC1
 2. Activate the progress control to advance to the next slide.
-3. Read the visible Featured lot.
-   - shows `<lot B>`. g10.auction-auction.US7-TC1
+3. Read the visible Featured listing.
+   - Step 3 shows `<listing B>`. g10.auction-auction.US7-TC1
    - Progress dots are present for the two slides. g10.auction-auction.US7-TC1
-4. Read the visible Featured lot.
-   - shows `<lot A>`. g10.auction-auction.US7-TC4
+4. Read the visible Featured listing.
+   - Step 4 shows `<listing A>`. g10.auction-auction.US7-TC4
 5. Activate stage next on the Featured image.
-6. Read the visible Featured lot.
-   - shows `<lot B>`. g10.auction-auction.US7-TC4
-   - The stage image pages horizontally to `<lot B>`. g10.auction-auction.US7-TC4
-   - Progress dots mark `<lot B>` current. g10.auction-auction.US7-TC4
-7. Read the visible Featured lot.
+6. Read the visible Featured listing.
+   - Step 6 shows `<listing B>`. g10.auction-auction.US7-TC4
+   - The stage image pages horizontally to `<listing B>`. g10.auction-auction.US7-TC4
+   - Progress dots mark `<listing B>` current. g10.auction-auction.US7-TC4
+7. Read the visible Featured listing.
 8. Advance with the progress control until each remaining slide has been shown.
-9. Read each visible Featured lot after each advance.
-   - The visible lots are `<lot A>`, then `<lot B>`, then `<lot C>` without leaving the Featured band. g10.auction-auction.US7-TC2
+9. Read each visible Featured listing after each advance.
+   - The visible listings are `<listing A>`, then `<listing B>`, then `<listing C>` without leaving the Featured band. g10.auction-auction.US7-TC2
 10. Navigate to `<grade10 auction catalogue url>`.
 11. Read the Featured progress control.
    - The single slide is shown. g10.auction-auction.US7-TC3
    - There is no multi-dot advance among slides. g10.auction-auction.US7-TC3
    - Stage previous/next is not required. g10.auction-auction.US7-TC3
 
-## Walk 8: Collector opens a Featured lot
+## Walk 8: Collector opens a Featured listing
 
 **Starting state:**
 
-- customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured lot>` visible.
-- customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<upcoming lot>` visible.
-- customer is on `<grade10 auction catalogue url>` with two complete Featured slides for `<lot A>` then `<lot B>`.
-- The progress control has advanced so `<lot B>` is visible.
+- customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured listing>` visible.
+- customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<upcoming listing>` visible.
+- customer is on `<grade10 auction catalogue url>` with two complete Featured slides for `<listing A>` then `<listing B>`.
+- The progress control has advanced so `<listing B>` is visible.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<featured lot>` | A published **Active** lot on the visible Featured slide |
-| `<lot page url>` | That lot's details page address |
-| `<upcoming lot>` | A published Upcoming lot on the visible Featured slide |
-| `<lot A>` | Published **Active** lot in Featured slot 1 |
-| `<lot B>` | Published **Active** lot in Featured slot 2 |
-| `<lot B page url>` | `<lot B>`'s details page address |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US8-TC1 | featured listing | A published **Active** listing on the visible Featured slide |
+| g10.auction-auction.US8-TC1 | listing page url | That listing's details page address |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US8-TC3 | upcoming listing | A published Upcoming listing on the visible Featured slide |
+| g10.auction-auction.US8-TC3 | listing page url | That listing's details page address |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US8-TC2 | listing A | Published **Active** listing in Featured slot 1 |
+| g10.auction-auction.US8-TC2 | listing B | Published **Active** listing in Featured slot 2 |
+| g10.auction-auction.US8-TC2 | listing B page url | `<listing B>`'s details page address |
 
 ### Route
 
 1. Activate Bid Now on the Featured slide.
 2. Read the page that opens.
-   - The browser opens `<lot page url>` — the details page for `<featured lot>`. g10.auction-auction.US8-TC1
+   - The browser opens `<listing page url>` — the details page for `<featured listing>`. g10.auction-auction.US8-TC1
 3. Activate View Auction on the Featured slide.
 4. Read the page that opens.
-   - The browser opens `<lot page url>` — the details page for `<upcoming lot>`. g10.auction-auction.US8-TC3
+   - The browser opens `<listing page url>` — the details page for `<upcoming listing>`. g10.auction-auction.US8-TC3
 5. Activate Bid Now on the visible Featured slide.
 6. Read the page that opens.
-   - The browser opens `<lot B page url>` — the details page for `<lot B>`, not `<lot A>`. g10.auction-auction.US8-TC2
+   - The browser opens `<listing B page url>` — the details page for `<listing B>`, not `<listing A>`. g10.auction-auction.US8-TC2
 
 ## Walk 9: Collector watches from an All auctions card
 
 **Starting state:**
 
-- customer(signed in, not watching `<open lot>`) is on `<grade10 auction catalogue url>`.
-- `<open lot>` appears on an All auctions card and is not closed.
-- customer(signed in, watching `<open lot>`) is on `<grade10 auction catalogue url>`.
+- customer(signed in, not watching `<open listing>`) is on `<grade10 auction catalogue url>`.
+- `<open listing>` appears on an All auctions card and is not closed.
+- customer(signed in, watching `<open listing>`) is on `<grade10 auction catalogue url>`.
 - customer(signed in) is on `<grade10 auction catalogue url>`.
-- `<closed lot>` appears on an All auctions card.
+- `<closed listing>` appears on an All auctions card.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<open lot>` | A published Active or Upcoming lot on an All auctions card |
-| `<open lot>` | A published Active or Upcoming lot the collector already watches |
-| `<closed lot>` | A closed lot visible in All auctions |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US9-TC1 | open listing | A published Active or Upcoming listing on an All auctions card |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US9-TC2 | open listing | A published Active or Upcoming listing the collector already watches |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US9-TC3 | closed listing | A closed listing visible in All auctions |
 
 ### Route
 
-1. Activate watch on the All auctions card for `<open lot>`.
+1. Activate watch on the All auctions card for `<open listing>`.
 2. Read the card's watch state.
-3. Open My Auctions and read whether `<open lot>` is watched.
+3. Open My Auctions and read whether `<open listing>` is watched.
    - The card shows the watched state. g10.auction-auction.US9-TC1
-   - `<open lot>` is watched the same way as from the lot page and My Auctions. g10.auction-auction.US9-TC1
-4. Activate watch off on the All auctions card for `<open lot>`.
+   - `<open listing>` is watched the same way as from the listing page and My Auctions. g10.auction-auction.US9-TC1
+4. Activate watch off on the All auctions card for `<open listing>`.
 5. Read the card's watch state.
-6. Open My Auctions and read whether `<open lot>` remains watched.
+6. Open My Auctions and read whether `<open listing>` remains watched.
    - The card shows the unwatched state. g10.auction-auction.US9-TC2
-   - `<open lot>` is no longer watched, same as unwatching from the lot page or My Auctions. g10.auction-auction.US9-TC2
-7. Find the All auctions card for `<closed lot>`.
+   - `<open listing>` is no longer watched, same as unwatching from the listing page or My Auctions. g10.auction-auction.US9-TC2
+7. Find the All auctions card for `<closed listing>`.
 8. Read whether a watch control is present on that card.
-   - The closed lot card shows no watch control. g10.auction-auction.US9-TC3
+   - The closed listing card shows no watch control. g10.auction-auction.US9-TC3
 
 ## Walk 10: Bidder is held to the close with everyone else
 
 **Starting state:**
 
 - `<listing_4>` is in extended bidding and its recorded close is 20:30:00 UTC.
-- customer A(card linked) is signed in and on the lot page for `<listing_4>`.
+- customer A(card linked) is signed in and on the listing page for `<listing_4>`.
 - `<listing_5>` has scheduled close 20:00:00 UTC and its extension terms are the row's.
 - customer B's bid was accepted on `<listing_5>` at `<last accepted>`.
 - Settling `<listing_5>` is held back, so its close is not yet recorded at `<bid time>`.
@@ -495,7 +552,7 @@
 - customer A leads `<listing_7>`.
 - `<listing_7>`'s recorded close is about two minutes away, and no other bid will be placed.
 - customer A leads `<listing_8>`, and no other bid will be placed.
-- The lot's own alarm is disabled for `<listing_8>`.
+- The listing's own alarm is disabled for `<listing_8>`.
 - ❓ The spec does not identify the surface where the tester waits for `<listing_8>` to close.
 - `<listing_11>` is in the row's state, and no page has it open.
 - Nobody reads `<listing_11>` until step 2.
@@ -543,7 +600,7 @@
    - is refused. g10.auction-auction.US11-TC5
 4. Read the API response for `<listing_5>`.
 5. Let settling resume.
-6. Read the lot's result.
+6. Read the listing's result.
    - At step 2 no accepted bid is added, the recorded close does not move, and `<listing_5>` is still not recorded closed. g10.auction-auction.US11-TC5
    - At step 4 `<listing_5>` is closed with customer B winning. g10.auction-auction.US11-TC5
 7. Wait for the scheduled close.
@@ -570,15 +627,15 @@
    - Steps 2 and 3 each give the auction service's time when it answered, not the caller's. g10.auction-auction.US11-TC10
    - 's answer is about one second after step 2's, not a cached copy. g10.auction-auction.US11-TC10
 
-## Walk 11: Bidder keeps a lot open only by moving its price
+## Walk 11: Bidder keeps a listing open only by moving its price
 
 **Starting state:**
 
 - `<listing_9>` is in extended bidding with its recorded close `<time left before bid>` away.
 - customer A leads `<listing_9>` at `<leader price>` with maximum `<user A maximum>`.
-- customer B(card linked) is signed in on a separate session, on the lot page for `<listing_9>`.
+- customer B(card linked) is signed in on a separate session, on the listing page for `<listing_9>`.
 - `<listing_10>` is in extended bidding, its recorded close `<close before raise>`.
-- customer A leads `<listing_10>` at `<leader price>` with maximum `<user A maximum>`, and is on its lot page.
+- customer A leads `<listing_10>` at `<leader price>` with maximum `<user A maximum>`, and is on its listing page.
 
 **Shared test data:**
 
@@ -609,73 +666,84 @@
    - Highest bid stays `<leader price>`. g10.auction-auction.US12-TC2
 5. Wait until `<close before raise>` with no further bid.
    - The recorded close stays `<close before raise>`, and Time left keeps counting to it. g10.auction-auction.US12-TC2
-6. Read the lot's result.
-   - The lot closes at `<close before raise>`, customer A winning at `<leader price>`. g10.auction-auction.US12-TC2
+6. Read the listing's result.
+   - The listing closes at `<close before raise>`, customer A winning at `<leader price>`. g10.auction-auction.US12-TC2
 
 ## Walk 12: Runner-up takes the lead when the leader's account is erased
 
 **Starting state:**
 
-- `<listing_27>` is open inside its window, with the row's maxima committed in the row's order.
+- `<listing_27>` is open inside its window, with maxima `<customer A maximum>`, `<customer B maximum>` and `<customer C maximum>` committed in the order stated in Test data.
 - customer A leads `<listing_27>` at `<price before>`.
 - customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
 - customer B is signed in on a separate session.
-- `<listing_28>` is open inside its window, and customer A's maximum is its only maximum.
-- `<listing_32>` is open inside its window, with the row's maxima committed in the order given, and Highest bid `<price before>`.
+- `<listing_28>` is open inside its window, and customer A holds its only maximum of `<customer A maximum>`.
+- `<listing_32>` is open inside its window, with maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
 - The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| Item | customer A maximum: HKD2,300 (range: 80000–399999 minor units), first; customer B maximum: HKD1,700 (range: 80000–399999 minor units); customer C maximum: HKD1,350 (range: 80000–399999 minor units); `<price before>`: HKD1,740 (fixed derived value), customer B's maximum plus 4000; `<price after>`: HKD1,390 (fixed derived value), customer C's maximum plus 4000; Leader after: customer B |
-| Item | customer A maximum: HKD2,300 (range: 80000–399999 minor units), first; customer B maximum: HKD1,360 (range: 80000–399999 minor units); customer C maximum: HKD1,350 (range: 80000–399999 minor units); `<price before>`: HKD1,400 (fixed derived value), customer B's maximum plus 4000; `<price after>`: HKD1,360 (fixed derived value), capped at customer B's maximum; Leader after: customer B |
-| Item | customer A maximum: HKD1,750 (range: 80000–399999 minor units), first; customer B maximum: HKD1,750 (range: 80000–399999 minor units), second; customer C maximum: HKD1,350 (range: 80000–399999 minor units); `<price before>`: HKD1,750 (fixed boundary or equality), equal maxima, customer A earlier; `<price after>`: HKD1,390 (fixed derived value), customer C's maximum plus 4000; Leader after: customer B |
-| Item | customer A maximum: Field; customer B maximum: Value |
-| Item | customer A maximum: `<listing_27>`; customer B maximum: An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away |
-| Item | customer A maximum: Increment; customer B maximum: HKD40 (range: 1000–79999 minor units), the HK$800 tier, at every maximum above |
-| `<listing_28>` | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), led by customer A alone at the starting price |
-| customer A maximum | HKD2,350 (range: 80000–399999 minor units) |
-| Item | Maxima, in the order committed: customer A 20000, customer B 15000, customer C 12000; `<price before>`: 15500; Erased: customer B; Leader after: customer A; `<price after>`: 12500, customer C's maximum plus 500 |
-| Item | Maxima, in the order committed: customer A 20000 raised to 50000 after customer B 19800, customer C 10000; `<price before>`: 20000; Erased: customer C; Leader after: customer A; `<price after>`: 20000, unchanged: customer B's maximum plus 500 is 20300, above `<price before>` |
-| Item | Maxima, in the order committed: customer A 20000, customer B 15000, customer C 11000; `<price before>`: 15500; Erased: customer C; Leader after: customer A; `<price after>`: 15500, unchanged, on the same bid |
-| Item | Maxima, in the order committed: customer A 20000, customer B 15000; `<price before>`: 15500; Erased: customer A; Leader after: customer B; `<price after>`: 10000, the opening price |
-| Item | Maxima, in the order committed: Field; `<price before>`: Value |
-| Item | Maxima, in the order committed: `<listing_32>`; `<price before>`: An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units |
-| Item | Maxima, in the order committed: Increment; `<price before>`: USD5 (fixed derived value), the USD 100 tier, at every next maximum above |
+| Case | `<customer A maximum>` | `<customer B maximum>` | `<customer C maximum>` | `<price before>` | `<price after>` | `<leader_after>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US13-TC1 | HKD2,300 | HKD1,700 | HKD1,350 | HKD1,740 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), customer C's maximum plus 4000 |
+| g10.auction-auction.US13-TC1 | HKD2,300 | HKD1,360 | HKD1,350 | HKD1,400 | HKD1,360 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), capped at customer B's maximum |
+| g10.auction-auction.US13-TC1 | HKD1,750 | HKD1,750 | HKD1,350 | HKD1,750 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units), second; `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed boundary or equality), equal maxima, customer A earlier; `<price after>`: (fixed boundary or equality), customer C's maximum plus 4000 |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US13-TC1 | listing_27 | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away | · |
+| g10.auction-auction.US13-TC1 | increment | HKD40 | (fixed tier increment), the HK$800 tier, at every maximum above |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US13-TC2 | listing_28 | An open HKD listing, starting price `<starting_price>`, led by customer A alone at the starting price | · |
+| g10.auction-auction.US13-TC2 | customer A maximum | HKD2,350 | (range: 80000–399999 minor units) |
+| g10.auction-auction.US13-TC2 | starting_price | HKD280 | (range: 1000–79999 minor units), the opening price of `<listing_28>` |
+
+| Case | `<committed_maxima>` | `<price before>` | `<erased_customer>` | `<leader_after>` | `<price after>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US13-TC3 | customer A 23000, customer B 17000, customer C 13500 | 17500 | customer B | customer A | 14000 | `<price after>`: customer C's maximum plus 500 |
+| g10.auction-auction.US13-TC3 | customer A 23000 raised to 47000 after customer B 22800, customer C 10500 | 23000 | customer C | customer A | 23000 | `<price after>`: unchanged: customer B's maximum plus 500 is 23300, above `<price before>` |
+| g10.auction-auction.US13-TC3 | customer A 23000, customer B 17000, customer C 12500 | 17500 | customer C | customer A | 17500 | `<price after>`: unchanged, on the same bid |
+| g10.auction-auction.US13-TC3 | customer A 23000, customer B 17000 | 17500 | customer A | customer B | 10000 | `<price after>`: the opening price |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US13-TC3 | listing_32 | An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units | · |
+| g10.auction-auction.US13-TC3 | increment | USD5 | (fixed tier increment), the USD 100 tier, at every next maximum above |
 
 ### Route
 
 1. Read `<listing_27>` from the public listing API.
-   - reads Highest bid `<price before>`, led by customer A. g10.auction-auction.US13-TC1
+   - Step 1 reads Highest bid `<price before>`, led by customer A. g10.auction-auction.US13-TC1
 2. Erase customer A's account through the account-erasure procedure.
 3. Read `<listing_27>` from the public listing API.
-   - reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum. g10.auction-auction.US13-TC1
-   - 's Highest bid is never above `<price before>`. g10.auction-auction.US13-TC1
+   - Step 3 reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum. g10.auction-auction.US13-TC1
+   - Step 3's Highest bid is never above `<price before>`. g10.auction-auction.US13-TC1
 4. As customer B, read their own standing on `<listing_27>`.
-   - reads the row's leader after: customer B leads, with their own maximum unchanged. g10.auction-auction.US13-TC1
+   - Step 4 reads `<leader_after>` as leader, with their own maximum unchanged. g10.auction-auction.US13-TC1
    - customer A's maxima appear nowhere on `<listing_27>`. g10.auction-auction.US13-TC1
 5. Erase customer A's account through the account-erasure procedure.
 6. Read `<listing_28>` from the public listing API.
    - `<listing_28>` has no leader and no current bid. g10.auction-auction.US13-TC2
-   - The next bid must reach HKD280, the opening price. g10.auction-auction.US13-TC2
+   - The next bid must reach `<starting_price>`, the opening price. g10.auction-auction.US13-TC2
    - customer A's maximum appears nowhere on `<listing_28>`. g10.auction-auction.US13-TC2
 7. Read `<listing_32>` from the public listing API, noting its scheduled close.
-   - reads Highest bid `<price before>`. g10.auction-auction.US13-TC3
-8. Erase the row's erased customer's account through the account-erasure procedure.
+   - Step 7 reads Highest bid `<price before>`. g10.auction-auction.US13-TC3
+8. Erase `<erased_customer>`'s account through the account-erasure procedure.
 9. Read `<listing_32>` from the public listing API.
-   - reads Highest bid `<price after>`, led by the row's leader after. g10.auction-auction.US13-TC3
-   - 's Highest bid is never above `<price before>`. g10.auction-auction.US13-TC3
-   - 's scheduled close is the one noted at step 1. g10.auction-auction.US13-TC3
+   - Step 9 reads Highest bid `<price after>`, led by `<leader_after>`. g10.auction-auction.US13-TC3
+   - Step 9's Highest bid is never above `<price before>`. g10.auction-auction.US13-TC3
+   - Step 9's scheduled close is the one noted at Step 7. g10.auction-auction.US13-TC3
    - The erased customer's maxima appear nowhere on `<listing_32>`. g10.auction-auction.US13-TC3
 
 ## Walk 13: Bidder reads why a bid was refused, and nothing else moves
 
 **Starting state:**
 
-- customer(card linked, account in the row's state) is signed in and on the lot page for `<listing_29>`.
+- customer(card linked, account in `<account_state>`) is signed in and on the listing page for `<listing_29>`.
 - customer holds no bid on `<listing_29>` and does not watch it.
-- `<listing_29>` is in the row's lot state.
+- `<listing_29>` is in `<listing_state>`.
 - customer A leads `<listing_30>` at `<current bid>`, and is signed in on the lot page.
 - customer B(card linked, no bid on `<listing_30>`) is signed in on a separate session, on the same lot page.
 - customer(card linked) is signed in and on the lot page for `<listing_31>`, holding the row's standing before the bid.
@@ -686,81 +754,171 @@
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| Item | Refused when: Below the next minimum; Account state: In good standing; Lot state: Open, minimum next bid `<next minimum>`; Amount entered: HKD5,280 (fixed derived value), one major unit below `<next minimum>`; The bid form says: Minimum bid is, naming `<next minimum>` |
-| Item | Refused when: Bidding suspended on the account; Account state: Bidding suspended; Lot state: Open; Amount entered: `<next minimum>`; The bid form says: Bidding is suspended on this account. Contact Us to resolve it. |
-| Item | Refused when: Account banned from bidding; Account state: Banned from bidding; Lot state: Open; Amount entered: `<next minimum>`; The bid form says: This account cannot bid. |
-| Item | Refused when: After the close; Account state: In good standing; Lot state: Past its effective close, its close not yet recorded, the page's live updates held back; Amount entered: `<next minimum>`; The bid form says: Your bid did not go through. |
-| Item | Refused when: Field; Account state: Value |
-| Item | Refused when: `<listing_29>`; Account state: An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` |
-| Item | Refused when: `<current bid>`; Account state: HKD5,210 (range: 400000–799999 minor units) |
-| Item | Refused when: `<next minimum>`; Account state: HKD5,290 (fixed derived value), `<current bid>` plus its 8000 increment |
-| Item | Refused when: `<bid count>`; Account state: 3 |
-| `<listing_30>` | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) |
-| `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
-| `<below minimum>` | HKD5,280 (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
-| Item | Standing before: No bid; Bid sent: A first maximum of `<maximum>`; Dropped: The answer, after the auction accepts the bid; The bid form reads: Placed, Leading with Your maximum `<maximum>`; Standing after: Leading, Your maximum `<maximum>`, a row on My Auctions |
-| Item | Standing before: No bid; Bid sent: A first maximum of `<maximum>`; Dropped: The request, before the auction receives it; The bid form reads: Could not place this bid.; Standing after: No bid, no row on My Auctions |
-| Item | Standing before: Leading, Your maximum `<maximum>`; Bid sent: A raise to `<raised maximum>`; Dropped: The answer, after the auction accepts the raise; The bid form reads: Placed, Leading with Your maximum `<raised maximum>`; Standing after: Leading, Your maximum `<raised maximum>` |
-| Item | Standing before: Leading, Your maximum `<maximum>`; Bid sent: A raise to `<raised maximum>`; Dropped: The request, before the auction receives it; The bid form reads: Could not place this bid.; Standing after: Leading, Your maximum `<maximum>` |
-| Item | Standing before: Field; Bid sent: Value |
-| Item | Standing before: `<listing_31>`; Bid sent: An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) |
-| Item | Standing before: `<maximum>`; Bid sent: HKD560 (range: 1000–79999 minor units) |
-| Item | Standing before: `<raised maximum>`; Bid sent: HKD920 (range: 80000–399999 minor units) |
-| `<ceiling>` | A distinct server-message marker |
-| Absent | A distinct server-message marker |
-| `<ceiling>` | Absent |
-| Absent | Absent |
-| Field | Value |
-| listing_29 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 |
-| valid draft | 5130 whole major units, the listing's next minimum |
-| ceiling | HKD80,000,000 (fixed configured value) |
+| Case | Refused when | `<account_state>` | `<listing_state>` | `<amount_entered>` | `<refusal_message>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US14-TC1 | Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | HKD5,280 | Minimum bid is, naming `<next minimum>` | `<amount_entered>`: (fixed derived value), one major unit below `<next minimum>` |
+| g10.auction-auction.US14-TC1 | Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. | · |
+| g10.auction-auction.US14-TC1 | Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. | · |
+| g10.auction-auction.US14-TC1 | After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. | · |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US14-TC1 | listing_29 | An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` | · |
+| g10.auction-auction.US14-TC1 | current bid | HKD5,210 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US14-TC1 | next minimum | HKD5,290 | (fixed derived value), `<current bid>` plus its 8000 increment |
+| g10.auction-auction.US14-TC1 | bid count | 3 | · |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US14-TC2 | `<listing_30>` | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) |
+| g10.auction-auction.US14-TC2 | `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
+| g10.auction-auction.US14-TC2 | `<below minimum>` | HKD5,280 (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
+
+| Case | Standing before | Bid sent | Dropped | The bid form reads | Standing after |
+| --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US14-TC3 | No bid | A first maximum of `<maximum>` | The answer, after the auction accepts the bid | Placed, Leading with Your maximum `<maximum>` | Leading, Your maximum `<maximum>`, a row on My Auctions |
+| g10.auction-auction.US14-TC3 | No bid | A first maximum of `<maximum>` | The request, before the auction receives it | Could not place this bid. | No bid, no row on My Auctions |
+| g10.auction-auction.US14-TC3 | Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The answer, after the auction accepts the raise | Placed, Leading with Your maximum `<raised maximum>` | Leading, Your maximum `<raised maximum>` |
+| g10.auction-auction.US14-TC3 | Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The request, before the auction receives it | Could not place this bid. | Leading, Your maximum `<maximum>` |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US14-TC3 | `<listing_31>` | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) |
+| g10.auction-auction.US14-TC3 | `<maximum>` | HKD560 (range: 1000–79999 minor units) |
+| g10.auction-auction.US14-TC3 | `<raised maximum>` | HKD920 (range: 80000–399999 minor units) |
+
+| Case | Ceiling field | Server-message field |
+| --- | --- | --- |
+| g10.auction-auction.US14-TC4 | `<ceiling>` | A distinct server-message marker |
+| g10.auction-auction.US14-TC4 | Absent | A distinct server-message marker |
+| g10.auction-auction.US14-TC4 | `<ceiling>` | Absent |
+| g10.auction-auction.US14-TC4 | Absent | Absent |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US14-TC4 | listing_29 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 |
+| g10.auction-auction.US14-TC4 | valid draft | 5130 whole major units, the listing's next minimum |
+| g10.auction-auction.US14-TC4 | ceiling | HKD80,000,000 (fixed configured value) |
 
 ### Route
 
-1. Enter the row's amount entered in the custom maximum on the bid panel.
+1. Enter `<amount_entered>` in the custom maximum on the bid panel.
 2. Place the bid.
 3. Read the bid form.
-   - shows the row's words on the bid form. g10.auction-auction.US14-TC1
-4. Reload the lot page and read Highest bid, the bid count, Recent Bids and the bid panel's standing.
-   - reads Highest bid `<current bid>`, bid count `<bid count>`, and Recent Bids as before, with no row for the customer. g10.auction-auction.US14-TC1
-   - shows no Leading or Outbid standing for the customer. g10.auction-auction.US14-TC1
+   - Step 3 shows `<refusal_message>` on the bid form. g10.auction-auction.US14-TC1
+4. Reload the listing page and read Highest bid, the bid count, Recent Bids and the bid panel's standing.
+   - Step 4 reads Highest bid `<current bid>`, bid count `<bid count>`, and Recent Bids as before, with no row for the customer. g10.auction-auction.US14-TC1
+   - Step 4 shows no Leading or Outbid standing for the customer. g10.auction-auction.US14-TC1
 5. Navigate to `<my auctions url>` and look for `<listing_29>`.
-   - shows no row for `<listing_29>`. g10.auction-auction.US14-TC1
+   - Step 5 shows no row for `<listing_29>`. g10.auction-auction.US14-TC1
 6. Navigate to `<grade10 bids url>` and look for `<listing_29>`.
-   - shows no entry for `<listing_29>`. g10.auction-auction.US14-TC1
+   - Step 6 shows no entry for `<listing_29>`. g10.auction-auction.US14-TC1
 7. As customer B, enter `<below minimum>` in the custom maximum and place the bid.
-   - is refused on customer B's bid form. g10.auction-auction.US14-TC2
+   - Step 7 is refused on customer B's bid form. g10.auction-auction.US14-TC2
 8. As customer A, read Highest bid, Recent Bids and the bid panel's standing, without reloading.
-   - reads Highest bid `<current bid>`, Recent Bids unchanged, and customer A still Leading. g10.auction-auction.US14-TC2
+   - Step 8 reads Highest bid `<current bid>`, Recent Bids unchanged, and customer A still Leading. g10.auction-auction.US14-TC2
 9. As customer A, navigate to `<my auctions url>` and read `<listing_30>`'s row.
-   - 's row reads Leading, with Current bid `<current bid>`. g10.auction-auction.US14-TC2
+   - Step 9's row reads Leading, with Current bid `<current bid>`. g10.auction-auction.US14-TC2
 10. As customer A, read their mailbox for a letter about `<listing_30>` sent after step 1.
-   - finds no new-bid or outbid letter. g10.auction-auction.US14-TC2
+   - Step 10 finds no new-bid or outbid letter. g10.auction-auction.US14-TC2
 11. Enter the row's bid in the custom maximum on the bid panel.
 12. Place the bid.
 13. Wait until the bid form settles.
 14. Read the bid form.
-   - reads the row's words on the bid form, never both placed and refused. g10.auction-auction.US14-TC3
+   - Step 14 reads the row's words on the bid form, never both placed and refused. g10.auction-auction.US14-TC3
 15. Reload the lot page and read the bid panel's standing.
-   - reads the row's standing after. g10.auction-auction.US14-TC3
+   - Step 15 reads the row's standing after. g10.auction-auction.US14-TC3
 16. Navigate to `<my auctions url>` and look for `<listing_31>`.
-   - agrees with the row's standing after. g10.auction-auction.US14-TC3
+   - Step 16 agrees with the row's standing after. g10.auction-auction.US14-TC3
 17. Place the bid.
 18. Wait for the mocked refusal answer.
 19. Read the bid form and custom maximum field.
-   - no maximum-bid or generic refusal message appears. g10.auction-auction.US14-TC4
-   - no server message or toast appears. g10.auction-auction.US14-TC4
-   - pending bid status ends and the action is usable. g10.auction-auction.US14-TC4
-   - the displayed draft remains `<valid draft>`. g10.auction-auction.US14-TC4
+   - Step 19: no maximum-bid or generic refusal message appears. g10.auction-auction.US14-TC4
+   - Step 19: no server message or toast appears. g10.auction-auction.US14-TC4
+   - Step 19: pending bid status ends and the action is usable. g10.auction-auction.US14-TC4
+   - Step 19: the displayed draft remains `<valid draft>`. g10.auction-auction.US14-TC4
 20. Read the number of bid attempts sent.
-   - exactly one attempt is sent, without automatic retry. g10.auction-auction.US14-TC4
+   - Step 20: exactly one attempt is sent, without automatic retry. g10.auction-auction.US14-TC4
 21. Reload the listing and read its public bids and standing.
-   - the price, leader, bid count and public bids remain unchanged. g10.auction-auction.US14-TC4
-   - customer has no Leading or Outbid standing. g10.auction-auction.US14-TC4
+   - Step 21: the price, leader, bid count and public bids remain unchanged. g10.auction-auction.US14-TC4
+   - Step 21: customer has no Leading or Outbid standing. g10.auction-auction.US14-TC4
 22. Read My Auctions and Bidding History for `<listing_29>`.
-   - neither surface records the refused attempt. g10.auction-auction.US14-TC4
+   - Step 22: neither surface records the refused attempt. g10.auction-auction.US14-TC4
+
+## Walk 14: Collector reads a house-led close and its order
+
+**Starting state:**
+
+- `<listing_1>` is led by `<leader>` at `<final price>`, over customer A's maximum `<customer A maximum>`, its recorded close under a minute away, no further bid coming.
+- The leader has this bidding setup: `<leader_setup>`.
+- customer C has never bid on `<listing_1>` and is on its listing page.
+- `<listing_2>` is published and taking bids with no bid, and its internal bid of `<house maximum>` is set at `<commit_time>`.
+- `<listing_2>`'s scheduled close is a few minutes away, and no collector will bid.
+- customer C is on the listing page for `<listing_2>`.
+- `<listing_4>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, and the house leads with this bidding setup: `<bidding_at_close>`, its recorded close a few minutes away, no further bid coming.
+- customer A(card linked) bid on `<listing_4>` as described by `<bidding_at_close>`.
+
+**Shared test data:**
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US1-TC3 | listing_1 | A published HKD listing in extended bidding | · |
+| g10.auction-auction.US1-TC3 | customer A maximum | 500000 minor units | (HK$5,000.00) |
+| g10.auction-auction.US1-TC3 | final price | 508000 minor units | `<customer A maximum>` plus its 8000 increment |
+
+| Case | `<leader>` | `<leader_setup>` |
+| --- | --- | --- |
+| g10.auction-auction.US1-TC3 | the house | The house, under `<listing_1>`'s internal bid of 600000 minor units |
+| g10.auction-auction.US1-TC3 | customer B | customer B, with maximum 600000 minor units and no internal bid on the listing |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US1-TC4 | listing_2 | A published HKD listing, starting price `<starting price>`, extension duration `<extension duration>`, no cap | · |
+| g10.auction-auction.US1-TC4 | starting price | 400000 minor units | (HK$4,000.00) |
+| g10.auction-auction.US1-TC4 | house maximum | 600000 minor units | (HK$6,000.00) |
+| g10.auction-auction.US1-TC4 | extension duration | 1800s | (30mins) |
+
+| Case | Row | `<commit_time>` |
+| --- | --- | --- |
+| g10.auction-auction.US1-TC4 | Before the close | 1 minute from now, before the scheduled close |
+| g10.auction-auction.US1-TC4 | At the scheduled close | Exactly the scheduled close |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US1-TC5 | listing_4 | A published HKD listing in no campaign, starting price `<starting price>` | · |
+| g10.auction-auction.US1-TC5 | starting price | 400000 minor units | (HK$4,000.00) |
+| g10.auction-auction.US1-TC5 | house maximum | 600000 minor units | (HK$6,000.00) |
+| g10.auction-auction.US1-TC5 | internal bidder | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test | · |
+
+| Case | Row | `<bidding_at_close>` | `<winning_bid>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| g10.auction-auction.US1-TC5 | House over a collector | The house leads over customer A's maximum of 500000 | 508000 | `<winning_bid>`: customer A's maximum plus its 8000 increment |
+| g10.auction-auction.US1-TC5 | House alone | No collector bid | `<starting price>` | · |
+
+### Route
+
+1. Wait through the recorded close without reloading.
+2. As customer C, read the listing's state, Highest bid and Recent bids.
+   - Step 2 reads sold at `<final price>`, the winning row crowned under the leader's listing pseudonym. g10.auction-auction.US1-TC3
+3. Read the API response for `<listing_1>`'s public facts.
+   - Step 3 reads the listing closed with a winner at `<final price>`, the winner by pseudonym only. g10.auction-auction.US1-TC3
+4. Open `<grade10 auction url>` and read `<listing_1>`'s card.
+   - Step 4's card reads Ended, as any sold listing's card does. g10.auction-auction.US1-TC3
+   - The House row and the Collector row read alike in every step, save the pseudonym. g10.auction-auction.US1-TC3
+5. Wait until the scheduled close passes and read Time left.
+   - Step 5 reads extended bidding, the close `<extension duration>` after the scheduled close. g10.auction-auction.US1-TC4
+6. Wait until the extended close passes.
+7. Read the listing's state, Highest bid and Recent bids.
+   - Step 7 reads sold at `<starting price>`, one bid, under the house's listing pseudonym. g10.auction-auction.US1-TC4
+8. Wait until `<listing_4>`'s recorded close passes.
+9. Read the orders the API holds for `<listing_4>`.
+   - Step 9 holds one order, `<internal bidder>`'s, flagged internal, at `<winning_bid>`. g10.auction-auction.US1-TC5
+10. Read the order's invoice and payments.
+   - Step 10: no invoice is issued and no payment is recorded. g10.auction-auction.US1-TC5
+11. In the House over a collector row, read customer A's card charges since the close.
+   - Step 11 holds no charge for `<listing_4>`. g10.auction-auction.US1-TC5
+12. Read the API response for `<listing_4>`'s public facts.
+   - Step 12 reads the listing closed with a winner at `<winning_bid>`, the winner by pseudonym only. g10.auction-auction.US1-TC5
 
 ## g10.auction-auction.US1: Collector browses Auction listings
 
@@ -806,7 +964,7 @@
 * It carries no reserve state.
 
 <!-- trace:case id=g10.auction-auction.TC-m16 rev=1 covers=g10.auction-auction.SC-fec,g10.auction-auction.SC-a4f -->
-### g10.auction-auction.US1-TC3: A lot the house leads at the close reads sold like any other
+### g10.auction-auction.US1-TC3: A listing the house leads at the close reads sold like any other
 
 Runs once per row of **Test data**.
 
@@ -825,38 +983,39 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` is led as the row states at `<final price>`, over customer A's maximum `<customer A maximum>`, its recorded close under a minute away, no further bid coming.
-* customer C has never bid on `<listing_1>` and is on its lot page.
+* `<listing_1>` is led by `<leader>` at `<final price>`, over customer A's maximum `<customer A maximum>`, its recorded close under a minute away, no further bid coming.
+* The leader has this bidding setup: `<leader_setup>`.
+* customer C has never bid on `<listing_1>` and is on its listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | A published HKD listing in extended bidding |
-| `<customer A maximum>` | 500000 minor units (HK$5,000.00) |
-| `<final price>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | A published HKD listing in extended bidding | · |
+| customer A maximum | 500000 minor units | (HK$5,000.00) |
+| final price | 508000 minor units | `<customer A maximum>` plus its 8000 increment |
 
-| Row | Leader |
+| `<leader>` | `<leader_setup>` |
 | --- | --- |
-| House | The house, under `<listing_1>`'s internal bid of 600000 minor units |
-| Collector | customer B, with maximum 600000 minor units and no internal bid on the lot |
+| the house | The house, under `<listing_1>`'s internal bid of 600000 minor units |
+| customer B | customer B, with maximum 600000 minor units and no internal bid on the listing |
 
 **Steps:**
 
 1. Wait through the recorded close without reloading.
-2. As customer C, read the lot's state, Highest bid and Recent bids.
+2. As customer C, read the listing's state, Highest bid and Recent bids.
 3. Read the API response for `<listing_1>`'s public facts.
-4. Open <grade10 auction url> and read `<listing_1>`'s card.
+4. Open `<grade10 auction url>` and read `<listing_1>`'s card.
 
 **Expected Results:**
 
 * Step 2 reads sold at `<final price>`, the winning row crowned under the leader's listing pseudonym.
-* Step 3 reads the lot closed with a winner at `<final price>`, the winner by pseudonym only.
-* Step 4's card reads Ended, as any sold lot's card does.
+* Step 3 reads the listing closed with a winner at `<final price>`, the winner by pseudonym only.
+* Step 4's card reads Ended, as any sold listing's card does.
 * The House row and the Collector row read alike in every step, save the pseudonym.
 
 <!-- trace:case id=g10.auction-auction.TC-fkn rev=1 covers=g10.auction-auction.SC-cqt,g10.auction-auto-bidding.SC-szf -->
-### g10.auction-auction.US1-TC4: A lot whose only bid is the house's extends and closes sold at the starting price
+### g10.auction-auction.US1-TC4: A listing whose only bid is the house's extends and closes sold at the starting price
 
 Runs once per row of **Test data**.
 
@@ -875,20 +1034,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_2>` is published and taking bids with no bid, and its internal bid of `<house maximum>` is set at the row's commit time.
+* `<listing_2>` is published and taking bids with no bid, and its internal bid of `<house maximum>` is set at `<commit_time>`.
 * `<listing_2>`'s scheduled close is a few minutes away, and no collector will bid.
-* customer C is on the lot page for `<listing_2>`.
+* customer C is on the listing page for `<listing_2>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | A published HKD listing, starting price `<starting price>`, extension duration `<extension duration>`, no cap |
-| `<starting price>` | 400000 minor units (HK$4,000.00) |
-| `<house maximum>` | 600000 minor units (HK$6,000.00) |
-| `<extension duration>` | 1800s (30mins) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_2 | A published HKD listing, starting price `<starting price>`, extension duration `<extension duration>`, no cap | · |
+| starting price | 400000 minor units | (HK$4,000.00) |
+| house maximum | 600000 minor units | (HK$6,000.00) |
+| extension duration | 1800s | (30mins) |
 
-| Row | Commit time |
+| Row | `<commit_time>` |
 | --- | --- |
 | Before the close | 1 minute from now, before the scheduled close |
 | At the scheduled close | Exactly the scheduled close |
@@ -897,7 +1056,7 @@ Runs once per row of **Test data**.
 
 1. Wait until the scheduled close passes and read Time left.
 2. Wait until the extended close passes.
-3. Read the lot's state, Highest bid and Recent bids.
+3. Read the listing's state, Highest bid and Recent bids.
 
 **Expected Results:**
 
@@ -924,22 +1083,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_4>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, and the house leads as the row states, its recorded close a few minutes away, no further bid coming.
-* customer A(card linked) bid on `<listing_4>` as the row states.
+* `<listing_4>`'s internal bid of `<house maximum>` is committed as `<internal bidder>`, and the house leads with this bidding setup: `<bidding_at_close>`, its recorded close a few minutes away, no further bid coming.
+* customer A(card linked) bid on `<listing_4>` as described by `<bidding_at_close>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | A published HKD listing in no campaign, starting price `<starting price>` |
-| `<starting price>` | 400000 minor units (HK$4,000.00) |
-| `<house maximum>` | 600000 minor units (HK$6,000.00) |
-| `<internal bidder>` | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test |
-
-| Row | Bidding at the close | Winning bid |
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| House over a collector | The house leads over customer A's maximum of 500000 | 508000: customer A's maximum plus its 8000 increment |
-| House alone | No collector bid | `<starting price>` |
+| listing_4 | A published HKD listing in no campaign, starting price `<starting price>` | · |
+| starting price | 400000 minor units | (HK$4,000.00) |
+| house maximum | 600000 minor units | (HK$6,000.00) |
+| internal bidder | An active internal bidder profile: name "QA House One", email label qa-house-one@internal.test | · |
+
+| Row | `<bidding_at_close>` | `<winning_bid>` | Fixture notes |
+| --- | --- | --- | --- |
+| House over a collector | The house leads over customer A's maximum of 500000 | 508000 | `<winning_bid>`: customer A's maximum plus its 8000 increment |
+| House alone | No collector bid | `<starting price>` | · |
 
 **Steps:**
 
@@ -951,18 +1110,18 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 holds one order, `<internal bidder>`'s, flagged internal, at the row's winning bid.
+* Step 2 holds one order, `<internal bidder>`'s, flagged internal, at `<winning_bid>`.
 * Step 3: no invoice is issued and no payment is recorded.
 * Step 4 holds no charge for `<listing_4>`.
-* Step 5 reads the lot closed with a winner at the row's winning bid, the winner by pseudonym only.
+* Step 5 reads the listing closed with a winner at `<winning_bid>`, the winner by pseudonym only.
 
 ---
 
 ## g10.auction-auction.US2: Collector places a bid inside the window
 
 **As a** bidder,
-**I want** a lot I bid on by its close to stay open until bidding stops,
-**so that** a bid placed at the last second can always be answered, up to the lot's cap.
+**I want** a listing I bid on by its close to stay open until bidding stops,
+**so that** a bid placed at the last second can always be answered, up to the listing's cap.
 
 <!-- trace:case id=g10.auction-auction.TC-b19 rev=2 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### g10.auction-auction.US2-TC5: A bid stands when accepted, with nothing held on the card
@@ -1607,9 +1766,9 @@ Runs once per row of **Test data**.
 
 ## g10.auction-auction.US4: Collector meets the identity bar on a high-value bid
 
-**As a** collector bidding the bar or more on a lot,
+**As a** collector bidding the bar or more on a listing,
 **I want** to be told at once that a verified identity is needed and where to get one,
-**so that** the auction records nothing for a bid it cannot take, and I can verify and bid again before the lot closes.
+**so that** the auction records nothing for a bid it cannot take, and I can verify and bid again before the listing closes.
 
 <!-- trace:case id=g10.auction-auction.TC-zsd rev=3 covers=g10.auction-auction.SC-d78 -->
 ### g10.auction-auction.US4-TC1: Verified bidder's bid at the bar is forwarded as any other
@@ -1634,13 +1793,13 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<a verified account>` | An account whose standing is `verified` on the day of the bid |
-| `<card>` | Visa ending 4242 |
-| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
-| `<listing_12>` | A live USD listing whose minimum next bid is `<bar>` |
-| `<bid at the bar>` | USD15,000 (fixed boundary or equality), equal to `<bar>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| a verified account | An account whose standing is `verified` on the day of the bid | · |
+| card | Visa ending 4242 | · |
+| bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
+| listing_12 | A live USD listing whose minimum next bid is `<bar>` | · |
+| bid at the bar | USD15,000 | (fixed boundary or equality), equal to `<bar>` |
 
 **Steps:**
 
@@ -1674,27 +1833,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The user is signed in with `<card>` saved on an account whose standing is the one the row names, holds no bid on `<listing_12>`, and is on `<listing_12>`.
+* The user is signed in with `<card>` saved on an account whose standing is `<account_standing>`, holds no bid on `<listing_12>`, and is on `<listing_12>`.
 * `<listing_12>` is live, inside its window, and its minimum next bid is `<bar>`.
 
 **Test data:**
 
-| Standing | Bid amount | Outcome |
-| --- | --- | --- |
-| `unverified` | USD15,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
-| `unverified` | USD15,200 (range: >1500000 minor units), above `<bar>` | Refused; no bid recorded |
-| `expired` | USD15,000 (fixed boundary or equality), exactly `<bar>` | Refused; no bid recorded |
-| `expired` | USD15,200 (range: >1500000 minor units), above `<bar>` | Refused; no bid recorded |
+| `<account_standing>` | `<bid_amount>` | Outcome | Fixture notes |
+| --- | --- | --- | --- |
+| `unverified` | USD15,000 | Refused; no bid recorded | `<bid_amount>`: (fixed boundary or equality), exactly `<bar>` |
+| `unverified` | USD15,200 | Refused; no bid recorded | `<bid_amount>`: (range: >1500000 minor units), above `<bar>` |
+| `expired` | USD15,000 | Refused; no bid recorded | `<bid_amount>`: (fixed boundary or equality), exactly `<bar>` |
+| `expired` | USD15,200 | Refused; no bid recorded | `<bid_amount>`: (range: >1500000 minor units), above `<bar>` |
 
-| Field | Value |
-| --- | --- |
-| `<card>` | Visa ending 4242 |
-| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
-| `<listing_12>` | A live USD listing whose minimum next bid is `<bar>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| card | Visa ending 4242 | · |
+| bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
+| listing_12 | A live USD listing whose minimum next bid is `<bar>` | · |
 
 **Steps:**
 
-1. Enter the bid amount the row names in the bid field and select **Place Bid**.
+1. Enter `<bid_amount>` in the bid field and select **Place Bid**.
 2. Read the refusal on the bid form.
 3. Reload `<listing_12>` and read Highest bid and the bid count.
 4. Navigate to `<my auctions url>` and look for `<listing_12>`.
@@ -1727,33 +1886,37 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_13>`.
-* `<listing_13>` is live, inside its window, in USD, and its minimum next bid is at or below the bid amount the row names.
+* The user is signed in with `<card>` saved on an account whose standing is `<account_standing>`, and is on `<listing_13>`.
+* `<listing_13>` is live, inside its window, in USD, and its minimum next bid is at or below `<bid_amount>`.
 
 **Test data:**
 
-| Standing | Bid amount | Outcome |
+| `<account_standing>` | `<bid_amount>` | Outcome | Fixture notes |
+| --- | --- | --- | --- |
+| `unverified` | USD520 | Forwarded; no standing read | `<bid_amount>`: (range: >0 and <1500000 minor units) |
+| `expired` | USD520 | Forwarded; no standing read | `<bid_amount>`: (range: >0 and <1500000 minor units) |
+| `verified` | USD520 | Forwarded; no standing read | `<bid_amount>`: (range: >0 and <1500000 minor units) |
+| `unverified` | USD14,999.00 | Forwarded; no standing read | `<bid_amount>`: (fixed boundary or equality), one dollar below `<bar>` |
+| `unverified` | USD14,999.99 | Forwarded; no standing read | `<bid_amount>`: (fixed boundary or equality), one cent below `<bar>` |
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| `unverified` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
-| `expired` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
-| `verified` | USD520 (range: >0 and <1500000 minor units) | Forwarded; no standing read |
-| `unverified` | USD14,999.00 (fixed boundary or equality), one dollar below `<bar>` | Forwarded; no standing read |
-| `unverified` | USD14,999.99 (fixed boundary or equality), one cent below `<bar>` | Forwarded; no standing read |
+| card | Visa ending 4242 | · |
+| bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
 
 | Field | Value |
 | --- | --- |
-| `<card>` | Visa ending 4242 |
-| `<bar>` | USD15,000 (fixed configured value), the bar Grade10 sets on a bid |
+| listing_13 | A live USD listing inside its bidding window, minimum next bid at or below `<bid_amount>`; bind its identity only |
 
 **Steps:**
 
-1. Enter the bid amount the row names in the bid field and select **Place Bid**.
+1. Enter `<bid_amount>` in the bid field and select **Place Bid**.
 2. Read Highest bid.
 3. Read the calls the run made to the identity store.
 
 **Expected Results:**
 
-* The bid is forwarded and accepted, and Highest bid reads the bid amount the row names.
+* The bid is forwarded and accepted, and Highest bid reads `<bid_amount>`.
 * No standing was read.
 
 ---
@@ -1761,8 +1924,8 @@ Runs once per row of **Test data**.
 ## g10.auction-auction.US5: Collector reads the catalogue in one order
 
 **As a** collector,
-**I want** All auctions to lead with the lots I can bid on, soonest to close first, and to keep that order as I read on — below Featured when Featured is present, with no category section —,
-**so that** what I can still bid on is in front of me and reading further never shows me a lot twice or skips one.
+**I want** All auctions to lead with the listings I can bid on, soonest to close first, and to keep that order as I read on — below Featured when Featured is present, with no category section —,
+**so that** what I can still bid on is in front of me and reading further never shows me a listing twice or skips one.
 
 <!-- trace:case id=g10.auction-auction.TC-91h rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC1: Open lots lead the catalogue
@@ -2173,7 +2336,7 @@ Runs once per row of **Test data**.
 **As a** collector opening `/auction`,
 **I want** the operator's Featured slides when any are set — front page image, title,
 status, countdown, current bid and Bid Now —,
-**so that** the lots the house leads with are what I meet first.
+**so that** the listings the house leads with are what I meet first.
 
 <!-- trace:case id=g10.auction-auction.TC-5my rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### g10.auction-auction.US6-TC1: One Featured slide shows front page image title status countdown bid and Bid Now
@@ -2196,14 +2359,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* Exactly one complete Featured slot is set for a published Active lot with its front page image.
+* Exactly one complete Featured slot is set for `<featured listing>` with `<front page image>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<featured lot>` | A published Active lot bound to the only complete Featured slot |
-| `<front page image>` | The front page image uploaded for that slot |
+| featured listing | A published Active listing bound to the only complete Featured slot |
+| front page image | The front page image uploaded for that slot |
+| featured listing title | The public title of `<featured listing>`; bind the title only |
 
 **Steps:**
 
@@ -2213,7 +2377,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Featured band is present with one slide.
-* The slide shows `<front page image>` as banner and slab, the lot title, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now.
+* The slide shows `<front page image>` as banner and slab, the title `<featured listing title>`, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now.
 
 <!-- trace:case id=g10.auction-auction.TC-zwc rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### g10.auction-auction.US6-TC2: Current bid rolls when the served amount increases
@@ -2235,21 +2399,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured lot>` visible.
-* The served current bid for `<featured lot>` is `<bid before>`.
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured listing>` visible.
+* The served current bid for `<featured listing>` is `<bid before>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<featured lot>` | A published Active lot on a complete Featured slide |
-| `<bid before>` | The current bid amount shown on the slide |
-| `<bid after>` | A **higher** served current bid for the same lot after first paint |
+| featured listing | A published Active listing on a complete Featured slide |
+| bid before | The current bid amount shown on the slide |
+| bid after | A **higher** served current bid for the same listing after first paint |
 
 **Steps:**
 
 1. Read the current bid on the Featured slide after first paint.
-2. Let the served current bid for `<featured lot>` become `<bid after>`.
+2. Let the served current bid for `<featured listing>` become `<bid after>`.
 3. Read the current bid on the Featured slide.
 
 **Expected Results:**
@@ -2258,7 +2422,7 @@ Runs once per row of **Test data**.
 * Step 3 shows `<bid after>` with a rolling number as the amount increases.
 
 <!-- trace:case id=g10.auction-auction.TC-htt rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
-### g10.auction-auction.US6-TC3: Client countdown uses served close or open by lot status
+### g10.auction-auction.US6-TC3: Client countdown uses served close or open by listing status
 
 Runs once per row of **Test data**.
 
@@ -2278,14 +2442,19 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* One complete Featured slot is set for the row's lot.
+* One complete Featured slot is set for a listing in `<listing_status>`, with countdown target `<served_time>`.
 
 **Test data:**
 
-| Lot status | Served time | Countdown |
+| `<listing_status>` | `<served_time>` | `<expected_countdown>` |
 | --- | --- | --- |
-| Active | Served close | Relative Ends in to the served close |
-| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
+| Active | `<served_close>` | Relative Ends in to the served close |
+| Upcoming | `<served_open>` | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
+
+| Field | Value |
+| --- | --- |
+| served_close | The effective close returned for the Active listing; bind its datetime only |
+| served_open | The scheduled opening returned for the Upcoming listing; bind its datetime only |
 
 **Steps:**
 
@@ -2294,7 +2463,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The countdown matches the row (Ends in or Opens in).
+* The countdown matches this expected display: `<expected_countdown>`.
 * Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount.
 
 <!-- trace:case id=g10.auction-auction.TC-d55 rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
@@ -2318,15 +2487,15 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is able to open `<grade10 auction catalogue url>`.
-* Three complete Featured slots are set in operator order `<lot A>`, `<lot B>`, `<lot C>`.
+* Three complete Featured slots are set in operator order `<listing A>`, `<listing B>`, `<listing C>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot A>` | Published Active or Upcoming lot in Featured slot 1 |
-| `<lot B>` | Published Active or Upcoming lot in Featured slot 2 |
-| `<lot C>` | Published Active or Upcoming lot in Featured slot 3 |
+| listing A | Published Active or Upcoming listing in Featured slot 1 |
+| listing B | Published Active or Upcoming listing in Featured slot 2 |
+| listing C | Published Active or Upcoming listing in Featured slot 3 |
 
 **Steps:**
 
@@ -2335,7 +2504,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Featured shows three slides in order `<lot A>`, then `<lot B>`, then `<lot C>`.
+* Featured shows three slides in order `<listing A>`, then `<listing B>`, then `<listing C>`.
 
 <!-- trace:case id=g10.auction-auction.TC-b8d rev=1 covers=g10.auction-auction.SC-kis,g10.auction-auction.SC-3g8,g10.auction-auction.SC-8d7,g10.auction-auction.SC-rl4,g10.auction-auction.SC-wea -->
 ### g10.auction-auction.US6-TC5: Incomplete Featured slot is not shown
@@ -2356,7 +2525,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is able to open `<grade10 auction catalogue url>`.
-* The only Featured slot holds an eligible lot and no front page image, or a front page image and no lot.
+* The only Featured slot holds an eligible listing and no front page image, or a front page image and no listing.
 
 **Steps:**
 
@@ -2375,7 +2544,7 @@ Runs once per row of **Test data**.
 **As a** collector on `/auction` with more than one Featured slide,
 **I want** to move between slides with the progress control, and on a small
 viewport also with stage previous/next or a horizontal swipe,
-**so that** I can reach every curated lot without leaving the band.
+**so that** I can reach every curated listing without leaving the band.
 
 <!-- trace:case id=g10.auction-auction.TC-72n rev=1 covers=g10.auction-auction.SC-94x -->
 ### g10.auction-auction.US7-TC1: Progress advances between two Featured slides
@@ -2398,25 +2567,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+* Two complete Featured slots are set for `<listing A>` then `<listing B>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot A>` | Published lot in Featured slot 1 |
-| `<lot B>` | Published lot in Featured slot 2 |
+| listing A | Published listing in Featured slot 1 |
+| listing B | Published listing in Featured slot 2 |
 
 **Steps:**
 
-1. Read the visible Featured lot.
+1. Read the visible Featured listing.
 2. Activate the progress control to advance to the next slide.
-3. Read the visible Featured lot.
+3. Read the visible Featured listing.
 
 **Expected Results:**
 
-* Step 1 shows `<lot A>`.
-* Step 3 shows `<lot B>`.
+* Step 1 shows `<listing A>`.
+* Step 3 shows `<listing B>`.
 * Progress dots are present for the two slides.
 
 <!-- trace:case id=g10.auction-auction.TC-fbj rev=1 covers=g10.auction-auction.SC-94x -->
@@ -2440,27 +2609,27 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>` at a small viewport (below `md`).
-* Two complete Featured slots are set for `<lot A>` then `<lot B>`.
+* Two complete Featured slots are set for `<listing A>` then `<listing B>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot A>` | Published lot in Featured slot 1 |
-| `<lot B>` | Published lot in Featured slot 2 |
+| listing A | Published listing in Featured slot 1 |
+| listing B | Published listing in Featured slot 2 |
 
 **Steps:**
 
-1. Read the visible Featured lot.
+1. Read the visible Featured listing.
 2. Activate stage next on the Featured image.
-3. Read the visible Featured lot.
+3. Read the visible Featured listing.
 
 **Expected Results:**
 
-* Step 1 shows `<lot A>`.
-* Step 3 shows `<lot B>`.
-* The stage image pages horizontally to `<lot B>`.
-* Progress dots mark `<lot B>` current.
+* Step 1 shows `<listing A>`.
+* Step 3 shows `<listing B>`.
+* The stage image pages horizontally to `<listing B>`.
+* Progress dots mark `<listing B>` current.
 
 <!-- trace:case id=g10.auction-auction.TC-9ji rev=1 covers=g10.auction-auction.SC-94x -->
 ### g10.auction-auction.US7-TC2: Progress reaches every slide when three are set
@@ -2483,25 +2652,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* Three complete Featured slots are set for `<lot A>`, `<lot B>`, `<lot C>` in that order.
+* Three complete Featured slots are set for `<listing A>`, `<listing B>`, `<listing C>` in that order.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot A>` | Published lot in Featured slot 1 |
-| `<lot B>` | Published lot in Featured slot 2 |
-| `<lot C>` | Published lot in Featured slot 3 |
+| listing A | Published listing in Featured slot 1 |
+| listing B | Published listing in Featured slot 2 |
+| listing C | Published listing in Featured slot 3 |
 
 **Steps:**
 
-1. Read the visible Featured lot.
+1. Read the visible Featured listing.
 2. Advance with the progress control until each remaining slide has been shown.
-3. Read each visible Featured lot after each advance.
+3. Read each visible Featured listing after each advance.
 
 **Expected Results:**
 
-* The visible lots are `<lot A>`, then `<lot B>`, then `<lot C>` without leaving the Featured band.
+* The visible listings are `<listing A>`, then `<listing B>`, then `<listing C>` without leaving the Featured band.
 
 <!-- trace:case id=g10.auction-auction.TC-7lv rev=1 covers=g10.auction-auction.SC-94x -->
 ### g10.auction-auction.US7-TC3: A single Featured slide needs no multi-dot advance
@@ -2537,15 +2706,15 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-auction.US8: Collector opens a Featured lot
+## g10.auction-auction.US8: Collector opens a Featured listing
 
 **As a** collector on a Featured slide,
-**I want** Bid Now when the lot is Active, or View Auction when it is Upcoming,
-to open that lot's details page,
-**so that** I land on the lot the catalogue led with.
+**I want** Bid Now when the listing is Active, or View Auction when it is Upcoming,
+to open that listing's details page,
+**so that** I land on the listing the catalogue led with.
 
 <!-- trace:case id=g10.auction-auction.TC-ytf rev=1 covers=g10.auction-auction.SC-sh8,g10.auction-auction.SC-b2i -->
-### g10.auction-auction.US8-TC1: Bid Now opens an Active lot details page
+### g10.auction-auction.US8-TC1: Bid Now opens an Active listing details page
 
 Runs once per row of **Test data**.
 
@@ -2564,14 +2733,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured lot>` visible.
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<featured listing>` visible.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<featured lot>` | A published **Active** lot on the visible Featured slide |
-| `<lot page url>` | That lot's details page address |
+| featured listing | A published **Active** listing on the visible Featured slide |
+| listing page url | That listing's details page address |
 
 **Steps:**
 
@@ -2580,10 +2749,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The browser opens `<lot page url>` — the details page for `<featured lot>`.
+* The browser opens `<listing page url>` — the details page for `<featured listing>`.
 
 <!-- trace:case id=g10.auction-auction.TC-2aj rev=1 covers=g10.auction-auction.SC-sh8,g10.auction-auction.SC-b2i -->
-### g10.auction-auction.US8-TC3: View Auction opens an Upcoming lot details page
+### g10.auction-auction.US8-TC3: View Auction opens an Upcoming listing details page
 
 Runs once per row of **Test data**.
 
@@ -2602,14 +2771,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<upcoming lot>` visible.
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<upcoming listing>` visible.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<upcoming lot>` | A published Upcoming lot on the visible Featured slide |
-| `<lot page url>` | That lot's details page address |
+| upcoming listing | A published Upcoming listing on the visible Featured slide |
+| listing page url | That listing's details page address |
 
 **Steps:**
 
@@ -2618,10 +2787,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The browser opens `<lot page url>` — the details page for `<upcoming lot>`.
+* The browser opens `<listing page url>` — the details page for `<upcoming listing>`.
 
 <!-- trace:case id=g10.auction-auction.TC-0qt rev=1 covers=g10.auction-auction.SC-sh8,g10.auction-auction.SC-b2i -->
-### g10.auction-auction.US8-TC2: Bid Now on a later Active slide opens that slide's lot
+### g10.auction-auction.US8-TC2: Bid Now on a later Active slide opens that slide's listing
 
 Runs once per row of **Test data**.
 
@@ -2640,16 +2809,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<grade10 auction catalogue url>` with two complete Featured slides for `<lot A>` then `<lot B>`.
-* The progress control has advanced so `<lot B>` is visible.
+* customer is on `<grade10 auction catalogue url>` with two complete Featured slides for `<listing A>` then `<listing B>`.
+* The progress control has advanced so `<listing B>` is visible.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot A>` | Published **Active** lot in Featured slot 1 |
-| `<lot B>` | Published **Active** lot in Featured slot 2 |
-| `<lot B page url>` | `<lot B>`'s details page address |
+| listing A | Published **Active** listing in Featured slot 1 |
+| listing B | Published **Active** listing in Featured slot 2 |
+| listing B page url | `<listing B>`'s details page address |
 
 **Steps:**
 
@@ -2658,14 +2827,14 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The browser opens `<lot B page url>` — the details page for `<lot B>`, not `<lot A>`.
+* The browser opens `<listing B page url>` — the details page for `<listing B>`, not `<listing A>`.
 
 ---
 
 ## g10.auction-auction.US9: Collector watches from an All auctions card
 
 **As a** signed-in collector reading All auctions,
-**I want** the watch control on a card to watch or unwatch that lot the same way as on the lot page and My Auctions,
+**I want** the watch control on a card to watch or unwatch that listing the same way as on the listing page and My Auctions,
 **so that** I do not learn a second watch rule on the catalogue.
 
 <!-- trace:case id=g10.auction-auction.TC-fjy rev=1 covers=g10.auction-auction.SC-na4,g10.auction-auction.SC-epv -->
@@ -2688,25 +2857,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, not watching `<open lot>`) is on `<grade10 auction catalogue url>`.
-* `<open lot>` appears on an All auctions card and is not closed.
+* customer(signed in, not watching `<open listing>`) is on `<grade10 auction catalogue url>`.
+* `<open listing>` appears on an All auctions card and is not closed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<open lot>` | A published Active or Upcoming lot on an All auctions card |
+| open listing | A published Active or Upcoming listing on an All auctions card |
 
 **Steps:**
 
-1. Activate watch on the All auctions card for `<open lot>`.
+1. Activate watch on the All auctions card for `<open listing>`.
 2. Read the card's watch state.
-3. Open My Auctions and read whether `<open lot>` is watched.
+3. Open My Auctions and read whether `<open listing>` is watched.
 
 **Expected Results:**
 
 * The card shows the watched state.
-* `<open lot>` is watched the same way as from the lot page and My Auctions.
+* `<open listing>` is watched the same way as from the listing page and My Auctions.
 
 <!-- trace:case id=g10.auction-auction.TC-8nw rev=1 covers=g10.auction-auction.SC-na4,g10.auction-auction.SC-epv -->
 ### g10.auction-auction.US9-TC2: Watch off from an All auctions card
@@ -2728,28 +2897,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, watching `<open lot>`) is on `<grade10 auction catalogue url>`.
-* `<open lot>` appears on an All auctions card and is not closed.
+* customer(signed in, watching `<open listing>`) is on `<grade10 auction catalogue url>`.
+* `<open listing>` appears on an All auctions card and is not closed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<open lot>` | A published Active or Upcoming lot the collector already watches |
+| open listing | A published Active or Upcoming listing the collector already watches |
 
 **Steps:**
 
-1. Activate watch off on the All auctions card for `<open lot>`.
+1. Activate watch off on the All auctions card for `<open listing>`.
 2. Read the card's watch state.
-3. Open My Auctions and read whether `<open lot>` remains watched.
+3. Open My Auctions and read whether `<open listing>` remains watched.
 
 **Expected Results:**
 
 * The card shows the unwatched state.
-* `<open lot>` is no longer watched, same as unwatching from the lot page or My Auctions.
+* `<open listing>` is no longer watched, same as unwatching from the listing page or My Auctions.
 
 <!-- trace:case id=g10.auction-auction.TC-txe rev=1 covers=g10.auction-auction.SC-na4,g10.auction-auction.SC-epv -->
-### g10.auction-auction.US9-TC3: Closed lot card shows no watch control
+### g10.auction-auction.US9-TC3: Closed listing card shows no watch control
 
 Runs once per row of **Test data**.
 
@@ -2769,29 +2938,29 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed in) is on `<grade10 auction catalogue url>`.
-* `<closed lot>` appears on an All auctions card.
+* `<closed listing>` appears on an All auctions card.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<closed lot>` | A closed lot visible in All auctions |
+| closed listing | A closed listing visible in All auctions |
 
 **Steps:**
 
-1. Find the All auctions card for `<closed lot>`.
+1. Find the All auctions card for `<closed listing>`.
 2. Read whether a watch control is present on that card.
 
 **Expected Results:**
 
-* The closed lot card shows no watch control.
+* The closed listing card shows no watch control.
 
 ---
 
 ## g10.auction-auction.US11: Bidder is held to the close with everyone else
 
 **As a** bidder,
-**I want** a lot to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
+**I want** a listing to stop taking bids at its close for everyone, and a bid to count when it is accepted before then,
 **so that** nobody wins with a bid that arrived after the close.
 
 <!-- trace:case id=g10.auction-auction.TC-wbb rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
@@ -3408,11 +3577,11 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-auction.US12: Bidder keeps a lot open only by moving its price
+## g10.auction-auction.US12: Bidder keeps a listing open only by moving its price
 
 **As a** bidder,
-**I want** extended bidding to restart only when a bid moves the lot's price,
-**so that** a leader cannot keep a lot open by raising their own maximum.
+**I want** extended bidding to restart only when a bid moves the listing's price,
+**so that** a leader cannot keep a listing open by raising their own maximum.
 
 <!-- trace:case id=g10.auction-auction.TC-lmv rev=1 covers=g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3 -->
 ### g10.auction-auction.US12-TC1: Equal maximum at a higher price extends the lot
@@ -3532,42 +3701,42 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_3>` is in extended bidding with its recorded close `<time left before change>` away.
-* `<listing_3>`'s internal bid of `<house maximum>` is committed, and the bidding is as the row states.
+* `<listing_3>`'s internal bid of `<house maximum>` is committed, and the bidding has this setup: `<bidding_setup>`.
 * admin(holds auction:reserve) is on `<listing_3>`'s editor in the admin.
-* customer C is on the lot page for `<listing_3>`.
+* customer C is on the listing page for `<listing_3>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | A published HKD listing in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<time left before change>` | 5 minutes |
-| `<house maximum>` | 600000 minor units (HK$6,000.00) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_3 | A published HKD listing in extended bidding, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
+| time left before change | 5 minutes | · |
+| house maximum | 600000 minor units | (HK$6,000.00) |
 
-| Row | Bidding | House change | Highest bid after | Time left after |
-| --- | --- | --- | --- | --- |
-| Raise past the leader | customer A leads at 608000 with maximum 700000 | Raise to 800000 | 708000: customer A's maximum plus its 8000 increment, the house leading | `<extension duration>` from the raise |
-| Raise while leading | The house leads at 508000 over customer A's maximum of 500000 | Raise to 800000 | 508000, unchanged | `<time left before change>`, less the time taken |
-| Lower while leading | The house leads at 508000 over customer A's maximum of 500000 | Lower to 550000 | 508000, unchanged | `<time left before change>`, less the time taken |
+| Row | `<bidding_setup>` | `<house_change>` | `<highest_bid_after>` | `<time_left_after>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| Raise past the leader | customer A leads at 608000 with maximum 700000 | Raise to 800000 | 708000 | `<extension duration>` from the raise | `<highest_bid_after>`: customer A's maximum plus its 8000 increment, the house leading |
+| Raise while leading | The house leads at 508000 over customer A's maximum of 500000 | Raise to 800000 | 508000 | `<time left before change>`, less the time taken | `<highest_bid_after>`: unchanged |
+| Lower while leading | The house leads at 508000 over customer A's maximum of 500000 | Lower to 550000 | 508000 | `<time left before change>`, less the time taken | `<highest_bid_after>`: unchanged |
 
 **Steps:**
 
-1. As the admin, make the row's house change and click Save.
+1. As the admin, make this house change: `<house_change>` and click Save.
 2. As customer C, read Highest bid, the leader and Time left.
 
 **Expected Results:**
 
 * Step 1 is accepted.
-* Step 2 reads the row's Highest bid and Time left.
+* Step 2 reads Highest bid `<highest_bid_after>` and Time left `<time_left_after>`.
 
 ---
 
 ## g10.auction-auction.US13: Runner-up takes the lead when the leader's account is erased
 
-**As a** bidder whose maximum is the highest left on a lot,
+**As a** bidder whose maximum is the highest left on a listing,
 **I want** to take the lead at a price set by the maxima still standing when the leader's account is erased,
-**so that** the lot keeps a leader and I never pay more than the price stood at before.
+**so that** the listing keeps a leader and I never pay more than the price stood at before.
 
 <!-- trace:case id=g10.auction-auction.TC-ptt rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
 ### g10.auction-auction.US13-TC1: Highest maximum left leads, priced from the maxima left
@@ -3589,23 +3758,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_27>` is open inside its window, with the row's maxima committed in the row's order.
+* `<listing_27>` is open inside its window, with maxima `<customer A maximum>`, `<customer B maximum>` and `<customer C maximum>` committed in the order stated in Test data.
 * customer A leads `<listing_27>` at `<price before>`.
 * customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
 * customer B is signed in on a separate session.
 
 **Test data:**
 
-| customer A maximum | customer B maximum | customer C maximum | `<price before>` | `<price after>` | Leader after |
-| --- | --- | --- | --- | --- | --- |
-| HKD2,300 (range: 80000–399999 minor units), first | HKD1,700 (range: 80000–399999 minor units) | HKD1,350 (range: 80000–399999 minor units) | HKD1,740 (fixed derived value), customer B's maximum plus 4000 | HKD1,390 (fixed derived value), customer C's maximum plus 4000 | customer B |
-| HKD2,300 (range: 80000–399999 minor units), first | HKD1,360 (range: 80000–399999 minor units) | HKD1,350 (range: 80000–399999 minor units) | HKD1,400 (fixed derived value), customer B's maximum plus 4000 | HKD1,360 (fixed derived value), capped at customer B's maximum | customer B |
-| HKD1,750 (range: 80000–399999 minor units), first | HKD1,750 (range: 80000–399999 minor units), second | HKD1,350 (range: 80000–399999 minor units) | HKD1,750 (fixed boundary or equality), equal maxima, customer A earlier | HKD1,390 (fixed boundary or equality), customer C's maximum plus 4000 | customer B |
+| `<customer A maximum>` | `<customer B maximum>` | `<customer C maximum>` | `<price before>` | `<price after>` | `<leader_after>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| HKD2,300 | HKD1,700 | HKD1,350 | HKD1,740 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), customer C's maximum plus 4000 |
+| HKD2,300 | HKD1,360 | HKD1,350 | HKD1,400 | HKD1,360 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units); `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed derived value), customer B's maximum plus 4000; `<price after>`: (fixed derived value), capped at customer B's maximum |
+| HKD1,750 | HKD1,750 | HKD1,350 | HKD1,750 | HKD1,390 | customer B | `<customer A maximum>`: (range: 80000–399999 minor units), first; `<customer B maximum>`: (range: 80000–399999 minor units), second; `<customer C maximum>`: (range: 80000–399999 minor units); `<price before>`: (fixed boundary or equality), equal maxima, customer A earlier; `<price after>`: (fixed boundary or equality), customer C's maximum plus 4000 |
 
-| Field | Value |
-| --- | --- |
-| `<listing_27>` | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away |
-| Increment | HKD40 (fixed tier increment), the HK$800 tier, at every maximum above |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_27 | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), scheduled close more than an hour away | · |
+| increment | HKD40 | (fixed tier increment), the HK$800 tier, at every maximum above |
 
 **Steps:**
 
@@ -3619,11 +3788,11 @@ Runs once per row of **Test data**.
 * Step 1 reads Highest bid `<price before>`, led by customer A.
 * Step 3 reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum.
 * Step 3's Highest bid is never above `<price before>`.
-* Step 4 reads the row's leader after: customer B leads, with their own maximum unchanged.
+* Step 4 reads `<leader_after>` as leader, with their own maximum unchanged.
 * customer A's maxima appear nowhere on `<listing_27>`.
 
 <!-- trace:case id=g10.auction-auction.TC-y3z rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
-### g10.auction-auction.US13-TC2: Erasing the only bidder leaves the lot with no leader
+### g10.auction-auction.US13-TC2: Erasing the only bidder leaves the listing with no leader
 
 Runs once per row of **Test data**.
 
@@ -3642,15 +3811,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_28>` is open inside its window, and customer A's maximum is its only maximum.
+* `<listing_28>` is open inside its window, and customer A holds its only maximum of `<customer A maximum>`.
 * customer A has no unpaid order or open fulfilment, so nothing stops the erasure.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_28>` | An open HKD listing, starting price HKD280 (range: 1000–79999 minor units), led by customer A alone at the starting price |
-| customer A maximum | HKD2,350 (range: 80000–399999 minor units) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_28 | An open HKD listing, starting price `<starting_price>`, led by customer A alone at the starting price | · |
+| customer A maximum | HKD2,350 | (range: 80000–399999 minor units) |
+| starting_price | HKD280 | (range: 1000–79999 minor units), the opening price of `<listing_28>` |
 
 **Steps:**
 
@@ -3660,11 +3830,11 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * `<listing_28>` has no leader and no current bid.
-* The next bid must reach HKD280, the opening price.
+* The next bid must reach `<starting_price>`, the opening price.
 * customer A's maximum appears nowhere on `<listing_28>`.
 
 <!-- trace:case id=g10.auction-auction.TC-lxa rev=1 covers=g10.auction-auction.SC-qs1,g10.auction-auction.SC-hlm,g10.auction-auction.SC-z26,g10.auction-auction.SC-43o,g10.auction-auction.SC-t9v,g10.auction-auction.SC-rmq,g10.auction-auction.SC-5oc -->
-### g10.auction-auction.US13-TC3: Erasing a bidder re-prices the lot from the maxima left, never upward
+### g10.auction-auction.US13-TC3: Erasing a bidder re-prices the listing from the maxima left, never upward
 
 Runs once per row of **Test data**.
 
@@ -3683,33 +3853,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_32>` is open inside its window, with the row's maxima committed in the order given, and Highest bid `<price before>`.
+* `<listing_32>` is open inside its window, with maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
 * The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
 
 **Test data:**
 
-| Maxima, in the order committed | `<price before>` | Erased | Leader after | `<price after>` |
-| --- | --- | --- | --- | --- |
-| customer A 23000, customer B 17000, customer C 13500 | 17500 | customer B | customer A | 14000, customer C's maximum plus 500 |
-| customer A 23000 raised to 47000 after customer B 22800, customer C 10500 | 23000 | customer C | customer A | 23000, unchanged: customer B's maximum plus 500 is 23300, above `<price before>` |
-| customer A 23000, customer B 17000, customer C 12500 | 17500 | customer C | customer A | 17500, unchanged, on the same bid |
-| customer A 23000, customer B 17000 | 17500 | customer A | customer B | 10000, the opening price |
+| `<committed_maxima>` | `<price before>` | `<erased_customer>` | `<leader_after>` | `<price after>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| customer A 23000, customer B 17000, customer C 13500 | 17500 | customer B | customer A | 14000 | `<price after>`: customer C's maximum plus 500 |
+| customer A 23000 raised to 47000 after customer B 22800, customer C 10500 | 23000 | customer C | customer A | 23000 | `<price after>`: unchanged: customer B's maximum plus 500 is 23300, above `<price before>` |
+| customer A 23000, customer B 17000, customer C 12500 | 17500 | customer C | customer A | 17500 | `<price after>`: unchanged, on the same bid |
+| customer A 23000, customer B 17000 | 17500 | customer A | customer B | 10000 | `<price after>`: the opening price |
 
-| Field | Value |
-| --- | --- |
-| `<listing_32>` | An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units |
-| Increment | USD5 (fixed tier increment), the USD 100 tier, at every next maximum above |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_32 | An open USD listing, opening price USD100 (fixed tier boundary), scheduled close more than an hour away; every amount above is in USD minor units | · |
+| increment | USD5 | (fixed tier increment), the USD 100 tier, at every next maximum above |
 
 **Steps:**
 
 1. Read `<listing_32>` from the public listing API, noting its scheduled close.
-2. Erase the row's erased customer's account through the account-erasure procedure.
+2. Erase `<erased_customer>`'s account through the account-erasure procedure.
 3. Read `<listing_32>` from the public listing API.
 
 **Expected Results:**
 
 * Step 1 reads Highest bid `<price before>`.
-* Step 3 reads Highest bid `<price after>`, led by the row's leader after.
+* Step 3 reads Highest bid `<price after>`, led by `<leader_after>`.
 * Step 3's Highest bid is never above `<price before>`.
 * Step 3's scheduled close is the one noted at step 1.
 * The erased customer's maxima appear nowhere on `<listing_32>`.
@@ -3742,38 +3912,38 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked, account in the row's state) is signed in and on the lot page for `<listing_29>`.
+* customer(card linked, account in `<account_state>`) is signed in and on the listing page for `<listing_29>`.
 * customer holds no bid on `<listing_29>` and does not watch it.
-* `<listing_29>` is in the row's lot state.
+* `<listing_29>` is in `<listing_state>`.
 
 **Test data:**
 
-| Refused when | Account state | Lot state | Amount entered | The bid form says |
-| --- | --- | --- | --- | --- |
-| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | HKD5,280 (fixed derived value), one major unit below `<next minimum>` | Minimum bid is, naming `<next minimum>` |
-| Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. |
-| Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. |
-| After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. |
+| Refused when | `<account_state>` | `<listing_state>` | `<amount_entered>` | `<refusal_message>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | HKD5,280 | Minimum bid is, naming `<next minimum>` | `<amount_entered>`: (fixed derived value), one major unit below `<next minimum>` |
+| Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. | · |
+| Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. | · |
+| After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. | · |
 
-| Field | Value |
-| --- | --- |
-| `<listing_29>` | An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` |
-| `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
-| `<next minimum>` | HKD5,290 (fixed derived value), `<current bid>` plus its 8000 increment |
-| `<bid count>` | 3 |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_29 | An HKD listing led by customer B at `<current bid>`, bid count `<bid count>` | · |
+| current bid | HKD5,210 | (range: 400000–799999 minor units) |
+| next minimum | HKD5,290 | (fixed derived value), `<current bid>` plus its 8000 increment |
+| bid count | 3 | · |
 
 **Steps:**
 
-1. Enter the row's amount entered in the custom maximum on the bid panel.
+1. Enter `<amount_entered>` in the custom maximum on the bid panel.
 2. Place the bid.
 3. Read the bid form.
-4. Reload the lot page and read Highest bid, the bid count, Recent Bids and the bid panel's standing.
+4. Reload the listing page and read Highest bid, the bid count, Recent Bids and the bid panel's standing.
 5. Navigate to `<my auctions url>` and look for `<listing_29>`.
 6. Navigate to `<grade10 bids url>` and look for `<listing_29>`.
 
 **Expected Results:**
 
-* Step 3 shows the row's words on the bid form.
+* Step 3 shows `<refusal_message>` on the bid form.
 * Step 4 reads Highest bid `<current bid>`, bid count `<bid count>`, and Recent Bids as before, with no row for the customer.
 * Step 4 shows no Leading or Outbid standing for the customer.
 * Step 5 shows no row for `<listing_29>`.
