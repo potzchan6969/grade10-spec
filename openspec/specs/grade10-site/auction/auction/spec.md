@@ -124,7 +124,7 @@ identity is switched off, the bar and requests SHALL not exist.
 - **THEN** no standing is read, and the bid is forwarded as any other
 
 <!-- trace:scenario id=g10.auction-auction.SC-mo5 rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-110 - A request holds a bid below the bar
+#### Scenario: grade10-site-auction-auction-SC-112 - A request holds a bid below the bar
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a signed-in bidder whose account has an unmet `person` request
@@ -136,7 +136,7 @@ identity is switched off, the bar and requests SHALL not exist.
   the listing
 
 <!-- trace:scenario id=g10.auction-auction.SC-pfh rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-111 - A standing maximum keeps bidding under a request
+#### Scenario: grade10-site-auction-auction-SC-113 - A standing maximum keeps bidding under a request
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a bidder whose maximum stands on a listing, and a request then
@@ -147,7 +147,7 @@ identity is switched off, the bar and requests SHALL not exist.
   verified identity
 
 <!-- trace:scenario id=g10.auction-auction.SC-a69 rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-112 - Each currency meets its own bar
+#### Scenario: grade10-site-auction-auction-SC-114 - Each currency meets its own bar
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a signed-in bidder whose standing is `unverified`, with no open
