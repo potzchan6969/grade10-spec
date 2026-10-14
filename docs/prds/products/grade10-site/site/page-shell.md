@@ -11,11 +11,6 @@ banner, one main and one contentinfo landmark, and adds no heading, copy or
 spacing of its own — everything a collector reads comes from the surface
 inside it.
 
-The chrome does not wait for the session. Header and footer render on the first
-paint. When the session arrives, the account entry changes between a Sign In
-primary button (signed out) and the account icon with its menu (signed in); other
-controls do not appear, disappear, or move.
-
 Controls exist only when there is something behind them. Search still waits for
 a search surface, and no link points to a page the site does not hold. The
 header marks the item that owns the current address, and marks nothing when no
@@ -32,6 +27,23 @@ so a collector can reach checkout without returning to Store
 🚧 **Store Locator** — in the header and footer only where the build carries
 [Store Locator](/p/grade10-site/store/store-locator), which waits with the
 store; auction-first chrome has none
+
+## Session
+
+The chrome does not wait for the session. Header and footer render on the first
+paint. When the session arrives, the account entry changes between a Sign In
+primary button (signed out) and the account icon with its menu (signed in); other
+controls do not appear or disappear.
+
+🚧 **Before the session answers** - the account entry is a placeholder the size of
+the account icon, with nothing to press, so a signed-in collector never sees
+Sign In first
+
+🚧 **First answer only** - the placeholder shows until the session first answers;
+a later re-read keeps the entry already shown, and a read that fails shows Sign In
+
+🚧 **Controls beside it** - only the account entry's own change in width moves the
+language and search controls to its left; the Cart control stays where it is
 
 ## Account Menu
 
