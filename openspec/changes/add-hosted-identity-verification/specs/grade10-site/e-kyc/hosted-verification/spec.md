@@ -1,19 +1,19 @@
 ## Purpose
 
-The identity check a collector completes on their own device before they visit a
-store — invited by Grade10, hosted and decided by a verification provider, and
-returned as a verdict that becomes a verified identity without anybody waiting
-for it. What the check produces is defined by `grade10-site/e-kyc/identity-record`,
+The identity check a collector completes on their own device - raised by
+Grade10 for the account or case that asks, hosted, screened and decided by a
+verification provider, and returned as a verdict that becomes a verified
+identity without anybody waiting for it. What the check produces is defined by `grade10-site/e-kyc/identity-record`,
 which also sets the two refusals every check answers to.
 
 ## Feature set
 
-- The invitation
-  - One person, one case: a link that opens the check it was sent for and no other
-  - One live check: a case holds one at a time, so a collector never juggles two invitations
-  - A life of its own: an invitation expires, and a new one is a new check
+- The hand-over
+  - One person, one case: the collector is handed the check raised for their own case and no other
+  - One live check: a case holds one at a time, so a collector never juggles two
+  - A life of its own: an unfinished check expires, and a new one is a new check
 - The ceremony
-  - Hosted away from Grade10: the provider captures the document and the face
+  - Hosted away from Grade10: the provider captures the document and the face, and screens the person against watchlists and lists of politically exposed people
   - Resumable: an interrupted check continues rather than starting over
 - The verdict
   - Trusted narrowly: raised by Grade10, signed by the provider, about the case's live check, acted on once
@@ -27,18 +27,22 @@ which also sets the two refusals every check answers to.
 
 ## ADDED Requirements
 
-### Requirement: A collector verifies themselves before the visit
+### Requirement: A collector verifies themselves on their own device
 
-The system SHALL let a collector complete an identity check away from a Grade10
-store, in this order.
+The system SHALL let a signed-in collector complete an identity check away
+from a Grade10 store, in this order. A vault case raises none; the account
+does, from its verification page, as `grade10-site/store/account-identity`
+defines.
 
-1. *Grade10* — **Raise the check with the provider** and record the provider's
-   own identifier for it, before the collector is invited
-2. *Grade10* — **Invite the collector**, at the contact details the case holds
-3. *Collector* — **Open the invitation** on their own device, at a time of their
-   choosing
-4. *Provider* — **Host the check**, capturing the document and the collector's
-   face, and decide it
+1. *Grade10* - **Raise the check with the provider** and record the provider's
+   own identifier for it, before the collector is handed over
+2. *Grade10* - **Hand the collector to the provider's page**, on the device
+   they are on
+3. *Collector* - **Return to the check** on that device whenever they choose,
+   while it is live
+4. *Provider* - **Host the check**, capturing the document and the collector's
+   face, screening the person, and decide it, through its reviewer where the
+   screening matches
 5. *Grade10* — **Read the verdict** when it arrives, apply its own refusals, and
    fetch the document image into its own evidence store
 6. *Grade10* — **Bind the verified identity** to the case the check was raised
@@ -49,16 +53,16 @@ verdict is about; only the identifier Grade10 recorded at step 1 SHALL resolve
 it. The collector SHALL NOT be asked for any detail the provider itself
 collects.
 
-A check that cannot be raised with the provider SHALL invite nobody, SHALL leave
-the case holding no live check, and SHALL be reported to an operator rather than
+A check that cannot be raised with the provider SHALL hand nobody over, SHALL
+leave the case holding no live check, and SHALL be reported to an operator rather than
 leaving the case reading as a check nobody answered.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-a2i rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-a2i rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-01 - A collector completes the check before arriving
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
 - **GIVEN** a case that has asked for an identity check
-- **WHEN** the collector opens the invitation and completes the provider's check
+- **WHEN** the collector is handed to the provider and completes its check
 - **AND** the provider approves it
 - **THEN** the case holds a verified identity before the visit, naming that
   provider
@@ -71,69 +75,64 @@ leaving the case reading as a check nobody answered.
 - **THEN** the collector's verification surface asks them for no document number,
   no expiry and no image of the document
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-5n5 rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-27 - A check that cannot be raised invites nobody and is reported
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-5n5 rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-27 - A check that cannot be raised hands nobody over and is reported
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
 - **GIVEN** a case with nothing to reuse and a verification provider that cannot
   be reached
 - **WHEN** a check is asked for
-- **THEN** no invitation is sent, the case holds no live check, and an operator
-  is told the check could not be raised
-- **AND** asking again once the provider answers raises one check and sends one
-  invitation
+- **THEN** nobody is handed to the provider, the case holds no live check, and
+  an operator is told the check could not be raised
+- **AND** asking again once the provider answers raises one check
 
-### Requirement: An invitation names one person and one case
+### Requirement: A hand-over names one person and one case
 
-The system SHALL issue an invitation that opens the check it was issued for and
-no other, and SHALL refuse an invitation that has been completed, withdrawn or
-expired. The invitation SHALL carry a secret that cannot be guessed from another
-invitation, a case reference, or anything a collector is shown, and that secret
-SHALL NOT appear in a request path, a query string, a log, or a referrer sent to
-the provider. Which device continues a check is the provider's own session to
-decide — its ceremony hands itself from one device to another. What a
-link-holder can read SHALL be the state and what to do next, and SHALL carry no
-identity field and no reason a check was refused.
+The system SHALL hand a collector only the check raised for their own case,
+and nothing they supply SHALL select another case or another person. A check
+that has been completed, withdrawn or expired SHALL NOT be handed over again.
+No Grade10 session or secret SHALL appear in a request path, a query string,
+a log, or a referrer sent to the provider. Which device continues a check is
+the provider's own session to decide - its ceremony hands itself from one
+device to another. What the collector reads of a check SHALL be its state and
+what to do next, and SHALL carry no identity field and no reason a check was
+refused.
 
-An invitation SHALL expire 14 days after it is issued. A check the collector has
-opened and not yet submitted SHALL expire 24 hours after it was opened or when
-the invitation's own life runs out, whichever comes first — a started check
-SHALL NOT outlive the invitation that carried it. A submitted check SHALL NOT
-expire on either clock.
+A check the collector has not submitted SHALL expire 24 hours after it was
+raised. A submitted check SHALL NOT expire on that clock.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-1ve rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-03 - An invitation opens the check it names
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-1ve rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-03 - A hand-over opens the check raised for the case
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
-- **WHEN** a collector opens their invitation on the first device to use it
+- **WHEN** a collector is handed to the provider
 - **THEN** the check that opens is the one raised for their case, and nothing
   they supply selects another case or another person
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-8uf rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-04 - A completed invitation does not open again
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-8uf rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-04 - A decided check is not handed over again
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
-- **GIVEN** an invitation whose check has been decided
-- **WHEN** it is opened again
-- **THEN** it starts no check, and what is shown is the state and what to do
+- **GIVEN** a check that has been decided
+- **WHEN** the collector comes back to it
+- **THEN** they are not handed to the provider, and what is shown is the state and what to do
   next, naming no identity field and no reason
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-36d rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-05 - An expired invitation is refused
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-36d rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-05 - An expired check is not handed over
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
-- **GIVEN** an invitation past its life
-- **WHEN** the collector opens it
-- **THEN** it is refused as expired, and the collector is told how to be invited
-  again
+- **GIVEN** a check past its life
+- **WHEN** the collector comes back to it
+- **THEN** it reads as expired, and the collector is offered a new check
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-i84 rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-24 - The invitation's secret is left nowhere it can be read
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-i84 rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-24 - No Grade10 secret travels to the provider
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
-- **WHEN** a collector opens their invitation and is handed on to the provider
-- **THEN** the secret is in no request path, no query string, no log line, and
-  no referrer the provider receives
+- **WHEN** a collector is handed on to the provider
+- **THEN** no Grade10 session or secret is in a request path, a query string,
+  a log line, or a referrer the provider receives
 
 ### Requirement: An identity check moves through these states
 
@@ -142,49 +141,49 @@ show the collector and the case which.
 
 | State | Meaning | Moves to |
 | --- | --- | --- |
-| Invited | The collector has been asked and has not started | Started, Expired, Withdrawn |
+| Invited | Raised, and the collector has not started | Started, Expired, Withdrawn |
 | Started | The collector opened the check and has not finished it | Submitted, Expired, Withdrawn |
-| Submitted | The collector finished; the provider has not decided | Approved, Declined, Stalled, Withdrawn |
-| Stalled | A submitted check the provider has not decided within the time it usually takes — a reading of Submitted from the check's own instants, not a state of its own | Approved, Declined, Expired, Withdrawn |
+| Submitted | The collector finished; the provider, or its reviewer, has not decided | Approved, Declined, Stalled, Withdrawn |
+| Stalled | A submitted check no reviewer holds, which the provider has not decided within the time it usually takes - a reading of Submitted from the check's own instants, not a state of its own | Approved, Declined, Expired, Withdrawn |
 | Approved | The provider vouched, and Grade10's own refusals passed | — |
 | Declined | The provider refused, Grade10's own refusals did, or the case could not take the verdict | — |
-| Expired | The invitation or the started check ran out of time | — |
+| Expired | The unfinished or undecided check ran out of time | - |
 | Withdrawn | The case no longer needs the check | — |
 
 Approved, Declined, Expired and Withdrawn SHALL be final: a collector who needs
-another chance is invited again, as a new check. A check in Submitted SHALL NOT
+another chance starts a new check. A check in Submitted SHALL NOT
 expire on its own — a verdict may still arrive — and SHALL become Stalled
 instead, so an operator can see the difference between a check that is arriving
 and one that is not coming. A check in Stalled SHALL become Expired once the
 provider has left it undecided for a stated period, so no check stays live for
 ever on a provider that never answers. A verdict usually takes a day: a
 submitted check reads as Stalled 24 hours after it was submitted, and becomes
-Expired once the provider has left it undecided for 7 days.
+Expired once the provider has left it undecided for 30 days. A check the
+provider's reviewer holds SHALL be neither Stalled nor Expired.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-wu9 rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-06 - An unopened invitation expires
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-wu9 rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-06 - A check never started expires
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
-- **GIVEN** a check in Invited that the collector never opens
+- **GIVEN** a check in Invited that the collector never starts
 - **WHEN** its life runs out
 - **THEN** it is Expired, and no verified identity exists
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-fdu rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-fdu rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-07 - An abandoned check expires rather than waiting forever
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a check in Started that the collector does not finish
 - **WHEN** its life runs out
-- **THEN** it is Expired, and the case is eligible to be invited again
+- **THEN** it is Expired, and the case may raise a new check
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-jan rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-jan rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-08 - A decided check does not move again
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a check in Approved or Declined
 - **WHEN** a further verdict arrives for it, or a check is asked for on that case
-- **THEN** the check stays where it is, and asking issues a new check with its
-  own invitation
+- **THEN** the check stays where it is, and asking issues a new check
 
 <!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-jz2 rev=1 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-22 - A check the provider never decides is stalled rather than lost
@@ -197,15 +196,17 @@ Expired once the provider has left it undecided for 7 days.
   arriving, and the check is read back from the provider and settled from what
   it says
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-hmw rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-hmw rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-25 - A check the provider never settles stops being live
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a check in Stalled the provider has left undecided for the stated
   period
 - **WHEN** that period passes
-- **THEN** the check is Expired, the case shows it as lapsed, and the case can be
-  invited again
+- **THEN** the check is Expired, the case shows it as lapsed, and the case may
+  raise a new check
+- **AND** a check the provider's reviewer holds over the same period is
+  neither Stalled nor Expired
 
 ### Requirement: A case has one live check at a time
 
@@ -215,32 +216,32 @@ writing, so two requests arriving together cannot both raise one. Asking for a
 check while one is live SHALL answer with the live check rather than issue a
 second. An operator holding `vault:operate` SHALL be able to withdraw a case's
 live check at any time before custody begins, and asking for a check after a
-withdrawal SHALL issue a new one with its own invitation.
+withdrawal SHALL issue a new one.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-vvo rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-09 - Asking twice does not invite twice
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-vvo rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-09 - Asking twice does not raise twice
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
 - **GIVEN** a case with a check in Invited
 - **WHEN** a check is asked for again, including at the same moment as the first
 - **THEN** one check exists, both requests answer with it, and the collector
-  holds one working invitation
+  is handed that one
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-nym rev=1 -->
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-10 - A withdrawn check frees the case to be invited again
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-nym rev=2 -->
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-10 - A withdrawn check frees the case for a new one
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a case with a live check
 - **WHEN** the check is withdrawn and a new one asked for
-- **THEN** the old invitation no longer starts a check, and the new one does
+- **THEN** the old check is not handed over again, and the new one is
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-fuz rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-fuz rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-26 - An operator clears a check that is going nowhere
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a case whose check is Invited, Started, Submitted or Stalled
 - **WHEN** an operator holding `vault:operate` withdraws it
-- **THEN** the check is Withdrawn, the collector's invitation starts no check,
+- **THEN** the check is Withdrawn, the collector is not handed to it again,
   and the case holds no live check
 
 ### Requirement: A verdict is trusted only as the provider's, about the case's live check, once
@@ -321,19 +322,19 @@ refusal it was to the operator.
 
 ### Requirement: The collector is told where their check stands
 
-The system SHALL show the collector the state of their check whenever they open
-their invitation, and SHALL tell them what to do next for every state.
+The system SHALL show the collector the state of their check wherever it was
+raised from, and SHALL tell them what to do next for every state.
 
 | State | What the collector is told to do |
 | --- | --- |
 | Invited | Start the check |
 | Started | Carry on where they left off |
-| Submitted | Wait; nothing is needed from them |
+| Submitted | Wait; nothing is needed from them, and a check a reviewer holds says it is being reviewed |
 | Stalled | Wait; nothing is needed from them |
 | Approved | Nothing further; their identity is on file |
-| Declined | Bring the document to the store |
-| Expired | Ask to be invited again |
-| Withdrawn | Ask to be invited again |
+| Declined | Try again, or bring the document to the store |
+| Expired | Start a new check |
+| Withdrawn | Start a new check |
 
 A declined collector SHALL be told that the check could not be completed
 online and that the counter is another way, and nothing else: no reason, no
@@ -341,21 +342,21 @@ finding, and no test the document failed. What the provider found SHALL be
 readable only by an operator holding the grant that reads the record, so the
 collector and the operator are never shown the same words.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-y6x rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-y6x rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-17 - A collector returning mid-check is shown where they are
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a check in Started
-- **WHEN** the collector opens the invitation again on the device that started
+- **WHEN** the collector comes back to the check on the device that started
   it
 - **THEN** they continue the provider's check rather than starting a new one
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-qkz rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-qkz rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-18 - A declined collector is told what to do next
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
 - **GIVEN** a check in Declined
-- **WHEN** the collector opens the invitation
+- **WHEN** the collector comes back to it
 - **THEN** they are told the check did not pass and that the document can be
   checked at the store, and are shown no reason it did not pass
 
@@ -363,19 +364,20 @@ collector and the operator are never shown the same words.
 
 The system SHALL start no check — mint no link into the provider's ceremony —
 until the collector has agreed, on the page that starts it, to the provider's
-check of their document and their face, to Grade10 keeping the document and
+check of their document and their face and screening of their name against
+watchlists and lists of politically exposed people, to Grade10 keeping the document and
 the result, to that result counting across Grade10's services, and to their
 right to erasure. The instant of the agreement SHALL be recorded on the check
 when it is first given and SHALL NOT be re-stamped when the collector returns
 to continue. A start carrying no agreement SHALL be refused, and SHALL change
 nothing.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-csg rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-csg rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-28 - A check starts only once the collector agrees
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
-- **GIVEN** a check in Invited
-- **WHEN** the collector tries to start it without agreeing, and then agrees
+- **GIVEN** a collector with nothing to reuse
+- **WHEN** the collector tries to start a check without agreeing, and then agrees
   and starts it
 - **THEN** the first attempt is refused and reaches the provider with nothing,
   and the second records when they agreed and hands them to the provider
@@ -394,7 +396,7 @@ and SHALL show on the case beside the declined check. A counter check offered
 without a reason on such a case SHALL be refused. Which grant an override takes
 is the consumer's to say, and `grade10-site/vault/identity-check` says it.
 
-<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-4i1 rev=1 -->
+<!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-4i1 rev=2 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-19 - Staff record a check while a hosted one is live
 **Serves:** grade10-site-e-kyc-hosted-verification-US-02 - Collector falls back to the counter when the hosted check does not complete
 
@@ -402,8 +404,8 @@ is the consumer's to say, and `grade10-site/vault/identity-check` says it.
   Stalled
 - **WHEN** staff record an identity check at the counter
 - **THEN** the case holds the identity staff recorded
-- **AND** the hosted check is Withdrawn, so the collector's old invitation no
-  longer starts a check
+- **AND** the hosted check is Withdrawn, so the collector is not handed to it
+  again
 
 <!-- trace:scenario id=g10.e-kyc-hosted-verification.SC-lod rev=1 -->
 #### Scenario: grade10-site-e-kyc-hosted-verification-SC-20 - A counter check after a decline is recorded as an override

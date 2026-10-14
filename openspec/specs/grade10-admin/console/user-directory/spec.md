@@ -16,6 +16,7 @@ everything access is not.
   - Granted moves only: a move reaches the row or the panel only when the operator's grants allow it
   - Open erasure: ban and unban are not offered while erasure is filed
   - Auction standing: an operator holding `auction:moderate` suspends or reinstates an account's bidding from its panel
+  - Identity: an operator holding `kyc:read` reads the account's identity; one holding `kyc:request` requires or drops a verification
 - Addressing an account
   - One address: the account's identifier in the page's address opens its panel
   - A view survives a paste: the search, the narrowing and the page position travel in the address
@@ -296,6 +297,36 @@ NOT suspend it.
 - **WHEN** they open the panel of a suspended account and of one that is not
 - **THEN** neither panel offers suspend or reinstate
 
+
+### Requirement: The panel shows the account's identity, and an admin requires a verification
+
+The panel SHALL show an Identity card to a session holding `kyc:read`, and
+none to any other session. The card SHALL show the account's person and
+business standings, each subject's latest hosted check with its state, its
+screening finding and a link to the provider's review, and each request with
+its subject, whether it is met, its reason, who required it and when. A session holding
+`kyc:request` SHALL be offered Require KYC, Require KYB and Drop on the card,
+each asking for a reason before it is sent, as
+`grade10-site/store/account-identity` defines a request. Where identity is
+switched off, the card SHALL offer no move.
+
+<!-- trace:scenario id=g10adm.console-user-directory.SC-41a rev=1 -->
+#### Scenario: grade10-admin-console-user-directory-SC-26 - An admin requires a business from the panel
+**Serves:** grade10-admin-console-user-directory-US-05 - Admin asks an account to verify
+
+- **GIVEN** an admin and an account with no request
+- **WHEN** they open the account's panel and choose Require KYB with a reason
+- **THEN** the Identity card shows a `business` request with that reason, the
+  admin's name and the time
+- **AND** the card offers Drop on it
+
+<!-- trace:scenario id=g10adm.console-user-directory.SC-deb rev=1 -->
+#### Scenario: grade10-admin-console-user-directory-SC-27 - Without `kyc:read` the panel shows no identity
+**Serves:** grade10-admin-console-user-directory-US-05 - Admin asks an account to verify
+
+- **GIVEN** an operator holding `user:list` and not `kyc:read`
+- **WHEN** they open an account's panel
+- **THEN** no Identity card is shown
 
 ### Requirement: An operator creates an account from Users
 

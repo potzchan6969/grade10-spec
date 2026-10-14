@@ -19,9 +19,10 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - 🚧 The store keeps the name a member chose for the shop, empty until they choose one. The profile, the till, the pass and the membership page show one name: that name, else the account name in auth, else the address before the `@`
 - 🚧 The store keeps the avatar a member chose for the shop: its key on the profile, the image in the store's own bucket
 - While auth cannot be reached, a member with no name chosen for the shop shows as 會員 at the till, and their pass stays as it was until a later refresh
-- The verified record — legal name, date of birth, document type, masked number, expiry, and the photograph of the document — lives in `grade10-e-kyc-service`: its own worker, its own Neon project, its own R2 bucket. It has no gateway route and no `ServiceId`, so no browser reaches it; a product reaches it over a `KYC_SERVICE` binding
+- The verified record - for a person, legal name, date of birth, document type, masked number, expiry, and the photograph of the document; for a business, its legal name, registration, country, address, the people it names and its registration document - lives in `grade10-e-kyc-service`: its own worker, its own Neon project, its own R2 bucket. It has no gateway route and no `ServiceId`, so no browser reaches it; a product reaches it over a `KYC_SERVICE` binding
 - Writes and case bindings are scoped to the calling product, by the entrypoint its binding names. Reading a person's verification is not: the same human is the same human, so a second product binds the check the first recorded instead of photographing the passport again
-- Only the vault holds a binding today. The reuse is a wiring job rather than a rewrite, and it is not done
+- The store and the vault hold bindings: the store one per account for the person and one for the business, the vault one per case
+- The store keeps an account's verification requests - what is asked, the reason, who asked and when - beside its own identity cases; erasing the account deletes them
 - Erasure is product-driven. The product that opened a case calls `releaseCaseBinding`, and the record and its capture are purged once nothing binds them — only the owning product knows whether the evidence is under legal hold, so a binding that still stands is the hold
 - Addresses stay product data, owned by apps
 

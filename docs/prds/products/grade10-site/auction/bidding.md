@@ -25,7 +25,7 @@ order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/interna
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
 | 🚧 Bid currency | **USD** for every lot; a collector always types USD — [Currencies](#currencies) |
 | 🚧 Bid ceiling | **USD 10,000,000** on every lot |
-| 🚧 Verified bidder | A bid of **USD 15,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
+| 🚧 Verified bidder | A bid of **USD 15,000** or more, or any new or raised maximum from an account Grade10 asked to verify - [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
 
@@ -168,7 +168,8 @@ any maximum.
 | Below the next minimum | **Minimum bid is** the minimum |
 | Above the USD ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
 | Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
-| At or above the bar without a verified identity | Where to verify; the auction hears nothing of the bid |
+| At or above the bar without a verified identity | **Bids this high need a verified identity. Verify from your account, then bid again.** and a **Verify** link |
+| Grade10 asked the account to verify, and it has not | **We asked you to verify before you bid again.** and a **Verify** link |
 | No linked card | **Link a card to bid.** |
 | Another card after the first accepted bid on the lot | **This listing's card is locked after the first accepted bid.** |
 | Bidding suspended on the account | **Bidding is suspended on this account. Contact Us to resolve it.** |
@@ -502,7 +503,7 @@ surface.
 | A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the USD ceiling, which shows no maximum-bid message. | Product |
 | Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the USD ceiling; never in the bidder's record. | Product and engineering |
 | An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
-| Verified bidder | 🚧 In flight | A bid of USD 15,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
+| Verified bidder | 🚧 In flight | A bid of USD 15,000 or more, or any new or raised maximum from an account Grade10 asked to verify, needs what is asked, checked by the storefront before the auction hears of the bid. | Product |
 | Bid currency | 🚧 In flight | USD is the single bid currency for every lot. Winners choose USD or HKD settlement. Chosen over per-lot bid currencies, which made bids incomparable and required separate increments and ceilings. | Product |
 | Existing lots | 🚧 In flight | Every existing lot is test data: its currency is overwritten to USD with the amounts unchanged and no conversion. | Product |
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |

@@ -90,6 +90,7 @@ import sharedEnSignIn from "../messages/shared/en/signIn.json";
 import sharedEnStore from "../messages/shared/en/store.json";
 import sharedEnStoreHome from "../messages/shared/en/storeHome.json";
 import sharedEnVault from "../messages/shared/en/vault.json";
+import sharedEnVerification from "../messages/shared/en/verification.json";
 import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
@@ -117,6 +118,7 @@ import sharedKoSignIn from "../messages/shared/ko/signIn.json";
 import sharedKoStore from "../messages/shared/ko/store.json";
 import sharedKoStoreHome from "../messages/shared/ko/storeHome.json";
 import sharedKoVault from "../messages/shared/ko/vault.json";
+import sharedKoVerification from "../messages/shared/ko/verification.json";
 import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json";
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
 import sharedZhHansAuctionBiddingHistory from "../messages/shared/zh-Hans/auctionBiddingHistory.json";
@@ -144,6 +146,7 @@ import sharedZhHansSignIn from "../messages/shared/zh-Hans/signIn.json";
 import sharedZhHansStore from "../messages/shared/zh-Hans/store.json";
 import sharedZhHansStoreHome from "../messages/shared/zh-Hans/storeHome.json";
 import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
+import sharedZhHansVerification from "../messages/shared/zh-Hans/verification.json";
 import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json";
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
 import sharedZhHantAuctionBiddingHistory from "../messages/shared/zh-Hant/auctionBiddingHistory.json";
@@ -171,6 +174,7 @@ import sharedZhHantSignIn from "../messages/shared/zh-Hant/signIn.json";
 import sharedZhHantStore from "../messages/shared/zh-Hant/store.json";
 import sharedZhHantStoreHome from "../messages/shared/zh-Hant/storeHome.json";
 import sharedZhHantVault from "../messages/shared/zh-Hant/vault.json";
+import sharedZhHantVerification from "../messages/shared/zh-Hant/verification.json";
 
 import zzzKoAuctionListing from "../messages/zzz/ko/auctionListing.json";
 import zzzKoChrome from "../messages/zzz/ko/chrome.json";
@@ -211,6 +215,7 @@ export const sharedEn = {
   store: sharedEnStore,
   storeHome: sharedEnStoreHome,
   vault: sharedEnVault,
+  verification: sharedEnVerification,
 };
 
 export const sharedZhHant = {
@@ -241,6 +246,7 @@ export const sharedZhHant = {
   store: sharedZhHantStore,
   storeHome: sharedZhHantStoreHome,
   vault: sharedZhHantVault,
+  verification: sharedZhHantVerification,
 };
 
 export const sharedZhHans = {
@@ -271,6 +277,7 @@ export const sharedZhHans = {
   store: sharedZhHansStore,
   storeHome: sharedZhHansStoreHome,
   vault: sharedZhHansVault,
+  verification: sharedZhHansVerification,
 };
 
 export const sharedKo = {
@@ -301,6 +308,7 @@ export const sharedKo = {
   store: sharedKoStore,
   storeHome: sharedKoStoreHome,
   vault: sharedKoVault,
+  verification: sharedKoVerification,
 };
 
 /** What each brand says for itself, one language at a time. */

@@ -1,6 +1,6 @@
 # grade10-site/vault/collector-notifications Test Cases
 
-**Status:** pending-review · 2/32
+**Status:** pending-review · 2/28
 **Drafts styled:** 2026-10-01, tcs-rules r4
 **Out of suite:** `grade10-site-vault-collector-notifications-SC-27` — its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that capability's suite walks the money email it names.
 
@@ -934,142 +934,9 @@ and that a person decides,
 
 ---
 
-## grade10-site-vault-collector-notifications-US6: Collector is invited to verify before the visit
-
-**As a** collector with a visit booked and no identity on file,
-**I want** the invitation to name the visit, the slot and what to bring,
-**so that** I can verify at home and turn up prepared.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-wk8 rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
-### grade10-site-vault-collector-notifications-US6-TC1-1: The invitation names the visit's shop, slot and checklist
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-06
-
-**Pre-conditions:**
-
-* customer(collector) has a case with a visit booked and no identity on file.
-
-**Steps:**
-
-1. Open the identity-check invitation email the collector receives.
-
-**Expected Results:**
-
-* The email names the shop, the slot, and what to bring to the visit.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-dxp rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
-### grade10-site-vault-collector-notifications-US6-TC2-1: The invitation's link opens the hosted identity check
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-06
-
-**Pre-conditions:**
-
-* customer(collector) has a case with a visit booked and no identity on file.
-
-**Steps:**
-
-1. Open the identity-check invitation email.
-2. Click its link.
-
-**Expected Results:**
-
-* The hosted identity check opens.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-x7v rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
-### grade10-site-vault-collector-notifications-US6-TC3-1: An operator resends the invitation before custody closes it
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-06
-
-**Pre-conditions:**
-
-* The case has no identity on file and has not yet reached custody.
-* admin(holds vault:operate) is on <grade10 vault admin case url>.
-
-**Steps:**
-
-1. Send the identity-check invitation again from the case.
-
-**Expected Results:**
-
-* The collector receives a new invitation email.
-* The case's identity state shows Out with the new invitation's date.
-
-<!-- trace:case id=g10.vault-collector-notifications.TC-w6w rev=1 covers=g10.vault-collector-notifications.SC-kz4,g10.vault-collector-notifications.SC-fcf -->
-### grade10-site-vault-collector-notifications-US6-TC4-1: The invitation is withheld when it is not owed
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-06
-
-**Pre-conditions:**
-
-* The case has a visit booked.
-
-**Test data:**
-
-| Reason | State |
-| --- | --- |
-| Identity already on file | The case already has a bound or reusable identity |
-| Already in custody | The item is already in the vault |
-
-**Steps:**
-
-1. The visit-booking event that would trigger the invitation occurs.
-
-**Expected Results:**
-
-* No identity-check invitation is sent.
-
----
-
 ## Settled
 
 - What a tester observes on a retried send is that the attachment equals the packet's sealed copy at send time: the documents are read from the packet at each attempt, never from the queue.
-- The invitation's own condition is a visit booked with no identity to reuse; that a reused check or a case in custody takes no new one is `grade10-site/vault/identity-verification`'s rule, so this suite keeps the case and writes no scenario against it.
 - The panel's Send again on a check still out is `grade10-admin/vault/operator-queue`'s, read from this suite rather than restated in it.
 - The repayment message this capability carries is walked by `grade10-site/vault/loan-and-settlement`'s suite, which reads every money email on the case; it is listed out of suite here.
 - The unset-value rule is whole here — bracketed outside production, the act refused in production, and the message rendered before the record commits — and `grade10-site/vault/loan-and-settlement` names it rather than restating it.
@@ -1114,10 +981,6 @@ reconciliation folded one more,
 | `US5-TC5-1` | Covered | `grade10-site-vault-collector-notifications-SC-21` for the case line; the case reads the footer without saying which party it names, which `US2-TC13-1` now does |
 | `US5-TC6-1` | Covered | `grade10-site-vault-collector-notifications-SC-32` |
 | `US5-TC7-1` | Covered | `grade10-site-vault-collector-notifications-SC-33` |
-| `US6-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-31`, `grade10-site-vault-collector-notifications-SC-20` |
-| `US6-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-31` |
-| `US6-TC3-1` | Covered elsewhere | `grade10-admin-vault-operator-queue-SC-39` states the panel's Send again on a check still out, and the durable `grade10-site-vault-identity-verification-SC-03` states that a case in custody takes no new check; nothing about the invitation is unstated, so no scenario is folded here |
-| `US6-TC4-1` | Covered elsewhere | The invitation's condition is `grade10-site-vault-collector-notifications-SC-20`'s GIVEN — a visit booked and no identity to reuse — and what makes it unmet is `grade10-site-vault-identity-verification-SC-09` (the last check is reused) and `grade10-site-vault-identity-verification-SC-03` (a case in custody takes no new check). The negative restates another capability's rule, so it stays a case and no scenario is written |
 | `US3-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-14` — no case traced `US-03` on its own until this pass; the requirement was denied to the blind reading, so this case answers the Raised row below rather than being re-derived blind |
 | `US4-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-09` — no case traced `US-04` on its own; `US2-TC8-1` traces `US-02` and asserts the retry cadence on a message already failed once, never that the act itself stands despite the failed send |
 | `grade10-site-vault-collector-notifications-SC-04` | Case added | `US2-TC12-1` — no blind case took a money record back, and nothing reached "never with who recorded it" |
@@ -1143,7 +1006,5 @@ reconciliation folded one more,
 | `US5-TC1-1` | The automated walk proves the table's rows; a person reads the whole message to confirm no figure is also written into a sentence |
 | `US5-TC5-1` | A person reads the footer against the party the message is from, which is the one thing the walk cannot decide for every kind of message at once |
 | `US5-TC8-1` | The walk proves the offer's six rows; a person confirms the prose around them repeats none of them |
-| `US6-TC1-1` | The isolated stack configures no hosted verification provider, so e-kyc raises no check and the invitation is never sent |
-| `US6-TC2-1` | As above |
 | `grade10-site-vault-collector-notifications-US2-TC14-1` | A person cancels both rows and reads the mailbox; the vault worker's walk-ins test decides nothing is owed for the unsent one |
 | `grade10-site-vault-collector-notifications-US2-TC15-1` | The draft runs out seven days from its last touch; a person moves the clock or waits, and reads the mailbox |

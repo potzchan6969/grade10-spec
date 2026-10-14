@@ -32,3 +32,11 @@ and roles, open the new account's panel when create succeeds, and open the
 existing account when the email is already taken,
 **so that** I can stand up elevated access before the person signs in without
 leaving the access desk or using Override.
+
+### grade10-admin-console-user-directory-US-05: Admin asks an account to verify
+
+**As an** admin holding `kyc:request`,
+**I want** to read an account's identity on its panel and require it to verify
+its person or its business, with a reason,
+**so that** the account's bids wait until Grade10 knows who stands behind it.
+
