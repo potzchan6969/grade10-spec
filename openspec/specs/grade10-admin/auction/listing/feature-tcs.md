@@ -27,7 +27,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -65,7 +65,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -142,7 +142,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -182,7 +182,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -271,7 +271,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -303,7 +303,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -386,7 +386,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -426,7 +426,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -497,7 +497,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -533,7 +533,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -652,7 +652,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -688,7 +688,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -722,7 +722,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -756,7 +756,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -790,7 +790,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -824,7 +824,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -892,7 +892,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -927,7 +927,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -968,7 +968,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1009,7 +1009,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1107,7 +1107,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1190,7 +1190,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1541,7 +1541,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1577,7 +1577,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1687,7 +1687,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1721,7 +1721,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1756,7 +1756,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1792,7 +1792,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1828,7 +1828,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1872,7 +1872,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1912,7 +1912,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1952,7 +1952,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -1986,7 +1986,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2022,7 +2022,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2056,7 +2056,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2090,7 +2090,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2124,7 +2124,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2156,7 +2156,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2197,7 +2197,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2242,7 +2242,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2309,7 +2309,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2375,7 +2375,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2416,7 +2416,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2450,7 +2450,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2487,7 +2487,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2525,7 +2525,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2559,7 +2559,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2593,7 +2593,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2686,7 +2686,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2720,7 +2720,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2755,7 +2755,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2789,7 +2789,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2832,7 +2832,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2862,7 +2862,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2894,7 +2894,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2938,7 +2938,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -2970,7 +2970,7 @@ campaign,
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3011,7 +3011,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3044,7 +3044,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3076,7 +3076,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3108,7 +3108,7 @@ surface for the same figure.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3624,7 +3624,7 @@ document the unit I selected.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3710,7 +3710,7 @@ document the unit I selected.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-11
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3754,7 +3754,7 @@ selected unit's normal media.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3798,7 +3798,7 @@ selected unit's normal media.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3842,7 +3842,7 @@ selected unit's normal media.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3886,7 +3886,7 @@ copy's photographs apply.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3938,7 +3938,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -3981,7 +3981,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4023,7 +4023,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4070,7 +4070,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4113,7 +4113,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4154,7 +4154,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4199,7 +4199,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4239,7 +4239,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4280,7 +4280,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4321,7 +4321,7 @@ changes later.
 * **Testability:** automation
 * **Trace:** grade10-admin-auction-listing-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4727,7 +4727,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4759,7 +4759,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4789,7 +4789,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4821,7 +4821,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
@@ -4852,7 +4852,7 @@ changes later.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-auction-listing-US-73
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/admin-listing.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/auction/listing.spec.ts`
 
 **Pre-conditions:**
 
