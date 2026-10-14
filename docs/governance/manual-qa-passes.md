@@ -263,7 +263,9 @@ grade10-site-site-page-shell-US06-TC4-1
 
 - **Store line alone** — Buying Online, Finding a Card, Account, the console's sign-in, and Site Foundation less the withheld-products case: 18 cases
 - **Membership line** — Membership, At the Counter, moving points, writing a reward, and the withheld-products case: 8 more
-- ❓ **Joining** — `grade10-site-store-membership-US-01` has no case a walker can run on staging, since its smoke case needs the shop to be unreachable. The product manager names the case that walks a plain join
+- **Profile line** — adds no bar case of its own; the withheld-products case reads its page answering
+- **No identity check at checkout** — the store asks for no identity at any value. `g10.store-cart-drawer.US6-TC2` and the cart drawer's verification-bar rule are left out of every pass, with that reason, until a change removes them
+- ❓ **Joining** — signing in for the first time joins the membership, and no case walks that on staging: the smoke case of `grade10-site-store-membership-US-01` needs the shop to be unreachable. The product manager adds the case
 
 ## See Also
 
