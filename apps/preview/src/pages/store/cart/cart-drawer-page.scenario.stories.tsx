@@ -20,9 +20,10 @@ type CartScenario = BasketSettings & {
 
 /** What the drawer holds for these settings, at this moment of the open. */
 function basketOf(settings: CartScenario) {
+  // A guest may take a public code, but spends no points.
   const basket =
     settings.shopper === "guest"
-      ? { ...settings, coupon: "none" as const, points: "none" as const }
+      ? { ...settings, points: "none" as const }
       : settings;
   return settings.moment === "priced"
     ? priceBasket(basket)
@@ -68,7 +69,11 @@ const meta = {
       options: ["opening", "before-code", "priced"],
     },
     ...BASKET_ARG_TYPES,
-    coupon: { ...BASKET_ARG_TYPES.coupon, ...memberOnly },
+    coupon: {
+      ...BASKET_ARG_TYPES.coupon,
+      description:
+        "Held in the member's wallet, minted by Loyalty; for a guest, a public code open to everyone",
+    },
     points: { ...BASKET_ARG_TYPES.points, ...memberOnly },
     balance: { ...BASKET_ARG_TYPES.balance, ...memberOnly },
   },
@@ -82,6 +87,7 @@ const meta = {
       "shared-ui-store-cart-US-16",
       "shared-ui-store-cart-US-18",
       "grade10-site-store-checkout-US-01",
+      "grade10-site-store-checkout-US-04",
     ],
     rules: {
       ...BASKET_RULES,
@@ -101,6 +107,11 @@ const meta = {
         estimatedTotal={basket.estimatedTotal}
         guest={settings.shopper === "guest"}
         heldPromoCodes={basket.heldCode ? [basket.heldCode] : []}
+        publicPromoCodes={
+          settings.shopper === "guest" && basket.heldCode
+            ? [basket.heldCode]
+            : undefined
+        }
         items={basket.items}
         loading={settings.moment === "opening"}
         orderDiscounts={basket.orderDiscounts}
@@ -127,6 +138,13 @@ const meta = {
       expect(
         canvas.getAllByText(basket.promoState.error).length,
       ).toBeGreaterThan(0);
+    if (settings.shopper === "guest") {
+      expect(
+        canvas.getByRole("button", { name: "Check Out as Guest" }),
+      ).toBeInTheDocument();
+      expect(canvas.queryByText("Use points")).not.toBeInTheDocument();
+      return;
+    }
     if (basket.pointsState?.status === "applied")
       expect(
         canvas.getAllByText(String(basket.pointsState.amountLabel)).length,
@@ -327,8 +345,168 @@ export const BoxesShort: Story = {
   args: { siteDiscount: "order-discount", lines: "adjusted", points: "500" },
 };
 
-/** A guest sees the site discount alone: codes and points are for members. */
-export const Guest: Story = {
-  name: "Guest · site discount only",
-  args: { shopper: "guest", siteDiscount: "order-discount" },
+// A guest meets the same site discounts and codes, with public codes only and no points.
+
+export const GuestNoDiscountNoCode: Story = {
+  name: "Guest · No site discount · no code",
+  args: { shopper: "guest", siteDiscount: "none", coupon: "none" },
+};
+
+export const GuestNoDiscountOrderCode: Story = {
+  name: "Guest · No site discount · HK$50 code",
+  args: { shopper: "guest", siteDiscount: "none", coupon: "order" },
+};
+
+export const GuestNoDiscountProductCode: Story = {
+  name: "Guest · No site discount · 10% card code",
+  args: { shopper: "guest", siteDiscount: "none", coupon: "product" },
+};
+
+export const GuestNoDiscountCodeTooSmall: Story = {
+  name: "Guest · No site discount · HK$200 code, order too small",
+  args: { shopper: "guest", siteDiscount: "none", coupon: "too-small" },
+};
+
+export const GuestSaleNoCode: Story = {
+  name: "Guest · Sale on the card · no code",
+  args: { shopper: "guest", siteDiscount: "product-sale", coupon: "none" },
+};
+
+export const GuestSaleOrderCodeStacks: Story = {
+  name: "Guest · Sale on the card · HK$50 code stacks",
+  args: {
+    shopper: "guest",
+    siteDiscount: "product-sale",
+    coupon: "order",
+    shopAnswer: "stack",
+  },
+};
+
+export const GuestSaleOrderCodeReplaces: Story = {
+  name: "Guest · Sale on the card · HK$50 code replaces the discount",
+  args: {
+    shopper: "guest",
+    siteDiscount: "product-sale",
+    coupon: "order",
+    shopAnswer: "replace",
+  },
+};
+
+export const GuestSaleOrderCodeRefused: Story = {
+  name: "Guest · Sale on the card · HK$50 code refused",
+  args: {
+    shopper: "guest",
+    siteDiscount: "product-sale",
+    coupon: "order",
+    shopAnswer: "refuse",
+  },
+};
+
+export const GuestSaleProductCodeStacks: Story = {
+  name: "Guest · Sale on the card · 10% card code stacks",
+  args: {
+    shopper: "guest",
+    siteDiscount: "product-sale",
+    coupon: "product",
+    shopAnswer: "stack",
+  },
+};
+
+export const GuestSaleProductCodeReplaces: Story = {
+  name: "Guest · Sale on the card · 10% card code replaces the discount",
+  args: {
+    shopper: "guest",
+    siteDiscount: "product-sale",
+    coupon: "product",
+    shopAnswer: "replace",
+  },
+};
+
+export const GuestSaleProductCodeRefused: Story = {
+  name: "Guest · Sale on the card · 10% card code refused",
+  args: {
+    shopper: "guest",
+    siteDiscount: "product-sale",
+    coupon: "product",
+    shopAnswer: "refuse",
+  },
+};
+
+export const GuestSaleCodeTooSmall: Story = {
+  name: "Guest · Sale on the card · HK$200 code, order too small",
+  args: { shopper: "guest", siteDiscount: "product-sale", coupon: "too-small" },
+};
+
+export const GuestOrderDiscountNoCode: Story = {
+  name: "Guest · Order discount · no code",
+  args: { shopper: "guest", siteDiscount: "order-discount", coupon: "none" },
+};
+
+export const GuestOrderDiscountOrderCodeStacks: Story = {
+  name: "Guest · Order discount · HK$50 code stacks",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "order",
+    shopAnswer: "stack",
+  },
+};
+
+export const GuestOrderDiscountOrderCodeReplaces: Story = {
+  name: "Guest · Order discount · HK$50 code replaces the discount",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "order",
+    shopAnswer: "replace",
+  },
+};
+
+export const GuestOrderDiscountOrderCodeRefused: Story = {
+  name: "Guest · Order discount · HK$50 code refused",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "order",
+    shopAnswer: "refuse",
+  },
+};
+
+export const GuestOrderDiscountProductCodeStacks: Story = {
+  name: "Guest · Order discount · 10% card code stacks",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "product",
+    shopAnswer: "stack",
+  },
+};
+
+export const GuestOrderDiscountProductCodeReplaces: Story = {
+  name: "Guest · Order discount · 10% card code replaces the discount",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "product",
+    shopAnswer: "replace",
+  },
+};
+
+export const GuestOrderDiscountProductCodeRefused: Story = {
+  name: "Guest · Order discount · 10% card code refused",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "product",
+    shopAnswer: "refuse",
+  },
+};
+
+export const GuestOrderDiscountCodeTooSmall: Story = {
+  name: "Guest · Order discount · HK$200 code, order too small",
+  args: {
+    shopper: "guest",
+    siteDiscount: "order-discount",
+    coupon: "too-small",
+  },
 };

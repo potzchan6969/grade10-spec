@@ -53,6 +53,8 @@ type CartDrawerPageProps = {
   promoState?: PromoState;
   /** The member's held codes; defaults to the stand-in wallet. */
   heldPromoCodes?: readonly HeldPromoCode[];
+  /** The codes open to everyone; defaults to the stand-in public codes. */
+  publicPromoCodes?: readonly HeldPromoCode[];
   pointsBalanceLabel?: string;
 };
 
@@ -75,6 +77,7 @@ function CartDrawerPage({
   orderDiscounts,
   promoState = { status: "collapsed" },
   heldPromoCodes = HELD_PROMO_CODES,
+  publicPromoCodes = PUBLIC_PROMO_CODES,
   pointsBalanceLabel = POINTS_BALANCE_LABEL,
 }: CartDrawerPageProps) {
   const [open, setOpen] = useState(true);
@@ -142,7 +145,7 @@ function CartDrawerPage({
         promoState={promo}
         onPromoStateChange={setPromo}
         heldPromoCodes={guest ? null : heldPromoCodes}
-        publicPromoCodes={PUBLIC_PROMO_CODES}
+        publicPromoCodes={publicPromoCodes}
         pointsState={guest ? null : points}
         pointsBalanceLabel={pointsBalanceLabel}
         onPointsStateChange={setPoints}
