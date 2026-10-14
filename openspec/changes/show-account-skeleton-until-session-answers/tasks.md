@@ -16,7 +16,7 @@ Depends on Group 1's published main SHA. Its tests stub the auth client and need
 - [ ] 2.3 Add `apps/frontend/grade10/src/chrome/useHeaderSession.ts`, holding the first answer in state the way `useHeldAddress` holds the opened address. Call it at the top of `Root`, above the bare-surface branch. Replace `Composition.signedIn` and `SiteShell`'s `signedIn` with `session: SiteHeaderSession`, passed straight to `SiteHeader`, and drop the shell's comment that an unresolved session reads as signed out. `grade10-site-site-page-shell-SC-68`, `grade10-site-site-page-shell-SC-69`, `grade10-site-site-page-shell-SC-70`, `grade10-site-site-page-shell-SC-71`, `grade10-site-site-page-shell-SC-72`, `grade10-site-site-page-shell-SC-73`, `grade10-site-site-page-shell-SC-74`, `grade10-site-site-page-shell-SC-77`, `grade10-site-site-page-shell-SC-78`
 - [ ] 2.4 Verify: `pnpm --dir apps/frontend/grade10 exec vitest run src/chrome src/serving/hydration.test.tsx`, `pnpm check:quick`, `pnpm run typecheck`, `pnpm run lint` and `pnpm run build`.
 
-## 3. The walk (grade10)
+## 3. The walk (grade10) (owner: @seankcw)
 
 Uses draft `feature-tcs.md` as its planning input, once QA2 has reconciled it; Groups 1 and 2 have landed.
 
