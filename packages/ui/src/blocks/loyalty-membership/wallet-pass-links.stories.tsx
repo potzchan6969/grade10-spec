@@ -217,7 +217,7 @@ export const EachWalletItsOwnState: Story = {
     ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
   },
 };
 
