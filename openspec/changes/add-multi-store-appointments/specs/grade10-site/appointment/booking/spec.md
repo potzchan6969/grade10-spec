@@ -35,7 +35,8 @@ The site SHALL let a collector book a customer-bookable service at
 1. *Collector* — **Pick a service** from every customer-bookable service,
    each shown with its name, description and duration
 2. *Collector* — **Pick a shop** among those offering it, each shown with its
-   name and address
+   name and address; a service offered at one shop has that shop already
+   picked
 3. *Collector* — **Pick a day** on a month calendar that marks which days
    offer something, reaching no further than the service's booking horizon
 4. *Collector* — **Pick a time** from the day's offered starts, shown in the
@@ -49,6 +50,10 @@ The site SHALL refuse to send a booking whose name, address or required
 answer is missing, saying which, and SHALL send nothing until they are
 supplied. `/book?service=<slug>` SHALL open the flow with that service picked.
 A product-bound service SHALL never be listed.
+
+The steps SHALL NOT change with the service picked: the shop step SHALL be
+shown while any listed service is offered at more than one shop, and SHALL be
+skipped, its one shop picked, only when none is.
 
 <!-- trace:scenario id=g10.appointment-booking.SC-gqn rev=1 -->
 #### Scenario: grade10-site-appointment-booking-SC-01 - Collector books a grading visit
@@ -133,6 +138,22 @@ A product-bound service SHALL never be listed.
 - **WHEN** a collector books the grading service again under that address at another time
 - **THEN** the site says a visit is already booked and shows when it is
 - **AND** no second booking is written
+
+<!-- trace:scenario id=g10.appointment-booking.SC-njr rev=1 -->
+#### Scenario: grade10-site-appointment-booking-SC-24 - A service offered at one shop keeps the shop step
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
+
+- **GIVEN** a grading service offered at one shop and another service offered at two
+- **WHEN** a collector picks the grading service and continues
+- **THEN** the flow is on the shop step, with that one shop picked and the same steps shown as before the pick
+
+<!-- trace:scenario id=g10.appointment-booking.SC-09a rev=1 -->
+#### Scenario: grade10-site-appointment-booking-SC-25 - The shop step is skipped when every service has one shop
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
+
+- **GIVEN** every listed service offered at the same one shop
+- **WHEN** a collector picks a service and continues
+- **THEN** the flow is on the time step with that shop picked, and the steps never showed a shop step
 
 ### Requirement: A private link manages the booking
 
