@@ -118,12 +118,14 @@ function SummaryRow({
   emphasize = false,
   muted = false,
   tooltip,
+  subtext,
 }: {
   label: string;
   value: string;
   emphasize?: boolean;
   muted?: boolean;
   tooltip?: string;
+  subtext?: string;
 }) {
   const labelNode = tooltip ? (
     <HStack className="min-w-0" gap="xs" vAlign="center">
@@ -158,14 +160,24 @@ function SummaryRow({
       >
         {labelNode}
       </span>
-      <span
-        className={cn(
-          "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
-          emphasize && "text-base font-semibold",
-          muted && "text-secondary-foreground",
-        )}
-      >
-        {value}
+      <span className="flex shrink-0 flex-col items-end">
+        <span
+          className={cn(
+            "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
+            emphasize && "text-base font-semibold",
+            muted && "text-secondary-foreground",
+          )}
+        >
+          {value}
+        </span>
+        {subtext ? (
+          <span
+            className="text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
+            data-slot="winner-order-summary-subtext"
+          >
+            {subtext}
+          </span>
+        ) : null}
       </span>
     </div>
   );
@@ -631,6 +643,7 @@ function OrderSummary({
             key={line.label}
             label={line.label}
             muted={line.muted}
+            subtext={line.subtext}
             tooltip={line.tooltip}
             value={line.value}
           />
@@ -644,6 +657,7 @@ function OrderSummary({
               emphasize
               label={summary.total.label}
               muted={summary.total.muted}
+              subtext={summary.total.subtext}
               value={summary.total.value}
             />
           ) : null}
