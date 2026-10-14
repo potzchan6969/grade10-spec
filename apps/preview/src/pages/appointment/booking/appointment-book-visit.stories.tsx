@@ -2,10 +2,8 @@ import { dayValue, formatTimeOfDay, formatWeekday } from "@grade10/date";
 import {
   BookingActionBar,
   BookingDetailsForm,
-  type BookingDetailsValues,
   BookingLocationPicker,
   BookingNotice,
-  BookingPayNotice,
   BookingServicePicker,
   type BookingSlot,
   BookingSlotPicker,
@@ -41,19 +39,18 @@ import {
 
 type Step = "service" | "location" | "time" | "details";
 type Phase = "flow" | "booked" | "confirming" | "expired";
-type Refusal = "taken" | "held" | "heldOut" | "tries" | null;
+type Refusal = "taken" | "held" | "tries" | null;
 
 type Scenario =
   | "normal"
   | "time just taken"
   | "full day"
-  | "already booked signed out"
+  | "signed out"
   | "too many tries today"
   | "slow network"
   | "signed in, no phone on account"
   | "service needs a phone"
   | "paid service"
-  | "booking for someone else"
   | "confirming payment"
   | "paid and booked"
   | "payment not completed";
@@ -71,7 +68,6 @@ type Moment = {
   refusal: Refusal;
   busy: boolean;
   gone: readonly number[];
-  bookedFor?: string;
 };
 
 const TAKEN = hkSlot("2026-10-22", "15:00");
@@ -112,20 +108,18 @@ function preset(scenario: Scenario): Moment {
       };
     case "full day":
       return { ...typed, step: "time", date: "2026-10-17", slot: undefined };
-    case "already booked signed out":
-      return { ...typed, signedIn: false, refusal: "heldOut" };
+    case "signed out":
+      return { ...typed, signedIn: false };
     case "too many tries today":
-      return { ...typed, signedIn: false, refusal: "tries" };
+      return { ...typed, refusal: "tries" };
     case "slow network":
       return { ...typed, busy: true };
     case "signed in, no phone on account":
       return { ...typed, accountPhone: "" };
     case "service needs a phone":
-      return { ...typed, signedIn: false, phoneRequired: true };
+      return { ...typed, accountPhone: "", phoneRequired: true };
     case "paid service":
       return paid;
-    case "booking for someone else":
-      return { ...typed, bookedFor: "Ben Chan" };
     case "confirming payment":
       return { ...paid, phase: "confirming" };
     case "paid and booked":
@@ -205,15 +199,12 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
     );
   }
 
-  const submit = (values: BookingDetailsValues) => {
-    if (moment.refusal === "heldOut" || moment.refusal === "tries") {
+  const submit = () => {
+    if (moment.refusal === "tries") {
       setAttempt((count) => count + 1);
       return;
     }
-    set({
-      bookedFor: values.bookedFor,
-      phase: service?.pay ? "confirming" : "booked",
-    });
+    set({ phase: service?.pay ? "confirming" : "booked" });
   };
 
   const summary = {
@@ -221,9 +212,6 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
     copy: SUMMARY_COPY,
     end: moment.slot?.end,
     extraRows: [
-      ...(moment.bookedFor
-        ? [{ label: WORDS.forLabel, value: moment.bookedFor }]
-        : []),
       ...(service?.pay
         ? [{ label: WORDS.payNow, value: service.pay.line }]
         : []),
@@ -241,14 +229,18 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
     timeZone: BOARD_ZONE,
   };
 
+  /* Guest booking is off: signed out, the details step asks for a sign-in. */
+  const gated = moment.step === "details" && !moment.signedIn;
   const primary =
     moment.step !== "details"
       ? WORDS.continue
-      : moment.busy
-        ? WORDS.stillTrying
-        : service?.pay
-          ? WORDS.payContinue
-          : `Book ${when}`;
+      : gated
+        ? WORDS.signInGate.press
+        : moment.busy
+          ? WORDS.stillTrying
+          : service?.pay
+            ? service.pay.confirm
+            : `Book ${when}`;
 
   return (
     <AppointmentPageShell>
@@ -357,22 +349,6 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
                 ) : undefined
               }
               days={{ status: "ready", data: boardDays(month) }}
-              earliest={{
-                label: `Earliest: ${shop.earliestAt.label}`,
-                pressed:
-                  moment.slot?.start ===
-                  hkSlot(shop.earliestAt.date, shop.earliestAt.time).start,
-                onPick: () =>
-                  set({
-                    date: shop.earliestAt.date,
-                    slot: hkSlot(
-                      shop.earliestAt.date,
-                      shop.earliestAt.time,
-                      length,
-                    ),
-                    refusal: null,
-                  }),
-              }}
               footer="Book at least 2 hours ahead, up to 60 days ahead."
               layout="responsive"
               maxMonth={BOARD_MAX_MONTH}
@@ -406,7 +382,14 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
             />
           ) : null}
 
-          {moment.step === "details" && service ? (
+          {gated ? (
+            <BookingNotice
+              body={WORDS.signInGate.body}
+              title={WORDS.signInGate.title}
+            />
+          ) : null}
+
+          {moment.step === "details" && service && !gated ? (
             <BookingDetailsForm
               account={
                 <p className="m-0 flex flex-wrap items-center gap-x-2 text-sm leading-5 text-(--gray-700)">
@@ -426,31 +409,13 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
               copy={DETAILS_COPY}
               footer={
                 <>
-                  {service.pay ? (
-                    <BookingPayNotice
-                      amount={service.pay.amount}
-                      copy={{ title: WORDS.payNow, via: WORDS.payVia }}
-                      refund={service.pay.refund}
-                    />
-                  ) : null}
                   <p className="m-0 text-[13px] leading-[18px] text-(--gray-700)">
                     {WORDS.consent}{" "}
                     <a className={LINK} href="#privacy">
                       {WORDS.privacy}
                     </a>
                   </p>
-                  {moment.refusal === "heldOut" ? (
-                    <VisitRefusedBook
-                      attempt={attempt}
-                      copy={{
-                        title: `This email already has a ${service.name}.`,
-                        body: "We’ve sent its link there. Sign in to see it here.",
-                        action: WORDS.signIn,
-                      }}
-                      onAction={() => set({ signedIn: true, refusal: null })}
-                      refusal="heldOut"
-                    />
-                  ) : moment.refusal === "tries" ? (
+                  {moment.refusal === "tries" ? (
                     <VisitRefusedBook
                       actionHref="tel:+85223456789"
                       attempt={attempt}
@@ -471,7 +436,6 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
                   ? {
                       ...ME,
                       phone: moment.accountPhone,
-                      bookedFor: moment.bookedFor,
                       answers: { cards: "12", company: "PSA" },
                     }
                   : {
@@ -514,20 +478,23 @@ function BookVisitPage({ scenario = "normal" }: { scenario?: Scenario }) {
                     : `Check the ${invalid} fields marked above.`
                   : undefined
             }
+            footnotes={
+              moment.step === "details" && !gated && service?.pay
+                ? [service.pay.refund, WORDS.payVia]
+                : undefined
+            }
             note={
-              moment.step !== "details"
-                ? undefined
-                : moment.busy
-                  ? WORDS.slowNote
-                  : service?.pay
-                    ? WORDS.payHold
-                    : undefined
+              moment.step === "details" && moment.busy
+                ? WORDS.slowNote
+                : undefined
             }
             noteLive={moment.busy}
             primary={
-              moment.step === "details"
-                ? { label: primary, form: "book-visit-details" }
-                : { label: primary, onClick: next }
+              gated
+                ? { label: primary, onClick: () => set({ signedIn: true }) }
+                : moment.step === "details"
+                  ? { label: primary, form: "book-visit-details" }
+                  : { label: primary, onClick: next }
             }
           />
         </div>
@@ -676,7 +643,7 @@ function After({
             ]
           : []),
       ]}
-      name={moment.bookedFor || ME.name}
+      name={ME.name}
       onAgain={onAgain}
       paid={
         service.pay
@@ -732,12 +699,12 @@ export const Default: Story = {
     ).toBeVisible();
     await userEvent.click(canvas.getByRole("radio", { name: /^Central/ }));
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
-    await userEvent.click(
-      canvas.getByRole("button", { name: /Earliest: today, 16:30/ }),
-    );
     expect(
       canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
     ).toBeVisible();
+    expect(canvas.queryByRole("button", { name: /Earliest/ })).toBeNull();
+    await userEvent.click(canvas.getByRole("button", { name: /^Thu 22 Oct/ }));
+    await userEvent.click(canvas.getByRole("button", { name: "15:00" }));
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
     expect(
       canvas.getByRole("heading", { level: 2, name: "Your details" }),
@@ -764,8 +731,21 @@ export const FullDay: Story = {
   },
 };
 
-export const AlreadyBookedSignedOut: Story = {
-  args: { scenario: "already booked signed out" },
+/** Guest booking is off: signed out, the details step asks for a sign-in,
+ * and the picks are kept through it. */
+export const SignedOut: Story = {
+  args: { scenario: "signed out" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Sign in to book" }),
+    );
+    expect(canvas.getByText(`Signed in as Alex Chan.`)).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: /^Book Thu 22 Oct, 15:00/ }),
+    ).toBeVisible();
+  },
 };
 
 export const TooManyTriesToday: Story = {
@@ -795,13 +775,19 @@ export const PaidService: Story = {
   args: { scenario: "paid service" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("group", { name: "Pay now" })).toBeVisible();
-    expect(canvas.getByText("We hold this time for 30 minutes")).toBeVisible();
+    expect(
+      canvas.getByRole("button", {
+        name: "Confirm booking with HK$100 deposit",
+      }),
+    ).toBeVisible();
+    expect(
+      canvas.getByText(
+        "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+      ),
+    ).toBeVisible();
+    expect(canvas.queryByText(/We hold this time/)).toBeNull();
+    expect(canvas.queryByText("I’m booking for someone else")).toBeNull();
   },
-};
-
-export const BookingForSomeoneElse: Story = {
-  args: { scenario: "booking for someone else" },
 };
 
 export const ConfirmingPayment: Story = {

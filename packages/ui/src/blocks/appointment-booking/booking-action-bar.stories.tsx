@@ -48,11 +48,28 @@ export const ErrorCount: Story = {
   },
 };
 
-/** A paid service: the time is held while the collector pays. */
-export const PayHold: Story = {
+/** A paid service: the press names the deposit, and the refund rule and
+ * where it is paid sit under the presses as footnotes. */
+export const Deposit: Story = {
   args: {
-    primary: { label: "Continue to payment", onClick: fn() },
-    note: "We hold this time for 30 minutes",
+    primary: { label: "Confirm booking with HK$100 deposit", onClick: fn() },
+    footnotes: [
+      "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+      "You pay on a secure Stripe page. Nothing is charged until you finish there.",
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("button", {
+        name: "Confirm booking with HK$100 deposit",
+      }),
+    ).toBeVisible();
+    expect(
+      canvas.getByText(
+        "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+      ),
+    ).toBeVisible();
   },
 };
 

@@ -4,8 +4,8 @@ spec: grade10-site/appointment/booking
 order: 1
 ---
 
-A collector books a visit to a shop without an account, in five picks, and
-leaves holding a link that manages it.
+A signed-in collector books a visit to a shop in five picks, and leaves
+holding a link that manages it.
 
 - **Service** — every customer-bookable service, with its length
 - **Shop** — the shops offering it, with their addresses; one shop is
@@ -13,14 +13,21 @@ leaves holding a link that manages it.
   shop, so the steps never change with the service picked
 - **Day** — a month calendar marking the days with something free, no further
   than the service's horizon
-- **Time** — the day's offered starts, in the shop's zone with the zone named
-- **Details** — name, email, a phone number, the service's questions, notes;
-  the phone is optional unless the service requires one
-- **Signed in** — the account's name, email and phone read as a summary
-  nobody edits here; the phone is asked for only when the account has none
-- **Pay** — a service that takes payment at booking sends the collector to
-  Stripe's checkout for its deposit or its full price; the time is held 30
+- **Time** — the day's offered starts, in the shop's zone with the zone named;
+  no press jumps to the earliest time
+- **Details** — the account's name, email and phone read as a summary nobody
+  edits here, then the service's questions and notes; the phone is asked for
+  only when the account has none, and is optional unless the service requires
+  one
+- **Signed out** — the details step asks the collector to sign in; the picks
+  are kept through the sign-in. Guest booking is built and switched off
+- **Pay** — a service that takes payment at booking names it on the press,
+  `Confirm booking with HK$100 deposit` or `Confirm booking and pay HK$300`,
+  with the refund rule and where it is paid under the presses as footnotes.
+  The press sends the collector to Stripe's checkout; the time is held 15
   minutes, and the visit is booked once the payment arrives
+- **Amounts** — a whole amount drops its zero cents, `HK$100`; an amount with
+  cents keeps them, `HK$100.50`
 - **URL**
   1. `grade10.com/book` — the flow
   2. `grade10.com/book?service=<slug>` — the flow opened at one service
@@ -56,14 +63,14 @@ leaves holding a link that manages it.
 Every step, state and phone frame: [the Appointments page of the Admin Console Redesign canvas](https://claude.ai/artifact/VT2bj6voRA2Ps3G9wqivGd).
 
 :::detail{title="Product decisions" for="pm"}
-A visit is booked by the person who will turn up, not by an account, because
-the first thing a new collector does with Grade10 is bring a card in. The
-account comes later, and the diary finds their visits by the address they
-gave.
+A visit is booked under the collector's account. Guest booking — a name and
+an email, the account later — is built and switched off; the diary still
+finds a guest visit made before by the address it was booked under.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Account | Decided | None needed; a name and an email book a visit. | Product |
+| Account | Decided | Required: a collector signs in to book. Guest booking stays in the code behind a switch, off. | Product |
+| Booking for someone else | Decided | Not offered: a visit is booked for the account holder. Built and switched off. | Product |
 | Time zone shown | Decided | The shop's, named; the visit is physical. | Product |
 | Second visit, same service | Decided | Refused while one is live; a collector with two cards books one visit. | Product |
 | Phone number | Decided | Optional by default; a service turns on Require a phone number when the shop calls before the visit, and the booking is refused without one. Set per service, because only some visits need a call. | Operations |
@@ -75,6 +82,7 @@ gave.
 | Shop facts in 繁中 | ❓ Open | Shop names, addresses, how to get there and counter names are stored in both languages. | Product |
 | Payment at booking | Decided | Set per service: none, a deposit or the full price, in HKD, paid on Stripe's checkout. Staff bookings and product visits pay in the shop. | Product |
 | Refunds | Decided | Set per service and off by default: a collector's cancellation before a cut-off, and a visit the shop cancels, each refunds in full only when the service allows it. | Product |
-| Unpaid hold | Decided | 30 minutes, the shortest checkout Stripe keeps open; an unpaid booking then ends and frees the time. | Engineering |
+| Unpaid hold | Decided | 15 minutes; an unpaid booking then ends and frees the time. Stripe keeps a checkout open 30 minutes at the least, so the diary closes the page itself when the hold ends. | Product |
+| Pay notice | Decided | No separate box: the press names the amount, and the refund rule sits under the presses as a footnote. | Product |
 | Anonymous write | Decided | A challenge plus a per-address budget of ten asks a day. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |
 :::

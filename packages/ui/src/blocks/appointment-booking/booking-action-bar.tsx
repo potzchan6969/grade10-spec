@@ -13,8 +13,13 @@ type BookingActionBarProps = {
   primary: { label: ReactNode; onClick?: () => void; form?: string };
   /** What is missing before the act can run: drawn over the presses. */
   error?: ReactNode;
-  /** Under the primary press: a slow write, or how long a time is held. */
+  /** Under the primary press: a slow write. */
   note?: ReactNode;
+  /**
+   * The bar's last lines, under both presses, in small print: what a paid
+   * booking refunds and where it is paid. One line per entry.
+   */
+  footnotes?: readonly ReactNode[];
   /** A booking is in flight: the press spins and Back stays put. */
   busy?: boolean;
   /** Announces the note: a slow write says so as it happens. */
@@ -23,12 +28,14 @@ type BookingActionBarProps = {
 };
 
 /** The bar at the foot of every step: Back on the left, the step's act on
- * the right, what stops it above, a note under it. Sticks to the bottom. */
+ * the right, what stops it above, a note under it and footnotes under all.
+ * Sticks to the bottom. */
 function BookingActionBar({
   back,
   primary,
   error,
   note,
+  footnotes = [],
   busy = false,
   noteLive = false,
   className,
@@ -99,6 +106,19 @@ function BookingActionBar({
           ) : null}
         </div>
       </div>
+      {footnotes.length > 0 ? (
+        <div
+          className="flex flex-col gap-0.5 text-[12px] leading-4 text-secondary-foreground"
+          data-slot="booking-footnotes"
+        >
+          {footnotes.map((line, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: fixed lines in a fixed order
+            <p className="m-0" key={index}>
+              {line}
+            </p>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

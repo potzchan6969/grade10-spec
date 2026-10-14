@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { BookingDetailsForm } from "./booking-details-form";
-import { BookingPayNotice } from "./booking-pay-notice";
 import {
   ALL_KINDS_QUESTIONS,
   BOARD_GRADING_QUESTIONS,
@@ -384,6 +383,29 @@ export const AboutYourCards: Story = {
   },
 };
 
+/** A hint and an error on one field leave the control beside it in line:
+ * the label, hint, control and error of each field share the grid's rows. */
+export const AlignedBesideAHint: Story = {
+  args: {
+    questions: BOARD_GRADING_QUESTIONS.slice(0, 2),
+    questionsTitle: "About your cards",
+    description: undefined,
+    className: "max-w-[600px]",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const top = (element: HTMLElement) =>
+      Math.round(element.getBoundingClientRect().top);
+    const count = canvas.getByRole("spinbutton", { name: "How many cards?" });
+    const box = count.closest<HTMLElement>('[data-slot="input-box"]') ?? count;
+    const company = canvas.getByRole("combobox", { name: "Grading company" });
+    expect(top(box)).toBe(top(company));
+    await userEvent.type(count, "40");
+    await userEvent.click(canvas.getByRole("button", { name: "Book" }));
+    expect(top(box)).toBe(top(company));
+  },
+};
+
 /** Signed out: each contact field with the line under its label. */
 export const SignedOutHints: Story = {
   args: { questions: [], description: undefined, phoneRequired: true },
@@ -426,8 +448,8 @@ export const ForSomeoneElse: Story = {
   },
 };
 
-/** A paid service: the pay box and the consent line close the form, and the
- * action bar outside it sends it. */
+/** A paid service: the consent line closes the form, and the action bar
+ * outside it sends it, naming the deposit. */
 export const PaidWithBar: Story = {
   args: {
     questions: [],
@@ -442,14 +464,6 @@ export const PaidWithBar: Story = {
     },
     footer: (
       <>
-        <BookingPayNotice
-          amount="HK$100.00 deposit"
-          copy={{
-            title: "Pay now",
-            via: "You pay on a secure Stripe page. Nothing is charged until you finish there.",
-          }}
-          refund="Refunded if you cancel at least 24 hours before, or if the shop cancels."
-        />
         <p className="m-0 text-[13px] leading-[18px]">
           We use these details to run your visit and email you about it.{" "}
           <a className="font-semibold underline" href="#privacy">
@@ -463,7 +477,7 @@ export const PaidWithBar: Story = {
     <div>
       <BookingDetailsForm {...args} />
       <button form="booking-details" type="submit">
-        Continue to payment
+        Confirm booking with HK$100 deposit
       </button>
     </div>
   ),
@@ -471,7 +485,9 @@ export const PaidWithBar: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByRole("button", { name: "Book" })).toBeNull();
     await userEvent.click(
-      canvas.getByRole("button", { name: "Continue to payment" }),
+      canvas.getByRole("button", {
+        name: "Confirm booking with HK$100 deposit",
+      }),
     );
     expect(args.onSubmit).toHaveBeenCalledTimes(1);
   },
