@@ -1,10 +1,12 @@
 {
   "title": "訂單詳情",
   "orderId": "訂單 {id}",
+  "receiptSentTo": "收據已傳送至 {email}。",
   "loading": "正在載入訂單詳情…",
   "error": "無法載入此訂單。請再試一次。",
   "retry": "再試一次",
   "notFound": "找不到訂單",
+  "notFoundLinkDescription": "請檢查訂單電郵中的連結。",
   "needHelp": "需要協助？",
   "table": {
     "items": "商品",
@@ -46,5 +48,28 @@
     "pickup": "可取貨",
     "canceled": "已取消",
     "refunded": "已退款"
+  },
+  "ask": {
+    "guest": {
+      "title": "將此訂單加入你的帳戶",
+      "body": "登入即可為此訂單賺取積分。",
+      "bodyCompleted": "登入後即可與你的其他訂單一併查看。"
+    },
+    "member": {
+      "title": "這是你的訂單嗎？",
+      "body": "登入即可在你的帳戶中查看。"
+    },
+    "added": {
+      "title": "訂單已加入你的帳戶",
+      "action": "查看訂單"
+    },
+    "anotherEmail": {
+      "title": "此訂單未有加入你的帳戶",
+      "body": "此訂單以 {email} 下單。我們可以傳送登入連結至該電郵，以加入此訂單。",
+      "action": "傳送連結"
+    },
+    "sent": {
+      "title": "登入連結已傳送至 {email}"
+    }
   }
 }

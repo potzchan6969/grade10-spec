@@ -59,6 +59,7 @@ export function Note({ children }: { children: ReactNode }) {
 }
 
 export type LetterShellProps = {
+  lang?: string;
   preheader: string;
   heading: string;
   /** `Hi Jasmine,` — the reader's own name. */
@@ -95,11 +96,12 @@ export function LetterShell({
   cta,
   trailer,
   footer,
+  lang,
 }: LetterShellProps) {
   const leadParagraphs = Array.isArray(lead) ? lead : [lead];
 
   return (
-    <Grade10EmailShell preheader={preheader}>
+    <Grade10EmailShell preheader={preheader} lang={lang}>
       <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
         {heading}
       </Heading>

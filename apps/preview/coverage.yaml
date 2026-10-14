@@ -10,7 +10,7 @@ no-screen:
   analytics/mixpanel-events: events, read in Mixpanel
   analytics/site-records: tables, read in the warehouse
   commerce/checkout-domain: a runbook for the checkout domain
-  commerce/commerce: the order machine; its identity bar is a Cart Drawer state
+  commerce/commerce: the order machine
   commerce/order-status: the badge rule; drawn on Order History and Order Details
   commerce/product-status: the availability rule; drawn on Product List, Product Detail and the Cart Drawer
   commerce/site-content: where content lives

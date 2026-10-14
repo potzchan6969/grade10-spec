@@ -24,6 +24,12 @@
       "promoPlaceholder": "Enter promo code",
       "removePromo": "Remove",
       "yourPromoCodes": "Your promo codes",
+      "publicPromoCodes": "Promo codes",
+      "publicCodeTitle": {
+        "amount": "{amount} discount",
+        "percentage": "{percent}% discount",
+        "freeShipping": "Free shipping"
+      },
       "notValidPromoCodes": "Not valid for this order",
       "noHeldPromoCodes": "You don’t have any promo codes yet.",
       "browseLoyaltyOffers": "Browse loyalty offers",
@@ -38,8 +44,10 @@
       "discountLabel": "Discount ({name})",
       "pointsLabel": "Points",
       "checkoutButton": "Proceed to Checkout",
+      "guestCheckoutButton": "Check Out as Guest",
       "checkoutRedirecting": "Redirecting…",
-      "checkoutFailed": "Couldn’t open checkout"
+      "checkoutFailed": "Couldn’t open checkout",
+      "signInSuffix": "for points and rewards"
     },
     "emptyTitle": "Your cart is empty",
     "emptyDescription": "Items you add will appear here",

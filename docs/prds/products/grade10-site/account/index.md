@@ -9,8 +9,8 @@ and how sign-in and sign-out work, the same way across every brand.
 
 - **Profile** — what a collector shows about themselves, and the address they
   signed in with ([Profile](/p/grade10-site/account/profile))
-- **KYC** — the verified standing that clears a high-value order, a
-  high-value bid, or a vault visit, what the check keeps, and how it is run
+- **KYC** — the verified standing that clears a high-value bid or a vault
+  visit, what the check keeps, and how it is run
   ([KYC](/p/grade10-site/account/kyc))
 - **Delivery addresses** — the ones a collector keeps and confirms onto
   an auction order ([Delivery Addresses](/p/grade10-site/auction/account#delivery-address-management))

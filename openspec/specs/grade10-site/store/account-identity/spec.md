@@ -4,23 +4,22 @@
 
 A collector verifies their identity from their own account on the Grade10
 site, on their own device, and is recognised as verified wherever Grade10
-asks: at a checkout or a bid at or above the brand's bar, and at a vault
-visit. The account page says where they stand and never who they are.
+asks: at a bid at or above the brand's bar, and at a vault visit. The account page says where they stand and never who they are.
 
 A **standing** is the identity store's answer for a person on the day it is
 asked — verified, expired, or unverified — as `grade10-site/e-kyc/identity-record`
 defines it. A **hosted check** is the provider's check as
 `grade10-site/e-kyc/hosted-verification` defines it; here the store raises one
 for an account, where the vault raises one for a case. The **bar** is the value
-at or above which an order's goods or a bid asks for a verified person, stated
-per brand in the brand's currency's minor units; Grade10's is 12,000,000 HKD
-minor units for both.
+at or above which a bid asks for a verified person, stated per brand in the
+brand's currency's minor units; Grade10's is 12,000,000 HKD minor units. A
+checkout asks for no verified person at any value.
 
 ## Feature set
 
 - Where the collector stands
   - Standing: verified until when, expired, or not yet, read from the identity store the day it is shown
-  - The bar: the order value and the bid value at which a verified identity is asked for
+  - The bar: the bid value at which a verified identity is asked for
 - Verifying from the account
   - Consent first: nothing reaches the provider until the collector has agreed on the page
   - The provider's page: the check happens on the provider's own page, on the collector's device
@@ -45,7 +44,7 @@ nothing about identity.
 | Standing | `verified`, `expired`, or `unverified` |
 | Valid until | The day the document behind a verified standing stops being valid; absent where it never expires or where the collector is not verified |
 | The check's progress | Where the latest check the store raised for this account stands, in the states below; absent where none was raised |
-| The bar | The order value and the bid value at which a verified identity is asked for, in the brand's currency |
+| The bar | The bid value at which a verified identity is asked for, in the brand's currency |
 
 | Progress | What the page offers |
 | --- | --- |
@@ -64,14 +63,14 @@ nothing about identity.
 - **THEN** it says they are verified and the day their document stops being
   valid, and offers no check to start
 
-<!-- trace:scenario id=g10.store-account-identity.SC-ymn rev=1 -->
+<!-- trace:scenario id=g10.store-account-identity.SC-ymn rev=2 -->
 #### Scenario: grade10-site-store-account-identity-SC-02 - A collector nobody verified sees the bar and how to verify
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector whose standing is `unverified`
 - **WHEN** they open their account page
-- **THEN** it says they are not verified, names the order value and the bid
-  value at which a verified identity is asked for, and offers to verify
+- **THEN** it says they are not verified, names the bid value at which a
+  verified identity is asked for, and offers to verify
 
 <!-- trace:scenario id=g10.store-account-identity.SC-zww rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-03 - The account page carries no identity field
@@ -82,13 +81,13 @@ nothing about identity.
 - **THEN** no legal name, date of birth, document type, document number, mask,
   document image or provider finding is shown or answered to the page
 
-<!-- trace:scenario id=g10.store-account-identity.SC-vwo rev=1 -->
+<!-- trace:scenario id=g10.store-account-identity.SC-vwo rev=2 -->
 #### Scenario: grade10-site-store-account-identity-SC-04 - A brand with no identity store shows nothing
 **Serves:** Where the collector stands - a brand with no identity store shows nothing
 
 - **GIVEN** a brand whose store is wired to no identity store
 - **WHEN** a collector opens their account page
-- **THEN** nothing about identity is shown, and no checkout or bid is held
+- **THEN** nothing about identity is shown, and no bid is held
 
 ### Requirement: A collector verifies from their account, on their explicit consent
 
@@ -124,7 +123,7 @@ able to try again and SHALL be told the counter is another way.
 - **THEN** the verify action is not available, and no check is started with the
   provider
 
-<!-- trace:scenario id=g10.store-account-identity.SC-wjz rev=1 -->
+<!-- trace:scenario id=g10.store-account-identity.SC-wjz rev=2 -->
 #### Scenario: grade10-site-store-account-identity-SC-06 - A collector verifies from their account and is recognised
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -132,7 +131,7 @@ able to try again and SHALL be told the counter is another way.
 - **WHEN** they tick their agreement, press verify, complete the provider's
   check with a valid document, and the verdict is applied
 - **THEN** the check records when they agreed, their account page reads
-  `verified`, and a checkout or a bid above the bar proceeds for them
+  `verified`, and a bid above the bar proceeds for them
 
 <!-- trace:scenario id=g10.store-account-identity.SC-f7d rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-07 - A collector verified at a vault visit is recognised without a ceremony

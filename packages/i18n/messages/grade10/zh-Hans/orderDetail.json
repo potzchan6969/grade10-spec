@@ -1,10 +1,12 @@
 {
   "title": "订单详情",
   "orderId": "订单 {id}",
+  "receiptSentTo": "收据已发送至 {email}。",
   "loading": "正在加载订单详情…",
   "error": "无法加载此订单。请重试。",
   "retry": "再试一次",
   "notFound": "找不到订单",
+  "notFoundLinkDescription": "请检查订单邮件中的链接。",
   "needHelp": "需要帮助？",
   "table": {
     "items": "商品",
@@ -46,5 +48,28 @@
     "pickup": "可取货",
     "canceled": "已取消",
     "refunded": "已退款"
+  },
+  "ask": {
+    "guest": {
+      "title": "将此订单添加到你的账户",
+      "body": "登录即可为此订单赚取积分。",
+      "bodyCompleted": "登录后即可与你的其他订单一并查看。"
+    },
+    "member": {
+      "title": "这是你的订单吗？",
+      "body": "登录即可在你的账户中查看。"
+    },
+    "added": {
+      "title": "订单已添加到你的账户",
+      "action": "查看订单"
+    },
+    "anotherEmail": {
+      "title": "此订单未添加到你的账户",
+      "body": "此订单使用 {email} 下单。我们可以向该邮箱发送登录链接，以添加此订单。",
+      "action": "发送链接"
+    },
+    "sent": {
+      "title": "登录链接已发送至 {email}"
+    }
   }
 }

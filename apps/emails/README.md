@@ -1,7 +1,8 @@
 # Email templates
 
-React Email letters for Grade10 — auth (magic link) and
-`grade10-site/auction/notifications` (+ post-close order letters) — built with
+React Email letters for Grade10: auth (magic link),
+`grade10-site/auction/notifications` (+ post-close order letters), and the
+store's Shopify order notifications. Built with
 [emailcn](https://www.emailcn.run/) on the shadcn registry.
 
 ## Setup
@@ -37,6 +38,7 @@ Restart the preview server after pulling so discovery refreshes.
 | Grading | `/preview/grading/checked-in` |
 | Vault case | `/preview/vault/case/offer-made` |
 | Vault item | `/preview/vault/item/item-vaulted` |
+| Store | `/preview/store/order-confirmation` |
 
 This same preview app — sidebar, linter, spam/compatibility checks — is
 published as a static site on every push to `main` (and on demand) to
@@ -90,6 +92,10 @@ emails/
                            four, the paper, the identity check
     item/                  the item's four — vaulted, retrieval
                            requested / approved / declined
+  store/                   the Shopify order notifications, one file each
+    _components/           StoreLetter, OrderLines, OrderTotals,
+                           ShippingAddress, Tracking
+    fixtures.ts            order preview fixture (#1042)
 ```
 
 `LetterShell` is the one shell both products write in: heading, greeting,
@@ -101,3 +107,26 @@ A footer line carrying a value Legal has not set writes it in brackets —
 
 Production send still goes through the application’s `@grade10/email` lane;
 these templates are the design/preview source for the letter markup.
+
+## Shopify Order Notifications
+
+Shopify sends these customer notifications for an order. The app renders
+them from `packages/email/src/shopify/emails/<handle>.tsx` in the grade10
+repo; each preview here is the design source for the same letter.
+
+| Preview file | Shopify notification | Shopify handle | App source |
+| --- | --- | --- | --- |
+| `store/order-confirmation.tsx` | Order confirmation | `order_confirmation` | `packages/email/src/shopify/emails/order_confirmation.tsx` |
+| `store/order-edited.tsx` | Order edited | `order_edited` | `packages/email/src/shopify/emails/order_edited.tsx` |
+| `store/order-cancelled.tsx` | Order canceled | `order_cancelled` | `packages/email/src/shopify/emails/order_cancelled.tsx` |
+| `store/order-invoice.tsx` | Order invoice | `order_invoice` | `packages/email/src/shopify/emails/order_invoice.tsx` |
+| `store/refund-notification.tsx` | Order refund | `refund_notification` | `packages/email/src/shopify/emails/refund_notification.tsx` |
+| `store/shipping-confirmation.tsx` | Shipping confirmation | `shipping_confirmation` | `packages/email/src/shopify/emails/shipping_confirmation.tsx` |
+| `store/shipping-update.tsx` | Shipping update | `shipping_update` | `packages/email/src/shopify/emails/shipping_update.tsx` |
+| `store/shipment-out-for-delivery.tsx` | Out for delivery | `shipment_out_for_delivery` | `packages/email/src/shopify/emails/shipment_out_for_delivery.tsx` |
+| `store/shipment-delivered.tsx` | Delivered | `shipment_delivered` | `packages/email/src/shopify/emails/shipment_delivered.tsx` |
+| `store/abandoned-checkout-notification.tsx` | Abandoned checkout | `abandoned_checkout_notification` | `packages/email/src/shopify/emails/abandoned_checkout_notification.tsx` |
+| `store/failed-payment-processing.tsx` | Payment error | `failed_payment_processing` | `packages/email/src/shopify/emails/failed_payment_processing.tsx` |
+
+- **Button** - the order button's Liquid is `{{ attributes.grade10_order_link | default: order_status_url }}`.
+- **Flow** - designers edit the preview here; an engineer carries the change into the app source, renders it with `pnpm --filter @grade10/email shopify:render`, and pastes it into each shop.
