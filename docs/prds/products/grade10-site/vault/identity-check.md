@@ -13,9 +13,10 @@ this page is what happens on site, and what a case demands of its identity.
 
 - **Reuse first** — a check the collector already passed, anywhere in Grade10,
   is bound rather than asked for again
-- **Before the visit** — an intake visit booked on a case with nothing to
-  reuse sends the collector the hosted check, and an operator can send it
-  again on any case that needs one, any time before custody
+- **No invitation** - a case invites nobody to a hosted check: booking a
+  visit sends none, an operator cannot send one, and the vault's own verify
+  page is withdrawn; a collector verifies from their account instead -
+  [KYC](/p/grade10-site/account/kyc)
 - **At the counter** — staff read the document in front of them and record it
   from the case screen; never gated on a hosted attempt having been tried
 - **Pre-custody only** — recordable from draft through signing, never once the
@@ -119,7 +120,7 @@ collector whose document expires while their item is in custody.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Invitation trigger | Decided | Booking an intake visit on a case with no identity, and an operator on demand before custody. | Product |
+| Invitation trigger | Decided | None: a case invites nobody to a hosted check, and the account's own check is the way to verify at home, decided 2026-10-13. | Owner |
 | Pre-custody only | Decided | A check is recordable from draft through signing, never once the item is in the vault. | Compliance |
 | Reuse before asking | Decided | A case binds a check the collector already passed rather than paying for a second one. | Product |
 | Counter fallback | Decided | Permanent, and never gated on a hosted attempt; the counter is equal evidence, so no case must hold an approved hosted check. | Operations |

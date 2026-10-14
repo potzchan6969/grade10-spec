@@ -57,7 +57,7 @@ list every product shares; a permission outside the list grants nothing.
 | `loyalty` | `read` · `adjust` · `invite` · `catalog` · `finance` · `demote` · `cancel` |
 | `auction` | `read` · `write` · `operate` · `reserve` · `moderate` · `settle` · `payment` · `refund` · `shipment` |
 | `vault` | `read` · `operate` · `approve` · `payout` |
-| `kyc` | `read` |
+| `kyc` | `read` · `request` |
 | `grading` | `read` · `operate` · `approve` |
 | `appointment` | `read` · `manage` |
 | `inventory` | `read` · `write` |
@@ -65,9 +65,12 @@ list every product shares; a permission outside the list grants nothing.
 
 - **No `finance` resource** — lending is the vault's financed lane, so its
   cases and money sit under `vault`
-- **Identity documents** — `kyc:read` reaches the identity capture and the
-  signed document printed from it; reading a vault case does not, and there is
-  no `kyc:write`
+- **Identity documents** - `kyc:read` reaches the identity capture, the
+  signed document printed from it, and an account's Identity card; reading a
+  vault case does not, and there is no `kyc:write`
+- **Requiring a verification** - `kyc:request`, held by `admin` alone;
+  requiring an account to verify its person or its business, and dropping
+  that request - [Users](/p/grade10-admin/console/user-directory#identity)
 
 ### Vault, Split by Cost
 
