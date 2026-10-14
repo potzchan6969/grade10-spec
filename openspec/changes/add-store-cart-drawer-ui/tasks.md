@@ -94,8 +94,8 @@ Independent of Groups 5–7 (points/promo editing is unaffected by this scope).
   today (linking to `addressOf("profile")` when `config.gates.profile` is
   set); a verified member or a basket under the bar proceeds without the
   gate. Start no identity check from the drawer itself. Make
-  `grade10-site-store-cart-drawer-SC-30` through
-  `grade10-site-store-cart-drawer-SC-33` pass.
+  SC-30 (dropped 2026-10-14) through
+  SC-33 (dropped 2026-10-14) pass.
 - [x] 8.4 Remove `src/routes/checkout.tsx`, `src/pages/checkout/
   CheckoutPage.tsx`, the `/checkout` route and surface entry from
   `src/surfaces.ts` and `src/routes.ts`, and `e2e/tests/store/

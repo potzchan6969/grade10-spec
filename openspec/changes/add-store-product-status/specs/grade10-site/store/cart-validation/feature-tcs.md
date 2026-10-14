@@ -581,7 +581,6 @@ when I cannot, I know exactly what to fix.
 
 * customer(member) is signed in and is on <grade10 store url>.
 * The cart holds 1 of <product_a> and 1 of <product_b>, both for sale, each below its count.
-* The cart's goods are under HKD 120,000.
 
 **Steps:**
 
@@ -769,7 +768,6 @@ Runs once per row of **Test data**.
 
 * customer(member) is signed in and is on <grade10 store url>.
 * The cart holds the row's held quantity of <product_a> and 1 of <product_b>, both for sale.
-* The cart's goods are under HKD 120,000.
 
 **Test data:**
 
@@ -815,7 +813,6 @@ Runs once per row of **Test data**.
 * customer(member) is signed in and is on <grade10 store url>.
 * The cart holds 3 of <product_a>, added while it was tracked at 10, and 1 of <product_b>, for sale.
 * Since then, <product_a> is tracked at 2 in the staging shop's admin, not sold when out of stock.
-* The cart's goods are under HKD 120,000.
 
 **Test data:**
 

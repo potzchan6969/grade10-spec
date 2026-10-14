@@ -14,8 +14,7 @@ secondary: share of guest orders linked to an account.
 
 - **Gateway** — a signed-out drawer's footer carries a primary Check out as
   guest, with a quiet Sign in link under it for points and rewards; no
-  extra step. Goods at **HKD 120,000** or more keep
-  asking a guest to sign in
+  extra step
 - **Guest tender** — a guest may type or pick a public code (from
   `add-store-public-codes`); no points, and no member's codes or rewards are
   shown

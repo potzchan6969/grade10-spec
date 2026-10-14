@@ -28,6 +28,9 @@ earning through attribution.
 
 ### Requirement: Every member has exactly one commerce customer
 
+Registering an account, by its first sign-in, SHALL join the membership at
+once; there is no separate join step.
+
 Enrolment SHALL record, in the same server-side flow that creates the
 member, the intent to pair them with exactly one commerce customer — and
 SHALL never wait on the commerce provider to complete sign-up. Pairing SHALL converge
@@ -36,6 +39,14 @@ visible conflict an operator can act on; it SHALL never give up silently.
 A retried creation SHALL land on the same customer, never a duplicate. A
 re-runnable check SHALL be able to report every member's pairing state,
 so members from before this capability shipped can be verified paired.
+
+<!-- trace:scenario id=g10.store-membership.SC-ys8 rev=1 -->
+#### Scenario: grade10-site-store-membership-SC-91 - Signing in for the first time joins the membership
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
+
+- **WHEN** a collector with no account signs in for the first time
+- **THEN** they are a member at once, at the entry tier with no points
+- **AND** the membership page shows them as a member, with no join step offered
 
 <!-- trace:scenario id=g10.store-membership.SC-z0r rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-01 - Sign-up never waits on the provider

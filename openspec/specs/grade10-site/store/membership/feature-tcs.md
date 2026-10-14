@@ -1,6 +1,6 @@
 # grade10-site/store/membership Test Cases
 
-**Status:** pending-review · 0/41
+**Status:** pending-review · 0/42
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## grade10-site-store-membership-US1: Collector becomes a member without waiting on commerce
@@ -320,6 +320,44 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The customer record step 2 created is found and removed.
+
+<!-- trace:case id=g10.store-membership.TC-eug rev=1 covers=g10.store-membership.SC-ys8 -->
+### grade10-site-store-membership-US1-TC9-1: Signing in for the first time makes the collector a member
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-membership-US-01
+
+**Pre-conditions:**
+
+* `<new tester>` has never signed in to the Grade10 site.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<new tester>` | A tester address no run has used, under the tester domain |
+
+**Steps:**
+
+1. Navigate to `<grade10 store url>`.
+2. Sign in as `<new tester>` by the emailed link.
+3. Open the membership page from the account menu.
+
+**Expected Results:**
+
+* Step 2 signs `<new tester>` in.
+* Step 3 shows `<new tester>` as a member at the entry tier, with no points.
+* No join step or join button is offered.
 
 ---
 
