@@ -216,7 +216,7 @@ Runs once per row of **Test data**.
 * When the read answers, <entry> shows in the placeholder's place at once.
 * <never shown> never shows.
 
-<!-- trace:case id=g10.site-page-shell.TC-fo4 rev=1 -->
+<!-- trace:case id=g10.site-page-shell.TC-fo4 rev=1 covers=g10.site-page-shell.SC-31a,g10.site-page-shell.SC-i26 -->
 ### grade10-site-site-page-shell-US9-TC5-1: A signed-in collector's first paints never show Sign In
 
 Runs once per row of **Test data**.
@@ -237,7 +237,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(signed in) on a browser whose session is read as usual, with nothing held.
-* The browser's developer tools record the page load frame by frame, with screenshots.
+* The browser's developer tools record the page load frame by frame, with screenshots, and the network requests.
 
 **Test data:**
 
@@ -255,7 +255,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No frame shows Sign In in the header.
-* Every frame from the first paint shows the placeholder or the account icon in the account entry's place.
+* Every frame before the session read's response arrives shows the placeholder in the account entry's place; the account icon shows only after that response, then stays.
 * Once the account icon shows, it stays.
 
 <!-- trace:case id=g10.site-page-shell.TC-79s rev=1 covers=g10.site-page-shell.SC-tah -->
@@ -558,9 +558,11 @@ Runs once per row of **Test data**.
 | `grade10-site-site-page-shell-US9-TC8-1` | Now held until step 4: a minute of placeholder with no Sign In, Auction opening with the placeholder still in place, and the account icon taking its place once the read is released | Reached: covers `grade10-site-site-page-shell-SC-73` |
 | `grade10-site-site-page-shell-US9-TC10-1` | Unchanged. It keeps the placeholder away on the page where the collector signs in or out, "no page that has already shown Sign In or the account icon". The magic link lands on a new page, which the reload rule starts at the placeholder; Google signs in without leaving the page. The scenario reads on that page | Reached: covers `grade10-site-site-page-shell-SC-78`. "On that page" in the scenario would say so (Dev, optional) |
 | `grade10-site-site-page-shell-US2-TC2-4`, `grade10-site-site-page-shell-US9-TC7-1`, `grade10-site-site-page-shell-US9-TC9-1`, `grade10-site-site-page-shell-US9-TC11-1` | Untouched by the repair; `grade10-site-site-page-shell-SC-05` now names the language and search controls and keeps every other control in place, as US2-TC2-4's rows assert | Reached as recorded above |
-| `grade10-site-site-page-shell-SC-77` | Only US9-TC5-1 walks the scripts taking a written page over, and it does not hold the placeholder until the answer | Uncovered: US9-TC5-1's repair (QA1) |
+| `grade10-site-site-page-shell-SC-77` | US9-TC5-1, after the coordinator's repair: every frame before the session read's response shows the placeholder, and the account icon only after it | Covered: US9-TC5-1, linked |
 | `grade10-site-site-page-shell-SC-04`, `grade10-site-site-page-shell-SC-05`, `grade10-site-site-page-shell-SC-68` to `grade10-site-site-page-shell-SC-76`, `grade10-site-site-page-shell-SC-78` | Each has a case that asserts every THEN; `grade10-site-site-page-shell-SC-04` stays with the durable `grade10-site-site-page-shell-US2-TC1-1` | Reached |
 | The requirement's state table | The Account icon and Sign In rows now read the latest read that did not fail, as Q8 decides. Sign In's "or the first read failed" stays true after a later read finds the collector signed in, when the Account icon row holds as well | Dev: "or every read so far has failed" |
 | Uncovered anchors | Unchanged | None |
 | Over-claimed cases | Each marker names only scenarios its case asserts whole; the durable US2-TC1-1 legacy marker stands as recorded above | None |
 | Contradicted readings | `grade10-site-site-page-shell-SC-05` and the state table now agree with Q10, Q8 and the cases | None |
+
+**Coordinator repair, 2026-10-14:** US9-TC5-1 now records the network requests and asserts the placeholder in every frame before the session read's response, the account icon only after it; linked to `grade10-site-site-page-shell-SC-70` and `grade10-site-site-page-shell-SC-77`. No scenario is left uncovered.

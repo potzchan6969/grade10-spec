@@ -2,7 +2,7 @@
 
 ### Site header before the session answers
 
-No Figma frame yet; the wait is recorded in `.openspec.yaml`.
+The header's layout source of truth is Storybook, as `Nav`'s doc comment says, and the page documents it through its SiteHeader stories rather than a Figma frame. The reference for this state is the pending SiteHeader stories, wide and at 375px, beside `SignedIn`, which `tasks.md` 1.1 adds and 1.3 cards on both pages.
 
 ## Components
 

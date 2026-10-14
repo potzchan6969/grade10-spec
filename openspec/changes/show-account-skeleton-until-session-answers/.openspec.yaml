@@ -3,5 +3,3 @@ created: 2026-10-14
 promoted_by: "@seankcw"
 depends_on:
   - nav-cart-count-badge
-awaiting:
-  ui-design: 2026-10-14, Figma frame for the header's account placeholder before the session answers - the SiteHeader story is the interim composition

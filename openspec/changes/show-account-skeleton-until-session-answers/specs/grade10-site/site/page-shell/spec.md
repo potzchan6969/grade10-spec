@@ -22,7 +22,7 @@ The account entry SHALL be in one of these states:
 | --- | --- | --- |
 | Placeholder | From the first paint until the session first answers, including in a page the site writes before anybody's session is read | A round placeholder 40 CSS pixels across, the account icon's footprint, in the account entry's place; nothing to focus or press, and nothing read aloud |
 | Account icon | The latest read that did not fail returned a signed-in session | The account icon that opens the account menu |
-| Sign In | The latest read that did not fail returned no session, or the first read failed | The primary Sign In button |
+| Sign In | The latest read that did not fail returned no session, or every read so far has failed | The primary Sign In button |
 
 **First answer** - The session first answers when its first read since the
 page loaded returns a signed-in session, returns no session, or fails. Moving
@@ -155,7 +155,7 @@ own; the placeholder SHALL show until the session answers.
 - **GIVEN** a header showing Sign In, or the account icon, after the session
   first answered
 - **WHEN** the collector signs in from Sign In, or signs out from the account
-  menu
+  menu, on that page
 - **THEN** the account entry changes straight to the account icon, or to Sign
   In
 - **AND** the placeholder does not show at any point
