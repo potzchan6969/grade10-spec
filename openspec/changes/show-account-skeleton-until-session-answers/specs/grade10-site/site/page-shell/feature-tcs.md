@@ -11,7 +11,7 @@ with only the account entry and the cart count updating once it does,
 **so that** I can start navigating immediately without chrome appearing or
 disappearing under me.
 
-<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=4 -->
+<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=4 covers=g10.site-page-shell.SC-yxt -->
 ### grade10-site-site-page-shell-US2-TC2-4: The session's arrival changes only the account entry and the cart count
 
 Runs once per row of **Test data**.
@@ -67,6 +67,7 @@ Runs once per row of **Test data**.
 answered,
 **so that** I am never offered Sign In while I am already signed in.
 
+<!-- trace:case id=g10.site-page-shell.TC-lir rev=1 -->
 ### grade10-site-site-page-shell-US9-TC1-1: The account entry's place holds a placeholder until the session answers
 
 Runs once per row of **Test data**.
@@ -109,6 +110,7 @@ Runs once per row of **Test data**.
 * At 375 CSS pixels wide, the placeholder sits in the bar beside Cart.
 * Neither Sign In nor the account icon shows.
 
+<!-- trace:case id=g10.site-page-shell.TC-nms rev=1 -->
 ### grade10-site-site-page-shell-US9-TC2-1: The placeholder offers nothing to press
 
 **Classification:**
@@ -141,6 +143,7 @@ Runs once per row of **Test data**.
 * Step 2: nothing opens - no sign-in and no account menu - and the page stays as it was.
 * Step 3: focus never rests on the placeholder.
 
+<!-- trace:case id=g10.site-page-shell.TC-an4 rev=1 -->
 ### grade10-site-site-page-shell-US9-TC3-1: The placeholder is not read aloud
 
 **Classification:**
@@ -172,6 +175,7 @@ Runs once per row of **Test data**.
 * Step 2: the screen reader reads nothing for the placeholder - no label, and no busy or loading status.
 * Step 3: the placeholder has no accessible name and no status role, and nothing in the header is marked busy.
 
+<!-- trace:case id=g10.site-page-shell.TC-din rev=1 -->
 ### grade10-site-site-page-shell-US9-TC4-1: The first answer puts the account entry in the placeholder's place
 
 Runs once per row of **Test data**.
@@ -212,6 +216,7 @@ Runs once per row of **Test data**.
 * When the read answers, <entry> shows in the placeholder's place at once.
 * <never shown> never shows.
 
+<!-- trace:case id=g10.site-page-shell.TC-fo4 rev=1 -->
 ### grade10-site-site-page-shell-US9-TC5-1: A signed-in collector's first paints never show Sign In
 
 Runs once per row of **Test data**.
@@ -253,6 +258,7 @@ Runs once per row of **Test data**.
 * Every frame from the first paint shows the placeholder or the account icon in the account entry's place.
 * Once the account icon shows, it stays.
 
+<!-- trace:case id=g10.site-page-shell.TC-79s rev=1 -->
 ### grade10-site-site-page-shell-US9-TC6-1: A written page holds the placeholder before the app takes over
 
 **Classification:**
@@ -288,6 +294,7 @@ Runs once per row of **Test data**.
 * The placeholder shows in the account entry's place.
 * Neither Sign In nor the account icon shows.
 
+<!-- trace:case id=g10.site-page-shell.TC-0r0 rev=1 covers=g10.site-page-shell.SC-qnl -->
 ### grade10-site-site-page-shell-US9-TC7-1: A failed session read shows Sign In
 
 Runs once per row of **Test data**.
@@ -327,6 +334,7 @@ Runs once per row of **Test data**.
 * Step 2: Sign In shows in the placeholder's place.
 * Step 3: sign-in opens.
 
+<!-- trace:case id=g10.site-page-shell.TC-89t rev=1 -->
 ### grade10-site-site-page-shell-US9-TC8-1: A session read that never answers keeps the placeholder
 
 **Classification:**
@@ -363,6 +371,7 @@ Runs once per row of **Test data**.
 * Step 2: the placeholder stays for the whole <wait>, and Sign In never shows.
 * Step 3: the Auction surface opens, with the placeholder still in the account entry's place.
 
+<!-- trace:case id=g10.site-page-shell.TC-zmu rev=1 covers=g10.site-page-shell.SC-gmi -->
 ### grade10-site-site-page-shell-US9-TC9-1: A later session read keeps the entry already shown
 
 Runs once per row of **Test data**.
@@ -404,6 +413,7 @@ Runs once per row of **Test data**.
 * Step 2: <entry> stays in place, and the placeholder does not show.
 * Step 3: <entry> still shows.
 
+<!-- trace:case id=g10.site-page-shell.TC-v1f rev=1 -->
 ### grade10-site-site-page-shell-US9-TC10-1: Signing in or out after the first answer does not bring the placeholder back
 
 Runs once per row of **Test data**.
@@ -442,6 +452,7 @@ Runs once per row of **Test data**.
 * The account entry shows <after>.
 * No page that has already shown Sign In or the account icon shows the placeholder again.
 
+<!-- trace:case id=g10.site-page-shell.TC-an5 rev=1 covers=g10.site-page-shell.SC-ra1 -->
 ### grade10-site-site-page-shell-US9-TC11-1: A later session read that fails keeps the entry already shown
 
 Runs once per row of **Test data**.
@@ -487,7 +498,47 @@ Runs once per row of **Test data**.
   every surface it answers, including Auction; visibility does not depend on
   session state.
 * The author chose to retain the last verified same-member count while a refresh is pending, including after failed cart updates; failed review hides the badge. Initial unknown counts and previous-member counts remain hidden.
+* A later session read that fails keeps the account entry already shown; a
+  later read that returns no session shows Sign In.
+* What Cart opens before the session first answers is the cart's own rule; the
+  account placeholder holds only the account entry.
+* When the session arrives, only the language and search controls on the wide
+  header may move, and only by the account entry's change in width; the
+  centred primary navigation, Cart and the compact bar stay where they are.
 
 ## Reconciliation
 
 - **Run** - QA1 blind pass, 2026-10-14. Read: the method (`spec-to-tcs` skill, `specs-to-test-cases.md` at `tcs_rules_rev` 5, `writing.md`); the change's `proposal.md`, `decisions.md` (goals, non-goals, Q1-Q7, empty `## Raised`) and `ui-design.md`; page-shell's durable `## Purpose` and `## Feature set`, the change's feature-set outline, the durable and change `user-journeys.md`; the existing `feature-tcs.md` with its `## Reconciliation` stripped; the Page Shell and Site Header and Footer PRDs; the `openspec/config.yaml` context. Denied: every `## Requirements` section, scenario text, `tech-design.md`, `tasks.md`, `openspec/specs/` beyond the supplied sections, and `openspec/changes/archive/`. Not supplied: `tcs-conventions.md` and the `grade10-site/site` domain suite.
+
+**Run:** 2026-10-14, QA2. A fresh reader joined QA1's blind cases and Dev's scenarios on `grade10-site-site-page-shell-US-02` and `grade10-site-site-page-shell-US-09`, read against the Session section of the Page Shell PRD, the Account Entry section of the Site Header and Footer PRD, `decisions.md` Q1 to Q10, `ui-design.md`, `tech-design.md` and `tasks.md`. After QA1 the coordinator wrote `grade10-site-site-page-shell-US9-TC11-1` from Q8 and reworded the `Stable layout` feature-set leaf to name the language and search controls (Q10), both non-anchor clarifications. A case links a scenario only where its route, starting state and checks assert every THEN; four do. No domain, product or platform suite traces either journey: `grade10-site/site` holds no `domain-tcs.md`.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `grade10-site-site-page-shell-US2-TC2-4` | Revised by QA1 from the durable `US2-TC2-3`. Its wide rows assert every THEN of `grade10-site-site-page-shell-SC-05`, moving only the language and search controls, by Sign In's width less 40 CSS pixels, as Q10 names them. Its 375 CSS pixel row keeps every control in place, which the requirement and Q10 state and no scenario does | Reached: covers `grade10-site-site-page-shell-SC-05`. The 375 row folds into that scenario (Dev) |
+| `grade10-site-site-page-shell-US9-TC1-1` | A round placeholder 40 CSS pixels across at both widths, signed in or out, beside Cart at 375, with neither Sign In nor the account icon. It does not walk the inert and silent clause, which TC2-1 and TC3-1 walk. Beside Cart is the requirement's Both widths paragraph, not a scenario's | Reached in part: `grade10-site-site-page-shell-SC-68`. Links once that scenario splits and its THEN names Cart (Dev) |
+| `grade10-site-site-page-shell-US9-TC2-1` | A click and a Tab pass on the wide header: nothing opens, and focus never rests on the placeholder | Reached in part: the inert clause of `grade10-site-site-page-shell-SC-68`. Links to the scenario that clause becomes (Dev) |
+| `grade10-site-site-page-shell-US9-TC3-1` | A screen reader reads nothing for the placeholder, and the accessibility tree gives it no name or status role, with nothing busy | Reached in part: the silent clause of `grade10-site-site-page-shell-SC-68`. Links to the scenario that clause becomes (Dev) |
+| `grade10-site-site-page-shell-US9-TC4-1` | Signed in, a read held 10 seconds: the placeholder until the answer, then the account icon in its place, and Sign In never. Signed out, Sign In in its place at once, the THEN of `grade10-site-site-page-shell-SC-05`. No check of the other controls | Reached in part: `grade10-site-site-page-shell-SC-70` all but its last AND. Links once that AND goes (Dev) |
+| `grade10-site-site-page-shell-US9-TC5-1` | Frames recorded from the first paint, signed in: no Sign In, only the placeholder or the account icon, and the icon stays. Its written-page row is the scripts taking the written page over | Reached in part: `grade10-site-site-page-shell-SC-70` all but its last AND, and the last AND of `grade10-site-site-page-shell-SC-69`. Links once both edits land (Dev) |
+| `grade10-site-site-page-shell-US9-TC6-1` | With JavaScript off, the written page shows the placeholder and neither Sign In nor the account icon. It cannot reach the scripts taking the page over | Reached in part: `grade10-site-site-page-shell-SC-69` all but its last AND. Links once that AND is its own scenario (Dev) |
+| `grade10-site-site-page-shell-US9-TC7-1` | A 500 and a dropped connection on the first read each show Sign In in the placeholder's place, and Sign In opens sign-in | Reached: covers `grade10-site-site-page-shell-SC-71` |
+| `grade10-site-site-page-shell-US9-TC8-1` | A read held 60 seconds keeps the placeholder with no Sign In, but the read is never released, so the account icon arriving after it is not asserted. Step 3 opens Auction with the placeholder still in place, which the requirement's Placeholder row implies and no scenario states | Reached in part: `grade10-site-site-page-shell-SC-73`. Links once the case releases the read (QA1) and the scenario states the move to another surface (Dev) |
+| `grade10-site-site-page-shell-US9-TC9-1` | Back to the tab signed out and signed in, and on to Auction signed in: the entry stays while the read is held, the placeholder never shows, and the same session leaves the entry as it was. A move between surfaces may start no read; the results hold either way | Reached: covers `grade10-site-site-page-shell-SC-72` |
+| `grade10-site-site-page-shell-US9-TC10-1` | Signing out from the account menu, and signing in through Sign In, after the first answer: the entry changes and the placeholder never returns. `grade10-site-site-page-shell-SC-72` keeps the placeholder away on a read, not on signing in or out, and the case does not walk its read under way | Behaviour no scenario states, and real (Q3, the requirement's Once paragraph): folds as a new scenario (Dev) |
+| `grade10-site-site-page-shell-US9-TC11-1` | Written by the coordinator after QA1 from Q8, not by the blind pass. A later 500 or dropped read keeps the account icon with no placeholder; a later read with no session shows Sign In | Reached: covers `grade10-site-site-page-shell-SC-74` |
+| `grade10-site-site-page-shell-SC-04` | Unchanged; no case in this suite asserts it | Durable `grade10-site-site-page-shell-US2-TC1-1` holds it |
+| `grade10-site-site-page-shell-SC-05` | `grade10-site-site-page-shell-US2-TC2-4` asserts every THEN | Reached |
+| `grade10-site-site-page-shell-SC-68` | The placeholder, its inertness and its silence are three cases, US9-TC1-1, US9-TC2-1 and US9-TC3-1; none asserts all three | Uncovered as one scenario: Dev splits it |
+| `grade10-site-site-page-shell-SC-69` | US9-TC6-1 asserts the written page and US9-TC5-1 the scripts taking it over; neither asserts both | Uncovered as one scenario: Dev splits its last AND |
+| `grade10-site-site-page-shell-SC-70` | US9-TC4-1 and US9-TC5-1 assert the account icon with no Sign In; only US2-TC2-4 checks that nothing else moves, and not from the first paint | Uncovered as one scenario: Dev drops its last AND, which `grade10-site-site-page-shell-SC-05` states for the account icon |
+| `grade10-site-site-page-shell-SC-71` | `grade10-site-site-page-shell-US9-TC7-1` asserts every THEN | Reached |
+| `grade10-site-site-page-shell-SC-72` | `grade10-site-site-page-shell-US9-TC9-1` asserts every THEN | Reached |
+| `grade10-site-site-page-shell-SC-73` | US9-TC8-1 asserts the minute; no case asserts the answer after it | Uncovered: US9-TC8-1 releases the read (QA1) |
+| `grade10-site-site-page-shell-SC-74` | `grade10-site-site-page-shell-US9-TC11-1` asserts every THEN | Reached |
+| `Stable layout` feature-set leaf | Reworded by the coordinator after QA1 to name the language and search controls (Q10); no journey moved | No case reads a feature-set line; none moves |
+| Raised: a later read that fails | Landed as Q8 | `grade10-site-site-page-shell-US9-TC11-1` walks it; settled above |
+| Raised: Cart before the first answer | Landed as Q9: not this change's | No case asserts what Cart opens before the first answer; settled above |
+| Raised: which controls move | Landed as Q10 | The feature-set leaf names them and `grade10-site-site-page-shell-SC-05` does not yet (contradicted readings); settled above |
+| Uncovered anchors | `grade10-site-site-page-shell-US-02` has US2-TC2-4; `grade10-site-site-page-shell-US-09` has eleven cases | None |
+| Over-claimed cases | No marker this run wrote names a scenario its case does not assert whole. The durable `grade10-site-site-page-shell-US2-TC1-1` marker still names `grade10-site-site-page-shell-SC-05`, which it does not assert | Legacy marker, valid; narrowing it means carrying the case here |
+| Contradicted readings | `grade10-site-site-page-shell-SC-05` moves "the controls to the account entry's left", the reading Q10 refused, while US2-TC2-4 keeps the primary navigation in place. The requirement's state table shows the account icon only after a signed-in latest read, while its Once paragraph, `grade10-site-site-page-shell-SC-74` and US9-TC11-1 keep it after a later failed read | Settled by Q10 and Q8: Dev rewords both; no Raised row |
