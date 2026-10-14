@@ -84,12 +84,6 @@ type Story = StoryObj<typeof meta>;
 /** A guest's order opened signed out: the receipt's email and the ask to add it. */
 export const Scenario: Story = {};
 
-/** The guest order has completed, so adding it now earns nothing. */
-export const GuestOrderCompleted: Story = {
-  name: "Guest order, completed",
-  args: { progress: "completed" },
-};
-
 /** A member's order opened signed out: is this your order? */
 export const MemberOrderSignedOut: Story = {
   name: "Member order, signed out",

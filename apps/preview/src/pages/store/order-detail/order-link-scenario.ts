@@ -2,14 +2,13 @@ import type { OrderAsk } from "../order-ask-toast";
 
 /**
  * An order opened through its private link, as the conditions staging can be
- * set to: the link, whose order it is, whether it has completed, who reads it
- * and how a sign-in made from the page went. `viewOf` turns them into what
+ * set to: the link, whose order it is, who reads it and how a sign-in made
+ * from the page went. `viewOf` turns them into what
  * the page shows, the way the site's `orderLinkAsk` decides it.
  */
 type OrderLinkSettings = {
   link: "right" | "wrong";
   order: "guest" | "member";
-  progress: "open" | "completed";
   viewer: "signedOut" | "someoneElse" | "signedInHere";
   closed: "no" | "yes";
   joined: "added" | "notAdded" | "sending" | "sent" | "sendFailed" | "failed";
@@ -18,7 +17,6 @@ type OrderLinkSettings = {
 const DEFAULT_ORDER_LINK: OrderLinkSettings = {
   link: "right",
   order: "guest",
-  progress: "open",
   viewer: "signedOut",
   closed: "no",
   joined: "added",
@@ -34,8 +32,7 @@ function askOf(settings: OrderLinkSettings): OrderAsk | undefined {
   switch (settings.viewer) {
     case "signedOut":
       if (settings.closed === "yes") return undefined;
-      if (settings.order === "member") return "member";
-      return settings.progress === "completed" ? "guestCompleted" : "guest";
+      return settings.order;
     case "someoneElse":
       return undefined;
     case "signedInHere":
@@ -76,17 +73,6 @@ const ORDER_LINK_ARG_TYPES = {
     },
     options: ["guest", "member"],
     if: { arg: "link", eq: "right" },
-  },
-  progress: {
-    name: "Progress",
-    description:
-      "Whether the order has completed; a guest order added after it completes earns no points",
-    control: {
-      type: "radio",
-      labels: { open: "Not completed yet", completed: "Completed" },
-    },
-    options: ["open", "completed"],
-    if: { arg: "order", eq: "guest" },
   },
   viewer: {
     name: "Viewer",

@@ -5,7 +5,6 @@ import {
 } from "../workbench-story-nav";
 import { SIGN_IN_STORY_ID } from "./cart-content";
 import {
-  ACCOUNT_ASK_COMPLETED_BODY,
   ACCOUNT_ASK_COPY,
   ASK_OUTCOME_COPY,
   MEMBER_ASK_COPY,
@@ -16,14 +15,13 @@ const ORDER_ASK_TOAST = "order-account-prompt";
 
 /**
  * What the order's page says to its viewer, besides the order. Signed out:
- * "add this order" on a guest order — earning while it has not completed —
- * or "is this your order?" on a member's. After a sign-in made from the
- * page: added, or not added because the account's email is not the
- * receipt's, with the send of a sign-in link to it.
+ * "add this order" on a guest order, or "is this your order?" on a
+ * member's. After a sign-in made from the page: added, or not added because
+ * the account's email is not the receipt's, with the send of a sign-in link
+ * to it.
  */
 type OrderAsk =
   | "guest"
-  | "guestCompleted"
   | "member"
   | "added"
   | "notAdded"
@@ -42,12 +40,6 @@ function askContent(ask: OrderAsk) {
       return {
         title: ACCOUNT_ASK_COPY.title,
         description: ACCOUNT_ASK_COPY.body,
-        action: signIn,
-      };
-    case "guestCompleted":
-      return {
-        title: ACCOUNT_ASK_COPY.title,
-        description: ACCOUNT_ASK_COMPLETED_BODY,
         action: signIn,
       };
     case "member":

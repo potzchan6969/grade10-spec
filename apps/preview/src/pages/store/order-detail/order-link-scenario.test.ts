@@ -11,9 +11,7 @@ const at = (settings: Partial<OrderLinkSettings>) =>
 describe("viewOf", () => {
   it.each([
     [{}, "guest"],
-    [{ progress: "completed" }, "guestCompleted"],
     [{ order: "member" }, "member"],
-    [{ order: "member", progress: "completed" }, "member"],
     [{ closed: "yes" }, undefined],
     [{ viewer: "someoneElse" }, undefined],
     [{ viewer: "signedInHere" }, "added"],
