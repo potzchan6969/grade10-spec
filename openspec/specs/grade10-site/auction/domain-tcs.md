@@ -200,7 +200,7 @@
 **Steps 12–14 setup:**
 
 - A user is signed in with `<card>` saved and is on `<listing_33>`.
-- `<listing_33>` is live, carries an extension cap, and its recorded close already stands at that cap.
+- `<listing_33>` is live, has configured extension duration `<extension duration>` and carries an extension cap, and its recorded close already stands at that cap.
 - Its recorded close is `<bid time>` away.
 
 **Steps 15–18 setup:**
@@ -475,7 +475,6 @@
 | Field | Value |
 | --- | --- |
 | listing_54 | A listing that was published, listed in the catalogue, then called off by an operator; bind its identity only |
-| lot_1 address | The address of `<listing_54>` from when it was published |
 | listing_55 | A replacement draft with the same slug and a different title; bind its identity only |
 
 | Field | Value |
@@ -579,7 +578,7 @@
 
 **Steps 1–5 setup:**
 
-- Customer A won `<listing_63>` at a USD winning bid and is on its order setup page.
+- Customer A won `<listing_63>` at `<winning bid>`, with buyer's premium `<buyer's premium>` and is on its order setup page.
 - HKD Card is offered, and Payment Settings holds an HKD card rule of `<card fee percent>` per cent and `<fixed card fee>`.
 - No settlement currency or payment method is preselected.
 - No invoice has been sent for `<listing_63>`.
@@ -1402,7 +1401,7 @@ from my card until I win.
 **Pre-conditions:**
 
 * A user is signed in with `<card>` saved and is on `<listing_33>`.
-* `<listing_33>` is live, carries an extension cap, and its recorded close already stands at that cap.
+* `<listing_33>` is live, has configured extension duration `<extension duration>` and carries an extension cap, and its recorded close already stands at that cap.
 * Its recorded close is `<bid time>` away.
 
 **Test data:**
@@ -1852,7 +1851,6 @@ it.
 | Field | Value |
 | --- | --- |
 | listing_54 | A listing that was published, listed in the catalogue, then called off by an operator; bind its identity only |
-| lot_1 address | The address of `<listing_54>` from when it was published |
 | listing_55 | A replacement draft with the same slug and a different title; bind its identity only |
 
 | Field | Value |
@@ -2021,7 +2019,7 @@ it.
 
 **Pre-conditions:**
 
-* Customer A won `<listing_63>` at a USD winning bid and is on its order setup page.
+* Customer A won `<listing_63>` at `<winning bid>`, with buyer's premium `<buyer's premium>` and is on its order setup page.
 * HKD Card is offered, and Payment Settings holds an HKD card rule of `<card fee percent>` per cent and `<fixed card fee>`.
 * No settlement currency or payment method is preselected.
 * No invoice has been sent for `<listing_63>`.

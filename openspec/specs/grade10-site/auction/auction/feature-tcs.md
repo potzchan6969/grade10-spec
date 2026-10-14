@@ -351,6 +351,11 @@
 | bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
 | listing_12 | A live USD listing whose minimum next bid is `<bar>` | · |
 
+| Field | Value |
+| --- | --- |
+| grade10 bids url | The signed-in account bidding-history URL in the test environment; bind its URL only |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
+
 **Steps 9–11 data:**
 
 | `<account_standing>` | `<bid_amount>` | Outcome | Fixture notes |
@@ -446,6 +451,10 @@
 | listing_49 | An Upcoming listing whose start is 19:00 UTC |
 | listing_50 | An Ended listing that closed at 12:00 UTC, before `<listing_48>` closes |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 3–4 data:**
 
 | Field | Value |
@@ -456,6 +465,10 @@
 | listing_54 | An Upcoming listing starting on 2026-10-02 |
 | listing_55 | An Ended listing that closed on 2026-09-22 |
 | listing_56 | An Ended listing that closed on 2026-09-15 |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps 5–6 data:**
 
@@ -469,6 +482,28 @@
 | Field | Value |
 | --- | --- |
 | featured_listing | A published listing that fills a complete Featured slot |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 11–12 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 13–13 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 14–15 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -531,6 +566,22 @@
 | --- | --- |
 | upcoming_listing | A published Upcoming listing on All auctions |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 3–4 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 5–7 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 ### Route
 
 1. Find `<upcoming_listing>` on All auctions.
@@ -541,7 +592,7 @@
 4. Read the document canonical and share address.
    - Canonical and share address are `/auction` with no category query. `g10.auction-auction.US5-TC9`
 5. Read the first batch of All auctions cards.
-   - Lots from step 5 stay visible. `g10.auction-auction.US5-TC10`
+   - Listings from step 5 stay visible. `g10.auction-auction.US5-TC10`
 6. Scroll near the end of the shown listings.
    - Step 6 shows Boneyard skeleton cards below the listings already shown, or the next batch lands without pagination controls. `g10.auction-auction.US5-TC10`
 7. Wait for the next batch.
@@ -588,6 +639,10 @@
 | front page image | The front page image uploaded for that slot |
 | featured listing title | The public title of `<featured listing>`; bind the title only |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 3–5 data:**
 
 | Field | Value |
@@ -595,6 +650,10 @@
 | featured listing | A published Active listing on a complete Featured slide |
 | bid before | The current bid amount shown on the slide |
 | bid after | A **higher** served current bid for the same listing after first paint |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps 6–7 data:**
 
@@ -608,6 +667,10 @@
 | served_close | The effective close returned for the Active listing; bind its datetime only |
 | served_open | The scheduled opening returned for the Upcoming listing; bind its datetime only |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 8–9 data:**
 
 | Field | Value |
@@ -615,6 +678,16 @@
 | listing A | Published Active or Upcoming listing in Featured slot 1 |
 | listing B | Published Active or Upcoming listing in Featured slot 2 |
 | listing C | Published Active or Upcoming listing in Featured slot 3 |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 10–11 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -672,12 +745,20 @@
 | listing A | Published listing in Featured slot 1 |
 | listing B | Published listing in Featured slot 2 |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 4–6 data:**
 
 | Field | Value |
 | --- | --- |
 | listing A | Published listing in Featured slot 1 |
 | listing B | Published listing in Featured slot 2 |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps 7–9 data:**
 
@@ -686,6 +767,16 @@
 | listing A | Published listing in Featured slot 1 |
 | listing B | Published listing in Featured slot 2 |
 | listing C | Published listing in Featured slot 3 |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
+**Steps 10–11 data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -738,12 +829,20 @@
 | featured listing | A published **Active** listing on the visible Featured slide |
 | listing page url | That listing's details page address |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 3–4 data:**
 
 | Field | Value |
 | --- | --- |
 | upcoming listing | A published Upcoming listing on the visible Featured slide |
 | listing page url | That listing's details page address |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps 5–6 data:**
 
@@ -752,6 +851,10 @@
 | listing A | Published **Active** listing in Featured slot 1 |
 | listing B | Published **Active** listing in Featured slot 2 |
 | listing B page url | `<listing B>`'s details page address |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -792,17 +895,29 @@
 | --- | --- |
 | open listing | A published Active or Upcoming listing on an All auctions card |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 4–6 data:**
 
 | Field | Value |
 | --- | --- |
 | open listing | A published Active or Upcoming listing the collector already watches |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps 7–8 data:**
 
 | Field | Value |
 | --- | --- |
 | closed listing | A closed listing visible in All auctions |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -1067,7 +1182,7 @@
 
 **Steps 7–9 setup:**
 
-- `<listing_32>` is open inside its window, with maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
+- `<listing_32>` is open inside its window, with increment `<increment>` and maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
 - The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
 
 **Shared test data:**
@@ -1113,7 +1228,7 @@
    - Step 1 reads Highest bid `<price before>`, led by customer A. `g10.auction-auction.US13-TC1`
 2. Erase customer A's account through the account-erasure procedure.
 3. Read `<listing_27>` from the public listing API.
-   - Step 3 reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum. `g10.auction-auction.US13-TC1`
+   - Step 3 reads Highest bid `<price after>`, the next maximum left plus `<increment>`, capped at the new leader's maximum. `g10.auction-auction.US13-TC1`
    - Step 3's Highest bid is never above `<price before>`. `g10.auction-auction.US13-TC1`
 4. As customer B, read their own standing on `<listing_27>`.
    - Step 4 reads `<leader_after>` as leader, with their own maximum unchanged. `g10.auction-auction.US13-TC1`
@@ -1177,6 +1292,11 @@
 | next minimum | HKD5,290 | (fixed derived value), `<current bid>` plus its 8000 increment |
 | bid count | 3 | · |
 
+| Field | Value |
+| --- | --- |
+| grade10 bids url | The signed-in account bidding-history URL in the test environment; bind its URL only |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
+
 **Steps 7–10 data:**
 
 | Field | Value | Fixture notes |
@@ -1184,6 +1304,10 @@
 | listing_68 | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) | · |
 | current bid | HKD5,210 | (range: 400000–799999 minor units) |
 | below minimum | HKD5,280 | (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
+
+| Field | Value |
+| --- | --- |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps 11–16 data:**
 
@@ -1199,6 +1323,10 @@
 | listing_69 | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) | · |
 | maximum | HKD560 | (range: 1000–79999 minor units) |
 | raised maximum | HKD920 | (range: 80000–399999 minor units) |
+
+| Field | Value |
+| --- | --- |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps 17–22 data:**
 
@@ -1295,6 +1423,10 @@
 | --- | --- |
 | the house | The house, under `<listing_1>`'s internal bid of 600000 minor units |
 | customer B | customer B, with maximum 600000 minor units and no internal bid on the listing |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The auction base URL in the test environment; bind its URL only |
 
 **Steps 5–7 data:**
 
@@ -1468,6 +1600,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | the house | The house, under `<listing_1>`'s internal bid of 600000 minor units |
 | customer B | customer B, with maximum 600000 minor units and no internal bid on the listing |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The auction base URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2351,6 +2487,11 @@ Runs once per row of **Test data**.
 | bar | USD15,000 | (fixed configured value), the bar Grade10 sets on a bid |
 | listing_12 | A live USD listing whose minimum next bid is `<bar>` | · |
 
+| Field | Value |
+| --- | --- |
+| grade10 bids url | The signed-in account bidding-history URL in the test environment; bind its URL only |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Enter `<bid_amount>` in the bid field and select **Place Bid**.
@@ -2455,6 +2596,10 @@ Runs once per row of **Test data**.
 | listing_49 | An Upcoming listing whose start is 19:00 UTC |
 | listing_50 | An Ended listing that closed at 12:00 UTC, before `<listing_48>` closes |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to `<grade10 auction catalogue url>`.
@@ -2495,6 +2640,10 @@ Runs once per row of **Test data**.
 | listing_54 | An Upcoming listing starting on 2026-10-02 |
 | listing_55 | An Ended listing that closed on 2026-09-22 |
 | listing_56 | An Ended listing that closed on 2026-09-15 |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2602,6 +2751,12 @@ Runs once per row of **Test data**.
 * No complete Featured slot is set.
 * At least one listing is visible in All auctions.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to `<grade10 auction catalogue url>`.
@@ -2635,6 +2790,12 @@ Runs once per row of **Test data**.
 * customer is on `<grade10 auction catalogue url>`.
 * Featured may be present or absent.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Read the catalogue page for category chrome.
@@ -2667,6 +2828,12 @@ Runs once per row of **Test data**.
 * customer is able to open `<grade10 auction catalogue url>`.
 * At least one complete Featured slot is set.
 * No listings are available for All auctions.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2710,6 +2877,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | featured_listing | A published listing that fills a complete Featured slot |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Read the Featured band for `<featured_listing>`.
@@ -2741,6 +2912,12 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is able to open `<grade10 auction catalogue url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2774,6 +2951,12 @@ Runs once per row of **Test data**.
 * customer is on `<grade10 auction catalogue url>`.
 * All auctions holds more listings than the first batch shows.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Read the first batch of All auctions cards.
@@ -2784,7 +2967,7 @@ Runs once per row of **Test data**.
 
 * Step 2 shows Boneyard skeleton cards below the listings already shown, or the next batch lands without pagination controls.
 * Step 3 shows additional listings below the first batch.
-* Lots from step 1 stay visible.
+* Listings from step 1 stay visible.
 * The combined list stays in the catalogue resting order.
 * No pagination controls appear.
 
@@ -2818,6 +3001,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | upcoming_listing | A published Upcoming listing on All auctions |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2869,6 +3056,10 @@ Runs once per row of **Test data**.
 | front page image | The front page image uploaded for that slot |
 | featured listing title | The public title of `<featured listing>`; bind the title only |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to `<grade10 auction catalogue url>`.
@@ -2909,6 +3100,10 @@ Runs once per row of **Test data**.
 | featured listing | A published Active listing on a complete Featured slide |
 | bid before | The current bid amount shown on the slide |
 | bid after | A **higher** served current bid for the same listing after first paint |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2956,6 +3151,10 @@ Runs once per row of **Test data**.
 | served_close | The effective close returned for the Active listing; bind its datetime only |
 | served_open | The scheduled opening returned for the Upcoming listing; bind its datetime only |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to `<grade10 auction catalogue url>`.
@@ -2997,6 +3196,10 @@ Runs once per row of **Test data**.
 | listing B | Published Active or Upcoming listing in Featured slot 2 |
 | listing C | Published Active or Upcoming listing in Featured slot 3 |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to `<grade10 auction catalogue url>`.
@@ -3026,6 +3229,12 @@ Runs once per row of **Test data**.
 
 * customer is able to open `<grade10 auction catalogue url>`.
 * The only Featured slot holds an eligible listing and no front page image, or a front page image and no listing.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3076,6 +3285,10 @@ Runs once per row of **Test data**.
 | listing A | Published listing in Featured slot 1 |
 | listing B | Published listing in Featured slot 2 |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Read the visible Featured listing.
@@ -3117,6 +3330,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | listing A | Published listing in Featured slot 1 |
 | listing B | Published listing in Featured slot 2 |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3162,6 +3379,10 @@ Runs once per row of **Test data**.
 | listing B | Published listing in Featured slot 2 |
 | listing C | Published listing in Featured slot 3 |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Read the visible Featured listing.
@@ -3192,6 +3413,12 @@ Runs once per row of **Test data**.
 
 * customer is on `<grade10 auction catalogue url>`.
 * Exactly one complete Featured slot is set.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3242,6 +3469,10 @@ Runs once per row of **Test data**.
 | featured listing | A published **Active** listing on the visible Featured slide |
 | listing page url | That listing's details page address |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Activate Bid Now on the Featured slide.
@@ -3279,6 +3510,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | upcoming listing | A published Upcoming listing on the visible Featured slide |
 | listing page url | That listing's details page address |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3319,6 +3554,10 @@ Runs once per row of **Test data**.
 | listing A | Published **Active** listing in Featured slot 1 |
 | listing B | Published **Active** listing in Featured slot 2 |
 | listing B page url | `<listing B>`'s details page address |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3366,6 +3605,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | open listing | A published Active or Upcoming listing on an All auctions card |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Activate watch on the All auctions card for `<open listing>`.
@@ -3406,6 +3649,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | open listing | A published Active or Upcoming listing the collector already watches |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Activate watch off on the All auctions card for `<open listing>`.
@@ -3445,6 +3692,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | closed listing | A closed listing visible in All auctions |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction catalogue url | The public auction catalogue URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -4317,7 +4568,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 reads Highest bid `<price before>`, led by customer A.
-* Step 3 reads Highest bid `<price after>`, the next maximum left plus one increment, capped at the new leader's maximum.
+* Step 3 reads Highest bid `<price after>`, the next maximum left plus `<increment>`, capped at the new leader's maximum.
 * Step 3's Highest bid is never above `<price before>`.
 * Step 4 reads `<leader_after>` as leader, with their own maximum unchanged.
 * customer A's maxima appear nowhere on `<listing_27>`.
@@ -4384,7 +4635,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_32>` is open inside its window, with maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
+* `<listing_32>` is open inside its window, with increment `<increment>` and maxima committed in this order: `<committed_maxima>`, and Highest bid `<price before>`.
 * The erased customer has no unpaid order or open fulfilment, so nothing stops the erasure.
 
 **Test data:**
@@ -4463,6 +4714,11 @@ Runs once per row of **Test data**.
 | next minimum | HKD5,290 | (fixed derived value), `<current bid>` plus its 8000 increment |
 | bid count | 3 | · |
 
+| Field | Value |
+| --- | --- |
+| grade10 bids url | The signed-in account bidding-history URL in the test environment; bind its URL only |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Enter `<amount_entered>` in the custom maximum on the bid panel.
@@ -4512,6 +4768,10 @@ Runs once per row of **Test data**.
 | listing_68 | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) | · |
 | current bid | HKD5,210 | (range: 400000–799999 minor units) |
 | below minimum | HKD5,280 | (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
+
+| Field | Value |
+| --- | --- |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -4566,6 +4826,10 @@ Runs once per row of **Test data**.
 | listing_69 | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) | · |
 | maximum | HKD560 | (range: 1000–79999 minor units) |
 | raised maximum | HKD920 | (range: 80000–399999 minor units) |
+
+| Field | Value |
+| --- | --- |
+| my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps:**
 

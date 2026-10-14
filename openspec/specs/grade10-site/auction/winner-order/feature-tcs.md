@@ -855,9 +855,9 @@
    - Unrelated country names outside the query are not shown. `g10.auction-winner-order.US1-TC43`
 3. Open the Country/Region picker.
 4. Type `<Typed query>`.
-5. Select United Kingdom from the filtered matches.
+5. Select `<Country or region>` from the filtered matches.
    - Step 5 closes the popup. `g10.auction-winner-order.US1-TC45`
-   - The field shows United Kingdom. `g10.auction-winner-order.US1-TC45`
+   - The field shows `<Country or region>`. `g10.auction-winner-order.US1-TC45`
    - Options are no longer in the tree. `g10.auction-winner-order.US1-TC45`
 6. Activate Confirm or Use This Address with Country/Region empty.
    - A field refusal appears beside Country/Region. `g10.auction-winner-order.US1-TC46`
@@ -2335,12 +2335,12 @@
 
 **Steps 10–11 data:**
 
-| Field | Value |
-| --- | --- |
-| winner_order_115_1 | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline; bind its identity only |
-| time left | 2 days (172800s), a time inside the 7-day payment window |
-| return reason | The reason text the operator entered for the winner |
-| return time | 18 hours after the upload |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_115_1 | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline; bind its identity only | · |
+| time left | 2 days | (172800s), a time inside the 7-day payment window |
+| return reason | The reason text the operator entered for the winner | · |
+| return time | 18 hours after the upload | · |
 
 **Steps 12–12 data:**
 
@@ -2352,11 +2352,11 @@
 
 **Steps 13–14 data:**
 
-| Field | Value |
-| --- | --- |
-| winner_order_117_1 | An order paid by bank transfer, `<time left>` before its payment deadline at upload; bind its identity only |
-| time left | 2 days (172800s) |
-| return reason | The reason text the operator enters for the winner |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_117_1 | An order paid by bank transfer, `<time left>` before its payment deadline at upload; bind its identity only | · |
+| time left | 2 days | (172800s) |
+| return reason | The reason text the operator enters for the winner | · |
 
 ### Route
 
@@ -3016,7 +3016,7 @@
    - To reads `support@grade10.com`. `g10.auction-winner-order.US16-TC2`
 4. Click Contact Us.
 5. Read Subject.
-   - Subject reads `Auction lot `<listing_title>`: setup overdue`, with no invoice id. `g10.auction-winner-order.US16-TC3`
+   - Subject reads “Auction lot `<listing_title>`: setup overdue”, with no invoice id. `g10.auction-winner-order.US16-TC3`
 6. Click Contact Us.
 7. Read Subject.
    - Subject reads `Auction order `<invoice_id>`: payment overdue`. `g10.auction-winner-order.US16-TC4`
@@ -3148,7 +3148,7 @@
    - It does not name `<replaced_invoice_id>`. `g10.auction-winner-order.US16-TC13`
 6. Click Contact Us.
 7. Read Subject and Message.
-   - Subject reads `Auction lot `<listing_title>`: order cancelled`. `g10.auction-winner-order.US16-TC14`
+   - Subject reads “Auction lot `<listing_title>`: order cancelled”. `g10.auction-winner-order.US16-TC14`
    - Message names `<listing_title>`, `<invoice_id>` and status Cancelled. `g10.auction-winner-order.US16-TC14`
    - Neither names the operator's category or note. `g10.auction-winner-order.US16-TC14`
 8. Open the order and choose Contact Us.
@@ -3230,7 +3230,7 @@
 
 **Steps 5–7 data:**
 
-| Field | Value |
+| Address fields | Setup |
 | --- | --- |
 | First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region, Postal Code | Filled |
 | Phone | `<a phone number of unusual length and format>` |
@@ -3278,7 +3278,7 @@
    - The confirmed address is shown. `g10.auction-winner-order.US19-TC2`
    - No invoice and no Pay Now are shown. `g10.auction-winner-order.US19-TC2`
 5. Navigate to `<winner order url>`.
-6. Fill the address form with **Test data**.
+6. Fill First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region and Postal Code. Enter `<a phone number of unusual length and format>` in Phone; leave Company Name, Address Line 2 and Apt./Suite/Building empty.
 7. Click Confirm.
    - The address is accepted. `g10.auction-winner-order.US19-TC3`
    - The order status reads Preparing Invoice. `g10.auction-winner-order.US19-TC3`
@@ -3443,19 +3443,20 @@
 
 **Steps 1–2 setup:**
 
-- `<listing_169_1>` closed at its recorded close and no delivery address is confirmed on its order.
+- `<listing_169_1>` closed at `<listing_169_1 close>` and no delivery address is confirmed on its order.
 - customer(winner of `<listing_169_1>`) is on `<winner order url>` at `<one minute before close>`.
 - The winner order under test is `<winner_order_169_1>`.
+- The address entrance closes at `<Entrance closes>`, 48 hours after `<listing_169_1 close>`.
 
 **Steps 3–4 setup:**
 
-- `<listing_170_1>` closed at its recorded close and no delivery address is confirmed on its order.
+- `<listing_170_1>` closed at `<listing_170_1 close>` and no delivery address is confirmed on its order.
 - customer(winner of `<listing_170_1>`) is on `<winner order url>` at `<the address deadline>`.
 - The winner order under test is `<winner_order_170_1>`.
 
 **Steps 5–6 setup:**
 
-- `<listing_171_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
+- `<listing_171_1>`'s order has no confirmed delivery address, derives as Setup Overdue,
 - has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
 - An operator reopened the address form at `<the reopen>`.
 - customer(winner of `<listing_171_1>`) is on `<winner order url>`.
@@ -3470,6 +3471,9 @@
 **Steps 9–11 setup:**
 
 - customer(winner of `<listing_173_1>`, `<listing_173_2>` and `<listing_173_3>`) won three listings that closed at different datetimes.
+- `<listing_173_1>` closed at `<listing_173_1 close>`.
+- `<listing_173_2>` closed at `<listing_173_2 close>`.
+- `<listing_173_3>` closed at `<listing_173_3 close>`.
 
 **Steps 12–13 setup:**
 
@@ -3503,7 +3507,7 @@
 
 | Field | Value |
 | --- | --- |
-| listing_169_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
+| listing_169_1 close | 2026-09-03T12:00:00Z |
 | Entrance closes | 2026-09-05T12:00:00Z |
 | one minute before close | 2026-09-05T11:59:00Z |
 
@@ -3520,7 +3524,7 @@
 
 | Field | Value |
 | --- | --- |
-| listing_170_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
+| listing_170_1 close | 2026-09-03T12:00:00Z |
 | the address deadline | 2026-09-05T12:00:00Z |
 
 | Field | Value |
@@ -3559,15 +3563,21 @@
 
 | Field | Value |
 | --- | --- |
-| listing_173_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
-| listing_173_2>` recorded close | 2026-09-03T18:30:00Z; bind its identity only |
-| listing_173_3>` recorded close | 2026-09-04T09:15:00Z; bind its identity only |
+| listing_173_1 close | 2026-09-03T12:00:00Z |
+| listing_173_2 close | 2026-09-03T18:30:00Z |
+| listing_173_3 close | 2026-09-04T09:15:00Z |
 
 | Field | Value |
 | --- | --- |
 | listing_173_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 | listing_173_2 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 | listing_173_3 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| address deadline 1 | 2026-09-05T12:00:00Z |
+| address deadline 2 | 2026-09-05T18:30:00Z |
+| address deadline 3 | 2026-09-06T09:15:00Z |
 
 **Steps 12–13 data:**
 
@@ -3630,7 +3640,7 @@
    - The order still reads Setup Overdue. `g10.auction-winner-order.US23-TC2`
 5. Read the delivery address area.
 6. Confirm the account's saved home address.
-   - The address deadline reads 2026-09-09T09:00:00Z, measured from the reopen. `g10.auction-winner-order.US23-TC4`
+   - The address deadline reads `<New address deadline>`, measured from the reopen. `g10.auction-winner-order.US23-TC4`
    - The confirmation is accepted. `g10.auction-winner-order.US23-TC4`
    - The order reads Preparing Invoice. `g10.auction-winner-order.US23-TC4`
 7. Read the delivery address area for a reopen or extend control.
@@ -3642,7 +3652,7 @@
 10. Read each order's address deadline.
 11. Confirm a different delivery address on each order.
    - Three separate orders exist, one per listing. `g10.auction-winner-order.US23-TC6`
-   - The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z. `g10.auction-winner-order.US23-TC6`
+   - The three address deadlines, each 48 hours after its listing's recorded close, read `<address deadline 1>`, `<address deadline 2>` and `<address deadline 3>`. `g10.auction-winner-order.US23-TC6`
    - Each order keeps the address confirmed on it and awaits its own invoice. `g10.auction-winner-order.US23-TC6`
 12. Attempt to change the delivery address to the account's work address.
 13. Read the delivery address area.
@@ -3950,7 +3960,7 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| winner_order_194_1 | A listing won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent; bind its identity only | · |
+| winner_order_194_1 | A listing won at `<winning bid>`, settled in HKD by FPS, with premium `<premium>` and Shipping & Handling `<shipping>`, invoice sent; bind its identity only | · |
 | winner_order_194_2 | A listing won at USD100.00, settled in HKD by FPS, invoice sent; bind its identity only | · |
 | winner_order_194_3 | A listing won at USD101.00, settled in HKD by FPS, invoice sent; bind its identity only | · |
 | winner_order_194_4 | A listing won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee; bind its identity only | · |
@@ -4014,7 +4024,7 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| winner_order_201_1 | An order settled in HKD by bank transfer on HK Local whose invoice lines total HKD1,031.00, with a bank transfer fee typed in USD; bind its identity only | · |
+| winner_order_201_1 | An order settled in HKD by bank transfer on HK Local whose invoice lines total HKD1,031.00, with bank transfer fee `<bank transfer fee>` typed in USD; bind its identity only | · |
 | bank transfer fee | USD50.00 | (fixed boundary or equality), 5000 minor units, which converts to HKD392.50 before rounding |
 | fee HKD | HKD393.00 | (fixed derived value), 39300 minor units |
 | total HKD | HKD1,424.00 | (fixed derived value), 142400 minor units |
@@ -4061,7 +4071,7 @@
    - Step 4 holds no row addressed to `<internal bidder>`'s email label: no won, address or setup letter. `g10.auction-winner-order.US1-TC57`
 5. Read the invoice premium and converted lines.
    - The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`. `g10.auction-winner-order.US8-TC5`
-   - HKD line amounts are each converted at the configured rate and rounded up before summing. `g10.auction-winner-order.US8-TC5`
+   - HKD line amounts are each converted at `<exchange rate>` and rounded up before summing. `g10.auction-winner-order.US8-TC5`
 6. Read the settlement currency and payment method choices.
    - USD and HKD are offered; neither is selected. `g10.auction-winner-order.US24-TC1`
    - No payment method is selected before a currency is chosen. `g10.auction-winner-order.US24-TC1`
@@ -4081,11 +4091,11 @@
 15. Reload `<winner_order_182_1>`.
    - Step 15 reads the order in Awaiting Setup, holding no delivery address, no currency and no method. `g10.auction-winner-order.US24-TC4`
 16. Open `<winner order url>` for `<winner_order_183_1>`.
-17. Choose the home address, choose HKD and choose FPS.
+17. Choose the home address, choose `<Currency>` and choose `<Method>`.
 18. Confirm the home address.
    - Step 18 is accepted. `g10.auction-winner-order.US24-TC5`
 19. Reload `<winner_order_183_1>`.
-   - Step 19 reads HKD as the order's settlement currency. `g10.auction-winner-order.US24-TC5`
+   - Step 19 reads `<Currency>` as the order's settlement currency. `g10.auction-winner-order.US24-TC5`
    - Step 19 reads the order as Preparing Invoice. `g10.auction-winner-order.US24-TC5`
 20. As the operator, change the settlement currency to USD with the reason `Winner picked the wrong currency`.
    - Step 20: the order records USD and still reads Preparing Invoice. `g10.auction-winner-order.US24-TC6`
@@ -4150,7 +4160,7 @@
    - Step 53: every amount in the invoice PDF reads in HKD, the Winning Bid is 78,500 minor units, and no USD amount or conversion rate appears. `g10.auction-winner-order.US26-TC1`
 54. Open `<winner_order_194_4>`'s invoice and read its lines and total.
    - Buyer's Premium reads HK$393 and Shipping & Handling reads HK$95. `g10.auction-winner-order.US26-TC1`
-   - The total reads `<total HKD>`, not the whole-total value. `g10.auction-winner-order.US26-TC1`
+   - The total reads `<total HKD>`, not `<Whole-total value>`. `g10.auction-winner-order.US26-TC1`
    - Every amount reads in HKD, and no USD amount appears. `g10.auction-winner-order.US26-TC1`
    - No USD winning bid is printed. `g10.auction-winner-order.US26-TC1`
    - `<winner_order_194_2>`'s Winning Bid is 78,500 minor units in HKD. `g10.auction-winner-order.US26-TC1`
@@ -4168,7 +4178,7 @@
    - No USD amount appears beside it. `g10.auction-winner-order.US26-TC4`
 58. Open the invoice.
 59. Read the card fee and the total.
-   - The card fee is 3,873 minor units in HKD, the HKD rule's gross-up fee on the HKD Subtotal. `g10.auction-winner-order.US26-TC5`
+   - The card fee is 3,873 minor units in HKD, the HKD rule's gross-up fee on subtotal `<HKD Subtotal>`. `g10.auction-winner-order.US26-TC5`
    - The total is 106,973 minor units in HKD. `g10.auction-winner-order.US26-TC5`
    - The USD rule is not applied. `g10.auction-winner-order.US26-TC5`
 60. Convert `<usd amount>` to HKD.
@@ -5745,12 +5755,12 @@ Runs once per row of **Test data**.
 
 1. Open the Country/Region picker.
 2. Type `<Typed query>`.
-3. Select United Kingdom from the filtered matches.
+3. Select `<Country or region>` from the filtered matches.
 
 **Expected Results:**
 
 * Step 3 closes the popup.
-* The field shows United Kingdom.
+* The field shows `<Country or region>`.
 * Options are no longer in the tree.
 
 <!-- trace:case id=g10.auction-winner-order.TC-iso rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1,g10.auction-winner-order.SC-fm8,g10.auction-winner-order.SC-ckz,g10.auction-winner-order.SC-98w,g10.auction-winner-order.SC-vuk,g10.auction-winner-order.SC-h2c,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-er5,g10.auction-winner-order.SC-ppq,g10.auction-winner-order.SC-deu,g10.auction-winner-order.SC-4z7,g10.auction-winner-order.SC-d0w,g10.auction-winner-order.SC-mph,g10.auction-winner-order.SC-1ok -->
@@ -8003,7 +8013,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The premium is the greater of 20% of `<winning bid>` or `<minimum premium>`.
-* HKD line amounts are each converted at the configured rate and rounded up before summing.
+* HKD line amounts are each converted at `<exchange rate>` and rounded up before summing.
 
 ---
 
@@ -9434,12 +9444,12 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| winner_order_115_1 | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline; bind its identity only |
-| time left | 2 days (172800s), a time inside the 7-day payment window |
-| return reason | The reason text the operator entered for the winner |
-| return time | 18 hours after the upload |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_115_1 | An order whose invoice was sent, proof uploaded `<time left>` before its payment deadline; bind its identity only | · |
+| time left | 2 days | (172800s), a time inside the 7-day payment window |
+| return reason | The reason text the operator entered for the winner | · |
+| return time | 18 hours after the upload | · |
 
 **Steps:**
 
@@ -9515,11 +9525,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| winner_order_117_1 | An order paid by bank transfer, `<time left>` before its payment deadline at upload; bind its identity only |
-| time left | 2 days (172800s) |
-| return reason | The reason text the operator enters for the winner |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_117_1 | An order paid by bank transfer, `<time left>` before its payment deadline at upload; bind its identity only | · |
+| time left | 2 days | (172800s) |
+| return reason | The reason text the operator enters for the winner | · |
 
 **Steps:**
 
@@ -10591,7 +10601,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Subject reads `Auction lot `<listing_title>`: setup overdue`, with no invoice id.
+* Subject reads “Auction lot `<listing_title>`: setup overdue”, with no invoice id.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gxu rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
 ### g10.auction-winner-order.US16-TC4: A payment-overdue Subject names the invoice
@@ -11054,7 +11064,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Subject reads `Auction lot `<listing_title>`: order cancelled`.
+* Subject reads “Auction lot `<listing_title>`: order cancelled”.
 * Message names `<listing_title>`, `<invoice_id>` and status Cancelled.
 * Neither names the operator's category or note.
 
@@ -11339,7 +11349,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
+| Address fields | Setup |
 | --- | --- |
 | First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region, Postal Code | Filled |
 | Phone | `<a phone number of unusual length and format>` |
@@ -11357,7 +11367,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<winner order url>`.
-2. Fill the address form with **Test data**.
+2. Fill First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region and Postal Code. Enter `<a phone number of unusual length and format>` in Phone; leave Company Name, Address Line 2 and Apt./Suite/Building empty.
 3. Click Confirm.
 
 **Expected Results:**
@@ -11822,16 +11832,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_169_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* `<listing_169_1>` closed at `<listing_169_1 close>` and no delivery address is confirmed on its order.
 * customer(winner of `<listing_169_1>`) is on `<winner order url>` at `<one minute before close>`.
 
 * The winner order under test is `<winner_order_169_1>`.
+
+* The address entrance closes at `<Entrance closes>`, 48 hours after `<listing_169_1 close>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_169_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
+| listing_169_1 close | 2026-09-03T12:00:00Z |
 | Entrance closes | 2026-09-05T12:00:00Z |
 | one minute before close | 2026-09-05T11:59:00Z |
 
@@ -11873,7 +11885,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_170_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* `<listing_170_1>` closed at `<listing_170_1 close>` and no delivery address is confirmed on its order.
 * customer(winner of `<listing_170_1>`) is on `<winner order url>` at `<the address deadline>`.
 
 * The winner order under test is `<winner_order_170_1>`.
@@ -11882,7 +11894,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| listing_170_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
+| listing_170_1 close | 2026-09-03T12:00:00Z |
 | the address deadline | 2026-09-05T12:00:00Z |
 
 | Field | Value |
@@ -11923,7 +11935,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_171_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
+* `<listing_171_1>`'s order has no confirmed delivery address, derives as Setup Overdue,
   has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
 * An operator reopened the address form at `<the reopen>`.
 * customer(winner of `<listing_171_1>`) is on `<winner order url>`.
@@ -11953,7 +11965,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The address deadline reads 2026-09-09T09:00:00Z, measured from the reopen.
+* The address deadline reads `<New address deadline>`, measured from the reopen.
 * The confirmation is accepted.
 * The order reads Preparing Invoice.
 
@@ -12018,19 +12030,31 @@ Runs once per row of **Test data**.
 
 * customer(winner of `<listing_173_1>`, `<listing_173_2>` and `<listing_173_3>`) won three listings that closed at different datetimes.
 
+* `<listing_173_1>` closed at `<listing_173_1 close>`.
+
+* `<listing_173_2>` closed at `<listing_173_2 close>`.
+
+* `<listing_173_3>` closed at `<listing_173_3 close>`.
+
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_173_1>` recorded close | 2026-09-03T12:00:00Z; bind its identity only |
-| listing_173_2>` recorded close | 2026-09-03T18:30:00Z; bind its identity only |
-| listing_173_3>` recorded close | 2026-09-04T09:15:00Z; bind its identity only |
+| listing_173_1 close | 2026-09-03T12:00:00Z |
+| listing_173_2 close | 2026-09-03T18:30:00Z |
+| listing_173_3 close | 2026-09-04T09:15:00Z |
 
 | Field | Value |
 | --- | --- |
 | listing_173_1 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 | listing_173_2 | The listing prepared with the original state in the pre-conditions; bind its identity only |
 | listing_173_3 | The listing prepared with the original state in the pre-conditions; bind its identity only |
+
+| Field | Value |
+| --- | --- |
+| address deadline 1 | 2026-09-05T12:00:00Z |
+| address deadline 2 | 2026-09-05T18:30:00Z |
+| address deadline 3 | 2026-09-06T09:15:00Z |
 
 **Steps:**
 
@@ -12041,7 +12065,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Three separate orders exist, one per listing.
-* The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z.
+* The three address deadlines, each 48 hours after its listing's recorded close, read `<address deadline 1>`, `<address deadline 2>` and `<address deadline 3>`.
 * Each order keeps the address confirmed on it and awaits its own invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-aui rev=1 covers=g10.auction-winner-order.SC-js5,g10.auction-winner-order.SC-h7y -->
@@ -12442,14 +12466,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<winner order url>` for `<winner_order_183_1>`.
-2. Choose the home address, choose HKD and choose FPS.
+2. Choose the home address, choose `<Currency>` and choose `<Method>`.
 3. Confirm the home address.
 4. Reload `<winner_order_183_1>`.
 
 **Expected Results:**
 
 * Step 3 is accepted.
-* Step 4 reads HKD as the order's settlement currency.
+* Step 4 reads `<Currency>` as the order's settlement currency.
 * Step 4 reads the order as Preparing Invoice.
 
 <!-- trace:case id=g10.auction-winner-order.TC-flb rev=1 covers=g10.auction-winner-order.SC-rau -->
@@ -12904,7 +12928,7 @@ Runs once per row of **Test data**.
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| winner_order_194_1 | A listing won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent; bind its identity only | · |
+| winner_order_194_1 | A listing won at `<winning bid>`, settled in HKD by FPS, with premium `<premium>` and Shipping & Handling `<shipping>`, invoice sent; bind its identity only | · |
 | winner_order_194_2 | A listing won at USD100.00, settled in HKD by FPS, invoice sent; bind its identity only | · |
 | winner_order_194_3 | A listing won at USD101.00, settled in HKD by FPS, invoice sent; bind its identity only | · |
 | winner_order_194_4 | A listing won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee; bind its identity only | · |
@@ -12934,7 +12958,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Buyer's Premium reads HK$393 and Shipping & Handling reads HK$95.
-* The total reads `<total HKD>`, not the whole-total value.
+* The total reads `<total HKD>`, not `<Whole-total value>`.
 * Every amount reads in HKD, and no USD amount appears.
 * No USD winning bid is printed.
 * `<winner_order_194_2>`'s Winning Bid is 78,500 minor units in HKD.
@@ -13087,7 +13111,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The card fee is 3,873 minor units in HKD, the HKD rule's gross-up fee on the HKD Subtotal.
+* The card fee is 3,873 minor units in HKD, the HKD rule's gross-up fee on subtotal `<HKD Subtotal>`.
 * The total is 106,973 minor units in HKD.
 * The USD rule is not applied.
 
@@ -13191,7 +13215,7 @@ Runs once per row of **Test data**.
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| winner_order_201_1 | An order settled in HKD by bank transfer on HK Local whose invoice lines total HKD1,031.00, with a bank transfer fee typed in USD; bind its identity only | · |
+| winner_order_201_1 | An order settled in HKD by bank transfer on HK Local whose invoice lines total HKD1,031.00, with bank transfer fee `<bank transfer fee>` typed in USD; bind its identity only | · |
 | bank transfer fee | USD50.00 | (fixed boundary or equality), 5000 minor units, which converts to HKD392.50 before rounding |
 | fee HKD | HKD393.00 | (fixed derived value), 39300 minor units |
 | total HKD | HKD1,424.00 | (fixed derived value), 142400 minor units |

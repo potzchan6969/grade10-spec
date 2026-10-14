@@ -29,6 +29,10 @@
 | published_listing | A published listing available in the auction catalogue; bind its public title only |
 | published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
+| Field | Value |
+| --- | --- |
+| lang | The supported language code selected for the canonical listing URL in this fixture; bind its URL language segment only |
+
 **Steps 4–5 data:**
 
 | Field | Value |
@@ -196,11 +200,19 @@
 | --- | --- |
 | published_listing | A published listing available in the auction catalogue; bind its public title only |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The auction base URL in the test environment; bind its URL only |
+
 **Steps 3–4 data:**
 
 | Field | Value |
 | --- | --- |
 | published_listing | A published listing in the catalogue; bind its public title only |
+
+| Field | Value |
+| --- | --- |
+| grade10 sitemap url | The sitemap URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -230,14 +242,14 @@
 
 | Field | Value |
 | --- | --- |
-| `<listing_12>` | An open listing taking bids, not watched and not bid on by this collector |
+| listing_12 | An open listing taking bids, not watched and not bid on by this collector |
 | listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 **Steps 4–5 data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_12>` | An open listing taking bids |
+| listing_12 | An open listing taking bids |
 | listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 ### Route
@@ -274,15 +286,23 @@
 
 | Field | Value |
 | --- | --- |
-| `<listing_13>` | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
 | listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps 3–5 data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_13>` | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
 | listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -321,16 +341,16 @@
 
 | Field | Value |
 | --- | --- |
-| `<listing_14>` | An open listing taking bids, with no bid from this collector |
-| `<first bid>` | The next valid bid shown on the bid panel |
+| listing_14 | An open listing taking bids, with no bid from this collector |
+| first bid | The next valid bid shown on the bid panel |
 | listing_14 url | The canonical URL of `<listing_14>`; bind the URL only |
 
 **Steps 4–4 data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_15>` | An open listing taking bids, where customer A bid before and customer B now leads |
-| `<raise>` | The next valid bid shown on the bid panel |
+| listing_15 | An open listing taking bids, where customer A bid before and customer B now leads |
+| raise | The next valid bid shown on the bid panel |
 | listing_15 url | The canonical URL of `<listing_15>`; bind the URL only |
 
 **Steps 5–6 data:**
@@ -711,18 +731,18 @@
 
 **Steps 3–4 data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_2 | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
 
 **Steps 5–7 data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps 8–11 data:**
 
@@ -873,9 +893,9 @@
 | --- | --- |
 | listing_3 | An open USD listing, close about 12 minutes away |
 
-| Field | Value |
-| --- | --- |
-| observation interval | 45 seconds (fixed observation fixture) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 45 seconds | (fixed observation fixture) |
 
 **Steps 7–9 data:**
 
@@ -899,14 +919,14 @@
 
 **Steps 13–15 data:**
 
-| Field | Value |
-| --- | --- |
-| listing_3 | An open USD listing, close about 12 minutes away |
-| correction | 0.6 seconds, under a second |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_3 | An open USD listing, close about 12 minutes away | · |
+| correction | 0.6 seconds | under a second |
 
-| Field | Value |
-| --- | --- |
-| observation interval | 5 seconds (fixed observation fixture) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 5 seconds | (fixed observation fixture) |
 
 ### Route
 
@@ -1009,10 +1029,10 @@
 | leader price | USD4,960 | (range: 100000–499999 minor units) |
 | bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
-| Field | Value |
-| --- | --- |
-| clock lag | 30 seconds (fixed stale-clock fixture) |
-| bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps 12–16 data:**
 
@@ -1021,10 +1041,10 @@
 | listing_10 | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap | · |
 | bid amount | USD280 | (range: 10000–49999 minor units), the opening price |
 
-| Field | Value |
-| --- | --- |
-| clock lag | 30 seconds (fixed stale-clock fixture) |
-| bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps 17–19 data:**
 
@@ -1035,8 +1055,8 @@
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| update delay | 5 seconds (fixed live-update delay fixture) | · |
-| last bid offset | 1 second (fixed last-second boundary) | · |
+| update delay | 5 seconds | (fixed live-update delay fixture) |
+| last bid offset | 1 second | (fixed last-second boundary) |
 | extension duration | 1800s | (30mins) |
 
 **Steps 20–22 data:**
@@ -1290,6 +1310,10 @@ The catalogue publishes `<published_listing>`. JavaScript disabled in the browse
 | --- | --- |
 | published_listing | A published listing available in the auction catalogue; bind its public title only |
 | published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| lang | The supported language code selected for the canonical listing URL in this fixture; bind its URL language segment only |
 
 **Steps:**
 
@@ -1811,6 +1835,10 @@ The collector is viewing the auction catalogue, which lists `<published_listing>
 | --- | --- |
 | published_listing | A published listing available in the auction catalogue; bind its public title only |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The auction base URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to `<grade10 auction url>`.
@@ -1846,6 +1874,10 @@ The catalogue holds `<published_listing>`.
 | Field | Value |
 | --- | --- |
 | published_listing | A published listing in the catalogue; bind its public title only |
+
+| Field | Value |
+| --- | --- |
+| grade10 sitemap url | The sitemap URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1889,7 +1921,7 @@ The catalogue holds `<published_listing>`.
 
 | Field | Value |
 | --- | --- |
-| `<listing_12>` | An open listing taking bids, not watched and not bid on by this collector |
+| listing_12 | An open listing taking bids, not watched and not bid on by this collector |
 | listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 **Steps:**
@@ -1932,7 +1964,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_12>` | An open listing taking bids |
+| listing_12 | An open listing taking bids |
 | listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 **Steps:**
@@ -1978,8 +2010,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_13>` | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
 | listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2017,8 +2053,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_13>` | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
 | listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2064,8 +2104,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_14>` | An open listing taking bids, with no bid from this collector |
-| `<first bid>` | The next valid bid shown on the bid panel |
+| listing_14 | An open listing taking bids, with no bid from this collector |
+| first bid | The next valid bid shown on the bid panel |
 | listing_14 url | The canonical URL of `<listing_14>`; bind the URL only |
 
 **Steps:**
@@ -2105,8 +2145,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_15>` | An open listing taking bids, where customer A bid before and customer B now leads |
-| `<raise>` | The next valid bid shown on the bid panel |
+| listing_15 | An open listing taking bids, where customer A bid before and customer B now leads |
+| raise | The next valid bid shown on the bid panel |
 | listing_15 url | The canonical URL of `<listing_15>`; bind the URL only |
 
 **Steps:**
@@ -2895,10 +2935,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_2 | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
 
 **Steps:**
 
@@ -2937,11 +2977,11 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -3278,9 +3318,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | listing_3 | An open USD listing, close about 12 minutes away |
 
-| Field | Value |
-| --- | --- |
-| observation interval | 45 seconds (fixed observation fixture) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 45 seconds | (fixed observation fixture) |
 
 **Steps:**
 
@@ -3415,14 +3455,14 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| listing_3 | An open USD listing, close about 12 minutes away |
-| correction | 0.6 seconds, under a second |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_3 | An open USD listing, close about 12 minutes away | · |
+| correction | 0.6 seconds | under a second |
 
-| Field | Value |
-| --- | --- |
-| observation interval | 5 seconds (fixed observation fixture) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 5 seconds | (fixed observation fixture) |
 
 **Steps:**
 
@@ -3568,10 +3608,10 @@ Runs once per row of **Test data**.
 | leader price | USD4,960 | (range: 100000–499999 minor units) |
 | bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
-| Field | Value |
-| --- | --- |
-| clock lag | 30 seconds (fixed stale-clock fixture) |
-| bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps:**
 
@@ -3621,10 +3661,10 @@ Runs once per row of **Test data**.
 | listing_10 | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap | · |
 | bid amount | USD280 | (range: 10000–49999 minor units), the opening price |
 
-| Field | Value |
-| --- | --- |
-| clock lag | 30 seconds (fixed stale-clock fixture) |
-| bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps:**
 
@@ -3676,8 +3716,8 @@ Runs once per row of **Test data**.
 
 | Field | Value | Fixture notes |
 | --- | --- | --- |
-| update delay | 5 seconds (fixed live-update delay fixture) | · |
-| last bid offset | 1 second (fixed last-second boundary) | · |
+| update delay | 5 seconds | (fixed live-update delay fixture) |
+| last bid offset | 1 second | (fixed last-second boundary) |
 | extension duration | 1800s | (30mins) |
 
 **Steps:**

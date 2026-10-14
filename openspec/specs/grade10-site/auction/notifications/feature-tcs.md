@@ -269,6 +269,10 @@
 | customer A maximum | US$5000 | (US$5,000.00); fixed, 500000 minor units |
 | customer B maximum | US$7000 | above `<house maximum>`; fixed, 700000 minor units |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
+
 ### Route
 
 1. As customer B, place `<customer B bid>`.
@@ -364,6 +368,10 @@
 | current bid | US$6000 | ; fixed, 600000 minor units |
 | short amount | US$5500 | short of the 608000 next minimum; fixed, 550000 minor units |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
+
 **Steps 12–15 data:**
 
 | Field | Value | Fixture notes |
@@ -430,11 +438,19 @@
 | listing_13 | A listing customer A and customer B watch |
 | customer A email | customer A's registered email |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
+
 **Steps 3–3 data:**
 
 | Field | Value |
 | --- | --- |
 | customer C email | customer C's registered email |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -501,6 +517,10 @@
 | customer A bid | US$300 | fixed, 30000 minor units |
 | customer B bid | US$250 | fixed, 25000 minor units |
 | winning bid | US$305 | fixed, 30500 minor units |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -1240,6 +1260,10 @@ Runs once per row of **Test data**.
 | customer A maximum | US$5000 | (US$5,000.00); fixed, 500000 minor units |
 | customer B maximum | US$7000 | above `<house maximum>`; fixed, 700000 minor units |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm.
@@ -1413,6 +1437,10 @@ Runs once per row of **Test data**.
 | current bid | US$6000 | ; fixed, 600000 minor units |
 | short amount | US$5500 | short of the 608000 next minimum; fixed, 550000 minor units |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Wait until the internal bid's time passes.
@@ -1506,6 +1534,10 @@ Runs once per row of **Test data**.
 | listing_13 | A listing customer A and customer B watch |
 | customer A email | customer A's registered email |
 
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Filter by `<customer A email>`.
@@ -1543,6 +1575,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | customer C email | customer C's registered email |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1703,6 +1739,10 @@ Runs once per row of **Test data**.
 | customer A bid | US$300 | fixed, 30000 minor units |
 | customer B bid | US$250 | fixed, 25000 minor units |
 | winning bid | US$305 | fixed, 30500 minor units |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction send log url | The operator auction email send-log URL in the test environment; bind its URL only |
 
 **Steps:**
 

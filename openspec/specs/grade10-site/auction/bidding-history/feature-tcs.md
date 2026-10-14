@@ -64,7 +64,7 @@
 | listing_6 | An open HKD listing the customer bid on; bind its identity only | · |
 | listing_7 | An open HKD listing with no bid from anyone; bind its identity only | · |
 | opening price | HK$370 | (range: 1000–79999 minor units), `<listing_7>`'s starting price |
-| refused bid | HK$120, below `<opening price>` | · |
+| refused bid | HK$120 | below `<opening price>` |
 
 | Field | Value |
 | --- | --- |
@@ -117,7 +117,7 @@
 | current bid | HK$5,460 | (range: 400000–799999 minor units), `<listing_21>`'s current bid |
 | increment | HK$80 | (fixed tier increment), the HK$4,000 tier |
 | next minimum | HK$5,540 | (fixed derived value), `<current bid>` plus `<increment>` |
-| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` | · |
+| refused bid | HK$5,460 | equal to `<current bid>`, below `<next minimum>` |
 
 | Field | Value |
 | --- | --- |
@@ -232,7 +232,7 @@
 | --- | --- | --- |
 | listing_30 | An open HKD listing led by customer A; bind its identity only | · |
 | customer A maximum | HK$200 | (range: 1000–79999 minor units) |
-| refused raise | HK$200, equal to `<customer A maximum>` | · |
+| refused raise | HK$200 | equal to `<customer A maximum>` |
 
 | Field | Value |
 | --- | --- |
@@ -926,7 +926,7 @@
 | listing_6 | An open HKD listing the customer bid on; bind its identity only | · |
 | listing_7 | An open HKD listing with no bid from anyone; bind its identity only | · |
 | opening price | HK$370 | (range: 1000–79999 minor units), `<listing_7>`'s starting price |
-| refused bid | HK$120, below `<opening price>` | · |
+| refused bid | HK$120 | below `<opening price>` |
 
 | Field | Value |
 | --- | --- |
@@ -1152,7 +1152,7 @@ Runs once per row of **Test data**.
 | current bid | HK$5,460 | (range: 400000–799999 minor units), `<listing_21>`'s current bid |
 | increment | HK$80 | (fixed tier increment), the HK$4,000 tier |
 | next minimum | HK$5,540 | (fixed derived value), `<current bid>` plus `<increment>` |
-| refused bid | HK$5,460, equal to `<current bid>`, below `<next minimum>` | · |
+| refused bid | HK$5,460 | equal to `<current bid>`, below `<next minimum>` |
 
 | Field | Value |
 | --- | --- |
@@ -1300,7 +1300,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | listing_30 | An open HKD listing led by customer A; bind its identity only | · |
 | customer A maximum | HK$200 | (range: 1000–79999 minor units) |
-| refused raise | HK$200, equal to `<customer A maximum>` | · |
+| refused raise | HK$200 | equal to `<customer A maximum>` |
 
 | Field | Value |
 | --- | --- |

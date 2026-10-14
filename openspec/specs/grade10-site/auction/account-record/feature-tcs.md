@@ -242,7 +242,7 @@
 | current bid | USD5,460 | (range: 400000–799999 minor units) |
 | increment | USD80 | (fixed tier increment), the USD4,000 tier |
 | next minimum | USD5,540 | Fixed derived value: `<current bid>` plus `<increment>` |
-| refused bid | USD5,460, equal to `<current bid>`, below `<next minimum>` | · |
+| refused bid | USD5,460 | equal to `<current bid>`, below `<next minimum>` |
 
 | Field | Value |
 | --- | --- |
@@ -1135,7 +1135,7 @@ Runs once per row of **Test data**.
 | current bid | USD5,460 | (range: 400000–799999 minor units) |
 | increment | USD80 | (fixed tier increment), the USD4,000 tier |
 | next minimum | USD5,540 | Fixed derived value: `<current bid>` plus `<increment>` |
-| refused bid | USD5,460, equal to `<current bid>`, below `<next minimum>` | · |
+| refused bid | USD5,460 | equal to `<current bid>`, below `<next minimum>` |
 
 | Field | Value |
 | --- | --- |

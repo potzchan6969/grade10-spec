@@ -28,15 +28,25 @@
 | Pending invoice whose deadline passes unpaid | None | Open listing led by `customer` | Standing maximum held by `customer` | Open listing with no bid from `customer` | The suspension names `<invoice_1>` and its reason |
 | Pending invoice whose deadline passes unpaid | Paid invoice | Open listing led by `customer` | Standing maximum held by `customer` | Open listing with no bid from `customer` | The suspension names `<invoice_1>`; `<invoice_2>` remains paid |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+
 **Steps 6–12 data:**
 
 | Field | Value |
 | --- | --- |
-| `<invoice_1>` | Payable invoice that belongs to the suspended customer |
-| `<listing_7>` | Open USD listing where the customer holds a standing maximum |
-| `<maximum_1>` | 50000 USD minor units |
-| `<raised maximum>` | 50500 USD minor units |
-| `<listing_8>` | Open USD listing where the customer has no standing maximum |
+| invoice_1 | Payable invoice that belongs to the suspended customer |
+| listing_7 | Open USD listing where the customer holds a standing maximum |
+| maximum_1 | 50000 USD minor units |
+| raised maximum | 50500 USD minor units |
+| listing_8 | Open USD listing where the customer has no standing maximum |
+
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -92,17 +102,33 @@
 | --- | --- | --- |
 | Expired auction invoice belonging to the suspended customer | The same invoice after its payment deadline is reissued | Open listing on which the suspended customer has no standing maximum |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+
 **Steps 7–11 data:**
 
 | `<store_item_1>` | `<loyalty_action_1>` | `<account_record_1>` |
 | --- | --- | --- |
 | Available store item | Earn or redeem action available to the customer | Customer's auction suspension or invoice record |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+| g10 loyalty url | The loyalty page URL in the test environment; bind its URL only |
+| g10 store url | The store URL in the test environment; bind its URL only |
+
 **Steps 12–14 data:**
 
 | `<won_listing_1>` |
 | --- |
 | Listing won by `customer` before a different auction invoice caused the suspension |
+
+| Field | Value |
+| --- | --- |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -157,13 +183,13 @@
 | Do not place a new bid | `customer A` still leads at the same price and history |
 | As customer B, commit a maximum of `<challenger_maximum>` | Auto-bidding records the valid `customer B` bid; `customer A` still leads at `<answered_bid>`, and suspension adds no history entry |
 
-| Field | Value |
-| --- | --- |
-| listing_7 | An open USD listing led by customer A at `<current_bid>` with standing maximum `<standing_maximum>` |
-| current_bid | USD300 (30000 USD minor units, fixed starting fixture) |
-| standing_maximum | USD500 (50000 USD minor units, fixed standing fixture) |
-| challenger_maximum | USD400 (40000 USD minor units, fixed challenger fixture) |
-| answered_bid | USD405 (40500 USD minor units): `<challenger_maximum>` plus the USD5 increment at that price |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_7 | An open USD listing led by customer A at `<current_bid>` with standing maximum `<standing_maximum>` | · |
+| current_bid | USD300 | (30000 USD minor units, fixed starting fixture) |
+| standing_maximum | USD500 | (50000 USD minor units, fixed standing fixture) |
+| challenger_maximum | USD400 | (40000 USD minor units, fixed challenger fixture) |
+| answered_bid | USD405 | (40500 USD minor units): `<challenger_maximum>` plus the USD5 increment at that price |
 
 **Steps 5–7 data:**
 
@@ -213,17 +239,33 @@
 | `Payment review: overdue invoice` | The account record shows the reason, who suspended the account and when |
 | `Manual review: policy exception` | The account record shows the reason, who suspended the account and when |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+| g10adm users url | The operator user-management URL in the test environment; bind its URL only |
+
 **Steps 6–7 data:**
 
 | `<invoice_3>` |
 | --- |
 | Pending auction invoice whose payment deadline passes after the operator suspension |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+
 **Steps 8–12 data:**
 
 | `<reopened_listing_1>` |
 | --- |
 | Open listing on which the reinstated customer may commit a maximum |
+
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+| g10adm users url | The operator user-management URL in the test environment; bind its URL only |
 
 ### Route
 
@@ -289,6 +331,11 @@ Runs once per row of **Test data**.
 | Pending invoice whose deadline passes unpaid | None | Open listing led by `customer` | Standing maximum held by `customer` | Open listing with no bid from `customer` | The suspension names `<invoice_1>` and its reason |
 | Pending invoice whose deadline passes unpaid | Paid invoice | Open listing led by `customer` | Standing maximum held by `customer` | Open listing with no bid from `customer` | The suspension names `<invoice_1>`; `<invoice_2>` remains paid |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Wait for `<invoice_1>`'s payment deadline to pass.
@@ -332,11 +379,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<invoice_1>` | Payable invoice that belongs to the suspended customer |
-| `<listing_7>` | Open USD listing where the customer holds a standing maximum |
-| `<maximum_1>` | 50000 USD minor units |
-| `<raised maximum>` | 50500 USD minor units |
-| `<listing_8>` | Open USD listing where the customer has no standing maximum |
+| invoice_1 | Payable invoice that belongs to the suspended customer |
+| listing_7 | Open USD listing where the customer holds a standing maximum |
+| maximum_1 | 50000 USD minor units |
+| raised maximum | 50500 USD minor units |
+| listing_8 | Open USD listing where the customer has no standing maximum |
+
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -385,6 +437,11 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Expired auction invoice belonging to the suspended customer | The same invoice after its payment deadline is reissued | Open listing on which the suspended customer has no standing maximum |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. As `admin`, open `<expired_invoice_1>`.
@@ -431,6 +488,13 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Available store item | Earn or redeem action available to the customer | Customer's auction suspension or invoice record |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+| g10 loyalty url | The loyalty page URL in the test environment; bind its URL only |
+| g10 store url | The store URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Sign in as `customer`.
@@ -475,6 +539,10 @@ Runs once per row of **Test data**.
 | `<won_listing_1>` |
 | --- |
 | Listing won by `customer` before a different auction invoice caused the suspension |
+
+| Field | Value |
+| --- | --- |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -629,13 +697,13 @@ Runs once per row of **Test data**.
 | Do not place a new bid | `customer A` still leads at the same price and history |
 | As customer B, commit a maximum of `<challenger_maximum>` | Auto-bidding records the valid `customer B` bid; `customer A` still leads at `<answered_bid>`, and suspension adds no history entry |
 
-| Field | Value |
-| --- | --- |
-| listing_7 | An open USD listing led by customer A at `<current_bid>` with standing maximum `<standing_maximum>` |
-| current_bid | USD300 (30000 USD minor units, fixed starting fixture) |
-| standing_maximum | USD500 (50000 USD minor units, fixed standing fixture) |
-| challenger_maximum | USD400 (40000 USD minor units, fixed challenger fixture) |
-| answered_bid | USD405 (40500 USD minor units): `<challenger_maximum>` plus the USD5 increment at that price |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_7 | An open USD listing led by customer A at `<current_bid>` with standing maximum `<standing_maximum>` | · |
+| current_bid | USD300 | (30000 USD minor units, fixed starting fixture) |
+| standing_maximum | USD500 | (50000 USD minor units, fixed standing fixture) |
+| challenger_maximum | USD400 | (40000 USD minor units, fixed challenger fixture) |
+| answered_bid | USD405 | (40500 USD minor units): `<challenger_maximum>` plus the USD5 increment at that price |
 
 **Steps:**
 
@@ -760,6 +828,12 @@ Runs once per row of **Test data**.
 | `Payment review: overdue invoice` | The account record shows the reason, who suspended the account and when |
 | `Manual review: policy exception` | The account record shows the reason, who suspended the account and when |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+| g10adm users url | The operator user-management URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. As `admin`, open `<g10adm users url>`.
@@ -804,6 +878,10 @@ Runs once per row of **Test data**.
 | --- |
 | Pending auction invoice whose payment deadline passes after the operator suspension |
 
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Wait for `<invoice_3>`'s payment deadline to pass.
@@ -842,6 +920,12 @@ Runs once per row of **Test data**.
 | `<reopened_listing_1>` |
 | --- |
 | Open listing on which the reinstated customer may commit a maximum |
+
+| Field | Value |
+| --- | --- |
+| g10 auction account record url | The signed-in auction account-record URL in the test environment; bind its URL only |
+| g10 auction url | The auction base URL in the test environment; bind its URL only |
+| g10adm users url | The operator user-management URL in the test environment; bind its URL only |
 
 **Steps:**
 

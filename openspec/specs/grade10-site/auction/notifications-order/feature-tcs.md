@@ -137,6 +137,10 @@
 | winner_order_6 | An auction order in Payment Overdue with a payment overdue letter already sent |
 | invoice_id | The issued invoice id on that order |
 
+| Field | Value |
+| --- | --- |
+| the winner's auction order url | The winner order URL for the seeded order in this case; bind its URL only |
+
 **Steps 7–8 data:**
 
 | Field | Value |
@@ -573,6 +577,10 @@ Runs once per row of **Test data**.
 | --- | --- |
 | winner_order_6 | An auction order in Payment Overdue with a payment overdue letter already sent |
 | invoice_id | The issued invoice id on that order |
+
+| Field | Value |
+| --- | --- |
+| the winner's auction order url | The winner order URL for the seeded order in this case; bind its URL only |
 
 **Steps:**
 
