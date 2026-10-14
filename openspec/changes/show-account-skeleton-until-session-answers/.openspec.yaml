@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-10-14
+promoted_by: "@seankcw"
+depends_on:
+  - nav-cart-count-badge
