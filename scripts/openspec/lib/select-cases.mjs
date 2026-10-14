@@ -331,12 +331,44 @@ export function displayCaseId(tc) {
   return marker ? `${tc.id} (${marker})` : tc.id;
 }
 
-function dataLines(shared, headers, row) {
-  const lines = shared.map(
-    (cells) => `${cells[0]}: ${cells.slice(1).join(" | ")}`,
+function relevantSharedRows(tc, fill) {
+  const rowKeys = new Set(fill.headers.map(columnKey));
+  const values = new Map();
+  for (const cells of fill.shared) {
+    const key = columnKey(cells[0]);
+    if (!values.has(key)) values.set(key, []);
+    values.get(key).push(cells.slice(1).join(" | "));
+  }
+  fill.headers.forEach((header, index) => {
+    values.set(columnKey(header), [fill.row[index] ?? ""]);
+  });
+  const used = new Set();
+  const queue = [
+    tc.preconditions,
+    ...tc.stepTexts,
+    ...tc.expectedTexts,
+    ...fill.row,
+  ];
+  for (let i = 0; i < queue.length; i++) {
+    for (const match of String(queue[i]).matchAll(/<([^<>`]+)>/g)) {
+      const key = match[1];
+      if (used.has(key)) continue;
+      used.add(key);
+      queue.push(...(values.get(key) ?? []));
+    }
+  }
+  return fill.shared.filter(
+    (cells) =>
+      used.has(columnKey(cells[0])) && !rowKeys.has(columnKey(cells[0])),
   );
-  headers.forEach((header, i) => {
-    lines.push(`${header}: ${row[i] ?? ""}`);
+}
+
+function dataLines(tc, fill) {
+  const lines = relevantSharedRows(tc, fill).map(
+    (cells) => `- ${columnKey(cells[0])}: ${cells.slice(1).join(" | ")}`,
+  );
+  fill.headers.forEach((header, i) => {
+    lines.push(`- ${columnKey(header)}: ${fill.row[i] ?? ""}`);
   });
   return lines.join("\n");
 }
@@ -367,10 +399,12 @@ export function caseRow({ read, tc }, fill = null) {
     Title: tc.title,
     "Pre-conditions": fillSlots(tc.preconditions),
     "Test data": fill
-      ? dataLines(fill.shared, fill.headers, fill.row)
-      : tc.testData.map((r) => `${r.field}: ${r.value}`).join("\n"),
+      ? dataLines(tc, fill)
+      : tc.testData
+          .map((r) => `- ${columnKey(r.field)}: ${r.value}`)
+          .join("\n"),
     Steps: steps.join("\n"),
-    "Expected results": expectedTexts.join("\n"),
+    "Expected results": expectedTexts.map((one) => `- ${one}`).join("\n"),
     ...surfaces,
     Product: product,
     Domain: domain,
