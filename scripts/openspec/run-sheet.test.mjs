@@ -1032,10 +1032,15 @@ test("draft stone grey is not the result to_do grey", () => {
   assert.notDeepEqual(DRAFT_BACKGROUND, RESULT_COLORS.to_do);
 });
 
-test("env defaults to staging and refuses anything else", () => {
+test("tester environment defaults to staging-1 and rejects print targets", () => {
   assert.equal(envOf(undefined), DEFAULT_ENV);
-  assert.equal(envOf(""), "staging");
-  assert.equal(envOf("Production"), "production");
+  assert.equal(envOf(""), "staging-1");
+  assert.equal(envOf("Production"), "prod");
+  assert.equal(envOf("staging"), "staging-1");
+  for (const env of ["staging-1", "staging-2", "uat", "preview", "prod"]) {
+    assert.equal(envOf(env), env);
+  }
+  assert.equal(envOf("sandbox"), null);
   assert.equal(envOf(" UAT "), "uat");
   assert.equal(envOf("lab"), null);
 });

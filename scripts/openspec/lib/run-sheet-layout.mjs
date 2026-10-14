@@ -211,15 +211,24 @@ export const SUMMARY_LEAD_COLUMNS = [
   "Env",
 ];
 
-export const ENVIRONMENTS = ["staging", "uat", "production"];
-export const DEFAULT_ENV = "staging";
+export const ENVIRONMENTS = [
+  "staging-1",
+  "staging-2",
+  "uat",
+  "preview",
+  "prod",
+];
+// Historical snapshots keep their recorded labels unchanged.
+export const RECORDED_ENVIRONMENTS = [...ENVIRONMENTS, "staging", "production"];
+export const DEFAULT_ENV = "staging-1";
 
 export function envOf(value) {
   const v = String(value ?? "")
     .trim()
     .toLowerCase();
   if (v === "") return DEFAULT_ENV;
-  return ENVIRONMENTS.includes(v) ? v : null;
+  const canonical = { staging: "staging-1", production: "prod" }[v] ?? v;
+  return ENVIRONMENTS.includes(canonical) ? canonical : null;
 }
 
 export const SUMMARY_COLUMNS = [
