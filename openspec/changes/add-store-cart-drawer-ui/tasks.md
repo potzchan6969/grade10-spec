@@ -114,7 +114,7 @@ Independent of Groups 5–7 (points/promo editing is unaffected by this scope).
   decision row) and `docs/prds/products/grade10-site/store/checkout.md`
   (`Integration readiness`) — and validate with `pnpm check:manual`.
 
-## 15. Shared pending operation contract (grade10-spec)
+## 15. Shared pending operation contract (grade10-spec) (owner: @kinisworking)
 
 Appended after completed groups to preserve their addresses. This shared
 contract lands before Group 16 and the checkout pending integration consumes it.
