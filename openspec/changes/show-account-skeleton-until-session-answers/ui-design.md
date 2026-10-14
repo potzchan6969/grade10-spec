@@ -24,10 +24,10 @@ No Figma frame yet; the wait is recorded in `.openspec.yaml`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Session not yet answered | A 40px round placeholder in the account entry's place, with nothing to press and nothing read aloud | `grade10-site-site-page-shell-US-09` |
-| Session not yet answered, compact bar | The same placeholder beside Cart in the compact bar | `grade10-site-site-page-shell-US-09` |
-| Page written before any session is read | The placeholder | `grade10-site-site-page-shell-US-09` |
-| Answered signed in | The account icon, in the placeholder's place | `grade10-site-site-page-shell-US-02` |
-| Answered signed out | Sign In; on the wide header, the language and search controls move left by its extra width | `grade10-site-site-page-shell-US-02` |
-| Session read failed | Sign In | `grade10-site-site-page-shell-US-09` |
-| Re-read after the first answer | The entry already shown, unchanged | `grade10-site-site-page-shell-US-09` |
+| Session not yet answered | A 40px round placeholder in the account entry's place, with nothing to press and nothing read aloud | `grade10-site-site-page-shell-SC-68`, `shared-ui-site-chrome-SC-45`, `shared-ui-site-chrome-SC-46` |
+| Session not yet answered, compact bar | The same placeholder beside Cart in the compact bar | `grade10-site-site-page-shell-SC-68`, `shared-ui-site-chrome-SC-45` |
+| Page written before any session is read | The placeholder | `grade10-site-site-page-shell-SC-69` |
+| Answered signed in | The account icon, in the placeholder's place | `grade10-site-site-page-shell-SC-70` |
+| Answered signed out | Sign In; on the wide header, the language and search controls move left by its extra width | `grade10-site-site-page-shell-SC-05` |
+| Session read failed | Sign In | `grade10-site-site-page-shell-SC-71` |
+| Re-read after the first answer | The entry already shown, unchanged | `grade10-site-site-page-shell-SC-72` |

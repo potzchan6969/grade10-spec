@@ -1,6 +1,7 @@
 schema: grade10-planning
 created: 2026-10-14
 promoted_by: "@seankcw"
+depends_on:
+  - nav-cart-count-badge
 awaiting:
-  specs: 2026-10-14, the outline, scenarios and suite come from /planning-dev
   ui-design: 2026-10-14, Figma frame for the header's account placeholder before the session answers - the SiteHeader story is the interim composition
