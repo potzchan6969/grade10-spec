@@ -870,13 +870,13 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_3>` | A published USD lot taking bids, scheduled close a day away |
-| `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<price after>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
+| `<customer A maximum>` | US$5000 (fixed, 500000 minor units) |
+| `<price after>` | US$5080 (fixed, 508000 minor units: `<customer A maximum>` plus its 8000 increment) |
 
 | Row | Internal bid before | House act | `<leader price>` |
 | --- | --- | --- | --- |
-| Commit at its time | 600000 minor units, its time 5 minutes ahead | Its time passes | 400000 minor units, the starting price |
-| Raise past the leader | 450000 minor units, committed and outbid | Raise to 600000 minor units and click Save | 458000 minor units: 450000 plus its 8000 increment |
+| Commit at its time | US$6000 (fixed, 600000 minor units), its time 5 minutes ahead | Its time passes | US$4000 (fixed, 400000 minor units), the starting price |
+| Raise past the leader | US$4500 (fixed, 450000 minor units), committed and outbid | Raise to US$6000 (fixed, 600000 minor units) and click Save | US$4580 (fixed, 458000 minor units: 450000 plus its 8000 increment) |
 
 **Steps:**
 
@@ -916,9 +916,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_4>` | A published USD lot taking bids, scheduled close a day away |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<customer B maximum>` | 700000 minor units, above `<house maximum>` |
+| `<house maximum>` | US$6000 (fixed, 600000 minor units) |
+| `<customer A maximum>` | US$5000 (fixed, 500000 minor units) |
+| `<customer B maximum>` | US$7000 (fixed, 700000 minor units), above `<house maximum>` |
 
 **Steps:**
 
@@ -1045,10 +1045,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_5>` | A published USD lot taking bids, starting price `<starting price>`, scheduled close a day away |
-| `<starting price>` | 400000 minor units (US$4,000.00) |
-| `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<house maximum>` | 600000 minor units (US$6,000.00), below `<customer A maximum>` |
-| `<price after>` | 608000 minor units: `<house maximum>` plus its 8000 increment |
+| `<starting price>` | US$4000 (fixed, 400000 minor units) |
+| `<customer A maximum>` | US$7000 (fixed, 700000 minor units) |
+| `<house maximum>` | US$6000 (fixed, 600000 minor units), below `<customer A maximum>` |
+| `<price after>` | US$6080 (fixed, 608000 minor units: `<house maximum>` plus its 8000 increment) |
 
 **Steps:**
 
@@ -1089,9 +1089,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_6>` | A published USD lot taking bids, scheduled close a day away |
-| `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 600000 minor units |
-| `<short amount>` | 550000 minor units, short of the 608000 next minimum |
+| `<customer A maximum>` | US$7000 (fixed, 700000 minor units) |
+| `<current bid>` | US$6000 (fixed, 600000 minor units) |
+| `<short amount>` | US$5500 (fixed, 550000 minor units), short of US$6080 (fixed, 608000 minor units), the next minimum |
 
 **Steps:**
 
@@ -1131,10 +1131,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_7>` | A published USD lot taking bids, scheduled close a day away |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<customer A maximum>` | 500000 minor units (US$5,000.00), customer B's below it |
-| `<current bid>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
-| `<lowered maximum>` | 550000 minor units (US$5,500.00), above `<current bid>` |
+| `<house maximum>` | US$6000 (fixed, 600000 minor units) |
+| `<customer A maximum>` | US$5000 (fixed, 500000 minor units), customer B's below it |
+| `<current bid>` | US$5080 (fixed, 508000 minor units: `<customer A maximum>` plus its 8000 increment) |
+| `<lowered maximum>` | US$5500 (fixed, 550000 minor units), above `<current bid>` |
 
 **Steps:**
 
@@ -1370,7 +1370,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid 30000 USD minor units and customer B bid 25000 USD minor units on `<lot_1>`, both with email alerts on; the house leads at 30500 USD minor units under its internal bid.
+* customer A bid US$300 (fixed, 30000 minor units) and customer B bid US$250 (fixed, 25000 minor units) on `<lot_1>`, both with email alerts on; the house leads at US$305 (fixed, 30500 minor units) under its internal bid.
 * `<lot_1>`'s close is a few minutes away, and no further bid is coming.
 * admin(auction operator) is on <grade10 auction send log url>.
 
@@ -1378,11 +1378,11 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A published USD lot protected by a committed internal bid of 50000 minor units |
-| `<house maximum>` | 50000 USD minor units |
-| `<customer A bid>` | 30000 USD minor units |
-| `<customer B bid>` | 25000 USD minor units |
-| `<winning bid>` | 30500 USD minor units |
+| `<lot_1>` | A published USD lot protected by a committed internal bid of US$500 (fixed, 50000 minor units) |
+| `<house maximum>` | US$500 (fixed, 50000 minor units) |
+| `<customer A bid>` | US$300 (fixed, 30000 minor units) |
+| `<customer B bid>` | US$250 (fixed, 25000 minor units) |
+| `<winning bid>` | US$305 (fixed, 30500 minor units) |
 
 **Steps:**
 
@@ -1511,8 +1511,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<lot_2>` | A published USD lot, starting price `<starting price>`, extension duration 1800s (30mins), internal bid 600000 minor units |
-| `<starting price>` | 30500 USD minor units |
+| `<lot_2>` | A published USD lot, starting price `<starting price>`, extension duration 1800s (30mins), internal bid US$6000 (fixed, 600000 minor units) |
+| `<starting price>` | US$305 (fixed, 30500 minor units) |
 
 **Steps:**
 
@@ -1521,7 +1521,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: one Lot watched, sold letter, Sold for 30500 USD minor units, and no Lot watched, ended letter.
+* Step 2: one Lot watched, sold letter, Sold for US$305 (fixed, 30500 minor units), and no Lot watched, ended letter.
 * Step 2: no letter names the house or a reserve.
 
 ---
