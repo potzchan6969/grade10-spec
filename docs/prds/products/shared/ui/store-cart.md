@@ -57,6 +57,16 @@ the footer and no count on the drawer title.
 
 🚧 **Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
 
+::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
+
+::story{id="store-cart-blocks-cartdrawerbody--interaction-pending" title="A scrollable cart body with pending rows"}
+
+::story{id="store-cart-blocks-cartitem--interaction-pending" title="A cart item with pending actions"}
+
+::story{id="store-cart-blocks-cartdrawerfooter-interactive--interaction-pending" title="A footer with pending tender actions"}
+
+::story{id="store-cart-blocks-cartdrawerfooter-promo-sheet--interaction-pending" title="An open promo sheet with pending actions"}
+
 ## Tender Actions
 
 🚧 **Unresolved choice** - tender actions and Checkout wait while the
