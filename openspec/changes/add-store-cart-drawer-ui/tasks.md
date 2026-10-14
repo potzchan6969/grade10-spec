@@ -124,7 +124,7 @@ contract lands before Group 16 and the checkout pending integration consumes it.
 - [ ] 15.3 Add pending compound/body/item/footer and exported open-sheet stories using existing controls and values; keep the Shared Pending Operations, Tender Actions and Cart Drawer product records aligned with the delivered contract under `docs/prds/`. Preserve construction marks until verified delivery.
 - [ ] 15.4 Verify focused shared tests and story interactions, UI typecheck and Storybook build; validate this change and the manual before the consumer gitlink advances.
 
-## 16. Drawer operation integration (grade10)
+## 16. Drawer operation integration (grade10) (owner: @kinisworking)
 
 Depends on Group 15's landed shared contract and gitlink. Checkout request
 and answer handling remain owned by `add-shopify-checkout-integration`; this
