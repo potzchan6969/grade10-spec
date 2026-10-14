@@ -120,7 +120,7 @@ identity is switched off, the bar and requests SHALL not exist.
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a signed-in bidder whose account has no request
-- **WHEN** they place a bid below the bar of the listing's currency
+- **WHEN** they place a bid below the bar
 - **THEN** no standing is read, and the bid is forwarded as any other
 
 <!-- trace:scenario id=g10.auction-auction.SC-mo5 rev=1 -->
@@ -145,17 +145,6 @@ identity is switched off, the bar and requests SHALL not exist.
 - **THEN** the standing maximum answers automatically as before
 - **AND** a raise of that maximum by its owner is refused as needing a
   verified identity
-
-<!-- trace:scenario id=g10.auction-auction.SC-a69 rev=1 -->
-#### Scenario: grade10-site-auction-auction-SC-114 - Each currency meets its own bar
-**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
-
-- **GIVEN** a signed-in bidder whose standing is `unverified`, with no open
-  request
-- **WHEN** they place a bid of 1,500,000 USD minor units on a `USD` listing,
-  and a bid of 1,500,000 HKD minor units on an `HKD` listing
-- **THEN** the `USD` bid is refused as needing a verified identity
-- **AND** the `HKD` bid is forwarded as any other
 
 <!-- trace:scenario id=g10.auction-auction.SC-l64 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-110 - A bid of exactly the bar is held

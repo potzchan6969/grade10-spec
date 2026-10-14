@@ -14,16 +14,13 @@ asked — verified, expired, or unverified — as `grade10-site/e-kyc/identity-r
 defines it. A **hosted check** is the provider's check as
 `grade10-site/e-kyc/hosted-verification` defines it; here the store raises one
 for an account, where the vault raises one for a case. The **bar** is the value
-at or above which a bid asks for a verified person, in minor units of one
-currency, stated once for each currency a lot may be priced in, with no
-exchange rate between them. A checkout asks for no verified person at any
-value. Grade10's are:
+at or above which a bid asks for a verified person. Every bid is in USD, so
+there is one bar. A checkout asks for no verified person at any value.
+Grade10's is:
 
 | Bar | Value |
 | --- | --- |
-| Bid on an HKD lot | 12,000,000 HKD minor units |
-| Bid on a USD lot | 1,500,000 USD minor units |
-| Bid on a JPY lot | 2,300,000 JPY minor units |
+| A bid | 1,500,000 USD minor units |
 
 A **request** is an admin's requirement that an account verify a subject -
 its `person` or its `business` - recorded with a reason, who required it and
@@ -36,7 +33,7 @@ page** is the collector's own page at `/verification`.
 
 - Where the collector stands
   - Standing: verified until when, expired, being reviewed, or not yet, read from the identity store the day it is shown
-  - The bars: the bid value for each lot currency, at which a verified identity is asked for
+  - The bar: the bid value at which a verified identity is asked for
   - Requests: what Grade10 asked the account to verify, never why
 - Verifying from the account
   - Consent first: nothing reaches the provider until the collector has agreed on the page
@@ -70,7 +67,7 @@ off, the page SHALL show nothing about identity.
 | Valid until | The day the document behind a verified standing stops being valid; absent where it never expires or where the collector is not verified |
 | The check's progress | Where the latest check the store raised for this account stands, in the states below; absent where none was raised |
 | Being reviewed | Whether a reviewer at the provider holds that check |
-| The bars | The bid bar for each lot currency |
+| The bar | The bid bar |
 | Requests | Each unmet request's subject, in the words: We asked you to verify your identity. or We asked you to verify your business.; never its reason |
 | Business | The business card, under "The business card reads where the business stands" |
 
@@ -91,14 +88,14 @@ off, the page SHALL show nothing about identity.
 - **THEN** it says they are verified and the day their document stops being
   valid, and offers no check to start
 
-<!-- trace:scenario id=g10.store-account-identity.SC-ymn rev=2 -->
+<!-- trace:scenario id=g10.store-account-identity.SC-ymn rev=3 -->
 #### Scenario: grade10-site-store-account-identity-SC-02 - A collector nobody verified sees the bar and how to verify
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector whose standing is `unverified`
 - **WHEN** they open their verification page
-- **THEN** it says they are not verified, names the bid bar for each lot
-  currency, and offers to verify
+- **THEN** it says they are not verified, names the bid bar, and offers to
+  verify
 
 <!-- trace:scenario id=g10.store-account-identity.SC-zww rev=2 -->
 #### Scenario: grade10-site-store-account-identity-SC-03 - The verification page carries no identity field
