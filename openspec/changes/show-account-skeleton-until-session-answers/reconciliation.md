@@ -5,7 +5,7 @@
 | Shared requirement | Owner of each part | What the others say |
 | --- | --- | --- |
 | `grade10-site/site/page-shell` / The chrome does not wait for the session | `nav-cart-count-badge` owns the cart count lines; this change owns the account entry before the first answer and what may move when the session arrives (Q7, Q10) | `nav-cart-count-badge` is accepted and folded; this change's block copies the folded text and edits only its own lines |
-| `shared/ui/site-chrome` / SiteHeader composes Nav with session-aware account entry | This change owns the `"pending"` session value, the **Pending** paragraph, `shared-ui-site-chrome-SC-45` to `shared-ui-site-chrome-SC-48`; `restrict-auctions-by-region` owns My Auctions as a handler-gated item and `shared-ui-site-chrome-SC-44` | `restrict-auctions-by-region` carries this change's session value and **Pending** paragraph, and takes SC-45 to SC-48 from the durable spec once this change is accepted |
+| `shared/ui/site-chrome` / SiteHeader composes Nav with session-aware account entry | This change owns the `"pending"` session value, the **Pending** paragraph, `shared-ui-site-chrome-SC-45` to `shared-ui-site-chrome-SC-48`; `restrict-auctions-by-region` owns My Auctions as a handler-gated item and `shared-ui-site-chrome-SC-44` | `restrict-auctions-by-region` carries this change's session value and **Pending** paragraph, and restates SC-45 to SC-48 so folding it second keeps them; until this change folds, the current tree reports those four ids as issued twice, and `accept:preflight`'s folded check passes |
 
 ## Decisions
 
