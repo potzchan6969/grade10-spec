@@ -123,6 +123,14 @@ const meta = {
     );
     for (const row of basket.orderDiscounts)
       expect(canvas.getAllByText(row.amount).length).toBeGreaterThan(0);
+    if (basket.promoState.status === "expanded" && basket.promoState.error)
+      expect(
+        canvas.getAllByText(basket.promoState.error).length,
+      ).toBeGreaterThan(0);
+    if (basket.pointsState?.status === "applied")
+      expect(
+        canvas.getAllByText(String(basket.pointsState.amountLabel)).length,
+      ).toBeGreaterThan(0);
   },
 } satisfies Meta<CartScenario>;
 
@@ -132,17 +140,195 @@ type Story = StoryObj<typeof meta>;
 /** A member's cart with an order code applied. */
 export const Scenario: Story = {};
 
-/** The sale on the card's line, and an order code stacked on it. */
-export const CodeStacksOnTheSale: Story = {
-  args: { siteDiscount: "product-sale", shopAnswer: "stack" },
+// Every way a site discount, the one code and points meet. A code meets a site
+// discount only when both apply to the basket, and then the shop's answer decides.
+
+export const NoDiscountNoCode: Story = {
+  name: "No site discount · no code · 500 pts",
+  args: { siteDiscount: "none", coupon: "none", points: "500" },
 };
 
-/** The order discount stays and the code is refused beside it. */
-export const CodeRefusedBesideTheDiscount: Story = {
-  args: { siteDiscount: "order-discount", shopAnswer: "refuse" },
+export const NoDiscountOrderCode: Story = {
+  name: "No site discount · HK$50 code · 500 pts",
+  args: { siteDiscount: "none", coupon: "order", points: "500" },
+};
+
+export const NoDiscountProductCode: Story = {
+  name: "No site discount · 10% card code · 500 pts",
+  args: { siteDiscount: "none", coupon: "product", points: "500" },
+};
+
+export const NoDiscountCodeTooSmall: Story = {
+  name: "No site discount · HK$200 code, order too small · 500 pts",
+  args: { siteDiscount: "none", coupon: "too-small", points: "500" },
+};
+
+export const SaleNoCode: Story = {
+  name: "Sale on the card · no code · 500 pts",
+  args: { siteDiscount: "product-sale", coupon: "none", points: "500" },
+};
+
+export const SaleOrderCodeStacks: Story = {
+  name: "Sale on the card · HK$50 code stacks · 500 pts",
+  args: {
+    siteDiscount: "product-sale",
+    coupon: "order",
+    shopAnswer: "stack",
+    points: "500",
+  },
+};
+
+export const SaleOrderCodeReplaces: Story = {
+  name: "Sale on the card · HK$50 code replaces the discount · 500 pts",
+  args: {
+    siteDiscount: "product-sale",
+    coupon: "order",
+    shopAnswer: "replace",
+    points: "500",
+  },
+};
+
+export const SaleOrderCodeRefused: Story = {
+  name: "Sale on the card · HK$50 code refused · 500 pts",
+  args: {
+    siteDiscount: "product-sale",
+    coupon: "order",
+    shopAnswer: "refuse",
+    points: "500",
+  },
+};
+
+export const SaleProductCodeStacks: Story = {
+  name: "Sale on the card · 10% card code stacks · 500 pts",
+  args: {
+    siteDiscount: "product-sale",
+    coupon: "product",
+    shopAnswer: "stack",
+    points: "500",
+  },
+};
+
+export const SaleProductCodeReplaces: Story = {
+  name: "Sale on the card · 10% card code replaces the discount · 500 pts",
+  args: {
+    siteDiscount: "product-sale",
+    coupon: "product",
+    shopAnswer: "replace",
+    points: "500",
+  },
+};
+
+export const SaleProductCodeRefused: Story = {
+  name: "Sale on the card · 10% card code refused · 500 pts",
+  args: {
+    siteDiscount: "product-sale",
+    coupon: "product",
+    shopAnswer: "refuse",
+    points: "500",
+  },
+};
+
+export const SaleCodeTooSmall: Story = {
+  name: "Sale on the card · HK$200 code, order too small · 500 pts",
+  args: { siteDiscount: "product-sale", coupon: "too-small", points: "500" },
+};
+
+export const OrderDiscountNoCode: Story = {
+  name: "Order discount · no code · 500 pts",
+  args: { siteDiscount: "order-discount", coupon: "none", points: "500" },
+};
+
+export const OrderDiscountOrderCodeStacks: Story = {
+  name: "Order discount · HK$50 code stacks · 500 pts",
+  args: {
+    siteDiscount: "order-discount",
+    coupon: "order",
+    shopAnswer: "stack",
+    points: "500",
+  },
+};
+
+export const OrderDiscountOrderCodeReplaces: Story = {
+  name: "Order discount · HK$50 code replaces the discount · 500 pts",
+  args: {
+    siteDiscount: "order-discount",
+    coupon: "order",
+    shopAnswer: "replace",
+    points: "500",
+  },
+};
+
+export const OrderDiscountOrderCodeRefused: Story = {
+  name: "Order discount · HK$50 code refused · 500 pts",
+  args: {
+    siteDiscount: "order-discount",
+    coupon: "order",
+    shopAnswer: "refuse",
+    points: "500",
+  },
+};
+
+export const OrderDiscountProductCodeStacks: Story = {
+  name: "Order discount · 10% card code stacks · 500 pts",
+  args: {
+    siteDiscount: "order-discount",
+    coupon: "product",
+    shopAnswer: "stack",
+    points: "500",
+  },
+};
+
+export const OrderDiscountProductCodeReplaces: Story = {
+  name: "Order discount · 10% card code replaces the discount · 500 pts",
+  args: {
+    siteDiscount: "order-discount",
+    coupon: "product",
+    shopAnswer: "replace",
+    points: "500",
+  },
+};
+
+export const OrderDiscountProductCodeRefused: Story = {
+  name: "Order discount · 10% card code refused · 500 pts",
+  args: {
+    siteDiscount: "order-discount",
+    coupon: "product",
+    shopAnswer: "refuse",
+    points: "500",
+  },
+};
+
+export const OrderDiscountCodeTooSmall: Story = {
+  name: "Order discount · HK$200 code, order too small · 500 pts",
+  args: { siteDiscount: "order-discount", coupon: "too-small", points: "500" },
+};
+
+/** The member asks for more points than they hold, so the whole balance goes. */
+export const PointsWholeBalance: Story = {
+  name: "Points · the whole balance",
+  args: { siteDiscount: "product-sale", points: "max", balance: "1250" },
 };
 
 /** Points pay the whole bill, trimmed to what the order carries. */
 export const PointsCoverTheBill: Story = {
-  args: { points: "max", balance: "50000" },
+  name: "Points · cover the bill",
+  args: { siteDiscount: "product-sale", points: "max", balance: "50000" },
+};
+
+/** The card sold out, so a code for graded cards has nothing to cut. */
+export const CardSoldOut: Story = {
+  name: "Lines · card sold out, card code held",
+  args: { coupon: "product", lines: "sold-out", points: "500" },
+};
+
+/** The shop had two boxes of more asked; the codes and points price the two. */
+export const BoxesShort: Story = {
+  name: "Lines · two boxes left",
+  args: { siteDiscount: "order-discount", lines: "adjusted", points: "500" },
+};
+
+/** A guest sees the site discount alone: codes and points are for members. */
+export const Guest: Story = {
+  name: "Guest · site discount only",
+  args: { shopper: "guest", siteDiscount: "order-discount" },
 };

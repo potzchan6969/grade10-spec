@@ -110,4 +110,19 @@ describe("priceBasket", () => {
     });
     expect(basket.subtotal).toBe("HK$40,400.00");
   });
+
+  it("meets a site discount and a code in 20 ways, the baskets the cart Scenario names", () => {
+    const ways = new Set<string>();
+    for (const siteDiscount of [
+      "none",
+      "product-sale",
+      "order-discount",
+    ] as const)
+      for (const coupon of ["none", "order", "product", "too-small"] as const)
+        for (const shopAnswer of ["stack", "replace", "refuse"] as const)
+          ways.add(
+            `${siteDiscount}/${coupon}/${price({ siteDiscount, coupon, shopAnswer }).outcome}`,
+          );
+    expect(ways.size).toBe(20);
+  });
 });
