@@ -33,7 +33,10 @@ export const Saving: Story = {
   args: { mode: "edit", save: "saving" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Save" })).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Save" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
   },
 };
 

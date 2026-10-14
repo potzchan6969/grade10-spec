@@ -64,9 +64,9 @@ export const Default: Story = {
 export const Cancelling: Story = {
   args: { reason: "wrong", pending: true },
   play: async () => {
-    expect(
-      await screen.findByRole("button", { name: "Cancelling…" }),
-    ).toBeDisabled();
+    const button = await screen.findByRole("button", { name: "Cancelling…" });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).not.toBeDisabled();
   },
 };
 

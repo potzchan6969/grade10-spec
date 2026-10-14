@@ -27,6 +27,8 @@ type ListingLotHeaderProps = {
   /** Bid stands — Watching disabled via `WatchButton` locked. */
   watchLocked?: boolean;
   watchPending?: boolean;
+  /** The owner's refusal of the last watch press, shown beside Watch. */
+  watchFailed?: string;
   onWatchToggle?: () => void;
   onWatchedToastAction?: () => void;
   onUnwatchedToastAction?: () => void;
@@ -44,6 +46,7 @@ function ListingLotHeader({
   watched = false,
   watchLocked = false,
   watchPending = false,
+  watchFailed,
   onWatchToggle,
   onWatchedToastAction,
   onUnwatchedToastAction,
@@ -74,6 +77,7 @@ function ListingLotHeader({
         {onWatchToggle ? (
           <WatchButton
             copy={watchCopy}
+            failed={watchFailed}
             locked={watchLocked}
             onPress={onWatchToggle}
             onUnwatchedToastAction={onUnwatchedToastAction}

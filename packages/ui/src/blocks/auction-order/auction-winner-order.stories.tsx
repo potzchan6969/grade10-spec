@@ -408,13 +408,16 @@ export const CardRedirecting: Story = {
       pay: { label: "Redirecting…", onPress: fn(), loading: true },
     },
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     await settled(canvasElement);
     const pay = within(canvasElement).getByRole("button", {
       name: "Redirecting…",
     });
-    expect(pay).toBeDisabled();
     expect(pay).toHaveAttribute("aria-busy", "true");
+    pay.focus();
+    expect(pay).toHaveFocus();
+    pay.click();
+    expect(args.summary.pay?.onPress).not.toHaveBeenCalled();
   },
 };
 
@@ -590,5 +593,148 @@ export const Refunded: Story = {
       within(canvasElement).getByRole("button", { name: "View" }),
     );
     expect(args.summary.refund?.onView).toHaveBeenCalledTimes(1);
+  },
+};
+
+const SETUP_CONFIRM = {
+  label: "Complete Order Setup",
+  onPress: fn(),
+  deadline: "Confirm by 26 Sep 2026, 15:12",
+};
+
+/** A press in flight draws busy on the button and a second press does nothing. */
+export const SetupConfirmPending: Story = {
+  args: {
+    ...AwaitingSetup.args,
+    delivery: {
+      label: "Delivery address",
+      confirm: { ...SETUP_CONFIRM, pending: true },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const sidebar = within(within(canvasElement).getByRole("complementary"));
+    const confirm = sidebar.getByRole("button", {
+      name: "Complete Order Setup",
+    });
+    expect(confirm).toHaveAttribute("aria-busy", "true");
+    confirm.click();
+    expect(args.delivery?.confirm?.onPress).not.toHaveBeenCalled();
+  },
+};
+
+/** A refused confirm says why under the button, which presses again. */
+export const SetupConfirmRefused: Story = {
+  args: {
+    ...AwaitingSetup.args,
+    delivery: {
+      label: "Delivery address",
+      confirm: {
+        ...SETUP_CONFIRM,
+        failed: "We couldn't start your order setup. Try again.",
+      },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const sidebar = within(within(canvasElement).getByRole("complementary"));
+    expect(sidebar.getByRole("alert")).toHaveTextContent(
+      "We couldn't start your order setup. Try again.",
+    );
+    await userEvent.click(
+      sidebar.getByRole("button", { name: "Complete Order Setup" }),
+    );
+    expect(args.delivery?.confirm?.onPress).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** An alert's action draws its own press: busy, then the refusal under the alert. */
+export const AlertActionRefused: Story = {
+  args: {
+    alerts: [
+      {
+        title: "Payment proof returned",
+        status: "warning",
+        role: "status",
+        action: {
+          label: "Upload again",
+          onPress: fn(),
+          failed: "The upload didn't go through. Try again.",
+        },
+      },
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "The upload didn't go through. Try again.",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Upload again" }));
+    expect(args.alerts?.[0]?.action?.onPress).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const AlertActionPending: Story = {
+  args: {
+    alerts: [
+      {
+        title: "Payment proof returned",
+        status: "warning",
+        role: "status",
+        action: { label: "Upload again", onPress: fn(), pending: true },
+      },
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const action = within(canvasElement).getByRole("button", {
+      name: "Upload again",
+    });
+    expect(action).toHaveAttribute("aria-busy", "true");
+    action.click();
+    expect(args.alerts?.[0]?.action?.onPress).not.toHaveBeenCalled();
+  },
+};
+
+/** The invoice link stays focusable while its PDF opens, and says when it can't. */
+export const InvoicePdfPending: Story = {
+  args: {
+    summary: {
+      ...meta.args.summary,
+      invoicePdf: { onOpen: fn(), pending: true },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const link = within(canvasElement).getByRole("link", {
+      name: "Invoice PDF",
+    });
+    expect(link).toHaveAttribute("aria-busy", "true");
+    link.focus();
+    expect(link).toHaveFocus();
+    await userEvent.click(link);
+    expect(args.summary.invoicePdf?.onOpen).not.toHaveBeenCalled();
+  },
+};
+
+export const InvoicePdfRefused: Story = {
+  args: {
+    summary: {
+      ...meta.args.summary,
+      invoicePdf: {
+        onOpen: fn(),
+        failed: "The invoice couldn't open. Try again.",
+      },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "The invoice couldn't open. Try again.",
+    );
+    await userEvent.click(canvas.getByRole("link", { name: "Invoice PDF" }));
+    expect(args.summary.invoicePdf?.onOpen).toHaveBeenCalledTimes(1);
   },
 };

@@ -19,8 +19,10 @@ type SignInLinkSentProps = {
   /** Address the link was sent to — drawn on its own line under `copy.message`. */
   email: string;
   onResend: () => void;
-  /** While a resend request is in flight — the Resend control looks busy. */
+  /** While a resend request is in flight — the Resend control looks busy and stays focusable. */
   resending?: boolean;
+  /** Why the last resend was refused, shown under Resend. */
+  resendFailed?: string;
   /** Whole seconds left in the post-send wait. Greater than zero disables
    * Resend and shows `copy.resendCountdown`. The consumer owns the clock —
    * this step does not tick. */
@@ -38,6 +40,7 @@ function SignInLinkSent({
   email,
   onResend,
   resending = false,
+  resendFailed,
   resendCooldownRemaining = 0,
 }: SignInLinkSentProps) {
   const coolingDown = resendCooldownRemaining > 0;
@@ -62,13 +65,27 @@ function SignInLinkSent({
         className="w-fit self-center"
         disabled={coolingDown}
         loading={resending}
-        onClick={onResend}
+        onClick={() => {
+          if (!resending) onResend();
+        }}
         size="md"
         type="button"
         variant="secondary"
       >
         {resendLabel}
       </Button>
+      {resendFailed ? (
+        <Text
+          as="p"
+          className="w-full text-center"
+          data-slot="sign-in-link-sent-failed"
+          role="alert"
+          size="sm"
+          tone="error"
+        >
+          {resendFailed}
+        </Text>
+      ) : null}
     </VStack>
   );
 }

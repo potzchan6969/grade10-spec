@@ -66,6 +66,7 @@ function BookingActionBar({
         ) : null}
         <div className="ml-auto flex max-w-[400px] flex-auto flex-col gap-1.5">
           <button
+            aria-busy={busy || undefined}
             aria-disabled={busy || undefined}
             className={PILL_PRIMARY}
             form={primary.form}

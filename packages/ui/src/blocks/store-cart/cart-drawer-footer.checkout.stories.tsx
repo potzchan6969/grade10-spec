@@ -111,7 +111,36 @@ export const CheckoutRedirecting: Story = {
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Redirecting..." }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-busy", "true");
+  },
+};
+
+/** The consumer owns checkout: its pending draws the button busy, and a press does nothing more */
+export const CheckoutPending: Story = {
+  args: { checkoutPending: true },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Redirecting..." });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    button.click();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+  },
+};
+
+/** The consumer's refusal shows under the button, which is pressable again */
+export const CheckoutRefused: Story = {
+  args: {
+    checkoutPending: false,
+    checkoutFailed: "Couldn’t open checkout. Try again.",
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const button = canvas.getByRole("button", { name: "Proceed to Checkout" });
+    const alert = canvas.getByRole("alert");
+    expect(alert).toHaveTextContent("Couldn’t open checkout. Try again.");
+    expect(button).toHaveAttribute("aria-describedby", alert.id);
+    await userEvent.click(button);
+    expect(args.onCheckout).toHaveBeenCalledTimes(1);
   },
 };
 

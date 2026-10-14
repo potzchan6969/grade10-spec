@@ -125,8 +125,10 @@ export const RefusedCommitKeepsCustomField: Story = {
     await userEvent.type(field, "70000");
     const commit = canvas.getByRole("button", { name: /^Raise maximum to/ });
     await userEvent.click(commit);
-    await waitFor(() => expect(commit).toBeDisabled());
-    await waitFor(() => expect(commit).toBeEnabled());
+    await waitFor(() => expect(commit).toHaveAttribute("aria-busy", "true"));
+    commit.focus();
+    expect(commit).toHaveFocus();
+    await waitFor(() => expect(commit).not.toHaveAttribute("aria-busy"));
     expect(field.value).toBe("70000");
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),

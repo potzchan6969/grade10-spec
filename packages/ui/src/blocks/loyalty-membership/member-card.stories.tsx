@@ -125,3 +125,32 @@ export const AlreadyUsed: Story = {
     expect(canvas.getByRole("button", { name: "New code" })).toBeEnabled();
   },
 };
+
+/** A new code is on its way: refresh draws busy and the card stays shown. */
+export const Refreshing: Story = {
+  args: { refreshing: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "New code" })).toHaveAttribute(
+      "aria-busy",
+      "true",
+    );
+    expect(canvas.getByText(FALLBACK_CODE)).toBeInTheDocument();
+  },
+};
+
+/** A refused refresh says why under the control, which is pressable again. */
+export const RefreshFailed: Story = {
+  args: {
+    state: { status: "expired" },
+    refreshFailed: "We couldn't get a new code. Try again.",
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We couldn't get a new code. Try again.",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "New code" }));
+    expect(args.onRefresh).toHaveBeenCalledOnce();
+  },
+};

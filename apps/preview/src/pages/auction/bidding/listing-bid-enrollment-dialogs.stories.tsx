@@ -108,7 +108,7 @@ SetupModalLinking.play = async () => {
   const continueButton = within(dialog).getByRole("button", {
     name: "Linking",
   });
-  expect(continueButton).toBeDisabled();
+  expect(continueButton).toHaveAttribute("aria-disabled", "true");
   expect(continueButton).toHaveAttribute("aria-busy", "true");
   expect(
     within(dialog).getByRole("checkbox", {
@@ -123,7 +123,9 @@ export const PaymentAuthorizationPending = enrollmentDialogStory(
 PaymentAuthorizationPending.play = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
   await waitFor(() => {
-    expect(canvas.getByRole("button", { name: /^Set maximum/ })).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: /^Set maximum/ }),
+    ).toHaveAttribute("aria-disabled", "true");
   });
   expect(
     canvas.queryByRole("dialog", { name: "Link a card to bid" }),

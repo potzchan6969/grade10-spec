@@ -111,7 +111,7 @@ export const Default: Story = {
     ).toHaveValue(SIGN_IN_EMAIL);
     expect(
       canvas.getByRole("button", { name: signIn.sendLinkLabel }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
 
     await userEvent.click(next);
     expect(canvas.getByText(SIGN_IN_EMAIL)).toBeVisible();

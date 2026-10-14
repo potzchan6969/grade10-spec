@@ -1,4 +1,4 @@
-import { Toast } from "@grade10/design-system/components/overlays/toast";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
@@ -46,6 +46,14 @@ const meta = {
     watched: false,
   },
 } satisfies Meta<typeof ListingLotHeader>;
+
+/** Toasts outlive a story in the shared frame; each announcing play starts clear. */
+async function clearToasts() {
+  toast.dismiss();
+  await waitFor(() =>
+    expect(document.querySelector("[data-sonner-toast]")).toBeNull(),
+  );
+}
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -122,6 +130,7 @@ export const WatchAnnounces: Story = {
   },
   render: () => <InteractiveHeader />,
   play: async ({ canvasElement }) => {
+    await clearToasts();
     openMyAuctions.mockClear();
     const canvas = within(canvasElement);
     const body = within(document.body);
@@ -149,6 +158,7 @@ export const UnwatchAnnounces: Story = {
   },
   render: () => <InteractiveHeader initialWatched />,
   play: async ({ canvasElement }) => {
+    await clearToasts();
     undoUnwatch.mockClear();
     const canvas = within(canvasElement);
     const body = within(document.body);
@@ -179,5 +189,41 @@ export const ClosedNoWatch: Story = {
     expect(
       within(canvasElement).queryByRole("button", { name: /watch/i }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** The owner refused the last watch press: the refusal shows beside Watch. */
+export const WatchRefused: Story = {
+  name: "Watch refused",
+  args: {
+    watchFailed: "We could not watch this auction. Try again.",
+  },
+  play: async ({ canvasElement }) => {
+    onWatchToggle.mockClear();
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We could not watch this auction. Try again.",
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Watch this auction" }),
+    );
+    expect(onWatchToggle).toHaveBeenCalled();
+  },
+};
+
+/** The watch write is in flight: busy, focusable, a second press is refused. */
+export const WatchPending: Story = {
+  name: "Watch pending",
+  args: { watchPending: true },
+  play: async ({ canvasElement }) => {
+    onWatchToggle.mockClear();
+    const button = within(canvasElement).getByRole("button", {
+      name: "Watch this auction",
+    });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    button.focus();
+    expect(button).toHaveFocus();
+    await userEvent.keyboard("{Enter}");
+    expect(onWatchToggle).not.toHaveBeenCalled();
   },
 };

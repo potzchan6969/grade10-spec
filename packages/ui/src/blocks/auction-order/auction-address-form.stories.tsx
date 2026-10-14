@@ -295,3 +295,33 @@ export const OptionalLocality: Story = {
     );
   },
 };
+
+/** Confirm draws busy while the address saves; a second submit does nothing. */
+export const ConfirmPending: Story = {
+  args: { errors: undefined, initialValues: COMPLETE_PERSONAL, pending: true },
+  play: async ({ args, canvasElement }) => {
+    const confirm = within(canvasElement).getByRole("button", {
+      name: "Confirm",
+    });
+    expect(confirm).toHaveAttribute("aria-busy", "true");
+    confirm.closest("form")?.requestSubmit();
+    expect(args.onConfirm).not.toHaveBeenCalled();
+  },
+};
+
+/** A refused confirm says why above the actions, and Confirm submits again. */
+export const ConfirmRefused: Story = {
+  args: {
+    errors: undefined,
+    initialValues: COMPLETE_PERSONAL,
+    failed: "We couldn't save this address. Try again.",
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We couldn't save this address. Try again.",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Confirm" }));
+    expect(args.onConfirm).toHaveBeenCalledTimes(1);
+  },
+};

@@ -50,7 +50,9 @@ export const Default: Story = {
     ).toBeEnabled();
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
 
-    expect(canvas.getByRole("button", { name: "Signing out…" })).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: "Signing out…" }),
+    ).toHaveAttribute("aria-disabled", "true");
     await userEvent.click(canvas.getByRole("button", { name: "Next" }));
 
     expect(canvas.getByText(AUTH_COPY.signOutFailed)).toBeVisible();

@@ -67,7 +67,7 @@ function VisitMovePanel({
                 !pending &&
                 cn("bg-muted opacity-100 disabled:opacity-100", VISIT_INK_2),
             )}
-            disabled={!picked || pending}
+            disabled={!picked}
             loading={pending}
             onClick={onConfirm}
             size="md"

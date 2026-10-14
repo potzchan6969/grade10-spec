@@ -257,7 +257,10 @@ export const PendingWithError: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: /^Book/ })).toBeDisabled();
+    expect(canvas.getByRole("button", { name: /^Book/ })).toHaveAttribute(
+      "aria-busy",
+      "true",
+    );
     expect(
       canvas.getByText("That time was just taken. Pick another."),
     ).toBeVisible();

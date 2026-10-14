@@ -485,6 +485,7 @@
       "staff": "任何門市的職員都可以用你的電話、電郵或姓名找到你的預約。"
     },
     "reconnecting": "重新連線中…",
+    "retryFailed": "仍未能連線，請檢查網絡後再試。",
     "offline": "最後更新 {time}。此頁會自動重試。",
     "tryNow": "立即重試",
     "trying": "重試中…",
@@ -570,6 +571,7 @@
     "leaveFailed": "未能讓你離開輪候，請再試。",
     "bookTime": "預約時間",
     "reconnecting": "重新連線中…",
+    "retryFailed": "仍未能連線，請檢查網絡後再試。",
     "offBody": "最後更新 {time}。你的位置會保留；如期間叫號，我們會為你保留 10 分鐘。",
     "asOf": "截至 {time}",
     "offLine": "恢復連線後會再顯示輪候時間。",

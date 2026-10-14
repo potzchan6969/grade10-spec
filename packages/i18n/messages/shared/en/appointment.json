@@ -485,6 +485,7 @@
       "staff": "Staff at any shop can find your visit by your phone, email or name."
     },
     "reconnecting": "Reconnecting…",
+    "retryFailed": "Still can't reach us. Check your connection and try again.",
     "offline": "Updated {time}. This page tries again by itself.",
     "tryNow": "Try now",
     "trying": "Trying…",
@@ -570,6 +571,7 @@
     "leaveFailed": "We couldn’t take you out of the line. Try again.",
     "bookTime": "Book a time",
     "reconnecting": "Reconnecting…",
+    "retryFailed": "Still can't reach us. Check your connection and try again.",
     "offBody": "Updated {time}. Your place is kept, and if we call you meanwhile, we hold your turn 10 min.",
     "asOf": "As of {time}",
     "offLine": "The wait shows again once you’re back online.",
