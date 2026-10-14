@@ -39,6 +39,7 @@ import {
   SURFACE_END,
   SURFACES,
   summaryRows,
+  tabOrderRequests,
   tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
@@ -1323,4 +1324,24 @@ test("several values for one shared field stay visible without choosing an arbit
   const [row] = caseRows({ ...one, tc });
   assert.equal(at(row, "Steps"), "1. Upload `<media type>` to [An open lot].");
   assert.equal(at(row, "Expected results"), "`<media type>` is accepted.");
+});
+
+test("tabs follow Summary in descending numeric run order", () => {
+  const sheets = [
+    { properties: { sheetId: 1, title: "2-older" } },
+    { properties: { sheetId: 2, title: "_Run records" } },
+    { properties: { sheetId: 3, title: "10-latest" } },
+    { properties: { sheetId: 4, title: "5-reprinted" } },
+    { properties: { sheetId: 9, title: "Summary" } },
+    { properties: { sheetId: 8, title: "Notes" } },
+  ];
+  assert.deepEqual(
+    tabOrderRequests(sheets, 9).map((request) => request.updateSheetProperties),
+    [
+      { properties: { sheetId: 9, index: 0 }, fields: "index" },
+      { properties: { sheetId: 3, index: 1 }, fields: "index" },
+      { properties: { sheetId: 4, index: 2 }, fields: "index" },
+      { properties: { sheetId: 1, index: 3 }, fields: "index" },
+    ],
+  );
 });
