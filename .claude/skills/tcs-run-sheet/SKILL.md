@@ -7,8 +7,8 @@ description: Pick cases for a manual pass, print a trial Google Sheet, and final
 
 | Record | Value |
 | --- | --- |
-| Sheet | Production unless the person asks for sandbox |
-| Environment | `staging` unless the person names `uat` or `production` |
+| Print target | PROD Sheet unless the person asks for Sandbox Sheet; selected by `sandbox` |
+| Test environment | Tester target: `staging-1`, `staging-2`, `uat`, `preview` or `prod`; default `staging-1`; selected by `env`, independently of print target |
 | Identity | Spreadsheet id and run id; tab name and `gid` can change before merge |
 | Trial | Temporary Sheet registry and workflow artifact; no commit |
 | Finalized | Human-confirmed snapshot; one commit on a dedicated run branch |
@@ -16,6 +16,11 @@ description: Pick cases for a manual pass, print a trial Google Sheet, and final
 
 The durable boundary is [The Run Sheet](../../../docs/governance/specs-to-test-cases.md#the-run-sheet).
 Execution results stay in Sheets. A manifest records coverage and provenance.
+
+The print target chooses the spreadsheet. The test environment says where the tester
+executes the cases. Printing to PROD Sheet does not mean testing against `prod`.
+Historical `staging` and `production` records stay readable; explicit legacy inputs
+normalize to `staging-1` and `prod` for new selections.
 
 ## Selection
 
@@ -40,7 +45,7 @@ Execution results stay in Sheets. A manifest records coverage and provenance.
      -f action=print -f name=auction \
      -f selection="auction regression" \
      -f cases="<confirmed comma-separated ids>" \
-     -f confirmed="<printed fingerprint>" -f env=staging
+     -f confirmed="<printed fingerprint>" -f env=staging-1
    ```
 
    Pass filters instead of `cases` when they resolved the list. Changing the
