@@ -113,6 +113,7 @@ type CartItemProps = {
   item: CartItemSummary;
   copy: CartItemCopy;
   loading?: boolean;
+  interactionPending?: boolean;
   onQuantityChange?: (quantity: number) => void;
   onRemove?: () => void;
   onClickProduct?: () => void;
@@ -141,6 +142,7 @@ const CART_ITEM_SKELETON_FIXTURE: CartItemSummary = {
 function CartItemContent({
   item,
   copy,
+  interactionPending = false,
   onQuantityChange,
   onRemove,
   onClickProduct,
@@ -167,10 +169,19 @@ function CartItemContent({
   const showLowStockWarning = isAdjusted && !adjustedWarningDismissed;
 
   const handleQuantityChange = (quantity: number) => {
+    if (interactionPending) return;
     if (isAdjusted) {
       setAdjustedWarningDismissed(true);
     }
     onQuantityChange?.(quantity);
+  };
+
+  const handleRemove = () => {
+    if (!interactionPending) onRemove?.();
+  };
+
+  const handleProductClick = () => {
+    if (!interactionPending) onClickProduct?.();
   };
 
   return (
@@ -187,7 +198,8 @@ function CartItemContent({
         aria-hidden
         tabIndex={-1}
         type="button"
-        onClick={onClickProduct}
+        disabled={interactionPending}
+        onClick={handleProductClick}
         className={cn(
           "relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-lg border border-border bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
           isSoldOut && "opacity-50",
@@ -208,7 +220,8 @@ function CartItemContent({
       <VStack gap="xs" className="min-w-0 flex-1">
         <button
           type="button"
-          onClick={onClickProduct}
+          disabled={interactionPending}
+          onClick={handleProductClick}
           className={cn(
             "w-full cursor-pointer text-left text-sm font-medium leading-5 text-foreground hover:underline focus-visible:outline-none",
             isSoldOut && "opacity-50",
@@ -282,7 +295,8 @@ function CartItemContent({
             size="sm"
             variant="outline"
             aria-label={copy.removeItemLabel}
-            onClick={onRemove}
+            disabled={interactionPending}
+            onClick={handleRemove}
           >
             <Trash aria-hidden size={14} />
           </IconButton>
@@ -296,7 +310,8 @@ function CartItemContent({
             incrementLabel={copy.increaseQtyLabel}
             max={item.maxQuantity}
             min={1}
-            onDecrementAtMin={onRemove}
+            disabled={interactionPending}
+            onDecrementAtMin={handleRemove}
             onValueChange={handleQuantityChange}
             size="md"
             value={item.quantity}
@@ -442,6 +457,7 @@ type CartDrawerBodyProps = {
   emptyTitle: string;
   emptyDescription?: string;
   loading?: boolean;
+  interactionPending?: boolean;
   onQuantityChange?: (itemId: string, quantity: number) => void;
   onRemoveItem?: (itemId: string) => void;
   onItemClick?: (itemId: string) => void;
@@ -461,6 +477,7 @@ function CartDrawerBody({
   emptyTitle,
   emptyDescription,
   loading = false,
+  interactionPending = false,
   onQuantityChange,
   onRemoveItem,
   onItemClick,
@@ -468,6 +485,8 @@ function CartDrawerBody({
 }: CartDrawerBodyProps) {
   const [exitingIds, setExitingIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
+  const interactionPendingRef = useRef(interactionPending);
+  interactionPendingRef.current = interactionPending;
   const isEmpty = items.length === 0 && !loading;
 
   useEffect(() => {
@@ -501,8 +520,17 @@ function CartDrawerBody({
     });
   }, [items]);
 
+  useEffect(() => {
+    if (!interactionPending) return;
+    for (const timerId of exitTimersRef.current.values()) {
+      window.clearTimeout(timerId);
+    }
+    exitTimersRef.current.clear();
+    setExitingIds((prev) => (prev.size === 0 ? prev : new Set()));
+  }, [interactionPending]);
+
   const requestRemove = (itemId: string) => {
-    if (exitingIds.has(itemId)) return;
+    if (interactionPendingRef.current || exitingIds.has(itemId)) return;
 
     if (prefersReducedMotion()) {
       onRemoveItem?.(itemId);
@@ -512,6 +540,15 @@ function CartDrawerBody({
     setExitingIds((prev) => new Set(prev).add(itemId));
     const timerId = window.setTimeout(() => {
       exitTimersRef.current.delete(itemId);
+      if (interactionPendingRef.current) {
+        setExitingIds((prev) => {
+          if (!prev.has(itemId)) return prev;
+          const next = new Set(prev);
+          next.delete(itemId);
+          return next;
+        });
+        return;
+      }
       // Keep `itemId` in exitingIds until `items` drops it — clearing here
       // would expand the row again for a frame before the parent re-renders.
       onRemoveItem?.(itemId);
@@ -567,6 +604,7 @@ function CartDrawerBody({
                     item={item}
                     copy={copy}
                     loading={loading}
+                    interactionPending={interactionPending}
                     onQuantityChange={(q) => onQuantityChange?.(item.id, q)}
                     onRemove={() => requestRemove(item.id)}
                     onClickProduct={() => onItemClick?.(item.id)}
@@ -588,6 +626,8 @@ type CartDrawerFooterProps = {
   loading?: boolean;
   /** Show summary amount skeletons while keeping cart rows mounted. */
   summaryLoading?: boolean;
+  /** Disable cart interactions while a cart operation is in flight. */
+  interactionPending?: boolean;
   /** Disable tender controls and checkout while a tender choice is saving. */
   tenderPending?: boolean;
   checkoutDisabled?: boolean;
@@ -650,6 +690,7 @@ function CartDrawerFooter({
   shippingEstimate,
   loading = false,
   summaryLoading = false,
+  interactionPending = false,
   tenderPending = false,
   checkoutDisabled = false,
   orderDiscounts = [],
@@ -669,6 +710,7 @@ function CartDrawerFooter({
   className,
 }: CartDrawerFooterProps) {
   const amountsLoading = loading || summaryLoading;
+  const controlsPending = interactionPending || tenderPending;
   const [pointsInput, setPointsInput] = useState("");
   const [isVerifyingPoints, setIsVerifyingPoints] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -723,9 +765,10 @@ function CartDrawerFooter({
               size="xs"
               variant="secondary"
               render={<button type="button" />}
-              disabled={tenderPending || isVerifyingPoints || isRedirecting}
+              disabled={controlsPending || isVerifyingPoints || isRedirecting}
               onClick={() => {
-                if (tenderPending || isVerifyingPoints || isRedirecting) return;
+                if (controlsPending || isVerifyingPoints || isRedirecting)
+                  return;
                 onUseMaxPoints?.();
               }}
             >
@@ -793,7 +836,7 @@ function CartDrawerFooter({
 
   const handleApplyPoints = async () => {
     if (
-      tenderPending ||
+      controlsPending ||
       !pointsInput.trim() ||
       isVerifyingPoints ||
       isRedirecting
@@ -815,7 +858,7 @@ function CartDrawerFooter({
     if (
       loading ||
       summaryLoading ||
-      tenderPending ||
+      controlsPending ||
       checkoutDisabled ||
       isRedirecting
     )
@@ -831,6 +874,7 @@ function CartDrawerFooter({
   };
 
   const handlePointsKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (controlsPending) return;
     if (e.key === "Enter") {
       e.preventDefault();
       handleApplyPoints();
@@ -903,9 +947,9 @@ function CartDrawerFooter({
                         size="sm"
                         variant="error"
                         render={<button type="button" />}
-                        disabled={tenderPending}
+                        disabled={controlsPending}
                         onClick={() => {
-                          if (!tenderPending) onRemovePromo?.();
+                          if (!controlsPending) onRemovePromo?.();
                         }}
                       >
                         {copy.removePromo}
@@ -926,9 +970,9 @@ function CartDrawerFooter({
                 <VStack gap="none" className="w-full pb-2">
                   <button
                     type="button"
-                    disabled={tenderPending}
+                    disabled={controlsPending}
                     onClick={() => {
-                      if (!tenderPending) {
+                      if (!controlsPending) {
                         onPromoStateChange?.({ status: "expanded" });
                       }
                     }}
@@ -965,9 +1009,9 @@ function CartDrawerFooter({
                         size="sm"
                         variant="error"
                         render={<button type="button" />}
-                        disabled={tenderPending}
+                        disabled={controlsPending}
                         onClick={() => {
-                          if (!tenderPending) onRemovePoints?.();
+                          if (!controlsPending) onRemovePoints?.();
                         }}
                       >
                         {copy.removePoints}
@@ -990,9 +1034,9 @@ function CartDrawerFooter({
                     <button
                       type="button"
                       aria-expanded={!!isPointsExpanded}
-                      disabled={tenderPending}
+                      disabled={controlsPending}
                       onClick={() => {
-                        if (!tenderPending) {
+                        if (!controlsPending) {
                           onPointsStateChange({
                             status: isPointsExpanded ? "collapsed" : "expanded",
                           });
@@ -1027,11 +1071,11 @@ function CartDrawerFooter({
                             step={1}
                             status={pointsErrorMessage ? "error" : "default"}
                             message={pointsContext}
-                            disabled={tenderPending || isVerifyingPoints}
+                            disabled={controlsPending || isVerifyingPoints}
                             onClear={
                               pointsInput
                                 ? () => {
-                                    if (tenderPending) return;
+                                    if (controlsPending) return;
                                     setPointsInput("");
                                     if (pointsErrorMessage) {
                                       onPointsStateChange?.({
@@ -1042,7 +1086,7 @@ function CartDrawerFooter({
                                 : undefined
                             }
                             onChange={(e) => {
-                              if (tenderPending) return;
+                              if (controlsPending) return;
                               setPointsInput(e.target.value);
                               if (pointsErrorMessage) {
                                 onPointsStateChange?.({ status: "expanded" });
@@ -1055,7 +1099,7 @@ function CartDrawerFooter({
                           size="md"
                           variant="outline"
                           disabled={
-                            tenderPending ||
+                            controlsPending ||
                             !pointsInput.trim() ||
                             isVerifyingPoints
                           }
@@ -1104,7 +1148,7 @@ function CartDrawerFooter({
           disabled={
             loading ||
             summaryLoading ||
-            tenderPending ||
+            controlsPending ||
             checkoutDisabled ||
             isRedirecting
           }
@@ -1124,11 +1168,21 @@ function CartDrawerFooter({
               disabled={
                 loading ||
                 summaryLoading ||
-                tenderPending ||
+                controlsPending ||
                 checkoutDisabled ||
                 isRedirecting
               }
-              onClick={onSignIn}
+              onClick={() => {
+                if (
+                  !loading &&
+                  !summaryLoading &&
+                  !controlsPending &&
+                  !checkoutDisabled &&
+                  !isRedirecting
+                ) {
+                  onSignIn();
+                }
+              }}
             >
               {copy.signInAction}
             </Link>
@@ -1151,6 +1205,7 @@ type CartPromoSheetProps = {
    * codes" heading; guests and members alike can pick or type one. */
   publicPromoCodes?: readonly HeldPromoCode[];
   selectedHeldPromoId?: string | null;
+  interactionPending?: boolean;
   tenderPending?: boolean;
   onClose: () => void;
   onPromoStateChange?: (next: PromoState) => void;
@@ -1172,6 +1227,7 @@ function CartPromoSheet({
   heldPromoCodes = null,
   publicPromoCodes = [],
   selectedHeldPromoId = null,
+  interactionPending = false,
   tenderPending = false,
   onClose,
   onPromoStateChange,
@@ -1179,6 +1235,7 @@ function CartPromoSheet({
   onSelectHeldPromo,
   onBrowseLoyalty,
 }: CartPromoSheetProps) {
+  const controlsPending = interactionPending || tenderPending;
   const [promoInput, setPromoInput] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const inputId = useId();
@@ -1205,7 +1262,7 @@ function CartPromoSheet({
   }, [open]);
 
   const handleApply = async () => {
-    if (tenderPending || !promoInput.trim() || isVerifying) return;
+    if (controlsPending || !promoInput.trim() || isVerifying) return;
     setIsVerifying(true);
     try {
       const success = await onApplyPromo?.(promoInput.trim());
@@ -1218,7 +1275,7 @@ function CartPromoSheet({
   };
 
   const handleKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
-    if (tenderPending) return;
+    if (controlsPending) return;
     if (e.key === "Enter") {
       e.preventDefault();
       handleApply();
@@ -1266,9 +1323,9 @@ function CartPromoSheet({
                 value={promoInput}
                 status={errorMessage ? "error" : "default"}
                 message={errorMessage}
-                disabled={tenderPending || isVerifying || !open}
+                disabled={controlsPending || isVerifying || !open}
                 onChange={(e) => {
-                  if (tenderPending) return;
+                  if (controlsPending) return;
                   setPromoInput(e.target.value);
                   if (errorMessage) {
                     onPromoStateChange?.({ status: "expanded" });
@@ -1281,7 +1338,7 @@ function CartPromoSheet({
               size="md"
               variant="outline"
               disabled={
-                tenderPending || !promoInput.trim() || isVerifying || !open
+                controlsPending || !promoInput.trim() || isVerifying || !open
               }
               loading={isVerifying}
               onClick={handleApply}
@@ -1307,9 +1364,9 @@ function CartPromoSheet({
                       <Button
                         size="sm"
                         variant="secondary"
-                        disabled={tenderPending || isVerifying || !open}
+                        disabled={controlsPending || isVerifying || !open}
                         onClick={() => {
-                          if (!tenderPending) {
+                          if (!controlsPending) {
                             onSelectHeldPromo?.(code.id);
                           }
                         }}
@@ -1347,9 +1404,9 @@ function CartPromoSheet({
                 <Button
                   size="md"
                   variant="secondary"
-                  disabled={tenderPending || !open}
+                  disabled={controlsPending || !open}
                   onClick={() => {
-                    if (!tenderPending) onBrowseLoyalty();
+                    if (!controlsPending) onBrowseLoyalty();
                   }}
                 >
                   {copy.browseLoyaltyOffers}
@@ -1374,6 +1431,8 @@ type CartDrawerProps = {
   loading?: boolean;
   /** Show only summary amount skeletons while keeping product rows available. */
   summaryLoading?: boolean;
+  /** Disable cart interactions while a cart operation is in flight. */
+  interactionPending?: boolean;
   /** Prevent overlapping tender writes; defaults to false for existing callers. */
   tenderPending?: boolean;
   /** Keep the cart visible while the consumer confirms an update. */
@@ -1450,6 +1509,7 @@ function CartDrawer({
   copy,
   loading,
   summaryLoading = false,
+  interactionPending = false,
   tenderPending = false,
   onFetchStatusAndPrice,
   checkoutDisabled,
@@ -1597,6 +1657,7 @@ function CartDrawer({
             emptyTitle={copy.emptyTitle}
             emptyDescription={copy.emptyDescription}
             loading={isLoading}
+            interactionPending={interactionPending}
             onQuantityChange={onQuantityChange}
             onRemoveItem={onRemoveItem}
             onItemClick={onItemClick}
@@ -1609,6 +1670,7 @@ function CartDrawer({
               shippingEstimate={shippingEstimate}
               loading={isLoading}
               summaryLoading={isSummaryLoading}
+              interactionPending={interactionPending}
               tenderPending={tenderPending}
               checkoutDisabled={checkoutDisabled}
               orderDiscounts={orderDiscounts}
@@ -1637,6 +1699,7 @@ function CartDrawer({
           heldPromoCodes={heldPromoCodes}
           publicPromoCodes={publicPromoCodes}
           selectedHeldPromoId={selectedHeldPromoId}
+          interactionPending={interactionPending}
           tenderPending={tenderPending}
           onClose={() => onPromoStateChange?.({ status: "collapsed" })}
           onPromoStateChange={onPromoStateChange}

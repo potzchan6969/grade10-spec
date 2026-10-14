@@ -70,3 +70,37 @@ export const Loading: Story = {
     loading: true,
   },
 };
+
+/** Shared interaction guard: item actions stay visible but cannot dispatch. */
+export const InteractionPending: Story = {
+  args: {
+    interactionPending: true,
+    item: {
+      ...SAMPLE_CART_ITEMS[0],
+      quantity: 1,
+    },
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("button", {
+        name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
+      }),
+    ).toBeDisabled();
+    expect(canvas.getByRole("spinbutton")).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: "Increase quantity" }),
+    ).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Remove item" })).toBeDisabled();
+
+    canvas
+      .getByRole("button", {
+        name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
+      })
+      .click();
+    canvas.getByRole("button", { name: "Increase quantity" }).click();
+    expect(args.onClickProduct).not.toHaveBeenCalled();
+    expect(args.onQuantityChange).not.toHaveBeenCalled();
+    expect(args.onRemove).not.toHaveBeenCalled();
+  },
+};
