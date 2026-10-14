@@ -872,7 +872,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -912,7 +912,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -964,7 +964,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1006,7 +1006,7 @@
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1044,7 +1044,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1086,7 +1086,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1135,7 +1135,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1191,7 +1191,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1240,7 +1240,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1286,7 +1286,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1337,7 +1337,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1383,7 +1383,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1436,7 +1436,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1494,7 +1494,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1542,7 +1542,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1592,7 +1592,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1632,7 +1632,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1686,7 +1686,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1786,7 +1786,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1890,7 +1890,7 @@ No storefront session.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-bidding-history-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2310,7 +2310,7 @@ None.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2353,7 +2353,7 @@ None.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2396,7 +2396,7 @@ None.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2447,7 +2447,7 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2490,7 +2490,7 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2529,7 +2529,7 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 

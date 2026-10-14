@@ -2881,7 +2881,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3012,7 +3012,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3058,7 +3058,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3153,7 +3153,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3198,7 +3198,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3246,7 +3246,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3299,7 +3299,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3352,7 +3352,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3396,7 +3396,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3445,7 +3445,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3500,7 +3500,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3547,7 +3547,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3592,7 +3592,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3646,7 +3646,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3699,7 +3699,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3749,7 +3749,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -3790,7 +3790,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 

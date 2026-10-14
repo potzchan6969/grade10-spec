@@ -270,7 +270,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 An open listing with no bids, with the row's starting price.
@@ -313,7 +313,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 An open listing whose current bid and minimum increment match the row.
@@ -356,7 +356,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer(leads with a committed maximum matching the row) is on that open listing's page.
@@ -441,7 +441,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/opening-price.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auction/opening-price.spec.ts`
 
 **Pre-conditions:**
 
@@ -576,7 +576,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 
@@ -633,7 +633,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer(committed a maximum matching the row) is on a listing whose current bid matches the row.
@@ -672,7 +672,7 @@ customer(committed a maximum matching the row) is on a listing whose current bid
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer(has been overtaken on an open listing) is on that listing's page.
@@ -704,7 +704,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer A(leads with a committed maximum matching the row) is on a listing whose current bid matches the row.
@@ -745,7 +745,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads an USD listing with a committed maximum of USD600 (range: 50000–99999 minor units)).
@@ -795,7 +795,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 An open USD listing where customer A leads with a committed maximum of USD500 (fixed tier boundary), the current bid is USD100 (fixed tier boundary), and the applicable increment is USD5 (fixed tier increment).
@@ -838,7 +838,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer A(leads an USD listing at USD28,100 (fixed derived value)) with a maximum of USD56,000 (range: 1000000–999999999 minor units); customer B's existing maximum is USD28,000 (range: 1000000–999999999 minor units).
@@ -877,7 +877,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads an USD listing with a committed maximum of USD34,000 (range: 1000000–999999999 minor units)) after overtaking customer A; customer A's maximum is USD30,000 (range: 1000000–999999999 minor units), and the current bid is USD30,100 (fixed derived value).
@@ -916,7 +916,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads an USD listing with a committed maximum of USD34,000 (range: 1000000–999999999 minor units)) after overtaking customer A; customer A's maximum is USD30,000 (range: 1000000–999999999 minor units), and the current bid is USD30,100 (fixed derived value).
@@ -955,7 +955,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer A(leads an USD listing with a committed maximum of USD8,400 (range: 500000–999999 minor units)).
@@ -994,7 +994,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 customer B(leads with a committed maximum of USD600 (range: 50000–99999 minor units)).
@@ -1591,7 +1591,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auto-bidding-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/auto-bidding/auto-bidding.spec.ts`
 
 **Pre-conditions:**
 
