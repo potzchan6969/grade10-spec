@@ -99,19 +99,25 @@
 
 **Pre-conditions:**
 
-* The Every Part story gives `FactCard` a <card title>, a line under it, a lead, two rows with a <rows label>, a body line and one action.
+* The Every Part story gives `FactCard` a `<card title>`, a line under it, a lead, two rows with a `<rows label>`, a body line and one action.
+
+* The With Figures fixture supplies rows `<rows>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <card title> | `Our offer` |
-| <rows label> | `The offer's figures` |
-| <rows> | `Loan` · `HK$8,000.00`, `Interest for the term` · `HK$480.00` |
+| card title | Our offer |
+| rows label | The offer's figures |
+| rows | `Loan` · `HK$8,000.00`, `Interest for the term` · `HK$480.00` |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / FactCard / Every Part at <grade10 ui workbench url>.
+1. Open Page Blocks / FactCard / Every Part at `<grade10 ui workbench url>`.
 2. Read the card from its title down.
 3. Find the region a screen reader lands on, by its name.
 4. Find the table among the card's parts, by its name.
@@ -119,8 +125,8 @@
 **Expected Results:**
 
 * The card reads the title, the line under it, the lead, the rows, the body, then the action.
-* The card is one region named <card title>.
-* The rows are one table named <rows label>, one row per label and value.
+* The card is one region named `<card title>`.
+* The rows are one table named `<rows label>`, one row per label and value.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-0td rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
 ### g10.shared-page-blocks.US1-TC4: Rows alone name their table by the card's title
@@ -140,23 +146,27 @@
 
 **Pre-conditions:**
 
-* The Rows Only story gives `FactCard` a <card title> and rows, with no rows label, lead, body or action.
+* The Rows Only story gives `FactCard` a `<card title>` and rows, with no rows label, lead, body or action.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <card title> | `What we keep` |
+| card title | What we keep |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / FactCard / Rows Only at <grade10 ui workbench url>.
+1. Open Page Blocks / FactCard / Rows Only at `<grade10 ui workbench url>`.
 2. Find the table by its name.
 3. Read the card below its title.
 
 **Expected Results:**
 
-* The table is named <card title>.
+* The table is named `<card title>`.
 * Nothing is drawn under the title but the table: no line, lead, body or action.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-29c rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
@@ -179,24 +189,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Body Only story gives `FactCard` a title and a body line, and its rows as the row says.
+* The Body Only story gives `FactCard` a title and a body line, and rows `<rows given>`.
 
 **Test data:**
 
-| Rows given | Outcome |
+| `<rows given>` | `<expected outcome>` |
 | --- | --- |
 | none | the title and the body line; no table |
 | an empty list | the title and the body line; no table |
 
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / FactCard / Body Only at <grade10 ui workbench url>.
-2. Set the rows in the Controls panel as the row says.
+1. Open Page Blocks / FactCard / Body Only at `<grade10 ui workbench url>`.
+2. Set the rows in the Controls panel to `<rows given>`.
 3. Read the card.
 
 **Expected Results:**
 
-* The card reads as the row's outcome says.
+* The card reads as follows: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-skf rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
 ### g10.shared-page-blocks.US1-TC6: Loading cards are one busy status, placeholders hidden
@@ -216,24 +230,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Two story gives `FactCardSkeleton` a count of 2 and a <loading label>.
+* The Two story gives `FactCardSkeleton` a count of 2 and a `<loading label>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <loading label> | `Loading your cases…` |
+| loading label | Loading your cases… |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / FactCardSkeleton / Two at <grade10 ui workbench url>.
+1. Open Page Blocks / FactCardSkeleton / Two at `<grade10 ui workbench url>`.
 2. Count the placeholder cards.
 3. List the status regions a screen reader announces.
 
 **Expected Results:**
 
 * Two placeholder cards are drawn.
-* One busy status is announced, named <loading label>.
+* One busy status is announced, named `<loading label>`.
 * No placeholder is announced on its own.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-rfs rev=1 covers=g10.shared-page-blocks.SC-8a9,g10.shared-page-blocks.SC-k2o,g10.shared-page-blocks.SC-dan,g10.shared-page-blocks.SC-ynk,g10.shared-page-blocks.SC-v4l -->
@@ -254,22 +272,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `FactCardSkeleton` is given a <loading label>.
+* `FactCardSkeleton` is given a `<loading label>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <loading label> | `Loading your cases…` |
-| <count below one> | `0` |
+| loading label | Loading your cases… |
+| count below one | 0 |
 
 **Steps:**
 
-1. Render `FactCardSkeleton` with <count below one> as its count.
+1. Render `FactCardSkeleton` with `<count below one>` as its count.
 
 **Expected Results:**
 
-* The render throws an error naming <count below one>.
+* The render throws an error naming `<count below one>`.
 * No status and no placeholder is drawn.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-we2 rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
@@ -292,26 +310,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The story the row names gives `NoteList` its lines.
+* The story `<story>` gives `NoteList` its lines.
 
 **Test data:**
 
-| Story | Lines | Dividers |
-| --- | --- | --- |
-| Before You Come Storage | 3: verified, bring, sign the custody agreement | under the first and the second; none under the third |
-| Before You Come Financed | 4: verified, bring, sign both agreements, the money follows | under the first, the second and the third |
-| One | 1 | none |
+| `<story>` | `<lines>` | `<dividers>` | Fixture notes |
+| --- | --- | --- | --- |
+| Before You Come Storage | 3 | under the first and the second; none under the third | `<lines>`: verified, bring, sign the custody agreement |
+| Before You Come Financed | 4 | under the first, the second and the third | `<lines>`: verified, bring, sign both agreements, the money follows |
+| One | 1 | none | · |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / NoteList / the row's story at <grade10 ui workbench url>.
+1. Open Page Blocks / NoteList / `<story>` at `<grade10 ui workbench url>`.
 2. Read the lines in order.
 3. Look for a divider under each line.
 
 **Expected Results:**
 
-* The lines read in the order given.
-* A divider sits where the row says, and none under the last line.
+* The lines read in this order: `<lines>`.
+* A divider sits at `<dividers>`, and none under the last line.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-22r rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
 ### g10.shared-page-blocks.US1-TC9: A line carrying a link keeps its link
@@ -331,22 +353,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The With Link Item story gives `NoteList` Before you come for a collector not yet verified: its first line holds a <verify link> and the in-person line.
+* The With Link Item story gives `NoteList` Before you come for a collector not yet verified: its first line holds a `<verify link>` and the in-person line.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| verify link | Verify now | to `/vault/verify` |
+
 | Field | Value |
 | --- | --- |
-| <verify link> | `Verify now`, to `/vault/verify` |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / NoteList / With Link Item at <grade10 ui workbench url>.
-2. Find the <verify link> in the first line.
+1. Open Page Blocks / NoteList / With Link Item at `<grade10 ui workbench url>`.
+2. Find the `<verify link>` in the first line.
 
 **Expected Results:**
 
-* The first line holds <verify link> as a link to its address, then the in-person line.
+* The first line holds `<verify link>` as a link to its address, then the in-person line.
 * Every other line reads as given.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-z3a rev=1 covers=g10.shared-page-blocks.SC-l8d,g10.shared-page-blocks.SC-df6,g10.shared-page-blocks.SC-44p -->
@@ -369,9 +395,15 @@ Runs once per row of **Test data**.
 
 * The Empty story gives `NoteList` no lines.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / NoteList / Empty at <grade10 ui workbench url>.
+1. Open Page Blocks / NoteList / Empty at `<grade10 ui workbench url>`.
 2. Look for a list in the story's canvas.
 
 **Expected Results:**
@@ -398,27 +430,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The story the row names gives `StageRail` its stages and the current one.
+* The story `<story>` gives `StageRail` stages `<stages>` and current stage `<current stage>`.
 
 **Test data:**
 
-| Story | Stages | Current | Done | To come |
+| `<story>` | `<stages>` | `<current stage>` | `<done stages>` | `<future stages>` |
 | --- | --- | --- | --- | --- |
 | Financed Mid | Request, Valued, Offer, Agreed, Signed, Vault, Loan, Home | Signed | Request, Valued, Offer, Agreed | Vault, Loan, Home |
 | Storage Lane | Request, Valued, Agreed, Signed, Vault, Home | Vault | Request, Valued, Agreed, Signed | Home |
 | Wizard First | Describe, Photograph, Review | Describe | none | Photograph, Review |
 
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / StageRail / the row's story at <grade10 ui workbench url>.
+1. Open Page Blocks / StageRail / `<story>` at `<grade10 ui workbench url>`.
 2. Read the stages in order.
 3. Find the stage a screen reader hears as current.
 
 **Expected Results:**
 
-* The stages read in the row's order.
-* Current is in progress and is the one current step.
-* The row's Done stages read done, its To come stages still to come.
+* The stages read in order: `<stages>`.
+* `<current stage>` is in progress and is the one current step.
+* The stages `<done stages>` read done, the stages `<future stages>` still to come.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-xr0 rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
 ### g10.shared-page-blocks.US1-TC12: An ended case stays at its stage with the ending's word
@@ -438,23 +474,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Ended story gives `StageRail` the financed lane, Offer as the current stage and <ending word>.
+* The Ended story gives `StageRail` the financed lane, Offer as the current stage and `<ending word>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <ending word> | `Declined` |
+| ending word | Declined |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open Page Blocks / StageRail / Ended at <grade10 ui workbench url>.
+1. Open Page Blocks / StageRail / Ended at `<grade10 ui workbench url>`.
 2. Read the current stage and the line under it.
 3. Read every later stage.
 
 **Expected Results:**
 
-* Offer is in progress, with <ending word> under it.
+* Offer is in progress, with `<ending word>` under it.
 * Every stage after Offer reads still to come.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-hab rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
@@ -479,17 +519,17 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| <stage not held> | `loan`, a financed-lane stage the storage lane skips |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| stage not held | loan | a financed-lane stage the storage lane skips |
 
 **Steps:**
 
-1. Render `StageRail` with <stage not held> as the current stage.
+1. Render `StageRail` with `<stage not held>` as the current stage.
 
 **Expected Results:**
 
-* The render throws an error naming <stage not held>.
+* The render throws an error naming `<stage not held>`.
 * No rail is drawn.
 
 <!-- trace:case id=g10.shared-page-blocks.TC-8jg rev=1 covers=g10.shared-page-blocks.SC-t28,g10.shared-page-blocks.SC-pim,g10.shared-page-blocks.SC-zd9,g10.shared-page-blocks.SC-naf,g10.shared-page-blocks.SC-vqx,g10.shared-page-blocks.SC-4c5 -->
@@ -512,9 +552,15 @@ Runs once per row of **Test data**.
 
 * The Narrow story draws the financed lane's eight stages in a 320-pixel frame.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / StageRail / Narrow at <grade10 ui workbench url>.
+1. Open Page Blocks / StageRail / Narrow at `<grade10 ui workbench url>`.
 2. Scroll the rail sideways.
 3. Scroll the page sideways.
 
@@ -543,9 +589,15 @@ Runs once per row of **Test data**.
 
 * The With Action story gives `EmptyPanel` a title and a Start action, and no line.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / EmptyPanel / With Action at <grade10 ui workbench url>.
+1. Open Page Blocks / EmptyPanel / With Action at `<grade10 ui workbench url>`.
 2. Clear the Actions panel.
 3. Click Start a submission.
 
@@ -574,9 +626,15 @@ Runs once per row of **Test data**.
 
 * Each of the five page blocks has one story without a slot and one with a slot.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open Page Blocks / FactCard / Every Part at <grade10 ui workbench url> and inspect the card's root; then open With Slot and inspect it again.
+1. Open Page Blocks / FactCard / Every Part at `<grade10 ui workbench url>` and inspect the card's root; then open With Slot and inspect it again.
 2. Open Page Blocks / FactCardSkeleton / Two and inspect the status's root; then open With Slot and inspect it again.
 3. Open Page Blocks / NoteList / Before You Come Storage and inspect the list's root; then open With Slot and inspect it again.
 4. Open Page Blocks / StageRail / Financed Mid and inspect the rail's root and the stepper inside it; then open With Slot and inspect the rail's root again.
