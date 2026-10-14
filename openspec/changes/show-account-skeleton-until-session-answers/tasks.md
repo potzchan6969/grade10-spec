@@ -1,4 +1,4 @@
-## 1. Pending session on SiteHeader (grade10-spec)
+## 1. Pending session on SiteHeader (grade10-spec) (owner: @seankcw)
 
 The block, its stories and the PRD's story cards. It lands and publishes its main SHA before Group 2 moves grade10's pin.
 
