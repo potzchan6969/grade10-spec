@@ -143,7 +143,7 @@ function OrderDetails({
   return (
     <VStack
       className={cn(
-        "w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
+        "w-full max-w-7xl gap-8 overflow-hidden px-4 pt-6 pb-12 sm:gap-12 sm:px-8 sm:pt-8 sm:pb-16",
         className,
       )}
       data-revealed={revealed || undefined}

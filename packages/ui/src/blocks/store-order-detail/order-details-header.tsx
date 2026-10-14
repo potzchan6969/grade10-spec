@@ -49,15 +49,15 @@ function OrderDetailsHeader({
       gap="sm"
       hAlign="stretch"
     >
-      <HStack className="w-full" gap="sm" vAlign="center">
-        <h1 className="shrink-0 text-3xl leading-9 font-semibold whitespace-nowrap text-foreground">
+      <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
+        <h1 className="min-w-0 text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
           {orderId}
         </h1>
-        <OrderHistoryStatus className="items-center" status={status}>
+        <OrderHistoryStatus className="shrink-0 items-center" status={status}>
           {statusLabel}
         </OrderHistoryStatus>
       </HStack>
-      <HStack className="w-full" gap="xs" vAlign="baseline">
+      <HStack className="w-full flex-wrap" gap="xs" vAlign="baseline">
         <time
           className="shrink-0 text-sm leading-5 whitespace-nowrap text-secondary-foreground"
           dateTime={placedOnDateTime}

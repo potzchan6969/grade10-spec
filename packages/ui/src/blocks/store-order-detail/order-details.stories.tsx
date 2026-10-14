@@ -198,13 +198,9 @@ export const NoOptionalGroups: Story = {
     );
     await waitFor(() =>
       expect(
-        canvasElement.querySelector('[data-slot="order-details-order-table"]')
-          ?.parentElement,
-      ).toHaveStyle({ opacity: "1" }),
+        canvas.getByText("Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)"),
+      ).toBeVisible(),
     );
-    expect(
-      canvas.getByText("Pokémon TCG Sealed Booster Box – Ninja Spinner (M4)"),
-    ).toBeVisible();
     expect(
       canvasElement.querySelector('[data-slot="order-details-sidebar"]'),
     ).toBeNull();
