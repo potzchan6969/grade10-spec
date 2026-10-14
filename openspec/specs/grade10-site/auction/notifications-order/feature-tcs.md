@@ -3,107 +3,290 @@
 **Status:** pending-review · 0/17
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
-## Walk 1: Post-close letters and adjacent checks
+## Walk 1: Winner reads payment reminders
 
 **Starting state:**
 
-- customer(winner of `<lot_1>`) has a registered email.
-- customer(winner of `<lot_1>`) has confirmed setup.
-- admin(operator) can send the invoice for `<lot_1>`.
-- customer(winner of `<lot_1>`) has a pending or expired invoice.
-- customer(winner of `<lot_1>`) has a pending unpaid invoice.
-- customer(winner of `<lot_1>`) pays on day 2 after the invoice was issued.
-- The payment-received letter for `<lot_1>` has already been sent.
-- customer(winner of `<lot_1>`) has a registered email and the letter in the row is due.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
-- customer(winner of `<lot_1>`) has a registered email and can open `<the winner's auction order url>` for the same payment-overdue order.
-- customer(winner of `<lot_1>`) opens a payment overdue letter in a browser mail surface that does not hand off to a system mail client.
-- customer(winner of `<lot_1>`) has a registered email and the letter in the row is the latest for that order.
-- An operator has recorded a partial payment on the order for `<lot_1>` and the partial-payment letter is due.
-- `<lot_1>`'s order reads Preparing Shipment.
+**Steps 1–1 setup:**
+
+- A collector wins a USD listing. No settlement currency is selected yet.
+
+**Steps 2–2 setup:**
+
+- A winner has chosen `<settlement_currency>` for an order won at `<winning_bid>`, and an operator is ready to send its invoice.
+
+**Steps 3–4 setup:**
+
+- customer(winner, holds `<winner_order_1>`) has a pending or expired invoice.
+
+**Steps 5–6 setup:**
+
+- customer(winner, holds `<winner_order_2>`) has a pending unpaid invoice.
+
+**Steps 7–8 setup:**
+
+- customer(winner, holds `<winner_order_3>`) pays on day 2 after the invoice was issued.
+
+**Steps 9–10 setup:**
+
+- The payment-received letter for `<winner_order_4>` has already been sent.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–1 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winning bid | USD101.00 | (10100 minor units) |
+
+**Steps 2–2 data:**
+
+| `<settlement_currency>` | `<winning_bid>` | `<payment_reminder_total>` | Fixture notes |
+| --- | --- | --- | --- |
+| USD | USD2,600 | USD3,120 | USD winning bid is representative; any positive USD winning bid with this invoice fixture remains in the same partition; `<payment_reminder_total>`: 312000 minor units in USD |
+| HKD | USD101 | HKD1,031 | Fixed source fixture; `<winning_bid>`: 10100 minor units in USD; `<payment_reminder_total>`: 103100 minor units in HKD |
+
+**Steps 3–4 data:**
+
+| Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot that just closed with this winner |
-| `<lot_1>` | An order in Preparing Invoice |
-| `<total>` | HKD3,280 (fixed derived value) |
-| `<lot_1>` | An order whose invoice an operator can reissue |
-| `<lot_1>` | An order with a pending invoice and a known payment deadline |
-| `<lot_1>` | An order whose invoice was issued two days ago and is now paid |
-| `<lot_1>` | An order whose payment-received letter was sent |
-| Setup overdue | A won lot whose setup overdue letter is due |
-| Payment overdue | A won lot whose payment overdue letter is due |
-| Order cancelled | A won lot whose order cancelled letter is due |
-| Delivered | A won lot whose delivered letter is due |
-| `<lot_1>` | A won lot in Payment Overdue with a payment overdue letter already sent |
-| `<invoice_id>` | The issued invoice id on that order |
-| `<lot_1>` | A won lot whose payment overdue letter is open |
-| Setup overdue | A won lot whose setup overdue letter is open |
-| Payment overdue | A won lot whose payment overdue letter is open |
-| Order cancelled | A won lot whose order cancelled letter is open |
-| Delivered | A won lot whose delivered letter is open |
-| `<lot_1>` | A won lot whose partial-payment letter is due |
-| `<invoice_id>` | The current invoice id on that order |
-| `<receipt_ids>` | Receipt ids recorded so far |
+| winner_order_1 | An auction order whose invoice an operator can reissue |
+
+**Steps 5–6 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_2 | An auction order with a pending invoice and a known payment deadline |
+
+**Steps 7–8 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_3 | An auction order whose invoice was issued two days ago and is now paid |
+
+**Steps 9–10 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_4 | An auction order whose payment-received letter was sent |
 
 ### Route
 
-1. Close `<lot_1>` with this winner.
-   - One auction-won letter names `<lot_1>` and the setup deadline. g10.auction-notifications-order.US1-TC1
-2. Open the winner's inbox.
-   - It names no amount owed. g10.auction-notifications-order.US1-TC1
-3. admin(operator) sends the invoice for `<lot_1>` with `<total>`.
-4. Open the winner's inbox.
-   - One payment-reminder letter names `<total>` and the payment deadline. g10.auction-notifications-order.US1-TC2
-   - The deadline uses `Asia/Hong_Kong` and is labelled `GMT+8`. g10.auction-notifications-order.US1-TC2
-   - No separate invoice-sent letter exists. g10.auction-notifications-order.US1-TC2
-5. admin(operator) reissues the invoice for `<lot_1>`.
-   - One payment-reminder letter for the new invoice. g10.auction-notifications-order.US1-TC3
+1. Read the auction-won letter.
+   - The letter names `<winning bid>` in USD. `g10.auction-notifications-order.US1-TC1`
+   - It names no HKD amount and no conversion rate. `g10.auction-notifications-order.US1-TC1`
+2. Send the invoice and read the payment-reminder letter.
+   - The reminder amount is `<payment_reminder_total>` and uses `<settlement_currency>`. `g10.auction-notifications-order.US1-TC2`
+   - The letter does not repeat the USD winning bid. `g10.auction-notifications-order.US1-TC2`
+   - Under HKD settlement, the letter names no conversion rate. `g10.auction-notifications-order.US1-TC2`
+3. admin(operator) reissues the invoice on `<winner_order_1>`.
+4. Open the winner's inbox and the send log.
+   - One payment-reminder letter for the new invoice. `g10.auction-notifications-order.US1-TC3`
+   - No invoice-reissued letter. `g10.auction-notifications-order.US1-TC3`
+5. Wait until 24 hours before the payment deadline.
+6. Open the winner's inbox.
+   - One final-notice letter for `<winner_order_2>`. `g10.auction-notifications-order.US1-TC4`
+   - No letter waits until the deadline transition itself. `g10.auction-notifications-order.US1-TC4`
+7. Wait until day 3 after invoice issue.
+8. Open the winner's inbox for reminder kinds.
+   - No day-3, day-6, or final-notice payment reminder for that invoice. `g10.auction-notifications-order.US1-TC5`
+9. Deliver the payment confirmation webhook again.
+10. Open the winner's inbox and the send log.
+   - No second payment-received letter. `g10.auction-notifications-order.US1-TC6`
+
+## Walk 2: Winner contacts support from a post-close letter
+
+**Starting state:**
+
+**Steps 1–3 setup:**
+
+- customer(winner, holds `<winner_order_5>`) has a registered email and `<letter_kind>` is due for `<winner_order_5>`.
+
+**Steps 4–6 setup:**
+
+- customer(winner, holds `<winner_order_6>`) has a registered email and can open `<the winner's auction order url>` for the same payment-overdue order.
+
+**Steps 7–8 setup:**
+
+- customer(winner, holds `<winner_order_7>`) opens a payment overdue letter in a browser mail surface that does not hand off to a system mail client.
+
+**Steps 9–10 setup:**
+
+- customer(winner, holds `<winner_order_8>`) has a registered email and `<letter_kind>` is the latest letter for `<winner_order_8>`.
+
+**Steps 11–13 setup:**
+
+- customer(winner) has a registered email.
+- An operator has recorded a partial payment on `<winner_order_9>` and the partial-payment letter is due.
+
+**Shared test data:**
+
+**Steps 1–3 data:**
+
+| `<letter_kind>` | `<winner_order_5>` |
+| --- | --- |
+| Setup overdue | An auction order whose setup overdue letter is due |
+| Payment overdue | An auction order whose payment overdue letter is due |
+| Order cancelled | An auction order whose order cancelled letter is due |
+| Delivered | An auction order whose delivered letter is due |
+
+**Steps 4–6 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_6 | An auction order in Payment Overdue with a payment overdue letter already sent |
+| invoice_id | The issued invoice id on that order |
+
+| Field | Value |
+| --- | --- |
+| the winner's auction order url | The winner order URL for the seeded order in this case; bind its URL only |
+
+**Steps 7–8 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_7 | An auction order whose payment overdue letter is open |
+
+**Steps 9–10 data:**
+
+| `<letter_kind>` | `<winner_order_8>` |
+| --- | --- |
+| Setup overdue | An auction order whose setup overdue letter is open |
+| Payment overdue | An auction order whose payment overdue letter is open |
+| Order cancelled | An auction order whose order cancelled letter is open |
+| Delivered | An auction order whose delivered letter is open |
+
+**Steps 11–13 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_9 | An auction order whose partial-payment letter is due |
+| invoice_id | The current invoice id on that order |
+| receipt_ids | Receipt ids recorded so far |
+
+### Route
+
+1. Wait for the letter of type `<letter_kind>` for `<winner_order_5>`.
+2. Open the letter.
+3. Read the letter body and the Contact Us link.
+   - The letter body names `support@grade10.com`. `g10.auction-notifications-order.US1-TC7`
+   - Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the ready email for that order. `g10.auction-notifications-order.US1-TC7`
+   - The mailto is not a bare `mailto:support@grade10.com` without subject and body. `g10.auction-notifications-order.US1-TC7`
+4. Open the payment overdue letter for `<winner_order_6>` and read the Contact Us `mailto:` subject and body.
+5. Open `<the winner's auction order url>` for that order.
+6. Click Contact Us and read Subject and Message.
+   - Letter mailto subject equals the dialog Subject `Auction order `<invoice_id>`: payment overdue`. `g10.auction-notifications-order.US1-TC11`
+   - Letter mailto body matches the dialog Message order facts. `g10.auction-notifications-order.US1-TC11`
+7. Open the payment overdue letter for `<winner_order_7>`.
+8. Read the letter body without activating Contact Us.
+   - The letter body still shows `support@grade10.com` for the collector to copy by hand. `g10.auction-notifications-order.US1-TC12`
+9. Open the letter of type `<letter_kind>` for `<winner_order_8>`.
+10. Inspect the Contact Us href.
+   - The href includes a subject query. `g10.auction-notifications-order.US1-TC13`
+   - The href includes a body query. `g10.auction-notifications-order.US1-TC13`
+   - The href is not only `mailto:support@grade10.com`. `g10.auction-notifications-order.US1-TC13`
+11. Wait for the partial-payment letter for `<winner_order_9>`.
+12. Open the letter.
+13. Read the letter body and the Contact Us link.
+   - The letter body names `support@grade10.com`. `g10.auction-notifications-order.US1-TC14`
+   - Contact Us is a `mailto:` to `support@grade10.com`. `g10.auction-notifications-order.US1-TC14`
+   - The mailto subject is `Auction order `<invoice_id>`: partial payment`. `g10.auction-notifications-order.US1-TC14`
+   - The mailto body may list `<receipt_ids>` and does not name the remaining balance. `g10.auction-notifications-order.US1-TC14`
+
+## Walk 3: Winner reads shipment and settlement-currency letters
+
+**Starting state:**
+
+**Steps 1–2 setup:**
+
+- customer(winner) has a registered email.
+- `<winner_order_10>` reads Preparing Shipment.
+
+**Steps 3–3 setup:**
+
+- A sent invoice remains unpaid; its order uses `<settlement_currency>` and has invoice total `<reminder_amount>`.
+
+**Steps 4–4 setup:**
+
+- A winner has an order using `<settlement_currency>` with a recorded payment of `<amount_received>`.
+
+**Steps 5–6 setup:**
+
+- customer(winner) has a pending invoice in HKD.
+- admin(operator) can reissue the invoice on `<winner_order_11>`.
+
+**Steps 7–8 setup:**
+
+- customer(winner, holds `<winner_order_12>`) has a registered email and a pending unpaid invoice in HKD, for a USD listing won at `<winning bid>`.
+
+**Steps 9–9 setup:**
+
+- An internal bidder wins and its order is created automatically at listing close.
+
+**Shared test data:**
+
+**Steps 1–2 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_10 | An auction order in Preparing Shipment, belonging to the winner; bind the order identifier only |
+
+**Steps 3–3 data:**
+
+| `<settlement_currency>` | `<reminder_amount>` | Fixture notes |
+| --- | --- | --- |
+| USD | USD3,120 | Representative USD amount; any positive USD amount remains in the same partition; `<reminder_amount>`: 312000 minor units in USD |
+| HKD | HKD1,031 | Fixed source fixture; `<reminder_amount>`: 103100 minor units in HKD |
+
+**Steps 4–4 data:**
+
+| `<settlement_currency>` | `<amount_received>` | Fixture notes |
+| --- | --- | --- |
+| USD | USD3,120 | `<amount_received>`: 312000 minor units in USD |
+| HKD | HKD1,031 | `<amount_received>`: 103100 minor units in HKD |
+
+**Steps 5–6 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_11 | An auction order with a pending HKD invoice, for a USD listing won at `<winning bid>` | · |
+| winning bid | USD2,400 | (range: >0 minor units) |
+| new invoice total | USD131.21 | (13121 minor units) |
+
+**Steps 7–8 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_12 | An auction order with a pending HKD invoice and a known payment deadline | · |
+| winning bid | USD2,400 | (range: >0 minor units) |
+| invoice total | HKD1,031.00 | (103100 minor units) |
+
+### Route
+
+1. Dispatch `<winner_order_10>` with a carrier and a tracking number, and no tracker link.
+2. Open the winner's inbox and read the shipped letter.
+   - The primary action is View order, and it opens `<winner_order_10>`'s Winner Order. `g10.auction-notifications-order.US1-TC55`
+   - The tracking number reads as plain text, not a link. `g10.auction-notifications-order.US1-TC55`
+   - The letter offers no track-and-trace action. `g10.auction-notifications-order.US1-TC55`
+3. Read a later payment reminder.
+   - Any amount in the reminder uses `<settlement_currency>`. `g10.auction-notifications-order.US1-TC56`
+   - The reminder includes no USD winning bid under HKD settlement. `g10.auction-notifications-order.US1-TC56`
+4. Read the payment-received letter and receipt.
+   - The received amount and receipt use `<settlement_currency>`. `g10.auction-notifications-order.US1-TC57`
+   - Under HKD settlement, neither prints the USD winning bid or a conversion rate. `g10.auction-notifications-order.US1-TC57`
+5. admin(operator) changes the settlement currency of `<winner_order_11>` to USD and reissues the invoice.
 6. Open the winner's inbox and the send log.
-   - No invoice-reissued letter. g10.auction-notifications-order.US1-TC3
-7. Wait until 24 hours before the payment deadline.
-   - One final-notice letter for `<lot_1>`. g10.auction-notifications-order.US1-TC4
-8. Open the winner's inbox.
-   - No letter waits until the deadline transition itself. g10.auction-notifications-order.US1-TC4
-9. Wait until day 3 after invoice issue.
-10. Open the winner's inbox for reminder kinds.
-   - No day-3, day-6, or final-notice payment reminder for that invoice. g10.auction-notifications-order.US1-TC5
-11. Deliver the payment confirmation webhook again.
-12. Open the winner's inbox and the send log.
-   - No second payment-received letter. g10.auction-notifications-order.US1-TC6
-13. Wait for the letter named in the row for `<lot_1>`.
-   - The letter body names `support@grade10.com`. g10.auction-notifications-order.US1-TC7
-14. Open the letter.
-   - Contact Us is a `mailto:` to `support@grade10.com` with subject and body prefilling the ready email for that order. g10.auction-notifications-order.US1-TC7
-15. Read the letter body and the Contact Us link.
-   - The mailto is not a bare `mailto:support@grade10.com` without subject and body. g10.auction-notifications-order.US1-TC7
-16. Open the payment overdue letter for `<lot_1>` and read the Contact Us `mailto:` subject and body.
-17. Open `<the winner's auction order url>` for that order.
-18. Click Contact Us and read Subject and Message.
-   - Letter mailto subject equals the dialog Subject `Auction order `<invoice_id>`: payment overdue`. g10.auction-notifications-order.US1-TC11
-   - Letter mailto body matches the dialog Message order facts. g10.auction-notifications-order.US1-TC11
-19. Open the payment overdue letter for `<lot_1>`.
-20. Read the letter body without activating Contact Us.
-   - The letter body still shows `support@grade10.com` for the collector to copy by hand. g10.auction-notifications-order.US1-TC12
-21. Open the letter named in the row for `<lot_1>`.
-22. Inspect the Contact Us href.
-   - The href includes a subject query. g10.auction-notifications-order.US1-TC13
-   - The href includes a body query. g10.auction-notifications-order.US1-TC13
-   - The href is not only `mailto:support@grade10.com`. g10.auction-notifications-order.US1-TC13
-23. Wait for the partial-payment letter for `<lot_1>`.
-24. Open the letter.
-25. Read the letter body and the Contact Us link.
-   - The letter body names `support@grade10.com`. g10.auction-notifications-order.US1-TC14
-   - Contact Us is a `mailto:` to `support@grade10.com`. g10.auction-notifications-order.US1-TC14
-   - The mailto subject is `Auction order `<invoice_id>`: partial payment`. g10.auction-notifications-order.US1-TC14
-   - The mailto body may list `<receipt_ids>` and does not name the remaining balance. g10.auction-notifications-order.US1-TC14
-26. Dispatch `<lot_1>`'s order with a carrier and a tracking number, and no tracker link.
-27. Open the winner's inbox and read the shipped letter.
-   - The primary action is View order, and it opens `<lot_1>`'s Winner Order. g10.auction-notifications-order.US1-TC55
-   - The tracking number reads as plain text, not a link. g10.auction-notifications-order.US1-TC55
-   - The letter offers no track-and-trace action. g10.auction-notifications-order.US1-TC55
+   - One payment-reminder letter exists for the new invoice and names `<new invoice total>` in USD. `g10.auction-notifications-order.US1-TC58`
+   - No amount in it reads in HKD. `g10.auction-notifications-order.US1-TC58`
+   - The HKD invoice's earlier payment-reminder letter still reads its HKD amounts. `g10.auction-notifications-order.US1-TC58`
+   - No invoice-reissued letter exists. `g10.auction-notifications-order.US1-TC58`
+7. Let the invoice's payment deadline pass so Grade10 sets it to `expired`.
+8. Open the winner's inbox and read the letter.
+   - One payment overdue letter exists for `<winner_order_12>`. `g10.auction-notifications-order.US1-TC59`
+   - It names `<invoice total>` as the outstanding amount in HKD. `g10.auction-notifications-order.US1-TC59`
+   - It names no USD amount and no conversion rate. `g10.auction-notifications-order.US1-TC59`
+9. Read the internal bidder's order letter history after close.
+   - No order letters are sent to the internal bidder. `g10.auction-notifications-order.US1-TC60`
 
 ## g10.auction-notifications-order.US1: Post-close letters
 
@@ -129,13 +312,13 @@
 
 **Pre-conditions:**
 
-* A collector wins a USD lot. No settlement currency is selected yet.
+* A collector wins a USD listing. No settlement currency is selected yet.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<winning bid>` | USD101.00 (10100 minor units) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winning bid | USD101.00 | (10100 minor units) |
 
 **Steps:**
 
@@ -164,14 +347,14 @@
 
 **Pre-conditions:**
 
-* A winner has chosen a settlement currency and an operator is ready to send the invoice.
+* A winner has chosen `<settlement_currency>` for an order won at `<winning_bid>`, and an operator is ready to send its invoice.
 
 **Test data:**
 
-| Settlement currency | Winning bid | Payment reminder total |
-| --- | --- | --- |
-| USD | Any USD winning bid | 312000 minor units in USD |
-| HKD | 10100 minor units in USD | 103100 minor units in HKD |
+| `<settlement_currency>` | `<winning_bid>` | `<payment_reminder_total>` | Fixture notes |
+| --- | --- | --- | --- |
+| USD | USD2,600 | USD3,120 | USD winning bid is representative; any positive USD winning bid with this invoice fixture remains in the same partition; `<payment_reminder_total>`: 312000 minor units in USD |
+| HKD | USD101 | HKD1,031 | Fixed source fixture; `<winning_bid>`: 10100 minor units in USD; `<payment_reminder_total>`: 103100 minor units in HKD |
 
 **Steps:**
 
@@ -179,7 +362,7 @@
 
 **Expected Results:**
 
-* The amount is the row's payment-reminder total in its settlement currency.
+* The reminder amount is `<payment_reminder_total>` and uses `<settlement_currency>`.
 * The letter does not repeat the USD winning bid.
 * Under HKD settlement, the letter names no conversion rate.
 
@@ -201,17 +384,17 @@
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a pending or expired invoice.
+* customer(winner, holds `<winner_order_1>`) has a pending or expired invoice.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | An order whose invoice an operator can reissue |
+| winner_order_1 | An auction order whose invoice an operator can reissue |
 
 **Steps:**
 
-1. admin(operator) reissues the invoice for `<lot_1>`.
+1. admin(operator) reissues the invoice on `<winner_order_1>`.
 2. Open the winner's inbox and the send log.
 
 **Expected Results:**
@@ -237,13 +420,13 @@
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a pending unpaid invoice.
+* customer(winner, holds `<winner_order_2>`) has a pending unpaid invoice.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | An order with a pending invoice and a known payment deadline |
+| winner_order_2 | An auction order with a pending invoice and a known payment deadline |
 
 **Steps:**
 
@@ -252,7 +435,7 @@
 
 **Expected Results:**
 
-* One final-notice letter for `<lot_1>`.
+* One final-notice letter for `<winner_order_2>`.
 * No letter waits until the deadline transition itself.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-tvz rev=1 covers=g10.auction-notifications-order.SC-75a,g10.auction-notifications-order.SC-3bl,g10.auction-notifications-order.SC-xae,g10.auction-notifications-order.SC-h6q,g10.auction-notifications-order.SC-1x0,g10.auction-notifications-order.SC-ekh,g10.auction-notifications-order.SC-oc3 -->
@@ -273,13 +456,13 @@
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) pays on day 2 after the invoice was issued.
+* customer(winner, holds `<winner_order_3>`) pays on day 2 after the invoice was issued.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | An order whose invoice was issued two days ago and is now paid |
+| winner_order_3 | An auction order whose invoice was issued two days ago and is now paid |
 
 **Steps:**
 
@@ -308,13 +491,13 @@
 
 **Pre-conditions:**
 
-* The payment-received letter for `<lot_1>` has already been sent.
+* The payment-received letter for `<winner_order_4>` has already been sent.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | An order whose payment-received letter was sent |
+| winner_order_4 | An auction order whose payment-received letter was sent |
 
 **Steps:**
 
@@ -345,20 +528,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email and the letter in the row is due.
+* customer(winner, holds `<winner_order_5>`) has a registered email and `<letter_kind>` is due for `<winner_order_5>`.
 
 **Test data:**
 
-| Letter | Fixture |
+| `<letter_kind>` | `<winner_order_5>` |
 | --- | --- |
-| Setup overdue | A won lot whose setup overdue letter is due |
-| Payment overdue | A won lot whose payment overdue letter is due |
-| Order cancelled | A won lot whose order cancelled letter is due |
-| Delivered | A won lot whose delivered letter is due |
+| Setup overdue | An auction order whose setup overdue letter is due |
+| Payment overdue | An auction order whose payment overdue letter is due |
+| Order cancelled | An auction order whose order cancelled letter is due |
+| Delivered | An auction order whose delivered letter is due |
 
 **Steps:**
 
-1. Wait for the letter named in the row for `<lot_1>`.
+1. Wait for the letter of type `<letter_kind>` for `<winner_order_5>`.
 2. Open the letter.
 3. Read the letter body and the Contact Us link.
 
@@ -386,18 +569,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email and can open `<the winner's auction order url>` for the same payment-overdue order.
+* customer(winner, holds `<winner_order_6>`) has a registered email and can open `<the winner's auction order url>` for the same payment-overdue order.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A won lot in Payment Overdue with a payment overdue letter already sent |
-| `<invoice_id>` | The issued invoice id on that order |
+| winner_order_6 | An auction order in Payment Overdue with a payment overdue letter already sent |
+| invoice_id | The issued invoice id on that order |
+
+| Field | Value |
+| --- | --- |
+| the winner's auction order url | The winner order URL for the seeded order in this case; bind its URL only |
 
 **Steps:**
 
-1. Open the payment overdue letter for `<lot_1>` and read the Contact Us `mailto:` subject and body.
+1. Open the payment overdue letter for `<winner_order_6>` and read the Contact Us `mailto:` subject and body.
 2. Open `<the winner's auction order url>` for that order.
 3. Click Contact Us and read Subject and Message.
 
@@ -424,17 +611,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) opens a payment overdue letter in a browser mail surface that does not hand off to a system mail client.
+* customer(winner, holds `<winner_order_7>`) opens a payment overdue letter in a browser mail surface that does not hand off to a system mail client.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A won lot whose payment overdue letter is open |
+| winner_order_7 | An auction order whose payment overdue letter is open |
 
 **Steps:**
 
-1. Open the payment overdue letter for `<lot_1>`.
+1. Open the payment overdue letter for `<winner_order_7>`.
 2. Read the letter body without activating Contact Us.
 
 **Expected Results:**
@@ -461,20 +648,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email and the letter in the row is the latest for that order.
+* customer(winner, holds `<winner_order_8>`) has a registered email and `<letter_kind>` is the latest letter for `<winner_order_8>`.
 
 **Test data:**
 
-| Letter | `<lot_1>` |
+| `<letter_kind>` | `<winner_order_8>` |
 | --- | --- |
-| Setup overdue | A won lot whose setup overdue letter is open |
-| Payment overdue | A won lot whose payment overdue letter is open |
-| Order cancelled | A won lot whose order cancelled letter is open |
-| Delivered | A won lot whose delivered letter is open |
+| Setup overdue | An auction order whose setup overdue letter is open |
+| Payment overdue | An auction order whose payment overdue letter is open |
+| Order cancelled | An auction order whose order cancelled letter is open |
+| Delivered | An auction order whose delivered letter is open |
 
 **Steps:**
 
-1. Open the letter named in the row for `<lot_1>`.
+1. Open the letter of type `<letter_kind>` for `<winner_order_8>`.
 2. Inspect the Contact Us href.
 
 **Expected Results:**
@@ -501,20 +688,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email.
-* An operator has recorded a partial payment on the order for `<lot_1>` and the partial-payment letter is due.
+* customer(winner) has a registered email.
+* An operator has recorded a partial payment on `<winner_order_9>` and the partial-payment letter is due.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A won lot whose partial-payment letter is due |
-| `<invoice_id>` | The current invoice id on that order |
-| `<receipt_ids>` | Receipt ids recorded so far |
+| winner_order_9 | An auction order whose partial-payment letter is due |
+| invoice_id | The current invoice id on that order |
+| receipt_ids | Receipt ids recorded so far |
 
 **Steps:**
 
-1. Wait for the partial-payment letter for `<lot_1>`.
+1. Wait for the partial-payment letter for `<winner_order_9>`.
 2. Open the letter.
 3. Read the letter body and the Contact Us link.
 
@@ -543,17 +730,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email.
-* `<lot_1>`'s order reads Preparing Shipment.
+* customer(winner) has a registered email.
+* `<winner_order_10>` reads Preparing Shipment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_10 | An auction order in Preparing Shipment, belonging to the winner; bind the order identifier only |
 
 **Steps:**
 
-1. Dispatch `<lot_1>`'s order with a carrier and a tracking number, and no tracker link.
+1. Dispatch `<winner_order_10>` with a carrier and a tracking number, and no tracker link.
 2. Open the winner's inbox and read the shipped letter.
 
 **Expected Results:**
 
-* The primary action is View order, and it opens `<lot_1>`'s Winner Order.
+* The primary action is View order, and it opens `<winner_order_10>`'s Winner Order.
 * The tracking number reads as plain text, not a link.
 * The letter offers no track-and-trace action.
 
@@ -575,14 +768,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A sent invoice remains unpaid; its order has the row's settlement currency.
+* A sent invoice remains unpaid; its order uses `<settlement_currency>` and has invoice total `<reminder_amount>`.
 
 **Test data:**
 
-| Settlement currency | Reminder amount |
-| --- | --- |
-| USD | Any amount in USD |
-| HKD | 103100 minor units in HKD |
+| `<settlement_currency>` | `<reminder_amount>` | Fixture notes |
+| --- | --- | --- |
+| USD | USD3,120 | Representative USD amount; any positive USD amount remains in the same partition; `<reminder_amount>`: 312000 minor units in USD |
+| HKD | HKD1,031 | Fixed source fixture; `<reminder_amount>`: 103100 minor units in HKD |
 
 **Steps:**
 
@@ -590,7 +783,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Any amount in the reminder uses the row's settlement currency.
+* Any amount in the reminder uses `<settlement_currency>`.
 * The reminder includes no USD winning bid under HKD settlement.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-vxo rev=2 covers=g10.auction-notifications-order.SC-16k -->
@@ -611,14 +804,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A winner has an order with the row's settlement currency and a recorded payment.
+* A winner has an order using `<settlement_currency>` with a recorded payment of `<amount_received>`.
 
 **Test data:**
 
-| Settlement currency | Amount received |
-| --- | --- |
-| USD | 312000 minor units in USD |
-| HKD | 103100 minor units in HKD |
+| `<settlement_currency>` | `<amount_received>` | Fixture notes |
+| --- | --- | --- |
+| USD | USD3,120 | `<amount_received>`: 312000 minor units in USD |
+| HKD | HKD1,031 | `<amount_received>`: 103100 minor units in HKD |
 
 **Steps:**
 
@@ -626,7 +819,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The received amount and receipt use the row's settlement currency.
+* The received amount and receipt use `<settlement_currency>`.
 * Under HKD settlement, neither prints the USD winning bid or a conversion rate.
 
 <!-- trace:case id=g10.auction-notifications-order.TC-l6s rev=2 covers=g10.auction-notifications-order.SC-0e7 -->
@@ -647,20 +840,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a pending invoice in HKD.
-* admin(operator) can reissue the invoice for `<lot_1>`.
+* customer(winner) has a pending invoice in HKD.
+* admin(operator) can reissue the invoice on `<winner_order_11>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order with a pending HKD invoice, for a USD lot won at `<winning bid>` |
-| `<winning bid>` | USD2,400 (range: >0 minor units) |
-| `<new invoice total>` | USD131.21 (13121 minor units) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_11 | An auction order with a pending HKD invoice, for a USD listing won at `<winning bid>` | · |
+| winning bid | USD2,400 | (range: >0 minor units) |
+| new invoice total | USD131.21 | (13121 minor units) |
 
 **Steps:**
 
-1. admin(operator) changes the settlement currency of `<lot_1>` to USD and reissues the invoice.
+1. admin(operator) changes the settlement currency of `<winner_order_11>` to USD and reissues the invoice.
 2. Open the winner's inbox and the send log.
 
 **Expected Results:**
@@ -688,15 +881,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`) has a registered email and a pending unpaid invoice in HKD, for a USD lot won at `<winning bid>`.
+* customer(winner, holds `<winner_order_12>`) has a registered email and a pending unpaid invoice in HKD, for a USD listing won at `<winning bid>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<lot_1>` | An order with a pending HKD invoice and a known payment deadline |
-| `<winning bid>` | USD2,400 (range: >0 minor units) |
-| `<invoice total>` | HKD1,031.00 (103100 minor units) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| winner_order_12 | An auction order with a pending HKD invoice and a known payment deadline | · |
+| winning bid | USD2,400 | (range: >0 minor units) |
+| invoice total | HKD1,031.00 | (103100 minor units) |
 
 **Steps:**
 
@@ -705,7 +898,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* One payment overdue letter exists for `<lot_1>`.
+* One payment overdue letter exists for `<winner_order_12>`.
 * It names `<invoice total>` as the outstanding amount in HKD.
 * It names no USD amount and no conversion rate.
 
@@ -727,7 +920,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An internal bidder wins and its order is created automatically at lot close.
+* An internal bidder wins and its order is created automatically at listing close.
 
 **Steps:**
 
