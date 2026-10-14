@@ -27,8 +27,8 @@ entry.
 take all brand, navigation, locale, and destination content through props.
 
 **No application state** - It SHALL NOT fetch, route, or read application
-session stores itself - the application supplies `session` as `"signed-out"` or
-`"signed-in"`.
+session stores itself - the application supplies `session` as `"pending"`,
+`"signed-out"`, or `"signed-in"`.
 
 **Signed out** - When `session` is `"signed-out"`, `SiteHeader` SHALL render a
 primary Sign In button (not the account icon) and SHALL invoke the supplied
@@ -41,6 +41,13 @@ supplied, the menu SHALL show `copy.accountMenuLabel` in its place and no
 avatar. The items SHALL include at minimum Sign Out. The
 menu SHALL NOT include KYC. Activating each item SHALL invoke the matching
 supplied handler.
+
+**Pending** - When `session` is `"pending"`, `SiteHeader` SHALL render a
+design-system `Skeleton` in the account entry's place: round, 40 CSS pixels
+across - the account icon's footprint - at every breakpoint. It SHALL render
+no Sign In button, no account icon, and no account menu. The placeholder SHALL
+NOT take focus, SHALL NOT invoke any supplied handler when activated, and SHALL
+expose no role, name, or busy state to assistive technology.
 
 **Sign Out label** - The account menu's sign-out item SHALL read "Sign Out".
 
