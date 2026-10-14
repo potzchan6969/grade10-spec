@@ -68,4 +68,4 @@
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| With Guest Orders | Guest orders under the member's email among their orders; one in progress earns when it completes | `g10.store-order-history.US4` |
+| With Guest Orders | Guest orders under the member's email among their orders; none earns points | `g10.store-order-history.US4` |

@@ -61,10 +61,9 @@ the order this browser last sent to Shopify.
 - **Order confirmed** - the guest's page is the order page; the
   placed-on line names the email the receipt went to — Placed on {date}.
   Receipt sent to {email}.
-- **Create an account** - a persistent toast on the order page asks to
-  add this order to an account - Sign in to earn points for this order, or
-  once it has completed, Sign in to see it with your other orders - with
-  one Sign in action; closing it hides it for this order
+- 🚧 **Create an account** - a persistent toast on the order page asks to
+  add this order to an account - Sign in to see it with your other
+  orders - with one Sign in action; closing it hides it for this order
 - **Joined at payment** - a guest order that joined an account at payment
   is that member's order, so the toast asks to sign in to see it -
   [Checkout](/p/grade10-site/store/checkout#guest-checkout)
@@ -102,8 +101,8 @@ put toward a purchase — [Histories](/p/grade10-site/loyalty/profile#histories)
 completes, then Points Earned — [Points](/p/grade10-site/loyalty/points)
 
 🚧 **No points section** — an order that will not earn shows no points
-section at all: one canceled or refunded in full, a guest order linked only
-after it completed, or a guest order with no owner
+section at all: one canceled or refunded in full, or a guest order, joined
+to an account or not
 
 **Amount marks** — summary lines use `$` with two decimals (`$1,770.00`),
 except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
@@ -129,6 +128,6 @@ except bare `$0` when the amount is zero; Total keeps `HK$` with two decimals
 | Order link for every order | Decided | Every order email's View order button carries the private link, member orders included. A forwarded email lets a holder see a member's order — accepted; the page shows no account facts. Decided 2026-10-13. | Product |
 | Post-checkout prompt | Decided | The account prompt lives on the Grade10 order page after checkout, not on a Shopify Thank-you extension. Decided 2026-10-13. | Product |
 | Another email | Decided | Only a sign-in that proves the order's email adds it — a magic link to that email or a Google account under it; a Google account under another email signs the buyer in and adds nothing, and the toast offers a magic link to the order's email. Decided 2026-10-13. | Product |
-| Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, linked after it completed, or a guest order with no owner — shows no points section at all. Decided 2026-10-13. | Product |
+| Points section | Decided | An order that will earn shows Points to Earn before completion and Points Earned after; an order that will not earn — canceled or fully refunded, or a guest order, joined or not — shows no points section at all. Decided 2026-10-13; a joined guest order earns nothing from 2026-10-14. | Product |
 | Shipping step label | Decided | The delivery step reads Shipping (in progress), matching winner orders; the status badge keeps the status name Shipped. Decided 2026-10-13. | Product |
 :::

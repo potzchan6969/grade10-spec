@@ -107,7 +107,8 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 - `createCheckout` takes a user id and an email as arguments and asks nothing about where they came from, so the order machine is already identity-agnostic
 - Three things make checkout a signed-in act: `authedProcedure` on the store's checkout procedures, `orders.user_id` being non-null, and `order_events.user_id` — which is the one that leaves the building, since it is the only identity loyalty and analytics ever see
-- A guest checkout is an order marked guest: no `user_id` at checkout, so no account is minted and loyalty never sees it. The email Shopify's page took is kept on the order. The order gets its owner from the account whose proven email it was placed under - at payment when that account exists, otherwise when a sign-in proves that email, by a magic link to it or a Google account under it - at which point loyalty hears of it: an order still in progress earns when it completes, one already complete earns nothing
+- A guest checkout is an order marked guest: no `user_id` at checkout, so no account is minted and loyalty never sees it. The email Shopify's page took is kept on the order. The order gets its owner from the account whose proven email it was placed under - at payment when that account exists, otherwise when a sign-in proves that email, by a magic link to it or a Google account under it
+- 🚧 A guest order earns nothing, joined or not: loyalty never hears of it
 - Matching a provider's customer by email stays out: a buyer types whatever they like into a hosted checkout, so only an account's proven email ever links a guest order
 - The checkout URL is a bearer link: Shopify binds no session to it, so whoever holds it can pay, and the order settles to whoever created the cart. Nothing available here closes that, and recording the payer's email would not — it changes no ownership and no read path
 

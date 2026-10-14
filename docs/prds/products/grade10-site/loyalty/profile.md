@@ -49,9 +49,10 @@ A sale rung up at the till as a guest is not lost: it earns once it has an
 owner. An order placed through the site's guest checkout gets its owner from the
 account whose proven email it was placed under: at payment when that account
 exists, otherwise when a sign-in proves that email, by the magic link to it or
-a Google account under it. One still in progress earns when it completes; one
-already complete earns nothing -
+a Google account under it -
 [Checkout](/p/grade10-site/store/checkout#guest-checkout).
+
+🚧 **No points** - a site guest order earns nothing, joined or not.
 
 - **Customer on the sale** — a guest who gave the shop their email has a
   Shopify customer; when an account with that verified email is paired to
