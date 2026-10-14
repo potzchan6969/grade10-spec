@@ -538,6 +538,7 @@ Runs once per row of **Test data**.
 | `grade10-site-site-page-shell-SC-73` | US9-TC8-1 asserts the minute; no case asserts the answer after it | Uncovered: US9-TC8-1 releases the read (QA1) |
 | `grade10-site-site-page-shell-SC-74` | `grade10-site-site-page-shell-US9-TC11-1` asserts every THEN | Reached |
 | `Stable layout` feature-set leaf | Reworded by the coordinator after QA1 to name the language and search controls (Q10); no journey moved | No case reads a feature-set line; none moves |
+| `Account placeholder` feature-set leaf | Reworded by the coordinator after acceptance review to say a first read that fails shows Sign In and a later read keeps the entry shown unless it finds a different session (Q4, Q8); no journey moved | US9-TC7-1, US9-TC9-1, US9-TC10-1 and US9-TC11-1 already agree; none moves |
 | Raised: a later read that fails | Landed as Q8 | `grade10-site-site-page-shell-US9-TC11-1` walks it; settled above |
 | Raised: Cart before the first answer | Landed as Q9: not this change's | No case asserts what Cart opens before the first answer; settled above |
 | Raised: which controls move | Landed as Q10 | The feature-set leaf names them and `grade10-site-site-page-shell-SC-05` does not yet (contradicted readings); settled above |
