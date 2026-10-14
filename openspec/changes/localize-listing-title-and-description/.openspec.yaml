@@ -1,0 +1,4 @@
+schema: grade10-planning
+created: 2026-10-14
+purpose_rewritten:
+  shared/localization: "the durable sentence says anything a seller typed renders in its source language; this change makes an auction listing's title and description the one exception, which the Purpose now says"

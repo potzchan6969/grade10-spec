@@ -46,6 +46,14 @@ What a listing carries, from the operator's form to the card.
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
+- **Language of the title and description** — the card, the lot page and its
+  share metadata show a listing's title and description in the language the
+  page is read in, where the operator wrote one; otherwise the English
+  originals. A Simplified Chinese reader of a lot with only a Traditional
+  Chinese text sees English —
+  [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+### Listing Facts
+
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
   [Auction Management](/p/grade10-admin/auction/management#listings)
