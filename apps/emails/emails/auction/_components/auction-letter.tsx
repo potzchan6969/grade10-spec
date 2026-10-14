@@ -186,6 +186,7 @@ export function AuctionLetter({
         secondaryLabel={secondaryCtaLabel}
       />
       <EmailFooter
+        brandName={brandName}
         canUnsubscribe={canUnsubscribe}
         muteUrl={taggedMute}
         whyYouGotThis={whyYouGotThis}

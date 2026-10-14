@@ -4,6 +4,8 @@ import { Hr, Link, Text } from "react-email";
 export type EmailFooterProps = {
   /** Why the reader received the letter. Omit for a footer without it. */
   whyYouGotThis?: string;
+  /** The brand the copyright line names. */
+  brandName?: string;
   canUnsubscribe?: boolean;
   /** Signed-in mute surface for this auction's email alerts. */
   muteUrl?: string;
@@ -22,7 +24,8 @@ export type EmailFooterProps = {
 };
 
 /** The line every footer ends with, the same in every language. */
-export const COPYRIGHT = "© 2026 Grade10. All rights reserved.";
+export const copyrightLine = (brandName: string) =>
+  `© 2026 ${brandName}. All rights reserved.`;
 
 const PLACEHOLDER = /(\[[^\]]+\])/;
 
@@ -41,6 +44,7 @@ function marked(line: string): ReactNode[] {
 
 export function EmailFooter({
   whyYouGotThis,
+  brandName = "Grade10",
   canUnsubscribe = false,
   muteUrl,
   unwatchUrl,
@@ -69,7 +73,7 @@ export function EmailFooter({
           {marked(line)}
         </Text>
       ))}
-      <Text className="m-0 text-sm leading-base text-fg-3">{COPYRIGHT}</Text>
+      <Text className="m-0 text-sm leading-base text-fg-3">{copyrightLine(brandName)}</Text>
     </>
   );
 }
