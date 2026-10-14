@@ -85,7 +85,7 @@ function holdAction(
     id,
     action: {
       ...action,
-      onClick: (event) => {
+      onClick: (event: Parameters<Action["onClick"]>[0]) => {
         if (running) {
           event.preventDefault();
           return;
@@ -97,7 +97,11 @@ function holdAction(
         sonnerToast.loading(message, {
           id,
           icon: undefined,
-          action: { ...action, onClick: (again) => again.preventDefault() },
+          action: {
+            ...action,
+            onClick: (again: Parameters<Action["onClick"]>[0]) =>
+              again.preventDefault(),
+          },
         });
         work.then(
           () => sonnerToast.dismiss(id),

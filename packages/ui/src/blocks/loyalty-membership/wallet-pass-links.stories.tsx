@@ -55,7 +55,7 @@ export const AddingOne: Story = {
     // tap minting a second pass and voiding the first.
     await expect(
       canvas.getByRole("button", { name: "Add to Google Wallet" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
     ).toBeEnabled();
@@ -187,7 +187,7 @@ export const EndingOne: Story = {
     const canvas = within(canvasElement);
     await expect(
       canvas.getByRole("button", { name: "End your Google Wallet pass" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "End your Apple Wallet pass" }),
     ).toBeEnabled();
@@ -214,7 +214,7 @@ export const EachWalletItsOwnState: Story = {
     const canvas = within(canvasElement);
     await expect(
       canvas.getByRole("button", { name: "End your Google Wallet pass" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
     ).toBeDisabled();

@@ -77,7 +77,10 @@ export const Default: Story = {
       "2",
     );
     await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
-    expect(canvas.getByRole("button", { name: "Adding…" })).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Adding…" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
     expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toBeDisabled();
     // The stepper takes its reset value in an effect, a render after the
     // button's label returns, so both are waited for.
@@ -131,7 +134,10 @@ export const Loading: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Adding…" })).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Adding…" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
     expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toBeDisabled();
   },
 };
