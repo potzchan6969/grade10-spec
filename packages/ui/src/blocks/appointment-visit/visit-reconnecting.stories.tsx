@@ -35,11 +35,13 @@ export const Trying: Story = {
 
 /** A refused retry says why beside Try now, which is pressable again. */
 export const RetryFailed: Story = {
-  args: { retryFailed: "Still no signal. Check your connection." },
+  args: {
+    retryFailed: "Still can't reach us. Check your connection and try again.",
+  },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("alert")).toHaveTextContent(
-      "Still no signal. Check your connection.",
+      "Still can't reach us. Check your connection and try again.",
     );
     await userEvent.click(canvas.getByRole("button", { name: "Try now" }));
     expect(args.onRetry).toHaveBeenCalledTimes(1);

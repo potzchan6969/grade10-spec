@@ -485,6 +485,7 @@
       "staff": "任何门店的职员都可以用你的电话、电邮或姓名找到你的预约。"
     },
     "reconnecting": "重新连线中…",
+    "retryFailed": "仍未能连线，请检查网络后再试。",
     "offline": "最后更新 {time}。此页会自动重试。",
     "tryNow": "立即重试",
     "trying": "重试中…",
@@ -570,6 +571,7 @@
     "leaveFailed": "未能让你离开轮候，请再试。",
     "bookTime": "预约时间",
     "reconnecting": "重新连线中…",
+    "retryFailed": "仍未能连线，请检查网络后再试。",
     "offBody": "最后更新 {time}。你的位置会保留；如期间叫号，我们会为你保留 10 分钟。",
     "asOf": "截至 {time}",
     "offLine": "恢复连线后会再显示轮候时间。",
