@@ -18,11 +18,12 @@ verified. Below the bar, checkout has no identity gate.
 ### Requirement: A checkout whose goods reach the identity bar needs a verified buyer
 
 The system SHALL price the basket's goods live, before any order is made, and
-compare the goods' value before any discount to the brand's bar. At or above
+compare the goods' value before any discount to the order bar
+`grade10-site/store/account-identity` states. At or above
 the bar it SHALL proceed only for a signed-in buyer whose standing is
 `verified` on the day of the checkout; it SHALL refuse any other signed-in
-buyer, naming the bar and the goods' value and sending them to their account
-to verify; and it SHALL refuse a guest, asking them to sign in. A refused
+buyer, naming the bar and the goods' value and sending them to their
+verification page; and it SHALL refuse a guest, asking them to sign in. A refused
 checkout SHALL leave no order behind. Below the bar a checkout SHALL ask
 nothing about identity. On a brand that deploys no identity store the bar
 SHALL not exist.
@@ -35,7 +36,7 @@ SHALL not exist.
   basket whose goods are worth the bar or more
 - **WHEN** they check out
 - **THEN** the checkout is refused naming the bar and the goods' value, no
-  order is made, and they are sent to their account to verify
+  order is made, and they are sent to their verification page
 
 <!-- trace:scenario id=g10.commerce-commerce.SC-pw2 rev=1 -->
 #### Scenario: grade10-site-commerce-commerce-SC-27 - A verified buyer above the bar checks out

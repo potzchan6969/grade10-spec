@@ -18,8 +18,6 @@ is what the collector hears about them.
   - Twenty-three messages: one per thing worth telling, English, to the case's
     own address
   - The action link: every message opens the case at its own address
-  - Twenty-four messages: one per thing worth telling, the identity-check
-    invitation among them, English, to the case's own address
   - Silence on a draft staff opened: its expiry and its cancel send nothing
 - Reminders
   - Before the due date: a week's warning and one the day before
@@ -307,11 +305,10 @@ A number SHALL be treated as unverified.
 - **WHEN** any event decides a message
 - **THEN** it is sent by email alone
 
-### Requirement: The vault sends twenty-four messages, each about the case it names
+### Requirement: The vault sends twenty-three messages, each about the case it names
 
-The messages SHALL be exactly these twenty-four, in English, addressed to the
-case's own address, each carrying an action link to the case — except the
-invitation to verify, whose link opens the identity check:
+The messages SHALL be exactly these twenty-three, in English, addressed to the
+case's own address, each carrying an action link to the case:
 
 | Group | Messages |
 | --- | --- |
@@ -322,7 +319,6 @@ invitation to verify, whose link opens the identity check:
 | Falling due | due soon, overdue, forfeiture notice with its cure date |
 | The end of a case | declined, cancelled, request untouched, request unbooked, request closed after a missed visit |
 | The paper | the signed documents, attached |
-| The identity check | the invitation to verify before the visit |
 
 <!-- trace:scenario id=g10.vault-collector-notifications.SC-nte rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-03 - The advance names the due date
@@ -338,19 +334,11 @@ invitation to verify, whose link opens the identity check:
 - **WHEN** a money record is taken back
 - **THEN** the collector is told, with the amount and what the case now stands at, and never with who recorded it
 
-<!-- trace:scenario id=g10.vault-collector-notifications.SC-kz4 rev=1 -->
-#### Scenario: grade10-site-vault-collector-notifications-SC-20 - The invitation is one of the set
-**Serves:** grade10-site-vault-collector-notifications-US-06 - the collector verifying at home before the visit they booked
-
-- **GIVEN** a case with a visit booked and no identity to reuse
-- **WHEN** its collector is invited to verify
-- **THEN** the invitation is one of the twenty-four messages this table names, sent to the case's own address like any other
-
 <!-- trace:scenario id=g10.vault-collector-notifications.SC-ayk rev=1 -->
 #### Scenario: grade10-site-vault-collector-notifications-SC-34 - The link opens the case the message is about
 **Serves:** grade10-site-vault-collector-notifications-US-02 - the collector going straight from the message to the case rather than asking the shop
 
-- **WHEN** a collector opens the action link on any message but the invitation to verify
+- **WHEN** a collector opens the action link on any message
 - **THEN** the case the message is about opens at its own address
 
 ### Requirement: Every message carries the case line and the sender's footer
@@ -472,23 +460,6 @@ The written notice is evidence, so it carries more than a reminder does.
 
 - **WHEN** a forfeiture notice is sent
 - **THEN** it says that taking the item is a person's decision, and that no further reminder follows it
-
-### Requirement: The invitation to verify names the visit it prepares for
-
-The one message the vault sends a collector who has no identity on file yet.
-
-- **The facts** — the invitation SHALL table the visit's date and time, the shop it is at, and what to bring.
-- **Where its link goes** — its action link SHALL open the identity check rather than the case.
-- **The other ways** — the invitation SHALL say that the check can be done at the counter instead, and that a collector already verified need do nothing.
-
-<!-- trace:scenario id=g10.vault-collector-notifications.SC-fcf rev=1 -->
-#### Scenario: grade10-site-vault-collector-notifications-SC-31 - The invitation names the visit and opens the check
-**Serves:** grade10-site-vault-collector-notifications-US-06 - the collector verifying at home and turning up prepared
-
-- **GIVEN** a case with a visit booked and no identity on file
-- **WHEN** its collector is invited to verify
-- **THEN** the message tables the visit's date and time, the shop and what to bring
-- **AND** its action link opens the identity check rather than the case
 
 ### Requirement: A value nobody has set is bracketed outside production and refuses the act in production
 

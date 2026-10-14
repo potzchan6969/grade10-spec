@@ -3,12 +3,15 @@
 The verified identity of a person — their legal name, date of birth, document
 type, masked document number, its expiry, and a photograph of the document —
 held once and reused by every Grade10 service that needs to know who somebody
-is, so the same human is never asked for the same document twice.
+is, so the same human is never asked for the same document twice. A
+business an account acts for is held in the same store as a record of its own,
+with the fields `grade10-site/store/account-identity` names for it.
 
 A **consumer** is a Grade10 service that asks the store about a person: one
 that records identity checks and binds them to its own cases, as the vault
-does, or one that only asks whether a person is verified, as the store and
-the auction do. A **person** is the account
+does, or one that only asks whether a person is verified, as the auction does.
+The store does both: it raises checks for an account and binds them, and asks
+at a checkout. A **person** is the account
 `shared/auth/users` identifies, or, where a consumer's case names no account,
 the case itself — and a record made for such a case is reusable only by it. A date of birth and a document expiry are
 calendar days as `shared/dates-and-times` defines them, judged in the
@@ -19,7 +22,7 @@ platform's UTC day.
 - What a record holds
   - Identity fields: the name a document prints, the day a person was born, and what proved it
   - Provenance: which consumer recorded the check and who performed it, so a reader can weigh it
-  - Provider findings: each check a verification provider ran, under the provider's own name, and whether it passed
+  - Provider findings: each check a verification provider ran, under the provider's own name, and whether it passed; screening as matched or clear
 - What never lands
   - Document number: only a mask a person is shown and a keyed digest a repeat is recognised by
   - The person's face: a provider may capture one; Grade10 keeps the finding, never the image
@@ -29,7 +32,7 @@ platform's UTC day.
 - Refusals
   - Age and validity: an adult, holding a document still valid at the instant the check is applied
 - Evidence
-  - Held by Grade10: one image of the document, in Grade10's own store, before the identity is readable
+  - Held by Grade10: one image of the document, or for a business one registration document as an image or a PDF, in Grade10's own store, before the record is readable
 - Erasure
   - Two clocks: the consumer's release commands the provider to erase its copy, and a standing window erases it anyway
 
@@ -39,7 +42,8 @@ platform's UTC day.
 
 The system SHALL hold a verified identity as a record of one identity check,
 carrying these fields. An operator's own note about the check MAY be held
-beside them and SHALL NOT be returned to any consumer.
+beside them and SHALL NOT be returned to any consumer. A business record SHALL
+hold no person field.
 
 | Field | Meaning |
 | --- | --- |
@@ -50,14 +54,14 @@ beside them and SHALL NOT be returned to any consumer.
 | Document number, masked | What a person is shown in place of the number |
 | Document number, digest | A keyed digest, so a repeat of the same document is a question that can be asked |
 | Document expiry | The day the document stops being valid, or absent for one that never expires |
-| Evidence | One image of the document, held by Grade10 |
+| Evidence | One image of the document, held by Grade10; for a business, one registration document as an image or a PDF |
 | Recorded by consumer | Which consumer's surface the check was made on |
 | Method | Whether the document was seen in person or as an uploaded scan |
 | Provider | Who performed the check — Grade10 staff, or a named verification provider |
 | Provider reference | The provider's own identifier for the check, absent for a check Grade10 staff performed |
 | Performed by | The staff member who checked, or, for a provider's check, the person who asked for it |
 | Performed at | When the check was decided — the staff member's clock, or the provider's decision instant |
-| Provider findings | Each check the provider ran, under the provider's own name, and whether it passed or failed; absent for a check Grade10 staff performed |
+| Provider findings | Each check the provider ran, under the provider's own name, and whether it passed or failed, with screening as `matched` or `clear`; absent for a check Grade10 staff performed |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-01 - A staff check names the staff member who made it
 **Serves:** What a record holds - a staff check names the staff member who made it
@@ -227,7 +231,8 @@ of birth and expiry rather than on the provider's verdict.
 
 ### Requirement: Every verified identity names one document image Grade10 holds
 
-The system SHALL store one image of the document the check was made against, in
+The system SHALL store one image of the document the check was made against,
+or for a business one registration document as an image or a PDF, in
 Grade10's own evidence store, and SHALL NOT hold a verified identity that names
 none. Where a verification provider performed the check, that image SHALL be
 fetched into that store before the identity becomes readable. The capture of the
@@ -287,7 +292,7 @@ than the store accepts — SHALL leave the check declined rather than retried.
 
 The system SHALL record, for a check a verification provider performed, each
 check the provider ran under the provider's own name for it and whether it
-passed or failed — nothing dropped for want of a translation, and nothing the
+passed or failed, with screening as `matched` or `clear` - nothing dropped for want of a translation, and nothing the
 provider attached to a finding beyond its name and outcome — and SHALL make
 them readable to an operator reading the case, without asking the provider. A
 declined check that produced no record SHALL keep its findings on the check.

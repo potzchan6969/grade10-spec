@@ -1,10 +1,11 @@
 ## Purpose
 
-How a vault case gets the verified identity its agreements are signed under —
-reused from a check the collector already passed, asked for before the visit,
-landed on its own while nobody waits, or recorded by staff with the document in
-front of them. The record itself is `grade10-site/e-kyc/identity-record`; the
-check a collector walks is `grade10-site/e-kyc/hosted-verification`.
+How a vault case gets the verified identity its agreements are signed under -
+reused from a check the collector already passed, landed on its own while
+nobody waits, or recorded by staff with the document in front of them. A case
+invites nobody to a hosted check; a collector verifies from their account.
+The record itself is `grade10-site/e-kyc/identity-record`; the check a
+collector walks is `grade10-site/e-kyc/hosted-verification`.
 
 A case is **pre-custody** while its status is `draft`, `submitted`,
 `under_valuation`, `offer_made`, `accepted` or `signing`. Every other status —
@@ -13,10 +14,9 @@ and `forfeited` — is **past recording**: no identity is bound or recorded ther
 
 ## Feature set
 
-- Asking for the check
+- Getting an identity
   - Reuse first: a check the collector already passed is bound rather than asked for again
-  - At booking: a case with nothing to reuse invites its collector
-  - On demand: an operator holding `vault:operate` asks again for a case that needs one
+  - No invitation: booking a visit sends none, an operator cannot send one, and the vault's verify page is withdrawn
 - While it is out
   - Nothing waits: the case carries the state and the visit is arranged around it
   - Visible to staff: the case screen says whether an identity is on file, out, stalled, refused or lapsed
@@ -32,56 +32,52 @@ and `forfeited` — is **past recording**: no identity is bound or recorded ther
 
 ## ADDED Requirements
 
-### Requirement: A case reuses a check before it asks for one
+### Requirement: A case reuses a check the collector already passed
 
-The system SHALL, before inviting a collector, ask for that person's most recent
-verified identity and bind it when it exists and passes the refusals
-`grade10-site/e-kyc/identity-record` defines. Only a case with nothing to reuse
-SHALL invite.
+The system SHALL, when a pre-custody case books an intake visit and holds no
+verified identity, ask for that person's most recent verified identity and
+bind it when it exists and passes the refusals
+`grade10-site/e-kyc/identity-record` defines.
 
-<!-- trace:scenario id=g10.vault-identity-check.SC-m0i rev=1 -->
+<!-- trace:scenario id=g10.vault-identity-check.SC-m0i rev=2 -->
 #### Scenario: grade10-site-vault-identity-check-SC-02 - A collector already verified is not asked again
 **Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a collector holding a verified identity that is still valid
 - **WHEN** an intake visit is booked on a case of theirs with no identity
-- **THEN** that identity is bound to the case and no invitation is sent
+- **THEN** that identity is bound to the case and no check is raised
 
-### Requirement: A case asks its collector to verify when a visit is booked
+### Requirement: A case invites nobody to a hosted check
 
-The system SHALL invite the collector to complete a hosted identity check when a
-pre-custody vault case books an intake visit, holds no verified identity and has
-nothing to reuse, using the contact details the case holds. An operator holding
-`vault:operate` SHALL be able to ask for a check on such a case at any time
-before custody begins. A case holding no email address, or naming no
-person at all, SHALL be left with no check, and SHALL be reported to an operator
-rather than passing as a check nobody answered.
+The system SHALL raise no hosted check for a vault case. Booking a visit SHALL
+send no invitation, no operator SHALL be offered a way to send one, and the
+vault's own verify page SHALL be withdrawn. A collector with nothing to reuse
+verifies from their account, as `grade10-site/store/account-identity`
+defines, or at the counter.
 
-<!-- trace:scenario id=g10.vault-identity-check.SC-ryc rev=1 -->
-#### Scenario: grade10-site-vault-identity-check-SC-01 - Booking an intake visit invites the collector
+<!-- trace:scenario id=g10.vault-identity-check.SC-ryc rev=2 -->
+#### Scenario: grade10-site-vault-identity-check-SC-01 - Booking an intake visit invites nobody
 **Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a pre-custody case with no verified identity and nothing to reuse
 - **WHEN** an intake visit is booked for it
-- **THEN** the collector is invited to verify at the contact details the case
-  holds
+- **THEN** no hosted check is raised and no invitation is sent
 
-<!-- trace:scenario id=g10.vault-identity-check.SC-qcf rev=1 -->
-#### Scenario: grade10-site-vault-identity-check-SC-03 - An operator asks for a check on a case that needs one
+<!-- trace:scenario id=g10.vault-identity-check.SC-qcf rev=2 -->
+#### Scenario: grade10-site-vault-identity-check-SC-03 - An operator cannot ask for a hosted check
 **Serves:** grade10-site-vault-identity-check-US-02 - Operator records a check at the counter
 
 - **GIVEN** a pre-custody case with no verified identity and no live check
-- **WHEN** an operator holding `vault:operate` asks for one
-- **THEN** the collector is invited
+- **WHEN** an operator holding `vault:operate` opens it
+- **THEN** no move to ask for a hosted check is offered, and an attempt to ask
+  is refused
 
-<!-- trace:scenario id=g10.vault-identity-check.SC-9le rev=1 -->
-#### Scenario: grade10-site-vault-identity-check-SC-19 - A case nobody can be invited on is reported, not left silently unchecked
+<!-- trace:scenario id=g10.vault-identity-check.SC-9le rev=2 -->
+#### Scenario: grade10-site-vault-identity-check-SC-19 - The vault's verify page is withdrawn
 **Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
-- **GIVEN** a pre-custody case that names no person, or holds no email address
-- **WHEN** an intake visit is booked for it
-- **THEN** no check is raised, and an operator is told why it could not be
-  raised rather than the case reading as a check nobody answered
+- **WHEN** anyone opens `grade10.com/vault/verify`
+- **THEN** the not-found surface is shown and no check is raised
 
 ### Requirement: The case shows where its identity stands
 
