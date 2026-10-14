@@ -240,14 +240,27 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **GIVEN** `session` is `"pending"`, with `onSignIn`, Sign In copy, and a
   cart handler supplied
 - **WHEN** `SiteHeader` renders at the wide breakpoint, or below it
-- **THEN** a `Skeleton` 40 CSS pixels wide and high, with fully rounded
-  corners, sits in the account entry's place, beside the cart control
+- **THEN** a `Skeleton` sits in the account entry's place, beside the cart
+  control
+- **AND** no Sign In button, account icon control, or account menu appears
+- **AND** the other supplied controls render
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-khj rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-47 - The account placeholder takes the account icon's footprint
+**Serves:** Header controls - the application holds the account entry's place while it waits for the session
+
+- **GIVEN** `session` is `"pending"`, with `onSignIn` and a cart handler
+  supplied
+- **WHEN** `SiteHeader` renders at the wide breakpoint, or below it
+- **THEN** the `Skeleton` is 40 CSS pixels wide and high, with fully rounded
+  corners
 - **AND** its box is the same size as the account icon's when `session` is
   `"signed-in"`
-- **AND** no Sign In button, account icon control, or account menu appears
+- **AND** when `session` changes to `"signed-in"`, no other control's box
+  changes
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-z5y rev=1 -->
-#### Scenario: shared-ui-site-chrome-SC-46 - The account placeholder is silent and inert
+#### Scenario: shared-ui-site-chrome-SC-46 - The account placeholder cannot be pressed or focused
 **Serves:** Header controls - a collector who meets the placeholder by pointer, keyboard, or screen reader
 
 - **GIVEN** `session` is `"pending"`, with `onSignIn` and `onSignOut` supplied
@@ -255,5 +268,11 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
   header with the keyboard
 - **THEN** no supplied handler is invoked, and focus never lands on the
   placeholder
-- **AND** the placeholder exposes no role, name, or busy state to assistive
-  technology
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-79a rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-48 - The account placeholder is silent to assistive technology
+**Serves:** Header controls - a collector who meets the placeholder by screen reader
+
+- **GIVEN** `session` is `"pending"`
+- **WHEN** assistive technology reads the header
+- **THEN** the placeholder exposes no role, name, or busy state

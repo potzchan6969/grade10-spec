@@ -14,7 +14,7 @@ header for any brand,
 reimplementing its behavior.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-hxc rev=1 -->
-### g10.shared-site-chrome.US1-TC28: A pending session draws a placeholder in the account entry's place
+### g10.shared-site-chrome.US1-TC29: A pending session draws a placeholder in the account entry's place
 
 Runs once per row of **Test data**.
 
@@ -50,12 +50,12 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * A round placeholder sits in the account entry's place.
-* At 375 CSS pixels wide, the placeholder sits in the bar beside Cart.
+* The placeholder sits in the bar beside Cart.
 * No Sign In button and no account icon renders.
 * Cart renders in the bar, and primary navigation and language render where <viewport> places them.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-cdi rev=1 -->
-### g10.shared-site-chrome.US1-TC29: The placeholder offers nothing to press, whatever account handlers are supplied
+### g10.shared-site-chrome.US1-TC30: The placeholder offers nothing to press, whatever account handlers are supplied
 
 **Classification:**
 
@@ -87,7 +87,7 @@ Runs once per row of **Test data**.
 * Step 3: focus never rests on the placeholder.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-u5p rev=1 -->
-### g10.shared-site-chrome.US1-TC30: The placeholder is silent to assistive technology
+### g10.shared-site-chrome.US1-TC31: The placeholder is silent to assistive technology
 
 **Classification:**
 
@@ -113,11 +113,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The placeholder has no accessible name and no status role.
+* The placeholder has no role and no accessible name.
 * Nothing in the header is marked busy.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-8u7 rev=1 -->
-### g10.shared-site-chrome.US1-TC31: The placeholder takes the account icon's footprint
+### g10.shared-site-chrome.US1-TC32: The placeholder takes the account icon's footprint
 
 Runs once per row of **Test data**.
 
@@ -176,15 +176,15 @@ Runs once per row of **Test data**.
 
 | Case or scenario | Reading | Disposition |
 | --- | --- | --- |
-| `g10.shared-site-chrome.US1-TC28` | Pending at 1280 and 375 CSS pixels: a round placeholder in the account entry's place, beside Cart at 375 only, no Sign In button or account icon, and the other controls still rendering. No size, and no box against the account icon | Reached in part: the place and absence clauses of `shared-ui-site-chrome-SC-45`. Links once the footprint leaves that scenario (Dev) and the case puts the placeholder beside Cart on both rows (QA1); its other-controls result folds into that scenario |
-| `g10.shared-site-chrome.US1-TC29` | A click and a Tab pass with every account handler supplied: no handler runs, no menu or item renders, and focus never rests on the placeholder | Reached in part: `shared-ui-site-chrome-SC-46` all but its assistive-technology AND. Links once that AND is its own scenario (Dev) |
-| `g10.shared-site-chrome.US1-TC30` | No accessible name, no status role and nothing busy; the requirement says no role at all | Reached in part: the assistive-technology AND of `shared-ui-site-chrome-SC-46`. Links once that AND is its own scenario (Dev) and the case asserts no role (QA1) |
-| `g10.shared-site-chrome.US1-TC31` | Pending, then signed in, at both widths: a circle 40 CSS pixels across, the account icon's box equal to it, and every other control's box unchanged. Not beside Cart, and not the absence of Sign In and the menu | Reached in part: the footprint clauses of `shared-ui-site-chrome-SC-45`. Links once they are their own scenario (Dev); its other-boxes result folds into it |
-| `shared-ui-site-chrome-SC-45` | US1-TC28 asserts the place and US1-TC31 the footprint; neither asserts both | Uncovered as one scenario: Dev splits the footprint into its own |
-| `shared-ui-site-chrome-SC-46` | US1-TC29 asserts the inertness and US1-TC30 the silence; neither asserts both | Uncovered as one scenario: Dev splits the silence into its own |
+| `g10.shared-site-chrome.US1-TC29` | Pending at 1280 and 375 CSS pixels: a round placeholder in the account entry's place, beside Cart at 375 only, no Sign In button or account icon, and the other controls still rendering. No size, and no box against the account icon | Reached in part: the place and absence clauses of `shared-ui-site-chrome-SC-45`. Links once the footprint leaves that scenario (Dev) and the case puts the placeholder beside Cart on both rows (QA1); its other-controls result folds into that scenario |
+| `g10.shared-site-chrome.US1-TC30` | A click and a Tab pass with every account handler supplied: no handler runs, no menu or item renders, and focus never rests on the placeholder | Reached in part: `shared-ui-site-chrome-SC-46` all but its assistive-technology AND. Links once that AND is its own scenario (Dev) |
+| `g10.shared-site-chrome.US1-TC31` | No accessible name, no status role and nothing busy; the requirement says no role at all | Reached in part: the assistive-technology AND of `shared-ui-site-chrome-SC-46`. Links once that AND is its own scenario (Dev) and the case asserts no role (QA1) |
+| `g10.shared-site-chrome.US1-TC32` | Pending, then signed in, at both widths: a circle 40 CSS pixels across, the account icon's box equal to it, and every other control's box unchanged. Not beside Cart, and not the absence of Sign In and the menu | Reached in part: the footprint clauses of `shared-ui-site-chrome-SC-45`. Links once they are their own scenario (Dev); its other-boxes result folds into it |
+| `shared-ui-site-chrome-SC-45` | US1-TC29 asserts the place and US1-TC32 the footprint; neither asserts both | Uncovered as one scenario: Dev splits the footprint into its own |
+| `shared-ui-site-chrome-SC-46` | US1-TC30 asserts the inertness and US1-TC31 the silence; neither asserts both | Uncovered as one scenario: Dev splits the silence into its own |
 | `shared-ui-site-chrome-SC-15` to `shared-ui-site-chrome-SC-18`, `shared-ui-site-chrome-SC-29` to `shared-ui-site-chrome-SC-40`, `shared-ui-site-chrome-SC-42`, `shared-ui-site-chrome-SC-43` | Carried word for word with the modified requirement | Durable markers hold them |
-| Case number US1-TC28 | `restrict-auctions-by-region`'s suite adds its own `g10.shared-site-chrome.US1-TC28`. The fold replaces a durable case by its TC number, so accepting that change after this one would overwrite this US1-TC28 and inherit its marker | That change's case takes the next unused number, US1-TC32 (coordinator) |
-| Uncovered anchors | `Header controls` has US1-TC28 to US1-TC31 | None |
+| Case number US1-TC29 | `restrict-auctions-by-region`'s suite adds its own `g10.shared-site-chrome.US1-TC29`. The fold replaces a durable case by its TC number, so accepting that change after this one would overwrite this US1-TC29 and inherit its marker | That change's case takes the next unused number, US1-TC32 (coordinator) |
+| Uncovered anchors | `Header controls` has US1-TC29 to US1-TC32 | None |
 | Over-claimed cases | No marker names a scenario | None |
 | Contradicted readings | No case and scenario disagree | None |
 | Raised | The blind pass raised nothing on this capability | None |

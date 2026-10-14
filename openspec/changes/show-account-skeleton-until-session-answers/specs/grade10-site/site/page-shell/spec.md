@@ -21,8 +21,8 @@ The account entry SHALL be in one of these states:
 | State | When | Shows |
 | --- | --- | --- |
 | Placeholder | From the first paint until the session first answers, including in a page the site writes before anybody's session is read | A round placeholder 40 CSS pixels across, the account icon's footprint, in the account entry's place; nothing to focus or press, and nothing read aloud |
-| Account icon | The session's latest read returned a signed-in session | The account icon that opens the account menu |
-| Sign In | The session's latest read returned no session, or its first read failed | The primary Sign In button |
+| Account icon | The latest read that did not fail returned a signed-in session | The account icon that opens the account menu |
+| Sign In | The latest read that did not fail returned no session, or the first read failed | The primary Sign In button |
 
 **First answer** - The session first answers when its first read since the
 page loaded returns a signed-in session, returns no session, or fails. Moving
@@ -50,10 +50,27 @@ own; the placeholder SHALL show until the session answers.
 - **WHEN** a collector opens any surface the shell wraps and the session has
   not yet answered
 - **THEN** the account entry's place in the header bar holds a round
-  placeholder 40 CSS pixels across
+  placeholder 40 CSS pixels across, beside Cart in the compact bar when the
+  header offers Cart
 - **AND** neither Sign In nor the account icon appears
-- **AND** the placeholder cannot be focused or pressed, and assistive
-  technology reads nothing for it
+
+<!-- trace:scenario id=g10.site-page-shell.SC-gua rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-75 - The placeholder cannot be focused or pressed
+**Serves:** grade10-site-site-page-shell-US-09 - a collector who reaches the placeholder by pointer or keyboard
+
+- **GIVEN** a header showing the placeholder
+- **WHEN** the collector clicks it, or moves focus through the header with the
+  keyboard
+- **THEN** nothing opens and the address does not change
+- **AND** focus never lands on the placeholder
+
+<!-- trace:scenario id=g10.site-page-shell.SC-0lr rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-76 - Assistive technology reads nothing for the placeholder
+**Serves:** grade10-site-site-page-shell-US-09 - a collector using a screen reader before their session has answered
+
+- **GIVEN** a header showing the placeholder
+- **WHEN** assistive technology reads the header
+- **THEN** it reads nothing for the placeholder, and announces no loading
 
 <!-- trace:scenario id=g10.site-page-shell.SC-tah rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-69 - A page written before any session is read shows the placeholder
@@ -64,8 +81,15 @@ own; the placeholder SHALL show until the session answers.
   over
 - **THEN** the account entry is the placeholder
 - **AND** Sign In does not appear
-- **AND** once the scripts take the page over, the placeholder stays until the
-  session answers
+
+<!-- trace:scenario id=g10.site-page-shell.SC-i26 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-77 - The placeholder stays when the scripts take a written page over
+**Serves:** grade10-site-site-page-shell-US-09 - a collector whose browser shows the written page before the site's scripts run
+
+- **GIVEN** a written page showing the placeholder
+- **WHEN** the site's scripts take the page over before the session answers
+- **THEN** the placeholder stays in the account entry's place
+- **AND** Sign In does not appear before the session answers
 
 <!-- trace:scenario id=g10.site-page-shell.SC-31a rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-70 - A signed-in collector goes straight to the account icon
@@ -76,7 +100,6 @@ own; the placeholder SHALL show until the session answers.
 - **THEN** the account icon takes the placeholder's place
 - **AND** Sign In does not appear at any point from the first paint to the
   account icon
-- **AND** no other control in the header bar moves
 
 <!-- trace:scenario id=g10.site-page-shell.SC-qnl rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-71 - A failed session read shows Sign In
@@ -109,6 +132,8 @@ own; the placeholder SHALL show until the session answers.
   failed
 - **THEN** the header still shows the placeholder, and Sign In has not
   appeared
+- **AND** moving to another surface while the read is under way keeps the
+  placeholder
 - **AND** when the read then answers, the account icon takes the
   placeholder's place
 
@@ -122,6 +147,18 @@ own; the placeholder SHALL show until the session answers.
   appears
 - **AND** when a later read returns no session, as after signing out
   elsewhere, Sign In takes the account icon's place
+
+<!-- trace:scenario id=g10.site-page-shell.SC-nuz rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-78 - Signing in or out after the first answer does not bring the placeholder back
+**Serves:** grade10-site-site-page-shell-US-09 - a collector who signs in or out after the session has answered
+
+- **GIVEN** a header showing Sign In, or the account icon, after the session
+  first answered
+- **WHEN** the collector signs in from Sign In, or signs out from the account
+  menu
+- **THEN** the account entry changes straight to the account icon, or to Sign
+  In
+- **AND** the placeholder does not show at any point
 
 ## MODIFIED Requirements
 
@@ -159,8 +196,10 @@ the Cart control.
   account icon when signed in), in the placeholder's place
 - **AND** no other chrome control appears or disappears
 - **AND** the Cart control stays where it was
-- **AND** on a wide viewport the controls to the account entry's left move
-  left by its change in width: not at all for the account icon, and by Sign
-  In's width less 40 CSS pixels for Sign In
+- **AND** on a wide viewport the language control, and search where the site
+  answers it, move left by the account entry's change in width: not at all
+  for the account icon, and by Sign In's width less 40 CSS pixels for Sign In
+- **AND** every other control, the primary navigation and the compact bar's
+  controls included, stays where it was
 - **AND** a cart count badge that later appears for a signed-in member leaves
   the Cart control where it was

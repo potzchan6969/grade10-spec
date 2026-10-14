@@ -335,7 +335,7 @@ Runs once per row of **Test data**.
 * Step 3: sign-in opens.
 
 <!-- trace:case id=g10.site-page-shell.TC-89t rev=1 -->
-### grade10-site-site-page-shell-US9-TC8-1: A session read that never answers keeps the placeholder
+### grade10-site-site-page-shell-US9-TC8-1: A slow session read keeps the placeholder until it answers
 
 **Classification:**
 
@@ -352,7 +352,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) is on a browser whose session read is held and never answers.
+* customer(signed in) is on a browser whose session read is held until step 4 releases it.
 
 **Test data:**
 
@@ -365,11 +365,13 @@ Runs once per row of **Test data**.
 1. Navigate to <grade10 site url>.
 2. Watch the account entry for <wait>.
 3. Click Auction in the primary navigation.
+4. Release the held session read.
 
 **Expected Results:**
 
 * Step 2: the placeholder stays for the whole <wait>, and Sign In never shows.
 * Step 3: the Auction surface opens, with the placeholder still in the account entry's place.
+* Step 4: the account icon takes the placeholder's place, and Sign In never shows.
 
 <!-- trace:case id=g10.site-page-shell.TC-zmu rev=1 covers=g10.site-page-shell.SC-gmi -->
 ### grade10-site-site-page-shell-US9-TC9-1: A later session read keeps the entry already shown
