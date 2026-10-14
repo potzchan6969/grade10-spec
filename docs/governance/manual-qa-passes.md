@@ -14,6 +14,8 @@
 | Surfaces | Tier 0 on Web and Mobile, console cases on Web only · Tiers 1 and 2 on the surface the run names |
 | Mobile | a phone-sized browser for an agent · an iPhone in Safari and an Android phone in Chrome for a person |
 | Languages | Tier 0 in the default language · the bar's browse and buy cases once more in each other language |
+| Test card | Stripe's default, `4242 4242 4242 4242`, any future date and any CVC |
+| Second factor | optional on staging, so a walker signs in to the console without one |
 | Rated again | Change on every pass · Impact, Reach and depth when a capability is added, and every quarter |
 
 ## Scope
@@ -67,7 +69,7 @@ A pass ranks features, never single cases: each feature sits in one scope at one
 
 | Walker | Walks | Needs |
 | --- | --- | --- |
-| Agent | the staging site, the admin console, the shop's hosted checkout, and the console's POS till and loyalty test pages, in a browser | a tester account whose sign-in mail it can read, the staging shop's test card, an admin account with its second factor |
+| Agent | the staging site, the admin console, the shop's hosted checkout, and the console's POS till and loyalty test pages, in a browser | a tester account whose sign-in mail it can read, the test card, an admin account |
 | Person | a phone's wallet, a till device, a camera, and how a page reads and looks | the device, signed in to a tester account |
 
 - **Either, by default** — a case either walker can take is given to whoever is free; the map names the features only a person walks
@@ -77,7 +79,7 @@ A pass ranks features, never single cases: each feature sits in one scope at one
 
 ## On Staging
 
-- **Test material only** — tester accounts, the staging shop and its test card; never a real customer's data or a live card
+- **Test material only** — tester accounts, the staging shop and the test card; never a real customer's data or a live card
 - **Evidence** — every `fail` keeps a screenshot or a recording, the page address, the build, the language, the tester and the time
 - **Redacted** — email addresses, session material, payment details and checkout tokens are cut from evidence before it is shared
 - **Clean afterwards** — a coupon, a points grant or a ban the pass made is reversed, or named in the run's notes, so the next pass starts from known ground
@@ -200,7 +202,7 @@ The shop at `grade10.com/store`, and what it needs in order to sell: sign-in, me
 
 | Feature | Journeys | Depth | Impact · Reach |
 | --- | --- | --- | --- |
-| Console sign-in and its second factor | `shared/auth/sign-in` US-12 · `shared/auth/session` US-07 · US-08 | D1 | 3 · 3 |
+| Console sign-in | `shared/auth/sign-in` US-12 · `shared/auth/session` US-07 · US-08 | D1 | 3 · 3 |
 | Moving points | `grade10-site/loyalty/programme` US-05 | D1 | 3 · 3 |
 | Writing a reward | `grade10-site/loyalty/programme` US-09 | D1 | 3 · 3 |
 | Bans, roles and the audit trail | `shared/auth/users` US-02 · US-03 · `shared/auth/roles` · `shared/auth/audit` | D2 | 3 · 2 |
