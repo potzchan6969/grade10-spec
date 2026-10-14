@@ -13,7 +13,7 @@ header for any brand,
 **so that** every product surface can render a correct header without
 reimplementing its behavior.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-hxc rev=1 -->
+<!-- trace:case id=g10.shared-site-chrome.TC-hxc rev=1 covers=g10.shared-site-chrome.SC-nal -->
 ### g10.shared-site-chrome.US1-TC29: A pending session draws a placeholder in the account entry's place
 
 Runs once per row of **Test data**.
@@ -54,7 +54,7 @@ Runs once per row of **Test data**.
 * No Sign In button and no account icon renders.
 * Cart renders in the bar, and primary navigation and language render where <viewport> places them.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-cdi rev=1 -->
+<!-- trace:case id=g10.shared-site-chrome.TC-cdi rev=1 covers=g10.shared-site-chrome.SC-z5y -->
 ### g10.shared-site-chrome.US1-TC30: The placeholder offers nothing to press, whatever account handlers are supplied
 
 **Classification:**
@@ -86,7 +86,7 @@ Runs once per row of **Test data**.
 * No Profile, My Orders, My Auctions, Membership or Sign Out item renders.
 * Step 3: focus never rests on the placeholder.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-u5p rev=1 -->
+<!-- trace:case id=g10.shared-site-chrome.TC-u5p rev=1 covers=g10.shared-site-chrome.SC-79a -->
 ### g10.shared-site-chrome.US1-TC31: The placeholder is silent to assistive technology
 
 **Classification:**
@@ -116,7 +116,7 @@ Runs once per row of **Test data**.
 * The placeholder has no role and no accessible name.
 * Nothing in the header is marked busy.
 
-<!-- trace:case id=g10.shared-site-chrome.TC-8u7 rev=1 -->
+<!-- trace:case id=g10.shared-site-chrome.TC-8u7 rev=1 covers=g10.shared-site-chrome.SC-khj -->
 ### g10.shared-site-chrome.US1-TC32: The placeholder takes the account icon's footprint
 
 Runs once per row of **Test data**.
@@ -183,8 +183,24 @@ Runs once per row of **Test data**.
 | `shared-ui-site-chrome-SC-45` | US1-TC29 asserts the place and US1-TC32 the footprint; neither asserts both | Uncovered as one scenario: Dev splits the footprint into its own |
 | `shared-ui-site-chrome-SC-46` | US1-TC30 asserts the inertness and US1-TC31 the silence; neither asserts both | Uncovered as one scenario: Dev splits the silence into its own |
 | `shared-ui-site-chrome-SC-15` to `shared-ui-site-chrome-SC-18`, `shared-ui-site-chrome-SC-29` to `shared-ui-site-chrome-SC-40`, `shared-ui-site-chrome-SC-42`, `shared-ui-site-chrome-SC-43` | Carried word for word with the modified requirement | Durable markers hold them |
-| Case number US1-TC29 | `restrict-auctions-by-region`'s suite adds its own `g10.shared-site-chrome.US1-TC29`. The fold replaces a durable case by its TC number, so accepting that change after this one would overwrite this US1-TC29 and inherit its marker | That change's case takes the next unused number, US1-TC32 (coordinator) |
+| Case numbers | This suite's first case took US1-TC28, which `restrict-auctions-by-region`'s suite had already issued for its own case. The fold replaces a durable case by its TC number, so whichever change was accepted second would overwrite the other's case and inherit its marker | One of the two renumbers (coordinator); resolved in the second reading |
 | Uncovered anchors | `Header controls` has US1-TC29 to US1-TC32 | None |
 | Over-claimed cases | No marker names a scenario | None |
 | Contradicted readings | No case and scenario disagree | None |
 | Raised | The blind pass raised nothing on this capability | None |
+
+**Run:** 2026-10-14, QA2 second reading, narrow. It read the repair to the first reading and what it touches: `shared-ui-site-chrome-SC-45` narrowed to the placeholder's place, the absence of Sign In, the account icon and the menu, and the other supplied controls; `shared-ui-site-chrome-SC-47` for the footprint; `shared-ui-site-chrome-SC-46` narrowed to pointer and keyboard; `shared-ui-site-chrome-SC-48` for assistive technology; this suite's cases renumbered US1-TC29 to US1-TC32; and the tasks and lanes citing the new scenarios. Findings the repair did not touch are carried forward.
+
+| Case or scenario | Reading | Disposition |
+| --- | --- | --- |
+| `g10.shared-site-chrome.US1-TC29` | Beside Cart on both rows now: the placeholder in the account entry's place, no Sign In button or account icon, and Cart, the primary navigation and language rendering. It names no account menu, which opens only from the account icon it finds absent | Reached: covers `shared-ui-site-chrome-SC-45` |
+| `g10.shared-site-chrome.US1-TC30` | Unchanged: a click and a Tab pass invoke no handler and never focus the placeholder | Reached: covers `shared-ui-site-chrome-SC-46` |
+| `g10.shared-site-chrome.US1-TC31` | Now no role and no accessible name, with nothing busy | Reached: covers `shared-ui-site-chrome-SC-48` |
+| `g10.shared-site-chrome.US1-TC32` | Unchanged: a circle 40 CSS pixels across, the account icon's box equal to it, and every other control's box unchanged | Reached: covers `shared-ui-site-chrome-SC-47` |
+| `shared-ui-site-chrome-SC-45` to `shared-ui-site-chrome-SC-48` | Each has a case that asserts every THEN | Reached |
+| `shared-ui-site-chrome-SC-15` to `shared-ui-site-chrome-SC-18`, `shared-ui-site-chrome-SC-29` to `shared-ui-site-chrome-SC-40`, `shared-ui-site-chrome-SC-42`, `shared-ui-site-chrome-SC-43` | Untouched by the repair | Durable markers hold them, as recorded above |
+| Case numbers | `restrict-auctions-by-region` keeps US1-TC28; this suite's cases moved to US1-TC29 to US1-TC32 with their markers unchanged (`reconciliation.md`, Case numbers) | Resolved |
+| Uncovered anchors | `Header controls` has US1-TC29 to US1-TC32 | None |
+| Uncovered scenarios | Every scenario the delta adds or changes has a case | None |
+| Over-claimed cases | Each marker names one scenario its case asserts whole | None |
+| Contradicted readings | No case and scenario disagree | None |
