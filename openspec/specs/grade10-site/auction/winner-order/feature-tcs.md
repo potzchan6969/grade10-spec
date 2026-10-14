@@ -9923,3 +9923,25 @@ Runs once per row of **Test data**.
 | `TC-vwm` | Repair within US27: retain exact card row and add bank-transfer row for the same source amounts, asserting its HKD subtotal without a card fee; rev 3, covers SC-290 and SC-304. |
 | `TC-7qs` | Retain; USD-only total and absence of HKD subtotal/fee match SC-291. |
 | `TC-17a` | Retain; pre-send absence of HKD total plus USD lot-card bid match SC-292. |
+
+**Pending legacy-unknown rail coverage**
+
+The approved 2026-10-14 refinement adds a historical read partition that this
+suite does not yet claim. Existing known-rail trace markers remain unchanged.
+Before the next TCS review, parent and the store owner must issue or assign
+coverage for these behaviours:
+
+- An ordinary confirmed bank-transfer order whose rail was never recorded reads
+  as bank transfer with an unknown rail, without a default or a current Finance
+  lookup.
+- The same order preserves its confirmed setup, sent invoice amounts and
+  currency, and any stored instruction artifact. No new snapshot or guessed
+  instructions are created.
+- A new confirmation, future operator edit, first send for a confirmed order
+  with no invoice, or reissue refuses a missing or unoffered rail and accepts an
+  explicitly supported offered rail.
+
+No new scenario or case ID is created in this refinement. The existing
+known-rail cases remain proofs for known rails only; the parent/store review
+must choose an existing case to refine or issue a store-assigned case ID before
+claiming coverage.

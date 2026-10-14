@@ -308,6 +308,13 @@ on winner, In transit, Closed and All, opening on Needs action.
   every amount in USD, the bank transfer fee included; for an HKD order Grade10
   converts each line at the fixed rate and shows the operator no rate —
   [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
+- 🚧 **Historical bank rail** - An ordinary order already confirmed for bank
+  transfer may have no recorded rail. The operator reads that rail as unknown;
+  current Finance configuration is not used to guess it. The confirmed setup,
+  sent invoice amounts and currencies, and existing instruction artifact stay
+  unchanged. A future edit, first send when no invoice exists, or reissue
+  requires a currently offered rail. A new setup record also requires one, and
+  the internal or house order still follows its HKD and FPS rule
 - 🚧 **Payment Processing Fee** - a card invoice's fee is Grade10's own: the
   Stripe card rule for the order's currency, grossed up so Grade10 keeps the
   Subtotal whole, read-only with the rule it came from. With no card rule for
@@ -324,7 +331,8 @@ on winner, In transit, Closed and All, opening on Needs action.
 - 🚧 **Edit before send** — at the winner's request the operator changes the
   address, the method or both, with a reason the log keeps beside the old and
   new values; the order stays Preparing Invoice. Bank transfer is refused
-  where Grade10 holds no bank details for the order's currency
+  where Grade10 holds no bank details for the order's currency, and an
+  unrecorded historical rail must be completed with a currently offered rail
 - 🚧 **Reissue** — one action for any change after send, on a pending or
   expired invoice: address, settlement currency, payment method or rail, fee,
   shipping, insurance, tax, and the

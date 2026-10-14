@@ -966,7 +966,8 @@ an auction order in Preparing Invoice:
 
 1. Open the order and read the winner's confirmed delivery address, the
    settlement currency, the payment method the winner chose and, for bank
-   transfer, its rail, the winning bid, and the buyer's premium.
+   transfer, its recorded rail or its explicit historical unknown state, the
+   winning bid, and the buyer's premium.
 2. Enter Shipping & Handling for that address, an integer count of minor
    units of zero or more in USD.
 3. Optionally add Insurance for that address, an integer count of minor units
@@ -991,8 +992,9 @@ payment method, write a sent entry to the invoice log, and send the winner the
 payment reminder letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, when the order holds no settlement currency, or no rail for
-a bank transfer (an internal bidder's order reads its lot's USD and is sent
+delivery address, when the order holds no settlement currency, or when a new
+confirmation or future operator transition has no supported rail for a bank
+transfer (an internal bidder's order reads its lot's USD and is sent
 as `grade10-admin/auction/internal-bid` states, with no currency or rail step), when
 Shipping & Handling is missing, when Insurance or Tax is
 added at zero, when a bank transfer invoice's fee is not an
@@ -1001,6 +1003,12 @@ invoice's settlement currency (`CARD_FEE_UNSET`), or when the order total the se
 carries differs from the one Grade10 prices on receipt (`QUOTE_CHANGED`). The
 `CARD_FEE_UNSET` refusal SHALL say the card fee for that currency is not set
 and point to Payment Settings. No send SHALL need the payment provider.
+
+For an ordinary historical order already confirmed for bank transfer whose
+rail was never recorded, a first future send is allowed only after the operator
+supplies a currently offered rail. Grade10 SHALL NOT issue a rail-less invoice,
+and SHALL preserve any existing setup, sent invoice facts, bank snapshot and
+document artifacts while the order remains in the unknown read state.
 An operator without payment-processing SHALL see the send control visible and
 disabled, and Grade10 SHALL refuse the same action on the server.
 
@@ -1600,7 +1608,9 @@ currency, with every line priced from the order's USD amounts, per
 `grade10-site/auction/winner-order`, and the replaced invoice SHALL keep its own
 currency and amounts. The method and rail the new invoice carries SHALL be ones
 the new currency offers, and Grade10 SHALL refuse a reissue that keeps one it
-does not.
+does not. A confirmed ordinary historical order whose bank rail is absent may
+be read as unknown, but a reissue SHALL require a currently offered rail and
+SHALL NOT fabricate a replacement snapshot from current Finance settings.
 
 **Not while checked or paid** - Reissue SHALL NOT be offered, and SHALL be
 refused, on an invoice that is `payment_verifying` or `paid`.
@@ -1841,6 +1851,11 @@ Invoice, on the winner's request:
 **After the edit** - The order SHALL hold the new address as its snapshot and
 the new settlement currency, method and rail, and Winner Order SHALL show
 them.
+
+An ordinary historical confirmed bank order with no recorded rail may be read
+as unknown. An edit before send SHALL supply a currently offered rail before it
+can write the order; the missing historical rail is not a valid retained
+choice.
 
 **Refused** - Grade10 SHALL refuse an edit with no reason, and an edit that
 changes nothing.
@@ -2863,6 +2878,11 @@ that rail. A reopen in a currency that offers neither method SHALL still be
 allowed, and the winner then reads that payment is not yet available, with
 Contact Us, per `grade10-site/auction/winner-order`.
 
+A new recorded setup SHALL always supply a supported bank rail when the method
+is bank transfer. The historical unknown state applies only to ordinary
+confirmed rows read from existing data and does not relax the internal or house
+order HKD and FPS rule.
+
 **One order at a time** - Grade10 SHALL serialize the winner's address write,
 the reopen, the record of setup and the invoice send under the order's
 boundary, so each reads the state the one before it left.
@@ -3092,7 +3112,9 @@ for, and the quote SHALL show no rate.
 
 **The rail is named** - The quote SHALL name the payment method the winner
 chose and, for bank transfer, the rail: FPS, HK Local or International via
-SWIFT.
+SWIFT. An ordinary historical confirmed bank order with no recorded rail may
+read as bank transfer with an unknown rail until the operator supplies a
+currently offered rail for a future send.
 
 <!-- trace:scenario id=g10adm.auction-post-sale.SC-8ko rev=1 -->
 #### Scenario: grade10-admin-auction-post-sale-SC-251 - An HKD order's quote reads the converted total
