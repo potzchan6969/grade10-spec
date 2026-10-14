@@ -146,7 +146,7 @@ service.
 | Where the gate stands | Decided | At the storefront, before the auction hears of a bid. | Engineering |
 | Checkout bar | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000; only a bid asks. | Product |
 | A gate reads a standing | Decided | A product that only asks whether a person is verified reads a standing and never the record; it reads one only when the bar or a request applies. | Product |
-| Screening | Decided | Every hosted check is screened against watchlists and politically exposed people; a match waits for the provider's reviewer, decided 2026-10-13. | Owner |
+| Screening | Decided | Every hosted check is screened against watchlists and politically exposed people; a match waits for the provider's reviewer, decided 2026-10-13. An approval without every screening ready - errored, still running or missing - waits as reviewing rather than landing, decided 2026-10-14. | Owner |
 | Counter screening | ❓ Open | Whether a counter check is screened before production. | Compliance |
 | An unverified winner's invoice | ❓ Open | Whether a won lot's invoice waits for a verified winner, at the bar with the premium or on a request, before production. | Compliance |
 | Consent | Decided | Explicit, on the page that starts the check, stamped on the check; the text names the document and face check, watchlist and political-exposure screening, what is kept, reuse across Grade10, and erasure. A DPIA is completed before production; the provider's DPA governs the transfer. | Compliance |
