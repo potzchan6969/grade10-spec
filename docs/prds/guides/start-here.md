@@ -91,6 +91,9 @@ classified cases, is
   what a passing verification does not claim.
 - [Board](/in-flight) — what is moving, so a test plan is written against the
   right version.
+- [Manual QA passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
+  — what a staging pass walks first, who walks it, and the bar a release must
+  pass.
 - [Working a change](/guides/working-a-change) — the two blind readings of a
   change, and the one word that lands the requirements and the cases together.
 

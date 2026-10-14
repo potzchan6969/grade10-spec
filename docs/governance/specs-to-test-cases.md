@@ -528,5 +528,6 @@ owns selection, confirmation, printing and finalization.
 
 - [`prd-and-openspec.md`](prd-and-openspec.md) — why `spec.md` is the sole source of truth
 - [`tcs-conventions.md`](tcs-conventions.md) — how a case reads: the house style, setup recipes, and what reviews have taught
+- [`manual-qa-passes.md`](manual-qa-passes.md) — what a staging pass walks first, who walks it, and the bar a release must pass
 - [`ui-component-testing.md`](ui-component-testing.md) — the automated coverage obligation for UI components
 - `openspec/config.yaml` — Feature set, user-journeys and id rules this derivation assumes

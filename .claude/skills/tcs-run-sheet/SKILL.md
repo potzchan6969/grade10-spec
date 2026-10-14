@@ -25,6 +25,7 @@ Execution results stay in Sheets. A manifest records coverage and provenance.
 - **Changed scope** — `--changed-since <sha>` selects whole suites affected by changed specs, PRDs or suites. It cannot combine with explicit ids. It is a scope hint, not proof each case changed
 - **Eligibility** — `actual` cases, automated included. Add `--include-draft` only when requested; drafts are grey. `deprecated` never prints. Use `--exclude-automated` only when requested
 - **Judgment** — read the capability's spec, journeys, feature suite and relevant domain suite; resolve the request to explicit ids
+- **A release pass** — its tiers and its bar come from [Manual QA Passes](../../../docs/governance/manual-qa-passes.md): the bar prints by `--cases-file`, each tier as its own run
 - **Intentional exclusions** — record ids and reasons in a JSON array, `[{"id":"...","reason":"..."}]`. Several ids may use the same reason. The array removes cases from property-filter selections. An id cannot be both explicitly selected and excluded. Natural filter exclusions need no individual reason. Intentionally removing an eligible case from an explicit reprint list requires a reason
 - **Copied runs** — `--copy-run <id>` takes a merged run's ids, resolves the latest accepted cases and creates a new run. Missing or deprecated ids stop for a revised selection. The new record names its source run
 
