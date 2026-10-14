@@ -202,7 +202,10 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const body = within(document.body);
-    const currencyList = canvas.getByRole("radiogroup");
+    const currencyList = canvas.getByRole("radiogroup", {
+      name: "Settlement currency",
+    });
+    expect(currencyList).toHaveAccessibleName("Settlement currency");
     const usd = within(currencyList).getByRole("radio", { name: "USD" });
     const hkd = within(currencyList).getByRole("radio", { name: "HKD" });
     expect(usd).not.toBeChecked();
@@ -214,7 +217,11 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
     usd.focus();
     await userEvent.keyboard(" ");
     await waitFor(() => expect(usd).toBeChecked());
-    const card = canvas.getByRole("radio", { name: /^Card/ });
+    const paymentList = canvas.getByRole("radiogroup", {
+      name: "Payment method",
+    });
+    expect(paymentList).toHaveAccessibleName("Payment method");
+    const card = within(paymentList).getByRole("radio", { name: /^Card/ });
     expect(card).toHaveAttribute("aria-disabled", "true");
     expect(card).toHaveAccessibleName(/Card is not yet available in USD/);
     await userEvent.click(card);
@@ -222,8 +229,16 @@ export const ControlledSettlementControlsAndBankDialog: Story = {
 
     hkd.focus();
     await userEvent.keyboard(" ");
+    const paymentListAfterCurrencyChange = await waitFor(() =>
+      canvas.getByRole("radiogroup", { name: "Payment method" }),
+    );
+    expect(paymentListAfterCurrencyChange).toHaveAccessibleName(
+      "Payment method",
+    );
     const fps = await waitFor(() =>
-      canvas.getByRole("radio", { name: /^FPS/ }),
+      within(paymentListAfterCurrencyChange).getByRole("radio", {
+        name: /^FPS/,
+      }),
     );
     fps.focus();
     await userEvent.keyboard(" ");
