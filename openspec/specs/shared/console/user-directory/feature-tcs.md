@@ -125,22 +125,28 @@ package contract.
 
 **Pre-conditions:**
 
-* admin(holds user:list and session:list) is on <grade10 admin users url>.
-* <subject account> is signed in on <grade10 store url> and on <grade10 admin console url>, with the second factor proved, so it holds one site session and one console session.
+* admin(holds user:list and session:list) is on `<grade10 admin users url>`.
+* `<subject account>` is signed in on `<grade10 store url>` and on `<grade10 admin console url>`, with the second factor proved, so it holds one site session and one console session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account holding console access, other than the admin's |
-| `<site session secret>` | The secret of <subject account>'s site session, read in the browser that holds it |
-| `<console session secret>` | The secret of <subject account>'s console session, read in the browser that holds it |
+| subject account | An account holding console access, other than the admin's |
+| site session secret | The secret of `<subject account>`'s site session, read in the browser that holds it |
+| console session secret | The secret of `<subject account>`'s console session, read in the browser that holds it |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open the account panel for <subject account> from its row.
+1. Open the account panel for `<subject account>` from its row.
 2. Read each session entry in the panel's sessions area.
-3. Search the panel's text and markup for <site session secret> and <console session secret>.
+3. Search the panel's text and markup for `<site session secret>` and `<console session secret>`.
 
 **Expected Results:**
 
@@ -164,18 +170,22 @@ package contract.
 
 **Pre-conditions:**
 
-* admin(holds user:list and session:list) is on <grade10 admin users url>.
-* <account with no sessions> holds no session on any surface.
+* admin(holds user:list and session:list) is on `<grade10 admin users url>`.
+* `<account with no sessions>` holds no session on any surface.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<account with no sessions>` | An account holding console access, signed out of the site and the console, or whose every session an operator ended |
+| account with no sessions | An account holding console access, signed out of the site and the console, or whose every session an operator ended |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open the account panel for <account with no sessions> from its row.
+1. Open the account panel for `<account with no sessions>` from its row.
 2. Read the panel's sessions area.
 
 **Expected Results:**
@@ -207,14 +217,14 @@ package contract.
 
 | Field | Value |
 | --- | --- |
-| `<first session secret>` | A secret the console holds for the first session and does not supply |
-| `<second session secret>` | A secret the console holds for the second session and does not supply |
+| first session secret | A secret the console holds for the first session and does not supply |
+| second session secret | A secret the console holds for the second session and does not supply |
 
 **Steps:**
 
 1. Render the sessions dialog with the two sessions.
 2. Read each session entry in the dialog.
-3. Search the dialog's text and markup for <first session secret> and <second session secret>.
+3. Search the dialog's text and markup for `<first session secret>` and `<second session secret>`.
 
 **Expected Results:**
 
@@ -238,17 +248,17 @@ package contract.
 
 **Pre-conditions:**
 
-* The console supplies no session for <account with no sessions>.
+* The console supplies no session for `<account with no sessions>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<account with no sessions>` | An account the console supplies no session for |
+| account with no sessions | An account the console supplies no session for |
 
 **Steps:**
 
-1. Render the sessions dialog for <account with no sessions>.
+1. Render the sessions dialog for `<account with no sessions>`.
 2. Read the dialog.
 
 **Expected Results:**
@@ -283,12 +293,19 @@ confirmations that never meet.
 * **Trace:** shared-console-user-directory-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory lists <account with identity, grants, standing, and sessions>.
+Signed in as admin(holds `user:list`). Directory lists `<account with identity, grants, standing, and sessions>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| account with identity, grants, standing, and sessions | The account seeded with identity, grants, standing and sessions for the directory read; bind its user id only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Open <account with identity, grants, standing, and sessions>.
+1. Navigate to `<grade10 admin users url>`.
+2. Open `<account with identity, grants, standing, and sessions>`.
 3. Check the panel.
 
 **Expected Results:**
@@ -314,13 +331,21 @@ Signed in as admin(holds `user:list`). Directory lists <account with identity, g
 * **Trace:** shared-console-user-directory-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory lists <banned account with reason> that has a session with where it was raised and when it ends, and <banned account without reason>.
+Signed in as admin(holds `user:list`). Directory lists `<banned account with reason>` that has a session with where it was raised and when it ends, and `<banned account without reason>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| banned account with reason | A banned account with a supplied ban reason; bind its user id only |
+| banned account without reason | A banned account with no supplied ban reason; bind its user id only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Open <banned account with reason> and check standing, timeline, and sessions.
-3. Open <banned account without reason> and check standing and timeline.
+1. Navigate to `<grade10 admin users url>`.
+2. Open `<banned account with reason>` and check standing, timeline, and sessions.
+3. Open `<banned account without reason>` and check standing and timeline.
 
 **Expected Results:**
 
@@ -345,14 +370,22 @@ Signed in as admin(holds `user:list`). Directory lists <banned account with reas
 * **Trace:** shared-console-user-directory-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory lists <account with elevated and plain grants> and <account with no grants>.
+Signed in as admin(holds `user:list`). Directory lists `<account with elevated and plain grants>` and `<account with no grants>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| account with elevated and plain grants | An account holding elevated and plain grants; bind its user id only |
+| account with no grants | An account with no grants; bind its user id only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Open <account with elevated and plain grants>.
+1. Navigate to `<grade10 admin users url>`.
+2. Open `<account with elevated and plain grants>`.
 3. Check the grant labels.
-4. Open <account with no grants>.
+4. Open `<account with no grants>`.
 
 **Expected Results:**
 
@@ -389,9 +422,15 @@ accident.
 **Pre-conditions:**
 Console renders the directory without a sessions handler and without a moderation handler.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin users url> under that console wiring.
+1. Navigate to `<grade10 admin users url>` under that console wiring.
 2. Check each row's actions.
 
 **Expected Results:**
@@ -416,12 +455,19 @@ Console renders the directory without a sessions handler and without a moderatio
 * **Trace:** shared-console-user-directory-US-05
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list` and `user:set-role` and `user:ban`). Directory lists <another account>.
+Signed in as admin(holds `user:list` and `user:set-role` and `user:ban`). Directory lists `<another account>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| another account | The other account in the directory, distinct from the signed-in admin; bind its user id only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin users url>.
-2. Open <another account>.
+1. Navigate to `<grade10 admin users url>`.
+2. Open `<another account>`.
 3. Change the selected roles in the panel and save.
 4. Start a ban from the panel.
 5. Cancel the moderation dialog.
@@ -489,21 +535,21 @@ Signed in as admin(console renders the directory without a create handler).
 * **Trace:** shared-console-user-directory-US-06
 
 **Pre-conditions:**
-Signed in as admin(console supplies a create handler and its role vocabulary). Create will succeed for <new email>.
+Signed in as admin(console supplies a create handler and its role vocabulary). Create will succeed for `<new email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <new name> | Dialog Person |
-| <new email> | dialog.person@example.com |
-| <roles> | a role from the console-supplied vocabulary |
+| new name | Dialog Person |
+| new email | dialog.person@example.com |
+| roles | a role from the console-supplied vocabulary |
 
 **Steps:**
 
 1. Open the directory surface.
 2. Choose Create.
-3. Enter <new name>, <new email>, and <roles>, and confirm.
+3. Enter `<new name>`, `<new email>`, and `<roles>`, and confirm.
 4. Confirm the review.
 5. Note what the create surface reports to the console.
 
@@ -563,26 +609,30 @@ Signed in as admin(console supplies a create handler).
 * **Trace:** shared-console-user-directory-US-06
 
 **Pre-conditions:**
-Signed in as admin(console supplies a create handler and an email lookup). An account already holds <taken email>.
+Signed in as admin(console supplies a create handler and an email lookup). An account already holds `<taken email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <taken email> | taken.dialog@example.com |
+| taken email | taken.dialog@example.com |
+
+| Field | Value |
+| --- | --- |
+| existing account | The existing account whose email is `<taken email>`; bind its user id only |
 
 **Steps:**
 
 1. Open the directory surface.
 2. Choose Create.
-3. Enter a name, <taken email>, and a role from the console vocabulary, and confirm Create on the form.
+3. Enter a name, `<taken email>`, and a role from the console vocabulary, and confirm Create on the form.
 4. Choose the open-existing action that steers them to change roles.
 5. Note what the create surface reports to the console.
 
 **Expected Results:**
 
 * Step 3 stays on the create form, does not open the review, shows the duplicate refuse and open-existing, and does not call create.
-* Step 5 reports <existing account>'s identifier through `onOpenExisting`; the components decide nothing about what shows next.
+* Step 5 reports `<existing account>`'s identifier through `onOpenExisting`; the components decide nothing about what shows next.
 
 <!-- trace:case id=g10.shared-user-directory.TC-07a rev=1 covers=g10.shared-user-directory.SC-3w0,g10.shared-user-directory.SC-uox,g10.shared-user-directory.SC-bm5,g10.shared-user-directory.SC-d4y,g10.shared-user-directory.SC-8ij,g10.shared-user-directory.SC-iqr,g10.shared-user-directory.SC-aan -->
 ### shared-console-user-directory-US6-TC5-1: Create warns when the email is malformed or off the console list
@@ -607,17 +657,17 @@ Signed in as admin(console supplies a create handler and a non-empty list of all
 
 | Field | Value |
 | --- | --- |
-| <off-list email> | someone@example.com |
-| <malformed email> | not-an-email |
+| off-list email | someone@example.com |
+| malformed email | not-an-email |
 
 **Steps:**
 
 1. Open the directory surface.
 2. Choose Create.
-3. Enter a name and <off-list email>, and confirm.
+3. Enter a name and `<off-list email>`, and confirm.
 4. Read the warning and choose Back.
 5. Confirm Create again, then confirm the warning.
-6. Repeat from Create with <malformed email>, confirm Create, then confirm the warning.
+6. Repeat from Create with `<malformed email>`, confirm Create, then confirm the warning.
 
 **Expected Results:**
 
@@ -649,18 +699,18 @@ Signed in as admin(console supplies a create handler, a locked-role list, and a 
 
 | Field | Value |
 | --- | --- |
-| <fine email> | someone@9gag.com |
-| <off-list email> | someone@example.com |
-| <locked role> | a role on the consumer-supplied locked list |
+| fine email | someone@9gag.com |
+| off-list email | someone@example.com |
+| locked role | a role on the consumer-supplied locked list |
 
 **Steps:**
 
 1. Open the directory surface.
 2. Choose Create.
-3. Enter a name, <fine email>, and <locked role>, and confirm.
+3. Enter a name, `<fine email>`, and `<locked role>`, and confirm.
 4. Read the warning and choose Back.
 5. Confirm Create again, then confirm the warning.
-6. Repeat from Create with <off-list email> and <locked role>, and confirm.
+6. Repeat from Create with `<off-list email>` and `<locked role>`, and confirm.
 
 **Expected Results:**
 
@@ -693,14 +743,14 @@ Signed in as admin(console supplies a create handler and a non-empty list of all
 
 | Field | Value |
 | --- | --- |
-| <fine email> | someone@9gag.com |
-| <roles> | a role that is not on the consumer-supplied locked list |
+| fine email | someone@9gag.com |
+| roles | a role that is not on the consumer-supplied locked list |
 
 **Steps:**
 
 1. Open the directory surface.
 2. Choose Create.
-3. Enter a name, <fine email>, and <roles>, and confirm.
+3. Enter a name, `<fine email>`, and `<roles>`, and confirm.
 4. Confirm the review.
 
 **Expected Results:**
