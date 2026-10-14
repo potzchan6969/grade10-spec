@@ -9,59 +9,112 @@
 
 **Starting state:**
 
-- `<listing_11>` is published.
-- customer(card linked, no bid on `<listing_25>`) is signed in.
-- `<listing_25>` is open inside its window.
-- `<listing_2>` is in extended bidding and its recorded close is `<close before bids>`.
-- `<listing_3>` is in extended bidding and its recorded close is its scheduled close plus `<extension cap>`.
-- `<listing_4>` is open with one accepted bid.
-- `<listing_5>` is open with an accepted bid and extension duration 0.
-- `<listing_6>` is open with scheduled close `<scheduled close>` and extension duration 1800s (30mins).
-- `<listing_6>` holds the row's `<bids by close>`.
-- `<listing_7>` is open with no accepted bid, scheduled close 20:00:00 UTC, and extension duration 1800s (30mins).
-- `<listing_8>` and `<listing_9>` are both in extended bidding with recorded close 20:30 UTC.
+- `<listing_33>` is published.
+- customer(card linked, no bid on `<listing_34>`) is signed in.
+- `<listing_34>` is open inside its window.
+- `<listing_35>` is in extended bidding and its recorded close is `<close before bids>`.
+- `<listing_36>` is in extended bidding and its recorded close is its scheduled close plus `<extension cap>`.
+- `<listing_37>` is open with one accepted bid.
+- `<listing_38>` is open with an accepted bid and extension duration 0.
+- `<listing_39>` is open with scheduled close `<scheduled close>` and extension duration `<extension duration>`.
+- `<listing_39>` holds `<bids by close>`.
+- `<listing_40>` is open with no accepted bid, scheduled close `<scheduled close>`, and extension duration `<extension duration>`.
+- `<listing_41>` and `<listing_42>` are both in extended bidding with recorded close `<close before bid>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<listing_11>` | A published listing with extension duration 1800s (30mins) and an extension cap of 3600s (60mins) |
-| `<listing_25>` | An open HKD listing taking bids, current bid `<current bid>` |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
-| `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<close before bids>` | 20:30 UTC |
-| `<first bid time>` | 20:10 UTC |
-| `<second bid time>` | 20:35 UTC |
-| `<close after first>` | 20:40 UTC |
-| `<close after second>` | 21:05 UTC |
-| `<listing_3>` | A listing in extended bidding whose recorded close already stands at its cap |
-| `<scheduled close>` | 20:00 UTC |
-| `<extension cap>` | 3600s (60mins), any cap the listing has already reached |
-| `<result>` | 21:00 UTC |
-| `<listing_4>` | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` |
-| `<short duration>` | 300s (5mins), any extension duration above 0 |
-| `<result>` | 20:05 UTC |
-| `<listing_5>` | An open listing with an accepted bid, extension duration 0s |
-| Item | `<bids by close>`: None; `<scheduled close>`: 20:00 UTC; `<extended close>`: —; `<result>`: Closed at 20:00 UTC |
-| Item | `<bids by close>`: One; `<scheduled close>`: 20:00 UTC; `<extended close>`: 20:30 UTC; `<result>`: Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
-| 19:59:00 UTC | 20:00:00 UTC, unchanged |
-| 20:00:00 UTC | 20:30:00 UTC, the listing in extended bidding |
-| `<listing_8>` | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
-| `<listing_9>` | A second listing in the same state as `<listing_8>` |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US1-TC2 | listing_33 | A published listing with extension duration `<extension duration>` and extension cap `<extension cap>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US1-TC2 | extension duration | 1800s | (30mins) |
+| g10.auction-auction.US1-TC2 | extension cap | 3600s | (60mins) |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC5 | listing_34 | An open HKD listing taking bids, current bid `<current bid>` | · |
+| g10.auction-auction.US2-TC5 | current bid | HKD4,960 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US2-TC5 | bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC10 | listing_35 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap | · |
+| g10.auction-auction.US2-TC10 | extension duration | 1800s | (30mins) |
+| g10.auction-auction.US2-TC10 | close before bids | 20:30 UTC | · |
+| g10.auction-auction.US2-TC10 | first bid time | 20:10 UTC | · |
+| g10.auction-auction.US2-TC10 | second bid time | 20:35 UTC | · |
+| g10.auction-auction.US2-TC10 | close after first | 20:40 UTC | · |
+| g10.auction-auction.US2-TC10 | close after second | 21:05 UTC | · |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC11 | listing_36 | A listing in extended bidding whose recorded close already stands at its cap | · |
+| g10.auction-auction.US2-TC11 | scheduled close | 20:00 UTC | · |
+| g10.auction-auction.US2-TC11 | extension cap | 3600s | (60mins), any cap the listing has already reached |
+| g10.auction-auction.US2-TC11 | result | 21:00 UTC | Value: `<scheduled close>` plus `<extension cap>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC12 | listing_37 | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` | · |
+| g10.auction-auction.US2-TC12 | scheduled close | 20:00 UTC | · |
+| g10.auction-auction.US2-TC12 | short duration | 300s | (5mins), any extension duration above 0 |
+| g10.auction-auction.US2-TC12 | result | 20:05 UTC | Value: `<scheduled close>` plus `<short duration>` |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC13 | listing_38 | An open listing with an accepted bid, extension duration 0s |
+
+| Case | `<bids by close>` | `<scheduled close>` | `<extended close>` | `<result>` |
+| --- | --- | --- | --- | --- |
+| g10.auction-auction.US2-TC14 | None | 20:00 UTC | — | Closed at 20:00 UTC |
+| g10.auction-auction.US2-TC14 | One | 20:00 UTC | 20:30 UTC | Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC14 | extension duration | 1800s | (30mins) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC14 | listing_39 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | `<bid time>` | `<recorded_close_after_bid>` | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC6 | 19:59:00 UTC | 20:00:00 UTC | `<recorded_close_after_bid>`: unchanged |
+| g10.auction-auction.US2-TC6 | 20:00:00 UTC | 20:30:00 UTC | `<recorded_close_after_bid>`: the listing in extended bidding |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC6 | scheduled close | 20:00:00 UTC | Value: (fixed boundary fixture) |
+| g10.auction-auction.US2-TC6 | extension duration | 1800s | (30mins) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC6 | listing_40 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC7 | listing_41 | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
+| g10.auction-auction.US2-TC7 | listing_42 | A second listing in the same state as `<listing_41>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC7 | close before bid | 20:30 UTC | Value: (fixed initial close) |
+| g10.auction-auction.US2-TC7 | bid time | 20:10 UTC | Value: (fixed in-window fixture) |
+| g10.auction-auction.US2-TC7 | close after bid | 20:40 UTC | Value: `<bid time>` plus the 1800s extension duration |
 
 ### Route
 
-1. Read the API response for `<listing_11>`.
+1. Read the API response for `<listing_33>`.
    - It carries the scheduled close, the recorded close, the extension duration and the extension cap. g10.auction-auction.US1-TC2
    - It carries no extension window. g10.auction-auction.US1-TC2
    - It carries no reserve state. g10.auction-auction.US1-TC2
-2. Submit `<bid amount>` on `<listing_25>`.
+2. Submit `<bid amount>` on `<listing_34>`.
 3. Read the API response.
-   - accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider. g10.auction-auction.US2-TC5
+   - Step 3 accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider. g10.auction-auction.US2-TC5
 4. Read the linked card's activity at the card provider.
-   - shows nothing held or charged on the card for `<listing_25>`. g10.auction-auction.US2-TC5
+   - Step 4 shows nothing held or charged on the card for `<listing_34>`. g10.auction-auction.US2-TC5
 5. Submit a valid bid at `<first bid time>`.
 6. Read the recorded close.
 7. Submit a valid bid at `<second bid time>`.
@@ -69,18 +122,18 @@
    - The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`. g10.auction-auction.US2-TC10
    - The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`. g10.auction-auction.US2-TC10
 9. Submit a valid bid.
-   - The bid is accepted. g10.auction-auction.US2-TC11
 10. Read the recorded close.
-   - The recorded close reads `<scheduled close>` plus `<extension cap>`. g10.auction-auction.US2-TC11
 11. Wait until the recorded close passes.
+   - The bid is accepted. g10.auction-auction.US2-TC11
+   - The recorded close reads `<scheduled close>` plus `<extension cap>`. g10.auction-auction.US2-TC11
    - The listing closes at `<result>`. g10.auction-auction.US2-TC11
 12. Wait for `<scheduled close>`.
-   - The listing is in extended bidding. g10.auction-auction.US2-TC12
 13. Read the recorded close.
+   - The listing is in extended bidding. g10.auction-auction.US2-TC12
    - The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`. g10.auction-auction.US2-TC12
 14. Wait for the scheduled close.
-   - The listing is closed at its scheduled close. g10.auction-auction.US2-TC13
 15. Read the listing's state and recorded close.
+   - The listing is closed at its scheduled close. g10.auction-auction.US2-TC13
    - It never entered extended bidding. g10.auction-auction.US2-TC13
 16. Wait for `<scheduled close>`.
 17. Read the listing's state and recorded close.
@@ -88,80 +141,100 @@
 19. Read the listing's state.
    - The listing reads `<result>`. g10.auction-auction.US2-TC14
 20. Submit a valid bid at `<bid time>`.
-   - The bid is accepted. g10.auction-auction.US2-TC6
 21. Read the recorded close.
-   - The recorded close reads as the row states. g10.auction-auction.US2-TC6
-22. Submit a valid bid on `<listing_8>` at 20:10 UTC.
-   - `<listing_8>` reads 20:40 UTC. g10.auction-auction.US2-TC7
+   - The bid is accepted. g10.auction-auction.US2-TC6
+   - The recorded close reads `<recorded_close_after_bid>`. g10.auction-auction.US2-TC6
+22. Submit a valid bid on `<listing_41>` at `<bid time>`.
 23. Read both recorded closes.
-   - `<listing_9>` still reads 20:30 UTC. g10.auction-auction.US2-TC7
+   - `<listing_41>` reads `<close after bid>`. g10.auction-auction.US2-TC7
+   - `<listing_42>` still reads `<close before bid>`. g10.auction-auction.US2-TC7
 
 ## Walk 2: Collector places a bid inside the window
 
 **Starting state:**
 
-- customer(no bid on `<listing_2>`, card saved) is signed in and on `<listing_2>`.
-- `<listing_2>` is in extended bidding.
-- `<listing_10>` entered extended bidding and its recorded close has passed.
-- `<listing_21>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
-- customer(card linked, no bid on `<listing_21>`) is signed in and on `<listing_21>`.
-- `<listing_22>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
-- customer(card linked, no bid on `<listing_22>`) is signed in.
-- `<listing_26>` is open inside its window, current bid `<current bid>`.
-- customer A(card linked) and customer B(card linked) are signed in on separate sessions, neither holding a bid on `<listing_26>`.
+- customer(no bid on `<listing_43>`, card saved) is signed in and on `<listing_43>`.
+- `<listing_43>` is in extended bidding.
+- `<listing_44>` entered extended bidding and its recorded close has passed.
+- `<listing_45>` is open inside its window, in `<currency>`, starting price `<start>`, with no accepted bid.
+- customer(card linked, no bid on `<listing_45>`) is signed in and on `<listing_45>`.
+- `<listing_46>` is open inside its window, in `<currency>`, starting price `<start>`, with no accepted bid.
+- customer(card linked, no bid on `<listing_46>`) is signed in.
+- `<listing_47>` is open inside its window, current bid `<current bid>`.
+- customer A(card linked) and customer B(card linked) are signed in on separate sessions, neither holding a bid on `<listing_47>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<listing_10>` | A listing whose extended bidding timer ran out with no new bid |
-| Item | Currency: HKD; `<start>`: HKD280 (range: 1000–79999 minor units), positive start; `<opening price>`: HKD280 (range: 1000–79999 minor units), the start itself; `<next minimum>`: HKD290 (fixed derived value) |
-| Item | Currency: HKD; `<start>`: HKD7 (fixed boundary or equality), below the lowest increment; `<opening price>`: HKD7 (range: 1–999 minor units), the start itself; `<next minimum>`: HKD17 (fixed derived value) |
-| Item | Currency: HKD; `<start>`: HKD0 (fixed tier boundary), zero start; `<opening price>`: HKD10 (fixed boundary or equality), the lowest increment; `<next minimum>`: HKD20 (fixed derived value) |
-| Item | Currency: USD; `<start>`: USD0 (fixed tier boundary), zero start; `<opening price>`: USD1 (fixed boundary or equality), the lowest increment; `<next minimum>`: USD2 (fixed derived value) |
-| Item | Currency: JPY; `<start>`: JPY0 (fixed tier boundary), zero start; `<opening price>`: JPY100 (fixed boundary or equality), the lowest increment; `<next minimum>`: JPY200 (fixed derived value) |
-| Item | Currency: HKD; `<start>`: HKD280 (range: 1000–79999 minor units); `<opening price>`: HKD280 (range: 1000–79999 minor units), the start itself; `<bid amount>`: HKD279.99 (fixed boundary or equality), one minor unit below |
-| Item | Currency: USD; `<start>`: USD500 (fixed tier boundary); `<opening price>`: USD500 (fixed tier boundary), the start itself; `<bid amount>`: USD499.99 (fixed boundary or equality), one minor unit below |
-| Item | Currency: JPY; `<start>`: JPY20,000 (range: 15000–74999 minor units); `<opening price>`: JPY20,000 (range: 15000–74999 minor units), the start itself; `<bid amount>`: JPY19,999 (fixed boundary or equality), one minor unit below |
-| Item | Currency: HKD; `<start>`: HKD0 (fixed tier boundary), zero start; `<opening price>`: HKD10 (fixed boundary or equality), the lowest increment; `<bid amount>`: HKD9.99 (fixed boundary or equality), one minor unit below |
-| Item | Currency: USD; `<start>`: USD0 (fixed tier boundary), zero start; `<opening price>`: USD1 (fixed boundary or equality), the lowest increment; `<bid amount>`: USD0.99 (fixed boundary or equality), one minor unit below |
-| Item | Currency: JPY; `<start>`: JPY0 (fixed tier boundary), zero start; `<opening price>`: JPY100 (fixed boundary or equality), the lowest increment; `<bid amount>`: JPY99 (fixed boundary or equality), one minor unit below |
-| `<listing_26>` | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
-| `<bid A>` | HKD5,210 (range: 400000–799999 minor units) |
-| `<bid B>` | HKD6,200 (range: 400000–799999 minor units), above `<bid A>` |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC8 | listing_43 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap | · |
+| g10.auction-auction.US2-TC8 | extension duration | 1800s | (30mins) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC9 | listing_44 | A listing whose extended bidding timer ran out with no new bid |
+
+| Case | `<currency>` | `<start>` | `<opening price>` | `<next minimum>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US2-TC15 | HKD | HKD280 | HKD280 | HKD290 | `<start>`: (range: 1000–79999 minor units), positive start; `<opening price>`: (range: 1000–79999 minor units), the start itself; `<next minimum>`: (range: 1000–79999 minor units) |
+| g10.auction-auction.US2-TC15 | HKD | HKD7 | HKD7 | HKD17 | `<start>`: (fixed boundary or equality), below the lowest increment; `<opening price>`: (fixed boundary or equality), the start itself; `<next minimum>`: (range: 1000–79999 minor units) |
+| g10.auction-auction.US2-TC15 | HKD | HKD0 | HKD10 | HKD20 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<next minimum>`: (fixed boundary or equality) |
+| g10.auction-auction.US2-TC15 | USD | USD0 | USD1 | USD2 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<next minimum>`: (fixed boundary or equality) |
+| g10.auction-auction.US2-TC15 | JPY | JPY0 | JPY100 | JPY200 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<next minimum>`: (fixed boundary or equality) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC15 | listing_45 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | `<currency>` | `<start>` | `<opening price>` | `<bid amount>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US2-TC16 | HKD | HKD280 | HKD280 | HKD279.99 | `<start>`: (range: 1000–79999 minor units); `<opening price>`: (range: 1000–79999 minor units), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| g10.auction-auction.US2-TC16 | USD | USD500 | USD500 | USD499.99 | `<start>`: (fixed tier boundary); `<opening price>`: (fixed tier boundary), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| g10.auction-auction.US2-TC16 | JPY | JPY23,500 | JPY23,500 | JPY23,499 | `<start>`: (range: 15000–74999 minor units); `<opening price>`: (range: 15000–74999 minor units), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| g10.auction-auction.US2-TC16 | HKD | HKD0 | HKD10 | HKD9.99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| g10.auction-auction.US2-TC16 | USD | USD0 | USD1 | USD0.99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| g10.auction-auction.US2-TC16 | JPY | JPY0 | JPY100 | JPY99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US2-TC16 | listing_46 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US2-TC19 | listing_47 | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` | · |
+| g10.auction-auction.US2-TC19 | current bid | HKD4,960 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US2-TC19 | increment | HKD80 | (fixed tier increment), the HK$4,000 tier |
+| g10.auction-auction.US2-TC19 | bid A | HKD5,210 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US2-TC19 | bid B | HKD6,200 | (range: 400000–799999 minor units), above `<bid A>` |
 
 ### Route
 
 1. Submit a bid at the minimum next bid.
-   - The bid is accepted. g10.auction-auction.US2-TC8
 2. Read Time left.
+   - The bid is accepted. g10.auction-auction.US2-TC8
    - The close moves to `<extension duration>` after that bid. g10.auction-auction.US2-TC8
 3. Submit a bid at the minimum next bid.
-   - Grade10 refuses the bid. g10.auction-auction.US2-TC9
 4. Read the listing's bids and recorded close.
+   - Grade10 refuses the bid. g10.auction-auction.US2-TC9
    - No accepted bid is added and the recorded close is unchanged. g10.auction-auction.US2-TC9
-5. Enter the row's `<opening price>` in the custom maximum on the bid panel.
-   - The bid is accepted. g10.auction-auction.US2-TC15
+5. Enter `<opening price>` in the custom maximum on the bid panel.
 6. Place the bid.
-   - Highest bid reads `<opening price>`, never 0. g10.auction-auction.US2-TC15
 7. Read Highest bid, the bid count and Recent Bids.
-   - The bid count reads 1, and Recent Bids shows the bid as You. g10.auction-auction.US2-TC15
 8. Read the minimum next bid.
-   - reads `<next minimum>`, `<opening price>` plus its tier increment. g10.auction-auction.US2-TC15
-9. Submit a bid of the row's `<bid amount>` on `<listing_22>`.
+   - The bid is accepted. g10.auction-auction.US2-TC15
+   - Highest bid reads `<opening price>`, never 0. g10.auction-auction.US2-TC15
+   - The bid count reads 1, and Recent Bids shows the bid as You. g10.auction-auction.US2-TC15
+   - Step 8 reads `<next minimum>`, `<opening price>` plus its tier increment. g10.auction-auction.US2-TC15
+9. Submit a bid of `<bid amount>` on `<listing_46>`.
 10. Read the API response.
-11. Read `<listing_22>`'s bids and bid count.
+11. Read `<listing_46>`'s bids and bid count.
    - Grade10 refuses the bid, naming `<opening price>` as the minimum. g10.auction-auction.US2-TC16
    - No accepted bid is recorded, and the bid count stays 0. g10.auction-auction.US2-TC16
-12. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_26>` at the same moment.
-   - Each response is one answer: accepted with a standing, or refused. g10.auction-auction.US2-TC19
+12. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_47>` at the same moment.
 13. Read both API responses.
+14. Read `<listing_47>` from the public listing API.
+   - Each response is one answer: accepted with a standing, or refused. g10.auction-auction.US2-TC19
    - customer B leads, and Highest bid reads `<bid A>` plus `<increment>`. g10.auction-auction.US2-TC19
-14. Read `<listing_26>` from the public listing API.
    - No lower bid overwrites that Highest bid, whichever response arrived first. g10.auction-auction.US2-TC19
 
 ## Walk 3: Collector meets the identity bar on a high-value bid
@@ -241,104 +314,113 @@
 
 **Starting state:**
 
-- The catalogue lists `<listing_14>`, `<listing_15>` and `<listing_16>`.
-- The catalogue lists the six listings in `<listing_17>`, `<listing_18>`, `<listing_19>`, `<listing_20>`, `<listing_21>`, `<listing_22>`.
-- `<listing_23>` and `<listing_24>` are both Active and close at the same time.
+- The catalogue lists `<listing_48>`, `<listing_49>` and `<listing_50>`.
+- The catalogue lists the six listings in **Test data**.
+- `<listing_57>` and `<listing_58>` are both Active and close at the same time.
+- customer is on `<grade10 auction catalogue url>`.
+- At least one complete Featured slot is set for `<featured_listing>`.
+- `<featured_listing>` is among the listings a collector can see.
 - The Auction catalogue holds more listings than one page lists.
 - customer is able to open `<grade10 auction catalogue url>`.
 - No complete Featured slot is set.
 - At least one listing is visible in All auctions.
-- customer is on `<grade10 auction catalogue url>`.
 - Featured may be present or absent.
 - At least one complete Featured slot is set.
 - No listings are available for All auctions.
-- At least one complete Featured slot is set for `<featured listing>`.
-- `<featured listing>` is among the listings a collector can see.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<listing_14>` | An Active listing whose close is 18:00 UTC |
-| `<listing_15>` | An Upcoming listing whose start is 19:00 UTC |
-| `<listing_16>` | An Ended listing that closed at 12:00 UTC, before `<listing_14>` closes |
-| `<listing_17>` | An Active listing closing at 18:00 UTC |
-| `<listing_18>` | An Active listing closing at 19:00 UTC |
-| `<listing_19>` | An Upcoming listing starting on 2026-10-01 |
-| `<listing_20>` | An Upcoming listing starting on 2026-10-02 |
-| `<listing_21>` | An Ended listing that closed on 2026-09-22 |
-| `<listing_22>` | An Ended listing that closed on 2026-09-15 |
-| `<listing_23>` | An Active listing closing at 18:00 UTC |
-| `<listing_24>` | An Active listing closing at 18:00 UTC, a different listing record from `<listing_23>` |
-| `<featured listing>` | A published listing that fills a complete Featured slot |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US5-TC1 | listing_48 | An Active listing whose close is 18:00 UTC |
+| g10.auction-auction.US5-TC1 | listing_49 | An Upcoming listing whose start is 19:00 UTC |
+| g10.auction-auction.US5-TC1 | listing_50 | An Ended listing that closed at 12:00 UTC, before `<listing_48>` closes |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US5-TC2 | listing_51 | An Active listing closing at 18:00 UTC |
+| g10.auction-auction.US5-TC2 | listing_52 | An Active listing closing at 19:00 UTC |
+| g10.auction-auction.US5-TC2 | listing_53 | An Upcoming listing starting on 2026-10-01 |
+| g10.auction-auction.US5-TC2 | listing_54 | An Upcoming listing starting on 2026-10-02 |
+| g10.auction-auction.US5-TC2 | listing_55 | An Ended listing that closed on 2026-09-22 |
+| g10.auction-auction.US5-TC2 | listing_56 | An Ended listing that closed on 2026-09-15 |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US5-TC3 | listing_57 | An Active listing closing at 18:00 UTC |
+| g10.auction-auction.US5-TC3 | listing_58 | An Active listing closing at 18:00 UTC, a different listing record from `<listing_57>` |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US5-TC8 | featured_listing | A published listing that fills a complete Featured slot |
 
 ### Route
 
 1. Navigate to `<grade10 auction catalogue url>`.
-   - `<listing_14>` is listed before `<listing_15>`. g10.auction-auction.US5-TC1
 2. Read the listings in listed order.
-   - `<listing_15>` is listed before `<listing_16>`. g10.auction-auction.US5-TC1
+   - `<listing_48>` is listed before `<listing_49>`. g10.auction-auction.US5-TC1
+   - `<listing_49>` is listed before `<listing_50>`. g10.auction-auction.US5-TC1
 3. Navigate to `<grade10 auction catalogue url>`.
 4. Read the listings in listed order.
-   - `<listing_17>` is listed before `<listing_18>`. g10.auction-auction.US5-TC2
-   - `<listing_19>` is listed before `<listing_20>`. g10.auction-auction.US5-TC2
-   - `<listing_21>` is listed before `<listing_22>`. g10.auction-auction.US5-TC2
+   - `<listing_51>` is listed before `<listing_52>`. g10.auction-auction.US5-TC2
+   - `<listing_53>` is listed before `<listing_54>`. g10.auction-auction.US5-TC2
+   - `<listing_55>` is listed before `<listing_56>`. g10.auction-auction.US5-TC2
 5. Read the API response for the Auction catalogue.
 6. Read the API response for the Auction catalogue again.
-   - `<listing_23>` and `<listing_24>` are in the same order both times. g10.auction-auction.US5-TC3
-7. Read the API response one page at a time to the end.
-8. Read the API response for the whole catalogue.
+   - `<listing_57>` and `<listing_58>` are in the same order both times. g10.auction-auction.US5-TC3
+7. Read the Featured band for `<featured_listing>`.
+8. Read All auctions for `<featured_listing>` and the list order.
+   - `<featured_listing>` appears in Featured and again in All auctions. g10.auction-auction.US5-TC8
+   - All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible listing. g10.auction-auction.US5-TC8
+9. Read the API response one page at a time to the end.
+10. Read the API response for the whole catalogue.
    - Both readings list the listings in the same order. g10.auction-auction.US5-TC4
    - No listing is listed twice. g10.auction-auction.US5-TC4
    - No listing is missing. g10.auction-auction.US5-TC4
-9. Navigate to `<grade10 auction catalogue url>`.
+11. Navigate to `<grade10 auction catalogue url>`.
+12. Read the page sections.
    - No Featured band is present. g10.auction-auction.US5-TC5
-10. Read the page sections.
    - All auctions is shown with listings in the catalogue resting order. g10.auction-auction.US5-TC5
-11. Read the catalogue page for category chrome.
+13. Read the catalogue page for category chrome.
    - There is no Categories heading, no category tiles, and no busy filter chrome. g10.auction-auction.US5-TC6
    - The only sections are Featured when set, then All auctions. g10.auction-auction.US5-TC6
-12. Navigate to `<grade10 auction catalogue url>`.
+14. Navigate to `<grade10 auction catalogue url>`.
+15. Read the Featured band and the All auctions area.
    - Featured still shows the curated slide or slides. g10.auction-auction.US5-TC7
-13. Read the Featured band and the All auctions area.
    - All auctions shows a message that there are no auctions. g10.auction-auction.US5-TC7
-14. Read the Featured band for `<featured listing>`.
-   - `<featured listing>` appears in Featured and again in All auctions. g10.auction-auction.US5-TC8
-15. Read All auctions for `<featured listing>` and the list order.
-   - All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible listing. g10.auction-auction.US5-TC8
 
 ## Walk 5: Collector reads the catalogue in one order
 
 **Starting state:**
 
-- customer is able to open `<grade10 auction catalogue url>`.
 - customer is on `<grade10 auction catalogue url>`.
+- The Upcoming listing `<upcoming_listing>` is among All auctions.
+- customer is able to open `<grade10 auction catalogue url>`.
 - All auctions holds more listings than the first batch shows.
-- An Upcoming listing is among All auctions.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<upcoming listing>` | A published Upcoming listing on All auctions |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US5-TC11 | upcoming_listing | A published Upcoming listing on All auctions |
 
 ### Route
 
-1. Navigate to `<grade10 auction catalogue url>`.
-2. Read the document canonical and share address.
+1. Find `<upcoming_listing>` on All auctions.
+2. Read its card for money and countdown.
+   - The card shows no starting bid and no money amount. g10.auction-auction.US5-TC11
+   - The card shows Opens in from the served open. g10.auction-auction.US5-TC11
+3. Navigate to `<grade10 auction catalogue url>`.
+4. Read the document canonical and share address.
    - Canonical and share address are `/auction` with no category query. g10.auction-auction.US5-TC9
-3. Read the first batch of All auctions cards.
-4. Scroll near the end of the shown listings.
-   - shows Boneyard skeleton cards below the listings already shown, or the next batch lands without pagination controls. g10.auction-auction.US5-TC10
-5. Wait for the next batch.
-   - shows additional listings below the first batch. g10.auction-auction.US5-TC10
-   - Lots from step 1 stay visible. g10.auction-auction.US5-TC10
+5. Read the first batch of All auctions cards.
+   - Lots from Step 5 stay visible. g10.auction-auction.US5-TC10
+6. Scroll near the end of the shown listings.
+   - Step 6 shows Boneyard skeleton cards below the listings already shown, or the next batch lands without pagination controls. g10.auction-auction.US5-TC10
+7. Wait for the next batch.
+   - Step 7 shows additional listings below the first batch. g10.auction-auction.US5-TC10
    - The combined list stays in the catalogue resting order. g10.auction-auction.US5-TC10
    - No pagination controls appear. g10.auction-auction.US5-TC10
-6. Find `<upcoming listing>` on All auctions.
-   - The card shows no starting bid and no money amount. g10.auction-auction.US5-TC11
-7. Read its card for money and countdown.
-   - The card shows Opens in from the served open. g10.auction-auction.US5-TC11
 
 ## Walk 6: Collector reads Featured on the catalogue
 
@@ -542,131 +624,186 @@
 
 **Starting state:**
 
-- `<listing_4>` is in extended bidding and its recorded close is 20:30:00 UTC.
-- customer A(card linked) is signed in and on the listing page for `<listing_4>`.
-- `<listing_5>` has scheduled close 20:00:00 UTC and its extension terms are the row's.
-- customer B's bid was accepted on `<listing_5>` at `<last accepted>`.
-- Settling `<listing_5>` is held back, so its close is not yet recorded at `<bid time>`.
-- customer A(card linked) is signed in and can bid on `<listing_5>`.
-- `<listing_6>` is open with one accepted bid.
-- customer A leads `<listing_7>`.
-- `<listing_7>`'s recorded close is about two minutes away, and no other bid will be placed.
-- customer A leads `<listing_8>`, and no other bid will be placed.
-- The listing's own alarm is disabled for `<listing_8>`.
-- ❓ The spec does not identify the surface where the tester waits for `<listing_8>` to close.
-- `<listing_11>` is in the row's state, and no page has it open.
-- Nobody reads `<listing_11>` until step 2.
-- `<listing_12>` is in extended bidding.
+- `<listing_59>` is in extended bidding and its recorded close is `<recorded close>`.
+- customer A(card linked) is signed in and on the listing page for `<listing_59>`.
+- `<listing_60>` has scheduled close `<scheduled close>`, extension duration `<extension duration>` and cap `<extension cap>`.
+- customer B's bid was accepted on `<listing_60>` at `<last accepted>`.
+- Settling `<listing_60>` is held back, so its close is not yet recorded at `<bid time>`.
+- customer A(card linked) is signed in and can bid on `<listing_60>`.
+- `<listing_61>` is open with one accepted bid.
+- customer A leads `<listing_62>`.
+- `<listing_62>`'s recorded close is about two minutes away, and no other bid will be placed.
+- customer A leads `<listing_63>`, and no other bid will be placed.
+- The listing's own alarm is disabled for `<listing_63>`.
+- `<listing_64>` has this state: `<listing_state>`, and no page has it open.
+- Nobody reads `<listing_64>` until step 2.
+- `<listing_65>` is in extended bidding.
 - No session is signed in.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<listing_4>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B |
-| `<bid time>` | 20:29:59 UTC, one second before the recorded close |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
-| `<new close>` | 20:59:59 UTC, `<bid time>` plus 1800s |
-| Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: 600s (10mins); `<last accepted>`: 20:05:00 UTC; `<effective close>`: 20:10:00 UTC, the cap; `<bid time>`: 20:10:00 UTC, at the limit |
-| Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: 600s (10mins); `<last accepted>`: 20:05:00 UTC; `<effective close>`: 20:10:00 UTC, the cap; `<bid time>`: 20:10:01 UTC |
-| Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: None; `<last accepted>`: 20:10:00 UTC; `<effective close>`: 20:40:00 UTC, the recorded close; `<bid time>`: 20:40:00 UTC, at the limit |
-| Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: None; `<last accepted>`: 20:10:00 UTC; `<effective close>`: 20:40:00 UTC, the recorded close; `<bid time>`: 20:40:01 UTC |
-| Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: 0s; `<last accepted>`: 19:58:00 UTC; `<effective close>`: 20:00:00.001 UTC, one millisecond after the scheduled close; `<bid time>`: 20:00:00.001 UTC, at the limit |
-| Item | `<extension duration>`: 1800s (30mins); `<extension cap>`: 0s; `<last accepted>`: 19:58:00 UTC; `<effective close>`: 20:00:00.001 UTC, one millisecond after the scheduled close; `<bid time>`: 20:00:01 UTC |
-| Item | `<extension duration>`: 0s; `<extension cap>`: None; `<last accepted>`: 19:58:00 UTC; `<effective close>`: 20:00:00.001 UTC, one millisecond after the scheduled close; `<bid time>`: 20:00:00.001 UTC, at the limit |
-| Item | `<extension duration>`: 0s; `<extension cap>`: None; `<last accepted>`: 19:58:00 UTC; `<effective close>`: 20:00:00.001 UTC, one millisecond after the scheduled close; `<bid time>`: 20:00:01 UTC |
-| Item | `<extension duration>`: Field; `<extension cap>`: Value |
-| Item | `<extension duration>`: `<bid amount>`; `<extension cap>`: HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
-| `<listing_6>` | An open listing, scheduled close 20:00:00 UTC, extension duration 1800s (30mins), extension cap 0s |
-| `<listing_7>` | An HKD listing in extended bidding, led by customer A |
-| `<sweep interval>` | 300s (5mins) |
-| A read of `<listing_8>` more than 2s after its recorded close | Right after that read answers |
-| Nobody before the five-minute sweep | The next sweep, at most 300s (5mins) after the recorded close |
-| Item | `<listing_11>` state: An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap; `<close>`: its recorded close; `<result>`: Closed, customer A winning at `<leader price>` |
-| Item | `<listing_11>` state: An open HKD listing with no accepted bid, extension duration 1800s (30mins); `<close>`: its scheduled close; `<result>`: Closed unsold, never in extended bidding |
-| Item | `<listing_11>` state: Field; `<close>`: Value |
-| Item | `<listing_11>` state: `<leader price>`; `<close>`: HKD4,960 (range: 400000–799999 minor units) |
-| Item | `<listing_11>` state: `<sweep interval>`; `<close>`: 300s (5mins) |
-| `<listing_12>` | An HKD listing, scheduled close 20:00:00 UTC, recorded close 20:25:00 UTC, extension duration 1800s (30mins), extension cap 3600s (60mins) |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC4 | listing_59 | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B | · |
+| g10.auction-auction.US11-TC4 | bid time | 20:29:59 UTC | Value: one second before the recorded close |
+| g10.auction-auction.US11-TC4 | bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
+| g10.auction-auction.US11-TC4 | new close | 20:59:59 UTC | Value: `<bid time>` plus 1800s |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC4 | recorded close | 20:30:00 UTC | Value: (fixed last-second fixture) |
+
+| Case | `<extension duration>` | `<extension cap>` | `<last accepted>` | `<effective close>` | `<bid time>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| g10.auction-auction.US11-TC5 | 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:00 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap; `<bid time>`: at the limit |
+| g10.auction-auction.US11-TC5 | 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:01 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap |
+| g10.auction-auction.US11-TC5 | 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:00 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close; `<bid time>`: at the limit |
+| g10.auction-auction.US11-TC5 | 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:01 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close |
+| g10.auction-auction.US11-TC5 | 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
+| g10.auction-auction.US11-TC5 | 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close |
+| g10.auction-auction.US11-TC5 | 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
+| g10.auction-auction.US11-TC5 | 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<effective close>`: one millisecond after the scheduled close |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC5 | bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC5 | scheduled close | 20:00:00 UTC | Value: (fixed effective-close fixture) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US11-TC5 | listing_60 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US11-TC6 | listing_61 | An open listing, scheduled close `<scheduled close>`, extension duration 1800s (30mins), extension cap 0s |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC6 | scheduled close | 20:00:00 UTC | Value: (fixed zero-cap boundary) |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC7 | listing_62 | An HKD listing in extended bidding, led by customer A | · |
+| g10.auction-auction.US11-TC7 | sweep interval | 300s | (5mins) |
+
+| Case | `<settlement_trigger>` | `<recorded by>` |
+| --- | --- | --- |
+| g10.auction-auction.US11-TC8 | Read `<listing_63>` more than 2s after its recorded close | right after that read answers |
+| g10.auction-auction.US11-TC8 | Wait for the five-minute sweep without reading the listing | at the next sweep, at most 300s (5mins) after the recorded close |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US11-TC8 | listing_63 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | `<listing_state>` | `<close>` | `<result>` |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC9 | An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap | its recorded close | Closed, customer A winning at `<leader price>` |
+| g10.auction-auction.US11-TC9 | An open HKD listing with no accepted bid, extension duration 1800s (30mins) | its scheduled close | Closed unsold, never in extended bidding |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC9 | leader price | HKD4,960 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US11-TC9 | sweep interval | 300s | (5mins) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US11-TC9 | listing_64 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-auction.US11-TC10 | listing_65 | An HKD listing, scheduled close `<scheduled close>`, recorded close `<recorded close>`, extension duration `<extension duration>`, extension cap `<extension cap>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US11-TC10 | scheduled close | 20:00:00 UTC | Value: (fixed public-read fixture) |
+| g10.auction-auction.US11-TC10 | recorded close | 20:25:00 UTC | Value: (fixed public-read fixture) |
+| g10.auction-auction.US11-TC10 | extension duration | 1800s | (30mins) |
+| g10.auction-auction.US11-TC10 | extension cap | 3600s | (60mins) |
 
 ### Route
 
 1. As customer A, place `<bid amount>` at `<bid time>`.
-2. Read the API response for `<listing_4>`.
+2. Read the API response for `<listing_59>`.
    - The bid is accepted when placed, with no wait for a payment. g10.auction-auction.US11-TC4
    - customer A leads and Highest bid reads `<bid amount>`. g10.auction-auction.US11-TC4
    - The recorded close reads `<new close>`. g10.auction-auction.US11-TC4
 3. As customer A, place `<bid amount>` at `<bid time>`.
-   - is refused. g10.auction-auction.US11-TC5
-4. Read the API response for `<listing_5>`.
+   - Step 3 is refused. g10.auction-auction.US11-TC5
+4. Read the API response for `<listing_60>`.
+   - At Step 4 no accepted bid is added, the recorded close does not move, and `<listing_60>` is still not recorded closed. g10.auction-auction.US11-TC5
 5. Let settling resume.
 6. Read the listing's result.
-   - At step 2 no accepted bid is added, the recorded close does not move, and `<listing_5>` is still not recorded closed. g10.auction-auction.US11-TC5
-   - At step 4 `<listing_5>` is closed with customer B winning. g10.auction-auction.US11-TC5
+   - At Step 6 `<listing_60>` is closed with customer B winning. g10.auction-auction.US11-TC5
 7. Wait for the scheduled close.
-   - `<listing_6>` never entered extended bidding. g10.auction-auction.US11-TC6
-8. Read the API response for `<listing_6>`.
-   - It is closed at 20:00:00 UTC, with its one bidder winning. g10.auction-auction.US11-TC6
+8. Read the API response for `<listing_61>`.
+   - `<listing_61>` never entered extended bidding. g10.auction-auction.US11-TC6
+   - It is closed at `<scheduled close>`, with its one bidder winning. g10.auction-auction.US11-TC6
 9. Wait for the recorded close.
-10. Read the API response for `<listing_7>`.
-   - reads `<listing_7>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`. g10.auction-auction.US11-TC7
-11. Wait for `<listing_8>`'s recorded close.
-12. Let `<who reaches it>` reach `<listing_8>`.
-13. Read the API response for `<listing_8>`.
-   - `<listing_8>` is recorded closed `<recorded by>`, with customer A winning. g10.auction-auction.US11-TC8
-   - Before then, `<listing_8>` takes no bid and reports no result. g10.auction-auction.US11-TC8
+10. Read the API response for `<listing_62>`.
+   - Step 10 reads `<listing_62>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`. g10.auction-auction.US11-TC7
+11. Wait for `<listing_63>`'s recorded close.
+12. Perform this settlement trigger: `<settlement_trigger>`.
+13. Read the API response for `<listing_63>`.
+   - `<listing_63>` is recorded closed `<recorded by>`, with customer A winning. g10.auction-auction.US11-TC8
+   - Before then, `<listing_63>` takes no bid and reports no result. g10.auction-auction.US11-TC8
 14. Wait until 10 seconds past `<close>`.
-   - `<listing_11>` reads `<result>`, recorded within seconds of `<close>`. g10.auction-auction.US11-TC9
-15. Read the API response for `<listing_11>`.
+15. Read the API response for `<listing_64>`.
+   - `<listing_64>` reads `<result>`, recorded within seconds of `<close>`. g10.auction-auction.US11-TC9
    - The close is recorded before the next sweep, well inside `<sweep interval>`. g10.auction-auction.US11-TC9
-16. Read `<listing_12>` from the public listing API.
-   - gives scheduled close 20:00:00 UTC and recorded close 20:25:00 UTC. g10.auction-auction.US11-TC10
-   - gives extension duration 1800s and extension cap 3600s. g10.auction-auction.US11-TC10
+16. Read `<listing_65>` from the public listing API.
+   - Step 16 gives scheduled close `<scheduled close>` and recorded close `<recorded close>`. g10.auction-auction.US11-TC10
+   - Step 16 gives extension duration `<extension duration>` and extension cap `<extension cap>`. g10.auction-auction.US11-TC10
 17. Read the auction service's time from its public time read.
 18. One second later, read the public time again.
    - Steps 2 and 3 each give the auction service's time when it answered, not the caller's. g10.auction-auction.US11-TC10
-   - 's answer is about one second after step 2's, not a cached copy. g10.auction-auction.US11-TC10
+   - Step 18's answer is about one second after Step 17's, not a cached copy. g10.auction-auction.US11-TC10
 
 ## Walk 11: Bidder keeps a listing open only by moving its price
 
 **Starting state:**
 
-- `<listing_9>` is in extended bidding with its recorded close `<time left before bid>` away.
-- customer A leads `<listing_9>` at `<leader price>` with maximum `<user A maximum>`.
-- customer B(card linked) is signed in on a separate session, on the listing page for `<listing_9>`.
-- `<listing_10>` is in extended bidding, its recorded close `<close before raise>`.
-- customer A leads `<listing_10>` at `<leader price>` with maximum `<user A maximum>`, and is on its listing page.
+- `<listing_66>` is in extended bidding with its recorded close `<time left before bid>` away.
+- customer A leads `<listing_66>` at `<leader price>` with maximum `<customer A maximum>`.
+- customer B(card linked) is signed in on a separate session, on the listing page for `<listing_66>`.
+- `<listing_67>` is in extended bidding, its recorded close `<close before raise>`.
+- customer A leads `<listing_67>` at `<leader price>` with maximum `<customer A maximum>`, and is on its listing page.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<listing_9>` | An HKD listing in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<time left before bid>` | 5 minutes |
-| `<leader price>` | HKD1,260 (range: 80000–399999 minor units) |
-| `<user A maximum>` | HKD2,360 (range: 80000–399999 minor units) |
-| `<user B maximum>` | HKD2,360 (fixed boundary or equality), equal to `<user A maximum>` |
-| `<listing_10>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap |
-| `<close before raise>` | 3 minutes after the raise |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<raised maximum>` | HKD9,600 (range: 800000–3999999 minor units) |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US12-TC1 | listing_66 | An HKD listing in extended bidding, extension duration `<extension duration>`, no cap | · |
+| g10.auction-auction.US12-TC1 | extension duration | 1800s | (30mins) |
+| g10.auction-auction.US12-TC1 | time left before bid | 5 minutes | · |
+| g10.auction-auction.US12-TC1 | leader price | HKD1,260 | (range: 80000–399999 minor units) |
+| g10.auction-auction.US12-TC1 | customer A maximum | HKD2,360 | (range: 80000–399999 minor units) |
+| g10.auction-auction.US12-TC1 | customer B maximum | HKD2,360 | (fixed boundary or equality), equal to `<customer A maximum>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US12-TC2 | listing_67 | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap | · |
+| g10.auction-auction.US12-TC2 | close before raise | 3 minutes after the raise | · |
+| g10.auction-auction.US12-TC2 | leader price | HKD5,460 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US12-TC2 | customer A maximum | HKD8,400 | (range: 800000–3999999 minor units) |
+| g10.auction-auction.US12-TC2 | raised maximum | HKD9,600 | (range: 800000–3999999 minor units) |
 
 ### Route
 
-1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 2. Read Highest bid, the leader and Time left.
-   - Highest bid reads `<user B maximum>`. g10.auction-auction.US12-TC1
+   - Highest bid reads `<customer B maximum>`. g10.auction-auction.US12-TC1
    - customer A still leads, as the earlier maximum. g10.auction-auction.US12-TC1
    - Time left reads `<extension duration>` from customer B's bid. g10.auction-auction.US12-TC1
 3. Select **Raise**, enter `<raised maximum>` and confirm.
-   - Your maximum reads `<raised maximum>`. g10.auction-auction.US12-TC2
 4. Read Your maximum, Highest bid and Time left.
-   - Highest bid stays `<leader price>`. g10.auction-auction.US12-TC2
 5. Wait until `<close before raise>` with no further bid.
-   - The recorded close stays `<close before raise>`, and Time left keeps counting to it. g10.auction-auction.US12-TC2
 6. Read the listing's result.
+   - Your maximum reads `<raised maximum>`. g10.auction-auction.US12-TC2
+   - Highest bid stays `<leader price>`. g10.auction-auction.US12-TC2
+   - The recorded close stays `<close before raise>`, and Time left keeps counting to it. g10.auction-auction.US12-TC2
    - The listing closes at `<close before raise>`, customer A winning at `<leader price>`. g10.auction-auction.US12-TC2
 
 ## Walk 12: Runner-up takes the lead when the leader's account is erased
@@ -744,12 +881,13 @@
 - customer(card linked, account in `<account_state>`) is signed in and on the listing page for `<listing_29>`.
 - customer holds no bid on `<listing_29>` and does not watch it.
 - `<listing_29>` is in `<listing_state>`.
-- customer A leads `<listing_30>` at `<current bid>`, and is signed in on the lot page.
-- customer B(card linked, no bid on `<listing_30>`) is signed in on a separate session, on the same lot page.
-- customer(card linked) is signed in and on the lot page for `<listing_31>`, holding the row's standing before the bid.
-- The network is manipulated to drop the bid at the row's point.
-- customer(card linked, account in good standing) is signed in on `<listing_29>`.
-- The next bid answer is mocked as `AMOUNT_TOO_HIGH`, with the row's ceiling and server-message fields.
+- customer A leads `<listing_68>` at `<current bid>`, and is signed in on the listing page.
+- customer B(card linked, no bid on `<listing_68>`) is signed in on a separate session, on the same listing page.
+- customer(card linked) is signed in and on the listing page for `<listing_69>`, with this standing: `<standing_before>`.
+- The network is manipulated to drop `<dropped_stage>`.
+- customer(card linked, account in good standing) is signed in on `<listing_70>`.
+- customer holds no bid on `<listing_70>` and does not watch it.
+- The next bid answer is mocked as `AMOUNT_TOO_HIGH`, with ceiling field `<ceiling_field>` and server-message field `<server_message_field>`.
 - The custom maximum draft equals `<valid draft>`.
 
 **Shared test data:**
@@ -768,37 +906,37 @@
 | g10.auction-auction.US14-TC1 | next minimum | HKD5,290 | (fixed derived value), `<current bid>` plus its 8000 increment |
 | g10.auction-auction.US14-TC1 | bid count | 3 | · |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-auction.US14-TC2 | `<listing_30>` | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) |
-| g10.auction-auction.US14-TC2 | `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
-| g10.auction-auction.US14-TC2 | `<below minimum>` | HKD5,280 (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US14-TC2 | listing_68 | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) | · |
+| g10.auction-auction.US14-TC2 | current bid | HKD5,210 | (range: 400000–799999 minor units) |
+| g10.auction-auction.US14-TC2 | below minimum | HKD5,280 | (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
 
-| Case | Standing before | Bid sent | Dropped | The bid form reads | Standing after |
+| Case | `<standing_before>` | `<bid_amount>` | `<dropped_stage>` | `<expected_bid_form>` | `<standing_after>` |
 | --- | --- | --- | --- | --- | --- |
-| g10.auction-auction.US14-TC3 | No bid | A first maximum of `<maximum>` | The answer, after the auction accepts the bid | Placed, Leading with Your maximum `<maximum>` | Leading, Your maximum `<maximum>`, a row on My Auctions |
-| g10.auction-auction.US14-TC3 | No bid | A first maximum of `<maximum>` | The request, before the auction receives it | Could not place this bid. | No bid, no row on My Auctions |
-| g10.auction-auction.US14-TC3 | Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The answer, after the auction accepts the raise | Placed, Leading with Your maximum `<raised maximum>` | Leading, Your maximum `<raised maximum>` |
-| g10.auction-auction.US14-TC3 | Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The request, before the auction receives it | Could not place this bid. | Leading, Your maximum `<maximum>` |
+| g10.auction-auction.US14-TC3 | No bid | `<maximum>` | The answer, after the auction accepts the bid | Placed, Leading with Your maximum `<maximum>` | Leading, Your maximum `<maximum>`, a row on My Auctions |
+| g10.auction-auction.US14-TC3 | No bid | `<maximum>` | The request, before the auction receives it | Could not place this bid. | No bid, no row on My Auctions |
+| g10.auction-auction.US14-TC3 | Leading, Your maximum `<maximum>` | `<raised maximum>` | The answer, after the auction accepts the raise | Placed, Leading with Your maximum `<raised maximum>` | Leading, Your maximum `<raised maximum>` |
+| g10.auction-auction.US14-TC3 | Leading, Your maximum `<maximum>` | `<raised maximum>` | The request, before the auction receives it | Could not place this bid. | Leading, Your maximum `<maximum>` |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-auction.US14-TC3 | `<listing_31>` | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) |
-| g10.auction-auction.US14-TC3 | `<maximum>` | HKD560 (range: 1000–79999 minor units) |
-| g10.auction-auction.US14-TC3 | `<raised maximum>` | HKD920 (range: 80000–399999 minor units) |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US14-TC3 | listing_69 | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) | · |
+| g10.auction-auction.US14-TC3 | maximum | HKD560 | (range: 1000–79999 minor units) |
+| g10.auction-auction.US14-TC3 | raised maximum | HKD920 | (range: 80000–399999 minor units) |
 
-| Case | Ceiling field | Server-message field |
+| Case | `<ceiling_field>` | `<server_message_field>` |
 | --- | --- | --- |
-| g10.auction-auction.US14-TC4 | `<ceiling>` | A distinct server-message marker |
-| g10.auction-auction.US14-TC4 | Absent | A distinct server-message marker |
+| g10.auction-auction.US14-TC4 | `<ceiling>` | QA_SERVER_MESSAGE_MARKER |
+| g10.auction-auction.US14-TC4 | Absent | QA_SERVER_MESSAGE_MARKER |
 | g10.auction-auction.US14-TC4 | `<ceiling>` | Absent |
 | g10.auction-auction.US14-TC4 | Absent | Absent |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-auction.US14-TC4 | listing_29 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 |
-| g10.auction-auction.US14-TC4 | valid draft | 5130 whole major units, the listing's next minimum |
-| g10.auction-auction.US14-TC4 | ceiling | HKD80,000,000 (fixed configured value) |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-auction.US14-TC4 | listing_70 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 | · |
+| g10.auction-auction.US14-TC4 | valid draft | 5130 whole major units, the listing's next minimum | · |
+| g10.auction-auction.US14-TC4 | ceiling | HKD80,000,000 | (fixed configured value) |
 
 ### Route
 
@@ -817,19 +955,19 @@
    - Step 7 is refused on customer B's bid form. g10.auction-auction.US14-TC2
 8. As customer A, read Highest bid, Recent Bids and the bid panel's standing, without reloading.
    - Step 8 reads Highest bid `<current bid>`, Recent Bids unchanged, and customer A still Leading. g10.auction-auction.US14-TC2
-9. As customer A, navigate to `<my auctions url>` and read `<listing_30>`'s row.
+9. As customer A, navigate to `<my auctions url>` and read `<listing_68>`'s row.
    - Step 9's row reads Leading, with Current bid `<current bid>`. g10.auction-auction.US14-TC2
-10. As customer A, read their mailbox for a letter about `<listing_30>` sent after step 1.
+10. As customer A, read their mailbox for a letter about `<listing_68>` sent after step 1.
    - Step 10 finds no new-bid or outbid letter. g10.auction-auction.US14-TC2
-11. Enter the row's bid in the custom maximum on the bid panel.
+11. Enter `<bid_amount>` in the custom maximum on the bid panel.
 12. Place the bid.
 13. Wait until the bid form settles.
 14. Read the bid form.
-   - Step 14 reads the row's words on the bid form, never both placed and refused. g10.auction-auction.US14-TC3
-15. Reload the lot page and read the bid panel's standing.
-   - Step 15 reads the row's standing after. g10.auction-auction.US14-TC3
-16. Navigate to `<my auctions url>` and look for `<listing_31>`.
-   - Step 16 agrees with the row's standing after. g10.auction-auction.US14-TC3
+   - Step 14 reads `<expected_bid_form>` on the bid form, never both placed and refused. g10.auction-auction.US14-TC3
+15. Reload the listing page and read the bid panel's standing.
+   - Step 15 reads `<standing_after>`. g10.auction-auction.US14-TC3
+16. Navigate to `<my auctions url>` and look for `<listing_69>`.
+   - Step 16 agrees with `<standing_after>`. g10.auction-auction.US14-TC3
 17. Place the bid.
 18. Wait for the mocked refusal answer.
 19. Read the bid form and custom maximum field.
@@ -842,7 +980,7 @@
 21. Reload the listing and read its public bids and standing.
    - Step 21: the price, leader, bid count and public bids remain unchanged. g10.auction-auction.US14-TC4
    - Step 21: customer has no Leading or Outbid standing. g10.auction-auction.US14-TC4
-22. Read My Auctions and Bidding History for `<listing_29>`.
+22. Read My Auctions and Bidding History for `<listing_70>`.
    - Step 22: neither surface records the refused attempt. g10.auction-auction.US14-TC4
 
 ## Walk 14: Collector reads a house-led close and its order
@@ -945,17 +1083,22 @@
 
 **Pre-conditions:**
 
-* `<listing_11>` is published.
+* `<listing_33>` is published.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_11>` | A published listing with extension duration 1800s (30mins) and an extension cap of 3600s (60mins) |
+| listing_33 | A published listing with extension duration `<extension duration>` and extension cap `<extension cap>` |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| extension duration | 1800s | (30mins) |
+| extension cap | 3600s | (60mins) |
 
 **Steps:**
 
-1. Read the API response for `<listing_11>`.
+1. Read the API response for `<listing_33>`.
 
 **Expected Results:**
 
@@ -1145,27 +1288,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked, no bid on `<listing_25>`) is signed in.
-* `<listing_25>` is open inside its window.
+* customer(card linked, no bid on `<listing_34>`) is signed in.
+* `<listing_34>` is open inside its window.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_25>` | An open HKD listing taking bids, current bid `<current bid>` |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_34 | An open HKD listing taking bids, current bid `<current bid>` | · |
+| current bid | HKD4,960 | (range: 400000–799999 minor units) |
+| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
-1. Submit `<bid amount>` on `<listing_25>`.
+1. Submit `<bid amount>` on `<listing_34>`.
 2. Read the API response.
 3. Read the linked card's activity at the card provider.
 
 **Expected Results:**
 
 * Step 2 accepts the bid in the one answer, by the listing's bid rules, with no wait on the card provider.
-* Step 3 shows nothing held or charged on the card for `<listing_25>`.
+* Step 3 shows nothing held or charged on the card for `<listing_34>`.
 
 <!-- trace:case id=g10.auction-auction.TC-rj4 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### g10.auction-auction.US2-TC10: Bid during extended bidding restarts the timer
@@ -1187,19 +1330,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_2>` is in extended bidding and its recorded close is `<close before bids>`.
+* `<listing_35>` is in extended bidding and its recorded close is `<close before bids>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<close before bids>` | 20:30 UTC |
-| `<first bid time>` | 20:10 UTC |
-| `<second bid time>` | 20:35 UTC |
-| `<close after first>` | 20:40 UTC |
-| `<close after second>` | 21:05 UTC |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_35 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
+| close before bids | 20:30 UTC | · |
+| first bid time | 20:10 UTC | · |
+| second bid time | 20:35 UTC | · |
+| close after first | 20:40 UTC | · |
+| close after second | 21:05 UTC | · |
 
 **Steps:**
 
@@ -1233,16 +1376,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_3>` is in extended bidding and its recorded close is its scheduled close plus `<extension cap>`.
+* `<listing_36>` is in extended bidding and its recorded close is its scheduled close plus `<extension cap>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | A listing in extended bidding whose recorded close already stands at its cap |
-| `<scheduled close>` | 20:00 UTC |
-| `<extension cap>` | 3600s (60mins), any cap the listing has already reached |
-| `<result>` | 21:00 UTC |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_36 | A listing in extended bidding whose recorded close already stands at its cap | · |
+| scheduled close | 20:00 UTC | · |
+| extension cap | 3600s | (60mins), any cap the listing has already reached |
+| result | 21:00 UTC | Value: `<scheduled close>` plus `<extension cap>` |
 
 **Steps:**
 
@@ -1276,16 +1419,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_4>` is open with one accepted bid.
+* `<listing_37>` is open with one accepted bid.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` |
-| `<scheduled close>` | 20:00 UTC |
-| `<short duration>` | 300s (5mins), any extension duration above 0 |
-| `<result>` | 20:05 UTC |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_37 | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` | · |
+| scheduled close | 20:00 UTC | · |
+| short duration | 300s | (5mins), any extension duration above 0 |
+| result | 20:05 UTC | Value: `<scheduled close>` plus `<short duration>` |
 
 **Steps:**
 
@@ -1317,13 +1460,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_5>` is open with an accepted bid and extension duration 0.
+* `<listing_38>` is open with an accepted bid and extension duration 0.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_5>` | An open listing with an accepted bid, extension duration 0s |
+| listing_38 | An open listing with an accepted bid, extension duration 0s |
 
 **Steps:**
 
@@ -1357,8 +1500,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_6>` is open with scheduled close `<scheduled close>` and extension duration 1800s (30mins).
-* `<listing_6>` holds the row's `<bids by close>`.
+* `<listing_39>` is open with scheduled close `<scheduled close>` and extension duration `<extension duration>`.
+* `<listing_39>` holds `<bids by close>`.
 
 **Test data:**
 
@@ -1366,6 +1509,14 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- |
 | None | 20:00 UTC | — | Closed at 20:00 UTC |
 | One | 20:00 UTC | 20:30 UTC | Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| extension duration | 1800s | (30mins) |
+
+| Field | Value |
+| --- | --- |
+| listing_39 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
@@ -1400,14 +1551,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_7>` is open with no accepted bid, scheduled close 20:00:00 UTC, and extension duration 1800s (30mins).
+* `<listing_40>` is open with no accepted bid, scheduled close `<scheduled close>`, and extension duration `<extension duration>`.
 
 **Test data:**
 
-| `<bid time>` | Recorded close right after the bid |
+| `<bid time>` | `<recorded_close_after_bid>` | Fixture notes |
+| --- | --- | --- |
+| 19:59:00 UTC | 20:00:00 UTC | `<recorded_close_after_bid>`: unchanged |
+| 20:00:00 UTC | 20:30:00 UTC | `<recorded_close_after_bid>`: the listing in extended bidding |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| scheduled close | 20:00:00 UTC | Value: (fixed boundary fixture) |
+| extension duration | 1800s | (30mins) |
+
+| Field | Value |
 | --- | --- |
-| 19:59:00 UTC | 20:00:00 UTC, unchanged |
-| 20:00:00 UTC | 20:30:00 UTC, the listing in extended bidding |
+| listing_40 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
@@ -1417,7 +1577,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The bid is accepted.
-* The recorded close reads as the row states.
+* The recorded close reads `<recorded_close_after_bid>`.
 
 <!-- trace:case id=g10.auction-auction.TC-iid rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### g10.auction-auction.US2-TC7: Each listing runs its own timer
@@ -1439,24 +1599,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_8>` and `<listing_9>` are both in extended bidding with recorded close 20:30 UTC.
+* `<listing_41>` and `<listing_42>` are both in extended bidding with recorded close `<close before bid>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
-| `<listing_9>` | A second listing in the same state as `<listing_8>` |
+| listing_41 | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
+| listing_42 | A second listing in the same state as `<listing_41>` |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| close before bid | 20:30 UTC | Value: (fixed initial close) |
+| bid time | 20:10 UTC | Value: (fixed in-window fixture) |
+| close after bid | 20:40 UTC | Value: `<bid time>` plus the 1800s extension duration |
 
 **Steps:**
 
-1. Submit a valid bid on `<listing_8>` at 20:10 UTC.
+1. Submit a valid bid on `<listing_41>` at `<bid time>`.
 2. Read both recorded closes.
 
 **Expected Results:**
 
-* `<listing_8>` reads 20:40 UTC.
-* `<listing_9>` still reads 20:30 UTC.
+* `<listing_41>` reads `<close after bid>`.
+* `<listing_42>` still reads `<close before bid>`.
 
 <!-- trace:case id=g10.auction-auction.TC-q6k rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### g10.auction-auction.US2-TC8: Collector with no earlier bid bids during extended bidding
@@ -1476,15 +1642,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(no bid on `<listing_2>`, card saved) is signed in and on `<listing_2>`.
-* `<listing_2>` is in extended bidding.
+* customer(no bid on `<listing_43>`, card saved) is signed in and on `<listing_43>`.
+* `<listing_43>` is in extended bidding.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_43 | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
 
 **Steps:**
 
@@ -1516,13 +1682,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_10>` entered extended bidding and its recorded close has passed.
+* `<listing_44>` entered extended bidding and its recorded close has passed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_10>` | A listing whose extended bidding timer ran out with no new bid |
+| listing_44 | A listing whose extended bidding timer ran out with no new bid |
 
 **Steps:**
 
@@ -1556,22 +1722,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_21>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
-* customer(card linked, no bid on `<listing_21>`) is signed in and on `<listing_21>`.
+* `<listing_45>` is open inside its window, in `<currency>`, starting price `<start>`, with no accepted bid.
+* customer(card linked, no bid on `<listing_45>`) is signed in and on `<listing_45>`.
 
 **Test data:**
 
-| Currency | `<start>` | `<opening price>` | `<next minimum>` |
-| --- | --- | --- | --- |
-| HKD | HKD280 (range: 1000–79999 minor units), positive start | HKD280 (range: 1000–79999 minor units), the start itself | HKD290 (range: 1000–79999 minor units) |
-| HKD | HKD7 (fixed boundary or equality), below the lowest increment | HKD7 (fixed boundary or equality), the start itself | HKD17 (range: 1000–79999 minor units) |
-| HKD | HKD0 (fixed tier boundary), zero start | HKD10 (fixed boundary or equality), the lowest increment | HKD20 (fixed boundary or equality) |
-| USD | USD0 (fixed tier boundary), zero start | USD1 (fixed boundary or equality), the lowest increment | USD2 (fixed boundary or equality) |
-| JPY | JPY0 (fixed tier boundary), zero start | JPY100 (fixed boundary or equality), the lowest increment | JPY200 (fixed boundary or equality) |
+| `<currency>` | `<start>` | `<opening price>` | `<next minimum>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| HKD | HKD280 | HKD280 | HKD290 | `<start>`: (range: 1000–79999 minor units), positive start; `<opening price>`: (range: 1000–79999 minor units), the start itself; `<next minimum>`: (range: 1000–79999 minor units) |
+| HKD | HKD7 | HKD7 | HKD17 | `<start>`: (fixed boundary or equality), below the lowest increment; `<opening price>`: (fixed boundary or equality), the start itself; `<next minimum>`: (range: 1000–79999 minor units) |
+| HKD | HKD0 | HKD10 | HKD20 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<next minimum>`: (fixed boundary or equality) |
+| USD | USD0 | USD1 | USD2 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<next minimum>`: (fixed boundary or equality) |
+| JPY | JPY0 | JPY100 | JPY200 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<next minimum>`: (fixed boundary or equality) |
+
+| Field | Value |
+| --- | --- |
+| listing_45 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
-1. Enter the row's `<opening price>` in the custom maximum on the bid panel.
+1. Enter `<opening price>` in the custom maximum on the bid panel.
 2. Place the bid.
 3. Read Highest bid, the bid count and Recent Bids.
 4. Read the minimum next bid.
@@ -1605,25 +1775,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_22>` is open inside its window, in the row's currency, starting price the row's `<start>`, with no accepted bid.
-* customer(card linked, no bid on `<listing_22>`) is signed in.
+* `<listing_46>` is open inside its window, in `<currency>`, starting price `<start>`, with no accepted bid.
+* customer(card linked, no bid on `<listing_46>`) is signed in.
 
 **Test data:**
 
-| Currency | `<start>` | `<opening price>` | `<bid amount>` |
-| --- | --- | --- | --- |
-| HKD | HKD280 (range: 1000–79999 minor units) | HKD280 (range: 1000–79999 minor units), the start itself | HKD279.99 (fixed boundary or equality), one minor unit below |
-| USD | USD500 (fixed tier boundary) | USD500 (fixed tier boundary), the start itself | USD499.99 (fixed boundary or equality), one minor unit below |
-| JPY | JPY23,500 (range: 15000–74999 minor units) | JPY23,500 (range: 15000–74999 minor units), the start itself | JPY23,499 (fixed boundary or equality), one minor unit below |
-| HKD | HKD0 (fixed tier boundary), zero start | HKD10 (fixed boundary or equality), the lowest increment | HKD9.99 (fixed boundary or equality), one minor unit below |
-| USD | USD0 (fixed tier boundary), zero start | USD1 (fixed boundary or equality), the lowest increment | USD0.99 (fixed boundary or equality), one minor unit below |
-| JPY | JPY0 (fixed tier boundary), zero start | JPY100 (fixed boundary or equality), the lowest increment | JPY99 (fixed boundary or equality), one minor unit below |
+| `<currency>` | `<start>` | `<opening price>` | `<bid amount>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| HKD | HKD280 | HKD280 | HKD279.99 | `<start>`: (range: 1000–79999 minor units); `<opening price>`: (range: 1000–79999 minor units), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| USD | USD500 | USD500 | USD499.99 | `<start>`: (fixed tier boundary); `<opening price>`: (fixed tier boundary), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| JPY | JPY23,500 | JPY23,500 | JPY23,499 | `<start>`: (range: 15000–74999 minor units); `<opening price>`: (range: 15000–74999 minor units), the start itself; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| HKD | HKD0 | HKD10 | HKD9.99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| USD | USD0 | USD1 | USD0.99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+| JPY | JPY0 | JPY100 | JPY99 | `<start>`: (fixed tier boundary), zero start; `<opening price>`: (fixed boundary or equality), the lowest increment; `<bid amount>`: (fixed boundary or equality), one minor unit below |
+
+| Field | Value |
+| --- | --- |
+| listing_46 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
-1. Submit a bid of the row's `<bid amount>` on `<listing_22>`.
+1. Submit a bid of `<bid amount>` on `<listing_46>`.
 2. Read the API response.
-3. Read `<listing_22>`'s bids and bid count.
+3. Read `<listing_46>`'s bids and bid count.
 
 **Expected Results:**
 
@@ -1737,24 +1911,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_26>` is open inside its window, current bid `<current bid>`.
-* customer A(card linked) and customer B(card linked) are signed in on separate sessions, neither holding a bid on `<listing_26>`.
+* `<listing_47>` is open inside its window, current bid `<current bid>`.
+* customer A(card linked) and customer B(card linked) are signed in on separate sessions, neither holding a bid on `<listing_47>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_26>` | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` |
-| `<current bid>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<increment>` | HKD80 (fixed tier increment), the HK$4,000 tier |
-| `<bid A>` | HKD5,210 (range: 400000–799999 minor units) |
-| `<bid B>` | HKD6,200 (range: 400000–799999 minor units), above `<bid A>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_47 | An open HKD listing taking bids, led by customer C at `<current bid>` with maximum `<current bid>` | · |
+| current bid | HKD4,960 | (range: 400000–799999 minor units) |
+| increment | HKD80 | (fixed tier increment), the HK$4,000 tier |
+| bid A | HKD5,210 | (range: 400000–799999 minor units) |
+| bid B | HKD6,200 | (range: 400000–799999 minor units), above `<bid A>` |
 
 **Steps:**
 
-1. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_26>` at the same moment.
+1. Submit `<bid A>` as customer A and `<bid B>` as customer B on `<listing_47>` at the same moment.
 2. Read both API responses.
-3. Read `<listing_26>` from the public listing API.
+3. Read `<listing_47>` from the public listing API.
 
 **Expected Results:**
 
@@ -1928,7 +2102,7 @@ Runs once per row of **Test data**.
 **so that** what I can still bid on is in front of me and reading further never shows me a listing twice or skips one.
 
 <!-- trace:case id=g10.auction-auction.TC-91h rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
-### g10.auction-auction.US5-TC1: Open lots lead the catalogue
+### g10.auction-auction.US5-TC1: Open listings lead the catalogue
 
 **Classification:**
 
@@ -1945,25 +2119,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The catalogue lists `<listing_14>`, `<listing_15>` and `<listing_16>`.
+* The catalogue lists `<listing_48>`, `<listing_49>` and `<listing_50>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_14>` | An Active lot whose close is 18:00 UTC |
-| `<listing_15>` | An Upcoming lot whose start is 19:00 UTC |
-| `<listing_16>` | An Ended lot that closed at 12:00 UTC, before `<listing_14>` closes |
+| listing_48 | An Active listing whose close is 18:00 UTC |
+| listing_49 | An Upcoming listing whose start is 19:00 UTC |
+| listing_50 | An Ended listing that closed at 12:00 UTC, before `<listing_48>` closes |
 
 **Steps:**
 
-1. Navigate to <grade10 auction catalogue url>.
-2. Read the lots in listed order.
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the listings in listed order.
 
 **Expected Results:**
 
-* `<listing_14>` is listed before `<listing_15>`.
-* `<listing_15>` is listed before `<listing_16>`.
+* `<listing_48>` is listed before `<listing_49>`.
+* `<listing_49>` is listed before `<listing_50>`.
 
 <!-- trace:case id=g10.auction-auction.TC-yh1 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC2: Each status has its own order
@@ -1983,29 +2157,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The catalogue lists the six lots in **Test data**.
+* The catalogue lists the six listings in **Test data**.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_17>` | An Active lot closing at 18:00 UTC |
-| `<listing_18>` | An Active lot closing at 19:00 UTC |
-| `<listing_19>` | An Upcoming lot starting on 2026-10-01 |
-| `<listing_20>` | An Upcoming lot starting on 2026-10-02 |
-| `<listing_21>` | An Ended lot that closed on 2026-09-22 |
-| `<listing_22>` | An Ended lot that closed on 2026-09-15 |
+| listing_51 | An Active listing closing at 18:00 UTC |
+| listing_52 | An Active listing closing at 19:00 UTC |
+| listing_53 | An Upcoming listing starting on 2026-10-01 |
+| listing_54 | An Upcoming listing starting on 2026-10-02 |
+| listing_55 | An Ended listing that closed on 2026-09-22 |
+| listing_56 | An Ended listing that closed on 2026-09-15 |
 
 **Steps:**
 
-1. Navigate to <grade10 auction catalogue url>.
-2. Read the lots in listed order.
+1. Navigate to `<grade10 auction catalogue url>`.
+2. Read the listings in listed order.
 
 **Expected Results:**
 
-* `<listing_17>` is listed before `<listing_18>`.
-* `<listing_19>` is listed before `<listing_20>`.
-* `<listing_21>` is listed before `<listing_22>`.
+* `<listing_51>` is listed before `<listing_52>`.
+* `<listing_53>` is listed before `<listing_54>`.
+* `<listing_55>` is listed before `<listing_56>`.
 
 <!-- trace:case id=g10.auction-auction.TC-yj3 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC3: A tie is settled the same way every read
@@ -2027,14 +2201,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_23>` and `<listing_24>` are both Active and close at the same time.
+* `<listing_57>` and `<listing_58>` are both Active and close at the same time.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_23>` | An Active lot closing at 18:00 UTC |
-| `<listing_24>` | An Active lot closing at 18:00 UTC, a different lot record from `<listing_23>` |
+| listing_57 | An Active listing closing at 18:00 UTC |
+| listing_58 | An Active listing closing at 18:00 UTC, a different listing record from `<listing_57>` |
 
 **Steps:**
 
@@ -2043,7 +2217,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `<listing_23>` and `<listing_24>` are in the same order both times.
+* `<listing_57>` and `<listing_58>` are in the same order both times.
 
 <!-- trace:case id=g10.auction-auction.TC-c4u rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC4: Paging does not change the order
@@ -2065,7 +2239,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The Auction catalogue holds more lots than one page lists.
+* The Auction catalogue holds more listings than one page lists.
 
 **Steps:**
 
@@ -2074,9 +2248,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Both readings list the lots in the same order.
-* No lot is listed twice.
-* No lot is missing.
+* Both readings list the listings in the same order.
+* No listing is listed twice.
+* No listing is missing.
 
 <!-- trace:case id=g10.auction-auction.TC-2gb rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC5: Empty Featured leaves All auctions only
@@ -2100,7 +2274,7 @@ Runs once per row of **Test data**.
 
 * customer is able to open `<grade10 auction catalogue url>`.
 * No complete Featured slot is set.
-* At least one lot is visible in All auctions.
+* At least one listing is visible in All auctions.
 
 **Steps:**
 
@@ -2110,7 +2284,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No Featured band is present.
-* All auctions is shown with lots in the catalogue resting order.
+* All auctions is shown with listings in the catalogue resting order.
 
 <!-- trace:case id=g10.auction-auction.TC-izg rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC6: Catalogue shows no category chrome
@@ -2166,7 +2340,7 @@ Runs once per row of **Test data**.
 
 * customer is able to open `<grade10 auction catalogue url>`.
 * At least one complete Featured slot is set.
-* No lots are available for All auctions.
+* No listings are available for All auctions.
 
 **Steps:**
 
@@ -2179,7 +2353,7 @@ Runs once per row of **Test data**.
 * All auctions shows a message that there are no auctions.
 
 <!-- trace:case id=g10.auction-auction.TC-yqf rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
-### g10.auction-auction.US5-TC8: Featured lots also appear in All auctions resting order
+### g10.auction-auction.US5-TC8: Featured listings also appear in All auctions resting order
 
 Runs once per row of **Test data**.
 
@@ -2201,24 +2375,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* At least one complete Featured slot is set for `<featured lot>`.
-* `<featured lot>` is among the lots a collector can see.
+* At least one complete Featured slot is set for `<featured_listing>`.
+* `<featured_listing>` is among the listings a collector can see.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<featured lot>` | A published lot that fills a complete Featured slot |
+| featured_listing | A published listing that fills a complete Featured slot |
 
 **Steps:**
 
-1. Read the Featured band for `<featured lot>`.
-2. Read All auctions for `<featured lot>` and the list order.
+1. Read the Featured band for `<featured_listing>`.
+2. Read All auctions for `<featured_listing>` and the list order.
 
 **Expected Results:**
 
-* `<featured lot>` appears in Featured and again in All auctions.
-* All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible lot.
+* `<featured_listing>` appears in Featured and again in All auctions.
+* All auctions keeps the catalogue resting order below Featured, with no duplicate within the list and no skipped visible listing.
 
 <!-- trace:case id=g10.auction-auction.TC-q56 rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
 ### g10.auction-auction.US5-TC9: Catalogue address stays indexable at /auction without category query
@@ -2252,7 +2426,7 @@ Runs once per row of **Test data**.
 * Canonical and share address are `/auction` with no category query.
 
 <!-- trace:case id=g10.auction-auction.TC-90r rev=1 covers=g10.auction-auction.SC-5vk,g10.auction-auction.SC-c4r,g10.auction-auction.SC-icd,g10.auction-auction.SC-zvy,g10.auction-auction.SC-zv8,g10.auction-auction.SC-4je,g10.auction-auction.SC-7l1,g10.auction-auction.SC-tb4,g10.auction-auction.SC-iyy,g10.auction-auction.SC-cys,g10.auction-auction.SC-ned,g10.auction-auction.SC-fs8 -->
-### g10.auction-auction.US5-TC10: More All auctions lots load on scroll
+### g10.auction-auction.US5-TC10: More All auctions listings load on scroll
 
 **Classification:**
 
@@ -2272,18 +2446,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* All auctions holds more lots than the first batch shows.
+* All auctions holds more listings than the first batch shows.
 
 **Steps:**
 
 1. Read the first batch of All auctions cards.
-2. Scroll near the end of the shown lots.
+2. Scroll near the end of the shown listings.
 3. Wait for the next batch.
 
 **Expected Results:**
 
-* Step 2 shows Boneyard skeleton cards below the lots already shown, or the next batch lands without pagination controls.
-* Step 3 shows additional lots below the first batch.
+* Step 2 shows Boneyard skeleton cards below the listings already shown, or the next batch lands without pagination controls.
+* Step 3 shows additional listings below the first batch.
 * Lots from step 1 stay visible.
 * The combined list stays in the catalogue resting order.
 * No pagination controls appear.
@@ -2311,17 +2485,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on `<grade10 auction catalogue url>`.
-* An Upcoming lot is among All auctions.
+* The Upcoming listing `<upcoming_listing>` is among All auctions.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<upcoming lot>` | A published Upcoming lot on All auctions |
+| upcoming_listing | A published Upcoming listing on All auctions |
 
 **Steps:**
 
-1. Find `<upcoming lot>` on All auctions.
+1. Find `<upcoming_listing>` on All auctions.
 2. Read its card for money and countdown.
 
 **Expected Results:**
@@ -2985,22 +3159,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_4>` is in extended bidding and its recorded close is 20:30:00 UTC.
-* customer A(card linked) is signed in and on the lot page for `<listing_4>`.
+* `<listing_59>` is in extended bidding and its recorded close is `<recorded close>`.
+* customer A(card linked) is signed in and on the listing page for `<listing_59>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_4>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B |
-| `<bid time>` | 20:29:59 UTC, one second before the recorded close |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
-| `<new close>` | 20:59:59 UTC, `<bid time>` plus 1800s |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_59 | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap, led by customer B | · |
+| bid time | 20:29:59 UTC | Value: one second before the recorded close |
+| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
+| new close | 20:59:59 UTC | Value: `<bid time>` plus 1800s |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| recorded close | 20:30:00 UTC | Value: (fixed last-second fixture) |
 
 **Steps:**
 
 1. As customer A, place `<bid amount>` at `<bid time>`.
-2. Read the API response for `<listing_4>`.
+2. Read the API response for `<listing_59>`.
 
 **Expected Results:**
 
@@ -3030,43 +3208,51 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_5>` has scheduled close 20:00:00 UTC and its extension terms are the row's.
-* customer B's bid was accepted on `<listing_5>` at `<last accepted>`.
-* Settling `<listing_5>` is held back, so its close is not yet recorded at `<bid time>`.
-* customer A(card linked) is signed in and can bid on `<listing_5>`.
+* `<listing_60>` has scheduled close `<scheduled close>`, extension duration `<extension duration>` and cap `<extension cap>`.
+* customer B's bid was accepted on `<listing_60>` at `<last accepted>`.
+* Settling `<listing_60>` is held back, so its close is not yet recorded at `<bid time>`.
+* customer A(card linked) is signed in and can bid on `<listing_60>`.
 
 **Test data:**
 
-| `<extension duration>` | `<extension cap>` | `<last accepted>` | `<effective close>` | `<bid time>` |
-| --- | --- | --- | --- | --- |
-| 1800s (30mins) | 600s (10mins) | 20:05:00 UTC | 20:10:00 UTC, the cap | 20:10:00 UTC, at the limit |
-| 1800s (30mins) | 600s (10mins) | 20:05:00 UTC | 20:10:00 UTC, the cap | 20:10:01 UTC |
-| 1800s (30mins) | None | 20:10:00 UTC | 20:40:00 UTC, the recorded close | 20:40:00 UTC, at the limit |
-| 1800s (30mins) | None | 20:10:00 UTC | 20:40:00 UTC, the recorded close | 20:40:01 UTC |
-| 1800s (30mins) | 0s | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:00.001 UTC, at the limit |
-| 1800s (30mins) | 0s | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:01 UTC |
-| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:00.001 UTC, at the limit |
-| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC, one millisecond after the scheduled close | 20:00:01 UTC |
+| `<extension duration>` | `<extension cap>` | `<last accepted>` | `<effective close>` | `<bid time>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:00 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap; `<bid time>`: at the limit |
+| 1800s | 600s | 20:05:00 UTC | 20:10:00 UTC | 20:10:01 UTC | `<extension duration>`: (30mins); `<extension cap>`: (10mins); `<effective close>`: the cap |
+| 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:00 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close; `<bid time>`: at the limit |
+| 1800s | None | 20:10:00 UTC | 20:40:00 UTC | 20:40:01 UTC | `<extension duration>`: (30mins); `<effective close>`: the recorded close |
+| 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
+| 1800s | 0s | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<extension duration>`: (30mins); `<effective close>`: one millisecond after the scheduled close |
+| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:00.001 UTC | `<effective close>`: one millisecond after the scheduled close; `<bid time>`: at the limit |
+| 0s | None | 19:58:00 UTC | 20:00:00.001 UTC | 20:00:01 UTC | `<effective close>`: one millisecond after the scheduled close |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| bid amount | HKD5,210 | (range: 400000–799999 minor units), at or above the minimum next bid |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| scheduled close | 20:00:00 UTC | Value: (fixed effective-close fixture) |
 
 | Field | Value |
 | --- | --- |
-| `<bid amount>` | HKD5,210 (range: 400000–799999 minor units), at or above the minimum next bid |
+| listing_60 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
 1. As customer A, place `<bid amount>` at `<bid time>`.
-2. Read the API response for `<listing_5>`.
+2. Read the API response for `<listing_60>`.
 3. Let settling resume.
-4. Read the lot's result.
+4. Read the listing's result.
 
 **Expected Results:**
 
 * Step 1 is refused.
-* At step 2 no accepted bid is added, the recorded close does not move, and `<listing_5>` is still not recorded closed.
-* At step 4 `<listing_5>` is closed with customer B winning.
+* At step 2 no accepted bid is added, the recorded close does not move, and `<listing_60>` is still not recorded closed.
+* At step 4 `<listing_60>` is closed with customer B winning.
 
 <!-- trace:case id=g10.auction-auction.TC-x7e rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC6: Extension cap of 0 closes the lot at its scheduled close
+### g10.auction-auction.US11-TC6: Extension cap of 0 closes the listing at its scheduled close
 
 Runs once per row of **Test data**.
 
@@ -3087,26 +3273,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_6>` is open with one accepted bid.
+* `<listing_61>` is open with one accepted bid.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | An open listing, scheduled close 20:00:00 UTC, extension duration 1800s (30mins), extension cap 0s |
+| listing_61 | An open listing, scheduled close `<scheduled close>`, extension duration 1800s (30mins), extension cap 0s |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| scheduled close | 20:00:00 UTC | Value: (fixed zero-cap boundary) |
 
 **Steps:**
 
 1. Wait for the scheduled close.
-2. Read the API response for `<listing_6>`.
+2. Read the API response for `<listing_61>`.
 
 **Expected Results:**
 
-* `<listing_6>` never entered extended bidding.
-* It is closed at 20:00:00 UTC, with its one bidder winning.
+* `<listing_61>` never entered extended bidding.
+* It is closed at `<scheduled close>`, with its one bidder winning.
 
 <!-- trace:case id=g10.auction-auction.TC-xee rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC7: A due lot is recorded closed at its close
+### g10.auction-auction.US11-TC7: A due listing is recorded closed at its close
 
 Runs once per row of **Test data**.
 
@@ -3127,27 +3317,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads `<listing_7>`.
-* `<listing_7>`'s recorded close is about two minutes away, and no other bid will be placed.
+* customer A leads `<listing_62>`.
+* `<listing_62>`'s recorded close is about two minutes away, and no other bid will be placed.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_7>` | An HKD listing in extended bidding, led by customer A |
-| `<sweep interval>` | 300s (5mins) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_62 | An HKD listing in extended bidding, led by customer A | · |
+| sweep interval | 300s | (5mins) |
 
 **Steps:**
 
 1. Wait for the recorded close.
-2. Read the API response for `<listing_7>`.
+2. Read the API response for `<listing_62>`.
 
 **Expected Results:**
 
-* Step 2 reads `<listing_7>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`.
+* Step 2 reads `<listing_62>` closed, customer A winning, before the next sweep, well inside `<sweep interval>`.
 
 <!-- trace:case id=g10.auction-auction.TC-32a rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC8: A lot whose alarm missed is still settled
+### g10.auction-auction.US11-TC8: A listing whose alarm missed is still settled
 
 Runs once per row of **Test data**.
 
@@ -3168,29 +3358,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads `<listing_8>`, and no other bid will be placed.
-* The lot's own alarm is disabled for `<listing_8>`.
+* customer A leads `<listing_63>`, and no other bid will be placed.
+* The listing's own alarm is disabled for `<listing_63>`.
 
 **Test data:**
 
-| `<who reaches it>` | `<recorded by>` |
+| `<settlement_trigger>` | `<recorded by>` |
 | --- | --- |
-| A read of `<listing_8>` more than 2s after its recorded close | Right after that read answers |
-| Nobody before the five-minute sweep | The next sweep, at most 300s (5mins) after the recorded close |
+| Read `<listing_63>` more than 2s after its recorded close | right after that read answers |
+| Wait for the five-minute sweep without reading the listing | at the next sweep, at most 300s (5mins) after the recorded close |
+
+| Field | Value |
+| --- | --- |
+| listing_63 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
-1. Wait for `<listing_8>`'s recorded close.
-2. Let `<who reaches it>` reach `<listing_8>`.
-3. Read the API response for `<listing_8>`.
+1. Wait for `<listing_63>`'s recorded close.
+2. Perform this settlement trigger: `<settlement_trigger>`.
+3. Read the API response for `<listing_63>`.
 
 **Expected Results:**
 
-* `<listing_8>` is recorded closed `<recorded by>`, with customer A winning.
-* Before then, `<listing_8>` takes no bid and reports no result.
+* `<listing_63>` is recorded closed `<recorded by>`, with customer A winning.
+* Before then, `<listing_63>` takes no bid and reports no result.
 
 <!-- trace:case id=g10.auction-auction.TC-cr9 rev=2 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
-### g10.auction-auction.US11-TC9: A lot no page has open is recorded closed at its close
+### g10.auction-auction.US11-TC9: A listing no page has open is recorded closed at its close
 
 Runs once per row of **Test data**.
 
@@ -3211,29 +3405,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_11>` is in the row's state, and no page has it open.
-* Nobody reads `<listing_11>` until step 2.
+* `<listing_64>` has this state: `<listing_state>`, and no page has it open.
+* Nobody reads `<listing_64>` until step 2.
 
 **Test data:**
 
-| `<listing_11>` state | `<close>` | `<result>` |
+| `<listing_state>` | `<close>` | `<result>` |
 | --- | --- | --- |
 | An HKD listing in extended bidding, led by customer A at `<leader price>`, extension duration 1800s (30mins), no cap | its recorded close | Closed, customer A winning at `<leader price>` |
 | An open HKD listing with no accepted bid, extension duration 1800s (30mins) | its scheduled close | Closed unsold, never in extended bidding |
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| leader price | HKD4,960 | (range: 400000–799999 minor units) |
+| sweep interval | 300s | (5mins) |
+
 | Field | Value |
 | --- | --- |
-| `<leader price>` | HKD4,960 (range: 400000–799999 minor units) |
-| `<sweep interval>` | 300s (5mins) |
+| listing_64 | The auction listing prepared with the state and timing in this case’s Pre-conditions and data row; bind its identity only |
 
 **Steps:**
 
 1. Wait until 10 seconds past `<close>`.
-2. Read the API response for `<listing_11>`.
+2. Read the API response for `<listing_64>`.
 
 **Expected Results:**
 
-* `<listing_11>` reads `<result>`, recorded within seconds of `<close>`.
+* `<listing_64>` reads `<result>`, recorded within seconds of `<close>`.
 * The close is recorded before the next sweep, well inside `<sweep interval>`.
 
 <!-- trace:case id=g10.auction-auction.TC-yrr rev=1 covers=g10.auction-auction.SC-r92,g10.auction-auction.SC-wu6,g10.auction-auction.SC-c6m,g10.auction-auction.SC-ckp -->
@@ -3258,25 +3456,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_12>` is in extended bidding.
+* `<listing_65>` is in extended bidding.
 * No session is signed in.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_12>` | An HKD listing, scheduled close 20:00:00 UTC, recorded close 20:25:00 UTC, extension duration 1800s (30mins), extension cap 3600s (60mins) |
+| listing_65 | An HKD listing, scheduled close `<scheduled close>`, recorded close `<recorded close>`, extension duration `<extension duration>`, extension cap `<extension cap>` |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| scheduled close | 20:00:00 UTC | Value: (fixed public-read fixture) |
+| recorded close | 20:25:00 UTC | Value: (fixed public-read fixture) |
+| extension duration | 1800s | (30mins) |
+| extension cap | 3600s | (60mins) |
 
 **Steps:**
 
-1. Read `<listing_12>` from the public listing API.
+1. Read `<listing_65>` from the public listing API.
 2. Read the auction service's time from its public time read.
 3. One second later, read the public time again.
 
 **Expected Results:**
 
-* Step 1 gives scheduled close 20:00:00 UTC and recorded close 20:25:00 UTC.
-* Step 1 gives extension duration 1800s and extension cap 3600s.
+* Step 1 gives scheduled close `<scheduled close>` and recorded close `<recorded close>`.
+* Step 1 gives extension duration `<extension duration>` and extension cap `<extension cap>`.
 * Steps 2 and 3 each give the auction service's time when it answered, not the caller's.
 * Step 3's answer is about one second after step 2's, not a cached copy.
 
@@ -3584,7 +3789,7 @@ Runs once per row of **Test data**.
 **so that** a leader cannot keep a listing open by raising their own maximum.
 
 <!-- trace:case id=g10.auction-auction.TC-lmv rev=1 covers=g10.auction-auction.SC-e9w,g10.auction-auction.SC-xd3 -->
-### g10.auction-auction.US12-TC1: Equal maximum at a higher price extends the lot
+### g10.auction-auction.US12-TC1: Equal maximum at a higher price extends the listing
 
 Runs once per row of **Test data**.
 
@@ -3605,29 +3810,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_9>` is in extended bidding with its recorded close `<time left before bid>` away.
-* customer A leads `<listing_9>` at `<leader price>` with maximum `<user A maximum>`.
-* customer B(card linked) is signed in on a separate session, on the lot page for `<listing_9>`.
+* `<listing_66>` is in extended bidding with its recorded close `<time left before bid>` away.
+* customer A leads `<listing_66>` at `<leader price>` with maximum `<customer A maximum>`.
+* customer B(card linked) is signed in on a separate session, on the listing page for `<listing_66>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_9>` | An HKD listing in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<time left before bid>` | 5 minutes |
-| `<leader price>` | HKD1,260 (range: 80000–399999 minor units) |
-| `<user A maximum>` | HKD2,360 (range: 80000–399999 minor units) |
-| `<user B maximum>` | HKD2,360 (fixed boundary or equality), equal to `<user A maximum>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_66 | An HKD listing in extended bidding, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
+| time left before bid | 5 minutes | · |
+| leader price | HKD1,260 | (range: 80000–399999 minor units) |
+| customer A maximum | HKD2,360 | (range: 80000–399999 minor units) |
+| customer B maximum | HKD2,360 | (fixed boundary or equality), equal to `<customer A maximum>` |
 
 **Steps:**
 
-1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 2. Read Highest bid, the leader and Time left.
 
 **Expected Results:**
 
-* Highest bid reads `<user B maximum>`.
+* Highest bid reads `<customer B maximum>`.
 * customer A still leads, as the earlier maximum.
 * Time left reads `<extension duration>` from customer B's bid.
 
@@ -3653,32 +3858,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_10>` is in extended bidding, its recorded close `<close before raise>`.
-* customer A leads `<listing_10>` at `<leader price>` with maximum `<user A maximum>`, and is on its lot page.
+* `<listing_67>` is in extended bidding, its recorded close `<close before raise>`.
+* customer A leads `<listing_67>` at `<leader price>` with maximum `<customer A maximum>`, and is on its listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_10>` | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap |
-| `<close before raise>` | 3 minutes after the raise |
-| `<leader price>` | HKD5,460 (range: 400000–799999 minor units) |
-| `<user A maximum>` | HKD8,400 (range: 800000–3999999 minor units) |
-| `<raised maximum>` | HKD9,600 (range: 800000–3999999 minor units) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_67 | An HKD listing in extended bidding, extension duration 1800s (30mins), no cap | · |
+| close before raise | 3 minutes after the raise | · |
+| leader price | HKD5,460 | (range: 400000–799999 minor units) |
+| customer A maximum | HKD8,400 | (range: 800000–3999999 minor units) |
+| raised maximum | HKD9,600 | (range: 800000–3999999 minor units) |
 
 **Steps:**
 
 1. Select **Raise**, enter `<raised maximum>` and confirm.
 2. Read Your maximum, Highest bid and Time left.
 3. Wait until `<close before raise>` with no further bid.
-4. Read the lot's result.
+4. Read the listing's result.
 
 **Expected Results:**
 
 * Your maximum reads `<raised maximum>`.
 * Highest bid stays `<leader price>`.
 * The recorded close stays `<close before raise>`, and Time left keeps counting to it.
-* The lot closes at `<close before raise>`, customer A winning at `<leader price>`.
+* The listing closes at `<close before raise>`, customer A winning at `<leader price>`.
 
 <!-- trace:case id=g10.auction-auction.TC-2g4 rev=1 covers=g10.auction-auto-bidding.SC-pfm,g10.auction-auto-bidding.SC-ax3 -->
 ### g10.auction-auction.US12-TC3: A house change restarts the timer only when it moves the price
@@ -3971,23 +4176,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads `<listing_30>` at `<current bid>`, and is signed in on the lot page.
-* customer B(card linked, no bid on `<listing_30>`) is signed in on a separate session, on the same lot page.
+* customer A leads `<listing_68>` at `<current bid>`, and is signed in on the listing page.
+* customer B(card linked, no bid on `<listing_68>`) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_30>` | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) |
-| `<current bid>` | HKD5,210 (range: 400000–799999 minor units) |
-| `<below minimum>` | HKD5,280 (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_68 | An open HKD listing led by customer A, maximum HKD8,400 (range: 800000–3999999 minor units) | · |
+| current bid | HKD5,210 | (range: 400000–799999 minor units) |
+| below minimum | HKD5,280 | (fixed derived value), one major unit below `<current bid>` plus its 8000 increment |
 
 **Steps:**
 
 1. As customer B, enter `<below minimum>` in the custom maximum and place the bid.
 2. As customer A, read Highest bid, Recent Bids and the bid panel's standing, without reloading.
-3. As customer A, navigate to `<my auctions url>` and read `<listing_30>`'s row.
-4. As customer A, read their mailbox for a letter about `<listing_30>` sent after step 1.
+3. As customer A, navigate to `<my auctions url>` and read `<listing_68>`'s row.
+4. As customer A, read their mailbox for a letter about `<listing_68>` sent after step 1.
 
 **Expected Results:**
 
@@ -4018,38 +4223,38 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked) is signed in and on the lot page for `<listing_31>`, holding the row's standing before the bid.
-* The network is manipulated to drop the bid at the row's point.
+* customer(card linked) is signed in and on the listing page for `<listing_69>`, with this standing: `<standing_before>`.
+* The network is manipulated to drop `<dropped_stage>`.
 
 **Test data:**
 
-| Standing before | Bid sent | Dropped | The bid form reads | Standing after |
+| `<standing_before>` | `<bid_amount>` | `<dropped_stage>` | `<expected_bid_form>` | `<standing_after>` |
 | --- | --- | --- | --- | --- |
-| No bid | A first maximum of `<maximum>` | The answer, after the auction accepts the bid | Placed, Leading with Your maximum `<maximum>` | Leading, Your maximum `<maximum>`, a row on My Auctions |
-| No bid | A first maximum of `<maximum>` | The request, before the auction receives it | Could not place this bid. | No bid, no row on My Auctions |
-| Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The answer, after the auction accepts the raise | Placed, Leading with Your maximum `<raised maximum>` | Leading, Your maximum `<raised maximum>` |
-| Leading, Your maximum `<maximum>` | A raise to `<raised maximum>` | The request, before the auction receives it | Could not place this bid. | Leading, Your maximum `<maximum>` |
+| No bid | `<maximum>` | The answer, after the auction accepts the bid | Placed, Leading with Your maximum `<maximum>` | Leading, Your maximum `<maximum>`, a row on My Auctions |
+| No bid | `<maximum>` | The request, before the auction receives it | Could not place this bid. | No bid, no row on My Auctions |
+| Leading, Your maximum `<maximum>` | `<raised maximum>` | The answer, after the auction accepts the raise | Placed, Leading with Your maximum `<raised maximum>` | Leading, Your maximum `<raised maximum>` |
+| Leading, Your maximum `<maximum>` | `<raised maximum>` | The request, before the auction receives it | Could not place this bid. | Leading, Your maximum `<maximum>` |
 
-| Field | Value |
-| --- | --- |
-| `<listing_31>` | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) |
-| `<maximum>` | HKD560 (range: 1000–79999 minor units) |
-| `<raised maximum>` | HKD920 (range: 80000–399999 minor units) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_69 | An open HKD listing with no other bidder, starting price HKD280 (range: 1000–79999 minor units) | · |
+| maximum | HKD560 | (range: 1000–79999 minor units) |
+| raised maximum | HKD920 | (range: 80000–399999 minor units) |
 
 **Steps:**
 
-1. Enter the row's bid in the custom maximum on the bid panel.
+1. Enter `<bid_amount>` in the custom maximum on the bid panel.
 2. Place the bid.
 3. Wait until the bid form settles.
 4. Read the bid form.
-5. Reload the lot page and read the bid panel's standing.
-6. Navigate to `<my auctions url>` and look for `<listing_31>`.
+5. Reload the listing page and read the bid panel's standing.
+6. Navigate to `<my auctions url>` and look for `<listing_69>`.
 
 **Expected Results:**
 
-* Step 4 reads the row's words on the bid form, never both placed and refused.
-* Step 5 reads the row's standing after.
-* Step 6 agrees with the row's standing after.
+* Step 4 reads `<expected_bid_form>` on the bid form, never both placed and refused.
+* Step 5 reads `<standing_after>`.
+* Step 6 agrees with `<standing_after>`.
 
 <!-- trace:case id=g10.auction-auction.TC-55k rev=1 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-auction.SC-cfg -->
 ### g10.auction-auction.US14-TC4: Defensive ceiling refusal shows no message or retry
@@ -4073,25 +4278,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(card linked, account in good standing) is signed in on `<listing_29>`.
-* customer holds no bid on `<listing_29>` and does not watch it.
-* The next bid answer is mocked as `AMOUNT_TOO_HIGH`, with the row's ceiling and server-message fields.
+* customer(card linked, account in good standing) is signed in on `<listing_70>`.
+* customer holds no bid on `<listing_70>` and does not watch it.
+* The next bid answer is mocked as `AMOUNT_TOO_HIGH`, with ceiling field `<ceiling_field>` and server-message field `<server_message_field>`.
 * The custom maximum draft equals `<valid draft>`.
 
 **Test data:**
 
-| Ceiling field | Server-message field |
+| `<ceiling_field>` | `<server_message_field>` |
 | --- | --- |
-| `<ceiling>` | A distinct server-message marker |
-| Absent | A distinct server-message marker |
+| `<ceiling>` | QA_SERVER_MESSAGE_MARKER |
+| Absent | QA_SERVER_MESSAGE_MARKER |
 | `<ceiling>` | Absent |
 | Absent | Absent |
 
-| Field | Value |
-| --- | --- |
-| listing_29 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 |
-| valid draft | 5130 whole major units, the listing's next minimum |
-| ceiling | HKD80,000,000 (fixed configured value) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_70 | An open HKD listing led by customer B, current bid HKD5,210 (range: 400000–799999 minor units) and bid count 3 | · |
+| valid draft | 5130 whole major units, the listing's next minimum | · |
+| ceiling | HKD80,000,000 | (fixed configured value) |
 
 **Steps:**
 
@@ -4100,7 +4305,7 @@ Runs once per row of **Test data**.
 3. Read the bid form and custom maximum field.
 4. Read the number of bid attempts sent.
 5. Reload the listing and read its public bids and standing.
-6. Read My Auctions and Bidding History for `<listing_29>`.
+6. Read My Auctions and Bidding History for `<listing_70>`.
 
 **Expected Results:**
 
