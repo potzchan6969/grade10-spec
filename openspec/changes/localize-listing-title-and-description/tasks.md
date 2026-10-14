@@ -74,7 +74,7 @@ Needs groups 2 to 6.
 - [x] 7.1 Take the 🚧 marks off the title and description outcomes in `docs/prds/products/grade10-admin/auction/management.md` (Listings), `docs/prds/products/grade10-site/auction/display.md` (Listing schema), `docs/prds/platform/shared/localization.md` and `docs/prds/products/grade10-admin/inventory/catalog.md` (Product identity)
 - [x] 7.2 Verify: `pnpm check:manual`
 
-## 8. The walk (grade10)
+## 8. The walk (grade10) (owner: @mason5991)
 
 Needs groups 2 to 6. Uses the draft `feature-tcs.md` as its input; human QA reviews the cases after deployment.
 

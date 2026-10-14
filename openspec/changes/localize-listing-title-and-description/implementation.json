@@ -1,0 +1,95 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "cfc02ccd63b6426d5a74a2d3bbffd5628ef4dd057946bb8be16883e85c846607"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "9807a4efb4cfbe934a314d8f3e3e41cbb1e744e4",
+    "capturedAt": "2026-10-14T23:01:03.706Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A closed listing cannot be rewritten here",
+          "Requirement: An operator writes a listing's title and description in each language",
+          "Requirement: Labs listing seeds are written in every language",
+          "Requirement: Relist opens a new draft from an Unsold listing",
+          "Requirement: The Copy block reads a listing's texts in one chosen language",
+          "Requirement: The Listings search finds a listing by a translated title",
+          "Requirement: The customer view previews the lot in each language",
+          "Requirement: What staff quote stays on the English title"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A product's name and description are written in each language",
+          "Requirement: Operators list and edit products",
+          "Requirement: Staff references and imports keep the English name",
+          "Requirement: The Details section reads a product's texts in one chosen language",
+          "Requirement: The product search finds a product by a translated name"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A lot's address and reference stay the same in every language",
+          "Requirement: A shared lot link unfurls as the lot",
+          "Requirement: The card and the lot page read in the page's language"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/localization/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/localization/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: An auction listing's title and description read in the page's language"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/localization/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
