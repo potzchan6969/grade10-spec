@@ -7,509 +7,669 @@
 
 **Starting state:**
 
+**Steps 1–4 setup:**
+
 - customer(signed in) is on `<listing_43 url>`.
+
+**Steps 5–5 setup:**
+
 - customer(signed in) has bookmarked every listing in **Test data**, and nothing else.
+
+**Steps 6–7 setup:**
+
 - customer(signed in, has never watched or bid on a listing).
+
+**Steps 8–9 setup:**
+
 - customer(signed in) watches `<listing_37>`.
 - The My Auctions read is mocked to fail once, then succeed.
+
+**Steps 10–11 setup:**
+
 - customer(signed out) has watched listings under their account.
+
+**Steps 12–13 setup:**
+
 - customer A(signed in) has bid on `<listing_35>`, with this state: `<listing_state>`.
+
+**Steps 14–15 setup:**
+
 - customer A(signed in) leads `<listing_34>` and is on `<my auctions url>`.
 - customer B(signed in, enrolled to bid) is on `<listing_34 url>` in a separate session.
+
+**Steps 16–16 setup:**
+
 - customer A(signed in) has bid on `<listing_33>` and is on `<my auctions url>`.
 - The refresh of `<listing_33>`'s bid and close is mocked to fail.
+
+**Steps 17–20 setup:**
+
 - customer A(signed in) holds maximum `<customer A maximum>` and standing `<your_standing>` for `<listing_31>`, with state `<listing_state>`, current bid `<current bid>` and minimum next bid `<minimum next bid>`, and is on `<listing_31 url>`.
+
+**Steps 21–24 setup:**
+
 - customer A(signed in, enrolled to bid) has neither watched nor bid on `<listing_31>`.
 
 **Shared test data:**
 
-| Case | Field | Value |
+**Steps 1–4 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_43 | A published listing whose bidding has not started, scheduled to open inside the test window; bind its identity only |
+| listing_43 url | The URL of `<listing_43>`; bind its URL only |
+| my auctions url | The My Auctions URL |
+
+**Steps 5–5 data:**
+
+| Listing | Bookmark | Close |
 | --- | --- | --- |
-| g10.auction-account-record.US1-TC1 | listing_43 | A published listing whose bidding has not started, scheduled to open inside the test window; bind its identity only |
-| g10.auction-account-record.US1-TC1 | listing_43 url | The URL of `<listing_43>`; bind its URL only |
-| g10.auction-account-record.US1-TC1 | my auctions url | The My Auctions URL |
+| listing_38 | Bid | Open, closes in 3 days |
+| listing_39 | Bid | Open, closes in 1 day |
+| listing_40 | Watch only | Open, closes in 2 days |
+| listing_41 | Watch only | Open, closes in 5 hours |
+| listing_42 | Watch only | Closed yesterday |
 
-| Case | Listing | Bookmark | Close |
-| --- | --- | --- | --- |
-| g10.auction-account-record.US1-TC2 | listing_38 | Bid | Open, closes in 3 days |
-| g10.auction-account-record.US1-TC2 | listing_39 | Bid | Open, closes in 1 day |
-| g10.auction-account-record.US1-TC2 | listing_40 | Watch only | Open, closes in 2 days |
-| g10.auction-account-record.US1-TC2 | listing_41 | Watch only | Open, closes in 5 hours |
-| g10.auction-account-record.US1-TC2 | listing_42 | Watch only | Closed yesterday |
+| Field | Value |
+| --- | --- |
+| listing_38 | A listing with Bid for this customer; Open, closes in 3 days; bind its identity only |
+| listing_39 | A listing with Bid for this customer; Open, closes in 1 day; bind its identity only |
+| listing_40 | A listing with Watch only for this customer; Open, closes in 2 days; bind its identity only |
+| listing_41 | A listing with Watch only for this customer; Open, closes in 5 hours; bind its identity only |
+| listing_42 | A listing with Watch only for this customer; Closed yesterday; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US1-TC2 | listing_38 | A listing with Bid for this customer; Open, closes in 3 days; bind its identity only |
-| g10.auction-account-record.US1-TC2 | listing_39 | A listing with Bid for this customer; Open, closes in 1 day; bind its identity only |
-| g10.auction-account-record.US1-TC2 | listing_40 | A listing with Watch only for this customer; Open, closes in 2 days; bind its identity only |
-| g10.auction-account-record.US1-TC2 | listing_41 | A listing with Watch only for this customer; Open, closes in 5 hours; bind its identity only |
-| g10.auction-account-record.US1-TC2 | listing_42 | A listing with Watch only for this customer; Closed yesterday; bind its identity only |
-| g10.auction-account-record.US1-TC2 | my auctions url | The My Auctions URL |
+**Steps 6–7 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US1-TC3 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US1-TC4 | listing_37 | An open listing taking bids, watched by this collector; bind its identity only |
-| g10.auction-account-record.US1-TC4 | my auctions url | The My Auctions URL |
+**Steps 8–9 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US1-TC5 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| listing_37 | An open listing taking bids, watched by this collector; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | `<listing_state>` | `<your_standing>` |
-| --- | --- | --- |
-| g10.auction-account-record.US2-TC1 | Open, customer A leads | Leading |
-| g10.auction-account-record.US2-TC1 | Open, customer B leads | Outbid, with the next valid bid |
+**Steps 10–11 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US2-TC1 | listing_35 | An open listing bid on by customer A, with state `<listing_state>`; bind its identity only |
-| g10.auction-account-record.US2-TC1 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US2-TC2 | listing_34 | An open listing taking bids, led by customer A with no maximum above the current bid; bind its identity only |
-| g10.auction-account-record.US2-TC2 | customer B bid | The next valid bid shown on customer B's bid panel |
-| g10.auction-account-record.US2-TC2 | listing_34 url | The URL of `<listing_34>`; bind its URL only |
-| g10.auction-account-record.US2-TC2 | my auctions url | The My Auctions URL |
+**Steps 12–13 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US2-TC3 | listing_33 | An open listing taking bids, bid on by customer A; bind its identity only |
-| g10.auction-account-record.US2-TC3 | my auctions url | The My Auctions URL |
+| `<listing_state>` | `<your_standing>` |
+| --- | --- |
+| Open, customer A leads | Leading |
+| Open, customer B leads | Outbid, with the next valid bid |
 
-| Case | `<listing_state>` | `<customer A maximum>` | `<current bid>` | `<minimum next bid>` | `<refused raise>` | `<your_standing>` |
-| --- | --- | --- | --- | --- | --- | --- |
-| g10.auction-account-record.US2-TC4 | Open, customer B leads | 25000 USD minor units | 30000 USD minor units | 30500 USD minor units | 30300 USD minor units | Outbid, with the next valid bid |
-| g10.auction-account-record.US2-TC4 | Open, customer A leads at 30000 USD minor units | 30000 USD minor units | 30000 USD minor units | 30500 USD minor units | 30300 USD minor units | Leading |
+| Field | Value |
+| --- | --- |
+| listing_35 | An open listing bid on by customer A, with state `<listing_state>`; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US2-TC4 | listing_31 | An open USD listing taking bids; bind its identity only |
-| g10.auction-account-record.US2-TC4 | listing_31 url | The URL of `<listing_31>`; bind its URL only |
-| g10.auction-account-record.US2-TC4 | my auctions url | The My Auctions URL |
+**Steps 14–15 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US2-TC5 | listing_31 | An open USD listing taking bids; bind its identity only |
-| g10.auction-account-record.US2-TC5 | low bid | One minor unit below the next valid bid shown on customer A's bid panel |
-| g10.auction-account-record.US2-TC5 | listing_31 url | The URL of `<listing_31>`; bind its URL only |
-| g10.auction-account-record.US2-TC5 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| listing_34 | An open listing taking bids, led by customer A with no maximum above the current bid; bind its identity only |
+| customer B bid | The next valid bid shown on customer B's bid panel |
+| listing_34 url | The URL of `<listing_34>`; bind its URL only |
+| my auctions url | The My Auctions URL |
+
+**Steps 16–16 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_33 | An open listing taking bids, bid on by customer A; bind its identity only |
+| my auctions url | The My Auctions URL |
+
+**Steps 17–20 data:**
+
+| `<listing_state>` | `<customer A maximum>` | `<current bid>` | `<minimum next bid>` | `<refused raise>` | `<your_standing>` |
+| --- | --- | --- | --- | --- | --- |
+| Open, customer B leads | 25000 USD minor units | 30000 USD minor units | 30500 USD minor units | 30300 USD minor units | Outbid, with the next valid bid |
+| Open, customer A leads at 30000 USD minor units | 30000 USD minor units | 30000 USD minor units | 30500 USD minor units | 30300 USD minor units | Leading |
+
+| Field | Value |
+| --- | --- |
+| listing_31 | An open USD listing taking bids; bind its identity only |
+| listing_31 url | The URL of `<listing_31>`; bind its URL only |
+| my auctions url | The My Auctions URL |
+
+**Steps 21–24 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_31 | An open USD listing taking bids; bind its identity only |
+| low bid | One minor unit below the next valid bid shown on customer A's bid panel |
+| listing_31 url | The URL of `<listing_31>`; bind its URL only |
+| my auctions url | The My Auctions URL |
 
 ### Route
 
 1. Click the Watch control.
 2. Navigate to `<my auctions url>`.
-   - Step 2: `<listing_43>` shows once, Your Standing `--`. g10.auction-account-record.US1-TC1
+   - Step 2: `<listing_43>` shows once, Your Standing `--`. `g10.auction-account-record.US1-TC1`
 3. Wait until `<listing_43>`'s bidding starts, then reload `<my auctions url>`.
-   - Step 3: `<listing_43>` is still listed. g10.auction-account-record.US1-TC1
+   - Step 3: `<listing_43>` is still listed. `g10.auction-account-record.US1-TC1`
 4. Click `<listing_43>`'s row.
-   - Step 4: `<listing_43 url>` opens, taking bids. g10.auction-account-record.US1-TC1
+   - Step 4: `<listing_43 url>` opens, taking bids. `g10.auction-account-record.US1-TC1`
 5. Navigate to `<my auctions url>`.
-   - The title count reads 5. g10.auction-account-record.US1-TC2
-   - Rows read, top down: `<listing_39>`, `<listing_38>`, `<listing_41>`, `<listing_40>`, `<listing_42>`. g10.auction-account-record.US1-TC2
-   - Each listing shows once. g10.auction-account-record.US1-TC2
+   - The title count reads 5. `g10.auction-account-record.US1-TC2`
+   - Rows read, top down: `<listing_39>`, `<listing_38>`, `<listing_41>`, `<listing_40>`, `<listing_42>`. `g10.auction-account-record.US1-TC2`
+   - Each listing shows once. `g10.auction-account-record.US1-TC2`
 6. Navigate to `<my auctions url>`.
-   - Step 6: the page says nothing is bookmarked; no error shows. g10.auction-account-record.US1-TC3
+   - Step 6: the page says nothing is bookmarked; no error shows. `g10.auction-account-record.US1-TC3`
 7. Click the catalogue offer.
-   - Step 7: the auction catalogue opens. g10.auction-account-record.US1-TC3
+   - Step 7: the auction catalogue opens. `g10.auction-account-record.US1-TC3`
 8. Navigate to `<my auctions url>`.
-   - Step 8: the page says the read failed; it does not read as empty. g10.auction-account-record.US1-TC4
-   - Step 8: no catalogue offer shows. g10.auction-account-record.US1-TC4
+   - Step 8: the page says the read failed; it does not read as empty. `g10.auction-account-record.US1-TC4`
+   - Step 8: no catalogue offer shows. `g10.auction-account-record.US1-TC4`
 9. Click retry.
-   - Step 9: `<listing_37>` is listed. g10.auction-account-record.US1-TC4
+   - Step 9: `<listing_37>` is listed. `g10.auction-account-record.US1-TC4`
 10. Navigate to `<my auctions url>`.
-   - Step 10: sign-in is offered; no bookmarked listing shows. g10.auction-account-record.US1-TC5
+   - Step 10: sign-in is offered; no bookmarked listing shows. `g10.auction-account-record.US1-TC5`
 11. Complete sign-in from the offer.
-   - Step 11: the collector returns to My Auctions, showing their own listings. g10.auction-account-record.US1-TC5
+   - Step 11: the collector returns to My Auctions, showing their own listings. `g10.auction-account-record.US1-TC5`
 12. Navigate to `<my auctions url>`.
 13. Find `<listing_35>`'s row.
-   - Your Standing reads `<your_standing>`. g10.auction-account-record.US2-TC1
-   - Current bid reads `<listing_35>`'s current bid. g10.auction-account-record.US2-TC1
-   - For Outbid, the next valid bid equals current bid plus its increment. g10.auction-account-record.US2-TC1
+   - Your Standing reads `<your_standing>`. `g10.auction-account-record.US2-TC1`
+   - Current bid reads `<listing_35>`'s current bid. `g10.auction-account-record.US2-TC1`
+   - For Outbid, the next valid bid equals current bid plus its increment. `g10.auction-account-record.US2-TC1`
 14. As customer B, place `<customer B bid>`.
 15. As customer A, reload `<my auctions url>`.
-   - `<listing_34>` reads Outbid, with the next valid bid. g10.auction-account-record.US2-TC2
-   - Current bid reads `<customer B bid>`. g10.auction-account-record.US2-TC2
+   - `<listing_34>` reads Outbid, with the next valid bid. `g10.auction-account-record.US2-TC2`
+   - Current bid reads `<customer B bid>`. `g10.auction-account-record.US2-TC2`
 16. Wait for the next refresh of `<listing_33>`'s row.
-   - `<listing_33>`'s current bid and close are shown as not current. g10.auction-account-record.US2-TC3
+   - `<listing_33>`'s current bid and close are shown as not current. `g10.auction-account-record.US2-TC3`
 17. Place `<refused raise>`.
-   - Step 17 shows the refusal on the bid panel. g10.auction-account-record.US2-TC4
+   - Step 17 shows the refusal on the bid panel. `g10.auction-account-record.US2-TC4`
 18. Note `<listing_31>`'s current bid on its page.
-   - Current bid reads the bid noted at Step 18, still `<current bid>`, never `<refused raise>`. g10.auction-account-record.US2-TC4
+   - Current bid reads the bid noted at step 18, still `<current bid>`, never `<refused raise>`. `g10.auction-account-record.US2-TC4`
 19. Navigate to `<my auctions url>`.
 20. Find `<listing_31>`'s row.
-   - Your Standing reads `<your_standing>`. g10.auction-account-record.US2-TC4
+   - Your Standing reads `<your_standing>`. `g10.auction-account-record.US2-TC4`
 21. Navigate to `<my auctions url>` and note the title count.
-   - The title count equals the count noted at Step 21. g10.auction-account-record.US2-TC5
+   - The title count equals the count noted at step 21. `g10.auction-account-record.US2-TC5`
 22. Navigate to `<listing_31 url>` and place `<low bid>`.
-   - Step 22 shows the refusal on the bid panel. g10.auction-account-record.US2-TC5
+   - Step 22 shows the refusal on the bid panel. `g10.auction-account-record.US2-TC5`
 23. Navigate to `<my auctions url>`.
 24. Open the Active, Upcoming and Ended tabs in turn.
-   - No tab holds a row for `<listing_31>`. g10.auction-account-record.US2-TC5
+   - No tab holds a row for `<listing_31>`. `g10.auction-account-record.US2-TC5`
 
 ## Walk 2: Reach My Auctions and read bidding rows and adjacent checks
 
 **Starting state:**
 
+**Steps 1–4 setup:**
+
 - customer A(signed in, enrolled to bid) bid on `<listing_29>` and `<listing_30>`, and customer B has since outbid them on `<listing_29>`.
 - customer A is on `<listing_29 url>`.
+
+**Steps 5–6 setup:**
+
 - customer(signed in) won `<listing_28>`, whose proof was under check.
 - An operator then took this action: `<operator_action>`.
+
+**Steps 7–7 setup:**
+
 - customer A won `<listing_27>`, which reads Payment Verifying.
 - customer B(signed in) uses a separate session.
+
+**Steps 8–9 setup:**
+
 - customer(signed in) won `<listing_26>`, whose order has this state: `<order_state>`.
+
+**Steps 10–10 setup:**
+
 - customer(winner) is on My Auctions with rows for `<listing_24>` and `<listing_25>`.
+
+**Steps 11–12 setup:**
+
 - customer A(signed in) bid on `<listing_23>`, which ended as follows: `<ending_state>`.
 
 **Shared test data:**
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-account-record.US2-TC6 | listing_29 | An open USD listing led by customer B, closing after `<listing_30>`; bind its identity only | · |
-| g10.auction-account-record.US2-TC6 | listing_30 | An open USD listing customer A bid on, closing before `<listing_29>`; bind its identity only | · |
-| g10.auction-account-record.US2-TC6 | current bid | USD5,460 | (range: 400000–799999 minor units) |
-| g10.auction-account-record.US2-TC6 | increment | USD80 | (fixed tier increment), the USD4,000 tier |
-| g10.auction-account-record.US2-TC6 | next minimum | USD5,540 | Fixed derived value: `<current bid>` plus `<increment>` |
-| g10.auction-account-record.US2-TC6 | refused bid | USD5,460, equal to `<current bid>`, below `<next minimum>` | · |
+**Steps 1–4 data:**
 
-| Case | Field | Value |
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-account-record.US2-TC6 | listing_29 url | The URL of `<listing_29>`; bind its URL only |
-| g10.auction-account-record.US2-TC6 | my auctions url | The My Auctions URL |
+| listing_29 | An open USD listing led by customer B, closing after `<listing_30>`; bind its identity only | · |
+| listing_30 | An open USD listing customer A bid on, closing before `<listing_29>`; bind its identity only | · |
+| current bid | USD5,460 | (range: 400000–799999 minor units) |
+| increment | USD80 | (fixed tier increment), the USD4,000 tier |
+| next minimum | USD5,540 | Fixed derived value: `<current bid>` plus `<increment>` |
+| refused bid | USD5,460, equal to `<current bid>`, below `<next minimum>` | · |
 
-| Case | `<operator_action>` | `<your_standing>` |
-| --- | --- | --- |
-| g10.auction-account-record.US3-TC2 | Returned the proof | Won, Pending Payment |
-| g10.auction-account-record.US3-TC2 | Confirmed the payment | Won, Processing |
+| Field | Value |
+| --- | --- |
+| listing_29 url | The URL of `<listing_29>`; bind its URL only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US3-TC2 | listing_28 | A listing won by this customer whose payment proof was under check; bind its identity only |
-| g10.auction-account-record.US3-TC2 | my auctions url | The My Auctions URL |
+**Steps 5–6 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US3-TC4 | listing_27 | customer A's won listing, proof under check; bind its identity only |
-| g10.auction-account-record.US3-TC4 | my auctions url | The My Auctions URL |
+| `<operator_action>` | `<your_standing>` |
+| --- | --- |
+| Returned the proof | Won, Pending Payment |
+| Confirmed the payment | Won, Processing |
 
-| Case | `<order_state>` | `<your_standing>` |
-| --- | --- | --- |
-| g10.auction-account-record.US3-TC5 | Delivery not yet set up, inside the setup window | Won, Awaiting Setup |
-| g10.auction-account-record.US3-TC5 | Set up, invoice not yet issued | Won, Preparing Invoice |
-| g10.auction-account-record.US3-TC5 | Invoice issued, unpaid, inside the payment window | Won, Pending Payment |
-| g10.auction-account-record.US3-TC5 | Payment proof waiting for an operator | Won, Payment Verifying |
-| g10.auction-account-record.US3-TC5 | Collected in parts, balance outstanding | Won, Partially Paid |
+| Field | Value |
+| --- | --- |
+| listing_28 | A listing won by this customer whose payment proof was under check; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US3-TC5 | listing_26 | A listing won by this customer whose order has state `<order_state>`; bind its identity only |
-| g10.auction-account-record.US3-TC5 | my auctions url | The My Auctions URL |
+**Steps 7–7 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US3-TC20 | listing_24 | A won listing with invoice `paid` and fulfilment `unfulfilled`; bind its identity only |
-| g10.auction-account-record.US3-TC20 | listing_25 | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation; bind its identity only |
+| Field | Value |
+| --- | --- |
+| listing_27 | customer A's won listing, proof under check; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | `<ending_state>` | `<your_standing>` |
-| --- | --- | --- |
-| g10.auction-account-record.US4-TC1 | Closed with customer B winning | Didn't win |
-| g10.auction-account-record.US4-TC1 | Called off by Grade10 | Didn't win |
+**Steps 8–9 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US4-TC1 | listing_23 | A listing bid on by customer A, ended with `<ending_state>`; bind its identity only |
-| g10.auction-account-record.US4-TC1 | my auctions url | The My Auctions URL |
+| `<order_state>` | `<your_standing>` |
+| --- | --- |
+| Delivery not yet set up, inside the setup window | Won, Awaiting Setup |
+| Set up, invoice not yet issued | Won, Preparing Invoice |
+| Invoice issued, unpaid, inside the payment window | Won, Pending Payment |
+| Payment proof waiting for an operator | Won, Payment Verifying |
+| Collected in parts, balance outstanding | Won, Partially Paid |
+
+| Field | Value |
+| --- | --- |
+| listing_26 | A listing won by this customer whose order has state `<order_state>`; bind its identity only |
+| my auctions url | The My Auctions URL |
+
+**Steps 10–10 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_24 | A won listing with invoice `paid` and fulfilment `unfulfilled`; bind its identity only |
+| listing_25 | A won listing with invoice `paid`, fulfilment `fulfilled`, and no delivery confirmation; bind its identity only |
+
+**Steps 11–12 data:**
+
+| `<ending_state>` | `<your_standing>` |
+| --- | --- |
+| Closed with customer B winning | Didn't win |
+| Called off by Grade10 | Didn't win |
+
+| Field | Value |
+| --- | --- |
+| listing_23 | A listing bid on by customer A, ended with `<ending_state>`; bind its identity only |
+| my auctions url | The My Auctions URL |
 
 ### Route
 
 1. Type `<refused bid>` into the custom maximum on the bid panel.
-   - `<listing_29>` still sits below `<listing_30>`, as before Step 1. g10.auction-account-record.US2-TC6
+   - `<listing_29>` still sits below `<listing_30>`, as before step 1. `g10.auction-account-record.US2-TC6`
 2. Confirm the bid.
-   - Step 2: the bid form says Minimum bid is `<next minimum>`. g10.auction-account-record.US2-TC6
+   - Step 2: the bid form says Minimum bid is `<next minimum>`. `g10.auction-account-record.US2-TC6`
 3. Navigate to `<my auctions url>`.
 4. Find `<listing_29>`'s row in the Active tab.
-   - Step 4: Your Standing reads Outbid, with the next valid bid `<next minimum>`. g10.auction-account-record.US2-TC6
-   - Current bid reads `<current bid>`. g10.auction-account-record.US2-TC6
-   - No row reads Bid submitted or Bid not accepted. g10.auction-account-record.US2-TC6
+   - Step 4: Your Standing reads Outbid, with the next valid bid `<next minimum>`. `g10.auction-account-record.US2-TC6`
+   - Current bid reads `<current bid>`. `g10.auction-account-record.US2-TC6`
+   - No row reads Bid submitted or Bid not accepted. `g10.auction-account-record.US2-TC6`
 5. Navigate to `<my auctions url>`.
 6. Read `<listing_28>`'s row.
-   - Your Standing reads `<your_standing>`. g10.auction-account-record.US3-TC2
+   - Your Standing reads `<your_standing>`. `g10.auction-account-record.US3-TC2`
 7. As customer B, navigate to `<my auctions url>`.
-   - No `<listing_27>` row shows. g10.auction-account-record.US3-TC4
+   - No `<listing_27>` row shows. `g10.auction-account-record.US3-TC4`
 8. Navigate to `<my auctions url>`.
 9. Find `<listing_26>`'s row.
-   - Your Standing reads `<your_standing>`. g10.auction-account-record.US3-TC5
-   - The row offers View order. g10.auction-account-record.US3-TC5
+   - Your Standing reads `<your_standing>`. `g10.auction-account-record.US3-TC5`
+   - The row offers View order. `g10.auction-account-record.US3-TC5`
 10. Read Status on each row.
-   - `<listing_24>` reads Preparing Shipment with the `default` status badge. g10.auction-account-record.US3-TC20
-   - `<listing_25>` reads Shipped with the `default` status badge. g10.auction-account-record.US3-TC20
+   - `<listing_24>` reads Preparing Shipment with the `default` status badge. `g10.auction-account-record.US3-TC20`
+   - `<listing_25>` reads Shipped with the `default` status badge. `g10.auction-account-record.US3-TC20`
 11. Navigate to `<my auctions url>`.
 12. Select the Ended tab and find `<listing_23>`'s row.
-   - Your Standing reads `<your_standing>`. g10.auction-account-record.US4-TC1
-   - The row says the card was not charged. g10.auction-account-record.US4-TC1
-   - No amount is shown as charged. g10.auction-account-record.US4-TC1
+   - Your Standing reads `<your_standing>`. `g10.auction-account-record.US4-TC1`
+   - The row says the card was not charged. `g10.auction-account-record.US4-TC1`
+   - No amount is shown as charged. `g10.auction-account-record.US4-TC1`
 
 ## Walk 3: Watch and bid from auction surfaces
 
 **Starting state:**
 
+**Steps 1–3 setup:**
+
 - customer(signed in, not watching `<listing_22>`, no bid on `<listing_22>`) is on `<listing_22 url>`.
+
+**Steps 4–5 setup:**
+
 - customer(signed in, not watching `<listing_22>`, no bid on `<listing_22>`) is on `<grade10 auction catalogue url>`.
+
+**Steps 6–8 setup:**
+
 - customer A(signed in) watches `<listing_21>`.
 - customer B(signed in, never watched or bid on `<listing_21>`) uses a separate session.
+
+**Steps 9–11 setup:**
+
 - customer(signed in, enrolled to bid, not watching `<listing_20>`, no bid on `<listing_20>`) is on `<listing_20 url>`.
+
+**Steps 12–13 setup:**
+
 - customer(signed in, enrolled to bid, watching `<listing_18>`, no bid on `<listing_18>`) is on `<listing_18 url>`.
 - The collector also watches `<listing_19>` without bidding.
+
+**Steps 14–17 setup:**
+
 - customer(signed in, enrolled to bid, not watching `<listing_17>`, no bid on `<listing_17>`) is on `<listing_17 url>`.
 - The account has this state: `<account_state>`.
 - The title count on `<my auctions url>` is noted.
 
 **Shared test data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US5-TC1 | listing_22 | An open listing taking bids, not watched and not bid on by this collector; bind its identity only |
-| g10.auction-account-record.US5-TC1 | listing_22 url | The URL of `<listing_22>`; bind its URL only |
+**Steps 1–3 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US5-TC2 | listing_22 | An open listing taking bids, not watched and not bid on by this collector; bind its identity only |
-| g10.auction-account-record.US5-TC2 | my auctions url | The My Auctions URL |
-| g10.auction-account-record.US5-TC2 | grade10 auction catalogue url | The auction catalogue URL |
+| Field | Value |
+| --- | --- |
+| listing_22 | An open listing taking bids, not watched and not bid on by this collector; bind its identity only |
+| listing_22 url | The URL of `<listing_22>`; bind its URL only |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US5-TC3 | listing_21 | An open listing taking bids, watched by customer A only; bind its identity only |
-| g10.auction-account-record.US5-TC3 | listing_21 url | The URL of `<listing_21>`; bind its URL only |
-| g10.auction-account-record.US5-TC3 | my auctions url | The My Auctions URL |
+**Steps 4–5 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US6-TC1 | listing_20 | An open listing taking bids, with no bid from this collector and no other bidder; bind its identity only |
-| g10.auction-account-record.US6-TC1 | first bid | The next valid bid shown on the bid panel |
-| g10.auction-account-record.US6-TC1 | listing_20 url | The URL of `<listing_20>`; bind its URL only |
-| g10.auction-account-record.US6-TC1 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| listing_22 | An open listing taking bids, not watched and not bid on by this collector; bind its identity only |
+| my auctions url | The My Auctions URL |
+| grade10 auction catalogue url | The auction catalogue URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US6-TC2 | listing_18 | An open listing taking bids, watched by this collector, closing after `<listing_19>`; bind its identity only |
-| g10.auction-account-record.US6-TC2 | listing_19 | An open listing taking bids, watch-only for this collector, closing before `<listing_18>`; bind its identity only |
-| g10.auction-account-record.US6-TC2 | first bid | The next valid bid shown on `<listing_18>`'s bid panel |
-| g10.auction-account-record.US6-TC2 | listing_18 url | The URL of `<listing_18>`; bind its URL only |
-| g10.auction-account-record.US6-TC2 | my auctions url | The My Auctions URL |
+**Steps 6–8 data:**
 
-| Case | `<account_state>` | `<typed bid>` | `<refusal_message>` | Fixture notes |
-| --- | --- | --- | --- | --- |
-| g10.auction-account-record.US6-TC3 | Bidding allowed | USD140 | Minimum bid is `<opening price>` | `<typed bid>` is below `<opening price>` |
-| g10.auction-account-record.US6-TC3 | Bidding suspended by an operator | USD280 | Bidding is suspended on this account. Contact Us to resolve it. | `<typed bid>` equals `<opening price>` |
+| Field | Value |
+| --- | --- |
+| listing_21 | An open listing taking bids, watched by customer A only; bind its identity only |
+| listing_21 url | The URL of `<listing_21>`; bind its URL only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value | Fixture notes |
+**Steps 9–11 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_20 | An open listing taking bids, with no bid from this collector and no other bidder; bind its identity only |
+| first bid | The next valid bid shown on the bid panel |
+| listing_20 url | The URL of `<listing_20>`; bind its URL only |
+| my auctions url | The My Auctions URL |
+
+**Steps 12–13 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_18 | An open listing taking bids, watched by this collector, closing after `<listing_19>`; bind its identity only |
+| listing_19 | An open listing taking bids, watch-only for this collector, closing before `<listing_18>`; bind its identity only |
+| first bid | The next valid bid shown on `<listing_18>`'s bid panel |
+| listing_18 url | The URL of `<listing_18>`; bind its URL only |
+| my auctions url | The My Auctions URL |
+
+**Steps 14–17 data:**
+
+| `<account_state>` | `<typed bid>` | `<refusal_message>` | Fixture notes |
 | --- | --- | --- | --- |
-| g10.auction-account-record.US6-TC3 | listing_17 | An open USD listing with no bid from anyone; bind its identity only | · |
-| g10.auction-account-record.US6-TC3 | opening price | USD280 | (range: 1000–79999 minor units), the starting price |
+| Bidding allowed | USD140 | Minimum bid is `<opening price>` | `<typed bid>` is below `<opening price>` |
+| Bidding suspended by an operator | USD280 | Bidding is suspended on this account. Contact Us to resolve it. | `<typed bid>` equals `<opening price>` |
 
-| Case | Field | Value |
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-account-record.US6-TC3 | listing_17 url | The URL of `<listing_17>`; bind its URL only |
-| g10.auction-account-record.US6-TC3 | my auctions url | The My Auctions URL |
+| listing_17 | An open USD listing with no bid from anyone; bind its identity only | · |
+| opening price | USD280 | (range: 1000–79999 minor units), the starting price |
+
+| Field | Value |
+| --- | --- |
+| listing_17 url | The URL of `<listing_17>`; bind its URL only |
+| my auctions url | The My Auctions URL |
 
 ### Route
 
 1. Click the Watch control.
-   - Step 1: a toast says email alerts are on, with View My Auctions. g10.auction-account-record.US5-TC1
+   - Step 1: a toast says email alerts are on, with View My Auctions. `g10.auction-account-record.US5-TC1`
 2. Click View My Auctions in the toast.
-   - Step 2: My Auctions opens; the title count includes `<listing_22>`. g10.auction-account-record.US5-TC1
+   - Step 2: My Auctions opens; the title count includes `<listing_22>`. `g10.auction-account-record.US5-TC1`
 3. Find the `<listing_22>` row.
-   - Step 3: `<listing_22>` shows once, with key image, title and close. g10.auction-account-record.US5-TC1
-   - Step 3: Your Standing reads `--`. g10.auction-account-record.US5-TC1
-   - Step 3: Email alerts switch is on; Unwatch is offered. g10.auction-account-record.US5-TC1
+   - Step 3: `<listing_22>` shows once, with key image, title and close. `g10.auction-account-record.US5-TC1`
+   - Step 3: Your Standing reads `--`. `g10.auction-account-record.US5-TC1`
+   - Step 3: Email alerts switch is on; Unwatch is offered. `g10.auction-account-record.US5-TC1`
 4. Click the watch control on `<listing_22>`'s card, bottom right of the image.
-   - Step 4: the card's control reads Watching. g10.auction-account-record.US5-TC2
+   - Step 4: the card's control reads Watching. `g10.auction-account-record.US5-TC2`
 5. Navigate to `<my auctions url>`.
-   - Step 5: `<listing_22>` shows once, Your Standing `--`, email alerts on. g10.auction-account-record.US5-TC2
+   - Step 5: `<listing_22>` shows once, Your Standing `--`, email alerts on. `g10.auction-account-record.US5-TC2`
 6. As customer B, navigate to `<my auctions url>`.
-   - Step 6: `<listing_21>` is not listed. g10.auction-account-record.US5-TC3
+   - Step 6: `<listing_21>` is not listed. `g10.auction-account-record.US5-TC3`
 7. As customer B, navigate to `<listing_21 url>`.
-   - Step 7: the control reads Watch; no watch count shows. g10.auction-account-record.US5-TC3
+   - Step 7: the control reads Watch; no watch count shows. `g10.auction-account-record.US5-TC3`
 8. As customer B, open the page source of `<listing_21 url>`.
-   - Step 8: no watch count and no watcher's identity appear. g10.auction-account-record.US5-TC3
+   - Step 8: no watch count and no watcher's identity appear. `g10.auction-account-record.US5-TC3`
 9. Place `<first bid>` from the bid panel.
-   - Step 9: one toast says email alerts are on. g10.auction-account-record.US6-TC1
+   - Step 9: one toast says email alerts are on. `g10.auction-account-record.US6-TC1`
 10. Reload `<listing_20 url>`.
-   - Step 10: no alerts toast shows. g10.auction-account-record.US6-TC1
+   - Step 10: no alerts toast shows. `g10.auction-account-record.US6-TC1`
 11. Navigate to `<my auctions url>`.
-   - Step 11: `<listing_20>` shows once, Your Standing Leading. g10.auction-account-record.US6-TC1
-   - Step 11: Email alerts switch is on; no Unwatch is offered. g10.auction-account-record.US6-TC1
+   - Step 11: `<listing_20>` shows once, Your Standing Leading. `g10.auction-account-record.US6-TC1`
+   - Step 11: Email alerts switch is on; no Unwatch is offered. `g10.auction-account-record.US6-TC1`
 12. Place `<first bid>` from the bid panel.
 13. Navigate to `<my auctions url>`.
-   - `<listing_18>` shows once, Your Standing Leading, no Unwatch. g10.auction-account-record.US6-TC2
-   - `<listing_18>` sits above `<listing_19>`: bid rows before watch-only. g10.auction-account-record.US6-TC2
+   - `<listing_18>` shows once, Your Standing Leading, no Unwatch. `g10.auction-account-record.US6-TC2`
+   - `<listing_18>` sits above `<listing_19>`: bid rows before watch-only. `g10.auction-account-record.US6-TC2`
 14. Type `<typed bid>` into the custom maximum on the bid panel.
 15. Confirm the bid.
-   - Step 15: the bid form says `<refusal_message>`, and no alerts toast shows. g10.auction-account-record.US6-TC3
+   - Step 15: the bid form says `<refusal_message>`, and no alerts toast shows. `g10.auction-account-record.US6-TC3`
 16. Reload `<listing_17 url>`.
-   - Step 16: the watch control offers Watch, not locked to watching. g10.auction-account-record.US6-TC3
+   - Step 16: the watch control offers Watch, not locked to watching. `g10.auction-account-record.US6-TC3`
 17. Navigate to `<my auctions url>`.
-   - Step 17: `<listing_17>` is not listed in any tab. g10.auction-account-record.US6-TC3
-   - Step 17: the title count is the one noted. g10.auction-account-record.US6-TC3
+   - Step 17: `<listing_17>` is not listed in any tab. `g10.auction-account-record.US6-TC3`
+   - Step 17: the title count is the one noted. `g10.auction-account-record.US6-TC3`
 
 ## Walk 4: Filter rows and read close results — phase 1
 
 **Starting state:**
 
+**Steps 1–3 setup:**
+
 - customer(signed in) watches `<listing_14>`, `<listing_15>` and `<listing_16>`.
+
+**Steps 4–6 setup:**
+
 - customer(signed in) watches `<listing_13>`, a listing whose bidding has not opened.
+
+**Steps 7–8 setup:**
+
 - customer(signed in) watches only open listings.
+
+**Steps 9–11 setup:**
+
 - customer(signed in) watches `<listing_12>`, a published listing that has closed.
+
+**Steps 12–13 setup:**
+
 - customer(winner) has a Won row for `<listing_11>` whose order `<winner_order_1>` is available.
+
+**Steps 14–15 setup:**
+
 - customer owns `<listing_10>`, whose order `<winner_order_2>` is Partially Paid.
+
+**Steps 16–17 setup:**
+
 - customer A(signed in) bid on `<listing_9>`, which closed with customer B winning.
+
+**Steps 18–19 setup:**
+
 - customer(signed in) has Won rows for `<listing_7>` and `<listing_8>`.
+
+**Steps 20–21 setup:**
+
 - customer(signed in) won `<listing_6>`, whose order has this state: `<order_state>`.
 
 **Shared test data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US7-TC1 | listing_14 | A published listing whose bidding has not opened; bind its identity only |
-| g10.auction-account-record.US7-TC1 | listing_15 | A published listing whose bidding is open; bind its identity only |
-| g10.auction-account-record.US7-TC1 | listing_16 | A published listing that has closed; bind its identity only |
-| g10.auction-account-record.US7-TC1 | my auctions url | The My Auctions URL |
+**Steps 1–3 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US7-TC2 | listing_13 | A published watched listing whose bidding has not opened and opens inside the test window; bind its identity only |
-| g10.auction-account-record.US7-TC2 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| listing_14 | A published listing whose bidding has not opened; bind its identity only |
+| listing_15 | A published listing whose bidding is open; bind its identity only |
+| listing_16 | A published listing that has closed; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US7-TC3 | my auctions url | The My Auctions URL |
+**Steps 4–6 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US7-TC4 | listing_12 | A published watched listing that has closed; bind its identity only |
-| g10.auction-account-record.US7-TC4 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| listing_13 | A published watched listing whose bidding has not opened and opens inside the test window; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US7-TC5 | listing_11 | A listing won by this customer with an available winner order; bind its identity only |
-| g10.auction-account-record.US7-TC5 | winner_order_1 | The winner order belonging to `<listing_11>`; bind its identity only |
-| g10.auction-account-record.US7-TC5 | my auctions url | The My Auctions URL |
+**Steps 7–8 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US8-TC1 | listing_10 | A listing won by this customer; bind its identity only |
-| g10.auction-account-record.US8-TC1 | winner_order_2 | The Partially Paid winner order belonging to `<listing_10>`; bind its identity only |
+| Field | Value |
+| --- | --- |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US8-TC2 | listing_9 | A closed listing won by customer B; bind its identity only |
-| g10.auction-account-record.US8-TC2 | my auctions url | The My Auctions URL |
+**Steps 9–11 data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US8-TC3 | listing_7 | A won listing whose order reads Payment Overdue; bind its identity only |
-| g10.auction-account-record.US8-TC3 | listing_8 | A won listing whose order reads Awaiting Setup inside the setup window; bind its identity only |
-| g10.auction-account-record.US8-TC3 | my auctions url | The My Auctions URL |
+| Field | Value |
+| --- | --- |
+| listing_12 | A published watched listing that has closed; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | `<order_state>` | `<your_standing>` | `<excluded_standing>` |
-| --- | --- | --- | --- |
-| g10.auction-account-record.US9-TC1 | Setup deadline (48 hours from close) passed, setup incomplete | Won, Setup Overdue | Awaiting Setup |
-| g10.auction-account-record.US9-TC1 | Payment deadline (7 days from invoice send) passed, unpaid | Won, Payment Overdue | Pending Payment |
+**Steps 12–13 data:**
 
-| Case | Field | Value |
+| Field | Value |
+| --- | --- |
+| listing_11 | A listing won by this customer with an available winner order; bind its identity only |
+| winner_order_1 | The winner order belonging to `<listing_11>`; bind its identity only |
+| my auctions url | The My Auctions URL |
+
+**Steps 14–15 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_10 | A listing won by this customer; bind its identity only |
+| winner_order_2 | The Partially Paid winner order belonging to `<listing_10>`; bind its identity only |
+
+**Steps 16–17 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_9 | A closed listing won by customer B; bind its identity only |
+| my auctions url | The My Auctions URL |
+
+**Steps 18–19 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_7 | A won listing whose order reads Payment Overdue; bind its identity only |
+| listing_8 | A won listing whose order reads Awaiting Setup inside the setup window; bind its identity only |
+| my auctions url | The My Auctions URL |
+
+**Steps 20–21 data:**
+
+| `<order_state>` | `<your_standing>` | `<excluded_standing>` |
 | --- | --- | --- |
-| g10.auction-account-record.US9-TC1 | listing_6 | A listing won by this customer whose order has state `<order_state>`; bind its identity only |
-| g10.auction-account-record.US9-TC1 | my auctions url | The My Auctions URL |
+| Setup deadline (48 hours from close) passed, setup incomplete | Won, Setup Overdue | Awaiting Setup |
+| Payment deadline (7 days from invoice send) passed, unpaid | Won, Payment Overdue | Pending Payment |
+
+| Field | Value |
+| --- | --- |
+| listing_6 | A listing won by this customer whose order has state `<order_state>`; bind its identity only |
+| my auctions url | The My Auctions URL |
 
 ### Route
 
 1. Navigate to `<my auctions url>`.
-   - Step 1 shows the Active tab, listing only `<listing_15>`. g10.auction-account-record.US7-TC1
+   - Step 1 shows the Active tab, listing only `<listing_15>`. `g10.auction-account-record.US7-TC1`
 2. Open the Upcoming tab.
-   - Step 2 lists only `<listing_14>`; Step 3 lists only `<listing_16>`. g10.auction-account-record.US7-TC1
+   - Step 2 lists only `<listing_14>`; step 3 lists only `<listing_16>`. `g10.auction-account-record.US7-TC1`
 3. Open the Ended tab.
-   - Title badge shows 3. g10.auction-account-record.US7-TC1
+   - Title badge shows 3. `g10.auction-account-record.US7-TC1`
 4. Navigate to `<my auctions url>`.
 5. Wait until `<listing_13>` bidding opens.
 6. Reload `<my auctions url>`.
-   - `<listing_13>` is listed in the Active tab. g10.auction-account-record.US7-TC2
-   - `<listing_13>` is not listed in the Upcoming tab. g10.auction-account-record.US7-TC2
+   - `<listing_13>` is listed in the Active tab. `g10.auction-account-record.US7-TC2`
+   - `<listing_13>` is not listed in the Upcoming tab. `g10.auction-account-record.US7-TC2`
 7. Navigate to `<my auctions url>`.
 8. Open the Upcoming tab.
-   - The Upcoming tab shows its no-listings empty state. g10.auction-account-record.US7-TC3
+   - The Upcoming tab shows its no-listings empty state. `g10.auction-account-record.US7-TC3`
 9. Navigate to `<my auctions url>`.
 10. Open the Ended tab.
 11. Click the Email alerts control on `<listing_12>`.
-   - The Email alerts control is disabled. g10.auction-account-record.US7-TC4
-   - The alert setting for `<listing_12>` is unchanged. g10.auction-account-record.US7-TC4
+   - The Email alerts control is disabled. `g10.auction-account-record.US7-TC4`
+   - The alert setting for `<listing_12>` is unchanged. `g10.auction-account-record.US7-TC4`
 12. Navigate to `<my auctions url>`.
 13. Select the order entry point on `<listing_11>`'s Won row.
-   - The matching order `<winner_order_1>` opens. g10.auction-account-record.US7-TC5
-   - My Auctions performs no payment, address, or order-status write. g10.auction-account-record.US7-TC5
+   - The matching order `<winner_order_1>` opens. `g10.auction-account-record.US7-TC5`
+   - My Auctions performs no payment, address, or order-status write. `g10.auction-account-record.US7-TC5`
 14. Open My Auctions and read `<listing_10>`'s Won row.
 15. Select View order.
-   - The row status is Partially Paid with its warning treatment. g10.auction-account-record.US8-TC1
-   - View order opens `<winner_order_2>`, the Partially Paid Winner Order. g10.auction-account-record.US8-TC1
+   - The row status is Partially Paid with its warning treatment. `g10.auction-account-record.US8-TC1`
+   - View order opens `<winner_order_2>`, the Partially Paid Winner Order. `g10.auction-account-record.US8-TC1`
 16. Navigate to `<my auctions url>`.
 17. Read `<listing_9>`'s row.
-   - Your Standing reads Didn't win, and the row says the card was not charged. g10.auction-account-record.US8-TC2
-   - No View order is offered. g10.auction-account-record.US8-TC2
+   - Your Standing reads Didn't win, and the row says the card was not charged. `g10.auction-account-record.US8-TC2`
+   - No View order is offered. `g10.auction-account-record.US8-TC2`
 18. Navigate to `<my auctions url>`.
 19. Read `<listing_7>` and `<listing_8>`'s rows.
-   - `<listing_7>` reads Won, Payment Overdue, and offers View order. g10.auction-account-record.US8-TC3
-   - `<listing_7>` has no helper line and no way to reach Grade10 on the row. g10.auction-account-record.US8-TC3
-   - `<listing_8>` reads Won, Awaiting Setup, and offers View order. g10.auction-account-record.US8-TC3
-   - `<listing_8>` has no confirm-address helper line on the row. g10.auction-account-record.US8-TC3
+   - `<listing_7>` reads Won, Payment Overdue, and offers View order. `g10.auction-account-record.US8-TC3`
+   - `<listing_7>` has no helper line and no way to reach Grade10 on the row. `g10.auction-account-record.US8-TC3`
+   - `<listing_8>` reads Won, Awaiting Setup, and offers View order. `g10.auction-account-record.US8-TC3`
+   - `<listing_8>` has no confirm-address helper line on the row. `g10.auction-account-record.US8-TC3`
 20. Navigate to `<my auctions url>`.
 21. Read `<listing_6>`'s row.
-   - Your Standing reads `<your_standing>`, never `<excluded_standing>`. g10.auction-account-record.US9-TC1
-   - The row offers View order. g10.auction-account-record.US9-TC1
-   - Listing, close and current bid read as on any Won row. g10.auction-account-record.US9-TC1
+   - Your Standing reads `<your_standing>`, never `<excluded_standing>`. `g10.auction-account-record.US9-TC1`
+   - The row offers View order. `g10.auction-account-record.US9-TC1`
+   - Listing, close and current bid read as on any Won row. `g10.auction-account-record.US9-TC1`
 
 ## Walk 5: Filter rows and read close results — phase 2
 
 **Starting state:**
 
+**Steps 1–5 setup:**
+
 - customer A(signed in) leads `<listing_5>`.
 - `<listing_5>`'s close has passed, and recording it is held back.
+
+**Steps 6–7 setup:**
+
 - customer B(signed in) bid `<customer B bid>` on `<listing_4>`.
 - customer A has since raised `<listing_4>`'s current bid to `<current bid>`.
 
 **Shared test data:**
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-account-record.US10-TC2 | listing_5 | A USD listing led by customer A, its close passed and not yet recorded; bind its identity only |
-| g10.auction-account-record.US10-TC2 | my auctions url | The My Auctions URL |
+**Steps 1–5 data:**
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-account-record.US10-TC3 | listing_4 | An open USD listing, its close more than an hour away; bind its identity only | · |
-| g10.auction-account-record.US10-TC3 | customer B bid | 100000 USD minor units | · |
-| g10.auction-account-record.US10-TC3 | current bid | 120000 USD minor units | above `<customer B bid>` |
+| Field | Value |
+| --- | --- |
+| listing_5 | A USD listing led by customer A, its close passed and not yet recorded; bind its identity only |
+| my auctions url | The My Auctions URL |
 
-| Case | Field | Value |
+**Steps 6–7 data:**
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-account-record.US10-TC3 | my auctions url | The My Auctions URL |
+| listing_4 | An open USD listing, its close more than an hour away; bind its identity only | · |
+| customer B bid | 100000 USD minor units | · |
+| current bid | 120000 USD minor units | above `<customer B bid>` |
+
+| Field | Value |
+| --- | --- |
+| my auctions url | The My Auctions URL |
 
 ### Route
 
 1. Navigate to `<my auctions url>`.
 2. Find `<listing_5>`'s row and read its tab and Your Standing.
-   - At Step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win. g10.auction-account-record.US10-TC2
+   - At step 2 the row is in the Active tab, and Your Standing reads Leading with no next valid bid, neither Won nor Didn't win. `g10.auction-account-record.US10-TC2`
 3. Let recording the close resume.
 4. Reload `<my auctions url>`.
 5. Find `<listing_5>`'s row and read Your Standing.
-   - At Step 5 the row is in the Ended tab and Your Standing reads Won. g10.auction-account-record.US10-TC2
+   - At step 5 the row is in the Ended tab and Your Standing reads Won. `g10.auction-account-record.US10-TC2`
 6. As customer B, navigate to `<my auctions url>`.
 7. Find `<listing_4>`'s row in the Active tab.
-   - Current bid reads `<current bid>`, not `<customer B bid>`. g10.auction-account-record.US10-TC3
-   - Your Standing reads Outbid, with the next valid bid. g10.auction-account-record.US10-TC3
+   - Current bid reads `<current bid>`, not `<customer B bid>`. `g10.auction-account-record.US10-TC3`
+   - Your Standing reads Outbid, with the next valid bid. `g10.auction-account-record.US10-TC3`
 
 ## g10.auction-account-record.US1: Mark a listing now and find it again later
 

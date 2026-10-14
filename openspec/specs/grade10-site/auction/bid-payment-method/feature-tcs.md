@@ -8,176 +8,219 @@
 
 **Starting state:**
 
+**Steps 1–5 setup:**
+
 - customer(signed in, no linked card) is on `<listing_2 url>`.
+
+**Steps 6–9 setup:**
+
 - customer(signed in, `<linked card>` on file, no bid on `<listing_4>`) is on `<listing_4 url>`.
+
+**Steps 10–13 setup:**
+
 - customer(signed in, `<linked card>` linked on `<listing_6>`, no bid on `<listing_7>`) is on `<listing_7 url>`.
+
+**Steps 14–17 setup:**
+
 - customer A(card linked) leads `<listing_8>` with maximum `<customer A maximum>`, and is signed in.
 - customer B(card linked) holds maximum `<customer B maximum>`, lower than `<customer A maximum>`, on `<listing_8>`.
 - `<listing_8>`'s close is under a minute away, and no further bid will be placed.
+
+**Steps 18–20 setup:**
+
 - customer(signed in) placed the first accepted bid on `<listing_10>` with `<linked card>`, and leads it at `<locked maximum>`.
 - customer has also linked `<replacement card>`, different from `<linked card>`.
+
+**Steps 21–24 setup:**
+
 - customer(signed in, card linked, no bid on `<listing_12>`) is on `<listing_12 url>`.
 - The listing has current bid `<current bid>` and minimum next bid `<minimum next bid>`.
 
 **Shared test data:**
 
-| Case | Field | Value |
+**Steps 1–5 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_2 | An open listing taking bids, with no bid from this collector; bind its identity only |
+| listing_2 url | The URL of `<listing_2>`; bind its URL only |
+| my auctions url | The My Auctions URL; bind its URL only |
+
+**Steps 6–9 data:**
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC1 | listing_2 | An open listing taking bids, with no bid from this collector; bind its identity only |
-| g10.auction-bid-payment-method.US1-TC1 | listing_2 url | The URL of `<listing_2>`; bind its URL only |
-| g10.auction-bid-payment-method.US1-TC1 | my auctions url | The My Auctions URL; bind its URL only |
+| listing_4 | An open listing taking bids, with no bid from this collector and no other bidder; bind its identity only | · |
+| linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| maximum | A maximum above the next valid bid, within the collector's bidding limits; bind its amount only | · |
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC2 | listing_4 | An open listing taking bids, with no bid from this collector and no other bidder; bind its identity only | · |
-| g10.auction-bid-payment-method.US1-TC2 | linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| g10.auction-bid-payment-method.US1-TC2 | maximum | A maximum above the next valid bid, within the collector's bidding limits; bind its amount only | · |
+| Field | Value |
+| --- | --- |
+| listing_4 url | The URL of `<listing_4>`; bind its URL only |
 
-| Case | Field | Value |
+**Steps 10–13 data:**
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC2 | listing_4 url | The URL of `<listing_4>`; bind its URL only |
+| listing_7 | An open listing taking bids, not bid on by this collector; bind its identity only | · |
+| linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| next bid | The next valid bid shown on the bid panel; bind its amount only | · |
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC6 | listing_7 | An open listing taking bids, not bid on by this collector; bind its identity only | · |
-| g10.auction-bid-payment-method.US1-TC6 | linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| g10.auction-bid-payment-method.US1-TC6 | next bid | The next valid bid shown on the bid panel; bind its amount only | · |
+| Field | Value |
+| --- | --- |
+| listing_6 | A different earlier listing where this collector linked `<linked card>`; bind its identity only |
+| listing_7 url | The URL of `<listing_7>`; bind its URL only |
 
-| Case | Field | Value |
+**Steps 14–17 data:**
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC6 | listing_6 | A different earlier listing where this collector linked `<linked card>`; bind its identity only |
-| g10.auction-bid-payment-method.US1-TC6 | listing_7 url | The URL of `<listing_7>`; bind its URL only |
+| listing_8 | An open USD listing led by customer A; bind its identity only | · |
+| customer A maximum | USD8,400 | (range: 800000–3999999 minor units) |
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC7 | listing_8 | An open USD listing led by customer A; bind its identity only | · |
-| g10.auction-bid-payment-method.US1-TC7 | customer A maximum | USD8,400 | (range: 800000–3999999 minor units) |
+| Field | Value |
+| --- | --- |
+| customer B maximum | The accepted maximum of customer B on `<listing_8>`, below `<customer A maximum>`; bind its amount only |
+| winner_order_1 | The winner order for customer A on `<listing_8>` after the close is recorded; bind its order identity only |
 
-| Case | Field | Value |
+**Steps 18–20 data:**
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC7 | customer B maximum | The accepted maximum of customer B on `<listing_8>`, below `<customer A maximum>`; bind its amount only |
-| g10.auction-bid-payment-method.US1-TC7 | winner_order_1 | The winner order for customer A on `<listing_8>` after the close is recorded; bind its order identity only |
+| listing_10 | An open listing taking bids, led by this collector; bind its identity only | · |
+| linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242, the card `<listing_10>` is locked to. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| replacement card | The seeded linked card different from `<linked card>`; bind its card identity only | 5555 5555 5555 4444. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| locked maximum | The collector's maximum on `<listing_10>`; bind its amount only | · |
+| replacement maximum | A maximum above `<locked maximum>`; bind its amount only | · |
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC9 | listing_10 | An open listing taking bids, led by this collector; bind its identity only | · |
-| g10.auction-bid-payment-method.US1-TC9 | linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242, the card `<listing_10>` is locked to. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| g10.auction-bid-payment-method.US1-TC9 | replacement card | The seeded linked card different from `<linked card>`; bind its card identity only | 5555 5555 5555 4444. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| g10.auction-bid-payment-method.US1-TC9 | locked maximum | The collector's maximum on `<listing_10>`; bind its amount only | · |
-| g10.auction-bid-payment-method.US1-TC9 | replacement maximum | A maximum above `<locked maximum>`; bind its amount only | · |
+**Steps 21–24 data:**
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC10 | listing_12 | An open USD listing, current bid `<current bid>`, minimum next bid `<minimum next bid>`; bind its identity only | · |
-| g10.auction-bid-payment-method.US1-TC10 | low maximum | USD282 | (range: 1000–79999 minor units), below the minimum next bid |
-| g10.auction-bid-payment-method.US1-TC10 | current bid | USD280 | (range: 1000–79999 minor units) |
-| g10.auction-bid-payment-method.US1-TC10 | minimum next bid | USD285 | (range: 1000–79999 minor units) |
-
-| Case | Field | Value |
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US1-TC10 | listing_12 url | The URL of `<listing_12>`; bind its URL only |
+| listing_12 | An open USD listing, current bid `<current bid>`, minimum next bid `<minimum next bid>`; bind its identity only | · |
+| low maximum | USD282 | (range: 1000–79999 minor units), below the minimum next bid |
+| current bid | USD280 | (range: 1000–79999 minor units) |
+| minimum next bid | USD285 | (range: 1000–79999 minor units) |
+
+| Field | Value |
+| --- | --- |
+| listing_12 url | The URL of `<listing_12>`; bind its URL only |
 
 ### Route
 
 1. Read the amount controls on the bid panel.
-   - Step 1: the quick bids and the custom maximum show, disabled. g10.auction-bid-payment-method.US1-TC1
+   - Step 1: the quick bids and the custom maximum show, disabled. `g10.auction-bid-payment-method.US1-TC1`
 2. Click the bid action.
-   - Step 2 opens card-link setup, the bid form asks for a card, and no bid is placed. g10.auction-bid-payment-method.US1-TC1
+   - Step 2 opens card-link setup, the bid form asks for a card, and no bid is placed. `g10.auction-bid-payment-method.US1-TC1`
 3. Close the setup modal without linking a card.
 4. Reload `<listing_2 url>` and read Highest bid and the bid count.
-   - Step 4: Highest bid and the bid count are unchanged, and no bid of this collector's is on `<listing_2>`. g10.auction-bid-payment-method.US1-TC1
+   - Step 4: Highest bid and the bid count are unchanged, and no bid of this collector's is on `<listing_2>`. `g10.auction-bid-payment-method.US1-TC1`
 5. Navigate to `<my auctions url>` and look for `<listing_2>`.
-   - Step 5 shows no row for `<listing_2>`. g10.auction-bid-payment-method.US1-TC1
+   - Step 5 shows no row for `<listing_2>`. `g10.auction-bid-payment-method.US1-TC1`
 6. Enter `<maximum>` in the custom maximum on the bid panel.
 7. Click the bid action.
-   - Step 7: no confirmation or payment-method modal opens. g10.auction-bid-payment-method.US1-TC2
+   - Step 7: no confirmation or payment-method modal opens. `g10.auction-bid-payment-method.US1-TC2`
 8. Read the bid panel.
-   - Step 8: the panel shows the collector leading at `<maximum>`, in the one answer, with no authorizing state before it. g10.auction-bid-payment-method.US1-TC2
+   - Step 8: the panel shows the collector leading at `<maximum>`, in the one answer, with no authorizing state before it. `g10.auction-bid-payment-method.US1-TC2`
 9. Read the linked card's activity at the card provider.
-   - Step 9: nothing is held or charged on `<linked card>`. g10.auction-bid-payment-method.US1-TC2
+   - Step 9: nothing is held or charged on `<linked card>`. `g10.auction-bid-payment-method.US1-TC2`
 10. Enter `<next bid>` in the bid panel.
 11. Click the bid action.
 12. Read the bid panel's linked card.
-   - Step 12 shows `<linked card>`, with Change no longer offered. g10.auction-bid-payment-method.US1-TC6
+   - Step 12 shows `<linked card>`, with Change no longer offered. `g10.auction-bid-payment-method.US1-TC6`
 13. Read the linked card's activity at the card provider.
-   - No card choice is asked for, and the bid is accepted. g10.auction-bid-payment-method.US1-TC6
-   - Step 13: nothing is held or charged on `<linked card>` for `<listing_7>`. g10.auction-bid-payment-method.US1-TC6
+   - No card choice is asked for, and the bid is accepted. `g10.auction-bid-payment-method.US1-TC6`
+   - Step 13: nothing is held or charged on `<linked card>` for `<listing_7>`. `g10.auction-bid-payment-method.US1-TC6`
 14. Wait until `<listing_8>` is recorded closed with customer A winning.
 15. Read customer A's and customer B's card activity at the card provider.
-   - Step 15: nothing is held or charged on either card, by the bids or by the close. g10.auction-bid-payment-method.US1-TC7
+   - Step 15: nothing is held or charged on either card, by the bids or by the close. `g10.auction-bid-payment-method.US1-TC7`
 16. As customer A, open `<winner_order_1>` from View order on My Auctions.
 17. Start paying the invoice by card.
-   - Step 17 opens the provider's hosted Checkout for `<winner_order_1>`'s invoice. g10.auction-bid-payment-method.US1-TC7
+   - Step 17 opens the provider's hosted Checkout for `<winner_order_1>`'s invoice. `g10.auction-bid-payment-method.US1-TC7`
 18. Submit `<replacement maximum>` on `<listing_10>` with `<replacement card>`.
 19. Read the API response.
-   - Step 19 refuses the bid because the listing's card is locked. g10.auction-bid-payment-method.US1-TC9
+   - Step 19 refuses the bid because the listing's card is locked. `g10.auction-bid-payment-method.US1-TC9`
 20. Read `<listing_10>`'s current bid, the leader and the collector's maximum.
-   - Step 20: the current bid and leader are unchanged, and the collector's maximum stays `<locked maximum>` on `<linked card>`. g10.auction-bid-payment-method.US1-TC9
+   - Step 20: the current bid and leader are unchanged, and the collector's maximum stays `<locked maximum>` on `<linked card>`. `g10.auction-bid-payment-method.US1-TC9`
 21. Enter `<low maximum>` in the custom maximum on the bid panel.
 22. Click the bid action.
 23. Read the bid form and the linked card on the bid panel.
-   - Step 23: the bid form names the minimum next bid `<minimum next bid>`, and Change is still offered on the linked card. g10.auction-bid-payment-method.US1-TC10
+   - Step 23: the bid form names the minimum next bid `<minimum next bid>`, and Change is still offered on the linked card. `g10.auction-bid-payment-method.US1-TC10`
 24. Click Change on the linked card.
-   - Step 24 opens card-link setup. g10.auction-bid-payment-method.US1-TC10
+   - Step 24 opens card-link setup. `g10.auction-bid-payment-method.US1-TC10`
 
 ## Walk 2: Collector raises a bid on the same card and adjacent checks
 
 **Starting state:**
 
+**Steps 1–4 setup:**
+
 - customer(signed in, leads `<listing_22>` at `<current maximum>` on `<linked card>`) is on `<listing_22 url>`.
+
+**Steps 5–6 setup:**
+
 - customer(signed in, no bid on `<listing_26>`) is on `<listing_26 url>`.
+
+**Steps 7–7 setup:**
+
 - The bid panel's premium disclosure is rendered for `<listing_28>`, an open listing in `<currency>`.
 
 **Shared test data:**
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US2-TC1 | listing_22 | An open listing taking bids, led by this collector on `<linked card>`; bind its identity only | · |
-| g10.auction-bid-payment-method.US2-TC1 | linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| g10.auction-bid-payment-method.US2-TC1 | current maximum | The collector's current maximum on `<listing_22>`; bind its amount only | · |
-| g10.auction-bid-payment-method.US2-TC1 | raised maximum | A maximum above `<current maximum>`; bind its amount only | · |
+**Steps 1–4 data:**
 
-| Case | Field | Value |
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US2-TC1 | listing_22 url | The URL of `<listing_22>`; bind its URL only |
+| listing_22 | An open listing taking bids, led by this collector on `<linked card>`; bind its identity only | · |
+| linked card | The seeded linked Visa card; bind its card identity only | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| current maximum | The collector's current maximum on `<listing_22>`; bind its amount only | · |
+| raised maximum | A maximum above `<current maximum>`; bind its amount only | · |
 
-| Case | Field | Value |
+| Field | Value |
+| --- | --- |
+| listing_22 url | The URL of `<listing_22>`; bind its URL only |
+
+**Steps 5–6 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_26 | An open USD listing taking bids; bind its identity only |
+| next bid | The next valid bid shown on the bid panel; bind its amount only |
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| g10.auction-bid-payment-method.US4-TC1 | listing_26 | An open USD listing taking bids; bind its identity only |
-| g10.auction-bid-payment-method.US4-TC1 | next bid | The next valid bid shown on the bid panel; bind its amount only |
+| premium rate | 20% | (fixed configured rate) |
 
-| Case | Field | Value | Fixture notes |
-| --- | --- | --- | --- |
-| g10.auction-bid-payment-method.US4-TC1 | premium rate | 20% | (fixed configured rate) |
+| Field | Value |
+| --- | --- |
+| listing_26 url | The URL of `<listing_26>`; bind its URL only |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-bid-payment-method.US4-TC1 | listing_26 url | The URL of `<listing_26>`; bind its URL only |
+**Steps 7–7 data:**
 
-| Case | `<currency>` | `<premium disclosure>` |
-| --- | --- | --- |
-| g10.auction-bid-payment-method.US4-TC2 | USD | 20% of the winning bid |
+| `<currency>` | `<premium disclosure>` |
+| --- | --- |
+| USD | 20% of the winning bid |
 
-| Case | Field | Value |
-| --- | --- | --- |
-| g10.auction-bid-payment-method.US4-TC2 | listing_28 | An open listing priced in `<currency>`; bind its identity only |
+| Field | Value |
+| --- | --- |
+| listing_28 | An open listing priced in `<currency>`; bind its identity only |
 
 ### Route
 
 1. Enter `<raised maximum>` in the bid panel.
 2. Click the bid action.
-   - Step 2: no card choice is asked for. g10.auction-bid-payment-method.US2-TC1
+   - Step 2: no card choice is asked for. `g10.auction-bid-payment-method.US2-TC1`
 3. Read the bid panel.
-   - Step 3: the panel shows `<raised maximum>` at once, with no authorizing state before it. g10.auction-bid-payment-method.US2-TC1
+   - Step 3: the panel shows `<raised maximum>` at once, with no authorizing state before it. `g10.auction-bid-payment-method.US2-TC1`
 4. Read the collector's card activity at the card provider.
-   - Step 4: nothing is held or charged on `<linked card>` for `<listing_22>`. g10.auction-bid-payment-method.US2-TC1
+   - Step 4: nothing is held or charged on `<linked card>` for `<listing_22>`. `g10.auction-bid-payment-method.US2-TC1`
 5. Read the bid panel, under the bid action.
-   - Step 5: the buyer's premium reads `<premium rate>` of the winning bid, not behind a tooltip. g10.auction-bid-payment-method.US4-TC1
+   - Step 5: the buyer's premium reads `<premium rate>` of the winning bid, not behind a tooltip. `g10.auction-bid-payment-method.US4-TC1`
 6. Enter `<next bid>` in the bid panel without placing it.
-   - Step 6: no premium amount and no invoice total show. g10.auction-bid-payment-method.US4-TC1
+   - Step 6: no premium amount and no invoice total show. `g10.auction-bid-payment-method.US4-TC1`
 7. Render the premium disclosure for `<currency>`.
-   - The premium disclosure reads `<premium disclosure>`. g10.auction-bid-payment-method.US4-TC2
-   - No currency amount appears in it. g10.auction-bid-payment-method.US4-TC2
+   - The premium disclosure reads `<premium disclosure>`. `g10.auction-bid-payment-method.US4-TC2`
+   - No currency amount appears in it. `g10.auction-bid-payment-method.US4-TC2`
 
 ## g10.auction-bid-payment-method.US1: Collector bids on the card already linked
 
