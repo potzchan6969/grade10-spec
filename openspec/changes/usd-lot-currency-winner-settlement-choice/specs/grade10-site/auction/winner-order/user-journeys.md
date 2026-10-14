@@ -38,10 +38,10 @@
 **I want** every amount on my invoice, receipt and order letters in HKD,
 **so that** I pay and keep records in one currency without working out a rate.
 
-### winner-order-US-27: Winner who settles in HKD reads the order total in both currencies
+### winner-order-US-27: Winner who settles in HKD reads the Order Summary in HKD
 
 **As a** winner who picked HKD,
-**I want** my Order Summary to keep the lot's USD amounts and show a USD total then the HKD total I will pay,
+**I want** my Order Summary in HKD, with each line's USD amount beneath it and one HKD total I will pay,
 **so that** I see what I won and what it costs me in HKD.
 
 ## MODIFIED User journeys
