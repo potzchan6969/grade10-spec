@@ -5,3 +5,5 @@ depends_on:
   - add-store-product-status
 hands:
   dev: "@kinisworking"
+reviewed:
+  ui-design: "01480e66"
