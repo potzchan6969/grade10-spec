@@ -7,8 +7,8 @@ import {
   TABLE_LABELS,
   WITH_TAX_INVOICE,
 } from "./fixtures";
-import { InvoicePdf } from "./invoice-pdf";
 import type { InvoicePdfBankRails } from "./invoice-pdf";
+import { InvoicePdf } from "./invoice-pdf";
 import {
   A4_WIDTH,
   LINE_HEIGHT,
@@ -393,9 +393,7 @@ describe("invoice PDF renderer", () => {
       }),
     );
     expect(
-      emptyRows.some((row) =>
-        row.text.startsWith(`${COPY.beneficiaryLabel}:`),
-      ),
+      emptyRows.some((row) => row.text.startsWith(`${COPY.beneficiaryLabel}:`)),
     ).toBe(true);
     expect(emptyRows.map((row) => row.text)).toContain(
       `${COPY.accountNoLabel}: test-account`,
