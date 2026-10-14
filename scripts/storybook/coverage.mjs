@@ -4,7 +4,7 @@
  * its design is agreed; a feature with no surface of its own, or one only
  * operators see, is declared once in apps/preview/coverage.yaml with why.
  *
- *   pnpm storybook:coverage           the two tables, as markdown
+ *   pnpm storybook:coverage           the three tables, as markdown
  *   pnpm storybook:coverage --gaps    only what is missing
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -119,6 +119,18 @@ export function journeyCoverage(
     .sort((a, b) => a.capability.localeCompare(b.capability));
 }
 
+/** Per Scenario: the settings staging can be set to, and its presets. */
+export function scenarioSettings(index = storyIndex({ root: rootDirectory })) {
+  return Object.values(index.files)
+    .filter((file) => file.tags?.includes("scenario"))
+    .map((file) => ({
+      title: file.title,
+      settings: file.settings ?? [],
+      presets: file.stories?.length ?? 0,
+    }))
+    .sort((a, b) => a.title.localeCompare(b.title));
+}
+
 const shortId = (id) => id.replace(/^.*-(US-\d+)$/, "$1");
 
 function main() {
@@ -145,6 +157,17 @@ function main() {
   for (const row of capabilityRows)
     console.log(
       `| ${row.capability} | ${row.walked.length}/${row.held} | ${row.open.map(shortId).join(", ")} |`,
+    );
+
+  const scenarios = scenarioSettings(index).filter(
+    (row) => !gaps || !row.settings.length,
+  );
+  console.log("\n## Scenarios\n");
+  console.log("| Scenario | Settings | Presets |");
+  console.log("| --- | --- | ---: |");
+  for (const row of scenarios)
+    console.log(
+      `| ${row.title} | ${row.settings.join(", ") || "missing"} | ${row.presets} |`,
     );
 
   const missing = features.filter((row) =>
