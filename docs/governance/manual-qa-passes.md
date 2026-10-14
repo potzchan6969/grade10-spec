@@ -69,7 +69,7 @@ A pass ranks features, never single cases: each feature sits in one scope at one
 
 | Walker | Walks | Needs |
 | --- | --- | --- |
-| Agent | the staging site, the admin console, the shop's hosted checkout, and the console's POS till and loyalty test pages, in a browser | a tester account whose sign-in mail it can read, the test card, an admin account |
+| Agent | the staging site, the admin console, the shop's hosted checkout, and the console's POS till and loyalty test pages, in a browser | a tester address under the tester domain, whose link it captures through the staging test door, the test card, an admin account |
 | Person | a phone's wallet, a till device, a camera, and how a page reads and looks | the device, signed in to a tester account |
 
 - **Either, by default** — a case either walker can take is given to whoever is free; the map names the features only a person walks
