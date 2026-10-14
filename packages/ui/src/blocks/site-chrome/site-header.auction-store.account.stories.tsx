@@ -122,6 +122,9 @@ export const SigningOut: Story = {
     expect(signOut).toHaveAttribute("aria-busy", "true");
     await userEvent.click(signOut);
     expect(args.onSignOut).not.toHaveBeenCalled();
-    expect(body.getByRole("menuitem", { name: "Sign Out" })).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Account" })).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
   },
 };
