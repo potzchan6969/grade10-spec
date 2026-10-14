@@ -1,0 +1,493 @@
+# grade10-site/site/page-shell Test Cases
+
+**Status:** pending-review · 0/12
+**Drafts styled:** 2026-10-14, tcs-rules r5
+
+## grade10-site-site-page-shell-US2: Collector sees the chrome before the session resolves
+
+**As a** collector,
+**I want** the header and the footer rendered before the session has resolved,
+with only the account entry and the cart count updating once it does,
+**so that** I can start navigating immediately without chrome appearing or
+disappearing under me.
+
+<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=4 -->
+### grade10-site-site-page-shell-US2-TC2-4: The session's arrival changes only the account entry and the cart count
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-02
+
+**Pre-conditions:**
+
+* customer's session is <session>, and the session read is held before it answers.
+* The site answers Store, so the header offers Cart.
+* The viewport is <viewport>.
+
+**Test data:**
+
+| `<viewport>` | `<session>` | `<cart count badge>` | `<controls left of the entry>` |
+| --- | --- | --- | --- |
+| 1280 CSS pixels wide | Signed in, 2 active lines | 2, once the cart review completes | Keep their places |
+| 1280 CSS pixels wide | Signed in, no active lines | none | Keep their places |
+| 1280 CSS pixels wide | Signed out, 1 active line in this browser's cart | 1, once the cart review completes | The language control, and search where the build answers it, move left by Sign In's width less 40 CSS pixels; every other control keeps its place |
+| 375 CSS pixels wide | Signed out, 1 active line in this browser's cart | 1, once the cart review completes | Keep their places |
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Record the position of every header control, the placeholder in the account entry's place included.
+3. Release the held session read.
+4. Wait for the cart review to complete, then record the position of every header control again.
+
+**Expected Results:**
+
+* Step 3: the account entry matches <session> - the account icon signed in, Sign In signed out - in the placeholder's place.
+* Between steps 2 and 4, no chrome control appears or disappears other than the count badge.
+* The Cart control keeps its place and shows <cart count badge>.
+* <controls left of the entry>.
+
+---
+
+## grade10-site-site-page-shell-US9: Collector is not offered Sign In before their session answers
+
+**As a** collector,
+**I want** the header to hold the account entry's place until my session has
+answered,
+**so that** I am never offered Sign In while I am already signed in.
+
+### grade10-site-site-page-shell-US9-TC1-1: The account entry's place holds a placeholder until the session answers
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer's session is <session>, and the session read is held before it answers.
+* The site answers Store, so the header offers Cart.
+* The viewport is <viewport>.
+
+**Test data:**
+
+| `<viewport>` | `<session>` |
+| --- | --- |
+| 1280 CSS pixels wide | Signed in |
+| 375 CSS pixels wide | Signed in |
+| 1280 CSS pixels wide | Signed out, with no session in this browser |
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Look at the header while the session read is held.
+
+**Expected Results:**
+
+* A round placeholder 40 CSS pixels across sits in the account entry's place.
+* At 375 CSS pixels wide, the placeholder sits in the bar beside Cart.
+* Neither Sign In nor the account icon shows.
+
+### grade10-site-site-page-shell-US9-TC2-1: The placeholder offers nothing to press
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) is on a browser whose session read is held before it answers.
+* The site answers Store, so the header offers Cart.
+* The viewport is 1280 CSS pixels wide.
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Click the placeholder in the account entry's place.
+3. Put keyboard focus on the first control in the header, then press Tab until focus reaches Cart.
+
+**Expected Results:**
+
+* Step 2: nothing opens - no sign-in and no account menu - and the page stays as it was.
+* Step 3: focus never rests on the placeholder.
+
+### grade10-site-site-page-shell-US9-TC3-1: The placeholder is not read aloud
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) is on a browser whose session read is held before it answers.
+* A screen reader is running.
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Move through the header with the screen reader's reading keys, from its first control to its last.
+3. Inspect the header in the browser's accessibility tree.
+
+**Expected Results:**
+
+* Step 2: the screen reader reads nothing for the placeholder - no label, and no busy or loading status.
+* Step 3: the placeholder has no accessible name and no status role, and nothing in the header is marked busy.
+
+### grade10-site-site-page-shell-US9-TC4-1: The first answer puts the account entry in the placeholder's place
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer's session is <session>.
+* The session read is held for 10 seconds, a slow read that still answers, then answers.
+
+**Test data:**
+
+| `<session>` | `<entry>` | `<never shown>` |
+| --- | --- | --- |
+| Signed in | The account icon | Sign In |
+| Signed out, with no session in this browser | Sign In | The account icon |
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Watch the account entry until the session read answers, and for 5 seconds after.
+
+**Expected Results:**
+
+* Until the read answers, the placeholder shows.
+* When the read answers, <entry> shows in the placeholder's place at once.
+* <never shown> never shows.
+
+### grade10-site-site-page-shell-US9-TC5-1: A signed-in collector's first paints never show Sign In
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) on a browser whose session is read as usual, with nothing held.
+* The browser's developer tools record the page load frame by frame, with screenshots.
+
+**Test data:**
+
+| `<address>` |
+| --- |
+| <grade10 site url>, opened in a new tab |
+| <written page address>, an address the site serves as a page written before any session is read |
+
+**Steps:**
+
+1. Start the recording, then open <address>.
+2. Stop the recording once the account icon shows.
+3. Step through the recorded frames from the first paint.
+
+**Expected Results:**
+
+* No frame shows Sign In in the header.
+* Every frame from the first paint shows the placeholder or the account icon in the account entry's place.
+* Once the account icon shows, it stays.
+
+### grade10-site-site-page-shell-US9-TC6-1: A written page holds the placeholder before the app takes over
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* JavaScript is turned off in the browser, so the page shows only what the site wrote.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<written page address>` | An address the site serves as a page written before any session is read |
+
+**Steps:**
+
+1. Navigate to <written page address>.
+2. Look at the header's account entry.
+
+**Expected Results:**
+
+* The placeholder shows in the account entry's place.
+* Neither Sign In nor the account icon shows.
+
+### grade10-site-site-page-shell-US9-TC7-1: A failed session read shows Sign In
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) is on a browser whose session read fails with <failure>.
+
+**Test data:**
+
+| `<failure>` |
+| --- |
+| A 500 server error |
+| A dropped connection, with no response |
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Look at the account entry once the session read has failed.
+3. Click Sign In.
+
+**Expected Results:**
+
+* Step 2: Sign In shows in the placeholder's place.
+* Step 3: sign-in opens.
+
+### grade10-site-site-page-shell-US9-TC8-1: A session read that never answers keeps the placeholder
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer(signed in) is on a browser whose session read is held and never answers.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<wait>` | 60 seconds |
+
+**Steps:**
+
+1. Navigate to <grade10 site url>.
+2. Watch the account entry for <wait>.
+3. Click Auction in the primary navigation.
+
+**Expected Results:**
+
+* Step 2: the placeholder stays for the whole <wait>, and Sign In never shows.
+* Step 3: the Auction surface opens, with the placeholder still in the account entry's place.
+
+### grade10-site-site-page-shell-US9-TC9-1: A later session read keeps the entry already shown
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer's session is <session>, and <grade10 site url> shows <entry> after its first answer.
+* The site's next session read will be held before it answers.
+
+**Test data:**
+
+| `<session>` | `<entry>` | `<re-read>` |
+| --- | --- | --- |
+| Signed out | Sign In | Switch to another browser tab, then back |
+| Signed in | The account icon | Switch to another browser tab, then back |
+| Signed in | The account icon | Click Auction in the primary navigation |
+
+**Steps:**
+
+1. <re-read>.
+2. Watch the account entry while the session read is held.
+3. Release the held session read.
+
+**Expected Results:**
+
+* Step 2: <entry> stays in place, and the placeholder does not show.
+* Step 3: <entry> still shows.
+
+### grade10-site-site-page-shell-US9-TC10-1: Signing in or out after the first answer does not bring the placeholder back
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer is <before> on <grade10 site url>, and the header shows the entry from the page's first answer.
+
+**Test data:**
+
+| `<before>` | `<action>` | `<after>` |
+| --- | --- | --- |
+| Signed in | Click the account icon, then Sign Out in the account menu | Sign In |
+| Signed out | Click Sign In and complete sign-in | The account icon |
+
+**Steps:**
+
+1. <action>.
+2. Watch the account entry until it shows <after>.
+
+**Expected Results:**
+
+* The account entry shows <after>.
+* No page that has already shown Sign In or the account icon shows the placeholder again.
+
+### grade10-site-site-page-shell-US9-TC11-1: A later session read that fails keeps the entry already shown
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-09
+
+**Pre-conditions:**
+
+* customer is signed in, and <grade10 site url> shows the account icon after the session's first answer.
+* The site's next session read will answer with <answer>.
+
+**Test data:**
+
+| `<answer>` | `<entry>` |
+| --- | --- |
+| A server error (500) | The account icon |
+| A dropped connection | The account icon |
+| No session, as after signing out in another browser | Sign In |
+
+**Steps:**
+
+1. Switch to another browser tab, then back.
+2. Watch the account entry until the session read has answered.
+
+**Expected Results:**
+
+* Step 2: <entry> shows, and the placeholder does not show at any point.
+
+## Settled
+
+* Cart is absent until the site answers the Store cart drawer, then appears on
+  every surface it answers, including Auction; visibility does not depend on
+  session state.
+* The author chose to retain the last verified same-member count while a refresh is pending, including after failed cart updates; failed review hides the badge. Initial unknown counts and previous-member counts remain hidden.
+
+## Reconciliation
+
+- **Run** - QA1 blind pass, 2026-10-14. Read: the method (`spec-to-tcs` skill, `specs-to-test-cases.md` at `tcs_rules_rev` 5, `writing.md`); the change's `proposal.md`, `decisions.md` (goals, non-goals, Q1-Q7, empty `## Raised`) and `ui-design.md`; page-shell's durable `## Purpose` and `## Feature set`, the change's feature-set outline, the durable and change `user-journeys.md`; the existing `feature-tcs.md` with its `## Reconciliation` stripped; the Page Shell and Site Header and Footer PRDs; the `openspec/config.yaml` context. Denied: every `## Requirements` section, scenario text, `tech-design.md`, `tasks.md`, `openspec/specs/` beyond the supplied sections, and `openspec/changes/archive/`. Not supplied: `tcs-conventions.md` and the `grade10-site/site` domain suite.

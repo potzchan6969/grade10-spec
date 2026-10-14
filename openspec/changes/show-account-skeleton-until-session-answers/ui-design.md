@@ -30,4 +30,4 @@ No Figma frame yet; the wait is recorded in `.openspec.yaml`.
 | Answered signed in | The account icon, in the placeholder's place | `grade10-site-site-page-shell-SC-70` |
 | Answered signed out | Sign In; on the wide header, the language and search controls move left by its extra width | `grade10-site-site-page-shell-SC-05` |
 | Session read failed | Sign In | `grade10-site-site-page-shell-SC-71` |
-| Re-read after the first answer | The entry already shown, unchanged | `grade10-site-site-page-shell-SC-72` |
+| Re-read after the first answer | The entry already shown, unchanged | `grade10-site-site-page-shell-SC-72`, `grade10-site-site-page-shell-SC-74` |

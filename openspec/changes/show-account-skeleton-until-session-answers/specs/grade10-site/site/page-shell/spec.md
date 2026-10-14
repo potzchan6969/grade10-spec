@@ -7,8 +7,8 @@
     is a placeholder the size of the account icon, with nothing to press; a
     later re-read keeps the entry shown, and a failed read shows Sign In
   - Stable layout: no chrome control appears or disappears when the session
-    arrives; only the account entry's own change in width moves the controls
-    to its left
+    arrives; only the account entry's own change in width moves the language
+    and search controls on the wide header
 
 ## ADDED Requirements
 
@@ -35,7 +35,9 @@ Cart.
 
 **Once** - After the first answer the account entry SHALL NOT return to the
 placeholder. While the session is read again, the header SHALL keep the entry
-already shown until that read returns a session other than the one shown.
+already shown until that read returns a session other than the one shown. A
+later read that fails SHALL keep the entry already shown; a later read that
+returns no session SHALL show Sign In.
 
 **No timer** - The site SHALL NOT replace the placeholder after a time of its
 own; the placeholder SHALL show until the session answers.
@@ -109,6 +111,17 @@ own; the placeholder SHALL show until the session answers.
   appeared
 - **AND** when the read then answers, the account icon takes the
   placeholder's place
+
+<!-- trace:scenario id=g10.site-page-shell.SC-ra1 rev=1 -->
+#### Scenario: grade10-site-site-page-shell-SC-74 - A later read that fails keeps the entry already shown
+**Serves:** grade10-site-site-page-shell-US-09 - a signed-in collector whose connection drops after the session has answered
+
+- **GIVEN** a header showing the account icon after the session first answered
+- **WHEN** a later read of the session fails without returning a session
+- **THEN** the account icon stays, and neither Sign In nor the placeholder
+  appears
+- **AND** when a later read returns no session, as after signing out
+  elsewhere, Sign In takes the account icon's place
 
 ## MODIFIED Requirements
 
