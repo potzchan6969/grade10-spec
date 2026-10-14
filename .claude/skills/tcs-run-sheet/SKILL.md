@@ -8,7 +8,7 @@ description: Pick cases for a manual pass, print a trial Google Sheet, and final
 | Record | Value |
 | --- | --- |
 | Sheet | Production unless the person asks for sandbox |
-| Environment | `staging` unless the person names `production` |
+| Environment | `staging` unless the person names `uat` or `production` |
 | Identity | Spreadsheet id and run id; tab name and `gid` can change before merge |
 | Trial | Temporary Sheet registry and workflow artifact; no commit |
 | Finalized | Human-confirmed snapshot; one commit on a dedicated run branch |

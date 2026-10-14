@@ -60,7 +60,7 @@ on:
         required: false
         type: string
       env:
-        description: "Where the pass is walked — staging or production. Defaults to staging"
+        description: "Where the pass is walked — staging, uat or production. Defaults to staging"
         required: false
         default: "staging"
         type: string
