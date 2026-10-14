@@ -92,7 +92,7 @@ const meta = {
     rules: {
       ...BASKET_RULES,
       shopper:
-        "grade10-site/store/checkout: A guest checks out the basket alone, and the order belongs to nobody",
+        "grade10-site/store/checkout: A guest checks out with a public code at most, and the order belongs to nobody",
       moment:
         "shared/ui/store-cart: Fetching status and price info on open with Boneyard skeletons",
     },

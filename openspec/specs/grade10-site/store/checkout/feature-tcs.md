@@ -1,6 +1,6 @@
 # grade10-site/store/checkout Test Cases
 
-**Status:** pending-review · 0/26
+**Status:** pending-review · 0/27
 **Drafts styled:** 2026-09-28, tcs-rules r4
 
 ## grade10-site-store-checkout-US1: Collector sends a current cart to hosted payment
@@ -584,8 +584,8 @@
 **I want** to pay for my cart without making an account,
 **so that** I can buy once without signing up.
 
-<!-- trace:case id=g10.store-checkout.TC-nos rev=3 covers=g10.store-checkout.SC-f06,g10.store-checkout.SC-wet -->
-### grade10-site-store-checkout-US4-TC1-3: A signed-out collector pays the basket as a guest
+<!-- trace:case id=g10.store-checkout.TC-nos rev=4 covers=g10.store-checkout.SC-f06,g10.store-checkout.SC-wet -->
+### grade10-site-store-checkout-US4-TC1-4: A signed-out collector pays the basket and a public code as a guest
 
 **Classification:**
 
@@ -604,23 +604,25 @@
 
 * customer is signed out on <grade10 store url>.
 * This browser's cart holds `<basket>`.
+* `<public code>` is applied in the drawer.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
 | `<basket>` | A ready basket |
+| `<public code>` | A code open to everyone that the shop accepts for `<basket>` |
 
 **Steps:**
 
-1. Open Cart and press Proceed to Checkout.
+1. Open Cart and press Check Out as Guest.
 2. Read the hosted invoice.
 3. Open Cart again.
 
 **Expected Results:**
 
 * Step 1 asks nobody to sign in and opens one Shopify hosted invoice.
-* Step 2 carries the lines of `<basket>`, with no promo code, reward coupon or points.
+* Step 2 carries the lines of `<basket>` and `<public code>`, with no reward coupon or points.
 * Step 3 shows an empty cart.
 
 <!-- trace:case id=g10.store-checkout.TC-j40 rev=1 covers=g10.store-checkout.SC-1yf -->
@@ -700,6 +702,44 @@
 
 * Step 1 is refused.
 * Step 2 finds no guest order.
+
+<!-- trace:case id=g10.store-checkout.TC-p4d rev=1 covers=g10.store-checkout.SC-p4c -->
+### grade10-site-store-checkout-US4-TC12-1: A member's code typed by a guest is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-04
+
+**Pre-conditions:**
+
+* customer is signed out on <grade10 store url>.
+* This browser's cart holds `<basket>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket |
+| `<member code>` | A live code minted to another member |
+
+**Steps:**
+
+1. Open Cart, type `<member code>` and apply it.
+2. Read the refusal.
+
+**Expected Results:**
+
+* Step 1 applies no code.
+* Step 2 reads as a code that does not exist, and names no owner, spend or expiry.
 
 ---
 
@@ -913,7 +953,7 @@ Runs once per row of **Test data**.
 
 - Shopify is the hosted payment page; Grade10 is the order of record.
 - The public storefront takes a member or a guest; a guest pays the basket
-  alone, and the order belongs to nobody. Typed email remains an operator test
+  and at most a public code, and the order belongs to nobody. Typed email remains an operator test
   path in development and staging.
 - Shipping and tax are calculated by Shopify after address entry.
 - One checkout intent owns repeated Pay, reload and response-loss recovery.
