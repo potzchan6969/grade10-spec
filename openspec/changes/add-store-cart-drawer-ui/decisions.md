@@ -66,6 +66,7 @@ The pending-operation update settles this requirement on 2026-10-13.
 | Q20 | Does pending work disable only Checkout and tender actions? | Disable drawer actions while it is pending, retrieving or loading something. Requested by @kinisworking on 2026-10-12 and carried into this PM update on 2026-10-13; dismissal is settled separately in Q21 | Leaving quantity, removal, product navigation or a nested promo sheet interactive while the drawer waits |
 | Q21 | Should Close, backdrop click and Escape also be disabled while pending? | Keep dismissal available (recommended). Confirmed by @kinisworking on 2026-10-13, so a slow or failed request cannot trap the collector; a close does not mean a sent operation was canceled | Disabling dismissal until all pending work finishes, which reverses the shared dismissal contract |
 | Q22 | What does a successful checkout reply do after the collector closes the pending drawer? | Open Shopify when the still-current successful reply arrives. Chosen by @kinisworking on 2026-10-13; closing does not cancel the request or make its answer stale. Checkout Q35 owns the navigation rule | Ignoring navigation solely because the drawer closed |
+| Q23 | Does the drawer still gate Checkout at HKD 120,000? | No. Dropped 2026-10-14: the store asks for no identity at any value. The verification-bar requirement and its scenarios leave the delta, and its cases are deprecated; this supersedes Q10, Q11 and Q13. | Keeping the gate, which asks for a requirement the store does not have. |
 
 ## Raised
 
