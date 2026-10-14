@@ -135,7 +135,7 @@ group maps its existing checkout mutation lifetime into the common guard.
 - [ ] 16.3 Guard host item, tender, disclosure and navigation callbacks before side effects, including synchronous duplicate activation. Retain accepted figures/values and tender-view scope/open-generation protections; checkout navigation uses its current-request guard under Q22. Release each operation on terminal completion and keep Retry and existing data guards after failure; replay no action: `grade10-site-store-cart-drawer-SC-23`, `g10.store-cart-drawer.SC35`, `g10.store-cart-drawer.SC36`, `g10.store-cart-drawer.SC38`, `g10.store-cart-drawer.SC39`, `g10.store-cart-drawer.SC40`.
 - [ ] 16.4 Verify focused host and affected hook tests, Grade10/ZZZ compatibility typechecks and frontend change-sensitive validation from `docs/conventions/validation.md`; record unavailable browser gates separately.
 
-## 17. The walk - pending drawer operations (grade10)
+## 17. The walk - pending drawer operations (grade10) (owner: @kinisworking)
 
 Uses draft `feature-tcs.md` as planning input after Groups 15-16 land, and
 the checkout pending integration for its request-specific walk. Existing
