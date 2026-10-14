@@ -52,7 +52,7 @@
   "ask": {
     "guest": {
       "title": "Add this order to your account",
-      "body": "Sign in to earn points for this order.",
+      "body": "Sign in to see it with your other orders.",
       "bodyCompleted": "Sign in to see it with your other orders."
     },
     "member": {

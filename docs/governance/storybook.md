@@ -107,6 +107,29 @@ Storybook holds it.
 - **Play** — a flow's `play` steps through it, so `pnpm test:stories` keeps
   it working
 
+## Scenarios
+
+A Scenario is a Screen given what staging can be set to, so a reader sees how
+a combination behaves without a staging order, and checks staging against it.
+
+- **Where** - one story file beside the Screen's states,
+  `<screen>.scenario.stories.tsx`, titled `<Domain>/<Feature>/Screens/<Screen>/Scenario`
+  and tagged `scenario`. The canvas is the designer's Screen at its real size;
+  the state stories stay as they are
+- **Settings** - each condition staging can be set to is an `argTypes` entry: a
+  `name`, a `description` saying where staging sets it, and a radio of its
+  values. `render` maps the settings to the props the Screen already takes,
+  computed by a walk module beside the feature, as `pages/basket-walk.ts` prices
+  the basket
+- **Rules** - each setting names the requirement that decides it,
+  `parameters: { rules: { coupon: "<capability>: <requirement title>" } }`;
+  `pnpm storybook:check` refuses a title the spec does not hold, and a Scenario
+  with no settings
+- **Presets** - a few named stories for combinations worth a link
+- **Given** - the panel beside Controls lists each setting in words, the
+  requirement deciding it, a link to this Scenario with these settings to paste
+  beside a staging report, and the journeys it walks
+
 ## Prototypes
 
 - **Not yet designed** — a screen whose manual page marks it ❓, or whose
@@ -131,7 +154,8 @@ Prototypes until its design is agreed. A feature with no screen of its own
 still walk its journeys) or one only operators see is declared once, with
 why, in `apps/preview/coverage.yaml`.
 `pnpm storybook:coverage` prints each feature's counts and, per capability,
-the collector journeys a flow walks and those it does not yet.
+the collector journeys a flow or Scenario walks and those it does not yet, and
+each Scenario's settings and presets.
 
 ## Product Details
 

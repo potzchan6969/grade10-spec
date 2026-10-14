@@ -26,11 +26,13 @@ repairs its payment lifecycle.
   - Paid orders appear in Your Orders and release the member cart
   - Shopify confirmation returns the collector to the Grade10 order
 - Guest checkout
-  - The basket alone: no promo code, no reward coupon and no points
+  - The basket and at most one public code: no member's code, no reward
+    coupon and no points
   - The email address taken on Shopify's page and kept once paid
-  - A guest order belongs to nobody: no account, no points, no claim
+  - A guest order earns nothing: no account made, no points, no claim
   - A private order link, and Continue back to the order just sent
-  - A member's Your Orders lists guest orders under their sign-in address
+  - A guest order joins the account that proves its address, and is listed
+    in that member's Your Orders
 - Carrier rates
   - Shopify asks a token-gated stateless carrier rule for served destinations
   - The callback and store preview use the same configured rate
@@ -143,23 +145,28 @@ embedded payment secret.
 - **THEN** the local order stores the provider checkout reference before the URL is returned
 - **AND** a database transaction never remains open while Shopify is called
 
-### Requirement: A guest checks out the basket alone, and the order belongs to nobody
+### Requirement: A guest checks out with a public code at most, and the order earns no points
 
 A collector with no session SHALL check out the cart this browser holds as a
 guest. A request that carries a session SHALL be refused rather than written
 as a guest's.
 
-**Basket only** - A guest checkout SHALL carry the reviewed lines alone: no
-promo code, no reward coupon and no points.
+**Tender** - A guest checkout SHALL carry the reviewed lines and at most one
+public code the shop accepted, a code open to everyone and minted to no
+member. It SHALL carry no reward coupon and no points. A code minted to a
+member SHALL be refused to a guest as a code that does not exist.
 
 **Email** - Shopify's page SHALL take the buyer's email address, and the store
 SHALL keep that address on the order once it is paid.
 
-**Nobody's order** - A guest order SHALL never gain an owner. Paying it SHALL
-make no account, it SHALL earn no points, and an operator's claim SHALL be
-refused, whoever signs in afterwards. A member's Your Orders SHALL list the
-guest orders paid under the address their sign-in proved, without making those
-orders theirs.
+**No points** - Paying a guest order SHALL make no account. A guest order
+SHALL earn no points, before or after it joins an account, and an operator's
+claim of it SHALL be refused.
+
+**Joining** - A paid guest order SHALL join the account whose sign-in proved
+the address it was paid under: on that account's sign-in, or at payment when
+the account already proved it. A member's Your Orders SHALL list the guest
+orders paid under the address their sign-in proved.
 
 **The cart** - This browser's cart SHALL be emptied once the guest's hosted
 invoice opens; the invoice holds the basket.
@@ -174,21 +181,32 @@ invoice opens; the invoice holds the basket.
 - **THEN** one Grade10 guest order and one Shopify hosted invoice are created
 - **AND** they are not asked to sign in
 
-<!-- trace:scenario id=g10.store-checkout.SC-wet rev=2 -->
-#### Scenario: grade10-site-store-checkout-SC-66 - A guest pays the basket alone
+<!-- trace:scenario id=g10.store-checkout.SC-wet rev=3 -->
+#### Scenario: grade10-site-store-checkout-SC-66 - A guest pays the basket and a public code
 **Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
 
 - **GIVEN** a signed-out collector whose browser cart holds a ready basket
+  with a public code the shop accepted
 - **WHEN** they press Pay
-- **THEN** the hosted invoice carries the reviewed lines with no promo code,
-  reward coupon or points
+- **THEN** the hosted invoice carries the reviewed lines and that code, with
+  no reward coupon or points
 - **AND** this browser's cart is empty once the invoice opens
 
-<!-- trace:scenario id=g10.store-checkout.SC-1yf rev=1 -->
-#### Scenario: grade10-site-store-checkout-SC-67 - A paid guest order keeps its address and belongs to nobody
+<!-- trace:scenario id=g10.store-checkout.SC-p4c rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-74 - A member's code typed by a guest is refused
 **Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
 
-- **GIVEN** a guest order whose buyer typed an address on Shopify's page
+- **GIVEN** a signed-out collector with a ready basket
+- **WHEN** they type a code minted to a member
+- **THEN** it is refused as a code that does not exist
+- **AND** nothing says whose code it is, or whether it is spent or lapsed
+
+<!-- trace:scenario id=g10.store-checkout.SC-1yf rev=2 -->
+#### Scenario: grade10-site-store-checkout-SC-67 - A paid guest order under an address with no account belongs to nobody
+**Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
+
+- **GIVEN** a guest order whose buyer typed an address with no Grade10 account
+  on Shopify's page
 - **WHEN** Shopify reports it paid
 - **THEN** the order keeps that address and names no owner
 - **AND** no account is made from the address
@@ -204,14 +222,24 @@ invoice opens; the invoice holds the basket.
 - **THEN** the request is refused
 - **AND** no guest order is made
 
-<!-- trace:scenario id=g10.store-checkout.SC-pxw rev=1 -->
+<!-- trace:scenario id=g10.store-checkout.SC-pxw rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-71 - A member's Your Orders lists guest orders under their address
 **Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
 
 - **GIVEN** a guest order paid under the address a member signs in with
 - **WHEN** that member opens Your Orders
 - **THEN** the guest order is listed
-- **AND** it still names no owner and earns nothing
+- **AND** it names that member as its owner and has earned no points
+
+<!-- trace:scenario id=g10.store-checkout.SC-q8v rev=1 -->
+#### Scenario: grade10-site-store-checkout-SC-75 - A joined guest order earns nothing when it completes
+**Serves:** grade10-site-store-checkout-US-09 - A buyer finds a guest order again
+
+- **GIVEN** a paid guest order joined to a member's account before Shopify
+  fulfils it
+- **WHEN** every item is fulfilled
+- **THEN** the order earns no points
+- **AND** the member's points balance is unchanged
 
 ### Requirement: A guest order opens from its private link
 

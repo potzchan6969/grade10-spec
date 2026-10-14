@@ -37,9 +37,10 @@ to the Store
 
 **Guest orders** - a paid guest order joins the account whose proven email
 it was placed under, at payment when that account exists and otherwise at
-that account's next sign-in, and is listed from then on. One that joins before
-it completes earns points when it completes; one that joins after earns
-nothing - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+that account's next sign-in, and is listed from then on -
+[Checkout](/p/grade10-site/store/checkout#guest-checkout)
+
+🚧 **No points** - a joined guest order earns none
 
 ## Designs
 
@@ -52,7 +53,7 @@ nothing - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner: one still in progress earns points when it completes, one already complete earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
+| Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner and earns nothing. Decided 2026-10-13, earning dropped 2026-10-14; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
 | Join at payment | Decided | A guest order placed under the proven email of an existing account joins that account at payment, so it is listed without waiting for a sign-in. Decided 2026-10-13, the owner's answer. | Product |
 | A changed sign-in email | Decided | A guest order joins under the email the account holds. A member whose Google account changes its email keeps the old one on the account, so guest orders under the new email do not join it. Accepted: a Gmail address cannot change, and following Google's email would move an identity across auth, the store, loyalty and Shopify for a rare case. Decided 2026-10-14, the owner's answer. | Product |
 :::

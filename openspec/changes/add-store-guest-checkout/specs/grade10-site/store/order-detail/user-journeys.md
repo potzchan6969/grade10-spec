@@ -10,7 +10,7 @@
 
 **As a** collector who paid as a guest,
 **I want** to add my order by continuing with the order email's Google account or sending a magic link to it,
-**so that** the order joins my account and earns points once it's completed.
+**so that** it is listed with my other orders.
 
 ### g10.store-order-detail.US5: Link holder reads an order without signing in
 

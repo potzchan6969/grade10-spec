@@ -11,6 +11,7 @@ import {
   pascalCase,
   placementErrors,
   rootOrder,
+  settingsErrors,
   sortRoots,
   titleCase,
 } from "./check.mjs";
@@ -280,5 +281,57 @@ describe("checkStories", () => {
       "Auth/Sign In - no Screens or Prototypes; draw them, or say why in apps/preview/coverage.yaml",
       'openspec/changes/add-x/ui-design.md:1 - no story "store-cart-cart--later"',
     ]);
+  });
+});
+
+describe("settingsErrors", () => {
+  const root = repository({
+    "openspec/specs/grade10-site/store/discounts/spec.md":
+      "### Requirement: A draft order carries at most one discount code\n",
+  });
+  after(() => rmSync(root, { recursive: true, force: true }));
+  const flow = (file) => ({
+    "cart.scenario.stories.tsx": {
+      title: "Store/Cart/Screens/Cart Drawer/Scenario",
+      tags: ["scenario"],
+      settings: [],
+      rules: {},
+      stories: [],
+      ...file,
+    },
+  });
+
+  it("refuses a Scenario with no settings, and reads no other story", () => {
+    assert.match(settingsErrors(root, flow({})).errors[0], /holds settings/);
+    assert.deepEqual(settingsErrors(root, flow({ tags: [] })), {
+      errors: [],
+      warnings: [],
+    });
+  });
+
+  it("holds each rule to a setting and a requirement that exists", () => {
+    const rule =
+      "grade10-site/store/discounts: A draft order carries at most one discount code";
+    assert.deepEqual(
+      settingsErrors(root, flow({ settings: ["code"], rules: { code: rule } })),
+      { errors: [], warnings: [] },
+    );
+    const { errors } = settingsErrors(
+      root,
+      flow({
+        settings: ["code"],
+        rules: { points: rule },
+        stories: [
+          {
+            rules: { code: "grade10-site/store/discounts: Not a requirement" },
+          },
+          { rules: { code: "no colon" } },
+        ],
+      }),
+    );
+    assert.equal(errors.length, 3);
+    assert.match(errors[0], /"points", which is no setting/);
+    assert.match(errors[1], /no requirement "Not a requirement"/);
+    assert.match(errors[2], /reads "<capability>: <requirement title>"/);
   });
 });
