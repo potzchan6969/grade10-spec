@@ -554,6 +554,13 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
               delete state.data[one.properties.title];
               one.properties.title = request.updateSheetProperties.properties.title;
             }
+            if (request.updateSheetProperties?.fields === 'index') {
+              const change = request.updateSheetProperties.properties;
+              const at = state.sheets.findIndex(one => one.properties.sheetId === change.sheetId);
+              const [one] = state.sheets.splice(at, 1);
+              const index = at < change.index ? change.index - 1 : change.index;
+              state.sheets.splice(index, 0, one);
+            }
             replies.push({});
           }
         }
@@ -619,6 +626,12 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
   ]);
   const printed = readReceipt();
   assert.equal(printed.state, "trial");
+  assert.deepEqual(
+    state()
+      .sheets.map((one) => one.properties.title)
+      .slice(0, 2),
+    ["Summary", printed.tab],
+  );
   assert.equal(state().data[printed.tab][3][0], "demo.thing.US1-TC1 (TC-abc)");
   const afterFirst = state().log.length;
   assert.match(
@@ -712,6 +725,12 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
   assert.equal(renamed.runId, printed.runId);
   assert.notEqual(renamed.sheetId, printed.sheetId);
   assert.equal(renamed.tab, "1-renamed");
+  assert.deepEqual(
+    state()
+      .sheets.map((one) => one.properties.title)
+      .slice(0, 3),
+    ["Summary", "2-filtered", renamed.tab],
+  );
   assert.ok(
     state().log.some(
       (one) =>
@@ -827,6 +846,12 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
   const sandboxHash = /^Fingerprint: ([a-f0-9]+)$/m.exec(sandboxPreview)[1];
   const sandboxOutput = run([...sandboxArgs, "--confirmed", sandboxHash]);
   assert.match(sandboxOutput, /Sandbox:/);
+  assert.deepEqual(
+    state()
+      .sheets.map((one) => one.properties.title)
+      .slice(0, 3),
+    ["Summary", "3-sandbox-source", "2-filtered"],
+  );
   assert.ok(sandboxOutput.includes(`Source commit: ${sandboxSource}`));
   const sandboxTab = state().sheets.find((one) =>
     one.properties.title.endsWith("-sandbox-source"),

@@ -107,6 +107,7 @@ The check reads the live registry and refuses cancelled or stale receipts.
 - **Multiple rows** — a case saying `Runs once per row of **Test data**.` expands once per run-table value row. Shared setup fills each row; row values take precedence. Filled values are not recursively substituted. Test data remains visible; the per-row reminder is omitted on expanded rows
 - **Four surfaces** — Web, Mobile, Auto web and Auto mobile are separate results. `manual` only: Web/Mobile `to_do`, Auto `n/a`; `automation` only: Web/Mobile `n/a`, Auto `to_do`; mixed: Web/Mobile `to_do`, Auto `to_do` only when automated, otherwise `n/a`
 - **Editing** — the four results and Notes belong to the tester. Case and classification cells are locked. Sort in the Walk filter view, not at sheet level; fix wrong case content in its source suite
+- **Tab order** — Summary first, then run tabs by descending numeric run id. A reprint keeps its run id and position in that order. Other tabs follow the runs
 - **Summary** — four rows per run, one per surface. Identity, environment and source SHA appear on the first. `n/a` is excluded from the pass rate; `skipped` counts against it
 
 ## Boundaries
