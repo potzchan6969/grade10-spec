@@ -1036,6 +1036,7 @@ test("env defaults to staging and refuses anything else", () => {
   assert.equal(envOf(undefined), DEFAULT_ENV);
   assert.equal(envOf(""), "staging");
   assert.equal(envOf("Production"), "production");
+  assert.equal(envOf(" UAT "), "uat");
   assert.equal(envOf("lab"), null);
 });
 

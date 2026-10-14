@@ -904,3 +904,20 @@ test("large Unicode manifests grow beyond 26 columns and clear old trailing chun
     /no execution results/,
   );
 });
+
+test("production-sheet records accept UAT and still reject unknown environments", () => {
+  const uat = {
+    ...trial,
+    snapshot: selectionSnapshot(picked, { ...options, env: "uat" }),
+  };
+  assert.equal(validateRecord(uat).snapshot.env, "uat");
+  assert.equal(finalize(uat).snapshot.env, "uat");
+  assert.throws(
+    () =>
+      validateRecord({
+        ...trial,
+        snapshot: selectionSnapshot(picked, { ...options, env: "lab" }),
+      }),
+    /valid selection/,
+  );
+});

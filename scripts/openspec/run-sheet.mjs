@@ -107,7 +107,7 @@ Selection - one of these, and the first two resolve to the third:
 Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
-  --env <name>        staging or production; defaults to staging
+  --env <name>        staging, uat or production; defaults to staging
   --include-draft     Also take \`draft\` cases (stone-grey in the tab)
   --exclude-automated Leave out cases an automated test already covers
   --sandbox           Write to TCS_SHEET_SANDBOX_ID instead of TCS_SHEET_ID
@@ -818,7 +818,7 @@ function summaryDressing(sheetId, startRow, rows, runId) {
 
 const args = parseArgs(cliArgs());
 args.env = envOf(args.env);
-if (!args.env) die("--env is staging or production");
+if (!args.env) die("--env is staging, uat or production");
 const actionCount = [
   args.overwrite,
   args.finalize,

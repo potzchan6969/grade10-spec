@@ -211,7 +211,7 @@ export const SUMMARY_LEAD_COLUMNS = [
   "Env",
 ];
 
-export const ENVIRONMENTS = ["staging", "production"];
+export const ENVIRONMENTS = ["staging", "uat", "production"];
 export const DEFAULT_ENV = "staging";
 
 export function envOf(value) {

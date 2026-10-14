@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { COLUMNS } from "./run-sheet-layout.mjs";
+import { COLUMNS, ENVIRONMENTS } from "./run-sheet-layout.mjs";
 import {
   buildGrid,
   caseRows,
@@ -143,7 +143,7 @@ export function validateRecord(record) {
     !snapshot ||
     snapshot.formatVersion !== FORMAT_VERSION ||
     !snapshot.name ||
-    !["staging", "production"].includes(snapshot.env) ||
+    !ENVIRONMENTS.includes(snapshot.env) ||
     !Array.isArray(snapshot.selected) ||
     snapshot.selected.length === 0 ||
     !Array.isArray(snapshot.excluded) ||
