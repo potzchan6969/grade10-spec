@@ -13,7 +13,7 @@
 - customer(signed out in this browser) watches `<lot_1>` with email alerts on, and the clock is moved to its scheduled start.
 - customer(signed in) watches `<lot_1>`, with alerts as the row gives.
 - The clock is moved past `<lot_1>`'s scheduled start.
-- `<lot_1>` was called off after Bidding opens in 24 hours was sent.
+- `<lot_9>` is called off before its scheduled start.
 
 **Shared test data:**
 
@@ -38,7 +38,7 @@
 
 | Item | Value |
 | --- | --- |
-| `<lot_1>` | A lot called off before its scheduled start |
+| `<lot_9>` | A lot called off before its scheduled start |
 
 ### Route
 
@@ -59,7 +59,7 @@
 7. Read the collector's My Auctions.
    - `<lot_1>` is still watched. g10.auction-notifications.US1-TC3
 8. Read the mail sent to the collector's registered email.
-   - Bidding has opened was not sent for `<lot_1>`. g10.auction-notifications.US1-TC4
+   - Bidding has opened was not sent for `<lot_9>`. g10.auction-notifications.US1-TC4
 
 ## Walk 2: Collector returns before a lot closes
 
@@ -192,8 +192,8 @@
 
 **Starting state:**
 
-- customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_1>`.
-- customer B was sent Bidding has opened for `<lot_1>`.
+- customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_10>`.
+- customer B was sent Bidding has opened for `<lot_10>`.
 - admin(auction operator) is on `<grade10 auction send log url>`.
 - customer C was never sent auction mail.
 
@@ -201,7 +201,7 @@
 
 | Item | Value |
 | --- | --- |
-| `<lot_1>` | A lot customer A and customer B watch |
+| `<lot_10>` | A lot customer A and customer B watch |
 | `<customer A email>` | customer A's registered email |
 | `<customer C email>` | customer C's registered email |
 
@@ -210,7 +210,7 @@
 1. Filter by `<customer A email>`.
    - two rows, both customer A's; none of customer B's. g10.auction-notifications.US5-TC1
 2. Read each row.
-   - each row shows message type, recipient email, `<lot_1>` and Sent At. g10.auction-notifications.US5-TC1
+   - each row shows message type, recipient email, `<lot_10>` and Sent At. g10.auction-notifications.US5-TC1
    - no row shows or opens the letter body. g10.auction-notifications.US5-TC1
 3. Filter by `<customer C email>`.
    - No rows show; the log says nothing was sent. g10.auction-notifications.US5-TC2
@@ -451,7 +451,7 @@ Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** normal
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
@@ -464,15 +464,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<lot_1>` with email alerts on.
-* `<lot_1>` was called off after Bidding opens in 24 hours was sent.
-* The clock is moved past `<lot_1>`'s scheduled start.
+* customer(signed in) watches `<lot_9>` with email alerts on.
+* `<lot_9>` is called off before its scheduled start.
+* The clock is moved past `<lot_9>`'s scheduled start.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot called off before its scheduled start |
+| `<lot_9>` | A lot called off before its scheduled start |
 
 **Steps:**
 
@@ -480,7 +480,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Bidding has opened was not sent for `<lot_1>`.
+* Bidding has opened was not sent for `<lot_9>`.
 
 ---
 
@@ -1176,15 +1176,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_1>`.
-* customer B was sent Bidding has opened for `<lot_1>`.
+* customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_10>`.
+* customer B was sent Bidding has opened for `<lot_10>`.
 * admin(auction operator) is on `<grade10 auction send log url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot customer A and customer B watch |
+| `<lot_10>` | A lot customer A and customer B watch |
 | `<customer A email>` | customer A's registered email |
 
 **Steps:**
@@ -1195,7 +1195,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: two rows, both customer A's; none of customer B's.
-* Step 2: each row shows message type, recipient email, `<lot_1>` and Sent At.
+* Step 2: each row shows message type, recipient email, `<lot_10>` and Sent At.
 * Step 2: no row shows or opens the letter body.
 
 <!-- trace:case id=g10.auction-notifications.TC-axs rev=2 -->
@@ -1371,15 +1371,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid US$300 (fixed, 30000 minor units) and customer B bid US$250 (fixed, 25000 minor units) on `<lot_1>`, both with email alerts on; the house leads at US$305 (fixed, 30500 minor units) under its internal bid.
-* `<lot_1>`'s close is a few minutes away, and no further bid is coming.
+* customer A bid US$300 (fixed, 30000 minor units) and customer B bid US$250 (fixed, 25000 minor units) on `<lot_11>`, both with email alerts on; the house leads at US$305 (fixed, 30500 minor units) under its internal bid.
+* `<lot_11>`'s close is a few minutes away, and no further bid is coming.
 * admin(auction operator) is on <grade10 auction send log url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A published USD lot protected by a committed internal bid of US$500 (fixed, 50000 minor units) |
+| `<lot_11>` | A published USD lot protected by a committed internal bid of US$500 (fixed, 50000 minor units) |
 | `<house maximum>` | US$500 (fixed, 50000 minor units) |
 | `<customer A bid>` | US$300 (fixed, 30000 minor units) |
 | `<customer B bid>` | US$250 (fixed, 25000 minor units) |
@@ -1387,9 +1387,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Let `<lot_1>` close with the house leading.
+1. Let `<lot_11>` close with the house leading.
 2. Read the mail sent to customer A and customer B for the close.
-3. Filter the send log by `<lot_1>` and read the rows from the close.
+3. Filter the send log by `<lot_11>` and read the rows from the close.
 
 **Expected Results:**
 
