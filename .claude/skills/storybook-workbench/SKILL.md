@@ -40,7 +40,9 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    data in the feature's `*-content.ts`; screens fullscreen; a journey's
    buttons open the next screen's story through `workbench-story-nav.ts`; a
    flow in `FlowContainer` with a `play` that walks it and
-   `parameters: { journeys: [...] }` naming the journey ids it walks. A
+   `parameters: { journeys: [...] }` naming the journey ids it walks. Where
+   the outcome turns on what staging is set to, add the Screen's Scenario, as
+   `docs/governance/storybook.md#scenarios` says. A
    wireframe sits under `apps/preview/src/prototypes/<domain>/<feature>/`,
    one story per state, with a note on what the design must settle. A
    `/prototype` draft runs
