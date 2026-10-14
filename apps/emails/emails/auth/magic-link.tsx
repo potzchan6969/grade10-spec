@@ -41,7 +41,6 @@ export default function MagicLinkEmail({
       </Text>
       <PrimaryCta href={magicLinkUrl} label="Sign In" />
       <EmailFooter
-        brandName={brandName}
         whyYouGotThis={`You asked for a sign-in link on ${brandName}.`}
       />
     </Grade10EmailShell>

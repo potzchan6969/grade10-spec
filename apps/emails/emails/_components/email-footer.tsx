@@ -4,7 +4,6 @@ import { Hr, Link, Text } from "react-email";
 export type EmailFooterProps = {
   /** Why the reader received the letter. Omit for a footer without it. */
   whyYouGotThis?: string;
-  brandName?: string;
   canUnsubscribe?: boolean;
   /** Signed-in mute surface for this auction's email alerts. */
   muteUrl?: string;
@@ -20,13 +19,10 @@ export type EmailFooterProps = {
    * nobody mistakes the placeholder for the name.
    */
   lines?: string[];
-  /**
-   * The `© year` line. A collector letter carries none — its footer names
-   * the party by its registered name instead — so the letter shell turns it
-   * off; the notification mail keeps it, as the auction's worker prints it.
-   */
-  copyright?: boolean;
 };
+
+/** The line every footer ends with, the same in every language. */
+export const COPYRIGHT = "© 2026 Grade10. All rights reserved.";
 
 const PLACEHOLDER = /(\[[^\]]+\])/;
 
@@ -45,12 +41,10 @@ function marked(line: string): ReactNode[] {
 
 export function EmailFooter({
   whyYouGotThis,
-  brandName = "Grade10",
   canUnsubscribe = false,
   muteUrl,
   unwatchUrl,
   lines = [],
-  copyright = true,
 }: EmailFooterProps) {
   const alertsUrl = muteUrl ?? unwatchUrl;
 
@@ -70,16 +64,12 @@ export function EmailFooter({
           ) : null}
         </Text>
       ) : null}
-      {copyright ? (
-        <Text className="m-0 text-sm leading-base text-fg-3">
-          © {new Date().getFullYear()} {brandName}.
-        </Text>
-      ) : null}
       {lines.map((line) => (
-        <Text className="m-0 mt-2 text-sm leading-base text-fg-3" key={line}>
+        <Text className="m-0 mb-2 text-sm leading-base text-fg-3" key={line}>
           {marked(line)}
         </Text>
       ))}
+      <Text className="m-0 text-sm leading-base text-fg-3">{COPYRIGHT}</Text>
     </>
   );
 }
