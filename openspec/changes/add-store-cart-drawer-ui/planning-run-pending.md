@@ -247,3 +247,17 @@ add-store-cart-drawer-ui` exits 0 with fingerprint
 **Status:** Ready for product-owner acceptance. No acceptance record,
 published revision or implementation claim is made until the product owner
 runs `pnpm spec:accept` with that fresh baseline fingerprint.
+
+## Cited Journey Reference Repair
+
+**Run:** 2026-10-14, after acceptance exposed the remaining old journey
+references in `tasks.md:144`. The task citation now uses
+`g10.store-cart-drawer.US1` through `g10.store-cart-drawer.US6`; no behavior,
+scenario id or durable suite changed.
+
+**Checks:** `pnpm check:manual --quiet`, scoped TCS validation and
+`pnpm accept:preflight add-store-cart-drawer-ui` pass. The preflight baseline
+remains `1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052`;
+the remaining Purpose and draft-case warnings are nonblocking. The refreshed
+review scope identity is
+`40f4f99c83b7e99173c58c4bfb282eb118484ea46c101a002fd6b836fa1f65f3`.
