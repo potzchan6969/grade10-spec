@@ -4,19 +4,19 @@
 **Drafts styled:** 2026-10-14, tcs-rules r5
 **Out of suite:** winner-order-SC-04, winner-order-SC-05, winner-order-SC-38, winner-order-SC-39, winner-order-SC-62, winner-order-SC-63, winner-order-SC-69, winner-order-SC-96, winner-order-SC-110, winner-order-SC-111, winner-order-SC-180, winner-order-SC-184, winner-order-SC-214, winner-order-SC-215, winner-order-SC-216, winner-order-SC-249, winner-order-SC-257, winner-order-SC-287, winner-order-SC-26, winner-order-SC-27, winner-order-SC-28
 
-## Walk 1: Winner settles a won lot — phase 1
+## Walk 1: Winner settles a won listing — phase 1
 
 **Starting state:**
 
-- customer(signed in, holds a default shipping address) leads `<lot_1>`.
-- ❓ The spec does not identify the surface where the tester waits for `<lot_1>` to close.
-- customer(signed in, no default shipping address) leads `<lot_1>`.
+- customer(signed in, holds a default shipping address) leads `<listing_1>`.
+- ❓ The spec does not identify the surface where the tester waits for `<listing_1>` to close.
+- customer(signed in, no default shipping address) leads `<listing_1>`.
 - customer(winner) is on `<winner order url>` for `<order_prefilled>`.
 - customer(winner) is on `<winner order url>` for `<order_unpaid>`.
 - `<address_far>` is saved on the account.
-- customer A(card linked) leads `<lot_1>`, bidding on the card on file.
+- customer A(card linked) leads `<listing_1>`, bidding on the card on file.
 - `<card_declining>` is mocked to decline.
-- `<lot_2>` was extended twice and closed with a winner at `<close>`.
+- `<listing_4>` was extended twice and closed with a winner at `<recorded_close>`.
 - customer(signed in, no saved shipping address) won `<order_unpaid>`.
 - customer(signed in) has `<address_home>` as default and `<address_work>` saved.
 - customer(winner) confirmed `<address_home>` on `<order_unpaid>`.
@@ -26,21 +26,23 @@
 
 | Item | Value |
 | --- | --- |
-| `<lot_1>` | A lot taking bids, led by this collector, closing within a minute |
+| `<listing_1>` | A listing taking bids, led by this collector, closing within a minute |
 | `<order_prefilled>` | An unpaid order whose delivery address is pre-filled from the account default, not confirmed |
 | `<order_unpaid>` | An unpaid HKD order, total `<total before>` |
-| `<address_far>` | A saved address whose shipping and insurance cost `<difference>` more |
+| `<address_far>` | Far: a saved address whose shipping and insurance cost `<difference>` more; bind the address name only |
 | `<total before>` | HKD3,280 (fixed derived value) |
 | `<difference>` | HKD50 (range: 1000–79999 minor units) |
 | `<total after>` | HKD 3,330.00: `<total before>` plus `<difference>` |
-| `<lot_1>` | A lot taking bids, led by customer A, closing within a minute |
+| `<listing_1>` | A listing taking bids, led by customer A, closing within a minute |
 | `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
 | `<order_unpaid>` | An unpaid order inside its payment deadline |
 | `<card_declining>` | A card the provider declines |
 | `<card_good>` | A card the provider accepts |
-| `<lot_2>` | A lot whose close moved twice under extended bidding |
-| `<close>` | 2026-09-03T12:00:00Z, the recorded (moved) close |
-| `<deadline>` | 2026-09-10T12:00:00Z: `<close>` plus 604800s (7 days) |
+| `<listing_4>` | A listing whose close moved twice under extended bidding |
+| `<recorded_close>` | 2026-09-03T12:00:00Z, the recorded (moved) close |
+| `<payment_deadline>` | 2026-09-10T12:00:00Z: `<recorded_close>` plus 604800s (7 days) |
+| `<pdf_deadline>` | 2026-09-10 20:00 GMT+8: `<payment_deadline>` in GMT+8 |
+| `<local_deadline>` | 2026-09-10 08:00 EDT: `<payment_deadline>` in America/New_York |
 | `<order_unpaid>` | An unpaid order inside its setup window |
 | `<address_home>` | A shipping address named Home |
 | `<address_work>` | A shipping address named Work |
@@ -53,14 +55,14 @@
 
 ### Route
 
-1. Wait for `<lot_1>` to close.
-2. Navigate to `<winner order url>` for `<lot_1>`.
-   - one Winner Order exists for `<lot_1>`. g10.auction-winner-order.US1-TC1
+1. Wait for `<listing_1>` to close.
+2. Navigate to `<winner order url>` for `<listing_1>`.
+   - one Winner Order exists for `<listing_1>`. g10.auction-winner-order.US1-TC1
 3. Read Order Summary.
    - Shipping & Handling, Insurance and Tax read TBD. g10.auction-winner-order.US1-TC1
    - no charge is marked as an estimate. g10.auction-winner-order.US1-TC1
-4. Wait for `<lot_1>` to close.
-5. Navigate to `<winner order url>` for `<lot_1>`.
+4. Wait for `<listing_1>` to close.
+5. Navigate to `<winner order url>` for `<listing_1>`.
    - the winning bid and buyer's premium show. g10.auction-winner-order.US1-TC2
    - Shipping & Handling, Insurance and Tax read TBD. g10.auction-winner-order.US1-TC2
 6. Try to pay.
@@ -68,26 +70,26 @@
 7. Try to pay without confirming the delivery address.
    - Payment is refused. g10.auction-winner-order.US1-TC3
    - The order asks the winner to confirm the delivery address. g10.auction-winner-order.US1-TC3
-8. Change the delivery address to `<address_far>`.
+8. Change the delivery address to the saved address named `<address_far>`.
 9. Read the totals before paying.
    - The new total reads `<total after>`, equal to `<total before>` plus `<difference>`. g10.auction-winner-order.US1-TC4
    - Both `<total before>` and `<total after>` show before payment. g10.auction-winner-order.US1-TC4
    - No separate charge of `<difference>` is raised. g10.auction-winner-order.US1-TC4
-10. Wait for `<lot_1>` to close.
-11. Read customer A's authorizations and charges for `<lot_1>` at the card provider.
-   - shows no authorization and no charge for `<lot_1>`. g10.auction-winner-order.US1-TC5
-12. Once the invoice for `<lot_1>` is sent, pay it by card through hosted Checkout with `<card>`.
+10. Wait for `<listing_1>` to close.
+11. Read customer A's authorizations and charges for `<listing_1>` at the card provider.
+   - shows no authorization and no charge for `<listing_1>`. g10.auction-winner-order.US1-TC5
+12. Once the invoice for `<listing_1>` is sent, pay it by card through hosted Checkout with `<card>`.
    - opens hosted Checkout for the invoice total. g10.auction-winner-order.US1-TC5
-13. Read customer A's card transactions for `<lot_1>` again.
+13. Read customer A's card transactions for `<listing_1>` again.
    - shows one charge, for the invoice total. g10.auction-winner-order.US1-TC5
 14. Pay with `<card_declining>`.
    - the invoice stays unpaid and payable. g10.auction-winner-order.US1-TC6
 15. Pay with `<card_good>`.
    - payment is accepted; the order reads paid. g10.auction-winner-order.US1-TC6
-16. Read the payment deadline on `<lot_2>`'s invoice.
-   - the deadline is `<deadline>` and the PDF shows it as 2026-09-10 20:00 `GMT+8`. g10.auction-winner-order.US1-TC7
+16. Read the payment deadline on `<listing_4>`'s invoice.
+   - the deadline is `<payment_deadline>` and the PDF shows it as `<pdf_deadline>`. g10.auction-winner-order.US1-TC7
 17. Open `<winner order url>` in a browser set to America/New_York.
-   - Winner Order shows the same instant in the viewer's local zone as 08:00 `EDT`. g10.auction-winner-order.US1-TC7
+   - Winner Order shows the same instant in the viewer's local zone as `<local_deadline>`. g10.auction-winner-order.US1-TC7
 18. Save `<address_home>` and `<address_work>` to the account address book.
    - both addresses are in the address book, each under its name. g10.auction-winner-order.US1-TC8
 19. Navigate to `<winner order url>` for `<order_unpaid>`.
@@ -105,7 +107,7 @@
    - The winner is asked to choose another address for `<order_unpaid>`. g10.auction-winner-order.US1-TC11
    - `<address_work>` stays available while the order uses it. g10.auction-winner-order.US1-TC11
 
-## Walk 2: Winner settles a won lot — phase 2
+## Walk 2: Winner settles a won listing — phase 2
 
 **Starting state:**
 
@@ -202,7 +204,7 @@
    - the card reads Northwind Collectibles, with no phone or postal code. g10.auction-winner-order.US1-TC24
 25. Open Complete Order Setup.
 
-## Walk 3: Winner settles a won lot — phase 3
+## Walk 3: Winner settles a won listing — phase 3
 
 **Starting state:**
 
@@ -300,7 +302,7 @@
 25. Type "uni" into the Country/Region search field.
    - Non-matching options are not shown. g10.auction-winner-order.US1-TC41
 
-## Walk 4: Winner settles a won lot — phase 4
+## Walk 4: Winner settles a won listing — phase 4
 
 **Starting state:**
 
@@ -386,7 +388,7 @@
    - The order records bank transfer, not card. g10.auction-winner-order.US1-TC50
    - The order reads Preparing Invoice. g10.auction-winner-order.US1-TC50
 
-## Walk 5: Winner settles a won lot — phase 5
+## Walk 5: Winner settles a won listing — phase 5
 
 **Starting state:**
 
@@ -422,7 +424,7 @@
 11. Type `日本`.
    - The list narrows to `日本`. g10.auction-winner-order.US1-TC56
 
-## Walk 6: Winner follows a settled lot to delivery — phase 1
+## Walk 6: Winner follows a settled listing to delivery — phase 1
 
 **Starting state:**
 
@@ -557,24 +559,29 @@
    - Order Progress shows no carrier name and no Track shipment control. g10.auction-winner-order.US2-TC14
    - opens nothing. g10.auction-winner-order.US2-TC14
 
-## Walk 7: Winner follows a settled lot to delivery and adjacent checks
+## Walk 7: Winner follows a settled listing to delivery and adjacent checks
 
 **Starting state:**
 
 - customer(winner) is on `<winner order url>` for `<order_shipped_no_link>`.
-- customer(winner) won a lot at `<winning bid>`, and its invoice was sent.
-- The currency's premium minimum in Auction Payment settings is `<minimum>` at send.
-- customer is on the order's Winner Order page.
+- admin(operator with payment-processing) holds a USD order in Preparing Invoice with a winning bid of `<winning_bid>` and no other invoice lines.
+- Auction Payment settings holds the USD premium minimum `<premium_minimum>`.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
 | `<order_shipped_no_link>` | A paid, fulfilled order with a ship date and a tracking number, and no recorded tracker link |
-| Item | Winning bid: HKD13,500 (range: 800000–3999999 minor units); Minimum: HKD 0; Buyer's Premium: HKD 2,700; Rule: 20% of the winning bid |
-| Item | Winning bid: JPY 1003; Minimum: JPY 0; Buyer's Premium: JPY 201; Rule: 20% is 200.6, rounded half up |
-| Item | Winning bid: JPY 1002; Minimum: JPY 0; Buyer's Premium: JPY 200; Rule: 20% is 200.4, rounded half up |
-| Item | Winning bid: HKD500 (range: 1000–79999 minor units); Minimum: HKD200 (fixed configured value); Buyer's Premium: HKD 200; Rule: The minimum, higher than 20% (HKD 100) |
+
+For the invoice checks, run once per row below.
+
+| `<winning_bid>` | `<premium_minimum>` | `<buyers_premium>` | `<final_amount>` | Rule |
+| --- | --- | --- | --- | --- |
+| USD1,350 (range: 80000-399999 minor units) | USD0 | USD270.00 | USD1,620.00 | 20% of the winning bid |
+| USD10.03 (fixed boundary) | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up |
+| USD10.02 (fixed boundary) | USD0 | USD2.00 | USD12.02 | 20% is 200.4 minor units, rounded half up |
+| USD50 (fixed fixture) | USD20 (fixed configured value) | USD20.00 | USD70.00 | The minimum, higher than 20% (USD10) |
+| USD2,500 (fixed scenario fixture) | USD200.00 (fixed configured value) | USD500.00 | USD3,000.00 | 20% of the winning bid; operator does not enter it |
 
 ### Route
 
@@ -582,12 +589,16 @@
    - Shipping is the current progress step with the day-only ship date. g10.auction-winner-order.US2-TC56
    - The tracking number reads as plain text, not a link. g10.auction-winner-order.US2-TC56
    - Order Progress shows no carrier name and no Track shipment control. g10.auction-winner-order.US2-TC56
-2. Read Order Summary.
-   - the winning bid line reads `<winning bid>`. g10.auction-winner-order.US3-TC5
-   - Buyer's Premium reads the row's value. g10.auction-winner-order.US3-TC5
-   - the total equals the sum of the lines shown. g10.auction-winner-order.US3-TC5
-3. Hover the Buyer's Premium info tooltip.
-   - a brief tooltip explains Buyer's Premium. g10.auction-winner-order.US3-TC5
+2. As the operator, open Send Invoice and read the quote fields.
+   - No buyer's premium input is shown or requested. g10.auction-winner-order.US3-TC5
+3. Send the invoice without entering a buyer's premium.
+   - The invoice is sent with Buyer's Premium of `<buyers_premium>`, computed by the USD rule. g10.auction-winner-order.US3-TC5
+4. As the winner, read Order Summary.
+   - The winning bid line reads `<winning_bid>`. g10.auction-winner-order.US3-TC5
+   - Buyer's Premium reads `<buyers_premium>`. g10.auction-winner-order.US3-TC5
+   - The total reads `<final_amount>`, equal to `<winning_bid>` plus `<buyers_premium>`. g10.auction-winner-order.US3-TC5
+5. Hover the Buyer's Premium info tooltip.
+   - A brief tooltip explains Buyer's Premium. g10.auction-winner-order.US3-TC5
 
 ## Walk 8: Winner pays an invoice by card
 
@@ -604,7 +615,7 @@
 
 1. Navigate to `<grade10 auction order url>`.
    - Every invoice line and Pay with Card are shown in the order summary. g10.auction-winner-order.US4-TC1
-   - The confirmed delivery address and the lot are shown. g10.auction-winner-order.US4-TC1
+   - The confirmed delivery address and the listing are shown. g10.auction-winner-order.US4-TC1
    - An expired invoice still reads Pending Payment and offers Contact Us instead. of Pay with Card. g10.auction-winner-order.US4-TC1
 2. Navigate to `<grade10 auction order url>`.
 3. Click Pay Now.
@@ -623,9 +634,9 @@
 9. Navigate to `<grade10 auction order url>`.
    - The order status reads Preparing Shipment. g10.auction-winner-order.US4-TC6
 10. Navigate to `<grade10 auction order url>`.
-11. Read the alerts under the lot.
+11. Read the alerts under the listing.
 12. Choose Pay what is owed.
-   - An alert under the lot says bidding is suspended and payment does not lift it. g10.auction-winner-order.US4-TC7
+   - An alert under the listing says bidding is suspended and payment does not lift it. g10.auction-winner-order.US4-TC7
    - Choosing Pay what is owed brings the order summary's pay control into view. g10.auction-winner-order.US4-TC7
 
 ## Walk 9: Winner misses the payment deadline
@@ -658,7 +669,7 @@
 
 - customer(winner) is on `<winner order url>` for `<order_setup_overdue>`.
 - Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
-- customer(winner) holds an auction order in USD in Awaiting Setup, whose lot closed 48 hours ago, with setup not confirmed.
+- customer(winner) holds an auction order in USD in Awaiting Setup, whose listing closed 48 hours ago, with setup not confirmed.
 - admin(operator with payment processing).
 - customer(winner) added a one-time delivery address to an auction order without saving it and did not confirm before the setup deadline.
 - admin(operator with payment processing) reopened its setup after the deadline passed.
@@ -776,7 +787,7 @@
    - A toast reads Proof submitted and We'll verify your payment shortly. g10.auction-winner-order.US9-TC2
    - The order reads Payment Verifying. g10.auction-winner-order.US9-TC2
    - The deadline stops with `<time left>` kept. g10.auction-winner-order.US9-TC2
-   - A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the lot from `lg` up. g10.auction-winner-order.US9-TC2
+   - A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the listing from `lg` up. g10.auction-winner-order.US9-TC2
    - Card Pay, Submit Payment Proof, View Bank Details and further uploads are hidden. g10.auction-winner-order.US9-TC2
    - `<proof>` and its file name are not shown. g10.auction-winner-order.US9-TC2
 6. Click Submit Payment Proof.
@@ -1031,7 +1042,7 @@
    - Its Pay by equals the return time plus `<time left>`. g10.auction-winner-order.US10-TC10
    - No payment reminder was sent while the proof was under check. g10.auction-winner-order.US10-TC10
 
-## Walk 16: Winner bills a won lot to a different address
+## Walk 16: Winner bills a won listing to a different address
 
 **Starting state:**
 
@@ -1232,9 +1243,9 @@
 
 ### Route
 
-1. Read the status, lot, winning bid and actions.
+1. Read the status, listing, winning bid and actions.
    - The page says Cancelled on the cancellation day, as a day-only date in the winner's local zone. g10.auction-winner-order.US13-TC1
-   - The lot and winning bid remain visible. g10.auction-winner-order.US13-TC1
+   - The listing and winning bid remain visible. g10.auction-winner-order.US13-TC1
    - Contact Us is the only action. g10.auction-winner-order.US13-TC1
    - No cancellation reason is shown. g10.auction-winner-order.US13-TC1
 2. Read the status, actions and receipt links.
@@ -1268,7 +1279,7 @@
 | --- | --- |
 | `<order_payment_overdue>` | An order whose payment deadline passed unpaid |
 | `<order_setup_overdue>` | An order past its setup deadline, no invoice issued |
-| `<lot_title>` | The lot title on that order |
+| `<listing_title>` | The listing title on that order |
 | `<invoice_id>` | That order's invoice id |
 | `<order_partially_paid>` | An order reading Partially Paid, with one receipt |
 | `<receipt_ids>` | That invoice's receipt ids |
@@ -1286,7 +1297,7 @@
    - To reads `support@grade10.com`. g10.auction-winner-order.US16-TC2
 4. Click Contact Us.
 5. Read Subject.
-   - Subject reads `Auction lot `<lot_title>`: setup overdue`, with no invoice id. g10.auction-winner-order.US16-TC3
+   - Subject reads `Auction lot `<listing_title>`: setup overdue`, with no invoice id. g10.auction-winner-order.US16-TC3
 6. Click Contact Us.
 7. Read Subject.
    - Subject reads `Auction order `<invoice_id>`: payment overdue`. g10.auction-winner-order.US16-TC4
@@ -1348,7 +1359,7 @@
 | `<current_invoice_id>` | The current invoice id |
 | `<replaced_invoice_id>` | The replaced invoice id |
 | `<order_cancelled>` | An order an operator cancelled, with a category and note |
-| `<lot_title>` | That order's lot title |
+| `<listing_title>` | That order's listing title |
 | `<invoice_id>` | That order's invoice id |
 
 ### Route
@@ -1365,8 +1376,8 @@
    - It does not name `<replaced_invoice_id>`. g10.auction-winner-order.US16-TC13
 6. Click Contact Us.
 7. Read Subject and Message.
-   - Subject reads `Auction lot `<lot_title>`: order cancelled`. g10.auction-winner-order.US16-TC14
-   - Message names `<lot_title>`, `<invoice_id>` and status Cancelled. g10.auction-winner-order.US16-TC14
+   - Subject reads `Auction lot `<listing_title>`: order cancelled`. g10.auction-winner-order.US16-TC14
+   - Message names `<listing_title>`, `<invoice_id>` and status Cancelled. g10.auction-winner-order.US16-TC14
    - Neither names the operator's category or note. g10.auction-winner-order.US16-TC14
 8. Open the order and choose Contact Us.
 9. Read the Subject and the Message.
@@ -1410,7 +1421,7 @@
 3. Read the page from the header to the sidebar.
    - The header shows Winner Order and the status badge. g10.auction-winner-order.US19-TC1
    - Order Progress shows Address current, then Invoice, Payment, Shipping and. Completed. g10.auction-winner-order.US19-TC1
-   - The lot's title shows in the lot card only. g10.auction-winner-order.US19-TC1
+   - The listing's title shows in the listing card only. g10.auction-winner-order.US19-TC1
    - No Order Information, Collection Method, Order Status list or Lots section. shows. g10.auction-winner-order.US19-TC1
 4. Navigate to `<grade10 auction order url>`.
    - The confirmed address is shown. g10.auction-winner-order.US19-TC2
@@ -1498,15 +1509,15 @@
 
 **Starting state:**
 
-- `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
-- customer(winner of `<lot_1>`) is on `<the winner's auction order url>` at `<one minute before close>`.
-- customer(winner of `<lot_1>`) is on `<the winner's auction order url>` at `<the address deadline>`.
-- `<lot_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
+- `<listing_1>` closed at its recorded close and no delivery address is confirmed on its order.
+- customer(winner of `<listing_1>`) is on `<the winner's auction order url>` at `<one minute before close>`.
+- customer(winner of `<listing_1>`) is on `<the winner's auction order url>` at `<the address deadline>`.
+- `<listing_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
 - An operator reopened the address form at `<the reopen>`.
-- customer(winner of `<lot_1>`) is on `<the winner's auction order url>`.
-- `<lot_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
-- customer(winner of `<lot_1>`) is signed in.
-- customer(winner of `<lot_1>`, `<lot_3>` and `<lot_4>`) won three lots that closed at different datetimes.
+- customer(winner of `<listing_1>`) is on `<the winner's auction order url>`.
+- `<listing_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
+- customer(winner of `<listing_1>`) is signed in.
+- customer(winner of `<listing_1>`, `<listing_5>` and `<listing_6>`) won three listings that closed at different datetimes.
 - `<sent-invoice order>` carries a confirmed delivery address and an invoice sent at 2026-09-05T09:00:00Z, inside the address window.
 - customer(winner of `<sent-invoice order>`) is on `<the winner's auction order url>`.
 - `<expired-invoice order>`'s invoice is `expired` and its address was confirmed and is locked.
@@ -1515,21 +1526,21 @@
 - customer(winner of `<missed-deadline order>`) is signed in.
 - `<missed-deadline order>`'s address deadline has passed.
 - An operator holds payment-processing.
-- `<extended lot>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
-- customer(winner of `<extended lot>`) is on `<the winner's auction order url>`.
+- `<extended listing>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
+- customer(winner of `<extended listing>`) is on `<the winner's auction order url>`.
 
 **Shared test data:**
 
 | Item | Value |
 | --- | --- |
-| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
 | Entrance closes | 2026-09-05T12:00:00Z |
 | `<one minute before close>` | 2026-09-05T11:59:00Z |
 | `<the address deadline>` | 2026-09-05T12:00:00Z |
 | `<the reopen>` | 2026-09-07T09:00:00Z |
 | New address deadline | 2026-09-09T09:00:00Z |
-| `<lot_3>` recorded close | 2026-09-03T18:30:00Z |
-| `<lot_4>` recorded close | 2026-09-04T09:15:00Z |
+| `<listing_5>` recorded close | 2026-09-03T18:30:00Z |
+| `<listing_6>` recorded close | 2026-09-04T09:15:00Z |
 
 ### Route
 
@@ -1554,7 +1565,7 @@
    - The reopen is refused. g10.auction-winner-order.US23-TC5
    - The address deadline is unchanged. g10.auction-winner-order.US23-TC5
 9. Open each of the three auction orders.
-   - Three separate orders exist, one per lot. g10.auction-winner-order.US23-TC6
+   - Three separate orders exist, one per listing. g10.auction-winner-order.US23-TC6
 10. Read each order's address deadline.
    - The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z. g10.auction-winner-order.US23-TC6
 11. Confirm a different delivery address on each order.
@@ -1577,21 +1588,21 @@
    - The order still has no confirmed delivery address and still offers no address form. g10.auction-winner-order.US23-TC9
 19. The operator reopens the address form with a reason.
    - The order offers the address form again. g10.auction-winner-order.US23-TC10
-20. Read the winner's post-close letters for that lot.
+20. Read the winner's post-close letters for that listing.
    - No letter about the reopen reaches the winner. g10.auction-winner-order.US23-TC10
 21. Read the address deadline under Confirm delivery address.
    - The deadline reads 2026-09-14T09:00:00Z, counted from the actual close. g10.auction-winner-order.US23-TC11
 22. Confirm the account's saved home address at 2026-09-14T08:50:00Z, ten minutes before that deadline and after 48 hours from the scheduled close.
    - The confirmation is accepted and the order reads Preparing Invoice. g10.auction-winner-order.US23-TC11
 
-## g10.auction-winner-order.US1: Winner settles a won lot
+## g10.auction-winner-order.US1: Winner settles a won listing
 
 **As a** winner,
 **I want** to tell Grade10 where to ship and how I will pay, then pay the invoice it sends me,
-**so that** the lot I won becomes mine inside a deadline I can see, priced for where it is actually going.
+**so that** the listing I won becomes mine inside a deadline I can see, priced for where it is actually going.
 
 <!-- trace:case id=g10.auction-winner-order.TC-8q4 rev=2 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
-### g10.auction-winner-order.US1-TC1: A lot closing with a winner opens one order whose quoted charges read TBD
+### g10.auction-winner-order.US1-TC1: A listing closing with a winner opens one order whose quoted charges read TBD
 
 **Classification:**
 
@@ -1608,23 +1619,23 @@
 
 **Pre-conditions:**
 
-* customer(signed in, holds a default shipping address) leads `<lot_1>`.
+* customer(signed in, holds a default shipping address) leads `<listing_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot taking bids, led by this collector, closing within a minute |
+| `<listing_1>` | A listing taking bids, led by this collector, closing within a minute |
 
 **Steps:**
 
-1. Wait for `<lot_1>` to close.
-2. Navigate to `<winner order url>` for `<lot_1>`.
+1. Wait for `<listing_1>` to close.
+2. Navigate to `<winner order url>` for `<listing_1>`.
 3. Read Order Summary.
 
 **Expected Results:**
 
-* Step 2: one Winner Order exists for `<lot_1>`.
+* Step 2: one Winner Order exists for `<listing_1>`.
 * Step 3: Shipping & Handling, Insurance and Tax read TBD.
 * Step 3: no charge is marked as an estimate.
 
@@ -1646,18 +1657,18 @@
 
 **Pre-conditions:**
 
-* customer(signed in, no default shipping address) leads `<lot_1>`.
+* customer(signed in, no default shipping address) leads `<listing_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot taking bids, led by this collector, closing within a minute |
+| `<listing_1>` | A listing taking bids, led by this collector, closing within a minute |
 
 **Steps:**
 
-1. Wait for `<lot_1>` to close.
-2. Navigate to `<winner order url>` for `<lot_1>`.
+1. Wait for `<listing_1>` to close.
+2. Navigate to `<winner order url>` for `<listing_1>`.
 3. Try to pay.
 
 **Expected Results:**
@@ -1727,14 +1738,14 @@
 | Field | Value |
 | --- | --- |
 | `<order_unpaid>` | An unpaid HKD order, total `<total before>` |
-| `<address_far>` | A saved address whose shipping and insurance cost `<difference>` more |
+| `<address_far>` | Far: a saved address whose shipping and insurance cost `<difference>` more; bind the address name only |
 | `<total before>` | HKD3,280 (fixed derived value) |
 | `<difference>` | HKD50 (range: 1000–79999 minor units) |
 | `<total after>` | HKD 3,330.00: `<total before>` plus `<difference>` |
 
 **Steps:**
 
-1. Change the delivery address to `<address_far>`.
+1. Change the delivery address to the saved address named `<address_far>`.
 2. Read the totals before paying.
 
 **Expected Results:**
@@ -1761,25 +1772,25 @@
 
 **Pre-conditions:**
 
-* customer A(card linked) leads `<lot_1>`, bidding on the card on file.
+* customer A(card linked) leads `<listing_1>`, bidding on the card on file.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot taking bids, led by customer A, closing within a minute |
+| `<listing_1>` | A listing taking bids, led by customer A, closing within a minute |
 | `<card>` | The card provider's test card `4242 4242 4242 4242`, any future expiry, any CVC |
 
 **Steps:**
 
-1. Wait for `<lot_1>` to close.
-2. Read customer A's authorizations and charges for `<lot_1>` at the card provider.
-3. Once the invoice for `<lot_1>` is sent, pay it by card through hosted Checkout with `<card>`.
-4. Read customer A's card transactions for `<lot_1>` again.
+1. Wait for `<listing_1>` to close.
+2. Read customer A's authorizations and charges for `<listing_1>` at the card provider.
+3. Once the invoice for `<listing_1>` is sent, pay it by card through hosted Checkout with `<card>`.
+4. Read customer A's card transactions for `<listing_1>` again.
 
 **Expected Results:**
 
-* Step 2 shows no authorization and no charge for `<lot_1>`.
+* Step 2 shows no authorization and no charge for `<listing_1>`.
 * Step 3 opens hosted Checkout for the invoice total.
 * Step 4 shows one charge, for the invoice total.
 
@@ -1840,25 +1851,27 @@
 
 **Pre-conditions:**
 
-* `<lot_2>` was extended twice and closed with a winner at `<close>`.
+* `<listing_4>` was extended twice and closed with a winner at `<recorded_close>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_2>` | A lot whose close moved twice under extended bidding |
-| `<close>` | 2026-09-03T12:00:00Z, the recorded (moved) close |
-| `<deadline>` | 2026-09-10T12:00:00Z: `<close>` plus 604800s (7 days) |
+| `<listing_4>` | A listing whose close moved twice under extended bidding |
+| `<recorded_close>` | 2026-09-03T12:00:00Z, the recorded (moved) close |
+| `<payment_deadline>` | 2026-09-10T12:00:00Z: `<recorded_close>` plus 604800s (7 days) |
+| `<pdf_deadline>` | 2026-09-10 20:00 GMT+8: `<payment_deadline>` in GMT+8 |
+| `<local_deadline>` | 2026-09-10 08:00 EDT: `<payment_deadline>` in America/New_York |
 
 **Steps:**
 
-1. Read the payment deadline on `<lot_2>`'s invoice.
+1. Read the payment deadline on `<listing_4>`'s invoice.
 2. Open `<winner order url>` in a browser set to America/New_York.
 
 **Expected Results:**
 
-* Step 1: the deadline is `<deadline>` and the PDF shows it as 2026-09-10 20:00 `GMT+8`.
-* Step 2: Winner Order shows the same instant in the viewer's local zone as 08:00 `EDT`.
+* Step 1: the deadline is `<payment_deadline>` and the PDF shows it as `<pdf_deadline>`.
+* Step 2: Winner Order shows the same instant in the viewer's local zone as `<local_deadline>`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-h5e rev=1 covers=g10.auction-winner-order.SC-6nv,g10.auction-winner-order.SC-33a,g10.auction-winner-order.SC-awt,g10.auction-winner-order.SC-6if,g10.auction-winner-order.SC-w9w,g10.auction-winner-order.SC-k0e,g10.auction-winner-order.SC-4lu,g10.auction-winner-order.SC-yzf,g10.auction-winner-order.SC-2zt,g10.auction-winner-order.SC-uii,g10.auction-winner-order.SC-a2i,g10.auction-winner-order.SC-ifg,g10.auction-winner-order.SC-r65,g10.auction-winner-order.SC-la2,g10.auction-winner-order.SC-d5v,g10.auction-winner-order.SC-eq0,g10.auction-winner-order.SC-0vs,g10.auction-winner-order.SC-wah,g10.auction-winner-order.SC-0ex,g10.auction-winner-order.SC-rbe,g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-sko,g10.auction-winner-order.SC-h7y,g10.auction-winner-order.SC-k1a,g10.auction-winner-order.SC-1hb,g10.auction-winner-order.SC-yc1,g10.auction-winner-order.SC-9nm,g10.auction-winner-order.SC-9ea,g10.auction-winner-order.SC-1d9,g10.auction-winner-order.SC-d74,g10.auction-winner-order.SC-gqs,g10.auction-winner-order.SC-11o,g10.auction-winner-order.SC-fm0,g10.auction-winner-order.SC-wsm,g10.auction-winner-order.SC-41c,g10.auction-winner-order.SC-ncd,g10.auction-winner-order.SC-uet,g10.auction-winner-order.SC-08s,g10.auction-winner-order.SC-es5,g10.auction-winner-order.SC-zit,g10.auction-winner-order.SC-pt5,g10.auction-winner-order.SC-12a,g10.auction-winner-order.SC-p5b,g10.auction-winner-order.SC-5r2,g10.auction-winner-order.SC-f6t,g10.auction-winner-order.SC-a0z,g10.auction-winner-order.SC-lth,g10.auction-winner-order.SC-41a,g10.auction-winner-order.SC-5xb,g10.auction-winner-order.SC-lyz,g10.auction-winner-order.SC-42u,g10.auction-winner-order.SC-nl8,g10.auction-winner-order.SC-f86,g10.auction-winner-order.SC-pgh,g10.auction-winner-order.SC-12v,g10.auction-winner-order.SC-km1 -->
 ### g10.auction-winner-order.US1-TC8: Two named saved addresses are both offered on an order
@@ -3649,7 +3662,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-winner-order.US2: Winner follows a settled lot to delivery
+## g10.auction-winner-order.US2: Winner follows a settled listing to delivery
 
 **As a** winner who has paid,
 **I want** a receipt PDF that says how I paid, what was paid before it and what is still owed, a tracker, and proof of what was handed over,
@@ -3893,7 +3906,7 @@ Runs once per row of **Test data**.
 * No receipt was reissued.
 
 <!-- trace:case id=g10.auction-winner-order.TC-4zy rev=3 covers=g10.auction-winner-order.SC-49p,g10.auction-winner-order.SC-9qq,g10.auction-winner-order.SC-0wc,g10.auction-winner-order.SC-8xb,g10.auction-winner-order.SC-g94,g10.auction-winner-order.SC-vxf,g10.auction-winner-order.SC-kiz,g10.auction-winner-order.SC-fpp,g10.auction-winner-order.SC-aaq,g10.auction-winner-order.SC-ubz,g10.auction-winner-order.SC-58l,g10.auction-winner-order.SC-u1h,g10.auction-winner-order.SC-dzh,g10.auction-winner-order.SC-cdf,g10.auction-winner-order.SC-6b0 -->
-### g10.auction-winner-order.US2-TC2: A dispatched lot shows the tracking number as the carrier link only with a tracker link
+### g10.auction-winner-order.US2-TC2: A dispatched listing shows the tracking number as the carrier link only with a tracker link
 
 **Classification:**
 
@@ -4339,12 +4352,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(operator with payment-processing) holds a USD order in Preparing Invoice; it has no other invoice lines.
-* Auction Payment settings holds the row's USD premium minimum.
+* admin(operator with payment-processing) holds a USD order in Preparing Invoice; its winning bid is `<winning_bid>` and it has no other invoice lines.
+* Auction Payment settings holds the USD premium minimum `<premium_minimum>`.
 
 **Test data:**
 
-| Winning bid | Minimum | Buyer's Premium | Final amount | Rule |
+| `<winning_bid>` | `<premium_minimum>` | `<buyers_premium>` | `<final_amount>` | Rule |
 | --- | --- | --- | --- | --- |
 | USD1,350 (range: 80000-399999 minor units) | USD0 | USD270.00 | USD1,620.00 | 20% of the winning bid |
 | USD10.03 (fixed boundary) | USD0 | USD2.01 | USD12.04 | 20% is 200.6 minor units, rounded half up |
@@ -4362,9 +4375,9 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: no buyer's premium input is shown or requested from the operator.
-* Step 2: the invoice is sent with the row's buyer's premium computed by the USD rule.
-* Step 3: the winning bid line reads the row's winning bid and Buyer's Premium reads the row's value.
-* Step 3: the total equals the row's final amount, including the premium.
+* Step 2: the invoice is sent with Buyer's Premium of `<buyers_premium>`, equal to the greater of 20% of `<winning_bid>` rounded half up to USD cents and `<premium_minimum>`.
+* Step 3: the winning bid line reads `<winning_bid>` and Buyer's Premium reads `<buyers_premium>`.
+* Step 3: the total equals `<final_amount>`, equal to `<winning_bid>` plus `<buyers_premium>`.
 * Step 4: a brief tooltip explains Buyer's Premium.
 
 ---
@@ -4373,10 +4386,10 @@ Runs once per row of **Test data**.
 
 **As a** winner
 **I want** to see the full invoice and pay it by card, even if a first attempt does not finish
-**so that** the lot moves to Preparing Shipment without contacting Grade10.
+**so that** the listing moves to Preparing Shipment without contacting Grade10.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9gh rev=2 covers=g10.auction-winner-order.SC-bbg,g10.auction-winner-order.SC-7ra,g10.auction-winner-order.SC-u5t,g10.auction-winner-order.SC-49w,g10.auction-winner-order.SC-1yn,g10.auction-winner-order.SC-y2j -->
-### g10.auction-winner-order.US4-TC1: An unpaid order shows invoice, Pay with Card, address and lot
+### g10.auction-winner-order.US4-TC1: An unpaid order shows invoice, Pay with Card, address and listing
 
 **Classification:**
 
@@ -4403,7 +4416,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Every invoice line and Pay with Card are shown in the order summary.
-* The confirmed delivery address and the lot are shown.
+* The confirmed delivery address and the listing are shown.
 * An expired invoice still reads Pending Payment and offers Contact Us instead.
   of Pay with Card.
 
@@ -4562,7 +4575,7 @@ Runs once per row of **Test data**.
 ---
 
 <!-- trace:case id=g10.auction-winner-order.TC-td7 rev=1 covers=g10.auction-winner-order.SC-1yn -->
-### g10.auction-winner-order.US4-TC7: A suspended winner reads the suspension under the lot
+### g10.auction-winner-order.US4-TC7: A suspended winner reads the suspension under the listing
 
 **Classification:**
 
@@ -4585,12 +4598,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Navigate to `<grade10 auction order url>`.
-2. Read the alerts under the lot.
+2. Read the alerts under the listing.
 3. Choose Pay what is owed.
 
 **Expected Results:**
 
-* An alert under the lot says bidding is suspended and payment does not lift it.
+* An alert under the listing says bidding is suspended and payment does not lift it.
 * Choosing Pay what is owed brings the order summary's pay control into view.
 
 ---
@@ -4676,7 +4689,7 @@ Runs once per row of **Test data**.
 
 ## g10.auction-winner-order.US7: Winner misses the address deadline
 
-**As a** winner who did not confirm a delivery address within 48 hours of lot close,
+**As a** winner who did not confirm a delivery address within 48 hours of listing close,
 **I want** Winner Order to read Setup Overdue with Contact Us and no Confirm,
 **so that** I know self-service setup has stopped and how to reach Grade10.
 
@@ -4735,7 +4748,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Payment Settings holds no USD card fee rule, and Grade10 holds no USD bank details.
-* customer(winner) holds an auction order in USD in Awaiting Setup, whose lot closed 48 hours ago, with setup not confirmed.
+* customer(winner) holds an auction order in USD in Awaiting Setup, whose listing closed 48 hours ago, with setup not confirmed.
 * admin(operator with payment processing).
 
 **Steps:**
@@ -4781,7 +4794,7 @@ Runs once per row of **Test data**.
 
 ## g10.auction-winner-order.US8: Winner pays an invoice with a policy premium
 
-**As a** winner of an auction lot,
+**As a** winner of an auction listing,
 **I want** my invoice to calculate the stated buyer premium correctly using the current currency minimum,
 **so that** the amount I pay is explainable and collectible.
 
@@ -5053,7 +5066,7 @@ Runs once per row of **Test data**.
 * A toast reads Proof submitted and We'll verify your payment shortly.
 * The order reads Payment Verifying.
 * The deadline stops with `<time left>` kept.
-* A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the lot from `lg` up.
+* A default inline Hourglass Alert says Grade10 is verifying the transfer and will email when payment is confirmed: under Order progress on small viewports and under the listing from `lg` up.
 * Card Pay, Submit Payment Proof, View Bank Details and further uploads are hidden.
 * `<proof>` and its file name are not shown.
 
@@ -6344,11 +6357,11 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-winner-order.US11: Winner bills a won lot to a different address
+## g10.auction-winner-order.US11: Winner bills a won listing to a different address
 
-**As a** winner who pays from a different address than the one the lot ships to,
+**As a** winner who pays from a different address than the one the listing ships to,
 **I want** to give that billing address when I confirm where to ship,
-**so that** my invoice and receipt show who is billed as well as where the lot goes.
+**so that** my invoice and receipt show who is billed as well as where the listing goes.
 
 <!-- trace:case id=g10.auction-winner-order.TC-qlk rev=1 covers=g10.auction-winner-order.SC-nle,g10.auction-winner-order.SC-qnq,g10.auction-winner-order.SC-14a,g10.auction-winner-order.SC-l8x -->
 ### g10.auction-winner-order.US11-TC1: Billing Add Address has phone and Personal or Company
@@ -7069,11 +7082,11 @@ Runs once per row of **Test data**.
 ## g10.auction-winner-order.US13: Winner learns their order was cancelled
 
 **As a** winner whose order an operator cancelled,
-**I want** Winner Order to say it was cancelled and when, with the lot I won and a way to contact Grade10,
+**I want** Winner Order to say it was cancelled and when, with the listing I won and a way to contact Grade10,
 **so that** I know the order is closed and who to ask about it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-3x8 rev=2 covers=g10.auction-winner-order.SC-1fb -->
-### g10.auction-winner-order.US13-TC1: Cancelled keeps the lot and winning bid visible
+### g10.auction-winner-order.US13-TC1: Cancelled keeps the listing and winning bid visible
 
 **Classification:**
 
@@ -7094,12 +7107,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the status, lot, winning bid and actions.
+1. Read the status, listing, winning bid and actions.
 
 **Expected Results:**
 
 * The page says Cancelled on the cancellation day, as a day-only date in the winner's local zone.
-* The lot and winning bid remain visible.
+* The listing and winning bid remain visible.
 * Contact Us is the only action.
 * No cancellation reason is shown.
 
@@ -7157,7 +7170,7 @@ Runs once per row of **Test data**.
 ## g10.auction-winner-order.US15: Winner sees an overpayment returned
 
 **As a** winner who paid more than the order,
-**I want** only the difference returned below the invoice total, while the lot, the shipping and the amount I should have paid stay, with a way to see why,
+**I want** only the difference returned below the invoice total, while the listing, the shipping and the amount I should have paid stay, with a way to see why,
 **so that** I know the sale still stands.
 
 <!-- trace:case id=g10.auction-winner-order.TC-pca rev=1 covers=g10.auction-winner-order.SC-7m4 -->
@@ -7278,7 +7291,7 @@ Runs once per row of **Test data**.
 * To reads `support@grade10.com`.
 
 <!-- trace:case id=g10.auction-winner-order.TC-ta0 rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
-### g10.auction-winner-order.US16-TC3: A setup-overdue Subject names the lot and no invoice
+### g10.auction-winner-order.US16-TC3: A setup-overdue Subject names the listing and no invoice
 
 **Classification:**
 
@@ -7302,7 +7315,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_setup_overdue>` | An order past its setup deadline, no invoice issued |
-| `<lot_title>` | The lot title on that order |
+| `<listing_title>` | The listing title on that order |
 
 **Steps:**
 
@@ -7311,7 +7324,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Subject reads `Auction lot `<lot_title>`: setup overdue`, with no invoice id.
+* Subject reads `Auction lot `<listing_title>`: setup overdue`, with no invoice id.
 
 <!-- trace:case id=g10.auction-winner-order.TC-gxu rev=1 covers=g10.auction-winner-order.SC-nlr,g10.auction-winner-order.SC-fu8,g10.auction-winner-order.SC-lh0,g10.auction-winner-order.SC-fnc,g10.auction-winner-order.SC-sfn,g10.auction-winner-order.SC-g9z,g10.auction-winner-order.SC-30l,g10.auction-winner-order.SC-kjq,g10.auction-winner-order.SC-hx5 -->
 ### g10.auction-winner-order.US16-TC4: A payment-overdue Subject names the invoice
@@ -7720,7 +7733,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<order_cancelled>` | An order an operator cancelled, with a category and note |
-| `<lot_title>` | That order's lot title |
+| `<listing_title>` | That order's listing title |
 | `<invoice_id>` | That order's invoice id |
 
 **Steps:**
@@ -7730,8 +7743,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Subject reads `Auction lot `<lot_title>`: order cancelled`.
-* Message names `<lot_title>`, `<invoice_id>` and status Cancelled.
+* Subject reads `Auction lot `<listing_title>`: order cancelled`.
+* Message names `<listing_title>`, `<invoice_id>` and status Cancelled.
 * Neither names the operator's category or note.
 
 <!-- trace:case id=g10.auction-winner-order.TC-nat rev=1 covers=g10.auction-winner-order.SC-i2y -->
@@ -7847,14 +7860,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-winner-order.US19: Winner confirms where a won lot ships
+## g10.auction-winner-order.US19: Winner confirms where a won listing ships
 
 **As a** winner
 **I want** to fill in and confirm a delivery address on the order
 **so that** Grade10 can quote shipping to the right place.
 
 <!-- trace:case id=g10.auction-winner-order.TC-clp rev=2 covers=g10.auction-winner-order.SC-cu4 -->
-### g10.auction-winner-order.US19-TC1: The page shows the lot once and none of the old sections
+### g10.auction-winner-order.US19-TC1: The page shows the listing once and none of the old sections
 
 **Classification:**
 
@@ -7883,7 +7896,7 @@ Runs once per row of **Test data**.
 * The header shows Winner Order and the status badge.
 * Order Progress shows Address current, then Invoice, Payment, Shipping and.
   Completed.
-* The lot's title shows in the lot card only.
+* The listing's title shows in the listing card only.
 * No Order Information, Collection Method, Order Status list or Lots section.
   shows.
 
@@ -8061,7 +8074,7 @@ Runs once per row of **Test data**.
 
 ## g10.auction-winner-order.US21: Winner quotes their order
 
-**As a** winner of an auction lot,
+**As a** winner of an auction listing,
 **I want** my order to have a clear, stable payment reference I can quote,
 **so that** I can reference it when contacting support or making inquiries about my purchase, without a separate order ID.
 
@@ -8350,7 +8363,7 @@ Runs once per row of **Test data**.
 
 **As a** winner who missed the 48-hour address deadline,
 **I want** Grade10 to reopen the address form when I get in touch, and nothing about my saved addresses to be blocked meanwhile,
-**so that** I can still settle the lot I won once I have told Grade10 where to ship it.
+**so that** I can still settle the listing I won once I have told Grade10 where to ship it.
 
 <!-- trace:case id=g10.auction-winner-order.TC-9uu rev=1 covers=g10.auction-winner-order.SC-r6m -->
 ### g10.auction-winner-order.US23-TC1: Address confirmed a minute inside the window is accepted
@@ -8370,14 +8383,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
-* customer(winner of `<lot_1>`) is on `<the winner's auction order url>` at `<one minute before close>`.
+* `<listing_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* customer(winner of `<listing_1>`) is on `<the winner's auction order url>` at `<one minute before close>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
 | Entrance closes | 2026-09-05T12:00:00Z |
 | `<one minute before close>` | 2026-09-05T11:59:00Z |
 
@@ -8410,14 +8423,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_1>` closed at its recorded close and no delivery address is confirmed on its order.
-* customer(winner of `<lot_1>`) is on `<the winner's auction order url>` at `<the address deadline>`.
+* `<listing_1>` closed at its recorded close and no delivery address is confirmed on its order.
+* customer(winner of `<listing_1>`) is on `<the winner's auction order url>` at `<the address deadline>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
 | `<the address deadline>` | 2026-09-05T12:00:00Z |
 
 **Steps:**
@@ -8449,10 +8462,10 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
+* `<listing_1>`'s order has no confirmed delivery address, derives as Setup Overdue,.
   has invoice status `not_issued`, and its address deadline passed on 2026-09-05T12:00:00Z.
 * An operator reopened the address form at `<the reopen>`.
-* customer(winner of `<lot_1>`) is on `<the winner's auction order url>`.
+* customer(winner of `<listing_1>`) is on `<the winner's auction order url>`.
 
 **Test data:**
 
@@ -8490,8 +8503,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
-* customer(winner of `<lot_1>`) is signed in.
+* `<listing_1>`'s order has no confirmed delivery address and its address deadline passed two hours ago.
+* customer(winner of `<listing_1>`) is signed in.
 
 **Steps:**
 
@@ -8505,7 +8518,7 @@ Runs once per row of **Test data**.
 * The address deadline is unchanged.
 
 <!-- trace:case id=g10.auction-winner-order.TC-w21 rev=1 covers=g10.auction-winner-order.SC-l0b,g10.auction-winner-order.SC-gqs -->
-### g10.auction-winner-order.US23-TC6: Three won lots open three orders with their own address deadlines
+### g10.auction-winner-order.US23-TC6: Three won listings open three orders with their own address deadlines
 
 **Classification:**
 
@@ -8522,15 +8535,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of `<lot_1>`, `<lot_3>` and `<lot_4>`) won three lots that closed at different datetimes.
+* customer(winner of `<listing_1>`, `<listing_5>` and `<listing_6>`) won three listings that closed at different datetimes.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` recorded close | 2026-09-03T12:00:00Z |
-| `<lot_3>` recorded close | 2026-09-03T18:30:00Z |
-| `<lot_4>` recorded close | 2026-09-04T09:15:00Z |
+| `<listing_1>` recorded close | 2026-09-03T12:00:00Z |
+| `<listing_5>` recorded close | 2026-09-03T18:30:00Z |
+| `<listing_6>` recorded close | 2026-09-04T09:15:00Z |
 
 **Steps:**
 
@@ -8540,7 +8553,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Three separate orders exist, one per lot.
+* Three separate orders exist, one per listing.
 * The three address deadline passes read 2026-09-05T12:00:00Z, 2026-09-05T18:30:00Z and 2026-09-06T09:15:00Z.
 * Each order keeps the address confirmed on it and awaits its own invoice.
 
@@ -8665,7 +8678,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. The operator reopens the address form with a reason.
-2. Read the winner's post-close letters for that lot.
+2. Read the winner's post-close letters for that listing.
 
 **Expected Results:**
 
@@ -8690,8 +8703,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<extended lot>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
-* customer(winner of `<extended lot>`) is on `<the winner's auction order url>`.
+* `<extended listing>` was scheduled to close at 2026-09-12T08:45:00Z, took a late bid, and closed at 2026-09-12T09:00:00Z after extended bidding.
+* customer(winner of `<extended listing>`) is on `<the winner's auction order url>`.
 
 **Steps:**
 
@@ -8707,7 +8720,7 @@ Runs once per row of **Test data**.
 
 ## g10.auction-winner-order.US24: Winner chooses the currency they pay in
 
-**As a** winner of a lot bid in USD,
+**As a** winner of a listing bid in USD,
 **I want** to settle in USD or HKD when I set the order up,
 **so that** I pay in the currency my money is already in.
 
@@ -8729,7 +8742,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A winner is on setup for a won lot whose auction bids were in USD.
+* A winner is on setup for a won listing whose auction bids were in USD.
 
 **Steps:**
 
@@ -9323,10 +9336,10 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_hkd>` | A lot won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent |
-| `<order_hkd_exact>` | A lot won at USD100.00, settled in HKD by FPS, invoice sent |
-| `<order_hkd_fraction>` | A lot won at USD101.00, settled in HKD by FPS, invoice sent |
-| `<order_hkd_lines>` | A lot won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee |
+| `<order_hkd>` | A listing won at `<winning bid>`, settled in HKD by FPS, with Shipping & Handling `<shipping>`, invoice sent |
+| `<order_hkd_exact>` | A listing won at USD100.00, settled in HKD by FPS, invoice sent |
+| `<order_hkd_fraction>` | A listing won at USD101.00, settled in HKD by FPS, invoice sent |
+| `<order_hkd_lines>` | A listing won at USD101.00, settled in HKD by bank transfer, invoice sent with 0 USD bank transfer fee |
 | `<winning bid HKD exact>` | HK$793.00 (fixed derived value), 79,300 minor units |
 | `<premium HKD exact>` | HK$159.00 (fixed derived value), 15,900 minor units |
 | `<shipping HKD exact>` | HK$79.00 (fixed derived value), 7,900 minor units |
@@ -9375,7 +9388,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A winner paid in full an HKD invoice whose total is 103100 minor units in HKD, for a lot bid in USD.
+* A winner paid in full an HKD invoice whose total is 103100 minor units in HKD, for a listing bid in USD.
 
 **Steps:**
 
@@ -9420,7 +9433,7 @@ Runs once per row of **Test data**.
 
 * Every amount in every letter sent after the winner picked HKD reads in HKD.
 * No letter sent after the winner picked HKD prints a USD winning bid or a conversion rate.
-* The won-lot letter, sent at the close before any currency was picked, names the winning bid in US$.
+* The won-listing letter, sent at the close before any currency was picked, names the winning bid in US$.
 
 <!-- trace:case id=g10.auction-winner-order.TC-q56 rev=1 -->
 ### g10.auction-winner-order.US26-TC4: A refund on an HKD order reads in HKD
@@ -9484,7 +9497,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_card>` | A lot won at USD101.00, with a USD20.20 premium and USD10.01 Shipping & Handling, settled in HKD by card |
+| `<order_card>` | A listing won at USD101.00, with a USD20.20 premium and USD10.01 Shipping & Handling, settled in HKD by card |
 | HKD Subtotal | HK$1,031.00 (fixed derived value): HK$793 bid + HK$159 premium + HK$79 Shipping & Handling |
 
 **Steps:**
@@ -9619,7 +9632,7 @@ Runs once per row of **Test data**.
 ## g10.auction-winner-order.US27: Winner who settles in HKD reads the order total in both currencies
 
 **As a** winner who picked HKD,
-**I want** my Order Summary to keep the lot's USD amounts and show a USD total then the HKD total I will pay,
+**I want** my Order Summary to keep the listing's USD amounts and show a USD total then the HKD total I will pay,
 **so that** I see what I won and what it costs me in HKD.
 
 <!-- trace:case id=g10.auction-winner-order.TC-vwm rev=3 covers=g10.auction-winner-order.SC-kdr,g10.auction-winner-order.SC-fq4 -->
@@ -9715,12 +9728,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<order_hkd_unsent>` | A lot won at USD250 (fixed fixture), settled in HKD, setup confirmed, invoice not sent |
+| `<order_hkd_unsent>` | A listing won at USD250 (fixed fixture), settled in HKD, setup confirmed, invoice not sent |
 
 **Steps:**
 
 1. Read Order Summary.
-2. Read the lot card.
+2. Read the listing card.
 
 **Expected Results:**
 
