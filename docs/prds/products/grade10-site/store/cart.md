@@ -46,6 +46,8 @@ back to that page.
 
 🚧 **Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
 
+::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
+
 ## Promo Code
 
 One code rides the cart, typed or picked; every figure is the store's,

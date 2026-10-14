@@ -97,3 +97,21 @@ the site sale, put the sale back on the lines while the sale still runs,
 **I want** a cut the shop takes off the whole order to show as its own row
 after the Subtotal, with no line struck and no Remove,
 **so that** the cart reads the way the shop's checkout prints it.
+
+### shared-ui-store-cart-US-19: Shopper waits for an accepted tender choice
+
+**As a** shopper,
+**I want** the drawer to hold my accepted figures while a tender change finishes,
+**so that** I cannot submit conflicting changes or continue with an unresolved choice.
+
+### shared.ui-store-cart.US19: Shopper waits before another drawer action
+
+**As a** shopper whose drawer is waiting for an answer,
+**I want** the item controls, tender controls and navigation actions to wait together,
+**so that** no remaining control can start a conflicting action.
+
+### shared.ui-store-cart.US20: Shopper resumes after the drawer receives an answer
+
+**As a** shopper whose drawer is no longer waiting,
+**I want** only currently available actions to return without repeating an earlier action,
+**so that** I decide what happens next from the accepted cart or its failure feedback.

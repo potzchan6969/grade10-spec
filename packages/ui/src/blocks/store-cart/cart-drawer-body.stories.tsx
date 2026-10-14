@@ -112,6 +112,25 @@ export const Empty: Story = {
   },
 };
 
+/** Shared interaction guard: rows remain visible and the list remains scrollable. */
+export const InteractionPending: Story = {
+  args: {
+    interactionPending: true,
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const body = canvasElement.querySelector('[data-slot="cart-drawer-body"]');
+    expect(body).toHaveClass("overflow-y-auto");
+    const remove = canvas.getAllByRole("button", { name: "Remove item" })[0];
+    expect(remove).toBeDisabled();
+    remove.click();
+    expect(args.onRemoveItem).not.toHaveBeenCalled();
+    expect(
+      canvas.getByText("1999 Pokémon Base Set #4 Charizard Holo PSA 10"),
+    ).toBeInTheDocument();
+  },
+};
+
 /** Mixed states: active items, sold out item, and quantity adjusted item */
 export const MixedItemStates: Story = {
   render: (args) => {

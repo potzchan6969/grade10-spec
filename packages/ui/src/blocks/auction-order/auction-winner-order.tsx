@@ -509,17 +509,19 @@ function SettlementChoices({
   );
 }
 
+type BankDetailsDialogProps = {
+  bankDetails: AuctionWinnerOrderBankDetails;
+  copy: AuctionWinnerOrderCopy;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+};
+
 function BankDetailsDialog({
   bankDetails,
   copy,
   onOpenChange,
   open,
-}: {
-  bankDetails: AuctionWinnerOrderBankDetails;
-  copy: AuctionWinnerOrderCopy;
-  onOpenChange: (open: boolean) => void;
-  open: boolean;
-}) {
+}: BankDetailsDialogProps) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent

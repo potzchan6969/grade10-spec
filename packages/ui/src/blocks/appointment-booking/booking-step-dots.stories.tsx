@@ -49,7 +49,7 @@ export const Default: Story = {
 
 export const First: Story = { args: { current: "service" } };
 
-/** One shop runs the service: three steps. */
+/** No service runs at more than one shop: three steps. */
 export const NoShopStep: Story = {
   args: {
     steps: STEPS.filter((step) => step.id !== "location"),

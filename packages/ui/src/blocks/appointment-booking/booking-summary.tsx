@@ -30,7 +30,7 @@ type BookingSummaryProps = LocaleProps & {
   location?: ReactNode;
   /** Drawn under the shop's name when given. */
   address?: ReactNode;
-  /** Drops the shop row: one shop runs the service. */
+  /** Drops the shop row: no service runs at more than one shop. */
   hideLocation?: boolean;
   start?: number;
   end?: number;

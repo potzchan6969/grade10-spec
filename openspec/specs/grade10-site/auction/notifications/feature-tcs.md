@@ -298,6 +298,7 @@
 **I want** to be emailed as a watched lot opens,
 **so that** I can come back and bid without sitting on the page.
 
+<!-- trace:case id=g10.auction-notifications.TC-b0t rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->
 ### g10.auction-notifications.US1-TC1: Watcher is mailed 24 hours before and at the opening
 
 Runs once per row of **Test data**.
@@ -706,6 +707,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when I lose the lead on a lot I bid on,
 **so that** I can raise my maximum while the lot still takes bids.
 
+<!-- trace:case id=g10.auction-notifications.TC-sdf rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->
 ### g10.auction-notifications.US3-TC1: Displaced leader gets outbid, not also new bid
 
 **Classification:**
@@ -919,6 +921,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else bids on a lot I already bid on,
 **so that** I know the lot moved without being mailed on every increment.
 
+<!-- trace:case id=g10.auction-notifications.TC-qvy rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->
 ### g10.auction-notifications.US4-TC1: Other bidders hear of a new bid, watchers do not
 
 **Classification:**
@@ -1220,6 +1223,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else wins it,
 **so that** I know the outcome without reopening the lot.
 
+<!-- trace:case id=g10.auction-notifications.TC-gqc rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
 ### g10.auction-notifications.US6-TC1: A losing bidder gets one You did not win letter
 
 **Classification:**
@@ -1383,6 +1387,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when that lot ends with a winner,
 **so that** I know bidding is over on a lot I followed.
 
+<!-- trace:case id=g10.auction-notifications.TC-gz5 rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
 ### g10.auction-notifications.US7-TC1: A watch-only collector hears Sold for at the close
 
 **Classification:**

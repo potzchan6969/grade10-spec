@@ -69,7 +69,7 @@ export const NothingYet: Story = {
   },
 };
 
-/** One shop runs the service: no shop row. */
+/** No service runs at more than one shop: no shop row. */
 export const OneShop: Story = {
   args: { hideLocation: true },
   play: async ({ canvasElement }) => {

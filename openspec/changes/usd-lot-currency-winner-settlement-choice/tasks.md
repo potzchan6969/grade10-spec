@@ -31,7 +31,7 @@
 
 Depends on the grade10-spec groups only through the submodule bump.
 
-- [ ] 4.1 Write the migration tests first, in their own commit: an HKD and a JPY listing read USD with amounts, bids, status and dates unchanged; a USD listing is untouched; a second run changes nothing; a legacy internal order that cannot be mapped without changing its sent invoice stops the migration before any write (`grade10-admin-auction-listing-SC-162`, `grade10-admin-auction-listing-SC-163`)
+- [x] 4.1 Write the migration tests first, in their own commit: an HKD and a JPY listing read USD with amounts, bids, status and dates unchanged; a USD listing is untouched; a second run changes nothing; a legacy internal order that cannot be mapped without changing its sent invoice stops the migration before any write (`grade10-admin-auction-listing-SC-162`, `grade10-admin-auction-listing-SC-163`)
 - [ ] 4.2 Add the nullable order columns for settlement currency and bank rail, the invoice currency, the line USD fact and the one-rail bank snapshot; enforce the supported currency/rail pairs and require internal orders to be HKD on FPS, per `tech-design.md`. Keep `settlement_currency` null only before confirmation. Keep `bank_rail` null for an unconfirmed order before choice or an ordinary historical confirmed bank order whose rail was never recorded; the nullable check validates supported pairs, while service transitions require a rail for every new confirmation, edit, send or reissue
 - [ ] 4.3 Write the one-time overwrite of every HKD or JPY listing, bid and auto-bid maximum to USD, in one transaction with row counts logged (`grade10-admin-auction-listing-SC-162`, `grade10-admin-auction-listing-SC-163`)
 - [ ] 4.4 Apply the USD check on listing, bid and maximum currency after the overwrite (`grade10-admin-auction-listing-SC-161`)
@@ -83,7 +83,7 @@ Frontend work against the contracts and fixtures, never a running backend.
 
 ## 8. Launch dependencies (grade10) (owner: @htonyl)
 
-- [ ] 8.1 Write the launch check first, as a staging script: a USD card rule is present, no listing holds HKD or JPY, and the verified bar reads 1500000 minor units in USD (`winner-order-SC-297`, `grade10-admin-auction-listing-SC-163`)
+- [x] 8.1 Write the launch check first, as a staging script: a USD card rule is present, no listing holds HKD or JPY, and the verified bar reads 1500000 minor units in USD (`winner-order-SC-297`, `grade10-admin-auction-listing-SC-163`)
 - [ ] 8.2 Finance saves the USD card fee rule in Payment Settings, recorded 2026-10-13 and due before the change goes live in production (`grade10-admin-auction-payment-settings-SC-15`)
 - [ ] 8.3 Run the one-time lot currency overwrite on production data, recorded 2026-10-13 and run once before the change goes live (`grade10-admin-auction-listing-SC-162`)
 - [ ] 8.4 Verify: the launch check passes on production

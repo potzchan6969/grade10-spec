@@ -102,6 +102,7 @@
 **I want** to mark a listing to come back to without bidding on it,
 **so that** I can leave the page and find it again without searching.
 
+<!-- trace:case id=g10.auction-watchlist.TC-pvl rev=1 covers=g10.auction-watchlist.SC-jux,g10.auction-watchlist.SC-qjq,g10.auction-watchlist.SC-n7n,g10.auction-watchlist.SC-g1p,g10.auction-watchlist.SC-ao4,g10.auction-watchlist.SC-7nx,g10.auction-watchlist.SC-zi2,g10.auction-watchlist.SC-qq2 -->
 ### g10.auction-watchlist.US1-TC1: Watch from the listing page records one watch
 
 **Classification:**
