@@ -7,29 +7,63 @@
 
 **Starting state:**
 
-- customer(signed out) is on <listing_1 url>.
-- customer(signed in, no linked card) is on <listing_2 url>.
+- customer(signed out) is on `<listing_2 url>`.
+- customer(signed out) is on `<listing_4 url>`.
+- customer(signed in, no linked card) is on `<listing_6 url>`.
+- customer(signed in, no linked card) is on `<listing_8 url>`.
 - The setup modal is open, from the bid action on this listing.
-- customer(signed in, no linked card) has submitted Link Card on <listing_2 url>.
+- customer(signed in, no linked card) has submitted Link Card on `<listing_10 url>`.
 - The card provider is mocked to leave linking in progress.
+- customer(signed in, no linked card) is on `<listing_12 url>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| <listing_1> | A live listing taking bids, with recent public bids shown |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US1-TC1 | listing_2 | A live listing taking bids, with recent public bids shown; bind its identity only |
+| g10.auction-bid-panel-enrollment.US1-TC1 | listing_2 url | The URL of `<listing_2>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US1-TC2 | listing_4 | A live listing taking bids, with recent public bids shown; bind its identity only |
+| g10.auction-bid-panel-enrollment.US1-TC2 | listing_4 url | The URL of `<listing_4>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC1 | listing_6 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| g10.auction-bid-panel-enrollment.US2-TC1 | listing_6 url | The URL of `<listing_6>`; bind its URL only |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC2 | listing_8 | An open listing taking bids; this collector has no linked card; bind its identity only | · |
+| g10.auction-bid-panel-enrollment.US2-TC2 | successful card number | 4242 4242 4242 4242 | Successful Visa provider fixture |
+| g10.auction-bid-panel-enrollment.US2-TC2 | expiry | 12/34 | Representative future expiry; any future expiry fits |
+| g10.auction-bid-panel-enrollment.US2-TC2 | postal code | 10101 | Representative postal code; any postal code fits |
+| g10.auction-bid-panel-enrollment.US2-TC2 | cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC2 | listing_8 url | The URL of `<listing_8>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC3 | listing_10 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| g10.auction-bid-panel-enrollment.US2-TC3 | listing_10 url | The URL of `<listing_10>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC4 | listing_12 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| g10.auction-bid-panel-enrollment.US2-TC4 | listing_12 url | The URL of `<listing_12>`; bind its URL only |
 
 ### Route
 
-1. Read the bid panel on <listing_1 url>.
-   - The primary action offers sign-in to bid. g10.auction-bid-panel-enrollment.US1-TC1
+1. Read the bid panel on `<listing_2 url>`.
 2. Read the primary bid action.
+   - The primary action offers sign-in to bid. g10.auction-bid-panel-enrollment.US1-TC1
    - Place bid and link a card are not offered. g10.auction-bid-panel-enrollment.US1-TC1
 3. Read standing badges on the bid panel.
-   - Highest-bid and outbid badges are not shown. g10.auction-bid-panel-enrollment.US1-TC2
 4. Read the recent-bids section.
+   - Highest-bid and outbid badges are not shown. g10.auction-bid-panel-enrollment.US1-TC2
    - Recent bids stay visible. g10.auction-bid-panel-enrollment.US1-TC2
 5. Read the quick-bid presets and the custom maximum.
 6. Read the primary bid action.
@@ -41,17 +75,17 @@
 8. Leave the provider card field empty.
 9. Leave age attestation unchecked.
 10. Read the continue control.
-11. Enter <the successful Visa> in the provider-hosted field.
+11. Enter `<successful card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 12. Check age attestation.
 13. Read the continue control.
    - Continue stays disabled while the card or attestation is missing. g10.auction-bid-panel-enrollment.US2-TC2
    - Continue reads "Link Card", not "Authorize". g10.auction-bid-panel-enrollment.US2-TC2
    - Continue enables once the card and attestation are both set. g10.auction-bid-panel-enrollment.US2-TC2
 14. Read the continue control.
-   - Continue reads "Linking" and is busy. g10.auction-bid-panel-enrollment.US2-TC3
 15. Read the provider field and age attestation.
-   - The provider field and age attestation are not interactive. g10.auction-bid-panel-enrollment.US2-TC3
 16. Try to close the setup modal.
+   - Continue reads "Linking" and is busy. g10.auction-bid-panel-enrollment.US2-TC3
+   - The provider field and age attestation are not interactive. g10.auction-bid-panel-enrollment.US2-TC3
    - The setup modal cannot be dismissed. g10.auction-bid-panel-enrollment.US2-TC3
 17. Click the primary bid action.
 18. Close the setup modal without continuing.
@@ -60,74 +94,117 @@
    - No linked card is on file for bidding. g10.auction-bid-panel-enrollment.US2-TC4
    - The empty link prompt is shown. g10.auction-bid-panel-enrollment.US2-TC4
    - Amount controls stay visible and disabled. g10.auction-bid-panel-enrollment.US2-TC4
-21. Click the primary bid action.
-22. Enter `<the successful Visa>` in the provider-hosted field.
-23. Check age attestation.
-24. Click Link Card.
-25. Read the linked-card slot.
 
 ## Walk 2: Link a card and return ready to bid — phase 2
 
 **Starting state:**
 
-- customer(signed in, no linked card) is on <listing_2 url>.
+- customer(signed in, no linked card) is on `<listing_14 url>`.
+- customer(signed in, no linked card) is on `<listing_16 url>`.
 - The empty linked-card slot is visible.
+- customer(signed in, no linked card) is on `<listing_28 url>`.
+- The provider fixture is `<failure type>`, with response `<provider answer>`.
+- customer(signed in, no linked card) is on `<listing_30 url>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| Expiry, CVC, postal code | Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| Item | Field: `<the refused card>`; Value: Card number; Value 3: Provider answer |
-| Item | Field: Generic decline; Value: 4000 0000 0000 0002; Value 3: Declined by the issuer |
-| Item | Field: Expired card; Value: 4000 0000 0000 0069; Value 3: Refused as expired |
-| Item | Field: Incorrect CVC; Value: 4000 0000 0000 0127; Value 3: Refused for the CVC |
-| Item | Field: Processing error; Value: 4000 0000 0000 0119; Value 3: Provider fails to process |
-| <the declining Visa> | 4000 0000 0000 0002, the provider's generic-decline test card. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC5 | listing_14 | An open listing taking bids; this collector has no linked card; bind its identity only | · |
+| g10.auction-bid-panel-enrollment.US2-TC5 | successful card number | 4242 4242 4242 4242 | Successful Visa provider fixture |
+| g10.auction-bid-panel-enrollment.US2-TC5 | expiry | 12/34 | Representative future expiry; any future expiry fits |
+| g10.auction-bid-panel-enrollment.US2-TC5 | postal code | 10101 | Representative postal code; any postal code fits |
+| g10.auction-bid-panel-enrollment.US2-TC5 | cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC5 | listing_14 url | The URL of `<listing_14>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC6 | listing_16 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| g10.auction-bid-panel-enrollment.US2-TC6 | listing_16 url | The URL of `<listing_16>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC12 | listing_28 | An open listing taking bids; this collector has no linked card; bind its identity only |
+
+| Case | `<failure type>` | `<card number>` | `<provider answer>` |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC12 | Generic decline | 4000 0000 0000 0002 | Declined by the issuer |
+| g10.auction-bid-panel-enrollment.US2-TC12 | Expired card | 4000 0000 0000 0069 | Refused as expired |
+| g10.auction-bid-panel-enrollment.US2-TC12 | Incorrect CVC | 4000 0000 0000 0127 | Refused for the CVC |
+| g10.auction-bid-panel-enrollment.US2-TC12 | Processing error | 4000 0000 0000 0119 | Provider fails to process |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC12 | expiry | 12/34 | Representative future expiry; any future expiry fits |
+| g10.auction-bid-panel-enrollment.US2-TC12 | postal code | 10101 | Representative postal code; any postal code fits |
+| g10.auction-bid-panel-enrollment.US2-TC12 | cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC12 | listing_28 url | The URL of `<listing_28>`; bind its URL only |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC13 | listing_30 | An open listing taking bids; this collector has no linked card; bind its identity only | · |
+| g10.auction-bid-panel-enrollment.US2-TC13 | declining card number | 4000 0000 0000 0002 | Provider generic-decline Visa fixture |
+| g10.auction-bid-panel-enrollment.US2-TC13 | successful card number | 4242 4242 4242 4242 | Successful Visa provider fixture |
+| g10.auction-bid-panel-enrollment.US2-TC13 | expiry | 12/34 | Representative future expiry; any future expiry fits |
+| g10.auction-bid-panel-enrollment.US2-TC13 | postal code | 10101 | Representative postal code; any postal code fits |
+| g10.auction-bid-panel-enrollment.US2-TC13 | cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC13 | listing_30 url | The URL of `<listing_30>`; bind its URL only |
 
 ### Route
 
-1. Read the quick-bid presets and the custom maximum.
-2. Read the primary bid action.
-3. Check the card's activity at the card provider.
+1. Click the primary bid action.
+2. Enter `<successful card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
+3. Check age attestation.
+4. Click Link Card.
+5. Read the linked-card slot.
+6. Read the quick-bid presets and the custom maximum.
+7. Read the primary bid action.
+8. Check the card's activity at the card provider.
    - The setup modal closes. g10.auction-bid-panel-enrollment.US2-TC5
    - The linked-card slot shows the linked card, with Change available. g10.auction-bid-panel-enrollment.US2-TC5
    - Quick-bid presets and the custom maximum are enabled at once. g10.auction-bid-panel-enrollment.US2-TC5
    - The primary bid action offers set or raise maximum. g10.auction-bid-panel-enrollment.US2-TC5
    - Setup takes nothing from the card. g10.auction-bid-panel-enrollment.US2-TC5
-4. Click a disabled quick-bid preset.
+9. Click a disabled quick-bid preset.
+10. Try to type in the custom maximum.
+11. Click the empty card slot.
    - The disabled preset does not open setup. g10.auction-bid-panel-enrollment.US2-TC6
-5. Try to type in the custom maximum.
    - The custom maximum does not open setup. g10.auction-bid-panel-enrollment.US2-TC6
-6. Click the empty card slot.
    - The empty card slot opens the setup modal. g10.auction-bid-panel-enrollment.US2-TC6
-7. Click the primary bid action.
-8. Enter <the refused card> in the provider-hosted field.
-9. Check age attestation.
-10. Click Link Card.
-11. Read the setup modal.
-   - the setup modal stays open, and a failure is shown. g10.auction-bid-panel-enrollment.US2-TC12
-12. Click into the provider-hosted field.
-   - the provider field accepts focus. g10.auction-bid-panel-enrollment.US2-TC12
-13. Uncheck age attestation.
-   - age attestation unchecks. g10.auction-bid-panel-enrollment.US2-TC12
-14. Close the setup modal.
-15. Read the linked-card slot.
-   - the empty link prompt is shown. g10.auction-bid-panel-enrollment.US2-TC12
-16. Read the quick-bid presets and the custom maximum.
-   - presets and the custom maximum are visible and disabled. g10.auction-bid-panel-enrollment.US2-TC12
-17. Read the primary bid action.
-   - the primary bid action reads "Link a card to bid". g10.auction-bid-panel-enrollment.US2-TC12
-18. Click the primary bid action.
-19. Enter `<the declining Visa>` in the provider-hosted field.
-20. Check age attestation.
-21. Click Link Card.
-22. Replace the card with `<the successful Visa>`.
-23. Click Link Card.
-24. Read the linked-card slot.
-25. Read the quick-bid presets and the custom maximum.
+12. Click the primary bid action.
+13. Enter `<card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
+14. Check age attestation.
+15. Click Link Card.
+16. Read the setup modal.
+   - Step 16: the setup modal stays open, and a failure is shown. g10.auction-bid-panel-enrollment.US2-TC12
+17. Click into the provider-hosted field.
+   - Step 17: the provider field accepts focus. g10.auction-bid-panel-enrollment.US2-TC12
+18. Uncheck age attestation.
+   - Step 18: age attestation unchecks. g10.auction-bid-panel-enrollment.US2-TC12
+19. Close the setup modal.
+20. Read the linked-card slot.
+   - Step 20: the empty link prompt is shown. g10.auction-bid-panel-enrollment.US2-TC12
+21. Read the quick-bid presets and the custom maximum.
+   - Step 21: presets and the custom maximum are visible and disabled. g10.auction-bid-panel-enrollment.US2-TC12
+22. Read the primary bid action.
+   - Step 22: the primary bid action reads "Link a card to bid". g10.auction-bid-panel-enrollment.US2-TC12
+23. Click the primary bid action.
+24. Enter `<declining card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
+25. Check age attestation.
+26. Click Link Card.
+27. Replace the card with `<successful card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>`.
+28. Click Link Card.
+29. Read the linked-card slot.
+30. Read the quick-bid presets and the custom maximum.
    - The first link attempt shows a failure and leaves the setup modal open. g10.auction-bid-panel-enrollment.US2-TC13
    - The successful retry closes the setup modal. g10.auction-bid-panel-enrollment.US2-TC13
    - The linked-card slot shows the successful card, with Change available. g10.auction-bid-panel-enrollment.US2-TC13
@@ -137,108 +214,180 @@
 
 **Starting state:**
 
-- customer(signed in, no linked card) is on `<listing_2 url>`.
-- customer(signed in, no linked card) is on <listing_2 url>.
-- customer(signed in, card linked on <the earlier listing>, no bid on <listing_6>) is on <listing_6 url>.
+- customer(signed in, no linked card) is on `<listing_32 url>`.
+- The selected test card has brand `<card brand>`.
+- customer(signed in, no linked card) is on `<listing_34 url>`.
+- customer(signed in, card linked on `<listing_48>`, no bid on `<listing_49>`) is on `<listing_49 url>`.
+- The earlier listing has this setup: `<earlier listing setup>`, with retained activity `<earlier activity>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| listing_2 | An open listing taking bids; this collector has no linked card |
-| Expiry, CVC, postal code | Any future expiry, such as 12/34, any CVC of the brand's length (4 digits for American Express, 3 otherwise), and any postal code |
-| `<the brand card>` | Card number |
-| Mastercard | 5555 5555 5555 4444 |
-| American Express | 3782 822463 10005 |
-| JCB | 3566 0020 2036 0505 |
-| UnionPay | 6200 0000 0000 0005 |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| <listing_6> | A new open listing this collector has not bid on; the card was linked on an earlier listing |
-| Item | Field: `<the earlier listing>`; Value: What this collector did there; Value 3: Change on <listing_6> |
-| Item | Field: Another open listing; Value: Linked the card through setup, placed no bid; Value 3: Offered |
-| Item | Field: Another open listing; Value: Linked the card through setup, then placed an accepted bid, so Change is no longer offered there; Value 3: Offered |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC14 | listing_32 | An open listing taking bids; this collector has no linked card; bind its identity only |
+
+| Case | `<card brand>` | `<card number>` | `<cvc>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC14 | Mastercard | 5555 5555 5555 4444 | 123 | Any 3-digit CVC fits |
+| g10.auction-bid-panel-enrollment.US2-TC14 | American Express | 3782 822463 10005 | 1234 | American Express uses a 4-digit CVC; any 4-digit CVC fits |
+| g10.auction-bid-panel-enrollment.US2-TC14 | JCB | 3566 0020 2036 0505 | 123 | Any 3-digit CVC fits |
+| g10.auction-bid-panel-enrollment.US2-TC14 | UnionPay | 6200 0000 0000 0005 | 123 | Any 3-digit CVC fits |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC14 | expiry | 12/34 | Representative future expiry; any future expiry fits |
+| g10.auction-bid-panel-enrollment.US2-TC14 | postal code | 10101 | Representative postal code; any postal code fits |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC14 | listing_32 url | The URL of `<listing_32>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC15 | listing_34 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| g10.auction-bid-panel-enrollment.US2-TC15 | listing_34 url | The URL of `<listing_34>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US5-TC1 | listing_49 | A new open listing this collector has not bid on; the card was linked on an earlier listing; bind its identity only |
+
+| Case | `<earlier listing setup>` | `<earlier activity>` | Change on the new listing |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US5-TC1 | Open, different from the new listing | Linked the card through setup, placed no bid | Offered |
+| g10.auction-bid-panel-enrollment.US5-TC1 | Open, different from the new listing | Linked the card through setup, then placed an accepted bid, so Change is no longer offered there | Offered |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US5-TC1 | listing_48 | A different listing where this collector linked the card, with `<earlier listing setup>` and `<earlier activity>`; bind its identity only |
+| g10.auction-bid-panel-enrollment.US5-TC1 | listing_49 url | The URL of `<listing_49>`; bind its URL only |
 
 ### Route
 
 1. Click the primary bid action.
-2. Enter `<the brand card>` in the provider-hosted field.
+2. Enter `<card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
-   - the link completes, or a failure is shown; note which per brand. g10.auction-bid-panel-enrollment.US2-TC14
+   - Step 4: the link completes, or a failure is shown; note which for `<card brand>`. g10.auction-bid-panel-enrollment.US2-TC14
 5. Read the setup modal and the linked-card slot.
-   - a linked brand shows in the linked-card slot. g10.auction-bid-panel-enrollment.US2-TC14
+   - Step 5: a linked card shows `<card brand>` in the linked-card slot. g10.auction-bid-panel-enrollment.US2-TC14
    - Any refused brand is reported to the spec's author, not failed. g10.auction-bid-panel-enrollment.US2-TC14
 6. Click the primary bid action.
-   - The title reads "Link a card to bid". g10.auction-bid-panel-enrollment.US2-TC15
 7. Read the setup title.
-   - The description says the card is charged only on a win. g10.auction-bid-panel-enrollment.US2-TC15
 8. Read the setup description.
-   - The description names no hold or authorization. g10.auction-bid-panel-enrollment.US2-TC15
 9. Read the continue control.
+   - The title reads "Link a card to bid". g10.auction-bid-panel-enrollment.US2-TC15
+   - The description says the card is charged only on a win. g10.auction-bid-panel-enrollment.US2-TC15
+   - The description names no hold or authorization. g10.auction-bid-panel-enrollment.US2-TC15
    - Continue reads "Link Card". g10.auction-bid-panel-enrollment.US2-TC15
 10. Read the linked-card slot.
-   - The linked-card slot shows the card on file, with Change available. g10.auction-bid-panel-enrollment.US5-TC1
 11. Read the quick-bid presets and the custom maximum.
-   - Quick-bid presets and the custom maximum are enabled. g10.auction-bid-panel-enrollment.US5-TC1
 12. Check whether the setup modal is open.
+   - The linked-card slot shows the card on file, with Change available. g10.auction-bid-panel-enrollment.US5-TC1
+   - Quick-bid presets and the custom maximum are enabled. g10.auction-bid-panel-enrollment.US5-TC1
    - The setup modal does not open. g10.auction-bid-panel-enrollment.US5-TC1
 
 ## Walk 4: Change or lock the linked card before bidding
 
 **Starting state:**
 
-- customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
-- customer(signed in, card linked, no bid on <listing_11>) is on <listing_11 url>.
-- <listing_11> is in the row's state.
-- customer(signed in, card linked on an earlier listing, age already attested, no bid on <listing_4>) is on <listing_4 url>.
-- customer(signed in, card linked) is on <listing_5 url>.
+- customer(signed in, card linked, no bid on `<listing_20>`) is on `<listing_20 url>`.
+- customer(signed in, card linked, no bid on `<listing_36>`) is on `<listing_36 url>`.
+- `<listing_36>` has this setup: `<listing setup>`.
+- customer(signed in, card linked, no bid on `<listing_38>`) is on `<listing_38 url>`.
+- customer(signed in, card linked, no bid on `<listing_40>`) is on `<listing_40 url>`.
+- customer(signed in, card linked on an earlier listing, age already attested, no bid on `<listing_42>`) is on `<listing_42 url>`.
+- The replacement card `<replacement card number>` differs from the card already linked.
+- customer(signed in, card linked) is on `<listing_44 url>`.
 - This collector's bid was accepted from the bid panel on this listing.
-- customer(signed in, card linked, no bid on <listing_7>) is on <listing_7 url>.
+- customer(signed in, card linked, no bid on `<listing_46>`) is on `<listing_46 url>`.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
-| <maximum> | The next valid bid shown on the bid panel |
-| Item | <listing_11> state: Open, no bid, starting price HKD280 (range: 1000–79999 minor units); <maximum>: HKD560 (range: 1000–79999 minor units); Standing shown: Leading |
-| Item | <listing_11> state: Open, led by customer B with maximum HKD840 (range: 80000–399999 minor units), current bid HKD280 (range: 1000–79999 minor units); <maximum>: HKD560 (range: 1000–79999 minor units), below customer B's maximum; Standing shown: Outbid, with the next valid bid |
-| <listing_4> | A new open listing this collector has not bid on; the card was linked on an earlier listing, and age was already attested |
-| <the other card> | 5555 5555 5555 4444, a Mastercard. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| <listing_5> | An open listing taking bids; this collector has a linked card and has placed a bid on it |
-| <listing_7> | An open listing taking bids with no other bidder; this collector has a linked card and has not bid on it |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC8 | listing_20 | An open listing taking bids; this collector has a linked card and has not bid on it; bind its identity only |
+| g10.auction-bid-panel-enrollment.US2-TC8 | maximum | The next valid bid shown on the bid panel; bind its amount only |
+| g10.auction-bid-panel-enrollment.US2-TC8 | listing_20 url | The URL of `<listing_20>`; bind its URL only |
+
+| Case | `<listing setup>` | `<maximum>` | `<standing>` | Fixture notes |
+| --- | --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC16 | Open, no bid, starting price `<opening price>` | HKD560 | Leading | `<maximum>`: (range: 1000–79999 minor units) |
+| g10.auction-bid-panel-enrollment.US2-TC16 | Open, led by customer B with maximum `<rival maximum>`, current bid `<opening price>` | HKD560 | Outbid, with the next valid bid | `<maximum>`: (range: 1000–79999 minor units), below customer B's maximum |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC16 | opening price | HKD280 | (range: 1000–79999 minor units) |
+| g10.auction-bid-panel-enrollment.US2-TC16 | rival maximum | HKD840 | (range: 80000–399999 minor units) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US2-TC16 | listing_36 url | The URL of `<listing_36>`; bind its URL only |
+| g10.auction-bid-panel-enrollment.US2-TC16 | listing_36 | An open listing prepared with `<listing setup>`; bind its identity only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US3-TC1 | listing_38 | An open listing taking bids; this collector has a linked card and has not bid on it; bind its identity only |
+| g10.auction-bid-panel-enrollment.US3-TC1 | listing_38 url | The URL of `<listing_38>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US3-TC2 | listing_40 | An open listing taking bids; this collector has a linked card and has not bid on it; bind its identity only |
+| g10.auction-bid-panel-enrollment.US3-TC2 | listing_40 url | The URL of `<listing_40>`; bind its URL only |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US3-TC3 | listing_42 | A new open listing this collector has not bid on; the card was linked on an earlier listing, and age was already attested; bind its identity only | · |
+| g10.auction-bid-panel-enrollment.US3-TC3 | replacement card number | 5555 5555 5555 4444 | Mastercard, different from the card already linked |
+| g10.auction-bid-panel-enrollment.US3-TC3 | expiry | 12/34 | Representative future expiry; any future expiry fits |
+| g10.auction-bid-panel-enrollment.US3-TC3 | postal code | 10101 | Representative postal code; any postal code fits |
+| g10.auction-bid-panel-enrollment.US3-TC3 | cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US3-TC3 | listing_42 url | The URL of `<listing_42>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US4-TC1 | listing_44 | An open listing taking bids; this collector has a linked card and has placed a bid on it; bind its identity only |
+| g10.auction-bid-panel-enrollment.US4-TC1 | listing_44 url | The URL of `<listing_44>`; bind its URL only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-bid-panel-enrollment.US4-TC2 | listing_46 | An open listing taking bids with no other bidder; this collector has a linked card and has not bid on it; bind its identity only |
+| g10.auction-bid-panel-enrollment.US4-TC2 | maximum | The next valid bid shown on the bid panel; bind its amount only |
+| g10.auction-bid-panel-enrollment.US4-TC2 | listing_46 url | The URL of `<listing_46>`; bind its URL only |
 
 ### Route
 
 1. Enter `<maximum>` in the custom maximum.
-   - The bid panel shows the accepted bid's standing without an Authorizing state between the click and the answer. g10.auction-bid-panel-enrollment.US2-TC8
 2. Click the bid action.
-   - The linked card remains visible. g10.auction-bid-panel-enrollment.US2-TC8
 3. Read the linked-card slot after the bid is accepted.
+   - The bid panel shows the accepted bid's standing without an Authorizing state between the click and the answer. g10.auction-bid-panel-enrollment.US2-TC8
+   - The linked card remains visible. g10.auction-bid-panel-enrollment.US2-TC8
    - Change is not offered for this listing. g10.auction-bid-panel-enrollment.US2-TC8
 4. Enter `<maximum>` in the custom maximum.
 5. Click the bid action.
 6. Watch the bid panel until it settles.
-   - The bid panel shows the row's expected standing in one answer: Leading or Outbid. g10.auction-bid-panel-enrollment.US2-TC16
+   - The bid panel shows `<standing>` in one answer: Leading or Outbid. g10.auction-bid-panel-enrollment.US2-TC16
    - No Authorizing or other in-between state shows between the click and the standing. g10.auction-bid-panel-enrollment.US2-TC16
 7. Read the linked-card row.
-   - The setup modal opens. g10.auction-bid-panel-enrollment.US3-TC1
 8. Click Change on the linked card.
+   - The setup modal opens. g10.auction-bid-panel-enrollment.US3-TC1
    - The linked-card row stays visible behind the modal. g10.auction-bid-panel-enrollment.US3-TC1
 9. Click Change on the linked card.
-   - The title reads "Link a card to bid". g10.auction-bid-panel-enrollment.US3-TC2
 10. Read the modal title.
-   - The description says the card is charged only on a win. g10.auction-bid-panel-enrollment.US3-TC2
 11. Read the modal description.
-   - The description names no hold or authorization. g10.auction-bid-panel-enrollment.US3-TC2
 12. Read the provider-hosted field.
+   - The title reads "Link a card to bid". g10.auction-bid-panel-enrollment.US3-TC2
+   - The description says the card is charged only on a win. g10.auction-bid-panel-enrollment.US3-TC2
+   - The description names no hold or authorization. g10.auction-bid-panel-enrollment.US3-TC2
    - The provider-hosted field indicates the card already on file. g10.auction-bid-panel-enrollment.US3-TC2
 13. Click Change on the linked card.
 14. Read age attestation.
-15. Enter <the other card> in the provider-hosted field.
+15. Enter `<replacement card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 16. Read the continue control.
    - Age attestation is already checked. g10.auction-bid-panel-enrollment.US3-TC3
-   - Continue reads "Link Card" and enables once <the other card> is entered. g10.auction-bid-panel-enrollment.US3-TC3
+   - Continue reads "Link Card" and enables once `<replacement card number>`, `<expiry>`, `<cvc>` and `<postal code>` are entered. g10.auction-bid-panel-enrollment.US3-TC3
 17. Read the linked-card slot on the bid panel.
    - The linked card is shown. g10.auction-bid-panel-enrollment.US4-TC1
    - Change is not offered. g10.auction-bid-panel-enrollment.US4-TC1
@@ -272,17 +421,18 @@
 
 **Pre-conditions:**
 
-* customer(signed out) is on <listing_1 url>.
+* customer(signed out) is on `<listing_2 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_1> | A live listing taking bids, with recent public bids shown |
+| listing_2 | A live listing taking bids, with recent public bids shown; bind its identity only |
+| listing_2 url | The URL of `<listing_2>`; bind its URL only |
 
 **Steps:**
 
-1. Read the bid panel on <listing_1 url>.
+1. Read the bid panel on `<listing_2 url>`.
 2. Read the primary bid action.
 
 **Expected Results:**
@@ -308,13 +458,14 @@
 
 **Pre-conditions:**
 
-* customer(signed out) is on <listing_1 url>.
+* customer(signed out) is on `<listing_4 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_1> | A live listing taking bids, with recent public bids shown |
+| listing_4 | A live listing taking bids, with recent public bids shown; bind its identity only |
+| listing_4 url | The URL of `<listing_4>`; bind its URL only |
 
 **Steps:**
 
@@ -353,13 +504,14 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_6 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
+| listing_6 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| listing_6 url | The URL of `<listing_6>`; bind its URL only |
 
 **Steps:**
 
@@ -392,22 +544,29 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_8 url>`.
 * The setup modal is open, from the bid action on this listing.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open listing taking bids; this collector has no linked card; bind its identity only | · |
+| successful card number | 4242 4242 4242 4242 | Successful Visa provider fixture |
+| expiry | 12/34 | Representative future expiry; any future expiry fits |
+| postal code | 10101 | Representative postal code; any postal code fits |
+| cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| listing_8 url | The URL of `<listing_8>`; bind its URL only |
 
 **Steps:**
 
 1. Leave the provider card field empty.
 2. Leave age attestation unchecked.
 3. Read the continue control.
-4. Enter <the successful Visa> in the provider-hosted field.
+4. Enter `<successful card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 5. Check age attestation.
 6. Read the continue control.
 
@@ -435,14 +594,15 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) has submitted Link Card on <listing_2 url>.
+* customer(signed in, no linked card) has submitted Link Card on `<listing_10 url>`.
 * The card provider is mocked to leave linking in progress.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
+| listing_10 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| listing_10 url | The URL of `<listing_10>`; bind its URL only |
 
 **Steps:**
 
@@ -474,13 +634,14 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_12 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
+| listing_12 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| listing_12 url | The URL of `<listing_12>`; bind its URL only |
 
 **Steps:**
 
@@ -515,19 +676,26 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_14 url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_14 | An open listing taking bids; this collector has no linked card; bind its identity only | · |
+| successful card number | 4242 4242 4242 4242 | Successful Visa provider fixture |
+| expiry | 12/34 | Representative future expiry; any future expiry fits |
+| postal code | 10101 | Representative postal code; any postal code fits |
+| cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| listing_14 url | The URL of `<listing_14>`; bind its URL only |
 
 **Steps:**
 
 1. Click the primary bid action.
-2. Enter `<the successful Visa>` in the provider-hosted field.
+2. Enter `<successful card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
 5. Read the linked-card slot.
@@ -561,14 +729,15 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_16 url>`.
 * The empty linked-card slot is visible.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
+| listing_16 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| listing_16 url | The URL of `<listing_16>`; bind its URL only |
 
 **Steps:**
 
@@ -644,14 +813,15 @@ enrolled after my first accepted bid,
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* customer(signed in, card linked, no bid on `<listing_20>`) is on `<listing_20 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
-| <maximum> | The next valid bid shown on the bid panel |
+| listing_20 | An open listing taking bids; this collector has a linked card and has not bid on it; bind its identity only |
+| maximum | The next valid bid shown on the bid panel; bind its amount only |
+| listing_20 url | The URL of `<listing_20>`; bind its URL only |
 
 **Steps:**
 
@@ -798,26 +968,36 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_28 url>`.
+* The provider fixture is `<failure type>`, with response `<provider answer>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| Expiry, CVC, postal code | Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| listing_28 | An open listing taking bids; this collector has no linked card; bind its identity only |
 
-| `<the refused card>` | Card number | Provider answer |
+| `<failure type>` | `<card number>` | `<provider answer>` |
 | --- | --- | --- |
 | Generic decline | 4000 0000 0000 0002 | Declined by the issuer |
 | Expired card | 4000 0000 0000 0069 | Refused as expired |
 | Incorrect CVC | 4000 0000 0000 0127 | Refused for the CVC |
 | Processing error | 4000 0000 0000 0119 | Provider fails to process |
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| expiry | 12/34 | Representative future expiry; any future expiry fits |
+| postal code | 10101 | Representative postal code; any postal code fits |
+| cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
+| Field | Value |
+| --- | --- |
+| listing_28 url | The URL of `<listing_28>`; bind its URL only |
+
 **Steps:**
 
 1. Click the primary bid action.
-2. Enter <the refused card> in the provider-hosted field.
+2. Enter `<card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
 5. Read the setup modal.
@@ -857,23 +1037,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_30 url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_30 | An open listing taking bids; this collector has no linked card; bind its identity only | · |
+| declining card number | 4000 0000 0000 0002 | Provider generic-decline Visa fixture |
+| successful card number | 4242 4242 4242 4242 | Successful Visa provider fixture |
+| expiry | 12/34 | Representative future expiry; any future expiry fits |
+| postal code | 10101 | Representative postal code; any postal code fits |
+| cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
-| <the declining Visa> | 4000 0000 0000 0002, the provider's generic-decline test card. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
-| <the successful Visa> | 4242 4242 4242 4242. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| listing_30 url | The URL of `<listing_30>`; bind its URL only |
 
 **Steps:**
 
 1. Click the primary bid action.
-2. Enter `<the declining Visa>` in the provider-hosted field.
+2. Enter `<declining card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
-5. Replace the card with `<the successful Visa>`.
+5. Replace the card with `<successful card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>`.
 6. Click Link Card.
 7. Read the linked-card slot.
 8. Read the quick-bid presets and the custom maximum.
@@ -905,34 +1092,43 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on `<listing_2 url>`.
+* customer(signed in, no linked card) is on `<listing_32 url>`.
+* The selected test card has brand `<card brand>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| listing_2 | An open listing taking bids; this collector has no linked card |
-| Expiry, CVC, postal code | Any future expiry, such as 12/34, any CVC of the brand's length (4 digits for American Express, 3 otherwise), and any postal code |
+| listing_32 | An open listing taking bids; this collector has no linked card; bind its identity only |
 
-| `<the brand card>` | Card number |
+| `<card brand>` | `<card number>` | `<cvc>` | Fixture notes |
+| --- | --- | --- | --- |
+| Mastercard | 5555 5555 5555 4444 | 123 | Any 3-digit CVC fits |
+| American Express | 3782 822463 10005 | 1234 | American Express uses a 4-digit CVC; any 4-digit CVC fits |
+| JCB | 3566 0020 2036 0505 | 123 | Any 3-digit CVC fits |
+| UnionPay | 6200 0000 0000 0005 | 123 | Any 3-digit CVC fits |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| expiry | 12/34 | Representative future expiry; any future expiry fits |
+| postal code | 10101 | Representative postal code; any postal code fits |
+
+| Field | Value |
 | --- | --- |
-| Mastercard | 5555 5555 5555 4444 |
-| American Express | 3782 822463 10005 |
-| JCB | 3566 0020 2036 0505 |
-| UnionPay | 6200 0000 0000 0005 |
+| listing_32 url | The URL of `<listing_32>`; bind its URL only |
 
 **Steps:**
 
 1. Click the primary bid action.
-2. Enter `<the brand card>` in the provider-hosted field.
+2. Enter `<card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 3. Check age attestation.
 4. Click Link Card.
 5. Read the setup modal and the linked-card slot.
 
 **Expected Results:**
 
-* Step 4: the link completes, or a failure is shown; note which per brand.
-* Step 5: a linked brand shows in the linked-card slot.
+* Step 4: the link completes, or a failure is shown; note which for `<card brand>`.
+* Step 5: a linked card shows `<card brand>` in the linked-card slot.
 * Any refused brand is reported to the spec's author, not failed.
 
 <!-- trace:case id=g10.auction-bid-panel-enrollment.TC-ywm rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
@@ -955,13 +1151,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, no linked card) is on <listing_2 url>.
+* customer(signed in, no linked card) is on `<listing_34 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_2> | An open listing taking bids; this collector has no linked card |
+| listing_34 | An open listing taking bids; this collector has no linked card; bind its identity only |
+| listing_34 url | The URL of `<listing_34>`; bind its URL only |
 
 **Steps:**
 
@@ -999,15 +1196,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_11>) is on <listing_11 url>.
-* <listing_11> is in the row's state.
+* customer(signed in, card linked, no bid on `<listing_36>`) is on `<listing_36 url>`.
+* `<listing_36>` has this setup: `<listing setup>`.
 
 **Test data:**
 
-| <listing_11> state | <maximum> | Standing shown |
+| `<listing setup>` | `<maximum>` | `<standing>` | Fixture notes |
+| --- | --- | --- | --- |
+| Open, no bid, starting price `<opening price>` | HKD560 | Leading | `<maximum>`: (range: 1000–79999 minor units) |
+| Open, led by customer B with maximum `<rival maximum>`, current bid `<opening price>` | HKD560 | Outbid, with the next valid bid | `<maximum>`: (range: 1000–79999 minor units), below customer B's maximum |
+
+| Field | Value | Fixture notes |
 | --- | --- | --- |
-| Open, no bid, starting price HKD280 (range: 1000–79999 minor units) | HKD560 (range: 1000–79999 minor units) | Leading |
-| Open, led by customer B with maximum HKD840 (range: 80000–399999 minor units), current bid HKD280 (range: 1000–79999 minor units) | HKD560 (range: 1000–79999 minor units), below customer B's maximum | Outbid, with the next valid bid |
+| opening price | HKD280 | (range: 1000–79999 minor units) |
+| rival maximum | HKD840 | (range: 80000–399999 minor units) |
+
+| Field | Value |
+| --- | --- |
+| listing_36 url | The URL of `<listing_36>`; bind its URL only |
+| listing_36 | An open listing prepared with `<listing setup>`; bind its identity only |
 
 **Steps:**
 
@@ -1017,7 +1224,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The bid panel shows the row's expected standing in one answer: Leading or Outbid.
+* The bid panel shows `<standing>` in one answer: Leading or Outbid.
 * No Authorizing or other in-between state shows between the click and the standing.
 
 ---
@@ -1046,13 +1253,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* customer(signed in, card linked, no bid on `<listing_38>`) is on `<listing_38 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
+| listing_38 | An open listing taking bids; this collector has a linked card and has not bid on it; bind its identity only |
+| listing_38 url | The URL of `<listing_38>`; bind its URL only |
 
 **Steps:**
 
@@ -1084,13 +1292,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_3>) is on <listing_3 url>.
+* customer(signed in, card linked, no bid on `<listing_40>`) is on `<listing_40 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_3> | An open listing taking bids; this collector has a linked card and has not bid on it |
+| listing_40 | An open listing taking bids; this collector has a linked card and has not bid on it; bind its identity only |
+| listing_40 url | The URL of `<listing_40>`; bind its URL only |
 
 **Steps:**
 
@@ -1124,26 +1333,34 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked on an earlier listing, age already attested, no bid on <listing_4>) is on <listing_4 url>.
+* customer(signed in, card linked on an earlier listing, age already attested, no bid on `<listing_42>`) is on `<listing_42 url>`.
+* The replacement card `<replacement card number>` differs from the card already linked.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_42 | A new open listing this collector has not bid on; the card was linked on an earlier listing, and age was already attested; bind its identity only | · |
+| replacement card number | 5555 5555 5555 4444 | Mastercard, different from the card already linked |
+| expiry | 12/34 | Representative future expiry; any future expiry fits |
+| postal code | 10101 | Representative postal code; any postal code fits |
+| cvc | 123 | Representative 3-digit CVC; any 3-digit CVC fits |
+
 | Field | Value |
 | --- | --- |
-| <listing_4> | A new open listing this collector has not bid on; the card was linked on an earlier listing, and age was already attested |
-| <the other card> | 5555 5555 5555 4444, a Mastercard. Any future expiry, such as 12/34, any 3-digit CVC, and any postal code |
+| listing_42 url | The URL of `<listing_42>`; bind its URL only |
 
 **Steps:**
 
 1. Click Change on the linked card.
 2. Read age attestation.
-3. Enter <the other card> in the provider-hosted field.
+3. Enter `<replacement card number>`, expiry `<expiry>`, CVC `<cvc>` and postal code `<postal code>` in the provider-hosted field.
 4. Read the continue control.
 
 **Expected Results:**
 
 * Age attestation is already checked.
-* Continue reads "Link Card" and enables once <the other card> is entered.
+* Continue reads "Link Card" and enables once `<replacement card number>`, `<expiry>`, `<cvc>` and `<postal code>` are entered.
 
 ---
 
@@ -1171,14 +1388,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked) is on <listing_5 url>.
+* customer(signed in, card linked) is on `<listing_44 url>`.
 * This collector's bid was accepted from the bid panel on this listing.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_5> | An open listing taking bids; this collector has a linked card and has placed a bid on it |
+| listing_44 | An open listing taking bids; this collector has a linked card and has placed a bid on it; bind its identity only |
+| listing_44 url | The URL of `<listing_44>`; bind its URL only |
 
 **Steps:**
 
@@ -1209,14 +1427,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked, no bid on <listing_7>) is on <listing_7 url>.
+* customer(signed in, card linked, no bid on `<listing_46>`) is on `<listing_46 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_7> | An open listing taking bids with no other bidder; this collector has a linked card and has not bid on it |
-| <maximum> | The next valid bid shown on the bid panel |
+| listing_46 | An open listing taking bids with no other bidder; this collector has a linked card and has not bid on it; bind its identity only |
+| maximum | The next valid bid shown on the bid panel; bind its amount only |
+| listing_46 url | The URL of `<listing_46>`; bind its URL only |
 
 **Steps:**
 
@@ -1258,18 +1477,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, card linked on <the earlier listing>, no bid on <listing_6>) is on <listing_6 url>.
+* customer(signed in, card linked on `<listing_48>`, no bid on `<listing_49>`) is on `<listing_49 url>`.
+* The earlier listing has this setup: `<earlier listing setup>`, with retained activity `<earlier activity>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <listing_6> | A new open listing this collector has not bid on; the card was linked on an earlier listing |
+| listing_49 | A new open listing this collector has not bid on; the card was linked on an earlier listing; bind its identity only |
 
-| `<the earlier listing>` | What this collector did there | Change on <listing_6> |
+| `<earlier listing setup>` | `<earlier activity>` | Change on the new listing |
 | --- | --- | --- |
-| Another open listing | Linked the card through setup, placed no bid | Offered |
-| Another open listing | Linked the card through setup, then placed an accepted bid, so Change is no longer offered there | Offered |
+| Open, different from the new listing | Linked the card through setup, placed no bid | Offered |
+| Open, different from the new listing | Linked the card through setup, then placed an accepted bid, so Change is no longer offered there | Offered |
+
+| Field | Value |
+| --- | --- |
+| listing_48 | A different listing where this collector linked the card, with `<earlier listing setup>` and `<earlier activity>`; bind its identity only |
+| listing_49 url | The URL of `<listing_49>`; bind its URL only |
 
 **Steps:**
 
