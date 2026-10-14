@@ -16,6 +16,7 @@ import {
 import { navigateToStory } from "../../workbench-story-nav";
 import {
   BAR_ITEMS,
+  BAR_SUBTOTAL,
   BOOSTER_NAME,
   GUEST_BAR_ASK,
   POINTS_COLLAPSED,
@@ -94,6 +95,12 @@ function GuestBarDrawerPage() {
               emptyDescription={STORE_CART_COPY.emptyDescription}
             />
             <GuestBarSignInAsk
+              subtotal={BAR_SUBTOTAL}
+              shippingEstimate={STORE_CART_COPY.footer.shippingValue}
+              estimatedTotal={BAR_SUBTOTAL}
+              subtotalLabel={STORE_CART_COPY.footer.subtotalLabel}
+              shippingLabel={STORE_CART_COPY.footer.shippingLabel}
+              estimatedTotalLabel={STORE_CART_COPY.footer.estimatedTotalLabel}
               prompt={GUEST_BAR_ASK.prompt}
               action={GUEST_BAR_ASK.action}
               onSignIn={() => navigateToStory(SIGN_IN_STORY_ID)}
@@ -116,7 +123,7 @@ export const GuestAtTheBar: Story = {
         "To check out HK$120,000 or more, sign in to your account.",
       ),
     ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: "Check Out as Guest" }),
     ).not.toBeInTheDocument();

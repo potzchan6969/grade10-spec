@@ -6172,3 +6172,25 @@ These scenarios have no full match in the 13 R5 cases. The named durable cases a
 `SC-78` does not inherit the durable second-reopen case's result. `SC-68` does not inherit the Tax-zero case. `SC-251` does not inherit the internal route's similar-number row. `SC-107` is covered by planned task 9.10 only; it has no implemented test proof yet. These distinctions prevent false coverage claims.
 
 **Scope** - The R5 review covers 13 draft cases. The exact durable cases above match the full route and result; broad legacy `covers=` lists do not establish coverage. Planned tasks 9.9, 9.10 and 9.11 remain planned work, not test results. No implementation execution or human approval is claimed.
+
+**Pending legacy-unknown rail coverage**
+
+The approved 2026-10-14 refinement adds a historical read partition that this
+suite does not yet claim. Existing known-rail trace markers remain unchanged.
+Before the next TCS review, parent and the store owner must issue or assign
+coverage for these behaviours:
+
+- An ordinary confirmed bank-transfer order whose rail was never recorded may
+  be read as bank transfer with an unknown rail. The operator does not infer a
+  rail from current Finance configuration.
+- The order's confirmed setup, sent invoice amounts and currency, and existing
+  instruction artifact remain unchanged while the rail is unknown.
+- A future edit, first send for a confirmed order with no invoice, or reissue
+  refuses a missing or unoffered rail, accepts an explicitly supported offered
+  rail, preserves the replaced invoice, and records a rail-only choice as a
+  payment-choice change.
+
+No new scenario or case ID is created in this refinement. The existing
+known-rail cases remain proofs for known rails only; the parent/store review
+must choose an existing case to refine or issue a store-assigned case ID before
+claiming coverage.

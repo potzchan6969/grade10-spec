@@ -118,6 +118,12 @@ function CartPanel({
       ) : null}
       {atBar ? (
         <GuestBarSignInAsk
+          subtotal={subtotal}
+          shippingEstimate={STORE_CART_COPY.footer.shippingValue}
+          estimatedTotal={estimatedTotal}
+          subtotalLabel={STORE_CART_COPY.footer.subtotalLabel}
+          shippingLabel={STORE_CART_COPY.footer.shippingLabel}
+          estimatedTotalLabel={STORE_CART_COPY.footer.estimatedTotalLabel}
           prompt={GUEST_BAR_ASK.prompt}
           action={GUEST_BAR_ASK.action}
           onSignIn={onSignIn}

@@ -63,7 +63,7 @@ export type InvoicePdfBankRails = {
   fps?: { fpsId: string; beneficiary: string };
   hkLocalTransfer?: {
     bankAndCode: string;
-    beneficiary: string;
+    beneficiary?: string;
     accountNo: string;
   };
   reference: string;
@@ -254,13 +254,16 @@ function bankDetailsBlock(
     });
   }
   if (bankRails.hkLocalTransfer) {
+    const rows: [string, string][] = [
+      [copy.bankAndCodeLabel, bankRails.hkLocalTransfer.bankAndCode],
+    ];
+    if (bankRails.hkLocalTransfer.beneficiary !== undefined) {
+      rows.push([copy.beneficiaryLabel, bankRails.hkLocalTransfer.beneficiary]);
+    }
+    rows.push([copy.accountNoLabel, bankRails.hkLocalTransfer.accountNo]);
     columns.push({
       heading: copy.hkLocalTransferLabel,
-      rows: [
-        [copy.bankAndCodeLabel, bankRails.hkLocalTransfer.bankAndCode],
-        [copy.beneficiaryLabel, bankRails.hkLocalTransfer.beneficiary],
-        [copy.accountNoLabel, bankRails.hkLocalTransfer.accountNo],
-      ],
+      rows,
     });
   }
   const columnWidth = (A4_WIDTH - MARGIN * 2) / Math.max(columns.length, 1);

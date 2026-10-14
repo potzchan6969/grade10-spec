@@ -50,7 +50,7 @@ Link](/p/shared/auth/sign-in#following-the-link).
 - **Forward only** - a maximum that already stands keeps bidding, as it does
   under a suspension
 - **Checked once** - the collector verifies on `grade10.com/verification` and
-  is recognised wherever Grade10 asks: at a bid, a high-value checkout or a
+  is recognised wherever Grade10 asks: at a bid or a
   vault visit - [KYC](/p/grade10-site/account/kyc)
 - **Held, not refused** - a held bid is never sent to the auction, and the bid
   form says why and offers **Verify**, which opens the verification page and

@@ -48,11 +48,11 @@ The specs govern the rules. These rows record how they are built.
 ### Order currency and bank rail
 
 - **Spec governs** - "The winner chooses a settlement currency at order setup" and "The winner chooses a payment method with the address".
-- **Reuse the method field** - The order keeps `card` or `bank_transfer` as it does today, and gains a nullable settlement currency and a nullable bank rail that is required when the method is `bank_transfer`.
+- **Reuse the method field** - The order keeps `card` or `bank_transfer` as it does today, and gains a nullable settlement currency and a nullable bank rail. `settlement_currency` is null only before confirmation. `bank_rail` is null only before confirmation or on an ordinary historical confirmed bank order whose rail was never recorded; new confirmations and every future operator edit, send or reissue require a supported offered rail. The service transitions distinguish those states, and a nullable database check validates supported pairs without making a new rail-less write valid.
 - **Offered set is derived** - A server function takes the settlement currency, whether a card rule exists for it and which rails have bank details, and returns the offered methods. The currency-to-rails map is one table: HKD gives FPS and HK Local, USD gives HK Local and SWIFT. The view carries the result, so the block never decides.
 - **Currency change** - The setup write validates the method against the offered set for the currency in the same request. A method the new currency does not offer is refused, and the form clears it on the client from the same set.
 - **Lock** - Confirmation writes address, currency, method and rail in one transaction. The invoice send reads those values inside its own transaction, so a send cannot see a half-confirmed order.
-- **Operator edit** - An operator's edit before send, and a reissue, write currency, method and rail through the same offered-set validation as the winner's confirmation, in one transaction, and record each changed part with its value before and after on the invoice log. A currency change that leaves the held method unoffered is refused unless the same edit names another.
+- **Operator edit** - An operator's edit before send, a first send for a confirmed legacy order with no invoice, and a reissue write currency, method and rail through the same offered-set validation as the winner's confirmation, in one transaction, and record each changed part with its value before and after on the invoice log. A historical missing rail is readable as unknown but cannot be carried into any of those future writes. A currency change that leaves the held method unoffered is refused unless the same edit names another.
 - **Internal bidder's order** - The close writes the internal bidder's billing address, `settlement_currency=HKD`, `payment_method=bank_transfer` and `bank_rail=fps` in the same order insert. The winning lot and bid remain USD. The order starts in Preparing Invoice; no invoice is issued at close. The operator still quotes and sends the invoice, lets it expire and cancels the order. There is no winner or operator setup step.
 - **Legacy internal orders** - Before adding the constraints, the migration checks every existing internal order. If an old row cannot be represented truthfully as HKD and FPS without changing an already sent invoice, the migration stops before it changes any order or invoice. The migration never re-prices or edits a sent invoice. It can be rerun after the legacy rows have a valid, reviewed mapping.
 - **Rejected: a four-valued method** - It would break every reader of `card` and `bank_transfer` for no gain; the rail only matters to View Bank Details.
@@ -60,7 +60,7 @@ The specs govern the rules. These rows record how they are built.
 ### Bank details shown
 
 - **Spec governs** - "A bank transfer invoice shows how to pay".
-- **Snapshot the rail picked** - The invoice snapshot holds the details of the one rail, not all three. The dialog reads the snapshot and shows no tabs.
+- **Snapshot the rail picked** - A newly issued invoice snapshot holds the details of the one supported rail, not all three. The dialog reads the snapshot and shows no tabs. A historical ordinary order with a missing rail keeps its existing instruction artifact; no new rail or snapshot is fabricated during a read.
 - **Config stays keyed by rail** - Finance's configuration is unchanged. Finance configures the USD and HKD bank details rail by rail, and a rail is offered once its details are held (`decisions.md` Q21). Whether USD and HKD share an HK Local account is a configuration fact, not a model change; see Open Questions.
 
 ### Bid currency, schedule and ceiling
@@ -140,10 +140,10 @@ Names follow the existing schema's conventions when written.
 
 | Table | Change | Notes |
 | --- | --- | --- |
-| auction order | add `settlement_currency` text, nullable, no default; add `bank_rail` text, nullable | Null only for an ordinary winner before confirmation. Checks allow only USD or HKD; require FPS or HK Local for HKD bank transfer, HK Local or SWIFT for USD bank transfer, and no rail for card. An internal order must be HKD, `bank_transfer` and FPS. Preflight existing internal rows before adding validated checks; abort without updates if a sent invoice cannot be preserved |
+| auction order | add `settlement_currency` text, nullable, no default; add `bank_rail` text, nullable | `settlement_currency` is null only before confirmation. `bank_rail` is null before confirmation or for an ordinary historical confirmed bank order whose rail was never recorded; new confirmation and future edit, first send or reissue transitions require a supported rail. Checks allow only USD or HKD; require FPS or HK Local for HKD bank transfer, HK Local or SWIFT for USD bank transfer, and no rail for card. An internal order must be HKD, `bank_transfer` and FPS. Preflight existing internal rows before adding validated checks; abort without updates if a sent invoice cannot be preserved |
 | invoice | add `settlement_currency` text, not null | Backfilled from each invoice's existing currency. No sent invoice amount, currency, line or bank snapshot is rewritten |
 | invoice line | add `usd_minor` bigint, nullable; keep the settlement amount column | Null on a card fee line. Equal to the amount on a USD invoice |
-| invoice bank snapshot | hold one rail | Existing rows keep three; new rows hold the picked rail |
+| invoice bank snapshot | hold one rail | Existing rows keep their stored details, including any historical artifact. New rows hold the picked supported rail; a missing historical rail does not cause a new snapshot |
 | listing, bid, auto-bid maximum | keep `currency`; add a check holding it to `USD` | Applied after the overwrite |
 | payment settings | premium minimum becomes one `premium_minimum_usd_minor` bigint, not null, default 0; card rule rows keyed by currency hold `USD` and `HKD` | HKD and JPY minimums and the JPY rule are deleted |
 

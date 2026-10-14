@@ -142,7 +142,7 @@ const BAR_SUBTOTAL = "HK$129,200.00";
 /** Draft words for the sign-in ask that replaces the guest button at the bar. */
 const GUEST_BAR_ASK = {
   prompt: "To check out HK$120,000 or more, sign in to your account.",
-  action: "Sign in",
+  action: "Sign In",
 };
 
 /** Draft words for the review that cannot finish; the drawer block has no copy for it yet. */

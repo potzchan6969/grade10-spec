@@ -35,10 +35,11 @@ localized Retry without replacing the address
 🚧 **Empty account** - a collector with no purchases gets a shopping path back
 to the Store
 
-🚧 **Guest orders** - every guest order placed under an email is listed
-automatically once a sign-in proves that email; one still in progress earns
-points when it completes, one already Completed earns nothing -
-[Checkout](/p/grade10-site/store/checkout#guest-checkout)
+**Guest orders** - a paid guest order joins the account whose proven email
+it was placed under, at payment when that account exists and otherwise at
+that account's next sign-in, and is listed from then on. One that joins before
+it completes earns points when it completes; one that joins after earns
+nothing - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 
 ## Designs
 
@@ -51,5 +52,6 @@ points when it completes, one already Completed earns nothing -
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner: one still in progress earns points when it completes, one already Completed earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
+| Guest orders after sign-in | Decided | Every paid guest order placed under an email appears in the account automatically once a sign-in proves that email — the way Shopify customer accounts and WooCommerce already list a guest's orders under a proven email, and the reason the member is the order's owner rather than a recipient of a saved link. Linking gives the order an owner: one still in progress earns points when it completes, one already complete earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13), which itself superseded the first email-match row (2026-10-12). | Product |
+| Join at payment | Decided | A guest order placed under the proven email of an existing account joins that account at payment, so it is listed without waiting for a sign-in. Decided 2026-10-13, the owner's answer. | Product |
 :::

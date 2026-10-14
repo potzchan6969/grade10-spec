@@ -94,9 +94,9 @@ tracker and delivery proof the order keeps afterwards.
   - Payment proof: one upload of 1 to 3 files (1 required) in Submit Payment Proof, behind a confirm step; proof fields and upload only (no amount or reference chrome)
   - Payment Verifying: the deadline stops, Submit Payment Proof, View Bank Details and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
-  - View Bank Details: Order summary secondary control opens a dialog with amount due (no Copy) and three pill tabs defaulting to FPS; each tab shows that rail’s fields then payment reference as a detail row (no Copy) with memo warning — FPS (ID, account name, QR), HK Local (bank name, bank code, branch code, full account number including bank and branch code), SWIFT (beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number or IBAN, then payment reference, then OUR charges note)
+  - View Bank Details: Order summary secondary control opens a dialog with amount due (no Copy) and the one selected rail; it has no tabs or default rail. Each selected rail shows its fields then payment reference as a detail row (no Copy) with memo warning - FPS (ID, account name, QR), HK Local (bank name, bank code, branch code, full account number including bank and branch code), SWIFT (beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number or IBAN, then payment reference, then OUR charges note). An ordinary historical confirmed bank order with no recorded rail reads as unknown and keeps any existing instruction artifact
   - Two entry points: Submit Payment Proof opens the proof dialog; View Bank Details opens the rails dialog; both hide when Pay is hidden
-  - Rail picked only: the invoice's bank details open on the rail the winner picked and name no other
+  - Rail picked only: a newly issued invoice's bank details open on the rail the winner picked and name no other; an ordinary historical confirmed bank order with no recorded rail remains explicitly unknown
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
   - Receipt payment breakdown: each receipt identifies the invoice total, prior payments, the current payment and remaining amount
@@ -159,7 +159,7 @@ converts each USD line at a fixed rate and rounds it up".
 | Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
-| Bank rail | On a bank transfer invoice only: FPS, HK Local or International via SWIFT, the rail the winner picked. It decides the bank details the winner reads, per "A bank transfer invoice shows how to pay" |
+| Bank rail | On a newly issued bank transfer invoice only: FPS, HK Local or International via SWIFT, the supported rail the winner picked. It decides the bank details the winner reads, per "A bank transfer invoice shows how to pay" |
 | Winning bid | The accepted bid that won the lot, excluding every other component. In HKD it is the converted line, and the USD bid is not printed |
 | Buyer's premium | The applicable fee. This capability fixes no rate |
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
@@ -187,6 +187,13 @@ rule's fixed amount divided by one less its percentage, SHALL round that total
 up to the next minor unit, and SHALL take the fee as the difference between
 the order total and the subtotal. Grade10 SHALL NOT read the payment
 provider's fees.
+
+A newly issued bank transfer invoice SHALL carry one supported rail offered for
+its settlement currency. An ordinary historical confirmed bank order whose
+stored rail is absent SHALL remain readable as bank transfer with an unknown
+rail. Grade10 SHALL NOT infer a rail from current Finance settings. Existing
+sent invoice amounts, currency, confirmed setup, bank snapshot and document
+artifacts SHALL remain unchanged.
 
 The fee SHALL be fixed on the invoice once sent. A later change to the card
 rule SHALL NOT move it; only a reissue SHALL price it again. No settlement
@@ -1528,6 +1535,14 @@ winner, per "The delivery address locks when the invoice is sent". An operator
 MAY change either before the invoice is sent, and on a reissue after, per
 `grade10-admin/auction/post-sale`.
 
+**Historical confirmed bank method** - An ordinary historical order that is
+already confirmed for bank transfer but has no recorded rail is a legacy read
+state, distinct from an unselected setup choice. Winner Order SHALL show the
+bank method with an unknown rail and SHALL NOT choose a default. New
+confirmation, an operator edit, a first send for a confirmed order with no
+invoice, or a reissue SHALL require a supported offered rail. Internal or house
+orders receive no exception to their settled HKD and FPS rule.
+
 Scenarios `winner-order-SC-92` and `winner-order-SC-226` keep their titles
 with their ids. The titles are historical: each rail is offered or withheld on
 its own bank details, and card on its own rule.
@@ -1738,6 +1753,14 @@ HSBC Hong Kong samples.
 | FPS | FPS ID, account name, scannable FPS QR |
 | HK Local | Bank name, bank code, branch code, full account number including bank and branch code |
 | International via SWIFT | Beneficiary name, beneficiary address, bank name, bank address (main branch address, city, country), SWIFT/BIC, full account number or IBAN; after the payment reference, a note to choose OUR for transfer fees so Grade10 receives the full order total |
+
+**Historical unknown rail** - For an ordinary historical order whose confirmed
+bank method has no recorded rail, Winner Order SHALL show bank transfer with an
+unknown rail and SHALL show no selected rail or current Finance instructions.
+It SHALL preserve any stored or sent instruction artifact. If no artifact is
+available, instructions SHALL read as unavailable. A newly confirmed or newly
+issued bank transfer SHALL use the supported picked rail and show only that
+rail.
 
 **Submit Payment Proof** - Submit Payment Proof SHALL be a separate dialog
 titled Submit Payment Proof. It SHALL NOT show amount due, transfer reference,
@@ -3453,6 +3476,11 @@ and every order letter that states an amount owed or paid SHALL carry the
 settlement currency. A winning bid on the lot card SHALL stay in USD. Payment
 method availability SHALL follow the settlement currency, per "The winner
 chooses a payment method with the address".
+
+`settlement_currency: null` is allowed only before confirmation. A missing
+`bank_rail` on an ordinary historical confirmed bank order is a separate
+legacy fact and SHALL NOT be treated as a missing currency or filled with a
+default rail.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-o92 rev=1 -->
 #### Scenario: winner-order-SC-278 - Setup offers USD and HKD with neither picked

@@ -16,6 +16,7 @@ import { DefaultFonts } from "@/components/email/font-default";
 import { grade10Theme } from "@/components/email/theme-grade10";
 
 export type Grade10EmailShellProps = {
+  lang?: string;
   preheader: string;
   /** Absolute or /static URL for the brand mark. Defaults to the Grade10 mono logo. */
   logoUrl?: string;
@@ -38,13 +39,14 @@ const theme = grade10Theme;
  */
 export function Grade10EmailShell({
   preheader,
+  lang = "en",
   logoUrl = GRADE10_LOGO_STATIC,
   logoAlt = "Grade10",
   homeUrl = GRADE10_HOME_URL,
   children,
 }: Grade10EmailShellProps) {
   return (
-    <Html lang="en">
+    <Html lang={lang}>
       <Head>
         <DefaultFonts />
       </Head>

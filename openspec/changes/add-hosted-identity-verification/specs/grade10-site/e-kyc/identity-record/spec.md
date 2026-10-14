@@ -11,7 +11,7 @@ A **consumer** is a Grade10 service that asks the store about a person: one
 that records identity checks and binds them to its own cases, as the vault
 does, or one that only asks whether a person is verified, as the auction does.
 The store does both: it raises checks for an account and binds them, and asks
-at a checkout. A **person** is the account
+before a bid. A **person** is the account
 `shared/auth/users` identifies, or, where a consumer's case names no account,
 the case itself — and a record made for such a case is reusable only by it. A date of birth and a document expiry are
 calendar days as `shared/dates-and-times` defines them, judged in the

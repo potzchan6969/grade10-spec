@@ -234,6 +234,12 @@ moment the winner changes it.
   currency picked; the USD rule is in place before launch
 - 🚧 **Bank rails** — HKD offers FPS and HK Local; USD offers HK Local and
   International via SWIFT. The winner selects one rail as the bank method
+- 🚧 **Historical unknown rail** - An ordinary order already confirmed for bank
+  transfer whose rail was never recorded remains readable as bank transfer with
+  an unknown rail. Grade10 does not guess from current Finance settings, and
+  keeps the confirmed setup, sent invoice facts and existing instruction
+  artifact. A new confirmation, future edit, first send for a confirmed order
+  with no invoice, or reissue requires a currently offered rail
 - 🚧 **One selected rail** — the invoice snapshots and shows only the selected
   rail. View Bank Details opens a dialog for that same rail; it has no tabs or
   copy controls
@@ -382,14 +388,17 @@ failure, and locks the form while work is in progress.
 
 - **Two entry points** — while the invoice is pending, Order summary keeps
   **Submit Payment Proof** as the primary control and places **View Bank
-  Details** under it; View Bank Details opens bank rails, Submit Payment
-  Proof opens the proof dialog
+  Details** under it; View Bank Details opens the selected rail, or the
+  historical unknown state, and Submit Payment Proof opens the proof dialog
 - **View Bank Details** — shows amount due and the one selected rail's detail
   rows with its payment reference and a warning to enter it in the bank memo.
   FPS shows the FPS ID, account name and QR; HK Local shows bank name, bank
   code, branch code and full account number; International via SWIFT shows
   beneficiary name and address, bank name and address, SWIFT/BIC, and full
-  account number or IBAN. The dialog has no tabs or copy controls
+  account number or IBAN. The dialog has no tabs or copy controls. An ordinary
+  historical order with no recorded rail reads the rail as unknown and keeps
+  any stored instruction artifact; Grade10 does not substitute current Finance
+  details
 
 #### Bank Transfer Proof
 

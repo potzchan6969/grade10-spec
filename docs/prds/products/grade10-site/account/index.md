@@ -9,8 +9,7 @@ and how sign-in and sign-out work, the same way across every brand.
 
 - **Profile** — what a collector shows about themselves, and the address they
   signed in with ([Profile](/p/grade10-site/account/profile))
-- **KYC** — the verified standing that clears a high-value order, a
-  high-value bid, a request from Grade10, or a vault visit, and the
+- **KYC** — the verified standing that clears a high-value bid, a request from Grade10, or a vault visit, and the
   verification page ([KYC](/p/grade10-site/account/kyc))
 - **Business verification** - the business behind an account, verified when
   Grade10 asks ([Business Verification](/p/grade10-site/account/business-verification))

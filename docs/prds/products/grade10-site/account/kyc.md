@@ -5,18 +5,16 @@ order: 2
 ---
 
 A collector verifies who they are once, from their own account, and is
-recognised wherever Grade10 asks: at a checkout or a bid at or above the bar,
+recognised wherever Grade10 asks: at a bid at or above the bar,
 when Grade10 asks them to verify, and at a vault visit.
 
 ## Values
 
-A bar is the amount at or above which an order or a bid needs a verified
-person. Each currency has its own fixed bar, with no exchange rate between
-them.
+A bar is the amount at or above which a bid needs a verified person. Each
+currency has its own fixed bar, with no exchange rate between them.
 
 | Rule | Value |
 | --- | --- |
-| Order | **HKD 120,000** of goods |
 | Bid on an HKD lot | **HKD 120,000** |
 | Bid on a USD lot | ❓ **USD 15,000** - Compliance confirms |
 | Bid on a JPY lot | ❓ **JPY 2,300,000** - Compliance confirms |
@@ -66,8 +64,7 @@ reason, from the account's Identity card - [Users](/p/grade10-admin/console/user
   is held at the storefront, at any amount and in any currency
 - **Forward only** - a maximum that already stands keeps bidding, as it does
   under a suspension
-- **The store** - a checkout keeps only its own bar; a request holds nothing
-  there
+- **The store** - a checkout asks nothing about identity, request or not
 - **A business request** - also requires the person acting for the business
   to be verified
 - **What the collector reads** - that Grade10 asked them to verify, never the
@@ -101,8 +98,7 @@ and the hosted check's states - [KYC Service](/p/grade10-site/account/kyc-servic
   the case, the gate, the requests
 - **The page** - `@grade10/store-frontend/identity`; words in the `identity`
   and `verification` catalogues
-- **The gates** - `checkout.createCheckout`, `createCheckoutWithEmail` and
-  `auction.placeBid` in the store's tRPC routers, on `identityGates` from
+- **The gate** - `auction.placeBid` in the store's tRPC routers, on `identityGates` from
   `@grade10/app-env`
 - **The switch** - the `identity` gate in `@grade10/app-env`
 - **The service** - [KYC Service](/p/grade10-site/account/kyc-service)
@@ -115,11 +111,11 @@ behind it has its own decisions - [KYC Service](/p/grade10-site/account/kyc-serv
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Collector | Buying or bidding above the bar | Verifies once, from the account, and is not asked at the next high-value purchase. |
+| Collector | Bidding above the bar | Verifies once, from the account, and is not asked at the next high-value bid. |
 | Collector | Asked by Grade10 to verify | Sees what is asked and where, verifies, and bids again. |
 | Collector | Document lapsed | Finds out at home, not after travelling. |
 | Admin | An account needs a closer look | Requires a verification with a reason, and the account's bids wait until it passes. |
-| Compliance | A sale above the bar, or a signed agreement years later | The account holds a verified, screened identity with consent on record; the evidence is readable without a vendor. |
+| Compliance | A bid above the bar, or a signed agreement years later | The account holds a verified, screened identity with consent on record; the evidence is readable without a vendor. |
 
 **Not in scope.** Verifying a guest. Any identity field on the site. Inviting
 by email from the store. Telling the collector why they were asked.
@@ -131,7 +127,7 @@ service.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Verified above the bar | Share of orders and bids at or above the bar placed by a verified collector. | Product |
+| Verified above the bar | Share of bids at or above the bar placed by a verified collector. | Product |
 | Requests met | Share of requests met, and the median days from request to met. | Compliance |
 | Recognised | Share of verifications reused rather than repeated. | Product |
 | Drop-off | Share of checks started that never decide. | Product |
@@ -141,14 +137,14 @@ service.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The bar | Decided | HKD 120,000 on an order's goods and on a bid on an HKD lot - the value at which a Hong Kong dealer in high-value goods has to know its customer. A bid on a lot in another currency meets that currency's own fixed bar, with no exchange rate, decided 2026-10-13. | Product |
+| The bar | Decided | HKD 120,000 on a bid on an HKD lot - the value at which a Hong Kong dealer in high-value goods has to know its customer. A bid on a lot in another currency meets that currency's own fixed bar, with no exchange rate, decided 2026-10-13. | Product |
 | USD and JPY bars | ❓ Open | USD 15,000 and JPY 2,300,000 proposed. | Compliance |
 | Requests | Decided | An admin may require any account to verify its person or its business, with a reason; until met, every new or raised maximum is held at any amount; a business request requires the person too; the collector never reads the reason; decided 2026-10-13. | Owner |
 | Rules that ask | ❓ Open | Which facts raise a request on their own. | Product |
 | Verification page | Decided | Verification moves to its own page, `grade10.com/verification`, with the identity card, the business card and the requests; a held bid links there and returns to the lot, decided 2026-10-13. | Owner |
 | Where identity is off | Decided | No request can be made and none is offered; the page shows nothing about identity. | Owner |
-| Where the gate stands | Decided | At the storefront, before an order is written or the auction hears of a bid. | Engineering |
-| Guests | Decided | Above the bar a guest signs in; a standing belongs to an account. | Product |
+| Where the gate stands | Decided | At the storefront, before the auction hears of a bid. | Engineering |
+| Checkout bar | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000; only a bid asks. | Product |
 | A gate reads a standing | Decided | A product that only asks whether a person is verified reads a standing and never the record; it reads one only when the bar or a request applies. | Product |
 | Screening | Decided | Every hosted check is screened against watchlists and politically exposed people; a match waits for the provider's reviewer, decided 2026-10-13. | Owner |
 | Counter screening | ❓ Open | Whether a counter check is screened before production. | Compliance |

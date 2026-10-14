@@ -445,6 +445,7 @@ function SettlementChoices({
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <RadioList
+        aria-label={settlementCurrency.label}
         label={settlementCurrency.label}
         onValueChange={(value) => {
           if (value === "USD" || value === "HKD") {
@@ -465,6 +466,7 @@ function SettlementChoices({
       {paymentChoices && selectedCurrency ? (
         choices.length > 0 ? (
           <RadioList
+            aria-label={paymentChoices.label}
             label={paymentChoices.label}
             onValueChange={(value) => {
               const choice = choices.find((item) => item.value === value);

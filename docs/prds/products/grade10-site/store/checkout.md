@@ -63,15 +63,11 @@ In Your Orders.
 Grade10 Your Orders link, and the staging walk proves the matching purchase
 appears after return.
 
-- **Where it starts** - the live review, the price check and the
-  verification gate all run in the cart drawer; there is no `/checkout` page -
+- **Where it starts** - the live review and the price check run in the
+  cart drawer; there is no `/checkout` page -
   [Cart Drawer](/p/grade10-site/store/cart)
 
 - **Pay** - the drawer's Proceed to Checkout button
-- **The bar** — goods worth **HKD 120,000** or more: pressing Proceed to
-  Checkout shows the verify message, with a link to the verification page;
-  no checkout session is created. A verified member, or a basket under the
-  bar, proceeds. They verify on [their verification page](/p/grade10-site/account/kyc)
 - **The cart** - Kept while the collector is at Shopify
 - **Shipping rate** - Shopify asks the store's carrier rule; a served destination gets the same rate the store preview shows, and any other gets none
 
@@ -81,43 +77,41 @@ appears after return.
 ## Guest Checkout
 
 A collector with no session checks out the cart this browser holds. Shopify's
-page asks for the email address, and the order belongs to no account until a
-sign-in proves its email.
+page asks for the email address, and the order belongs to no account until it
+joins one under that email.
 
-- 🚧 **A public code** - the guest may type one or pick one in the drawer;
+- **A public code** - the guest may type one or pick one in the drawer;
   a member's own codes and rewards are never shown to a guest -
   [Discounts](/p/grade10-site/store/discounts#public-codes)
-- 🚧 **Gateway** - the signed-out drawer's primary button is Check out as
+- **Gateway** - the signed-out drawer's primary button is Check out as
   guest; under it a quiet Sign in link for points and rewards, and no
   extra step -
   [Cart Drawer](/p/grade10-site/store/cart#checkout)
 - **Email on Shopify's page** - the address the guest types there is kept
   with the order once it is paid
 - **No account** - paying makes no account, now or later
-- 🚧 **Points after sign-in** - a guest order earns nothing while it has no
-  owner; one a proven sign-in links before it is Completed earns points when
-  it completes, on the usual basis and the member's tier at completion. One
-  already Completed when linked earns nothing -
-  [Points](/p/grade10-site/loyalty/points) ·
-  [Order Status](/p/grade10-site/commerce/order-status)
-- **The bar** - goods worth **HKD 120,000** or more ask the guest to sign in;
-  no checkout session is created
+- **Joining an account** - a guest order joins the account whose proven
+  email it was placed under: at payment when that account exists, otherwise
+  at that account's next sign-in. Every other guest order under that email
+  joins with it
+- **Points after joining** - a guest order earns only if it joined an
+  account before it completed; it then earns on completion like any order,
+  on the usual basis and the member's tier at completion. One that joins
+  after it completed earns nothing -
+  [Points](/p/grade10-site/loyalty/points#rules)
 - **The cart** - this browser's cart is emptied when the guest leaves for
   Shopify's page; the invoice holds the basket
-- 🚧 **Post-checkout account** - the order page after payment asks the
-  buyer to sign in to add the order to an account; signing in with the
-  order's email adds the order — and every other guest order under that
-  email — to the account -
+- **Post-checkout account** - the order page after payment asks the
+  buyer to sign in to add the order to an account; a sign-in that proves
+  the order's email adds it -
   [Order Detail](/p/grade10-site/store/order-detail#back-from-checkout)
-- 🚧 **Order link** - every order's emails, guest and member, carry the
+- **Order link** - every web order's emails, guest and member, carry the
   private link; Grade10 sends no store email of its own -
   [Order Detail](/p/grade10-site/store/order-detail#order-link)
 
 ## Designs
 
 ::story{id="store-cart-screens-cart-drawer-guest--guest" title="The signed-out drawer leads with guest checkout"}
-
-::story{id="store-cart-screens-cart-drawer-guest--guest-at-the-bar" title="A guest at the bar, asked to sign in"}
 
 ::story{id="store-order-detail-screens-order-link--just-paid" title="Back from checkout, the account ask as a toast"}
 
@@ -126,18 +120,15 @@ sign-in proves its email.
 - **The order machine, recovery, refunds** — [commerce](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
-:::detail{title="Test page" for="engineer"}
-- **Test page** — under an **Overrider** nav heading, development and staging only; drives the real checkout procedures against a real shop, as the signed-in buyer or with a typed email
-:::
-
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Guest checkout | Decided | A collector with no session checks out the browser's cart. Shopify's page takes the email; the order belongs to no account until a sign-in proves its email — paying makes none. Supersedes members-only checkout. | Product |
+| Guest checkout | Decided | A collector with no session checks out the browser's cart. Shopify's page takes the email; the order belongs to no account until it joins one under that email — paying makes none. Supersedes members-only checkout. | Product |
 | Guest tender | Decided | A guest may type or pick a public code in the drawer; the order earns nothing while it has no owner. Decided 2026-10-13; supersedes the basket-only rule (2026-10-12). | Product |
 | Guest order link | Decided | Every order now carries a private link to its page, guest and member alike, and every order email's View order button shows it. The link carries its secret and needs no account — see [Order Detail](/p/grade10-site/store/order-detail#order-link). One email, from Shopify; rejected a Grade10 email of its own, which repeated the link and needed the order email read. Decided 2026-10-12; widened 2026-10-13. | Product |
 | Gateway in the footer | Decided | The signed-out drawer's primary button is Check Out as Guest, with a quiet sign-in link under it. Chosen over a choice step after Checkout, which adds a tap for every guest. Decided 2026-10-13. | Product |
-| Guest order linking | Decided | Every paid guest order placed under an email joins the member's account automatically once a sign-in proves that email — a magic link to it or a Google account under it — on any sign-in, including from the prompt. The order gets an owner; one still in progress earns points when it completes, one already Completed earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13). | Product |
+| Guest order linking | Decided | Every paid guest order placed under an email joins the member's account automatically once a sign-in proves that email — a magic link to it or a Google account under it — on any sign-in, including from the prompt. The order gets an owner; one still in progress earns points when it completes, one already complete earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13). | Product |
+| Join at payment | Decided | A guest order placed under the proven email of an existing account joins that account at payment, without waiting for a sign-in. Decided 2026-10-13, the owner's answer. | Product |
 | Prompt location | Decided | The account prompt lives on the Grade10 order page. Rejected a Shopify Thank-you extension, which lives outside the store and limits Google sign-in. Decided 2026-10-13. | Product |
 | Existing-account banner | Decided | Dropped from scope 2026-10-13. Shopify's page holds the email before payment and a lookup there needs an extension. | Product |
 | Current decision | Decided | Cart open provides the early review; Pay makes its own current decision, including when it resumes an invoice. An earlier drawer quote never replaces that decision. | Product |
@@ -147,8 +138,7 @@ sign-in proves its email.
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |
-| Verification gate | Decided | When the gross-goods gate answers Proceed to Checkout, the drawer shows the threshold message, with a link to the verification page. The identity check itself runs only on the verification page. | Product |
-| The bar's basis | Decided | Checked against gross goods, not the total after code or points — unchanged from the existing checkout resolution's own goods figure. | Engineering |
+| Verification gate | Decided | Dropped 2026-10-13. Grade10 never required a sign-in or a verified identity for a checkout at HKD 120,000, for a member or a guest. | Product |
 :::
 
 :::detail{title="Test cases" for="qa"}

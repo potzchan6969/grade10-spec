@@ -4,7 +4,7 @@
 
 A collector verifies their identity from their own account on the Grade10
 site, on their own device, and is recognised as verified wherever Grade10
-asks: at a checkout or a bid at or above a bar, at a bid when an admin
+asks: at a bid at or above a bar, at a bid when an admin
 requires it, and at a vault visit. An account Grade10 asks to verify its business does so
 through the same page. The verification page says where they stand and never
 who they are.
@@ -14,14 +14,13 @@ asked — verified, expired, or unverified — as `grade10-site/e-kyc/identity-r
 defines it. A **hosted check** is the provider's check as
 `grade10-site/e-kyc/hosted-verification` defines it; here the store raises one
 for an account, where the vault raises one for a case. The **bar** is the value
-at or above which an order's goods or a bid asks for a verified person, in
-minor units of one currency. The order bar is stated in the store's currency;
-the bid bar is stated once for each currency a lot may be priced in, with no
-exchange rate between them. Grade10's are:
+at or above which a bid asks for a verified person, in minor units of one
+currency, stated once for each currency a lot may be priced in, with no
+exchange rate between them. A checkout asks for no verified person at any
+value. Grade10's are:
 
 | Bar | Value |
 | --- | --- |
-| Order goods | 12,000,000 HKD minor units |
 | Bid on an HKD lot | 12,000,000 HKD minor units |
 | Bid on a USD lot | 1,500,000 USD minor units |
 | Bid on a JPY lot | 2,300,000 JPY minor units |
@@ -37,7 +36,7 @@ page** is the collector's own page at `/verification`.
 
 - Where the collector stands
   - Standing: verified until when, expired, being reviewed, or not yet, read from the identity store the day it is shown
-  - The bars: the order value, and the bid value for each lot currency, at which a verified identity is asked for
+  - The bars: the bid value for each lot currency, at which a verified identity is asked for
   - Requests: what Grade10 asked the account to verify, never why
 - Verifying from the account
   - Consent first: nothing reaches the provider until the collector has agreed on the page
@@ -71,7 +70,7 @@ off, the page SHALL show nothing about identity.
 | Valid until | The day the document behind a verified standing stops being valid; absent where it never expires or where the collector is not verified |
 | The check's progress | Where the latest check the store raised for this account stands, in the states below; absent where none was raised |
 | Being reviewed | Whether a reviewer at the provider holds that check |
-| The bars | The order bar, and the bid bar for each lot currency |
+| The bars | The bid bar for each lot currency |
 | Requests | Each unmet request's subject, in the words: We asked you to verify your identity. or We asked you to verify your business.; never its reason |
 | Business | The business card, under "The business card reads where the business stands" |
 
@@ -98,8 +97,8 @@ off, the page SHALL show nothing about identity.
 
 - **GIVEN** a collector whose standing is `unverified`
 - **WHEN** they open their verification page
-- **THEN** it says they are not verified, names the order bar and the bid
-  bar for each lot currency, and offers to verify
+- **THEN** it says they are not verified, names the bid bar for each lot
+  currency, and offers to verify
 
 <!-- trace:scenario id=g10.store-account-identity.SC-zww rev=2 -->
 #### Scenario: grade10-site-store-account-identity-SC-03 - The verification page carries no identity field
@@ -116,7 +115,7 @@ off, the page SHALL show nothing about identity.
 
 - **GIVEN** a brand whose store is wired to no identity store
 - **WHEN** a collector opens their verification page
-- **THEN** nothing about identity is shown, no checkout or bid is held, and
+- **THEN** nothing about identity is shown, no bid is held, and
   no request can be made of the account
 
 ### Requirement: A collector verifies from their account, on their explicit consent
@@ -163,7 +162,7 @@ able to try again and SHALL be told the counter is another way.
 - **WHEN** they tick their agreement, press verify, complete the provider's
   check with a valid document, and the verdict is applied
 - **THEN** the check records when they agreed, their verification page reads
-  `verified`, and a checkout or a bid above the bar proceeds for them
+  `verified`, and a bid above the bar proceeds for them
 
 <!-- trace:scenario id=g10.store-account-identity.SC-f7d rev=2 -->
 #### Scenario: grade10-site-store-account-identity-SC-07 - A collector verified at a vault visit is recognised without a ceremony

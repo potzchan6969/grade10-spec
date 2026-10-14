@@ -20,8 +20,8 @@ same human**: a product binds the check another product already recorded.
   ([Identity Check](/p/grade10-site/vault/identity-check))
 - **Who reads it** - vault staff, on the case, the name and the document
   image; an operator, on the account's Identity card, the standings and the
-  findings; the collector, a standing and never a name; a checkout or a bid,
-  the same standing before it goes through
+  findings; the collector, a standing and never a name; a bid, the same
+  standing before it goes through
 - **Walled** - reached only by Grade10's own services over a binding, never a
   browser ([account data](/platform/account-data))
 - **One per brand** - a collector verified on grade10.com is unknown to ZZZ,
