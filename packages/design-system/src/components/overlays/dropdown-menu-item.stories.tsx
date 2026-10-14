@@ -1,6 +1,6 @@
 import { Check, Star } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { DropdownMenu } from "./dropdown-menu";
 import { DropdownMenuItem } from "./dropdown-menu-item";
 
@@ -44,3 +44,12 @@ export const Selected: Story = {
   },
 };
 export const Disabled: Story = { args: { disabled: true } };
+export const Pending: Story = {
+  args: { pending: true, onClick: fn() },
+  play: async ({ canvasElement, args }) => {
+    const item = within(canvasElement).getByRole("menuitem", { name: "Item" });
+    expect(item).toHaveAttribute("aria-busy", "true");
+    await userEvent.click(item);
+    expect(args.onClick).not.toHaveBeenCalled();
+  },
+};

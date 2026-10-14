@@ -103,3 +103,25 @@ export const WithoutEmail: Story = {
     ).toBeNull();
   },
 };
+
+/**
+ * Sign Out is running: its item spins and the menu stays open, a second
+ * press does nothing, and the Account button spins too.
+ */
+export const SigningOut: Story = {
+  name: "Signing out",
+  args: { onMembership: undefined, signOutPending: true },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Account" })).toHaveAttribute(
+      "aria-busy",
+      "true",
+    );
+    const body = within(canvasElement.ownerDocument.body);
+    const signOut = await body.findByRole("menuitem", { name: "Sign Out" });
+    expect(signOut).toHaveAttribute("aria-busy", "true");
+    await userEvent.click(signOut);
+    expect(args.onSignOut).not.toHaveBeenCalled();
+    expect(body.getByRole("menuitem", { name: "Sign Out" })).toBeVisible();
+  },
+};
