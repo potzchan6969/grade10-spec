@@ -10,8 +10,7 @@ import {
 } from "@grade10/ui";
 import { type ReactNode, useEffect, useRef } from "react";
 import { STORE_CART_COPY } from "../store-content";
-import { GUEST_BAR_ASK, GUEST_FOOTER_COPY } from "./cart-content";
-import { GuestBarSignInAsk } from "./guest-bar-ask";
+import { GUEST_FOOTER_COPY } from "./cart-content";
 
 /**
  * The cart drawer's header, rows and footer without the drawer, for a card in
@@ -41,8 +40,6 @@ type CartPanelProps = {
   promoState?: PromoState;
   /** A guest's panel: guest checkout copy, the quiet sign-in line, no points. */
   guest?: boolean;
-  /** Goods at the HKD 120,000 bar: the sign-in ask stands for the footer. */
-  atBar?: boolean;
   onSignIn?: () => void;
   notice?: CartPanelNotice;
 };
@@ -73,7 +70,6 @@ function CartPanel({
   pointsState = POINTS_COLLAPSED,
   promoState = { status: "collapsed" },
   guest = false,
-  atBar = false,
   onSignIn = noop,
   notice,
 }: CartPanelProps) {
@@ -116,37 +112,23 @@ function CartPanel({
           <CartPanelNoticeBar {...notice} />
         </div>
       ) : null}
-      {atBar ? (
-        <GuestBarSignInAsk
-          subtotal={subtotal}
-          shippingEstimate={STORE_CART_COPY.footer.shippingValue}
-          estimatedTotal={estimatedTotal}
-          subtotalLabel={STORE_CART_COPY.footer.subtotalLabel}
-          shippingLabel={STORE_CART_COPY.footer.shippingLabel}
-          estimatedTotalLabel={STORE_CART_COPY.footer.estimatedTotalLabel}
-          prompt={GUEST_BAR_ASK.prompt}
-          action={GUEST_BAR_ASK.action}
-          onSignIn={onSignIn}
-        />
-      ) : (
-        <CartDrawerFooter
-          subtotal={subtotal}
-          estimatedTotal={estimatedTotal}
-          shippingEstimate={STORE_CART_COPY.footer.shippingValue}
-          loading={loading}
-          checkoutDisabled={checkoutDisabled}
-          promoState={promoState}
-          pointsState={guest ? null : pointsState}
-          pointsBalanceLabel={POINTS_BALANCE_LABEL}
-          copy={guest ? GUEST_FOOTER_COPY : STORE_CART_COPY.footer}
-          onPromoStateChange={noop}
-          onPointsStateChange={noop}
-          onApplyPoints={() => false}
-          onUseMaxPoints={noop}
-          onRemovePoints={noop}
-          onSignIn={guest ? onSignIn : undefined}
-        />
-      )}
+      <CartDrawerFooter
+        subtotal={subtotal}
+        estimatedTotal={estimatedTotal}
+        shippingEstimate={STORE_CART_COPY.footer.shippingValue}
+        loading={loading}
+        checkoutDisabled={checkoutDisabled}
+        promoState={promoState}
+        pointsState={guest ? null : pointsState}
+        pointsBalanceLabel={POINTS_BALANCE_LABEL}
+        copy={guest ? GUEST_FOOTER_COPY : STORE_CART_COPY.footer}
+        onPromoStateChange={noop}
+        onPointsStateChange={noop}
+        onApplyPoints={() => false}
+        onUseMaxPoints={noop}
+        onRemovePoints={noop}
+        onSignIn={guest ? onSignIn : undefined}
+      />
     </div>
   );
 }
