@@ -102,14 +102,18 @@
 
 **Starting state:**
 
-- No additional setup is named by these cases.
+- The collector is viewing the auction catalogue, which lists `<published_listing>`.
+- The catalogue holds `<published_listing>`.
 
 **Shared test data:**
 
-| Field | Value |
-| --- | --- |
-| a published lot | The same published listing as `<published_listing>`; legacy binding retained for the automated sitemap case |
-| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US5-TC1 | published_listing | A published listing available in the auction catalogue; bind its public title only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US5-TC2 | published_listing | A published listing in the catalogue; bind its public title only |
 
 ### Route
 
@@ -117,9 +121,9 @@
 2. Open `<published_listing>` the catalogue lists.
    - The browser is on that listing's address, showing that listing's page. g10.auction-listing-page.US5-TC1
 3. Fetch `<grade10 sitemap url>`.
-   - `<a published lot>`'s address is listed as an absolute URL of the serving environment. g10.auction-listing-page.US5-TC2
 4. Check every sitemap entry.
-   - No entry carries an unfilled parameter in place of a lot. g10.auction-listing-page.US5-TC2
+   - `<published_listing>`'s address is listed as an absolute URL of the serving environment. g10.auction-listing-page.US5-TC2
+   - No entry carries an unfilled parameter in place of a listing. g10.auction-listing-page.US5-TC2
 
 ## Walk 5: Watch an auction and open My Auctions from the toast
 
@@ -378,32 +382,65 @@
 - customer A is on the listing page for `<listing_2>`.
 - `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
 - customer A is on the listing page for `<listing_1>`, with the browser's live connection to the auction blocked.
-- customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<user A maximum>`, and is on its listing page.
-- customer A(signed in) leads `<listing_8>` with maximum `<user A maximum>`.
+- customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<customer A maximum>`, and is on its listing page.
+- customer A(signed in) leads `<listing_8>` with maximum `<customer A maximum>`.
 - customer C(signed out) is on the listing page for `<listing_8>`, with the browser's network inspector recording its live connection.
-- `<listing_1>` is open in USD, before its scheduled close, with no bid.
-- customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the listing page for `<listing_1>`, in English.
-- `<listing_5>` is open in USD, before its scheduled close, with no bid.
-- customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the listing page for `<listing_5>`, in English.
+- `<listing_16>` is open in USD, before its scheduled close, with no bid.
+- customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
+- customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid count>` | 3 |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
-| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
-| `<user A maximum>` | USD5,280 (range: 500000–999999 minor units) |
-| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), above `<user A maximum>` |
-| `<increment>` | USD80 (fixed tier increment), the US$4,000 tier |
-| `<user A maximum>` | USD9,280 (range: 500000–999999 minor units) |
-| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), below `<user A maximum>` |
-| `<maximum>` | At least two increments above the opening price |
-| `<higher maximum>` | At least two increments above `<maximum>` |
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US12-TC1 | listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| g10.auction-listing-page.US12-TC1 | current bid | USD4,960 | (range: 100000–499999 minor units) |
+| g10.auction-listing-page.US12-TC1 | bid count | 3 | · |
+| g10.auction-listing-page.US12-TC1 | bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US12-TC2 | `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
+| g10.auction-listing-page.US12-TC2 | `<extension duration>` | 1800s (30mins) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US12-TC3 | `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
+| g10.auction-listing-page.US12-TC3 | `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
+| g10.auction-listing-page.US12-TC3 | `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US12-TC4 | listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| g10.auction-listing-page.US12-TC4 | current bid | USD4,960 | (range: 100000–499999 minor units) |
+| g10.auction-listing-page.US12-TC4 | bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US12-TC5 | listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| g10.auction-listing-page.US12-TC5 | current bid | USD1200 | (120000 USD minor units) |
+| g10.auction-listing-page.US12-TC5 | customer A maximum | USD1275 | (127500 USD minor units) |
+| g10.auction-listing-page.US12-TC5 | customer B maximum | USD1300 | (130000 USD minor units), above `<customer A maximum>` |
+| g10.auction-listing-page.US12-TC5 | increment | USD25 | (2500 USD minor units), the USD1000 tier increment |
+| g10.auction-listing-page.US12-TC5 | highest_bid_after | USD1,300 | (130000 USD minor units): `<customer A maximum>` plus `<increment>` |
+| g10.auction-listing-page.US12-TC5 | minimum_next_bid | USD1,325 | (132500 USD minor units): `<highest_bid_after>` plus `<increment>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US12-TC6 | listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| g10.auction-listing-page.US12-TC6 | customer A maximum | USD9,280 | (range: 500000–999999 minor units) |
+| g10.auction-listing-page.US12-TC6 | customer B maximum | USD6,160 | (range: 500000–999999 minor units), below `<customer A maximum>` |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US12-TC7 | maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| g10.auction-listing-page.US12-TC7 | listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US12-TC8 | maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| g10.auction-listing-page.US12-TC8 | higher maximum | USD2,200 | At least two increments above `<maximum>`; representative USD fixture |
+| g10.auction-listing-page.US12-TC8 | listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
 
 ### Route
 
@@ -430,40 +467,40 @@
    - Highest bid reads `<bid amount>` and the bid count includes customer B's bid. g10.auction-listing-page.US12-TC4
    - customer A's page did not reload. g10.auction-listing-page.US12-TC4
 12. As customer A, read the standing on the bid panel.
-   - reads Leading, with Your maximum `<user A maximum>`. g10.auction-listing-page.US12-TC5
-13. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+   - Step 12 reads Leading, with Your maximum `<customer A maximum>`. g10.auction-listing-page.US12-TC5
+13. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 14. As customer A, without reloading, read the standing, Highest bid and the next valid bid.
-   - reads Outbid, with no reload. g10.auction-listing-page.US12-TC5
-   - reads Highest bid `<user A maximum>` plus `<increment>`. g10.auction-listing-page.US12-TC5
-   - shows the next valid bid, Highest bid plus its increment. g10.auction-listing-page.US12-TC5
-15. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+   - Step 14 reads Outbid, with no reload. g10.auction-listing-page.US12-TC5
+   - Step 14 reads Highest bid `<highest_bid_after>`, `<customer A maximum>` plus `<increment>`. g10.auction-listing-page.US12-TC5
+   - Step 14 shows `<minimum_next_bid>` as the minimum next valid bid. g10.auction-listing-page.US12-TC5
+15. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 16. As customer C, read every message the live connection received after step 1.
-   - shows an update carrying the new price, bid count and close. g10.auction-listing-page.US12-TC6
-   - No message carries `<user A maximum>`, an account id, an email or a card detail. g10.auction-listing-page.US12-TC6
-   - Any bidder a message names appears only by the lot's pseudonym. g10.auction-listing-page.US12-TC6
+   - Step 16 shows an update carrying the new price, bid count and close. g10.auction-listing-page.US12-TC6
+   - No message carries `<customer A maximum>`, an account id, an email or a card detail. g10.auction-listing-page.US12-TC6
+   - Any bidder a message names appears only by the listing's pseudonym. g10.auction-listing-page.US12-TC6
 17. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
 18. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 19. As customer B, read the Recent bids rows at `<maximum>`.
-   - customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A leads and set `<maximum>` first, whatever time each row shows. g10.auction-listing-page.US12-TC7
-   - customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. g10.auction-listing-page.US12-TC7
+   - Step 19: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A leads and set `<maximum>` first, whatever time each row shows. g10.auction-listing-page.US12-TC7
+   - Step 19: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. g10.auction-listing-page.US12-TC7
 20. Hover the Info control on customer B's row at `<maximum>`.
-   - the tip reads When maximums match, the earlier one leads. g10.auction-listing-page.US12-TC7
+   - Step 20: the tip reads When maximums match, the earlier one leads. g10.auction-listing-page.US12-TC7
 21. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
 22. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 23. As customer C, enter `<higher maximum>` in the custom maximum on the bid panel and confirm it.
 24. As customer C, read the current price and the Recent bids rows at `<maximum>`.
-   - the current price is above `<maximum>`, and customer C's row leads Recent bids. g10.auction-listing-page.US12-TC8
-   - customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A set `<maximum>` first, whatever time each row shows. g10.auction-listing-page.US12-TC8
-   - customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. g10.auction-listing-page.US12-TC8
+   - Step 24: the current price is above `<maximum>`, and customer C's row leads Recent bids. g10.auction-listing-page.US12-TC8
+   - Step 24: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A set `<maximum>` first, whatever time each row shows. g10.auction-listing-page.US12-TC8
+   - Step 24: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. g10.auction-listing-page.US12-TC8
 25. Hover the Info control on customer B's row at `<maximum>`.
-   - the tip reads When maximums match, the earlier one leads. g10.auction-listing-page.US12-TC8
+   - Step 25: the tip reads When maximums match, the earlier one leads. g10.auction-listing-page.US12-TC8
 
 ## Walk 12: Collector sees another bid on the listing without reloading and adjacent checks
 
 **Starting state:**
 
-- collector A has `<listing_3>` open with a live line.
-- customer B(card linked, email `<email_mike>`) can bid on `<listing_3>` from another session.
+- collector A has `<listing_17>` open with a live line.
+- customer B(card linked, email `<customer B email>`) can bid on `<listing_17>` from another session.
 - `<listing_3>` is open, its close about 12 minutes away.
 - customer A is on the listing page for `<listing_3>` on a device whose clock is `<device skew>`.
 - customer B is on the same listing page on a device whose clock is correct.
@@ -474,97 +511,164 @@
 
 **Shared test data:**
 
-| Item | Value |
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US12-TC9 | customer B email | `mike@example.com` |
+| g10.auction-listing-page.US12-TC9 | listing_17 | An open USD listing whose live connection is available and customer B can bid; bind its identity only |
+| g10.auction-listing-page.US12-TC9 | customer B avatar letter | M: the public avatar letter derived from `<customer B email>`; bind the letter only |
+
+| Case | `<device skew>` |
 | --- | --- |
-| email_mike | `mike@example.com` |
-| Item | `<device skew>`: 4 minutes ahead |
-| Item | `<device skew>`: 4 minutes behind |
-| Item | `<device skew>`: Field; Value 2: Value |
-| Item | `<device skew>`: `<listing_3>`; Value 2: An open USD listing, close about 12 minutes away |
-| `<listing_4>` | An open USD listing with no bids, extension duration 1800s (30mins) |
-| `<last moment>` | 0.4 seconds before the close |
-| Item | `<away>`: customer A's device sleeps for 45 seconds |
-| Item | `<away>`: customer A's browser goes offline for 45 seconds, then reconnects |
-| Item | `<away>`: customer A switches to another tab for 45 seconds, then back |
-| Item | `<away>`: Field; Value 2: Value |
-| Item | `<away>`: `<listing_3>`; Value 2: An open USD listing, close about 12 minutes away |
-| Item | `<away>`: `<clock change>`; Value 2: customer A's device clock set 90 seconds ahead |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
-| `<correction>` | 0.6 seconds, under a second |
+| g10.auction-listing-page.US13-TC1 | 4 minutes ahead |
+| g10.auction-listing-page.US13-TC1 | 4 minutes behind |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US13-TC1 | listing_3 | An open USD listing, close about 12 minutes away |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US13-TC1 | observation interval | 45 seconds (fixed observation fixture) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US13-TC2 | listing_4 | An open USD listing with no bids, extension duration 1800s (30mins) |
+| g10.auction-listing-page.US13-TC2 | last moment | 0.4 seconds before the close |
+
+| Case | `<away>` |
+| --- | --- |
+| g10.auction-listing-page.US13-TC3 | customer A's device sleeps for 45 seconds |
+| g10.auction-listing-page.US13-TC3 | customer A's browser goes offline for 45 seconds, then reconnects |
+| g10.auction-listing-page.US13-TC3 | customer A switches to another tab for 45 seconds, then back |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US13-TC3 | listing_3 | An open USD listing, close about 12 minutes away |
+| g10.auction-listing-page.US13-TC3 | clock change | a 90-second forward change to customer A's device clock |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US13-TC4 | listing_3 | An open USD listing, close about 12 minutes away |
+| g10.auction-listing-page.US13-TC4 | correction | 0.6 seconds, under a second |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US13-TC4 | observation interval | 5 seconds (fixed observation fixture) |
 
 ### Route
 
 1. As collector A, watch Recent Bids.
-   - The new row appears without a reload. g10.auction-listing-page.US12-TC9
-2. As customer B, place an accepted public bid on `<listing_3>`.
-   - Its avatar shows `M`. g10.auction-listing-page.US12-TC9
+2. As customer B, place an accepted public bid on `<listing_17>`.
 3. As collector A, without reloading, find customer B's new Recent Bids row.
+   - The new row appears without a reload. g10.auction-listing-page.US12-TC9
+   - Its avatar shows `<customer B avatar letter>`. g10.auction-listing-page.US12-TC9
    - Its readable label is a listing pseudonym, not an email. g10.auction-listing-page.US12-TC9
 4. Read Time left on customer A's page and customer B's page at the same moment.
-   - Both pages read the same Time left, to the second, at step 1. g10.auction-listing-page.US13-TC1
-5. Wait 45 seconds.
-   - Both pages read the same Time left, to the second, at step 3. g10.auction-listing-page.US13-TC1
+   - Both pages read the same Time left, to the second, at Step 4. g10.auction-listing-page.US13-TC1
+5. Wait `<observation interval>`.
 6. Read Time left on both pages at the same moment.
+   - Both pages read the same Time left, to the second, at Step 6. g10.auction-listing-page.US13-TC1
    - Neither page is off by `<device skew>`. g10.auction-listing-page.US13-TC1
 7. Watch Time left from 10 seconds before the close.
-   - Through step 1 Time left shows whole seconds only, never tenths. g10.auction-listing-page.US13-TC2
+   - Through Step 7 Time left shows whole seconds only, never tenths. g10.auction-listing-page.US13-TC2
 8. Read Time left at `<last moment>`.
-   - At step 2 Time left reads 1 second, never 0. g10.auction-listing-page.US13-TC2
+   - At Step 8 Time left reads 1 second, never 0. g10.auction-listing-page.US13-TC2
 9. Read Time left just after the close passes.
-   - At step 3 Time left reads 0 or the lot reads Closed. g10.auction-listing-page.US13-TC2
-10. Make `<clock change>` while `<away>`.
+   - At Step 9 Time left reads 0 or the listing reads Closed. g10.auction-listing-page.US13-TC2
+10. Apply `<clock change>` while `<away>`.
 11. Return to the listing page, without reloading.
 12. Read Time left on customer A's page and customer B's page at the same moment.
    - Both pages read the same Time left, to the second. g10.auction-listing-page.US13-TC3
 13. Switch to another tab.
 14. Switch back to the listing page.
-15. Watch Time left for 5 seconds.
+15. Watch Time left for `<observation interval>`.
    - Time left never reads a higher value than it read the moment before. g10.auction-listing-page.US13-TC4
 
 ## Walk 13: Bidder waits on a closed listing for its result
 
 **Starting state:**
 
-- `<listing_5>` is in the state the row gives, its close under a minute away, and no further bid will be placed.
-- `<viewer>` is signed in and on the listing page for `<listing_5>`.
+- The listing `<listing_18>` has this state: `<listing_state>`, its close under a minute away, and no further bid will be placed.
+- `<viewer>` is signed in and on the listing page for `<listing_18>`.
 - customer A leads `<listing_6>` and is on its listing page.
 - `<listing_6>`'s close is under a minute away, and no further bid will be placed.
 - Recording `<listing_6>`'s close is held back until the next sweep.
 - customer B leads `<listing_9>` at `<leader price>`, its close under a minute away.
 - customer A(card linked) is signed in and on the listing page for `<listing_9>`, and has never bid on it.
-- Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
+- Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
 - `<listing_10>` is open with no accepted bid, its scheduled close under a minute away.
 - customer A(card linked) is signed in and on the listing page for `<listing_10>`.
 - `<listing_11>` is in extended bidding, led by customer B, its recorded close under a minute away.
-- customer A is on the listing page for `<listing_11>`, with its live updates delayed by 5 seconds.
+- customer A is on the listing page for `<listing_11>`, with its live updates delayed by `<update delay>`.
 - customer C(card linked) is signed in on a separate session, on the same listing page.
-- `<listing_2>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
-- customer C is on the listing page for `<listing_2>`, in English.
-- `<listing_3>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
-- `<listing_4>` is past its close with no bid, its close recorded with no winner.
+- `<listing_19>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+- customer C is on the listing page for `<listing_19>`, in English.
+- `<listing_20>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
+- `<listing_21>` is past its close with no bid, its close recorded with no winner.
 - customer C is signed in on a separate session.
 
 **Shared test data:**
 
-| Item | Value |
-| --- | --- |
-| Item | `<listing_5>`: Led by customer A; `<viewer>`: customer A; `<result>`: Won |
-| Item | `<listing_5>`: Led by customer A, customer B outbid; `<viewer>`: customer B; `<result>`: Did not win |
-| Item | `<listing_5>`: Open with no accepted bid; `<viewer>`: customer A; `<result>`: Ended, with No bids under it |
-| `<listing_6>` | A USD listing led by customer A |
-| `<listing_9>` | A USD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
-| `<listing_10>` | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap |
-| `<bid amount>` | USD280 (range: 10000–49999 minor units), the opening price |
-| `<listing_11>` | A USD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
-| `<bid amount>` | At or above the minimum next bid |
+| Case | `<listing_state>` | `<viewer>` | `<result>` |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US14-TC1 | Led by customer A | customer A | Won |
+| g10.auction-listing-page.US14-TC1 | Led by customer A, customer B outbid | customer B | Did not win |
+| g10.auction-listing-page.US14-TC1 | Open with no accepted bid | customer A | Ended, with No bids under it |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC1 | listing_18 | A USD listing in `<listing_state>` with its close under a minute away; bind its identity only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC2 | listing_6 | A USD listing led by customer A |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US14-TC4 | listing_9 | A USD listing in extended bidding, led by customer B, no cap | · |
+| g10.auction-listing-page.US14-TC4 | leader price | USD4,960 | (range: 100000–499999 minor units) |
+| g10.auction-listing-page.US14-TC4 | bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC4 | clock lag | 30 seconds (fixed stale-clock fixture) |
+| g10.auction-listing-page.US14-TC4 | bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US14-TC5 | listing_10 | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap | · |
+| g10.auction-listing-page.US14-TC5 | bid amount | USD280 | (range: 10000–49999 minor units), the opening price |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC5 | clock lag | 30 seconds (fixed stale-clock fixture) |
+| g10.auction-listing-page.US14-TC5 | bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC6 | listing_11 | A USD listing in extended bidding, led by customer B, extension duration `<extension duration>`, no cap |
+| g10.auction-listing-page.US14-TC6 | bid amount | At or above the minimum next bid |
+
+| Case | Field | Value | Fixture notes |
+| --- | --- | --- | --- |
+| g10.auction-listing-page.US14-TC6 | update delay | 5 seconds (fixed live-update delay fixture) | · |
+| g10.auction-listing-page.US14-TC6 | last bid offset | 1 second (fixed last-second boundary) | · |
+| g10.auction-listing-page.US14-TC6 | extension duration | 1800s | (30mins) |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC7 | listing_19 | A live USD listing led by customer A with customer B below, recorded close a minute away; bind its identity only |
+
+| Case | Field | Value |
+| --- | --- | --- |
+| g10.auction-listing-page.US14-TC8 | listing_20 | A USD listing past its close with bids, recording its close held until the next sweep; bind its identity only |
+| g10.auction-listing-page.US14-TC8 | listing_21 | A USD listing past its close with no bid, recorded with no winner; bind its identity only |
 
 ### Route
 
 1. Watch the listing through its close, without reloading.
-   - Once the close passes, the page reads Closed with no result. g10.auction-listing-page.US14-TC1
 2. Read the listing's state until the result appears.
+   - Once the close passes, the page reads Closed with no result. g10.auction-listing-page.US14-TC1
    - The page then reads `<result>`, without a reload. g10.auction-listing-page.US14-TC1
 3. Watch the listing through its close, without reloading.
 4. Wait 30 seconds.
@@ -572,42 +676,42 @@
 6. Wait until the close is recorded.
    - Through steps 1 to 3 the page reads Closed with no result. g10.auction-listing-page.US14-TC2
    - No step shows Won, Did not win or Ended before the close is recorded. g10.auction-listing-page.US14-TC2
-   - After step 4 the page reads Won, without a reload. g10.auction-listing-page.US14-TC2
-7. Wait until 5 seconds after the close, by the auction's clock.
+   - After Step 6 the page reads Won, without a reload. g10.auction-listing-page.US14-TC2
+7. Wait until `<bid delay>` after the close, by the auction's clock.
 8. Place `<bid amount>`.
 9. Read the bid panel.
+   - At Step 9 the bid panel reads "Your bid did not go through." alone. g10.auction-listing-page.US14-TC4
 10. Unblock the auction, reload the listing page and wait until the close is recorded.
 11. Read the listing's state and the bid panel.
-   - At step 3 the bid panel reads "Your bid did not go through." alone. g10.auction-listing-page.US14-TC4
    - No new label or wording appears for the refused bid. g10.auction-listing-page.US14-TC4
-   - At step 5 Highest bid reads `<leader price>`. g10.auction-listing-page.US14-TC4
-   - At step 5 customer A's page shows neither Won nor Did not win. g10.auction-listing-page.US14-TC4
-12. Wait until 5 seconds after the scheduled close, by the auction's clock.
+   - At Step 11 Highest bid reads `<leader price>`. g10.auction-listing-page.US14-TC4
+   - At Step 11 customer A's page shows neither Won nor Did not win. g10.auction-listing-page.US14-TC4
+12. Wait until `<bid delay>` after the scheduled close, by the auction's clock.
 13. Place `<bid amount>`.
 14. Read the bid panel.
+   - At Step 14 the bid panel reads "Your bid did not go through." alone. g10.auction-listing-page.US14-TC5
 15. Unblock the auction, reload the listing page and wait until the close is recorded.
 16. Read Time left, the listing's state and the bid panel.
-   - At step 3 the bid panel reads "Your bid did not go through." alone. g10.auction-listing-page.US14-TC5
-   - At step 5 Time left never read Extended bidding. g10.auction-listing-page.US14-TC5
-   - At step 5 the lot reads Ended, with No bids under it. g10.auction-listing-page.US14-TC5
-   - At step 5 the page shows neither Won nor Did not win. g10.auction-listing-page.US14-TC5
-17. As customer C, place `<bid amount>` 1 second before the recorded close.
+   - At Step 16 Time left never read Extended bidding. g10.auction-listing-page.US14-TC5
+   - At Step 16 the listing reads Ended, with No bids under it. g10.auction-listing-page.US14-TC5
+   - At Step 16 the page shows neither Won nor Did not win. g10.auction-listing-page.US14-TC5
+17. As customer C, place `<bid amount>` `<last bid offset>` before the recorded close.
 18. As customer A, watch Time left through the recorded close, without reloading.
 19. As customer A, read the listing's state and the bid panel once the update arrives.
    - Once the close it counted to passes, customer A's page reads Closed with no result and its bid controls disabled. g10.auction-listing-page.US14-TC6
-   - At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus 1800s. g10.auction-listing-page.US14-TC6
-   - At step 3 the bid controls are enabled. g10.auction-listing-page.US14-TC6
+   - At Step 19 Time left is labelled Extended bidding and counts to customer C's bid time plus `<extension duration>`. g10.auction-listing-page.US14-TC6
+   - At Step 19 the bid controls are enabled. g10.auction-listing-page.US14-TC6
    - No step shows Won, Did not win or Ended, and the page did not reload. g10.auction-listing-page.US14-TC6
 20. As customer C, read Recent bids before the close.
-   - no row shows a crown. g10.auction-listing-page.US14-TC7
+   - Step 20: no row shows a crown. g10.auction-listing-page.US14-TC7
 21. Wait for the close to be recorded as sold to customer A, without reloading.
 22. As customer C, read Recent bids again.
-   - customer A's winning row shows a crown named Winner after the amount. g10.auction-listing-page.US14-TC7
-   - no other row, customer B's included, shows a crown. g10.auction-listing-page.US14-TC7
-23. As customer C, open the listing page for `<listing_3>` and read Recent bids.
-   - the lot reads Closed and no row shows a crown. g10.auction-listing-page.US14-TC8
-24. As customer C, open the listing page for `<listing_4>` and read Recent bids.
-   - the lot reads Ended with No bids under it, Recent bids holds no row, and no crown shows. g10.auction-listing-page.US14-TC8
+   - Step 22: customer A's winning row shows a crown named Winner after the amount. g10.auction-listing-page.US14-TC7
+   - Step 22: no other row, customer B's included, shows a crown. g10.auction-listing-page.US14-TC7
+23. As customer C, open the listing page for `<listing_20>` and read Recent bids.
+   - Step 23: the listing reads Closed and no row shows a crown. g10.auction-listing-page.US14-TC8
+24. As customer C, open the listing page for `<listing_21>` and read Recent bids.
+   - Step 24: the listing reads Ended with No bids under it, Recent bids holds no row, and no crown shows. g10.auction-listing-page.US14-TC8
 
 ## Walk 14: Collector tells Recent Bids rivals apart by avatar letter
 
@@ -1207,7 +1311,7 @@ The collector is viewing the auction catalogue, which lists `<published_listing>
 * The browser is on that listing's address, showing that listing's page.
 
 <!-- trace:case id=g10.auction-listing-page.TC-edm rev=3 -->
-### g10.auction-listing-page.US5-TC2: Sitemap lists each published lot
+### g10.auction-listing-page.US5-TC2: Sitemap lists each published listing
 
 **Classification:**
 
@@ -1225,7 +1329,13 @@ The collector is viewing the auction catalogue, which lists `<published_listing>
 **Decided by:** `grade10:apps/frontend/grade10/src/serving/sitemap.test.tsx`
 
 **Pre-conditions:**
-The catalogue holds `<a published lot>`.
+The catalogue holds `<published_listing>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing in the catalogue; bind its public title only |
 
 **Steps:**
 
@@ -1234,8 +1344,8 @@ The catalogue holds `<a published lot>`.
 
 **Expected Results:**
 
-* `<a published lot>`'s address is listed as an absolute URL of the serving environment.
-* No entry carries an unfilled parameter in place of a lot.
+* `<published_listing>`'s address is listed as an absolute URL of the serving environment.
+* No entry carries an unfilled parameter in place of a listing.
 
 ---
 
@@ -2226,17 +2336,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>` and bid count `<bid count>`.
-* customer A is on the lot page for `<listing_1>`.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_1>`.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid count>` | 3 |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid count | 3 | · |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2357,16 +2467,16 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
-* customer A is on the lot page for `<listing_1>`.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_1>`.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2402,31 +2512,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<user A maximum>`, and is on its lot page.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<customer A maximum>`, and is on its listing page.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
-| `<current bid>` | USD1200 (120000 USD minor units) |
-| `<user A maximum>` | USD1275 (127500 USD minor units) |
-| `<user B maximum>` | USD1300 (130000 USD minor units), above `<user A maximum>` |
-| `<increment>` | USD25 (2500 USD minor units), the USD1000 tier increment |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| current bid | USD1200 | (120000 USD minor units) |
+| customer A maximum | USD1275 | (127500 USD minor units) |
+| customer B maximum | USD1300 | (130000 USD minor units), above `<customer A maximum>` |
+| increment | USD25 | (2500 USD minor units), the USD1000 tier increment |
+| highest_bid_after | USD1,300 | (130000 USD minor units): `<customer A maximum>` plus `<increment>` |
+| minimum_next_bid | USD1,325 | (132500 USD minor units): `<highest_bid_after>` plus `<increment>` |
 
 **Steps:**
 
 1. As customer A, read the standing on the bid panel.
-2. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+2. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 3. As customer A, without reloading, read the standing, Highest bid and the next valid bid.
 
 **Expected Results:**
 
-* Step 1 reads Leading, with Your maximum `<user A maximum>`.
+* Step 1 reads Leading, with Your maximum `<customer A maximum>`.
 * Step 3 reads Outbid, with no reload.
-* Step 3 reads Highest bid 130000 USD minor units, `<user A maximum>` plus `<increment>`.
-* Step 3 shows 132500 USD minor units as the minimum next valid bid.
+* Step 3 reads Highest bid `<highest_bid_after>`, `<customer A maximum>` plus `<increment>`.
+* Step 3 shows `<minimum_next_bid>` as the minimum next valid bid.
 
 <!-- trace:case id=g10.auction-listing-page.TC-wzt rev=2 -->
 ### g10.auction-listing-page.US12-TC6: Live updates name no bidder and no maximum
@@ -2450,28 +2562,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) leads `<listing_8>` with maximum `<user A maximum>`.
-* customer C(signed out) is on the lot page for `<listing_8>`, with the browser's network inspector recording its live connection.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A(signed in) leads `<listing_8>` with maximum `<customer A maximum>`.
+* customer C(signed out) is on the listing page for `<listing_8>`, with the browser's network inspector recording its live connection.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
-| `<user A maximum>` | USD9,280 (range: 500000–999999 minor units) |
-| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), below `<user A maximum>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| customer A maximum | USD9,280 | (range: 500000–999999 minor units) |
+| customer B maximum | USD6,160 | (range: 500000–999999 minor units), below `<customer A maximum>` |
 
 **Steps:**
 
-1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 2. As customer C, read every message the live connection received after step 1.
 
 **Expected Results:**
 
 * Step 2 shows an update carrying the new price, bid count and close.
-* No message carries `<user A maximum>`, an account id, an email or a card detail.
-* Any bidder a message names appears only by the lot's pseudonym.
+* No message carries `<customer A maximum>`, an account id, an email or a card detail.
+* Any bidder a message names appears only by the listing's pseudonym.
 
 <!-- trace:case id=g10.auction-listing-page.TC-0yw rev=2 -->
 ### g10.auction-listing-page.US12-TC7: A tied maximum that came second carries the earlier-leads tip
@@ -2495,14 +2607,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` is open in USD, before its scheduled close, with no bid.
-* customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the lot page for `<listing_1>`, in English.
+* `<listing_16>` is open in USD, before its scheduled close, with no bid.
+* customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<maximum>` | At least two increments above the opening price |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
 
 **Steps:**
 
@@ -2539,15 +2652,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_5>` is open in USD, before its scheduled close, with no bid.
-* customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the lot page for `<listing_5>`, in English.
+* `<listing_16>` is open in USD, before its scheduled close, with no bid.
+* customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<maximum>` | At least two increments above the opening price |
-| `<higher maximum>` | At least two increments above `<maximum>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| higher maximum | USD2,200 | At least two increments above `<maximum>`; representative USD fixture |
+| listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
 
 **Steps:**
 
@@ -2586,25 +2700,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* collector A has `<listing_3>` open with a live line.
-* customer B(card linked, email `<email_mike>`) can bid on `<listing_3>` from another session.
+* collector A has `<listing_17>` open with a live line.
+* customer B(card linked, email `<customer B email>`) can bid on `<listing_17>` from another session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| email_mike | `mike@example.com` |
+| customer B email | `mike@example.com` |
+| listing_17 | An open USD listing whose live connection is available and customer B can bid; bind its identity only |
+| customer B avatar letter | M: the public avatar letter derived from `<customer B email>`; bind the letter only |
 
 **Steps:**
 
 1. As collector A, watch Recent Bids.
-2. As customer B, place an accepted public bid on `<listing_3>`.
+2. As customer B, place an accepted public bid on `<listing_17>`.
 3. As collector A, without reloading, find customer B's new Recent Bids row.
 
 **Expected Results:**
 
 * The new row appears without a reload.
-* Its avatar shows `M`.
+* Its avatar shows `<customer B avatar letter>`.
 * Its readable label is a listing pseudonym, not an email.
 
 ---
@@ -2638,8 +2754,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_3>` is open, its close about 12 minutes away.
-* customer A is on the lot page for `<listing_3>` on a device whose clock is `<device skew>`.
-* customer B is on the same lot page on a device whose clock is correct.
+* customer A is on the listing page for `<listing_3>` on a device whose clock is `<device skew>`.
+* customer B is on the same listing page on a device whose clock is correct.
 
 **Test data:**
 
@@ -2650,12 +2766,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
+| listing_3 | An open USD listing, close about 12 minutes away |
+
+| Field | Value |
+| --- | --- |
+| observation interval | 45 seconds (fixed observation fixture) |
 
 **Steps:**
 
 1. Read Time left on customer A's page and customer B's page at the same moment.
-2. Wait 45 seconds.
+2. Wait `<observation interval>`.
 3. Read Time left on both pages at the same moment.
 
 **Expected Results:**
@@ -2665,7 +2785,7 @@ Runs once per row of **Test data**.
 * Neither page is off by `<device skew>`.
 
 <!-- trace:case id=g10.auction-listing-page.TC-56e rev=2 -->
-### g10.auction-listing-page.US13-TC2: Last second never reads 0 while the lot takes bids
+### g10.auction-listing-page.US13-TC2: Last second never reads 0 while the listing takes bids
 
 Runs once per row of **Test data**.
 
@@ -2687,14 +2807,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_4>` is open with no accepted bid, its close under a minute away.
-* customer A is on the lot page for `<listing_4>`.
+* customer A is on the listing page for `<listing_4>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_4>` | An open USD listing with no bids, extension duration 1800s (30mins) |
-| `<last moment>` | 0.4 seconds before the close |
+| listing_4 | An open USD listing with no bids, extension duration 1800s (30mins) |
+| last moment | 0.4 seconds before the close |
 
 **Steps:**
 
@@ -2706,7 +2826,7 @@ Runs once per row of **Test data**.
 
 * Through step 1 Time left shows whole seconds only, never tenths.
 * At step 2 Time left reads 1 second, never 0.
-* At step 3 Time left reads 0 or the lot reads Closed.
+* At step 3 Time left reads 0 or the listing reads Closed.
 
 <!-- trace:case id=g10.auction-listing-page.TC-iu2 rev=2 -->
 ### g10.auction-listing-page.US13-TC3: Countdown corrects itself after the page was away
@@ -2731,8 +2851,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_3>` is open, its close about 12 minutes away.
-* customer A is on the lot page for `<listing_3>`.
-* customer B is on the same lot page on a device whose clock is correct.
+* customer A is on the listing page for `<listing_3>`.
+* customer B is on the same listing page on a device whose clock is correct.
 
 **Test data:**
 
@@ -2744,13 +2864,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
-| `<clock change>` | customer A's device clock set 90 seconds ahead |
+| listing_3 | An open USD listing, close about 12 minutes away |
+| clock change | a 90-second forward change to customer A's device clock |
 
 **Steps:**
 
-1. Make `<clock change>` while `<away>`.
-2. Return to the lot page, without reloading.
+1. Apply `<clock change>` while `<away>`.
+2. Return to the listing page, without reloading.
 3. Read Time left on customer A's page and customer B's page at the same moment.
 
 **Expected Results:**
@@ -2780,21 +2900,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_3>` is open, its close about 12 minutes away.
-* customer A is on the lot page for `<listing_3>`.
+* customer A is on the listing page for `<listing_3>`.
 * The auction service's time, read on customer A's return, is `<correction>` earlier than the page's countdown assumes, so the new reading would add time.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
-| `<correction>` | 0.6 seconds, under a second |
+| listing_3 | An open USD listing, close about 12 minutes away |
+| correction | 0.6 seconds, under a second |
+
+| Field | Value |
+| --- | --- |
+| observation interval | 5 seconds (fixed observation fixture) |
 
 **Steps:**
 
 1. Switch to another tab.
-2. Switch back to the lot page.
-3. Watch Time left for 5 seconds.
+2. Switch back to the listing page.
+3. Watch Time left for `<observation interval>`.
 
 **Expected Results:**
 
@@ -2830,21 +2954,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_5>` is in the state the row gives, its close under a minute away, and no further bid will be placed.
-* `<viewer>` is signed in and on the lot page for `<listing_5>`.
+* The listing `<listing_18>` has this state: `<listing_state>`, its close under a minute away, and no further bid will be placed.
+* `<viewer>` is signed in and on the listing page for `<listing_18>`.
 
 **Test data:**
 
-| `<listing_5>` | `<viewer>` | `<result>` |
+| `<listing_state>` | `<viewer>` | `<result>` |
 | --- | --- | --- |
 | Led by customer A | customer A | Won |
 | Led by customer A, customer B outbid | customer B | Did not win |
 | Open with no accepted bid | customer A | Ended, with No bids under it |
 
+| Field | Value |
+| --- | --- |
+| listing_18 | A USD listing in `<listing_state>` with its close under a minute away; bind its identity only |
+
 **Steps:**
 
-1. Watch the lot through its close, without reloading.
-2. Read the lot's state until the result appears.
+1. Watch the listing through its close, without reloading.
+2. Read the listing's state until the result appears.
 
 **Expected Results:**
 
@@ -2873,7 +3001,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A leads `<listing_6>` and is on its lot page.
+* customer A leads `<listing_6>` and is on its listing page.
 * `<listing_6>`'s close is under a minute away, and no further bid will be placed.
 * Recording `<listing_6>`'s close is held back until the next sweep.
 
@@ -2881,13 +3009,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | A USD listing led by customer A |
+| listing_6 | A USD listing led by customer A |
 
 **Steps:**
 
-1. Watch the lot through its close, without reloading.
+1. Watch the listing through its close, without reloading.
 2. Wait 30 seconds.
-3. Reload the lot page.
+3. Reload the listing page.
 4. Wait until the close is recorded.
 
 **Expected Results:**
@@ -2919,24 +3047,29 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer B leads `<listing_9>` at `<leader price>`, its close under a minute away.
-* customer A(card linked) is signed in and on the lot page for `<listing_9>`, and has never bid on it.
-* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and lot reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
+* customer A(card linked) is signed in and on the listing page for `<listing_9>`, and has never bid on it.
+* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_9 | A USD listing in extended bidding, led by customer B, no cap | · |
+| leader price | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
 | Field | Value |
 | --- | --- |
-| `<listing_9>` | A USD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| clock lag | 30 seconds (fixed stale-clock fixture) |
+| bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps:**
 
-1. Wait until 5 seconds after the close, by the auction's clock.
+1. Wait until `<bid delay>` after the close, by the auction's clock.
 2. Place `<bid amount>`.
 3. Read the bid panel.
-4. Unblock the auction, reload the lot page and wait until the close is recorded.
-5. Read the lot's state and the bid panel.
+4. Unblock the auction, reload the listing page and wait until the close is recorded.
+5. Read the listing's state and the bid panel.
 
 **Expected Results:**
 
@@ -2946,7 +3079,7 @@ Runs once per row of **Test data**.
 * At step 5 customer A's page shows neither Won nor Did not win.
 
 <!-- trace:case id=g10.auction-listing-page.TC-1pq rev=3 -->
-### g10.auction-listing-page.US14-TC5: A lone first bid refused past the close leaves the lot Ended with No bids
+### g10.auction-listing-page.US14-TC5: A lone first bid refused past the close leaves the listing Ended with No bids
 
 Runs once per row of **Test data**.
 
@@ -2968,29 +3101,34 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_10>` is open with no accepted bid, its scheduled close under a minute away.
-* customer A(card linked) is signed in and on the lot page for `<listing_10>`.
-* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and lot reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
+* customer A(card linked) is signed in and on the listing page for `<listing_10>`.
+* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_10 | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap | · |
+| bid amount | USD280 | (range: 10000–49999 minor units), the opening price |
+
 | Field | Value |
 | --- | --- |
-| `<listing_10>` | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap |
-| `<bid amount>` | USD280 (range: 10000–49999 minor units), the opening price |
+| clock lag | 30 seconds (fixed stale-clock fixture) |
+| bid delay | 5 seconds (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps:**
 
-1. Wait until 5 seconds after the scheduled close, by the auction's clock.
+1. Wait until `<bid delay>` after the scheduled close, by the auction's clock.
 2. Place `<bid amount>`.
 3. Read the bid panel.
-4. Unblock the auction, reload the lot page and wait until the close is recorded.
-5. Read Time left, the lot's state and the bid panel.
+4. Unblock the auction, reload the listing page and wait until the close is recorded.
+5. Read Time left, the listing's state and the bid panel.
 
 **Expected Results:**
 
 * At step 3 the bid panel reads "Your bid did not go through." alone.
 * At step 5 Time left never read Extended bidding.
-* At step 5 the lot reads Ended, with No bids under it.
+* At step 5 the listing reads Ended, with No bids under it.
 * At step 5 the page shows neither Won nor Did not win.
 
 <!-- trace:case id=g10.auction-listing-page.TC-ecq rev=2 -->
@@ -3016,31 +3154,37 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_11>` is in extended bidding, led by customer B, its recorded close under a minute away.
-* customer A is on the lot page for `<listing_11>`, with its live updates delayed by 5 seconds.
-* customer C(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_11>`, with its live updates delayed by `<update delay>`.
+* customer C(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_11>` | A USD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
-| `<bid amount>` | At or above the minimum next bid |
+| listing_11 | A USD listing in extended bidding, led by customer B, extension duration `<extension duration>`, no cap |
+| bid amount | At or above the minimum next bid |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| update delay | 5 seconds (fixed live-update delay fixture) | · |
+| last bid offset | 1 second (fixed last-second boundary) | · |
+| extension duration | 1800s | (30mins) |
 
 **Steps:**
 
-1. As customer C, place `<bid amount>` 1 second before the recorded close.
+1. As customer C, place `<bid amount>` `<last bid offset>` before the recorded close.
 2. As customer A, watch Time left through the recorded close, without reloading.
-3. As customer A, read the lot's state and the bid panel once the update arrives.
+3. As customer A, read the listing's state and the bid panel once the update arrives.
 
 **Expected Results:**
 
 * Once the close it counted to passes, customer A's page reads Closed with no result and its bid controls disabled.
-* At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus 1800s.
+* At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus `<extension duration>`.
 * At step 3 the bid controls are enabled.
 * No step shows Won, Did not win or Ended, and the page did not reload.
 
 <!-- trace:case id=g10.auction-listing-page.TC-4ba rev=2 -->
-### g10.auction-listing-page.US14-TC7: A sold lot crowns its winning bid and no other
+### g10.auction-listing-page.US14-TC7: A sold listing crowns its winning bid and no other
 
 **Classification:**
 
@@ -3059,8 +3203,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_2>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
-* customer C is on the lot page for `<listing_2>`, in English.
+* `<listing_19>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+* customer C is on the listing page for `<listing_19>`, in English.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_19 | A live USD listing led by customer A with customer B below, recorded close a minute away; bind its identity only |
 
 **Steps:**
 
@@ -3075,7 +3225,7 @@ Runs once per row of **Test data**.
 * Step 3: no other row, customer B's included, shows a crown.
 
 <!-- trace:case id=g10.auction-listing-page.TC-hqd rev=2 -->
-### g10.auction-listing-page.US14-TC8: A lot without a winner crowns no bid
+### g10.auction-listing-page.US14-TC8: A listing without a winner crowns no bid
 
 **Classification:**
 
@@ -3094,19 +3244,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_3>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
-* `<listing_4>` is past its close with no bid, its close recorded with no winner.
+* `<listing_20>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
+* `<listing_21>` is past its close with no bid, its close recorded with no winner.
 * customer C is signed in on a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_20 | A USD listing past its close with bids, recording its close held until the next sweep; bind its identity only |
+| listing_21 | A USD listing past its close with no bid, recorded with no winner; bind its identity only |
 
 **Steps:**
 
-1. As customer C, open the lot page for `<listing_3>` and read Recent bids.
-2. As customer C, open the lot page for `<listing_4>` and read Recent bids.
+1. As customer C, open the listing page for `<listing_20>` and read Recent bids.
+2. As customer C, open the listing page for `<listing_21>` and read Recent bids.
 
 **Expected Results:**
 
-* Step 1: the lot reads Closed and no row shows a crown.
-* Step 2: the lot reads Ended with No bids under it, Recent bids holds no row, and no crown shows.
+* Step 1: the listing reads Closed and no row shows a crown.
+* Step 2: the listing reads Ended with No bids under it, Recent bids holds no row, and no crown shows.
 
 <!-- trace:case id=g10.auction-listing-page.TC-jic rev=2 -->
 ### g10.auction-listing-page.US14-TC3: A bid still confirming at the close reads in existing words
