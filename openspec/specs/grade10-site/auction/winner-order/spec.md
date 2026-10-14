@@ -3668,57 +3668,54 @@ An order in USD SHALL read every amount in USD on the same documents.
 - **THEN** the order total and the payment read 103100 minor units in HKD
 - **AND** no USD winning bid and no conversion rate appears on either
 
-### Requirement: The Order Summary keeps USD lines and splits its total under HKD
+### Requirement: The Order Summary reads the settlement currency, with USD beneath each HKD line
 
-The Order Summary on Winner Order SHALL list the order's lines in USD whichever
-settlement currency the winner picked. For a USD order its Order Total SHALL
-be one line in USD. For an HKD order its Order Total SHALL split into two
-lines: the USD total, the sum of the order's USD lines, and below it the HKD
-total, the sum of the lines each converted and rounded up.
+The Order Summary on Winner Order SHALL show its lines and its Order Total in
+the settlement currency the winner picked. For a USD order every line and the
+Order Total SHALL read USD. For an HKD order each line SHALL read its converted
+HKD amount, with the line's USD amount beneath it, and the Order Total SHALL be
+one HKD total, the invoice's Order Total. No USD total shows.
 
-A card order settled in HKD SHALL show the Payment Processing Fee in HKD after
-the separator, below the two totals. Grade10 computes it in HKD from the HKD
-card rule on the HKD subtotal, and it is added on top of the converted HKD
-total. The winner pays the converted HKD total plus the fee, which is the
-invoice's Order Total. The USD total SHALL leave the fee out, and no USD fee
-line shows.
+A card order settled in HKD SHALL show the Payment Processing Fee as a line in
+HKD, with no USD amount beneath it. Grade10 computes it in HKD from the HKD
+card rule on the HKD subtotal, and the Order Total includes it.
 
-Before an invoice is sent the summary SHALL show no HKD total and no HKD fee.
-The lot card SHALL keep the winning bid in USD.
+Before an invoice is sent the summary SHALL show no HKD amount. The lot card
+SHALL keep the winning bid in USD.
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-kdr rev=2 -->
-#### Scenario: winner-order-SC-290 - An HKD order's summary shows a USD total then an HKD total
-**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+<!-- trace:scenario id=g10.auction-winner-order.SC-kdr rev=3 -->
+#### Scenario: winner-order-SC-290 - An HKD order's summary reads HKD lines with USD beneath
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the Order Summary in HKD
 
 - **GIVEN** a Pending Payment order whose winner picked HKD and bank transfer,
   with USD lines of 10100, 2020 and 1001 minor units
 - **WHEN** the winner opens Winner Order
-- **THEN** the Order Summary lists the three lines in USD
-- **AND** Order Total shows a USD total of 13121 minor units, then an HKD
-  total of 103100 minor units
+- **THEN** the Order Summary lines read 79300, 15900 and 7900 minor units in
+  HKD
+- **AND** beneath each line its USD amount reads 10100, 2020 and 1001 minor
+  units
+- **AND** Order Total reads 103100 minor units in HKD, and no USD total shows
 - **AND** the lot card shows the winning bid of 10100 minor units in USD
 
-<!-- trace:scenario id=g10.auction-winner-order.SC-fq4 rev=1 -->
-#### Scenario: winner-order-SC-304 - A card order under HKD shows the HKD fee after the two totals
-**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+<!-- trace:scenario id=g10.auction-winner-order.SC-fq4 rev=2 -->
+#### Scenario: winner-order-SC-304 - A card order under HKD shows the HKD fee in the total
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the Order Summary in HKD
 
 - **GIVEN** a Pending Payment order whose winner picked HKD and card, with USD
   lines of 10100, 2020 and 1001 minor units
 - **AND** an HKD card rule in Payment Settings of 3.4 per cent and 235 minor
   units
 - **WHEN** the winner opens Winner Order
-- **THEN** the Order Summary lists the three lines in USD
-- **AND** Order Total shows a USD total of 13121 minor units, then an HKD
-  total of 103100 minor units
-- **AND** after the separator, below the two totals, the Payment Processing Fee
-  reads 3873 minor units in HKD
-- **AND** the fee is not in the USD total and no USD fee line shows
-- **AND** the amount the winner pays is 106973 minor units in HKD, the
-  invoice's Order Total
+- **THEN** the Order Summary lines read 79300, 15900 and 7900 minor units in
+  HKD, each with its USD amount beneath it
+- **AND** the Payment Processing Fee reads 3873 minor units in HKD, with no USD
+  amount beneath it
+- **AND** Order Total reads 106973 minor units in HKD, the invoice's Order
+  Total, and no USD total shows
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-59h rev=1 -->
 #### Scenario: winner-order-SC-291 - A USD order's summary shows one total
-**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the Order Summary in HKD
 
 - **GIVEN** a Pending Payment order whose winner picked USD
 - **WHEN** the winner opens Winner Order
@@ -3727,7 +3724,7 @@ The lot card SHALL keep the winning bid in USD.
 
 <!-- trace:scenario id=g10.auction-winner-order.SC-ug0 rev=2 -->
 #### Scenario: winner-order-SC-292 - The HKD total waits for the invoice
-**Serves:** winner-order-US-27 - Winner who settles in HKD reads the order total in both currencies
+**Serves:** winner-order-US-27 - Winner who settles in HKD reads the Order Summary in HKD
 
 - **GIVEN** an order whose winner picked HKD and whose invoice is not yet sent
 - **WHEN** the winner opens Winner Order

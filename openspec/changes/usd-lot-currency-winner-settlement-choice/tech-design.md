@@ -41,7 +41,7 @@ The specs govern the rules. These rows record how they are built.
 - **Spec governs** - "Invoice fields" and "An HKD invoice, receipt and letter carry HKD only".
 - **Persist, do not recompute** - At send the service writes one row per line holding the USD fact and the settlement amount. For a USD invoice the two are equal. A read never converts, so a later change to the figure cannot move a sent invoice.
 - **No rate on the invoice** - The figure is one constant and the lines protect the invoice. A per-invoice rate column would add a field that could leak onto a page. A reviewed change moves the constant and applies only to invoices sent or reissued after it.
-- **Card fee** - Computed in the settlement currency from that currency's rule, on the sum of the settlement lines, and stored as its own line with no USD fact. The Order Summary reads it from that line in HKD, after the separator below the two totals, on top of the converted HKD total; the USD total leaves it out and no USD fee shows. The winner pays the converted HKD total plus the fee, the invoice's Order Total (`decisions.md` Q17).
+- **Card fee** - Computed in the settlement currency from that currency's rule, on the sum of the settlement lines, and stored as its own line with no USD fact. The Order Summary reads it from that line in HKD, with no USD amount beneath it, and the HKD Order Total includes it. The winner pays the invoice's Order Total (`decisions.md` Q8, Q17).
 - **Reissue** - Reprices from the USD facts in the currency the operator chose, which may differ from the replaced invoice's. A change to the settlement currency or payment choice counts; a payment choice includes its rail. A rail-only change writes a new invoice and bank snapshot and leaves the replaced invoice and snapshot untouched.
 - **Rejected: store only HKD** - The Order Summary needs the USD lines, and an audit needs the fact the conversion started from.
 
@@ -147,7 +147,7 @@ Names follow the existing schema's conventions when written.
 | listing, bid, auto-bid maximum | keep `currency`; add a check holding it to `USD` | Applied after the overwrite |
 | payment settings | premium minimum becomes one `premium_minimum_usd_minor` bigint, not null, default 0; card rule rows keyed by currency hold `USD` and `HKD` | HKD and JPY minimums and the JPY rule are deleted |
 
-Authoritative: the USD facts and the stored settlement lines. Derived: the offered methods, the two total lines on the page and every display string.
+Authoritative: the USD facts and the stored settlement lines. Derived: the offered methods, the HKD lines with their USD amounts on the page and every display string.
 
 ## Risks / Trade-offs
 

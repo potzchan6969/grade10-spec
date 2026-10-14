@@ -4036,16 +4036,15 @@
 **Steps 68–69 data:**
 
 | `<payment method>` | `<usd line facts>` | `<hkd line facts>` | Fixture notes |
-| --- | --- | ---: | --- |
-| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79 | `<hkd line facts>`: 300; 15,900; 7,900 minor; subtotal 103,100 minor |
-| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79 | `<hkd line facts>`: 300; 15,900; 7,900 minor; subtotal 103,100 minor |
+| --- | --- | --- | --- |
+| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | Winning Bid 79,300; Buyer's Premium 15,900; Shipping & Handling 7,900 minor | HKD subtotal 103,100 minor |
+| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | Winning Bid 79,300; Buyer's Premium 15,900; Shipping & Handling 7,900 minor | HKD subtotal 103,100 minor |
 
 | Field | Value |
 | --- | --- |
 | card rule | 3.4% + 235 minor units |
 | card fee | 3873 HKD minor units |
 | card amount payable | 106973 HKD minor units |
-| usd subtotal | 13121 USD minor units |
 | hkd subtotal | 103100 HKD minor units |
 | winner_order_202_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
@@ -4194,12 +4193,12 @@
    - The Payment Processing Fee reads `<fee HKD>`, the typed amount converted and rounded up to the whole HK$. `g10.auction-winner-order.US26-TC8`
    - The total reads `<total HKD>`, the sum of the rounded lines and the fee. `g10.auction-winner-order.US26-TC8`
    - Every amount reads in HKD. `g10.auction-winner-order.US26-TC8`
-68. Read each Order Summary from top to bottom: `<usd line facts>`, then `<hkd line facts>` for `<payment method>`.
-69. Read the amount payable for `<payment method>`.
-   - Both rows list the bid, premium and Shipping & Handling lines in USD. `g10.auction-winner-order.US27-TC1`
-   - Both rows show the USD subtotal of `<usd subtotal>` before the HKD subtotal of `<hkd subtotal>`. `g10.auction-winner-order.US27-TC1`
-   - The bank-transfer row has no card fee and has an amount payable of `<hkd subtotal>` in HKD. `g10.auction-winner-order.US27-TC1`
-   - The card row shows the HKD card fee of `<card fee>` after the separator below both totals; its amount payable is `<card amount payable>` in HKD and includes the fee, with no USD fee line. `g10.auction-winner-order.US27-TC1`
+68. Read each Order Summary line for `<payment method>`.
+69. Read the Order Total for `<payment method>`.
+   - Both rows list the bid, premium and Shipping & Handling lines as `<hkd line facts>` in HKD, each with its amount from `<usd line facts>` in USD beneath it. `g10.auction-winner-order.US27-TC1`
+   - The bank-transfer row has no card fee and its Order Total reads `<hkd subtotal>` in HKD. `g10.auction-winner-order.US27-TC1`
+   - The card row shows the Payment Processing Fee of `<card fee>` in HKD, with no USD amount beneath it; its Order Total reads `<card amount payable>` in HKD and includes the fee. `g10.auction-winner-order.US27-TC1`
+   - Neither row shows a USD total. `g10.auction-winner-order.US27-TC1`
 70. Read the Order Summary totals.
    - The summary shows one USD total. `g10.auction-winner-order.US27-TC2`
    - It shows no HKD subtotal or fee. `g10.auction-winner-order.US27-TC2`
@@ -13237,14 +13236,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-winner-order.US27: Winner who settles in HKD reads the order total in both currencies
+## g10.auction-winner-order.US27: Winner who settles in HKD reads the Order Summary in HKD
 
 **As a** winner who picked HKD,
-**I want** my Order Summary to keep the listing's USD amounts and show a USD total then the HKD total I will pay,
+**I want** my Order Summary in HKD, with each line's USD amount beneath it and one HKD total I will pay,
 **so that** I see what I won and what it costs me in HKD.
 
-<!-- trace:case id=g10.auction-winner-order.TC-vwm rev=3 covers=g10.auction-winner-order.SC-kdr,g10.auction-winner-order.SC-fq4 -->
-### g10.auction-winner-order.US27-TC1: HKD summary places card fee after both subtotals
+<!-- trace:case id=g10.auction-winner-order.TC-vwm rev=4 covers=g10.auction-winner-order.SC-kdr,g10.auction-winner-order.SC-fq4 -->
+### g10.auction-winner-order.US27-TC1: HKD summary reads HKD lines with USD beneath
 
 **Classification:**
 
@@ -13270,30 +13269,29 @@ Runs once per row of **Test data**.
 **Test data:**
 
 | `<payment method>` | `<usd line facts>` | `<hkd line facts>` | Fixture notes |
-| --- | --- | ---: | --- |
-| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79 | `<hkd line facts>`: 300; 15,900; 7,900 minor; subtotal 103,100 minor |
-| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | 79 | `<hkd line facts>`: 300; 15,900; 7,900 minor; subtotal 103,100 minor |
+| --- | --- | --- | --- |
+| Bank transfer | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | Winning Bid 79,300; Buyer's Premium 15,900; Shipping & Handling 7,900 minor | HKD subtotal 103,100 minor |
+| Card | Winning Bid 10,100; Buyer's Premium 2,020; Shipping & Handling 1,001 minor | Winning Bid 79,300; Buyer's Premium 15,900; Shipping & Handling 7,900 minor | HKD subtotal 103,100 minor |
 
 | Field | Value |
 | --- | --- |
 | card rule | 3.4% + 235 minor units |
 | card fee | 3873 HKD minor units |
 | card amount payable | 106973 HKD minor units |
-| usd subtotal | 13121 USD minor units |
 | hkd subtotal | 103100 HKD minor units |
 | winner_order_202_1 | The winner order prepared with the state and actor conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read each Order Summary from top to bottom: `<usd line facts>`, then `<hkd line facts>` for `<payment method>`.
-2. Read the amount payable for `<payment method>`.
+1. Read each Order Summary line for `<payment method>`.
+2. Read the Order Total for `<payment method>`.
 
 **Expected Results:**
 
-* Both rows list the bid, premium and Shipping & Handling lines in USD.
-* Both rows show the USD subtotal of `<usd subtotal>` before the HKD subtotal of `<hkd subtotal>`.
-* The bank-transfer row has no card fee and has an amount payable of `<hkd subtotal>` in HKD.
-* The card row shows the HKD card fee of `<card fee>` after the separator below both totals; its amount payable is `<card amount payable>` in HKD and includes the fee, with no USD fee line.
+* Both rows list the bid, premium and Shipping & Handling lines as `<hkd line facts>` in HKD, each with its amount from `<usd line facts>` in USD beneath it.
+* The bank-transfer row has no card fee and its Order Total reads `<hkd subtotal>` in HKD.
+* The card row shows the Payment Processing Fee of `<card fee>` in HKD, with no USD amount beneath it; its Order Total reads `<card amount payable>` in HKD and includes the fee.
+* Neither row shows a USD total.
 
 <!-- trace:case id=g10.auction-winner-order.TC-7qs rev=1 covers=g10.auction-winner-order.SC-59h -->
 ### g10.auction-winner-order.US27-TC2: USD summary shows one USD total
@@ -13480,7 +13478,7 @@ Runs once per row of **Test data**.
 | SC-287 | Out of suite: pricing module change test planned in task 6.1; the fixed rate is a code constant, not an operator-editable value. |
 | SC-288 | Covered by repaired `TC-ac5`; exact USD100 / HKD78,500 invoice and PDF, no USD amount or rate. |
 | SC-289 | Covered by repaired `TC-nf6`; exact HKD103,100 receipt and payment-confirmed letter, no USD winning bid or rate. |
-| SC-290, SC-304 | Covered by `TC-vwm`; exact supplied USD/HKD lines, subtotals, HKD card-fee gross-up, separator and payable amount. |
+| SC-290, SC-304 | Covered by `TC-vwm`; HKD lines with USD beneath, one HKD total, HKD card-fee gross-up and payable amount. |
 | SC-291 | Covered by `TC-7qs`; one USD total only. |
 | SC-292 | Covered by `TC-17a`; no HKD total before invoice send and USD bid on lot card. |
 | SC-40 | Covered by repaired `TC-x85`; the operator quote has no premium input, then the invoice carries the exact USD500 premium for a USD2,500 bid and USD200 minimum. |
