@@ -132,6 +132,17 @@ const SECTION_RULE = "flex flex-col gap-3 border-t border-border pt-4";
 const GRID =
   "grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-4";
 
+/**
+ * A field's label, hint, control and error on the four rows of the grid it
+ * sits in, so a hint or an error beside it never pushes its control out of
+ * line. Outside a grid the rows simply stack.
+ */
+const FIELD_ROWS =
+  "row-span-4 grid min-w-0 grid-rows-subgrid content-start gap-y-0";
+
+/** A question drawn as a list of options takes the grid's whole width. */
+const LIST_QUESTION = "col-span-full flex min-w-0 flex-col gap-1.5";
+
 function countErrors(found: FieldErrors) {
   return (
     [found.name, found.email, found.phone, found.bookedFor].filter(Boolean)
@@ -464,29 +475,49 @@ function Field({
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
   return (
-    <div className="flex min-w-0 flex-col gap-1.5" data-slot="booking-field">
-      <label className="text-sm leading-5 font-semibold" htmlFor={id}>
+    <div className={FIELD_ROWS} data-slot="booking-field">
+      <label
+        className="row-start-1 text-sm leading-5 font-semibold"
+        htmlFor={id}
+      >
         {label}
         {mark ? <> {mark}</> : null}
       </label>
       {hint ? (
         <span
-          className="text-[13px] leading-[18px] text-secondary-foreground"
+          className="row-start-2 mt-1.5 text-[13px] leading-[18px] text-secondary-foreground"
           id={hintId}
         >
           {hint}
         </span>
       ) : null}
-      {children(describedBy)}
-      {error ? <FieldError id={errorId} message={error} /> : null}
+      <div className="row-start-3 mt-1.5 min-w-0">{children(describedBy)}</div>
+      {error ? (
+        <FieldError
+          className="row-start-4 mt-1.5"
+          id={errorId}
+          message={error}
+        />
+      ) : null}
     </div>
   );
 }
 
-function FieldError({ id, message }: { id?: string; message: string }) {
+function FieldError({
+  id,
+  message,
+  className,
+}: {
+  id?: string;
+  message: string;
+  className?: string;
+}) {
   return (
     <span
-      className="flex animate-in items-start gap-1.5 text-[13px] leading-[18px] text-destructive slide-in-from-top-1 duration-200"
+      className={cn(
+        "flex animate-in items-start gap-1.5 text-[13px] leading-[18px] text-destructive slide-in-from-top-1 duration-200",
+        className,
+      )}
       id={id}
     >
       <span aria-hidden className="mt-0.5 inline-flex shrink-0">
@@ -537,10 +568,7 @@ function QuestionField({
   );
   if (question.kind === "radio") {
     return (
-      <div
-        className="flex min-w-0 flex-col gap-1.5"
-        data-slot="booking-question"
-      >
+      <div className={LIST_QUESTION} data-slot="booking-question">
         <RadioList
           aria-describedby={
             [hintId, errorId].filter(Boolean).join(" ") || undefined
@@ -565,10 +593,7 @@ function QuestionField({
   if (question.kind === "checkboxes") {
     const selected = new Set(answer);
     return (
-      <div
-        className="flex min-w-0 flex-col gap-1.5"
-        data-slot="booking-question"
-      >
+      <div className={LIST_QUESTION} data-slot="booking-question">
         <CheckboxList label={groupLabel}>
           {options.map((option) => (
             <CheckboxListInput

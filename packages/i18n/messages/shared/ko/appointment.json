@@ -177,6 +177,11 @@
     "signedIn": "{name}(으)로 로그인했습니다.",
     "notYou": "본인이 아닌가요?",
     "signInLine": "계정이 있으신가요? 로그인하면 자동으로 채워 드립니다.",
+    "signInGate": {
+      "title": "로그인하고 예약하기",
+      "body": "예약은 계정으로 진행됩니다. 로그인하는 동안 선택한 내용은 유지됩니다.",
+      "press": "로그인하고 예약하기"
+    },
     "signIn": "로그인",
     "bookAt": "{when} 예약",
     "booking": "예약 중…",
@@ -214,13 +219,13 @@
       "refundShop": "매장이 취소하면 환불됩니다.",
       "refundBoth": "방문 {hours}시간 전까지 취소하거나 매장이 취소하면 환불됩니다.",
       "refundNone": "취소하거나 방문하지 않으면 환불되지 않습니다.",
-      "continue": "결제하기",
+      "confirmDeposit": "보증금 {amount} 결제하고 예약 확정",
+      "confirmFull": "{amount} 결제하고 예약 확정",
       "opening": "결제 페이지를 여는 중…",
       "unavailable": "지금은 이 서비스를 온라인으로 예약할 수 없습니다. 매장에 전화해 예약해 주세요.",
       "now": "지금 결제",
       "chargeDeposit": "보증금 {amount}",
       "via": "안전한 Stripe 페이지에서 결제합니다. 결제를 마치기 전에는 청구되지 않습니다.",
-      "hold": "이 시간을 {minutes}분 동안 잡아 둡니다",
       "receipt": "{amount} 결제 완료. 영수증은 해당 이메일에 있습니다."
     },
     "continue": "계속",
@@ -452,8 +457,7 @@
       "pick": "시간을 고르세요",
       "to": "{when}(으)로 변경",
       "moving": "변경 중…",
-      "moved": "{when}(으)로 변경했습니다. {email}(으)로 이메일을 보냈습니다.",
-      "earliest": "가장 빠른 시간: {when}"
+      "moved": "{when}(으)로 변경했습니다. {email}(으)로 이메일을 보냈습니다."
     },
     "cancelSheet": {
       "title": "방문을 취소할까요?",

@@ -1,6 +1,6 @@
 /* The Book a visit board's cast and words: Hong Kong, Thu 15 Oct 2026 at
  * 14:20, three shops and four services. Money is in the collector's shape,
- * HK$100.00. */
+ * HK$100, with no trailing zero cents. */
 
 import type {
   BookingDay,
@@ -53,8 +53,9 @@ const cards = (min: number, max: number, error: string): BookingQuestion => ({
 type BoardService = BookingService & {
   group: "grading" | "vault";
   shops: readonly string[];
-  /** What is charged at booking, worded for the summary and the pay box. */
-  pay?: { line: string; amount: string; refund: string };
+  /** What is charged at booking, worded for the summary, the press and the
+   * footnote under it. */
+  pay?: { line: string; amount: string; confirm: string; refund: string };
 };
 
 const BOARD_SERVICES: readonly BoardService[] = [
@@ -90,12 +91,13 @@ const BOARD_SERVICES: readonly BoardService[] = [
     group: "grading",
     durationLabel: "45 min",
     fit: "Choose this if you have 20 to 100 cards.",
-    charge: "Deposit HK$100.00",
+    charge: "Deposit HK$100",
     notes: [GRADE_FEE, SLEEVES],
     shops: ["central", "causeway-bay"],
     pay: {
-      line: "HK$100.00 deposit at booking",
-      amount: "HK$100.00 deposit",
+      line: "HK$100 deposit at booking",
+      amount: "HK$100 deposit",
+      confirm: "Confirm booking with HK$100 deposit",
       refund:
         "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
     },
@@ -111,12 +113,13 @@ const BOARD_SERVICES: readonly BoardService[] = [
     group: "vault",
     durationLabel: "30 min",
     fit: "Choose this to put graded cards, raw cards or sealed product in the vault.",
-    charge: "HK$300.00",
+    charge: "HK$300",
     notes: [VAULT_FEE, PHOTO_ID],
     shops: ["central", "kowloon-bay"],
     pay: {
-      line: "HK$300.00, paid at booking",
-      amount: "HK$300.00",
+      line: "HK$300, paid at booking",
+      amount: "HK$300",
+      confirm: "Confirm booking and pay HK$300",
       refund: "Refunded if the shop cancels.",
     },
     questions: [
@@ -316,12 +319,6 @@ const DETAILS_COPY: BookingDetailsFormCopy = {
   chooseX: "Choose a {label}.",
   choose: "Choose",
   submit: "Book",
-  forOther: {
-    label: "I’m booking for someone else",
-    name: "Their name",
-    hint: "We email the pass to you. Forward it to them.",
-    missing: "Enter their name.",
-  },
 };
 
 const SUMMARY_COPY: BookingSummaryCopy = {
@@ -361,15 +358,17 @@ const WORDS = {
   notYou: "Not you?",
   signInLine: "Have an account? Sign in and we fill this in.",
   signIn: "Sign in",
+  signInGate: {
+    title: "Sign in to book",
+    body: "Visits are booked under your account. Your picks are kept while you sign in.",
+    press: "Sign in to book",
+  },
   consent: "We use these details to run your visit and email you about it.",
   privacy: "Privacy policy",
   changeRule: "You can change or cancel until your visit starts.",
-  forLabel: "For",
   payNow: "Pay now",
   payVia:
     "You pay on a secure Stripe page. Nothing is charged until you finish there.",
-  payHold: "We hold this time for 30 minutes",
-  payContinue: "Continue to payment",
   booking: "Booking…",
   stillTrying: "Booking… still trying",
   slowNote: "Keep this page open. We won’t book you twice.",
