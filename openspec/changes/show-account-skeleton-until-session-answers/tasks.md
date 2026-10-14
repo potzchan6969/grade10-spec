@@ -7,7 +7,7 @@ The block, its stories and the PRD's story cards. It lands and publishes its mai
 - [ ] 1.3 Add the two pending stories as `::story` cards on `docs/prds/products/shared/ui/site-chrome.md` beside the Account Entry stories and on `docs/prds/products/grade10-site/site/page-shell.md` beside the SiteHeader stories; the 🚧 lines stay for the archive.
 - [ ] 1.4 Verify: `pnpm --filter @grade10/ui exec vitest run --project storybook src/blocks/site-chrome`, `pnpm --filter @grade10/ui run typecheck`, `pnpm run lint`, `pnpm check:manual` and `pnpm run validate:changes`. Record the merged PR and the published main SHA Group 2 pins.
 
-## 2. Header session in the site shell (grade10)
+## 2. Header session in the site shell (grade10) (owner: @seankcw)
 
 Depends on Group 1's published main SHA. Its tests stub the auth client and need no running auth service.
 
