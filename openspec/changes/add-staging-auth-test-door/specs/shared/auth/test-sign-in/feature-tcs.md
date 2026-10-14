@@ -1,6 +1,6 @@
 # shared/auth/test-sign-in Test Cases
 
-**Status:** pending-review · 0/29
+**Status:** pending-review · 0/31
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## g10.shared-test-sign-in.US1: The locked staging door for sign-in tests
@@ -68,7 +68,7 @@ Runs once per row of **Test data**.
 
 | Caller | Outcome |
 | --- | --- |
-| A laptop sending the same request with no run identity | refused |
+| A laptop sending the same request with no run identity and no QA token | refused |
 | A run of `<another workflow of this repository>` | refused |
 | A run in a fork of this repository | refused |
 | A run in another repository | refused |
@@ -990,6 +990,76 @@ Runs once per row of **Test data**.
 
 * The move is carried out.
 * That address is banned.
+
+<!-- trace:case id=g10.shared-test-sign-in.TC-lfa rev=1 covers=g10.shared-test-sign-in.SC-l73 -->
+### g10.shared-test-sign-in.US1-TC30: The QA token captures a tester's link on staging
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** smoke
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Who may call
+
+**Pre-conditions:**
+
+* `<tester address>` is minted under `<tester domain>` and has asked for a sign-in link on `<grade10 staging site url>`.
+
+**Steps:**
+
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`, carrying the QA token from the repository.
+2. Follow the returned link.
+
+**Expected Results:**
+
+* Step 1 returns the link.
+* Step 2 signs `<tester address>` in.
+
+<!-- trace:case id=g10.shared-test-sign-in.TC-jia rev=1 covers=g10.shared-test-sign-in.SC-kgh -->
+### g10.shared-test-sign-in.US1-TC31: The QA token is refused for ban, prepare and after rotation
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Who may call
+
+**Pre-conditions:**
+
+* `<tester address>` is minted under `<tester domain>` and holds no ban and no role.
+
+**Test data:**
+
+| Call | Outcome |
+| --- | --- |
+| Ban `<tester address>` with the current QA token | refused |
+| Prepare `<tester address>` with the current QA token | refused |
+| Capture for `<tester address>` with a QA token a later commit replaced | refused |
+
+**Steps:**
+
+1. Send the call in the row to the door on `<grade10 staging site url>`.
+2. Read `<tester address>`'s account.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 2 shows no ban and no role.
 
 ## Reconciliation
 

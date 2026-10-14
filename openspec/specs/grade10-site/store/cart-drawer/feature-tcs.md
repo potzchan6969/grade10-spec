@@ -1,6 +1,6 @@
 # grade10-site/store/cart-drawer Test Cases
 
-**Status:** pending-review · 0/53
+**Status:** pending-review · 0/51
 **Drafts styled:** 2026-10-13, tcs-rules r5
 
 **Out of suite:** grade10-site-store-cart-drawer-SC-36 - reordered, removed and unconfirmed variant-ID joins and quantity guards in Grade10 Group 4.1 frontend runtime tests; grade10-site-store-cart-drawer-SC-39 - guest/member review, basket quote and checkout response compatibility with current and previous production decoders in Grade10 Groups 2.1 and 3.1 runtime tests; grade10-site-store-cart-drawer-SC-40 - malformed picture-field refusal by the current production decoder in Grade10 Group 2.1 contract tests; grade10-site-store-cart-drawer-SC-43 - unavailable-variant field omission and drawer cleanup in Grade10 Group 5.3 review/drawer runtime tests
@@ -1005,7 +1005,6 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * A signed-in collector has a successfully reviewed drawer holding an available line, an accepted code and accepted points.
-* The collector's identity is verified, or the reviewed basket is under HKD 120,000.
 
 **Steps:**
 
@@ -1016,75 +1015,6 @@ Runs once per row of **Test data**.
 
 * A checkout session is created carrying the reviewed lines and the accepted code and points; no separate checkout-open read happens first.
 * The drawer shows a redirecting state until the collector's browser reaches Shopify's hosted invoice for that session.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-28w rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
-### g10.store-cart-drawer.US6-TC2: An unverified member's basket at the HKD 120,000 bar blocks Proceed to Checkout
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** g10.store-cart-drawer.US6
-
-**Pre-conditions:**
-
-* A signed-in member whose identity is not verified has a successfully reviewed drawer holding a basket read at or above HKD 120,000 (gross goods, before any code or points).
-
-**Steps:**
-
-1. Inspect the drawer's checkout area.
-2. Attempt to press Proceed to Checkout.
-
-**Expected Results:**
-
-* The drawer shows the same threshold message and account-page link that `CheckoutPage`'s verification panel shows today, in place of an available Proceed to Checkout.
-* No checkout session is created.
-* The link opens the member's account page; the drawer itself performs no verification.
-
-<!-- trace:case id=g10.store-cart-drawer.TC-x28 rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
-### g10.store-cart-drawer.US6-TC3: A basket under the bar, or a verified member's basket at or above it, proceeds without the gate
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** g10.store-cart-drawer.US6
-
-**Pre-conditions:**
-
-* A signed-in collector is in `<state>` with a successfully reviewed drawer eligible to check out.
-
-**Test data:**
-
-| `<state>` |
-| --- |
-| Identity not verified, basket read (gross goods) under HKD 120,000 |
-| Identity verified, basket read (gross goods) at or above HKD 120,000 |
-
-**Steps:**
-
-1. Press Proceed to Checkout.
-
-**Expected Results:**
-
-* No verification message or account-page link is shown.
-* A checkout session is created and the collector reaches Shopify's hosted invoice.
 
 <!-- trace:case id=g10.store-cart-drawer.TC-uvd rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
 ### g10.store-cart-drawer.US6-TC4: The drawer holds a redirecting state until Shopify's hosted invoice is ready before leaving
@@ -1244,6 +1174,75 @@ Runs once per row of **Test data**.
 
 * No checkout page opens at that address.
 * Checkout is reachable only from Proceed to Checkout in the cart drawer.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-28w rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
+### g10.store-cart-drawer.US6-TC2: An unverified member's basket at the HKD 120,000 bar blocks Proceed to Checkout
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** g10.store-cart-drawer.US6
+
+**Pre-conditions:**
+
+* A signed-in member whose identity is not verified has a successfully reviewed drawer holding a basket read at or above HKD 120,000 (gross goods, before any code or points).
+
+**Steps:**
+
+1. Inspect the drawer's checkout area.
+2. Attempt to press Proceed to Checkout.
+
+**Expected Results:**
+
+* The drawer shows the same threshold message and account-page link that `CheckoutPage`'s verification panel shows today, in place of an available Proceed to Checkout.
+* No checkout session is created.
+* The link opens the member's account page; the drawer itself performs no verification.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-x28 rev=1 covers=g10.store-cart-drawer.SC-xbm,g10.store-cart-drawer.SC-5pn,g10.store-cart-drawer.SC-t6r,g10.store-cart-drawer.SC-f0v,g10.store-cart-drawer.SC-7lx,g10.store-cart-drawer.SC-pqf -->
+### g10.store-cart-drawer.US6-TC3: A basket under the bar, or a verified member's basket at or above it, proceeds without the gate
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US6
+
+**Pre-conditions:**
+
+* A signed-in collector is in `<state>` with a successfully reviewed drawer eligible to check out.
+
+**Test data:**
+
+| `<state>` |
+| --- |
+| Identity not verified, basket read (gross goods) under HKD 120,000 |
+| Identity verified, basket read (gross goods) at or above HKD 120,000 |
+
+**Steps:**
+
+1. Press Proceed to Checkout.
+
+**Expected Results:**
+
+* No verification message or account-page link is shown.
+* A checkout session is created and the collector reaches Shopify's hosted invoice.
 
 ---
 
@@ -2281,8 +2280,7 @@ PRDs, the prior suite (for id continuity) and the domain suite - never a
 - **Uncovered anchor, folded into spec** - `US06-TC03-1` tested a boundary
   the scenario reading had not written: a verified member at or above the
   bar, and any member under it, proceeding without the gate. Folded as
-  `grade10-site-store-cart-drawer-SC-32` and `grade10-site-store-cart-
-  drawer-SC-33`.
+  SC-32 (dropped 2026-10-14) and SC-33 (dropped 2026-10-14).
 - **Raised, escalated** - `US06-TC02-1`'s pre-condition assumption (the bar
   read against gross goods, not the total after code and points) and
   whether the gate replaces Checkout or sits disabled beside it were both
@@ -2291,7 +2289,7 @@ PRDs, the prior suite (for id continuity) and the domain suite - never a
   change's own decisions record).
 - **Joined** - `US03-TC01-1` ↔ `grade10-site-store-cart-drawer-SC-13`;
   `US06-TC01-1` and `US06-TC04-1` ↔ `grade10-site-store-cart-drawer-SC-15`;
-  `US06-TC02-1` ↔ `grade10-site-store-cart-drawer-SC-30`; `US06-TC05-1` ↔
+  `US06-TC02-1` ↔ SC-30 (dropped 2026-10-14); `US06-TC05-1` ↔
   `grade10-site-store-cart-drawer-SC-28`; `US06-TC06-1` ↔ `grade10-site-
   store-cart-drawer-SC-29`.
 - **Retired** - the former `US03-TC03-1` ("Checkout opens the existing
@@ -2307,7 +2305,7 @@ PRDs, the prior suite (for id continuity) and the domain suite - never a
   infrastructure fact this change's proposal states under Impact rather than
   a capability behaviour a spec scenario names - verified by a routing-level
   check, not a scenario here.
-- **Uncovered anchor, out of suite** - `grade10-site-store-cart-drawer-SC-31`
+- **Uncovered anchor, out of suite** - SC-31 (dropped 2026-10-14)
   (verifying itself happens on the account page, on the collector's own
   consent) is reached by no case in this suite, since the blind pass never
   reads `grade10-site/store/account-identity`'s own journeys. Out of suite:

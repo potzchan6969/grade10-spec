@@ -19,7 +19,7 @@
   page instead.
 - **Grade10 store emails** - Shopify's order emails carry everything.
 - **Public-code source and list** - owned by `add-store-public-codes`.
-- **The HKD 120,000 bar** - unchanged.
+- **An identity bar at checkout** - dropped 2026-10-14: the store asks no buyer, guest or member, to verify at any value.
 
 ## Decisions
 
