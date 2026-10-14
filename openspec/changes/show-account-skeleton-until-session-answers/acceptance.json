@@ -1,0 +1,137 @@
+{
+  "version": 2,
+  "change": "show-account-skeleton-until-session-answers",
+  "baseline": "26e7f6fada02156be5dae5532a6c5ce386b3b1d0787e863744b8e9044b7c94b5",
+  "fingerprint": "4eac72a3e5ef72b675edd2dc6b7b6028a372475778b733274f5ce4af08fad2c2",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-14T03:59:14.508Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/site/page-shell.md#session",
+      "sha256": "5774b55ce3c534d4102db50e91e15d0450e8b58c6717895f10acf2ee43d2f7a8",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/site-chrome.md#account-entry",
+      "sha256": "2f6a42c6a97c7d2211c18f07f71fc5abb87b8e54cd9c2efc3bbc3bba91d38a36",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/decisions.md",
+      "sha256": "79dd732f5deb9f0f5e5c60e811ea23e886437d6d5c05fa0e9a147e7c5e04d1ca",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/proposal.md",
+      "sha256": "af733412b0c79f5a10de0f059c37adcb776f982db7073260fd57742bf5508bfc",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "6ff434be6fa925c14d002971c3442675842da55388df367cea063170ee20e875",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "1d6c4bcad4c6efbc28c2e8ae0201680df1a5a569fe129fde271dec0bdf591e30",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "e04ac886356111b1af658629d54772da51fef30c9bad14e97c6e41045280303c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/specs/shared/ui/site-chrome/feature-tcs.md",
+      "sha256": "65df596bb6d92aa21b20019c6f81733032e328ceb426f93ea7dfadf8218b3582",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/specs/shared/ui/site-chrome/spec.md",
+      "sha256": "8ef1420110c45d98a40d69f74511e9f4b7c451f94f0719c1afd547d8bf3b4e78",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/specs/shared/ui/site-chrome/user-journeys.md",
+      "sha256": "f5ef5358d6ca68050415af451deb50bbfe269b2eb3022a52645dfef8e9685f20",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/tech-design.md",
+      "sha256": "5b5d2c66342d33d279208ddd411b8c7f6ed1d522eeeeb51b4dadc1e3ab1892cb",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/ui-design.md",
+      "sha256": "4e531c6bcb5a047185bdb16055e054ad9fd6abd824c59ab1c090506d12d4d264",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "sha256": "99d6560beaf2f2951e52553c4655842be31611f591c1e81109adefde676c0224",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "sha256": "ed96b850d3cdcf9ff839d574180ee542941a9d29d7b73e014583af256acde0ed",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "sha256": "7f6cba99348858fc825ac586cbd9ee448e2e5e242d60bf8a262f915bd1ad78dc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+      "sha256": "6eb84a9dc48654f1d36d69728ff51274e43a4dbc5e746278fc93829bbe1f5595",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+      "sha256": "be8a679e605ecc0a85a74d739011872c6250e3bf750c6d8bf47db7eb33412bca",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+      "sha256": "f5ef5358d6ca68050415af451deb50bbfe269b2eb3022a52645dfef8e9685f20",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/show-account-skeleton-until-session-answers/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The account entry holds its place until the session first answers",
+        "Requirement: The chrome does not wait for the session"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/site/page-shell/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: SiteHeader composes Nav with session-aware account entry"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/site-chrome/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
