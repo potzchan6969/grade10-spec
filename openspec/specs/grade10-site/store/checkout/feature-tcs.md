@@ -1,6 +1,6 @@
 # grade10-site/store/checkout Test Cases
 
-**Status:** pending-review · 0/27
+**Status:** pending-review · 0/28
 **Drafts styled:** 2026-09-28, tcs-rules r4
 
 ## grade10-site-store-checkout-US1: Collector sends a current cart to hosted payment
@@ -832,8 +832,8 @@ Runs once per row of **Test data**.
 * Step 2 shows the site's not-found page.
 * Nothing about either order is shown.
 
-<!-- trace:case id=g10.store-checkout.TC-ru6 rev=1 covers=g10.store-checkout.SC-pxw -->
-### grade10-site-store-checkout-US9-TC3-1: Your Orders lists a guest order under the member's address
+<!-- trace:case id=g10.store-checkout.TC-ru6 rev=2 covers=g10.store-checkout.SC-pxw -->
+### grade10-site-store-checkout-US9-TC3-2: Your Orders lists a guest order under the member's address
 
 **Classification:**
 
@@ -868,7 +868,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 lists the guest order.
-* Step 3 shows the order still names no owner and earned no points.
+* Step 3 shows the order names the member at `<member email>` as its owner
+  and earned no points.
 
 <!-- trace:case id=g10.store-checkout.TC-kco rev=1 covers=g10.store-checkout.SC-gxp -->
 ### grade10-site-store-checkout-US9-TC4-1: Continue opens the order just paid
@@ -949,12 +950,54 @@ Runs once per row of **Test data**.
 
 * Step 2 lands where the row says.
 
+<!-- trace:case id=g10.store-checkout.TC-q8w rev=1 covers=g10.store-checkout.SC-q8v -->
+### grade10-site-store-checkout-US9-TC6-1: A joined guest order earns nothing when it completes
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-checkout-US-09
+
+**Pre-conditions:**
+
+* A guest order for `<basket>` was paid under `<member email>`, and no item
+  is fulfilled yet.
+* The member at `<member email>` holds `<balance>` points.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<basket>` | A ready basket of eligible goods |
+| `<member email>` | The address a member signs in with |
+| `<balance>` | The member's points balance before the order |
+
+**Steps:**
+
+1. Sign in as `<member email>`.
+2. Fulfil every item of the order in Shopify.
+3. Read the points earned on the order and the member's balance.
+
+**Expected Results:**
+
+* Step 1 joins the order to the member's account.
+* Step 3 shows no points earned on the order, and a balance of `<balance>`.
+
 ## Settled
 
 - Shopify is the hosted payment page; Grade10 is the order of record.
 - The public storefront takes a member or a guest; a guest pays the basket
-  and at most a public code, and the order belongs to nobody. Typed email remains an operator test
-  path in development and staging.
+  and at most a public code, and the order earns no points; it joins the
+  account that proves its address. Typed email remains an operator test path
+  in development and staging.
 - Shipping and tax are calculated by Shopify after address entry.
 - One checkout intent owns repeated Pay, reload and response-loss recovery.
 - A paid transition, not the provider return, releases the member cart.
