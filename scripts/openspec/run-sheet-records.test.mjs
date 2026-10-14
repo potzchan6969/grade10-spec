@@ -13,6 +13,7 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
+import { SUMMARY_COLUMNS } from "./lib/run-sheet-layout.mjs";
 import {
   candidatesAt,
   cellRows,
@@ -573,7 +574,13 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
         const address = /^([A-Z]+)([0-9]*)/.exec(cells);
         const column = [...address[1]].reduce((n, letter) => n * 26 + letter.charCodeAt(0) - 64, 0) - 1;
         const row = Number(address[2] || 1) - 1;
-        if (method === 'GET') answer = {values: data.slice(row).map(one => one.slice(column))};
+        if (method === 'GET') {
+          const result = data.slice(row).map(one => one.slice(column));
+          if (state.percentRunIds && title === 'Summary' && column === 0 && parsed.searchParams.get('valueRenderOption') !== 'UNFORMATTED_VALUE') {
+            result.forEach(one => { if (typeof one[0] === 'number') one[0] = String(one[0] * 100) + '%'; });
+          }
+          answer = {values: result};
+        }
         else if (path.endsWith(':append')) {
           const start = data.length;
           data.push(...body.values); state.data[title] = data;
@@ -633,6 +640,41 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     ["Summary", printed.tab],
   );
   assert.equal(state().data[printed.tab][3][0], "demo.thing.US1-TC1 (TC-abc)");
+  const formats = state()
+    .log.flatMap((one) => one.body?.requests ?? [])
+    .map((one) => one.repeatCell)
+    .filter((one) => one?.cell?.userEnteredFormat?.numberFormat);
+  assert.deepEqual(
+    formats
+      .filter(
+        (one) => one.cell.userEnteredFormat.numberFormat.type === "NUMBER",
+      )
+      .map((one) =>
+        SUMMARY_COLUMNS.slice(
+          one.range.startColumnIndex,
+          one.range.endColumnIndex,
+        ),
+      ),
+    [
+      ["Run ID"],
+      ["Total"],
+      ["To do", "Pass", "Fail", "Blocked", "Skipped", "N/A"],
+    ],
+  );
+  assert.deepEqual(
+    formats
+      .filter(
+        (one) => one.cell.userEnteredFormat.numberFormat.type === "PERCENT",
+      )
+      .map((one) =>
+        SUMMARY_COLUMNS.slice(
+          one.range.startColumnIndex,
+          one.range.endColumnIndex,
+        ),
+      ),
+    [["Pass rate"]],
+  );
+  writeFileSync(stateFile, JSON.stringify({ ...state(), percentRunIds: true }));
   const afterFirst = state().log.length;
   assert.match(
     run([

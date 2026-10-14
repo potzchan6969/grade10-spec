@@ -329,7 +329,10 @@ const batchUpdate = (token, id, requests) =>
   call(token, `/${id}:batchUpdate`, { method: "POST", body: { requests } });
 
 const values = (token, id, range) =>
-  call(token, `/${id}/values/${encodeURIComponent(range)}`);
+  call(
+    token,
+    `/${id}/values/${encodeURIComponent(range)}?valueRenderOption=UNFORMATTED_VALUE`,
+  );
 
 const putValues = (token, id, range, rows, raw = true) =>
   call(
@@ -760,6 +763,19 @@ function summaryDressing(sheetId, startRow, rows, runId) {
           "userEnteredFormat(backgroundColor,textFormat,verticalAlignment)",
       },
     },
+    ...[
+      [0, 1],
+      [SUMMARY_COLUMNS.indexOf("Total"), SUMMARY_COLUMNS.indexOf("Total") + 1],
+      [SUMMARY_COLUMNS.indexOf("To do"), SUMMARY_COLUMNS.indexOf("N/A") + 1],
+    ].map(([startColumnIndex, endColumnIndex]) => ({
+      repeatCell: {
+        range: { ...block, startColumnIndex, endColumnIndex },
+        cell: {
+          userEnteredFormat: { numberFormat: { type: "NUMBER", pattern: "0" } },
+        },
+        fields: "userEnteredFormat.numberFormat",
+      },
+    })),
     {
       repeatCell: {
         range: {
