@@ -1,0 +1,176 @@
+{
+  "version": 2,
+  "change": "add-store-cart-drawer-ui",
+  "baseline": "1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052",
+  "fingerprint": "5c6a7673141167cd8247b117625f3ecde887aad76df81e5699e74231b1fea7ce",
+  "reviewedBy": "@kinisworking",
+  "acceptedAt": "2026-10-14T00:57:58.669Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#checkout",
+      "sha256": "1914dfab9e5ff9e4f465611dc0ff023e2d0add2e839e5d13baa111d879cac8c2",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#pending-operations",
+      "sha256": "8231e99963805465e98a52ea4c88e0d7410e43db3cd1d07c0939914f5d36cdf1",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#points",
+      "sha256": "7ba654f9c0f641e8a121410227bdb1eec0df14558a93eca48804a4c234c9f485",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#promo-code",
+      "sha256": "e3598ab273979649fdd7e3d9d7a4c825bce87f71ead988380e9c0b98c77689e7",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart",
+      "sha256": "55f5ffc9ed8ca60ea3131d224bbb9b32858cdaf811ea7e9a924d7581686020fd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/store/checkout.md#integration-readiness",
+      "sha256": "6f21f2fb8719769d6b9f0ac11de10dc678b35d1e0d2fee5f944086b20c3f7ccd",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#pending-operations",
+      "sha256": "2a849616d0c8196647066d9856180adfaa23f5f1fbc9f90147d03f6b36cc534b",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/shared/ui/store-cart.md#tender-actions",
+      "sha256": "a5fb46cc8fc42fc09ff70ab125e22f1660bd3d564b75f2db036589e2389e4d6a",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/decisions.md",
+      "sha256": "f83863ede858988d39eec671364dec596ad53efc186f6c4986993e79800a4240",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/proposal.md",
+      "sha256": "e61dcf5902557fbe2087bc1621e91efc703f1b9dc67203b1093d8c3a2d6457c2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "sha256": "ac8028dee679496dc8943db2bda88a116e18c6209e2c2e8efcc0a7a51b961076",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "c849bbbdb97325fc9c3cd4fbc2aceb20d3dc5e5e83b8f61a6a0fcf44b6076173",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "9fb154f842a28b1382375841ed2d127e677e93e398b22153c5363e2579724a9f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "ad50d6de942d057c2e8cd30eac710b4d91408eb970c9edfa55e563e271bd8f37",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/specs/shared/ui/store-cart/spec.md",
+      "sha256": "35b562b3abd63e2ff3bc2dad85bd5de2e1f40712bfaf1a46ae391f53d9195cb6",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "d459b4cd13fd551871c9dae00e48e1bd82d672d5aa14759b0b48a48fa913d32a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/tech-design.md",
+      "sha256": "442b35a5b4c9fbadffa503672945c7fa3ad4c26b73703021deaaf1fdb672bc15",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/ui-design.md",
+      "sha256": "e328c7bc1d180b016c2558edb9fc2733c80e9ea9089b243edbca85abef3966bd",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "sha256": "83ddd97906fcaecc05de5d2ce6edc65449f76ab3071e2bff3ee018b71fdb36c4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "c8393bf04903a636e0c813f9198ddd2603b542221649b05fc351cfedbfd345fc",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "76b399a5ea9468f2db74b82705c42e71afbb6c2afded15e2a8aad558d435ef9f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "sha256": "2ec8c9ccdce4ed66b357a467eb87bc53bf248f724bb47f388364b50f09198881",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "sha256": "a28cdddb7acbf49695b53525176808e00329cd697b52198067935c4c22d8c744",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "sha256": "abb796e3ff4e773546d177d086b4b6df1296081f329feef70c48860376cc6bea",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/changes/add-store-cart-drawer-ui/ui-design.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A signed-in collector sees current tender facts and chooses points",
+        "Requirement: Drawer actions continue to a product address or create checkout directly",
+        "Requirement: Drawer changes stay on the current cart",
+        "Requirement: Pending drawer operations hold actions until work ends",
+        "Requirement: Points changes retain an accepted quote and choice",
+        "Requirement: The cart opens over the current site surface",
+        "Requirement: The drawer gates Checkout at the verification bar",
+        "Requirement: The drawer presents only review-backed facts",
+        "Requirement: The drawer reviews the current cart"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: Consumer pending operations disable drawer actions",
+        "Requirement: Consumer pending tender prevents conflicting actions"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/store-cart/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

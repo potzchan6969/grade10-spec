@@ -178,8 +178,86 @@ vault identity verification, shared console blocks, order settlement and
 two currency-change capabilities. Those unrelated omissions remain outside
 this pending increment.
 
-**Acceptance status** - Blocked. No independent acceptance verdict, new
-accepted fingerprint or published revision is claimed. The acceptance-review
-skill says a blocked preflight stops review, so acceptance review, acceptance
-and publication are not run. Application implementation is not part of this
-planning update.
+**Previous acceptance status (2026-10-13)** - Blocked. No independent
+acceptance verdict, new accepted fingerprint or published revision was
+claimed. The acceptance-review skill says a blocked preflight stops review, so
+acceptance review, acceptance and publication were not run. Application
+implementation was not part of that planning update.
+
+## Purpose Alignment Rerun
+
+**Run:** planning-dev scoped rerun on 2026-10-14 after the durable
+`grade10-site/store/cart-drawer` Purpose changed when the cart picture contract
+was accepted. The repair is committed at `43f592e056a5` on top of published
+store main `76973009c9f9`.
+
+**QA1:** The Purpose now carries the durable sentence and the drawer's existing
+review, edit and onward-navigation scope. No feature-set root, journey,
+requirement, or case anchor changed, so no new behavior case is owed.
+
+**Dev:** The existing `tech-design.md`, `tasks.md`, `ui-design.md` and
+requirements still cover the same drawer and shared pending-operation contract.
+The implementation groups and the Q22 checkout rule are unchanged.
+
+**QA2:** The scoped change suites validate with no errors: 43 cart cases and 9
+shared cases remain draft. The scoped durable cart suite and shared suite also
+validate with no errors. `plan:review-preflight` returns `ready` with source
+identity `85da7375cc6e40ff7d740617d3dd31b5ee8cfe1b7e93d61393cfa2701a7370e5`.
+
+**Acceptance review:** The fresh review is blocked by the store-wide folded
+suite gate, not by the cart-drawer Purpose or its scoped suites. The current
+`accept:preflight` reports no Purpose blocker and returns fingerprint
+`c78048e9e4accfed8be53b02b74022107e39bd91f38e0c0effabce59e2babb05` with
+baseline `1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052`,
+but `tcs:validate --require-suites` exits 1 on pre-existing store-wide suite
+coverage and metadata findings outside this change.
+
+**Status:** Not ready to accept. No acceptance record, published revision, or
+implementation claim is made. The product owner's acceptance command waits for
+the store-wide suite gate and the required push of this Purpose repair.
+
+## Identifier Namespace Rerun
+
+**Run:** 2026-10-14, bounded planning-dev and acceptance-review rerun after the
+active cart-drawer delta was repaired to use the durable
+`g10.store-cart-drawer.*` namespace. The durable cart-drawer suite was not
+edited.
+
+**QA1:** The six journey anchors and 43 existing cart cases retain their
+behavior and lifecycle. Legacy active-delta headings now map to the durable
+journey and case anchors (`US1` through `US6`); no new behavior case is owed.
+
+**Dev:** The repair is mechanical identifier alignment across
+`user-journeys.md`, `spec.md` and `feature-tcs.md`. Existing `trace:case` ids,
+scenario ids, requirement text and implementation behavior are unchanged.
+
+**QA2:** The scoped cart-drawer and shared suites validate without identifier
+errors. `git diff --check` passes, and the diff contains no changes to
+`trace:case` marker ids. The remaining draft and post-hoc coverage warnings
+are nonblocking and do not alter this change's contract.
+
+**Acceptance review:** Fresh review scope identity is
+`84792ceff97daeaf13bec74fd8d721a9681f6a723e705226c173c5ea51a0d85b`; the
+durable baseline remains
+`1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052`. The
+review ledger is `Ready to accept`. `pnpm accept:preflight
+add-store-cart-drawer-ui` exits 0 with fingerprint
+`5c6a7673141167cd8247b117625f3ecde887aad76df81e5699e74231b1fea7ce`.
+
+**Status:** Ready for product-owner acceptance. No acceptance record,
+published revision or implementation claim is made until the product owner
+runs `pnpm spec:accept` with that fresh baseline fingerprint.
+
+## Cited Journey Reference Repair
+
+**Run:** 2026-10-14, after acceptance exposed the remaining old journey
+references in `tasks.md:144`. The task citation now uses
+`g10.store-cart-drawer.US1` through `g10.store-cart-drawer.US6`; no behavior,
+scenario id or durable suite changed.
+
+**Checks:** `pnpm check:manual --quiet`, scoped TCS validation and
+`pnpm accept:preflight add-store-cart-drawer-ui` pass. The preflight baseline
+remains `1f810ff479ea3231a55ba09972db2ccb2d7811ac01d28ea6c9fc6b8221359052`;
+the remaining Purpose and draft-case warnings are nonblocking. The refreshed
+review scope identity is
+`40f4f99c83b7e99173c58c4bfb282eb118484ea46c101a002fd6b836fa1f65f3`.
