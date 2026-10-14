@@ -28,19 +28,19 @@
 | g10.auction-bid-increments.US1-TC1 | USD280 | USD280 | `<starting price>`: (range: 10000-49999 minor units); `<minimum next amount>`: (same as starting price) |
 | g10.auction-bid-increments.US1-TC1 | USD100 | USD100 | `<starting price>`: (fixed tier boundary); `<minimum next amount>`: (same as starting price) |
 
-| Case | current public price | increment | minimum next amount |
-| --- | --- | ---: | ---: |
-| g10.auction-bid-increments.US1-TC2 | USD100 (fixed tier boundary) | 500 | 10500 |
-| g10.auction-bid-increments.US1-TC2 | USD99.99 (range: 100–9999 minor units) | 100 | 10099 |
-| g10.auction-bid-increments.US1-TC2 | USD500 (fixed tier boundary) | 1000 | 51000 |
+| Case | `<current public price>` | `<increment>` | `<minimum next amount>` | Fixture notes |
+| --- | --- | ---: | ---: | --- |
+| g10.auction-bid-increments.US1-TC2 | USD100 | USD5 | USD105 | `<current public price>`: (fixed tier boundary); `<increment>`: 500 USD minor units; `<minimum next amount>`: 10500 USD minor units |
+| g10.auction-bid-increments.US1-TC2 | USD99.99 | USD1 | USD100.99 | `<current public price>`: (range: 100–9999 minor units); `<increment>`: 100 USD minor units; `<minimum next amount>`: 10099 USD minor units |
+| g10.auction-bid-increments.US1-TC2 | USD500 | USD10 | USD510 | `<current public price>`: (fixed tier boundary); `<increment>`: 1000 USD minor units; `<minimum next amount>`: 51000 USD minor units |
 
-| Case | minimum | bid amount |
-| --- | --- | ---: |
-| g10.auction-bid-increments.US1-TC3 | USD105 (range: 10000–49999 minor units) | 12600 |
+| Case | `<minimum>` | `<bid amount>` | Fixture notes |
+| --- | --- | ---: | --- |
+| g10.auction-bid-increments.US1-TC3 | USD105 | USD126 | `<minimum>`: (range: 10000–49999 minor units); `<bid amount>`: 12600 USD minor units |
 
-| Case | minimum | bid amount |
-| --- | --- | ---: |
-| g10.auction-bid-increments.US1-TC4 | USD105 (range: 10000–49999 minor units) | 10499 |
+| Case | `<minimum>` | `<bid amount>` | Fixture notes |
+| --- | --- | ---: | --- |
+| g10.auction-bid-increments.US1-TC4 | USD105 | USD104.99 | `<minimum>`: (range: 10000–49999 minor units); `<bid amount>`: 10499 USD minor units |
 
 | Case | `<starting price>` | `<first bid>` | `<increment>` | `<minimum next amount>` | `<higher bid>` | Fixture notes |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -73,11 +73,11 @@
 5. Open the listing bid panel.
 6. Enter `<bid amount>` as the bid amount.
 7. Confirm the bid.
-   - The bid is accepted. g10.auction-bid-increments.US1-TC3
+   - The bid of `<bid amount>` is accepted. g10.auction-bid-increments.US1-TC3
 8. Open the listing bid panel.
 9. Enter `<bid amount>` as the bid amount.
 10. Confirm the bid.
-   - The bid is refused. g10.auction-bid-increments.US1-TC4
+   - The bid of `<bid amount>` is refused. g10.auction-bid-increments.US1-TC4
    - The refusal names `<minimum>` as the minimum. g10.auction-bid-increments.US1-TC4
 11. Open the listing.
 12. Read the minimum next amount.
@@ -110,6 +110,7 @@
 **Starting state:**
 
 - The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+- The bid amount `<bid amount>` equals `<ceiling>`.
 - A live USD listing's minimum next bid is at or below `<ceiling>`; a linked-card customer is on the listing.
 - A live USD listing has an accepted bid; a bid request sets maximum `<over ceiling>`, above `<ceiling>`.
 - customer A leads the open USD listing at `<ceiling>`.
@@ -118,9 +119,9 @@
 
 **Shared test data:**
 
-| Case | minimum | ceiling | bid amount |
-| --- | --- | ---: | ---: |
-| g10.auction-bid-increments.US2-TC1 | USD9,999,900 (range: 1000000–1000000000 minor units) | 1000000000 | 1000000000 |
+| Case | `<minimum>` | `<ceiling>` | `<bid amount>` | Fixture notes |
+| --- | --- | ---: | ---: | --- |
+| g10.auction-bid-increments.US2-TC1 | USD9,999,900 | USD10,000,000 | USD10,000,000 | `<minimum>`: (range: 1000000–1000000000 minor units); `<ceiling>`: 1000000000 USD minor units; `<bid amount>`: 1000000000 USD minor units |
 
 | Case | Field | Value | Fixture notes |
 | --- | --- | --- | --- |
@@ -142,7 +143,7 @@
 1. Open the listing bid panel.
 2. Enter `<bid amount>` as the bid amount.
 3. Confirm the bid.
-   - The bid is accepted. g10.auction-bid-increments.US2-TC1
+   - The bid of `<bid amount>` is accepted. g10.auction-bid-increments.US2-TC1
 4. Enter `<over ceiling>` as the custom maximum and confirm.
 5. Read the refusal, highest bid, and bid count.
 6. Read the customer's My Auctions row.
@@ -280,16 +281,17 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
-An open USD listing has current public price `<current public price>`.
-The collector is enrolled and can bid.
+
+* An open USD listing has current public price `<current public price>`.
+* The collector is enrolled and can bid.
 
 **Test data:**
 
-| current public price | increment | minimum next amount |
-| --- | ---: | ---: |
-| USD100 (fixed tier boundary) | 500 | 10500 |
-| USD99.99 (range: 100–9999 minor units) | 100 | 10099 |
-| USD500 (fixed tier boundary) | 1000 | 51000 |
+| `<current public price>` | `<increment>` | `<minimum next amount>` | Fixture notes |
+| --- | ---: | ---: | --- |
+| USD100 | USD5 | USD105 | `<current public price>`: (fixed tier boundary); `<increment>`: 500 USD minor units; `<minimum next amount>`: 10500 USD minor units |
+| USD99.99 | USD1 | USD100.99 | `<current public price>`: (range: 100–9999 minor units); `<increment>`: 100 USD minor units; `<minimum next amount>`: 10099 USD minor units |
+| USD500 | USD10 | USD510 | `<current public price>`: (fixed tier boundary); `<increment>`: 1000 USD minor units; `<minimum next amount>`: 51000 USD minor units |
 
 **Steps:**
 
@@ -319,13 +321,14 @@ The collector is enrolled and can bid.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+* The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
 
 **Test data:**
 
-| minimum | bid amount |
-| --- | ---: |
-| USD105 (range: 10000–49999 minor units) | 12600 |
+| `<minimum>` | `<bid amount>` | Fixture notes |
+| --- | ---: | --- |
+| USD105 | USD126 | `<minimum>`: (range: 10000–49999 minor units); `<bid amount>`: 12600 USD minor units |
 
 **Steps:**
 
@@ -335,7 +338,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 
 **Expected Results:**
 
-* The bid is accepted.
+* The bid of `<bid amount>` is accepted.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-5ez rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### g10.auction-bid-increments.US1-TC4: Amount below the minimum is refused
@@ -356,13 +359,14 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+* The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
 
 **Test data:**
 
-| minimum | bid amount |
-| --- | ---: |
-| USD105 (range: 10000–49999 minor units) | 10499 |
+| `<minimum>` | `<bid amount>` | Fixture notes |
+| --- | ---: | --- |
+| USD105 | USD104.99 | `<minimum>`: (range: 10000–49999 minor units); `<bid amount>`: 10499 USD minor units |
 
 **Steps:**
 
@@ -372,7 +376,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 
 **Expected Results:**
 
-* The bid is refused.
+* The bid of `<bid amount>` is refused.
 * The refusal names `<minimum>` as the minimum.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=2 covers=g10.auction-bid-increments.SC-ijk -->
@@ -561,13 +565,16 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-increments.spec.ts`
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+* The collector is enrolled on an open USD listing whose minimum bid is `<minimum>`.
+
+* The bid amount `<bid amount>` equals `<ceiling>`.
 
 **Test data:**
 
-| minimum | ceiling | bid amount |
-| --- | ---: | ---: |
-| USD9,999,900 (range: 1000000–1000000000 minor units) | 1000000000 | 1000000000 |
+| `<minimum>` | `<ceiling>` | `<bid amount>` | Fixture notes |
+| --- | ---: | ---: | --- |
+| USD9,999,900 | USD10,000,000 | USD10,000,000 | `<minimum>`: (range: 1000000–1000000000 minor units); `<ceiling>`: 1000000000 USD minor units; `<bid amount>`: 1000000000 USD minor units |
 
 **Steps:**
 
@@ -577,7 +584,7 @@ The collector is enrolled on an open USD listing whose minimum bid is `<minimum>
 
 **Expected Results:**
 
-* The bid is accepted.
+* The bid of `<bid amount>` is accepted.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=3 covers=g10.auction-bid-increments.SC-hm3 -->
 ### g10.auction-bid-increments.US2-TC2: Direct bid above USD ceiling is refused without effects
