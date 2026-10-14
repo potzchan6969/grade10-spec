@@ -303,6 +303,26 @@ export const RemainingCount: Story = {
   },
 };
 
+/** A refused cart change: the control holds the cart's quantity and the tile
+ * says why beneath it, still pressable. */
+export const CartRefused: Story = {
+  args: {
+    inCart: true,
+    cartCount: "2",
+    cartFailed: "The cart could not be changed. Try again.",
+  },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "The cart could not be changed. Try again.",
+    );
+    expect(
+      canvas.getByRole("button", { name: `2. ${copy.adjustQuantity}` }),
+    ).toBeEnabled();
+  },
+};
+
 /**
  * Scenario: shared-ui-store-product-listing-SC-61 - No remaining count
  * supplied, so the card says nothing about what is left.

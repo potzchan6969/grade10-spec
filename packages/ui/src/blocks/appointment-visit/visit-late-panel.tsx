@@ -70,7 +70,7 @@ function VisitLatePanel({
       footer={
         <Button
           className="h-11 w-full text-[15px] font-semibold"
-          disabled={!picked || pending}
+          disabled={!picked}
           loading={pending}
           onClick={onSend}
           size="md"
@@ -120,7 +120,6 @@ function VisitLatePanel({
           </span>
           <Button
             className="h-11 w-full border-border-strong text-[15px] font-semibold"
-            disabled={here.pending}
             loading={here.pending}
             onClick={here.onHere}
             size="md"

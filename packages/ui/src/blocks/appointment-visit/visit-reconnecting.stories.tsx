@@ -26,6 +26,22 @@ export const Trying: Story = {
   args: { busy: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Trying…" })).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Trying…" })).toHaveAttribute(
+      "aria-busy",
+      "true",
+    );
+  },
+};
+
+/** A refused retry says why beside Try now, which is pressable again. */
+export const RetryFailed: Story = {
+  args: { retryFailed: "Still no signal. Check your connection." },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "Still no signal. Check your connection.",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Try now" }));
+    expect(args.onRetry).toHaveBeenCalledTimes(1);
   },
 };

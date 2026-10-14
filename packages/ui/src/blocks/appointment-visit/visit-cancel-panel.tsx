@@ -95,7 +95,6 @@ function VisitCancelPanel({
           </Button>
           <Button
             className="h-11 text-[15px] font-semibold"
-            disabled={pending}
             loading={pending}
             onClick={onConfirm}
             size="md"

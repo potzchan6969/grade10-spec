@@ -48,3 +48,30 @@ export const Default: Story = {
     expect(args.onNotYou).toHaveBeenCalledTimes(1);
   },
 };
+
+/** Not you? is signing out: it spins, keeps focus and takes no second press. */
+export const NotYouPending: Story = {
+  args: { notYouPending: true },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const notYou = canvas.getByRole("button", { name: "Not you?" });
+    expect(notYou).toHaveAttribute("aria-busy", "true");
+    notYou.focus();
+    expect(notYou).toHaveFocus();
+    await userEvent.click(notYou);
+    expect(args.onNotYou).not.toHaveBeenCalled();
+  },
+};
+
+/** The sign-out was refused: the reason shows under Not you?, which works again. */
+export const NotYouFailed: Story = {
+  args: { notYouFailed: "We couldn’t sign you out. Try again." },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We couldn’t sign you out. Try again.",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Not you?" }));
+    expect(args.onNotYou).toHaveBeenCalledTimes(1);
+  },
+};

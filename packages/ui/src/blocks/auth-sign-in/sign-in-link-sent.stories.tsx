@@ -120,3 +120,17 @@ export const ResendReportsActivation: Story = {
     expect(args.onResend).toHaveBeenCalledOnce();
   },
 };
+
+/** A refused resend says why under Resend, which is pressable again. */
+export const ResendFailed: Story = {
+  name: "Resend refused",
+  args: { resendFailed: "We couldn't send the link. Try again." },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("alert")).toHaveTextContent(
+      "We couldn't send the link. Try again.",
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Resend" }));
+    expect(args.onResend).toHaveBeenCalledOnce();
+  },
+};

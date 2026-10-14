@@ -19,7 +19,13 @@ function ResultsCondition({
     <EmptyState
       actions={
         action ? (
-          <Button onClick={action.onAction} size="md" variant="secondary">
+          <Button
+            focusableWhenDisabled
+            loading={action.pending}
+            onClick={action.onAction}
+            size="md"
+            variant="secondary"
+          >
             {action.label}
           </Button>
         ) : undefined

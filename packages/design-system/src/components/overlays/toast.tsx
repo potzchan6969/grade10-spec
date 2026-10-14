@@ -57,6 +57,67 @@ const defaultToastIcon = (
   </span>
 );
 
+type Action = Extract<ExternalToast["action"], { onClick: unknown }>;
+
+const isAction = (action: ExternalToast["action"]): action is Action =>
+  typeof action === "object" && action !== null && "onClick" in action;
+
+const isThenable = (value: unknown): value is PromiseLike<unknown> =>
+  typeof (value as PromiseLike<unknown> | null)?.then === "function";
+
+let heldToasts = 0;
+
+/**
+ * An action whose `onClick` returns a promise holds its toast: the toast turns
+ * loading under the same id, its action does nothing on a second press, and
+ * it closes when the promise settles. The outcome is the caller's to draw.
+ */
+function holdAction(
+  message: ToastMessage,
+  data?: ExternalToast,
+): ExternalToast | undefined {
+  const action = data?.action;
+  if (!isAction(action)) return data;
+  const id = data?.id ?? `held-toast-${++heldToasts}`;
+  let running = false;
+  return {
+    ...data,
+    id,
+    action: {
+      ...action,
+      onClick: (event) => {
+        if (running) {
+          event.preventDefault();
+          return;
+        }
+        const work: unknown = action.onClick(event);
+        if (!isThenable(work)) return;
+        event.preventDefault();
+        running = true;
+        sonnerToast.loading(message, {
+          id,
+          icon: undefined,
+          action: { ...action, onClick: (again) => again.preventDefault() },
+        });
+        work.then(
+          () => sonnerToast.dismiss(id),
+          (error: unknown) => {
+            sonnerToast.dismiss(id);
+            globalThis.reportError(error);
+          },
+        );
+      },
+    },
+  };
+}
+
+function held(
+  show: (message: ToastMessage, data?: ExternalToast) => string | number,
+) {
+  return (message: ToastMessage, data?: ExternalToast) =>
+    show(message, holdAction(message, data));
+}
+
 /** Figma `type=default` draws an optional Bell; pass `icon: null` to hide it. */
 function withDefaultIcon(data?: ExternalToast): ExternalToast | undefined {
   if (data?.icon !== undefined) return data;
@@ -83,7 +144,9 @@ function withDefaultIcon(data?: ExternalToast): ExternalToast | undefined {
  * Title is `text-sm/medium` in `Base/foreground` (a `<p>`/`<div>`, not a
  * heading); description is `text-sm/normal` in `Base/secondary-foreground`.
  * The optional action is a nested secondary `Button` `sm` — hover/focus on it
- * pauses the auto-dismiss timer, and activating it dismisses the toast. Close
+ * pauses the auto-dismiss timer, and activating it dismisses the toast; an
+ * action whose `onClick` returns a promise holds the toast until it settles.
+ * Close
  * (`Toast / Close`, `6332:3599`) is a 20px hit target with a 16px `X`:
  * `Base/secondary-foreground` idle, `Base/foreground` on hover. Mount one
  * `<Toast />` at the app root; emit toasts with `toast()` / `toast.success()`
@@ -172,15 +235,15 @@ function Toast({
 }
 
 const toast = Object.assign(
-  (message: ToastMessage, data?: ExternalToast) =>
-    sonnerToast(message, withDefaultIcon(data)),
+  held((message, data) => sonnerToast(message, withDefaultIcon(data))),
   {
-    success: sonnerToast.success,
-    info: sonnerToast.info,
-    warning: sonnerToast.warning,
-    error: sonnerToast.error,
-    message: (message: ToastMessage, data?: ExternalToast) =>
+    success: held(sonnerToast.success),
+    info: held(sonnerToast.info),
+    warning: held(sonnerToast.warning),
+    error: held(sonnerToast.error),
+    message: held((message, data) =>
       sonnerToast.message(message, withDefaultIcon(data)),
+    ),
     promise: sonnerToast.promise,
     dismiss: sonnerToast.dismiss,
     loading: sonnerToast.loading,

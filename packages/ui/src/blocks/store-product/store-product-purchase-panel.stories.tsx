@@ -27,23 +27,34 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const ADD_REFUSAL = "The cart could not be changed. Try again.";
+
 function InteractivePurchasePanel({
   product,
+  refuses = false,
 }: {
   product: typeof PRODUCT_DETAIL_STORY;
+  refuses?: boolean;
 }) {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [addFailed, setAddFailed] = useState<string>();
 
   return (
     <StoreProductPurchasePanel
+      addFailed={addFailed}
       copy={PURCHASE_COPY}
       loading={loading}
       onAddToCart={() => {
         if (loading) return;
         setLoading(true);
+        setAddFailed(undefined);
         window.setTimeout(() => {
           setLoading(false);
+          if (refuses) {
+            setAddFailed(ADD_REFUSAL);
+            return;
+          }
           setQuantity(1);
         }, ADD_MS);
       }}
@@ -122,5 +133,28 @@ export const Loading: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Adding…" })).toBeDisabled();
     expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toBeDisabled();
+  },
+};
+
+/** A refused add says why under the button, which is pressable again for a
+ * retry; the chosen quantity stays. */
+export const AddRefused: Story = {
+  render: () => (
+    <InteractivePurchasePanel product={PRODUCT_DETAIL_STORY} refuses />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Increase quantity" }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
+    expect(canvas.queryByRole("alert")).toBeNull();
+    await waitFor(() =>
+      expect(canvas.getByRole("alert")).toHaveTextContent(ADD_REFUSAL),
+    );
+    expect(canvas.getByRole("button", { name: "Add to cart" })).toBeEnabled();
+    expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
+      "2",
+    );
   },
 };

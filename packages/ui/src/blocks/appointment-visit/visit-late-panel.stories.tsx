@@ -59,9 +59,9 @@ export const Default: Story = {
 export const Sending: Story = {
   args: { pending: true },
   play: async () => {
-    expect(
-      await screen.findByRole("button", { name: "Sending…" }),
-    ).toBeDisabled();
+    const button = await screen.findByRole("button", { name: "Sending…" });
+    expect(button).toHaveAttribute("aria-busy", "true");
+    expect(button).not.toBeDisabled();
   },
 };
 

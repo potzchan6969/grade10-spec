@@ -46,8 +46,14 @@ type BookingManageCardProps = LocaleProps & {
   timeZoneLabel?: string;
   /** The instant the visit is judged against, as epoch milliseconds. */
   now?: number;
+  /** Shared busy state for both acts; `movePending`/`cancelPending` override it. */
   pending?: boolean;
   error?: ReactNode;
+  movePending?: boolean;
+  moveFailed?: string;
+  /** When given, the cancel dialog stays open until the visit is cancelled. */
+  cancelPending?: boolean;
+  cancelFailed?: string;
   onMove: () => void;
   onCancel: () => void;
   className?: string;
@@ -66,15 +72,22 @@ function BookingManageCard({
   now = Date.now(),
   pending = false,
   error,
+  movePending = pending,
+  moveFailed,
+  cancelPending,
+  cancelFailed,
   onMove,
   onCancel,
   className,
 }: BookingManageCardProps) {
   const [confirming, setConfirming] = useState(false);
   const open = record.state === "booked" && record.end > now;
+  const cancelBusy = cancelPending ?? pending;
+  const dialogOpen = confirming && open;
 
   function confirmCancel() {
-    setConfirming(false);
+    if (cancelBusy) return;
+    if (cancelPending === undefined) setConfirming(false);
     onCancel();
   }
 
@@ -145,13 +158,16 @@ function BookingManageCard({
               {error}
             </Text>
           ) : null}
+          <ActFailed message={moveFailed} />
+          <ActFailed message={dialogOpen ? undefined : cancelFailed} />
         </VStack>
       </CardContent>
       {open ? (
         <CardFooter className="flex-col items-stretch justify-start gap-2 border-border bg-transparent sm:flex-row sm:items-center">
           <Button
             className="w-full sm:w-auto"
-            disabled={pending}
+            disabled={cancelBusy}
+            loading={movePending}
             onClick={onMove}
             size="md"
             type="button"
@@ -161,7 +177,8 @@ function BookingManageCard({
           </Button>
           <Button
             className="w-full sm:w-auto"
-            disabled={pending}
+            disabled={movePending}
+            loading={cancelBusy}
             onClick={() => setConfirming(true)}
             size="md"
             type="button"
@@ -171,7 +188,7 @@ function BookingManageCard({
           </Button>
         </CardFooter>
       ) : null}
-      {confirming ? (
+      {dialogOpen ? (
         <Dialog onOpenChange={setConfirming} open>
           <DialogContent showCloseButton={false}>
             <DialogHeader showCloseButton={false}>
@@ -179,6 +196,7 @@ function BookingManageCard({
             </DialogHeader>
             <DialogBody>
               <DialogDescription>{copy.cancelBody}</DialogDescription>
+              <ActFailed message={cancelFailed} />
             </DialogBody>
             <DialogFooter>
               <Button
@@ -190,7 +208,7 @@ function BookingManageCard({
                 {copy.cancelKeep}
               </Button>
               <Button
-                loading={pending}
+                loading={cancelBusy}
                 onClick={confirmCancel}
                 size="md"
                 type="button"
@@ -203,6 +221,15 @@ function BookingManageCard({
         </Dialog>
       ) : null}
     </Card>
+  );
+}
+
+function ActFailed({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <Text as="p" role="alert" size="sm" tone="error">
+      {message}
+    </Text>
   );
 }
 

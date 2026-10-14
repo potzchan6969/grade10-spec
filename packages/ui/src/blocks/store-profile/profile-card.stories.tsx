@@ -1,6 +1,6 @@
 import { getMessages } from "@grade10/i18n";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { FIXTURE_MEMBER_SINCE } from "../../lib/datetime-fixtures";
 import { ProfileCard } from "./profile-card";
 import { ProfileDetails } from "./profile-details";
@@ -48,6 +48,27 @@ export const ErrorState: Story = {
       message: "Could not load your profile.",
       action: { label: common.retry, onAction: fn() },
     },
+  },
+};
+
+/** A retry under way spins on its button, keeps focus and takes no press. */
+export const ErrorRetryPending: Story = {
+  args: {
+    state: {
+      status: "error",
+      message: "Could not load your profile.",
+      action: { label: common.retry, onAction: fn(), pending: true },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const retry = canvas.getByRole("button", { name: common.retry });
+    expect(retry).toHaveAttribute("aria-busy", "true");
+    retry.focus();
+    expect(retry).toHaveFocus();
+    await userEvent.click(retry);
+    if (args.state.status !== "error") throw new Error("error state expected");
+    expect(args.state.action?.onAction).not.toHaveBeenCalled();
   },
 };
 
