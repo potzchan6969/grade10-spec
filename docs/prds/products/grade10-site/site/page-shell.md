@@ -110,6 +110,8 @@ holds - [Cart Drawer](/p/grade10-site/store/cart)
 
 ::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
+::story{id="site-page-shell-blocks-siteheader-auction-first--pending" title="Auction first — pending session"}
+
 ::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
 ::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
@@ -121,6 +123,8 @@ holds - [Cart Drawer](/p/grade10-site/store/cart)
 ::story{id="design-system-layout-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
 ::story{id="site-page-shell-blocks-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
+
+::story{id="site-page-shell-blocks-siteheader-layout--narrow-pending" title="SiteHeader — narrow pending session"}
 
 ::story{id="site-page-shell-blocks-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 

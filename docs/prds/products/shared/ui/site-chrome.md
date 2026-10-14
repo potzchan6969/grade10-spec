@@ -107,6 +107,10 @@ through an optional cart slot, as it does for account.
 
 ::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
+::story{id="site-page-shell-blocks-siteheader-auction-first--pending" title="Auction first — pending session"}
+
+::story{id="site-page-shell-blocks-siteheader-layout--narrow-pending" title="SiteHeader — narrow pending session"}
+
 ::story{id="design-system-layout-nav-overview--another-brand" title="Nav — another brand"}
 
 ::story{id="design-system-layout-footer--auction-only" title="Footer — auction only"}
