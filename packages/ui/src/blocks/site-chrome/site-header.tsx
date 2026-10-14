@@ -165,7 +165,9 @@ function SiteHeader({
           }
         >
           {signOutPending ? (
-            <CircleNotch aria-hidden className="animate-spin" size={14} />
+            <span aria-hidden className="inline-flex animate-spin">
+              <CircleNotch size={14} />
+            </span>
           ) : (
             <User aria-hidden size={14} />
           )}
