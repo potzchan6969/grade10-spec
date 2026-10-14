@@ -33,23 +33,27 @@
 * **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
-customer is on <grade10 sign-in url>, signed out.
+customer is on `<grade10 sign-in url>`, signed out.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <collector email> at the email step.
+1. Submit `<collector email>` at the email step.
 2. Open the sign-in email and follow its unused, unexpired link.
 
 **Expected Results:**
 
 * The link lands the collector on this brand, signed in.
-* The signed-in account is the one for <collector email>.
+* The signed-in account is the one for `<collector email>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-vx5 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC2-1: Email step offers the link and no code control
@@ -70,9 +74,15 @@ customer is on <grade10 sign-in url>, signed out.
 **Pre-conditions:**
 customer is signed out.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 sign-in url>.
+1. Navigate to `<grade10 sign-in url>`.
 2. Reach the email step.
 
 **Expected Results:**
@@ -98,18 +108,22 @@ customer is signed out.
 
 **Pre-conditions:**
 
-* customer is on <grade10 sign-in url>, signed out.
+* customer is on `<grade10 sign-in url>`, signed out.
 * The send-link request is held open by manipulated network conditions, so it stays in flight.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <collector email> at the email step.
+1. Submit `<collector email>` at the email step.
 2. Activate the same send-link command again while its request is held.
 3. Release the held request.
 
@@ -135,17 +149,21 @@ customer is signed out.
 * **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
-customer is on <grade10 sign-in url>, signed out.
+customer is on `<grade10 sign-in url>`, signed out.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| new email | newcomer@example.com | an address that has never signed in |
+
 | Field | Value |
 | --- | --- |
-| `<new email>` | newcomer@example.com, an address that has never signed in |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <new email> at the email step.
+1. Submit `<new email>` at the email step.
 
 **Expected Results:**
 
@@ -208,18 +226,18 @@ customer is on <grade10 sign-in url>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* A sign-in link for <collector email> is past its time to live.
+* A sign-in link for `<collector email>` is past its time to live.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<expired link>` | A sign-in link whose time to live has ended |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| expired link | A sign-in link whose time to live has ended | · |
 
 **Steps:**
 
-1. Follow <expired link>.
+1. Follow `<expired link>`.
 
 **Expected Results:**
 
@@ -245,24 +263,24 @@ customer is on <grade10 sign-in url>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* <earlier link> is unused and unexpired for <collector email>.
-* The sixty-second window since <earlier link> was sent has passed.
+* `<earlier link>` is unused and unexpired for `<collector email>`.
+* The sixty-second window since `<earlier link>` was sent has passed.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<earlier link>` | The unused unexpired link from the first sign-in email |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| earlier link | The unused unexpired link from the first sign-in email | · |
 
 **Steps:**
 
-1. Submit <collector email> at the email step to send a later sign-in email.
-2. Follow <earlier link>.
+1. Submit `<collector email>` at the email step to send a later sign-in email.
+2. Follow `<earlier link>`.
 
 **Expected Results:**
 
-* No session is created from <earlier link>.
+* No session is created from `<earlier link>`.
 * The surface still shows the person as signed out.
 
 <!-- trace:case id=g10.shared-sign-in.TC-p0g rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
@@ -283,18 +301,22 @@ customer is on <grade10 sign-in url>, signed out.
 
 **Pre-conditions:**
 
-* customer is on <grade10 sign-in url>, signed out.
+* customer is on `<grade10 sign-in url>`, signed out.
 * The sign-in-link send is mocked to fail.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <collector email> at the email step.
+1. Submit `<collector email>` at the email step.
 
 **Expected Results:**
 
@@ -320,19 +342,23 @@ customer is on <grade10 sign-in url>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* A sign-in email for collector@example.com, an address with an account, has gone out and its link is unused.
+* A sign-in email for `<email_1>`, an address with an account, has gone out and its link is unused.
 
 **Test data:**
 
 Runs once per row of **Test data**.
 
-| `<follow delay>` | Grade10 answers |
+| `<follow delay>` | `<expected outcome>` |
 | --- | --- |
 | 4 minutes after the send | signs the collector in |
 | 4 minutes 59 seconds after the send | signs the collector in |
 | exactly 5 minutes after the send | creates no session |
 | 5 minutes 1 second after the send | creates no session |
 | 6 minutes after the send | creates no session |
+
+| Field | Value |
+| --- | --- |
+| email_1 | collector@example.com |
 
 **Steps:**
 
@@ -341,8 +367,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Grade10 answers as the row states.
-* A sign-in row enters the account for collector@example.com.
+* Grade10 answers with this outcome: `<expected outcome>`.
+* A sign-in row enters the account for `<email_1>`.
 * A no-session row leaves the surface showing the person signed out.
 
 <!-- trace:case id=g10.shared-sign-in.TC-2zv rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
@@ -363,25 +389,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on <grade10 sign-in url>, signed out, at the confirmation step.
-* A sign-in email for <collector email> has gone out and <sign-in link> is unused.
+* customer is on `<grade10 sign-in url>`, signed out, at the confirmation step.
+* A sign-in email for `<collector email>` has gone out and `<sign-in link>` is unused.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| sign-in link | The unused link from that sign-in email | · |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<sign-in link>` | The unused link from that sign-in email |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Wait for the Resend control to turn on again, without resending.
-2. Follow <sign-in link>, ninety seconds after the send.
+2. Follow `<sign-in link>`, ninety seconds after the send.
 
 **Expected Results:**
 
 * The link signs the collector in.
-* The signed-in account is the one for <collector email>.
+* The signed-in account is the one for `<collector email>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-uee rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC11-1: A resent link's five minutes run from its own send
@@ -401,26 +431,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on <grade10 sign-in url>, signed out, at the confirmation step.
-* A first sign-in email for <collector email> went out sixty seconds ago and its link is unused.
+* customer is on `<grade10 sign-in url>`, signed out, at the confirmation step.
+* A first sign-in email for `<collector email>` went out sixty seconds ago and its link is unused.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| later link | The link from the second sign-in email | · |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<later link>` | The link from the second sign-in email |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Resend the sign-in email.
 2. Let four minutes pass after the second send.
-3. Follow <later link>.
+3. Follow `<later link>`.
 
 **Expected Results:**
 
 * The link signs the collector in, five minutes after the first send.
-* The signed-in account is the one for <collector email>.
+* The signed-in account is the one for `<collector email>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-k9t rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC12-1: The session outlives the link that created it
@@ -441,18 +475,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out.
-* A sign-in link for <collector email> is unused and four minutes past its send.
+* A sign-in link for `<collector email>` is unused and four minutes past its send.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<sign-in link>` | The unused link from that sign-in email |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| sign-in link | The unused link from that sign-in email | · |
 
 **Steps:**
 
-1. Follow <sign-in link>.
+1. Follow `<sign-in link>`.
 2. Let a further ten minutes pass.
 3. Reload the account page.
 
@@ -480,24 +514,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out.
-* No unused sign-in link exists for <collector email>.
+* No unused sign-in link exists for `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<send time>` | The instant the sign-in email is sent |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| send time | The instant the sign-in email is sent | · |
 
 **Steps:**
 
-1. Send a sign-in link to <collector email> at <send time>.
+1. Send a sign-in link to `<collector email>` at `<send time>`.
 2. Read the recorded expiry for that link.
 3. Let the sixty-second resend wait end and read the expiry again.
 
 **Expected Results:**
 
-* The recorded expiry is <send time> plus five minutes.
+* The recorded expiry is `<send time>` plus five minutes.
 * The expiry is unchanged at step 3.
 
 <!-- trace:case id=g10.shared-sign-in.TC-j99 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
@@ -518,28 +552,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on <grade10 sign-in url>, signed out, with `<locale>` in force.
+* customer is on `<grade10 sign-in url>`, signed out, with `<locale>` in force.
 
 **Test data:**
 
 Runs once per row of **Test data**.
 
-| `<locale>` | The body promises |
+| `<locale>` | `<promised duration>` |
 | --- | --- |
 | The default locale | five minutes |
 | Traditional Chinese | five minutes |
 | Simplified Chinese | five minutes |
 
+| Field | Value |
+| --- | --- |
+| email_1 | collector@example.com |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Submit collector@example.com at the email step.
+1. Submit `<email_1>` at the email step.
 2. Open the sign-in email.
 3. Read the sentence that states how long the link lasts.
 
 **Expected Results:**
 
-* The body promises what the row states.
-* No row's body states fifteen minutes or any other duration.
+* The body promises `<promised duration>`.
+* No email body states fifteen minutes or any other duration.
 
 <!-- trace:case id=g10.shared-sign-in.TC-lw1 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC15-1: The promised duration is the enforced duration
@@ -640,25 +679,29 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out in a fresh browser session.
-* <used link> created a session two minutes after its send.
+* `<used link>` created a session two minutes after its send.
 
 **Test data:**
 
 Runs once per row of **Test data**.
 
-| `<follow delay>` | Grade10 answers |
+| `<follow delay>` | `<expected outcome>` |
 | --- | --- |
 | 4 minutes after the send | creates no session |
 | 6 minutes after the send | creates no session |
 
+| Field | Value |
+| --- | --- |
+| used link | The emailed sign-in link that has already been followed successfully; bind its URL only |
+
 **Steps:**
 
 1. Let `<follow delay>` pass after the send.
-2. Follow <used link>.
+2. Follow `<used link>`.
 
 **Expected Results:**
 
-* Grade10 answers as the row states.
+* Grade10 answers with this outcome: `<expected outcome>`.
 * The surface still shows the person as signed out.
 
 <!-- trace:case id=g10.shared-sign-in.TC-mem rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
@@ -680,18 +723,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out on a device whose clock is set one hour behind.
-* <expired link> for <collector email> is six minutes past its send.
+* `<expired link>` for `<collector email>` is six minutes past its send.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<expired link>` | A sign-in link whose time to live has ended |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| expired link | A sign-in link whose time to live has ended | · |
 
 **Steps:**
 
-1. Follow <expired link>.
+1. Follow `<expired link>`.
 2. Read the signed-in state on the surface.
 
 **Expected Results:**
@@ -728,20 +771,24 @@ customer is signed out on a brand that has Google sign-in.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| verified google email | collector@example.com | verified by Google |
+
 | Field | Value |
 | --- | --- |
-| `<verified google email>` | collector@example.com, verified by Google |
+| sign-in url of a brand with google sign-in | The customer sign-in URL of a brand with Google sign-in enabled in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <sign-in url of a brand with google sign-in>.
+1. Navigate to `<sign-in url of a brand with google sign-in>`.
 2. Activate the Google control.
-3. Complete Google sign-in with <verified google email>.
+3. Complete Google sign-in with `<verified google email>`.
 
 **Expected Results:**
 
 * Step 1 shows the Google control on the sign-in surface.
-* The collector is signed in as the account for <verified google email>.
+* The collector is signed in as the account for `<verified google email>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-rnu rev=1 covers=g10.shared-sign-in.SC-eng,g10.shared-sign-in.SC-erl,g10.shared-sign-in.SC-ddm -->
 ### shared-auth-sign-in-US3-TC2-1: Brand without Google hides the control
@@ -762,9 +809,15 @@ customer is signed out on a brand that has Google sign-in.
 **Pre-conditions:**
 customer is signed out on a brand that does not have Google sign-in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| sign-in url of a brand without google sign-in | The customer sign-in URL of a brand with Google sign-in disabled in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <sign-in url of a brand without google sign-in>.
+1. Navigate to `<sign-in url of a brand without google sign-in>`.
 
 **Expected Results:**
 
@@ -789,22 +842,26 @@ customer is signed out on a brand that does not have Google sign-in.
 **Pre-conditions:**
 
 * customer is signed out on a brand that has Google sign-in.
-* The Google sign-in response is stubbed to return <unverified google email> with its verified flag false.
+* The Google sign-in response is stubbed to return `<unverified google email>` with its verified flag false.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| unverified google email | collector@workspace-example.com | returned by Google as not verified |
+
 | Field | Value |
 | --- | --- |
-| `<unverified google email>` | collector@workspace-example.com, returned by Google as not verified |
+| sign-in url of a brand with google sign-in | The customer sign-in URL of a brand with Google sign-in enabled in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <sign-in url of a brand with google sign-in>.
-2. Complete Google sign-in with <unverified google email>.
+1. Navigate to `<sign-in url of a brand with google sign-in>`.
+2. Complete Google sign-in with `<unverified google email>`.
 
 **Expected Results:**
 
-* No account is created for <unverified google email>.
+* No account is created for `<unverified google email>`.
 * The person is not signed in.
 
 ---
@@ -832,22 +889,26 @@ customer is signed out on a brand that does not have Google sign-in.
 * **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
-customer is on <grade10 sign-in url>, signed out.
+customer is on `<grade10 sign-in url>`, signed out.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| new email | newcomer@example.com | an address that has never signed in |
+
 | Field | Value |
 | --- | --- |
-| `<new email>` | newcomer@example.com, an address that has never signed in |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <new email> at the email step.
+1. Submit `<new email>` at the email step.
 2. Follow the unused, unexpired link from that email.
 
 **Expected Results:**
 
-* An account exists for <new email>.
+* An account exists for `<new email>`.
 * The person is signed in as that account.
 
 <!-- trace:case id=g10.shared-sign-in.TC-hrr rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
@@ -870,29 +931,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <link-created email> has an account created by an emailed link.
+* `<link-created email>` has an account created by an emailed link.
 * customer is signed out.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<link-created email>` | collector-link@example.com, an account created by an emailed link |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| link-created email | collector-link@example.com | an account created by an emailed link |
 
 | `<method>` | `<outcome>` |
 | --- | --- |
-| A later emailed link at <link-created email> | the same account, not a second one |
-| Google sign-in at <link-created email> on a brand that has Google | the same account, not a second one |
+| A later emailed link at `<link-created email>` | the same account, not a second one |
+| Google sign-in at `<link-created email>` on a brand that has Google | the same account, not a second one |
 
 **Steps:**
 
-1. Complete sign-in by <method>.
+1. Complete sign-in by `<method>`.
 2. Read the signed-in account.
 
 **Expected Results:**
 
-* The person enters <outcome>.
-* No second account exists for <link-created email>.
+* The person enters `<outcome>`.
+* No second account exists for `<link-created email>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-9ep rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC3-1: Letter case does not create a second account
@@ -912,24 +973,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An account exists for Collector@example.com.
+* An account exists for `<email_1>`.
 * customer is signed out.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lower case address>` | collector@example.com |
+| lower case address | collector@example.com |
+
+| Field | Value |
+| --- | --- |
+| email_1 | Collector@example.com |
 
 **Steps:**
 
-1. Submit <lower case address> at the email step.
+1. Submit `<lower case address>` at the email step.
 2. Follow the unused, unexpired link from that email.
 3. Read the signed-in account.
 
 **Expected Results:**
 
-* The person enters the account for Collector@example.com.
+* The person enters the account for `<email_1>`.
 * No second account exists for that address.
 
 <!-- trace:case id=g10.shared-sign-in.TC-4vq rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
@@ -950,25 +1015,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An account exists for collector@example.com.
+* An account exists for `<email_1>`.
 * customer is signed out.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<plus-tag address>` | collector+shop@example.com |
+| plus-tag address | collector+shop@example.com |
+
+| Field | Value |
+| --- | --- |
+| email_1 | collector@example.com |
 
 **Steps:**
 
-1. Submit <plus-tag address> at the email step.
+1. Submit `<plus-tag address>` at the email step.
 2. Follow the unused, unexpired link from that email.
 3. Read the signed-in account.
 
 **Expected Results:**
 
-* A second account exists for <plus-tag address>.
-* It is not the account for collector@example.com.
+* A second account exists for `<plus-tag address>`.
+* It is not the account for `<email_1>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-4qd rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC5-1: Trusted product creates or enters by verified email
@@ -989,7 +1058,7 @@ Runs once per row of **Test data**.
 Runs once per row of **Test data**.
 
 **Pre-conditions:**
-A product of this brand has verified <address>.
+A product of this brand has verified `<address>`.
 
 **Test data:**
 
@@ -1000,12 +1069,12 @@ A product of this brand has verified <address>.
 
 **Steps:**
 
-1. Ask the auth service to create or enter the account for <address>.
+1. Ask the auth service to create or enter the account for `<address>`.
 
 **Expected Results:**
 
-* The product receives <outcome>.
-* No second account exists for <address>.
+* The product receives `<outcome>`.
+* No second account exists for `<address>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-kjy rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC6-1: Trusted product signs the person in on this brand
@@ -1026,24 +1095,24 @@ A product of this brand has verified <address>.
 **Pre-conditions:**
 
 * customer is signed out on this brand.
-* <trusted product> has verified <product-verified email> in its own flow.
+* `<trusted product>` has verified `<product-verified email>` in its own flow.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<trusted product>` | The Grade10 hosted identity verification (e-KYC), a product of this brand |
-| `<product-verified email>` | collector-verified@example.com, verified by <trusted product> (e-KYC) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| trusted product | The Grade10 hosted identity verification (e-KYC), a product of this brand | · |
+| product-verified email | collector-verified@example.com | verified by `<trusted product>` (e-KYC) |
 
 **Steps:**
 
-1. Complete <trusted product>'s identity verification for <product-verified email>.
-2. Ask the auth service, as <trusted product>, to sign that account in.
+1. Complete `<trusted product>`'s identity verification for `<product-verified email>`.
+2. Ask the auth service, as `<trusted product>`, to sign that account in.
 3. Read who the caller is on this brand.
 
 **Expected Results:**
 
-* The person is signed in as the account for <product-verified email>.
+* The person is signed in as the account for `<product-verified email>`.
 * No sign-in link or Google sign-in was completed for it.
 
 <!-- trace:case id=g10.shared-sign-in.TC-yvm rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
@@ -1064,25 +1133,29 @@ A product of this brand has verified <address>.
 
 **Pre-conditions:**
 
-* <product-verified email> has an account created when a product verified it.
-* customer is on <grade10 sign-in url>, signed out.
+* `<product-verified email>` has an account created when a product verified it.
+* customer is on `<grade10 sign-in url>`, signed out.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| product-verified email | collector-verified@example.com | verified by the hosted identity verification (e-KYC) |
+
 | Field | Value |
 | --- | --- |
-| `<product-verified email>` | collector-verified@example.com, verified by the hosted identity verification (e-KYC) |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <product-verified email> at the email step.
+1. Submit `<product-verified email>` at the email step.
 2. Follow the unused, unexpired link from that email.
 3. Read the signed-in account.
 
 **Expected Results:**
 
 * The person enters the product-created account.
-* No second account exists for <product-verified email>.
+* No second account exists for `<product-verified email>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-3pf rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC8-1: Client cannot claim an email
@@ -1104,14 +1177,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <untrusted client> holds no trusted-product credential for this brand.
+* `<untrusted client>` holds no trusted-product credential for this brand.
 * customer is signed out on this brand.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<untrusted client>` | A caller outside this brand's products, such as a script posting to the auth service directly |
+| untrusted client | A caller outside this brand's products, such as a script posting to the auth service directly |
 
 | `<claimed email>` | `<directory after>` |
 | --- | --- |
@@ -1120,15 +1193,15 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Send the auth service a create-or-sign-in request naming <claimed email>, as <untrusted client>.
+1. Send the auth service a create-or-sign-in request naming `<claimed email>`, as `<untrusted client>`.
 2. Read who the caller is on this brand.
-3. Look <claimed email> up in the identity directory.
+3. Look `<claimed email>` up in the identity directory.
 
 **Expected Results:**
 
 * No account is created from that request.
-* The caller is not signed in as <claimed email>.
-* The directory shows <directory after>.
+* The caller is not signed in as `<claimed email>`.
+* The directory shows `<directory after>`.
 
 ---
 
@@ -1155,17 +1228,21 @@ Runs once per row of **Test data**.
 * **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
-customer opened <grade10 sign-in url> directly, so the sign-in names no return location, and is signed out.
+customer opened `<grade10 sign-in url>` directly, so the sign-in names no return location, and is signed out.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <collector email> at the email step.
+1. Submit `<collector email>` at the email step.
 2. Follow the unused, unexpired link from that email.
 
 **Expected Results:**
@@ -1190,18 +1267,22 @@ customer opened <grade10 sign-in url> directly, so the sign-in names no return l
 
 **Pre-conditions:**
 
-* A sign-in-link email went out to <collector email> less than sixty seconds ago.
-* customer is on <grade10 sign-in url>, signed out.
+* A sign-in-link email went out to `<collector email>` less than sixty seconds ago.
+* customer is on `<grade10 sign-in url>`, signed out.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Ask for another sign-in link at <collector email>.
+1. Ask for another sign-in link at `<collector email>`.
 
 **Expected Results:**
 
@@ -1228,28 +1309,33 @@ customer opened <grade10 sign-in url> directly, so the sign-in names no return l
 Runs once per row of **Test data**.
 
 **Pre-conditions:**
-customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
+customer is on `<grade10 sign-in url>` naming `<off-brand location>`, signed out.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 | `<off-brand location>` | `<why it is off brand>` |
 | --- | --- |
 | https://collector-rewards.example.com/claim | an address outside this store |
-| <zzz sign-in url> | another brand of this store |
+| `<zzz sign-in url>` | another brand of this store |
+
+| Field | Value |
+| --- | --- |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
+| zzz sign-in url | The ZZZ customer sign-in URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Submit <collector email> at the email step.
+1. Submit `<collector email>` at the email step.
 2. Follow the unused, unexpired link from that email.
 
 **Expected Results:**
 
 * The collector lands on this brand.
-* The collector is not sent to <off-brand location>.
+* The collector is not sent to `<off-brand location>`.
 
 ---
 
@@ -1278,18 +1364,18 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* <expired link> for <collector email> is past its time to live.
+* `<expired link>` for `<collector email>` is past its time to live.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<expired link>` | A sign-in link whose time to live has ended |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| expired link | A sign-in link whose time to live has ended | · |
 
 **Steps:**
 
-1. Follow <expired link>.
+1. Follow `<expired link>`.
 
 **Expected Results:**
 
@@ -1315,19 +1401,19 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 **Pre-conditions:**
 
-* A sign-in link for <collector email> has already created a session.
+* A sign-in link for `<collector email>` has already created a session.
 * customer is signed out in a fresh browser session.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<used link>` | The sign-in link that already created a session |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| used link | The sign-in link that already created a session | · |
 
 **Steps:**
 
-1. Follow <used link>.
+1. Follow `<used link>`.
 
 **Expected Results:**
 
@@ -1354,24 +1440,24 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* <earlier link> is unused and unexpired for <collector email>.
-* The sixty-second window since <earlier link> was sent has passed.
+* `<earlier link>` is unused and unexpired for `<collector email>`.
+* The sixty-second window since `<earlier link>` was sent has passed.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<earlier link>` | The unused unexpired link from the first sign-in email |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| earlier link | The unused unexpired link from the first sign-in email | · |
 
 **Steps:**
 
-1. Submit <collector email> at the email step to send a later sign-in email.
-2. Follow <earlier link>.
+1. Submit `<collector email>` at the email step to send a later sign-in email.
+2. Follow `<earlier link>`.
 
 **Expected Results:**
 
-* No session is created from <earlier link>.
+* No session is created from `<earlier link>`.
 * The collector is on this brand's home.
 * A toast states that the link no longer works.
 
@@ -1394,17 +1480,17 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* <invalid link> is a sign-in link whose token is malformed or unknown.
+* `<invalid link>` is a sign-in link whose token is malformed or unknown.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<invalid link>` | A sign-in link token that is malformed or unknown |
+| invalid link | A sign-in link token that is malformed or unknown |
 
 **Steps:**
 
-1. Follow <invalid link>.
+1. Follow `<invalid link>`.
 
 **Expected Results:**
 
@@ -1431,19 +1517,19 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 **Pre-conditions:**
 
 * customer is signed out.
-* The account for <banned email> is banned.
-* <banned link> is a sign-in link for <banned email>.
+* The account for `<banned email>` is banned.
+* `<banned link>` is a sign-in link for `<banned email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<banned email>` | banned@example.com, an address whose account is banned |
-| `<banned link>` | A sign-in link for <banned email> |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| banned email | banned@example.com | an address whose account is banned |
+| banned link | A sign-in link for `<banned email>` | · |
 
 **Steps:**
 
-1. Follow <banned link>.
+1. Follow `<banned link>`.
 
 **Expected Results:**
 
@@ -1479,17 +1565,21 @@ Resend after a short wait,
 
 **Pre-conditions:**
 
-* customer is signed out and is on <grade10 sign-in url>.
+* customer is signed out and is on `<grade10 sign-in url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com |
+| collector email | collector@example.com |
+
+| Field | Value |
+| --- | --- |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Enter <collector email> at the email step.
+1. Enter `<collector email>` at the email step.
 2. Activate **Sign In with Email**.
 3. Wait until the send settles successfully.
 
@@ -1497,7 +1587,7 @@ Resend after a short wait,
 
 * The dialog title is **Check Your Email**.
 * A confirmation lead line is shown.
-* <collector email> appears on the line below that lead.
+* `<collector email>` appears on the line below that lead.
 * The surface does not state whether an account already exists.
 
 ---
@@ -1553,7 +1643,13 @@ Resend after a short wait,
 
 **Pre-conditions:**
 
-* customer is signed out and is on <grade10 sign-in url>.
+* customer is signed out and is on `<grade10 sign-in url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1586,7 +1682,13 @@ Resend after a short wait,
 **Pre-conditions:**
 
 * customer just completed a successful Sign In with Email send to
-  <collector email>.
+  `<collector email>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector email | An inbox the tester reads for the collector account prepared in the pre-conditions; bind its email address only |
 
 **Steps:**
 
@@ -1727,14 +1829,20 @@ Resend after a short wait,
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A on <grade10 store url> showing Check Your Email.
+* customer is signed out, with tab A on `<grade10 store url>` showing Check Your Email.
 * Tab A is in the background.
+
+* The sign-in email was requested for `<collector email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1766,22 +1874,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <refused action>'s surface in tab A.
-* Tab A shows Check Your Email after asking for a link at <collector email>.
+* customer is signed out on `<refused action>`'s surface in tab A.
+* Tab A shows Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<lot>` | a live auction lot open to bid on |
-| `<bid amount>` | the lowest bid the lot accepts |
-| `<signed-in-only page>` | the collector's orders list, which only they may read |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| listing | a live auction listing open to bid on | · |
+| bid amount | the lowest bid the listing accepts | · |
+| signed-in-only page | the collector's orders list, which only they may read | · |
 
 | `<refused action>` | What must have happened |
 | --- | --- |
-| bid <bid amount> on <lot> | the bid stands on <lot> |
-| open <signed-in-only page> | tab A is on <signed-in-only page> |
+| bid `<bid amount>` on `<listing>` | the bid stands on `<listing>` |
+| open `<signed-in-only page>` | tab A is on `<signed-in-only page>` |
 
 **Steps:**
 
@@ -1790,7 +1898,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* <refused action> is done in tab A.
+* `<refused action>` is done in tab A.
 * The collector is not asked to do it again.
 
 <!-- trace:case id=g10.shared-sign-in.TC-gj2 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
@@ -1811,15 +1919,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A on <grade10 store url> showing Check Your Email.
-* Tab C is open on <listing>, where nothing was asked for and nothing was refused.
+* customer is signed out, with tab A on `<grade10 store url>` showing Check Your Email.
+* Tab C is open on `<listing>`, where nothing was asked for and nothing was refused.
+
+* The sign-in email was requested for `<collector email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| listing | a card listing with an add-to-cart control | · |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<listing>` | a card listing with an add-to-cart control |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1851,15 +1965,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <signed-in-only page> in tab A, refused it.
-* Tab A shows Check Your Email after asking for a link at <collector email>.
+* customer is signed out on `<signed-in-only page>` in tab A, refused it.
+* Tab A shows Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<signed-in-only page>` | the collector's orders list, which only they may read |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| signed-in-only page | the collector's orders list, which only they may read | · |
 
 | `<failed link>` | What it is |
 | --- | --- |
@@ -1869,14 +1983,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Follow the <failed link> in tab B.
+1. Follow the `<failed link>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
 
 * Tab A shows nobody signed in.
 * Tab A still shows the Check Your Email dialog.
-* <signed-in-only page> stays closed.
+* `<signed-in-only page>` stays closed.
 * Tab A says nothing about the link.
 
 <!-- trace:case id=g10.shared-sign-in.TC-zy9 rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
@@ -1897,16 +2011,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <lot> in tab A, refused the bid.
-* Tab A shows Check Your Email after asking for a link at <collector email>.
+* customer is signed out on `<listing>` in tab A, refused the bid of `<bid amount>`.
+* Tab A shows Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<lot>` | a live auction lot open to bid on |
-| `<bid amount>` | the lowest bid the lot accepts |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| listing | a live auction listing open to bid on | · |
+| bid amount | the lowest bid the listing accepts | · |
 
 **Steps:**
 
@@ -1919,7 +2033,7 @@ Runs once per row of **Test data**.
 
 * Tab A shows the collector signed in.
 * The bid is not placed.
-* <lot> holds no bid from the collector.
+* `<listing>` holds no bid from the collector.
 
 <!-- trace:case id=g10.shared-sign-in.TC-54a rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC6-2: Refused action is done once, not twice
@@ -1939,26 +2053,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <lot> in tab A, refused the bid of <bid amount>.
-* Tab A shows Check Your Email after asking for a link at <collector email>.
+* customer is signed out on `<listing>` in tab A, refused the bid of `<bid amount>`.
+* Tab A shows Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<lot>` | a live auction lot open to bid on |
-| `<bid amount>` | the lowest bid the lot accepts |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| listing | a live auction listing open to bid on | · |
+| bid amount | the lowest bid the listing accepts | · |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Return to tab A, and confirm the bid of <bid amount> stands on <lot>.
+2. Return to tab A, and confirm the bid of `<bid amount>` stands on `<listing>`.
 3. Leave tab A for tab B, then return to tab A, without touching the bid control.
 
 **Expected Results:**
 
-* <lot> holds one bid of <bid amount> from the collector, not two.
+* `<listing>` holds one bid of `<bid amount>` from the collector, not two.
 * Returning a second time places the bid no further times.
 
 <!-- trace:case id=g10.shared-sign-in.TC-3kv rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
@@ -1979,17 +2093,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <lot> in tab A, refused the bid.
-* Tab A shows Check Your Email after asking for a link at <collector email>.
-* The link lands on <grade10 store url>, another site of the brand.
+* customer is signed out on `<listing>` in tab A, refused the bid.
+* Tab A shows Check Your Email after asking for a link at `<collector email>`.
+* The link lands on `<grade10 store url>`, another site of the brand.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| listing | a live auction listing open to bid on | · |
+| bid amount | the lowest bid the listing accepts | · |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<lot>` | a live auction lot open to bid on |
-| `<bid amount>` | the lowest bid the lot accepts |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1999,7 +2117,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Tab A shows the collector signed in, unreloaded.
-* The bid of <bid amount> stands on <lot>.
+* The bid of `<bid amount>` stands on `<listing>`.
 
 <!-- trace:case id=g10.shared-sign-in.TC-j4x rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC8-1: Another brand's dialog does not close
@@ -2020,14 +2138,18 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out on both brands.
-* Tab A is on <zzz store url> showing Check Your Email for a ZZZ link.
-* An unused, unexpired Grade10 sign-in link has been sent to <collector email>.
+* Tab A is on `<zzz store url>` showing Check Your Email for a ZZZ link.
+* An unused, unexpired Grade10 sign-in link has been sent to `<collector email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2057,28 +2179,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, refused <signed-in-only page> in tab A.
-* customer is refused the bid on <lot> in tab C.
-* Both tabs show Check Your Email after asking for a link at <collector email>.
+* customer is signed out, refused `<signed-in-only page>` in tab A.
+* customer is refused the bid on `<listing>` in tab C.
+* Both tabs show Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<signed-in-only page>` | the collector's orders list, which only they may read |
-| `<lot>` | a live auction lot open to bid on |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| signed-in-only page | the collector's orders list, which only they may read | · |
+| listing | a live auction listing open to bid on | · |
 
 **Steps:**
 
-1. Ask for a sign-in link at <collector email> on tab B.
+1. Ask for a sign-in link at `<collector email>` on tab B.
 2. Follow the newest link from that address in tab B.
 3. Return to tab A, then to tab C.
 
 **Expected Results:**
 
 * Both tabs show the collector signed in.
-* Tab A opens <signed-in-only page> and tab C carries out its bid: each surface that asked completes its own refusal, whether or not its own link was the one that worked.
+* Tab A opens `<signed-in-only page>` and tab C carries out its bid: each surface that asked completes its own refusal, whether or not its own link was the one that worked.
 
 <!-- trace:case id=g10.shared-sign-in.TC-lnk rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC10-2: Refused action that can no longer be done is refused, not skipped
@@ -2098,27 +2220,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out on <lot> in tab A, refused the bid of <bid amount>.
-* Tab A shows Check Your Email after asking for a link at <collector email>.
+* customer is signed out on `<listing>` in tab A, refused the bid of `<bid amount>`.
+* Tab A shows Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<lot>` | a live auction lot open to bid on |
-| `<bid amount>` | the lowest bid the lot accepts |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+| listing | a live auction listing open to bid on | · |
+| bid amount | the lowest bid the listing accepts | · |
 
 **Steps:**
 
-1. In a separate session, another bidder bids above <bid amount> on <lot>.
+1. In a separate session, another bidder bids above `<bid amount>` on `<listing>`.
 2. Follow the unused, unexpired link from that email in tab B.
 3. Return to tab A.
 
 **Expected Results:**
 
 * Tab A shows the collector signed in.
-* Tab A reports the refusal a bid below the lot's lowest accepted bid ordinarily gets.
+* Tab A reports the refusal a bid below the listing's lowest accepted bid ordinarily gets.
 * Tab A does not pass the bid over in silence.
 
 <!-- trace:case id=g10.shared-sign-in.TC-4z2 rev=2 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
@@ -2141,25 +2263,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Nobody is signed in on <side url>, with tabs A and C open on it, each showing the sign-in dialog.
+* Nobody is signed in on `<side url>`, with tabs A and C open on it, each showing the sign-in dialog.
 * A sign-in link was asked for in tab A only.
 
 **Test data:**
 
-| Side | <side url> | <person email> | <second factor code> |
+| Side | `<side url>` | `<person email>` | `<second factor code>` |
 | --- | --- | --- | --- |
-| Site | <grade10 store url> | collector@example.com, an address with an account | None asked |
-| Console | <grade10 admin console url> | operator@example.com, the address of an account holding console access | A valid current code from that account's authenticator |
+| Site | `<grade10 store url>` | collector@example.com, an address with an account | None asked |
+| Console | `<grade10 admin console url>` | operator@example.com, the address of an account holding console access | A valid current code from that account's authenticator |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Return to tab A, entering <second factor code> where the console asks for one.
+2. Return to tab A, entering `<second factor code>` where the console asks for one.
 3. Return to tab C.
 
 **Expected Results:**
 
-* Step 2 shows tab A with no sign-in dialog and <person email>'s account signed in.
+* Step 2 shows tab A with no sign-in dialog and `<person email>`'s account signed in.
 * Step 3 shows tab C with no sign-in dialog and the same account signed in.
 
 ---
@@ -2193,10 +2320,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
-| `<link account email>` | collector-other@example.com, a different address with its own account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
+| link account email | collector-other@example.com | a different address with its own account |
 
 **Steps:**
 
@@ -2232,10 +2359,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
-| `<link account email>` | collector-other@example.com, a different address with its own account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
+| link account email | collector-other@example.com | a different address with its own account |
 
 **Steps:**
 
@@ -2269,10 +2396,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
-| `<link account email>` | collector-other@example.com, a different address with its own account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
+| link account email | collector-other@example.com | a different address with its own account |
 
 **Steps:**
 
@@ -2306,10 +2433,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
-| `<link account email>` | collector-other@example.com, a different address with its own account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
+| link account email | collector-other@example.com | a different address with its own account |
 
 **Steps:**
 
@@ -2343,10 +2470,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
-| `<link account email>` | collector-other@example.com, a different address with its own account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
+| link account email | collector-other@example.com | a different address with its own account |
 
 **Steps:**
 
@@ -2382,10 +2509,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
-| `<link account email>` | collector-other@example.com, a different address with its own account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
+| link account email | collector-other@example.com | a different address with its own account |
 
 **Steps:**
 
@@ -2418,9 +2545,9 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| current account email | collector@example.com | an address with an account, currently signed in |
 
 **Steps:**
 
@@ -2458,13 +2585,17 @@ elsewhere.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+* customer is signed out, with device A on `<grade10 store url>` showing Check Your Email for `<collector email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2495,18 +2626,22 @@ elsewhere.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A on <grade10 sign-in url> showing Check Your Email for <collector email>.
+* customer is signed out, with device A on `<grade10 sign-in url>` showing Check Your Email for `<collector email>`.
 * Device A's brand has Google sign-in.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Complete Google sign-in with <collector email> on device B.
+1. Complete Google sign-in with `<collector email>` on device B.
 2. Return to device A.
 
 **Expected Results:**
@@ -2532,13 +2667,17 @@ elsewhere.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A on <grade10 store url> showing Check Your Email after asking for a link at <collector email>.
+* customer is signed out, with device A on `<grade10 store url>` showing Check Your Email after asking for a link at `<collector email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -2571,23 +2710,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+* customer is signed out, with device A on `<grade10 store url>` showing Check Your Email for `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 | `<failed attempt>` | What it is |
 | --- | --- |
 | expired link | a link older than five minutes, followed on device B |
 | already used link | a link followed once already, followed again on device B |
-| banned account | a link for <collector email> after the account is banned, followed on device B |
+| banned account | a link for `<collector email>` after the account is banned, followed on device B |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Attempt the <failed attempt> on device B.
+1. Attempt the `<failed attempt>` on device B.
 2. Return to device A.
 
 **Expected Results:**
@@ -2615,22 +2758,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+* customer is signed out, with device A on `<grade10 store url>` showing Check Your Email for `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 | `<other address>` | What it is |
 | --- | --- |
-| unrelated@example.com | an address with no relation to <collector email> |
-| collector+shop@example.com | the plus-tag variant of <collector email>, its own account |
+| unrelated@example.com | an address with no relation to `<collector email>` |
+| collector+shop@example.com | the plus-tag variant of `<collector email>`, its own account |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <other address> on device B.
+1. Sign in as `<other address>` on device B.
 2. Return to device A.
 
 **Expected Results:**
@@ -2656,17 +2803,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A and device C each showing Check Your Email after separately asking for a link at <collector email>.
+* customer is signed out, with device A and device C each showing Check Your Email after separately asking for a link at `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 **Steps:**
 
-1. Complete Google sign-in with <collector email> on device B.
+1. Complete Google sign-in with `<collector email>` on device B.
 2. Return to device A, then to device C.
 
 **Expected Results:**
@@ -2692,17 +2839,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A showing Check Your Email for <collector email>, left in the background.
+* customer is signed out, with device A showing Check Your Email for `<collector email>`, left in the background.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 **Steps:**
 
-1. Complete Google sign-in with <collector email> on device B while device A stays backgrounded.
+1. Complete Google sign-in with `<collector email>` on device B while device A stays backgrounded.
 2. Bring device A back to the foreground.
 
 **Expected Results:**
@@ -2730,13 +2877,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with device A showing Check Your Email for <collector email>.
+* customer is signed out, with device A showing Check Your Email for `<collector email>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 | `<resend state>` | On device A |
 | --- | --- |
@@ -2745,8 +2892,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Reach <resend state> on device A.
-2. Complete Google sign-in with <collector email> on device B.
+1. Reach `<resend state>` on device A.
+2. Complete Google sign-in with `<collector email>` on device B.
 3. Return to device A.
 
 **Expected Results:**
@@ -2772,23 +2919,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <signed-in address> is signed in on device B.
-* customer is on <grade10 sign-in url> on device A, signed out, having asked for no link.
+* `<signed-in address>` is signed in on device B.
+* customer is on `<grade10 sign-in url>` on device A, signed out, having asked for no link.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| signed-in address | collector@example.com | currently signed in on device B |
+
 | Field | Value |
 | --- | --- |
-| `<signed-in address>` | collector@example.com, currently signed in on device B |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Ask the auth service, from device A, whether <signed-in address> currently holds a session, naming no flow of device A's own.
+1. Ask the auth service, from device A, whether `<signed-in address>` currently holds a session, naming no flow of device A's own.
 
 **Expected Results:**
 
 * The request is refused.
-* Nothing in the response states whether <signed-in address> holds a session.
+* Nothing in the response states whether `<signed-in address>` holds a session.
 
 ---
 
@@ -3109,6 +3260,12 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 * The Google account chooser is stubbed to return `<unverified google email>` with its verified flag false.
 * The corner prompt is showing.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| unverified google email | A Google account email returned as unverified in this fixture; bind its email address only |
+
 **Steps:**
 
 1. Complete the prompt's account chooser for `<unverified google email>`.
@@ -3175,26 +3332,34 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* <operator account> holds console access and has requested a sign-in link from the console, which has not been followed.
-* Tab A is open on <grade10 admin console url>, showing Check Your Email.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* `<operator account>` holds console access and has requested a sign-in link from the console, which has not been followed.
+* Tab A is open on `<grade10 admin console url>`, showing Check Your Email.
+
+* The operator’s sign-in email address is `<operator email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Return to tab A and enter <operator TOTP code>.
-3. In tab C, navigate to <grade10 store url>.
+2. Return to tab A and enter `<operator TOTP code>`.
+3. In tab C, navigate to `<grade10 store url>`.
 
 **Expected Results:**
 
-* Step 2 shows <operator account> signed in on the console, unreloaded.
+* Step 2 shows `<operator account>` signed in on the console, unreloaded.
 * Step 3 shows nobody signed in on the site.
 
 ### shared-auth-sign-in-US12-TC2-1: Link asked on the site signs in the site only
@@ -3214,25 +3379,33 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 store url> and on <grade10 admin console url>.
-* <operator account> holds console access and has requested a sign-in link from the site, which has not been followed.
-* Tab A is open on <grade10 store url>, showing Check Your Email.
+* admin is signed out on `<grade10 store url>` and on `<grade10 admin console url>`.
+* `<operator account>` holds console access and has requested a sign-in link from the site, which has not been followed.
+* Tab A is open on `<grade10 store url>`, showing Check Your Email.
+
+* The operator’s sign-in email address is `<operator email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
 2. Return to tab A.
-3. In tab C, navigate to <grade10 admin console url>.
+3. In tab C, navigate to `<grade10 admin console url>`.
 
 **Expected Results:**
 
-* Tab A shows <operator account> signed in on the site, unreloaded.
+* Tab A shows `<operator account>` signed in on the site, unreloaded.
 * Step 3 shows the console's sign-in page, not the console.
 
 ### shared-auth-sign-in-US12-TC3-1: Console link leaves the site session untouched
@@ -3252,27 +3425,32 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <collector account> is signed in on <grade10 store url> in tab A, with <cart item> in its cart.
-* <collector account> has requested a sign-in link from <grade10 admin console url> and it has not been followed.
+* `<collector account>` is signed in on `<grade10 store url>` in tab A, with `<cart item>` in its cart.
+* `<collector account>` has requested a sign-in link from `<grade10 admin console url>` and it has not been followed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | A customer account holding `user` only that also holds console access |
-| `<cart item>` | A card in <collector account>'s cart |
-| `<console TOTP code>` | A valid current code from <collector account>'s authenticator |
+| collector account | A customer account holding `user` only that also holds console access |
+| cart item | A card in `<collector account>`'s cart |
+| console TOTP code | A valid current code from `<collector account>`'s authenticator |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Enter <console TOTP code> on the console.
+2. Enter `<console TOTP code>` on the console.
 3. Return to tab A.
 
 **Expected Results:**
 
-* Step 2 opens the console as <collector account>.
-* Tab A still names <collector account>, with <cart item> in its cart.
+* Step 2 opens the console as `<collector account>`.
+* Tab A still names `<collector account>`, with `<cart item>` in its cart.
 * The site session is the one it was before step 1.
 
 ### shared-auth-sign-in-US12-TC4-1: Console link signs in its own account beside a different site account
@@ -3292,29 +3470,34 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <collector account> is signed in on <grade10 store url> in tab A.
-* admin is signed out on <grade10 admin console url>.
-* <operator account>, a different account, has requested a sign-in link from the console and it has not been followed.
+* `<collector account>` is signed in on `<grade10 store url>` in tab A.
+* admin is signed out on `<grade10 admin console url>`.
+* `<operator account>`, a different account, has requested a sign-in link from the console and it has not been followed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | A customer account holding `user` only |
-| `<operator account>` | A different account holding console access |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| collector account | A customer account holding `user` only |
+| operator account | A different account holding console access |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Enter <operator TOTP code> on the console.
+2. Enter `<operator TOTP code>` on the console.
 3. Return to tab A.
 
 **Expected Results:**
 
 * Step 1 shows no different-account toast.
-* Step 2 opens the console as <operator account>.
-* Tab A still names <collector account>.
+* Step 2 opens the console as `<operator account>`.
+* Tab A still names `<collector account>`.
 
 ### shared-auth-sign-in-US12-TC5-1: Different-account choice on the console is judged on the console session
 
@@ -3333,16 +3516,21 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account A> is signed in on <grade10 admin console url> with the second factor proved.
-* <operator account B> is signed in on <grade10 store url> in the same browser.
-* A sign-in link for <operator account B>, requested from the console, is unused and unexpired.
+* `<operator account A>` is signed in on `<grade10 admin console url>` with the second factor proved.
+* `<operator account B>` is signed in on `<grade10 store url>` in the same browser.
+* A sign-in link for `<operator account B>`, requested from the console, is unused and unexpired.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account A>` | An account holding console access, signed in on the console |
-| `<operator account B>` | A different account holding console access, signed in on the site |
+| operator account A | An account holding console access, signed in on the console |
+| operator account B | A different account holding console access, signed in on the site |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3350,7 +3538,7 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Expected Results:**
 
-* The console's own sign-in page states inline that the person is signed in with a different account and names <operator account B>'s email.
+* The console's own sign-in page states inline that the person is signed in with a different account and names `<operator account B>`'s email.
 * The inline choice offers Switch and Stay.
 * No toast shows.
 * The console session and the site session are both unchanged.
@@ -3372,16 +3560,21 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account A> is signed in on <grade10 admin console url> with the second factor proved.
-* <collector account> is signed in on <grade10 store url> in the same browser.
-* A sign-in link for <operator account A>, requested from the console, is unused and unexpired.
+* `<operator account A>` is signed in on `<grade10 admin console url>` with the second factor proved.
+* `<collector account>` is signed in on `<grade10 store url>` in the same browser.
+* A sign-in link for `<operator account A>`, requested from the console, is unused and unexpired.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account A>` | An account holding console access, signed in on the console |
-| `<collector account>` | A customer account holding `user` only |
+| operator account A | An account holding console access, signed in on the console |
+| collector account | A customer account holding `user` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3409,30 +3602,35 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account A> is signed in on <grade10 admin console url> in tab A.
-* <collector account> is signed in on <grade10 store url> in tab B.
-* The console's own sign-in page is showing the inline different-account choice, offering Switch and Stay, after following a link for <operator account C>, requested from the console.
+* `<operator account A>` is signed in on `<grade10 admin console url>` in tab A.
+* `<collector account>` is signed in on `<grade10 store url>` in tab B.
+* The console's own sign-in page is showing the inline different-account choice, offering Switch and Stay, after following a link for `<operator account C>`, requested from the console.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account A>` | An account holding console access |
-| `<collector account>` | A customer account holding `user` only |
-| `<operator account C>` | A different account holding console access |
-| `<operator TOTP code>` | A valid current code from <operator account C>'s authenticator |
+| operator account A | An account holding console access |
+| collector account | A customer account holding `user` only |
+| operator account C | A different account holding console access |
+| operator TOTP code | A valid current code from `<operator account C>`'s authenticator |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Activate Switch.
-2. Enter <operator TOTP code> on the console.
+2. Enter `<operator TOTP code>` on the console.
 3. Return to tab B.
 
 **Expected Results:**
 
-* Step 1 ends <operator account A>'s console session.
-* Step 2 opens the console as <operator account C>.
-* Tab B still names <collector account>.
+* Step 1 ends `<operator account A>`'s console session.
+* Step 2 opens the console as `<operator account C>`.
+* Tab B still names `<collector account>`.
 
 ### shared-auth-sign-in-US12-TC8-1: Console link followed with no console tab open still signs in the console
 
@@ -3451,25 +3649,33 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* <operator account> requested a sign-in link from the console on another device, and no tab is waiting on this device.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* `<operator account>` requested a sign-in link from the console on another device, and no tab is waiting on this device.
+
+* The operator’s sign-in email address is `<operator email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email on this device.
-2. Enter <operator TOTP code> on the console.
-3. Navigate to <grade10 store url>.
+2. Enter `<operator TOTP code>` on the console.
+3. Navigate to `<grade10 store url>`.
 
 **Expected Results:**
 
-* Step 2 opens the console as <operator account>.
+* Step 2 opens the console as `<operator account>`.
 * Step 3 shows nobody signed in on the site.
 
 ### shared-auth-sign-in-US12-TC9-1: Waiting console tab carries on while a signed-out site tab does not
@@ -3490,25 +3696,33 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 **Pre-conditions:**
 
 * admin is signed out on both surfaces.
-* Tab A is on <grade10 admin console url>, showing Check Your Email, after requesting a link for <operator account>.
-* Tab B is on <grade10 store url>, signed out, in the background.
+* Tab A is on `<grade10 admin console url>`, showing Check Your Email, after requesting a link for `<operator account>`.
+* Tab B is on `<grade10 store url>`, signed out, in the background.
+
+* The operator’s sign-in email address is `<operator email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link in tab C.
-2. Return to tab A and enter <operator TOTP code>.
+2. Return to tab A and enter `<operator TOTP code>`.
 3. Return to tab B.
 
 **Expected Results:**
 
-* Tab A shows <operator account> signed in on the console, and the Check Your Email dialog is gone.
+* Tab A shows `<operator account>` signed in on the console, and the Check Your Email dialog is gone.
 * Tab B still shows nobody signed in, unreloaded.
 
 ### shared-auth-sign-in-US12-TC10-1: ZZZ console link signs in the ZZZ console only
@@ -3528,25 +3742,30 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <zzz admin console url> and on <zzz store url>.
-* <zzz operator account> has requested a sign-in link from the ZZZ console and it has not been followed.
+* admin is signed out on `<zzz admin console url>` and on `<zzz store url>`.
+* `<zzz operator account>` has requested a sign-in link from the ZZZ console and it has not been followed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<zzz operator account>` | An account holding console access on ZZZ |
-| `<zzz operator TOTP code>` | A valid current code from <zzz operator account>'s authenticator |
+| zzz operator account | An account holding console access on ZZZ |
+| zzz operator TOTP code | A valid current code from `<zzz operator account>`'s authenticator |
+
+| Field | Value |
+| --- | --- |
+| zzz admin console url | The ZZZ admin console URL, on a different brand from Grade10 in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Follow the unused, unexpired link from that email in tab B.
-2. Enter <zzz operator TOTP code> on the ZZZ console.
-3. In tab C, navigate to <zzz store url>.
+2. Enter `<zzz operator TOTP code>` on the ZZZ console.
+3. In tab C, navigate to `<zzz store url>`.
 
 **Expected Results:**
 
-* Step 2 opens the ZZZ console as <zzz operator account>.
+* Step 2 opens the ZZZ console as `<zzz operator account>`.
 * Step 3 shows nobody signed in on the ZZZ site.
 
 ### shared-auth-sign-in-US12-TC11-1: Resend from the console keeps the console as the surface that asked
@@ -3566,27 +3785,35 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* <operator account> has requested a sign-in link from the console and Resend has turned on.
-* Tab A is open on <grade10 admin console url>, showing Check Your Email.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* `<operator account>` has requested a sign-in link from the console and Resend has turned on.
+* Tab A is open on `<grade10 admin console url>`, showing Check Your Email.
+
+* The operator’s sign-in email address is `<operator email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. In tab A, activate Resend.
 2. Follow the unused, unexpired link the resend sent in tab B.
-3. Return to tab A and enter <operator TOTP code>.
-4. In tab C, navigate to <grade10 store url>.
+3. Return to tab A and enter `<operator TOTP code>`.
+4. In tab C, navigate to `<grade10 store url>`.
 
 **Expected Results:**
 
-* Step 3 shows <operator account> signed in on the console.
+* Step 3 shows `<operator account>` signed in on the console.
 * Step 4 shows nobody signed in on the site.
 
 ### shared-auth-sign-in-US12-TC12-1: A link asked from the console that names a site location lands on the console
@@ -3606,23 +3833,28 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of an account holding console access |
+| site location | A page of `<grade10 store url>` | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of an account holding console access |
-| `<site location>` | A page of <grade10 store url> |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Ask for a sign-in link as the console for <operator email>, naming <site location> as the location to return to.
+1. Ask for a sign-in link as the console for `<operator email>`, naming `<site location>` as the location to return to.
 2. Follow the unused, unexpired link.
 
 **Expected Results:**
 
-* Step 2 ends on <grade10 admin console url>, not on <site location>.
+* Step 2 ends on `<grade10 admin console url>`, not on `<site location>`.
 * The site has no signed-in person.
 
 <!-- trace:case id=g10.shared-sign-in.TC-7cx rev=1 -->
@@ -3643,29 +3875,34 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account A> is signed in on <grade10 admin console url> with the second factor proved.
-* A sign-in link for <operator account B>, requested from the console, is unused and unexpired.
-* <collector account> is signed in on <grade10 store url> in the same browser.
+* `<operator account A>` is signed in on `<grade10 admin console url>` with the second factor proved.
+* A sign-in link for `<operator account B>`, requested from the console, is unused and unexpired.
+* `<collector account>` is signed in on `<grade10 store url>` in the same browser.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account A>` | An account holding console access, signed in on the console |
-| `<operator account B>` | A different account holding console access |
-| `<collector account>` | A customer account holding `user` only |
+| operator account A | An account holding console access, signed in on the console |
+| operator account B | A different account holding console access |
+| collector account | A customer account holding `user` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Follow that link in a new tab and make no choice there.
 2. Reload the console tab.
-3. Reload <grade10 store url>.
+3. Reload `<grade10 store url>`.
 
 **Expected Results:**
 
-* Step 2 still shows <operator account A> on the console.
-* No console session exists for <operator account B>.
-* Step 3 still names <collector account>.
+* Step 2 still shows `<operator account A>` on the console.
+* No console session exists for `<operator account B>`.
+* Step 3 still names `<collector account>`.
 
 ### shared-auth-sign-in-US12-TC14-1: Google sign-in on the console signs in the console only
 
@@ -3685,24 +3922,29 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 **Pre-conditions:**
 
 * Grade10 offers Google sign-in.
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<google account>` | A Google account with a verified email, whose address belongs to an account holding console access |
-| `<operator TOTP code>` | A valid current code from that account's authenticator |
+| google account | A Google account with a verified email, whose address belongs to an account holding console access |
+| operator TOTP code | A valid current code from that account's authenticator |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin console url>, choose Google and complete it with <google account>.
-2. Enter <operator TOTP code> on the console.
-3. In tab B, navigate to <grade10 store url>.
+1. On `<grade10 admin console url>`, choose Google and complete it with `<google account>`.
+2. Enter `<operator TOTP code>` on the console.
+3. In tab B, navigate to `<grade10 store url>`.
 
 **Expected Results:**
 
-* Step 2 opens the console as the account for <google account>'s address.
+* Step 2 opens the console as the account for `<google account>`'s address.
 * Step 3 shows nobody signed in on the site.
 
 ### shared-auth-sign-in-US12-TC15-1: A product's verified-email sign-in is the site's and never the console's
@@ -3722,23 +3964,28 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account> holds console access and is signed out on <grade10 admin console url> and on <grade10 store url>.
+* `<operator account>` holds console access and is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding console access |
+| operator account | An account holding console access |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. A Grade10 product that has verified <operator account>'s email signs that account in.
+1. A Grade10 product that has verified `<operator account>`'s email signs that account in.
 2. Ask who is calling as the site.
 3. Ask who is calling as the console.
 
 **Expected Results:**
 
-* Step 2 receives <operator account>.
+* Step 2 receives `<operator account>`.
 * Step 3 receives no person.
 
 ### shared-auth-sign-in-US12-TC16-1: A console link right after a site link for the same address is sent and the site link stays alive
@@ -3758,25 +4005,31 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* <operator account> asked for a sign-in link from <grade10 store url> less than a minute ago, and it is unused and unexpired.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* `<operator account>` asked for a sign-in link from `<grade10 store url>` less than a minute ago, and it is unused and unexpired.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Ask for a sign-in link for <operator email> on <grade10 admin console url>.
-2. Follow the link asked from <grade10 store url>.
-3. Navigate to <grade10 admin console url>.
+1. Ask for a sign-in link for `<operator email>` on `<grade10 admin console url>`.
+2. Follow the link asked from `<grade10 store url>`.
+3. Navigate to `<grade10 admin console url>`.
 
 **Expected Results:**
 
 * Step 1 sends the link and does not tell them to wait.
-* Step 2 signs in <operator account> on the site.
+* Step 2 signs in `<operator account>` on the site.
 * Step 3 shows nobody signed in on the console.
 
 ### shared-auth-sign-in-US12-TC17-1: A second console link in a minute is told to wait
@@ -3796,18 +4049,24 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* <operator account> asked for a sign-in link from <grade10 admin console url> less than a minute ago, and it is unused and unexpired.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* `<operator account>` asked for a sign-in link from `<grade10 admin console url>` less than a minute ago, and it is unused and unexpired.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Ask again for a sign-in link for <operator email> on <grade10 admin console url>.
+1. Ask again for a sign-in link for `<operator email>` on `<grade10 admin console url>`.
 
 **Expected Results:**
 
@@ -3831,22 +4090,28 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 **Pre-conditions:**
 
 * admin is signed out on both surfaces.
-* Tab A is on <grade10 admin console url>, showing Check Your Email, after requesting a link for <operator account>.
-* Tab B is on <grade10 store url>, showing Check Your Email, after requesting a link for <operator account>.
+* Tab A is on `<grade10 admin console url>`, showing Check Your Email, after requesting a link for `<operator account>`.
+* Tab B is on `<grade10 store url>`, showing Check Your Email, after requesting a link for `<operator account>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Follow the unused, unexpired link asked from <grade10 store url> in tab C.
+1. Follow the unused, unexpired link asked from `<grade10 store url>` in tab C.
 2. Return to tab B.
 3. Return to tab A.
-4. In tab B, open sign-in again and request a link for <operator email>, waiting out the resend wait if it shows.
-5. Follow the unused, unexpired link asked from <grade10 admin console url> in tab C.
+4. In tab B, open sign-in again and request a link for `<operator email>`, waiting out the resend wait if it shows.
+5. Follow the unused, unexpired link asked from `<grade10 admin console url>` in tab C.
 6. Return to tab B.
 7. Return to tab A.
 
@@ -3876,14 +4141,22 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* A sign-in link asked from <grade10 admin console url> for <operator account> has expired.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* A sign-in link asked from `<grade10 admin console url>` for `<operator account>` has expired.
+
+* The operator’s sign-in email address is `<operator email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -3914,14 +4187,19 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 admin console url> and on <grade10 store url>.
-* <banned operator account> is banned, and a sign-in link asked from <grade10 admin console url> for its address is unused and unexpired.
+* admin is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* `<banned operator account>` is banned, and a sign-in link asked from `<grade10 admin console url>` for its address is unused and unexpired.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<banned operator account>` | An account holding console access that an admin has banned |
+| banned operator account | An account holding console access that an admin has banned |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3952,15 +4230,19 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account A> is signed in on <grade10 admin console url> with the second factor proved.
-* The console's own sign-in page is showing the inline different-account choice, offering Switch and Stay, after following a link for <operator account C>, requested from the console.
+* `<operator account A>` is signed in on `<grade10 admin console url>` with the second factor proved.
+* The console's own sign-in page is showing the inline different-account choice, offering Switch and Stay, after following a link for `<operator account C>`, requested from the console.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account A>` | An account holding console access |
-| `<operator account C>` | A different account holding console access |
+| operator account A | An account holding console access |
+| operator account C | A different account holding console access |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -3968,8 +4250,8 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Expected Results:**
 
-* Step 1 keeps <operator account A> signed in on the console.
-* <operator account C> is not entered.
+* Step 1 keeps `<operator account A>` signed in on the console.
+* `<operator account C>` is not entered.
 
 ### shared-auth-sign-in-US12-TC22-1: A site link an operator action sends signs in the site and not the console
 
@@ -3988,29 +4270,34 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account> holds `admin` and is signed in on <grade10 admin console url> with the second factor proved.
-* <customer account> is signed out on <grade10 store url> and on <grade10 admin console url>.
+* `<operator account>` holds `admin` and is signed in on `<grade10 admin console url>` with the second factor proved.
+* `<customer account>` is signed out on `<grade10 store url>` and on `<grade10 admin console url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding `admin`, which holds `user:create` |
-| `<customer account>` | A customer account holding `user` only |
-| `<customer email>` | The address of <customer account> |
-| `<site location>` | A page of <grade10 store url> |
+| operator account | An account holding `admin`, which holds `user:create` |
+| customer account | A customer account holding `user` only |
+| customer email | The address of `<customer account>` |
+| site location | A page of `<grade10 store url>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. As the console, with <operator account>'s session, ask for a sign-in link for the site to <customer email>, naming <site location> as the location to return to.
+1. As the console, with `<operator account>`'s session, ask for a sign-in link for the site to `<customer email>`, naming `<site location>` as the location to return to.
 2. Follow the unused, unexpired link with a client that holds no cookies.
 3. Ask who is calling as the site.
 4. Ask who is calling as the console.
 
 **Expected Results:**
 
-* Step 2 ends on <site location>, not on <grade10 admin console url>.
-* Step 3 receives <customer account>.
+* Step 2 ends on `<site location>`, not on `<grade10 admin console url>`.
+* Step 3 receives `<customer account>`.
 * Step 4 receives no person.
 
 ### shared-auth-sign-in-US12-TC23-1: Following an operator action's site link keeps the console session in place
@@ -4030,17 +4317,22 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account> holds `admin` and is signed in on <grade10 admin console url> with the second factor proved, in one client.
-* <customer account> is signed out on <grade10 store url>.
-* An operator action asked for a sign-in link for the site to <customer email> and it has not been followed.
+* `<operator account>` holds `admin` and is signed in on `<grade10 admin console url>` with the second factor proved, in one client.
+* `<customer account>` is signed out on `<grade10 store url>`.
+* An operator action asked for a sign-in link for the site to `<customer email>` and it has not been followed.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding `admin`, which holds `user:create` |
-| `<customer account>` | A customer account holding `user` only |
-| `<customer email>` | The address of <customer account> |
+| operator account | An account holding `admin`, which holds `user:create` |
+| customer account | A customer account holding `user` only |
+| customer email | The address of `<customer account>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -4050,8 +4342,8 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Expected Results:**
 
-* Step 2 receives <customer account>.
-* Step 3 receives <operator account>.
+* Step 2 receives `<customer account>`.
+* Step 3 receives `<operator account>`.
 
 ### shared-auth-sign-in-US12-TC24-1: A site link asked for with no console session is refused
 
@@ -4070,21 +4362,26 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account> holds `admin`, is signed in on <grade10 store url>, and is signed out on <grade10 admin console url>.
-* <customer account> has received no sign-in email since the case began.
+* `<operator account>` holds `admin`, is signed in on `<grade10 store url>`, and is signed out on `<grade10 admin console url>`.
+* `<customer account>` has received no sign-in email since the case began.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding `admin`, which holds `user:create` |
-| `<customer account>` | A customer account holding `user` only |
-| `<customer email>` | The address of <customer account> |
+| operator account | An account holding `admin`, which holds `user:create` |
+| customer account | A customer account holding `user` only |
+| customer email | The address of `<customer account>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. As the console, presenting only <operator account>'s site session, ask for a sign-in link for the site to <customer email>.
-2. Read the mail sent to <customer email>.
+1. As the console, presenting only `<operator account>`'s site session, ask for a sign-in link for the site to `<customer email>`.
+2. Read the mail sent to `<customer email>`.
 
 **Expected Results:**
 
@@ -4108,21 +4405,25 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account> holds `support` only and is signed in on <grade10 admin console url> with the second factor proved.
-* <customer account> has received no sign-in email since the case began.
+* `<operator account>` holds `support` only and is signed in on `<grade10 admin console url>` with the second factor proved.
+* `<customer account>` has received no sign-in email since the case began.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account whose only operator role is `support`, which holds no `user:create` |
-| `<customer account>` | A customer account holding `user` only |
-| `<customer email>` | The address of <customer account> |
+| operator account | An account whose only operator role is `support`, which holds no `user:create` |
+| customer account | A customer account holding `user` only |
+| customer email | The address of `<customer account>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. As the console, with <operator account>'s console session, ask for a sign-in link for the site to <customer email>.
-2. Read the mail sent to <customer email>.
+1. As the console, with `<operator account>`'s console session, ask for a sign-in link for the site to `<customer email>`.
+2. Read the mail sent to `<customer email>`.
 
 **Expected Results:**
 
@@ -4146,21 +4447,25 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 
 **Pre-conditions:**
 
-* <operator account> holds `admin`, has a second factor set up, and is signed in on <grade10 admin console url> without having proved it on this session.
-* <customer account> has received no sign-in email since the case began.
+* `<operator account>` holds `admin`, has a second factor set up, and is signed in on `<grade10 admin console url>` without having proved it on this session.
+* `<customer account>` has received no sign-in email since the case began.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding `admin`, which holds `user:create`, with a second factor set up |
-| `<customer account>` | A customer account holding `user` only |
-| `<customer email>` | The address of <customer account> |
+| operator account | An account holding `admin`, which holds `user:create`, with a second factor set up |
+| customer account | A customer account holding `user` only |
+| customer email | The address of `<customer account>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. As the console, with <operator account>'s console session, ask for a sign-in link for the site to <customer email>.
-2. Read the mail sent to <customer email>.
+1. As the console, with `<operator account>`'s console session, ask for a sign-in link for the site to `<customer email>`.
+2. Read the mail sent to `<customer email>`.
 
 **Expected Results:**
 
@@ -4185,18 +4490,23 @@ customer is signed out on a brand that has Google sign-in, with the corner promp
 **Pre-conditions:**
 
 * Grade10 offers Google sign-in.
-* <operator account> is signed in on <grade10 admin console url> only, with the second factor proved where the console asks for it, and signed out on <grade10 store url>.
+* `<operator account>` is signed in on `<grade10 admin console url>` only, with the second factor proved where the console asks for it, and signed out on `<grade10 store url>`.
 * No sign-in dialog is open.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding console access, with a second factor set up |
+| operator account | An account holding console access, with a second factor set up |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 store url> in the same browser, without opening the sign-in dialog.
+1. Navigate to `<grade10 store url>` in the same browser, without opening the sign-in dialog.
 2. Read the page.
 
 **Expected Results:**

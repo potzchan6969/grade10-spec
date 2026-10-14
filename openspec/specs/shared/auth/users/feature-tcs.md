@@ -31,9 +31,15 @@
 
 * admin(holds `user:list`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open <grade10 admin users url>.
+1. Open `<grade10 admin users url>`.
 2. Read the listed accounts.
 
 **Expected Results:**
@@ -63,9 +69,15 @@
 
 * admin(does not hold `user:list`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open <grade10 admin users url>.
+1. Open `<grade10 admin users url>`.
 
 **Expected Results:**
 
@@ -93,23 +105,27 @@
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
-* The directory holds <subject email>.
+* The directory holds `<subject email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject email> | collector@example.com |
-| <email fragment> | COLLECTOR |
+| subject email | collector@example.com |
+| email fragment | COLLECTOR |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <grade10 admin users url>.
-2. Search the directory for <email fragment>.
+1. Open `<grade10 admin users url>`.
+2. Search the directory for `<email fragment>`.
 
 **Expected Results:**
 
-* The account for <subject email> is listed.
+* The account for `<subject email>` is listed.
 * Every listed email contains that fragment, ignoring letter case.
 
 <!-- trace:case id=g10.shared-users.TC-b3k rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
@@ -138,18 +154,22 @@
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | The account to open |
-| <other user id> | A different account that shares an email attribute with <subject user id> |
+| subject user id | The account to open |
+| other user id | A different account that shares an email attribute with `<subject user id>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <grade10 admin users url>.
-2. Open the account for <subject user id>.
+1. Open `<grade10 admin users url>`.
+2. Open the account for `<subject user id>`.
 
 **Expected Results:**
 
-* The account shown is <subject user id>.
-* <other user id> is not the account shown.
+* The account shown is `<subject user id>`.
+* `<other user id>` is not the account shown.
 
 <!-- trace:case id=g10.shared-users.TC-jkd rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC5-1: Banned account stays in the directory
@@ -172,22 +192,26 @@
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
-* <subject user id> is banned.
+* `<subject user id>` is banned.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | A banned account |
+| subject user id | A banned account |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <grade10 admin users url>.
-2. Find <subject user id>.
+1. Open `<grade10 admin users url>`.
+2. Find `<subject user id>`.
 
 **Expected Results:**
 
-* <subject user id> is listed.
+* `<subject user id>` is listed.
 * The account is marked banned.
 
 ---
@@ -220,29 +244,35 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
-* <subject user id> is unbanned and signed in on <grade10 store url>.
+* `<subject user id>` is unbanned and signed in on `<grade10 store url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | An unbanned account |
-| <subject email> | That account's email |
-| <ban reason> | Account closed after a ticket |
+| subject user id | An unbanned account |
+| subject email | That account's email |
+| ban reason | Account closed after a ticket |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, ban <subject user id> with <ban reason> and confirm.
+1. On `<grade10 admin users url>`, ban `<subject user id>` with `<ban reason>` and confirm.
 2. In the pre-ban store session, start a payment.
-3. Sign in as <subject email> on <grade10 sign-in url>.
-4. Reopen <grade10 store url> in the pre-ban session.
+3. Sign in as `<subject email>` on `<grade10 sign-in url>`.
+4. Reopen `<grade10 store url>` in the pre-ban session.
 
 **Expected Results:**
 
 * The payment does not complete.
 * Sign-in does not start a session.
 * The store shows nobody signed in.
-* <subject user id> stays listed, marked banned.
+* `<subject user id>` stays listed, marked banned.
 
 <!-- trace:case id=g10.shared-users.TC-v0p rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC2-1: Unban lets the person sign in again
@@ -265,23 +295,28 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 **Pre-conditions:**
 
 * admin(holds `user:ban`) is signed in.
-* <subject user id> is banned.
+* `<subject user id>` is banned.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | A banned account |
-| <subject email> | That account's email |
+| subject user id | A banned account |
+| subject email | That account's email |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 sign-in url | The Grade10 customer sign-in URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, unban <subject user id>.
-2. Complete sign-in as <subject email> on <grade10 sign-in url>.
+1. On `<grade10 admin users url>`, unban `<subject user id>`.
+2. Complete sign-in as `<subject email>` on `<grade10 sign-in url>`.
 
 **Expected Results:**
 
-* <subject email> is signed in.
+* `<subject email>` is signed in.
 
 <!-- trace:case id=g10.shared-users.TC-hx1 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC3-1: Caller without the ban grant is refused
@@ -304,22 +339,26 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 **Pre-conditions:**
 
 * admin(does not hold `user:ban`) is signed in.
-* <subject user id> is unbanned.
+* `<subject user id>` is unbanned.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | An unbanned account |
+| subject user id | An unbanned account |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, try to ban <subject user id>.
+1. On `<grade10 admin users url>`, try to ban `<subject user id>`.
 
 **Expected Results:**
 
 * The directory refuses the ban.
-* <subject user id> stays unbanned.
+* `<subject user id>` stays unbanned.
 
 <!-- trace:case id=g10.shared-users.TC-3i2 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC4-1: Operator cannot ban themselves
@@ -344,9 +383,15 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 * admin(holds `user:ban`) is signed in.
 * The signed-in account is unbanned.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. On <grade10 admin users url>, try to ban the signed-in account.
+1. On `<grade10 admin users url>`, try to ban the signed-in account.
 
 **Expected Results:**
 
@@ -375,23 +420,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's caller is signed in and holds `user:ban`.
-* The row's subject holds `admin` and is unbanned.
+* `<caller>` is signed in and holds `user:ban`.
+* `<subject>` holds `admin` and is unbanned.
 
 **Test data:**
 
-| Caller | Subject | Outcome |
-| --- | --- | --- |
-| admin(role `support`, holds `user:ban`) | <admin user id> | Ban is refused. The account stays unbanned. |
-| admin(holds `admin` and `user:ban`) | <peer admin user id>, a different account | Ban is refused. The account stays unbanned. |
+| `<caller>` | `<subject>` | `<expected outcome>` | Fixture notes |
+| --- | --- | --- | --- |
+| admin(role `support`, holds `user:ban`) | `<admin user id>` | Ban is refused. The account stays unbanned. | · |
+| admin(holds `admin` and `user:ban`) | `<peer admin user id>` | Ban is refused. The account stays unbanned. | Subject differs from the signed-in caller |
+
+| Field | Value |
+| --- | --- |
+| admin user id | The unbanned account holding `admin` targeted by the support caller; bind its user id only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| peer admin user id | The other admin account in this fixture; bind its user id only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, try to ban the row's subject.
+1. On `<grade10 admin users url>`, try to ban `<subject>`.
 
 **Expected Results:**
 
-* The directory answers as the row's outcome states.
+* The directory answers with this outcome: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-users.TC-ka8 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk -->
 ### shared-auth-users-US2-TC6-1: Last admin cannot be banned
@@ -473,11 +524,17 @@ Runs once per row of **Test data**.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:delete`. <a subject user id> holds no open erasure request and is unbanned.
+Signed in as an operator who holds `user:delete`. `<a subject user id>` holds no open erasure request and is unbanned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. File an erasure request for <a subject user id> from the directory.
+1. File an erasure request for `<a subject user id>` from the directory.
 2. Complete a sign-in method as that person.
 
 **Expected Results:**
@@ -502,12 +559,18 @@ Signed in as an operator who holds `user:delete`. <a subject user id> holds no o
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:delete`. <a subject user id> is banned by an operator's open erasure request, filed less than seven days ago, and was unbanned before it.
+Signed in as an operator who holds `user:delete`. `<a subject user id>` is banned by an operator's open erasure request, filed less than seven days ago, and was unbanned before it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. Cancel that erasure request.
-2. Complete a sign-in method as <a subject user id>.
+2. Complete a sign-in method as `<a subject user id>`.
 
 **Expected Results:**
 
@@ -531,12 +594,18 @@ Signed in as an operator who holds `user:delete`. <a subject user id> is banned 
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:delete`. <a subject user id> was banned for conduct before an operator's erasure request was filed over the account, and that request is open.
+Signed in as an operator who holds `user:delete`. `<a subject user id>` was banned for conduct before an operator's erasure request was filed over the account, and that request is open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
 1. Cancel that erasure request.
-2. Complete a sign-in method as <a subject user id>.
+2. Complete a sign-in method as `<a subject user id>`.
 
 **Expected Results:**
 
@@ -562,11 +631,17 @@ Signed in as an operator who holds `user:delete`. <a subject user id> was banned
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:delete`. <an admin user id> holds `admin` and is unbanned.
+Signed in as an operator who holds `user:delete`. `<an admin user id>` holds `admin` and is unbanned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| an admin user id | The admin account prepared with the sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Try to file an erasure request for <an admin user id>.
+1. Try to file an erasure request for `<an admin user id>`.
 
 **Expected Results:**
 
@@ -593,18 +668,22 @@ Runs once per row of **Test data**.
 * **Trace:** shared-auth-users-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `user:ban` and `user:delete`. <a subject user id> holds the open erasure request and the standing named in **Test data**.
+Signed in as an operator who holds `user:ban` and `user:delete`. `<a subject user id>` holds the open erasure request filed by `<request owner>` and standing `<request standing>`.
 
 **Test data:**
 
-| Request filed by | Standing | Act |
+| `<request owner>` | `<request standing>` | `<act>` |
 | --- | --- | --- |
 | the account holder | unbanned | ban |
 | an operator | banned by that filing | unban |
 
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+
 **Steps:**
 
-1. Send the row's act for <a subject user id>.
+1. Send `<act>` for `<a subject user id>`.
 
 **Expected Results:**
 
@@ -681,21 +760,25 @@ peer lockout does not.
 **Pre-conditions:**
 
 * admin(holds `user:set-role`) is signed in.
-* <subject user id> does not hold `staff`.
+* `<subject user id>` does not hold `staff`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | An account that does not hold `staff` |
+| subject user id | An account that does not hold `staff` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, save <subject user id> with `staff` among its roles.
+1. On `<grade10 admin users url>`, save `<subject user id>` with `staff` among its roles.
 
 **Expected Results:**
 
-* <subject user id> holds `staff`.
+* `<subject user id>` holds `staff`.
 
 <!-- trace:case id=g10.shared-users.TC-3wy rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
 ### shared-auth-users-US3-TC2-1: Clearing operator roles leaves a user
@@ -718,21 +801,25 @@ peer lockout does not.
 **Pre-conditions:**
 
 * admin(holds `user:set-role`) is signed in.
-* <subject user id> holds an operator role and does not hold `admin`.
+* `<subject user id>` holds an operator role and does not hold `admin`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | An account with an operator role and no `admin` |
+| subject user id | An account with an operator role and no `admin` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, save <subject user id> with no operator role selected.
+1. On `<grade10 admin users url>`, save `<subject user id>` with no operator role selected.
 
 **Expected Results:**
 
-* <subject user id> holds `user` only.
+* `<subject user id>` holds `user` only.
 
 <!-- trace:case id=g10.shared-users.TC-g3z rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
 ### shared-auth-users-US3-TC3-1: Support cannot set roles
@@ -760,16 +847,20 @@ peer lockout does not.
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | Another account |
+| subject user id | Another account |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, try to change <subject user id>'s roles.
+1. On `<grade10 admin users url>`, try to change `<subject user id>`'s roles.
 
 **Expected Results:**
 
 * The directory refuses the change.
-* <subject user id>'s roles are unchanged.
+* `<subject user id>`'s roles are unchanged.
 
 <!-- trace:case id=g10.shared-users.TC-j1l rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
 ### shared-auth-users-US3-TC4-1: Operator may change their own roles
@@ -798,18 +889,22 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Roles saved | Result |
+| `<roles saved>` | `<expected result>` |
 | --- | --- |
 | `staff` and `admin` | The account holds `staff` and `admin`. |
 | no `admin` | The account does not hold `admin`. |
 
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. On <grade10 admin users url>, save the signed-in account with the row's roles.
+1. On `<grade10 admin users url>`, save the signed-in account with `<roles saved>`.
 
 **Expected Results:**
 
-* The account answers as the row's result states.
+* The account answers with this result: `<expected result>`.
 
 <!-- trace:case id=g10.shared-users.TC-60a rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
 ### shared-auth-users-US3-TC5-1: Last admin keeps admin
@@ -831,18 +926,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Exactly one account holds `admin`.
+* Exactly one account holds `admin`; `<caller>` is signed in.
 
 **Test data:**
 
-| Caller | Account saved |
+| `<caller>` | `<account saved>` |
 | --- | --- |
-| admin(holds `user:set-role`, does not hold `admin`) | <only admin user id> |
+| admin(holds `user:set-role`, does not hold `admin`) | `<only admin user id>` |
 | admin(holds `admin` and `user:set-role`), the only admin | The signed-in account |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| only admin user id | The sole remaining admin account in this fixture; bind its user id only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, save the row's account without `admin`.
+1. On `<grade10 admin users url>`, save `<account saved>` without `admin`.
 
 **Expected Results:**
 
@@ -869,22 +969,26 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds `admin` and `user:set-role`) is signed in.
-* <peer admin user id> holds `admin` and is not the signed-in account.
+* `<peer admin user id>` holds `admin` and is not the signed-in account.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <peer admin user id> | An admin other than the signed-in account |
+| peer admin user id | An admin other than the signed-in account |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, save <peer admin user id> without `admin`.
+1. On `<grade10 admin users url>`, save `<peer admin user id>` without `admin`.
 
 **Expected Results:**
 
 * The directory refuses the save.
-* <peer admin user id> still holds `admin`.
+* `<peer admin user id>` still holds `admin`.
 
 <!-- trace:case id=g10.shared-users.TC-q92 rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6,g10.shared-users.SC-7i8 -->
 ### shared-auth-users-US3-TC7-1: An ordinary read of the caller's own permissions reflects a role change on the very next read
@@ -908,24 +1012,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's target is signed in, and an ordinary (non-elevated) browse read of its own current permissions has already warmed its session cache.
+* `<target>` is signed in, and an ordinary (non-elevated) browse read of its own current permissions has already warmed its session cache.
 
 **Test data:**
 
-| Target | Role change |
+| `<target>` | `<role change>` |
 | --- | --- |
 | Another account | `staff` granted, previously held no operator role |
 | The signed-in admin's own account | Own `admin` stripped; another admin remains |
 
 **Steps:**
 
-1. Read the row's target's permissions on an ordinary, non-elevated browse surface.
-2. An admin holding `user:set-role` saves the row's target with the row's role change.
-3. Immediately read the row's target's permissions the same way as step 1.
+1. Read `<target>`’s permissions on an ordinary, non-elevated browse surface.
+2. An admin holding `user:set-role` saves `<target>` with `<role change>`.
+3. Immediately read `<target>`’s permissions the same way as step 1.
 
 **Expected Results:**
 
-* Step 3 reflects the row's new roles, even though step 1's read would otherwise have kept the cache answering the old roles for up to five more minutes.
+* Step 3 reflects the new roles from `<role change>`, even though step 1's read would otherwise have kept the cache answering the old roles for up to five more minutes.
 
 ---
 
@@ -958,24 +1062,28 @@ without reading every account.
 **Pre-conditions:**
 
 * admin(holds `user:list`) is signed in.
-* The directory holds <account name>, and that name is not part of the account's email.
+* The directory holds `<account name>`, and that name is not part of the account’s email `<subject email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <account name> | Alex Collector |
-| <name fragment> | ALEX |
-| <subject email> | collector@example.com |
+| account name | Alex Collector |
+| name fragment | ALEX |
+| subject email | collector@example.com |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <grade10 admin users url>.
-2. Search the directory for <name fragment>.
+1. Open `<grade10 admin users url>`.
+2. Search the directory for `<name fragment>`.
 
 **Expected Results:**
 
-* The account named <account name> is listed.
+* The account named `<account name>` is listed.
 
 <!-- trace:case id=g10.shared-users.TC-1nn rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC2-1: Directory narrows to a role
@@ -1000,9 +1108,15 @@ without reading every account.
 * admin(holds `user:list`) is signed in.
 * The directory holds an account with `admin` and an account with no elevated role.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open <grade10 admin users url>.
+1. Open `<grade10 admin users url>`.
 2. Narrow the directory to accounts that hold `admin`.
 
 **Expected Results:**
@@ -1033,9 +1147,15 @@ without reading every account.
 * admin(holds `user:list`) is signed in.
 * The directory holds banned and unbanned `support` accounts that joined on different days.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open <grade10 admin users url>.
+1. Open `<grade10 admin users url>`.
 2. Narrow to banned accounts that hold `support`.
 3. Order by when the account joined, oldest first.
 4. Clear the order.
@@ -1069,9 +1189,15 @@ without reading every account.
 * admin(holds `user:list`) is signed in.
 * The directory holds an account with `admin` and an account with no elevated role.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open <grade10 admin users url>.
+1. Open `<grade10 admin users url>`.
 2. Narrow the directory to the user population.
 
 **Expected Results:**
@@ -1097,15 +1223,19 @@ without reading every account.
 
 **Pre-conditions:**
 
-* admin(holds `user:list`) is on <grade10 admin users url>.
-* The directory holds <elevated account> and <plain account>.
+* admin(holds `user:list`) is on `<grade10 admin users url>`.
+* The directory holds `<elevated account>` and `<plain account>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<elevated account>` | An account holding `staff`, any elevated role |
-| `<plain account>` | An account holding `user` only |
+| elevated account | An account holding `staff`, any elevated role |
+| plain account | An account holding `user` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1115,7 +1245,7 @@ without reading every account.
 **Expected Results:**
 
 * Every listed account holds at least one elevated role.
-* <plain account> is not listed.
+* `<plain account>` is not listed.
 
 ---
 
@@ -1145,26 +1275,26 @@ or an invite mail, and a duplicate never becomes a second account.
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:create` and `user:set-role`). No Auth account holds <new email>.
+Signed in as operator(holds `user:create` and `user:set-role`). No Auth account holds `<new email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <new name> | Ada Operator |
-| <new email> | ada.operator@example.com |
-| <roles> | `admin` |
+| new name | Ada Operator |
+| new email | ada.operator@example.com |
+| roles | admin |
 
 **Steps:**
 
-1. Create an Auth account with <new name>, <new email>, and <roles>.
-2. Open the account named by <new email>.
+1. Create an Auth account with `<new name>`, `<new email>`, and `<roles>`.
+2. Open the account named by `<new email>`.
 3. Check that account's roles and whether a password was required at create.
 
 **Expected Results:**
 
-* Step 1 succeeds and creates one Auth account for <new email>.
-* Step 2 opens that account with <new name> and roles including `admin`.
+* Step 1 succeeds and creates one Auth account for `<new email>`.
+* Step 2 opens that account with `<new name>` and roles including `admin`.
 * Create collected no password.
 
 <!-- trace:case id=g10.shared-users.TC-thu rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
@@ -1184,20 +1314,20 @@ Signed in as operator(holds `user:create` and `user:set-role`). No Auth account 
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account holds <plain email>.
+Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account holds `<plain email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <plain name> | Pat Collector |
-| <plain email> | pat.collector@example.com |
-| <roles> | `user` |
+| plain name | Pat Collector |
+| plain email | pat.collector@example.com |
+| roles | user |
 
 **Steps:**
 
-1. Create an Auth account with <plain name>, <plain email>, and <roles>.
-2. Open the account named by <plain email>.
+1. Create an Auth account with `<plain name>`, `<plain email>`, and `<roles>`.
+2. Open the account named by `<plain email>`.
 
 **Expected Results:**
 
@@ -1221,22 +1351,22 @@ Signed in as operator(holds `user:create`, not `user:set-role`). No Auth account
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`). No Auth account holds <attempted email>.
+Signed in as operator(holds `user:list` and `user:set-role`, not `user:create`). No Auth account holds `<attempted email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <attempted email> | no.create@example.com |
+| attempted email | no.create@example.com |
 
 **Steps:**
 
-1. Try to create an Auth account with name, <attempted email>, and role `user`.
+1. Try to create an Auth account with name, `<attempted email>`, and role `user`.
 
 **Expected Results:**
 
 * The system refuses the create.
-* No Auth account holds <attempted email>.
+* No Auth account holds `<attempted email>`.
 
 <!-- trace:case id=g10.shared-users.TC-h8w rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
 ### shared-auth-users-US5-TC4-1: Elevated role without user:set-role is refused
@@ -1259,7 +1389,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * operator(holds `user:create` and `user:list`, not `user:set-role`) is signed in to the console.
-* No account holds <elevated email>.
+* No account holds `<elevated email>`.
 
 **Test data:**
 
@@ -1268,10 +1398,15 @@ Runs once per row of **Test data**.
 | `staff` | Almost Staff | almost.staff@example.com | Refused; no account holds the address |
 | `admin` | Almost Admin | almost.admin@example.com | Refused; no account holds the address |
 
+| Field | Value |
+| --- | --- |
+| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Send the users create call, as <grade10 admin api docs url> lists it, with <elevated name>, <elevated email> and <elevated role>.
-2. Search <grade10 admin users url> for <elevated email>.
+1. Send the users create call, as `<grade10 admin api docs url>` lists it, with `<elevated name>`, `<elevated email>` and `<elevated role>`.
+2. Search `<grade10 admin users url>` for `<elevated email>`.
 
 **Expected Results:**
 
@@ -1296,28 +1431,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* operator(holds `user:create`, `user:set-role` and `user:list`) is on <grade10 admin users url>.
-* <existing account> holds <existing email>.
+* operator(holds `user:create`, `user:set-role` and `user:list`) is on `<grade10 admin users url>`.
+* `<existing account>` holds `<existing email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<existing account>` | An account that has signed in at least once |
-| `<existing email>` | That account's email |
-| `<new name>` | Second Taker, any name other than the existing account's |
+| existing account | An account that has signed in at least once |
+| existing email | That account's email |
+| new name | Second Taker, any name other than the existing account's |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Click Create.
-2. Enter <new name> and <existing email>, and select `user`.
+2. Enter `<new name>` and `<existing email>`, and select `user`.
 3. Submit the form.
-4. Search the directory for <existing email>.
+4. Search the directory for `<existing email>`.
 
 **Expected Results:**
 
 * Step 3 is refused.
-* Step 4 lists exactly one account for <existing email>.
+* Step 4 lists exactly one account for `<existing email>`.
 
 <!-- trace:case id=g10.shared-users.TC-p4w rev=1 covers=g10.shared-users.SC-6zy,g10.shared-users.SC-icb,g10.shared-users.SC-aob,g10.shared-users.SC-fdw,g10.shared-users.SC-30l,g10.shared-users.SC-52a -->
 ### shared-auth-users-US5-TC6-1: Create does not enroll loyalty or send invite mail
@@ -1337,25 +1476,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* operator(holds `user:create`, `user:set-role` and `loyalty:read`) is on <grade10 admin users url>.
-* No account holds <silent email>.
+* operator(holds `user:create`, `user:set-role` and `loyalty:read`) is on `<grade10 admin users url>`.
+* No account holds `<silent email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| silent name | Silent Create | · |
+| silent email | An inbox the tester reads, held by no account | · |
+| silent role | staff | any role from the closed set |
+
 | Field | Value |
 | --- | --- |
-| `<silent name>` | Silent Create |
-| `<silent email>` | An inbox the tester reads, held by no account |
-| `<silent role>` | `staff`, any role from the closed set |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Click Create.
-2. Enter <silent name> and <silent email>, and select <silent role>.
+2. Enter `<silent name>` and `<silent email>`, and select `<silent role>`.
 3. Submit the form.
 4. Click Confirm.
-5. Open the inbox for <silent email>.
-6. Search the loyalty Members page for <silent email>.
+5. Open the inbox for `<silent email>`.
+6. Search the loyalty Members page for `<silent email>`.
 
 **Expected Results:**
 
@@ -1382,19 +1525,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * operator(holds `user:create` and `user:list`) is signed in to the console.
-* No account holds <empty-roles email>.
+* No account holds `<empty-roles email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| empty-roles name | No Role Pick | · |
+| empty-roles email | no.role@example.com | any address no account holds |
+
 | Field | Value |
 | --- | --- |
-| `<empty-roles name>` | No Role Pick |
-| `<empty-roles email>` | no.role@example.com, any address no account holds |
+| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the users create call, as <grade10 admin api docs url> lists it, with <empty-roles name>, <empty-roles email> and an empty role list.
-2. Search <grade10 admin users url> for <empty-roles email> and open the account.
+1. Send the users create call, as `<grade10 admin api docs url>` lists it, with `<empty-roles name>`, `<empty-roles email>` and an empty role list.
+2. Search `<grade10 admin users url>` for `<empty-roles email>` and open the account.
 
 **Expected Results:**
 
@@ -1430,7 +1578,14 @@ before anything is erased.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-Signed in as <a subject user id>, on <Your data page>. No erasure request is open for that account.
+Signed in as `<a subject user id>`, on `<Your data page>`. No erasure request is open for that account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Your data page | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -1461,11 +1616,17 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-<a subject user id> has filed their own erasure request. The seven-day window is still open.
+`<a subject user id>` has filed their own erasure request. The seven-day window is still open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Complete a sign-in method as <a subject user id>.
+1. Complete a sign-in method as `<a subject user id>`.
 
 **Expected Results:**
 
@@ -1490,7 +1651,14 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-Signed in as <a subject user id>, on <Your data page>. <a subject user id> has an open self-filed erasure request, filed six days ago on the brand's own zone, so the day an erasure may run has not opened.
+Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>` has an open self-filed erasure request, filed six days ago on the brand's own zone, so the day an erasure may run has not opened.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Your data page | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -1520,7 +1688,14 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> has a
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-Signed in as <a subject user id>, on <Your data page>. <a subject user id> previously filed and then cancelled an erasure request.
+Signed in as `<a subject user id>`, on `<Your data page>`. `<a subject user id>` previously filed and then cancelled an erasure request.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Your data page | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -1550,7 +1725,13 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-<a subject user id> already has an open self-filed erasure request.
+`<a subject user id>` already has an open self-filed erasure request.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -1580,7 +1761,13 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-Signed in as <a subject user id>. <a subject user id> holds no open erasure request.
+Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure request.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -1609,14 +1796,18 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 **Pre-conditions:**
 
-* customer is signed in as <subject user id> and on <grade10 your data url>.
-* <subject user id> filed their own erasure request seven days ago, on the brand's zone, so today an erasure may run.
+* customer is signed in as `<subject user id>` and on `<grade10 your data url>`.
+* `<subject user id>` filed their own erasure request seven days ago, on the brand's zone, so today an erasure may run.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject user id>` | An account holding `user` only, with that request open |
+| subject user id | An account holding `user` only, with that request open |
+
+| Field | Value |
+| --- | --- |
+| grade10 your data url | The signed-in Grade10 Your data URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1648,16 +1839,22 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-<a subject user id> has an open self-filed erasure request, inside the seven-day window. An operator holding `user:delete` files an erasure request for <a subject user id> from the directory.
+`<a subject user id>` has an open self-filed erasure request, inside the seven-day window. An operator holding `user:delete` files an erasure request for `<a subject user id>` from the directory.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Try to complete a sign-in method as <a subject user id>.
+1. Try to complete a sign-in method as `<a subject user id>`.
 
 **Expected Results:**
 
 * The request becomes the operator's, with a ban applied.
-* Completing a sign-in method does not sign <a subject user id> in.
+* Completing a sign-in method does not sign `<a subject user id>` in.
 
 <!-- trace:case id=g10.shared-users.TC-y5k rev=2 covers=g10.shared-users.SC-qww,g10.shared-users.SC-r91,g10.shared-users.SC-qse,g10.shared-users.SC-7rv,g10.shared-users.SC-lh5,g10.shared-users.SC-gnj,g10.shared-users.SC-x17,g10.shared-users.SC-use -->
 ### shared-auth-users-US6-TC9-2: A taken-over request refuses the account holder's own cancel
@@ -1678,11 +1875,17 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
-<a subject user id> filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.
+`<a subject user id>` filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Send the account holder's own cancel as <a subject user id>.
+1. Send the account holder's own cancel as `<a subject user id>`.
 
 **Expected Results:**
 
@@ -1707,25 +1910,29 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 
 **Pre-conditions:**
 
-* customer is signed in as <subject user id>.
-* <subject user id> filed their own erasure request and cancelled it inside the window, on <first cancel day>.
+* customer is signed in as `<subject user id>`.
+* `<subject user id>` filed their own erasure request and cancelled it inside the window, on `<first cancel day>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject user id>` | An unbanned account holding `user` only |
-| `<first cancel day>` | The day of the first cancel |
+| subject user id | An unbanned account holding `user` only |
+| first cancel day | The day of the first cancel |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the erasure cancel call, as <grade10 admin api docs url> lists it, as <subject user id>.
+1. Send the erasure cancel call, as `<grade10 admin api docs url>` lists it, as `<subject user id>`.
 2. Read the request.
-3. Read <subject user id>'s standing.
+3. Read `<subject user id>`'s standing.
 
 **Expected Results:**
 
-* Step 2 reads the request cancelled, closed on <first cancel day>.
+* Step 2 reads the request cancelled, closed on `<first cancel day>`.
 * Step 3 reads unbanned, as before.
 
 ## Settled

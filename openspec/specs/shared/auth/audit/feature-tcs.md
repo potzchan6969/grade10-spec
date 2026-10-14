@@ -27,29 +27,34 @@
 
 **Pre-conditions:**
 
-* admin(holds `user:ban`) is on <grade10 admin users url>.
-* <subject account> is unbanned.
+* admin(holds `user:ban`) is on `<grade10 admin users url>`.
+* `<subject account>` is unbanned.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An unbanned account holding `user` only |
-| `<ban reason>` | Chargeback dispute open, any reason the operator states |
+| subject account | An unbanned account holding `user` only |
+| ban reason | Chargeback dispute open, any reason the operator states |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <subject account>'s user id into the search.
+1. Paste `<subject account>`'s user id into the search.
 2. Choose Ban in the account's panel.
-3. Enter <ban reason> and confirm.
-4. As admin(holds `audit:read`), open <grade10 admin audit url>.
-5. Filter by subject id <subject account>.
+3. Enter `<ban reason>` and confirm.
+4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+5. Filter by subject id `<subject account>`.
 6. Expand the ban row.
 
 **Expected Results:**
 
-* Step 5 lists the ban, naming the operator and <subject account> by user id, not by email.
-* Step 6 shows <ban reason> and no secret.
+* Step 5 lists the ban, naming the operator and `<subject account>` by user id, not by email.
+* Step 6 shows `<ban reason>` and no secret.
 
 <!-- trace:case id=g10.shared-audit.TC-ccj rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC2-1: Refused ban is on the trail as unsuccessful
@@ -70,19 +75,24 @@
 **Pre-conditions:**
 
 * admin(does not hold `user:ban`) is signed in to the console.
-* <subject account> is unbanned.
+* `<subject account>` is unbanned.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An unbanned account holding `user` only |
+| subject account | An unbanned account holding `user` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the users ban call, as <grade10 admin api docs url> lists it, for <subject account>.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter by subject id <subject account>.
+1. Send the users ban call, as `<grade10 admin api docs url>` lists it, for `<subject account>`.
+2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+3. Filter by subject id `<subject account>`.
 
 **Expected Results:**
 
@@ -107,25 +117,30 @@
 
 **Pre-conditions:**
 
-* admin(holds `session:list` and `session:revoke`) is on <grade10 admin users url>.
-* <subject account> is signed in on one browser.
+* admin(holds `session:list` and `session:revoke`) is on `<grade10 admin users url>`.
+* `<subject account>` is signed in on one browser.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account signed in on one browser only |
+| subject account | An account signed in on one browser only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <subject account>'s user id into the search.
+1. Paste `<subject account>`'s user id into the search.
 2. Revoke the session in the account's panel.
-3. As admin(holds `audit:read`), open <grade10 admin audit url>.
-4. Filter by subject id <subject account>.
+3. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+4. Filter by subject id `<subject account>`.
 
 **Expected Results:**
 
-* Step 4 lists the revoke, naming the operator and <subject account>.
+* Step 4 lists the revoke, naming the operator and `<subject account>`.
 
 <!-- trace:case id=g10.shared-audit.TC-api rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC4-1: Directory and session lists write no trail entry
@@ -145,22 +160,27 @@
 
 **Pre-conditions:**
 
-* admin(holds `user:list` and `session:list`) is on <grade10 admin users url>.
+* admin(holds `user:list` and `session:list`) is on `<grade10 admin users url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account signed in on one browser |
-| `<start time>` | The time just before step 1 |
-| `<operator id>` | The signed-in operator's user id |
+| subject account | An account signed in on one browser |
+| start time | The time just before step 1 |
+| operator id | The signed-in operator's user id |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Search the directory for <subject account>.
-2. Read the sessions in <subject account>'s panel.
-3. As admin(holds `audit:read`), open <grade10 admin audit url>.
-4. Filter by actor id <operator id>, from <start time>.
+1. Search the directory for `<subject account>`.
+2. Read the sessions in `<subject account>`'s panel.
+3. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+4. Filter by actor id `<operator id>`, from `<start time>`.
 
 **Expected Results:**
 
@@ -185,24 +205,29 @@
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
-* An unused, unexpired sign-in link has been emailed to <collector email>.
+* customer is not signed in on `<grade10 store url>`.
+* An unused, unexpired sign-in link has been emailed to `<collector email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | An inbox the tester reads, with an account holding `user` only |
-| `<collector id>` | That account's user id |
-| `<start time>` | The time just before step 1 |
+| collector email | An inbox the tester reads, with an account holding `user` only |
+| collector id | That account's user id |
+| start time | The time just before step 1 |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Follow the sign-in link emailed to <collector email>.
-2. Sign out on <grade10 store url>.
-3. As admin(holds `audit:read`), open <grade10 admin audit url>.
-4. Filter by subject id <collector id>, from <start time>.
-5. Filter by actor id <collector id>, from <start time>.
+1. Follow the sign-in link emailed to `<collector email>`.
+2. Sign out on `<grade10 store url>`.
+3. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+4. Filter by subject id `<collector id>`, from `<start time>`.
+5. Filter by actor id `<collector id>`, from `<start time>`.
 
 **Expected Results:**
 
@@ -229,30 +254,34 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <subject account> exists and is signed in on one browser.
+* `<subject account>` exists and is signed in on one browser.
 
 **Test data:**
 
-| Read sent by a trusted product | Outcome |
+| `<read request>` | `<expected outcome>` |
 | --- | --- |
-| Whether an account exists for <subject email> | No trail entry |
-| The session of <subject account> | No trail entry |
+| Whether an account exists for `<subject email>` | No trail entry |
+| The session of `<subject account>` | No trail entry |
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account holding `user` only |
-| `<subject email>` | That account's email |
-| `<start time>` | The time just before step 1 |
+| subject account | An account holding `user` only |
+| subject email | That account's email |
+| start time | The time just before step 1 |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the row's read as a trusted product.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter to the identity product, from <start time>.
+1. Send `<read request>` as a trusted product.
+2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+3. Filter to the identity product, from `<start time>`.
 
 **Expected Results:**
 
-* Step 3 lists as the row's outcome states.
+* Step 3 lists this outcome: `<expected outcome>`.
 
 ---
 
@@ -283,9 +312,15 @@ Runs once per row of **Test data**.
 * admin(holds `audit:read` only) is signed in to the console.
 * At least one identity action is on the trail.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin audit url>.
+1. Navigate to `<grade10 admin audit url>`.
 2. Filter to the identity product.
 
 **Expected Results:**
@@ -310,7 +345,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `audit:read` only) is on <grade10 admin audit url>.
+* admin(holds `audit:read` only) is on `<grade10 admin audit url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -341,10 +382,17 @@ Runs once per row of **Test data**.
 
 * admin(holds `user:list`, does not hold `audit:read`) is signed in to the console.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin api docs url | The Grade10 operator API documentation URL in the test environment; bind its URL only |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin audit url>.
-2. Send the identity trail check call, as <grade10 admin api docs url> lists it.
+1. Navigate to `<grade10 admin audit url>`.
+2. Send the identity trail check call, as `<grade10 admin api docs url>` lists it.
 
 **Expected Results:**
 
@@ -377,23 +425,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An identity action, <trail entry>, is on the trail.
+* An identity action, `<trail entry>`, is on the trail.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<trail entry>` | A recorded ban, any recorded identity action |
+| trail entry | A recorded ban, any recorded identity action |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send an edit of <trail entry> to the identity trail store.
-2. Send a removal of <trail entry> to the identity trail store.
-3. As admin(holds `audit:read`), read <trail entry> on <grade10 admin audit url>.
+1. Send an edit of `<trail entry>` to the identity trail store.
+2. Send a removal of `<trail entry>` to the identity trail store.
+3. As admin(holds `audit:read`), read `<trail entry>` on `<grade10 admin audit url>`.
 
 **Expected Results:**
 
-* Step 3 shows <trail entry> unchanged.
+* Step 3 shows `<trail entry>` unchanged.
 
 <!-- trace:case id=g10.shared-audit.TC-2d0 rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC2-1: Unrecorded ban does not take effect
@@ -413,27 +465,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `user:ban`) is on <grade10 admin users url>.
-* <subject account> is unbanned.
+* admin(holds `user:ban`) is on `<grade10 admin users url>`.
+* `<subject account>` is unbanned.
 * The identity trail is mocked to refuse a new entry.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An unbanned account holding `user` only |
-| `<ban reason>` | Chargeback dispute open, any reason the operator states |
+| subject account | An unbanned account holding `user` only |
+| ban reason | Chargeback dispute open, any reason the operator states |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <subject account>'s user id into the search.
+1. Paste `<subject account>`'s user id into the search.
 2. Choose Ban in the account's panel.
-3. Enter <ban reason> and confirm.
+3. Enter `<ban reason>` and confirm.
 4. Reload the account's panel.
 
 **Expected Results:**
 
-* Step 4 shows <subject account> not banned.
+* Step 4 shows `<subject account>` not banned.
 
 <!-- trace:case id=g10.shared-audit.TC-vfa rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC3-1: Unrecorded revoke does not take effect
@@ -453,27 +509,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `session:list` and `session:revoke`) is on <grade10 admin users url>.
-* <subject account> is signed in on <grade10 store url> in <subject browser>.
+* admin(holds `session:list` and `session:revoke`) is on `<grade10 admin users url>`.
+* `<subject account>` is signed in on `<grade10 store url>` in `<subject browser>`.
 * The identity trail is mocked to refuse a new entry.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account signed in on one browser only |
-| `<subject browser>` | The browser holding that session |
+| subject account | An account signed in on one browser only |
+| subject browser | The browser holding that session |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <subject account>'s user id into the search.
+1. Paste `<subject account>`'s user id into the search.
 2. Revoke the session in the account's panel.
 3. Wait 70 seconds.
-4. Reload <grade10 store url> in <subject browser>.
+4. Reload `<grade10 store url>` in `<subject browser>`.
 
 **Expected Results:**
 
-* Step 4 shows <subject account> still signed in.
+* Step 4 shows `<subject account>` still signed in.
 
 ---
 
@@ -501,30 +562,35 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
-* No account holds <new email>.
+* customer is not signed in on `<grade10 store url>`.
+* No account holds `<new email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| new email | new.buyer+20261007@example.com | An inbox the tester reads, held by no account |
+| product | Any in-stock product on `<grade10 store url>` | · |
+| test card | The staging shop's test card that pays successfully | · |
+| start time | The time just before step 1 | · |
+
 | Field | Value |
 | --- | --- |
-| `<new email>` | An inbox the tester reads, held by no account, for example new.buyer+20261007@example.com |
-| `<product>` | Any in-stock product on <grade10 store url> |
-| `<test card>` | The staging shop's test card that pays successfully |
-| `<start time>` | The time just before step 1 |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Add <product> to the cart on <grade10 store url>.
-2. Check out as a guest with <new email>.
-3. Pay with <test card>.
-4. As admin(holds `audit:read`), open <grade10 admin audit url>.
-5. Filter to the identity product, from <start time>.
+1. Add `<product>` to the cart on `<grade10 store url>`.
+2. Check out as a guest with `<new email>`.
+3. Pay with `<test card>`.
+4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+5. Filter to the identity product, from `<start time>`.
 
 **Expected Results:**
 
 * Step 5 lists the write for a new user id, with outcome `created`.
-* The entry names the system as actor and the subject by user id, not by <new email>.
+* The entry names the system as actor and the subject by user id, not by `<new email>`.
 
 <!-- trace:case id=g10.shared-audit.TC-2mz rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC2-1: Already-existed find is not on the trail
@@ -546,35 +612,40 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
-* An account holds <existing email>, in the row's standing.
+* customer is not signed in on `<grade10 store url>`.
+* An account holds `<existing email>`, with standing `<account standing>`, created through `<account origin>`.
 
 **Test data:**
 
-| Account at `<existing email>` | How it was made | Outcome |
+| `<account standing>` | `<account origin>` | `<expected outcome>` |
 | --- | --- | --- |
-| Unverified | An earlier paid guest checkout with <existing email> | No trail entry |
-| Verified | A sign-in with <existing email>, then a sign-out | No trail entry |
+| Unverified | An earlier paid guest checkout with `<existing email>` | No trail entry |
+| Verified | A sign-in with `<existing email>`, then a sign-out | No trail entry |
 
 | Field | Value |
 | --- | --- |
-| `<existing email>` | An inbox the tester reads, holding the row's account |
-| `<existing account id>` | That account's user id |
-| `<product>` | Any in-stock product on <grade10 store url> |
-| `<test card>` | The staging shop's test card that pays successfully |
-| `<start time>` | The time just before step 1 |
+| existing email | An inbox the tester reads, holding the account in `<account standing>` |
+| existing account id | That account's user id |
+| product | Any in-stock product on `<grade10 store url>` |
+| test card | The staging shop's test card that pays successfully |
+| start time | The time just before step 1 |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Add <product> to the cart on <grade10 store url>.
-2. Check out as a guest with <existing email>.
-3. Pay with <test card>.
-4. As admin(holds `audit:read`), open <grade10 admin audit url>.
-5. Filter by subject id <existing account id>, from <start time>.
+1. Add `<product>` to the cart on `<grade10 store url>`.
+2. Check out as a guest with `<existing email>`.
+3. Pay with `<test card>`.
+4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+5. Filter by subject id `<existing account id>`, from `<start time>`.
 
 **Expected Results:**
 
-* Step 5 lists as the row's outcome states.
+* Step 5 lists this outcome: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-audit.TC-8lh rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC3-1: Verify flip is on the trail
@@ -594,21 +665,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <unverified email> holds an unverified account.
+* `<unverified email>` holds an unverified account.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| unverified email | unverified.buyer@example.com | an unverified account |
+| unverified account id | That account's user id | · |
+| start time | The time just before step 1 | · |
+
 | Field | Value |
 | --- | --- |
-| `<unverified email>` | unverified.buyer@example.com, an unverified account |
-| `<unverified account id>` | That account's user id |
-| `<start time>` | The time just before step 1 |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the trusted-product verify call for <unverified email>.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter by subject id <unverified account id>, from <start time>.
+1. Send the trusted-product verify call for `<unverified email>`.
+2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+3. Filter by subject id `<unverified account id>`, from `<start time>`.
 
 **Expected Results:**
 
@@ -632,20 +707,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* No account holds <new verified email>.
+* No account holds `<new verified email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| new verified email | verified.buyer@example.com | any address no account holds |
+| start time | The time just before step 1 | · |
+
 | Field | Value |
 | --- | --- |
-| `<new verified email>` | verified.buyer@example.com, any address no account holds |
-| `<start time>` | The time just before step 1 |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the trusted-product verify call for <new verified email>.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter to the identity product, from <start time>.
+1. Send the trusted-product verify call for `<new verified email>`.
+2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+3. Filter to the identity product, from `<start time>`.
 
 **Expected Results:**
 
@@ -669,21 +748,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A verified account holds <existing email>.
+* A verified account holds `<existing email>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| existing email | existing.buyer@example.com | a verified account |
+| existing account id | That account's user id | · |
+| start time | The time just before step 1 | · |
+
 | Field | Value |
 | --- | --- |
-| `<existing email>` | existing.buyer@example.com, a verified account |
-| `<existing account id>` | That account's user id |
-| `<start time>` | The time just before step 1 |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Send the trusted-product verify call for <existing email>.
-2. As admin(holds `audit:read`), open <grade10 admin audit url>.
-3. Filter by subject id <existing account id>, from <start time>.
+1. Send the trusted-product verify call for `<existing email>`.
+2. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+3. Filter by subject id `<existing account id>`, from `<start time>`.
 
 **Expected Results:**
 
@@ -709,31 +792,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's starting account exists, or does not.
+* The directory is seeded as follows: `<starting account>`.
 * The identity trail is mocked to refuse a new entry.
 
 **Test data:**
 
-| Starting account | Write sent | Outcome |
+| `<starting account>` | `<write request>` | `<expected outcome>` |
 | --- | --- | --- |
-| None at <fresh email> | Trusted-product create for <fresh email> | No account holds <fresh email> |
-| Unverified at <unverified email> | Trusted-product verify for <unverified email> | The account at <unverified email> is still unverified |
-| <account to delete> | admin(holds `user:delete`) deletes <account to delete> | <account to delete> still exists |
+| None at `<fresh email>` | Trusted-product create for `<fresh email>` | No account holds `<fresh email>` |
+| Unverified at `<unverified email>` | Trusted-product verify for `<unverified email>` | The account at `<unverified email>` is still unverified |
+| `<account to delete>` | admin(holds `user:delete`) deletes `<account to delete>` | `<account to delete>` still exists |
 
-| Field | Value |
-| --- | --- |
-| `<fresh email>` | fresh.buyer@example.com, any address no account holds |
-| `<unverified email>` | unverified.buyer@example.com, an unverified account |
-| `<account to delete>` | An account holding `user` only |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| fresh email | fresh.buyer@example.com | any address no account holds |
+| unverified email | unverified.buyer@example.com | an unverified account |
+| account to delete | An account holding `user` only | · |
 
 **Steps:**
 
-1. Send the row's write.
-2. Read the row's account.
+1. Send `<write request>`.
+2. Read the directory for `<starting account>`.
 
 **Expected Results:**
 
-* Step 2 answers as the row's outcome states.
+* Step 2 answers with this outcome: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-audit.TC-36y rev=1 covers=g10.shared-audit.SC-06a,g10.shared-audit.SC-88n,g10.shared-audit.SC-2og,g10.shared-audit.SC-fa1,g10.shared-audit.SC-f32,g10.shared-audit.SC-osr,g10.shared-audit.SC-ubk,g10.shared-audit.SC-tej,g10.shared-audit.SC-oue,g10.shared-audit.SC-7no,g10.shared-audit.SC-5fv -->
 ### shared-auth-audit-US4-TC7-1: Deleting an account is on the trail
@@ -753,28 +836,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `user:delete`) is on <grade10 admin users url>.
-* An operator's erasure request for <account to delete> has passed its seven-day window, and every product reports holding nothing of it.
+* admin(holds `user:delete`) is on `<grade10 admin users url>`.
+* An operator's erasure request for `<account to delete>` has passed its seven-day window, and every product reports holding nothing of it.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<account to delete>` | An account holding `user` only |
-| `<deleted account id>` | That account's user id |
-| `<start time>` | The time just before step 1 |
+| account to delete | An account holding `user` only |
+| deleted account id | That account's user id |
+| start time | The time just before step 1 |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <deleted account id> into the search.
+1. Paste `<deleted account id>` into the search.
 2. Open the erasure checklist in the account's panel.
 3. Click delete login and confirm.
-4. As admin(holds `audit:read`), open <grade10 admin audit url>.
-5. Filter by subject id <deleted account id>, from <start time>.
+4. As admin(holds `audit:read`), open `<grade10 admin audit url>`.
+5. Filter by subject id `<deleted account id>`, from `<start time>`.
 
 **Expected Results:**
 
-* Step 5 lists the deletion, naming the operator and <deleted account id>.
+* Step 5 lists the deletion, naming the operator and `<deleted account id>`.
 
 ---
 
@@ -802,21 +890,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <subject account> has no second factor and can enroll one.
+* `<subject account>` has no second factor and can enroll one.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An admin account with no second factor |
+| subject account | An admin account with no second factor |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Start second-factor enrollment for <subject account>, without completing it.
+1. Start second-factor enrollment for `<subject account>`, without completing it.
 2. Complete the enrollment, so the factor first becomes active.
 3. Regenerate the recovery codes.
 4. Remove the second factor.
-5. As admin(holds `audit:read`), filter <grade10 admin audit url> by subject id <subject account>.
+5. As admin(holds `audit:read`), filter `<grade10 admin audit url>` by subject id `<subject account>`.
 
 **Expected Results:**
 
@@ -842,22 +934,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <subject account>'s second factor is becoming active.
+* `<subject account>`'s second factor is becoming active.
 * The identity trail is mocked to refuse a new entry.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An admin account mid-enrollment |
+| subject account | An admin account mid-enrollment |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Complete the enrollment for <subject account>.
-2. Read <subject account>'s second-factor state.
+1. Complete the enrollment for `<subject account>`.
+2. Read `<subject account>`'s second-factor state.
 3. Restore the identity trail.
-4. Complete a later successful second-factor proof as <subject account>.
-5. As admin(holds `audit:read`), filter <grade10 admin audit url> by subject id <subject account>.
+4. Complete a later successful second-factor proof as `<subject account>`.
+5. As admin(holds `audit:read`), filter `<grade10 admin audit url>` by subject id `<subject account>`.
 
 **Expected Results:**
 
@@ -885,29 +981,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <subject account> has an active second factor and recovery codes <current codes>.
+* `<subject account>` has an active second factor and recovery codes `<current codes>`.
 * The identity trail is mocked to refuse a new entry.
 
 **Test data:**
 
-| Act | Outcome |
+| `<act>` | `<expected outcome>` |
 | --- | --- |
-| Regenerate the recovery codes | The recovery codes are still <current codes> |
+| Regenerate the recovery codes | The recovery codes are still `<current codes>` |
 | Remove the second factor | The second factor is still active |
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An admin account with an active second factor |
-| `<current codes>` | The recovery codes on file before step 1 |
+| subject account | An admin account with an active second factor |
+| current codes | The recovery codes on file before step 1 |
 
 **Steps:**
 
-1. Send the row's act for <subject account>.
-2. Read <subject account>'s second-factor state.
+1. Send `<act>` for `<subject account>`.
+2. Read `<subject account>`'s second-factor state.
 
 **Expected Results:**
 
-* Step 2 answers as the row's outcome states.
+* Step 2 answers with this outcome: `<expected outcome>`.
 
 ## Reconciliation
 

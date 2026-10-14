@@ -28,7 +28,13 @@
 
 **Pre-conditions:**
 
-* customer(has never been granted an operator role) is signed in on <grade10 store url>.
+* customer(has never been granted an operator role) is signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -56,13 +62,17 @@
 
 **Pre-conditions:**
 
-* customer(stored roles include <unknown role>) is signed in on <grade10 store url>.
+* customer(stored roles include `<unknown role>`) is signed in on `<grade10 store url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <unknown role> | intern |
+| unknown role | intern |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -92,9 +102,15 @@
 
 * customer(roles are `user` only) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. On <grade10 admin users url>, try to ban an account.
+1. On `<grade10 admin users url>`, try to ban an account.
 
 **Expected Results:**
 
@@ -166,15 +182,19 @@
 
 | Field | Value |
 | --- | --- |
-| <subject user id> | An account that does not hold `admin` |
-| <subject session> | A session of an account that does not hold `admin` |
+| subject user id | An account that does not hold `admin` |
+| subject session | A session of an account that does not hold `admin` |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin users url>, try to change another account's roles.
+1. On `<grade10 admin users url>`, try to change another account's roles.
 2. List the accounts.
-3. Ban <subject user id>.
-4. End <subject session>.
+3. Ban `<subject user id>`.
+4. End `<subject session>`.
 
 **Expected Results:**
 
@@ -201,9 +221,15 @@
 
 * admin(role `staff`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. On <grade10 admin users url>, try to list accounts.
+1. On `<grade10 admin users url>`, try to list accounts.
 2. Try to ban an account.
 
 **Expected Results:**
@@ -229,17 +255,21 @@
 
 **Pre-conditions:**
 
-* A signed-in person is on <grade10 store url>.
+* A signed-in person is on `<grade10 store url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <unknown permission> | store:explode |
+| unknown permission | store:explode |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Request an action that requires <unknown permission>.
+1. Request an action that requires `<unknown permission>`.
 
 **Expected Results:**
 
@@ -265,10 +295,17 @@
 
 * admin(role `staff`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin auction catalog url | The Grade10 operator auction catalogue URL in the test environment; bind its URL only |
+| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Write a store record on <grade10 admin url>.
-2. Operate the auction catalog on <grade10 admin auction catalog url>.
+1. Write a store record on `<grade10 admin url>`.
+2. Operate the auction catalog on `<grade10 admin auction catalog url>`.
 
 **Expected Results:**
 
@@ -295,11 +332,19 @@
 
 * admin(only operator role is `auditor`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin audit url | The Grade10 operator identity audit-trail URL in the test environment; bind its URL only |
+| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Read the identity audit trail on <grade10 admin audit url>.
-2. On <grade10 admin users url>, try to ban an account.
-3. Try a store write on <grade10 admin url>.
+1. Read the identity audit trail on `<grade10 admin audit url>`.
+2. On `<grade10 admin users url>`, try to ban an account.
+3. Try a store write on `<grade10 admin url>`.
 4. Try to change another account's roles.
 
 **Expected Results:**
@@ -327,10 +372,17 @@
 
 * admin(holds `support` and `staff`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. List accounts on <grade10 admin users url>.
-2. Write a store record on <grade10 admin url>.
+1. List accounts on `<grade10 admin users url>`.
+2. Write a store record on `<grade10 admin url>`.
 
 **Expected Results:**
 
@@ -357,9 +409,15 @@
 
 * admin(holds `user:set-role`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Open another account on <grade10 admin users url>.
+1. Open another account on `<grade10 admin users url>`.
 2. Read what can be changed for that account.
 
 **Expected Results:**
@@ -387,9 +445,15 @@
 
 * admin(role `admin`) is signed in.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Request a refund, which requires `auction:refund`, on <grade10 admin auction url>.
+1. Request a refund, which requires `auction:refund`, on `<grade10 admin auction url>`.
 
 **Expected Results:**
 
@@ -416,9 +480,15 @@
 * admin(role `staff`) is signed in.
 * That caller holds refund processing and does not hold payment settlement.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Request a refund, which requires `auction:refund`, on <grade10 admin auction url>.
+1. Request a refund, which requires `auction:refund`, on `<grade10 admin auction url>`.
 2. Read the caller's grants.
 
 **Expected Results:**
@@ -444,35 +514,41 @@
 
 **Pre-conditions:**
 
-* admin(only operator role is `finance`) is signed in on <grade10 admin url>.
-* <auction order> is awaiting payment.
-* <vault case> is awaiting payout.
+* admin(only operator role is `finance`) is signed in on `<grade10 admin url>`.
+* `<auction order>` is awaiting payment.
+* `<vault case>` is awaiting payout.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <auction order> | An auction order with an unpaid invoice |
-| <vault case> | A vault case whose cost is agreed and not yet paid out |
+| auction order | An auction order with an unpaid invoice |
+| vault case | A vault case whose cost is agreed and not yet paid out |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
+| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin auction url>, open the Orders tab and open <auction order>.
-2. Click `Record payment` and record the payment of <auction order>.
-3. Look at `Dispatch` on <auction order>.
-4. Look at `Refund` on <auction order>.
+1. On `<grade10 admin auction url>`, open the Orders tab and open `<auction order>`.
+2. Click `Record payment` and record the payment of `<auction order>`.
+3. Look at `Dispatch` on `<auction order>`.
+4. Look at `Refund` on `<auction order>`.
 5. Open the Listings tab and look for `Create listing`.
 6. Open the Campaigns tab and look for `Open new campaign`.
 7. Look for Store in the console's navigation.
-8. Look for Vault in the console's navigation, then navigate to <grade10 admin vault url>/cases/<vault case>.
+8. Look for Vault in the console's navigation, then navigate to `<grade10 admin vault url>`/cases/`<vault case>`.
 
 **Expected Results:**
 
-* Step 1 shows <auction order>; step 2 records the payment and <auction order> shows it.
+* Step 1 shows `<auction order>`; step 2 records the payment and `<auction order>` shows it.
 * `Dispatch` is disabled with "Needs shipment processing", and `Refund` with "Needs refund processing".
 * The Listings tab offers no `Create listing`, and the Campaigns tab no `Open new campaign`.
-* Store and Vault are not in the navigation, and step 8 lands on another section, so neither <vault case> nor its payout is offered.
-* <auction order> shows no shipment and no refund; <vault case> shows no payout.
+* Store and Vault are not in the navigation, and step 8 lands on another section, so neither `<vault case>` nor its payout is offered.
+* `<auction order>` shows no shipment and no refund; `<vault case>` shows no payout.
 
 <!-- trace:case id=g10.shared-roles.TC-bs3 rev=1 covers=g10.shared-roles.SC-2bw,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-gk8,g10.shared-roles.SC-11t,g10.shared-roles.SC-gip,g10.shared-roles.SC-tyx,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss,g10.shared-roles.SC-a54,g10.shared-roles.SC-njl -->
 ### shared-auth-roles-US2-TC14-1: Staff run the grading counter, bookings, stock and catalogue
@@ -492,25 +568,33 @@
 
 **Pre-conditions:**
 
-* admin(only operator role is `staff`) is signed in on <grade10 admin url>.
-* <grading request> was asked for by another staff member and awaits approval.
-* <booking> and <stock item> exist.
+* admin(only operator role is `staff`) is signed in on `<grade10 admin url>`.
+* `<grading request>` was asked for by another staff member and awaits approval.
+* `<booking>` and `<stock item>` exist.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <grading request> | A settings or fee-sheet change another staff member asked for, awaiting approval |
-| <booking> | A booked appointment |
-| <stock item> | An inventory item with stock on hand |
+| grading request | A settings or fee-sheet change another staff member asked for, awaiting approval |
+| booking | A booked appointment |
+| stock item | An inventory item with stock on hand |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin appointments url | The Grade10 operator appointments URL in the test environment; bind its URL only |
+| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
+| grade10 admin grading url | The Grade10 operator grading URL in the test environment; bind its URL only |
+| grade10 admin inventory url | The Grade10 operator inventory URL in the test environment; bind its URL only |
+| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <grade10 admin grading url>/walk-in, click `Start at the desk` and record a walk-in submission.
-2. On <grade10 admin grading url>/settings, click `Approve` on <grading request>.
-3. On <grade10 admin appointments url>, open the Bookings tab, click `Open` on <booking>, then `Move` it to another free slot.
-4. On <stock item>'s product page under <grade10 admin inventory url>, click `Intake` and add one unit.
-5. On <grade10 admin auction url>, open the Campaigns tab, click `Open new campaign` and save it.
+1. On `<grade10 admin grading url>`/walk-in, click `Start at the desk` and record a walk-in submission.
+2. On `<grade10 admin grading url>`/settings, click `Approve` on `<grading request>`.
+3. On `<grade10 admin appointments url>`, open the Bookings tab, click `Open` on `<booking>`, then `Move` it to another free slot.
+4. On `<stock item>`'s product page under `<grade10 admin inventory url>`, click `Intake` and add one unit.
+5. On `<grade10 admin auction url>`, open the Campaigns tab, click `Open new campaign` and save it.
 
 **Expected Results:**
 
@@ -536,19 +620,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(only operator role is the row's) is signed in to the Grade10 console.
+* admin(only operator role is `<operator role>`) is signed in to the Grade10 console.
 * `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
 
 **Test data:**
 
-| Operator role |
+| `<operator role>` |
 | --- |
 | `staff` |
 | `admin` |
 
+| Field | Value |
+| --- | --- |
+| collector A | The collector who owns `<item_1>` in this fixture; bind their user id only |
+| grade10 admin item page url | The Grade10 operator item page URL for `<item_1>` in the test environment; bind its URL only |
+| item_1 | The catalogue item owned by `<collector A>` and prepared with the standing in the pre-conditions; bind its item identity only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin item page url> for `<item_1>`.
+1. Navigate to `<grade10 admin item page url>` for `<item_1>`.
 2. In the Moves panel, click the proof's file name on the top move.
 3. Click `Transfer`, choose the custodian as Owner, enter a Reason, and click `Transfer`.
 
@@ -577,6 +667,13 @@ Runs once per row of **Test data**.
 
 * admin(only operator role is `treasurer`) is signed in to the Grade10 console.
 * `<item_1>` is owned by `<collector A>`, no place marks it, and its top move carries one proof.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector A | The collector who owns `<item_1>` in this fixture; bind their user id only |
+| item_1 | The catalogue item owned by `<collector A>` and prepared with the standing in the pre-conditions; bind its item identity only |
 
 **Steps:**
 
@@ -616,18 +713,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `kyc:read`) is on <grade10 admin vault url>.
-* <vault case> holds a customer's identity capture and a signed document.
+* admin(holds `kyc:read`) is on `<grade10 admin vault url>`.
+* `<vault case>` holds a customer's identity capture and a signed document.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case> | A vault case whose customer has submitted an identity capture and signed its document |
+| vault case | A vault case whose customer has submitted an identity capture and signed its document |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On the Queue tab, open <vault case> and go to its Documents tab.
+1. On the Queue tab, open `<vault case>` and go to its Documents tab.
 2. Click `View photograph` on the identity record.
 3. Click `Download` on the signed document.
 
@@ -654,36 +755,41 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(only operator role is `staff`) is on <grade10 admin vault url>.
-* <vault case A> is awaiting an agreed cost.
-* <vault case B> has an agreed cost and is awaiting payout.
-* <vault case C> is a financed case with a repayment due.
-* <auction order> is awaiting payment.
+* admin(only operator role is `staff`) is on `<grade10 admin vault url>`.
+* `<vault case A>` is awaiting an agreed cost.
+* `<vault case B>` has an agreed cost and is awaiting payout.
+* `<vault case C>` is a financed case with a repayment due.
+* `<auction order>` is awaiting payment.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case A> | A financed vault case in progress with no cost agreed |
-| <vault case B> | A vault case whose cost is agreed and not yet paid out |
-| <vault case C> | A financed vault case, paid out, with a repayment due |
-| <auction order> | An auction order with an unpaid invoice |
+| vault case A | A financed vault case in progress with no cost agreed |
+| vault case B | A vault case whose cost is agreed and not yet paid out |
+| vault case C | A financed vault case, paid out, with a repayment due |
+| auction order | An auction order with an unpaid invoice |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin auction url | The Grade10 operator auction URL in the test environment; bind its URL only |
+| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <vault case A> from the Queue tab and click `Start the valuation` on its Case tab.
+1. Open `<vault case A>` from the Queue tab and click `Start the valuation` on its Case tab.
 2. Click `Record a valuation` and record one.
-3. Click `Make an offer` on <vault case A>'s Case tab and send the offer.
-4. Open <vault case B> and look for its Payouts tab.
-5. Open <vault case C> and look for its Payouts tab.
-6. On <grade10 admin vault url>, look for the Money tab.
-7. On <grade10 admin auction url>, open the Orders tab, open <auction order> and look at `Record payment`.
+3. Click `Make an offer` on `<vault case A>`'s Case tab and send the offer.
+4. Open `<vault case B>` and look for its Payouts tab.
+5. Open `<vault case C>` and look for its Payouts tab.
+6. On `<grade10 admin vault url>`, look for the Money tab.
+7. On `<grade10 admin auction url>`, open the Orders tab, open `<auction order>` and look at `Record payment`.
 
 **Expected Results:**
 
-* Steps 1 to 3 are allowed; <vault case A> shows the valuation started and the offer made.
-* <vault case B> and <vault case C> show no Payouts tab, the vault shows no Money tab, and `Record payment` is disabled with "Needs payment processing".
-* <vault case B> shows no payout, <vault case C> no repayment, <auction order> no payment.
+* Steps 1 to 3 are allowed; `<vault case A>` shows the valuation started and the offer made.
+* `<vault case B>` and `<vault case C>` show no Payouts tab, the vault shows no Money tab, and `Record payment` is disabled with "Needs payment processing".
+* `<vault case B>` shows no payout, `<vault case C>` no repayment, `<auction order>` no payment.
 
 <!-- trace:case id=g10.shared-roles.TC-8gk rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC3-1: Treasurer pays out but cannot run a case, set its cost or open the identity document
@@ -703,32 +809,36 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(only operator role is `treasurer`) is on <grade10 admin vault url>.
-* <vault case A> is not yet under valuation.
-* <vault case D> is financed, has a recorded valuation and no offer.
-* <vault case B> has an agreed cost, is awaiting payout, and holds a customer's identity document.
+* admin(only operator role is `treasurer`) is on `<grade10 admin vault url>`.
+* `<vault case A>` is not yet under valuation.
+* `<vault case D>` is financed, has a recorded valuation and no offer.
+* `<vault case B>` has an agreed cost, is awaiting payout, and holds a customer's identity document.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case A> | A vault case not yet under valuation |
-| <vault case D> | A financed vault case with a recorded valuation and no offer |
-| <vault case B> | A vault case whose cost is agreed, not yet paid out, with an identity document submitted |
+| vault case A | A vault case not yet under valuation |
+| vault case D | A financed vault case with a recorded valuation and no offer |
+| vault case B | A vault case whose cost is agreed, not yet paid out, with an identity document submitted |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On the Queue tab, open <vault case B>.
+1. On the Queue tab, open `<vault case B>`.
 2. On its Payouts tab, click `Record the payout` and record it.
-3. Open <vault case A> and look for `Start the valuation` on its Case tab.
-4. Open <vault case D> and look for `Make an offer` on its Case tab.
-5. Open <vault case B>'s Documents tab and look for `View photograph` on the identity record.
+3. Open `<vault case A>` and look for `Start the valuation` on its Case tab.
+4. Open `<vault case D>` and look for `Make an offer` on its Case tab.
+5. Open `<vault case B>`'s Documents tab and look for `View photograph` on the identity record.
 
 **Expected Results:**
 
-* Step 1 shows the case; step 2 records the payout and <vault case B> shows it.
-* <vault case A>'s Case tab offers no `Start the valuation`, <vault case D>'s no `Make an offer`, and <vault case B>'s Documents tab offers no `View photograph`.
-* <vault case A> shows no valuation started and <vault case D> no offer made, and no identity document shows.
+* Step 1 shows the case; step 2 records the payout and `<vault case B>` shows it.
+* `<vault case A>`'s Case tab offers no `Start the valuation`, `<vault case D>`'s no `Make an offer`, and `<vault case B>`'s Documents tab offers no `View photograph`.
+* `<vault case A>` shows no valuation started and `<vault case D>` no offer made, and no identity document shows.
 
 <!-- trace:case id=g10.shared-roles.TC-zgr rev=1 covers=g10.shared-roles.SC-tdr,g10.shared-roles.SC-tm7,g10.shared-roles.SC-85d,g10.shared-roles.SC-v6v -->
 ### shared-auth-roles-US3-TC4-1: Reading a case does not open the person's identity documents
@@ -748,18 +858,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `vault:read` and does not hold `kyc:read`) is on <grade10 admin vault url>.
-* <vault case> holds a customer's identity capture and a signed document.
+* admin(holds `vault:read` and does not hold `kyc:read`) is on `<grade10 admin vault url>`.
+* `<vault case>` holds a customer's identity capture and a signed document.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case> | A vault case whose customer has submitted an identity capture and signed its document |
+| vault case | A vault case whose customer has submitted an identity capture and signed its document |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On the Queue tab, open <vault case>.
+1. On the Queue tab, open `<vault case>`.
 2. Go to its Documents tab and look for `View photograph` on the identity record.
 3. Look for `Download` on the signed document.
 
@@ -786,29 +900,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds `staff` and `treasurer`) is on <grade10 admin vault url>.
-* <second operator> holds `treasurer` only.
-* <vault case> is financed, has a recorded valuation and no offer.
+* admin(holds `staff` and `treasurer`) is on `<grade10 admin vault url>`.
+* `<second operator>` holds `treasurer` only.
+* `<vault case>` is financed, has a recorded valuation and no offer.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <vault case> | A financed vault case with a recorded valuation and no offer |
-| <second operator> | Another operator, holding `treasurer` only |
+| vault case | A financed vault case with a recorded valuation and no offer |
+| second operator | Another operator, holding `treasurer` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin vault url | The Grade10 operator vault URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. On <vault case>'s Case tab, click `Make an offer` and send it, then have the customer accept it on their vault case page.
-2. On <vault case>'s Payouts tab, click `Record the payout` and confirm.
-3. As <second operator>, open <vault case>'s Payouts tab and record the payout.
+1. On `<vault case>`'s Case tab, click `Make an offer` and send it, then have the customer accept it on their vault case page.
+2. On `<vault case>`'s Payouts tab, click `Record the payout` and confirm.
+3. As `<second operator>`, open `<vault case>`'s Payouts tab and record the payout.
 
 **Expected Results:**
 
 * The offer is made.
-* Step 2's dialog reads "Two people" as unmet, naming the admin as the one who priced it; confirming is refused and <vault case> shows no payout.
+* Step 2's dialog reads "Two people" as unmet, naming the admin as the one who priced it; confirming is refused and `<vault case>` shows no payout.
 * In step 3, the dialog reads "Two people" as met.
-* Step 3 is allowed and <vault case> shows the payout.
+* Step 3 is allowed and `<vault case>` shows the payout.
 
 ## Settled
 

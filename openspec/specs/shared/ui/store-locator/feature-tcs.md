@@ -70,16 +70,20 @@
 
 **Pre-conditions:**
 
-* The `StoreLocator` block's default story is open on <grade10 ui workbench url>.
+* The `StoreLocator` block's default story is open on `<grade10 ui workbench url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<store name>` | Test Shop Kowloon |
-| `<address lines>` | 1 Test Street; Mong Kok; Hong Kong, in that order |
-| `<hours rows>` | Monday 10am – 6pm; Tuesday closed, in that order |
-| `<maps destination>` | A Google Maps address for 1 Test Street, Mong Kok |
+| store name | Test Shop Kowloon |
+| address lines | 1 Test Street; Mong Kok; Hong Kong, in that order |
+| hours rows | Monday 10am – 6pm; Tuesday closed, in that order |
+| maps destination | A Google Maps address for 1 Test Street, Mong Kok |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -115,13 +119,17 @@
 
 **Pre-conditions:**
 
-* The `StoreLocator` block's default story is open on <grade10 ui workbench url>.
+* The `StoreLocator` block's default story is open on `<grade10 ui workbench url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<map name>` | Open Test Shop in Google Maps |
+| map name | Open Test Shop in Google Maps |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 

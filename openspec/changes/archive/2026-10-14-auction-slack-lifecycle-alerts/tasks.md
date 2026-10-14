@@ -38,8 +38,8 @@ Builds against group 1's contracts and fixture rows, never a running backend.
 
 Uses draft `feature-tcs.md` as its planning input, and the groups it walks landed.
 
-- [ ] 5.1 Walk `grade10-admin-console-daily-reminder-US-05` and the modified `US-02` / `US-03` on Today and in the dialog: seed a fresh flag, a flagged order also past 48 hours, an unflagged 48-hour wait, and an unflagged overdue; confirm flagged rows lead, one row when both apply, overdue alone out, and the warning title and caption
-- [ ] 5.2 Walk `grade10-admin-console-daily-reminder-US-06` and `US-07` through Slack on the isolated stack: fire go-live, end, extension, Setup Overdue, Payment Overdue and flag transitions against a Slack stub; refuse a send and read the log; confirm the bid and close still complete
-- [ ] 5.3 Walk the modified `US-04` morning post: Flagged or still waiting heading with warning mark and flagged rows first; with token or channel unset or empty, nothing posts and the run stays clean
-- [ ] 5.4 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:<path of the walk>` in the walks' own commit; name the cases that stay manual in the walk's `rounds.md` row
-- [ ] 5.5 Verify: the walks pass in the isolated E2E stack; `pnpm run check:store-tcs`
+- [x] 5.1 Walk `grade10-admin-console-daily-reminder-US-05` and the modified `US-02` / `US-03` on Today and in the dialog: seed a fresh flag, a flagged order also past 48 hours, an unflagged 48-hour wait, and an unflagged overdue; confirm flagged rows lead, one row when both apply, overdue alone out, and the warning title and caption
+- [x] 5.2 Walk `grade10-admin-console-daily-reminder-US-06` and `US-07` through Slack on the isolated stack: fire go-live, end, extension, Setup Overdue, Payment Overdue and flag transitions against a Slack stub; refuse a send and read the log; confirm the bid and close still complete
+- [x] 5.3 Walk the modified `US-04` morning post: Flagged or still waiting heading with warning mark and flagged rows first; with token or channel unset or empty, nothing posts and the run stays clean
+- [x] 5.4 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:<path of the walk>` in the walks' own commit; name the cases that stay manual in the walk's `rounds.md` row
+- [x] 5.5 Verify: the walks pass in the isolated E2E stack; `pnpm run check:store-tcs`

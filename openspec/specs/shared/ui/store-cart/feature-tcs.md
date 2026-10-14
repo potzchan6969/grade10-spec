@@ -44,26 +44,30 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| `<cart_1>` | Lines | Reached by |
+| `<cart_1>` | `<line count>` | `<setup action>` |
 | --- | --- | --- |
 | Two lines | 2 | the story as it opens |
 | One line | 1 | clicking the remove control on one line |
 | Two lines, one at 3 units | 2 | clicking the increase control on the second line until it reads 3 |
 
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
+
 **Steps:**
 
 1. Navigate to the Store/Cart/Blocks/CartDrawer Default story at `<shared ui storybook url>`.
-2. Reach `<cart_1>` as **Reached by** says.
+2. Reach `<cart_1>` using `<setup action>`.
 3. Look at the drawer body.
 4. Look at the drawer title and the footer.
 
 **Expected Results:**
 
-* Step 3 shows exactly the row count in **Lines**.
+* Step 3 shows exactly `<line count>`.
 * No dashed or placeholder row follows the last line.
 * No empty state shows.
 * No edge fade shows while every line fits in the body.
-* Step 4: the count beside the drawer title reads the row count in **Lines**.
+* Step 4: the count beside the drawer title reads `<line count>`.
 * Footer shows the price summary and Checkout.
 
 <!-- trace:case id=g10.shared-store-cart.TC-5iw rev=2 covers=g10.shared-store-cart.SC-9dd,g10.shared-store-cart.SC-dcr,g10.shared-store-cart.SC-utr,g10.shared-store-cart.SC-e4c,g10.shared-store-cart.SC-j31,g10.shared-store-cart.SC-xfz,g10.shared-store-cart.SC-62u,g10.shared-store-cart.SC-gx1,g10.shared-store-cart.SC-tou -->
@@ -85,6 +89,12 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * None.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -126,8 +136,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<empty title>` | the story's empty-cart title |
-| `<empty description>` | the story's line under that title |
+| empty title | the story's empty-cart title |
+| empty description | the story's line under that title |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -169,9 +183,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<cart_5>` | `<active line>`, `<sold-out line>` and a line marked unavailable |
-| `<active line>` | an active line |
-| `<sold-out line>` | a line marked sold out |
+| cart_5 | `<active line>`, `<sold-out line>` and a line marked unavailable |
+| active line | an active line |
+| sold-out line | a line marked sold out |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -209,7 +227,11 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<empty title>` | the story's empty-cart title |
+| empty title | the story's empty-cart title |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -246,7 +268,11 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<cart_2>` | 2 lines, both sold out, none delisted |
+| cart_2 | 2 lines, both sold out, none delisted |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -286,8 +312,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<cart_3>` | 2 active lines |
-| `<empty title>` | the story's empty-cart title |
+| cart_3 | 2 active lines |
+| empty title | the story's empty-cart title |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -327,8 +357,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<empty title>` | the story's empty-cart title |
-| `<empty description>` | the story's line under that title |
+| empty title | the story's empty-cart title |
+| empty description | the story's line under that title |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -360,26 +394,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Controlled picture stories supply a served picture URL, an item name and the **Supplied alt text** for each **Composition**.
+* Controlled picture stories supply a served picture URL, an item name and the `<alt text>` for each `<composition>`.
 
 **Test data:**
 
-| Composition | Supplied alt text | Item state |
+| `<composition>` | `<alt text>` | Item state |
 | --- | --- | --- |
 | CartItem alone | Card front | Available |
 | CartDrawerBody | two spaces | Available |
 | CartDrawer | Card front | Sold out |
 
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to the **Composition** picture story at <shared ui storybook url>.
+1. Navigate to the `<composition>` picture story at `<shared ui storybook url>`.
 2. Inspect the matching item's thumbnail image, its source and alt attribute.
 3. Check that the served image completes loading with positive natural width.
 4. Activate each available existing item action and inspect its callback record.
 
 **Expected Results:**
 
-* Step 2 shows the supplied picture in the existing thumbnail frame with the supplied URL and **Supplied alt text** unchanged.
+* Step 2 shows the supplied picture in the existing thumbnail frame with the supplied URL and `<alt text>` unchanged.
 * Step 3 reports a completed image with positive natural width.
 * Step 4 preserves the existing callbacks. The sold-out row also keeps its existing sold-out treatment.
 
@@ -407,21 +445,25 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Supplied alt text | Expected alt attribute |
+| `<alt text>` | `<expected alt>` |
 | --- | --- |
 | absent | Gengar VMAX |
 | empty string | Gengar VMAX |
 
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to the CartItem missing-alt story at <shared ui storybook url>.
-2. Set **Supplied alt text** for this run.
+1. Navigate to the CartItem missing-alt story at `<shared ui storybook url>`.
+2. Set `<alt text>` for this run.
 3. Inspect the item picture, its alt attribute, copy and layout.
 
 **Expected Results:**
 
 * Step 3 still shows the supplied picture.
-* Its alt attribute is **Expected alt attribute**.
+* Its alt attribute is `<expected alt>`.
 * No new copy or layout appears.
 
 <!-- trace:case id=g10.shared-store-cart.TC-y6p rev=1 covers=g10.shared-store-cart.SC-du1 -->
@@ -448,14 +490,18 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Supplied image source |
+| `<image source>` |
 | --- |
 | omitted |
 | empty string |
 
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to the CartItem no-picture story at <shared ui storybook url> with **Supplied image source**.
+1. Navigate to the CartItem no-picture story at `<shared ui storybook url>` with `<image source>`.
 2. Inspect the item's thumbnail frame and other supplied display facts.
 3. Activate each available existing item action and inspect its callback record.
 4. Inspect product requests and picture metadata in story storage before and after rendering.
@@ -486,9 +532,15 @@ Runs once per row of **Test data**.
 
 * The CartItem sold-out picture story supplies a picture and sold-out status.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to the CartItem sold-out picture story at <shared ui storybook url>.
+1. Navigate to the CartItem sold-out picture story at `<shared ui storybook url>`.
 2. Inspect the item row.
 
 **Expected Results:**
@@ -524,6 +576,12 @@ showing skeletons while that read is in flight,
 **Pre-conditions:**
 
 * The Loading With Lines story holds the drawer loading on a cart with lines and an applied promo code.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -563,7 +621,11 @@ showing skeletons while that read is in flight,
 
 | Field | Value |
 | --- | --- |
-| `<empty title>` | the story's empty-cart title |
+| empty title | the story's empty-cart title |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -757,9 +819,13 @@ sells.
 
 | Field | Value |
 | --- | --- |
-| `<cart_6>` | `<active line>` and `<delisted line>`, 1 each |
-| `<active line>` | an active line |
-| `<delisted line>` | a line the catalogue no longer sells |
+| cart_6 | `<active line>` and `<delisted line>`, 1 each |
+| active line | an active line |
+| delisted line | a line the catalogue no longer sells |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -799,7 +865,7 @@ sells.
 
 | Field | Value |
 | --- | --- |
-| `<cart_7>` | 2 active lines, none delisted |
+| cart_7 | 2 active lines, none delisted |
 
 **Steps:**
 
@@ -870,8 +936,12 @@ sells.
 
 | Field | Value |
 | --- | --- |
-| `<cart_4>` | 2 lines, both delisted |
-| `<empty title>` | the story's empty-cart title |
+| cart_4 | 2 lines, both delisted |
+| empty title | the story's empty-cart title |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -912,9 +982,9 @@ sells.
 
 | Field | Value |
 | --- | --- |
-| `<cart_8>` | `<delisted line>` and `<sold-out line>`, 1 each, no active line |
-| `<delisted line>` | a line the catalogue no longer sells |
-| `<sold-out line>` | a line still in the catalogue, sold out |
+| cart_8 | `<delisted line>` and `<sold-out line>`, 1 each, no active line |
+| delisted line | a line the catalogue no longer sells |
+| sold-out line | a line still in the catalogue, sold out |
 
 **Steps:**
 
@@ -956,10 +1026,14 @@ sells.
 
 | Field | Value |
 | --- | --- |
-| `<cart_9>` | `<active line>`, `<sold-out line>` and `<delisted line>` |
-| `<active line>` | an active line |
-| `<sold-out line>` | a line marked sold out |
-| `<delisted line>` | a line marked unavailable |
+| cart_9 | `<active line>`, `<sold-out line>` and `<delisted line>` |
+| active line | an active line |
+| sold-out line | a line marked sold out |
+| delisted line | a line marked unavailable |
+
+| Field | Value |
+| --- | --- |
+| shared ui storybook url | The shared UI Storybook URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1099,9 +1173,9 @@ down.
 
 | Field | Value |
 | --- | --- |
-| `<line_1>` | A cart line whose supplied quantity equals its supplied maximum |
-| `<line quantity>` | `2` |
-| `<line maximum>` | `2` |
+| line_1 | A cart line whose supplied quantity equals its supplied maximum |
+| line quantity | 2 |
+| line maximum | 2 |
 
 **Steps:**
 
@@ -1139,8 +1213,8 @@ down.
 
 | Field | Value |
 | --- | --- |
-| `<line_2>` | A cart line supplied with no maximum |
-| `<line quantity>` | `2` |
+| line_2 | A cart line supplied with no maximum |
+| line quantity | 2 |
 
 **Steps:**
 
@@ -1170,23 +1244,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer has the row's line in the cart.
+* customer has `<line>` in the cart, supplied with remaining-count content `<remaining count>`.
 
 **Test data:**
 
-| Line | Supplied remaining count | Displayed on that line |
+| `<line>` | `<remaining count>` | `<expected line display>` |
 | --- | --- | --- |
 | `<line_3>` | `Only 2 left` | `Only 2 left`, and no other remaining-count copy |
 | `<line_4>` | none | no remaining count |
 
+| Field | Value |
+| --- | --- |
+| line_3 | The cart line with the remaining-count fixture in its data row; bind its line identity only |
+| line_4 | The cart line with the remaining-count fixture in its data row; bind its line identity only |
+
 **Steps:**
 
 1. Open the cart drawer.
-2. Read the row's line.
+2. Read `<line>`.
 
 **Expected Results:**
 
-* The line displays what the row's last column names.
+* The line displays `<expected line display>`.
 * Nothing else on the line says what is left.
 
 ---
@@ -1224,12 +1303,16 @@ at the prices I see on them.
 
 | Field | Value |
 | --- | --- |
-| `<sale price>` | The line's price the story supplies, the price after the site sale |
-| `<list price>` | The line's list price the story supplies, above `<sale price>` |
+| sale price | The line's price the story supplies, the price after the site sale |
+| list price | The line's list price the story supplies, above `<sale price>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open the Store Cart / CartItem / Sale Price story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartItem / Sale Price story at `<grade10 ui workbench url>`.
 2. Read the line's prices.
 
 **Expected Results:**
@@ -1263,15 +1346,22 @@ at the prices I see on them.
 
 | Field | Value |
 | --- | --- |
-| `<sale line>` | Each line the site sale cuts: price `<sale price>`, the price of one, list price `<list price>` above it |
-| `<full price line>` | A line the site sale does not cut: price `<full price>`, no list price supplied |
-| `<sold-out line>` | A line the shop no longer sells, marked sold out |
-| `<unavailable line>` | A line whose product the shop has delisted |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+| sale line | Each line the site sale cuts: price `<sale price>`, the price of one, list price `<list price>` above it |
+| full price line | A line the site sale does not cut: price `<full price>`, no list price supplied |
+| sold-out line | A line the shop no longer sells, marked sold out |
+| unavailable line | A line whose product the shop has delisted |
+| subtotal | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+
+| Field | Value |
+| --- | --- |
+| full price | The price supplied for the full-price line, with no list price; bind its currency amount only |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price | The list price supplied for the fixture’s sale line, above its sale price unless the pre-conditions state equality; bind its currency amount only |
+| sale price | The sale price supplied for the fixture’s sale line; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / On Sale story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / On Sale story at `<grade10 ui workbench url>`.
 2. Read each `<sale line>`'s prices.
 3. Read `<full price line>`'s prices.
 4. Read `<sold-out line>`.
@@ -1312,12 +1402,16 @@ at the prices I see on them.
 
 | Field | Value |
 | --- | --- |
-| `<price>` | The line's price the story supplies |
-| `<list price>` | The line's list price the story supplies, equal to `<price>` |
+| price | The line's price the story supplies |
+| list price | The line's list price the story supplies, equal to `<price>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open the Store Cart / CartItem / Equal List Price story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartItem / Equal List Price story at `<grade10 ui workbench url>`.
 2. Read the line's prices.
 
 **Expected Results:**
@@ -1359,14 +1453,20 @@ row.
 
 | Field | Value |
 | --- | --- |
-| `<sale line>` | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
-| `<stacking code>` | The held code the story lets stack on the site sale |
-| `<code discount>` | The amount the story supplies for `<stacking code>` |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+| sale line | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
+| stacking code | The held code the story lets stack on the site sale |
+| code discount | The amount the story supplies for `<stacking code>` |
+| subtotal | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price | The list price supplied for the fixture’s sale line, above its sale price unless the pre-conditions state equality; bind its currency amount only |
+| sale price | The sale price supplied for the fixture’s sale line; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Stack story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Stack story at `<grade10 ui workbench url>`.
 2. Open the promo sheet.
 3. Click Apply on `<stacking code>`'s ticket.
 4. Read each `<sale line>`'s prices.
@@ -1412,15 +1512,21 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 
 | Field | Value |
 | --- | --- |
-| `<sale line>` | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
-| `<refused code>` | The code the story refuses on the site sale |
-| `<refusal reason>` | The sentence the story supplies for refusing the typed `<refused code>`, unlike any held ticket's reason: `This promo code cannot stack on the site sale` |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
-| `<total before>` | The footer's total before the attempt |
+| sale line | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
+| refused code | The code the story refuses on the site sale |
+| refusal reason | The sentence the story supplies for refusing the typed `<refused code>`, unlike any held ticket's reason: `This promo code cannot stack on the site sale` |
+| subtotal | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+| total before | The footer's total before the attempt |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price | The list price supplied for the fixture’s sale line, above its sale price unless the pre-conditions state equality; bind its currency amount only |
+| sale price | The sale price supplied for the fixture’s sale line; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Refuse story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Refuse story at `<grade10 ui workbench url>`.
 2. Read the footer's total.
 3. Open the promo sheet.
 4. Type `<refused code>` in the promo field.
@@ -1460,11 +1566,15 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 
 | Field | Value |
 | --- | --- |
-| `<inapplicable reason>` | The reason the story supplies for the code not applying |
+| inapplicable reason | The reason the story supplies for the code not applying |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open the Store Cart / PromoTicket / Not Applicable story at <grade10 ui workbench url>.
+1. Open the Store Cart / PromoTicket / Not Applicable story at `<grade10 ui workbench url>`.
 2. Read the ticket.
 3. Press Tab from the canvas until focus leaves the ticket.
 4. Click the ticket.
@@ -1501,12 +1611,17 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 
 | Field | Value |
 | --- | --- |
-| `<applicable code>` | A held code that can apply on this cart |
-| `<inapplicable code>` | A held code that cannot apply on this cart, with `<inapplicable reason>` |
+| applicable code | A held code that can apply on this cart |
+| inapplicable code | A held code that cannot apply on this cart, with `<inapplicable reason>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| inapplicable reason | The supplied reason for `<inapplicable code>` not applying to this cart; bind its text only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Refuse story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Refuse story at `<grade10 ui workbench url>`.
 2. Open the promo sheet.
 3. Read the held tickets.
 
@@ -1542,15 +1657,21 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 
 | Field | Value |
 | --- | --- |
-| `<sale line>` | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
-| `<picked code>` | A held code listed with its Apply control, which the site sale refuses |
-| `<refusal reason>` | The sentence the story's quote supplies for refusing `<picked code>`, unlike the reason any held ticket shows before the attempt: `This promo code cannot stack on the site sale` |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
-| `<total before>` | The footer's total before the attempt |
+| sale line | Each line the story puts on the site sale: price `<sale price>`, list price `<list price>` above it |
+| picked code | A held code listed with its Apply control, which the site sale refuses |
+| refusal reason | The sentence the story's quote supplies for refusing `<picked code>`, unlike the reason any held ticket shows before the attempt: `This promo code cannot stack on the site sale` |
+| subtotal | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+| total before | The footer's total before the attempt |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price | The list price supplied for the fixture’s sale line, above its sale price unless the pre-conditions state equality; bind its currency amount only |
+| sale price | The sale price supplied for the fixture’s sale line; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Refuse story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Refuse story at `<grade10 ui workbench url>`.
 2. Read the footer's total.
 3. Open the promo sheet.
 4. Click Apply on `<picked code>`'s ticket.
@@ -1600,14 +1721,21 @@ the sale from and show only that code's Discount in the footer,
 
 | Field | Value |
 | --- | --- |
-| `<replaced line>` | A line the code took the site sale from: price `<list price A>`, no list price supplied |
-| `<kept sale line>` | A line the code left on the site sale: price `<sale price B>`, list price `<list price B>` above it |
-| `<code discount>` | The amount the story supplies for the replacing code |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+| replaced line | A line the code took the site sale from: price `<list price A>`, no list price supplied |
+| kept sale line | A line the code left on the site sale: price `<sale price B>`, list price `<list price B>` above it |
+| code discount | The amount the story supplies for the replacing code |
+| subtotal | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price A | The full list price supplied for `<replaced line>` after its sale is replaced; bind its currency amount only |
+| list price B | The higher list price supplied for `<kept sale line>`; bind its currency amount only |
+| sale price B | The sale price supplied for `<kept sale line>`; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Replace story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Replace story at `<grade10 ui workbench url>`.
 2. Read `<replaced line>`'s prices.
 3. Read `<kept sale line>`'s prices.
 4. Read the summary rows in the footer.
@@ -1654,12 +1782,18 @@ the site sale, put the sale back on the lines while the sale still runs,
 
 | Field | Value |
 | --- | --- |
-| `<replaced line>` | Each line the code took the site sale from: list price `<list price>`, sale price `<sale price>` below it |
-| `<subtotal after>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one, after the removal |
+| replaced line | Each line the code took the site sale from: list price `<list price>`, sale price `<sale price>` below it |
+| subtotal after | Each line's price times its quantity, added up over every line but a sold-out or unavailable one, after the removal |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price | The list price supplied for the fixture’s sale line, above its sale price unless the pre-conditions state equality; bind its currency amount only |
+| sale price | The sale price supplied for the fixture’s sale line; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Fallback after remove story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Fallback after remove story at `<grade10 ui workbench url>`.
 2. Read each `<replaced line>`'s prices.
 3. Click Remove on the code's discount row.
 4. Read each `<replaced line>`'s prices.
@@ -1697,13 +1831,19 @@ the site sale, put the sale back on the lines while the sale still runs,
 
 | Field | Value |
 | --- | --- |
-| `<sale line>` | Each line on the site sale: price `<sale price>`, list price `<list price>` above it |
-| `<stacking code>` | The held code the story lets stack on the site sale |
-| `<subtotal>` | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+| sale line | Each line on the site sale: price `<sale price>`, list price `<list price>` above it |
+| stacking code | The held code the story lets stack on the site sale |
+| subtotal | Each line's price times its quantity, added up over every line but a sold-out or unavailable one |
+
+| Field | Value |
+| --- | --- |
+| grade10 ui workbench url | The Grade10 UI workbench URL in the test environment; bind its URL only |
+| list price | The list price supplied for the fixture’s sale line, above its sale price unless the pre-conditions state equality; bind its currency amount only |
+| sale price | The sale price supplied for the fixture’s sale line; bind its currency amount only |
 
 **Steps:**
 
-1. Open the Store Cart / CartDrawer / Auto Discount / Stack story at <grade10 ui workbench url>.
+1. Open the Store Cart / CartDrawer / Auto Discount / Stack story at `<grade10 ui workbench url>`.
 2. Open the promo sheet.
 3. Click Apply on `<stacking code>`'s ticket.
 4. Read the Subtotal.
@@ -1827,6 +1967,12 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US19
 
+**Pre-conditions:**
+
+* The tester is on the shared `<surface>` fixture.
+* `<drawer>` is open with the consumer pending input false.
+* Each action is otherwise available in its `<points_state>` row.
+
 **Test data:**
 
 | Field | Value |
@@ -1838,17 +1984,11 @@ the site sale, put the sale back on the lines while the sale still runs,
 | navigation_actions | Existing account or loyalty link and Checkout |
 | surface | Compound drawer; standalone body, item and footer with the same applicable inputs and callbacks, run separately |
 
-**Pre-conditions:**
-
-* The tester is on the shared `<surface>` fixture.
-* `<drawer>` is open with the consumer pending input false.
-* Each action is otherwise available in its `<points_state>` row.
-
 **Steps:**
 
 1. Record the visible accepted figures and entered points.
 2. Set the consumer pending input true.
-3. Attempt each listed action with the pointer.
+3. Attempt `<item_actions>`, `<tender_actions>` and `<navigation_actions>` with the pointer.
 4. Attempt each listed action with Enter and Space, including Enter and value changes in an input.
 5. Inspect the displayed values and callback record.
 
@@ -1876,6 +2016,12 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US19
 
+**Pre-conditions:**
+
+* The tester is on the shared `<surface>` fixture.
+* `<promo_sheet>` is open with the consumer pending input false.
+* Each `<sheet_actions>` control is otherwise available.
+
 **Test data:**
 
 | Field | Value |
@@ -1884,12 +2030,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 | sheet_actions | Promo input, typed-code Apply, held-code selection and loyalty link |
 | surface | Nested promo sheet; standalone public promo sheet, run separately |
 | dismissal | Existing Back or close control, sheet backdrop click and Escape, run separately |
-
-**Pre-conditions:**
-
-* The tester is on the shared `<surface>` fixture.
-* `<promo_sheet>` is open with the consumer pending input false.
-* Each `<sheet_actions>` control is otherwise available.
 
 **Steps:**
 
@@ -1925,6 +2065,11 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-04
 
+**Pre-conditions:**
+
+* The tester is on the shared drawer fixture.
+* `<drawer>` has its consumer pending input true and `<sheet>` state.
+
 **Test data:**
 
 | Field | Value |
@@ -1932,11 +2077,6 @@ the site sale, put the sale back on the lines while the sale still runs,
 | drawer | Open shared drawer with accepted cart content exceeding its viewport and recorded action and dismissal callbacks |
 | dismissal | Drawer Close, drawer backdrop click and Escape, run separately |
 | sheet | Promo sheet closed; promo sheet open with recorded state proposals and a focused opener, run separately |
-
-**Pre-conditions:**
-
-* The tester is on the shared drawer fixture.
-* `<drawer>` has its consumer pending input true and `<sheet>` state.
 
 **Steps:**
 
@@ -2015,6 +2155,15 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US20
 
+**Pre-conditions:**
+
+* The tester is on the shared drawer fixture.
+* `<drawer>` is open with the consumer pending input true.
+* The consumer supplies availability `<available>`, quantity constraint `<quantity_limit>` and unavailable-action setup `<unavailable_action>`.
+* Pointer and keyboard attempts on actions while pending have invoked no callbacks.
+
+
+* The restored fixture supplies `<available>`.
 **Test data:**
 
 | Field | Value |
@@ -2025,19 +2174,12 @@ the site sale, put the sale back on the lines while the sale still runs,
 | unavailable_action | Missing action callback, invalid promo code, zero points, or existing loading, verifying, redirecting or checkout-disabled state; run each relevant control separately |
 | legacy_pending | Existing tenderPending true when the consumer pending input clears |
 
-**Pre-conditions:**
-
-* The tester is on the shared drawer fixture.
-* `<drawer>` is open with the consumer pending input true.
-* The consumer supplies the current availability in each test-data row.
-* Pointer and keyboard attempts on actions while pending have invoked no callbacks.
-
 **Steps:**
 
 1. Record accepted figures, entered values and callback counts.
 2. Set the consumer pending input false.
 3. Inspect values, callbacks and action availability.
-4. Attempt the row's blocked actions by pointer and keyboard.
+4. Attempt the blocked actions in `<unavailable_action>` by pointer and keyboard.
 5. Activate each currently permitted action separately.
 6. Inspect callback counts after each activation.
 
@@ -2068,26 +2210,26 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared.ui-store-cart.US20
 
+**Pre-conditions:**
+
+* The consumer supplies the existing display values and applicable action callbacks.
+* Each surface is otherwise interactive, with existing loading, verification, redirecting and callback-presence guards available for the relevant rows.
+
 **Test data:**
 
-| interaction_pending | tender_pending | surface |
+| `<interaction_pending>` | `<tender_pending>` | `<surface>` |
 | --- | --- | --- |
 | omitted | false | Compound drawer |
 | false | false | Compound drawer and standalone body, item, footer and promo sheet where applicable |
 | omitted | true | Compound drawer and standalone footer or promo sheet where applicable |
 | false | true | Compound drawer and standalone footer or promo sheet where applicable |
 
-**Pre-conditions:**
-
-* The consumer supplies the existing display values and applicable action callbacks.
-* Each surface is otherwise interactive, with existing loading, verification, redirecting and callback-presence guards available for the relevant rows.
-
 **Steps:**
 
 1. Render the `<surface>` with the `<interaction_pending>` and `<tender_pending>` values.
 2. Inspect the existing layout, accepted figures, entered values and action availability.
 3. Attempt item, tender, disclosure, navigation and Checkout actions that the row supports.
-4. Activate one action that remains permitted by the row's existing guards.
+4. Activate one action that remains permitted by the supplied existing guards for `<surface>`.
 5. Inspect callback records and displayed values.
 
 **Expected Results:**
