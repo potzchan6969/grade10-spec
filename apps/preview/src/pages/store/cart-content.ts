@@ -128,23 +128,6 @@ const PUBLIC_PROMO_CODES: readonly HeldPromoCode[] = [
   },
 ];
 
-/** Goods at the HKD 120,000 bar: a guest is asked to sign in before checkout starts. */
-const BAR_CARD: CartItemSummary = {
-  id: "line-bar-card",
-  name: "2003 Pokémon Skyridge Charizard Holo #146 PSA 10",
-  price: "HK$128,000.00",
-  quantity: 1,
-  maxQuantity: 1,
-};
-const BAR_ITEMS: readonly CartItemSummary[] = [BAR_CARD, BOOSTER];
-const BAR_SUBTOTAL = "HK$129,200.00";
-
-/** Draft words for the sign-in ask that replaces the guest button at the bar. */
-const GUEST_BAR_ASK = {
-  prompt: "To check out HK$120,000 or more, sign in to your account.",
-  action: "Sign in",
-};
-
 /** Draft words for the review that cannot finish; the drawer block has no copy for it yet. */
 const CART_REVIEW_FAILED = {
   title: "Couldn’t check your cart",
@@ -168,8 +151,6 @@ export {
   ADJUSTED_ITEMS,
   ADJUSTED_SUBTOTAL,
   APPLIED_TOTAL,
-  BAR_ITEMS,
-  BAR_SUBTOTAL,
   BOOSTER,
   BOOSTER_NAME,
   CART_REVIEW_FAILED,
@@ -178,7 +159,6 @@ export {
   DELISTED_ITEMS,
   DELISTED_LINE_ID,
   DELISTED_NAME,
-  GUEST_BAR_ASK,
   GUEST_FOOTER_COPY,
   HELD_PROMO_CODES,
   ORDER_CONFIRMED_STORY_ID,

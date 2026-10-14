@@ -16,7 +16,7 @@ import { expect, userEvent, within } from "storybook/test";
 const identity = {
   title: "Identity",
   description:
-    "Orders of HK$120,000 or more and bids of HK$120,000 or more need a verified identity. Verify once and it counts everywhere with us.",
+    "Bids of HK$120,000 or more need a verified identity. Verify once and it counts everywhere with us.",
   verifiedUntil: "Verified. Your document is valid until {day}.",
   expired:
     "Your verified document has expired. Verify again with a current one.",
