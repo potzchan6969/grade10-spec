@@ -92,17 +92,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
 * The viewer has no maximum on the listing.
-* The listing has an accepted bid at <current bid>.
+* The listing has an accepted bid at `<current bid>`.
 
 **Test data:**
 
-| Currency | Current bid | Increment | Chip 1× | Chip 2× | Chip 4× |
-| --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 1000 (HK$10) | 21000 | 22000 | 24000 |
-| JPY | 20000 (¥20,000) | 500 (¥500) | 20500 | 21000 | 22000 |
-| USD | 100 ($1), a first bid at a 0 start's opening price | 100 ($1) | 200 | 300 | 500 |
+| `<currency>` | `<current bid>` | `<increment>` | `<chip 1×>` | `<chip 2×>` | `<chip 4×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 1000 | 21000 | 22000 | 24000 | `<current bid>`: (HK$200); `<increment>`: (HK$10) |
+| JPY | 20000 | 500 | 20500 | 21000 | 22000 | `<current bid>`: (¥20,000); `<increment>`: (¥500) |
+| USD | 100 | 100 | 200 | 300 | 500 | `<current bid>`: ($1), a first bid at a 0 start's opening price; `<increment>`: ($1) |
 
 **Steps:**
 
@@ -112,8 +112,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: three chips read <current bid> plus 1×, 2× and 4× <increment>.
-* Step 3: the amount entered is the 2× chip's amount.
+* Step 2: three chips read `<chip 1×>`, `<chip 2×>` and `<chip 4×>`, equal to `<current bid>` plus 1×, 2× and 4× `<increment>`.
+* Step 3: the amount entered is `<chip 2×>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-tcx rev=1 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
 ### g10.shared-auction-listing.US1-TC4: Chips step from a leader's committed maximum
@@ -135,14 +135,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
-* The viewer leads with a committed maximum of <leader maximum> over a current bid of <current bid>.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
+* The viewer leads with a committed maximum of `<leader maximum>` over a current bid of `<current bid>`.
 
 **Test data:**
 
-| Currency | Current bid | Leader maximum | Increment | Chip 1× | Chip 2× | Chip 4× |
-| --- | --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 30000 (HK$300) | 1000 (HK$10) | 31000 | 32000 | 34000 |
+| `<currency>` | `<current bid>` | `<leader maximum>` | `<increment>` | `<chip 1×>` | `<chip 2×>` | `<chip 4×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 30000 | 1000 | 31000 | 32000 | 34000 | `<current bid>`: (HK$200); `<leader maximum>`: (HK$300); `<increment>`: (HK$10) |
 
 **Steps:**
 
@@ -151,8 +151,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Three chips read <leader maximum> plus 1×, 2× and 4× <increment>.
-* No chip reads <current bid> plus an increment.
+* Three chips read `<chip 1×>`, `<chip 2×>` and `<chip 4×>`, equal to `<leader maximum>` plus 1×, 2× and 4× `<increment>`.
+* No chip reads `<current bid>` plus an increment.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-7vc rev=2 covers=g10.shared-auction-listing.SC-7o5,g10.shared-auction-listing.SC-t9f,g10.shared-auction-listing.SC-2s5 -->
 ### g10.shared-auction-listing.US1-TC5: Before any bid, chip 1× is the opening price
@@ -174,16 +174,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
-* The listing has no accepted bid and a starting price of <starting price>.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
+* The listing has no accepted bid and a starting price of `<starting price>`.
 
 **Test data:**
 
-| Currency | Starting price | Opening price | Increment | Chip 1× | Chip 2× | Chip 4× |
-| --- | --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 20000, the starting price | 1000 (HK$10) | 20000 | 22000 | 24000 |
-| USD | 0 | 100 ($1), the lowest increment | 100 ($1) | 100 | 300 | 500 |
-| HKD | 0 | 1000 (HK$10), the lowest increment | 1000 (HK$10) | 1000 | 3000 | 5000 |
+| `<currency>` | `<starting price>` | `<opening price>` | `<increment>` | Chip 1× | `<chip 2×>` | `<chip 4×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 20000 | 1000 | 20000 | 22000 | 24000 | `<starting price>`: (HK$200); `<opening price>`: the starting price; `<increment>`: (HK$10) |
+| USD | 0 | 100 | 100 | 100 | 300 | 500 | `<opening price>`: ($1), the lowest increment; `<increment>`: ($1) |
+| HKD | 0 | 1000 | 1000 | 1000 | 3000 | 5000 | `<opening price>`: (HK$10), the lowest increment; `<increment>`: (HK$10) |
 
 **Steps:**
 
@@ -193,11 +193,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: chip 1× reads <opening price> itself, not <opening price> plus an increment.
+* Step 2: chip 1× reads `<opening price>` itself, not `<opening price>` plus an increment.
 * Step 2: chip 1× is captioned as the next eligible bid.
-* Step 2: chips 2× and 4× read <chip 2×> and <chip 4×>, <opening price> plus two and four increments.
+* Step 2: chips 2× and 4× read `<chip 2×>` and `<chip 4×>`, `<opening price>` plus two and four times `<increment>`.
 * Step 2: on a 0 start, no chip reads 0.
-* Step 3: the amount entered is <opening price>.
+* Step 3: the amount entered is `<opening price>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-gk7 rev=1 covers=g10.shared-auction-listing.SC-dv0 -->
 ### g10.shared-auction-listing.US1-TC6: A leader's typed raise starts above their maximum
@@ -219,15 +219,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing.
-* The viewer leads with a committed maximum of <leader maximum> over a current bid of <current bid>.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `ready` on an open listing in `<currency>`.
+* The viewer leads with a committed maximum of `<leader maximum>` over a current bid of `<current bid>`.
 
 **Test data:**
 
-| Currency | Current bid | Leader maximum | Next minimum | Raise floor | Chip 1× |
-| --- | --- | --- | --- | --- | --- |
-| HKD | 20000 (HK$200) | 30000 (HK$300) | 21000 | 30100, the maximum plus 100 | 31000 |
-| HKD | 20000 (HK$200) | 20000 (HK$200) | 21000 | 21000, the next minimum | 21000 |
+| `<currency>` | `<current bid>` | `<leader maximum>` | `<next minimum>` | `<raise floor>` | `<chip 1×>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- |
+| HKD | 20000 | 30000 | 21000 | 30100 | 31000 | `<current bid>`: (HK$200); `<leader maximum>`: (HK$300); `<raise floor>`: the maximum plus 100 |
+| HKD | 20000 | 20000 | 21000 | 21000 | 21000 | `<current bid>`: (HK$200); `<leader maximum>`: (HK$200); `<raise floor>`: the next minimum |
 
 **Steps:**
 
@@ -237,8 +237,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: the minimum is the greater of <next minimum> and <leader maximum> plus 100.
-* Step 3: the 1× chip reads <leader maximum> plus one increment, not the floor, where the two differ.
+* Step 2: the minimum `<raise floor>` is the greater of `<next minimum>` and `<leader maximum>` plus 100.
+* Step 3: the 1× chip reads `<chip 1×>`, equal to `<leader maximum>` plus one increment, not the floor, where the two differ.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ijc rev=1 covers=g10.shared-auction-listing.SC-emk,g10.shared-auction-listing.SC-i3i -->
 ### g10.shared-auction-listing.US1-TC7: Blocks import by name and the gallery stands alone
@@ -290,14 +290,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingGallery` with two images, the first given the sources in **Test data**.
+* Storybook renders `ListingGallery` with two images, the first given thumbnail source `<thumb source>`, main source `<main source>` and zoom source `<zoom source>`.
 
 **Test data:**
 
-| Thumb source | Main source | Zoom source | Strip shows | Main frame shows | Zoom shows |
+| `<thumb source>` | `<main source>` | `<zoom source>` | `<strip shows>` | `<main frame shows>` | `<zoom shows>` |
 | --- | --- | --- | --- | --- | --- |
 | `<thumb url>` | `<main url>` | `<zoom url>` | `<thumb url>` | `<main url>` | `<zoom url>` |
 | none | `<main url>` | none | `<main url>` | `<main url>` | `<main url>` |
+
+| Field | Value |
+| --- | --- |
+| main url | The supplied main source of the first gallery image, distinct from the thumbnail and zoom sources; bind its URL only |
+| thumb url | The supplied thumbnail source of the first gallery image; bind its URL only |
+| zoom url | The supplied zoom source of the first gallery image, distinct from the thumbnail and main sources; bind its URL only |
 
 **Steps:**
 
@@ -308,9 +314,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the strip shows <strip shows>.
-* Step 2: the main frame shows <main frame shows>.
-* Step 4: the zoom shows <zoom shows>.
+* Step 1: the strip shows `<strip shows>`.
+* Step 2: the main frame shows `<main frame shows>`.
+* Step 4: the zoom shows `<zoom shows>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-04g rev=1 covers=g10.shared-auction-listing.SC-e6o,g10.shared-auction-listing.SC-96b,g10.shared-auction-listing.SC-1a8,g10.shared-auction-listing.SC-nlz,g10.shared-auction-listing.SC-ed7,g10.shared-auction-listing.SC-ln3 -->
 ### g10.shared-auction-listing.US1-TC9: The strip shows only for several images
@@ -332,11 +338,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingGallery` with <image count> images.
+* Storybook renders `ListingGallery` with `<image count>` images.
 
 **Test data:**
 
-| Image count | Outcome |
+| `<image count>` | `<outcome>` |
 | --- | --- |
 | 0 | Nothing renders; no previous or next control |
 | 1 | The image renders with no thumbnail strip |
@@ -348,7 +354,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The gallery reads as <outcome>.
+* The gallery reads as `<outcome>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-bow rev=1 covers=g10.shared-auction-listing.SC-ogg,g10.shared-auction-listing.SC-0gu,g10.shared-auction-listing.SC-ptk -->
 ### g10.shared-auction-listing.US1-TC10: Accessible names are the copy the application supplies
@@ -401,12 +407,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingBidHistoryList` with locale <locale> and time zone <time zone>.
+* Storybook renders `ListingBidHistoryList` with locale `<locale>` and time zone `<time zone>`.
 * One row was accepted 5 minutes ago, and one at 2026-09-01T12:00:00Z.
 
 **Test data:**
 
-| Locale | Time zone | Older row reads |
+| `<locale>` | `<time zone>` | `<older row reads>` |
 | --- | --- | --- |
 | en | Asia/Hong_Kong | 1 Sep 2026, 20:00 |
 | en | Asia/Tokyo | 1 Sep 2026, 21:00 |
@@ -421,8 +427,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the recent row reads in relative form, in <locale>.
-* Step 2: the older row reads <older row reads>; a zh-Hant month's wording is not asserted.
+* Step 1: the recent row reads in relative form, in `<locale>`.
+* Step 2: the older row reads `<older row reads>`; a zh-Hant month's wording is not asserted.
 * Step 2: no zone name follows the older row's time.
 * Each row keeps its accepted instant as data.
 
@@ -544,11 +550,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` <signal> on an open listing.
+* Storybook renders `ListingAuctionBidCard` with `bidEnrollment` `<signal>` on an open listing.
 
 **Test data:**
 
-| Signal | Bid action | Quick bids and custom field | Standing and fee line |
+| `<signal>` | `<bid action>` | `<quick bids and custom field>` | `<standing and fee line>` |
 | --- | --- | --- | --- |
 | `signed-out` | Offers sign-in | Not offered for bidding | Absent |
 | `needs-card` | Opens setup | Visible, disabled | Fee line shown |
@@ -562,10 +568,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the bid action reads as <bid action>.
-* Step 2: chips and custom field behave as <quick bids and custom field>.
-* Step 3: the bid action does <bid action>.
-* Standing and the fee line are <standing and fee line>.
+* Step 1: the bid action reads as `<bid action>`.
+* Step 2: chips and custom field behave as `<quick bids and custom field>`.
+* Step 3: the bid action does `<bid action>`.
+* Standing and the fee line are `<standing and fee line>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-edg rev=1 covers=g10.shared-auction-listing.SC-o4b,g10.shared-auction-listing.SC-wri,g10.shared-auction-listing.SC-1qn,g10.shared-auction-listing.SC-89v,g10.shared-auction-listing.SC-s3o,g10.shared-auction-listing.SC-srg,g10.shared-auction-listing.SC-ji6,g10.shared-auction-listing.SC-b43,g10.shared-auction-listing.SC-z9r,g10.shared-auction-listing.SC-92g,g10.shared-auction-listing.SC-b9p,g10.shared-auction-listing.SC-7da,g10.shared-auction-listing.SC-ujz,g10.shared-auction-listing.SC-egd -->
 ### g10.shared-auction-listing.US1-TC16: Setup waits on a card and an attestation
@@ -591,7 +597,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Card entered | Attestation checked | Continue |
+| `<card entered>` | `<attestation checked>` | `<continue>` |
 | --- | --- | --- |
 | No | No | Disabled |
 | Yes | No | Disabled |
@@ -600,13 +606,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Set the card field to <card entered>.
-2. Set the attestation to <attestation checked>.
+1. Set the card field to `<card entered>`.
+2. Set the attestation to `<attestation checked>`.
 3. Read the continue control.
 
 **Expected Results:**
 
-* Continue is <continue>.
+* Continue is `<continue>`.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-8vb rev=1 covers=g10.shared-auction-listing.SC-8xx -->
 ### g10.shared-auction-listing.US1-TC17: A supplied accessory sits at the recent-bids header's end
@@ -688,14 +694,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The bid panel receives a USD ceiling of `<ceiling>` and is rendered for an open lot in the row's mode.
+* The bid panel receives a USD ceiling of `<ceiling>` and is rendered for an open listing in `<mode>`.
 
 **Test data:**
 
-| Mode | `<ceiling>` |
-| --- | --- |
-| Set maximum | USD10,000,000 whole major units |
-| Raise maximum | USD10,000,000 whole major units |
+| `<mode>` | `<ceiling>` | Fixture notes |
+| --- | --- | --- |
+| Set maximum | USD10,000,000 | whole major units |
+| Raise maximum | USD10,000,000 | whole major units |
 
 **Steps:**
 
@@ -731,10 +737,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
-| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| ceiling | USD10,000,000 | whole major units (fixed configured ceiling) |
+| over ceiling | USD10,000,001 | (fixed boundary, one USD over) |
 
 **Steps:**
 
@@ -768,10 +774,10 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<ceiling>` | USD10,000,000 whole major units (fixed configured ceiling) |
-| `<over ceiling>` | USD10,000,001 (fixed boundary, one USD over) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| ceiling | USD10,000,000 | whole major units (fixed configured ceiling) |
+| over ceiling | USD10,000,001 | (fixed boundary, one USD over) |
 
 **Steps:**
 
@@ -805,12 +811,12 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
 * The custom maximum draft is `500`.
 
 **Test data:**
 
-| Currency | Replacement | Entry | Ceiling |
+| `<currency>` | `<replacement>` | `<entry>` | `<ceiling>` |
 | --- | --- | --- | --- |
 | USD | 10000001 | Paste | 10000000 |
 | USD | 10000001 | Selected multi-character insertText | 10000000 |
@@ -819,12 +825,12 @@ Runs once per row of **Test data**, in both set and raise modes.
 **Steps:**
 
 1. Select the existing custom maximum draft.
-2. Replace it using the row's entry and replacement.
+2. Replace it using `<entry>` with replacement `<replacement>`.
 3. Read the displayed draft and reviewed amount.
 
 **Expected Results:**
 
-* The displayed draft equals the USD ceiling.
+* The displayed draft equals `<ceiling>`.
 * The reviewed amount agrees with the corrected draft.
 * No ceiling message appears.
 
@@ -850,12 +856,12 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
 * The custom maximum draft is `500`.
 
 **Test data:**
 
-| Currency | Paste | Ceiling |
+| `<currency>` | `<paste>` | `<ceiling>` |
 | --- | --- | --- |
 | USD | 10000001.99 | 10000000 |
 | USD | 999999999999999999999999999999.99 | 10000000 |
@@ -863,12 +869,12 @@ Runs once per row of **Test data**, in both set and raise modes.
 **Steps:**
 
 1. Select the existing custom maximum draft.
-2. Paste the row's paste into the custom maximum field.
+2. Paste `<paste>` into the custom maximum field.
 
 **Expected Results:**
 
 * The fractional suffix is discarded without rounding.
-* The displayed draft equals the USD ceiling.
+* The displayed draft equals `<ceiling>`.
 * The reviewed amount agrees with the corrected draft.
 * No ceiling message appears.
 
@@ -892,13 +898,13 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD, in raise mode.
+* Storybook renders `ListingAuctionBidCard` in `<currency>`, in raise mode.
 * The collector leads with a committed maximum below `500`.
-* The raise custom maximum draft equals the USD ceiling.
+* The raise custom maximum draft equals `<ceiling>`.
 
 **Test data:**
 
-| Currency | Ceiling | Replacement |
+| `<currency>` | `<ceiling>` | `<replacement>` |
 | --- | --- | --- |
 | USD | 10000000 | 10000001 |
 
@@ -906,18 +912,18 @@ Runs once per row of **Test data**, in both set and raise modes.
 
 1. Append `1` to the raise custom maximum field.
 2. Read the displayed draft.
-3. Select the draft and paste the row's replacement.
+3. Select the draft and paste `<replacement>`.
 4. Read the displayed draft.
 5. Set the draft to `500`, put the caret at its end.
-6. Paste the row's replacement without selecting the draft.
+6. Paste `<replacement>` without selecting the draft.
 7. Read the displayed draft and reviewed amount.
 8. Repeat steps 5 to 7 in set mode.
 
 **Expected Results:**
 
-* Step 2: the displayed draft remains the USD ceiling.
-* Step 4: the displayed draft equals the USD ceiling.
-* Steps 7 and 8: paste clamps to the USD ceiling.
+* Step 2: the displayed draft remains `<ceiling>`.
+* Step 4: the displayed draft equals `<ceiling>`.
+* Steps 7 and 8: paste clamps to `<ceiling>`.
 * The reviewed amount agrees with every corrected draft.
 * No ceiling message appears in either mode.
 
@@ -943,25 +949,25 @@ Runs once in set mode and once in raise mode.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
 * The custom maximum draft is `60500`.
 * The listing's next minimum is at or below `60500`.
 * No message appears beside the custom maximum field.
 
 **Test data:**
 
-| Currency | Paste | Ceiling |
+| `<currency>` | `<paste>` | `<ceiling>` |
 | --- | --- | --- |
 | USD | 10000001 | 10000000 |
 
 **Steps:**
 
-1. Select the existing draft and paste the row's paste.
+1. Select the existing draft and paste `<paste>`.
 2. Read the custom maximum field and surrounding messages.
 
 **Expected Results:**
 
-* The displayed draft equals the USD ceiling.
+* The displayed draft equals `<ceiling>`.
 * No maximum-bid, invalid-amount or below-floor message appears.
 * The reviewed amount agrees with the corrected draft.
 * No ceiling message appears.
@@ -988,25 +994,25 @@ Runs once in set mode and once in raise mode.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD and the mode the run names.
+* Storybook renders `ListingAuctionBidCard` in `<currency>` and the mode the run names.
 * The custom maximum draft is `500`.
 
 **Test data:**
 
-| Currency | Paste | Ceiling |
+| `<currency>` | `<paste>` | `<ceiling>` |
 | --- | --- | --- |
 | USD | 10000000.99 | 10000000 |
 
 **Steps:**
 
-1. Select the existing draft and paste the row's paste.
+1. Select the existing draft and paste `<paste>`.
 2. Read the displayed draft and reviewed amount.
 3. Commit the maximum and read the callback amount.
 
 **Expected Results:**
 
 * The fractional suffix is discarded without rounding.
-* The displayed draft equals the USD ceiling.
+* The displayed draft equals `<ceiling>`.
 * The reviewed amount agrees with the displayed draft.
 * The callback receives the ceiling in integer minor units.
 
@@ -1028,8 +1034,8 @@ Runs once in set mode and once in raise mode.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax: a closed sold lot whose first Recent bids row is the viewer's and has `isWinner` true, with bid history copy `winner` set to `Winner`.
-* Storybook renders `ListingAuctionBidCard` → Default: a live lot whose Recent bids rows carry no `isWinner`, with the same copy.
+* Storybook renders `ListingAuctionBidCard` → ClosedSoldEqualMax: a closed sold listing whose first Recent bids row is the viewer's and has `isWinner` true, with bid history copy `winner` set to `Winner`.
+* Storybook renders `ListingAuctionBidCard` → Default: a live listing whose Recent bids rows carry no `isWinner`, with the same copy.
 
 **Steps:**
 
@@ -1089,7 +1095,7 @@ Runs once in set mode and once in raise mode.
 
 **Pre-conditions:**
 
-* `ListingAuctionBidCard` renders ClosedSoldEqualMax's args - a closed sold lot whose first Recent bids row has `isWinner` true - with bid history copy that leaves `winner` unset.
+* `ListingAuctionBidCard` renders ClosedSoldEqualMax's args - a closed sold listing whose first Recent bids row has `isWinner` true - with bid history copy that leaves `winner` unset.
 
 **Steps:**
 
@@ -1277,11 +1283,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `AuctionCard` closing at 2027-09-01T12:00:00Z with locale zh-Hant and time zone <viewer zone>.
+* Storybook renders `AuctionCard` closing at 2027-09-01T12:00:00Z with locale zh-Hant and time zone `<viewer zone>`.
 
 **Test data:**
 
-| Viewer zone | Local time | Zone name |
+| `<viewer zone>` | `<local time>` | `<zone name>` |
 | --- | --- | --- |
 | Asia/Tokyo | 21:00 | GMT+9 |
 | America/New_York | 08:00 | EDT |
@@ -1292,8 +1298,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The clock reads <local time>, not Hong Kong's 20:00.
-* The line names <zone name>, in English though the locale is zh-Hant, and not HKT.
+* The clock reads `<local time>`, not Hong Kong's 20:00.
+* The line names `<zone name>`, in English though the locale is zh-Hant, and not HKT.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ae5 rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
 ### g10.shared-auction-listing.US1-TC58: A bid row's display text replaces its formatted time
@@ -1316,14 +1322,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Storybook renders `ListingBidHistoryList` with locale en and time zone Asia/Hong_Kong.
-* One row carries an accepted instant and the display text <display text>.
+* One row carries an accepted instant and the display text `<display text>`.
 * One row carries only an accepted instant, 2026-09-01T12:00:00Z.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| <display text> | `DISPLAY-TEXT-MARKER`, a string no date formatter could produce |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| display text | DISPLAY-TEXT-MARKER | a string no date formatter could produce |
 
 **Steps:**
 
@@ -1332,7 +1338,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1: the row shows <display text> as supplied.
+* Step 1: the row shows `<display text>` as supplied.
 * Step 1: no date, clock or zone name shows beside it.
 * Step 2: the row reads 1 Sep 2026, 20:00.
 
@@ -1356,16 +1362,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `ListingAuctionBidCard` in USD.
-* The collector leads with the row's committed maximum.
-* The row's chips hold at least one amount above the ceiling and at least one below it.
+* Storybook renders `ListingAuctionBidCard` in `<currency>`.
+* The collector leads with `<committed maximum>`.
+* The configured increment `<increment>` produces the corrected chip amounts `<chips offered>`; the stepped bids before clamping hold at least one amount above `<ceiling>` and at least one below it.
 
 **Test data:**
 
-| Currency | Ceiling (major) | Committed maximum (major) | Increment (major) | Chips offered |
-| --- | --- | --- | --- | --- |
-| USD | 10000000 | 9999800 | 100 | 9999900, 10000000 (the 2x and 4x amounts both land on the ceiling and merge to one chip) |
-| USD | 10000000 | 9999700 | 100 | 9999800, 9999900, 10000000 |
+| `<currency>` | `<ceiling>` | `<committed maximum>` | `<increment>` | `<chips offered>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- |
+| USD | 10000000 | 9999800 | 100 | 9999900, 10000000 | All amounts are whole major units; the 2x and 4x amounts both land on the ceiling and merge to one chip |
+| USD | 10000000 | 9999700 | 100 | 9999800, 9999900, 10000000 | All amounts are whole major units |
+
+| Field | Value |
+| --- | --- |
+| ceiling minor units | 1000000000 |
 
 **Steps:**
 
@@ -1375,10 +1385,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Every chip amount is at or below the ceiling.
-* A chip whose stepped amount exceeds the ceiling shows the ceiling and is captioned as the auction's limit, not the amount's delta.
+* Every chip amount is at or below `<ceiling>`.
+* A chip whose stepped amount exceeds the ceiling shows `<ceiling>` and is captioned as the auction's limit, not the amount's delta.
 * A chip at or below the ceiling keeps its stepped amount and caption.
-* Committing a clamped chip passes the ceiling in minor units.
+* Committing a clamped chip passes `<ceiling minor units>`, equal to `<ceiling>` × 100 in USD minor units.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-w4r rev=2 covers=g10.shared-auction-listing.SC-atq -->
 ### g10.shared-auction-listing.US1-TC60: Chips clamped onto the same amount merge to one
@@ -1432,11 +1442,11 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
-* The collector leads with the row's committed maximum and current bid.
+* The whole-major-unit fixture has the collector leading with maximum `<committed maximum>` and current bid `<current bid>`.
 
 **Test data:**
 
-| Committed maximum (major) | Current bid (major) | Floor driving the collapse |
+| `<committed maximum>` | `<current bid>` | Floor driving the collapse |
 | --- | --- | --- |
 | 10000000 | 1200 | maximum plus the minimum raise |
 | 9999950 | 9999950 | minimum next bid 10000050, already above the ceiling |
@@ -1450,12 +1460,12 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No quick-bid chip, no custom maximum field and no bid action render.
-* A status row leads with `Max: 10000000` in the first row, and with `Max: 9999950` in the second.
+* A status row leads with Max: `<committed maximum>`.
 * The row carries the private-maximum explanation behind its Info tooltip and one line that the auction accepts no higher amount; the raise mechanism line does not appear.
 * The buyer-fee line still renders.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-5dh rev=2 covers=g10.shared-auction-listing.SC-cfl -->
-### g10.shared-auction-listing.US1-TC62: A lot priced past the ceiling offers no entry
+### g10.shared-auction-listing.US1-TC62: A listing priced past the ceiling offers no entry
 
 **Classification:**
 
@@ -1473,8 +1483,8 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * Storybook renders `ListingAuctionBidCard` in USD with the `10000000` ceiling.
-* The lot's minimum next bid is above the ceiling.
-* The collector holds no maximum on the lot.
+* The listing's minimum next bid is above the ceiling.
+* The collector holds no maximum on the listing.
 
 **Steps:**
 
