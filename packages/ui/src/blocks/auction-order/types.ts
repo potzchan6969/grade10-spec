@@ -52,6 +52,8 @@ type AuctionWinnerOrderLine = {
   value: string;
   muted?: boolean;
   tooltip?: string;
+  /** Under the value, muted: the quoted amount in the other currency. */
+  subtext?: string;
 };
 
 type AuctionSettlementCurrency = "USD" | "HKD";
