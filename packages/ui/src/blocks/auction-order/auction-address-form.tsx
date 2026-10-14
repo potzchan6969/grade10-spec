@@ -1,3 +1,4 @@
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
 import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
@@ -72,6 +73,7 @@ function AuctionAddressForm({
   initialValues,
   errors,
   pending = false,
+  failed,
   onConfirm,
   onCancel,
   className,
@@ -158,6 +160,7 @@ function AuctionAddressForm({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     setAttempted(true);
 
     const incomplete =
@@ -314,6 +317,11 @@ function AuctionAddressForm({
               autoComplete: "postal-code",
             })}
           </div>
+          {failed ? (
+            <Text as="p" role="alert" size="sm" tone="error">
+              {failed}
+            </Text>
+          ) : null}
           {showActions ? (
             <HStack className="flex-wrap" gap="sm" vAlign="center">
               <Button loading={pending} size="md" type="submit">

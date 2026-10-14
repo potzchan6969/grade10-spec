@@ -56,6 +56,12 @@ type ProductCardProps = {
    * A sold-out product shows none: there is nothing left to be running out of.
    */
   remainingLabel?: ReactNode;
+  /**
+   * Why the last cart change was refused, in the consumer's own words. The
+   * consumer moves the control back to the cart's quantity; the tile says why
+   * beneath it until the consumer clears it.
+   */
+  cartFailed?: string;
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /**
@@ -114,6 +120,7 @@ function ProductCardContent({
   cartCount,
   maxCartQuantity,
   remainingLabel,
+  cartFailed,
   onCartQuantityChange,
   onClick,
   href,
@@ -185,6 +192,16 @@ function ProductCardContent({
         {!soldOut && remainingLabel != null ? (
           <Text data-slot="product-card-remaining" size="sm" tone="error">
             {remainingLabel}
+          </Text>
+        ) : null}
+        {cartFailed ? (
+          <Text
+            data-slot="product-card-cart-failed"
+            role="alert"
+            size="sm"
+            tone="error"
+          >
+            {cartFailed}
           </Text>
         ) : null}
       </VStack>

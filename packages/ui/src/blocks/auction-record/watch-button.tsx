@@ -1,63 +1,65 @@
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Bell, BellSlash } from "@phosphor-icons/react";
-import { useEffect, useRef } from "react";
 import type {
   WatchButtonCopy,
   WatchButtonProps,
   WatchToastCopy,
 } from "./types";
+import { useSettledChange } from "./use-settled-change";
 
 /**
- * Toasts once per confirmed change of the controlled `watched` value.
+ * Toasts once per settled change the collector made (`useSettledChange`).
  * Copy and toast actions are consumer-supplied; without copy, nothing is
  * announced. The application mounts one design-system `<Toast />` at its root.
  */
 function useWatchToast(
   watched: boolean,
+  pending: boolean,
   copy: WatchButtonCopy,
   active: boolean,
   onWatchedToastAction?: () => void,
   onUnwatchedToastAction?: () => void,
 ) {
-  const previous = useRef(watched);
-
-  useEffect(() => {
-    if (previous.current === watched) return;
-    previous.current = watched;
+  const markPressed = useSettledChange(watched, pending, (settled) => {
     if (!active) return;
-
-    const message: WatchToastCopy | undefined = watched
+    const message: WatchToastCopy | undefined = settled
       ? copy.watchedToast
       : copy.unwatchedToast;
     if (!message) return;
 
-    const onAction = watched ? onWatchedToastAction : onUnwatchedToastAction;
+    const onAction = settled ? onWatchedToastAction : onUnwatchedToastAction;
     toast(message.title, {
       description: message.description,
       ...(message.actionLabel && onAction
-        ? { action: { label: message.actionLabel, onClick: onAction } }
+        ? {
+            action: {
+              label: message.actionLabel,
+              onClick: () => {
+                markPressed();
+                onAction();
+              },
+            },
+          }
         : null),
     });
-  }, [
-    active,
-    copy.unwatchedToast,
-    copy.watchedToast,
-    onUnwatchedToastAction,
-    onWatchedToastAction,
-    watched,
-  ]);
+  });
+  return markPressed;
 }
 
 /**
  * Watch / unwatch control for lot details and catalogue — design-system
  * Button + Bell. When `locked`, a bid stands: Watching stays on and the
- * control does not report press.
+ * control does not report press. While `pending` it stays focusable and
+ * refuses a second press; `failed` shows the refusal beside it.
  */
 function WatchButton({
   watched,
   pending = false,
+  failed,
   copy,
   onPress,
   disabled = false,
@@ -66,12 +68,13 @@ function WatchButton({
   onUnwatchedToastAction,
   className,
 }: WatchButtonProps) {
-  const inactive = disabled || pending || locked;
-  const label = pending ? copy.pending : watched ? copy.watching : copy.watch;
+  const settledLabel = watched ? copy.watching : copy.watch;
+  const label = pending ? (copy.pending ?? settledLabel) : settledLabel;
 
   // Hooks run on every render; the empty-label bail-out comes after them.
-  useWatchToast(
+  const markPressed = useWatchToast(
     watched,
+    pending,
     copy,
     !locked,
     onWatchedToastAction,
@@ -80,9 +83,8 @@ function WatchButton({
 
   if (!label) return null;
 
-  return (
+  const button = (
     <Button
-      aria-busy={pending || undefined}
       aria-label={
         locked
           ? copy.watching
@@ -91,17 +93,41 @@ function WatchButton({
             : copy.watchAriaLabel
       }
       aria-pressed={watched}
-      className={cn("shrink-0", className)}
-      disabled={inactive}
+      className={cn("shrink-0", failed ? undefined : className)}
+      disabled={disabled || locked}
       leading={
         watched || locked ? <BellSlash aria-hidden /> : <Bell aria-hidden />
       }
-      onClick={locked ? undefined : onPress}
+      loading={pending}
+      onClick={
+        locked
+          ? undefined
+          : () => {
+              markPressed();
+              onPress();
+            }
+      }
       size="md"
       variant="outline"
     >
       {locked ? copy.watching : label}
     </Button>
+  );
+
+  if (!failed) return button;
+
+  return (
+    <VStack
+      className={cn("shrink-0", className)}
+      data-slot="watch-button-refused"
+      gap="xs"
+      hAlign="flex-start"
+    >
+      {button}
+      <Text role="alert" size="xs" tone="error">
+        {failed}
+      </Text>
+    </VStack>
   );
 }
 

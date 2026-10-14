@@ -102,6 +102,31 @@ function FooterSectionReveal({
   );
 }
 
+type LeavingCartItem = { item: CartItemSummary; index: number };
+
+function settledRemovals(
+  previous: readonly CartItemSummary[],
+  next: readonly CartItemSummary[],
+  removedIds: ReadonlySet<string>,
+): LeavingCartItem[] {
+  const nextIds = new Set(next.map((item) => item.id));
+  return previous.flatMap((item, index) =>
+    removedIds.has(item.id) && !nextIds.has(item.id) ? [{ item, index }] : [],
+  );
+}
+
+function withLeaving(
+  items: readonly CartItemSummary[],
+  leaving: readonly LeavingCartItem[],
+) {
+  const rows = items.map((item) => ({ item, left: false }));
+  for (const { item, index } of leaving) {
+    if (items.some((live) => live.id === item.id)) continue;
+    rows.splice(Math.min(index, rows.length), 0, { item, left: true });
+  }
+  return rows;
+}
+
 function prefersReducedMotion() {
   return (
     typeof window !== "undefined" &&
@@ -177,7 +202,7 @@ function CartItemContent({
   };
 
   const handleRemove = () => {
-    if (!interactionPending) onRemove?.();
+    if (!interactionPending && !item.pending) onRemove?.();
   };
 
   const handleProductClick = () => {
@@ -191,6 +216,7 @@ function CartItemContent({
       className={cn("w-full flex-wrap py-2 sm:flex-nowrap", className)}
       data-slot="cart-item"
       data-status={item.status || "default"}
+      aria-busy={item.pending || undefined}
     >
       {/* The name button beside it is the control; the thumbnail repeats it
           for a pointer only. */}
@@ -280,6 +306,16 @@ function CartItemContent({
             {item.remainingLabel}
           </span>
         ) : null}
+
+        {item.failed ? (
+          <span
+            role="alert"
+            data-slot="cart-item-failed"
+            className="w-full text-xs font-semibold leading-4 text-destructive"
+          >
+            {item.failed}
+          </span>
+        ) : null}
       </VStack>
 
       {/* Action: StepperInput or Sold-Out Remove — wraps to a full-width row
@@ -295,6 +331,7 @@ function CartItemContent({
             size="sm"
             variant="outline"
             aria-label={copy.removeItemLabel}
+            aria-busy={item.pending || undefined}
             disabled={interactionPending}
             onClick={handleRemove}
           >
@@ -487,7 +524,15 @@ function CartDrawerBody({
   const exitTimersRef = useRef<Map<string, number>>(new Map());
   const interactionPendingRef = useRef(interactionPending);
   interactionPendingRef.current = interactionPending;
-  const isEmpty = items.length === 0 && !loading;
+  const [removedIds, setRemovedIds] = useState(() => new Set<string>());
+  const [leaving, setLeaving] = useState<readonly LeavingCartItem[]>([]);
+  const [previousItems, setPreviousItems] = useState(items);
+  if (previousItems !== items) {
+    const left = settledRemovals(previousItems, items, removedIds);
+    setPreviousItems(items);
+    if (left.length > 0) setLeaving((prev) => [...prev, ...left]);
+  }
+  const isEmpty = items.length === 0 && leaving.length === 0 && !loading;
 
   useEffect(() => {
     return () => {
@@ -529,8 +574,32 @@ function CartDrawerBody({
     setExitingIds((prev) => (prev.size === 0 ? prev : new Set()));
   }, [interactionPending]);
 
+  // A line that owns its removal leaves after the consumer drops it.
+  useEffect(() => {
+    if (leaving.length === 0) return;
+    const timerId = window.setTimeout(() => {
+      setLeaving((prev) => prev.filter((entry) => !leaving.includes(entry)));
+      setRemovedIds((prev) => {
+        const next = new Set(prev);
+        for (const entry of leaving) next.delete(entry.item.id);
+        return next;
+      });
+    }, CART_ITEM_EXIT_MS);
+    return () => window.clearTimeout(timerId);
+  }, [leaving]);
+
   const requestRemove = (itemId: string) => {
     if (interactionPendingRef.current || exitingIds.has(itemId)) return;
+
+    const line = items.find((item) => item.id === itemId);
+    if (line?.pending !== undefined) {
+      if (line.pending) return;
+      if (!prefersReducedMotion()) {
+        setRemovedIds((prev) => new Set(prev).add(itemId));
+      }
+      onRemoveItem?.(itemId);
+      return;
+    }
 
     if (prefersReducedMotion()) {
       onRemoveItem?.(itemId);
@@ -574,9 +643,9 @@ function CartDrawerBody({
           icon={<ShoppingCart aria-hidden weight="regular" />}
         />
       ) : (
-        items.map((item, index) => {
-          const exiting = exitingIds.has(item.id);
-          const hasRowBelow = index < items.length - 1;
+        withLeaving(items, leaving).map(({ item, left }, index, rows) => {
+          const exiting = left || exitingIds.has(item.id);
+          const hasRowBelow = index < rows.length - 1;
 
           return (
             <div
@@ -663,8 +732,17 @@ type CartDrawerFooterProps = {
    * to Shopify. The button stays on the redirecting label until navigation
    * succeeds. On rejection, the button restores and a toast shows
    * `checkoutFailed`. The shared component does not perform the redirect.
+   * With `checkoutPending` set, the consumer owns the outcome instead.
    */
   onCheckout?: () => Promise<void> | void;
+  /**
+   * The consumer's checkout in flight, drawn on the button until the shopper
+   * has left. Set it, `false` included, to own checkout's state; left unset,
+   * the button follows `onCheckout`'s promise.
+   */
+  checkoutPending?: boolean;
+  /** The refusal of the last checkout, shown under the button. */
+  checkoutFailed?: string;
   /**
    * Sign-in offer for a signed-out shopper. When provided — with
    * `copy.signInAction` set — a quiet line under the checkout button offers
@@ -706,6 +784,8 @@ function CartDrawerFooter({
   onUseMaxPoints,
   onRemovePoints,
   onCheckout,
+  checkoutPending,
+  checkoutFailed,
   onSignIn,
   className,
 }: CartDrawerFooterProps) {
@@ -713,8 +793,10 @@ function CartDrawerFooter({
   const controlsPending = interactionPending || tenderPending;
   const [pointsInput, setPointsInput] = useState("");
   const [isVerifyingPoints, setIsVerifyingPoints] = useState(false);
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [redirectingLocally, setIsRedirecting] = useState(false);
+  const isRedirecting = checkoutPending ?? redirectingLocally;
   const pointsInputId = useId();
+  const checkoutFailedId = useId();
   const lastAppliedRef = useRef<AppliedPromo | null>(null);
   const lastAppliedPointsRef = useRef<AppliedPoints | null>(null);
   const [discountMounted, setDiscountMounted] = useState(
@@ -863,6 +945,12 @@ function CartDrawerFooter({
       isRedirecting
     )
       return;
+    if (checkoutPending !== undefined) {
+      Promise.resolve(onCheckout?.()).catch((error: unknown) =>
+        globalThis.reportError(error),
+      );
+      return;
+    }
     setIsRedirecting(true);
     try {
       await onCheckout?.();
@@ -1098,11 +1186,7 @@ function CartDrawerFooter({
                         <Button
                           size="md"
                           variant="outline"
-                          disabled={
-                            controlsPending ||
-                            !pointsInput.trim() ||
-                            isVerifyingPoints
-                          }
+                          disabled={controlsPending || !pointsInput.trim()}
                           loading={isVerifyingPoints}
                           onClick={handleApplyPoints}
                         >
@@ -1146,18 +1230,26 @@ function CartDrawerFooter({
           size="lg"
           variant="default"
           disabled={
-            loading ||
-            summaryLoading ||
-            controlsPending ||
-            checkoutDisabled ||
-            isRedirecting
+            loading || summaryLoading || controlsPending || checkoutDisabled
           }
           loading={isRedirecting}
+          aria-describedby={checkoutFailed ? checkoutFailedId : undefined}
           onClick={handleCheckout}
           className="w-full"
         >
           {isRedirecting ? copy.checkoutRedirecting : copy.checkoutButton}
         </Button>
+
+        {checkoutFailed && !isRedirecting ? (
+          <span
+            id={checkoutFailedId}
+            role="alert"
+            data-slot="cart-checkout-failed"
+            className="w-full text-center text-xs font-semibold leading-4 text-destructive"
+          >
+            {checkoutFailed}
+          </span>
+        ) : null}
 
         {onSignIn && copy.signInAction ? (
           <div className="flex w-full flex-wrap items-baseline justify-center gap-x-1 text-sm font-normal leading-5 text-secondary-foreground">
@@ -1337,9 +1429,7 @@ function CartPromoSheet({
             <Button
               size="md"
               variant="outline"
-              disabled={
-                controlsPending || !promoInput.trim() || isVerifying || !open
-              }
+              disabled={controlsPending || !promoInput.trim() || !open}
               loading={isVerifying}
               onClick={handleApply}
             >
@@ -1469,6 +1559,9 @@ type CartDrawerProps = {
   /** Opens Account → Loyalty from the empty held-promo state (new tab when wired). */
   onBrowseLoyalty?: () => void;
   onCheckout?: () => Promise<void> | void;
+  /** Checkout's state when the consumer owns it — see `CartDrawerFooterProps`. */
+  checkoutPending?: boolean;
+  checkoutFailed?: string;
   /** Sign-in offer for a signed-out shopper — see `CartDrawerFooterProps`. */
   onSignIn?: () => void;
   className?: string;
@@ -1534,6 +1627,8 @@ function CartDrawer({
   onItemClick,
   onBrowseLoyalty,
   onCheckout,
+  checkoutPending,
+  checkoutFailed,
   onSignIn,
   className,
 }: CartDrawerProps) {
@@ -1686,6 +1781,8 @@ function CartDrawer({
               onUseMaxPoints={onUseMaxPoints}
               onRemovePoints={onRemovePoints}
               onCheckout={onCheckout}
+              checkoutPending={checkoutPending}
+              checkoutFailed={checkoutFailed}
               onSignIn={onSignIn}
             />
           ) : null}

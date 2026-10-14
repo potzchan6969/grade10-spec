@@ -613,7 +613,100 @@ export const AlertsPending: Story = {
     const canvas = within(canvasElement);
     await auctionRecordSettled(canvasElement);
     const alerts = canvas.getByRole("switch");
-    expect(alerts).toHaveAttribute("aria-disabled", "true");
+    expect(alerts).not.toHaveAttribute("aria-disabled");
     expect(alerts).toHaveAttribute("aria-busy", "true");
+    onEmailAlertsChange.mockClear();
+    await userEvent.click(alerts);
+    expect(onEmailAlertsChange).toHaveBeenCalledWith(false);
+  },
+};
+
+const REFUSAL = "We could not save that. Try again.";
+
+/** Holds each write for a beat, then refuses it and moves the row back. */
+function RefusingRecord() {
+  const [watchPending, setWatchPending] = useState(false);
+  const [watchFailed, setWatchFailed] = useState<string>();
+  const [alerts, setAlerts] = useState(true);
+  const [alertsPending, setAlertsPending] = useState(false);
+  const [alertsFailed, setAlertsFailed] = useState<string>();
+
+  return (
+    <AuctionRecord
+      copy={AUCTION_RECORD_COPY}
+      watchingItems={[
+        {
+          ...WATCHING_POSTER,
+          watchPending,
+          watchFailed,
+          onWatchToggle: () => {
+            setWatchFailed(undefined);
+            setWatchPending(true);
+            setTimeout(() => {
+              setWatchPending(false);
+              setWatchFailed(REFUSAL);
+            }, 50);
+          },
+          emailAlerts: alerts,
+          emailAlertsPending: alertsPending,
+          emailAlertsFailed: alertsFailed,
+          onEmailAlertsChange: (enabled) => {
+            setAlertsFailed(undefined);
+            setAlerts(enabled);
+            setAlertsPending(true);
+            setTimeout(() => {
+              setAlerts(!enabled);
+              setAlertsPending(false);
+              setAlertsFailed(REFUSAL);
+            }, 50);
+          },
+        },
+      ]}
+    />
+  );
+}
+
+/** A refused Unwatch keeps the row on screen, pressable, with its refusal. */
+export const UnwatchRefused: Story = {
+  name: "Unwatch refused",
+  render: () => <RefusingRecord />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await auctionRecordSettled(canvasElement);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Unwatch this auction" }),
+    );
+    await waitFor(() =>
+      expect(canvas.getByRole("alert")).toHaveTextContent(REFUSAL),
+    );
+    const unwatch = canvas.getByRole("button", {
+      name: "Unwatch this auction",
+    });
+    expect(unwatch).toBeVisible();
+    expect(unwatch).not.toHaveAttribute("aria-busy");
+    expect(unwatch).toBeEnabled();
+  },
+};
+
+/** A refused alerts change moves the switch back and says why, with no toast. */
+export const EmailAlertsRefused: Story = {
+  name: "Email alerts refused",
+  render: () => <RefusingRecord />,
+  play: async ({ canvasElement }) => {
+    toast.dismiss();
+    await waitFor(() =>
+      expect(document.querySelector("[data-sonner-toast]")).toBeNull(),
+    );
+    const canvas = within(canvasElement);
+    await auctionRecordSettled(canvasElement);
+
+    const alerts = canvas.getByRole("switch");
+    await userEvent.click(alerts);
+    await waitFor(() =>
+      expect(canvas.getByRole("alert")).toHaveTextContent(REFUSAL),
+    );
+    expect(alerts).toBeChecked();
+    expect(document.querySelector("[data-sonner-toast]")).toBeNull();
   },
 };

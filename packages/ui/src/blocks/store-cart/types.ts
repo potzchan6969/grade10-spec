@@ -47,6 +47,15 @@ type CartItemSummary = {
    */
   remainingLabel?: ReactNode;
   status?: CartItemStatus;
+  /**
+   * The line's own write in flight. A line that sets it, `false` included,
+   * owns its removal: the drawer calls `onRemoveItem` on the press, keeps the
+   * row busy while this is true, and animates it out once `items` drops it.
+   * Left unset, removal waits for its exit animation as before.
+   */
+  pending?: boolean;
+  /** The refusal of the line's last write, shown on the row. */
+  failed?: string;
 };
 
 /**

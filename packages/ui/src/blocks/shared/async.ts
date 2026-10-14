@@ -10,7 +10,12 @@ import type { ReactNode } from "react";
  * call it. Retry is an `action` rather than a bare callback for that last
  * reason: a bare callback would force a built-in English label.
  */
-type AsyncAction = { label: ReactNode; onAction: () => void };
+type AsyncAction = {
+  label: ReactNode;
+  onAction: () => void;
+  /** The action's work is under way: its button spins and takes no press. */
+  pending?: boolean;
+};
 
 type AsyncState<T> =
   | { status: "loading" }

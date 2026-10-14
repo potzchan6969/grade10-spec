@@ -182,17 +182,18 @@ function PdfLink({
   pdf: AuctionWinnerOrderPdf;
   className?: string;
 }) {
-  const { href, onOpen } = pdf;
-  return (
+  const { href, onOpen, pending, failed } = pdf;
+  const link = (
     <Link
+      aria-busy={pending || undefined}
       aria-label={ariaLabel}
-      className={className}
+      className={failed ? undefined : className}
       href={href ?? "#view-pdf"}
       onClick={
         onOpen
           ? (event) => {
               event.preventDefault();
-              onOpen();
+              if (!pending) onOpen();
             }
           : undefined
       }
@@ -203,29 +204,54 @@ function PdfLink({
       {label}
     </Link>
   );
+  if (!failed) return link;
+  return (
+    <VStack className={className} gap="xs" hAlign="end">
+      {link}
+      <ActionFailed message={failed} />
+    </VStack>
+  );
+}
+
+function ActionFailed({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <Text as="p" role="alert" size="sm" tone="error">
+      {message}
+    </Text>
+  );
 }
 
 function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
+  const { action } = alert;
   return (
-    <Alert
-      actions={
-        alert.action ? (
-          <Button onClick={alert.action.onPress} size="sm" variant="outline">
-            {alert.action.label}
-          </Button>
-        ) : undefined
-      }
-      description={
-        alert.description ? (
-          <span className="whitespace-pre-line">{alert.description}</span>
-        ) : undefined
-      }
-      dismissible={false}
-      layout={alert.description ? "block" : "inline"}
-      role={alert.role ?? "alert"}
-      status={alert.status}
-      title={alert.title}
-    />
+    <>
+      <Alert
+        actions={
+          action ? (
+            <Button
+              loading={action.pending}
+              onClick={action.onPress}
+              size="sm"
+              variant="outline"
+            >
+              {action.label}
+            </Button>
+          ) : undefined
+        }
+        description={
+          alert.description ? (
+            <span className="whitespace-pre-line">{alert.description}</span>
+          ) : undefined
+        }
+        dismissible={false}
+        layout={alert.description ? "block" : "inline"}
+        role={alert.role ?? "alert"}
+        status={alert.status}
+        title={alert.title}
+      />
+      <ActionFailed message={action?.failed} />
+    </>
   );
 }
 
@@ -671,16 +697,18 @@ function OrderSummary({
           <Button
             className="w-full"
             disabled={pay.disabled}
-            loading={pay.loading}
+            loading={pay.loading || pay.pending}
             onClick={pay.onPress}
             size="md"
           >
             {pay.label}
           </Button>
+          <ActionFailed message={pay.failed} />
           {pay.secondary ? (
             <Button
               className="w-full"
-              disabled={pay.disabled || pay.loading}
+              disabled={pay.disabled || pay.loading || pay.pending}
+              loading={pay.secondary.pending}
               onClick={onViewBankDetails ?? pay.secondary.onPress}
               size="md"
               variant="outline"
@@ -688,6 +716,7 @@ function OrderSummary({
               {pay.secondary.label}
             </Button>
           ) : null}
+          <ActionFailed message={pay.secondary?.failed} />
           {pay.deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {pay.deadline}
@@ -765,11 +794,13 @@ function AddressBlock({
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button
             className="w-full"
+            loading={delivery.confirm.pending}
             onClick={delivery.confirm.onPress}
             size="md"
           >
             {delivery.confirm.label}
           </Button>
+          <ActionFailed message={delivery.confirm.failed} />
           {delivery.confirm.deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {delivery.confirm.deadline}

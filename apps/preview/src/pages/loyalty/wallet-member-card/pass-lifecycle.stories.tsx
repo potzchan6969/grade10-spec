@@ -43,7 +43,7 @@ const CHECKS: readonly Check[] = [
   (canvas) => {
     expect(
       canvas.getByRole("button", { name: "Add to Google Wallet" }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     expect(
       canvas.getByRole("button", { name: "Add to Apple Wallet" }),
     ).toBeEnabled();

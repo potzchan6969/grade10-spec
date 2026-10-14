@@ -64,6 +64,10 @@ type MemberCardProps = {
   state: MemberCardState;
   /** Asks the consumer for a fresh token; nothing changes until one arrives. */
   onRefresh: () => void;
+  /** A fresh token is on its way; the refresh control shows busy and the card stays shown. */
+  refreshing?: boolean;
+  /** Why the last refresh was refused, shown under the refresh control. */
+  refreshFailed?: string;
   className?: string;
 };
 
@@ -84,6 +88,8 @@ function MemberCard({
   fallbackCode,
   state,
   onRefresh,
+  refreshing = false,
+  refreshFailed,
   className,
 }: MemberCardProps) {
   const spent = state.status !== "live";
@@ -114,7 +120,10 @@ function MemberCard({
           <HStack align="center" gap="sm" justify="space-between">
             <CardState copy={copy} state={state} />
             <Button
-              onClick={onRefresh}
+              loading={refreshing}
+              onClick={() => {
+                if (!refreshing) onRefresh();
+              }}
               size="sm"
               type="button"
               variant="outline"
@@ -122,6 +131,17 @@ function MemberCard({
               {copy.refresh}
             </Button>
           </HStack>
+          {refreshFailed ? (
+            <Text
+              as="p"
+              data-slot="member-card-refresh-failed"
+              role="alert"
+              size="sm"
+              tone="error"
+            >
+              {refreshFailed}
+            </Text>
+          ) : null}
         </VStack>
       </CardContent>
     </Card>

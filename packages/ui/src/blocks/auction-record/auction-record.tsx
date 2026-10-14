@@ -12,7 +12,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Gavel } from "@phosphor-icons/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   REVEAL_REDUCED_MOTION_CLASS,
   revealStaggerDelayMs,
@@ -28,6 +28,8 @@ const ENTER_TRANSITION_CLASS =
   "transition-[opacity,transform] duration-[250ms] motion-reduce:transition-none";
 const ENTER_HIDDEN_CLASS = "translate-y-1 opacity-0";
 const ENTER_VISIBLE_CLASS = "translate-y-0 opacity-100";
+
+const NO_ROWS: readonly AuctionRecordRowProps[] = [];
 
 /** Exit: slightly quicker than enter so Unwatch feels decisive. */
 const ROW_EXIT_MS = 200;
@@ -62,6 +64,76 @@ function useIsMdUp() {
 
 function rowKey(item: AuctionRecordRowProps) {
   return item.id ?? item.href ?? item.title;
+}
+
+type LeavingRow = {
+  item: AuctionRecordRowProps;
+  index: number;
+  since: number;
+};
+
+/**
+ * Keeps a row the collector unwatched on screen, collapsing, for
+ * `ROW_EXIT_MS` after the application drops it. The row leaves as the result
+ * of its removal, so a refused Unwatch leaves it in place and pressable.
+ */
+function useLeavingRows(rows: readonly AuctionRecordRowProps[]) {
+  const [unwatched, setUnwatched] = useState<ReadonlySet<string>>(new Set());
+  const [previous, setPrevious] = useState(rows);
+  const [leaving, setLeaving] = useState<ReadonlyMap<string, LeavingRow>>(
+    new Map(),
+  );
+
+  if (previous !== rows) {
+    const live = new Set(rows.map(rowKey));
+    const next = new Map([...leaving].filter(([id]) => !live.has(id)));
+    const departed = new Set<string>();
+    previous.forEach((item, index) => {
+      const id = rowKey(item);
+      if (live.has(id) || !unwatched.has(id)) return;
+      departed.add(id);
+      if (!prefersReducedMotion()) {
+        next.set(id, { item, index, since: performance.now() });
+      }
+    });
+    setPrevious(rows);
+    setLeaving(next);
+    if (departed.size > 0) {
+      setUnwatched(new Set([...unwatched].filter((id) => !departed.has(id))));
+    }
+  }
+
+  useEffect(() => {
+    if (leaving.size === 0) return;
+    const earliest = Math.min(...[...leaving.values()].map((row) => row.since));
+    const timerId = window.setTimeout(
+      () => {
+        const now = performance.now();
+        setLeaving(
+          (current) =>
+            new Map(
+              [...current].filter(([, row]) => now - row.since < ROW_EXIT_MS),
+            ),
+        );
+      },
+      Math.max(0, earliest + ROW_EXIT_MS - performance.now()),
+    );
+    return () => window.clearTimeout(timerId);
+  }, [leaving]);
+
+  const displayRows: { item: AuctionRecordRowProps; leaving: boolean }[] =
+    rows.map((item) => ({ item, leaving: false }));
+  for (const row of [...leaving.values()].sort((a, b) => a.index - b.index)) {
+    displayRows.splice(Math.min(row.index, displayRows.length), 0, {
+      item: row.item,
+      leaving: true,
+    });
+  }
+
+  const markUnwatched = (id: string) =>
+    setUnwatched((current) => new Set(current).add(id));
+
+  return { displayRows, markUnwatched };
 }
 
 function enterStyle(staggerIndex: number, revealed: boolean) {
@@ -134,14 +206,14 @@ function AuctionRecordEmptyBody({
  * matches Figma `Auction Watchlist` (`6507:5463`). Site chrome stays outside,
  * and so does the `<Toast />` the application mounts at its root.
  *
- * Motion: title → header → rows stagger in; Unwatch collapses the row before
- * the application is told to drop it.
+ * Motion: title → header → rows stagger in; an unwatched row collapses once
+ * the application drops it, and stays while its Unwatch is pending.
  */
 function AuctionRecord({
   copy,
   breadcrumbs,
-  watchingItems = [],
-  biddingItems = [],
+  watchingItems = NO_ROWS,
+  biddingItems = NO_ROWS,
   onBrowseCatalogue,
   className,
 }: AuctionRecordProps) {
@@ -151,57 +223,12 @@ function AuctionRecord({
     () => [...biddingItems, ...watchingItems],
     [biddingItems, watchingItems],
   );
-  const isEmpty = rows.length === 0;
-
-  const [exitingIds, setExitingIds] = useState(() => new Set<string>());
-  const exitTimersRef = useRef<Map<string, number>>(new Map());
-
-  useEffect(() => {
-    return () => {
-      for (const timerId of exitTimersRef.current.values()) {
-        window.clearTimeout(timerId);
-      }
-      exitTimersRef.current.clear();
-    };
-  }, []);
-
-  // Drop exit bookkeeping once the consumer removed the row (or restored it).
-  useEffect(() => {
-    const liveIds = new Set(rows.map(rowKey));
-    setExitingIds((prev) => {
-      let changed = false;
-      const next = new Set<string>();
-      for (const id of prev) {
-        if (liveIds.has(id)) {
-          next.add(id);
-        } else {
-          changed = true;
-          const timerId = exitTimersRef.current.get(id);
-          if (timerId != null) {
-            window.clearTimeout(timerId);
-            exitTimersRef.current.delete(id);
-          }
-        }
-      }
-      return changed ? next : prev;
-    });
-  }, [rows]);
+  const { displayRows, markUnwatched } = useLeavingRows(rows);
+  const isEmpty = displayRows.length === 0;
 
   const requestUnwatch = (item: AuctionRecordRowProps) => {
-    const id = rowKey(item);
-    if (exitingIds.has(id) || !item.onWatchToggle) return;
-
-    if (prefersReducedMotion()) {
-      item.onWatchToggle();
-      return;
-    }
-
-    setExitingIds((prev) => new Set(prev).add(id));
-    const timerId = window.setTimeout(() => {
-      exitTimersRef.current.delete(id);
-      item.onWatchToggle?.();
-    }, ROW_EXIT_MS);
-    exitTimersRef.current.set(id, timerId);
+    markUnwatched(rowKey(item));
+    item.onWatchToggle?.();
   };
 
   return (
@@ -268,7 +295,7 @@ function AuctionRecord({
               <TableCell className={AUCTION_RECORD_COLUMNS.actions} />
             </TableHeader>
             <TableBody className={AUCTION_RECORD_TABLE_LAYOUT.body}>
-              {rows.map((item, index) => {
+              {displayRows.map(({ item, leaving }, index) => {
                 const id = rowKey(item);
                 return (
                   <AuctionRecordRow
@@ -283,7 +310,7 @@ function AuctionRecord({
                       ...item.copy,
                     }}
                     enterStyle={enterStyle(index + 2, revealed)}
-                    exiting={exitingIds.has(id)}
+                    exiting={leaving}
                     exitEase={ROW_EXIT_EASE}
                     exitMs={ROW_EXIT_MS}
                     onWatchToggle={
@@ -303,7 +330,7 @@ function AuctionRecord({
           className="flex w-full flex-col gap-3"
           data-slot="auction-record-cards"
         >
-          {rows.map((item, index) => {
+          {displayRows.map(({ item, leaving }, index) => {
             const id = rowKey(item);
             return (
               <AuctionRecordRow
@@ -318,7 +345,7 @@ function AuctionRecord({
                   ...item.copy,
                 }}
                 enterStyle={enterStyle(index + 2, revealed)}
-                exiting={exitingIds.has(id)}
+                exiting={leaving}
                 exitEase={ROW_EXIT_EASE}
                 exitMs={ROW_EXIT_MS}
                 factLabels={{
