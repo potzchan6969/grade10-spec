@@ -946,7 +946,9 @@ function CartDrawerFooter({
     )
       return;
     if (checkoutPending !== undefined) {
-      Promise.resolve(onCheckout?.()).catch(reportError);
+      Promise.resolve(onCheckout?.()).catch((error: unknown) =>
+        globalThis.reportError(error),
+      );
       return;
     }
     setIsRedirecting(true);
