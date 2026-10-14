@@ -10,7 +10,7 @@
 - customer(signed in) watches `<lot_1>` with email alerts on.
 - The account's Auction email alerts master is on.
 - The clock is moved to `<moment>`.
-- customer(signed out in this browser) has received Bidding has opened for `<lot_1>`.
+- customer(signed out in this browser) watches `<lot_1>` with email alerts on, and the clock is moved to its scheduled start.
 - customer(signed in) watches `<lot_1>`, with alerts as the row gives.
 - The clock is moved past `<lot_1>`'s scheduled start.
 - `<lot_1>` was called off after Bidding opens in 24 hours was sent.
@@ -21,13 +21,23 @@
 | --- | --- |
 | `<lot_1>` | A published lot whose bidding has not started |
 | `<opening warning>` | 86400s (24 hours) before the scheduled start |
+
 | Moment | Letter |
+| --- | --- |
 | `<opening warning>` | Bidding opens in 24 hours |
 | The scheduled start | Bidding has opened |
+
+| Item | Value |
+| --- | --- |
 | `<lot_1>` | A lot taking bids, watched by this collector with email alerts on |
+
 | Lot email alerts | Auction email alerts master |
+| --- | --- |
 | Off | On |
 | On | Off |
+
+| Item | Value |
+| --- | --- |
 | `<lot_1>` | A lot called off before its scheduled start |
 
 ### Route
@@ -74,11 +84,16 @@
 | `<lot_3>` | A lot in extended bidding |
 | `<lot_2>` | A lot taking bids, not in extended bidding |
 | `<closing warning>` | 86400s (24 hours) before the scheduled close |
+
 | Relationship | Letters |
+| --- | --- |
 | Watch only | One Bidding closes in 24 hours |
 | Bid, not watched before | One Bidding closes in 24 hours |
 | Watched, then bid | One Bidding closes in 24 hours |
 | Bid, then unwatched, alerts still on | One Bidding closes in 24 hours |
+
+| Item | Value |
+| --- | --- |
 | `<lot_3>` | A lot taking bids, inside its last minutes before the scheduled close |
 | `<late bid>` | The next valid bid, placed inside the extension window |
 
@@ -250,9 +265,11 @@
 | --- | --- |
 | `<lot_7>` | A lot taking bids, led by customer B, about to close |
 | `<winning bid>` | customer B's winning bid at the close |
+
+| Lot email alerts | Auction email alerts master |
+| --- | --- |
 | Off | On |
 | On | Off |
-| Field | Value |
 
 ### Route
 
