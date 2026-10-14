@@ -83,7 +83,7 @@ Frontend work against the contracts and fixtures, never a running backend.
 
 ## 8. Launch dependencies (grade10) (owner: @htonyl)
 
-- [ ] 8.1 Write the launch check first, as a staging script: a USD card rule is present, no listing holds HKD or JPY, and the verified bar reads 1500000 minor units in USD (`winner-order-SC-297`, `grade10-admin-auction-listing-SC-163`)
+- [x] 8.1 Write the launch check first, as a staging script: a USD card rule is present, no listing holds HKD or JPY, and the verified bar reads 1500000 minor units in USD (`winner-order-SC-297`, `grade10-admin-auction-listing-SC-163`)
 - [ ] 8.2 Finance saves the USD card fee rule in Payment Settings, recorded 2026-10-13 and due before the change goes live in production (`grade10-admin-auction-payment-settings-SC-15`)
 - [ ] 8.3 Run the one-time lot currency overwrite on production data, recorded 2026-10-13 and run once before the change goes live (`grade10-admin-auction-listing-SC-162`)
 - [ ] 8.4 Verify: the launch check passes on production
