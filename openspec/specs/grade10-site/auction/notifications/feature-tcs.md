@@ -378,7 +378,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out in this browser) has received Bidding has opened for `<lot_1>`.
+* customer(signed out in this browser) watches `<lot_1>` with email alerts on.
+* The clock is moved to the scheduled start of `<lot_1>`.
 
 **Test data:**
 
@@ -388,7 +389,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the letter.
+1. Read the mail sent to the collector's registered email and open the Bidding has opened letter.
 2. Click the listing action.
 3. Back in the letter, click Manage alerts.
 4. Complete sign-in from the offer.
