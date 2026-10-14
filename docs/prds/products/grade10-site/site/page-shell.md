@@ -29,10 +29,11 @@ so a collector can reach checkout without returning to Store
 store; auction-first chrome has none
 
 **Copyright** — the footer's bottom bar reads "© 2026 Grade10. All rights
-reserved." in every language
+reserved." in every language; on ZZZ, "© 2026 ZZZ. All rights reserved."
 
-**Email footers** — every email Grade10 sends ends its footer with the same
-line, "© 2026 Grade10. All rights reserved."
+**Email footers** — every email ends its footer with the same line, naming
+the brand that sent it: "© 2026 Grade10. All rights reserved." or "© 2026
+ZZZ. All rights reserved."
 
 ## Session
 
@@ -144,5 +145,5 @@ holds - [Cart Drawer](/p/grade10-site/store/cart)
 | Profile in the menu | Decided | Profile joins first wherever the account page is carried ([Carried Surfaces](/p/grade10-site/site/carried-surfaces)), so it shows only where that page does and `add-account-profile` opens it with the page. The header is the one route to the account page that stays put on every surface. Rejected never offering Profile, which leaves the Account breadcrumbs on My Auctions and the order pages as the only way in. | Product (@tangconst) |
 | Signed-in email | Decided | The menu shows the sign-in email above the items, in place of an "Account" heading, with the same small initial avatar the bidding panel uses for that address. | Product |
 | Membership | Decided | Membership joins after My Auctions wherever the membership page at `/membership` is carried ([Carried Surfaces](/p/grade10-site/site/carried-surfaces)), by the rule Profile follows, so the menu never offers an address a lane withholds. A later change offers it. Rejected waiting for the loyalty programme's own launch, which leaves two rules for two gated account pages. | Product (@tangconst) |
-| Copyright line | Decided | Every footer, on the site and in every email, reads "© 2026 Grade10. All rights reserved." — the same words and a fixed year in every language. Rejected a year that follows the clock and a translated line. | Product |
+| Copyright line | Decided | Every footer, on the site and in every email, reads "© 2026 Grade10. All rights reserved." — the same words and a fixed year in every language. A ZZZ footer names ZZZ in the same words. Rejected a year that follows the clock, a translated line, and Grade10 on a ZZZ footer. | Product |
 :::
