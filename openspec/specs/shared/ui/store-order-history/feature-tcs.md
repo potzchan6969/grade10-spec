@@ -206,7 +206,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Variant | Label supplied |
+| `<variant>` | `<label>` |
 | --- | --- |
 | processing | `Preparing` |
 | shipped | `On its way` |
@@ -218,13 +218,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. In the Controls panel, set `status` to the row's Variant.
-2. In the Controls panel, set `children` to the row's Label supplied.
+1. In the Controls panel, set `status` to `<variant>`.
+2. In the Controls panel, set `children` to `<label>`.
 3. Read the badge.
 
 **Expected Results:**
 
-* Step 3: the badge shows the row's Label supplied, in the row's Variant style.
+* Step 3: the badge shows `<label>`, in `<variant>` style.
 * Step 3: the badge shows no words besides the supplied label.
 
 <!-- trace:case id=g10.shared-store-order-history.TC-hyr rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->

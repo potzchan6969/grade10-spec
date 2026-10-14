@@ -26,12 +26,20 @@
 * **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
-Signed in as an operator who can open <grade10 admin console url> and <a second admin console url>.
+Signed in as an operator who can open `<grade10 admin console url>` and `<a second admin console url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a second admin console url | The other application admin console URL used for the shared-control comparison in the test environment; bind its URL only |
+| a shared control kind | The same shared control kind rendered in both admin consoles for this comparison; bind its component export only |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url> and note how <a shared control kind> is arranged.
-2. Navigate to <a second admin console url> and check the same kind of control.
+1. Navigate to `<grade10 admin console url>` and note how `<a shared control kind>` is arranged.
+2. Navigate to `<a second admin console url>` and check the same kind of control.
 
 **Expected Results:**
 
@@ -56,9 +64,16 @@ Signed in as an operator who can open <grade10 admin console url> and <a second 
 **Pre-conditions:**
 An admin console renders a component that customer surfaces also render.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a shared customer component | The shared customer component also shown in this admin console; bind its component export only |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin console url> on a surface that shows <a shared customer component>.
+1. Navigate to `<grade10 admin console url>` on a surface that shows `<a shared customer component>`.
 2. Check that component against the console around it.
 
 **Expected Results:**
@@ -82,11 +97,18 @@ An admin console renders a component that customer surfaces also render.
 * **Trace:** shared-console-visual-standard-US-01
 
 **Pre-conditions:**
-<The console read endpoint> is mocked to refuse the request.
+`<The console read endpoint>` is mocked to refuse the request.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| The console read endpoint | The console read endpoint used by this surface in the test environment; bind its endpoint URL only |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url> on a surface that reads that endpoint.
+1. Navigate to `<grade10 admin console url>` on a surface that reads that endpoint.
 2. Check the loading, refused, and empty presentations.
 
 **Expected Results:**
@@ -120,10 +142,17 @@ An admin console renders a component that customer surfaces also render.
 **Pre-conditions:**
 Signed in as an operator who can open both brands' admin consoles.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| zzz admin console url | The ZZZ admin console URL, on a different brand from Grade10 in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin console url> and note visual identity.
-2. Navigate to <zzz admin console url> on the same console surface and note visual identity.
+1. Navigate to `<grade10 admin console url>` and note visual identity.
+2. Navigate to `<zzz admin console url>` on the same console surface and note visual identity.
 
 **Expected Results:**
 
@@ -146,12 +175,19 @@ Signed in as an operator who can open both brands' admin consoles.
 * **Trace:** shared-console-visual-standard-US-02
 
 **Pre-conditions:**
-Signed in as an operator on <grade10 admin console url>.
+Signed in as an operator on `<grade10 admin console url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a brand visual value | The brand-owned visual value changed for the comparison; bind its configured value only |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url>.
-2. Check which mechanism sets <a brand visual value>.
+1. Navigate to `<grade10 admin console url>`.
+2. Check which mechanism sets `<a brand visual value>`.
 
 **Expected Results:**
 

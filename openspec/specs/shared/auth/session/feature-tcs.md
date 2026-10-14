@@ -32,7 +32,13 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -60,7 +66,13 @@
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
+* customer is not signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -116,7 +128,13 @@
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
+* customer is not signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -152,11 +170,18 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The Grade10 public auction URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <grade10 auction url>.
+1. Open `<grade10 auction url>`.
 
 **Expected Results:**
 
@@ -180,11 +205,18 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <zzz store url>.
+1. Open `<zzz store url>`.
 
 **Expected Results:**
 
@@ -207,12 +239,19 @@
 
 **Pre-conditions:**
 
-* admin is signed in on <grade10 admin console url> and has proved the second factor.
+* admin is signed in on `<grade10 admin console url>` and has proved the second factor.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| zzz admin console url | The ZZZ admin console URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url>.
-2. Navigate to <zzz admin console url>.
+1. Navigate to `<grade10 admin console url>`.
+2. Navigate to `<zzz admin console url>`.
 
 **Expected Results:**
 
@@ -245,7 +284,13 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -273,7 +318,13 @@
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
+* customer is not signed in on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -302,8 +353,14 @@
 
 **Pre-conditions:**
 
-* customer is not signed in on <grade10 store url>.
+* customer is not signed in on `<grade10 store url>`.
 * Analytics events were recorded against this device while unsigned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -341,18 +398,22 @@
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A open on <grade10 store url>.
+* customer is signed out, with tab A open on `<grade10 store url>`.
 * Tab A is in the background.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> in tab B.
+1. Sign in as `<collector email>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
@@ -380,17 +441,22 @@
 **Pre-conditions:**
 
 * customer is signed out.
-* Tabs A and B are open on <grade10 store url>, tab C on <grade10 auction url>.
+* Tabs A and B are open on `<grade10 store url>`, tab C on `<grade10 auction url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 auction url | The Grade10 public auction URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> in tab D.
+1. Sign in as `<collector email>` in tab D.
 2. Return to tabs A, B and C in turn.
 
 **Expected Results:**
@@ -416,17 +482,22 @@
 **Pre-conditions:**
 
 * customer is signed out on both brands.
-* Tab A is open on <zzz store url>.
+* Tab A is open on `<zzz store url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> on <grade10 store url> in tab B.
+1. Sign in as `<collector email>` on `<grade10 store url>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
@@ -452,17 +523,21 @@
 **Pre-conditions:**
 
 * customer is signed out on a phone and on a desktop.
-* The phone has a tab open on <grade10 store url>.
+* The phone has a tab open on `<grade10 store url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> on the desktop.
+1. Sign in as `<collector email>` on the desktop.
 2. Return to the phone's tab.
 
 **Expected Results:**
@@ -489,23 +564,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A open on <grade10 store url>.
+* customer is signed out, with tab A open on `<grade10 store url>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 | `<tab state>` | How tab A is left |
 | --- | --- |
-| back-forward cache | In tab A, leave <grade10 store url> by navigating away, then use Back. Tab A stays open. Do not use reload. |
+| back-forward cache | In tab A, leave `<grade10 store url>` by navigating away, then use Back. Tab A stays open. Do not use reload. |
 | discarded | Tab A stays in the tab strip. The browser discards its page process (Chrome: chrome://discards). Click that same tab. Do not close it. |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Leave tab A in <tab state>.
-2. Sign in as <collector email> in tab B.
+1. Leave tab A in `<tab state>`.
+2. Sign in as `<collector email>` in tab B.
 3. Return to tab A.
 
 **Expected Results:**
@@ -530,18 +609,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with window A on <grade10 store url> beside window B on the same site.
+* customer is signed out, with window A on `<grade10 store url>` beside window B on the same site.
 * Window A stays visible and untouched throughout.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> in window B.
+1. Sign in as `<collector email>` in window B.
 2. Watch window A without touching it.
 
 **Expected Results:**
@@ -566,17 +649,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A open on <grade10 page naming no person>.
+* customer is signed out, with tab A open on `<grade10 page naming no person>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 page naming no person | A public Grade10 page that names no signed-in person in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> in tab B.
+1. Sign in as `<collector email>` in tab B.
 2. Return to tab A.
 3. Open the cart from tab A.
 
@@ -639,14 +726,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A open on <grade10 store url>.
-* An expired sign-in link for <collector email> is to hand.
+* customer is signed out, with tab A open on `<grade10 store url>`.
+* An expired sign-in link for `<collector email>` is to hand.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -678,19 +769,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in as <collector email>, with tab A open on <grade10 store url>.
-* Tab A is under <read failure>.
+* customer is signed in as `<collector email>`, with tab A open on `<grade10 store url>`.
+* Tab A is under `<read failure>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
 
 | `<read failure>` | How it is produced |
 | --- | --- |
 | session read errors | the session read is mocked to return a 500 for tab A |
 | device offline | network conditions are manipulated to take tab A offline |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -719,18 +814,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin is signed out, with tab A open on <grade10 admin url>.
+* admin is signed out, with tab A open on `<grade10 admin url>`.
 * No second factor is proved in this browser.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | an address with a console account |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, an address with a console account |
+| grade10 admin url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <operator email> in tab B. Do not enter a TOTP or backup code in any tab.
+1. Sign in as `<operator email>` in tab B. Do not enter a TOTP or backup code in any tab.
 2. Return to tab A.
 
 **Expected Results:**
@@ -765,8 +864,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`, with tab A open on `<grade10 store url>`.
 * Tab A is in the background.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -796,8 +901,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`, with tab A open on `<grade10 store url>`.
 * The session is seeded to run out while tab A is in the background.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -826,14 +937,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url> with <listing> in their cart.
-* Tab A is open on <grade10 store url>, showing the cart count.
+* customer is signed in on `<grade10 store url>` with `<listing>` in their cart.
+* Tab A is open on `<grade10 store url>`, showing the cart count.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing>` | a card listing in the collector's cart |
+| listing | a card listing in the collector's cart |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -862,8 +977,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>.
-* Tabs A and B are open on <grade10 store url>, tab C on <grade10 auction url>.
+* customer is signed in on `<grade10 store url>`.
+* Tabs A and B are open on `<grade10 store url>`, tab C on `<grade10 auction url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The Grade10 public auction URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -892,17 +1014,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed out, with tab A open on <grade10 store url>, in the background.
+* customer is signed out, with tab A open on `<grade10 store url>`, in the background.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | collector@example.com | an address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector email> in tab B.
+1. Sign in as `<collector email>` in tab B.
 2. Sign out in tab B.
 3. Return to tab A.
 
@@ -929,7 +1055,13 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed in as the same person on a phone and on a desktop.
-* The phone has a tab open on <grade10 store url>.
+* The phone has a tab open on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -958,17 +1090,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url> and on <zzz store url> in one browser.
-* Tab A is open on <zzz store url>.
+* customer is signed in on `<grade10 store url>` and on `<zzz store url>` in one browser.
+* Tab A is open on `<zzz store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign out of <grade10 store url> in tab B.
+1. Sign out of `<grade10 store url>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
 
-* Tab A still shows the collector signed in on <zzz store url>.
+* Tab A still shows the collector signed in on `<zzz store url>`.
 
 <!-- trace:case id=g10.shared-session.TC-3z8 rev=1 covers=g10.shared-session.SC-n9f,g10.shared-session.SC-lp3,g10.shared-session.SC-etz,g10.shared-session.SC-bc8,g10.shared-session.SC-35o -->
 ### shared-auth-session-US5-TC8-1: Nothing is announced when the session ends
@@ -988,7 +1127,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
+* customer is signed in on `<grade10 store url>`, with tab A open on `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1018,13 +1163,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 store url>, with tab A open on <signed-in-only page>.
+* customer is signed in on `<grade10 store url>`, with tab A open on `<signed-in-only page>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<signed-in-only page>` | the collector's orders list, which only they may read |
+| signed-in-only page | the collector's orders list, which only they may read |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1064,17 +1213,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url>, with tab A open on <grade10 store url>, in the background.
+* customer A is signed in on `<grade10 store url>`, with tab A open on `<grade10 store url>`, in the background.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab B.
+1. Sign in as `<collector B email>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
@@ -1102,29 +1255,34 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url>, with tab A open on <per-person surface>.
+* customer A is signed in on `<grade10 store url>`, with tab A open on `<per-person surface>`.
 * collector A and collector B each hold different items on that surface.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector B email | collector-b@example.com | a second address with an account |
 
 | `<per-person surface>` | What it holds |
 | --- | --- |
-| the cart | <listing>, which only collector A has added |
-| the watchlist | a lot only collector A is watching |
+| the cart | `<listing>`, which only collector A has added |
+| the watchlist | a listing only collector A is watching |
 | the orders list | an order only collector A has placed |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| listing | The card listing present only in collector A’s cart in this fixture; bind its listing identity only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab B.
+1. Sign in as `<collector B email>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
 
-* <per-person surface> shows collector B's own items.
+* `<per-person surface>` shows collector B's own items.
 * It shows none of collector A's.
 
 <!-- trace:case id=g10.shared-session.TC-7oa rev=1 covers=g10.shared-session.SC-pyv,g10.shared-session.SC-4mx,g10.shared-session.SC-ekp -->
@@ -1145,26 +1303,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url> with <listing> in their cart.
-* Tab A is open on <grade10 store url>, showing the cart count.
+* customer A is signed in on `<grade10 store url>` with `<listing>` in their cart.
+* Tab A is open on `<grade10 store url>`, showing the cart count.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing | a card listing only collector A has added | · |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<listing>` | a card listing only collector A has added |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab B.
+1. Sign in as `<collector B email>` in tab B.
 2. Return to tab A.
 3. Open the cart in tab A.
 
 **Expected Results:**
 
-* <listing> is in no cart tab A shows.
-* At no point does tab A show <listing> under collector B.
+* `<listing>` is in no cart tab A shows.
+* At no point does tab A show `<listing>` under collector B.
 
 <!-- trace:case id=g10.shared-session.TC-d1l rev=1 covers=g10.shared-session.SC-pyv,g10.shared-session.SC-4mx,g10.shared-session.SC-ekp -->
 ### shared-auth-session-US6-TC4-1: Per-person data still loading when the person changes
@@ -1184,26 +1346,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url>, with tab A open on the cart.
+* customer A is signed in on `<grade10 store url>`, with tab A open on the cart.
 * Tab A's cart read is held open by manipulated network conditions.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing | a card listing only collector A has added | · |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<listing>` | a card listing only collector A has added |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab B.
+1. Sign in as `<collector B email>` in tab B.
 2. Release collector A's held cart read.
 3. Return to tab A.
 
 **Expected Results:**
 
 * Tab A shows collector B's cart.
-* <listing> never appears in it.
+* `<listing>` never appears in it.
 
 <!-- trace:case id=g10.shared-session.TC-iip rev=1 covers=g10.shared-session.SC-pyv,g10.shared-session.SC-4mx,g10.shared-session.SC-ekp -->
 ### shared-auth-session-US6-TC5-1: Same person signing in again keeps the tab theirs
@@ -1223,25 +1389,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url> with <listing> in their cart.
-* Tab A is open on <grade10 store url>, in the background.
+* customer A is signed in on `<grade10 store url>` with `<listing>` in their cart.
+* Tab A is open on `<grade10 store url>`, in the background.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing | a card listing only collector A has added | · |
+| collector A email | collector-a@example.com | collector A's address |
+
 | Field | Value |
 | --- | --- |
-| `<listing>` | a card listing only collector A has added |
-| `<collector A email>` | collector-a@example.com, collector A's address |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector A email> again in tab B.
+1. Sign in as `<collector A email>` again in tab B.
 2. Return to tab A.
 
 **Expected Results:**
 
 * Tab A still names collector A as signed in.
-* <listing> is still in their cart.
+* `<listing>` is still in their cart.
 
 <!-- trace:case id=g10.shared-session.TC-l8l rev=1 covers=g10.shared-session.SC-pyv,g10.shared-session.SC-4mx,g10.shared-session.SC-ekp -->
 ### shared-auth-session-US6-TC6-1: Every open tab of the brand shows the new person
@@ -1261,18 +1431,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url>.
-* Tabs A and B are open on <grade10 store url>, tab C on <grade10 auction url>.
+* customer A is signed in on `<grade10 store url>`.
+* Tabs A and B are open on `<grade10 store url>`, tab C on `<grade10 auction url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 auction url | The Grade10 public auction URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab D.
+1. Sign in as `<collector B email>` in tab D.
 2. Return to tabs A, B and C in turn.
 
 **Expected Results:**
@@ -1299,17 +1474,21 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer A is signed in on a phone and on a desktop.
-* The phone has a tab open on <grade10 store url>.
+* The phone has a tab open on `<grade10 store url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> on the desktop.
+1. Sign in as `<collector B email>` on the desktop.
 2. Return to the phone's tab.
 
 **Expected Results:**
@@ -1334,18 +1513,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url>, with tab A open on <collector A order>.
+* customer A is signed in on `<grade10 store url>`, with tab A open on `<collector A order>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector A order | the page of an order only collector A placed | · |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector A order>` | the page of an order only collector A placed |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab B.
+1. Sign in as `<collector B email>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
@@ -1370,17 +1553,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
+* customer A is signed in on `<grade10 store url>`, with tab A open on `<grade10 store url>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector B email | collector-b@example.com | a second address with an account |
+
 | Field | Value |
 | --- | --- |
-| `<collector B email>` | collector-b@example.com, a second address with an account |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Sign in as <collector B email> in tab B.
+1. Sign in as `<collector B email>` in tab B.
 2. Return to tab A.
 
 **Expected Results:**
@@ -1415,26 +1602,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin is signed out on <store url> and on <console url>.
-* <operator account> holds console access.
-* Tab B is open on <console url>, in the background.
+* admin is signed out on `<store url>` and on `<console url>`.
+* `<operator account>` holds console access.
+* Tab B is open on `<console url>`, in the background.
 
 **Test data:**
 
-| Brand | <store url> | <console url> | <operator account> |
+| Brand | `<store url>` | `<console url>` | `<operator account>` |
 | --- | --- | --- | --- |
-| Grade10 | <grade10 store url> | <grade10 admin console url> | An account holding console access on Grade10 |
-| ZZZ | <zzz store url> | <zzz admin console url> | An account holding console access on ZZZ |
+| Grade10 | `<grade10 store url>` | `<grade10 admin console url>` | An account holding console access on Grade10 |
+| ZZZ | `<zzz store url>` | `<zzz admin console url>` | An account holding console access on ZZZ |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| zzz admin console url | The ZZZ admin console URL, on a different brand from Grade10 in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. In tab A, sign in on <store url> as <operator account>.
+1. In tab A, sign in on `<store url>` as `<operator account>`.
 2. Return to tab B.
 3. Reload tab B.
 
 **Expected Results:**
 
-* Step 1 shows <operator account> signed in on the site.
+* Step 1 shows `<operator account>` signed in on the site.
 * Step 2 shows tab B still signed out of the console, unreloaded.
 * Step 3 shows the console's sign-in page, not the console.
 
@@ -1455,20 +1649,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin is signed out on <grade10 store url> and on <grade10 admin console url>.
-* <operator account> holds console access.
-* Tab B is open on <grade10 store url>, in the background.
+* admin is signed out on `<grade10 store url>` and on `<grade10 admin console url>`.
+* `<operator account>` holds console access.
+* Tab B is open on `<grade10 store url>`, in the background.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. In tab A, sign in on <grade10 admin console url> as <operator email>, entering <operator TOTP code>.
+1. In tab A, sign in on `<grade10 admin console url>` as `<operator email>`, entering `<operator TOTP code>`.
 2. Return to tab B.
 3. Reload tab B.
 
@@ -1495,28 +1695,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <collector account> is signed in on <grade10 store url> in tab A, in the background, with <cart item> in its cart.
+* `<collector account>` is signed in on `<grade10 store url>` in tab A, in the background, with `<cart item>` in its cart.
 * admin is signed out of the console.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector account | A customer account holding `user` only | · |
+| cart item | A card in `<collector account>`'s cart | · |
+| operator account | A different account holding console access | · |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<collector account>` | A customer account holding `user` only |
-| `<cart item>` | A card in <collector account>'s cart |
-| `<operator account>` | A different account holding console access |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. In tab B, sign in on <grade10 admin console url> as <operator email>, entering <operator TOTP code>.
+1. In tab B, sign in on `<grade10 admin console url>` as `<operator email>`, entering `<operator TOTP code>`.
 2. Return to tab A.
 
 **Expected Results:**
 
-* Step 1 opens the console as <operator account>.
-* Step 2 shows tab A still naming <collector account>, with <cart item> in its cart and nothing of <operator account>, unreloaded.
+* Step 1 opens the console as `<operator account>`.
+* Step 2 shows tab A still naming `<collector account>`, with `<cart item>` in its cart and nothing of `<operator account>`, unreloaded.
 
 ### shared-auth-session-US7-TC4-1: A session that runs out leaves the other surface signed in
 
@@ -1537,15 +1742,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> is signed in on <grade10 store url> in tab A and on <grade10 admin console url> in tab B, with the second factor proved.
-* <expiring surface> has run out; the other surface's session has not.
+* `<operator account>` is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
+* `<expiring surface>` has run out; the other surface's session has not.
 
 **Test data:**
 
-| <expiring surface> | Tab that still shows <operator account> |
+| `<expiring surface>` | Tab that still shows `<operator account>` |
 | --- | --- |
 | The site | Tab B, the console |
 | The console | Tab A, the site |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1554,8 +1764,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The tab on <expiring surface> shows nobody signed in.
-* The other tab still shows <operator account> signed in, unreloaded.
+* The tab on `<expiring surface>` shows nobody signed in.
+* The other tab still shows `<operator account>` signed in, unreloaded.
 
 ### shared-auth-session-US7-TC5-1: Recent site sign-in does not satisfy the console's recent sign-in
 
@@ -1574,18 +1784,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> holds console access and has no second factor.
-* <operator account> is signed in on <grade10 admin console url> in tab A, with a console sign-in older than <recent sign-in window>.
+* `<operator account>` holds console access and has no second factor.
+* `<operator account>` is signed in on `<grade10 admin console url>` in tab A, with a console sign-in older than `<recent sign-in window>`.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| recent sign-in window | 15 minutes | the stated limit |
+
 | Field | Value |
 | --- | --- |
-| `<recent sign-in window>` | 15 minutes, the stated limit |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. In tab B, sign in on <grade10 store url> as <operator account>.
+1. In tab B, sign in on `<grade10 store url>` as `<operator account>`.
 2. In tab A, set up a second factor on the console.
 
 **Expected Results:**
@@ -1610,21 +1826,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> is signed in on <grade10 store url> in tab A.
+* `<operator account>` is signed in on `<grade10 store url>` in tab A.
 * No second factor is proved in this browser.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. In tab B, sign in on <grade10 admin console url> as <operator email>. Enter no TOTP or backup code.
+1. In tab B, sign in on `<grade10 admin console url>` as `<operator email>`. Enter no TOTP or backup code.
 2. Read tab B.
-3. In tab B, enter <operator TOTP code>.
+3. In tab B, enter `<operator TOTP code>`.
 
 **Expected Results:**
 
@@ -1648,27 +1870,33 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> is signed in on <grade10 store url> in tab C.
-* admin is signed out of the console, with tab A open on <grade10 admin console url>, in the background.
+* `<operator account>` is signed in on `<grade10 store url>` in tab C.
+* admin is signed out of the console, with tab A open on `<grade10 admin console url>`, in the background.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. In tab B, sign in on <grade10 admin console url> as <operator email>, entering <operator TOTP code>.
+1. In tab B, sign in on `<grade10 admin console url>` as `<operator email>`, entering `<operator TOTP code>`.
 2. Return to tab A.
 3. Return to tab C.
 
 **Expected Results:**
 
 * Step 1 opens the console.
-* Step 2 shows tab A showing <operator account> signed in on the console, unreloaded.
-* Step 3 shows tab C unchanged, still showing <operator account> signed in on the site.
+* Step 2 shows tab A showing `<operator account>` signed in on the console, unreloaded.
+* Step 3 shows tab C unchanged, still showing `<operator account>` signed in on the site.
 
 ### shared-auth-session-US7-TC8-1: A site session that holds a role is refused for a console request
 
@@ -1687,25 +1915,29 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> holds a role that grants <operator action>.
-* <operator account> is signed in on the site and has no console session.
+* `<operator account>` holds a role that grants `<operator action>`.
+* `<operator account>` is signed in on the site and has no console session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator action>` | An operator action the role grants, whose target <target account> is read before and after |
-| `<target account>` | An account the action would change |
+| operator action | An operator action the role grants, whose target `<target account>` is read before and after |
+| target account | An account the action would change |
+
+| Field | Value |
+| --- | --- |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Request <operator action> as the console, carrying only the site session's credentials.
+1. Request `<operator action>` as the console, carrying only the site session's credentials.
 2. Present the site session's credentials to the console as the console's own, and ask who is calling.
 
 **Expected Results:**
 
 * Step 1 is refused as not signed in.
-* <target account> is unchanged.
+* `<target account>` is unchanged.
 * Step 2 receives no person.
 
 ### shared-auth-session-US7-TC9-1: A console session without the second factor refuses an operator action beside a site session
@@ -1725,24 +1957,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> has a second factor and holds a role that grants <operator action>.
-* <operator account> is signed in on the site and on the console, and has not proved the second factor on that console session.
+* `<operator account>` has a second factor and holds a role that grants `<operator action>`.
+* `<operator account>` is signed in on the site and on the console, and has not proved the second factor on that console session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator action>` | An operator action the role grants, whose target <target account> is read before and after |
-| `<target account>` | An account the action would change |
+| operator action | An operator action the role grants, whose target `<target account>` is read before and after |
+| target account | An account the action would change |
+
+| Field | Value |
+| --- | --- |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Request <operator action> on the console session.
+1. Request `<operator action>` on the console session.
 
 **Expected Results:**
 
 * Step 1 is refused and asks for the second factor.
-* <target account> is unchanged.
+* `<target account>` is unchanged.
 
 ---
 
@@ -1769,26 +2005,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <operator account> held a signed-in session from before the release, open on the site and on the console.
+* `<operator account>` held a signed-in session from before the release, open on the site and on the console.
 * The release of this change is live.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url>.
-2. Navigate to <grade10 store url>.
-3. In a new tab, sign in on <grade10 admin console url> as <operator email>, entering <operator TOTP code>.
+1. Navigate to `<grade10 admin console url>`.
+2. Navigate to `<grade10 store url>`.
+3. In a new tab, sign in on `<grade10 admin console url>` as `<operator email>`, entering `<operator TOTP code>`.
 
 **Expected Results:**
 
 * Step 1 shows the console's sign-in page, not the console.
-* Step 2 shows <operator account> still signed in on the site.
+* Step 2 shows `<operator account>` still signed in on the site.
 * Step 3 opens the console.
 
 ### shared-auth-session-US8-TC2-1: Customer session survives the release
@@ -1808,22 +2050,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <collector account> held a signed-in session from before the release on <grade10 store url>.
+* `<collector account>` held a signed-in session from before the release on `<grade10 store url>`.
 * The release of this change is live.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | A customer account holding `user` only |
+| collector account | A customer account holding `user` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 store url>.
+1. Navigate to `<grade10 store url>`.
 
 **Expected Results:**
 
-* The page shows <collector account> signed in, without a new sign-in.
+* The page shows `<collector account>` signed in, without a new sign-in.
 
 ## Settled
 

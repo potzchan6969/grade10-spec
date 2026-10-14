@@ -28,12 +28,18 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 profile url>.
+* customer is signed in on `<grade10 profile url>`.
 * Network manipulation holds the sign-out request in flight.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 profile url>.
+1. Navigate to `<grade10 profile url>`.
 2. Activate the sign-out control.
 3. Sign out again while the request is still running.
 
@@ -60,11 +66,17 @@
 
 **Pre-conditions:**
 
-* admin is signed in on <grade10 admin console url>.
+* admin is signed in on `<grade10 admin console url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url>.
+1. Navigate to `<grade10 admin console url>`.
 2. Activate the sign-out control and wait for the auth service to confirm.
 
 **Expected Results:**
@@ -89,11 +101,17 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 profile url>.
+* customer is signed in on `<grade10 profile url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 profile url>.
+1. Navigate to `<grade10 profile url>`.
 2. Activate the sign-out control and wait for the auth service to confirm.
 
 **Expected Results:**
@@ -117,12 +135,18 @@
 
 **Pre-conditions:**
 
-* admin is signed in on <grade10 admin console url> with the second factor proved.
+* admin is signed in on `<grade10 admin console url>` with the second factor proved.
 * Network manipulation holds the sign-out request in flight.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin console url>.
+1. Navigate to `<grade10 admin console url>`.
 2. Activate the sign-out control.
 3. Activate the sign-out control again while the request is still running.
 
@@ -157,12 +181,19 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 profile url>.
-* <The sign-out endpoint> is mocked to refuse the request.
+* customer is signed in on `<grade10 profile url>`.
+* `<The sign-out endpoint>` is mocked to refuse the request.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| The sign-out endpoint | The auth service sign-out endpoint in the test environment; bind its endpoint URL only |
+| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 profile url>.
+1. Navigate to `<grade10 profile url>`.
 2. Activate the sign-out control.
 
 **Expected Results:**
@@ -188,12 +219,19 @@
 
 **Pre-conditions:**
 
-* customer is signed in on <grade10 profile url> with sign-out failure feedback showing.
-* <The sign-out endpoint> then confirms.
+* customer is signed in on `<grade10 profile url>` with sign-out failure feedback showing.
+* `<The sign-out endpoint>` then confirms.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| The sign-out endpoint | The auth service sign-out endpoint in the test environment; bind its endpoint URL only |
+| grade10 profile url | The signed-in Grade10 customer profile URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 profile url>.
+1. Navigate to `<grade10 profile url>`.
 2. Activate the sign-out control again.
 
 **Expected Results:**
@@ -226,16 +264,21 @@
 
 **Pre-conditions:**
 
-* <operator account> is signed in on <grade10 admin console url> in tab A, with the second factor proved.
-* <site account> is signed in on <grade10 store url> in tab B, with <cart item> in its cart.
+* `<operator account>` is signed in on `<grade10 admin console url>` in tab A, with the second factor proved.
+* `<site account>` is signed in on `<grade10 store url>` in tab B, with `<cart item>` in its cart.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding console access |
-| `<site account>` | <operator account>, or a different account |
-| `<cart item>` | A card in <site account>'s cart |
+| operator account | An account holding console access |
+| site account | `<operator account>`, or a different account |
+| cart item | A card in `<site account>`'s cart |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -247,7 +290,7 @@
 
 * Step 1 shows the console's sign-in page.
 * Step 2 still shows the console's sign-in page.
-* Tab B still names <site account>, with <cart item> in its cart.
+* Tab B still names `<site account>`, with `<cart item>` in its cart.
 * Tab B shows no signed-out message.
 
 <!-- trace:case id=g10.shared-sign-out.TC-vnx rev=1 -->
@@ -268,14 +311,19 @@
 
 **Pre-conditions:**
 
-* <operator account> is signed in on <grade10 store url> in tab A.
-* <operator account> is signed in on <grade10 admin console url> in tab B, with the second factor proved.
+* `<operator account>` is signed in on `<grade10 store url>` in tab A.
+* `<operator account>` is signed in on `<grade10 admin console url>` in tab B, with the second factor proved.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding console access |
+| operator account | An account holding console access |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -286,8 +334,8 @@
 **Expected Results:**
 
 * Step 1 shows the site returned to marketing.
-* Step 2 shows the console open as <operator account>, with no signed-out message.
-* Step 3 still shows the console open as <operator account>.
+* Step 2 shows the console open as `<operator account>`, with no signed-out message.
+* Step 3 still shows the console open as `<operator account>`.
 
 ## Settled
 

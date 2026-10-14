@@ -27,26 +27,30 @@
 
 **Pre-conditions:**
 
-* A customer is not signed in on <grade10 store url>.
-* An unused, unexpired sign-in link has been emailed to <collector email>.
+* A customer is not signed in on `<grade10 store url>`.
+* An unused, unexpired sign-in link has been emailed to `<collector email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | The address the sign-in link was asked for |
-| `<collector account>` | The account for <collector email> |
+| collector email | The address the sign-in link was asked for |
+| collector account | The account for `<collector email>` |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Follow the sign-in link emailed to <collector email>.
-2. Read the signed-in state on <grade10 store url>.
+1. Follow the sign-in link emailed to `<collector email>`.
+2. Read the signed-in state on `<grade10 store url>`.
 3. Activate the sign-out control and wait for the auth service to answer.
 
 **Expected Results:**
 
-* Step 1 signs them in as <collector account>.
-* Step 2 shows <collector account>'s name and email in the signed-in state.
+* Step 1 signs them in as `<collector account>`.
+* Step 2 shows `<collector account>`'s name and email in the signed-in state.
 * The page leaves the signed-in state and no longer shows their name.
 
 <!-- trace:case id=g10.auth-domain.TC-be8 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq,g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
@@ -67,13 +71,20 @@
 
 **Pre-conditions:**
 
-* A customer is not signed in on <grade10 store url>.
-* A sign-in link emailed to <collector email> is past its expiry.
+* A customer is not signed in on `<grade10 store url>`.
+* A sign-in link emailed to `<collector email>` is past its expiry.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector email | An inbox the tester reads for the collector account prepared in the pre-conditions; bind its email address only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Follow the expired sign-in link.
-2. Read the signed-in state on <grade10 store url>.
+2. Read the signed-in state on `<grade10 store url>`.
 
 **Expected Results:**
 
@@ -109,13 +120,22 @@
 **Pre-conditions:**
 
 * A customer is not signed in on any brand.
-* An unused, unexpired sign-in link has been emailed to <collector email>.
+* An unused, unexpired sign-in link has been emailed to `<collector email>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector email | An inbox the tester reads for the collector account prepared in the pre-conditions; bind its email address only |
+| grade10 auction url | The Grade10 public auction URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL, on a different brand from Grade10 in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Follow the sign-in link from <grade10 store url>.
-2. Open <grade10 auction url> and read the signed-in state.
-3. Open <zzz store url> and read the signed-in state.
+1. Follow the sign-in link from `<grade10 store url>`.
+2. Open `<grade10 auction url>` and read the signed-in state.
+3. Open `<zzz store url>` and read the signed-in state.
 
 **Expected Results:**
 
@@ -144,21 +164,25 @@
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| collector email | An inbox the tester reads, with an account | · |
+| off-brand location | https://example.com/landing | any location that is not a site of this brand |
+
 | Field | Value |
 | --- | --- |
-| `<collector email>` | An inbox the tester reads, with an account |
-| `<off-brand location>` | `https://example.com/landing`, any location that is not a site of this brand |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Start a sign-in on <grade10 store url> naming <off-brand location> as the return location.
-2. Ask for a sign-in link at <collector email>.
+1. Start a sign-in on `<grade10 store url>` naming `<off-brand location>` as the return location.
+2. Ask for a sign-in link at `<collector email>`.
 3. Follow the link from that email.
 4. Read the signed-in state on the page step 3 lands on.
 
 **Expected Results:**
 
-* Step 3 lands on this brand, not on <off-brand location>.
+* Step 3 lands on this brand, not on `<off-brand location>`.
 * Step 4 shows the collector's name and email.
 
 ---
@@ -187,31 +211,35 @@
 
 **Pre-conditions:**
 
-* admin(holds `user:ban` and `audit:read`) is on <grade10 admin users url>.
-* <collector account> is not banned.
-* An unused, unexpired sign-in link has been emailed to <collector email>.
+* admin(holds `user:ban` and `audit:read`) is on `<grade10 admin users url>`.
+* `<collector account>` is not banned.
+* An unused, unexpired sign-in link has been emailed to `<collector email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | An unbanned account holding `user` only |
-| `<collector email>` | That account's email, an inbox the tester reads |
-| `<ban reason>` | Chargeback dispute open, any reason the operator states |
+| collector account | An unbanned account holding `user` only |
+| collector email | That account's email, an inbox the tester reads |
+| ban reason | Chargeback dispute open, any reason the operator states |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <collector account>'s user id into the search.
+1. Paste `<collector account>`'s user id into the search.
 2. Choose Ban in the account's panel.
-3. Enter <ban reason> and confirm.
-4. In a separate browser, follow the link emailed to <collector email>.
+3. Enter `<ban reason>` and confirm.
+4. In a separate browser, follow the link emailed to `<collector email>`.
 5. Open the audit trail from the account's panel.
 
 **Expected Results:**
 
 * Step 4 does not sign that person in.
-* Step 5 shows the ban, naming the operator and <collector account> by user id.
-* The ban entry keeps <ban reason>.
+* Step 5 shows the ban, naming the operator and `<collector account>` by user id.
+* The ban entry keeps `<ban reason>`.
 
 <!-- trace:case id=g10.auth-domain.TC-emm rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y,g10.shared-users.SC-vpv,g10.shared-users.SC-5vl,g10.shared-users.SC-z5x,g10.shared-users.SC-xp8,g10.shared-users.SC-2ey,g10.shared-users.SC-4gk,g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-e2e-US3-TC2-1: Unban lets the same person sign in again
@@ -231,27 +259,32 @@
 
 **Pre-conditions:**
 
-* admin(holds `user:ban`) is on <grade10 admin users url>.
-* <collector account> is banned.
+* admin(holds `user:ban`) is on `<grade10 admin users url>`.
+* `<collector account>` is banned.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | A banned account holding `user` only |
-| `<collector email>` | That account's email, an inbox the tester reads |
+| collector account | A banned account holding `user` only |
+| collector email | That account's email, an inbox the tester reads |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <collector account>'s user id into the search.
+1. Paste `<collector account>`'s user id into the search.
 2. Choose Unban in the account's panel and confirm.
-3. In a separate browser, ask for a sign-in link at <collector email> on <grade10 store url>.
+3. In a separate browser, ask for a sign-in link at `<collector email>` on `<grade10 store url>`.
 4. Follow the link from that email.
 
 **Expected Results:**
 
-* Step 1 lists <collector account>.
-* Step 2 leaves <collector account> listed.
+* Step 1 lists `<collector account>`.
+* Step 2 leaves `<collector account>` listed.
 * Step 4 signs that person in.
 
 ---
@@ -280,24 +313,29 @@
 
 **Pre-conditions:**
 
-* admin(holds `session:list`, `session:revoke` and `audit:read`) is on <grade10 admin users url>.
-* <collector account> is signed in on <grade10 store url> in one browser, <collector browser>.
+* admin(holds `session:list`, `session:revoke` and `audit:read`) is on `<grade10 admin users url>`.
+* `<collector account>` is signed in on `<grade10 store url>` in one browser, `<collector browser>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | An account signed in on one browser only |
-| `<collector browser>` | The browser holding that session |
+| collector account | An account signed in on one browser only |
+| collector browser | The browser holding that session |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <collector account>'s user id into the search.
+1. Paste `<collector account>`'s user id into the search.
 2. Read the sessions in the account's panel.
 3. Open the audit trail from the account's panel.
 4. Revoke the session in the account's panel.
 5. Wait 70 seconds.
-6. Reload <grade10 store url> in <collector browser>.
+6. Reload `<grade10 store url>` in `<collector browser>`.
 7. Open the audit trail again.
 
 **Expected Results:**
@@ -305,7 +343,7 @@
 * Step 2 lists that account's session, with no session secret shown.
 * Step 3 shows no entry for the listing.
 * Step 6 shows nobody signed in.
-* Step 7 shows the revoke, naming the operator and <collector account>.
+* Step 7 shows the revoke, naming the operator and `<collector account>`.
 
 <!-- trace:case id=g10.auth-domain.TC-zsj rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1,g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots,g10.shared-sessions.SC-bui,g10.shared-session.SC-xll,g10.shared-session.SC-yja,g10.shared-session.SC-4uk,g10.shared-session.SC-ol8,g10.shared-session.SC-qd6 -->
 ### shared-auth-e2e-US4-TC2-1: Revoke that cannot be recorded leaves the session signed in
@@ -325,23 +363,28 @@
 
 **Pre-conditions:**
 
-* admin(holds `session:list` and `session:revoke`) is on <grade10 admin users url>.
-* <collector account> is signed in on <grade10 store url> in one browser, <collector browser>.
+* admin(holds `session:list` and `session:revoke`) is on `<grade10 admin users url>`.
+* `<collector account>` is signed in on `<grade10 store url>` in one browser, `<collector browser>`.
 * The identity trail is mocked to refuse a new entry.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector account>` | An account signed in on one browser only |
-| `<collector browser>` | The browser holding that session |
+| collector account | An account signed in on one browser only |
+| collector browser | The browser holding that session |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <collector account>'s user id into the search.
+1. Paste `<collector account>`'s user id into the search.
 2. Revoke the session in the account's panel.
 3. Wait 70 seconds.
-4. Reload <grade10 store url> in <collector browser>.
+4. Reload `<grade10 store url>` in `<collector browser>`.
 
 **Expected Results:**
 
@@ -376,27 +419,31 @@
 
 **Pre-conditions:**
 
-* admin(holds user:set-role) is on <admin users directory url>.
-* <operator account> holds `user` only.
+* admin(holds user:set-role) is on `<admin users directory url>`.
+* `<operator account>` holds `user` only.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<operator account>` | An account holding `user` only, named by user id |
+| operator account | An account holding `user` only, named by user id |
+
+| Field | Value |
+| --- | --- |
+| admin users directory url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <operator account> by user id.
+1. Open `<operator account>` by user id.
 2. Set its roles to `staff` and save.
-3. As <operator account>, take an auction operate action.
-4. As <operator account>, try to ban an account.
+3. As `<operator account>`, take an auction operate action.
+4. As `<operator account>`, try to ban an account.
 
 **Expected Results:**
 
-* <operator account>'s roles include `staff`.
+* `<operator account>`'s roles include `staff`.
 * Step 3 is allowed and step 4 is refused.
-* The trail records the actor, <operator account>, and the set-role, naming both by user id.
+* The trail records the actor, `<operator account>`, and the set-role, naming both by user id.
 
 ---
 
@@ -424,31 +471,35 @@
 
 **Pre-conditions:**
 
-* admin(role `support`) is on <grade10 admin users url>.
-* <admin account> holds `admin`, is unbanned, and is signed in on one session.
-* <collector account> holds `user` only.
+* admin(role `support`) is on `<grade10 admin users url>`.
+* `<admin account>` holds `admin`, is unbanned, and is signed in on one session.
+* `<collector account>` holds `user` only.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<admin account>` | An account holding `admin`, signed in on one session |
-| `<collector account>` | An account holding `user` only |
+| admin account | An account holding `admin`, signed in on one session |
+| collector account | An account holding `user` only |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin users url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Paste <admin account>'s user id into the search.
-2. Try to list <admin account>'s sessions.
-3. Try to ban <admin account>.
-4. Paste <collector account>'s user id into the search.
-5. Try to set <collector account>'s roles.
+1. Paste `<admin account>`'s user id into the search.
+2. Try to list `<admin account>`'s sessions.
+3. Try to ban `<admin account>`.
+4. Paste `<collector account>`'s user id into the search.
+5. Try to set `<collector account>`'s roles.
 6. As admin(holds `audit:read`), open the audit trail.
 
 **Expected Results:**
 
 * Step 2 is refused and shows no session.
-* Step 3 is refused; <admin account> stays unbanned.
-* Step 5 is refused; <collector account>'s roles are unchanged.
+* Step 3 is refused; `<admin account>` stays unbanned.
+* Step 5 is refused; `<collector account>`'s roles are unchanged.
 * Step 6 shows the refused ban, recorded as not succeeding.
 
 ---
@@ -477,26 +528,30 @@
 
 **Pre-conditions:**
 
-* customer is not signed in, with tab A refused <signed-in-only page> and tab C open on <grade10 store url>.
-* In tab A, a sign-in link was asked for at <collector email>.
+* customer is not signed in, with tab A refused `<signed-in-only page>` and tab C open on `<grade10 store url>`.
+* In tab A, a sign-in link was asked for at `<collector email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | An inbox the tester reads, with an account |
-| `<signed-in-only page>` | The collector's orders list, which only they may read |
+| collector email | An inbox the tester reads, with an account |
+| signed-in-only page | The collector's orders list, which only they may read |
+
+| Field | Value |
+| --- | --- |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open tab B and follow the link emailed to <collector email>.
+1. Open tab B and follow the link emailed to `<collector email>`.
 2. Return to tab A.
 3. Switch to tab C without reloading it.
 
 **Expected Results:**
 
 * Step 2 shows no sign-in dialog and names the collector.
-* Tab A is on <signed-in-only page>, without it being opened again.
+* Tab A is on `<signed-in-only page>`, without it being opened again.
 * Step 3 names the collector.
 
 ---
@@ -524,35 +579,41 @@
 
 **Pre-conditions:**
 
-* <operator account> holds console access and is signed out on <grade10 admin console url> and on <grade10 store url>.
-* admin is signed in on <grade10 admin console url> in another browser, able to end sessions.
+* `<operator account>` holds console access and is signed out on `<grade10 admin console url>` and on `<grade10 store url>`.
+* admin is signed in on `<grade10 admin console url>` in another browser, able to end sessions.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| operator email | operator@example.com | the address of `<operator account>` |
+| operator TOTP code | A valid current code from `<operator account>`'s authenticator | · |
+
 | Field | Value |
 | --- | --- |
-| `<operator email>` | operator@example.com, the address of <operator account> |
-| `<operator TOTP code>` | A valid current code from <operator account>'s authenticator |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| operator account | The operator account prepared with the console access and session conditions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Follow a sign-in link asked from <grade10 store url> for <operator email>.
-2. Navigate to <grade10 admin console url> and read the signed-in state.
-3. Follow a sign-in link asked from <grade10 admin console url> for <operator email>, then enter <operator TOTP code>.
-4. Open the session list for <operator account> as admin.
-5. Sign out on <grade10 store url>.
-6. Read the signed-in state on <grade10 admin console url>.
-7. As admin, end every session of <operator account>.
-8. Read the signed-in state on <grade10 admin console url> and on <grade10 store url>.
+1. Follow a sign-in link asked from `<grade10 store url>` for `<operator email>`.
+2. Navigate to `<grade10 admin console url>` and read the signed-in state.
+3. Follow a sign-in link asked from `<grade10 admin console url>` for `<operator email>`, then enter `<operator TOTP code>`.
+4. Open the session list for `<operator account>` as admin.
+5. Sign out on `<grade10 store url>`.
+6. Read the signed-in state on `<grade10 admin console url>`.
+7. As admin, end every session of `<operator account>`.
+8. Read the signed-in state on `<grade10 admin console url>` and on `<grade10 store url>`.
 
 **Expected Results:**
 
-* Step 1 signs <operator account> in on the site.
+* Step 1 signs `<operator account>` in on the site.
 * Step 2 shows nobody signed in on the console.
-* Step 3 opens the console as <operator account> and leaves the site signed in.
+* Step 3 opens the console as `<operator account>` and leaves the site signed in.
 * Step 4 lists one site session and one console session, each naming its surface.
 * Step 5 signs out the site only.
-* Step 6 still shows <operator account> signed in on the console.
+* Step 6 still shows `<operator account>` signed in on the console.
 * Step 8 shows nobody signed in on either surface.
 
 ## Settled
