@@ -466,6 +466,38 @@ export const TenderPendingWithOpenPromoSheet: Story = {
   },
 };
 
+/** Shared interaction guard: the cart can still be dismissed while mutations wait. */
+export const InteractionPending: Story = {
+  args: {
+    interactionPending: true,
+    promoState: { status: "collapsed" },
+    pointsState: null,
+    onClose: fn(),
+    onPromoStateChange: fn(),
+    onRemoveItem: fn(),
+    onCheckout: fn(),
+  },
+  play: async ({ args }) => {
+    const canvas = drawer();
+    await userEvent.click(
+      canvas.getByRole("button", {
+        name: DEFAULT_CART_COPY.header.closeCartLabel,
+      }),
+    );
+    expect(args.onClose).toHaveBeenCalledTimes(1);
+
+    const overlay = document.body.querySelector<HTMLElement>(
+      '[data-slot="drawer-overlay"]',
+    );
+    expect(overlay).toBeInTheDocument();
+    await userEvent.click(overlay as HTMLElement);
+    await userEvent.keyboard("{Escape}");
+    expect(args.onClose).toHaveBeenCalledTimes(3);
+    expect(args.onRemoveItem).not.toHaveBeenCalled();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+  },
+};
+
 /** Simulates initial status and price fetch on cart open with transition to ready */
 export const FetchingOnOpen: Story = {
   render: (args) => {

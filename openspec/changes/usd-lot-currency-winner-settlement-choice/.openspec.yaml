@@ -21,3 +21,7 @@ purpose_rewritten:
   grade10-admin/auction/payment-settings: "Payment Settings now hold a card fee
     rule per settlement currency and one USD premium minimum, not a mapping per
     lot currency"
+reviewed:
+  user-journeys: b0731aff
+  specs: 4be57560
+  test-cases: 4be57560

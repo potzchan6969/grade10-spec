@@ -264,3 +264,53 @@ export const ConfirmingCartUpdate: Story = {
     expect(args.onCheckout).not.toHaveBeenCalled();
   },
 };
+
+/** Shared interaction guard: footer mutations remain visible but inert. */
+export const InteractionPending: Story = {
+  args: {
+    interactionPending: true,
+    promoState: { status: "expanded" },
+    pointsState: { status: "expanded" },
+    copy: {
+      ...DEFAULT_CART_COPY.footer,
+      signInPrompt: "Already a member?",
+      signInAction: "Sign in",
+    },
+    onPromoStateChange: fn(),
+    onPointsStateChange: fn(),
+    onApplyPoints: fn(),
+    onCheckout: fn(),
+    onSignIn: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const promo = canvas.getByRole("button", {
+      name: /Select or enter code/i,
+    });
+    const points = canvas.getByRole("button", { name: /Use points/i });
+    const input = canvas.getByRole("spinbutton", { name: "Use points" });
+    const apply = canvas.getByRole("button", { name: "Apply" });
+    const checkout = canvas.getByRole("button", {
+      name: "Proceed to Checkout",
+    });
+    const signIn = canvas.getByRole("button", { name: "Sign in" });
+
+    expect(promo).toBeDisabled();
+    expect(points).toBeDisabled();
+    expect(input).toBeDisabled();
+    expect(apply).toBeDisabled();
+    expect(checkout).toBeDisabled();
+    expect(signIn).toHaveAttribute("aria-disabled", "true");
+
+    promo.click();
+    points.click();
+    apply.click();
+    checkout.click();
+    signIn.click();
+    expect(args.onPromoStateChange).not.toHaveBeenCalled();
+    expect(args.onPointsStateChange).not.toHaveBeenCalled();
+    expect(args.onApplyPoints).not.toHaveBeenCalled();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+    expect(args.onSignIn).not.toHaveBeenCalled();
+  },
+};

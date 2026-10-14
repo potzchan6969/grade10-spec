@@ -19,6 +19,7 @@ role is data; what a role grants is not.
 - What a role holds
   - Split by cost: in the vault, running a case, setting what it costs and moving its money are separate actions; staff and treasurer share no vault money grant
   - Identity documents: reached by a grant of their own, never by running a flow
+  - Requiring a verification: a grant of its own, held by admin alone
   - Two people on an approval: one person may hold staff and treasurer, and nobody approves an act they recorded
   - Moving an item: a grant of its own beside reading and writing stock,
     held by staff and admin, and the treasurer holds no inventory grant
@@ -261,7 +262,7 @@ written `resource:action`, drawn from this list and no other.
 | `loyalty` | `read`, `adjust`, `invite`, `catalog`, `finance`, `demote`, `cancel` |
 | `auction` | `read`, `write`, `operate`, `reserve`, `moderate`, `settle`, `payment`, `refund`, `shipment` |
 | `vault` | `read`, `operate`, `approve`, `payout` |
-| `kyc` | `read` |
+| `kyc` | `read`, `request` |
 | `grading` | `read`, `operate`, `approve` |
 | `appointment` | `read`, `manage` |
 | `inventory` | `read`, `write`, `transfer` |
@@ -291,6 +292,11 @@ evidence whichever product holds them, so `vault:read` SHALL NOT reach them.
 **No `kyc:write`** - There SHALL be no `kyc:write`; recording a verification
 stays with the flow that needs it.
 
+**Requiring a verification** - `kyc:request` SHALL be the only grant that
+requires an account to verify its person or its business, or drops that
+request. Only `admin` SHALL hold it: a request holds every bid the account
+places, so it is not a step in running a flow.
+
 <!-- trace:scenario id=g10.shared-roles.SC-85d rev=1 -->
 #### Scenario: shared-auth-roles-SC-11 - Reading a case is not reading its identity document
 **Serves:** shared-auth-roles-US-03 - Case work and money are separate grants
@@ -299,6 +305,16 @@ stays with the flow that needs it.
 - **WHEN** they open a vault case and ask for the identity capture or the
   signed document behind it
 - **THEN** the case is shown and both documents are refused
+
+<!-- trace:scenario id=g10.shared-roles.SC-aqp rev=1 -->
+#### Scenario: shared-auth-roles-SC-25 - Staff read an identity and cannot require one
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
+
+- **GIVEN** a person whose only operator role is `staff`
+- **WHEN** they read an account's identity, then try to require that account
+  to verify its business
+- **THEN** the read is allowed
+- **AND** the requirement is refused
 
 <!-- trace:scenario id=g10.shared-roles.SC-a54 rev=1 -->
 #### Scenario: shared-auth-roles-SC-21 - The vocabulary is exactly the listed set

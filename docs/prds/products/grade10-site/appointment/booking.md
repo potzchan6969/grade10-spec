@@ -8,7 +8,9 @@ A collector books a visit to a shop without an account, in five picks, and
 leaves holding a link that manages it.
 
 - **Service** — every customer-bookable service, with its length
-- **Shop** — the shops offering it, with their addresses
+- **Shop** — the shops offering it, with their addresses; one shop is
+  already picked. The step shows while any service runs at more than one
+  shop, so the steps never change with the service picked
 - **Day** — a month calendar marking the days with something free, no further
   than the service's horizon
 - **Time** — the day's offered starts, in the shop's zone with the zone named
@@ -67,6 +69,7 @@ gave.
 | Phone number | Decided | Optional by default; a service turns on Require a phone number when the shop calls before the visit, and the booking is refused without one. Set per service, because only some visits need a call. | Operations |
 | Reminders | Decided | Set per service: up to five leads, a day and two hours before by default, each removable. | Product |
 | Services by card count | ❓ Open | Grading drop-off for 1 to 19 cards, 30 min; Bulk grading drop-off for 20 or more, 45 min, in the Grading room. | Operations |
+| Shop step | Decided | Shown while any service runs at more than one shop, whichever service is picked; skipped only when none does. Steps that change under the collector read as a mistake. | Product |
 | A full day | ❓ Open | Shows the earliest time at each shop; no waitlist. | Product |
 | Prefill | Decided | A signed-in collector books under the account's name, email and phone, shown read-only; a wrong detail is changed on the account. Book again carries the service, the shop and the answers. | Product |
 | Shop facts in 繁中 | ❓ Open | Shop names, addresses, how to get there and counter names are stored in both languages. | Product |

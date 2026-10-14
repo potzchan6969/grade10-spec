@@ -7,6 +7,7 @@ import {
   TABLE_LABELS,
   WITH_TAX_INVOICE,
 } from "./fixtures";
+import type { InvoicePdfBankRails } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 import {
   A4_WIDTH,
@@ -41,6 +42,32 @@ const ENABLED_BANK_RAILS = {
   swift: BANK_RAILS.swift,
   fps: BANK_RAILS.fps,
   reference: BANK_RAILS.reference,
+};
+
+const HK_LOCAL_RAIL_WITHOUT_BENEFICIARY: InvoicePdfBankRails = {
+  hkLocalTransfer: {
+    bankAndCode: "Example Bank (003)",
+    accountNo: "test-account",
+  },
+  reference: "TEST-REFERENCE",
+};
+
+const HK_LOCAL_RAIL_WITH_BENEFICIARY: InvoicePdfBankRails = {
+  hkLocalTransfer: {
+    bankAndCode: "Example Bank (003)",
+    beneficiary: "Test account holder",
+    accountNo: "test-account",
+  },
+  reference: "TEST-REFERENCE",
+};
+
+const HK_LOCAL_RAIL_WITH_EMPTY_BENEFICIARY: InvoicePdfBankRails = {
+  hkLocalTransfer: {
+    bankAndCode: "Example Bank (003)",
+    beneficiary: "",
+    accountNo: "test-account",
+  },
+  reference: "TEST-REFERENCE",
 };
 
 const ADDRESS = {
@@ -317,6 +344,60 @@ describe("invoice PDF renderer", () => {
     expect(strings.join(" ")).toContain("HK local transfer");
     expect(strings.join(" ")).toContain(BANK_RAILS.reference);
     expect(await drawnContent(bytes)).toMatch(/Tf/);
+  });
+
+  it("renders HK Local details when the accepted rail has no beneficiary", async () => {
+    const bytes = await InvoicePdf({
+      ...DATA,
+      paymentMethod: "Bank transfer",
+      bankRails: HK_LOCAL_RAIL_WITHOUT_BENEFICIARY,
+    });
+    const strings = await drawnStrings(bytes);
+    const text = strings.join(" ");
+
+    expect(text).toContain(COPY.bankDetailsHeading);
+    expect(text).toContain(COPY.hkLocalTransferLabel);
+    expect(text).toContain(`${COPY.bankAndCodeLabel}: Example Bank (003)`);
+    expect(text).toContain(`${COPY.accountNoLabel}: test-account`);
+    expect(text).toContain("TEST-REFERENCE");
+    expect(text).not.toContain(`${COPY.beneficiaryLabel}:`);
+    expect(text).not.toContain(COPY.swiftLabel);
+    expect(text).not.toContain(COPY.fpsLabel);
+  });
+
+  it("keeps a supplied HK Local beneficiary row, including an empty value", async () => {
+    const rows = await drawnText(
+      await InvoicePdf({
+        ...DATA,
+        paymentMethod: "Bank transfer",
+        bankRails: HK_LOCAL_RAIL_WITH_BENEFICIARY,
+      }),
+    );
+    const bankRow = drawnRow(
+      rows,
+      `${COPY.bankAndCodeLabel}: Example Bank (003)`,
+    );
+    const beneficiaryRow = drawnRow(
+      rows,
+      `${COPY.beneficiaryLabel}: Test account holder`,
+    );
+    const accountRow = drawnRow(rows, `${COPY.accountNoLabel}: test-account`);
+    expect(bankRow.y).toBeGreaterThan(beneficiaryRow.y);
+    expect(beneficiaryRow.y).toBeGreaterThan(accountRow.y);
+
+    const emptyRows = await drawnText(
+      await InvoicePdf({
+        ...DATA,
+        paymentMethod: "Bank transfer",
+        bankRails: HK_LOCAL_RAIL_WITH_EMPTY_BENEFICIARY,
+      }),
+    );
+    expect(
+      emptyRows.some((row) => row.text.startsWith(`${COPY.beneficiaryLabel}:`)),
+    ).toBe(true);
+    expect(emptyRows.map((row) => row.text)).toContain(
+      `${COPY.accountNoLabel}: test-account`,
+    );
   });
 
   // shared-ui-invoice-and-receipt-pdf-SC-48, shared-ui-invoice-and-receipt-pdf-US1-TC2-1,

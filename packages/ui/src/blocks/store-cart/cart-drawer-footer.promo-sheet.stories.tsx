@@ -1,3 +1,4 @@
+import { Button } from "@grade10/design-system/components/forms/button";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
@@ -7,6 +8,8 @@ import {
   FooterWithPromoNest,
   footerMeta,
   heldPromoSelectionSpy,
+  pendingBrowseSpy,
+  pendingDraftPromoSpy,
 } from "./cart-drawer-footer.story-fixtures";
 import {
   DEFAULT_CART_COPY,
@@ -55,6 +58,72 @@ export const PromoSheetOpen: Story = {
     expect(canvas.getByPlaceholderText("Enter promo code")).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Apply" })).toBeDisabled();
     expect(canvas.getByRole("button", { name: "Back" })).toBeInTheDocument();
+  },
+};
+
+/** Exported open-sheet state: draft input survives the shared pending guard. */
+export const InteractionPending: Story = {
+  render: () => {
+    const [pending, setPending] = useState(false);
+    const [promo, setPromo] = useState<PromoState>({ status: "expanded" });
+
+    return (
+      <div className="flex flex-col gap-4">
+        <Button onClick={() => setPending((value) => !value)}>
+          {pending ? "Finish saving" : "Start saving"}
+        </Button>
+        <FooterWithPromoNest
+          promoOpen
+          sheet={
+            <CartPromoSheet
+              open
+              copy={DEFAULT_CART_COPY.footer}
+              promoState={promo}
+              heldPromoCodes={[]}
+              interactionPending={pending}
+              onClose={fn()}
+              onPromoStateChange={setPromo}
+              onApplyPromo={pendingDraftPromoSpy}
+              onBrowseLoyalty={pendingBrowseSpy}
+            />
+          }
+        >
+          <div />
+        </FooterWithPromoNest>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    pendingDraftPromoSpy.mockClear();
+    pendingBrowseSpy.mockClear();
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText("Enter promo code");
+    await userEvent.type(input, "SAVE");
+    await userEvent.click(canvas.getByRole("button", { name: "Start saving" }));
+
+    expect(input).toBeDisabled();
+    expect(input).toHaveValue("SAVE");
+    expect(canvas.getByRole("button", { name: "Apply" })).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: "Browse loyalty offers" }),
+    ).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Back" })).toBeEnabled();
+    canvas.getByRole("button", { name: "Apply" }).click();
+    canvas.getByRole("button", { name: "Browse loyalty offers" }).click();
+    expect(pendingDraftPromoSpy).not.toHaveBeenCalled();
+    expect(pendingBrowseSpy).not.toHaveBeenCalled();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Finish saving" }),
+    );
+    await userEvent.click(canvas.getByRole("button", { name: "Apply" }));
+    await waitFor(() =>
+      expect(pendingDraftPromoSpy).toHaveBeenCalledWith("SAVE"),
+    );
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Browse loyalty offers" }),
+    );
+    expect(pendingBrowseSpy).toHaveBeenCalledTimes(1);
   },
 };
 

@@ -10,10 +10,10 @@
 - customer(signed in) watches `<lot_1>` with email alerts on.
 - The account's Auction email alerts master is on.
 - The clock is moved to `<moment>`.
-- customer(signed out in this browser) has received Bidding has opened for `<lot_1>`.
+- customer(signed out in this browser) watches `<lot_1>` with email alerts on, and the clock is moved to its scheduled start.
 - customer(signed in) watches `<lot_1>`, with alerts as the row gives.
 - The clock is moved past `<lot_1>`'s scheduled start.
-- `<lot_1>` was called off after Bidding opens in 24 hours was sent.
+- `<lot_9>` is called off before its scheduled start.
 
 **Shared test data:**
 
@@ -21,14 +21,24 @@
 | --- | --- |
 | `<lot_1>` | A published lot whose bidding has not started |
 | `<opening warning>` | 86400s (24 hours) before the scheduled start |
+
 | Moment | Letter |
+| --- | --- |
 | `<opening warning>` | Bidding opens in 24 hours |
 | The scheduled start | Bidding has opened |
+
+| Item | Value |
+| --- | --- |
 | `<lot_1>` | A lot taking bids, watched by this collector with email alerts on |
+
 | Lot email alerts | Auction email alerts master |
+| --- | --- |
 | Off | On |
 | On | Off |
-| `<lot_1>` | A lot called off before its scheduled start |
+
+| Item | Value |
+| --- | --- |
+| `<lot_9>` | A lot called off before its scheduled start |
 
 ### Route
 
@@ -49,7 +59,7 @@
 7. Read the collector's My Auctions.
    - `<lot_1>` is still watched. g10.auction-notifications.US1-TC3
 8. Read the mail sent to the collector's registered email.
-   - Bidding has opened was not sent for `<lot_1>`. g10.auction-notifications.US1-TC4
+   - Bidding has opened was not sent for `<lot_9>`. g10.auction-notifications.US1-TC4
 
 ## Walk 2: Collector returns before a lot closes
 
@@ -74,11 +84,16 @@
 | `<lot_3>` | A lot in extended bidding |
 | `<lot_2>` | A lot taking bids, not in extended bidding |
 | `<closing warning>` | 86400s (24 hours) before the scheduled close |
+
 | Relationship | Letters |
+| --- | --- |
 | Watch only | One Bidding closes in 24 hours |
 | Bid, not watched before | One Bidding closes in 24 hours |
 | Watched, then bid | One Bidding closes in 24 hours |
 | Bid, then unwatched, alerts still on | One Bidding closes in 24 hours |
+
+| Item | Value |
+| --- | --- |
 | `<lot_3>` | A lot taking bids, inside its last minutes before the scheduled close |
 | `<late bid>` | The next valid bid, placed inside the extension window |
 
@@ -177,8 +192,8 @@
 
 **Starting state:**
 
-- customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_1>`.
-- customer B was sent Bidding has opened for `<lot_1>`.
+- customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_10>`.
+- customer B was sent Bidding has opened for `<lot_10>`.
 - admin(auction operator) is on `<grade10 auction send log url>`.
 - customer C was never sent auction mail.
 
@@ -186,7 +201,7 @@
 
 | Item | Value |
 | --- | --- |
-| `<lot_1>` | A lot customer A and customer B watch |
+| `<lot_10>` | A lot customer A and customer B watch |
 | `<customer A email>` | customer A's registered email |
 | `<customer C email>` | customer C's registered email |
 
@@ -195,7 +210,7 @@
 1. Filter by `<customer A email>`.
    - two rows, both customer A's; none of customer B's. g10.auction-notifications.US5-TC1
 2. Read each row.
-   - each row shows message type, recipient email, `<lot_1>` and Sent At. g10.auction-notifications.US5-TC1
+   - each row shows message type, recipient email, `<lot_10>` and Sent At. g10.auction-notifications.US5-TC1
    - no row shows or opens the letter body. g10.auction-notifications.US5-TC1
 3. Filter by `<customer C email>`.
    - No rows show; the log says nothing was sent. g10.auction-notifications.US5-TC2
@@ -250,9 +265,11 @@
 | --- | --- |
 | `<lot_7>` | A lot taking bids, led by customer B, about to close |
 | `<winning bid>` | customer B's winning bid at the close |
+
+| Lot email alerts | Auction email alerts master |
+| --- | --- |
 | Off | On |
 | On | Off |
-| Field | Value |
 
 ### Route
 
@@ -298,6 +315,7 @@
 **I want** to be emailed as a watched lot opens,
 **so that** I can come back and bid without sitting on the page.
 
+<!-- trace:case id=g10.auction-notifications.TC-b0t rev=1 covers=g10.auction-notifications.SC-7kd,g10.auction-notifications.SC-km6,g10.auction-notifications.SC-n5v,g10.auction-notifications.SC-r1s,g10.auction-notifications.SC-io5,g10.auction-notifications.SC-4qb,g10.auction-notifications.SC-4du,g10.auction-notifications.SC-yz5,g10.auction-notifications.SC-5o6,g10.auction-notifications.SC-fxu,g10.auction-notifications.SC-vsw,g10.auction-notifications.SC-aud,g10.auction-notifications.SC-yzf,g10.auction-notifications.SC-wna -->
 ### g10.auction-notifications.US1-TC1: Watcher is mailed 24 hours before and at the opening
 
 Runs once per row of **Test data**.
@@ -360,7 +378,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out in this browser) has received Bidding has opened for `<lot_1>`.
+* customer(signed out in this browser) watches `<lot_1>` with email alerts on.
+* The clock is moved to the scheduled start of `<lot_1>`.
 
 **Test data:**
 
@@ -370,7 +389,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Open the letter.
+1. Read the mail sent to the collector's registered email and open the Bidding has opened letter.
 2. Click the listing action.
 3. Back in the letter, click Manage alerts.
 4. Complete sign-in from the offer.
@@ -432,7 +451,7 @@ Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** normal
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** negative
@@ -445,15 +464,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in) watches `<lot_1>` with email alerts on.
-* `<lot_1>` was called off after Bidding opens in 24 hours was sent.
-* The clock is moved past `<lot_1>`'s scheduled start.
+* customer(signed in) watches `<lot_9>` with email alerts on.
+* `<lot_9>` is called off before its scheduled start.
+* The clock is moved past `<lot_9>`'s scheduled start.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot called off before its scheduled start |
+| `<lot_9>` | A lot called off before its scheduled start |
 
 **Steps:**
 
@@ -461,7 +480,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Bidding has opened was not sent for `<lot_1>`.
+* Bidding has opened was not sent for `<lot_9>`.
 
 ---
 
@@ -706,6 +725,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when I lose the lead on a lot I bid on,
 **so that** I can raise my maximum while the lot still takes bids.
 
+<!-- trace:case id=g10.auction-notifications.TC-sdf rev=1 covers=g10.auction-notifications.SC-ga4,g10.auction-notifications.SC-vsu,g10.auction-notifications.SC-7rk,g10.auction-notifications.SC-yky,g10.auction-notifications.SC-02a -->
 ### g10.auction-notifications.US3-TC1: Displaced leader gets outbid, not also new bid
 
 **Classification:**
@@ -851,13 +871,13 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_3>` | A published USD lot taking bids, scheduled close a day away |
-| `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<price after>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
+| `<customer A maximum>` | US$5000 (fixed, 500000 minor units) |
+| `<price after>` | US$5080 (fixed, 508000 minor units: `<customer A maximum>` plus its 8000 increment) |
 
 | Row | Internal bid before | House act | `<leader price>` |
 | --- | --- | --- | --- |
-| Commit at its time | 600000 minor units, its time 5 minutes ahead | Its time passes | 400000 minor units, the starting price |
-| Raise past the leader | 450000 minor units, committed and outbid | Raise to 600000 minor units and click Save | 458000 minor units: 450000 plus its 8000 increment |
+| Commit at its time | US$6000 (fixed, 600000 minor units), its time 5 minutes ahead | Its time passes | US$4000 (fixed, 400000 minor units), the starting price |
+| Raise past the leader | US$4500 (fixed, 450000 minor units), committed and outbid | Raise to US$6000 (fixed, 600000 minor units) and click Save | US$4580 (fixed, 458000 minor units: 450000 plus its 8000 increment) |
 
 **Steps:**
 
@@ -897,9 +917,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_4>` | A published USD lot taking bids, scheduled close a day away |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<customer A maximum>` | 500000 minor units (US$5,000.00) |
-| `<customer B maximum>` | 700000 minor units, above `<house maximum>` |
+| `<house maximum>` | US$6000 (fixed, 600000 minor units) |
+| `<customer A maximum>` | US$5000 (fixed, 500000 minor units) |
+| `<customer B maximum>` | US$7000 (fixed, 700000 minor units), above `<house maximum>` |
 
 **Steps:**
 
@@ -919,6 +939,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else bids on a lot I already bid on,
 **so that** I know the lot moved without being mailed on every increment.
 
+<!-- trace:case id=g10.auction-notifications.TC-qvy rev=1 covers=g10.auction-notifications.SC-rk1,g10.auction-notifications.SC-ktw,g10.auction-notifications.SC-xzz,g10.auction-notifications.SC-gn8 -->
 ### g10.auction-notifications.US4-TC1: Other bidders hear of a new bid, watchers do not
 
 **Classification:**
@@ -1025,10 +1046,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_5>` | A published USD lot taking bids, starting price `<starting price>`, scheduled close a day away |
-| `<starting price>` | 400000 minor units (US$4,000.00) |
-| `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<house maximum>` | 600000 minor units (US$6,000.00), below `<customer A maximum>` |
-| `<price after>` | 608000 minor units: `<house maximum>` plus its 8000 increment |
+| `<starting price>` | US$4000 (fixed, 400000 minor units) |
+| `<customer A maximum>` | US$7000 (fixed, 700000 minor units) |
+| `<house maximum>` | US$6000 (fixed, 600000 minor units), below `<customer A maximum>` |
+| `<price after>` | US$6080 (fixed, 608000 minor units: `<house maximum>` plus its 8000 increment) |
 
 **Steps:**
 
@@ -1069,9 +1090,9 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_6>` | A published USD lot taking bids, scheduled close a day away |
-| `<customer A maximum>` | 700000 minor units (US$7,000.00) |
-| `<current bid>` | 600000 minor units |
-| `<short amount>` | 550000 minor units, short of the 608000 next minimum |
+| `<customer A maximum>` | US$7000 (fixed, 700000 minor units) |
+| `<current bid>` | US$6000 (fixed, 600000 minor units) |
+| `<short amount>` | US$5500 (fixed, 550000 minor units), short of US$6080 (fixed, 608000 minor units), the next minimum |
 
 **Steps:**
 
@@ -1111,10 +1132,10 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<lot_7>` | A published USD lot taking bids, scheduled close a day away |
-| `<house maximum>` | 600000 minor units (US$6,000.00) |
-| `<customer A maximum>` | 500000 minor units (US$5,000.00), customer B's below it |
-| `<current bid>` | 508000 minor units: `<customer A maximum>` plus its 8000 increment |
-| `<lowered maximum>` | 550000 minor units (US$5,500.00), above `<current bid>` |
+| `<house maximum>` | US$6000 (fixed, 600000 minor units) |
+| `<customer A maximum>` | US$5000 (fixed, 500000 minor units), customer B's below it |
+| `<current bid>` | US$5080 (fixed, 508000 minor units: `<customer A maximum>` plus its 8000 increment) |
+| `<lowered maximum>` | US$5500 (fixed, 550000 minor units), above `<current bid>` |
 
 **Steps:**
 
@@ -1155,15 +1176,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_1>`.
-* customer B was sent Bidding has opened for `<lot_1>`.
+* customer A was sent Bidding has opened and Bidding closes in 24 hours for `<lot_10>`.
+* customer B was sent Bidding has opened for `<lot_10>`.
 * admin(auction operator) is on `<grade10 auction send log url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A lot customer A and customer B watch |
+| `<lot_10>` | A lot customer A and customer B watch |
 | `<customer A email>` | customer A's registered email |
 
 **Steps:**
@@ -1174,7 +1195,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: two rows, both customer A's; none of customer B's.
-* Step 2: each row shows message type, recipient email, `<lot_1>` and Sent At.
+* Step 2: each row shows message type, recipient email, `<lot_10>` and Sent At.
 * Step 2: no row shows or opens the letter body.
 
 <!-- trace:case id=g10.auction-notifications.TC-axs rev=2 -->
@@ -1220,6 +1241,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when someone else wins it,
 **so that** I know the outcome without reopening the lot.
 
+<!-- trace:case id=g10.auction-notifications.TC-gqc rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
 ### g10.auction-notifications.US6-TC1: A losing bidder gets one You did not win letter
 
 **Classification:**
@@ -1349,25 +1371,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A bid 30000 USD minor units and customer B bid 25000 USD minor units on `<lot_1>`, both with email alerts on; the house leads at 30500 USD minor units under its internal bid.
-* `<lot_1>`'s close is a few minutes away, and no further bid is coming.
+* customer A bid US$300 (fixed, 30000 minor units) and customer B bid US$250 (fixed, 25000 minor units) on `<lot_11>`, both with email alerts on; the house leads at US$305 (fixed, 30500 minor units) under its internal bid.
+* `<lot_11>`'s close is a few minutes away, and no further bid is coming.
 * admin(auction operator) is on <grade10 auction send log url>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A published USD lot protected by a committed internal bid of 50000 minor units |
-| `<house maximum>` | 50000 USD minor units |
-| `<customer A bid>` | 30000 USD minor units |
-| `<customer B bid>` | 25000 USD minor units |
-| `<winning bid>` | 30500 USD minor units |
+| `<lot_11>` | A published USD lot protected by a committed internal bid of US$500 (fixed, 50000 minor units) |
+| `<house maximum>` | US$500 (fixed, 50000 minor units) |
+| `<customer A bid>` | US$300 (fixed, 30000 minor units) |
+| `<customer B bid>` | US$250 (fixed, 25000 minor units) |
+| `<winning bid>` | US$305 (fixed, 30500 minor units) |
 
 **Steps:**
 
-1. Let `<lot_1>` close with the house leading.
+1. Let `<lot_11>` close with the house leading.
 2. Read the mail sent to customer A and customer B for the close.
-3. Filter the send log by `<lot_1>` and read the rows from the close.
+3. Filter the send log by `<lot_11>` and read the rows from the close.
 
 **Expected Results:**
 
@@ -1383,6 +1405,7 @@ Runs once per row of **Test data**.
 **I want** to be emailed when that lot ends with a winner,
 **so that** I know bidding is over on a lot I followed.
 
+<!-- trace:case id=g10.auction-notifications.TC-gz5 rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
 ### g10.auction-notifications.US7-TC1: A watch-only collector hears Sold for at the close
 
 **Classification:**
@@ -1489,8 +1512,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<lot_2>` | A published USD lot, starting price `<starting price>`, extension duration 1800s (30mins), internal bid 600000 minor units |
-| `<starting price>` | 30500 USD minor units |
+| `<lot_2>` | A published USD lot, starting price `<starting price>`, extension duration 1800s (30mins), internal bid US$6000 (fixed, 600000 minor units) |
+| `<starting price>` | US$305 (fixed, 30500 minor units) |
 
 **Steps:**
 
@@ -1499,7 +1522,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2: one Lot watched, sold letter, Sold for 30500 USD minor units, and no Lot watched, ended letter.
+* Step 2: one Lot watched, sold letter, Sold for US$305 (fixed, 30500 minor units), and no Lot watched, ended letter.
 * Step 2: no letter names the house or a reserve.
 
 ---

@@ -33,6 +33,24 @@ Shared rules for the read and the components:
 [Users](/p/shared/auth/users),
 [User Directory](/p/shared/console/user-directory).
 
+## Identity
+
+The panel's Identity card shows what Grade10 knows of an account's identity,
+under `kyc:read`.
+
+- **Standings** - the person and the business: verified until a day,
+  expired, or not yet
+- **Latest checks** - each subject's latest hosted check, its state such as
+  being reviewed or declined, its screening finding, matched or clear, and a
+  link to the provider's review
+- **Requests** - each request: what is asked, whether it is met, the reason,
+  who asked and when
+- **Moves** - **Require KYC** and **Require KYB** each take a reason; **Drop**
+  takes none. All are under `kyc:request`, which only `admin` holds, and each
+  is on the audit trail
+- **Where verification is off** - the card offers no move, and a request is
+  refused
+
 ## Create Account
 
 An operator holding `user:create` creates a passwordless Auth account from
@@ -74,6 +92,7 @@ but is the wrong shape for an access desk.
 | Admin at create | Warn on the same confirmation — `admin` cannot be demoted once created |
 | Always confirm | Always confirm when the email is free, even for a clean draft |
 | Taken email | Refuse on the create form before review; open-existing opens that panel |
+| Identity on Users | The Identity card sits on the account's panel, read under `kyc:read`; requiring or dropping a verification is `kyc:request`, admin only, decided 2026-10-13 |
 
 Non-goals:
 

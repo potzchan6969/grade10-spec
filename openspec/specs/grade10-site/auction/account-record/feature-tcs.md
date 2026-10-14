@@ -346,6 +346,7 @@
 **I want** to watch listings I am interested in before bidding opens,
 **so that** I can find them again when it does without searching the catalogue a second time.
 
+<!-- trace:case id=g10.auction-account-record.TC-3pj rev=1 covers=g10.auction-account-record.SC-e7i,g10.auction-account-record.SC-ub6,g10.auction-account-record.SC-w7y,g10.auction-account-record.SC-n3a,g10.auction-account-record.SC-cba,g10.auction-account-record.SC-bge,g10.auction-account-record.SC-h9h,g10.auction-account-record.SC-myi,g10.auction-account-record.SC-w21,g10.auction-account-record.SC-v08,g10.auction-account-record.SC-20r,g10.auction-account-record.SC-db4,g10.auction-account-record.SC-5we -->
 ### g10.auction-account-record.US1-TC1: A lot watched before it opens is found when it opens
 
 **Classification:**

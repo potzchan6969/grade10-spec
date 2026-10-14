@@ -167,6 +167,7 @@
 how to resolve it,
 **so that** I understand what I can still do and what it takes to bid again.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-7ui rev=2 -->
 ### g10.auction-bidder-suspension.US1-TC1: Deadline suspension refuses new auction actions
 
 **Classification:**

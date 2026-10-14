@@ -258,6 +258,7 @@
 **I want** an unpaid invoice past its deadline to read Payment Overdue without winner card pay,
 **so that** the deadline ends self-service settlement while operators can still resolve the order.
 
+<!-- trace:case id=g10.auction-order-status.TC-87a rev=1 covers=g10.auction-order-status.SC-agq -->
 ### g10.auction-order-status.US1-TC1: Expired derives Payment Overdue
 
 **Classification:**

@@ -92,6 +92,7 @@
 **I want** every lot to show whether it is Upcoming, Active or Ended,
 **so that** I can see at a glance whether I can still bid on it.
 
+<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### g10.auction-lot-status.US1-TC1: Preparing Shipment maps to Ended
 
 **Classification:**
@@ -164,6 +165,7 @@
 **I want** draft lots and called-off lots absent from browse, search and my watchlist,
 **so that** I do not mistake an unfinished or withdrawn lot for an available auction.
 
+<!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-w9d,g10.auction-lot-status.SC-3yw -->
 ### g10.auction-lot-status.US2-TC1: Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.

@@ -25,7 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@grade10/design-system/components/overlays/dropdown-menu";
-import { ShoppingBag, User } from "@phosphor-icons/react";
+import { CircleNotch, ShoppingBag, User } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 /**
@@ -81,6 +81,9 @@ type SiteHeaderProps = {
   /** Store-launch membership item. TBC — omitted unless this handler is supplied. */
   onMembership?: () => void;
   onSignOut: () => void;
+  /** Sign-out is running: its item spins and keeps the menu open, and the
+   * account button spins while the menu is closed. */
+  signOutPending?: boolean;
   /**
    * Opens the account menu on first paint. Stories that are the layout SoT for
    * the open menu pass this; production leaves it unset.
@@ -132,6 +135,7 @@ function SiteHeader({
   onSubmissions,
   onMembership,
   onSignOut,
+  signOutPending = false,
   accountMenuDefaultOpen,
   className,
 }: SiteHeaderProps) {
@@ -153,13 +157,20 @@ function SiteHeader({
           className="[&_svg]:transition-none [&[data-popup-open]_svg]:rotate-0"
           render={
             <IconButton
+              aria-busy={signOutPending || undefined}
               aria-label={navCopy.account ?? "Account"}
               size="md"
               variant="ghost"
             />
           }
         >
-          <User aria-hidden size={14} />
+          {signOutPending ? (
+            <span aria-hidden className="inline-flex animate-spin">
+              <CircleNotch size={14} />
+            </span>
+          ) : (
+            <User aria-hidden size={14} />
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-48 w-auto">
           <DropdownMenuGroup>
@@ -202,7 +213,12 @@ function SiteHeader({
             ) : null}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={onSignOut} variant="destructive">
+          <DropdownMenuItem
+            closeOnClick={false}
+            onClick={onSignOut}
+            pending={signOutPending}
+            variant="destructive"
+          >
             {signOut}
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -445,6 +445,7 @@ function SettlementChoices({
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <RadioList
+        aria-label={settlementCurrency.label}
         label={settlementCurrency.label}
         onValueChange={(value) => {
           if (value === "USD" || value === "HKD") {
@@ -465,6 +466,7 @@ function SettlementChoices({
       {paymentChoices && selectedCurrency ? (
         choices.length > 0 ? (
           <RadioList
+            aria-label={paymentChoices.label}
             label={paymentChoices.label}
             onValueChange={(value) => {
               const choice = choices.find((item) => item.value === value);
@@ -507,17 +509,19 @@ function SettlementChoices({
   );
 }
 
+type BankDetailsDialogProps = {
+  bankDetails: AuctionWinnerOrderBankDetails;
+  copy: AuctionWinnerOrderCopy;
+  onOpenChange: (open: boolean) => void;
+  open: boolean;
+};
+
 function BankDetailsDialog({
   bankDetails,
   copy,
   onOpenChange,
   open,
-}: {
-  bankDetails: AuctionWinnerOrderBankDetails;
-  copy: AuctionWinnerOrderCopy;
-  onOpenChange: (open: boolean) => void;
-  open: boolean;
-}) {
+}: BankDetailsDialogProps) {
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent

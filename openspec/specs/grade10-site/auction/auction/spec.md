@@ -23,11 +23,12 @@ card.
 - Public contract
   - Listing and extension terms: a consumer reads the scheduled close, the recorded close, the extension duration, and the cap
   - Service time: a public read gives the auction service's clock
-- Identity bar on a bid
-  - Held at the storefront: a bid at or above the bar is held before the auction hears of it
-  - A verified bidder above the bar bids; another is sent to verify
+- Identity on a bid
+  - Held at the storefront: a bid at or above the bar, or any new or raised maximum from an account Grade10 asked to verify, is held before the auction hears of it
+  - A bidder holding what is asked bids; another is sent to verify
   - US$15,000 bar: a bid of US$15,000 or more is held at the storefront before the auction hears of it
   - USD comparison: every bid and the bar use USD, so the storefront compares them without conversion
+  - Forward only: a maximum that already stands keeps bidding
 - Closing a due lot
   - Closed at the close: a lot is settled at its deadline by whichever reaches it first - the lot's own alarm, then a read that finds it overdue
   - Sweep as the net: the five-minute sweep still settles any lot nobody reached
@@ -73,19 +74,27 @@ card.
 
 ## Requirements
 
-### Requirement: A bid at or above the identity bar needs a verified bidder
+### Requirement: A bid needs what the identity bar and the account's requests ask for
 
-The storefront that forwards a bid SHALL compare the bid's amount to the
-brand's bar before the auction hears of it. The bar is US$15,000, 1500000
-minor units in USD; every bid is in USD, so the comparison converts nothing.
-At or above the bar it SHALL forward the bid only for a bidder whose standing
-is `verified` on the day of the bid, and SHALL otherwise refuse the bid naming
-that a verified identity is needed and where to verify, and the auction
-records nothing.
-Below the bar a bid SHALL ask nothing about identity. On a brand that deploys
-no identity store the bar SHALL not exist.
+The storefront that forwards a bid SHALL decide what the bid requires before
+the auction hears of it. The bid SHALL require every subject the account's
+requests name, as `grade10-site/store/account-identity` defines them, and a
+verified person when its amount is at or above the bar. The bar is
+US$15,000, 1500000 minor units in USD; every bid is in USD, so the comparison
+converts nothing. The storefront SHALL read the account's standing only when
+the bid requires something, and SHALL forward the bid only when the account
+holds every subject it requires on the day of the bid. Otherwise it SHALL
+refuse the bid naming what is needed, with a Verify link that opens the
+verification page and returns to the listing, and the auction records
+nothing. On a brand that deploys no identity store the bar SHALL not exist.
 
-<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=2 -->
+An unmet request SHALL hold every new or raised maximum, at any amount and in any
+currency. A maximum that already stands SHALL keep bidding automatically, as
+it does under a suspension. Below the bar, with no request, a bid SHALL ask
+nothing about identity. On a brand that deploys no identity store, or where
+identity is switched off, the bar and requests SHALL not exist.
+
+<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=3 -->
 #### Scenario: grade10-site-auction-auction-SC-16 - An unverified bidder above the bar is held at the storefront
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
@@ -95,6 +104,8 @@ no identity store the bar SHALL not exist.
   auction records no bid
 - **AND** the bid form says: Bids this high need a verified identity. Verify
   from your account, then bid again.
+- **AND** it offers a Verify link to the verification page that returns to
+  the listing
 
 <!-- trace:scenario id=g10.auction-auction.SC-d78 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-17 - A verified bidder above the bar bids
@@ -104,13 +115,47 @@ no identity store the bar SHALL not exist.
 - **WHEN** they place a bid of the bar or more
 - **THEN** the bid is forwarded to the auction as any other
 
-<!-- trace:scenario id=g10.auction-auction.SC-ndj rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-ndj rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-18 - A bid below the bar asks nothing
 **Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
-- **GIVEN** any signed-in bidder
-- **WHEN** they place a bid below the bar
-- **THEN** no standing is read and the bid is forwarded as any other
+- **GIVEN** a signed-in bidder whose account has no request
+- **WHEN** they place a bid below the bar of the listing's currency
+- **THEN** no standing is read, and the bid is forwarded as any other
+
+<!-- trace:scenario id=g10.auction-auction.SC-mo5 rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-112 - A request holds a bid below the bar
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose account has an unmet `person` request
+- **WHEN** they place a bid of the listing's lowest increment
+- **THEN** the bid is refused as needing a verified identity, and the auction
+  records no bid
+- **AND** the bid form says: We asked you to verify before you bid again.
+- **AND** it offers a Verify link to the verification page that returns to
+  the listing
+
+<!-- trace:scenario id=g10.auction-auction.SC-pfh rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-113 - A standing maximum keeps bidding under a request
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a bidder whose maximum stands on a listing, and a request then
+  made of their account that it does not meet
+- **WHEN** another bidder bids below that maximum
+- **THEN** the standing maximum answers automatically as before
+- **AND** a raise of that maximum by its owner is refused as needing a
+  verified identity
+
+<!-- trace:scenario id=g10.auction-auction.SC-a69 rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-114 - Each currency meets its own bar
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `unverified`, with no open
+  request
+- **WHEN** they place a bid of 1,500,000 USD minor units on a `USD` listing,
+  and a bid of 1,500,000 HKD minor units on an `HKD` listing
+- **THEN** the `USD` bid is refused as needing a verified identity
+- **AND** the `HKD` bid is forwarded as any other
 
 <!-- trace:scenario id=g10.auction-auction.SC-l64 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-110 - A bid of exactly the bar is held
@@ -1011,7 +1056,8 @@ automatically retry.
 | Refused when | Code | The bid form says |
 | --- | --- | --- |
 | The amount is not a whole count of minor units above zero, checked by the bid form before it sends | None: the request is never sent | Enter a valid amount. |
-| At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. |
+| At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. with a Verify link |
+| A request the account does not meet, at the storefront | `IDENTITY_REQUIRED` | We asked you to verify before you bid again. with a Verify link |
 | Below the minimum next bid | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
 | Above the currency's ceiling | `AMOUNT_TOO_HIGH` | No message |
 | Not above the bidder's own maximum on the listing | `MAXIMUM_NOT_RAISED` | Your new maximum must be higher than your current one. |
@@ -1026,8 +1072,8 @@ minor units above zero before `INVALID_AMOUNT` can be answered, so the bid form
 never shows that code. Where several refusals apply, the first in this order
 answers: unknown listing, not biddable, not registered, suspended, banned, erased
 bidder, another currency, above the ceiling, maximum not raised, below the
-minimum, no card, another card. The storefront answers the identity bar before
-the auction hears of the bid.
+minimum, no card, another card. The storefront answers the identity bar and the
+account's requests before the auction hears of the bid.
 
 Each refusal the auction service answers SHALL be one structured operational
 log entry at the auction service, naming the bidder, the listing, the code, the
