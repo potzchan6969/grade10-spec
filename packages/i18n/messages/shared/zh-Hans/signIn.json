@@ -1,6 +1,7 @@
 {
   "googleActionLabel": "使用 Google 继续",
   "googleFailed": "无法连接 Google。",
+  "googleWaiting": "请在 Google 窗口中完成登录。",
   "emailLabel": "邮箱地址",
   "emailPlaceholder": "请输入邮箱地址",
   "sendLinkLabel": "使用邮箱登录",

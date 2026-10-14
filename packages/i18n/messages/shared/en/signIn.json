@@ -1,6 +1,7 @@
 {
   "googleActionLabel": "Continue with Google",
   "googleFailed": "Could not reach Google.",
+  "googleWaiting": "Finish signing in in Google’s window.",
   "emailLabel": "Email",
   "emailPlaceholder": "Enter your email",
   "sendLinkLabel": "Sign In with Email",

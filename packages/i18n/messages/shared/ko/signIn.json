@@ -1,6 +1,7 @@
 {
   "googleActionLabel": "Google로 계속하기",
   "googleFailed": "Google에 연결하지 못했습니다.",
+  "googleWaiting": "Google 창에서 로그인을 완료하세요.",
   "emailLabel": "이메일",
   "emailPlaceholder": "이메일을 입력하세요",
   "sendLinkLabel": "이메일로 로그인",
