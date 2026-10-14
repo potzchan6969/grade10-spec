@@ -71,7 +71,7 @@ function BookingStepDots<Id extends string>({
                 className={cn(
                   "grid size-6 place-items-center rounded-full text-[11px] font-bold tabular-nums",
                   now
-                    ? "bg-primary text-foreground"
+                    ? "bg-primary text-primary-foreground"
                     : "bg-card text-secondary-foreground shadow-[inset_0_0_0_1.5px_var(--border-strong)]",
                 )}
               >
