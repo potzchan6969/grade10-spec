@@ -9,7 +9,7 @@
 - Hosted Shopify handoff
   - Member identity: require a fresh signed-in storefront session
   - Current request: send reviewed lines, seen prices and accepted tender
-  - Safe response: keep refusal and verification feedback; open only the current answer
+  - Safe response: keep refusal feedback; open only the current answer
 - Safe repetition and recovery
   - One Pay at a time: one pending Pay per drawer; all other drawer actions wait
   - Stale answers: an answer for an older cart, tender or member opens nothing
@@ -361,7 +361,7 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 
 **One Pay at a time** - The drawer SHALL hold at most one pending Pay. While it is active, all non-dismissal drawer actions SHALL wait under the cart drawer's pending-operation contract. Close, backdrop and Escape SHALL remain available. The lines and tender it sent SHALL stay fixed for that request; an edit from another tab or session applies to the next Pay. After this request ends, any other active drawer operation and the current-data guards SHALL still govern availability.
 
-**Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens Your Orders, a named line or refused tender is named in the drawer, verification shows the threshold feedback, with the account action where the profile page is enabled, and anything else shows the existing failure feedback.
+**Answers** - The drawer SHALL use the existing treatment for each answer: a hosted invoice opens Shopify, a settling order opens Your Orders, a named line or refused tender is named in the drawer, and anything else shows the existing failure feedback.
 
 **Dismissed drawer** - Closing the drawer SHALL NOT cancel a sent Pay or make its answer stale. A still-current successful hosted-invoice answer SHALL open Shopify even after dismissal. A changed cart, tender, member or request SHALL retain the older-answer protection below.
 
@@ -434,12 +434,11 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 **Serves:** `grade10-site-store-checkout-US-02` - The collector retries a Pay whose answer failed
 
 - **GIVEN** Pay has been sent for a ready reviewed basket
-- **WHEN** its answer is a failure other than a named line, a refused tender or verification
+- **WHEN** its answer is a failure other than a named line or a refused tender
 - **THEN** the drawer shows the existing failure feedback and opens no Shopify page
 - **AND** the pending Pay ends and the drawer sends no further checkout request by itself
 - **AND** Pay is available again once the basket is ready, and a later Pay is a new request
 
-<!-- trace:scenario id=g10.store-checkout.SC-vsd rev=3 -->
 #### Scenario: grade10-site-store-checkout-SC-37 - Existing verification feedback keeps the account gate
 **Serves:** grade10-site-store-checkout-US-01 - Existing verification feedback keeps the account gate
 
@@ -449,7 +448,6 @@ The cart drawer SHALL send Pay through the store's existing checkout request and
 - **AND** where the profile page is enabled, an account action opens the existing account verification route
 - **AND** promo or points cannot bypass the gross-goods gate
 
-<!-- trace:scenario id=g10.store-checkout.SC-ecp rev=2 -->
 #### Scenario: grade10-site-store-checkout-SC-57 - Gross goods preserve the existing verification boundary
 **Serves:** `grade10-site-store-checkout-US-01` - Gross goods preserve the existing verification boundary
 

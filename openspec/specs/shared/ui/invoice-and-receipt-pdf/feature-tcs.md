@@ -120,25 +120,25 @@
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other order-value line supplied, and Insurance set to `<insurance prop>`.
+
 **Test data:**
 
-| Insurance prop | Insurance line |
+| `<insurance prop>` | `<insurance line>` |
 | --- | --- |
 | Supplied | Renders |
 | Omitted | Does not render |
 
-**Pre-conditions:**
-
-* `InvoicePdf` is rendered with every other order-value line supplied, and Insurance set per the row.
-
 **Steps:**
 
-1. Render `InvoicePdf` with the row's Insurance prop.
+1. Render `InvoicePdf` with `<insurance prop>`.
 2. Inspect the order-value lines.
 
 **Expected Results:**
 
-* The Insurance line matches the row's outcome.
+* The Insurance line has this presence: `<insurance line>`.
 * Every other order-value line still renders.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-5dx rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
@@ -190,25 +190,25 @@ Runs once per row of **Test data**.
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other field supplied, and `replacesInvoice` set to `<replaces invoice>`.
+
 **Test data:**
 
-| `replacesInvoice` | Replacement line |
+| `<replaces invoice>` | `<replacement line>` |
 | --- | --- |
 | `{ invoiceId: "IN-LK42301" }` | Renders `Replaces invoice IN-LK42301` |
 | Omitted or `null` | Does not render |
 
-**Pre-conditions:**
-
-* `InvoicePdf` is rendered with every other field supplied, and `replacesInvoice` set per the row.
-
 **Steps:**
 
-1. Render `InvoicePdf` with the row's `replacesInvoice` value.
+1. Render `InvoicePdf` with `<replaces invoice>`.
 2. Inspect the meta rows.
 
 **Expected Results:**
 
-* The replacement line matches the row's outcome and names the prior invoice.
+* The replacement line has this outcome: `<replacement line>` and names the prior invoice.
 * The prior invoice remains retained; this renderer does not mark it cancelled.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-kio rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-a9o,g10.shared-invoice-and-receipt-pdf.SC-g9l,g10.shared-invoice-and-receipt-pdf.SC-kto,g10.shared-invoice-and-receipt-pdf.SC-9et,g10.shared-invoice-and-receipt-pdf.SC-lrt,g10.shared-invoice-and-receipt-pdf.SC-63o,g10.shared-invoice-and-receipt-pdf.SC-8b8,g10.shared-invoice-and-receipt-pdf.SC-8ek,g10.shared-invoice-and-receipt-pdf.SC-cys,g10.shared-invoice-and-receipt-pdf.SC-14c,g10.shared-invoice-and-receipt-pdf.SC-tt8,g10.shared-invoice-and-receipt-pdf.SC-xeu -->
@@ -361,26 +361,26 @@ Runs once per row of **Test data**.
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with the payment method meta row set to `<payment method content>`.
+
 **Test data:**
 
-| Payment method content |
+| `<payment method content>` |
 | --- |
 | Card brand and last four digits |
 | Bank Transfer |
 | An operator-given description with an external reference |
 
-**Pre-conditions:**
-
-* `ReceiptPdf` is rendered with the payment method meta row set to the row's content.
-
 **Steps:**
 
-1. Render `ReceiptPdf` with the row's payment method content.
+1. Render `ReceiptPdf` with `<payment method content>`.
 2. Inspect the payment method meta row.
 
 **Expected Results:**
 
-* The payment method row renders the row's content verbatim, unchanged by which variant it is.
+* The payment method row renders `<payment method content>` verbatim, unchanged by which variant it is.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-agl rev=1 covers=g10.shared-invoice-and-receipt-pdf.SC-qqd,g10.shared-invoice-and-receipt-pdf.SC-1uz,g10.shared-invoice-and-receipt-pdf.SC-rzk,g10.shared-invoice-and-receipt-pdf.SC-4tl,g10.shared-invoice-and-receipt-pdf.SC-f0x,g10.shared-invoice-and-receipt-pdf.SC-zks,g10.shared-invoice-and-receipt-pdf.SC-27a,g10.shared-invoice-and-receipt-pdf.SC-5lf,g10.shared-invoice-and-receipt-pdf.SC-03g -->
 ### g10.shared-invoice-and-receipt-pdf.US1-TC12: Superseded invoice renders only when given
@@ -590,25 +590,25 @@ Runs once per row of **Test data**.
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other order-value line supplied, and `taxLine` set to `<tax line>`.
+
 **Test data:**
 
-| `taxLine` | Tax row |
+| `<tax line>` | `<tax row>` |
 | --- | --- |
 | Omitted entirely | Does not render |
 | `null` | Does not render |
 
-**Pre-conditions:**
-
-* `InvoicePdf` is rendered with every other order-value line supplied, and `taxLine` set per the row.
-
 **Steps:**
 
-1. Render `InvoicePdf` with the row's `taxLine` value.
+1. Render `InvoicePdf` with `<tax line>`.
 2. Inspect the order-value lines for a tax row.
 
 **Expected Results:**
 
-* The tax row's presence matches the row's outcome.
+* The tax row's presence is `<tax row>`.
 * Omission and `null` are both treated as absent.
 
 <!-- trace:case id=g10.shared-invoice-and-receipt-pdf.TC-7d6 rev=1 covers=none -->
@@ -1578,25 +1578,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The machine clock is set to America/New_York.
-* <document> is rendered with the <date row> date supplied as <date supplied>, every other prop supplied normally.
+* `<document>` is rendered with the `<date row>` date supplied as `<date supplied>`, every other prop supplied normally.
 
 **Test data:**
 
-| Document | Date row | Date supplied | Hong Kong day | Hong Kong month | Hong Kong year | Hong Kong clock |
-| --- | --- | --- | --- | --- | --- | --- |
-| `InvoicePdf` | sent-at | 2026-09-08T16:00:00Z, Hong Kong midnight | 9 | September | 2026 | 00:00 |
-| `InvoicePdf` | payment deadline | 2026-09-08T15:59:00Z, one minute before Hong Kong midnight | 8 | September | 2026 | 23:59 |
-| `InvoicePdf` | payment deadline | 2026-09-08T16:00:00Z, Hong Kong midnight | 9 | September | 2026 | 00:00 |
-| `ReceiptPdf` | date paid | 2026-09-08T16:00:00Z, Hong Kong midnight | 9 | September | 2026 | 00:00 |
+| `<document>` | `<date row>` | `<date supplied>` | `<Hong Kong day>` | `<Hong Kong month>` | `<Hong Kong year>` | `<Hong Kong clock>` | Fixture notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `InvoicePdf` | sent-at | 2026-09-08T16:00:00Z | 9 | September | 2026 | 00:00 | `<date supplied>`: Hong Kong midnight |
+| `InvoicePdf` | payment deadline | 2026-09-08T15:59:00Z | 8 | September | 2026 | 23:59 | `<date supplied>`: one minute before Hong Kong midnight |
+| `InvoicePdf` | payment deadline | 2026-09-08T16:00:00Z | 9 | September | 2026 | 00:00 | `<date supplied>`: Hong Kong midnight |
+| `ReceiptPdf` | date paid | 2026-09-08T16:00:00Z | 9 | September | 2026 | 00:00 | `<date supplied>`: Hong Kong midnight |
 
 **Steps:**
 
-1. Render <document> with the row's date.
-2. Read the <date row> row.
+1. Render `<document>` with `<date supplied>`.
+2. Read the `<date row>` row.
 
 **Expected Results:**
 
-* The row shows the day <Hong Kong day>, the month <Hong Kong month> named in English and the year <Hong Kong year>, in the renderer's own arrangement, and the clock <Hong Kong clock>.
+* The row shows the day `<Hong Kong day>`, the month `<Hong Kong month>` named in English and the year `<Hong Kong year>`, in the renderer's own arrangement, and the clock `<Hong Kong clock>`.
 * The row ends in `GMT+8`.
 * The row does not contain `HKT`.
 
@@ -1620,11 +1620,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` and `ReceiptPdf` are each rendered with a `copy` argument in <copy language>, with the sent-at date and the date paid supplied as 2026-09-01T12:00:00Z.
+* `InvoicePdf` and `ReceiptPdf` are each rendered with a `copy` argument in `<copy language>`, with the sent-at date and the date paid supplied as 2026-09-01T12:00:00Z.
 
 **Test data:**
 
-| Copy language |
+| `<copy language>` |
 | --- |
 | en |
 | zh-Hant |
@@ -1682,7 +1682,7 @@ Runs once per row of **Test data**.
 * One item row sits under the header, with the title, Winning Bid, Buyer's Premium and Total of `<item_1>` in their columns.
 * No second item row is drawn.
 * An Item Total row sits directly under the item row, with the three `<item_total_1>` amounts, one under each amount column.
-* No lot title heading and no Description or Amount header appears.
+* No listing title heading and no Description or Amount header appears.
 * Step 4: the charges and the summary follow the Item Total row.
 
 ### g10.shared-invoice-and-receipt-pdf.US1-TC52: Several items read as one row each in the order given
@@ -1887,7 +1887,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The header row, a divider under it, one `<item_1>` row and the Item Total row with the `<item_total_1>` amounts come first, in that order.
-* No lot title heading and no Description or Amount header appears.
+* No listing title heading and no Description or Amount header appears.
 * The charge rows and the summary follow, with their supplied amounts.
 * The payment breakdown follows the summary: Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due, in that order, with the `<breakdown_1>` amounts.
 
@@ -1952,11 +1952,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ReceiptPdf` is rendered with the row's item as its only item, the row's embedded font, and every other required prop supplied.
+* `ReceiptPdf` is rendered with `<item>` as its only item, `<embedded font>`, and every other required prop supplied.
 
 **Test data:**
 
-| Item | Embedded font | Item row |
+| `<item>` | `<embedded font>` | `<expected item row>` |
 | --- | --- | --- |
 | Title `1999 Pokemon Base Set First Edition Shadowless Holographic Charizard 4/102 Graded PSA 10 Gem Mint From A Single Owner Collection Certified In 2019` (146 characters), Winning Bid `HKD 75,000.00`, Buyer's Premium `HKD 15,000.00`, Total `HKD 90,000.00` | Not supplied | The title wraps onto at least three lines inside the Item column, and the three amounts sit beside its first line |
 | Title `1999 寶可夢 初版 噴火龍 PSA 10`, Winning Bid `HKD 30,000.00`, Buyer's Premium `HKD 6,000.00`, Total `HKD 36,000.00` | A font file that carries every character of the title | Every character draws as a glyph of the supplied font, and the three amounts sit in their columns on the title's line |
@@ -1964,13 +1964,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render `ReceiptPdf` with the row's item and embedded font.
+1. Render `ReceiptPdf` with `<item>` and `<embedded font>`.
 2. Parse the returned bytes as a PDF document and read page 1.
 3. Read the item row and the row under it.
 
 **Expected Results:**
 
-* The item row matches the row's outcome.
+* The item row has this outcome: `<expected item row>`.
 * No part of the title crosses into an amount column.
 * The Item Total row sits directly under the item row.
 
@@ -2162,12 +2162,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| renderer | `InvoicePdf`, then `ReceiptPdf`, one full pass each |
 | items_two | The smallest count of items for which `<renderer>` returns two pages and page 2 holds at least three item rows: from the largest count that returns one page, add items one at a time. Items are titled `Lot 001`, `Lot 002`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
 | item_long | Title `1999 Pokemon Base Set First Edition Shadowless Holographic Charizard 4/102 Graded PSA 10 Gem Mint From A Single Owner Collection Certified In 2019` (146 characters, wrapping to at least three lines in the Item column), Winning Bid `HKD 75,000.00`, Buyer's Premium `HKD 15,000.00`, Total `HKD 90,000.00` |
 | p_last | The position of the last item row on page 1 when `<renderer>` renders `<items_two>` items without `<item_long>` |
 | p | Each position from `<p_last>` minus 4 to `<p_last>` plus 1, one render per position |
 | item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | one full pass each |
+| ReceiptPdf | one full pass each |
 
 **Steps:**
 
@@ -2425,11 +2429,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The row's renderer is rendered with the row's two items and Item Total amounts, and every other required prop supplied.
+* `<renderer>` is rendered with two items titled Lot A and Lot B, with amounts `<item 1 amounts>` and `<item 2 amounts>`, and Item Total amounts `<item total amounts>`, and every other required prop supplied.
 
 **Test data:**
 
-| Renderer | Item 1 (title `Lot A`): Winning Bid / Buyer's Premium / Total | Item 2 (title `Lot B`): Winning Bid / Buyer's Premium / Total | Item Total: Winning Bid / Buyer's Premium / Total | Cell drawn |
+| `<renderer>` | `<item 1 amounts>` | `<item 2 amounts>` | `<item total amounts>` | `<cell drawn>` |
 | --- | --- | --- | --- | --- |
 | `InvoicePdf` | `HKD 100,000.00` / `HKD 20,000.00` / `HKD 120,000.00` | `HKD 50,000.00` / `HKD 10,000.00` / `HKD 60,000.00` | `HKD 1.00` / `HKD 30,000.00` / `HKD 180,000.00` | Item Total row, Winning Bid column: `HKD 1.00` |
 | `InvoicePdf` | `HKD 100,000.00` / `HKD 20,000.00` / `HKD 7.00` | `HKD 50,000.00` / `HKD 10,000.00` / `HKD 60,000.00` | `HKD 150,000.00` / `HKD 30,000.00` / `HKD 180,000.00` | Lot A row, Total column: `HKD 7.00` |
@@ -2438,9 +2442,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render the row's renderer with the row's items and Item Total amounts.
+1. Render `<renderer>` with the two items with amounts `<item 1 amounts>` and `<item 2 amounts>`, and Item Total amounts `<item total amounts>`.
 2. Parse the returned bytes as a PDF document and read page 1.
-3. Read the cell the row names.
+3. Read the cell described by `<cell drawn>`.
 4. Read every other amount cell in the item table.
 
 **Expected Results:**
@@ -2470,12 +2474,12 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| word | `ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ` (78 letters, no space, wider than the Item column) |
-| item_word | Title `<word>`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
-| item_serial | Title `Serial <word> PSA-10`, Winning Bid `HKD 50,000.00`, Buyer's Premium `HKD 10,000.00`, Total `HKD 60,000.00` |
-| item_total_2 | Winning Bid `HKD 150,000.00`, Buyer's Premium `HKD 30,000.00`, Total `HKD 180,000.00` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| word | ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ | (78 letters, no space, wider than the Item column) |
+| item_word | Title `<word>`, Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` | · |
+| item_serial | Title `Serial <word> PSA-10`, Winning Bid `HKD 50,000.00`, Buyer's Premium `HKD 10,000.00`, Total `HKD 60,000.00` | · |
+| item_total_2 | Winning Bid `HKD 150,000.00`, Buyer's Premium `HKD 30,000.00`, Total `HKD 180,000.00` | · |
 
 **Steps:**
 
@@ -2513,10 +2517,14 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| renderer | `InvoicePdf`, then `ReceiptPdf`, one full pass each |
 | item_wide | Title `Lot A`, Winning Bid `HKD 12,345,678.00`, Buyer's Premium `HKD 2,469,135.60`, Total `HKD 14,814,813.60` |
 | item_small | Title `Lot B`, Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00`, Total `HKD 120.00` |
 | item_total_wide | Winning Bid `HKD 12,345,778.00`, Buyer's Premium `HKD 2,469,155.60`, Total `HKD 14,814,933.60` |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | one full pass each |
+| ReceiptPdf | one full pass each |
 
 **Steps:**
 
@@ -2554,12 +2562,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| renderer | `InvoicePdf`, then `ReceiptPdf`, a full pass each for each issuer |
 | document_number | `IN-LK42301` on the invoice, `RC-CN8HK01P1` on the receipt |
-| recipient | `Chan Tai Man` |
+| recipient | Chan Tai Man |
 | issuer | First `Grade10`, which has a wordmark on file, so page 1 draws the wordmark at the top right; then `Issuer Co`, which has none, so page 1 draws the name as text at the top right; email `billing@example.com` on both |
 | items_100 | 100 items titled `Lot 001` to `Lot 100` in that order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
 | item_total_100 | Winning Bid `HKD 100,000.00`, Buyer's Premium `HKD 20,000.00`, Total `HKD 120,000.00` |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | a full pass each for each issuer |
+| ReceiptPdf | a full pass each for each issuer |
 
 **Steps:**
 
@@ -2645,7 +2657,7 @@ Runs once per row of **Test data**.
 | item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
 | summary_1 | Subtotal `HKD 121,312.00`, Payment Processing Fee `HKD 4,000.00`, Order Total `HKD 125,312.00` |
 | breakdown_1 | Original Invoice Total `HKD 125,312.00`, Previous Payments `HKD 0.00`, Current Payment Received `HKD 125,312.00`, Remaining Balance Due `HKD 0.00` |
-| transfer_reference | `TRF-7731` |
+| transfer_reference | TRF-7731 |
 
 **Steps:**
 
@@ -2683,13 +2695,17 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| renderer | `InvoicePdf`, then `ReceiptPdf`, one full pass each |
 | n | Each count of items from 1 to 40, one render per count. Items are titled `Lot 01`, `Lot 02`, ... in order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
 | item_total_n | Winning Bid `HKD 9,999.00`, Buyer's Premium `HKD 1,999.00`, Total `HKD 11,998.00`, supplied for every count |
 | charges_2 | Shipping & Handling `HKD 80.00` and Insurance `HKD 40.00`, in that order |
 | summary_1 | Subtotal `HKD 121,312.00`, Payment Processing Fee `HKD 4,000.00`, Order Total `HKD 125,312.00` |
 | breakdown_1 | Original Invoice Total `HKD 125,312.00`, Previous Payments `HKD 0.00`, Current Payment Received `HKD 125,312.00`, Remaining Balance Due `HKD 0.00`, supplied to `ReceiptPdf` only |
 | issuer | Name `Issuer Co`, email `billing@example.com`. The name has no wordmark on file, so page 1 also draws it as text at the top right as the issuer mark. The issuer block is found by its email, with the name on the line directly above it |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | one full pass each |
+| ReceiptPdf | one full pass each |
 
 **Steps:**
 
@@ -2730,7 +2746,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Document | Compared with |
+| `<document>` | `<compared document>` |
 | --- | --- |
 | `InvoicePdf` with one item and bank details | `InvoicePdf` with one item and no bank details |
 | `InvoicePdf` with 30 items and no bank details | `InvoicePdf` with one item and no bank details |
@@ -2739,9 +2755,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render the row's compared document.
+1. Render `<compared document>`.
 2. Parse the returned bytes as a PDF document and read the x and y of the issuer email and of the line directly above it on its last page.
-3. Render the row's document with the same issuer.
+3. Render `<document>` with the same issuer.
 4. Parse the returned bytes as a PDF document and read the x and y of the issuer email and of the line directly above it on its last page.
 
 **Expected Results:**
@@ -2772,9 +2788,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| renderer | `InvoicePdf`, then `ReceiptPdf`, one full pass each |
 | items_30 | 30 items titled `Lot 01` to `Lot 30` in that order, one line each, each with Winning Bid `HKD 1,000.00`, Buyer's Premium `HKD 200.00`, Total `HKD 1,200.00` |
 | item_total_30 | Winning Bid `HKD 30,000.00`, Buyer's Premium `HKD 6,000.00`, Total `HKD 36,000.00` |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | one full pass each |
+| ReceiptPdf | one full pass each |
 
 **Steps:**
 
@@ -2811,8 +2831,12 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| renderer | `InvoicePdf`, then `ReceiptPdf`, one call each |
 | item_total_1 | Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00`, Total `HKD 120.00` |
+
+| `<renderer>` | Fixture notes |
+| --- | --- |
+| InvoicePdf | one call each |
+| ReceiptPdf | one call each |
 
 **Steps:**
 
@@ -2845,18 +2869,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` and `ReceiptPdf` are each called with the row's title as the only item, with Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00` and Total `HKD 120.00`, the same three amounts as the Item Total, no embedded font, and every other required prop supplied.
+* `InvoicePdf` and `ReceiptPdf` are each called with `<item title>` as the only item, with Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00` and Total `HKD 120.00`, the same three amounts as the Item Total, no embedded font, and every other required prop supplied.
 
 **Test data:**
 
-| Item title |
+| `<item title>` |
 | --- |
 | `中8號` (Chinese characters) |
 | `Лот 8` (Cyrillic letters) |
 
 **Steps:**
 
-1. Call `InvoicePdf` with the row's title and no embedded font.
+1. Call `InvoicePdf` with `<item title>` and no embedded font.
 2. Read the outcome of the call.
 3. Repeat steps 1 and 2 for `ReceiptPdf`.
 
@@ -2884,11 +2908,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `InvoicePdf` and `ReceiptPdf` are each called with the row's data, the item's own three amounts as the Item Total, and every other required prop supplied normally.
+* `InvoicePdf` and `ReceiptPdf` are each called with `<document data>`, the item's own three amounts as the Item Total, and every other required prop supplied normally.
 
 **Test data:**
 
-| Document data | Part the error names |
+| `<document data>` | `<error part>` |
 | --- | --- |
 | One item titled `Lot A` whose Winning Bid, Buyer's Premium and Total are each `HKD 12345678901234567890123456789012345678901234567890123456` (60 characters) | The amounts |
 | One item whose title is the word `lot` repeated 2,500 times with a space between, with Winning Bid `HKD 100.00`, Buyer's Premium `HKD 20.00` and Total `HKD 120.00` | The item row |
@@ -2896,7 +2920,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Call `InvoicePdf` with the row's data.
+1. Call `InvoicePdf` with `<document data>`.
 2. Read the outcome of the call.
 3. Repeat steps 1 and 2 for `ReceiptPdf`.
 
@@ -2904,7 +2928,7 @@ Runs once per row of **Test data**.
 
 * Each call rejects with an error.
 * No PDF bytes are returned.
-* The error names the part in the row's second column as the one that does not fit.
+* The error names `<error part>` as the one that does not fit.
 
 ## Settled
 

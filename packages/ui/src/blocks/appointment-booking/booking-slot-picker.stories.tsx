@@ -31,11 +31,6 @@ const meta = {
     selectedDate: "2026-10-22",
     slots: { status: "ready", data: THURSDAY_SLOTS },
     timeZone: FIXTURE_TIME_ZONE,
-    earliest: {
-      label: "Earliest: today, 16:30",
-      pressed: false,
-      onPick: fn(),
-    },
     footer: "Book at least 2 hours ahead, up to 60 days ahead.",
     onMonthChange: fn(),
     onSelectDay: fn(),
@@ -66,27 +61,22 @@ export const Default: Story = {
     expect(args.onSelectDay).toHaveBeenCalledWith("2026-10-17");
     await userEvent.click(canvas.getByRole("button", { name: "15:00" }));
     expect(args.onSelectSlot).toHaveBeenCalledWith(THURSDAY_SLOTS[4]);
-    await userEvent.click(
-      canvas.getByRole("button", { name: /Earliest: today, 16:30/ }),
-    );
-    expect(args.earliest?.onPick).toHaveBeenCalledTimes(1);
+    expect(
+      canvas.queryByRole("button", { name: /Earliest/ }),
+    ).not.toBeInTheDocument();
   },
 };
 
-/** Today: the header says so and the earliest press is on. */
+/** Today: the header says so. */
 export const Today: Story = {
   args: {
     selectedDate: "2026-10-15",
     selectedStart: TODAY_SLOTS[0]?.start,
     slots: { status: "ready", data: TODAY_SLOTS },
-    earliest: { label: "Earliest: today, 16:30", pressed: true, onPick: fn() },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Today, Thu 15 Oct")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: /Earliest: today, 16:30/ }),
-    ).toHaveAttribute("aria-pressed", "true");
     expect(canvas.getByRole("button", { name: "16:30" })).toHaveAttribute(
       "aria-pressed",
       "true",
@@ -96,7 +86,7 @@ export const Today: Story = {
 
 /** No day picked yet: the times column asks for one. */
 export const NoDay: Story = {
-  args: { selectedDate: undefined, earliest: undefined },
+  args: { selectedDate: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Pick a day to see its free times.")).toBeVisible();

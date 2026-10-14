@@ -37,12 +37,12 @@ export const Default: Story = {
     ).toBeVisible();
     await userEvent.click(canvas.getByRole("radio", { name: /^Central/ }));
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
-    await userEvent.click(
-      canvas.getByRole("button", { name: /Earliest: today, 16:30/ }),
-    );
     expect(
       canvas.getByRole("heading", { level: 2, name: "Pick a time" }),
     ).toBeVisible();
+    expect(canvas.queryByRole("button", { name: /Earliest/ })).toBeNull();
+    await userEvent.click(canvas.getByRole("button", { name: /^Thu 22 Oct/ }));
+    await userEvent.click(canvas.getByRole("button", { name: "15:00" }));
     await userEvent.click(canvas.getByRole("button", { name: "Continue" }));
     expect(
       canvas.getByRole("heading", { level: 2, name: "Your details" }),
@@ -69,8 +69,21 @@ export const FullDay: Story = {
   },
 };
 
-export const AlreadyBookedSignedOut: Story = {
-  args: { scenario: "already booked signed out" },
+/** Guest booking is off: signed out, the details step asks for a sign-in,
+ * and the picks are kept through it. */
+export const SignedOut: Story = {
+  args: { scenario: "signed out" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("textbox", { name: "Name" })).toBeNull();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Sign in to book" }),
+    );
+    expect(canvas.getByText(`Signed in as Alex Chan.`)).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: /^Book Thu 22 Oct, 15:00/ }),
+    ).toBeVisible();
+  },
 };
 
 export const TooManyTriesToday: Story = {
@@ -100,13 +113,19 @@ export const PaidService: Story = {
   args: { scenario: "paid service" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("group", { name: "Pay now" })).toBeVisible();
-    expect(canvas.getByText("We hold this time for 30 minutes")).toBeVisible();
+    expect(
+      canvas.getByRole("button", {
+        name: "Confirm booking with HK$100 deposit",
+      }),
+    ).toBeVisible();
+    expect(
+      canvas.getByText(
+        "Refunded if you cancel at least 24 hours before, or if the shop cancels.",
+      ),
+    ).toBeVisible();
+    expect(canvas.queryByText(/We hold this time/)).toBeNull();
+    expect(canvas.queryByText("I’m booking for someone else")).toBeNull();
   },
-};
-
-export const BookingForSomeoneElse: Story = {
-  args: { scenario: "booking for someone else" },
 };
 
 export const ConfirmingPayment: Story = {

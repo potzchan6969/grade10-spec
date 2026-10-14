@@ -121,6 +121,7 @@ function ProductList({
                 <ProductCard
                   badges={product.badges}
                   cartCount={product.cartCount}
+                  cartFailed={product.cartFailed}
                   copy={copy.card}
                   href={product.href}
                   imageAlt={product.imageAlt}

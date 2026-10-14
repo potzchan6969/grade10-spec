@@ -11,6 +11,7 @@ QA walks sign-in on staging through a locked door. Collectors never see it.
 | Rule | Value |
 | --- | --- |
 | Who may call | 🚧 The door's own workflow, on a dispatch a reviewer approved |
+| A QA agent | 🚧 Holds the staging QA token, committed to the repository |
 | Which addresses | 🚧 Any address under the tester domain |
 | Where it is open | 🚧 Staging only |
 | How long a captured mail stays readable | 🚧 **Fifteen minutes**, so it outlives the link |
@@ -18,7 +19,11 @@ QA walks sign-in on staging through a locked door. Collectors never see it.
 
 ## Who May Call
 
-- 🚧 **The door's own workflow** — one workflow opens the door, and nobody else can. Proving the repository is not enough: every job in it proves the same thing, including one running code a pull request wrote.
+- 🚧 **The door's own workflow** — one workflow opens the door. Proving the repository is not enough: every job in it proves the same thing, including one running code a pull request wrote.
+- 🚧 **A QA agent** — an agent walking a manual pass on staging captures a tester's sign-in link through the door, so it signs in without a mailbox — [Manual QA Passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
+- 🚧 **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
+- 🚧 **What the token may do** — capture, age and clear; never ban or prepare, so a holder can reach no account outside the tester domain and grant nothing
+- 🚧 **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on
 
 ## Testers
 
@@ -60,7 +65,8 @@ Staging auth tests need the sign-in link without opening `/dev` on a public work
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Where the door is open | Decided | Staging only. | Product |
-| Who may call | Decided | One workflow, from main, on a reviewed dispatch. Proving the repository alone is not enough. | Product |
+| Who may call | Decided | One workflow, from main, on a reviewed dispatch, and a QA agent walking a manual pass on staging. Proving the repository alone is not enough. | Product |
+| How a QA agent proves itself | Decided | A staging-only QA token committed to the repository, for capture, age and clear on a tester address. Anyone who reads the repository can sign in as a tester on staging; that is accepted for an easy setup. | Product |
 | Which addresses | Decided | Any address under one tester domain, minted per run. | Product |
 | The domain | ❓ Open | Ops names it. | Ops |
 | Delivery | ❓ Open | A catch-all inbox on that domain, so nothing bounces. | Ops |

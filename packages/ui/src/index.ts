@@ -31,11 +31,6 @@ export {
   type BookingNoticeProps,
 } from "./blocks/appointment-booking/booking-notice";
 export {
-  BookingPayNotice,
-  type BookingPayNoticeCopy,
-  type BookingPayNoticeProps,
-} from "./blocks/appointment-booking/booking-pay-notice";
-export {
   BookingServicePicker,
   type BookingServicePickerCopy,
   type BookingServicePickerProps,

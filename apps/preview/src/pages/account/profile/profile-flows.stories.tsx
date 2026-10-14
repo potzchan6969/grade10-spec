@@ -154,7 +154,10 @@ export const Default: Story = {
     );
 
     await userEvent.click(next);
-    expect(canvas.getByRole("button", { name: "Save" })).toBeDisabled();
+    expect(canvas.getByRole("button", { name: "Save" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
 
     await userEvent.click(next);
     expect(canvas.getByText(PROFILE_COPY.refused)).toBeVisible();

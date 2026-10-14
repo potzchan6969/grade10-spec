@@ -29,6 +29,10 @@ session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
 sign-in email, then My Auctions and Sign Out
 
+🚧 **Pending session** - while the application says the session has not answered,
+the account entry is a placeholder the size of the account icon, with nothing to
+press and nothing read aloud
+
 **Profile** - first in the menu, only when `onProfile` is supplied
 
 **My Orders** - ahead of My Auctions, only when `onMyOrders` is supplied
@@ -102,6 +106,10 @@ through an optional cart slot, as it does for account.
 ::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
 ::story{id="site-page-shell-blocks-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+
+::story{id="site-page-shell-blocks-siteheader-auction-first--pending" title="Auction first — pending session"}
+
+::story{id="site-page-shell-blocks-siteheader-layout--narrow-pending" title="SiteHeader — narrow pending session"}
 
 ::story{id="design-system-layout-nav-overview--another-brand" title="Nav — another brand"}
 

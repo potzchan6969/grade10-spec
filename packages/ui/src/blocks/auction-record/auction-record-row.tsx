@@ -16,7 +16,6 @@ import { Trash } from "@phosphor-icons/react";
 import {
   type CSSProperties,
   type RefObject,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -27,6 +26,7 @@ import type {
   AuctionRecordRowState,
   EmailAlertsCopy,
 } from "./types";
+import { useSettledChange } from "./use-settled-change";
 
 /** Badge tone per sale / bid state. The label itself stays consumer-supplied.
  *
@@ -70,7 +70,7 @@ type AuctionRecordRowFactLabels = {
 type AuctionRecordRowViewProps = AuctionRecordRowProps & {
   /** Page enter stagger — keeps subgrid; delay cleared while exiting. */
   enterStyle?: CSSProperties;
-  /** Collapse + fade before the application drops the row. */
+  /** Collapse + fade after the application dropped the row. */
   exiting?: boolean;
   exitMs?: number;
   exitEase?: string;
@@ -116,31 +116,40 @@ function LotThumbnail({
 }
 
 /**
- * Toasts once per confirmed change of the controlled `emailAlerts` value, so
- * the message follows what the application accepted rather than the click that
- * asked for it. Copy is consumer-supplied; without it, nothing is announced.
- * The application mounts one design-system `<Toast />` at its root.
+ * Toasts once per settled change the collector made to `emailAlerts`
+ * (`useSettledChange`), so a switch moved back after a refused write says
+ * nothing. Copy is consumer-supplied; without it, nothing is announced. The
+ * application mounts one design-system `<Toast />` at its root.
  */
 function useEmailAlertsToast(
   enabled: boolean,
+  pending: boolean,
   copy: EmailAlertsCopy | undefined,
   active: boolean,
 ) {
-  const previous = useRef(enabled);
-
-  useEffect(() => {
-    if (previous.current === enabled) return;
-    previous.current = enabled;
+  return useSettledChange(enabled, pending, (settled) => {
     if (!active || !copy) return;
-
-    const message = enabled ? copy.enabledToast : copy.mutedToast;
+    const message = settled ? copy.enabledToast : copy.mutedToast;
     if (!message) return;
-
     toast(
       message.title,
       message.description ? { description: message.description } : undefined,
     );
-  }, [active, copy, enabled]);
+  });
+}
+
+function RowRefusal({
+  message,
+  className,
+}: {
+  message?: string;
+  className?: string;
+}) {
+  return message ? (
+    <Text className={className} role="alert" size="xs" tone="error">
+      {message}
+    </Text>
+  ) : null;
 }
 
 function useCollapseOnExit(exiting: boolean): {
@@ -190,10 +199,12 @@ function AuctionRecordRow({
   copy,
   onOpen,
   watchPending,
+  watchFailed,
   watchCopy,
   onWatchToggle,
   emailAlerts,
   emailAlertsPending,
+  emailAlertsFailed,
   emailAlertsDisabled,
   emailAlertsCopy,
   onEmailAlertsChange,
@@ -222,7 +233,17 @@ function AuctionRecordRow({
 
   const { ref, collapseHeight } = useCollapseOnExit(exiting);
 
-  useEmailAlertsToast(alertsEnabled, emailAlertsCopy, showEmailAlerts);
+  const markAlertsPressed = useEmailAlertsToast(
+    alertsEnabled,
+    Boolean(emailAlertsPending),
+    emailAlertsCopy,
+    showEmailAlerts,
+  );
+  const changeEmailAlerts = (checked: boolean) => {
+    markAlertsPressed();
+    onEmailAlertsChange?.(checked);
+  };
+  const unwatchInactive = Boolean(watchPending) || exiting;
 
   const titleClassName =
     presentation === "card"
@@ -314,8 +335,8 @@ function AuctionRecordRow({
               : emailAlertsCopy.offAriaLabel
           }
           checked={alertsEnabled}
-          disabled={Boolean(emailAlertsDisabled) || Boolean(emailAlertsPending)}
-          onCheckedChange={(checked) => onEmailAlertsChange(checked === true)}
+          disabled={Boolean(emailAlertsDisabled)}
+          onCheckedChange={(checked) => changeEmailAlerts(checked === true)}
           size="md"
         />
         {alertsNote ? (
@@ -323,6 +344,7 @@ function AuctionRecordRow({
             {alertsNote}
           </Text>
         ) : null}
+        <RowRefusal message={emailAlertsFailed} />
       </VStack>
     ) : null;
 
@@ -346,8 +368,8 @@ function AuctionRecordRow({
               : emailAlertsCopy.offAriaLabel
           }
           checked={alertsEnabled}
-          disabled={Boolean(emailAlertsDisabled) || Boolean(emailAlertsPending)}
-          onCheckedChange={(checked) => onEmailAlertsChange(checked === true)}
+          disabled={Boolean(emailAlertsDisabled)}
+          onCheckedChange={(checked) => changeEmailAlerts(checked === true)}
           size="md"
         />
       </HStack>
@@ -364,10 +386,10 @@ function AuctionRecordRow({
       </a>
     ) : showUnwatch && watchCopy && onWatchToggle ? (
       <Button
-        aria-busy={watchPending || undefined}
         aria-label={watchCopy.unwatchAriaLabel}
-        disabled={watchPending || exiting}
+        disabled={exiting}
         leading={<Trash aria-hidden />}
+        loading={watchPending}
         onClick={onWatchToggle}
         size="sm"
         variant="secondary"
@@ -386,8 +408,13 @@ function AuctionRecordRow({
       <Link
         aria-busy={watchPending || undefined}
         aria-label={watchCopy.unwatchAriaLabel}
-        disabled={watchPending || exiting}
-        render={<button onClick={onWatchToggle} type="button" />}
+        disabled={unwatchInactive}
+        render={
+          <button
+            onClick={unwatchInactive ? undefined : onWatchToggle}
+            type="button"
+          />
+        }
         size="xs"
         variant="error"
       >
@@ -475,12 +502,19 @@ function AuctionRecordRow({
           </div>
 
           {showFooter ? (
-            <div className="pointer-events-auto relative z-10 flex w-full items-center gap-2 border-t border-border px-2 pt-2 pb-1">
-              {cardActionControl}
-              {cardAlertsControl ? (
-                <div className="ml-auto">{cardAlertsControl}</div>
-              ) : null}
-            </div>
+            <VStack
+              className="pointer-events-auto relative z-10 w-full"
+              gap="xs"
+            >
+              <div className="pointer-events-auto relative z-10 flex w-full items-center gap-2 border-t border-border px-2 pt-2 pb-1">
+                {cardActionControl}
+                {cardAlertsControl ? (
+                  <div className="ml-auto">{cardAlertsControl}</div>
+                ) : null}
+              </div>
+              <RowRefusal className="px-2" message={watchFailed} />
+              <RowRefusal className="px-2" message={emailAlertsFailed} />
+            </VStack>
           ) : null}
         </div>
       </li>
@@ -533,7 +567,10 @@ function AuctionRecordRow({
       </TableCell>
 
       <TableCell className={AUCTION_RECORD_COLUMNS.actions}>
-        {tableActionControl}
+        <VStack gap="xs" hAlign="start">
+          {tableActionControl}
+          <RowRefusal message={watchFailed} />
+        </VStack>
       </TableCell>
     </TableRow>
   );

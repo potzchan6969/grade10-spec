@@ -52,7 +52,14 @@ const meta = {
     );
   },
   play: async ({ args, canvasElement }) => {
-    const heading = headingOf(args as BookVisitSettings);
+    const settings = args as BookVisitSettings;
+    if (settings.step === "details" && settings.shopper === "signedOut") {
+      expect(
+        await within(canvasElement).findAllByText("Sign in to book"),
+      ).not.toHaveLength(0);
+      return;
+    }
+    const heading = headingOf(settings);
     if (!heading) return;
     expect(
       await within(canvasElement).findAllByRole("heading", { name: heading }),
@@ -74,27 +81,18 @@ export const TimeJustTaken: Story = {
 /** The day is full, so each shop's earliest free time is offered. */
 export const FullDay: Story = { args: { step: "time", time: "full" } };
 
-/** A signed-out email that already holds this service is told so. */
-export const AlreadyBooked: Story = {
-  args: { shopper: "signedOut", gate: "held" },
-};
+/** Guest booking is off: a signed-out collector is asked to sign in. */
+export const SignedOut: Story = { args: { shopper: "signedOut" } };
 
-/** A signed-out email past 10 tries today is turned away until tomorrow. */
-export const TooManyTries: Story = {
-  args: { shopper: "signedOut", gate: "tries" },
-};
+/** An email past 10 tries today is turned away until tomorrow. */
+export const TooManyTries: Story = { args: { gate: "tries" } };
 
-/** A service the shop calls about asks a signed-out collector for a phone. */
+/** A service the shop calls about asks for a phone the account lacks. */
 export const NeedsAPhone: Story = {
-  args: { shopper: "signedOut", phone: "required" },
+  args: { shopper: "signedInNoPhone", phone: "required" },
 };
 
 /** Paid now, and the payment still confirming. */
 export const PaymentConfirming: Story = {
   args: { service: "paid", step: "after", payment: "confirming" },
-};
-
-/** Paid and booked, for someone else. */
-export const PaidForSomeoneElse: Story = {
-  args: { service: "paid", step: "after", bookingFor: "someone" },
 };

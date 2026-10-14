@@ -26,11 +26,18 @@
 * **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
-Signed in as an operator who holds `session:list`. <a subject user id> has at least one session.
+Signed in as an operator who holds `session:list`. `<a subject user id>` has at least one session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin sessions url> for <a subject user id>.
+1. Navigate to `<grade10 admin sessions url>` for `<a subject user id>`.
 2. Check the listed sessions.
 
 **Expected Results:**
@@ -56,9 +63,15 @@ Signed in as an operator who holds `session:list`. <a subject user id> has at le
 **Pre-conditions:**
 Signed in as a person who does not hold `session:list`.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+
 **Steps:**
 
-1. Try to list sessions for <a subject user id>.
+1. Try to list sessions for `<a subject user id>`.
 
 **Expected Results:**
 
@@ -81,11 +94,17 @@ Signed in as a person who does not hold `session:list`.
 * **Trace:** shared-auth-sessions-US-01
 
 **Pre-conditions:**
-Signed in as an operator whose role is `support`. <an admin user id> holds `admin`.
+Signed in as an operator whose role is `support`. `<an admin user id>` holds `admin`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| an admin user id | The admin account prepared with the sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Try to list sessions for <an admin user id>.
+1. Try to list sessions for `<an admin user id>`.
 
 **Expected Results:**
 
@@ -116,11 +135,18 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `session:revoke`. <a subject user id> has a session other than the operator's.
+Signed in as an operator who holds `session:revoke`. `<a subject user id>` has a session other than the operator's.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin sessions url> for <a subject user id>.
+1. Navigate to `<grade10 admin sessions url>` for `<a subject user id>`.
 2. Revoke one of that account's sessions.
 3. Check who is calling on the revoked session.
 
@@ -144,11 +170,18 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has a s
 * **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
-Signed in as an operator who holds `session:revoke`. <a subject user id> has more than one session.
+Signed in as an operator who holds `session:revoke`. `<a subject user id>` has more than one session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 admin sessions url> for <a subject user id>.
+1. Navigate to `<grade10 admin sessions url>` for `<a subject user id>`.
 2. Revoke every session of that account.
 
 **Expected Results:**
@@ -171,11 +204,17 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has mor
 * **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
-Signed in as an operator who does not hold `session:revoke`. <a subject user id> has a live session.
+Signed in as an operator who does not hold `session:revoke`. `<a subject user id>` has a live session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Try to revoke a session of <a subject user id>.
+1. Try to revoke a session of `<a subject user id>`.
 
 **Expected Results:**
 
@@ -198,11 +237,17 @@ Signed in as an operator who does not hold `session:revoke`. <a subject user id>
 * **Trace:** shared-auth-sessions-US-02
 
 **Pre-conditions:**
-Signed in as an operator whose role is `support`. <an admin user id> holds `admin` and has a live session.
+Signed in as an operator whose role is `support`. `<an admin user id>` holds `admin` and has a live session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| an admin user id | The admin account prepared with the sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
-1. Try to revoke a session of <an admin user id>.
+1. Try to revoke a session of `<an admin user id>`.
 
 **Expected Results:**
 
@@ -227,9 +272,15 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 **Pre-conditions:**
 Signed in as an operator who holds `session:revoke`.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Navigate to <grade10 admin sessions url> for the operator's own user id.
+1. Navigate to `<grade10 admin sessions url>` for the operator's own user id.
 2. Revoke the session currently in use.
 
 **Expected Results:**
@@ -255,7 +306,13 @@ Signed in as an operator who holds `session:revoke`.
 **Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/sessions.spec.ts`
 
 **Pre-conditions:**
-Signed in as an operator who holds `session:revoke`. <a subject user id> has two sessions, A and B; an ordinary browse read of A's signed-in state has already warmed its cache and is still within the cache window.
+Signed in as an operator who holds `session:revoke`. `<a subject user id>` has two sessions, A and B; an ordinary browse read of A's signed-in state has already warmed its cache and is still within the cache window.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| a subject user id | The subject account prepared with the standing and sessions in the pre-conditions; bind its user id only |
 
 **Steps:**
 
@@ -314,26 +371,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds session:list and session:revoke) is on <grade10 admin sessions url> for <subject account>.
-* <subject account> is signed in on <grade10 store url> in tab A and on <grade10 admin console url> in tab B, with the second factor proved.
+* admin(holds session:list and session:revoke) is on `<grade10 admin sessions url>` for `<subject account>`.
+* `<subject account>` is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
 
 **Test data:**
 
-| <revoked session> | Tab that still shows <subject account> |
+| `<revoked session>` | Tab that still shows `<subject account>` |
 | --- | --- |
 | The site session | Tab B, the console |
 | The console session | Tab A, the site |
 
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+
 **Steps:**
 
-1. Revoke <revoked session>.
+1. Revoke `<revoked session>`.
 2. Wait 70 seconds, the stated closing bound, then return to tab A.
 3. Return to tab B.
 
 **Expected Results:**
 
 * The tab on the revoked surface shows nobody signed in.
-* The other tab still shows <subject account> signed in.
+* The other tab still shows `<subject account>` signed in.
 
 ---
 
@@ -360,18 +423,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds session:list) is on <grade10 admin sessions url>.
-* <subject account> has a site session on a desktop, a console session on the same desktop and a site session on a phone.
+* admin(holds session:list) is on `<grade10 admin sessions url>`.
+* `<subject account>` has a site session on a desktop, a console session on the same desktop and a site session on a phone.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account holding console access, named by user id |
+| subject account | An account holding console access, named by user id |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. List <subject account>'s sessions by user id.
+1. List `<subject account>`'s sessions by user id.
 
 **Expected Results:**
 
@@ -396,18 +463,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds session:list) is on <grade10 admin sessions url>.
-* <subject account> is signed in on the console only.
+* admin(holds session:list) is on `<grade10 admin sessions url>`.
+* `<subject account>` is signed in on the console only.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account holding console access, named by user id |
+| subject account | An account holding console access, named by user id |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. List <subject account>'s sessions by user id.
+1. List `<subject account>`'s sessions by user id.
 
 **Expected Results:**
 
@@ -431,8 +502,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds session:list) is signed in on <grade10 admin console url> and on <grade10 store url>.
-* admin is on <grade10 admin sessions url>.
+* admin(holds session:list) is signed in on `<grade10 admin console url>` and on `<grade10 store url>`.
+* admin is on `<grade10 admin sessions url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -460,18 +539,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds session:list) is on <grade10 admin sessions url>.
-* <subject account> holds a session made before release, which carries no surface stamp.
+* admin(holds session:list) is on `<grade10 admin sessions url>`.
+* `<subject account>` holds a session made before release, which carries no surface stamp.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account with a pre-release session, named by user id |
+| subject account | An account with a pre-release session, named by user id |
+
+| Field | Value |
+| --- | --- |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. List <subject account>'s sessions by user id.
+1. List `<subject account>`'s sessions by user id.
 
 **Expected Results:**
 
@@ -503,20 +586,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds session:list and session:revoke) is on <grade10 admin sessions url> for <subject account>.
-* <subject account> is signed in on <grade10 store url> in tab A and on <grade10 admin console url> in tab B, with the second factor proved.
+* admin(holds session:list and session:revoke) is on `<grade10 admin sessions url>` for `<subject account>`.
+* `<subject account>` is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| subject account | An account holding console access, named by user id | · |
+| closing bound | 70 seconds | (the stated closing bound) |
+
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account holding console access, named by user id |
-| `<closing bound>` | 70 seconds (the stated closing bound) |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 admin sessions url | The Grade10 operator sessions URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Revoke every session of <subject account>.
-2. Wait <closing bound>, then return to tab A.
+1. Revoke every session of `<subject account>`.
+2. Wait `<closing bound>`, then return to tab A.
 3. Return to tab B.
 
 **Expected Results:**
@@ -542,22 +631,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds user:ban) is on <admin users directory url>.
-* <subject account> is not banned, and is signed in on <grade10 store url> in tab A and on <grade10 admin console url> in tab B, with the second factor proved.
+* admin(holds user:ban) is on `<admin users directory url>`.
+* `<subject account>` is not banned, and is signed in on `<grade10 store url>` in tab A and on `<grade10 admin console url>` in tab B, with the second factor proved.
 
 **Test data:**
 
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| subject account | An account holding console access, named by user id | · |
+| ban reason | Chargeback dispute open | · |
+| closing bound | 70 seconds | (the stated closing bound) |
+
 | Field | Value |
 | --- | --- |
-| `<subject account>` | An account holding console access, named by user id |
-| `<ban reason>` | Chargeback dispute open |
-| `<closing bound>` | 70 seconds (the stated closing bound) |
+| admin users directory url | The Grade10 operator user-directory URL in the test environment; bind its URL only |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Open <subject account> by user id.
-2. Ban it with <ban reason>.
-3. Wait <closing bound>, then return to tab A.
+1. Open `<subject account>` by user id.
+2. Ban it with `<ban reason>`.
+3. Wait `<closing bound>`, then return to tab A.
 4. Return to tab B.
 
 **Expected Results:**

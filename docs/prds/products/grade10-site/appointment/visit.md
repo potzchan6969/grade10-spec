@@ -40,7 +40,7 @@ The manage link opens one page per visit, and the page follows the visit from th
 | --- | --- |
 | Confirmation | on booking, or once the payment arrives |
 | Receipt | once a payment arrives, with the amount |
-| Time released | when a checkout is left unpaid for 30 minutes |
+| Time released | when a checkout is left unpaid for 15 minutes |
 | Reminder | at each lead the service sets, with the pass, Running late and the typhoon line |
 | Moved | on a move |
 | Cancelled | by the collector; by the shop, with the reason; shop closed, with Pick another time; with the refund where the service gives one |

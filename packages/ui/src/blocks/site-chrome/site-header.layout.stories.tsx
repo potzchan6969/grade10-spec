@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
-import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
+import {
+  pendingSessionPlay,
+  SessionSwitch,
+  SITE_HEADER_BASE_ARGS,
+} from "./site-header.story-shared";
 
 const meta = {
   title: "Site/Page Shell/Blocks/SiteHeader/Layout",
@@ -54,4 +58,19 @@ export const NarrowSignedOut: Story = {
     expect(help).toHaveAttribute("target", "_blank");
     expect(help).toHaveAttribute("rel", "noopener noreferrer");
   },
+};
+
+/** Pending at 375px — the placeholder sits beside Cart in the compact bar. */
+export const NarrowPending: Story = {
+  name: "Narrow pending (375px)",
+  args: { session: "pending", onCartClick: fn() },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 375 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <SessionSwitch {...args} />,
+  play: pendingSessionPlay(true),
 };

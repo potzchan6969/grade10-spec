@@ -2,7 +2,7 @@
 
 ## Purpose
 
-How the staging Actions job walks sign-in without the disposable `/dev` door:
+How the staging Actions job, and a QA agent walking a manual pass, walk sign-in without the disposable `/dev` door:
 which run may call, which addresses it may act on, what it may do to them, and
 where the door stays closed. Collectors still walk `shared/auth/sign-in`.
 Operators still walk ban and role on `shared/auth/users`.
@@ -10,7 +10,9 @@ Operators still walk ban and role on `shared/auth/users`.
 ## Feature set
 
 - Who may call
-  - The door's own workflow: a run that proves it is this repository's Actions, running that one workflow from the main branch, on a dispatch a reviewer approved; every other caller is refused
+  - The door's own workflow: a run that proves it is this repository's Actions, running that one workflow from the main branch, on a dispatch a reviewer approved
+  - The QA token: a staging-only token committed to the repository, held by a QA agent, for capture, age and clear alone
+  - Every other caller is refused
 - Testers
   - The tester domain: any address under the one domain Ops names, minted per run; an address outside it is refused, and an account is created when a move needs one
 - What the job may do
@@ -24,7 +26,7 @@ Operators still walk ban and role on `shared/auth/users`.
 
 ## ADDED Requirements
 
-### Requirement: Only the door's own workflow may call
+### Requirement: Only the door's own workflow and the QA token may call
 
 Which run the door acts for, and what a refused call leaves behind.
 
@@ -38,8 +40,13 @@ Which run the door acts for, and what a refused call leaves behind.
   a pull request started included, SHALL be refused
 - **An unapproved dispatch** — a call from a run whose dispatch no reviewer
   approved SHALL be refused
-- **Anyone else** — a call from a laptop, a fork, or another repository SHALL
-  be refused
+- **The QA token** — a call carrying the current QA token SHALL be acted on
+  for capture, age and clear on a tester address; the token is committed to
+  the repository, and staging alone accepts it
+- **The token's limits** — a ban or a prepare carrying only the QA token
+  SHALL be refused, and a token a later commit replaced SHALL be refused
+- **Anyone else** — a call from a laptop, a fork, or another repository that
+  carries no current QA token SHALL be refused
 - **A refused call** — a call the door refuses SHALL change nothing: no
   account, no role, no ban, no link, no limit
 
@@ -95,8 +102,25 @@ Which run the door acts for, and what a refused call leaves behind.
 #### Scenario: shared-auth-test-sign-in-SC-05 - A caller that is not this repository's Actions is refused
 **Serves:** Who may call - every other caller is refused
 
-- **GIVEN** a caller from a laptop, a fork, or another repository
+- **GIVEN** a caller from a laptop, a fork, or another repository, carrying no QA token
 - **WHEN** it calls the door
+- **THEN** the door refuses the call
+- **AND** nothing is changed
+
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-l73 rev=1 -->
+#### Scenario: shared-auth-test-sign-in-SC-94 - The QA token captures a tester's link
+**Serves:** Who may call - the QA agent walking a manual pass
+
+- **GIVEN** a call on staging carrying the current QA token, and a tester address holding an unused sign-in mail
+- **WHEN** it asks for that address's last sign-in mail
+- **THEN** the door returns the link
+
+<!-- trace:scenario id=g10.shared-test-sign-in.SC-kgh rev=1 -->
+#### Scenario: shared-auth-test-sign-in-SC-95 - The QA token cannot ban, prepare, or outlive its rotation
+**Serves:** Who may call - the QA agent walking a manual pass
+
+- **GIVEN** a call on staging carrying only the QA token
+- **WHEN** it asks to ban or prepare a tester address, or carries a token a later commit replaced
 - **THEN** the door refuses the call
 - **AND** nothing is changed
 

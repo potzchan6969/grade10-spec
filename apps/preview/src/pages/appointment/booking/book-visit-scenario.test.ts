@@ -10,13 +10,12 @@ import {
 const REACHED: [Scenario, Partial<BookVisitSettings>][] = [
   ["time just taken", { step: "time", time: "taken" }],
   ["full day", { step: "time", time: "full" }],
-  ["already booked signed out", { shopper: "signedOut", gate: "held" }],
-  ["too many tries today", { shopper: "signedOut", gate: "tries" }],
+  ["signed out", { shopper: "signedOut" }],
+  ["too many tries today", { gate: "tries" }],
   ["slow network", { answer: "slow" }],
   ["signed in, no phone on account", { shopper: "signedInNoPhone" }],
-  ["service needs a phone", { shopper: "signedOut", phone: "required" }],
+  ["service needs a phone", { shopper: "signedInNoPhone", phone: "required" }],
   ["paid service", { service: "paid" }],
-  ["booking for someone else", { bookingFor: "someone" }],
   [
     "confirming payment",
     { service: "paid", step: "after", payment: "confirming" },
@@ -33,10 +32,6 @@ describe("momentOf", () => {
     expect(momentOf({ ...DEFAULT_VISIT, ...settings })).toEqual(
       preset(scenario),
     );
-  });
-
-  it("lets a signed-in collector past the gate", () => {
-    expect(momentOf({ ...DEFAULT_VISIT, gate: "tries" }).refusal).toBeNull();
   });
 
   it("books a free service at once, whatever the payment says", () => {

@@ -51,6 +51,27 @@ export const ErrorState: Story = {
   },
 };
 
+/** A retry under way spins on its button, keeps focus and takes no press. */
+export const ErrorRetryPending: Story = {
+  args: {
+    state: {
+      status: "error",
+      message: "Could not load your profile.",
+      action: { label: common.retry, onAction: fn(), pending: true },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const retry = canvas.getByRole("button", { name: common.retry });
+    expect(retry).toHaveAttribute("aria-busy", "true");
+    retry.focus();
+    expect(retry).toHaveFocus();
+    retry.click();
+    if (args.state.status !== "error") throw new Error("error state expected");
+    expect(args.state.action?.onAction).not.toHaveBeenCalled();
+  },
+};
+
 /** View-versus-edit is product state: the consumer swaps the body, the card
  * stays put. */
 export const EditingBody: Story = {

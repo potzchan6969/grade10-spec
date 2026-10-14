@@ -4,168 +4,359 @@
 **Reviewed:** 2026-09-01, lapsed 2026-09-29
 **Drafts styled:** 2026-10-12, tcs-rules r5
 
-## Walk 1: Collector opens a lot at its own address and adjacent checks
+## Walk 1: Collector opens a listing at its own address and adjacent checks
 
 **Starting state:**
 
-- No additional setup is named by these cases.
+**Steps 1–3 setup:**
 
-### Route
+- The catalogue publishes `<published_listing>`. JavaScript disabled in the browser.
 
-1. Navigate to <a published lot url>.
-   - Response status is 200 and the lot page renders. g10.auction-listing-page.US1-TC1
-2. Check the rendered page.
-   - URL contains <lang>. g10.auction-listing-page.US1-TC1
-3. Check the page source.
-   - Page source carries that lot's name, description, and bidding standing. g10.auction-listing-page.US1-TC1
-4. Navigate to <a published lot url> and note name, standing, title, meta description and `og:url`.
-   - Each response carries its own lot's name and standing. g10.auction-listing-page.US1-TC2
-5. Navigate to <a second published lot url> and note the same.
-   - Each response carries its own title, meta description and `og:url`. g10.auction-listing-page.US1-TC2
-6. Navigate to <a published lot url>.
-   - Page source carries `og:title`, `og:description` and `og:url` naming that lot and its own address. g10.auction-listing-page.US2-TC1
-7. Check the page source for `og:title`, `og:description` and `og:url`.
-   - None of them names the auction catalogue in its place. g10.auction-listing-page.US2-TC1
+**Steps 4–5 setup:**
 
-## Walk 2: Collector opens an address that names no lot
+- The catalogue publishes two listings.
 
-**Starting state:**
+**Steps 6–7 setup:**
 
-- `<draft lot>` is a draft that is not published.
+- JavaScript disabled in the browser.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–3 data:**
+
+| Field | Value |
 | --- | --- |
-| draft lot | A draft lot that is not published |
-| draft lot url | That lot's canonical address |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| lang | The supported language code selected for the canonical listing URL in this fixture; bind its URL language segment only |
+
+**Steps 4–5 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+| second_published_listing_url | The canonical URL of a different published listing with its own name and standing; bind the URL only |
+
+**Steps 6–7 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 ### Route
 
-1. Navigate to <a lot address naming no published lot>.
+1. Navigate to `<published_listing_url>`.
 2. Check the rendered page.
-3. Check the response status.
-   - Response status is 404. g10.auction-listing-page.US3-TC1
-   - The site's not-found surface is on screen. g10.auction-listing-page.US3-TC1
-4. Navigate to <a published lot url>.
-   - Response status is 200. g10.auction-listing-page.US3-TC2
-5. Check the response status and the rendered page.
-   - The page is that lot's page. g10.auction-listing-page.US3-TC2
-6. Navigate to `<draft lot url>`.
-7. Check the response status.
-   - response status is 404. g10.auction-listing-page.US3-TC3
-8. Check the rendered page.
-   - the site's Page not found screen is on screen, not the lot and not the catalogue. g10.auction-listing-page.US3-TC3
+3. Check the page source.
+   - Response status is 200 and the listing page renders. `g10.auction-listing-page.US1-TC1`
+   - URL contains `<lang>`. `g10.auction-listing-page.US1-TC1`
+   - Page source carries that listing's name, description, and bidding standing. `g10.auction-listing-page.US1-TC1`
+4. Navigate to `<published_listing_url>` and note name, standing, title, meta description and `og:url`.
+5. Navigate to `<second_published_listing_url>` and note the same.
+   - Each response carries its own listing's name and standing. `g10.auction-listing-page.US1-TC2`
+   - Each response carries its own title, meta description and `og:url`. `g10.auction-listing-page.US1-TC2`
+6. Navigate to `<published_listing_url>`.
+7. Check the page source for `og:title`, `og:description` and `og:url`.
+   - Page source carries `og:title`, `og:description` and `og:url` naming that listing and its own address. `g10.auction-listing-page.US2-TC1`
+   - None of them names the auction catalogue in its place. `g10.auction-listing-page.US2-TC1`
 
-## Walk 3: Collector reads a live lot while scripts load
+## Walk 2: Collector opens an address that names no listing
 
 **Starting state:**
 
-- No additional setup is named by these cases.
+**Steps 1–3 setup:**
+
+- The catalogue publishes no listing for `<unknown_listing_url>`.
+
+**Steps 4–5 setup:**
+
+- The catalogue publishes `<published_listing>`.
+
+**Steps 6–13 setup:**
+
+- customer is outside the business and has `<original_address>` saved.
+- The original listing is in `<state>`.
+- No eligible public listing holds its original slug.
+- The browser runs no client-side scripts.
+- For called-off rows, the collector watched the original before call off.
+
+**Shared test data:**
+
+**Steps 1–3 data:**
+
+| Field | Value |
+| --- | --- |
+| unknown_listing_url | An auction listing URL with no published listing or eligible holder; bind the URL only |
+
+**Steps 4–5 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 6–13 data:**
+
+| `<state>` | `<original_address>` |
+| --- | --- |
+| Draft, never published | The draft's address |
+| Called off in this pass | Its saved address before call off |
+| Called off before this release | Its saved address before call off |
+| Called off, slug saved by a new unpublished draft | The shared slug's address |
+| Called off, slug held by a created unpublished replacement | The shared slug's address |
 
 ### Route
 
-1. Navigate to <a published lot url>.
+1. Navigate to `<unknown_listing_url>`.
+2. Check the rendered page.
+3. Check the response status.
+   - Response status is 404. `g10.auction-listing-page.US3-TC1`
+   - The site's not-found surface is on screen. `g10.auction-listing-page.US3-TC1`
+4. Navigate to `<published_listing_url>`.
+5. Check the response status and the rendered page.
+   - Response status is 200. `g10.auction-listing-page.US3-TC2`
+   - The page is that listing's page. `g10.auction-listing-page.US3-TC2`
+6. Navigate to `<original_address>`.
+7. Check the response status.
+   - Step 7 returns 404. `g10.auction-listing-page.US3-TC3`
+8. Check the served page.
+   - Step 8 shows Page not found. `g10.auction-listing-page.US3-TC3`
+9. Inspect its response body and embedded data.
+   - Step 9 contains no original-listing or replacement-listing data. `g10.auction-listing-page.US3-TC3`
+   - Step 9 contains no listing code or payment reference. `g10.auction-listing-page.US3-TC3`
+10. Open the original listing code alone as the listing address.
+   - Step 10 returns 404. `g10.auction-listing-page.US3-TC3`
+11. Inspect that response and page.
+   - Step 11 shows Page not found with no listing data or code. `g10.auction-listing-page.US3-TC3`
+12. Open the original collector's watchlist.
+13. Search for the called-off original listing.
+   - Neither original listing nor unpublished replacement appears. `g10.auction-listing-page.US3-TC3`
+   - No empty listing page, redirect or catalogue replaces it. `g10.auction-listing-page.US3-TC3`
+   - Step 13 does not show the called-off original in the watchlist. `g10.auction-listing-page.US3-TC3`
+   - An unpublished replacement does not appear there either. `g10.auction-listing-page.US3-TC3`
+
+## Walk 3: Collector reads a live listing while scripts load
+
+**Starting state:**
+
+**Steps 1–4 setup:**
+
+- `<published_listing>` is on the catalogue.
+
+**Steps 5–8 setup:**
+
+- a bidding countdown is shown on `<published_listing>`.
+
+**Shared test data:**
+
+**Steps 1–4 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 5–8 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+### Route
+
+1. Navigate to `<published_listing_url>`.
 2. Note the served name, description and standing in the document.
 3. Wait until scripts finish loading.
 4. Check the same fields on screen.
-   - The same lot is on screen with its served name, description and standing still present. g10.auction-listing-page.US4-TC1
-   - None of them is replaced by a loading placeholder. g10.auction-listing-page.US4-TC1
-5. Navigate to <a published lot url>.
+   - The same listing is on screen with its served name, description and standing still present. `g10.auction-listing-page.US4-TC1`
+   - None of them is replaced by a loading placeholder. `g10.auction-listing-page.US4-TC1`
+5. Navigate to `<published_listing_url>`.
 6. Note how long bidding has left in the document.
 7. Wait until scripts finish loading.
 8. Check how long bidding has left on screen.
-   - What is on screen continues from what the document carried, rather than contradicting it. g10.auction-listing-page.US4-TC2
+   - What is on screen continues from what the document carried, rather than contradicting it. `g10.auction-listing-page.US4-TC2`
 
-## Walk 4: Collector reaches a lot from the catalogue
+## Walk 4: Collector reaches a listing from the catalogue
 
 **Starting state:**
 
-- No additional setup is named by these cases.
+**Steps 1–2 setup:**
+
+- The collector is viewing the auction catalogue, which lists `<published_listing>`.
+
+**Steps 3–4 setup:**
+
+- The catalogue holds `<published_listing>`.
+
+**Shared test data:**
+
+**Steps 1–2 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The auction base URL in the test environment; bind its URL only |
+
+**Steps 3–4 data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing in the catalogue; bind its public title only |
+
+| Field | Value |
+| --- | --- |
+| grade10 sitemap url | The sitemap URL in the test environment; bind its URL only |
 
 ### Route
 
-1. Navigate to <grade10 auction url>.
-2. Open <a published lot> the catalogue lists.
-   - The browser is on that lot's address, showing that lot's page. g10.auction-listing-page.US5-TC1
+1. Navigate to `<grade10 auction url>`.
+2. Open `<published_listing>` the catalogue lists.
+   - The browser is on that listing's address, showing that listing's page. `g10.auction-listing-page.US5-TC1`
 3. Fetch `<grade10 sitemap url>`.
-   - `<a published lot>`'s address is listed as an absolute URL of the serving environment. g10.auction-listing-page.US5-TC2
 4. Check every sitemap entry.
-   - No entry carries an unfilled parameter in place of a lot. g10.auction-listing-page.US5-TC2
+   - `<published_listing>`'s address is listed as an absolute URL of the serving environment. `g10.auction-listing-page.US5-TC2`
+   - No entry carries an unfilled parameter in place of a listing. `g10.auction-listing-page.US5-TC2`
 
 ## Walk 5: Watch an auction and open My Auctions from the toast
 
 **Starting state:**
 
-- customer(signed in, no bid on <lot_1>, not watching <lot_1>) is on <lot_1 url>.
-- customer(signed out) is on <lot_1 url>.
+**Steps 1–3 setup:**
+
+- customer(signed in, no bid on `<listing_12>`, not watching `<listing_12>`) is on `<listing_12 url>`.
+
+**Steps 4–5 setup:**
+
+- customer(signed out) is on `<listing_12 url>`.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–3 data:**
+
+| Field | Value |
 | --- | --- |
-| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
-| <lot_1> | An open lot taking bids |
+| listing_12 | An open listing taking bids, not watched and not bid on by this collector |
+| listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
+
+**Steps 4–5 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_12 | An open listing taking bids |
+| listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 ### Route
 
 1. Note the current bid, time left and bid panel.
 2. Click the Watch control.
-   - the control reads Watching. g10.auction-listing-page.US6-TC1
-   - a toast says email alerts are on, with View My Auctions. g10.auction-listing-page.US6-TC1
-   - current bid, time left and bid panel are unchanged. g10.auction-listing-page.US6-TC1
+   - Step 2: the control reads Watching. `g10.auction-listing-page.US6-TC1`
+   - Step 2: a toast says email alerts are on, with View My Auctions. `g10.auction-listing-page.US6-TC1`
+   - Step 2: current bid, time left and bid panel are unchanged. `g10.auction-listing-page.US6-TC1`
 3. Click View My Auctions in the toast.
-   - My Auctions opens and lists <lot_1> once, Your Standing `--`. g10.auction-listing-page.US6-TC1
-   - <lot_1>'s email alerts switch is on. g10.auction-listing-page.US6-TC1
+   - Step 3: My Auctions opens and lists `<listing_12>` once, Your Standing `--`. `g10.auction-listing-page.US6-TC1`
+   - Step 3: `<listing_12>`'s email alerts switch is on. `g10.auction-listing-page.US6-TC1`
 4. Click the Watch control.
-   - sign-in is offered; no toast says email alerts are on. g10.auction-listing-page.US6-TC2
+   - Step 4: sign-in is offered; no toast says email alerts are on. `g10.auction-listing-page.US6-TC2`
 5. Sign in using the offered sign-in flow.
-   - the collector returns to <lot_1 url>. g10.auction-listing-page.US6-TC2
-   - the control reads Watch; nothing was watched before sign-in. g10.auction-listing-page.US6-TC2
+   - Step 5: the collector returns to `<listing_12 url>`. `g10.auction-listing-page.US6-TC2`
+   - Step 5: the control reads Watch; nothing was watched before sign-in. `g10.auction-listing-page.US6-TC2`
 
 ## Walk 6: Unwatch from the auction and undo
 
 **Starting state:**
 
-- customer(signed in, watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
+**Steps 1–2 setup:**
+
+- customer(signed in, watching `<listing_13>`, no bid on `<listing_13>`) is on `<listing_13 url>`.
+
+**Steps 3–5 setup:**
+
+- customer(signed in, watching `<listing_13>`, no bid on `<listing_13>`) is on `<listing_13 url>`.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–2 data:**
+
+| Field | Value |
 | --- | --- |
-| <lot_2> | An open lot taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
+
+**Steps 3–5 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 ### Route
 
 1. Click the Watching control.
-   - the control reads Watch. g10.auction-listing-page.US7-TC1
-   - a toast says the lot left My Auctions, with Undo. g10.auction-listing-page.US7-TC1
-   - current bid, time left and bid panel are unchanged. g10.auction-listing-page.US7-TC1
-2. Open <grade10 my auctions url> in a new tab.
-   - <lot_2> is not listed. g10.auction-listing-page.US7-TC1
+   - Step 1: the control reads Watch. `g10.auction-listing-page.US7-TC1`
+   - Step 1: a toast says the listing left My Auctions, with Undo. `g10.auction-listing-page.US7-TC1`
+   - Step 1: current bid, time left and bid panel are unchanged. `g10.auction-listing-page.US7-TC1`
+2. Open `<grade10 my auctions url>` in a new tab.
+   - Step 2: `<listing_13>` is not listed. `g10.auction-listing-page.US7-TC1`
 3. Click the Watching control.
 4. Click Undo in the toast.
-   - the control reads Watching again. g10.auction-listing-page.US7-TC2
-5. Open <grade10 my auctions url> in a new tab.
-   - <lot_2> is listed once, Your Standing `--`. g10.auction-listing-page.US7-TC2
-   - <lot_2>'s email alerts switch is on. g10.auction-listing-page.US7-TC2
+   - Step 4: the control reads Watching again. `g10.auction-listing-page.US7-TC2`
+5. Open `<grade10 my auctions url>` in a new tab.
+   - Step 5: `<listing_13>` is listed once, Your Standing `--`. `g10.auction-listing-page.US7-TC2`
+   - Step 5: `<listing_13>`'s email alerts switch is on. `g10.auction-listing-page.US7-TC2`
 
 ## Walk 7: After bidding, Watching stays locked and adjacent checks
 
 **Starting state:**
 
-- customer(signed in, enrolled to bid, not watching <lot_3>, no bid on <lot_3>) is on <lot_3 url>.
-- customer A(signed in, has bid on <lot_4>, outbid) is on <lot_4 url>.
-- <closed lot> is closed as the row states.
+**Steps 1–3 setup:**
+
+- customer(signed in, enrolled to bid, not watching `<listing_14>`, no bid on `<listing_14>`) is on `<listing_14 url>`.
+
+**Steps 4–4 setup:**
+
+- customer A(signed in, has bid on `<listing_15>`, outbid) is on `<listing_15 url>`.
+
+**Steps 5–6 setup:**
+
+- The listing at `<closed listing url>` is in `<listing_state>` for the viewer described in Test data.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–3 data:**
+
+| Field | Value |
 | --- | --- |
-| <lot_3> | An open lot taking bids, with no bid from this collector |
-| <first bid> | The next valid bid shown on the bid panel |
-| <lot_4> | An open lot taking bids, where customer A bid before and customer B now leads |
-| <raise> | The next valid bid shown on the bid panel |
+| listing_14 | An open listing taking bids, with no bid from this collector |
+| first bid | The next valid bid shown on the bid panel |
+| listing_14 url | The canonical URL of `<listing_14>`; bind the URL only |
+
+**Steps 4–4 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_15 | An open listing taking bids, where customer A bid before and customer B now leads |
+| raise | The next valid bid shown on the bid panel |
+| listing_15 url | The canonical URL of `<listing_15>`; bind the URL only |
+
+**Steps 5–6 data:**
+
+| `<listing_state>` | Viewer |
+| --- | --- |
 | Sold, with a winner | customer(signed in, never watched or bid on it) |
 | Sold, with a winner | customer(signed in, watched it before the close, no bid) |
 | Sold, with a winner | customer(signed in, bid on it and lost) |
@@ -173,413 +364,929 @@
 | Ended with no bids | customer(signed in, watched it before the close) |
 | Ended with no bids | customer(signed out) |
 
+| Field | Value |
+| --- | --- |
+| closed listing url | The canonical URL of the closed listing in this row; bind the URL only |
+
 ### Route
 
-1. Place <first bid> from the bid panel.
-   - a toast says email alerts are on. g10.auction-listing-page.US8-TC1
-   - the control reads Watching, disabled. g10.auction-listing-page.US8-TC1
+1. Place `<first bid>` from the bid panel.
+   - Step 1: a toast says email alerts are on. `g10.auction-listing-page.US8-TC1`
+   - Step 1: the control reads Watching, disabled. `g10.auction-listing-page.US8-TC1`
 2. Click the Watching control.
-   - nothing changes; no Unwatch toast. g10.auction-listing-page.US8-TC1
-3. Reload <lot_3 url>.
-   - the control still reads Watching, disabled; no alerts toast. g10.auction-listing-page.US8-TC1
-4. Place <raise> from the bid panel.
-   - No toast says email alerts are on. g10.auction-listing-page.US8-TC2
-   - The control reads Watching, disabled. g10.auction-listing-page.US8-TC2
-5. Navigate to <closed lot url>.
-   - the lot page renders. g10.auction-listing-page.US9-TC1
-6. Check the lot image area and the bid panel area.
-   - no Watch or Watching control shows anywhere on the lot page. g10.auction-listing-page.US9-TC1
+   - Step 2: nothing changes; no Unwatch toast. `g10.auction-listing-page.US8-TC1`
+3. Reload `<listing_14 url>`.
+   - Step 3: the control still reads Watching, disabled; no alerts toast. `g10.auction-listing-page.US8-TC1`
+4. Place `<raise>` from the bid panel.
+   - No toast says email alerts are on. `g10.auction-listing-page.US8-TC2`
+   - The control reads Watching, disabled. `g10.auction-listing-page.US8-TC2`
+5. Navigate to `<closed listing url>`.
+   - Step 5: the listing page renders. `g10.auction-listing-page.US9-TC1`
+6. Check the listing image area and the bid panel area.
+   - Step 6: no Watch or Watching control shows anywhere on the listing page. `g10.auction-listing-page.US9-TC1`
 
-## Walk 8: Collector quotes a published lot
+## Walk 8: Collector quotes a published listing
 
 **Starting state:**
 
-- A published lot exists at its own address.
-- The lot's listing code is known from the admin listing screen.
-- A published lot exists and its listing code is known from the admin listing screen.
+**Steps 1–3 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Steps 4–8 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+- Its bidding standing stays unchanged during the pass.
+- The browser initially runs no scripts.
+
+**Steps 9–12 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Steps 13–15 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Steps 16–18 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Steps 19–21 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Steps 22–22 setup:**
+
+- A published listing exists and its listing code is known from the admin listing screen.
+
+**Steps 23–24 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Shared test data:**
+
+**Steps 1–3 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 4–8 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 9–12 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 13–15 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 16–18 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 19–21 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 22–22 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+
+**Steps 23–24 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 ### Route
 
-1. Open `<a published lot's address>`.
+1. Open `<published_listing_url>`.
 2. View the page's response source before any script runs.
-3. Identify each occurrence of the lot's listing code and inspect its context.
-   - The source names the lot by its title. g10.auction-listing-page.US10-TC1
-   - The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present. g10.auction-listing-page.US10-TC1
-4. Open `<a published lot's address>` and let the page finish loading its scripts.
-5. View the rendered page and its current source.
-6. Identify each occurrence of the lot's listing code in both.
-   - The rendered page has no labelled listing-code or payment-reference field. g10.auction-listing-page.US10-TC2
-   - Every code occurrence in the source is the lower-case suffix of the canonical address. g10.auction-listing-page.US10-TC2
-7. Fetch the share-preview metadata for `<a published lot's address>`.
-   - The preview's title and description have no labelled listing-code or payment-reference field. g10.auction-listing-page.US10-TC3
-8. Search the preview's title, description and url for the lot's listing code.
-   - Its URL is the canonical address ending in the lower-case listing-code suffix. Previously cached preview content may persist; the test does not require a purge or regeneration. A fresh preview fetch must satisfy the absence above. g10.auction-listing-page.US10-TC3
-9. Open `<a published lot's address>`.
-10. Read the browser tab title and the page's meta description.
-   - Neither the tab title nor the meta description contains the listing code. g10.auction-listing-page.US10-TC4
-11. Open `<a published lot's address>`.
-12. View the page's response source.
-13. Search any data embedded in the document, outside the visible text, for the lot's listing code.
-   - No field in the embedded data carries the listing code. g10.auction-listing-page.US10-TC5
-14. Open `<a published lot's address>` and let the page finish loading.
-15. Inspect the responses the page's own client-side requests receive.
-16. Search those responses for the lot's listing code.
-   - No page response contains a separate listing-code or payment-reference field. g10.auction-listing-page.US10-TC6
-17. Open the auction's lot-address path, substituting the lot's listing code for its usual identifier.
-   - The address does not resolve to that lot's page. g10.auction-listing-page.US10-TC7
-   - The site's not-found surface is shown, the same as for any address naming no published lot. g10.auction-listing-page.US10-TC7
-18. Open `<a published lot's address>` as a signed-out visitor and search the page and its source for the lot's listing code.
-   - Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix. g10.auction-listing-page.US10-TC8
-19. Open the same address signed in as a registered collector and repeat the search.
-   - The title and address shown are identical in both views. g10.auction-listing-page.US10-TC8
+3. Identify each occurrence of `<listing_code>` and inspect its context.
+   - The source names the listing by its title. `g10.auction-listing-page.US10-TC1`
+   - The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present. `g10.auction-listing-page.US10-TC1`
+4. Open `<published_listing_url>` with scripts disabled.
+5. Record its served title, description and bidding standing.
+   - Step 5 provides the addressed listing's title, description and bidding standing. `g10.auction-listing-page.US10-TC2`
+6. Enable scripts on the same address.
+7. Read the hydrated page, DOM, source and document metadata.
+   - Step 7 keeps those same served values after hydration. `g10.auction-listing-page.US10-TC2`
+8. Inspect every listing-code occurrence.
+   - No placeholder replaces served content. `g10.auction-listing-page.US10-TC2`
+   - Hydrated DOM and document metadata name the same listing. `g10.auction-listing-page.US10-TC2`
+   - No separate listing-code or payment-reference field appears. `g10.auction-listing-page.US10-TC2`
+   - A code occurs only within the full canonical address. `g10.auction-listing-page.US10-TC2`
+9. Fetch the share-preview metadata for `<published_listing_url>`.
+10. Search the preview's title, description and url for `<listing_code>`.
+11. Inspect the preview image and embedded metadata.
+12. Read the same address's document title and meta description.
+   - The preview's title and description have no labelled listing-code or payment-reference field. `g10.auction-listing-page.US10-TC3`
+   - Its URL is the canonical address ending in the lower-case listing-code suffix. Previously cached preview content may persist; the test does not require a purge or regeneration. A fresh preview fetch must satisfy the absence above. `g10.auction-listing-page.US10-TC3`
+   - The preview identifies the public listing by title and full address. `g10.auction-listing-page.US10-TC3`
+   - Image and embedded metadata expose no separate code or payment reference. `g10.auction-listing-page.US10-TC3`
+   - Step 12 identifies the same public listing by title and description. `g10.auction-listing-page.US10-TC3`
+   - Neither document field contains a listing code or payment reference. `g10.auction-listing-page.US10-TC3`
+13. Open `<published_listing_url>`.
+14. Read the browser tab title and the page's meta description.
+15. Compare the title and description with the addressed listing.
+   - Neither the tab title nor the meta description contains the listing code. `g10.auction-listing-page.US10-TC4`
+   - Both identify the addressed listing, never the auction catalogue. `g10.auction-listing-page.US10-TC4`
+16. Open `<published_listing_url>`.
+17. View the page's response source.
+18. Search any data embedded in the document, outside the visible text, for `<listing_code>`.
+   - No field in the embedded data carries the listing code. `g10.auction-listing-page.US10-TC5`
+19. Open `<published_listing_url>` and let the page finish loading.
+20. Inspect the responses the page's own client-side requests receive.
+21. Search those responses for `<listing_code>`.
+   - No page response contains a separate listing-code or payment-reference field. `g10.auction-listing-page.US10-TC6`
+22. Open the auction's listing-address path, substituting `<listing_code>` for its usual identifier.
+   - The address does not resolve to that listing's page. `g10.auction-listing-page.US10-TC7`
+   - The site's not-found surface is shown, the same as for any address naming no published listing. `g10.auction-listing-page.US10-TC7`
+23. Open `<published_listing_url>` as a signed-out visitor and search the page and its source for `<listing_code>`.
+24. Open the same address signed in as a registered collector and repeat the search.
+   - Neither view has a labelled listing-code or payment-reference field; the canonical address may end in the lower-case code suffix. `g10.auction-listing-page.US10-TC8`
+   - The title and address shown are identical in both views. `g10.auction-listing-page.US10-TC8`
 
-## Walk 9: Collector quotes a published lot
+## Walk 9: Collector quotes a published listing
 
 **Starting state:**
 
-- A lot's auction has closed with a winning bid, so an order now exists on that lot.
-- The catalogue publishes no lot for `<a lot address naming no published lot>`.
+**Steps 1–4 setup:**
+
+- A listing's auction has closed with a winning bid, so an order now exists on that listing.
+
+**Steps 5–7 setup:**
+
+- The catalogue publishes no listing for `<unknown_listing_url>`.
+
+**Steps 8–10 setup:**
+
 - A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
-- The listing has been removed from browse and search without being explicitly deleted.
+- The listing is closed or settled, and removed from browse and search without explicit deletion.
+- The listing was not called off.
+
+**Steps 11–12 setup:**
+
 - A preview for `<listing_url>` was cached while the listing was publicly available.
 - The listing is subsequently removed from browse and search, without explicit deletion.
 - An authorized admin or the winner knows `<listing_code>`.
 
+**Shared test data:**
+
+**Steps 5–7 data:**
+
+| Field | Value |
+| --- | --- |
+| unknown_listing_url | An auction listing URL with no published listing or eligible holder; bind the URL only |
+
+**Steps 8–10 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+
+**Steps 11–12 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+
 ### Route
 
-1. Open the lot's own address on the public listing page.
+1. Open the listing's own address on the public listing page.
 2. View the page, its source, and its share-preview metadata.
 3. Inspect every occurrence of the lower-case listing-code suffix, which is now also the order's payment reference.
-   - The page and preview contain no labelled listing-code or payment-reference field. g10.auction-listing-page.US10-TC9
-   - The code appears only as the lower-case suffix of the canonical address. g10.auction-listing-page.US10-TC9
-4. Fetch `<a lot address naming no published lot>`.
-   - Response status is 404. g10.auction-listing-page.US10-TC10
-5. Search the response, including any error detail, for a listing code.
-   - No listing code appears anywhere in the response. g10.auction-listing-page.US10-TC10
-6. Browse the auction catalogue and search for the listing.
-7. Open `<listing_url>` directly.
-8. Inspect the rendered page, response source and fresh share-preview metadata.
-   - Browse and search do not return the listing. g10.auction-listing-page.US10-TC11
-   - `<listing_url>` still returns its public listing page. g10.auction-listing-page.US10-TC11
-   - The page and fresh preview identify the listing by its public title and canonical URL. g10.auction-listing-page.US10-TC11
-   - Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata. g10.auction-listing-page.US10-TC11
-   - Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`. g10.auction-listing-page.US10-TC11
-9. Request the existing cached preview for `<listing_url>`.
-10. Inspect its title, description, URL, image and embedded metadata.
-   - The cached preview may continue to show previously cached public listing metadata and `<listing_url>`. g10.auction-listing-page.US10-TC12
-   - It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data. g10.auction-listing-page.US10-TC12
-   - A persistent preview does not make the listing discoverable through browse or search. g10.auction-listing-page.US10-TC12
+4. Inspect hydrated DOM, page lookup responses, title and description.
+   - The page and preview contain no labelled listing-code or payment-reference field. `g10.auction-listing-page.US10-TC9`
+   - The code appears only as the lower-case suffix of the canonical address. `g10.auction-listing-page.US10-TC9`
+   - All surfaces name the same listing and its full address. `g10.auction-listing-page.US10-TC9`
+   - Title and description contain no listing code or payment reference. `g10.auction-listing-page.US10-TC9`
+   - Embedded and network data contain no separate code or payment reference. `g10.auction-listing-page.US10-TC9`
+5. Fetch `<unknown_listing_url>`.
+6. Search the response, including any error detail, for a listing code.
+7. Check the not-found page and embedded data.
+   - Response status is 404. `g10.auction-listing-page.US10-TC10`
+   - No listing code appears anywhere in the response. `g10.auction-listing-page.US10-TC10`
+   - No listing content or separate payment reference appears. `g10.auction-listing-page.US10-TC10`
+8. Browse the auction catalogue and search for the listing.
+9. Open `<listing_url>` directly.
+10. Inspect the rendered page, response source and fresh share-preview metadata.
+   - Browse and search do not return the listing. `g10.auction-listing-page.US10-TC11`
+   - `<listing_url>` still returns its public listing page. `g10.auction-listing-page.US10-TC11`
+   - The page and fresh preview identify the listing by its public title and canonical URL. `g10.auction-listing-page.US10-TC11`
+   - Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata. `g10.auction-listing-page.US10-TC11`
+   - Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`. `g10.auction-listing-page.US10-TC11`
+11. Request the existing cached preview for `<listing_url>`.
+12. Inspect its title, description, URL, image and embedded metadata.
+   - The cached preview may continue to show previously cached public listing metadata and `<listing_url>`. `g10.auction-listing-page.US10-TC12`
+   - It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data. `g10.auction-listing-page.US10-TC12`
+   - A persistent preview does not make the listing discoverable through browse or search. `g10.auction-listing-page.US10-TC12`
 
-## Walk 10: Collector contacts support about a lot
-
-**Starting state:**
-
-- A published lot exists at its own address.
-- The lot's listing code is known from the admin listing screen.
-- A published lot exists and its listing code is known from a leak or from another surface.
-- A lot's auction has closed with a winning bid, so an order now exists on that lot.
-- A listing has an allocated canonical address and listing code.
-
-### Route
-
-1. Open `<a published lot's address>`.
-2. Inspect the visible page and its source for a labelled listing-code or payment-reference field.
-   - The page has no labelled listing-code or payment-reference field for the collector to copy; its canonical address may end in the lower-case code suffix. g10.auction-listing-page.US11-TC1
-3. Attempt to open the lot's address by substituting its listing code for the lot's usual identifier.
-   - The listing code does not resolve to the lot. g10.auction-listing-page.US11-TC2
-   - No working link to the lot can be built from the code alone. g10.auction-listing-page.US11-TC2
-4. Open the lot's own address on the public listing page.
-   - The title and canonical address are unchanged by the order. g10.auction-listing-page.US11-TC3
-5. Note its title and address, and search the page for the lot's listing code.
-   - The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix. g10.auction-listing-page.US11-TC3
-6. Call the listing off before close.
-7. Open its canonical address directly.
-8. Search browse and search results for the listing.
-9. Try the listing code as the address.
-   - The canonical address still resolves to the called-off listing. g10.auction-listing-page.US11-TC4
-   - The listing is absent from browse and search. g10.auction-listing-page.US11-TC4
-   - The listing code does not resolve as a public route. g10.auction-listing-page.US11-TC4
-
-## Walk 11: Collector sees another bid on the lot without reloading
+## Walk 10: Collector contacts support about a listing
 
 **Starting state:**
 
-- `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>` and bid count `<bid count>`.
-- customer A is on the lot page for `<listing_1>`.
-- customer B(card linked) is signed in on a separate session, on the same lot page.
-- `<listing_2>` is open with one accepted bid, its scheduled close under a minute away.
-- customer A is on the lot page for `<listing_2>`.
-- `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
-- customer A is on the lot page for `<listing_1>`, with the browser's live connection to the auction blocked.
-- customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<user A maximum>`, and is on its lot page.
-- customer A(signed in) leads `<listing_8>` with maximum `<user A maximum>`.
-- customer C(signed out) is on the lot page for `<listing_8>`, with the browser's network inspector recording its live connection.
-- `<listing_1>` is open in USD, before its scheduled close, with no bid.
-- customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the lot page for `<listing_1>`, in English.
-- `<listing_5>` is open in USD, before its scheduled close, with no bid.
-- customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the lot page for `<listing_5>`, in English.
+**Steps 1–5 setup:**
+
+- A published listing exists at its own address.
+- The listing code `<listing_code>` is known from the admin listing screen.
+
+**Steps 6–6 setup:**
+
+- A published listing exists and its listing code is known from a leak or from another surface.
+
+**Steps 7–10 setup:**
+
+- A listing's auction has closed with a winning bid, so an order now exists on that listing.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–5 data:**
+
+| Field | Value |
 | --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid count>` | 3 |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
-| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
-| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
-| `<user A maximum>` | USD5,280 (range: 500000–999999 minor units) |
-| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), above `<user A maximum>` |
-| `<increment>` | USD80 (fixed tier increment), the US$4,000 tier |
-| `<user A maximum>` | USD9,280 (range: 500000–999999 minor units) |
-| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), below `<user A maximum>` |
-| `<maximum>` | At least two increments above the opening price |
-| `<higher maximum>` | At least two increments above `<maximum>` |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+**Steps 6–6 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+
+### Route
+
+1. Open `<published_listing_url>`.
+2. Read the public listing title and full address.
+   - Step 2 provides the public title and full address. `g10.auction-listing-page.US11-TC1`
+3. Inspect the page and source for a separate code field.
+   - Step 3 offers no separate code or payment reference. `g10.auction-listing-page.US11-TC1`
+4. As admin(support), find the public listing by that title.
+   - Step 4 finds the listing without a listing code. `g10.auction-listing-page.US11-TC1`
+5. Open the matched listing.
+   - Support lookup shows no separate listing-code or payment-reference field. `g10.auction-listing-page.US11-TC1`
+   - Step 5 identifies the same listing by title and full address. `g10.auction-listing-page.US11-TC1`
+   - The opened public listing shows no separate code to support. `g10.auction-listing-page.US11-TC1`
+6. Attempt to open the listing's address by substituting `<listing_code>` for the listing's usual identifier.
+   - The listing code does not resolve to the listing. `g10.auction-listing-page.US11-TC2`
+   - No working link to the listing can be built from the code alone. `g10.auction-listing-page.US11-TC2`
+7. Open the listing's own address on the public listing page.
+8. Note its title and address.
+9. Inspect DOM, source, embedded data and fresh preview metadata.
+   - Step 9 exposes no separate code or payment reference. `g10.auction-listing-page.US11-TC3`
+10. As admin(support), find and open the listing by title.
+   - The title and canonical address are unchanged by the order. `g10.auction-listing-page.US11-TC3`
+   - The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix. `g10.auction-listing-page.US11-TC3`
+   - Step 10 finds the same listing without a code. `g10.auction-listing-page.US11-TC3`
+
+## Walk 11: Collector sees another bid on the listing without reloading
+
+**Starting state:**
+
+**Steps 1–2 setup:**
+
+- `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>` and bid count `<bid count>`.
+- customer A is on the listing page for `<listing_1>`.
+- customer B(card linked) is signed in on a separate session, on the same listing page.
+
+**Steps 3–4 setup:**
+
+- `<listing_2>` is open with one accepted bid, its scheduled close under a minute away.
+- customer A is on the listing page for `<listing_2>`.
+
+**Steps 5–7 setup:**
+
+- `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
+- customer A is on the listing page for `<listing_1>`, with the browser's live connection to the auction blocked.
+- customer B(card linked) is signed in on a separate session, on the same listing page.
+
+**Steps 8–11 setup:**
+
+- `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
+- customer A is on the listing page for `<listing_1>`.
+- customer B(card linked) is signed in on a separate session, on the same listing page.
+
+**Steps 12–14 setup:**
+
+- customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<customer A maximum>`, and is on its listing page.
+- customer B(card linked) is signed in on a separate session, on the same listing page.
+
+**Steps 15–16 setup:**
+
+- customer A(signed in) leads `<listing_8>` with maximum `<customer A maximum>`.
+- customer C(signed out) is on the listing page for `<listing_8>`, with the browser's network inspector recording its live connection.
+- customer B(card linked) is signed in on a separate session, on the same listing page.
+
+**Steps 17–20 setup:**
+
+- `<listing_16>` is open in USD, before its scheduled close, with no bid.
+- customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
+
+**Steps 21–25 setup:**
+
+- `<listing_16>` is open in USD, before its scheduled close, with no bid.
+- customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
+
+**Shared test data:**
+
+**Steps 1–2 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid count | 3 | · |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+**Steps 3–4 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_2 | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
+
+**Steps 5–7 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+**Steps 8–11 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+**Steps 12–14 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| current bid | USD1200 | (120000 USD minor units) |
+| customer A maximum | USD1275 | (127500 USD minor units) |
+| customer B maximum | USD1300 | (130000 USD minor units), above `<customer A maximum>` |
+| increment | USD25 | (2500 USD minor units), the USD1000 tier increment |
+| highest_bid_after | USD1,300 | (130000 USD minor units): `<customer A maximum>` plus `<increment>` |
+| minimum_next_bid | USD1,325 | (132500 USD minor units): `<highest_bid_after>` plus `<increment>` |
+
+**Steps 15–16 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| customer A maximum | USD9,280 | (range: 500000–999999 minor units) |
+| customer B maximum | USD6,160 | (range: 500000–999999 minor units), below `<customer A maximum>` |
+
+**Steps 17–20 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
+
+**Steps 21–25 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| higher maximum | USD2,200 | At least two increments above `<maximum>`; representative USD fixture |
+| listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
 
 ### Route
 
 1. As customer B, enter `<bid amount>` in the custom maximum on the bid panel and confirm the bid.
 2. As customer A, without reloading, read Highest bid, the bid count and Time left.
-   - Highest bid reads `<bid amount>` on customer A's page. g10.auction-listing-page.US12-TC1
-   - The bid count reads `<bid count>` plus 1. g10.auction-listing-page.US12-TC1
-   - Time left still counts to the scheduled close. g10.auction-listing-page.US12-TC1
-   - customer A's page did not reload. g10.auction-listing-page.US12-TC1
+   - Highest bid reads `<bid amount>` on customer A's page. `g10.auction-listing-page.US12-TC1`
+   - The bid count reads `<bid count>` plus 1. `g10.auction-listing-page.US12-TC1`
+   - Time left still counts to the scheduled close. `g10.auction-listing-page.US12-TC1`
+   - customer A's page did not reload. `g10.auction-listing-page.US12-TC1`
 3. Watch Time left through the scheduled close, without reloading.
 4. Read Time left and its label.
-   - Time left never reads Closed at the scheduled close. g10.auction-listing-page.US12-TC2
-   - Time left is labelled Extended bidding and counts to the scheduled close plus `<extension duration>`. g10.auction-listing-page.US12-TC2
-   - The page did not reload. g10.auction-listing-page.US12-TC2
+   - Time left never reads Closed at the scheduled close. `g10.auction-listing-page.US12-TC2`
+   - Time left is labelled Extended bidding and counts to the scheduled close plus `<extension duration>`. `g10.auction-listing-page.US12-TC2`
+   - The page did not reload. `g10.auction-listing-page.US12-TC2`
 5. As customer B, enter `<bid amount>` in the custom maximum on the bid panel and confirm the bid.
 6. As customer A, wait on the page without reloading.
 7. Read Highest bid and the bid count.
-   - Highest bid reads `<bid amount>` and the bid count includes customer B's bid. g10.auction-listing-page.US12-TC3
-   - customer A's page did not reload. g10.auction-listing-page.US12-TC3
+   - Highest bid reads `<bid amount>` and the bid count includes customer B's bid. `g10.auction-listing-page.US12-TC3`
+   - customer A's page did not reload. `g10.auction-listing-page.US12-TC3`
 8. Take customer A's browser offline.
 9. As customer B, enter `<bid amount>` in the custom maximum on the bid panel and confirm the bid.
 10. Bring customer A's browser back online, without reloading.
 11. As customer A, read Highest bid and the bid count.
-   - Highest bid reads `<bid amount>` and the bid count includes customer B's bid. g10.auction-listing-page.US12-TC4
-   - customer A's page did not reload. g10.auction-listing-page.US12-TC4
+   - Highest bid reads `<bid amount>` and the bid count includes customer B's bid. `g10.auction-listing-page.US12-TC4`
+   - customer A's page did not reload. `g10.auction-listing-page.US12-TC4`
 12. As customer A, read the standing on the bid panel.
-   - reads Leading, with Your maximum `<user A maximum>`. g10.auction-listing-page.US12-TC5
-13. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+   - Step 12 reads Leading, with Your maximum `<customer A maximum>`. `g10.auction-listing-page.US12-TC5`
+13. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 14. As customer A, without reloading, read the standing, Highest bid and the next valid bid.
-   - reads Outbid, with no reload. g10.auction-listing-page.US12-TC5
-   - reads Highest bid `<user A maximum>` plus `<increment>`. g10.auction-listing-page.US12-TC5
-   - shows the next valid bid, Highest bid plus its increment. g10.auction-listing-page.US12-TC5
-15. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+   - Step 14 reads Outbid, with no reload. `g10.auction-listing-page.US12-TC5`
+   - Step 14 reads Highest bid `<highest_bid_after>`, `<customer A maximum>` plus `<increment>`. `g10.auction-listing-page.US12-TC5`
+   - Step 14 shows `<minimum_next_bid>` as the minimum next valid bid. `g10.auction-listing-page.US12-TC5`
+15. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 16. As customer C, read every message the live connection received after step 1.
-   - shows an update carrying the new price, bid count and close. g10.auction-listing-page.US12-TC6
-   - No message carries `<user A maximum>`, an account id, an email or a card detail. g10.auction-listing-page.US12-TC6
-   - Any bidder a message names appears only by the lot's pseudonym. g10.auction-listing-page.US12-TC6
+   - Step 16 shows an update carrying the new price, bid count and close. `g10.auction-listing-page.US12-TC6`
+   - No message carries `<customer A maximum>`, an account id, an email or a card detail. `g10.auction-listing-page.US12-TC6`
+   - Any bidder a message names appears only by the listing's pseudonym. `g10.auction-listing-page.US12-TC6`
 17. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
 18. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 19. As customer B, read the Recent bids rows at `<maximum>`.
-   - customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A leads and set `<maximum>` first, whatever time each row shows. g10.auction-listing-page.US12-TC7
-   - customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. g10.auction-listing-page.US12-TC7
+   - Step 19: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A leads and set `<maximum>` first, whatever time each row shows. `g10.auction-listing-page.US12-TC7`
+   - Step 19: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. `g10.auction-listing-page.US12-TC7`
 20. Hover the Info control on customer B's row at `<maximum>`.
-   - the tip reads When maximums match, the earlier one leads. g10.auction-listing-page.US12-TC7
+   - Step 20: the tip reads When maximums match, the earlier one leads. `g10.auction-listing-page.US12-TC7`
 21. As customer A, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer A sets `<maximum>` first.
 22. As customer B, enter `<maximum>` in the custom maximum on the bid panel and confirm it, so customer B sets the same maximum later.
 23. As customer C, enter `<higher maximum>` in the custom maximum on the bid panel and confirm it.
 24. As customer C, read the current price and the Recent bids rows at `<maximum>`.
-   - the current price is above `<maximum>`, and customer C's row leads Recent bids. g10.auction-listing-page.US12-TC8
-   - customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A set `<maximum>` first, whatever time each row shows. g10.auction-listing-page.US12-TC8
-   - customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. g10.auction-listing-page.US12-TC8
+   - Step 24: the current price is above `<maximum>`, and customer C's row leads Recent bids. `g10.auction-listing-page.US12-TC8`
+   - Step 24: customer A's row and customer B's row both read `<maximum>`, customer A's first, since customer A set `<maximum>` first, whatever time each row shows. `g10.auction-listing-page.US12-TC8`
+   - Step 24: customer A's row at `<maximum>` carries no Info control; customer B's row, the later maximum, carries one. `g10.auction-listing-page.US12-TC8`
 25. Hover the Info control on customer B's row at `<maximum>`.
-   - the tip reads When maximums match, the earlier one leads. g10.auction-listing-page.US12-TC8
+   - Step 25: the tip reads When maximums match, the earlier one leads. `g10.auction-listing-page.US12-TC8`
 
-## Walk 12: Collector sees another bid on the lot without reloading and adjacent checks
+## Walk 12: Collector sees another bid on the listing without reloading and adjacent checks
 
 **Starting state:**
 
-- collector A has `<listing_3>` open with a live line.
-- customer B(card linked, email `<email_mike>`) can bid on `<listing_3>` from another session.
+**Steps 1–3 setup:**
+
+- collector A has `<listing_17>` open with a live line.
+- customer B(card linked, email `<customer B email>`) can bid on `<listing_17>` from another session.
+
+**Steps 4–6 setup:**
+
 - `<listing_3>` is open, its close about 12 minutes away.
-- customer A is on the lot page for `<listing_3>` on a device whose clock is `<device skew>`.
-- customer B is on the same lot page on a device whose clock is correct.
+- customer A is on the listing page for `<listing_3>` on a device whose clock is `<device skew>`.
+- customer B is on the same listing page on a device whose clock is correct.
+
+**Steps 7–9 setup:**
+
 - `<listing_4>` is open with no accepted bid, its close under a minute away.
-- customer A is on the lot page for `<listing_4>`.
-- customer A is on the lot page for `<listing_3>`.
+- customer A is on the listing page for `<listing_4>`.
+
+**Steps 10–12 setup:**
+
+- `<listing_3>` is open, its close about 12 minutes away.
+- customer A is on the listing page for `<listing_3>`.
+- customer B is on the same listing page on a device whose clock is correct.
+
+**Steps 13–15 setup:**
+
+- `<listing_3>` is open, its close about 12 minutes away.
+- customer A is on the listing page for `<listing_3>`.
 - The auction service's time, read on customer A's return, is `<correction>` earlier than the page's countdown assumes, so the new reading would add time.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–3 data:**
+
+| Field | Value |
 | --- | --- |
-| email_mike | `mike@example.com` |
-| Item | `<device skew>`: 4 minutes ahead |
-| Item | `<device skew>`: 4 minutes behind |
-| Item | `<device skew>`: Field; Value 2: Value |
-| Item | `<device skew>`: `<listing_3>`; Value 2: An open USD listing, close about 12 minutes away |
-| `<listing_4>` | An open USD listing with no bids, extension duration 1800s (30mins) |
-| `<last moment>` | 0.4 seconds before the close |
-| Item | `<away>`: customer A's device sleeps for 45 seconds |
-| Item | `<away>`: customer A's browser goes offline for 45 seconds, then reconnects |
-| Item | `<away>`: customer A switches to another tab for 45 seconds, then back |
-| Item | `<away>`: Field; Value 2: Value |
-| Item | `<away>`: `<listing_3>`; Value 2: An open USD listing, close about 12 minutes away |
-| Item | `<away>`: `<clock change>`; Value 2: customer A's device clock set 90 seconds ahead |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
-| `<correction>` | 0.6 seconds, under a second |
+| customer B email | `mike@example.com` |
+| listing_17 | An open USD listing whose live connection is available and customer B can bid; bind its identity only |
+| customer B avatar letter | M: the public avatar letter derived from `<customer B email>`; bind the letter only |
+
+**Steps 4–6 data:**
+
+| `<device skew>` |
+| --- |
+| 4 minutes ahead |
+| 4 minutes behind |
+
+| Field | Value |
+| --- | --- |
+| listing_3 | An open USD listing, close about 12 minutes away |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 45 seconds | (fixed observation fixture) |
+
+**Steps 7–9 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_4 | An open USD listing with no bids, extension duration 1800s (30mins) |
+| last moment | 0.4 seconds before the close |
+
+**Steps 10–12 data:**
+
+| `<away>` |
+| --- |
+| customer A's device sleeps for 45 seconds |
+| customer A's browser goes offline for 45 seconds, then reconnects |
+| customer A switches to another tab for 45 seconds, then back |
+
+| Field | Value |
+| --- | --- |
+| listing_3 | An open USD listing, close about 12 minutes away |
+| clock change | a 90-second forward change to customer A's device clock |
+
+**Steps 13–15 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_3 | An open USD listing, close about 12 minutes away | · |
+| correction | 0.6 seconds | under a second |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 5 seconds | (fixed observation fixture) |
 
 ### Route
 
 1. As collector A, watch Recent Bids.
-   - The new row appears without a reload. g10.auction-listing-page.US12-TC9
-2. As customer B, place an accepted public bid on `<listing_3>`.
-   - Its avatar shows `M`. g10.auction-listing-page.US12-TC9
+2. As customer B, place an accepted public bid on `<listing_17>`.
 3. As collector A, without reloading, find customer B's new Recent Bids row.
-   - Its readable label is a listing pseudonym, not an email. g10.auction-listing-page.US12-TC9
+   - The new row appears without a reload. `g10.auction-listing-page.US12-TC9`
+   - Its avatar shows `<customer B avatar letter>`. `g10.auction-listing-page.US12-TC9`
+   - Its readable label is a listing pseudonym, not an email. `g10.auction-listing-page.US12-TC9`
 4. Read Time left on customer A's page and customer B's page at the same moment.
-   - Both pages read the same Time left, to the second, at step 1. g10.auction-listing-page.US13-TC1
-5. Wait 45 seconds.
-   - Both pages read the same Time left, to the second, at step 3. g10.auction-listing-page.US13-TC1
+   - Both pages read the same Time left, to the second, at step 4. `g10.auction-listing-page.US13-TC1`
+5. Wait `<observation interval>`.
 6. Read Time left on both pages at the same moment.
-   - Neither page is off by `<device skew>`. g10.auction-listing-page.US13-TC1
+   - Both pages read the same Time left, to the second, at step 6. `g10.auction-listing-page.US13-TC1`
+   - Neither page is off by `<device skew>`. `g10.auction-listing-page.US13-TC1`
 7. Watch Time left from 10 seconds before the close.
-   - Through step 1 Time left shows whole seconds only, never tenths. g10.auction-listing-page.US13-TC2
+   - Through step 7 Time left shows whole seconds only, never tenths. `g10.auction-listing-page.US13-TC2`
 8. Read Time left at `<last moment>`.
-   - At step 2 Time left reads 1 second, never 0. g10.auction-listing-page.US13-TC2
+   - At step 8 Time left reads 1 second, never 0. `g10.auction-listing-page.US13-TC2`
 9. Read Time left just after the close passes.
-   - At step 3 Time left reads 0 or the lot reads Closed. g10.auction-listing-page.US13-TC2
-10. Make `<clock change>` while `<away>`.
-11. Return to the lot page, without reloading.
+   - At step 9 Time left reads 0 or the listing reads Closed. `g10.auction-listing-page.US13-TC2`
+10. Apply `<clock change>` while `<away>`.
+11. Return to the listing page, without reloading.
 12. Read Time left on customer A's page and customer B's page at the same moment.
-   - Both pages read the same Time left, to the second. g10.auction-listing-page.US13-TC3
+   - Both pages read the same Time left, to the second. `g10.auction-listing-page.US13-TC3`
 13. Switch to another tab.
-14. Switch back to the lot page.
-15. Watch Time left for 5 seconds.
-   - Time left never reads a higher value than it read the moment before. g10.auction-listing-page.US13-TC4
+14. Switch back to the listing page.
+15. Watch Time left for `<observation interval>`.
+   - Time left never reads a higher value than it read the moment before. `g10.auction-listing-page.US13-TC4`
 
-## Walk 13: Bidder waits on a closed lot for its result
+## Walk 13: Bidder waits on a closed listing for its result
 
 **Starting state:**
 
-- `<listing_5>` is in the state the row gives, its close under a minute away, and no further bid will be placed.
-- `<viewer>` is signed in and on the lot page for `<listing_5>`.
-- customer A leads `<listing_6>` and is on its lot page.
+**Steps 1–2 setup:**
+
+- The listing `<listing_18>` has this state: `<listing_state>`, its close under a minute away, and no further bid will be placed.
+- `<viewer>` is signed in and on the listing page for `<listing_18>`.
+
+**Steps 3–6 setup:**
+
+- customer A leads `<listing_6>` and is on its listing page.
 - `<listing_6>`'s close is under a minute away, and no further bid will be placed.
 - Recording `<listing_6>`'s close is held back until the next sweep.
+
+**Steps 7–11 setup:**
+
 - customer B leads `<listing_9>` at `<leader price>`, its close under a minute away.
-- customer A(card linked) is signed in and on the lot page for `<listing_9>`, and has never bid on it.
-- Once the page has loaded, customer A's browser blocks the auction's time route, live socket and lot reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
+- customer A(card linked) is signed in and on the listing page for `<listing_9>`, and has never bid on it.
+- Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
+
+**Steps 12–16 setup:**
+
 - `<listing_10>` is open with no accepted bid, its scheduled close under a minute away.
-- customer A(card linked) is signed in and on the lot page for `<listing_10>`.
+- customer A(card linked) is signed in and on the listing page for `<listing_10>`.
+- Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
+
+**Steps 17–19 setup:**
+
 - `<listing_11>` is in extended bidding, led by customer B, its recorded close under a minute away.
-- customer A is on the lot page for `<listing_11>`, with its live updates delayed by 5 seconds.
-- customer C(card linked) is signed in on a separate session, on the same lot page.
-- `<listing_2>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
-- customer C is on the lot page for `<listing_2>`, in English.
-- `<listing_3>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
-- `<listing_4>` is past its close with no bid, its close recorded with no winner.
+- customer A is on the listing page for `<listing_11>`, with its live updates delayed by `<update delay>`.
+- customer C(card linked) is signed in on a separate session, on the same listing page.
+
+**Steps 20–22 setup:**
+
+- `<listing_19>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+- customer C is on the listing page for `<listing_19>`, in English.
+
+**Steps 23–24 setup:**
+
+- `<listing_20>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
+- `<listing_21>` is past its close with no bid, its close recorded with no winner.
 - customer C is signed in on a separate session.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–2 data:**
+
+| `<listing_state>` | `<viewer>` | `<result>` |
+| --- | --- | --- |
+| Led by customer A | customer A | Won |
+| Led by customer A, customer B outbid | customer B | Did not win |
+| Open with no accepted bid | customer A | Ended, with No bids under it |
+
+| Field | Value |
 | --- | --- |
-| Item | `<listing_5>`: Led by customer A; `<viewer>`: customer A; `<result>`: Won |
-| Item | `<listing_5>`: Led by customer A, customer B outbid; `<viewer>`: customer B; `<result>`: Did not win |
-| Item | `<listing_5>`: Open with no accepted bid; `<viewer>`: customer A; `<result>`: Ended, with No bids under it |
-| `<listing_6>` | A USD listing led by customer A |
-| `<listing_9>` | A USD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
-| `<listing_10>` | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap |
-| `<bid amount>` | USD280 (range: 10000–49999 minor units), the opening price |
-| `<listing_11>` | A USD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
-| `<bid amount>` | At or above the minimum next bid |
+| listing_18 | A USD listing in `<listing_state>` with its close under a minute away; bind its identity only |
+
+**Steps 3–6 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_6 | A USD listing led by customer A |
+
+**Steps 7–11 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_9 | A USD listing in extended bidding, led by customer B, no cap | · |
+| leader price | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
+
+**Steps 12–16 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_10 | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap | · |
+| bid amount | USD280 | (range: 10000–49999 minor units), the opening price |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
+
+**Steps 17–19 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_11 | A USD listing in extended bidding, led by customer B, extension duration `<extension duration>`, no cap |
+| bid amount | At or above the minimum next bid |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| update delay | 5 seconds | (fixed live-update delay fixture) |
+| last bid offset | 1 second | (fixed last-second boundary) |
+| extension duration | 1800s | (30mins) |
+
+**Steps 20–22 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_19 | A live USD listing led by customer A with customer B below, recorded close a minute away; bind its identity only |
+
+**Steps 23–24 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_20 | A USD listing past its close with bids, recording its close held until the next sweep; bind its identity only |
+| listing_21 | A USD listing past its close with no bid, recorded with no winner; bind its identity only |
 
 ### Route
 
-1. Watch the lot through its close, without reloading.
-   - Once the close passes, the page reads Closed with no result. g10.auction-listing-page.US14-TC1
-2. Read the lot's state until the result appears.
-   - The page then reads `<result>`, without a reload. g10.auction-listing-page.US14-TC1
-3. Watch the lot through its close, without reloading.
+1. Watch the listing through its close, without reloading.
+2. Read the listing's state until the result appears.
+   - Once the close passes, the page reads Closed with no result. `g10.auction-listing-page.US14-TC1`
+   - The page then reads `<result>`, without a reload. `g10.auction-listing-page.US14-TC1`
+3. Watch the listing through its close, without reloading.
 4. Wait 30 seconds.
-5. Reload the lot page.
+5. Reload the listing page.
 6. Wait until the close is recorded.
-   - Through steps 1 to 3 the page reads Closed with no result. g10.auction-listing-page.US14-TC2
-   - No step shows Won, Did not win or Ended before the close is recorded. g10.auction-listing-page.US14-TC2
-   - After step 4 the page reads Won, without a reload. g10.auction-listing-page.US14-TC2
-7. Wait until 5 seconds after the close, by the auction's clock.
+   - Through steps 3 to 3 the page reads Closed with no result. `g10.auction-listing-page.US14-TC2`
+   - No step shows Won, Did not win or Ended before the close is recorded. `g10.auction-listing-page.US14-TC2`
+   - After step 6 the page reads Won, without a reload. `g10.auction-listing-page.US14-TC2`
+7. Wait until `<bid delay>` after the close, by the auction's clock.
 8. Place `<bid amount>`.
 9. Read the bid panel.
-10. Unblock the auction, reload the lot page and wait until the close is recorded.
-11. Read the lot's state and the bid panel.
-   - At step 3 the bid panel reads "Your bid did not go through." alone. g10.auction-listing-page.US14-TC4
-   - No new label or wording appears for the refused bid. g10.auction-listing-page.US14-TC4
-   - At step 5 Highest bid reads `<leader price>`. g10.auction-listing-page.US14-TC4
-   - At step 5 customer A's page shows neither Won nor Did not win. g10.auction-listing-page.US14-TC4
-12. Wait until 5 seconds after the scheduled close, by the auction's clock.
+   - At step 9 the bid panel reads "Your bid did not go through." alone. `g10.auction-listing-page.US14-TC4`
+10. Unblock the auction, reload the listing page and wait until the close is recorded.
+11. Read the listing's state and the bid panel.
+   - No new label or wording appears for the refused bid. `g10.auction-listing-page.US14-TC4`
+   - At step 11 Highest bid reads `<leader price>`. `g10.auction-listing-page.US14-TC4`
+   - At step 11 customer A's page shows neither Won nor Did not win. `g10.auction-listing-page.US14-TC4`
+12. Wait until `<bid delay>` after the scheduled close, by the auction's clock.
 13. Place `<bid amount>`.
 14. Read the bid panel.
-15. Unblock the auction, reload the lot page and wait until the close is recorded.
-16. Read Time left, the lot's state and the bid panel.
-   - At step 3 the bid panel reads "Your bid did not go through." alone. g10.auction-listing-page.US14-TC5
-   - At step 5 Time left never read Extended bidding. g10.auction-listing-page.US14-TC5
-   - At step 5 the lot reads Ended, with No bids under it. g10.auction-listing-page.US14-TC5
-   - At step 5 the page shows neither Won nor Did not win. g10.auction-listing-page.US14-TC5
-17. As customer C, place `<bid amount>` 1 second before the recorded close.
+   - At step 14 the bid panel reads "Your bid did not go through." alone. `g10.auction-listing-page.US14-TC5`
+15. Unblock the auction, reload the listing page and wait until the close is recorded.
+16. Read Time left, the listing's state and the bid panel.
+   - At step 16 Time left never read Extended bidding. `g10.auction-listing-page.US14-TC5`
+   - At step 16 the listing reads Ended, with No bids under it. `g10.auction-listing-page.US14-TC5`
+   - At step 16 the page shows neither Won nor Did not win. `g10.auction-listing-page.US14-TC5`
+17. As customer C, place `<bid amount>` `<last bid offset>` before the recorded close.
 18. As customer A, watch Time left through the recorded close, without reloading.
-19. As customer A, read the lot's state and the bid panel once the update arrives.
-   - Once the close it counted to passes, customer A's page reads Closed with no result and its bid controls disabled. g10.auction-listing-page.US14-TC6
-   - At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus 1800s. g10.auction-listing-page.US14-TC6
-   - At step 3 the bid controls are enabled. g10.auction-listing-page.US14-TC6
-   - No step shows Won, Did not win or Ended, and the page did not reload. g10.auction-listing-page.US14-TC6
+19. As customer A, read the listing's state and the bid panel once the update arrives.
+   - Once the close it counted to passes, customer A's page reads Closed with no result and its bid controls disabled. `g10.auction-listing-page.US14-TC6`
+   - At step 19 Time left is labelled Extended bidding and counts to customer C's bid time plus `<extension duration>`. `g10.auction-listing-page.US14-TC6`
+   - At step 19 the bid controls are enabled. `g10.auction-listing-page.US14-TC6`
+   - No step shows Won, Did not win or Ended, and the page did not reload. `g10.auction-listing-page.US14-TC6`
 20. As customer C, read Recent bids before the close.
-   - no row shows a crown. g10.auction-listing-page.US14-TC7
+   - Step 20: no row shows a crown. `g10.auction-listing-page.US14-TC7`
 21. Wait for the close to be recorded as sold to customer A, without reloading.
 22. As customer C, read Recent bids again.
-   - customer A's winning row shows a crown named Winner after the amount. g10.auction-listing-page.US14-TC7
-   - no other row, customer B's included, shows a crown. g10.auction-listing-page.US14-TC7
-23. As customer C, open the lot page for `<listing_3>` and read Recent bids.
-   - the lot reads Closed and no row shows a crown. g10.auction-listing-page.US14-TC8
-24. As customer C, open the lot page for `<listing_4>` and read Recent bids.
-   - the lot reads Ended with No bids under it, Recent bids holds no row, and no crown shows. g10.auction-listing-page.US14-TC8
+   - Step 22: customer A's winning row shows a crown named Winner after the amount. `g10.auction-listing-page.US14-TC7`
+   - Step 22: no other row, customer B's included, shows a crown. `g10.auction-listing-page.US14-TC7`
+23. As customer C, open the listing page for `<listing_20>` and read Recent bids.
+   - Step 23: the listing reads Closed and no row shows a crown. `g10.auction-listing-page.US14-TC8`
+24. As customer C, open the listing page for `<listing_21>` and read Recent bids.
+   - Step 24: the listing reads Ended with No bids under it, Recent bids holds no row, and no crown shows. `g10.auction-listing-page.US14-TC8`
 
 ## Walk 14: Collector tells Recent Bids rivals apart by avatar letter
 
 **Starting state:**
 
+**Steps 1–2 setup:**
+
 - `<listing_1>` is open in USD.
-- customer A(card linked, email `<email_ada>`) and customer B(card linked, email `<email_bob>`) each have an accepted public bid on `<listing_1>`.
-- A collector is on the lot page for `<listing_1>` in English.
-- customer A(signed in, card linked, email `<email_ada>`) has an accepted public bid on open `<listing_2>` and is on that lot page.
+- customer A(card linked, email `<customer A email>`) and customer B(card linked, email `<customer B email>`) each have an accepted public bid on `<listing_1>`.
+- A collector is on the listing page for `<listing_1>` in English.
+
+**Steps 3–4 setup:**
+
+- customer A(signed in, card linked, email `<customer A email>`) has an accepted public bid on open `<listing_2>` and is on that listing page.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–2 data:**
+
+| Field | Value |
 | --- | --- |
-| email_ada | `ada@example.com` |
-| email_bob | `bob@example.com` |
+| customer A email | `ada@example.com` |
+| customer A avatar letter | A: the public avatar letter derived from `<customer A email>`; bind the letter only |
+| customer B email | `bob@example.com` |
+| customer B avatar letter | B: the public avatar letter derived from `<customer B email>`; bind the letter only |
+| listing_1 | The open USD listing with accepted public bids in this case; bind its identity only |
+
+**Steps 3–4 data:**
+
+| Field | Value |
+| --- | --- |
+| customer A email | `ada@example.com` |
+| customer A avatar letter | A: the public avatar letter derived from `<customer A email>`; bind the letter only |
+| listing_2 | The open USD listing with customer A’s accepted public bid in this case; bind its identity only |
 
 ### Route
 
-1. Open Recent Bids on the lot page.
+1. Open Recent Bids on the listing page.
 2. Find customer A's public row and customer B's public row.
-   - Customer A's avatar shows `A`. g10.auction-listing-page.US15-TC1
-   - Customer B's avatar shows `B`. g10.auction-listing-page.US15-TC1
-   - Neither row shows an email or personal name. g10.auction-listing-page.US15-TC1
-   - Readable labels stay listing pseudonyms or You, not an email-prefixed form. g10.auction-listing-page.US15-TC1
+   - Customer A's avatar shows `<customer A avatar letter>`. `g10.auction-listing-page.US15-TC1`
+   - Customer B's avatar shows `<customer B avatar letter>`. `g10.auction-listing-page.US15-TC1`
+   - Neither row shows an email or personal name. `g10.auction-listing-page.US15-TC1`
+   - Readable labels stay listing pseudonyms or You, not an email-prefixed form. `g10.auction-listing-page.US15-TC1`
 3. Open Recent Bids.
-   - The You row's avatar shows `A`. g10.auction-listing-page.US15-TC2
 4. Find the row marked You.
-   - The row still shows the You badge. g10.auction-listing-page.US15-TC2
+   - The You row's avatar shows `<customer A avatar letter>`. `g10.auction-listing-page.US15-TC2`
+   - The row still shows the You badge. `g10.auction-listing-page.US15-TC2`
 
-## g10.auction-listing-page.US1: Collector opens a lot at its own address
+## Walk 15: Additional fixture checks
+
+**Starting state:**
+
+**Steps 1–6 setup:**
+
+- customer has `<reused_address>` saved before `<original_listing>` was called off.
+- `<replacement_listing>` is the eligible current holder in `<replacement_state>`.
+- No bid or standing change occurs during this pass.
+- The browser runs no client-side scripts.
+
+**Steps 7–11 setup:**
+
+- customer has `<reused_address>` saved before `<original_listing>` was called off.
+- `<replacement_listing>` is public and holds that released slug.
+- customer is on the auction catalogue with scripts running.
+- A saved link in this session names `<reused_address>`.
+
+**Steps 12–17 setup:**
+
+- customer is on the auction catalogue with scripts running.
+- `<original_listing>` is called off and `<holder_state>` applies.
+- A saved link in this session names `<released_address>`.
+
+**Shared test data:**
+
+**Steps 1–6 data:**
+
+| Field | Value |
+| --- | --- |
+| original_listing | A called-off listing with a different title and description |
+| replacement_listing | The eligible current holder, with its own title, description and bidding standing |
+| reused_address | The original address shared by both listings |
+
+| `<replacement_state>` |
+| --- |
+| Published, open to collectors |
+| Closed, retained by public lookup |
+| Settled, retained by public lookup |
+
+**Steps 7–11 data:**
+
+| Field | Value |
+| --- | --- |
+| original_listing | A called-off listing with a different title and description |
+| replacement_listing | The eligible current holder, with its own title and description |
+| reused_address | The original address shared by both listings |
+
+**Steps 12–17 data:**
+
+| `<holder_state>` | `<released_address>` |
+| --- | --- |
+| No listing holds the released slug | `<original_listing>`'s former address |
+| A new unpublished draft holds the released slug | `<original_listing>`'s former address |
+| A created unpublished replacement holds the released slug | `<original_listing>`'s former address |
+
+| Field | Value |
+| --- | --- |
+| original_listing | The called-off listing that previously held `<released_address>`; bind its identity only |
+
+### Route
+
+1. Navigate to `<reused_address>`.
+   - Step 1 returns 200 at `<reused_address>`. `g10.auction-listing-page.US1-TC3`
+2. Read the served page.
+   - Step 2 shows `<replacement_listing>`'s content and standing. `g10.auction-listing-page.US1-TC3`
+3. Inspect its title, description and Open Graph metadata.
+   - Step 3 names `<replacement_listing>` and `<reused_address>`. `g10.auction-listing-page.US1-TC3`
+4. Inspect embedded data and fresh share-preview metadata.
+   - Step 4 names only `<replacement_listing>` as the current holder. `g10.auction-listing-page.US1-TC3`
+5. Enable scripts on this same address.
+6. Read the hydrated page and client lookup data.
+   - No content or fresh metadata identifies `<original_listing>`. `g10.auction-listing-page.US1-TC3`
+   - No redirect or called-off page appears. `g10.auction-listing-page.US1-TC3`
+   - Preview title, description and URL identify `<replacement_listing>`. `g10.auction-listing-page.US1-TC3`
+   - No separate listing-code or payment-reference field appears. `g10.auction-listing-page.US1-TC3`
+   - A code appears only within the full canonical address. `g10.auction-listing-page.US1-TC3`
+   - The served document title and meta description name `<replacement_listing>`. `g10.auction-listing-page.US1-TC3`
+   - Its canonical address and og:url equal `<reused_address>`. `g10.auction-listing-page.US1-TC3`
+   - og:title and og:description name `<replacement_listing>`. `g10.auction-listing-page.US1-TC3`
+   - Step 6 keeps the same `<replacement_listing>`, title, description and bidding standing. `g10.auction-listing-page.US1-TC3`
+   - No placeholder, old-listing content or separate code field replaces served content. `g10.auction-listing-page.US1-TC3`
+7. Open the saved link through client navigation.
+8. Read the listing page after its lookup completes.
+   - Step 8 shows `<replacement_listing>`'s content and standing. `g10.auction-listing-page.US1-TC4`
+9. Reload `<reused_address>`.
+   - Step 9 returns 200. `g10.auction-listing-page.US1-TC4`
+10. Read the served page.
+   - Step 10 shows the same `<replacement_listing>`. `g10.auction-listing-page.US1-TC4`
+11. Inspect hydrated DOM, lookup response and fresh preview metadata.
+   - The address remains `<reused_address>`. `g10.auction-listing-page.US1-TC4`
+   - No content identifies `<original_listing>`. `g10.auction-listing-page.US1-TC4`
+   - No redirect or called-off page appears. `g10.auction-listing-page.US1-TC4`
+   - Step 11 names `<replacement_listing>`, its title and full address. `g10.auction-listing-page.US1-TC4`
+   - Neither `<original_listing>` nor its data appears. `g10.auction-listing-page.US1-TC4`
+   - No separate listing-code or payment-reference field appears. `g10.auction-listing-page.US1-TC4`
+12. Open the saved link through client navigation.
+13. Read the page after its lookup completes.
+   - Step 13 shows Page not found. `g10.auction-listing-page.US3-TC4`
+14. Inspect the client lookup response.
+   - Step 14 contains no listing data or listing code. `g10.auction-listing-page.US3-TC4`
+15. Reload the address.
+   - Step 15 returns 404 with the same not-found surface. `g10.auction-listing-page.US3-TC4`
+16. Open the original code alone through client navigation.
+17. Reload that code-only address.
+   - Neither `<original_listing>` nor the unpublished holder appears. `g10.auction-listing-page.US3-TC4`
+   - Steps 16 and 17 show Page not found, with no listing data. `g10.auction-listing-page.US3-TC4`
+   - Step 17 returns 404 and no listing code. `g10.auction-listing-page.US3-TC4`
+   - No redirect, empty listing page or catalogue replaces it. `g10.auction-listing-page.US3-TC4`
+
+## g10.auction-listing-page.US1: Collector opens a listing at its own address
 
 **As a** collector,
-**I want** a lot's address to answer with that lot's own page in the response
+**I want** a listing's address to answer with that listing's own page in the response
 HTML,
 **so that** I can read its name, its description and where its bidding stands
 without waiting for a script to run.
 
-### g10.auction-listing-page.US1-TC1: Lot answers whole before scripts run
+### g10.auction-listing-page.US1-TC1: Listing answers whole before scripts run
 
 **Classification:**
 
@@ -595,22 +1302,33 @@ without waiting for a script to run.
 * **Trace:** grade10-site-auction-listing-page-US-01
 
 **Pre-conditions:**
-The catalogue publishes <a published lot>. JavaScript disabled in the browser.
+The catalogue publishes `<published_listing>`. JavaScript disabled in the browser.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| lang | The supported language code selected for the canonical listing URL in this fixture; bind its URL language segment only |
 
 **Steps:**
 
-1. Navigate to <a published lot url>.
+1. Navigate to `<published_listing_url>`.
 2. Check the rendered page.
 3. Check the page source.
 
 **Expected Results:**
 
-* Response status is 200 and the lot page renders.
-* URL contains <lang>.
-* Page source carries that lot's name, description, and bidding standing.
+* Response status is 200 and the listing page renders.
+* URL contains `<lang>`.
+* Page source carries that listing's name, description, and bidding standing.
 
 <!-- trace:case id=g10.auction-listing-page.TC-82e rev=2 -->
-### g10.auction-listing-page.US1-TC2: Two lots answer as two pages
+### g10.auction-listing-page.US1-TC2: Two listings answer as two pages
 
 **Classification:**
 
@@ -626,16 +1344,23 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * **Trace:** grade10-site-auction-listing-page-US-01
 
 **Pre-conditions:**
-The catalogue publishes two lots.
+The catalogue publishes two listings.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+| second_published_listing_url | The canonical URL of a different published listing with its own name and standing; bind the URL only |
 
 **Steps:**
 
-1. Navigate to <a published lot url> and note name, standing, title, meta description and `og:url`.
-2. Navigate to <a second published lot url> and note the same.
+1. Navigate to `<published_listing_url>` and note name, standing, title, meta description and `og:url`.
+2. Navigate to `<second_published_listing_url>` and note the same.
 
 **Expected Results:**
 
-* Each response carries its own lot's name and standing.
+* Each response carries its own listing's name and standing.
 * Each response carries its own title, meta description and `og:url`.
 
 <!-- trace:case id=g10.auction-listing-page.TC-2it rev=4 -->
@@ -656,8 +1381,8 @@ The catalogue publishes two lots.
 
 **Pre-conditions:**
 
-* customer has `<reused_address>` saved before `<old_lot>` was called off.
-* `<new_lot>` is the eligible current holder in `<replacement_state>`.
+* customer has `<reused_address>` saved before `<original_listing>` was called off.
+* `<replacement_listing>` is the eligible current holder in `<replacement_state>`.
 * No bid or standing change occurs during this pass.
 * The browser runs no client-side scripts.
 
@@ -665,8 +1390,8 @@ The catalogue publishes two lots.
 
 | Field | Value |
 | --- | --- |
-| old_lot | A called-off listing with a different title and description |
-| new_lot | The eligible current holder, with its own title, description and bidding standing |
+| original_listing | A called-off listing with a different title and description |
+| replacement_listing | The eligible current holder, with its own title, description and bidding standing |
 | reused_address | The original address shared by both listings |
 
 | `<replacement_state>` |
@@ -687,22 +1412,22 @@ The catalogue publishes two lots.
 **Expected Results:**
 
 * Step 1 returns 200 at `<reused_address>`.
-* Step 2 shows `<new_lot>`'s content and standing.
-* Step 3 names `<new_lot>` and `<reused_address>`.
-* No content or fresh metadata identifies `<old_lot>`.
+* Step 2 shows `<replacement_listing>`'s content and standing.
+* Step 3 names `<replacement_listing>` and `<reused_address>`.
+* No content or fresh metadata identifies `<original_listing>`.
 * No redirect or called-off page appears.
-* Step 4 names only `<new_lot>` as the current holder.
-* Preview title, description and URL identify `<new_lot>`.
+* Step 4 names only `<replacement_listing>` as the current holder.
+* Preview title, description and URL identify `<replacement_listing>`.
 * No separate listing-code or payment-reference field appears.
 * A code appears only within the full canonical address.
-* The served document title and meta description name `<new_lot>`.
+* The served document title and meta description name `<replacement_listing>`.
 * Its canonical address and og:url equal `<reused_address>`.
-* og:title and og:description name `<new_lot>`.
-* Step 6 keeps the same `<new_lot>`, title, description and bidding standing.
-* No placeholder, old-lot content or separate code field replaces served content.
+* og:title and og:description name `<replacement_listing>`.
+* Step 6 keeps the same `<replacement_listing>`, title, description and bidding standing.
+* No placeholder, old-listing content or separate code field replaces served content.
 
 <!-- trace:case id=g10.auction-listing-page.TC-tof rev=3 -->
-### g10.auction-listing-page.US1-TC4: Client navigation opens the eligible replacement lot
+### g10.auction-listing-page.US1-TC4: Client navigation opens the eligible replacement listing
 
 **Classification:**
 
@@ -719,8 +1444,8 @@ The catalogue publishes two lots.
 
 **Pre-conditions:**
 
-* customer has `<reused_address>` saved before `<old_lot>` was called off.
-* `<new_lot>` is public and holds that released slug.
+* customer has `<reused_address>` saved before `<original_listing>` was called off.
+* `<replacement_listing>` is public and holds that released slug.
 * customer is on the auction catalogue with scripts running.
 * A saved link in this session names `<reused_address>`.
 
@@ -728,41 +1453,41 @@ The catalogue publishes two lots.
 
 | Field | Value |
 | --- | --- |
-| old_lot | A called-off listing with a different title and description |
-| new_lot | The eligible current holder, with its own title and description |
+| original_listing | A called-off listing with a different title and description |
+| replacement_listing | The eligible current holder, with its own title and description |
 | reused_address | The original address shared by both listings |
 
 **Steps:**
 
 1. Open the saved link through client navigation.
-2. Read the lot page after its lookup completes.
+2. Read the listing page after its lookup completes.
 3. Reload `<reused_address>`.
 4. Read the served page.
 5. Inspect hydrated DOM, lookup response and fresh preview metadata.
 
 **Expected Results:**
 
-* Step 2 shows `<new_lot>`'s content and standing.
+* Step 2 shows `<replacement_listing>`'s content and standing.
 * The address remains `<reused_address>`.
 * Step 3 returns 200.
-* Step 4 shows the same `<new_lot>`.
-* No content identifies `<old_lot>`.
+* Step 4 shows the same `<replacement_listing>`.
+* No content identifies `<original_listing>`.
 * No redirect or called-off page appears.
-* Step 5 names `<new_lot>`, its title and full address.
-* Neither `<old_lot>` nor its data appears.
+* Step 5 names `<replacement_listing>`, its title and full address.
+* Neither `<original_listing>` nor its data appears.
 * No separate listing-code or payment-reference field appears.
 
 ---
 
-## g10.auction-listing-page.US2: Collector shares a lot link
+## g10.auction-listing-page.US2: Collector shares a listing link
 
 **As a** collector,
-**I want** a lot link to unfurl as that lot and its own canonical address,
-**so that** a link I pass on names the lot it points at instead of the auction
+**I want** a listing link to unfurl as that listing and its own canonical address,
+**so that** a link I pass on names the listing it points at instead of the auction
 catalogue.
 
 <!-- trace:case id=g10.auction-listing-page.TC-89i rev=2 -->
-### g10.auction-listing-page.US2-TC1: Shared lot link unfurls as that lot
+### g10.auction-listing-page.US2-TC1: Shared listing link unfurls as that listing
 
 **Classification:**
 
@@ -780,27 +1505,33 @@ catalogue.
 **Pre-conditions:**
 JavaScript disabled in the browser.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
 **Steps:**
 
-1. Navigate to <a published lot url>.
+1. Navigate to `<published_listing_url>`.
 2. Check the page source for `og:title`, `og:description` and `og:url`.
 
 **Expected Results:**
 
-* Page source carries `og:title`, `og:description` and `og:url` naming that lot and its own address.
+* Page source carries `og:title`, `og:description` and `og:url` naming that listing and its own address.
 * None of them names the auction catalogue in its place.
 
 ---
 
-## g10.auction-listing-page.US3: Collector opens an address that names no lot
+## g10.auction-listing-page.US3: Collector opens an address that names no listing
 
 **As a** collector,
-**I want** an address under the auction's lots that names no published lot to
+**I want** an address under the auction's listings that names no published listing to
 answer with the site's not-found surface,
-**so that** I am never shown an empty lot page or the catalogue in its place.
+**so that** I am never shown an empty listing page or the catalogue in its place.
 
 <!-- trace:case id=g10.auction-listing-page.TC-3xv rev=2 -->
-### g10.auction-listing-page.US3-TC1: Unknown lot address returns not-found
+### g10.auction-listing-page.US3-TC1: Unknown listing address returns not-found
 
 **Classification:**
 
@@ -816,11 +1547,17 @@ answer with the site's not-found surface,
 * **Trace:** grade10-site-auction-listing-page-US-03
 
 **Pre-conditions:**
-The catalogue publishes no lot for <a lot address naming no published lot>.
+The catalogue publishes no listing for `<unknown_listing_url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| unknown_listing_url | An auction listing URL with no published listing or eligible holder; bind the URL only |
 
 **Steps:**
 
-1. Navigate to <a lot address naming no published lot>.
+1. Navigate to `<unknown_listing_url>`.
 2. Check the rendered page.
 3. Check the response status.
 
@@ -830,7 +1567,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * The site's not-found surface is on screen.
 
 <!-- trace:case id=g10.auction-listing-page.TC-6r8 rev=2 -->
-### g10.auction-listing-page.US3-TC2: Published lot address returns the lot page
+### g10.auction-listing-page.US3-TC2: Published listing address returns the listing page
 
 **Classification:**
 
@@ -846,17 +1583,24 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * **Trace:** grade10-site-auction-listing-page-US-03
 
 **Pre-conditions:**
-The catalogue publishes <a published lot>.
+The catalogue publishes `<published_listing>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Navigate to <a published lot url>.
+1. Navigate to `<published_listing_url>`.
 2. Check the response status and the rendered page.
 
 **Expected Results:**
 
 * Response status is 200.
-* The page is that lot's page.
+* The page is that listing's page.
 
 <!-- trace:case id=g10.auction-listing-page.TC-pdz rev=5 -->
 ### g10.auction-listing-page.US3-TC3: Unavailable original address serves Page not found
@@ -901,7 +1645,7 @@ Runs once per row of **Test data**.
 2. Check the response status.
 3. Check the served page.
 4. Inspect its response body and embedded data.
-5. Open the original listing code alone as the lot address.
+5. Open the original listing code alone as the listing address.
 6. Inspect that response and page.
 7. Open the original collector's watchlist.
 8. Search for the called-off original listing.
@@ -911,11 +1655,11 @@ Runs once per row of **Test data**.
 * Step 2 returns 404.
 * Step 3 shows Page not found.
 * Neither original listing nor unpublished replacement appears.
-* No empty lot page, redirect or catalogue replaces it.
-* Step 4 contains no original-lot or replacement-lot data.
+* No empty listing page, redirect or catalogue replaces it.
+* Step 4 contains no original-listing or replacement-listing data.
 * Step 4 contains no listing code or payment reference.
 * Step 5 returns 404.
-* Step 6 shows Page not found with no lot data or code.
+* Step 6 shows Page not found with no listing data or code.
 * Step 8 does not show the called-off original in the watchlist.
 * An unpublished replacement does not appear there either.
 
@@ -940,16 +1684,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is on the auction catalogue with scripts running.
-* `<old_lot>` is called off and `<holder_state>` applies.
+* `<original_listing>` is called off and `<holder_state>` applies.
 * A saved link in this session names `<released_address>`.
 
 **Test data:**
 
 | `<holder_state>` | `<released_address>` |
 | --- | --- |
-| No listing holds the released slug | `<old_lot>`'s former address |
-| A new unpublished draft holds the released slug | `<old_lot>`'s former address |
-| A created unpublished replacement holds the released slug | `<old_lot>`'s former address |
+| No listing holds the released slug | `<original_listing>`'s former address |
+| A new unpublished draft holds the released slug | `<original_listing>`'s former address |
+| A created unpublished replacement holds the released slug | `<original_listing>`'s former address |
+
+| Field | Value |
+| --- | --- |
+| original_listing | The called-off listing that previously held `<released_address>`; bind its identity only |
 
 **Steps:**
 
@@ -963,24 +1711,24 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 2 shows Page not found.
-* Neither `<old_lot>` nor the unpublished holder appears.
-* Step 3 contains no lot data or listing code.
+* Neither `<original_listing>` nor the unpublished holder appears.
+* Step 3 contains no listing data or listing code.
 * Step 4 returns 404 with the same not-found surface.
-* Steps 5 and 6 show Page not found, with no lot data.
+* Steps 5 and 6 show Page not found, with no listing data.
 * Step 6 returns 404 and no listing code.
-* No redirect, empty lot page or catalogue replaces it.
+* No redirect, empty listing page or catalogue replaces it.
 
 ---
 
-## g10.auction-listing-page.US4: Collector reads a live lot while scripts load
+## g10.auction-listing-page.US4: Collector reads a live listing while scripts load
 
 **As a** collector,
-**I want** the lot I was served to stay on screen once scripts finish loading,
+**I want** the listing I was served to stay on screen once scripts finish loading,
 **so that** nothing I was reading blanks into a placeholder and no value
 disagrees with what the document carried.
 
 <!-- trace:case id=g10.auction-listing-page.TC-wka rev=2 -->
-### g10.auction-listing-page.US4-TC1: Served lot stays on screen after scripts
+### g10.auction-listing-page.US4-TC1: Served listing stays on screen after scripts
 
 **Classification:**
 
@@ -996,18 +1744,25 @@ disagrees with what the document carried.
 * **Trace:** grade10-site-auction-listing-page-US-04
 
 **Pre-conditions:**
-<a published lot> is on the catalogue.
+`<published_listing>` is on the catalogue.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Navigate to <a published lot url>.
+1. Navigate to `<published_listing_url>`.
 2. Note the served name, description and standing in the document.
 3. Wait until scripts finish loading.
 4. Check the same fields on screen.
 
 **Expected Results:**
 
-* The same lot is on screen with its served name, description and standing still present.
+* The same listing is on screen with its served name, description and standing still present.
 * None of them is replaced by a loading placeholder.
 
 <!-- trace:case id=g10.auction-listing-page.TC-e6y rev=2 -->
@@ -1027,11 +1782,18 @@ disagrees with what the document carried.
 * **Trace:** grade10-site-auction-listing-page-US-04
 
 **Pre-conditions:**
-a bidding countdown is shown on <a published lot>.
+a bidding countdown is shown on `<published_listing>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Navigate to <a published lot url>.
+1. Navigate to `<published_listing_url>`.
 2. Note how long bidding has left in the document.
 3. Wait until scripts finish loading.
 4. Check how long bidding has left on screen.
@@ -1042,14 +1804,14 @@ a bidding countdown is shown on <a published lot>.
 
 ---
 
-## g10.auction-listing-page.US5: Collector reaches a lot from the catalogue
+## g10.auction-listing-page.US5: Collector reaches a listing from the catalogue
 
 **As a** collector,
-**I want** to open a lot's own address from the catalogue without a page load,
-**so that** the lot I picked out of the list is the page I land on.
+**I want** to open a listing's own address from the catalogue without a page load,
+**so that** the listing I picked out of the list is the page I land on.
 
 <!-- trace:case id=g10.auction-listing-page.TC-fe3 rev=2 -->
-### g10.auction-listing-page.US5-TC1: Catalogue opens the lot's own address
+### g10.auction-listing-page.US5-TC1: Catalogue opens the listing's own address
 
 **Classification:**
 
@@ -1065,19 +1827,29 @@ a bidding countdown is shown on <a published lot>.
 * **Trace:** grade10-site-auction-listing-page-US-05
 
 **Pre-conditions:**
-The collector is viewing the auction catalogue, which lists <a published lot>.
+The collector is viewing the auction catalogue, which lists `<published_listing>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing available in the auction catalogue; bind its public title only |
+
+| Field | Value |
+| --- | --- |
+| grade10 auction url | The auction base URL in the test environment; bind its URL only |
 
 **Steps:**
 
-1. Navigate to <grade10 auction url>.
-2. Open <a published lot> the catalogue lists.
+1. Navigate to `<grade10 auction url>`.
+2. Open `<published_listing>` the catalogue lists.
 
 **Expected Results:**
 
-* The browser is on that lot's address, showing that lot's page.
+* The browser is on that listing's address, showing that listing's page.
 
 <!-- trace:case id=g10.auction-listing-page.TC-edm rev=3 -->
-### g10.auction-listing-page.US5-TC2: Sitemap lists each published lot
+### g10.auction-listing-page.US5-TC2: Sitemap lists each published listing
 
 **Classification:**
 
@@ -1095,7 +1867,17 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 **Decided by:** `grade10:apps/frontend/grade10/src/serving/sitemap.test.tsx`
 
 **Pre-conditions:**
-The catalogue holds `<a published lot>`.
+The catalogue holds `<published_listing>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| published_listing | A published listing in the catalogue; bind its public title only |
+
+| Field | Value |
+| --- | --- |
+| grade10 sitemap url | The sitemap URL in the test environment; bind its URL only |
 
 **Steps:**
 
@@ -1104,16 +1886,16 @@ The catalogue holds `<a published lot>`.
 
 **Expected Results:**
 
-* `<a published lot>`'s address is listed as an absolute URL of the serving environment.
-* No entry carries an unfilled parameter in place of a lot.
+* `<published_listing>`'s address is listed as an absolute URL of the serving environment.
+* No entry carries an unfilled parameter in place of a listing.
 
 ---
 
 ## g10.auction-listing-page.US6: Watch an auction and open My Auctions from the toast
 
-**As a** collector on a lot I have not bid on,
+**As a** collector on a listing I have not bid on,
 **I want** Watching to tell me email alerts are on and offer My Auctions,
-**so that** I know how to manage that lot without hunting for the account page.
+**so that** I know how to manage that listing without hunting for the account page.
 
 <!-- trace:case id=g10.auction-listing-page.TC-4op rev=2 -->
 ### g10.auction-listing-page.US6-TC1: Watch announces alerts on and opens My Auctions
@@ -1133,13 +1915,14 @@ The catalogue holds `<a published lot>`.
 
 **Pre-conditions:**
 
-* customer(signed in, no bid on <lot_1>, not watching <lot_1>) is on <lot_1 url>.
+* customer(signed in, no bid on `<listing_12>`, not watching `<listing_12>`) is on `<listing_12 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | An open lot taking bids, not watched and not bid on by this collector |
+| listing_12 | An open listing taking bids, not watched and not bid on by this collector |
+| listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 **Steps:**
 
@@ -1152,8 +1935,8 @@ The catalogue holds `<a published lot>`.
 * Step 2: the control reads Watching.
 * Step 2: a toast says email alerts are on, with View My Auctions.
 * Step 2: current bid, time left and bid panel are unchanged.
-* Step 3: My Auctions opens and lists <lot_1> once, Your Standing `--`.
-* Step 3: <lot_1>'s email alerts switch is on.
+* Step 3: My Auctions opens and lists `<listing_12>` once, Your Standing `--`.
+* Step 3: `<listing_12>`'s email alerts switch is on.
 
 <!-- trace:case id=g10.auction-listing-page.TC-sip rev=2 -->
 ### g10.auction-listing-page.US6-TC2: Signed-out viewer is offered sign-in, no watch
@@ -1175,13 +1958,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed out) is on <lot_1 url>.
+* customer(signed out) is on `<listing_12 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_1> | An open lot taking bids |
+| listing_12 | An open listing taking bids |
+| listing_12 url | The canonical URL of `<listing_12>`; bind the URL only |
 
 **Steps:**
 
@@ -1191,19 +1975,19 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1: sign-in is offered; no toast says email alerts are on.
-* Step 2: the collector returns to <lot_1 url>.
+* Step 2: the collector returns to `<listing_12 url>`.
 * Step 2: the control reads Watch; nothing was watched before sign-in.
 
 ---
 
 ## g10.auction-listing-page.US7: Unwatch from the auction and undo
 
-**As a** collector who watched a lot without bidding,
+**As a** collector who watched a listing without bidding,
 **I want** Unwatch to confirm alerts are off and let me Undo,
-**so that** a mis-tap does not force me to find the lot again.
+**so that** a mis-tap does not force me to find the listing again.
 
 <!-- trace:case id=g10.auction-listing-page.TC-pjv rev=2 -->
-### g10.auction-listing-page.US7-TC1: Unwatch removes the lot and turns alerts off
+### g10.auction-listing-page.US7-TC1: Unwatch removes the listing and turns alerts off
 
 **Classification:**
 
@@ -1220,25 +2004,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
+* customer(signed in, watching `<listing_13>`, no bid on `<listing_13>`) is on `<listing_13 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | An open lot taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Click the Watching control.
-2. Open <grade10 my auctions url> in a new tab.
+2. Open `<grade10 my auctions url>` in a new tab.
 
 **Expected Results:**
 
 * Step 1: the control reads Watch.
-* Step 1: a toast says the lot left My Auctions, with Undo.
+* Step 1: a toast says the listing left My Auctions, with Undo.
 * Step 1: current bid, time left and bid panel are unchanged.
-* Step 2: <lot_2> is not listed.
+* Step 2: `<listing_13>` is not listed.
 
 <!-- trace:case id=g10.auction-listing-page.TC-i5l rev=2 -->
 ### g10.auction-listing-page.US7-TC2: Undo restores the watch with alerts on
@@ -1258,32 +2047,37 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, watching <lot_2>, no bid on <lot_2>) is on <lot_2 url>.
+* customer(signed in, watching `<listing_13>`, no bid on `<listing_13>`) is on `<listing_13 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_2> | An open lot taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 | An open listing taking bids, watched with email alerts on, not bid on by this collector |
+| listing_13 url | The canonical URL of `<listing_13>`; bind the URL only |
+
+| Field | Value |
+| --- | --- |
+| grade10 my auctions url | The signed-in My Auctions URL in the test environment; bind its URL only |
 
 **Steps:**
 
 1. Click the Watching control.
 2. Click Undo in the toast.
-3. Open <grade10 my auctions url> in a new tab.
+3. Open `<grade10 my auctions url>` in a new tab.
 
 **Expected Results:**
 
 * Step 2: the control reads Watching again.
-* Step 3: <lot_2> is listed once, Your Standing `--`.
-* Step 3: <lot_2>'s email alerts switch is on.
+* Step 3: `<listing_13>` is listed once, Your Standing `--`.
+* Step 3: `<listing_13>`'s email alerts switch is on.
 
 ---
 
 ## g10.auction-listing-page.US8: After bidding, Watching stays locked
 
-**As a** bidder on this lot,
-**I want** the watch control locked as Watching and one alerts toast when the bid bookmarks the lot,
+**As a** bidder on this listing,
+**I want** the watch control locked as Watching and one alerts toast when the bid bookmarks the listing,
 **so that** I am not invited to unwatch money I already put down, and I am not toasted on every revisit.
 
 <!-- trace:case id=g10.auction-listing-page.TC-jhd rev=2 -->
@@ -1304,20 +2098,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(signed in, enrolled to bid, not watching <lot_3>, no bid on <lot_3>) is on <lot_3 url>.
+* customer(signed in, enrolled to bid, not watching `<listing_14>`, no bid on `<listing_14>`) is on `<listing_14 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_3> | An open lot taking bids, with no bid from this collector |
-| <first bid> | The next valid bid shown on the bid panel |
+| listing_14 | An open listing taking bids, with no bid from this collector |
+| first bid | The next valid bid shown on the bid panel |
+| listing_14 url | The canonical URL of `<listing_14>`; bind the URL only |
 
 **Steps:**
 
-1. Place <first bid> from the bid panel.
+1. Place `<first bid>` from the bid panel.
 2. Click the Watching control.
-3. Reload <lot_3 url>.
+3. Reload `<listing_14 url>`.
 
 **Expected Results:**
 
@@ -1327,7 +2122,7 @@ Runs once per row of **Test data**.
 * Step 3: the control still reads Watching, disabled; no alerts toast.
 
 <!-- trace:case id=g10.auction-listing-page.TC-amc rev=2 -->
-### g10.auction-listing-page.US8-TC2: A second bid on the lot shows no alerts toast
+### g10.auction-listing-page.US8-TC2: A second bid on the listing shows no alerts toast
 
 **Classification:**
 
@@ -1344,18 +2139,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in, has bid on <lot_4>, outbid) is on <lot_4 url>.
+* customer A(signed in, has bid on `<listing_15>`, outbid) is on `<listing_15 url>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <lot_4> | An open lot taking bids, where customer A bid before and customer B now leads |
-| <raise> | The next valid bid shown on the bid panel |
+| listing_15 | An open listing taking bids, where customer A bid before and customer B now leads |
+| raise | The next valid bid shown on the bid panel |
+| listing_15 url | The canonical URL of `<listing_15>`; bind the URL only |
 
 **Steps:**
 
-1. Place <raise> from the bid panel.
+1. Place `<raise>` from the bid panel.
 
 **Expected Results:**
 
@@ -1364,14 +2160,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-listing-page.US9: Closed lot has no watch control
+## g10.auction-listing-page.US9: Closed listing has no watch control
 
-**As a** collector on a closed lot (sold or unsold),
+**As a** collector on a closed listing (sold or unsold),
 **I want** no Watch / Watching control,
 **so that** I am not invited to watch a sale that has already ended.
 
 <!-- trace:case id=g10.auction-listing-page.TC-84a rev=2 -->
-### g10.auction-listing-page.US9-TC1: A closed lot shows no watch control
+### g10.auction-listing-page.US9-TC1: A closed listing shows no watch control
 
 Runs once per row of **Test data**.
 
@@ -1390,11 +2186,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <closed lot> is closed as the row states.
+* The listing at `<closed listing url>` is in `<listing_state>` for the viewer described in Test data.
 
 **Test data:**
 
-| Closed lot | Viewer |
+| `<listing_state>` | Viewer |
 | --- | --- |
 | Sold, with a winner | customer(signed in, never watched or bid on it) |
 | Sold, with a winner | customer(signed in, watched it before the close, no bid) |
@@ -1403,22 +2199,26 @@ Runs once per row of **Test data**.
 | Ended with no bids | customer(signed in, watched it before the close) |
 | Ended with no bids | customer(signed out) |
 
+| Field | Value |
+| --- | --- |
+| closed listing url | The canonical URL of the closed listing in this row; bind the URL only |
+
 **Steps:**
 
-1. Navigate to <closed lot url>.
-2. Check the lot image area and the bid panel area.
+1. Navigate to `<closed listing url>`.
+2. Check the listing image area and the bid panel area.
 
 **Expected Results:**
 
-* Step 1: the lot page renders.
-* Step 2: no Watch or Watching control shows anywhere on the lot page.
+* Step 1: the listing page renders.
+* Step 2: no Watch or Watching control shows anywhere on the listing page.
 
 ---
 
-## g10.auction-listing-page.US10: Collector quotes a published lot
+## g10.auction-listing-page.US10: Collector quotes a published listing
 
 **As a** collector browsing a listing,
-**I want** to reference and share a lot by its title and URL,
+**I want** to reference and share a listing by its title and URL,
 **so that** I can discuss it with others and return to it easily.
 
 <!-- trace:case id=g10.auction-listing-page.TC-nis rev=2 -->
@@ -1439,18 +2239,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Open `<a published lot's address>`.
+1. Open `<published_listing_url>`.
 2. View the page's response source before any script runs.
-3. Identify each occurrence of the lot's listing code and inspect its context.
+3. Identify each occurrence of `<listing_code>` and inspect its context.
 
 **Expected Results:**
 
-* The source names the lot by its title.
+* The source names the listing by its title.
 * The only code occurrence is the lower-case suffix of the canonical address; no labelled listing-code or payment-reference field is present.
 
 <!-- trace:case id=g10.auction-listing-page.TC-87q rev=4 -->
@@ -1471,14 +2278,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
 * Its bidding standing stays unchanged during the pass.
 * The browser initially runs no scripts.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
+
 **Steps:**
 
-1. Open `<a published lot's address>` with scripts disabled.
+1. Open `<published_listing_url>` with scripts disabled.
 2. Record its served title, description and bidding standing.
 3. Enable scripts on the same address.
 4. Read the hydrated page, DOM, source and document metadata.
@@ -1486,10 +2300,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 provides the addressed lot's title, description and bidding standing.
+* Step 2 provides the addressed listing's title, description and bidding standing.
 * Step 4 keeps those same served values after hydration.
 * No placeholder replaces served content.
-* Hydrated DOM and document metadata name the same lot.
+* Hydrated DOM and document metadata name the same listing.
 * No separate listing-code or payment-reference field appears.
 * A code occurs only within the full canonical address.
 
@@ -1511,13 +2325,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Fetch the share-preview metadata for `<a published lot's address>`.
-2. Search the preview's title, description and url for the lot's listing code.
+1. Fetch the share-preview metadata for `<published_listing_url>`.
+2. Search the preview's title, description and url for `<listing_code>`.
 3. Inspect the preview image and embedded metadata.
 4. Read the same address's document title and meta description.
 
@@ -1528,9 +2349,9 @@ Runs once per row of **Test data**.
 
 Previously cached preview content may persist; the test does not require a
 purge or regeneration. A fresh preview fetch must satisfy the absence above.
-* The preview identifies the public lot by title and full address.
+* The preview identifies the public listing by title and full address.
 * Image and embedded metadata expose no separate code or payment reference.
-* Step 4 identifies the same public lot by title and description.
+* Step 4 identifies the same public listing by title and description.
 * Neither document field contains a listing code or payment reference.
 
 <!-- trace:case id=g10.auction-listing-page.TC-zq9 rev=3 -->
@@ -1551,19 +2372,26 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Open `<a published lot's address>`.
+1. Open `<published_listing_url>`.
 2. Read the browser tab title and the page's meta description.
-3. Compare the title and description with the addressed lot.
+3. Compare the title and description with the addressed listing.
 
 **Expected Results:**
 
 * Neither the tab title nor the meta description contains the listing code.
-* Both identify the addressed lot, never the auction catalogue.
+* Both identify the addressed listing, never the auction catalogue.
 
 <!-- trace:case id=g10.auction-listing-page.TC-udy rev=2 -->
 ### g10.auction-listing-page.US10-TC5: Listing code absent from the page's embedded data
@@ -1583,14 +2411,21 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Open `<a published lot's address>`.
+1. Open `<published_listing_url>`.
 2. View the page's response source.
-3. Search any data embedded in the document, outside the visible text, for the lot's listing code.
+3. Search any data embedded in the document, outside the visible text, for `<listing_code>`.
 
 **Expected Results:**
 
@@ -1614,21 +2449,28 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Open `<a published lot's address>` and let the page finish loading.
+1. Open `<published_listing_url>` and let the page finish loading.
 2. Inspect the responses the page's own client-side requests receive.
-3. Search those responses for the lot's listing code.
+3. Search those responses for `<listing_code>`.
 
 **Expected Results:**
 
 * No page response contains a separate listing-code or payment-reference field.
 
 <!-- trace:case id=g10.auction-listing-page.TC-cbx rev=2 -->
-### g10.auction-listing-page.US10-TC7: Listing code does not resolve as a lot address
+### g10.auction-listing-page.US10-TC7: Listing code does not resolve as a listing address
 
 **Classification:**
 
@@ -1645,16 +2487,22 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists and its listing code is known from the admin listing screen.
+* A published listing exists and its listing code is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
 
 **Steps:**
 
-1. Open the auction's lot-address path, substituting the lot's listing code for its usual identifier.
+1. Open the auction's listing-address path, substituting `<listing_code>` for its usual identifier.
 
 **Expected Results:**
 
-* The address does not resolve to that lot's page.
-* The site's not-found surface is shown, the same as for any address naming no published lot.
+* The address does not resolve to that listing's page.
+* The site's not-found surface is shown, the same as for any address naming no published listing.
 
 <!-- trace:case id=g10.auction-listing-page.TC-udv rev=2 -->
 ### g10.auction-listing-page.US10-TC8: Listing code stays absent regardless of the collector's signed-in state
@@ -1674,12 +2522,19 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Open `<a published lot's address>` as a signed-out visitor and search the page and its source for the lot's listing code.
+1. Open `<published_listing_url>` as a signed-out visitor and search the page and its source for `<listing_code>`.
 2. Open the same address signed in as a registered collector and repeat the search.
 
 **Expected Results:**
@@ -1688,7 +2543,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The title and address shown are identical in both views.
 
 <!-- trace:case id=g10.auction-listing-page.TC-6de rev=3 -->
-### g10.auction-listing-page.US10-TC9: Listing code stays absent once an order exists on the lot
+### g10.auction-listing-page.US10-TC9: Listing code stays absent once an order exists on the listing
 
 **Classification:**
 
@@ -1705,11 +2560,11 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A lot's auction has closed with a winning bid, so an order now exists on that lot.
+* A listing's auction has closed with a winning bid, so an order now exists on that listing.
 
 **Steps:**
 
-1. Open the lot's own address on the public listing page.
+1. Open the listing's own address on the public listing page.
 2. View the page, its source, and its share-preview metadata.
 3. Inspect every occurrence of the lower-case listing-code suffix, which is now also the order's payment reference.
 4. Inspect hydrated DOM, page lookup responses, title and description.
@@ -1718,12 +2573,12 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * The page and preview contain no labelled listing-code or payment-reference field.
 * The code appears only as the lower-case suffix of the canonical address.
-* All surfaces name the same lot and its full address.
+* All surfaces name the same listing and its full address.
 * Title and description contain no listing code or payment reference.
 * Embedded and network data contain no separate code or payment reference.
 
 <!-- trace:case id=g10.auction-listing-page.TC-y7l rev=3 -->
-### g10.auction-listing-page.US10-TC10: An address naming no lot carries no listing code
+### g10.auction-listing-page.US10-TC10: An address naming no listing carries no listing code
 
 **Classification:**
 
@@ -1740,11 +2595,17 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* The catalogue publishes no lot for `<a lot address naming no published lot>`.
+* The catalogue publishes no listing for `<unknown_listing_url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| unknown_listing_url | An auction listing URL with no published listing or eligible holder; bind the URL only |
 
 **Steps:**
 
-1. Fetch `<a lot address naming no published lot>`.
+1. Fetch `<unknown_listing_url>`.
 2. Search the response, including any error detail, for a listing code.
 3. Check the not-found page and embedded data.
 
@@ -1752,7 +2613,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * Response status is 404.
 * No listing code appears anywhere in the response.
-* No lot content or separate payment reference appears.
+* No listing content or separate payment reference appears.
 
 <!-- trace:case id=g10.auction-listing-page.TC-90g rev=3 -->
 ### g10.auction-listing-page.US10-TC11: Closed and settled listings retain their public addresses
@@ -1775,6 +2636,13 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
 * The listing is closed or settled, and removed from browse and search without explicit deletion.
 * The listing was not called off.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
 
 **Steps:**
 
@@ -1812,6 +2680,13 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * The listing is subsequently removed from browse and search, without explicit deletion.
 * An authorized admin or the winner knows `<listing_code>`.
 
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+
 **Steps:**
 
 1. Request the existing cached preview for `<listing_url>`.
@@ -1825,10 +2700,10 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 ---
 
-## g10.auction-listing-page.US11: Collector contacts support about a lot
+## g10.auction-listing-page.US11: Collector contacts support about a listing
 
-**As a** collector contacting support about a lot,
-**I want** support to quickly identify which lot I'm referring to,
+**As a** collector contacting support about a listing,
+**I want** support to quickly identify which listing I'm referring to,
 **so that** my inquiry is resolved faster without having to copy listing URLs or titles.
 
 <!-- trace:case id=g10.auction-listing-page.TC-du4 rev=4 -->
@@ -1849,25 +2724,32 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists at its own address.
-* The lot's listing code is known from the admin listing screen.
+* A published listing exists at its own address.
+* The listing code `<listing_code>` is known from the admin listing screen.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
+| published_listing_url | The canonical URL of the published listing in this case; bind the URL only |
 
 **Steps:**
 
-1. Open `<a published lot's address>`.
-2. Read the public lot title and full address.
+1. Open `<published_listing_url>`.
+2. Read the public listing title and full address.
 3. Inspect the page and source for a separate code field.
-4. As admin(support), find the public lot by that title.
-5. Open the matched lot.
+4. As admin(support), find the public listing by that title.
+5. Open the matched listing.
 
 **Expected Results:**
 
 * Step 2 provides the public title and full address.
 * Step 3 offers no separate code or payment reference.
-* Step 4 finds the lot without a listing code.
+* Step 4 finds the listing without a listing code.
 * Support lookup shows no separate listing-code or payment-reference field.
-* Step 5 identifies the same lot by title and full address.
-* The opened public lot shows no separate code to support.
+* Step 5 identifies the same listing by title and full address.
+* The opened public listing shows no separate code to support.
 
 <!-- trace:case id=g10.auction-listing-page.TC-wxd rev=2 -->
 ### g10.auction-listing-page.US11-TC2: A listing code known from elsewhere gives no working link
@@ -1887,16 +2769,22 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A published lot exists and its listing code is known from a leak or from another surface.
+* A published listing exists and its listing code is known from a leak or from another surface.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
 
 **Steps:**
 
-1. Attempt to open the lot's address by substituting its listing code for the lot's usual identifier.
+1. Attempt to open the listing's address by substituting `<listing_code>` for the listing's usual identifier.
 
 **Expected Results:**
 
-* The listing code does not resolve to the lot.
-* No working link to the lot can be built from the code alone.
+* The listing code does not resolve to the listing.
+* No working link to the listing can be built from the code alone.
 
 <!-- trace:case id=g10.auction-listing-page.TC-h6y rev=3 -->
 ### g10.auction-listing-page.US11-TC3: Title and address stay the collector's only reference once an order exists
@@ -1916,21 +2804,21 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 **Pre-conditions:**
 
-* A lot's auction has closed with a winning bid, so an order now exists on that lot.
+* A listing's auction has closed with a winning bid, so an order now exists on that listing.
 
 **Steps:**
 
-1. Open the lot's own address on the public listing page.
+1. Open the listing's own address on the public listing page.
 2. Note its title and address.
 3. Inspect DOM, source, embedded data and fresh preview metadata.
-4. As admin(support), find and open the lot by title.
+4. As admin(support), find and open the listing by title.
 
 **Expected Results:**
 
 * The title and canonical address are unchanged by the order.
 * The page has no labelled listing-code or payment-reference field; the code appears only as the lower-case canonical-address suffix.
 * Step 3 exposes no separate code or payment reference.
-* Step 4 finds the same lot without a code.
+* Step 4 finds the same listing without a code.
 
 <!-- trace:case id=g10.auction-listing-page.TC-sa9 rev=3 -->
 ### g10.auction-listing-page.US11-TC4: Called-off listing remains directly accessible
@@ -1969,7 +2857,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 ---
 
-## g10.auction-listing-page.US12: Collector sees another bid on the lot without reloading
+## g10.auction-listing-page.US12: Collector sees another bid on the listing without reloading
 
 **As a** collector,
 **I want** a bid placed on another page to show on mine with the new price and close, without a reload,
@@ -1993,22 +2881,22 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>` and bid count `<bid count>`.
-* customer A is on the lot page for `<listing_1>`.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_1>`.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid count>` | 3 |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid count | 3 | · |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2043,14 +2931,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_2>` is open with one accepted bid, its scheduled close under a minute away.
-* customer A is on the lot page for `<listing_2>`.
+* customer A is on the listing page for `<listing_2>`.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_2>` | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800s (30mins) |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_2 | An open USD listing with one accepted bid, extension duration `<extension duration>`, no cap | · |
+| extension duration | 1800s | (30mins) |
 
 **Steps:**
 
@@ -2084,16 +2972,16 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
-* customer A is on the lot page for `<listing_1>`, with the browser's live connection to the auction blocked.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_1>`, with the browser's live connection to the auction blocked.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2124,21 +3012,21 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_1>` is open, before its scheduled close, with Highest bid `<current bid>`.
-* customer A is on the lot page for `<listing_1>`.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_1>`.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_1>` | An open USD listing with bids, scheduled close more than an hour away |
-| `<current bid>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_1 | An open USD listing with bids, scheduled close more than an hour away | · |
+| current bid | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
 
 **Steps:**
 
@@ -2170,35 +3058,37 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<user A maximum>`, and is on its lot page.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A(signed in) leads `<listing_8>` at `<current bid>` with maximum `<customer A maximum>`, and is on its listing page.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
-| `<current bid>` | USD1200 (120000 USD minor units) |
-| `<user A maximum>` | USD1275 (127500 USD minor units) |
-| `<user B maximum>` | USD1300 (130000 USD minor units), above `<user A maximum>` |
-| `<increment>` | USD25 (2500 USD minor units), the USD1000 tier increment |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| current bid | USD1200 | (120000 USD minor units) |
+| customer A maximum | USD1275 | (127500 USD minor units) |
+| customer B maximum | USD1300 | (130000 USD minor units), above `<customer A maximum>` |
+| increment | USD25 | (2500 USD minor units), the USD1000 tier increment |
+| highest_bid_after | USD1,300 | (130000 USD minor units): `<customer A maximum>` plus `<increment>` |
+| minimum_next_bid | USD1,325 | (132500 USD minor units): `<highest_bid_after>` plus `<increment>` |
 
 **Steps:**
 
 1. As customer A, read the standing on the bid panel.
-2. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+2. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 3. As customer A, without reloading, read the standing, Highest bid and the next valid bid.
 
 **Expected Results:**
 
-* Step 1 reads Leading, with Your maximum `<user A maximum>`.
+* Step 1 reads Leading, with Your maximum `<customer A maximum>`.
 * Step 3 reads Outbid, with no reload.
-* Step 3 reads Highest bid 130000 USD minor units, `<user A maximum>` plus `<increment>`.
-* Step 3 shows 132500 USD minor units as the minimum next valid bid.
+* Step 3 reads Highest bid `<highest_bid_after>`, `<customer A maximum>` plus `<increment>`.
+* Step 3 shows `<minimum_next_bid>` as the minimum next valid bid.
 
 <!-- trace:case id=g10.auction-listing-page.TC-wzt rev=2 -->
 ### g10.auction-listing-page.US12-TC6: Live updates name no bidder and no maximum
@@ -2222,28 +3112,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in) leads `<listing_8>` with maximum `<user A maximum>`.
-* customer C(signed out) is on the lot page for `<listing_8>`, with the browser's network inspector recording its live connection.
-* customer B(card linked) is signed in on a separate session, on the same lot page.
+* customer A(signed in) leads `<listing_8>` with maximum `<customer A maximum>`.
+* customer C(signed out) is on the listing page for `<listing_8>`, with the browser's network inspector recording its live connection.
+* customer B(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | An open USD listing, scheduled close more than an hour away |
-| `<user A maximum>` | USD9,280 (range: 500000–999999 minor units) |
-| `<user B maximum>` | USD6,160 (range: 500000–999999 minor units), below `<user A maximum>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_8 | An open USD listing, scheduled close more than an hour away | · |
+| customer A maximum | USD9,280 | (range: 500000–999999 minor units) |
+| customer B maximum | USD6,160 | (range: 500000–999999 minor units), below `<customer A maximum>` |
 
 **Steps:**
 
-1. As customer B, enter `<user B maximum>` in the custom maximum on the bid panel and confirm the bid.
+1. As customer B, enter `<customer B maximum>` in the custom maximum on the bid panel and confirm the bid.
 2. As customer C, read every message the live connection received after step 1.
 
 **Expected Results:**
 
 * Step 2 shows an update carrying the new price, bid count and close.
-* No message carries `<user A maximum>`, an account id, an email or a card detail.
-* Any bidder a message names appears only by the lot's pseudonym.
+* No message carries `<customer A maximum>`, an account id, an email or a card detail.
+* Any bidder a message names appears only by the listing's pseudonym.
 
 <!-- trace:case id=g10.auction-listing-page.TC-0yw rev=2 -->
 ### g10.auction-listing-page.US12-TC7: A tied maximum that came second carries the earlier-leads tip
@@ -2263,18 +3153,19 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* `<listing_1>` is open in USD, before its scheduled close, with no bid.
-* customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the lot page for `<listing_1>`, in English.
+* `<listing_16>` is open in USD, before its scheduled close, with no bid.
+* customer A(card linked) and customer B(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<maximum>` | At least two increments above the opening price |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
 
 **Steps:**
 
@@ -2307,19 +3198,20 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* `<listing_5>` is open in USD, before its scheduled close, with no bid.
-* customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the lot page for `<listing_5>`, in English.
+* `<listing_16>` is open in USD, before its scheduled close, with no bid.
+* customer A(card linked), customer B(card linked) and customer C(card linked) are signed in on separate sessions, each on the listing page for `<listing_16>`, in English.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<maximum>` | At least two increments above the opening price |
-| `<higher maximum>` | At least two increments above `<maximum>` |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| maximum | USD1,800 | At least two increments above the opening price; representative USD fixture |
+| higher maximum | USD2,200 | At least two increments above `<maximum>`; representative USD fixture |
+| listing_16 | An open USD listing with no bid, before its scheduled close, opening price at least two increments below `<maximum>`; bind its identity only | · |
 
 **Steps:**
 
@@ -2354,29 +3246,31 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* collector A has `<listing_3>` open with a live line.
-* customer B(card linked, email `<email_mike>`) can bid on `<listing_3>` from another session.
+* collector A has `<listing_17>` open with a live line.
+* customer B(card linked, email `<customer B email>`) can bid on `<listing_17>` from another session.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| email_mike | `mike@example.com` |
+| customer B email | `mike@example.com` |
+| listing_17 | An open USD listing whose live connection is available and customer B can bid; bind its identity only |
+| customer B avatar letter | M: the public avatar letter derived from `<customer B email>`; bind the letter only |
 
 **Steps:**
 
 1. As collector A, watch Recent Bids.
-2. As customer B, place an accepted public bid on `<listing_3>`.
+2. As customer B, place an accepted public bid on `<listing_17>`.
 3. As collector A, without reloading, find customer B's new Recent Bids row.
 
 **Expected Results:**
 
 * The new row appears without a reload.
-* Its avatar shows `M`.
+* Its avatar shows `<customer B avatar letter>`.
 * Its readable label is a listing pseudonym, not an email.
 
 ---
@@ -2384,7 +3278,7 @@ Runs once per row of **Test data**.
 ## g10.auction-listing-page.US13: Collector reads the same time left as every other page
 
 **As a** collector,
-**I want** the lot's countdown to agree with every other page on that lot, whatever my device's clock says,
+**I want** the listing's countdown to agree with every other page on that listing, whatever my device's clock says,
 **so that** the time I see left is the time I have.
 
 <!-- trace:case id=g10.auction-listing-page.TC-o3v rev=2 -->
@@ -2405,13 +3299,13 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_3>` is open, its close about 12 minutes away.
-* customer A is on the lot page for `<listing_3>` on a device whose clock is `<device skew>`.
-* customer B is on the same lot page on a device whose clock is correct.
+* customer A is on the listing page for `<listing_3>` on a device whose clock is `<device skew>`.
+* customer B is on the same listing page on a device whose clock is correct.
 
 **Test data:**
 
@@ -2422,12 +3316,16 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
+| listing_3 | An open USD listing, close about 12 minutes away |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 45 seconds | (fixed observation fixture) |
 
 **Steps:**
 
 1. Read Time left on customer A's page and customer B's page at the same moment.
-2. Wait 45 seconds.
+2. Wait `<observation interval>`.
 3. Read Time left on both pages at the same moment.
 
 **Expected Results:**
@@ -2437,7 +3335,7 @@ Runs once per row of **Test data**.
 * Neither page is off by `<device skew>`.
 
 <!-- trace:case id=g10.auction-listing-page.TC-56e rev=2 -->
-### g10.auction-listing-page.US13-TC2: Last second never reads 0 while the lot takes bids
+### g10.auction-listing-page.US13-TC2: Last second never reads 0 while the listing takes bids
 
 Runs once per row of **Test data**.
 
@@ -2454,19 +3352,19 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_4>` is open with no accepted bid, its close under a minute away.
-* customer A is on the lot page for `<listing_4>`.
+* customer A is on the listing page for `<listing_4>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_4>` | An open USD listing with no bids, extension duration 1800s (30mins) |
-| `<last moment>` | 0.4 seconds before the close |
+| listing_4 | An open USD listing with no bids, extension duration 1800s (30mins) |
+| last moment | 0.4 seconds before the close |
 
 **Steps:**
 
@@ -2478,7 +3376,7 @@ Runs once per row of **Test data**.
 
 * Through step 1 Time left shows whole seconds only, never tenths.
 * At step 2 Time left reads 1 second, never 0.
-* At step 3 Time left reads 0 or the lot reads Closed.
+* At step 3 Time left reads 0 or the listing reads Closed.
 
 <!-- trace:case id=g10.auction-listing-page.TC-iu2 rev=2 -->
 ### g10.auction-listing-page.US13-TC3: Countdown corrects itself after the page was away
@@ -2498,13 +3396,13 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_3>` is open, its close about 12 minutes away.
-* customer A is on the lot page for `<listing_3>`.
-* customer B is on the same lot page on a device whose clock is correct.
+* customer A is on the listing page for `<listing_3>`.
+* customer B is on the same listing page on a device whose clock is correct.
 
 **Test data:**
 
@@ -2516,13 +3414,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
-| `<clock change>` | customer A's device clock set 90 seconds ahead |
+| listing_3 | An open USD listing, close about 12 minutes away |
+| clock change | a 90-second forward change to customer A's device clock |
 
 **Steps:**
 
-1. Make `<clock change>` while `<away>`.
-2. Return to the lot page, without reloading.
+1. Apply `<clock change>` while `<away>`.
+2. Return to the listing page, without reloading.
 3. Read Time left on customer A's page and customer B's page at the same moment.
 
 **Expected Results:**
@@ -2547,26 +3445,30 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-13
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_3>` is open, its close about 12 minutes away.
-* customer A is on the lot page for `<listing_3>`.
+* customer A is on the listing page for `<listing_3>`.
 * The auction service's time, read on customer A's return, is `<correction>` earlier than the page's countdown assumes, so the new reading would add time.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_3>` | An open USD listing, close about 12 minutes away |
-| `<correction>` | 0.6 seconds, under a second |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_3 | An open USD listing, close about 12 minutes away | · |
+| correction | 0.6 seconds | under a second |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| observation interval | 5 seconds | (fixed observation fixture) |
 
 **Steps:**
 
 1. Switch to another tab.
-2. Switch back to the lot page.
-3. Watch Time left for 5 seconds.
+2. Switch back to the listing page.
+3. Watch Time left for `<observation interval>`.
 
 **Expected Results:**
 
@@ -2574,10 +3476,10 @@ Runs once per row of **Test data**.
 
 ---
 
-## g10.auction-listing-page.US14: Bidder waits on a closed lot for its result
+## g10.auction-listing-page.US14: Bidder waits on a closed listing for its result
 
 **As a** bidder,
-**I want** a lot past its close to read Closed until its result is recorded, then Won or Did not win,
+**I want** a listing past its close to read Closed until its result is recorded, then Won or Did not win,
 **so that** I am never shown a result the auction has not decided.
 
 <!-- trace:case id=g10.auction-listing-page.TC-ffc rev=2 -->
@@ -2598,25 +3500,29 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* `<listing_5>` is in the state the row gives, its close under a minute away, and no further bid will be placed.
-* `<viewer>` is signed in and on the lot page for `<listing_5>`.
+* The listing `<listing_18>` has this state: `<listing_state>`, its close under a minute away, and no further bid will be placed.
+* `<viewer>` is signed in and on the listing page for `<listing_18>`.
 
 **Test data:**
 
-| `<listing_5>` | `<viewer>` | `<result>` |
+| `<listing_state>` | `<viewer>` | `<result>` |
 | --- | --- | --- |
 | Led by customer A | customer A | Won |
 | Led by customer A, customer B outbid | customer B | Did not win |
 | Open with no accepted bid | customer A | Ended, with No bids under it |
 
+| Field | Value |
+| --- | --- |
+| listing_18 | A USD listing in `<listing_state>` with its close under a minute away; bind its identity only |
+
 **Steps:**
 
-1. Watch the lot through its close, without reloading.
-2. Read the lot's state until the result appears.
+1. Watch the listing through its close, without reloading.
+2. Read the listing's state until the result appears.
 
 **Expected Results:**
 
@@ -2641,11 +3547,11 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* customer A leads `<listing_6>` and is on its lot page.
+* customer A leads `<listing_6>` and is on its listing page.
 * `<listing_6>`'s close is under a minute away, and no further bid will be placed.
 * Recording `<listing_6>`'s close is held back until the next sweep.
 
@@ -2653,13 +3559,13 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_6>` | A USD listing led by customer A |
+| listing_6 | A USD listing led by customer A |
 
 **Steps:**
 
-1. Watch the lot through its close, without reloading.
+1. Watch the listing through its close, without reloading.
 2. Wait 30 seconds.
-3. Reload the lot page.
+3. Reload the listing page.
 4. Wait until the close is recorded.
 
 **Expected Results:**
@@ -2686,29 +3592,34 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * customer B leads `<listing_9>` at `<leader price>`, its close under a minute away.
-* customer A(card linked) is signed in and on the lot page for `<listing_9>`, and has never bid on it.
-* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and lot reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
+* customer A(card linked) is signed in and on the listing page for `<listing_9>`, and has never bid on it.
+* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_9>` | A USD listing in extended bidding, led by customer B, no cap |
-| `<leader price>` | USD4,960 (range: 100000–499999 minor units) |
-| `<bid amount>` | USD5,210 (range: 500000–999999 minor units), at or above the minimum next bid |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_9 | A USD listing in extended bidding, led by customer B, no cap | · |
+| leader price | USD4,960 | (range: 100000–499999 minor units) |
+| bid amount | USD5,210 | (range: 500000–999999 minor units), at or above the minimum next bid |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps:**
 
-1. Wait until 5 seconds after the close, by the auction's clock.
+1. Wait until `<bid delay>` after the close, by the auction's clock.
 2. Place `<bid amount>`.
 3. Read the bid panel.
-4. Unblock the auction, reload the lot page and wait until the close is recorded.
-5. Read the lot's state and the bid panel.
+4. Unblock the auction, reload the listing page and wait until the close is recorded.
+5. Read the listing's state and the bid panel.
 
 **Expected Results:**
 
@@ -2718,7 +3629,7 @@ Runs once per row of **Test data**.
 * At step 5 customer A's page shows neither Won nor Did not win.
 
 <!-- trace:case id=g10.auction-listing-page.TC-1pq rev=3 -->
-### g10.auction-listing-page.US14-TC5: A lone first bid refused past the close leaves the lot Ended with No bids
+### g10.auction-listing-page.US14-TC5: A lone first bid refused past the close leaves the listing Ended with No bids
 
 Runs once per row of **Test data**.
 
@@ -2735,34 +3646,39 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_10>` is open with no accepted bid, its scheduled close under a minute away.
-* customer A(card linked) is signed in and on the lot page for `<listing_10>`.
-* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and lot reads, and its device clock runs 30 seconds behind the auction's, so the page keeps its bid controls enabled past the close.
+* customer A(card linked) is signed in and on the listing page for `<listing_10>`.
+* Once the page has loaded, customer A's browser blocks the auction's time route, live socket and listing reads, and its device clock runs `<clock lag>` behind the auction's, so the page keeps its bid controls enabled past the close.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| `<listing_10>` | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap |
-| `<bid amount>` | USD280 (range: 10000–49999 minor units), the opening price |
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| listing_10 | An open USD listing with no bids, starting price USD280 (range: 10000–49999 minor units), extension duration 1800s (30mins), no cap | · |
+| bid amount | USD280 | (range: 10000–49999 minor units), the opening price |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| clock lag | 30 seconds | (fixed stale-clock fixture) |
+| bid delay | 5 seconds | (fixed after-close fixture, shorter than `<clock lag>`) |
 
 **Steps:**
 
-1. Wait until 5 seconds after the scheduled close, by the auction's clock.
+1. Wait until `<bid delay>` after the scheduled close, by the auction's clock.
 2. Place `<bid amount>`.
 3. Read the bid panel.
-4. Unblock the auction, reload the lot page and wait until the close is recorded.
-5. Read Time left, the lot's state and the bid panel.
+4. Unblock the auction, reload the listing page and wait until the close is recorded.
+5. Read Time left, the listing's state and the bid panel.
 
 **Expected Results:**
 
 * At step 3 the bid panel reads "Your bid did not go through." alone.
 * At step 5 Time left never read Extended bidding.
-* At step 5 the lot reads Ended, with No bids under it.
+* At step 5 the listing reads Ended, with No bids under it.
 * At step 5 the page shows neither Won nor Did not win.
 
 <!-- trace:case id=g10.auction-listing-page.TC-ecq rev=2 -->
@@ -2783,36 +3699,42 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
 * `<listing_11>` is in extended bidding, led by customer B, its recorded close under a minute away.
-* customer A is on the lot page for `<listing_11>`, with its live updates delayed by 5 seconds.
-* customer C(card linked) is signed in on a separate session, on the same lot page.
+* customer A is on the listing page for `<listing_11>`, with its live updates delayed by `<update delay>`.
+* customer C(card linked) is signed in on a separate session, on the same listing page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_11>` | A USD listing in extended bidding, led by customer B, extension duration 1800s (30mins), no cap |
-| `<bid amount>` | At or above the minimum next bid |
+| listing_11 | A USD listing in extended bidding, led by customer B, extension duration `<extension duration>`, no cap |
+| bid amount | At or above the minimum next bid |
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| update delay | 5 seconds | (fixed live-update delay fixture) |
+| last bid offset | 1 second | (fixed last-second boundary) |
+| extension duration | 1800s | (30mins) |
 
 **Steps:**
 
-1. As customer C, place `<bid amount>` 1 second before the recorded close.
+1. As customer C, place `<bid amount>` `<last bid offset>` before the recorded close.
 2. As customer A, watch Time left through the recorded close, without reloading.
-3. As customer A, read the lot's state and the bid panel once the update arrives.
+3. As customer A, read the listing's state and the bid panel once the update arrives.
 
 **Expected Results:**
 
 * Once the close it counted to passes, customer A's page reads Closed with no result and its bid controls disabled.
-* At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus 1800s.
+* At step 3 Time left is labelled Extended bidding and counts to customer C's bid time plus `<extension duration>`.
 * At step 3 the bid controls are enabled.
 * No step shows Won, Did not win or Ended, and the page did not reload.
 
 <!-- trace:case id=g10.auction-listing-page.TC-4ba rev=2 -->
-### g10.auction-listing-page.US14-TC7: A sold lot crowns its winning bid and no other
+### g10.auction-listing-page.US14-TC7: A sold listing crowns its winning bid and no other
 
 **Classification:**
 
@@ -2827,12 +3749,18 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* `<listing_2>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
-* customer C is on the lot page for `<listing_2>`, in English.
+* `<listing_19>` is live in USD, led by customer A, with a bid from customer B below it, its recorded close a minute away.
+* customer C is on the listing page for `<listing_19>`, in English.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_19 | A live USD listing led by customer A with customer B below, recorded close a minute away; bind its identity only |
 
 **Steps:**
 
@@ -2847,7 +3775,7 @@ Runs once per row of **Test data**.
 * Step 3: no other row, customer B's included, shows a crown.
 
 <!-- trace:case id=g10.auction-listing-page.TC-hqd rev=2 -->
-### g10.auction-listing-page.US14-TC8: A lot without a winner crowns no bid
+### g10.auction-listing-page.US14-TC8: A listing without a winner crowns no bid
 
 **Classification:**
 
@@ -2862,23 +3790,30 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-listing-page-US-14
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
-* `<listing_3>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
-* `<listing_4>` is past its close with no bid, its close recorded with no winner.
+* `<listing_20>` is past its close with bids from customer A and customer B, and recording its close is held back until the next sweep.
+* `<listing_21>` is past its close with no bid, its close recorded with no winner.
 * customer C is signed in on a separate session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_20 | A USD listing past its close with bids, recording its close held until the next sweep; bind its identity only |
+| listing_21 | A USD listing past its close with no bid, recorded with no winner; bind its identity only |
 
 **Steps:**
 
-1. As customer C, open the lot page for `<listing_3>` and read Recent bids.
-2. As customer C, open the lot page for `<listing_4>` and read Recent bids.
+1. As customer C, open the listing page for `<listing_20>` and read Recent bids.
+2. As customer C, open the listing page for `<listing_21>` and read Recent bids.
 
 **Expected Results:**
 
-* Step 1: the lot reads Closed and no row shows a crown.
-* Step 2: the lot reads Ended with No bids under it, Recent bids holds no row, and no crown shows.
+* Step 1: the listing reads Closed and no row shows a crown.
+* Step 2: the listing reads Ended with No bids under it, Recent bids holds no row, and no crown shows.
 
 <!-- trace:case id=g10.auction-listing-page.TC-jic rev=2 -->
 ### g10.auction-listing-page.US14-TC3: A bid still confirming at the close reads in existing words
@@ -2928,7 +3863,7 @@ Runs once per row of **Test data**.
 ## g10.auction-listing-page.US15: Collector tells Recent Bids rivals apart by avatar letter
 
 **As a** collector,
-**I want** each Recent Bids avatar on the lot to show that bidder's email
+**I want** each Recent Bids avatar on the listing to show that bidder's email
 initial while the label stays Bidder N,
 **so that** I can tell who bid what without reading a name or email.
 
@@ -2953,25 +3888,28 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<listing_1>` is open in USD.
-* customer A(card linked, email `<email_ada>`) and customer B(card linked, email `<email_bob>`) each have an accepted public bid on `<listing_1>`.
-* A collector is on the lot page for `<listing_1>` in English.
+* customer A(card linked, email `<customer A email>`) and customer B(card linked, email `<customer B email>`) each have an accepted public bid on `<listing_1>`.
+* A collector is on the listing page for `<listing_1>` in English.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| email_ada | `ada@example.com` |
-| email_bob | `bob@example.com` |
+| customer A email | `ada@example.com` |
+| customer A avatar letter | A: the public avatar letter derived from `<customer A email>`; bind the letter only |
+| customer B email | `bob@example.com` |
+| customer B avatar letter | B: the public avatar letter derived from `<customer B email>`; bind the letter only |
+| listing_1 | The open USD listing with accepted public bids in this case; bind its identity only |
 
 **Steps:**
 
-1. Open Recent Bids on the lot page.
+1. Open Recent Bids on the listing page.
 2. Find customer A's public row and customer B's public row.
 
 **Expected Results:**
 
-* Customer A's avatar shows `A`.
-* Customer B's avatar shows `B`.
+* Customer A's avatar shows `<customer A avatar letter>`.
+* Customer B's avatar shows `<customer B avatar letter>`.
 * Neither row shows an email or personal name.
 * Readable labels stay listing pseudonyms or You, not an email-prefixed form.
 
@@ -2995,13 +3933,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A(signed in, card linked, email `<email_ada>`) has an accepted public bid on open `<listing_2>` and is on that lot page.
+* customer A(signed in, card linked, email `<customer A email>`) has an accepted public bid on open `<listing_2>` and is on that listing page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| email_ada | `ada@example.com` |
+| customer A email | `ada@example.com` |
+| customer A avatar letter | A: the public avatar letter derived from `<customer A email>`; bind the letter only |
+| listing_2 | The open USD listing with customer A’s accepted public bid in this case; bind its identity only |
 
 **Steps:**
 
@@ -3010,7 +3950,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The You row's avatar shows `A`.
+* The You row's avatar shows `<customer A avatar letter>`.
 * The row still shows the You badge.
 
 ## Settled

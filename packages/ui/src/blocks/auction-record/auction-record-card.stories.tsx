@@ -1,5 +1,9 @@
+import {
+  Table,
+  TableBody,
+} from "@grade10/design-system/components/display/table";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionRecordRow } from "./auction-record-row";
 import {
   AUCTION_RECORD_COPY,
@@ -18,6 +22,8 @@ const CARD_FACT_LABELS = {
   standing: AUCTION_RECORD_COPY.standingColumn,
   emailAlerts: AUCTION_RECORD_COPY.emailAlertsColumn,
 };
+
+const unwatchPressed = fn();
 
 const FILLED_SMALL_VIEWPORT_STORY =
   "?path=/story/auction-bidding-blocks-auctionrecord--filled-small-viewport";
@@ -178,5 +184,42 @@ export const PendingPayment: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Pending Payment")).toBeVisible();
     expect(canvas.getByRole("link", { name: /View order/ })).toBeVisible();
+  },
+};
+
+/** Unwatch in flight in both presentations: busy, focusable, a second press is refused. */
+export const UnwatchPending: Story = {
+  name: "Unwatch pending",
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <AuctionCard
+        {...WATCHING_CAMERA}
+        onWatchToggle={unwatchPressed}
+        watchPending
+      />
+      <Table>
+        <TableBody>
+          <AuctionRecordRow
+            {...WATCHING_CAMERA}
+            onWatchToggle={unwatchPressed}
+            watchPending
+          />
+        </TableBody>
+      </Table>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    unwatchPressed.mockClear();
+    const buttons = within(canvasElement).getAllByRole("button", {
+      name: "Unwatch this auction",
+    });
+    expect(buttons).toHaveLength(2);
+    for (const button of buttons) {
+      expect(button).toHaveAttribute("aria-busy", "true");
+      button.focus();
+      expect(button).toHaveFocus();
+      await userEvent.keyboard("{Enter}");
+    }
+    expect(unwatchPressed).not.toHaveBeenCalled();
   },
 };

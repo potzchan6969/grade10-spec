@@ -847,7 +847,7 @@ from my card until I win.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auction-US-12, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 

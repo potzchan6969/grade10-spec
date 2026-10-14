@@ -295,7 +295,7 @@ export const SetupSheetLinking: Story = {
     const continueButton = within(dialog).getByRole("button", {
       name: "Linking",
     });
-    expect(continueButton).toBeDisabled();
+    expect(continueButton).toHaveAttribute("aria-disabled", "true");
     expect(continueButton).toHaveAttribute("aria-busy", "true");
     expect(
       within(dialog).getByRole("checkbox", {

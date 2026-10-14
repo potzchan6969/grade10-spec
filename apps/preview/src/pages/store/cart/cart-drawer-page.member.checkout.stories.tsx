@@ -70,7 +70,7 @@ export const CheckoutRedirecting: Story = {
     await waitFor(() => {
       expect(
         canvas.getByRole("button", { name: "Redirecting..." }),
-      ).toBeDisabled();
+      ).toHaveAttribute("aria-busy", "true");
     });
   },
 };

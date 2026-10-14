@@ -1,6 +1,5 @@
 import { formatTimeOfDay, formatWeekday, hourOf } from "@grade10/date";
 import { cn } from "@grade10/design-system/lib/utils";
-import { Clock } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
@@ -66,8 +65,6 @@ type BookingSlotPickerProps = LocaleProps & {
    * `responsive` the grid from 760px and the strip below it.
    */
   layout?: "month" | "strip" | "responsive";
-  /** The shop's earliest free time, pressed to pick it without leaving the step. */
-  earliest?: { label: ReactNode; pressed: boolean; onPick: () => void };
   /** The picked day's own hours, e.g. a card show: drawn over its times. */
   note?: ReactNode;
   /** Drawn in place of the times: the picked day is full or closed. */
@@ -94,8 +91,7 @@ function partOf(start: number, timeZone: string): Part {
 }
 
 /**
- * The step's heading with the earliest time beside it, a month calendar (or a
- * 14-day strip) next to the picked day's times grouped by part of the day.
+ * The step's heading, a month calendar (or a 14-day strip) next to the picked day's times grouped by part of the day.
  * Everything shown is what the consumer passed: the picker decides nothing
  * about the diary.
  */
@@ -112,7 +108,6 @@ function BookingSlotPicker({
   timeZone,
   timeZoneLabel,
   layout = "month",
-  earliest,
   note,
   dayPanel,
   footer,
@@ -182,26 +177,7 @@ function BookingSlotPicker({
       data-slot="booking-slot-picker"
     >
       {notice}
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <h2 className={cn(STEP_HEADING, "flex-auto")}>{copy.timeTitle}</h2>
-        {earliest ? (
-          <button
-            aria-pressed={earliest.pressed}
-            className={cn(
-              "inline-flex h-11 cursor-pointer items-center gap-2 rounded-full px-4 text-sm font-semibold tabular-nums transition-[box-shadow,background-color] duration-100 outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-              earliest.pressed
-                ? "bg-primary text-primary-foreground"
-                : "bg-card text-foreground shadow-[inset_0_0_0_1px_var(--border-strong)] hover:shadow-[inset_0_0_0_1px_var(--foreground)]",
-            )}
-            data-slot="booking-earliest"
-            onClick={earliest.onPick}
-            type="button"
-          >
-            <Clock aria-hidden size={14} />
-            {earliest.label}
-          </button>
-        ) : null}
-      </div>
+      <h2 className={STEP_HEADING}>{copy.timeTitle}</h2>
       <div className="flex flex-wrap items-start gap-6">
         {layout === "strip" ? null : (
           <div

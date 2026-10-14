@@ -13,8 +13,8 @@ shipped without it.
 **As a** collector,
 **I want** the header and the footer rendered before the session has resolved,
 with only the account entry and the cart count updating once it does,
-**so that** I can start navigating immediately without unrelated chrome
-shifting under me.
+**so that** I can start navigating immediately without chrome appearing or
+disappearing under me.
 
 ### grade10-site-site-page-shell-US-03: Collector reaches account destinations from the header
 
@@ -65,3 +65,10 @@ auction-only or full primary nav.
 **As a** collector,
 **I want** the header to show the same active-line count as my cart drawer as my cart changes,
 **so that** I can see how many active lines I hold from any surface without opening the drawer.
+
+### grade10-site-site-page-shell-US-09: Collector is not offered Sign In before their session answers
+
+**As a** collector,
+**I want** the header to hold the account entry's place until my session has
+answered,
+**so that** I am never offered Sign In while I am already signed in.

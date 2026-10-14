@@ -365,3 +365,22 @@ export function summaryRows({ runId, tab, date, name, selection, env, sha }) {
     ];
   });
 }
+
+/** Summary first, then numbered runs from newest to oldest. Other tabs follow. */
+export function tabOrderRequests(sheets, summarySheetId) {
+  const runs = sheets
+    .filter((one) => /^\d+-/.test(one.properties.title))
+    .sort(
+      (a, b) =>
+        Number(b.properties.title.split("-")[0]) -
+        Number(a.properties.title.split("-")[0]),
+    );
+  return [summarySheetId, ...runs.map((one) => one.properties.sheetId)].map(
+    (sheetId, index) => ({
+      updateSheetProperties: {
+        properties: { sheetId, index },
+        fields: "index",
+      },
+    }),
+  );
+}

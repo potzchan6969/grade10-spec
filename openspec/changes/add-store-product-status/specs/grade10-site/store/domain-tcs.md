@@ -177,7 +177,6 @@ repaired cart sent on to Shopify's payment page,
 
 * customer(member) is signed in and is on <grade10 store url>.
 * The cart holds 1 of <product_a> and 1 of <product_b>, both for sale.
-* The cart's goods are under HKD 120,000.
 
 **Test data:**
 

@@ -57,6 +57,7 @@ import {
   SURFACE_END,
   SURFACES,
   summaryRows,
+  tabOrderRequests,
   tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
@@ -1313,6 +1314,15 @@ try {
     );
   }
   if (record) requests.push(await recordRequest(record, currentRow));
+  requests.push(
+    ...tabOrderRequests(
+      [
+        ...sheets.filter((one) => one.properties.title !== found?.tab),
+        { properties: { sheetId, title: tab } },
+      ],
+      summarySheetId,
+    ),
+  );
   // All updates validate together. A failed request leaves the old run intact.
   // https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate
   await batchUpdate(token, args.sheet, requests);

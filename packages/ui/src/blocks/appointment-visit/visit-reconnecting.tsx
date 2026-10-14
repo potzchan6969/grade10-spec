@@ -1,4 +1,5 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
+import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 
 type VisitReconnectingCopy = {
@@ -11,25 +12,47 @@ type VisitReconnectingCopy = {
 
 type VisitReconnectingProps = {
   copy: VisitReconnectingCopy;
-  /** A retry is under way. */
+  /** A retry is under way; Try now shows busy and stays focusable. */
   busy: boolean;
   onRetry: () => void;
+  /** Why the last retry failed, shown under Try now. */
+  retryFailed?: string;
 };
 
 /** A live page that lost its signal: what it last knew and when, and Try now. */
-function VisitReconnecting({ copy, busy, onRetry }: VisitReconnectingProps) {
+function VisitReconnecting({
+  copy,
+  busy,
+  onRetry,
+  retryFailed,
+}: VisitReconnectingProps) {
   return (
     <Alert
       actions={
-        <Button
-          disabled={busy}
-          onClick={onRetry}
-          size="sm"
-          type="button"
-          variant="outline"
-        >
-          {busy ? copy.trying : copy.retry}
-        </Button>
+        <>
+          {retryFailed ? (
+            <Text
+              as="p"
+              data-slot="reconnecting-failed"
+              role="alert"
+              size="sm"
+              tone="error"
+            >
+              {retryFailed}
+            </Text>
+          ) : null}
+          <Button
+            loading={busy}
+            onClick={() => {
+              if (!busy) onRetry();
+            }}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
+            {busy ? copy.trying : copy.retry}
+          </Button>
+        </>
       }
       data-slot="reconnecting"
       description={copy.body}

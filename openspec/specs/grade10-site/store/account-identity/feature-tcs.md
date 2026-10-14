@@ -9,8 +9,8 @@
 **I want** to verify who I am from my own account page, on my own phone, after reading what will be checked,
 **so that** I am recognised wherever Grade10 asks, without a visit and without being asked twice.
 
-<!-- trace:case id=g10.store-account-identity.TC-25d rev=2 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
-### grade10-site-store-account-identity-US1-TC1-2: Unverified account names the bar and offers to verify
+<!-- trace:case id=g10.store-account-identity.TC-25d rev=3 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
+### grade10-site-store-account-identity-US1-TC1-3: Unverified account names the bar and offers to verify
 
 **Classification:**
 
@@ -34,7 +34,7 @@
 | Field | Value |
 | --- | --- |
 | `<an unverified account>` | An account with no verified identity on file and no check raised |
-| `<bar>` | 12000000 HKD minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| `<bar>` | 1500000 USD minor units (USD 15,000.00), the bar Grade10 sets on a bid |
 
 **Steps:**
 
@@ -47,8 +47,8 @@
 * The card names `<bar>` as the bid value at which a verified identity is asked for.
 * The card offers to verify — the agreement to tick and the verify button.
 
-<!-- trace:case id=g10.store-account-identity.TC-dbs rev=2 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
-### grade10-site-store-account-identity-US1-TC2-2: Verifying from the account is recognised at a bid above the bar
+<!-- trace:case id=g10.store-account-identity.TC-dbs rev=3 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
+### grade10-site-store-account-identity-US1-TC2-3: Verifying from the account is recognised at a bid above the bar
 
 **Classification:**
 
@@ -73,9 +73,9 @@
 | Field | Value |
 | --- | --- |
 | `<an unverified account>` | An account with no verified identity on file and no check raised |
-| `<bar>` | 12000000 HKD minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
-| `<bid above the bar>` | 12500000 HKD minor units (HKD 125,000.00), above `<bar>` |
-| `<listing above the bar>` | A live HKD listing whose minimum next bid is at most `<bid above the bar>` |
+| `<bar>` | 1500000 USD minor units (USD 15,000.00), the bar Grade10 sets on a bid |
+| `<bid above the bar>` | 1550000 USD minor units (USD 15,500.00), above `<bar>` |
+| `<listing above the bar>` | A live USD listing whose minimum next bid is at most `<bid above the bar>` |
 
 **Steps:**
 
@@ -431,4 +431,4 @@ Runs once per row of **Test data**.
 Run: durable carry for add-account-identity-gate; the feature set, journeys and suite were reconciled against the carried requirements.
 
 - **Uncovered anchors:** none.
-- **Rewritten** - `grade10-site-store-account-identity-US1-TC1-2` and `grade10-site-store-account-identity-US1-TC2-2`: the bar names a bid alone since the checkout bar was dropped on 2026-10-13
+- **Rewritten** - `grade10-site-store-account-identity-US1-TC1-3` and `grade10-site-store-account-identity-US1-TC2-3`: the bar names a bid alone since the checkout bar was dropped on 2026-10-13; it is one USD bar since bidding became USD-only on 2026-10-14

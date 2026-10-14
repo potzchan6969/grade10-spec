@@ -11,10 +11,9 @@ type BookVisitSettings = {
   service: "free" | "paid";
   phone: "optional" | "required";
   shopper: "signedOut" | "signedIn" | "signedInNoPhone";
-  bookingFor: "self" | "someone";
   time: "open" | "taken" | "full";
   answer: "books" | "slow";
-  gate: "passes" | "held" | "tries";
+  gate: "passes" | "tries";
   payment: "booked" | "confirming" | "expired";
 };
 
@@ -23,14 +22,12 @@ const DEFAULT_VISIT: BookVisitSettings = {
   service: "free",
   phone: "optional",
   shopper: "signedIn",
-  bookingFor: "self",
   time: "open",
   answer: "books",
   gate: "passes",
   payment: "booked",
 };
 
-const BOOKED_FOR = "Ben Chan";
 const FULL_DAY = "2026-10-17";
 
 function momentOf(settings: BookVisitSettings): Moment {
@@ -49,7 +46,6 @@ function momentOf(settings: BookVisitSettings): Moment {
     refusal: null,
     busy: false,
     gone: [],
-    ...(settings.bookingFor === "someone" ? { bookedFor: BOOKED_FOR } : {}),
   };
   switch (settings.step) {
     case "service":
@@ -78,13 +74,7 @@ function momentOf(settings: BookVisitSettings): Moment {
       return {
         ...booking,
         busy: settings.answer === "slow",
-        // The gate answers a signed-out shopper only.
-        refusal:
-          signedIn || settings.gate === "passes"
-            ? null
-            : settings.gate === "held"
-              ? "heldOut"
-              : "tries",
+        refusal: settings.gate === "tries" ? "tries" : null,
       };
     case "after":
       return { ...booking, phase: paid ? settings.payment : "booked" };
@@ -146,15 +136,6 @@ const BOOK_VISIT_ARG_TYPES = {
     },
     options: ["signedOut", "signedIn", "signedInNoPhone"],
   },
-  bookingFor: {
-    name: "Booking for",
-    description: "Who the collector books for, on the details step",
-    control: {
-      type: "radio",
-      labels: { self: "Themselves", someone: "Someone else" },
-    },
-    options: ["self", "someone"],
-  },
   time: {
     name: "Time",
     description:
@@ -183,17 +164,16 @@ const BOOK_VISIT_ARG_TYPES = {
   gate: {
     name: "This email",
     description:
-      "What the shop finds for the email a signed-out collector books with: a live visit of this service, or 10 tries today",
+      "What the shop finds for the collector's email: 10 tries today",
     control: {
       type: "radio",
       labels: {
         passes: "Passes",
-        held: "Already has this service booked",
         tries: "Too many tries today",
       },
     },
-    options: ["passes", "held", "tries"],
-    if: { arg: "shopper", eq: "signedOut" },
+    options: ["passes", "tries"],
+    ...atStep("details"),
   },
   payment: {
     name: "Payment",
@@ -220,8 +200,6 @@ const BOOK_VISIT_RULES = {
     "shared/ui/appointment-booking: The details form validates before reporting",
   shopper:
     "grade10-site/appointment/booking: A signed-in collector sees their own visits",
-  bookingFor:
-    "shared/ui/appointment-booking: The details form validates before reporting",
   time: "shared/ui/appointment-booking: The slot picker shows the diary honestly",
   answer: "shared/ui/appointment-booking: Async regions state their condition",
   gate: "grade10-site/appointment/booking: The anonymous write passes a gate",

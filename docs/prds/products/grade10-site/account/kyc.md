@@ -10,14 +10,12 @@ when Grade10 asks them to verify, and at a vault visit.
 
 ## Values
 
-A bar is the amount at or above which a bid needs a verified person. Each
-currency has its own fixed bar, with no exchange rate between them.
+The bar is the amount at or above which a bid needs a verified person. Every
+lot is priced in USD, so one bar holds for every bid.
 
 | Rule | Value |
 | --- | --- |
-| Bid on an HKD lot | **HKD 120,000** |
-| Bid on a USD lot | ❓ **USD 15,000** - Compliance confirms |
-| Bid on a JPY lot | ❓ **JPY 2,300,000** - Compliance confirms |
+| A bid | **USD 15,000** |
 | A request from Grade10 | Every new or raised maximum, any amount, until the account passes - [Requests](#requests) |
 
 ## Verification Page
@@ -137,8 +135,7 @@ service.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The bar | Decided | HKD 120,000 on a bid on an HKD lot - the value at which a Hong Kong dealer in high-value goods has to know its customer. A bid on a lot in another currency meets that currency's own fixed bar, with no exchange rate, decided 2026-10-13. | Product |
-| USD and JPY bars | ❓ Open | USD 15,000 and JPY 2,300,000 proposed. | Compliance |
+| The bar | Decided | US$15,000 on a bid; every lot is priced in USD. A bar for each lot currency - HKD 120,000, with USD and JPY bars proposed - was dropped 2026-10-14 when bidding became USD-only. | Product |
 | Requests | Decided | An admin may require any account to verify its person or its business, with a reason; until met, every new or raised maximum is held at any amount; a business request requires the person too; the collector never reads the reason; decided 2026-10-13. | Owner |
 | Rules that ask | ❓ Open | Which facts raise a request on their own. | Product |
 | Verification page | Decided | Verification moves to its own page, `grade10.com/verification`, with the identity card, the business card and the requests; a held bid links there and returns to the lot, decided 2026-10-13. | Owner |

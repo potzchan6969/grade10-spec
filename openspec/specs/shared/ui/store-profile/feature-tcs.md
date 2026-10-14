@@ -68,7 +68,7 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| <state> | The card shows |
+| `<state>` | `<expected outcome>` |
 | --- | --- |
 | Loading | a loading placeholder and no profile field |
 | Empty, with a message and an action | the supplied message and action, and no profile field |
@@ -78,11 +78,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render `ProfileCard` in <state>.
+1. Render `ProfileCard` in `<state>`.
 
 **Expected Results:**
 
-* Step 1 shows the title and the row's outcome.
+* Step 1 shows the title and this outcome: `<expected outcome>`.
 
 <!-- trace:case id=g10.shared-store-profile.TC-r9t rev=1 covers=g10.shared-store-profile.SC-7fw,g10.shared-store-profile.SC-ozv,g10.shared-store-profile.SC-4f1 -->
 ### g10.shared-store-profile.US1-TC3: Read view shows the fields it is given and defaults none
@@ -104,11 +104,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProfileDetails` is given <supplied>.
+* `ProfileDetails` is given `<supplied>`.
 
 **Test data:**
 
-| <supplied> | The read view shows |
+| `<supplied>` | `<expected outcome>` |
 | --- | --- |
 | An avatar source, a display name, an email, a bio and a meta line | each of the five as given |
 | A display name alone, with the email, bio and meta left out | the name, and no text for the email, the bio or the meta |
@@ -120,7 +120,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 shows the row's outcome.
+* Step 1 shows this outcome: `<expected outcome>`.
 * Step 2 finds no word the props did not supply.
 
 <!-- trace:case id=g10.shared-store-profile.TC-cev rev=1 covers=g10.shared-store-profile.SC-67q,g10.shared-store-profile.SC-2r8 -->
@@ -143,15 +143,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <component> is given the fallback content <fallback> and <avatar source>.
+* `<component>` is given the fallback content `<fallback>` and `<avatar source>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <fallback> | `KC` |
+| fallback | KC |
 
-| <component> | <avatar source> |
+| `<component>` | `<avatar source>` |
 | --- | --- |
 | `ProfileDetails` | None |
 | `ProfileDetails` | An address whose image fails to load |
@@ -160,11 +160,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render <component>.
+1. Render `<component>`.
 
 **Expected Results:**
 
-* <fallback> shows in the avatar's place, no broken image.
+* `<fallback>` shows in the avatar's place, no broken image.
 
 <!-- trace:case id=g10.shared-store-profile.TC-g2v rev=1 covers=g10.shared-store-profile.SC-tnt -->
 ### g10.shared-store-profile.US1-TC5: Read view offers editing only with both an edit label and a handler
@@ -186,11 +186,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProfileDetails` is given <edit props>.
+* `ProfileDetails` is given `<edit props>`.
 
 **Test data:**
 
-| <edit props> | An edit control shows |
+| `<edit props>` | `<edit control shown>` |
 | --- | --- |
 | An edit label and an edit handler | yes |
 | An edit label alone | no |
@@ -204,7 +204,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 shows the row's outcome.
+* Step 1 shows an edit control when `<edit control shown>` is yes, and none when it is no.
 * Step 2 calls the edit handler once.
 
 <!-- trace:case id=g10.shared-store-profile.TC-5j0 rev=1 covers=g10.shared-store-profile.SC-mc2,g10.shared-store-profile.SC-eqc,g10.shared-store-profile.SC-v9c -->
@@ -227,36 +227,36 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProfileForm` is given <current avatar>, fallback content <fallback>, a display name and a bio.
+* `ProfileForm` is given `<current avatar>`, fallback content `<fallback>`, a display name and a bio.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <fallback> | `KC` |
-| <typed name> | `Kit Lam` |
-| <typed bio> | `Graded cards only.` |
-| <chosen file> | A PNG of about 1 MB |
+| fallback | KC |
+| typed name | Kit Lam |
+| typed bio | Graded cards only. |
+| chosen file | A PNG of about 1 MB |
 
-| <current avatar> | <avatar action> | The avatar shows | The save reports the avatar as |
+| `<current avatar>` | `<avatar action>` | `<avatar display>` | `<avatar payload>` |
 | --- | --- | --- | --- |
 | An avatar source | None | the current image | unchanged |
-| No avatar source | None | <fallback> | unchanged |
-| An avatar source | Click the remove control | <fallback> | removed |
-| An avatar source | Choose <chosen file> | a preview of <chosen file> | <chosen file> |
+| No avatar source | None | `<fallback>` | unchanged |
+| An avatar source | Click the remove control | `<fallback>` | removed |
+| An avatar source | Choose `<chosen file>` | a preview of `<chosen file>` | `<chosen file>` |
 
 **Steps:**
 
 1. Render `ProfileForm`.
-2. Replace the display name with <typed name>.
-3. Replace the bio with <typed bio>.
-4. Take <avatar action>.
+2. Replace the display name with `<typed name>`.
+3. Replace the bio with `<typed bio>`.
+4. Take `<avatar action>`.
 5. Click the save button.
 
 **Expected Results:**
 
-* Step 4 shows the row's avatar.
-* Step 5 reports <typed name>, <typed bio> and the row's avatar outcome, once.
+* Step 4 shows `<avatar display>`.
+* Step 5 reports `<typed name>`, `<typed bio>` and `<avatar payload>`, once.
 
 <!-- trace:case id=g10.shared-store-profile.TC-y5b rev=1 covers=g10.shared-store-profile.SC-83g,g10.shared-store-profile.SC-67a -->
 ### g10.shared-store-profile.US1-TC7: Form refuses nothing itself and shows the application's error
@@ -282,21 +282,21 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <not an image> | A PDF of about 100 KB |
-| <error> | `Display name is required` |
+| not an image | A PDF of about 100 KB |
+| error | Display name is required |
 
 **Steps:**
 
 1. Render `ProfileForm`.
 2. Empty the display name.
-3. Choose <not an image> with the avatar control.
+3. Choose `<not an image>` with the avatar control.
 4. Click the save button.
-5. Render `ProfileForm` again with <error> supplied as its error.
+5. Render `ProfileForm` again with `<error>` supplied as its error.
 
 **Expected Results:**
 
-* Step 4 reports the empty name and <not an image>, with no message of the form's own.
-* Step 5 shows <error> and keeps the entered values.
+* Step 4 reports the empty name and `<not an image>`, with no message of the form's own.
+* Step 5 shows `<error>` and keeps the entered values.
 
 <!-- trace:case id=g10.shared-store-profile.TC-v8k rev=1 covers=g10.shared-store-profile.SC-cxo -->
 ### g10.shared-store-profile.US1-TC8: Form holds each field to the limit it is given
@@ -322,20 +322,20 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| <field> | <typed text> | <field> then holds |
-| --- | --- | --- |
-| Display name | 11 characters | the first 10 |
-| Bio | 21 characters | the first 20 |
+| `<field>` | `<typed text>` | `<remaining text>` | Fixture notes |
+| --- | --- | --- | --- |
+| Display name | ABCDEFGHIJK | ABCDEFGHIJ | 11 characters; retain the first 10, fixed boundary |
+| Bio | ABCDEFGHIJKLMNOPQRSTU | ABCDEFGHIJKLMNOPQRST | 21 characters; retain the first 20, fixed boundary |
 
 **Steps:**
 
 1. Render `ProfileForm`.
-2. Type <typed text> into <field>.
+2. Type `<typed text>` into `<field>`.
 3. Type-check a render of `ProfileForm` with either limit left out.
 
 **Expected Results:**
 
-* Step 2 leaves <field> holding the row's outcome.
+* Step 2 leaves `<field>` holding `<remaining text>`.
 * Step 3 fails the type check, naming the missing limit.
 
 <!-- trace:case id=g10.shared-store-profile.TC-w3h rev=1 covers=g10.shared-store-profile.SC-at4 -->
@@ -356,13 +356,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProfileForm` is given the email <email>.
+* `ProfileForm` is given the email `<email>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <email> | `kit.lam@example.com` |
+| email | kit.lam@example.com |
 
 **Steps:**
 
@@ -372,8 +372,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 shows <email>.
-* Step 2 changes nothing: <email> still shows.
+* Step 1 shows `<email>`.
+* Step 2 changes nothing: `<email>` still shows.
 * Step 3 reports no email.
 
 <!-- trace:case id=g10.shared-store-profile.TC-bns rev=1 covers=g10.shared-store-profile.SC-bba -->
@@ -426,28 +426,28 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <component> is given an avatar source, the accessible name <image name> and the display name <display name>.
+* `<component>` is given an avatar source, the accessible name `<image name>` and the display name `<display name>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <image name> | `Profile photo` |
-| <display name> | `Kit Lam` |
+| image name | Profile photo |
+| display name | Kit Lam |
 
-| <component> |
+| `<component>` |
 | --- |
 | `ProfileDetails` |
 | `ProfileForm` |
 
 **Steps:**
 
-1. Render <component>.
+1. Render `<component>`.
 2. Read the avatar image's accessible name.
 
 **Expected Results:**
 
-* Step 2 reads <image name>, never <display name> or a name of the component's own.
+* Step 2 reads `<image name>`, never `<display name>` or a name of the component's own.
 
 <!-- trace:case id=g10.shared-store-profile.TC-1fi rev=1 covers=g10.shared-store-profile.SC-4f1,g10.shared-store-profile.SC-y6u -->
 ### g10.shared-store-profile.US1-TC12: Every word on the surface comes from its copy
@@ -498,35 +498,35 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `ProfileForm` is given a display name, a bio, an avatar source, a save handler, a cancel handler, and <cancel label> as the cancel label.
+* `ProfileForm` is given a display name, a bio, an avatar source, a save handler, a cancel handler, and `<cancel label>` as the cancel label.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <typed name> | `Kit Lam` |
-| <chosen file> | A PNG of about 1 MB |
-| <cancel label> | `Discard changes` |
+| typed name | Kit Lam |
+| chosen file | A PNG of about 1 MB |
+| cancel label | Discard changes |
 
-| <cancel props> |
+| `<cancel props>` |
 | --- |
 | The cancel handler and no cancel label |
-| <cancel label> and no cancel handler |
+| `<cancel label>` and no cancel handler |
 | Neither |
 
 **Steps:**
 
 1. Render `ProfileForm`.
-2. Replace the display name with <typed name>.
-3. Choose <chosen file> with the avatar control.
-4. Click the control labelled <cancel label>.
-5. Render `ProfileForm` again with each of <cancel props>.
+2. Replace the display name with `<typed name>`.
+3. Choose `<chosen file>` with the avatar control.
+4. Click the control labelled `<cancel label>`.
+5. Render `ProfileForm` again with each of `<cancel props>`.
 
 **Expected Results:**
 
 * Step 4 calls the cancel handler once.
 * Step 4 reports no values to the save handler.
-* Step 5 shows no cancel control for any of <cancel props>.
+* Step 5 shows no cancel control for any of `<cancel props>`.
 
 <!-- trace:case id=g10.shared-store-profile.TC-5zz rev=1 covers=g10.shared-store-profile.SC-tlq -->
 ### g10.shared-store-profile.US1-TC14: Bio keeps its line breaks from the form to the read view
@@ -552,21 +552,21 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| <first line> | `Graded cards only.` |
-| <second line> | `Trades welcome.` |
+| first line | Graded cards only. |
+| second line | Trades welcome. |
 
 **Steps:**
 
 1. Render `ProfileForm`.
-2. Type <first line> into the bio, press Enter, and type <second line>.
+2. Type `<first line>` into the bio, press Enter, and type `<second line>`.
 3. Click the save button.
 4. Render `ProfileDetails` with the bio step 3 reported.
 
 **Expected Results:**
 
-* Step 2 shows <first line> and <second line> on two lines in the bio field.
-* Step 3 reports a bio holding <first line>, a line break and <second line>.
-* Step 4 shows <first line> and <second line> on two lines.
+* Step 2 shows `<first line>` and `<second line>` on two lines in the bio field.
+* Step 3 reports a bio holding `<first line>`, a line break and `<second line>`.
+* Step 4 shows `<first line>` and `<second line>` on two lines.
 
 ## Reconciliation
 
