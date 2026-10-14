@@ -277,7 +277,7 @@ or label for a second orders item.
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-z5y rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-46 - The account placeholder cannot be pressed or focused
-**Serves:** Header controls - a collector who meets the placeholder by pointer, keyboard, or screen reader
+**Serves:** Header controls - a collector who meets the placeholder by pointer or keyboard
 
 - **GIVEN** `session` is `"pending"`, with `onSignIn` and `onSignOut` supplied
 - **WHEN** the collector clicks the placeholder, or moves focus through the

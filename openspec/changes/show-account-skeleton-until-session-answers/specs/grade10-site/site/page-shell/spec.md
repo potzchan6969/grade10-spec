@@ -5,7 +5,8 @@
 - Session-independent chrome
   - Account placeholder: until the session first answers, the account entry
     is a placeholder the size of the account icon, with nothing to press; a
-    later re-read keeps the entry shown, and a failed read shows Sign In
+    first read that fails shows Sign In, and a later read keeps the entry
+    shown unless it finds a different session
   - Stable layout: no chrome control appears or disappears when the session
     arrives; only the account entry's own change in width moves the language
     and search controls on the wide header
@@ -25,9 +26,12 @@ The account entry SHALL be in one of these states:
 | Sign In | The latest read that did not fail returned no session, or every read so far has failed | The primary Sign In button |
 
 **First answer** - The session first answers when its first read since the
-page loaded returns a signed-in session, returns no session, or fails. Moving
-between surfaces SHALL NOT bring the placeholder back; a reload SHALL start
-over at it, with no session remembered from before.
+page loaded returns a signed-in session, returns no session, or fails. A read
+that answers that the collector has no session, including a refusal saying
+they are not signed in, returns no session; a read fails only when it returns
+neither a session nor that answer. Moving between surfaces SHALL NOT bring the
+placeholder back; a reload SHALL start over at it, with no session remembered
+from before.
 
 **Both widths** - The placeholder SHALL be the same size on a wide viewport
 and in the compact bar, where it SHALL sit beside Cart when the header offers

@@ -9,7 +9,7 @@
 
 ## Decisions
 
-- **Order** - this change is accepted before `restrict-auctions-by-region`, which waits on its own Figma frame and on `omit-profile-account-menu`; decided by @seankcw on 2026-10-14, who also authorized the edit to `restrict-auctions-by-region` in this change's pull request, for @tangconst to review
+- **Order** - this change is accepted before `restrict-auctions-by-region`, which waits on its own Figma frame; decided by @seankcw on 2026-10-14, who also authorized the edit to `restrict-auctions-by-region` in this change's pull request, for @tangconst to review
 - **Case numbers** - `restrict-auctions-by-region` issued `g10.shared-site-chrome.US1-TC28` first; this change's SiteHeader cases take US1-TC29 to US1-TC32
 
 ## Order

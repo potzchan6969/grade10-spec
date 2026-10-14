@@ -36,12 +36,12 @@ primary button (signed out) and the account icon with its menu (signed in); othe
 controls do not appear or disappear.
 
 🚧 **Before the session answers** - the account entry is a placeholder the size of
-the account icon, with nothing to press, so a signed-in collector never sees
-Sign In first
+the account icon, with nothing to press and nothing read aloud, so a signed-in
+collector never sees Sign In first
 
 🚧 **First answer only** - the placeholder shows until the session first answers,
-and a first read that fails shows Sign In; a later read keeps the entry already
-shown unless it finds no session
+and a first read that fails shows Sign In; a later read that fails keeps the
+entry already shown, and one that finds a different session changes it
 
 🚧 **Controls beside it** - only the account entry's own change in width moves the
 language and search controls to its left; the Cart control stays where it is
