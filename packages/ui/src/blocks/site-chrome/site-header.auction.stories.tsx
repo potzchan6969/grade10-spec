@@ -3,6 +3,8 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import {
   ACCOUNT_EMAIL,
+  pendingSessionPlay,
+  SessionSwitch,
   SITE_HEADER_BASE_ARGS,
 } from "./site-header.story-shared";
 
@@ -60,6 +62,25 @@ export const SignedIn: Story = {
     expect(canvas.queryByRole("link", { name: "Store" })).toBeNull();
     expect(canvas.queryByRole("link", { name: "Store Locator" })).toBeNull();
   },
+};
+
+/**
+ * The session has not answered: a 40px round placeholder holds the account
+ * entry's place beside Cart, then the story re-renders signed in to prove the
+ * account icon takes the same box and nothing else moves.
+ */
+export const Pending: Story = {
+  name: "Pending",
+  args: { session: "pending", onCartClick: fn() },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 1280 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <SessionSwitch {...args} />,
+  play: pendingSessionPlay(false),
 };
 
 /**
