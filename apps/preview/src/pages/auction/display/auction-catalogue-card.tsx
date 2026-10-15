@@ -151,6 +151,15 @@ function bidsLabel(count: number) {
   return `${count} ${count === 1 ? "bid" : "bids"}`;
 }
 
+/** A lot nobody has bid on yet reads "No bids yet", matching the lot page. */
+function bidCountLabel(count: number) {
+  return count === 0 ? "No bids yet" : bidsLabel(count);
+}
+
+function priceLabel(lot: CatalogueLot) {
+  return lot.bidCount === 0 ? "Starting bid" : "Current Bid";
+}
+
 function CatalogueWatch({
   lot,
   watched,
@@ -343,7 +352,7 @@ function AuctionLotCardContent({
           {lot.status !== "Upcoming" ? (
             <div className="flex w-full flex-col items-start">
               <p className="w-full text-sm text-secondary-foreground">
-                Current Bid
+                {priceLabel(lot)}
               </p>
               <div className="flex w-full items-baseline gap-2">
                 <p
@@ -356,7 +365,7 @@ function AuctionLotCardContent({
                 </p>
                 {lift && lot.status !== "Ended" ? (
                   <p className="shrink-0 whitespace-nowrap text-sm leading-5 text-secondary-foreground">
-                    {bidsLabel(lot.bidCount)}
+                    {bidCountLabel(lot.bidCount)}
                   </p>
                 ) : null}
               </div>
@@ -1042,14 +1051,14 @@ function FeaturedAuctionsPair({
                           }
                         >
                           <p className="text-sm text-secondary-foreground">
-                            Current Bid
+                            {priceLabel(lot)}
                           </p>
                           <p className="text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">
                             {lot.bidLabel}
                           </p>
                           {lot.status !== "Ended" ? (
                             <p className="text-sm text-secondary-foreground">
-                              {bidsLabel(lot.bidCount)}
+                              {bidCountLabel(lot.bidCount)}
                             </p>
                           ) : null}
                         </motion.div>
