@@ -29,7 +29,9 @@ The account entry SHALL be in one of these states:
 page loaded returns a signed-in session, returns no session, or fails. A read
 that answers that the collector has no session, including a refusal saying
 they are not signed in, returns no session; a read fails only when it returns
-neither a session nor that answer. Moving between surfaces SHALL NOT bring the
+neither a session nor that answer. Every read of the session SHALL end within
+two minutes of its start, so a read the network neither answers nor fails ends as
+a failed read. Moving between surfaces SHALL NOT bring the
 placeholder back; a reload SHALL start over at it, with no session remembered
 from before.
 
@@ -42,9 +44,6 @@ placeholder. While the session is read again, the header SHALL keep the entry
 already shown until that read returns a session other than the one shown. A
 later read that fails SHALL keep the entry already shown; a later read that
 returns no session SHALL show Sign In.
-
-**No timer** - The site SHALL NOT replace the placeholder after a time of its
-own; the placeholder SHALL show until the session answers.
 
 <!-- trace:scenario id=g10.site-page-shell.SC-3s6 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-68 - The account entry is a placeholder until the session answers
