@@ -64,7 +64,7 @@ Needs group 2; built against the contracts and fixtures.
 - [ ] 6.6 Add the Internal bidders page to auction admin, shown and fetched only under `auction:reserve`: the list with name, email label, billing address and Active or Retired, add with a required billing address in the winner's billing address fields, rename, change the billing address, an email label locked once the profile has bid, retire with the listings that hold it in use, each refusal inline, and its copy in every Grade10 admin locale (`grade10-admin-auction-internal-bid-SC-60`, `grade10-admin-auction-internal-bid-SC-61`, `grade10-admin-auction-internal-bid-SC-62`, `grade10-admin-auction-internal-bid-SC-63`, `grade10-admin-auction-internal-bid-SC-64`, `grade10-admin-auction-internal-bid-SC-65`, `grade10-admin-auction-internal-bid-SC-66`, `grade10-admin-auction-internal-bid-SC-72`, `grade10-admin-auction-internal-bid-SC-79`)
 - [ ] 6.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused admin listing and Orders E2E journeys
 
-## 7. The walk (grade10)
+## 7. The walk (grade10) (owner: @htonyl)
 
 Needs groups 3 to 6. Uses the draft `feature-tcs.md` as its input; human QA reviews the cases after deployment (`/tcs-review add-auction-internal-bid`), and `/tcs-run-sheet` executes manual cases when needed.
 
