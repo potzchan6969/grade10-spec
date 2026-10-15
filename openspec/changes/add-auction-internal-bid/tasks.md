@@ -39,7 +39,7 @@ Needs group 2.
 - [ ] 4.4 Apply the house-exclusion fragment to every mail and push claim, stamp house bid rows as notified on insert, and make the mail dispatcher throw on an `internal` recipient (`grade10-site-auction-notifications-SC-49`, `grade10-site-auction-notifications-SC-50`, `grade10-site-auction-notifications-SC-51`, `grade10-site-auction-notifications-SC-52`, `grade10-site-auction-notifications-SC-53`, `grade10-site-auction-notifications-SC-54`)
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`
 
-## 5. Admin internal-bid door, listing-edit clear and redaction (grade10)
+## 5. Admin internal-bid door, listing-edit clear and redaction (grade10) (owner: @htonyl)
 
 Needs group 2. The commit and raise paths it calls are group 3's.
 
