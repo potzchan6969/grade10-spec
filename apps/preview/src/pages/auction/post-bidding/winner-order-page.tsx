@@ -313,7 +313,22 @@ function paymentMethodFor(
     : undefined;
 }
 
-/** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
+/** `US$12,800.00` → 12800, so a fee can compute off the displayed bid. */
+function summaryAmountValue(line: string): number | null {
+  const match = /^(?:HK|US)\$([\d,]+)(?:\.(\d+))?$/.exec(line);
+  if (!match) return null;
+  return Number(match[1].replaceAll(",", "")) + Number(`0.${match[2] ?? "0"}`);
+}
+
+/** A computed summary amount, formatted the same way `summaryLineAmount` writes one. */
+function summaryAmountLine(value: number, prefix: "HK$" | "US$"): string {
+  return `${prefix}${value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+/** Sidebar money rows — full invoice when issued; otherwise winning bid + the computed premium + TBD fees. */
 function summaryLinesFor(
   content: WinnerOrderContent,
 ): WinnerOrderInvoiceLine[] {
@@ -331,12 +346,21 @@ function summaryLinesFor(
       { label: "Order Total", value: "—" },
     ];
   }
+  // The premium is Grade10-computed — 20% of the winning bid, or the currency
+  // minimum when that is higher — so it is known at close, ahead of the
+  // operator's invoice. The total shows the known charges; operator-quoted
+  // fees stay TBD until the invoice is sent.
+  const prefix = winningBidLine.startsWith("HK$") ? "HK$" : "US$";
+  const bid = summaryAmountValue(winningBidLine);
+  const premium =
+    bid == null ? null : Math.max(Math.round(bid * 20), 100) / 100;
+  const knownTotal = bid == null || premium == null ? null : bid + premium;
   return [
     { label: "Winning Bid", value: winningBidLine },
     {
       label: "Buyer’s Premium",
-      value: "TBD",
-      muted: true,
+      value: premium == null ? "TBD" : summaryAmountLine(premium, prefix),
+      muted: premium == null,
       tooltip: LINE_TOOLTIPS.buyersPremium,
     },
     {
@@ -363,7 +387,15 @@ function summaryLinesFor(
       muted: true,
       tooltip: LINE_TOOLTIPS.processingFee,
     },
-    { label: "Order Total", value: "TBD", muted: true },
+    {
+      label: "Order Total",
+      value: knownTotal == null ? "TBD" : summaryAmountLine(knownTotal, prefix),
+      muted: knownTotal == null,
+      footnote:
+        knownTotal == null
+          ? undefined
+          : "Shipping, insurance and fees are added at invoice.",
+    },
   ];
 }
 

@@ -5,6 +5,7 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
 import {
   BASE_ARGS,
+  LINE_TOOLTIPS,
   SETUP_CONFIRM,
   STEPS,
   settled,
@@ -37,9 +38,18 @@ export const AwaitingSetup: Story = {
     summary: {
       lines: [
         { label: "Winning Bid", value: "HK$12,800.00" },
+        {
+          label: "Buyer’s Premium",
+          value: "HK$2,560.00",
+          tooltip: LINE_TOOLTIPS.buyersPremium,
+        },
         { label: "Shipping & Handling", value: "TBD", muted: true },
       ],
-      total: { label: "Order Total", value: "TBD", muted: true },
+      total: {
+        label: "Order Total",
+        value: "HK$15,360.00",
+        footnote: "Shipping, insurance and fees are added at invoice.",
+      },
     },
     paymentMethod: undefined,
     delivery: {
@@ -74,8 +84,19 @@ export const SetupOverdue: Story = {
       },
     },
     summary: {
-      lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
-      total: { label: "Order Total", value: "TBD", muted: true },
+      lines: [
+        { label: "Winning Bid", value: "HK$12,800.00" },
+        {
+          label: "Buyer’s Premium",
+          value: "HK$2,560.00",
+          tooltip: LINE_TOOLTIPS.buyersPremium,
+        },
+      ],
+      total: {
+        label: "Order Total",
+        value: "HK$15,360.00",
+        footnote: "Shipping, insurance and fees are added at invoice.",
+      },
     },
     paymentMethod: undefined,
     delivery: {

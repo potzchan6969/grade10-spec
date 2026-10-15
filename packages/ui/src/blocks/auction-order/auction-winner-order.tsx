@@ -128,6 +128,7 @@ function SummaryRow({
   muted = false,
   tooltip,
   subtext,
+  footnote,
 }: {
   label: string;
   value: string;
@@ -135,6 +136,7 @@ function SummaryRow({
   muted?: boolean;
   tooltip?: string;
   subtext?: string;
+  footnote?: string;
 }) {
   const labelNode = tooltip ? (
     <HStack className="min-w-0" gap="xs" vAlign="center">
@@ -158,7 +160,7 @@ function SummaryRow({
 
   return (
     <div
-      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4"
+      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 sm:gap-x-4"
       data-slot="winner-order-summary-line"
     >
       <span
@@ -189,6 +191,14 @@ function SummaryRow({
           </span>
         ) : null}
       </span>
+      {footnote ? (
+        <span
+          className="col-span-2 mt-0.5 text-left text-xs leading-4 text-secondary-foreground"
+          data-slot="winner-order-summary-footnote"
+        >
+          {footnote}
+        </span>
+      ) : null}
     </div>
   );
 }
@@ -716,6 +726,7 @@ function OrderSummary({
       <VStack className="w-full" gap="sm" hAlign="stretch" id={linesId}>
         {summary.lines.map((line) => (
           <SummaryRow
+            footnote={line.footnote}
             key={line.label}
             label={line.label}
             muted={line.muted}
@@ -731,6 +742,7 @@ function OrderSummary({
           {summary.total ? (
             <SummaryRow
               emphasize
+              footnote={summary.total.footnote}
               label={summary.total.label}
               muted={summary.total.muted}
               subtext={currencyToggle ? undefined : summary.total.subtext}
@@ -744,6 +756,7 @@ function OrderSummary({
           {summary.convertedTotal && !currencyToggle ? (
             <SummaryRow
               emphasize
+              footnote={summary.convertedTotal.footnote}
               label={summary.convertedTotal.label}
               muted={summary.convertedTotal.muted}
               value={summary.convertedTotal.value}
@@ -756,6 +769,7 @@ function OrderSummary({
         <>
           <hr className="w-full border-border" />
           <SummaryRow
+            footnote={summary.convertedFee.footnote}
             label={summary.convertedFee.label}
             muted={summary.convertedFee.muted}
             value={summary.convertedFee.value}
