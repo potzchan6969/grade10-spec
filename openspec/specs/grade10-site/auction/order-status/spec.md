@@ -57,7 +57,7 @@ from the chain of invoices on the order.
 | `pending` | An operator has sent the invoice and it is unpaid. A reissued invoice is `pending`, and so is an invoice whose proof an operator returned |
 | `partially_paid` | An operator recorded a payment short of the order total on a `pending` or `expired` bank transfer invoice; no deadline runs |
 | `payment_verifying` | The winner uploaded payment proof on a `pending` bank transfer invoice, and an operator has not yet confirmed or returned it. The deadline is stopped |
-| `expired` | The payment deadline passed with the invoice `pending`. Written by Grade10 at the deadline. Winner self-service payment ends; an operator may reissue, record a payment, or cancel |
+| `expired` | The payment deadline passed with the invoice `pending`. Written by Grade10 at the deadline, or, when a card session started before it is open, when that session ends unpaid. Winner self-service payment ends; an operator may reissue, record a payment, or cancel |
 | `paid` | Payment is received in full, whether by the winner's card, by an operator confirming the winner's proof, or recorded by an operator |
 | `cancelled` | An operator cancels an order that is unpaid. Terminal |
 | `refunded` | A paid invoice is subsequently refunded. Terminal |
@@ -320,7 +320,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | Invoice status | `pending` | `paid` | The winner's card payment is confirmed, or an operator commits a manual settlement |
 | Invoice status | `pending` | `payment_verifying` | The winner uploads payment proof on a bank transfer invoice |
 | Invoice status | `pending` | `pending` | An operator reissues the invoice; the new invoice replaces it |
-| Invoice status | `pending` | `expired` | Grade10, at the payment deadline, with the invoice unpaid |
+| Invoice status | `pending` | `expired` | Grade10, at the payment deadline, with the invoice unpaid. When a card session started before the deadline is open, Grade10 writes it when that session ends unpaid |
 | Invoice status | `pending` | `partially_paid` | An operator records a payment short of the order total on a bank transfer invoice |
 | Invoice status | `payment_verifying` | `paid` | An operator confirms the proof |
 | Invoice status | `payment_verifying` | `pending` | An operator returns the proof; the deadline restarts with the time left |
@@ -625,7 +625,7 @@ order facts, and SHALL NOT store it as a status enum.
 
 | Condition | Source |
 | --- | --- |
-| `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, no delivery address is confirmed, and the order is not cancelled and has no cancellation requested |
+| `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, no delivery address is confirmed, and the order is not cancelled |
 
 `address_window_open` gates what the winner may write and SHALL NOT be a
 condition of the order-status derivation, which reads `address_deadline_passed`.

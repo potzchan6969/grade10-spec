@@ -59,7 +59,7 @@
 
 ## 5. After complete-auction-post-sale archives (owner: @htonyl)
 
-- [ ] 5.1 After `complete-auction-post-sale` archives, MODIFY Order Status's
+- [x] 5.1 After `complete-auction-post-sale` archives, MODIFY Order Status's
   "An auction order carries two writable status fields" and "Permitted
   transitions" so `pending` to `expired` at the deadline carries the in-flight
   card payment exception, and the write when that session ends unpaid. Also
