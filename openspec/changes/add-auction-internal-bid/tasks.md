@@ -18,7 +18,7 @@ fixtures. The design is in [`tech-design.md`](tech-design.md).
 - [ ] 2.4 Add the `internalBidders` (with `billingAddress` in the winner's billing address input schema) and `listings.internalBid` input and answer schemas, `internalBidder` on the operator bid reads, the operator bid read changes, `internalWin` on the admin listing item and listing read, `internal` and `internalBidder` on the order worklist row and order view with a nullable winner email and name, `winnerEmailed` widened to a boolean, and change `auction:reserve`'s description to "Set and read a listing's internal bid, and keep the internal bidders."
 - [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:migrations`
 
-## 3. House bidding in the auction service (grade10)
+## 3. House bidding in the auction service (grade10) (owner: @htonyl)
 
 Needs group 2.
 
