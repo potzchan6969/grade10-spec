@@ -444,7 +444,10 @@ test("lists only stories whose render changed, with the reason", () => {
   const text = payload.blocks.map((block) => block.text?.text).join("\n");
 
   assert.match(text, /\*1 of 3\* stories/);
-  assert.match(text, /Store > Empty — <https:\/\/sb\.test\/\?path=\/story\/pages-store--empty\|layout shifted>/);
+  assert.match(
+    text,
+    /Store > Empty — <https:\/\/sb\.test\/\?path=\/story\/pages-store--empty\|layout shifted>/,
+  );
   assert.doesNotMatch(text, /Profile/);
 });
 

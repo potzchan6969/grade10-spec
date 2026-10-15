@@ -1,5 +1,11 @@
 import { execFile } from "node:child_process";
-import { appendFile, readdir, readFile, stat, writeFile } from "node:fs/promises";
+import {
+  appendFile,
+  readdir,
+  readFile,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import { createRequire } from "node:module";
 import {
   dirname,
@@ -436,7 +442,12 @@ function renderPayload({
       },
       ...textBlocks(list),
       ...(commitLine
-        ? [{ elements: [{ text: commitLine, type: "mrkdwn" }], type: "context" }]
+        ? [
+            {
+              elements: [{ text: commitLine, type: "mrkdwn" }],
+              type: "context",
+            },
+          ]
         : []),
     ],
   };
@@ -693,10 +704,7 @@ async function main() {
     const baseline = await readBaseline(values.baseline);
     const needed = !baseline || candidates.length > 0;
     if (values["github-output"]) {
-      await appendFile(
-        values["github-output"],
-        `render-needed=${needed}\n`,
-      );
+      await appendFile(values["github-output"], `render-needed=${needed}\n`);
     }
     process.stdout.write(`render-needed=${needed}\n`);
     return;

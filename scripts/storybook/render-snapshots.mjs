@@ -19,7 +19,8 @@ const MIME = {
   ".woff": "font/woff",
   ".woff2": "font/woff2",
 };
-const FREEZE = "*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}";
+const FREEZE =
+  "*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}";
 
 function serve(directory) {
   const server = createServer(async (request, response) => {
@@ -84,7 +85,9 @@ async function settle(page, id, origin) {
 // Returns { [storyId]: { layout, text } }. A story that fails to render is
 // recorded as `error`, so a break shows as a change and never as silence.
 export async function snapshotStories({ ids, staticDirectory }) {
-  const require = createRequire(join(rootDirectory, "apps/preview/package.json"));
+  const require = createRequire(
+    join(rootDirectory, "apps/preview/package.json"),
+  );
   const { chromium } = require("playwright");
   const server = await serve(staticDirectory);
   const origin = `http://127.0.0.1:${server.address().port}`;
