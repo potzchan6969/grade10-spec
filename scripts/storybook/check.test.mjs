@@ -64,7 +64,7 @@ describe("placementErrors", () => {
   const place = (path, title, component) =>
     placementErrors(root, path, { title, component });
 
-  it("accepts a screen, a flow, a part, a block and a primitive in their folders", () => {
+  it("accepts a screen, a part, a block and a primitive in their folders", () => {
     assert.deepEqual(
       place(
         "apps/preview/src/pages/store/cart/cart-page.stories.tsx",
@@ -72,12 +72,12 @@ describe("placementErrors", () => {
       ),
       [],
     );
-    assert.deepEqual(
+    assert.match(
       place(
         "apps/preview/src/pages/store/cart/checkout.stories.tsx",
         "Store/Cart/Flows/Checkout",
-      ),
-      [],
+      )[0],
+      /sits under Screens/,
     );
     assert.deepEqual(
       place(
@@ -290,7 +290,7 @@ describe("settingsErrors", () => {
       "### Requirement: A draft order carries at most one discount code\n",
   });
   after(() => rmSync(root, { recursive: true, force: true }));
-  const flow = (file) => ({
+  const scenario = (file) => ({
     "cart.scenario.stories.tsx": {
       title: "Store/Cart/Screens/Cart Drawer/Scenario",
       tags: ["scenario"],
@@ -302,8 +302,11 @@ describe("settingsErrors", () => {
   });
 
   it("refuses a Scenario with no settings, and reads no other story", () => {
-    assert.match(settingsErrors(root, flow({})).errors[0], /holds settings/);
-    assert.deepEqual(settingsErrors(root, flow({ tags: [] })), {
+    assert.match(
+      settingsErrors(root, scenario({})).errors[0],
+      /holds settings/,
+    );
+    assert.deepEqual(settingsErrors(root, scenario({ tags: [] })), {
       errors: [],
       warnings: [],
     });
@@ -313,19 +316,23 @@ describe("settingsErrors", () => {
     const rule =
       "grade10-site/store/discounts: A draft order carries at most one discount code";
     assert.deepEqual(
-      settingsErrors(root, flow({ settings: ["code"], rules: { code: rule } })),
+      settingsErrors(
+        root,
+        scenario({ settings: ["code"], rules: { code: rule } }),
+      ),
       { errors: [], warnings: [] },
     );
     const { errors } = settingsErrors(
       root,
-      flow({
+      scenario({
         settings: ["code"],
         rules: { points: rule },
         stories: [
           {
+            exportName: "Scenario",
             rules: { code: "grade10-site/store/discounts: Not a requirement" },
           },
-          { rules: { code: "no colon" } },
+          { exportName: "Scenario", rules: { code: "no colon" } },
         ],
       }),
     );
@@ -333,5 +340,21 @@ describe("settingsErrors", () => {
     assert.match(errors[0], /"points", which is no setting/);
     assert.match(errors[1], /no requirement "Not a requirement"/);
     assert.match(errors[2], /reads "<capability>: <requirement title>"/);
+  });
+
+  it("refuses a story beside Scenario; its settings reach every case", () => {
+    const { errors } = settingsErrors(
+      root,
+      scenario({
+        settings: ["code"],
+        stories: [
+          { exportName: "Scenario", name: "Scenario" },
+          { exportName: "CodeRefused", name: "Code refused" },
+        ],
+      }),
+    );
+    assert.deepEqual(errors, [
+      "cart.scenario.stories.tsx - a Scenario holds one story, Scenario; its settings reach every case, not Code refused",
+    ]);
   });
 });

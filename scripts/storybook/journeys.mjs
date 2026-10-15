@@ -1,6 +1,6 @@
 /**
- * The journeys a flow can cite: every `### <id>: <title>` heading in a
- * `user-journeys.md` beside a spec, durable or in an active change. A flow
+ * The journeys a story can cite: every `### <id>: <title>` heading in a
+ * `user-journeys.md` beside a spec, durable or in an  active change. A story
  * names the ids it walks in `parameters.journeys`, so the check can refuse an
  * id nobody wrote and the coverage report can count what is walked.
  */
@@ -109,7 +109,7 @@ const REQUIREMENT = /^###\s+Requirement:\s*(.+)$/gm;
 
 /**
  * The requirement titles of a capability, durable or in an active change:
- * what a Flow's `parameters.rules` cites as `"<capability>: <title>"`.
+ * what a Scenario's `parameters.rules` cites as `"<capability>: <title>"`.
  */
 export function requirementTitles(root, capability) {
   const paths = [`openspec/specs/${capability}/spec.md`];

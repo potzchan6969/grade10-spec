@@ -97,7 +97,7 @@ The operative rule, from the ownership table: **a component may not offer a vari
 
 ## Blocks and views
 
-Three homes, and the first that fits is the answer. Where each one's stories go in the workbench, and how screens, states, flows and prototypes are drawn: [Storybook](storybook.md).
+Three homes, and the first that fits is the answer. Where each one's stories go in the workbench, and how screens, states, Scenarios and prototypes are drawn: [Storybook](storybook.md).
 
 
 | It is                                                 | Home                                                     | Preview                                                      |

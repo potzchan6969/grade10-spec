@@ -72,27 +72,3 @@ type Story = StoryObj<typeof meta>;
 
 /** A signed-in collector on the details step of a free drop-off. */
 export const Scenario: Story = {};
-
-/** The time picked went to somebody else; the day's times come back without it. */
-export const TimeJustTaken: Story = {
-  args: { step: "time", time: "taken" },
-};
-
-/** The day is full, so each shop's earliest free time is offered. */
-export const FullDay: Story = { args: { step: "time", time: "full" } };
-
-/** Guest booking is off: a signed-out collector is asked to sign in. */
-export const SignedOut: Story = { args: { shopper: "signedOut" } };
-
-/** An email past 10 tries today is turned away until tomorrow. */
-export const TooManyTries: Story = { args: { gate: "tries" } };
-
-/** A service the shop calls about asks for a phone the account lacks. */
-export const NeedsAPhone: Story = {
-  args: { shopper: "signedInNoPhone", phone: "required" },
-};
-
-/** Paid now, and the payment still confirming. */
-export const PaymentConfirming: Story = {
-  args: { service: "paid", step: "after", payment: "confirming" },
-};

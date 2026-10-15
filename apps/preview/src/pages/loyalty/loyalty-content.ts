@@ -18,11 +18,11 @@ import { storyHref } from "../workbench-story-nav";
 /* Stand-in programme content the Loyalty workbench draws with. Grade10's own
  * copy and figures for the examples only; a consumer supplies its own. */
 
-/** Storybook story id for the Pay Part of a Basket flow. */
+/** Storybook story id for the cart drawer's Scenario, where points pay part of a basket. */
 const LOYALTY_PAY_PART_OF_BASKET_STORY_ID =
-  "loyalty-paying-with-points-flows-pay-part-of-a-basket--part-of-basket";
+  "store-cart-screens-cart-drawer-scenario--scenario";
 
-/** Preview href from Membership to the points-on-the-basket flow. */
+/** Preview href from Membership to points on the basket. */
 const LOYALTY_PAY_PART_OF_BASKET_HREF = storyHref(
   LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
 );

@@ -111,7 +111,7 @@ describe("priceBasket", () => {
     expect(basket.subtotal).toBe("HK$40,400.00");
   });
 
-  it("meets a site discount and a code in 20 ways, the baskets the cart Scenario names", () => {
+  it("meets a site discount and a code in 20 ways, each one the cart Scenario's settings reach", () => {
     const ways = new Set<string>();
     for (const siteDiscount of [
       "none",
@@ -124,5 +124,85 @@ describe("priceBasket", () => {
             `${siteDiscount}/${coupon}/${price({ siteDiscount, coupon, shopAnswer }).outcome}`,
           );
     expect(ways.size).toBe(20);
+  });
+
+  it("prices every basket the cart Scenario's settings reach", () => {
+    const totals: Record<string, string> = {};
+    for (const points of ["500", "none"] as const)
+      for (const siteDiscount of [
+        "none",
+        "product-sale",
+        "order-discount",
+      ] as const)
+        for (const coupon of ["none", "order", "product", "too-small"] as const)
+          for (const shopAnswer of ["stack", "replace", "refuse"] as const) {
+            const basket = price({ siteDiscount, coupon, shopAnswer, points });
+            if (basket.outcome === "refused")
+              expect(basket.promoState).toEqual({
+                status: "expanded",
+                error: "Cannot combine with the sale on this order",
+              });
+            totals[
+              `${points} pts · ${siteDiscount} · ${coupon} · ${basket.outcome}`
+            ] = basket.estimatedTotal;
+          }
+    for (const settings of [
+      { siteDiscount: "product-sale", points: "max", balance: "1250" },
+      { siteDiscount: "product-sale", points: "max", balance: "50000" },
+      { coupon: "product", lines: "sold-out", points: "500" },
+      { siteDiscount: "order-discount", lines: "adjusted", points: "500" },
+    ] as const) {
+      const basket = price(settings);
+      expect(basket.pointsState?.status).toBe("applied");
+      totals[Object.values(settings).join(" · ")] = basket.estimatedTotal;
+    }
+    expect(totals).toMatchInlineSnapshot(`
+      {
+        "500 pts · none · none · no-code": "HK$38,700.00",
+        "500 pts · none · order · applied": "HK$38,650.00",
+        "500 pts · none · product · applied": "HK$34,900.00",
+        "500 pts · none · too-small · not-valid": "HK$38,700.00",
+        "500 pts · order-discount · none · no-code": "HK$36,740.00",
+        "500 pts · order-discount · order · refused": "HK$36,740.00",
+        "500 pts · order-discount · order · replaced": "HK$38,650.00",
+        "500 pts · order-discount · order · stacked": "HK$36,690.00",
+        "500 pts · order-discount · product · refused": "HK$36,740.00",
+        "500 pts · order-discount · product · replaced": "HK$34,900.00",
+        "500 pts · order-discount · product · stacked": "HK$33,130.00",
+        "500 pts · order-discount · too-small · not-valid": "HK$36,740.00",
+        "500 pts · product-sale · none · no-code": "HK$34,900.00",
+        "500 pts · product-sale · order · refused": "HK$34,900.00",
+        "500 pts · product-sale · order · replaced": "HK$38,650.00",
+        "500 pts · product-sale · order · stacked": "HK$34,850.00",
+        "500 pts · product-sale · product · refused": "HK$34,900.00",
+        "500 pts · product-sale · product · replaced": "HK$34,900.00",
+        "500 pts · product-sale · product · stacked": "HK$31,480.00",
+        "500 pts · product-sale · too-small · not-valid": "HK$34,900.00",
+        "none pts · none · none · no-code": "HK$39,200.00",
+        "none pts · none · order · applied": "HK$39,150.00",
+        "none pts · none · product · applied": "HK$35,400.00",
+        "none pts · none · too-small · not-valid": "HK$39,200.00",
+        "none pts · order-discount · none · no-code": "HK$37,240.00",
+        "none pts · order-discount · order · refused": "HK$37,240.00",
+        "none pts · order-discount · order · replaced": "HK$39,150.00",
+        "none pts · order-discount · order · stacked": "HK$37,190.00",
+        "none pts · order-discount · product · refused": "HK$37,240.00",
+        "none pts · order-discount · product · replaced": "HK$35,400.00",
+        "none pts · order-discount · product · stacked": "HK$33,630.00",
+        "none pts · order-discount · too-small · not-valid": "HK$37,240.00",
+        "none pts · product-sale · none · no-code": "HK$35,400.00",
+        "none pts · product-sale · order · refused": "HK$35,400.00",
+        "none pts · product-sale · order · replaced": "HK$39,150.00",
+        "none pts · product-sale · order · stacked": "HK$35,350.00",
+        "none pts · product-sale · product · refused": "HK$35,400.00",
+        "none pts · product-sale · product · replaced": "HK$35,400.00",
+        "none pts · product-sale · product · stacked": "HK$31,980.00",
+        "none pts · product-sale · too-small · not-valid": "HK$35,400.00",
+        "order-discount · adjusted · 500": "HK$37,830.00",
+        "product · sold-out · 500": "HK$700.00",
+        "product-sale · max · 1250": "HK$34,100.00",
+        "product-sale · max · 50000": "HK$0.00",
+      }
+    `);
   });
 });

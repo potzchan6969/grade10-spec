@@ -98,7 +98,7 @@ function stringsOf(node) {
     .map((element) => element.text);
 }
 
-/** `parameters.journeys` of a meta or a story: the journey ids a flow walks. */
+/** `parameters.journeys` of a meta or a story: the journey ids a story walks. */
 function journeysOf(object) {
   const parameters = parametersOf(object);
   return parameters
@@ -112,7 +112,7 @@ function parametersOf(object) {
 
 /**
  * Where one file's names come from: its own top-level consts, and what it
- * imports from a relative module, read on demand. A Flow spreads shared
+ * imports from a relative module, read on demand. A Scenario spreads shared
  * settings and rules from a module beside it, so the check follows them.
  */
 function moduleScope(path, source, loader) {

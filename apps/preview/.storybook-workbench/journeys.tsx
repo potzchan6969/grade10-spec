@@ -1,8 +1,8 @@
 import type { Decorator } from "@storybook/react-vite";
 
-/* A flow names the journeys it walks in `parameters.journeys`; this note
+/* A story names the journeys it walks in `parameters.journeys`; this note
  * under the canvas says which, in the journeys' own words, so a designer
- * walking the flow reads what it must prove. `pnpm storybook:check` holds the
+ * walking the story reads what it must prove. `pnpm storybook:check` holds the
  * ids to the `user-journeys.md` files read here. A Scenario lists its
  * journeys in the Given panel instead (`given.tsx`), leaving its canvas to the
  * screen. */
@@ -36,7 +36,7 @@ export const withJourneys: Decorator = (Story, context) => {
     <>
       <Story />
       <aside
-        aria-label="Journeys this flow walks"
+        aria-label="Journeys this story walks"
         style={{
           borderTop: "1px solid rgb(0 0 0 / 0.1)",
           font: "13px/1.5 system-ui, sans-serif",

@@ -100,14 +100,3 @@ type Story = StoryObj<typeof meta>;
 
 /** A booked visit, opened from its link while signed in. */
 export const Scenario: Story = {};
-
-/** Signed out, choosing a new time. */
-export const SignedOutChangingTime: Story = {
-  args: { opened: "move", shopper: "signedOut" },
-};
-
-/** The visit is over. */
-export const Visited: Story = { args: { booking: "visited" } };
-
-/** A link that matches no booking. */
-export const NotFound: Story = { args: { booking: "notFound" } };

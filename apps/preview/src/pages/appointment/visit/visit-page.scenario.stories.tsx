@@ -127,22 +127,3 @@ type Story = StoryObj<typeof meta>;
 
 /** A free visit, booked, before the day. */
 export const Scenario: Story = {};
-
-/** A paid visit cancelled early enough to get the money back. */
-export const PaidCancelRefunded: Story = {
-  args: { paid: "yes", opened: "cancel", refund: "due" },
-};
-
-/** A paid visit cancelled too late to get the money back. */
-export const PaidCancelTooLate: Story = {
-  args: { paid: "yes", opened: "cancel", refund: "kept" },
-};
-
-/** The collector changes the time. */
-export const ChangeTime: Story = { args: { opened: "move" } };
-
-/** The shop cancelled the visit. */
-export const CancelledByTheShop: Story = { args: { visit: "cancelledShop" } };
-
-/** A link that matches no booking. */
-export const LinkOpensNothing: Story = { args: { visit: "linkOpensNothing" } };

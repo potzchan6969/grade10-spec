@@ -93,11 +93,11 @@ export const OnSale: Story = { name: "On sale" };
     ]);
   });
 
-  it("reads the journeys a flow names on its meta and its stories", () => {
+  it("reads the journeys a story names on its meta and its stories", () => {
     const file = parseStoryFile(
-      "cart-flows.stories.tsx",
+      "cart.scenario.stories.tsx",
       `const meta = {
-  title: "Store/Cart/Flows/Edit",
+  title: "Store/Cart/Screens/Cart Drawer/Scenario",
   parameters: { layout: "fullscreen", journeys: ["a-US-01"] },
 } satisfies Meta;
 export default meta;
@@ -110,9 +110,9 @@ export const Remove: Story = { parameters: { journeys: ["a-US-02"] } };
 
   it("reads a story's settings and its rules", () => {
     const file = parseStoryFile(
-      "spend-flows.stories.tsx",
+      "spend.scenario.stories.tsx",
       `const meta = {
-  title: "Loyalty/Coupons/Flows/Spend",
+  title: "Loyalty/Coupons/Screens/Spend/Scenario",
   argTypes: { code: { control: "radio" }, "points": {} },
   parameters: { rules: { code: "a/b: One code" } },
 } satisfies Meta;
@@ -125,7 +125,7 @@ export const Replace: Story = { parameters: { rules: { points: "a/b: Points" } }
     assert.deepEqual(file.stories[0].rules, { points: "a/b: Points" });
   });
 
-  it("follows settings and rules spread from a module beside the flow", () => {
+  it("follows settings and rules spread from a module beside the Scenario", () => {
     const modules = {
       "pages/basket-walk.ts": `const SHARED = { coupon: {}, points: {} } as const;
 const RULES = { coupon: "a/b: One code" } as const;
@@ -139,7 +139,7 @@ export { SHARED, RULES };`,
       "pages/loyalty/coupons/spend.stories.tsx",
       `import { RULES, SHARED } from "../../basket-walk";
 const meta = {
-  title: "Loyalty/Coupons/Flows/Spend",
+  title: "Loyalty/Coupons/Screens/Spend/Scenario",
   argTypes: { ...SHARED, surface: {} },
   parameters: { rules: { ...RULES, surface: "a/b: Counter" } },
 } satisfies Meta;

@@ -7,11 +7,11 @@ import { ManualDocsContainer } from "./manual-link";
 /* Themes, frames, and decorators come from the base preview. The sidebar reads
  * like the manual (`docs/governance/storybook.md`): Start Here, the manual's
  * domains in `docs/prds/manual.yaml` order, then the design system; inside a
- * feature, Screens, Flows, Prototypes, Parts and Blocks.
+ * feature, Screens, Prototypes, Parts and Blocks.
  *
  * Storybook evaluates this comparator on its own, so it imports nothing and
  * carries no types; `pnpm storybook:check` holds `roots` to the manual. A
- * flow's journeys show under its canvas (`journeys.tsx`); a Scenario's settings
+ * story's journeys show under its canvas (`journeys.tsx`); a Scenario's settings
  * and journeys show in the Given panel (`given.tsx`, `manager.tsx`). */
 const preview: Preview = {
   ...basePreview,
@@ -41,7 +41,7 @@ const preview: Preview = {
           "Commerce",
           "Design System",
         ];
-        const kinds = ["Screens", "Flows", "Prototypes", "Parts", "Blocks"];
+        const kinds = ["Screens", "Prototypes", "Parts", "Blocks"];
         const left = a.title.split("/");
         const right = b.title.split("/");
         const rank = (list, item) =>

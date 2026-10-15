@@ -1,6 +1,6 @@
 ---
 name: storybook-workbench
-description: Draw a feature's screens, states, click-through journeys, flows and prototypes in the workbench Storybook, placed and named the way the manual reads. Use when a designer or anyone asks to add or change a story, a state, a flow or a prototype, or to show a feature's stories.
+description: Draw a feature's screens, states, click-through journeys, Scenarios and prototypes in the workbench Storybook, placed and named the way the manual reads. Use when a designer or anyone asks to add or change a story, a state, a Scenario or a prototype, or to show a feature's stories.
 ---
 
 # Storybook Workbench
@@ -11,7 +11,7 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
 
 - `Appointment › Booking: add a "No slots this month" state to Book Visit`
 - `Vault › Portfolio: draw the "Retrieval requested" state of the asset card from <Figma link>`
-- `Store › Cart: walk adding an item through to checkout as a flow`
+- `Store › Cart: let me set the discount, the code and the points on the drawer`
 - `Grading › Drop Off: wireframe the booking screen from its journeys`
 - `Vault › Portfolio: /prototype three empty states`
 - `Show me every state of Book Visit at 375px`
@@ -28,7 +28,8 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    `user-journeys.md` beside each spec the page names, and
    `pnpm storybook:coverage --gaps` for what the feature still owes
 3. **Pick the kind** — a whole screen or its state is a story under `Screens`; a
-   journey walked as a sequence is a Flow; a screen not yet designed is a
+   journey walked screen to screen is a click-through; an outcome that turns
+   on what staging is set to is the Screen's Scenario; a screen not yet designed is a
    wireframe Prototype; three directions to choose from is a Prototype; a piece
    only this feature draws is a Part; an `@grade10/ui` export's own state is a
    Block story, beside the block. A new block, variant or token is the
@@ -38,11 +39,11 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    first, and a rule found while drawing onto the manual page, marked 🚧 or ❓
 5. **Build it** — compose existing blocks and primitives; content and stand-in
    data in the feature's `*-content.ts`; screens fullscreen; a journey's
-   buttons open the next screen's story through `workbench-story-nav.ts`; a
-   flow in `FlowContainer` with a `play` that walks it and
-   `parameters: { journeys: [...] }` naming the journey ids it walks. Where
-   the outcome turns on what staging is set to, add the Screen's Scenario, as
-   `docs/governance/storybook.md#scenarios` says. A
+   buttons open the next screen's story through `workbench-story-nav.ts`,
+   with `parameters: { journeys: [...] }` naming the journey ids it walks.
+   Where the outcome turns on what staging is set to, add the Screen's
+   Scenario, as `docs/governance/storybook.md#scenarios` says: one `Scenario`
+   story whose settings reach every case, and each case a unit-test row. A
    wireframe sits under `apps/preview/src/prototypes/<domain>/<feature>/`,
    one story per state, with a note on what the design must settle. A
    `/prototype` draft runs
