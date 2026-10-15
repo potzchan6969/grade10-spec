@@ -27,7 +27,7 @@ pnpm storybook:workbench
 - **Endpoint** - The Verification panel connects to the Storybook origin automatically; the deployment serves the archive API and static workbench on that origin.
 - **Development** - Storybook development mounts the filesystem archive at its own origin automatically. The default is `.cache/ui-verification` in this checkout, or in the consuming app root when this checkout is its submodule. Set `UI_VERIFICATION_ARCHIVE` to an absolute directory before startup to select another archive.
 - **Worker preview** - Build the workbench and run Wrangler with `apps/preview/wrangler.storybook.jsonc` to exercise the combined static and API deployment locally.
-- **Pairing** - The Not Found story carries a permanent case ID. Its consuming app declaration selects `pages-not-found--default`; site routes and state setup stay with the application recipe.
+- **Pairing** - The Not Found story carries a permanent case ID. Its consuming app declaration selects `site-navigation-screens-not-found--default`; site routes and state setup stay with the application recipe.
 
 ## Archive Operations
 

@@ -18,7 +18,7 @@ const requirePreview = createRequire(
   resolve(repositoryRoot, "apps/preview/package.json"),
 );
 const { chromium } = requirePreview("playwright");
-const STORY_ID = "pages-not-found--default";
+const STORY_ID = "site-navigation-screens-not-found--default";
 const CASE_ID = "vc_c00fc18c-bacf-4e88-931c-85d550dc4c2b";
 const PROFILE_SIZES = {
   desktop: { width: 1440, height: 900 },
@@ -378,12 +378,12 @@ async function publishReferenceStoryRun(archive, browser) {
     caseId: "vc_breadcrumbs_history",
     targetId: "breadcrumb-navigation",
     capturePointId: "default-navigation",
-    storyId: "components-breadcrumbs--previous-name",
-    label: "Components/Breadcrumbs/Previous name",
+    storyId: "design-system-display-breadcrumbs--previous-name",
+    label: "Design System/Display/Breadcrumbs/Previous name",
     scoreProfile: "desktop",
     recipe: "Render the shared breadcrumbs component.",
     reference: {
-      storyId: "components-breadcrumbs--default",
+      storyId: "design-system-display-breadcrumbs--default",
       selector: "nav",
     },
     status: "active",
@@ -1503,7 +1503,7 @@ test("a story switch does not carry the prior case mapping while preparation is 
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Breadcrumbs Default");
   await page
-    .locator('.search-result-item[data-id="components-breadcrumbs--default"]')
+    .locator('.search-result-item[data-id="design-system-display-breadcrumbs--default"]')
     .click();
   await breadcrumbsRequested;
   const currentStoryHeading = page.getByRole("heading", {
@@ -1519,12 +1519,12 @@ test("a story switch does not carry the prior case mapping while preparation is 
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
-      "components-breadcrumbs--default"
+      "design-system-display-breadcrumbs--default"
     );
   });
   assert.equal(
     await currentStoryId.textContent(),
-    "components-breadcrumbs--default",
+    "design-system-display-breadcrumbs--default",
   );
   assert.equal(
     breadcrumbsReleased,
@@ -1579,7 +1579,7 @@ test("a shared story without a verification parameter finds its reference case a
 
   const page = await browser.newPage();
   await page.goto(
-    `${server.origin}/?path=/story/components-breadcrumbs--default`,
+    `${server.origin}/?path=/story/design-system-display-breadcrumbs--default`,
     { waitUntil: "domcontentloaded" },
   );
   await page.getByRole("tab", { name: "Verification" }).click();
@@ -1599,7 +1599,7 @@ test("a shared story without a verification parameter finds its reference case a
     .getByRole("combobox", { name: "Archived run" })
     .selectOption("reference-story-history-0001");
   await page
-    .getByText("components-breadcrumbs--previous-name", { exact: true })
+    .getByText("design-system-display-breadcrumbs--previous-name", { exact: true })
     .waitFor();
   await page
     .getByText(
@@ -1643,7 +1643,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
     JSON.stringify(["f".repeat(40), "1".repeat(40)]),
   );
   const storyChoice = page.getByRole("button", {
-    name: /Components\/Breadcrumbs\/Previous name/,
+    name: /Design System\/Display\/Breadcrumbs\/Previous name/,
   });
   assert.equal(
     await page.locator(".verification-story-choice").count(),
@@ -1665,7 +1665,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
-      "components-breadcrumbs--default"
+      "design-system-display-breadcrumbs--default"
     );
   });
   await assertSelectedRunVisible(page, "reference-story-history-0001");
@@ -1673,7 +1673,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Not Found Default page");
   await page
-    .locator('.search-result-item[data-id="pages-not-found--default"]')
+    .locator('.search-result-item[data-id="site-navigation-screens-not-found--default"]')
     .click();
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
@@ -1682,7 +1682,7 @@ test("an explicit historical story stays selected while Storybook navigation cha
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
-      "pages-not-found--default"
+      "site-navigation-screens-not-found--default"
     );
   });
   assert.equal(
@@ -1739,7 +1739,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
   const componentSearch = page.getByPlaceholder("Find components");
   await componentSearch.fill("Breadcrumbs Default");
   await page
-    .locator('.search-result-item[data-id="components-breadcrumbs--default"]')
+    .locator('.search-result-item[data-id="design-system-display-breadcrumbs--default"]')
     .click();
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
@@ -1748,7 +1748,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
-      "components-breadcrumbs--default"
+      "design-system-display-breadcrumbs--default"
     );
   });
 
@@ -1804,7 +1804,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
-      "pages-not-found--default"
+      "site-navigation-screens-not-found--default"
     );
   });
   assert.equal(await archivedStory.getAttribute("aria-pressed"), "true");
@@ -1814,7 +1814,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
 
   await componentSearch.fill("Breadcrumbs Default");
   await page
-    .locator('.search-result-item[data-id="components-breadcrumbs--default"]')
+    .locator('.search-result-item[data-id="design-system-display-breadcrumbs--default"]')
     .click();
   await page.waitForFunction(() => {
     const heading = [...document.querySelectorAll("h3")].find(
@@ -1823,7 +1823,7 @@ test("renamed recorded story IDs resolve through a unique current case-only mapp
     );
     return (
       heading?.nextElementSibling?.textContent?.trim() ===
-      "components-breadcrumbs--default"
+      "design-system-display-breadcrumbs--default"
     );
   });
   assert.equal(
