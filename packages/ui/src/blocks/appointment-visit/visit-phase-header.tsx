@@ -1,7 +1,8 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { cn } from "@grade10/design-system/lib/utils";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { VisitTone } from "./types";
-import { VISIT_INK_2, VISIT_TINT } from "./visit-tones";
+import { VISIT_TINT } from "./visit-tones";
 
 type VisitPhaseHeaderCopy = {
   /** The badge's word for where it stands. */
@@ -38,9 +39,7 @@ function VisitPhaseHeader({ copy, tone, level = 1 }: VisitPhaseHeaderProps) {
           {copy.phase}
         </Badge>
         {copy.note ? (
-          <span
-            className={cn("text-[13px] leading-5 tabular-nums", VISIT_INK_2)}
-          >
+          <span className={cn("text-[13px] leading-5 tabular-nums", INK_2)}>
             {copy.note}
           </span>
         ) : null}
@@ -49,7 +48,7 @@ function VisitPhaseHeader({ copy, tone, level = 1 }: VisitPhaseHeaderProps) {
         {copy.title}
       </Heading>
       {copy.lede ? (
-        <p className={cn("m-0 text-[15px] leading-[22px]", VISIT_INK_2)}>
+        <p className={cn("m-0 text-[15px] leading-[22px]", INK_2)}>
           {copy.lede}
         </p>
       ) : null}

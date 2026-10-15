@@ -2,10 +2,18 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { VisitLateChoice } from "./types";
-import { VisitSheet } from "./visit-sheet";
-import { VISIT_INK_2 } from "./visit-tones";
 
 type VisitLatePanelCopy = {
   title: string;
@@ -61,79 +69,77 @@ function VisitLatePanel({
 }: VisitLatePanelProps) {
   const picked = choices.some((one) => one.minutes === value);
   return (
-    <VisitSheet
-      copy={{
-        title: copy.title,
-        description: copy.description,
-        close: copy.close,
+    <Drawer
+      onOpenChange={(next) => {
+        if (!next) onClose();
       }}
-      footer={
-        <Button
-          className="h-11 w-full text-[15px] font-semibold"
-          disabled={!picked}
-          loading={pending}
-          onClick={onSend}
-          size="md"
-          type="button"
-        >
-          {pending ? copy.sending : copy.send}
-        </Button>
-      }
-      onClose={onClose}
-      slot="visit-late"
+      open
+      showSwipeHandle
+      swipeDirection="down"
     >
-      <RadioList
-        aria-label={copy.legend}
-        onValueChange={(next) => onValueChange(Number(next))}
-        value={value === null ? "" : String(value)}
-      >
-        {choices.map((choice) => (
-          <RadioCard
-            className="rounded-xl border-border-strong has-[[data-slot=radio-button][data-checked]]:bg-transparent has-[[data-slot=radio-button][data-checked]]:shadow-[inset_0_0_0_1px_var(--primary)]"
-            description={
-              <span className={cn("text-[13px] leading-[18px]", VISIT_INK_2)}>
-                {choice.detail}
+      <DrawerContent data-sheet="visit-late">
+        <DrawerHeader closeLabel={copy.close}>
+          <DrawerTitle>{copy.title}</DrawerTitle>
+          <DrawerDescription>{copy.description}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody data-slot="visit-late">
+          <RadioList
+            aria-label={copy.legend}
+            onValueChange={(next) => onValueChange(Number(next))}
+            value={value === null ? "" : String(value)}
+          >
+            {choices.map((choice) => (
+              <RadioCard
+                description={choice.detail}
+                key={choice.minutes}
+                title={choice.label}
+                value={String(choice.minutes)}
+              />
+            ))}
+          </RadioList>
+          {error ? (
+            <Text as="p" role="alert" size="sm" tone="error">
+              {error}
+            </Text>
+          ) : null}
+          {here ? (
+            <div
+              className="flex flex-col gap-2 border-t border-border pt-4"
+              data-slot="visit-late-here"
+            >
+              <span className="text-[15px] leading-5 font-bold">
+                {here.copy.title}
               </span>
-            }
-            key={choice.minutes}
-            title={
-              <span className="text-[15px] leading-5 font-bold tabular-nums">
-                {choice.label}
+              <Button
+                className="h-11 w-full border-border-strong text-[15px] font-semibold"
+                loading={here.pending}
+                onClick={here.onHere}
+                size="md"
+                type="button"
+                variant="outline"
+              >
+                {here.copy.label}
+              </Button>
+              <span className={cn("text-[13px] leading-[18px]", INK_2)}>
+                {here.copy.hint}
               </span>
-            }
-            value={String(choice.minutes)}
-          />
-        ))}
-      </RadioList>
-      {error ? (
-        <Text as="p" role="alert" size="sm" tone="error">
-          {error}
-        </Text>
-      ) : null}
-      {here ? (
-        <div
-          className="flex flex-col gap-2 border-t border-border pt-4"
-          data-slot="visit-late-here"
-        >
-          <span className="text-[15px] leading-5 font-bold">
-            {here.copy.title}
-          </span>
+            </div>
+          ) : null}
+        </DrawerBody>
+        <DrawerFooter>
           <Button
-            className="h-11 w-full border-border-strong text-[15px] font-semibold"
-            loading={here.pending}
-            onClick={here.onHere}
+            className="h-11 w-full text-[15px] font-semibold"
+            disabled={!picked}
+            loading={pending}
+            onClick={onSend}
             size="md"
             type="button"
-            variant="outline"
           >
-            {here.copy.label}
+            {pending ? copy.sending : copy.send}
           </Button>
-          <span className={cn("text-[13px] leading-[18px]", VISIT_INK_2)}>
-            {here.copy.hint}
-          </span>
-        </div>
-      ) : null}
-    </VisitSheet>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 

@@ -18,13 +18,6 @@ function formatMonth(year: number, monthIndex: number): string {
   return `${year}-${pad(monthIndex + 1)}`;
 }
 
-/** Every date of the month, first to last. */
-function datesOf(month: string): string[] {
-  const { year, monthIndex } = parseMonth(month);
-  const count = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
-  return Array.from({ length: count }, (_, day) => `${month}-${pad(day + 1)}`);
-}
-
 /** Monday is 0, Sunday is 6. */
 function weekdayOf(date: string): number {
   const match = DATE.exec(date);
@@ -33,10 +26,6 @@ function weekdayOf(date: string): number {
     Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])),
   ).getUTCDay();
   return (day + 6) % 7;
-}
-
-function dayOf(date: string): number {
-  return Number(date.slice(8, 10));
 }
 
 function shiftMonth(month: string, by: number): string {
@@ -80,10 +69,8 @@ function dayFromDate(date: Date): string {
 export {
   dateFromDay,
   dateFromMonth,
-  datesOf,
   dayFromDate,
   dayInstant,
-  dayOf,
   monthFromDate,
   monthInstant,
   shiftMonth,

@@ -2,8 +2,9 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretRight } from "@phosphor-icons/react";
 import { useId } from "react";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { VisitListRow } from "./types";
-import { VISIT_INK_2, VISIT_INK_3, VISIT_TINT } from "./visit-tones";
+import { VISIT_INK_3, VISIT_TINT } from "./visit-tones";
 
 type VisitListCopy = {
   upcoming: string;
@@ -66,7 +67,7 @@ function Section({
       data-slot={slot}
     >
       <h2
-        className={cn("m-0 text-[13px] leading-[18px] font-bold", VISIT_INK_2)}
+        className={cn("m-0 text-[13px] leading-[18px] font-bold", INK_2)}
         id={id}
       >
         {heading}
@@ -102,9 +103,7 @@ function RowBody({ row }: { row: VisitListRow }) {
     <>
       <span className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="text-[15px] leading-5 font-bold">{row.service}</span>
-        <span
-          className={cn("truncate text-sm leading-5 tabular-nums", VISIT_INK_2)}
-        >
+        <span className={cn("truncate text-sm leading-5 tabular-nums", INK_2)}>
           {row.when} · {row.location}
         </span>
         <Badge

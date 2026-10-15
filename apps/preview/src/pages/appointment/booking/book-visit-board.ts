@@ -341,7 +341,6 @@ const WORDS = {
     details: "Details",
   },
   stepsLabel: "Booking steps",
-  doneAria: "Step {n}, {label}, done. Go back to it.",
   svcQ: "What do you need?",
   groups: { grading: "Grading", vault: "Vault" },
   more100: "More than 100 cards?",

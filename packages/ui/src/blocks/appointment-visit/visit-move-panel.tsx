@@ -1,12 +1,20 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
+import { INK_2 } from "../appointment-booking/booking-look";
 import {
   BookingSlotPicker,
   type BookingSlotPickerProps,
 } from "../appointment-booking/booking-slot-picker";
-import { VisitSheet } from "./visit-sheet";
-import { VISIT_INK_2 } from "./visit-tones";
 
 type VisitMovePanelCopy = {
   title: string;
@@ -52,20 +60,37 @@ function VisitMovePanel({
   onClose,
 }: VisitMovePanelProps) {
   return (
-    <VisitSheet
-      copy={{
-        title: copy.title,
-        description: copy.description,
-        close: copy.close,
+    <Drawer
+      onOpenChange={(next) => {
+        if (!next) onClose();
       }}
-      footer={
-        <>
+      open
+      showSwipeHandle
+      swipeDirection="down"
+    >
+      <DrawerContent data-sheet="visit-move">
+        <DrawerHeader closeLabel={copy.close}>
+          <DrawerTitle>{copy.title}</DrawerTitle>
+          <DrawerDescription>{copy.description}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody data-slot="visit-move">
+          <BookingSlotPicker layout="strip" {...slotPicker} />
+          <p className={cn("m-0 text-sm leading-5", INK_2)}>
+            {copy.consequence}
+          </p>
+          {error ? (
+            <Text as="p" role="alert" size="sm" tone="error">
+              {error}
+            </Text>
+          ) : null}
+        </DrawerBody>
+        <DrawerFooter>
           <Button
             className={cn(
               "h-11 w-full text-[15px] font-semibold",
               !picked &&
                 !pending &&
-                cn("bg-muted opacity-100 disabled:opacity-100", VISIT_INK_2),
+                cn("bg-muted opacity-100 disabled:opacity-100", INK_2),
             )}
             disabled={!picked}
             loading={pending}
@@ -84,21 +109,9 @@ function VisitMovePanel({
           >
             {copy.keep}
           </Button>
-        </>
-      }
-      onClose={onClose}
-      slot="visit-move"
-    >
-      <BookingSlotPicker layout="strip" {...slotPicker} />
-      <p className={cn("m-0 text-sm leading-5", VISIT_INK_2)}>
-        {copy.consequence}
-      </p>
-      {error ? (
-        <Text as="p" role="alert" size="sm" tone="error">
-          {error}
-        </Text>
-      ) : null}
-    </VisitSheet>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 

@@ -10,6 +10,8 @@ type StageRailCopy = {
   stages: readonly StageRailStage[];
   /** The word that says the case ended, read under the stage it ended at. */
   ended?: string;
+  /** The list's name a screen reader hears: `Booking steps`. */
+  label?: string;
 };
 
 type StageRailProps = {
@@ -47,7 +49,7 @@ function StageRail({ copy, current, slot, className }: StageRailProps) {
       // biome-ignore lint/a11y/noNoninteractiveTabindex: the rail scrolls sideways on a narrow screen, and a scroll container takes focus so a keyboard can scroll it.
       tabIndex={0}
     >
-      <Stepper className="min-w-max">
+      <Stepper aria-label={copy.label} className="min-w-max">
         {copy.stages.map((stage, index) => (
           <Step
             description={index === reached ? copy.ended : undefined}

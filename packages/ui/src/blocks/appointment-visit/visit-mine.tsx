@@ -3,7 +3,8 @@ import { buttonVariants } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CircleNotch } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
-import { VISIT_INK_2, VISIT_INK_3 } from "./visit-tones";
+import { INK_2 } from "../appointment-booking/booking-look";
+import { VISIT_INK_3 } from "./visit-tones";
 
 type VisitMineCopy = {
   title: string;
@@ -51,7 +52,7 @@ function VisitMine({
           <p
             className={cn(
               "m-0 flex flex-wrap items-center gap-x-2 text-sm leading-5",
-              VISIT_INK_2,
+              INK_2,
             )}
           >
             <span>{copy.signedIn}</span>

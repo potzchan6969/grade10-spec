@@ -1,10 +1,11 @@
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { cn } from "@grade10/design-system/lib/utils";
 import { type ReactNode, useId } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
+import { ClockLine } from "./booking-clock-line";
 import { INK_2, STEP_HEADING } from "./booking-look";
-import { BookingOption } from "./booking-option";
 import type { BookingLocation } from "./types";
 
 type BookingLocationPickerCopy = { title: string };
@@ -54,11 +55,16 @@ function BookingLocationPicker({
             value={selectedId ?? ""}
           >
             {list.map((location) => (
-              <BookingOption
-                clock={location.hours}
+              <RadioCard
+                description={
+                  location.hours ? (
+                    <ClockLine>{location.hours}</ClockLine>
+                  ) : undefined
+                }
                 key={location.id}
-                onRepick={() => onSelect(location.id)}
-                picked={location.id === selectedId}
+                onClick={() => {
+                  if (location.id === selectedId) onSelect(location.id);
+                }}
                 title={location.name}
                 value={location.id}
               >
@@ -72,7 +78,7 @@ function BookingLocationPicker({
                     {location.address}
                   </span>
                 ) : null}
-              </BookingOption>
+              </RadioCard>
             ))}
           </RadioList>
         )}

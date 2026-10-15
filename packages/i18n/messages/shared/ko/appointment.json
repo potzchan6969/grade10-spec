@@ -236,7 +236,6 @@
       "time": "계속하려면 시간을 선택하세요."
     },
     "stepsLabel": "예약 단계",
-    "stepDoneAria": "{n}단계, {label}, 완료. 이 단계로 돌아가기.",
     "notChosen": "아직 선택 안 함",
     "forLabel": "방문자",
     "more100": "카드가 100장 넘나요?",

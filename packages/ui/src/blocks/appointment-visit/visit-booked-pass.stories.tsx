@@ -20,7 +20,7 @@ const meta = {
         manage: "Change or cancel",
       },
       pass: {
-        title: "Booked",
+        badge: "Booked",
         nameLabel: "Booked for",
         note: "At the counter, give your phone or email.",
       },

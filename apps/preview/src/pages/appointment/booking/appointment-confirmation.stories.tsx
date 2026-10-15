@@ -48,7 +48,7 @@ function AppointmentConfirmationPage({ paid = false }: { paid?: boolean }) {
             calendar: "Add to calendar",
           },
           pass: {
-            title: "Booked",
+            badge: "Booked",
             nameLabel: "Booked for",
             note: "At the counter, give your phone or email.",
           },

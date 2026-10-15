@@ -1,8 +1,10 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import { CaretRight } from "@phosphor-icons/react";
 import { useId } from "react";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { VisitFullDayShop } from "./types";
 
 type VisitFullDayCopy = {
@@ -40,7 +42,7 @@ function VisitFullDay({ copy, shops, waitHref, onPick }: VisitFullDayProps) {
         role="group"
       >
         <span
-          className="text-[13px] leading-[18px] font-semibold text-(--gray-700)"
+          className={cn("text-[13px] leading-[18px] font-semibold", INK_2)}
           id={headingId}
         >
           {copy.earliestEach}
@@ -58,7 +60,9 @@ function VisitFullDay({ copy, shops, waitHref, onPick }: VisitFullDayProps) {
               <span className="text-sm leading-5 font-semibold">
                 {shop.name}
               </span>
-              <span className="text-[13px] leading-[18px] text-(--gray-700) tabular-nums">
+              <span
+                className={cn("text-[13px] leading-[18px] tabular-nums", INK_2)}
+              >
                 {shop.earliest ?? copy.noFreeYet}
               </span>
             </span>

@@ -3,13 +3,11 @@ import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
-import {
-  BookingCalendar,
-  type BookingCalendarCopy,
-  type WeekdayWords,
-} from "./booking-calendar";
 import { type LocaleProps, zoneLabel } from "./booking-copy";
+import { BookingDayStrip } from "./booking-day-strip";
+import type { BookingDaysCopy, WeekdayWords } from "./booking-days";
 import { INK_2, STEP_HEADING } from "./booking-look";
+import { BookingMonth } from "./booking-month";
 import { dayFromDate, dayInstant, monthInstant } from "./calendar";
 import type { BookingDay, BookingSlot } from "./types";
 
@@ -140,7 +138,7 @@ function BookingSlotPicker({
       : selectedDate === todayKey && copy.todayDay
         ? copy.todayDay.replace("{day}", formatWeekday(selectedDate, locale))
         : formatWeekday(selectedDate, locale);
-  const calendarCopy: BookingCalendarCopy = {
+  const calendarCopy: BookingDaysCopy = {
     previousMonth: copy.previousMonth,
     nextMonth: copy.nextMonth,
     heads: copy.heads,
@@ -154,21 +152,23 @@ function BookingSlotPicker({
   };
   const calendar = (shape: "month" | "strip") => (
     <AsyncRegion skeletons={5} slot="booking-days" state={days}>
-      {(list) => (
-        <BookingCalendar
-          copy={calendarCopy}
-          days={list}
-          layout={shape}
-          locale={locale}
-          maxMonth={maxMonth}
-          minMonth={minMonth}
-          month={month}
-          onMonthChange={onMonthChange}
-          onSelectDay={onSelectDay}
-          selectedDate={selectedDate}
-          today={todayKey}
-        />
-      )}
+      {(list) => {
+        const Days = shape === "strip" ? BookingDayStrip : BookingMonth;
+        return (
+          <Days
+            copy={calendarCopy}
+            days={list}
+            locale={locale}
+            maxMonth={maxMonth}
+            minMonth={minMonth}
+            month={month}
+            onMonthChange={onMonthChange}
+            onSelectDay={onSelectDay}
+            selectedDate={selectedDate}
+            today={todayKey}
+          />
+        );
+      }}
     </AsyncRegion>
   );
   return (
