@@ -7,5 +7,5 @@ hands:
   design: "@tangconst"
   dev: "@tangconst"
 ui_waived: "@tangconst waived ui-design on 2026-10-15; the Order Summary
-  stories draw the HKD and USD views as the design reference, as
+  stories draw the note under the total as the design reference, as
   usd-lot-currency-winner-settlement-choice settled its own."

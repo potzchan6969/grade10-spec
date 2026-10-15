@@ -272,15 +272,15 @@ winner who picks USD pays it unchanged.
 | --- | --- |
 | 🚧 Rate | **7.85** HKD to 1 USD, one rate for every order, set by Grade10 and not looked up live |
 | 🚧 Rounding | Up to the whole HK$ — any fraction rounds up, so `100.01` and `100.1` both read `101` |
-| 🚧 Never shown | The rate appears on no page, invoice, receipt or letter |
+| 🚧 Shown once | Only the Order Summary's conversion note names the rate; no other page, invoice, receipt or letter does |
 | 🚧 Invoice and receipt | Every amount reads HKD; the USD winning bid is not printed |
 | 🚧 Fees and letters | The order total, fees, payments, refunds and order letters carry HKD |
 | 🚧 Fixed once sent | The sent invoice never re-prices, and its currency never changes |
 
 - 🚧 **Order Summary under USD** — every line and the Order Total read USD
-- 🚧 **Order Summary under HKD** — an HKD | USD control in the heading swaps
-  every amount between the HKD invoice lines and the lot's USD figures, Order
-  Total included; the summary opens on HKD, which is what the invoice asks for
+- 🚧 **Order Summary under HKD** — every line and the Order Total read HKD,
+  which is what the invoice asks for; a note under the total names the
+  conversion once — `Converted from US$131.21 at 1 USD = 7.85 HKD`
 - 🚧 **What the HKD total adds up from** — each line converted and rounded up,
   then summed, so the invoice adds up line by line; the card fee is computed
   in HKD from the HKD card rule
@@ -292,8 +292,8 @@ winner who picks USD pays it unchanged.
   picked, keeps the US$ bid; every letter after the winner picks reads the
   settlement currency only, with no USD winning bid
 - 🚧 **Card fee under HKD** — the card fee uses the configured HKD rule and
-  reads HKD only in both views, with no USD figure; the HKD Order Total
-  includes it
+  reads HKD only, with no USD figure; it adds nothing to the note's converted
+  USD figure, and the HKD Order Total includes it
 - 🚧 **Bank details by currency** — Finance configures the bank details for
   each offered settlement rail; a rail is offered once its details are held
 - 🚧 **Where Finance configures them** — the admin panel, where the bank

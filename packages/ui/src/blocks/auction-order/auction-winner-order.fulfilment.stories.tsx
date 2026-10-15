@@ -3,7 +3,6 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
 import {
   BASE_ARGS,
-  CURRENCY_TOGGLE,
   INVOICE_LINES,
   INVOICE_TOTAL,
   STEPS,
@@ -34,7 +33,6 @@ export const Shipped: Story = {
       tracking: { code: "SF1234567890", href: "https://www.sf-express.com/" },
     },
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
       invoicePdf: { onOpen: fn() },
@@ -65,7 +63,6 @@ export const Delivered: Story = {
       },
     },
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
     },
@@ -110,7 +107,6 @@ export const Refunded: Story = {
     badge: { label: "Refunded", variant: "outline" },
     progress: null,
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
       invoicePdf: { onOpen: fn() },
