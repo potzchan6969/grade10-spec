@@ -540,60 +540,30 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ]);
   });
 
-  it("shared-ui-auction-order-SC-31 - swaps each subtext into the value spot behind the supplied toggle", async () => {
+  it("renders the total's footnote muted under the Order Total row", () => {
     const { container } = mount({
       summary: {
         ...BASE_PROPS.summary,
-        currencyToggle: {
-          primary: "HKD",
-          secondary: "USD",
-          ariaLabel: "Amount currency",
-        },
-        lines: [
-          { label: "Winning Bid", value: "HK$793.00", subtext: "US$101.00" },
-          { label: "Payment Processing Fee", value: "HK$38.73" },
-        ],
+        lines: [{ label: "Winning Bid", value: "HK$793.00" }],
         total: {
           label: "Order Total",
           value: "HK$831.73",
-          subtext: "US$101.00",
+          footnote: "Converted from US$101.00 at 1 USD = 7.85 HKD",
         },
       },
     });
-    const sidebar = within(container).getByRole("complementary");
 
-    const hkd = within(sidebar).getByRole("button", { name: "HKD" });
-    const usd = within(sidebar).getByRole("button", { name: "USD" });
-    expect(hkd.getAttribute("aria-pressed")).toBe("true");
-    expect(usd.getAttribute("aria-pressed")).toBe("false");
-    expect(
-      container.querySelectorAll('[data-slot="winner-order-summary-subtext"]'),
-    ).toHaveLength(0);
-    expect(summaryRowText(container)).toEqual([
-      "Winning BidHK$793.00",
-      "Payment Processing FeeHK$38.73",
-      "Order TotalHK$831.73",
-    ]);
-
-    await act(async () => {
-      usd.click();
-    });
-    expect(usd.getAttribute("aria-pressed")).toBe("true");
-    expect(summaryRowText(container)).toEqual([
-      "Winning BidUS$101.00",
-      "Payment Processing FeeHK$38.73",
-      "Order TotalUS$101.00",
-    ]);
-
-    await act(async () => {
-      hkd.click();
-    });
-    expect(hkd.getAttribute("aria-pressed")).toBe("true");
-    expect(summaryRowText(container)).toEqual([
-      "Winning BidHK$793.00",
-      "Payment Processing FeeHK$38.73",
-      "Order TotalHK$831.73",
-    ]);
+    const totalRow = summaryRow(
+      container,
+      "Order TotalHK$831.73Converted from US$101.00 at 1 USD = 7.85 HKD",
+    );
+    expect(totalRow).not.toBeUndefined();
+    const footnote = totalRow?.querySelector(
+      '[data-slot="winner-order-summary-footnote"]',
+    );
+    expect(footnote?.textContent).toBe(
+      "Converted from US$101.00 at 1 USD = 7.85 HKD",
+    );
   });
 
   it("winner-order-SC-290 and winner-order-SC-304 and shared-ui-auction-order-SC-27 and shared-ui-auction-order-SC-30 - renders USD then HKD totals and keeps the card fee on its own row", () => {
@@ -639,38 +609,6 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     const lotCard = container.querySelector('[data-slot="winner-order-lot"]');
     expect(lotCard).not.toBeNull();
     expect(lotCard?.textContent).toContain("Winning bid: US$101.00");
-  });
-
-  it("renders no converted lines where a currency toggle renders - the converted amounts travel as subtext instead", () => {
-    const { container } = mount({
-      summary: {
-        ...BASE_PROPS.summary,
-        currencyToggle: {
-          primary: "HKD",
-          secondary: "USD",
-          ariaLabel: "Amount currency",
-        },
-        lines: [
-          { label: "Winning Bid", value: "HK$793.00", subtext: "US$101.00" },
-        ],
-        total: {
-          label: "Order Total",
-          value: "HK$831.73",
-          subtext: "US$101.00",
-        },
-        convertedTotal: { label: "Order Total", value: "US$106.07" },
-        convertedFee: { label: "Payment Processing Fee", value: "US$4.97" },
-      },
-    });
-
-    const sidebar = within(within(container).getByRole("complementary"));
-    expect(sidebar.getAllByText("Order Total")).toHaveLength(1);
-    expect(sidebar.queryByText("US$106.07")).toBeNull();
-    expect(sidebar.queryByText("US$4.97")).toBeNull();
-    expect(summaryRowText(container)).toEqual([
-      "Winning BidHK$793.00",
-      "Order TotalHK$831.73",
-    ]);
   });
 
   it("winner-order-SC-291 and shared-ui-auction-order-SC-28 - keeps a USD order to one total line", () => {

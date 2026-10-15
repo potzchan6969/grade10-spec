@@ -5,7 +5,6 @@ import {
   BANK_TRANSFER_METHOD,
   BASE_ARGS,
   bankTransferPay,
-  CURRENCY_TOGGLE,
   INVOICE_LINES,
   INVOICE_TOTAL,
   settled,
@@ -40,12 +39,9 @@ export const PendingPayment: Story = {
       canvas.getByRole("button", { name: "Pay with Card" }),
     );
     expect(args.summary.pay?.onPress).toHaveBeenCalledTimes(1);
-    const hkd = canvas.getByRole("button", { name: "HKD" });
-    expect(hkd).toHaveAttribute("aria-pressed", "true");
-    await userEvent.click(canvas.getByRole("button", { name: "USD" }));
-    expect(canvas.getByText("US$15,540.00")).toBeInTheDocument();
-    await userEvent.click(hkd);
-    expect(canvas.getByText("HK$16,085.00")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Converted from US$15,540.00 at 1 USD = 7.85 HKD"),
+    ).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("link", { name: "Invoice PDF" }));
     expect(args.summary.invoicePdf?.onOpen).toHaveBeenCalledTimes(1);
   },
@@ -54,7 +50,6 @@ export const PendingPayment: Story = {
 export const BankTransferDue: Story = {
   args: {
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
       pay: bankTransferPay("Pay by 2 Oct 2026, 15:00 HKT"),
@@ -73,7 +68,6 @@ export const BankTransferDue: Story = {
 export const CardRedirecting: Story = {
   args: {
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
       pay: { label: "Redirecting…", onPress: fn(), loading: true },
@@ -101,7 +95,6 @@ export const PaymentVerifying: Story = {
       icon: "hourglass",
     },
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
     },
@@ -118,7 +111,6 @@ export const PaymentVerifying: Story = {
 export const ProofReturned: Story = {
   args: {
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
       pay: bankTransferPay("Pay by 9 Oct 2026, 15:00 HKT"),
@@ -145,7 +137,6 @@ export const PartiallyPaid: Story = {
   args: {
     badge: { label: "Partially Paid", variant: "warning" },
     summary: {
-      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
       alert: {

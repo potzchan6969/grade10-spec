@@ -39,7 +39,6 @@ import {
 import {
   type ReactNode,
   useEffect,
-  useId,
   useLayoutEffect,
   useRef,
   useState,
@@ -655,14 +654,6 @@ function OrderSummary({
   summary: AuctionWinnerOrderProps["summary"];
 }) {
   const { pay } = summary;
-  const [view, setView] = useState<"primary" | "secondary">("primary");
-  const linesId = useId();
-  const currencyToggle =
-    summary.currencyToggle &&
-    (summary.lines.some((line) => line.subtext) || summary.total?.subtext)
-      ? summary.currencyToggle
-      : null;
-  const swapped = view === "secondary";
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <HStack
@@ -674,45 +665,6 @@ function OrderSummary({
           <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
             {copy.orderSummary}
           </h2>
-          {currencyToggle ? (
-            <fieldset
-              className="m-0 inline-flex items-baseline gap-1.5 border-0 p-0 whitespace-nowrap"
-              data-slot="winner-order-currency-toggle"
-            >
-              {currencyToggle.ariaLabel ? (
-                <legend className="sr-only">{currencyToggle.ariaLabel}</legend>
-              ) : null}
-              <Link
-                aria-controls={linesId}
-                aria-pressed={view === "primary"}
-                className={cn(
-                  view === "primary" && "font-medium text-foreground",
-                )}
-                onClick={() => setView("primary")}
-                render={<button type="button" />}
-                size="sm"
-                variant="secondary"
-              >
-                {currencyToggle.primary}
-              </Link>
-              <span aria-hidden className="text-secondary-foreground">
-                |
-              </span>
-              <Link
-                aria-controls={linesId}
-                aria-pressed={view === "secondary"}
-                className={cn(
-                  view === "secondary" && "font-medium text-foreground",
-                )}
-                onClick={() => setView("secondary")}
-                render={<button type="button" />}
-                size="sm"
-                variant="secondary"
-              >
-                {currencyToggle.secondary}
-              </Link>
-            </fieldset>
-          ) : null}
         </HStack>
         {summary.invoicePdf ? (
           <PdfLink
@@ -723,16 +675,16 @@ function OrderSummary({
           />
         ) : null}
       </HStack>
-      <VStack className="w-full" gap="sm" hAlign="stretch" id={linesId}>
+      <VStack className="w-full" gap="sm" hAlign="stretch">
         {summary.lines.map((line) => (
           <SummaryRow
             footnote={line.footnote}
             key={line.label}
             label={line.label}
             muted={line.muted}
-            subtext={currencyToggle ? undefined : line.subtext}
+            subtext={line.subtext}
             tooltip={line.tooltip}
-            value={swapped && line.subtext ? line.subtext : line.value}
+            value={line.value}
           />
         ))}
       </VStack>
@@ -745,15 +697,11 @@ function OrderSummary({
               footnote={summary.total.footnote}
               label={summary.total.label}
               muted={summary.total.muted}
-              subtext={currencyToggle ? undefined : summary.total.subtext}
-              value={
-                swapped && summary.total.subtext
-                  ? summary.total.subtext
-                  : summary.total.value
-              }
+              subtext={summary.total.subtext}
+              value={summary.total.value}
             />
           ) : null}
-          {summary.convertedTotal && !currencyToggle ? (
+          {summary.convertedTotal ? (
             <SummaryRow
               emphasize
               footnote={summary.convertedTotal.footnote}
@@ -765,7 +713,7 @@ function OrderSummary({
         </>
       ) : null}
 
-      {summary.convertedFee && !currencyToggle ? (
+      {summary.convertedFee ? (
         <>
           <hr className="w-full border-border" />
           <SummaryRow
