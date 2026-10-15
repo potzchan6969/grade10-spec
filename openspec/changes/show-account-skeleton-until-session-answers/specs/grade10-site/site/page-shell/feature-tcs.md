@@ -81,9 +81,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -122,9 +124,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -155,9 +159,11 @@ Runs once per row of **Test data**.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -189,9 +195,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -230,9 +238,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -270,9 +280,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -308,9 +320,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -346,9 +360,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -387,9 +403,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -429,9 +447,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
@@ -468,9 +488,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-09
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auth/account-placeholder.spec.ts`
 
 **Pre-conditions:**
 
