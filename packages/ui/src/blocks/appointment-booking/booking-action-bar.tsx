@@ -77,6 +77,9 @@ function BookingActionBar({
             aria-disabled={busy || undefined}
             className={PILL_PRIMARY}
             form={primary.form}
+            // A press that switches the step into a form's must not submit that
+            // form: a new button per mode leaves the pressed one detached.
+            key={primary.form ? "submit" : "button"}
             onClick={(event) => {
               if (busy) {
                 event.preventDefault();
