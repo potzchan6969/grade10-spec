@@ -33,8 +33,6 @@ type AuctionWinnerOrderAction = {
 type AuctionWinnerOrderAlert = {
   title: string;
   description?: string;
-  /** Inline folds a description into the title row; omit and a description forces block. */
-  layout?: "block" | "inline";
   status: "default" | "warning" | "success" | "error";
   role?: "alert" | "status";
   action?: AuctionWinnerOrderAction;

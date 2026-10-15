@@ -259,7 +259,6 @@ function ActionFailed({ message }: { message?: string }) {
 
 function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
   const { action } = alert;
-  const isInline = alert.layout === "inline" || !alert.description;
   return (
     <>
       <Alert
@@ -276,27 +275,15 @@ function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
           ) : undefined
         }
         description={
-          !isInline ? (
+          alert.description ? (
             <span className="whitespace-pre-line">{alert.description}</span>
           ) : undefined
         }
         dismissible={false}
-        layout={isInline ? "inline" : "block"}
+        layout={alert.description ? "block" : "inline"}
         role={alert.role ?? "alert"}
         status={alert.status}
-        title={
-          isInline && alert.description ? (
-            <>
-              {alert.title}
-              <span className="font-normal text-secondary-foreground">
-                {" "}
-                — {alert.description}
-              </span>
-            </>
-          ) : (
-            alert.title
-          )
-        }
+        title={alert.title}
       />
       <ActionFailed message={action?.failed} />
     </>
