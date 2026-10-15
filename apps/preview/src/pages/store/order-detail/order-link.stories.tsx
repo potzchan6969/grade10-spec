@@ -46,7 +46,8 @@ export const GuestOrder: Story = {
     expect(
       canvas.getByText(/Receipt sent to ada@example\.com\./),
     ).toBeInTheDocument();
-    expect(canvas.queryByText("Points Earned")).not.toBeInTheDocument();
+    // No loyalty facts on a public link — no points section, no Points row.
+    expect(canvas.queryByText(/Points/)).not.toBeInTheDocument();
     const ask = await theToast();
     expect(await ask.findByText(ACCOUNT_ASK_COPY.title)).toBeInTheDocument();
     expect(
@@ -71,6 +72,8 @@ export const MemberOrderSignedOut: Story = {
     expect(
       canvas.getByText(/Receipt sent to ada@example\.com\./),
     ).toBeInTheDocument();
+    // A member's link stays just as private — no points section or row.
+    expect(canvas.queryByText(/Points/)).not.toBeInTheDocument();
     const ask = await theToast();
     expect(await ask.findByText(MEMBER_ASK_COPY.title)).toBeInTheDocument();
     expect(ask.getByText(MEMBER_ASK_COPY.body)).toBeInTheDocument();
