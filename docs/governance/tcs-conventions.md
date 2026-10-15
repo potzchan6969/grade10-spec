@@ -118,7 +118,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Classification starting shapes
 
-Starting shapes, not substitutes for reading the case: a core positive path `critical` / `high`; a degradation the journey survives `major` / `medium`; an empty state `normal` / `medium`; a presentational fallback `minor` / `low`; a case run through the interface `e2e`; worth a script and a human eye `automation, manual`.
+Read the case against **Step 5: Classify the Case** in [Specs to Test Cases](specs-to-test-cases.md#step-5-classify-the-case). Presentation, code logic and a core-flow label do not determine its classification. A case run through the interface uses `e2e`; one suitable for both a script and a human uses `automation, manual`.
 
 ## Setup Recipes
 

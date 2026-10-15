@@ -56,6 +56,7 @@ import {
   findSuites,
   isAutomated,
   issuedPrefix,
+  LEGACY_CLASSIFICATIONS,
   LEGACY_TYPES,
   levelOf,
   modernDomainPrefix,
@@ -635,6 +636,19 @@ function checkSuite(root, filePath, rulesRev, allCases) {
           continue;
         }
         if (!vocab) continue;
+        const legacy = (part) => {
+          if (!LEGACY_CLASSIFICATIONS[name]?.includes(part)) return false;
+          const status = tc.props.get("Status");
+          if (status !== "deprecated") {
+            const report =
+              status === "draft" && suite.draftsStyled?.rev >= 6 ? err : warn;
+            report(
+              at,
+              `case \`${tc.id}\` has former **${name}:** \`${part}\` — review its classification under tcs-rules r6; do not rename it mechanically`,
+            );
+          }
+          return true;
+        };
         if (multi) {
           const { values: parts, empty } = commaList(value);
           if (parts.length === 0) {
@@ -650,14 +664,14 @@ function checkSuite(root, filePath, rulesRev, allCases) {
               `case \`${tc.id}\` has an empty element in **${name}:** — a doubled or trailing comma`,
             );
           for (const part of parts)
-            if (!vocab.includes(part))
+            if (!vocab.includes(part) && !legacy(part))
               err(
                 at,
                 `case \`${tc.id}\` has **${name}:** \`${part}\` — expected one or more of ${vocab.join(", ")}`,
               );
           if (parts.includes("none") && parts.length > 1)
             err(at, `case \`${tc.id}\` lists \`none\` beside another suite`);
-        } else if (!vocab.includes(value))
+        } else if (!vocab.includes(value) && !legacy(value))
           err(
             at,
             `case \`${tc.id}\` has **${name}:** \`${raw}\` — expected one of ${vocab.join(", ")}`,

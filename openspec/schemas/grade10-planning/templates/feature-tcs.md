@@ -69,12 +69,12 @@
 
 **Classification:**
 
-* **Severity:** blocker | critical | major | normal | minor | trivial
+* **Severity:** blocker | critical | major | minor | trivial
 * **Priority:** high | medium | low
 * **Status:** draft
 * **Behaviour:** positive | negative | destructive
-* **Type:** functional | acceptance | usability | security | performance | compatibility | integration
-* **Suites:** smoke | regression | release | none
+* **Type:** functional | usability | security | performance | compatibility
+* **Suites:** acceptance | smoke | regression | health-check | prod | none
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
@@ -107,12 +107,12 @@
 
 **Classification:**
 
-* **Severity:** blocker | critical | major | normal | minor | trivial
+* **Severity:** blocker | critical | major | minor | trivial
 * **Priority:** high | medium | low
 * **Status:** draft
 * **Behaviour:** positive | negative | destructive
-* **Type:** functional | acceptance | usability | security | performance | compatibility | integration
-* **Suites:** smoke | regression | release | none
+* **Type:** functional | usability | security | performance | compatibility
+* **Suites:** acceptance | smoke | regression | health-check | prod | none
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual

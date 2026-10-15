@@ -48,28 +48,26 @@ export const FILE_STATUSES = [
 export const CASE_STATUSES = ["draft", "actual", "deprecated"];
 /** Values that were `Type` before tcs-rules r2 and are `Suites` now. */
 export const LEGACY_TYPES = ["smoke", "regression"];
+/** Former classifications remain readable until cases are reviewed under r6. */
+export const LEGACY_CLASSIFICATIONS = {
+  Severity: ["normal"],
+  Type: ["acceptance", "integration"],
+  Suites: ["release", "exploratory"],
+};
 export const PROPERTIES = [
-  ["Severity", ["blocker", "critical", "major", "normal", "minor", "trivial"]],
+  ["Severity", ["blocker", "critical", "major", "minor", "trivial"]],
   ["Priority", ["high", "medium", "low"]],
   ["Status", CASE_STATUSES],
   ["Behaviour", ["positive", "negative", "destructive"]],
   [
     "Type",
-    [
-      "functional",
-      "acceptance",
-      "usability",
-      "security",
-      "performance",
-      "compatibility",
-      "integration",
-    ],
+    ["functional", "usability", "security", "performance", "compatibility"],
   ],
   // Added in tcs-rules r2. Missing on a suite written before it: a warning,
   // not an error, so the store migrates one reviewed suite at a time.
   [
     "Suites",
-    ["smoke", "regression", "release", "exploratory", "none"],
+    ["acceptance", "smoke", "regression", "health-check", "prod", "none"],
     true,
     true,
   ],

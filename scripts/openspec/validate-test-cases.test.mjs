@@ -933,3 +933,81 @@ test("a change suite owes a section to the journeys it adds or modifies, not to 
     /spec journey `demo-alpha-US-02` has no section in this suite/,
   );
 });
+
+test("r6 classifications accept production health and core acceptance selections", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  writeFileSync(
+    file,
+    readFileSync(file, "utf8").replaceAll(
+      "* **Suites:** regression",
+      "* **Suites:** acceptance, smoke, regression, health-check, prod",
+    ),
+  );
+  const result = runValidator(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+test("r6 former classifications require review without rewriting historical cases", () => {
+  const root = store("", []);
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  const text = readFileSync(file, "utf8")
+    .replaceAll("* **Severity:** major", "* **Severity:** normal")
+    .replace("* **Type:** functional", "* **Type:** acceptance")
+    .replace("* **Type:** functional", "* **Type:** integration")
+    .replaceAll(
+      "* **Suites:** regression",
+      "* **Suites:** release, exploratory",
+    );
+  writeFileSync(file, text);
+  const result = runValidator(root);
+  const out = result.stdout + result.stderr;
+  assert.equal(result.status, 0, out);
+  for (const value of [
+    "normal",
+    "acceptance",
+    "integration",
+    "release",
+    "exploratory",
+  ])
+    assert.ok(out.includes(value), out);
+  assert.match(out, /review its classification under tcs-rules r6/);
+  assert.equal(readFileSync(file, "utf8"), text);
+});
+
+test("r6 still refuses unknown suites and none combined with a named suite", () => {
+  for (const value of ["full", "none, prod"]) {
+    const root = store("", []);
+    const file = join(root, `${CHANGE}/feature-tcs.md`);
+    writeFileSync(
+      file,
+      readFileSync(file, "utf8").replaceAll(
+        "* **Suites:** regression",
+        `* **Suites:** ${value}`,
+      ),
+    );
+    const result = runValidator(root);
+    assert.notEqual(result.status, 0, result.stdout + result.stderr);
+    assert.match(
+      result.stdout + result.stderr,
+      value === "full" ? /expected one or more/ : /none.*beside another suite/,
+    );
+  }
+});
+
+test("r6-styled drafts cannot introduce former classifications", () => {
+  const root = store("", []);
+  const governance = join(root, "docs/governance/specs-to-test-cases.md");
+  mkdirSync(dirname(governance), { recursive: true });
+  writeFileSync(governance, "---\ntcs_rules_rev: 6\n---\n");
+  const file = join(root, `${CHANGE}/feature-tcs.md`);
+  writeFileSync(
+    file,
+    readFileSync(file, "utf8")
+      .replace("tcs-rules r3.0", "tcs-rules r6")
+      .replaceAll("* **Type:** functional", "* **Type:** acceptance"),
+  );
+  const result = runValidator(root);
+  assert.notEqual(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout + result.stderr, /former \*\*Type:\*\*/);
+});
