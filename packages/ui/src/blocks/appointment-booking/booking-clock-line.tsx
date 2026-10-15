@@ -5,7 +5,9 @@ import type { ReactNode } from "react";
 function ClockLine({ children }: { children: ReactNode }) {
   return (
     <span className="inline-flex items-start gap-1.5 tabular-nums">
-      <Clock aria-hidden className="mt-[3px] shrink-0" size={14} />
+      <span aria-hidden className="mt-[3px] inline-flex shrink-0">
+        <Clock size={14} />
+      </span>
       {children}
     </span>
   );
