@@ -3,6 +3,12 @@
 **Walked by:** the winner of a lot, from a Pending Payment order to a paid
 one
 
+### winner-order-US-26: Winner who settles in HKD reads the invoice and receipt in HKD
+
+**As a** winner who picked HKD,
+**I want** every amount on my invoice, receipt and order letters in HKD,
+**so that** I pay and keep records in one currency without working out a rate.
+
 ## ADDED User journeys
 
 ## MODIFIED User journeys
