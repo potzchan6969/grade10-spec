@@ -21,10 +21,10 @@ export type WinnerOrderStatus =
 
 export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
   awaiting_address: "Awaiting Setup",
-  awaiting_address_expired: "Awaiting Setup (deadline passed)",
+  awaiting_address_expired: "Setup Overdue",
   preparing_invoice: "Preparing Invoice",
   pending_payment: "Pending Payment",
-  pending_payment_expired: "Pending Payment (expired invoice)",
+  pending_payment_expired: "Payment Overdue",
   payment_verifying: "Payment Verifying",
   partially_paid: "Partially Paid",
   processing: "Preparing Shipment",
