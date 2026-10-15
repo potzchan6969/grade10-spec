@@ -89,6 +89,21 @@ export const SETUP_CONFIRM = {
   deadline: "Confirm by 26 Sep 2026, 15:12",
 };
 
+export const BANK_TRANSFER_METHOD: AuctionWinnerOrderProps["paymentMethod"] = {
+  kind: "bank",
+  label: "Bank transfer",
+  bankName: "HSBC",
+};
+
+export function bankTransferPay(deadline: string) {
+  return {
+    label: "Submit Payment Proof",
+    onPress: fn(),
+    secondary: { label: "View Bank Details", onPress: fn() },
+    deadline,
+  };
+}
+
 export const BASE_ARGS: AuctionWinnerOrderProps = {
   copy: COPY,
   title: "Winner Order",

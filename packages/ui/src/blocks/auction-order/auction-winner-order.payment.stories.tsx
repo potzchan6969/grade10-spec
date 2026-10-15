@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
 import {
+  BANK_TRANSFER_METHOD,
   BASE_ARGS,
+  bankTransferPay,
   CURRENCY_TOGGLE,
   INVOICE_LINES,
   INVOICE_TOTAL,
@@ -55,14 +57,9 @@ export const BankTransferDue: Story = {
       currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
-      pay: {
-        label: "Submit Payment Proof",
-        onPress: fn(),
-        secondary: { label: "View Bank Details", onPress: fn() },
-        deadline: "Pay by 2 Oct 2026, 15:00 HKT",
-      },
+      pay: bankTransferPay("Pay by 2 Oct 2026, 15:00 HKT"),
     },
-    paymentMethod: { kind: "bank", label: "Bank transfer", bankName: "HSBC" },
+    paymentMethod: BANK_TRANSFER_METHOD,
   },
   play: async ({ args, canvasElement }) => {
     await settled(canvasElement);
@@ -108,7 +105,7 @@ export const PaymentVerifying: Story = {
       lines: INVOICE_LINES,
       total: INVOICE_TOTAL,
     },
-    paymentMethod: { kind: "text", label: "Bank transfer" },
+    paymentMethod: BANK_TRANSFER_METHOD,
   },
   play: async ({ canvasElement }) => {
     await settled(canvasElement);
@@ -120,6 +117,13 @@ export const PaymentVerifying: Story = {
 
 export const ProofReturned: Story = {
   args: {
+    summary: {
+      currencyToggle: CURRENCY_TOGGLE,
+      lines: INVOICE_LINES,
+      total: INVOICE_TOTAL,
+      pay: bankTransferPay("Pay by 9 Oct 2026, 15:00 HKT"),
+    },
+    paymentMethod: BANK_TRANSFER_METHOD,
     alerts: [
       {
         title: "Payment proof returned",
