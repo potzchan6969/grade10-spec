@@ -30,11 +30,18 @@ import {
   ArrowCounterClockwise,
   ArrowUpRight,
   Bank,
+  CaretDown,
   FilePdf,
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -164,6 +171,7 @@ function SummaryRow({
         <span
           className={cn(
             "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
+            !muted && "font-medium",
             emphasize && "text-base font-semibold",
             muted && "text-secondary-foreground",
           )}
@@ -172,7 +180,7 @@ function SummaryRow({
         </span>
         {subtext ? (
           <span
-            className="text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
+            className="mt-0.5 text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
             data-slot="winner-order-summary-subtext"
           >
             {subtext}
@@ -236,6 +244,7 @@ function ActionFailed({ message }: { message?: string }) {
 
 function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
   const { action } = alert;
+  const isInline = alert.layout === "inline" || !alert.description;
   return (
     <>
       <Alert
@@ -252,15 +261,27 @@ function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
           ) : undefined
         }
         description={
-          alert.description ? (
+          !isInline ? (
             <span className="whitespace-pre-line">{alert.description}</span>
           ) : undefined
         }
         dismissible={false}
-        layout={alert.description ? "block" : "inline"}
+        layout={isInline ? "inline" : "block"}
         role={alert.role ?? "alert"}
         status={alert.status}
-        title={alert.title}
+        title={
+          isInline && alert.description ? (
+            <>
+              {alert.title}
+              <span className="font-normal text-secondary-foreground">
+                {" "}
+                — {alert.description}
+              </span>
+            </>
+          ) : (
+            alert.title
+          )
+        }
       />
       <ActionFailed message={action?.failed} />
     </>
@@ -618,6 +639,12 @@ function OrderSummary({
   summary: AuctionWinnerOrderProps["summary"];
 }) {
   const { pay } = summary;
+  const [subtextsOpen, setSubtextsOpen] = useState(false);
+  const linesId = useId();
+  const subtextToggle =
+    summary.subtextToggle && summary.lines.some((line) => line.subtext)
+      ? summary.subtextToggle
+      : null;
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <HStack
@@ -637,17 +664,41 @@ function OrderSummary({
           />
         ) : null}
       </HStack>
-      <VStack className="w-full" gap="sm" hAlign="stretch">
+      <VStack className="w-full" gap="sm" hAlign="stretch" id={linesId}>
         {summary.lines.map((line) => (
           <SummaryRow
             key={line.label}
             label={line.label}
             muted={line.muted}
-            subtext={line.subtext}
+            subtext={subtextToggle && !subtextsOpen ? undefined : line.subtext}
             tooltip={line.tooltip}
             value={line.value}
           />
         ))}
+        {subtextToggle ? (
+          <Link
+            aria-controls={linesId}
+            aria-expanded={subtextsOpen}
+            className="self-start"
+            data-slot="winner-order-subtext-toggle"
+            onClick={() => setSubtextsOpen((open) => !open)}
+            render={<button type="button" />}
+            size="sm"
+            trailing={
+              <span
+                className={cn(
+                  "inline-flex transition-transform motion-reduce:transition-none",
+                  subtextsOpen && "rotate-180",
+                )}
+              >
+                <CaretDown aria-hidden size={14} />
+              </span>
+            }
+            variant="secondary"
+          >
+            {subtextsOpen ? subtextToggle.hide : subtextToggle.show}
+          </Link>
+        ) : null}
       </VStack>
       {summary.total || summary.convertedTotal ? (
         <>

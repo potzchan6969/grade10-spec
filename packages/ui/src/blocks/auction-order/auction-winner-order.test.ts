@@ -540,6 +540,58 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     ]);
   });
 
+  it("shared-ui-auction-order-SC-31 - collapses a line's subtext behind the supplied toggle", async () => {
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        subtextToggle: {
+          show: "Show USD amounts",
+          hide: "Hide USD amounts",
+        },
+        lines: [
+          { label: "Winning Bid", value: "HK$793.00", subtext: "US$101.00" },
+          { label: "Payment Processing Fee", value: "HK$38.73" },
+        ],
+        total: { label: "Order Total", value: "HK$831.73" },
+      },
+    });
+    const sidebar = within(container).getByRole("complementary");
+
+    const toggle = within(sidebar).getByRole("button", {
+      name: "Show USD amounts",
+    });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(
+      container.querySelectorAll('[data-slot="winner-order-summary-subtext"]'),
+    ).toHaveLength(0);
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidHK$793.00",
+      "Payment Processing FeeHK$38.73",
+      "Order TotalHK$831.73",
+    ]);
+
+    await act(async () => {
+      toggle.click();
+    });
+    expect(
+      within(sidebar)
+        .getByRole("button", { name: "Hide USD amounts" })
+        .getAttribute("aria-expanded"),
+    ).toBe("true");
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidHK$793.00US$101.00",
+      "Payment Processing FeeHK$38.73",
+      "Order TotalHK$831.73",
+    ]);
+
+    await act(async () => {
+      within(sidebar).getByRole("button", { name: "Hide USD amounts" }).click();
+    });
+    expect(
+      container.querySelectorAll('[data-slot="winner-order-summary-subtext"]'),
+    ).toHaveLength(0);
+  });
+
   it("winner-order-SC-290 and winner-order-SC-304 and shared-ui-auction-order-SC-27 and shared-ui-auction-order-SC-30 - renders USD then HKD totals and keeps the card fee on its own row", () => {
     const { container } = mount({
       summary: {

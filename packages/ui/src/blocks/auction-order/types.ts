@@ -33,6 +33,8 @@ type AuctionWinnerOrderAction = {
 type AuctionWinnerOrderAlert = {
   title: string;
   description?: string;
+  /** Inline folds a description into the title row; omit and a description forces block. */
+  layout?: "block" | "inline";
   status: "default" | "warning" | "success" | "error";
   role?: "alert" | "status";
   action?: AuctionWinnerOrderAction;
@@ -105,6 +107,8 @@ type AuctionWinnerOrderProps = {
   alerts?: readonly AuctionWinnerOrderAlert[];
   summary: {
     lines: readonly AuctionWinnerOrderLine[];
+    /** Collapses every line's `subtext` behind a toggle reading the labels; without it, a `subtext` renders under its value. */
+    subtextToggle?: { show: string; hide: string };
     total: Omit<AuctionWinnerOrderLine, "tooltip"> | null;
     convertedTotal?: Omit<AuctionWinnerOrderLine, "tooltip">;
     convertedFee?: Omit<AuctionWinnerOrderLine, "tooltip">;
