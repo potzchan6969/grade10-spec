@@ -28,7 +28,7 @@ ahead of acceptance; they are re-verified against the accepted contract.
 
 - [x] 5.1 Run terminal-transition, role, late-payment and focused admin/site E2E checks.
 - [x] 5.2 Run the cancellation-race, returned-lot link and optional-reference cases added for this refinement.
-- [ ] 5.3 Run the `order cancelled` Contact Us case (`winner-order-US16-TC14-1`).
+- [x] 5.3 Run the `order cancelled` Contact Us case (`winner-order-US16-TC14-1`).
 
 ## 6. Dependencies (owner: @htonyl)
 
