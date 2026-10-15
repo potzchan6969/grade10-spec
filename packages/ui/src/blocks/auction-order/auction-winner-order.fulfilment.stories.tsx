@@ -85,16 +85,14 @@ export const Cancelled: Story = {
   args: {
     badge: { label: "Cancelled", variant: "outline" },
     progress: null,
-    alerts: [
-      {
-        title: "Order cancelled. The lot returned to available stock.",
-        status: "default",
-        action: { label: "Contact Us", onPress: fn() },
-      },
-    ],
     summary: {
       lines: [{ label: "Winning Bid", value: "HK$12,800.00" }],
       total: { label: "Order Total", value: "—" },
+      alert: {
+        title: "Order cancelled.",
+        status: "default",
+        action: { label: "Contact Us", onPress: fn() },
+      },
     },
     paymentMethod: undefined,
     delivery: undefined,
