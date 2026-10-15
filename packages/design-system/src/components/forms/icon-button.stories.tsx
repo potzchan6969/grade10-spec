@@ -31,6 +31,9 @@ export const ExtraSmall: Story = { args: { size: "xs" } };
 
 export const Disabled: Story = { args: { disabled: true } };
 
+/** Its work is out: Button's spinner in the glyph's place, still focusable. */
+export const Loading: Story = { args: { loading: true } };
+
 export const Variants: Story = {
   render: (args) => (
     <div className="flex items-center gap-3">
