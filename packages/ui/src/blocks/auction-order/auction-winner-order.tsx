@@ -457,7 +457,11 @@ function LotCard({
         >
           {lot.title}
         </Text>
-        <Text className="tabular-nums" size="sm" weight="medium">
+        <Text
+          className="tabular-nums text-secondary-foreground"
+          size="sm"
+          weight="regular"
+        >
           {copy.winningBid}: {lot.winningBid}
         </Text>
       </VStack>
