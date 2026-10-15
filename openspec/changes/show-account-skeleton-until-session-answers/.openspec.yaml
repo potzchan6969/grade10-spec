@@ -6,5 +6,6 @@ depends_on:
 hands:
   dev: "@seankcw"
   pm: "@seankcw"
+  tech: "@seankcw"
 reviewed:
   tasks: 467cabd8
