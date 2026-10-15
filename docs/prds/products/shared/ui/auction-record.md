@@ -50,8 +50,8 @@ capability is the component contract underneath it.
   outrun the write, and one row's switch never moves another's
 
 :::detail{title="Code map" for="engineer"}
-- **Blocks** — `AuctionRecord`, `AuctionRecordRow`, `AuctionRecordEmpty`,
-  `AuctionRecordTabs` and `WatchButton`, in `packages/ui`
+- **Blocks** — `AuctionRecord`, `AuctionRecordRow`, `AuctionRecordEmpty` and
+  `WatchButton`, in `packages/ui`
 - **Retiring** — `WatchingList` and `BiddingList`, with the one-table
   redesign
 :::
