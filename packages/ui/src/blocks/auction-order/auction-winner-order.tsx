@@ -173,7 +173,6 @@ function SummaryRow({
         <span
           className={cn(
             "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
-            !muted && "font-medium",
             emphasize && "text-base font-semibold",
             muted && "text-secondary-foreground",
           )}
