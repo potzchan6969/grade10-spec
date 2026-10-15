@@ -28,6 +28,9 @@ importers:
       '@grade10/date':
         specifier: workspace:*
         version: link:../../packages/date
+      '@grade10/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       react:
         specifier: ^19.2.8
         version: 19.2.8
