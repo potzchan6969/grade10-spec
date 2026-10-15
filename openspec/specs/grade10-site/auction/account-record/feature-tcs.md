@@ -783,7 +783,7 @@
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -821,7 +821,7 @@
 * **Testability:** automation
 * **Trace:** grade10-site-auction-account-record-US-01
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -908,7 +908,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -953,7 +953,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1225,7 +1225,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1265,7 +1265,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1312,7 +1312,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1395,7 +1395,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1448,7 +1448,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1491,7 +1491,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1531,7 +1531,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1582,7 +1582,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1626,7 +1626,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-06
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1732,7 +1732,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1775,7 +1775,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1815,7 +1815,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1852,7 +1852,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1892,7 +1892,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-07
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1940,7 +1940,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -1979,7 +1979,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -2018,7 +2018,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-08
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -2106,7 +2106,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-09
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -2159,7 +2159,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** grade10-site-auction-account-record-US-10
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -2202,7 +2202,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-account-record-US-10
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`
 
 **Pre-conditions:**
 
@@ -2371,7 +2371,7 @@ Runs once per row of **Test data**.
 | Lone first bid confirming after the close (`grade10-site-auction-account-record-US10-TC4-1`) | **Deprecated:** no bid takes a hold to confirm after the close |
 | Hold copy retained for Didn’t win | **Superseded:** the row says the card was not charged; no hold copy remains |
 
-**Run:** 2026-10-02, from the delta against the durable suite and the built My Auctions mapping in grade10 (`packages/grade10-auction/backend/src/services/accountRecord.ts`, `apps/frontend/grade10/src/pages/auctions/AccountAuctionRecordPage.tsx`) and its walk (`apps/frontend/grade10/e2e/tests/auction/account-record.spec.ts`). It is a statement, not proof.
+**Run:** 2026-10-02, from the delta against the durable suite and the built My Auctions mapping in grade10 (`packages/grade10-auction/backend/src/services/accountRecord.ts`, `apps/frontend/grade10/src/pages/auctions/AccountAuctionRecordPage.tsx`) and its walk (`apps/frontend/grade10/e2e/tests/auction/account-record/account-record.spec.ts`). It is a statement, not proof.
 
 **Run:** QA2, 2026-10-03. QA1's blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, `proposal.md`, `decisions.md`, the linked pages under `docs/prds/`, and the durable suite and the change's domain draft with `## Reconciliation` stripped; it was denied every `## Requirements` section, `tech-design.md`, `tasks.md` and `openspec/changes/archive/`. QA2 read QA1's suites, the delta specs, `decisions.md`, `tech-design.md`, `tasks.md`, the durable specs and suites on main after `my-auctions-without-bid-holds` was accepted, and grade10 main's bidding, history, erasure and refusal-copy code and tests. It is a statement, not proof.
 

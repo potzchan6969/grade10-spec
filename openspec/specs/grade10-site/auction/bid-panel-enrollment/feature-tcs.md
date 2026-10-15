@@ -768,7 +768,7 @@ enrolled after my first accepted bid,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 
@@ -905,7 +905,7 @@ enrolled after my first accepted bid,
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 
@@ -1129,7 +1129,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 
@@ -1243,7 +1243,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 
@@ -1288,7 +1288,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 
@@ -1384,7 +1384,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 
@@ -1519,7 +1519,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bid-panel-enrollment-US-04
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bid-panel-enrollment/bid-panel-enrollment.spec.ts`
 
 **Pre-conditions:**
 

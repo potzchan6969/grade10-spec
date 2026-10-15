@@ -53,6 +53,27 @@ the card is in the winner's hands. The collector's half is
 - **Cert ID** - creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for regular stock without a Cert
   record; each Cert ID can have its own live listing, and only one
+- **Title and description in each language** — a listing keeps its title and
+  description as written today, and an operator may add the same two in
+  Traditional Chinese and in Simplified Chinese, on the create and edit forms
+  and on the listing's Copy block, which switches both with one language
+  choice. A language left empty shows the title and description already on the
+  listing, marked as the fallback; the other Chinese is never borrowed. The
+  slug, the listing code, the Listings table and everything staff quote stay on
+  the English title. Relist carries every language across. The Listings search
+  also finds a listing by a translated title
+- **Customer view in each language** — the preview of the lot page in a
+  listing's editor and record offers EN, 繁中 and 简中 on its desktop and phone
+  frames; the lot page title follows the choice, falls back to English, never
+  borrows the other Chinese, and the image alt text stays English
+- **Customer view description** — the preview draws no description, because
+  its lot-page block needs shipping copy and badges
+- **Language control** — the Copy block switches language with three
+  buttons, EN, 繁中 and 简中, like the customer view's strip, rather than a
+  dropdown, because the console dropdown fails the phone touch target
+- **Labs seeds in each language** — every Labs listing seed writes
+  Traditional and Simplified Chinese titles and descriptions on the listing and
+  names and descriptions on its product; a recovered product is left alone
 - 🚧 **Slug helper** — the first saved draft receives a title-and-code slug:
   lower-case title words, then its lower-case listing code. The helper follows
   title edits only while the operator has left that generated value unchanged.
@@ -545,7 +566,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service)
-- **Fixture tabs** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs seed and drop fixture listings, local dev only
+- **Fixture tabs** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs seed and drop fixture listings, local dev only; every Labs seed fills the Chinese texts (`devFixtures/fixtureTranslations.ts`)
 - **Winners** — `trpc/routers/testWinners.ts` on the `testBids` middleware; the Test tab ships only in pre-production builds
 :::
 

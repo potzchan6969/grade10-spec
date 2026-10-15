@@ -636,8 +636,8 @@
 | shipping | USD10.01 | (1001 minor units) |
 | settlement currency | HKD | selected by customer A |
 | payment method | Card | selected by customer A |
-| USD total | USD131.21 | (13121 minor units) |
-| HKD total | HKD1,031.00 | (103100 minor units) |
+| HKD lines | HKD793.00; HKD159.00; HKD79.00 | (79300, 15900 and 7900 minor units) |
+| HKD subtotal | HKD1,031.00 | (103100 minor units) |
 | HKD card fee | HKD38.73 | (3873 minor units) from the gross-up rule on the HKD subtotal |
 | amount payable | HKD1,069.73 | (106973 minor units) |
 
@@ -757,19 +757,19 @@
 ### Route
 
 1. Read the setup choices and Order Summary before making a selection.
-   - Step 1 has no preselected settlement currency or payment method, and no HKD total or fee appears before an invoice exists. `g10.auction-dmn.US12-TC3`
+   - Step 1 has no preselected settlement currency or payment method, and no HKD amount appears before an invoice exists. `g10.auction-dmn.US12-TC3`
 2. Select `<settlement currency>`, then `<payment method>`; confirm the address and setup, then read the Order Summary before invoice send.
    - Step 2 commits the winner's explicit HKD settlement and Card choices. `g10.auction-dmn.US12-TC3`
 3. As an operator, quote the order with Shipping & Handling of `<shipping>` and send its invoice.
    - Step 3 sends an invoice after the quote includes `<shipping>`. `g10.auction-dmn.US12-TC3`
 4. Reopen the winner's order and read its Pending Payment status and Order Summary, totals and fee rows.
-   - Step 4 reads Pending Payment and lists the winning bid, buyer's premium and shipping in USD. `g10.auction-dmn.US12-TC3`
-   - Step 4 shows `<USD total>`, then `<HKD total>`; the HKD fee of `<HKD card fee>` appears after the separator, below both totals. `g10.auction-dmn.US12-TC3`
+   - Step 4 reads Pending Payment and lists the winning bid, buyer's premium and shipping as `<HKD lines>`, each with its USD amount beneath it. `g10.auction-dmn.US12-TC3`
+   - Step 4 shows the Payment Processing Fee of `<HKD card fee>` in HKD, with no USD amount beneath it, and one Order Total of `<amount payable>` in HKD; no USD total shows. `g10.auction-dmn.US12-TC3`
 5. Read the invoice amount payable.
-   - Before the invoice is sent, the summary has no HKD total or fee. `g10.auction-dmn.US12-TC3`
-   - The HKD card fee is calculated from the HKD subtotal `<HKD total>` (103100 minor units) using `<card fee percent>` per cent plus `<fixed card fee>`. It is not included in either total, and no USD fee line appears. `g10.auction-dmn.US12-TC3`
+   - Before the invoice is sent, the summary has no HKD amount. `g10.auction-dmn.US12-TC3`
+   - The HKD card fee is calculated from the HKD subtotal `<HKD subtotal>` (103100 minor units) using `<card fee percent>` per cent plus `<fixed card fee>`, and the Order Total includes it. `g10.auction-dmn.US12-TC3`
    - Step 5 reads `<amount payable>` in HKD, equal to the invoice's Order Total. `g10.auction-dmn.US12-TC3`
-   - The order summary names no USD winning bid or exchange rate under HKD settlement. `g10.auction-dmn.US12-TC3`
+   - The order summary names no exchange rate under HKD settlement. `g10.auction-dmn.US12-TC3`
 6. Wait until `<commit time>` passes.
 7. As customer A, read the standing, Highest bid and Recent bids on the listing page for `<listing_66>`.
    - Step 7 reads Outbid, Highest bid `<final price>`. `g10.auction-dmn.US13-TC1`
@@ -1453,7 +1453,7 @@ from my card until I win.
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auction-US-12, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-listing-page-US-12
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/live-room.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/listing-page/live-room.spec.ts`
 
 **Pre-conditions:**
 
@@ -2001,7 +2001,7 @@ it.
 * Step 3's card reads Ended and names when it ended, with no watch control.
 * Neither page reloaded.
 
-<!-- trace:case id=g10.auction-domain.TC-k4p rev=3 covers=g10.auction-winner-order.SC-ug0,g10.auction-winner-order.SC-fq4 -->
+<!-- trace:case id=g10.auction-domain.TC-k4p rev=4 covers=g10.auction-winner-order.SC-ug0,g10.auction-winner-order.SC-fq4 -->
 ### g10.auction-dmn.US12-TC3: A winner chooses HKD and sees the card fee after both order totals
 
 **Classification:**
@@ -2034,8 +2034,8 @@ it.
 | shipping | USD10.01 | (1001 minor units) |
 | settlement currency | HKD | selected by customer A |
 | payment method | Card | selected by customer A |
-| USD total | USD131.21 | (13121 minor units) |
-| HKD total | HKD1,031.00 | (103100 minor units) |
+| HKD lines | HKD793.00; HKD159.00; HKD79.00 | (79300, 15900 and 7900 minor units) |
+| HKD subtotal | HKD1,031.00 | (103100 minor units) |
 | HKD card fee | HKD38.73 | (3873 minor units) from the gross-up rule on the HKD subtotal |
 | amount payable | HKD1,069.73 | (106973 minor units) |
 
@@ -2054,15 +2054,15 @@ it.
 
 **Expected Results:**
 
-* Step 1 has no preselected settlement currency or payment method, and no HKD total or fee appears before an invoice exists.
+* Step 1 has no preselected settlement currency or payment method, and no HKD amount appears before an invoice exists.
 * Step 2 commits the winner's explicit HKD settlement and Card choices.
-* Before the invoice is sent, the summary has no HKD total or fee.
+* Before the invoice is sent, the summary has no HKD amount.
 * Step 3 sends an invoice after the quote includes `<shipping>`.
-* Step 4 reads Pending Payment and lists the winning bid, buyer's premium and shipping in USD.
-* Step 4 shows `<USD total>`, then `<HKD total>`; the HKD fee of `<HKD card fee>` appears after the separator, below both totals.
-* The HKD card fee is calculated from the HKD subtotal `<HKD total>` (103100 minor units) using `<card fee percent>` per cent plus `<fixed card fee>`. It is not included in either total, and no USD fee line appears.
+* Step 4 reads Pending Payment and lists the winning bid, buyer's premium and shipping as `<HKD lines>`, each with its USD amount beneath it.
+* Step 4 shows the Payment Processing Fee of `<HKD card fee>` in HKD, with no USD amount beneath it, and one Order Total of `<amount payable>` in HKD; no USD total shows.
+* The HKD card fee is calculated from the HKD subtotal `<HKD subtotal>` (103100 minor units) using `<card fee percent>` per cent plus `<fixed card fee>`, and the Order Total includes it.
 * Step 5 reads `<amount payable>` in HKD, equal to the invoice's Order Total.
-* The order summary names no USD winning bid or exchange rate under HKD settlement.
+* The order summary names no exchange rate under HKD settlement.
 
 ---
 
@@ -2491,7 +2491,7 @@ it.
 - **Decision** - None new. Q1-Q4 stay settled.
 - **Classification** - New and changed active cases remain draft. No runtime execution or human approval is claimed.
 
-**Current cases** - `TC-k4p@3` covers winner-order SC-ug0 and SC-fq4. Its reopened sent order shows USD lines 101.00, 20.20 and 10.01; converted HKD lines 793.00, 159.00 and 79.00; USD subtotal 131.21; HKD subtotal 1,031.00; HKD gross-up fee 38.73 outside both subtotals; and payable 1,069.73 HKD. It checks that no HKD total or fee appears before confirmation and invoice creation.
+**Current cases** - `TC-k4p@4` covers winner-order SC-ug0 and SC-fq4. Its reopened sent order shows HKD lines 793.00, 159.00 and 79.00, each with its USD amount 101.00, 20.20 and 10.01 beneath it; an HKD gross-up fee of 38.73; and one Order Total of 1,069.73 HKD. It checks that no HKD amount appears before confirmation and invoice creation.
 
 `TC-wrl` remains draft with `automation, manual` testability and manual automation status. Its corrected current-bid range is 30,000 to 30,500 USD minor units. The domain cases do not claim full coverage of other site feature scenarios based on representative cases.
 

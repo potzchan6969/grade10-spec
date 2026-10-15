@@ -16,7 +16,12 @@ import {
   manualFeatures,
 } from "./coverage.mjs";
 import { DESIGN_SYSTEM, KINDS, START_HERE, titleCase } from "./grammar.mjs";
-import { citedJourneys, readJourneys } from "./journeys.mjs";
+import {
+  citedJourneys,
+  parseRule,
+  readJourneys,
+  requirementTitles,
+} from "./journeys.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
 
 export { DESIGN_SYSTEM, KINDS, START_HERE, titleCase };
@@ -278,6 +283,46 @@ export function journeyErrors(root, parsed) {
   return { errors, warnings };
 }
 
+/**
+ * A Scenario, a story tagged `scenario`, holds the settings staging can be
+ * set to; each rule it cites names a setting and a requirement that exists.
+ */
+export function settingsErrors(root, parsed) {
+  const errors = [];
+  const warnings = [];
+  const titles = new Map();
+  const requirements = (capability) => {
+    if (!titles.has(capability))
+      titles.set(capability, requirementTitles(root, capability));
+    return titles.get(capability);
+  };
+  for (const [path, file] of Object.entries(parsed)) {
+    if (!file.tags?.includes("scenario")) continue;
+    if (!file.settings?.length)
+      errors.push(
+        `"${file.title}" - a Scenario holds settings: argTypes for the conditions staging can be set to`,
+      );
+    const rules = [
+      file.rules ?? {},
+      ...(file.stories ?? []).map((story) => story.rules ?? {}),
+    ];
+    for (const [setting, rule] of rules.flatMap(Object.entries)) {
+      if (!file.settings?.includes(setting))
+        errors.push(`${path} - rule for "${setting}", which is no setting`);
+      const parsedRule = parseRule(rule);
+      if (!parsedRule)
+        errors.push(
+          `${path} - rule "${rule}" reads "<capability>: <requirement title>"`,
+        );
+      else if (!requirements(parsedRule.capability).has(parsedRule.title))
+        errors.push(
+          `${path} - no requirement "${parsedRule.title}" in ${parsedRule.capability}`,
+        );
+    }
+  }
+  return { errors, warnings };
+}
+
 /** coverage.yaml names real features, and a collector feature holds something to look at. */
 export function coverageErrors(root, index) {
   const errors = [];
@@ -328,6 +373,9 @@ export async function checkStories({ root = rootDirectory, files } = {}) {
   const journeyProblems = journeyErrors(root, parsed);
   errors.push(...journeyProblems.errors);
   warnings.push(...journeyProblems.warnings);
+  const settingsProblems = settingsErrors(root, parsed);
+  errors.push(...settingsProblems.errors);
+  warnings.push(...settingsProblems.warnings);
   const coverageProblems = coverageErrors(root, { entries, files: parsed });
   errors.push(...coverageProblems.errors);
   warnings.push(...coverageProblems.warnings);

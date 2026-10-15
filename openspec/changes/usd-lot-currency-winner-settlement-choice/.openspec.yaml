@@ -22,6 +22,8 @@ purpose_rewritten:
     rule per settlement currency and one USD premium minimum, not a mapping per
     lot currency"
 reviewed:
-  user-journeys: b0731aff
-  specs: 4be57560
-  test-cases: 4be57560
+  user-journeys: cf926a1b
+  specs: b7c79f08
+  test-cases: b7c79f08
+  tech-design: 60839e2e
+  tasks: 8efbf1a5

@@ -28,9 +28,8 @@ support contacts about missing points (watch).
   when the paid order lands
 - **Expiry clock** — the inactivity window counts the earn on its completion
   date
-- **Linked guest orders** — a guest order linked before it completes earns
-  on completion like any order; one already Completed when linked earns
-  nothing (owned by `add-store-guest-checkout`)
+- **Guest orders** — a site guest order never earns, linked or not (owned
+  by `add-store-guest-checkout`)
 
 ## Non-Goals
 

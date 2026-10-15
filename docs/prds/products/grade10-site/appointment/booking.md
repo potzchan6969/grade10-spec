@@ -84,5 +84,5 @@ finds a guest visit made before by the address it was booked under.
 | Refunds | Decided | Set per service and off by default: a collector's cancellation before a cut-off, and a visit the shop cancels, each refunds in full only when the service allows it. | Product |
 | Unpaid hold | Decided | 15 minutes; an unpaid booking then ends and frees the time. Stripe keeps a checkout open 30 minutes at the least, so the diary closes the page itself when the hold ends. | Product |
 | Pay notice | Decided | No separate box: the press names the amount, and the refund rule sits under the presses as a footnote. | Product |
-| Anonymous write | Decided | A challenge plus a per-address budget of ten asks a day. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |
+| Anonymous write | Decided | A challenge plus a per-address budget of twenty asks an hour. A booking holds a desk and sends mail on nobody's authority, and the two brakes answer different questions: whether a person is there at all, and how much one address may spend however convincingly it asks. | Product |
 :::

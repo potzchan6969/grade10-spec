@@ -8,6 +8,7 @@ import {
   featureCoverage,
   journeyCoverage,
   manualFeatures,
+  scenarioSettings,
 } from "./coverage.mjs";
 import { readJourneys } from "./journeys.mjs";
 import { storyIndex } from "./story-index.mjs";
@@ -162,5 +163,28 @@ describe("coverageErrors", () => {
       warnings.join("\n"),
       /Auth\/Sign In - no Screens or Prototypes/,
     );
+  });
+});
+
+describe("scenarioSettings", () => {
+  it("lists each Scenario's settings and its presets", () => {
+    const index = {
+      files: {
+        a: {
+          title: "Store/Cart/Screens/Cart Drawer/Scenario",
+          tags: ["scenario"],
+          settings: ["code", "points"],
+          stories: [{}, {}],
+        },
+        b: { title: "Store/Cart/Screens/Cart", settings: [], stories: [{}] },
+      },
+    };
+    assert.deepEqual(scenarioSettings(index), [
+      {
+        title: "Store/Cart/Screens/Cart Drawer/Scenario",
+        settings: ["code", "points"],
+        presets: 2,
+      },
+    ]);
   });
 });
