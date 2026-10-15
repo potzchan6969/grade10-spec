@@ -187,6 +187,7 @@
     "booking": "正在预约…",
     "stillTrying": "正在预约…仍在尝试",
     "slowNote": "请保持此页开启，我们不会重复预约。",
+    "challenge": "请先完成上方的真人验证，再预约。",
     "takenTitle": "{day} {time} 刚被其他人预约。",
     "takenBody": "请选择其他时间，你的资料已保留。",
     "heldTitle": "你已有一个{service}预约。",

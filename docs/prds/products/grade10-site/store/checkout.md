@@ -97,8 +97,9 @@ joins one under that email.
 - 🚧 **No points** - a guest order never earns, joined or not; only an
   order placed with an account earns -
   [Points](/p/grade10-site/loyalty/points#rules)
-- **The cart** - this browser's cart is emptied when the guest leaves for
-  Shopify's page; the invoice holds the basket
+- **The cart** - this browser's cart keeps the basket until it reads the
+  order paid, so a guest who leaves Shopify's page unpaid comes back to a full
+  cart; a cart the guest changed after Pay is kept
 - **Post-checkout account** - the order page after payment asks the
   buyer to sign in to add the order to an account; a sign-in that proves
   the order's email adds it -
@@ -134,6 +135,7 @@ joins one under that email.
 | Frontend scope | Decided | The drawer uses the store's current checkout request and changes no backend. Invoice reuse, recovery and durable retirement are a separate backend change. Decided 2026-10-09. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery. The drawer holds no purchase identity; it accepts one Pay at a time. | @kinisworking |
 | Reply after closing | Decided | A still-current successful checkout reply opens Shopify after dismissal. Chosen over ignoring navigation on 2026-10-13. | @kinisworking |
+| Guest paid cart | Decided | A guest's cart empties when this browser reads the order paid, not when the invoice opens; a cart changed after Pay is kept. Decided 2026-10-15, the owner's answer; supersedes emptying at invoice open. | Product |
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |

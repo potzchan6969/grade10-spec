@@ -187,6 +187,7 @@
     "booking": "예약 중…",
     "stillTrying": "예약 중… 계속 시도하고 있습니다",
     "slowNote": "이 페이지를 열어 두세요. 두 번 예약되지 않습니다.",
+    "challenge": "위의 사람 확인을 먼저 마친 뒤 예약해 주세요.",
     "takenTitle": "{day} {time}은(는) 방금 다른 분이 예약했습니다.",
     "takenBody": "다른 시간을 고르세요. 입력하신 정보는 그대로 두었습니다.",
     "heldTitle": "이미 {service} 예약이 있습니다.",

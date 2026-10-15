@@ -187,6 +187,7 @@
     "booking": "Booking…",
     "stillTrying": "Booking… still trying",
     "slowNote": "Keep this page open. We won’t book you twice.",
+    "challenge": "Confirm you’re human above, then book.",
     "takenTitle": "{time} on {day} was just taken.",
     "takenBody": "Pick another time. We kept your details.",
     "heldTitle": "You already have a {service}.",

@@ -168,8 +168,9 @@ the address it was paid under: on that account's sign-in, or at payment when
 the account already proved it. A member's Your Orders SHALL list the guest
 orders paid under the address their sign-in proved.
 
-**The cart** - This browser's cart SHALL be emptied once the guest's hosted
-invoice opens; the invoice holds the basket.
+**The cart** - This browser's cart SHALL keep the basket while the guest's
+hosted invoice is unpaid. It SHALL be emptied once this browser reads the
+order paid, unless the guest changed the cart's lines or code after Pay.
 
 <!-- trace:scenario id=g10.store-checkout.SC-f06 rev=5 -->
 #### Scenario: grade10-site-store-checkout-SC-06 - A signed-out buyer checks out as a guest
@@ -181,7 +182,7 @@ invoice opens; the invoice holds the basket.
 - **THEN** one Grade10 guest order and one Shopify hosted invoice are created
 - **AND** they are not asked to sign in
 
-<!-- trace:scenario id=g10.store-checkout.SC-wet rev=3 -->
+<!-- trace:scenario id=g10.store-checkout.SC-wet rev=4 -->
 #### Scenario: grade10-site-store-checkout-SC-66 - A guest pays the basket and a public code
 **Serves:** grade10-site-store-checkout-US-04 - A collector with no account pays for the cart
 
@@ -190,7 +191,8 @@ invoice opens; the invoice holds the basket.
 - **WHEN** they press Pay
 - **THEN** the hosted invoice carries the reviewed lines and that code, with
   no reward coupon or points
-- **AND** this browser's cart is empty once the invoice opens
+- **AND** this browser's cart still holds the basket while the invoice is
+  unpaid, and is empty once this browser reads the order paid
 
 <!-- trace:scenario id=g10.store-checkout.SC-p4c rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-74 - A member's code typed by a guest is refused
