@@ -237,8 +237,6 @@ export const LiveNoBids: Story = {
     expect(canvas.getByText("Min. bid").closest("button")).toHaveTextContent(
       "US$48,000",
     );
-    expect(canvas.getAllByText(/vs starting/).length).toBeGreaterThan(0);
-    expect(canvas.queryByText(/vs current/)).toBeNull();
   },
 };
 

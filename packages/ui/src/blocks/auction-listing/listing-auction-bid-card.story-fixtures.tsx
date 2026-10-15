@@ -76,7 +76,6 @@ export const COPY = {
   bidUpTo: auctionListing.maximumChip,
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
-  amountAboveStarting: "{amount} vs starting",
   amountAboveMaximum: "{amount} vs max",
   maximumAtCeiling: auctionListing.maximumAtCeiling,
   biddingAtCeiling: auctionListing.biddingAtCeiling,

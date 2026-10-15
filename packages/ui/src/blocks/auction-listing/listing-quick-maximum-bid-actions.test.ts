@@ -31,7 +31,6 @@ const COPY: ListingQuickMaximumBidActionsCopy = {
   bidUpTo: "Bid up to",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
-  amountAboveStarting: "{amount} vs starting",
   amountAboveMaximum: "{amount} vs max",
   linkACardToBid: "Link a card to bid",
   maximumAtCeiling: "This is the highest maximum this auction accepts.",
