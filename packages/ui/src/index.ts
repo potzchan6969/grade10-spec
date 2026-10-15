@@ -343,11 +343,9 @@ export {
 } from "./blocks/auction-order/auction-phone-field";
 export {
   type AuctionPaymentRail,
-  type AuctionSettlementCurrency,
   AuctionWinnerOrder,
   type AuctionWinnerOrderBankDetails,
   type AuctionWinnerOrderCopy,
-  type AuctionWinnerOrderPaymentChoice,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
 } from "./blocks/auction-order/auction-winner-order";

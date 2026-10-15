@@ -62,16 +62,7 @@ type AuctionWinnerOrderLine = {
   footnote?: string;
 };
 
-type AuctionSettlementCurrency = "USD" | "HKD";
-
 type AuctionPaymentRail = "fps" | "hk_local" | "swift";
-
-type AuctionWinnerOrderPaymentChoice = {
-  value: "card" | AuctionPaymentRail;
-  label: string;
-  feeRange: string;
-  unavailable?: string;
-};
 
 type AuctionWinnerOrderBankDetails = {
   rail: AuctionPaymentRail;
@@ -139,25 +130,6 @@ type AuctionWinnerOrderProps = {
     confirm?: AuctionWinnerOrderAction & { deadline?: string };
   };
   billing?: { label: string; value: string };
-  settlementCurrency?: {
-    label: string;
-    options: readonly {
-      value: AuctionSettlementCurrency;
-      label: string;
-    }[];
-    value: AuctionSettlementCurrency | null;
-    onChange: (value: AuctionSettlementCurrency) => void;
-  };
-  paymentChoices?: {
-    label: string;
-    byCurrency: Record<
-      AuctionSettlementCurrency,
-      readonly AuctionWinnerOrderPaymentChoice[]
-    >;
-    value: AuctionWinnerOrderPaymentChoice["value"] | null;
-    onChange: (value: AuctionWinnerOrderPaymentChoice["value"]) => void;
-    none?: string;
-  };
   bankDetails?: AuctionWinnerOrderBankDetails;
 };
 
@@ -231,13 +203,11 @@ export type {
   AuctionAddressFormValues,
   AuctionAddressKind,
   AuctionPaymentRail,
-  AuctionSettlementCurrency,
   AuctionWinnerOrderAction,
   AuctionWinnerOrderAlert,
   AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
   AuctionWinnerOrderLine,
-  AuctionWinnerOrderPaymentChoice,
   AuctionWinnerOrderPdf,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,

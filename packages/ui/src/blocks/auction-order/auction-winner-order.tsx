@@ -6,8 +6,6 @@ import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
-import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
-import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
@@ -502,87 +500,6 @@ function LotCard({
   );
 }
 
-function SettlementChoices({
-  settlementCurrency,
-  paymentChoices,
-}: {
-  settlementCurrency: NonNullable<
-    AuctionWinnerOrderProps["settlementCurrency"]
-  >;
-  paymentChoices?: AuctionWinnerOrderProps["paymentChoices"];
-}) {
-  const selectedCurrency = settlementCurrency.value;
-  const choices = selectedCurrency
-    ? (paymentChoices?.byCurrency[selectedCurrency] ?? [])
-    : [];
-
-  return (
-    <VStack className="w-full" gap="md" hAlign="stretch">
-      <RadioList
-        aria-label={settlementCurrency.label}
-        label={settlementCurrency.label}
-        onValueChange={(value) => {
-          if (value === "USD" || value === "HKD") {
-            settlementCurrency.onChange(value);
-          }
-        }}
-        value={settlementCurrency.value ?? ""}
-      >
-        {settlementCurrency.options.map((option) => (
-          <RadioCard
-            key={option.value}
-            title={option.label}
-            value={option.value}
-          />
-        ))}
-      </RadioList>
-
-      {paymentChoices && selectedCurrency ? (
-        choices.length > 0 ? (
-          <RadioList
-            aria-label={paymentChoices.label}
-            label={paymentChoices.label}
-            onValueChange={(value) => {
-              const choice = choices.find((item) => item.value === value);
-              if (choice && !choice.unavailable) {
-                paymentChoices.onChange(choice.value);
-              }
-            }}
-            value={
-              choices.some((choice) => choice.value === paymentChoices.value)
-                ? (paymentChoices.value ?? "")
-                : ""
-            }
-          >
-            {choices.map((choice) => (
-              <RadioCard
-                description={
-                  choice.unavailable ? (
-                    <>
-                      <span>{choice.feeRange}</span>
-                      <span>{choice.unavailable}</span>
-                    </>
-                  ) : (
-                    choice.feeRange
-                  )
-                }
-                disabled={Boolean(choice.unavailable)}
-                key={choice.value}
-                title={choice.label}
-                value={choice.value}
-              />
-            ))}
-          </RadioList>
-        ) : paymentChoices.none ? (
-          <Text className="text-secondary-foreground" size="sm">
-            {paymentChoices.none}
-          </Text>
-        ) : null
-      ) : null}
-    </VStack>
-  );
-}
-
 type BankDetailsDialogProps = {
   bankDetails: AuctionWinnerOrderBankDetails;
   copy: AuctionWinnerOrderCopy;
@@ -877,8 +794,6 @@ function OrderSidebar({
   delivery,
   billing,
   bankDetails,
-  paymentChoices,
-  settlementCurrency,
 }: Pick<
   AuctionWinnerOrderProps,
   | "copy"
@@ -888,8 +803,6 @@ function OrderSidebar({
   | "delivery"
   | "billing"
   | "bankDetails"
-  | "paymentChoices"
-  | "settlementCurrency"
 >) {
   const [bankDetailsOpen, setBankDetailsOpen] = useState(false);
   const methodCard =
@@ -913,12 +826,6 @@ function OrderSidebar({
           gap="md"
           hAlign="stretch"
         >
-          {settlementCurrency ? (
-            <SettlementChoices
-              paymentChoices={paymentChoices}
-              settlementCurrency={settlementCurrency}
-            />
-          ) : null}
           <OrderSummary
             copy={copy}
             onViewBankDetails={() => {
@@ -992,8 +899,6 @@ function AuctionWinnerOrder({
   receipts,
   delivery,
   billing,
-  settlementCurrency,
-  paymentChoices,
   bankDetails,
 }: AuctionWinnerOrderProps) {
   const revealed = useFirstPaintReveal();
@@ -1080,10 +985,8 @@ function AuctionWinnerOrder({
             billing={billing}
             copy={copy}
             delivery={delivery}
-            paymentChoices={paymentChoices}
             paymentMethod={paymentMethod}
             receipts={receipts}
-            settlementCurrency={settlementCurrency}
             summary={summary}
           />
         </RevealGroup>
@@ -1094,10 +997,8 @@ function AuctionWinnerOrder({
 
 export type {
   AuctionPaymentRail,
-  AuctionSettlementCurrency,
   AuctionWinnerOrderBankDetails,
   AuctionWinnerOrderCopy,
-  AuctionWinnerOrderPaymentChoice,
   AuctionWinnerOrderProps,
   AuctionWinnerOrderStep,
 } from "./types";

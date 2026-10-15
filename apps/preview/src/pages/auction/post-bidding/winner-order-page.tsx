@@ -7,10 +7,8 @@ import {
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import {
-  type AuctionSettlementCurrency,
   AuctionWinnerOrder,
   type AuctionWinnerOrderBankDetails,
-  type AuctionWinnerOrderPaymentChoice,
   type AuctionWinnerOrderProps,
   type AuctionWinnerOrderStep,
   type OrderDetailsPaymentBrand,
@@ -399,86 +397,6 @@ function summaryLinesFor(
   ];
 }
 
-const SETTLEMENT_CURRENCY_OPTIONS: readonly {
-  value: AuctionSettlementCurrency;
-  label: string;
-}[] = [
-  { value: "USD", label: "USD" },
-  { value: "HKD", label: "HKD" },
-];
-
-const PAYMENT_RAILS_BY_CURRENCY: Record<
-  AuctionSettlementCurrency,
-  readonly AuctionWinnerOrderPaymentChoice[]
-> = {
-  HKD: [
-    {
-      value: "card",
-      label: "Card",
-      feeRange: "3.0% + HK$10 to 4.0% + HK$20",
-    },
-    { value: "fps", label: "FPS", feeRange: "No fee" },
-    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
-  ],
-  USD: [
-    {
-      value: "card",
-      label: "Card",
-      feeRange: "3.0% + US$1 to 4.0% + US$2",
-    },
-    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
-    {
-      value: "swift",
-      label: "International via SWIFT",
-      feeRange: "No fee",
-    },
-  ],
-};
-
-function selectedPaymentChoice(
-  content: WinnerOrderContent,
-): AuctionWinnerOrderPaymentChoice["value"] | null {
-  if (content.paymentRail) return content.paymentRail;
-  if (
-    content.setupPaymentMethod === "Card" ||
-    content.paymentMethod === "Visa"
-  ) {
-    return "card";
-  }
-  if (content.setupPaymentMethod === "FPS") return "fps";
-  if (content.setupPaymentMethod === "HK Local") return "hk_local";
-  if (content.setupPaymentMethod === "International via SWIFT") return "swift";
-  return null;
-}
-
-function settlementCurrencyFor(
-  content: WinnerOrderContent,
-): NonNullable<AuctionWinnerOrderProps["settlementCurrency"]> | undefined {
-  if (content.status !== "awaiting_address" || !content.settlementCurrency) {
-    return undefined;
-  }
-  return {
-    label: "Settlement currency",
-    options: SETTLEMENT_CURRENCY_OPTIONS,
-    value: content.settlementCurrency,
-    onChange: () => undefined,
-  };
-}
-
-function paymentChoicesFor(
-  content: WinnerOrderContent,
-): AuctionWinnerOrderProps["paymentChoices"] | undefined {
-  if (content.status !== "awaiting_address" || !content.settlementCurrency) {
-    return undefined;
-  }
-  return {
-    label: "Payment method",
-    byCurrency: PAYMENT_RAILS_BY_CURRENCY,
-    value: selectedPaymentChoice(content),
-    onChange: () => undefined,
-  };
-}
-
 function bankDetailsFor(
   content: WinnerOrderContent,
 ): AuctionWinnerOrderBankDetails | undefined {
@@ -838,7 +756,6 @@ function WinnerOrderPageState({
           }}
           bankDetails={bankDetailsFor(content)}
           note={noteFor(content)}
-          paymentChoices={paymentChoicesFor(content)}
           paymentMethod={paymentMethodFor(content)}
           progress={progressFor(content)}
           receipts={receiptLinksFor(content).map((receipt) => ({
@@ -849,7 +766,6 @@ function WinnerOrderPageState({
                 receipt.fileName ?? "grade10-winner-receipt.pdf",
               ),
           }))}
-          settlementCurrency={settlementCurrencyFor(content)}
           summary={{
             lines: summaryLines,
             total: total ?? null,
