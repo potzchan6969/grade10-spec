@@ -4,6 +4,10 @@
 > The grade10 groups then claim in parallel against the contracts and
 > fixtures. The rate (fixed 7.85), the retirement of HKD and JPY lot pricing
 > and the invoice disclosure are settled in `decisions.md`.
+>
+> Task 1.2's `settlementCurrency` and `paymentChoices` props were removed from
+> `AuctionWinnerOrder` afterwards: setup owns the choice and the order panel
+> never offers it.
 
 ## 1. Winner order presentation and fixtures (grade10-spec) (owner: @htonyl)
 
