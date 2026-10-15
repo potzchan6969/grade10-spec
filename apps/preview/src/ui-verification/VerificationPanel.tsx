@@ -11,6 +11,7 @@ import type { FormEvent } from "react";
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import { useStorybookApi, useStorybookState } from "storybook/manager-api";
+import { useTheme } from "storybook/theming";
 import type {
   ArchiveRecord,
   ArchiveStorage,
@@ -279,12 +280,12 @@ function latestRecord(values: ArchiveRecord[]): ArchiveRecord | null {
 function isSyntheticShadowAssessment(value: ArchiveRecord | null): boolean {
   return Boolean(
     value?.decision === "shadow" &&
-      (value.synthetic === true ||
-        value.source === "synthetic" ||
-        value.rubricVersion === "demo-only" ||
-        (isRecord(value.scorer) &&
-          value.scorer.id === "synthetic-demo" &&
-          value.scorer.model === "fixture-only")),
+    (value.synthetic === true ||
+      value.source === "synthetic" ||
+      value.rubricVersion === "demo-only" ||
+      (isRecord(value.scorer) &&
+        value.scorer.id === "synthetic-demo" &&
+        value.scorer.model === "fixture-only")),
   );
 }
 
@@ -610,7 +611,7 @@ function ImageEvidence({
       aria-label={`${title} evidence`}
     >
       <div className="verification-image-heading">
-        <h3>{title}</h3>
+        <h4>{title}</h4>
         <span>
           {artifact.width} × {artifact.height}
         </span>
@@ -636,7 +637,11 @@ function ImageEvidence({
         )}
       </div>
       {imageUrl ? (
-        <a href={imageUrl} download={`${title.toLocaleLowerCase()}.png`}>
+        <a
+          href={imageUrl}
+          download={`${title.toLocaleLowerCase()}.png`}
+          title={artifact.sha256}
+        >
           Download original {title} PNG · SHA-256 {artifact.sha256}
         </a>
       ) : (
@@ -651,7 +656,30 @@ function ImageEvidence({
   );
 }
 
+// The panel renders in the Storybook manager, where the design-system theme CSS
+// is not loaded, so it borrows the manager theme through scoped variables.
+function themeVariables(theme: ReturnType<typeof useTheme>) {
+  const dark = theme.base === "dark";
+  return {
+    "--vp-fg": theme.color.defaultText,
+    "--vp-muted": theme.color.mediumdark,
+    "--vp-bg": theme.background.content,
+    "--vp-surface": theme.background.hoverable,
+    "--vp-border": theme.appBorderColor,
+    "--vp-accent": theme.color.secondary,
+    "--vp-font": theme.typography.fonts.base,
+    "--vp-mono": theme.typography.fonts.mono,
+    "--vp-warn-bg": dark ? "#3a2f10" : "#fff9e8",
+    "--vp-warn-border": dark ? "#7a6320" : "#d8c691",
+    "--vp-warn-fg": dark ? "#f2dfa2" : "#523f12",
+    "--vp-error-bg": dark ? "#3d1717" : "#fff0f0",
+    "--vp-error-border": dark ? "#9b3b3b" : "#d65a5a",
+    "--vp-error-fg": dark ? "#ffc9c9" : "#7d1818",
+  } as React.CSSProperties;
+}
+
 export function VerificationPanel({ active }: { active: boolean }) {
+  const theme = useTheme();
   const managerApi = useStorybookApi();
   const managerState = useStorybookState();
   const currentStoryId = managerState.storyId;
@@ -855,14 +883,14 @@ export function VerificationPanel({ active }: { active: boolean }) {
   }, [localeChoices, selectedLocaleHasOption]);
   const selectedLocaleHasEvidence = Boolean(
     selectedManifestSummary &&
-      selectedIdentity &&
-      selectedManifestSummary.captures.some(
-        (capture) =>
-          capture.caseId === selectedIdentity.caseId &&
-          capture.targetId === selectedIdentity.targetId &&
-          capture.capturePointId === selectedIdentity.capturePointId &&
-          localeKey(captureLocale(capture)) === localeKey(localeId),
-      ),
+    selectedIdentity &&
+    selectedManifestSummary.captures.some(
+      (capture) =>
+        capture.caseId === selectedIdentity.caseId &&
+        capture.targetId === selectedIdentity.targetId &&
+        capture.capturePointId === selectedIdentity.capturePointId &&
+        localeKey(captureLocale(capture)) === localeKey(localeId),
+    ),
   );
   const selectedCapture = useMemo(
     () => captureFor(manifest, selectedIdentity, profileId, localeId),
@@ -1200,15 +1228,22 @@ export function VerificationPanel({ active }: { active: boolean }) {
     if (navigation.target) managerApi.selectStory(navigation.target);
   }
 
+  const reviewBlockedReason = !selectedCapture
+    ? "Review applies once this run has an outcome for the selected profile."
+    : selectedCapture.status !== "captured"
+      ? "Review applies to captured pairs only."
+      : !selectedCapture.reference
+        ? "No reference at this viewport; review applies to scored pairs."
+        : !archiveStorage
+          ? "Review needs an archive destination. Start Storybook with pnpm storybook:workbench, or set UI_VERIFICATION_ARCHIVE."
+          : "";
+
   return (
-    <div className="verification-panel">
+    <div className="verification-panel" style={themeVariables(theme)}>
       <header className="verification-panel-header">
         <div>
           <h2>Verification history</h2>
-          <p>
-            The current Storybook story is live; archived evidence stays tied to
-            its run.
-          </p>
+          <p>Archived evidence stays tied to its run.</p>
         </div>
         <button
           type="button"
@@ -1421,6 +1456,11 @@ export function VerificationPanel({ active }: { active: boolean }) {
       {historyError ? (
         <p role="alert" className="verification-error">
           Run history: {historyError}
+          <span className="verification-hint">
+            {" "}
+            Refresh to retry; if it persists, restart Storybook with pnpm
+            storybook:workbench.
+          </span>
         </p>
       ) : null}
       {loadingRuns ? <p role="status">Loading archived runs…</p> : null}
@@ -1459,57 +1499,17 @@ export function VerificationPanel({ active }: { active: boolean }) {
       {manifestError ? (
         <p role="alert" className="verification-error">
           Selected run: {manifestError}
+          <span className="verification-hint">
+            {" "}
+            Refresh to retry; if it persists, restart Storybook with pnpm
+            storybook:workbench.
+          </span>
         </p>
       ) : null}
       {loadingRun ? <p role="status">Loading archived evidence…</p> : null}
 
       {manifest && selectedIdentity ? (
         <>
-          <section className="verification-section" aria-label="Run provenance">
-            <h3>{manifest.runId}</h3>
-            <p>Run created: {manifest.createdAt}</p>
-            <dl className="verification-provenance">
-              <div>
-                <dt>App checkpoint</dt>
-                <dd>
-                  {manifest.checkpoint.app.ref} ·{" "}
-                  {manifest.checkpoint.app.commit}
-                </dd>
-              </div>
-              <div>
-                <dt>Story reference</dt>
-                <dd>
-                  {manifest.checkpoint.reference.ref} ·{" "}
-                  {manifest.checkpoint.reference.commit}
-                </dd>
-              </div>
-              <div>
-                <dt>Recorded story</dt>
-                <dd>
-                  {selectedDeclaration?.storyId ?? "Not present in this run"}
-                </dd>
-              </div>
-              <div>
-                <dt>Identity</dt>
-                <dd>{formatIdentity(selectedIdentity)}</dd>
-              </div>
-              <div>
-                <dt>Source capture time</dt>
-                <dd>
-                  {selectedCapture?.provenance.capturedAt ?? "Not recorded"}
-                </dd>
-              </div>
-              <div>
-                <dt>Capture source commits</dt>
-                <dd>
-                  {selectedCapture
-                    ? `${selectedCapture.provenance.appCommit} · ${selectedCapture.provenance.referenceCommit}`
-                    : "Not recorded"}
-                </dd>
-              </div>
-            </dl>
-          </section>
-
           {selectedDeclaration?.status === "retired" ? (
             <p className="verification-notice">Retired at capture</p>
           ) : null}
@@ -1649,7 +1649,8 @@ export function VerificationPanel({ active }: { active: boolean }) {
             className="verification-section"
             aria-label="Assessment and review status"
           >
-            <h3>Assessment</h3>
+            <h3>Status</h3>
+            <h4>Assessment</h4>
             <p>
               {automaticStatus(
                 selectedAssessment,
@@ -1697,7 +1698,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 Calibration history: {calibrationError}
               </p>
             ) : null}
-            <h3>Human review</h3>
+            <h4>Human review</h4>
             <p>
               {selectedReview
                 ? recordDecision(selectedReview)
@@ -1739,8 +1740,7 @@ export function VerificationPanel({ active }: { active: boolean }) {
                   onChange={(event) =>
                     setReviewDecision(
                       event.currentTarget.value as
-                        | "approved"
-                        | "changes-requested",
+                        "approved" | "changes-requested",
                     )
                   }
                 >
@@ -1780,6 +1780,9 @@ export function VerificationPanel({ active }: { active: boolean }) {
                   Archive destination is unavailable.
                 </p>
               )}
+              {reviewBlockedReason ? (
+                <p className="verification-hint">{reviewBlockedReason}</p>
+              ) : null}
               <button
                 type="submit"
                 disabled={
@@ -1796,6 +1799,57 @@ export function VerificationPanel({ active }: { active: boolean }) {
                 {savingReview ? "Saving review…" : "Submit review"}
               </button>
             </form>
+          </section>
+
+          <section className="verification-section" aria-label="Run provenance">
+            <details className="verification-details-toggle" open>
+              <summary>
+                <h3 className="verification-inline-heading">
+                  {manifest.runId}
+                </h3>
+              </summary>
+              <p>Run created: {manifest.createdAt}</p>
+              <dl className="verification-provenance">
+                <div>
+                  <dt>App checkpoint</dt>
+                  <dd>
+                    {manifest.checkpoint.app.ref} ·{" "}
+                    {manifest.checkpoint.app.commit}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Story reference</dt>
+                  <dd>
+                    {manifest.checkpoint.reference.ref} ·{" "}
+                    {manifest.checkpoint.reference.commit}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Recorded story</dt>
+                  <dd>
+                    {selectedDeclaration?.storyId ?? "Not present in this run"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Identity</dt>
+                  <dd>{formatIdentity(selectedIdentity)}</dd>
+                </div>
+                <div>
+                  <dt>Source capture time</dt>
+                  <dd>
+                    {selectedCapture?.provenance.capturedAt ?? "Not recorded"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Capture source commits</dt>
+                  <dd>
+                    {selectedCapture
+                      ? `${selectedCapture.provenance.appCommit} · ${selectedCapture.provenance.referenceCommit}`
+                      : "Not recorded"}
+                  </dd>
+                </div>
+              </dl>
+            </details>
           </section>
         </>
       ) : null}
