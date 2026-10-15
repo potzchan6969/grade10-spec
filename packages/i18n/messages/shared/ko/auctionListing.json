@@ -2,6 +2,7 @@
   "aboutThisAuction": "이 경매 정보",
   "ageAttestation": "본인은 18세 이상임을 확인합니다.",
   "amountAboveCurrent": "현재 입찰가보다 {amount} 높음",
+  "amountAboveStarting": "시작가보다 {amount} 높음",
   "amountAboveMaximum": "내 최대 금액보다 {amount} 높음",
   "auctionClosed": "경매 종료",
   "auctionDetails": "경매 상세",
