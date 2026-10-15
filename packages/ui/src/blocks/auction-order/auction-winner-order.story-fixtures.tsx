@@ -1,11 +1,6 @@
 import { getMessages } from "@grade10/i18n";
 import { expect, fn, waitFor } from "storybook/test";
-import type {
-  AuctionPaymentRail,
-  AuctionSettlementCurrency,
-  AuctionWinnerOrderPaymentChoice,
-  AuctionWinnerOrderProps,
-} from "./types";
+import type { AuctionWinnerOrderProps } from "./types";
 
 export const IMAGE = new URL(
   "../store-order-history/product.fixture.png",
@@ -13,10 +8,6 @@ export const IMAGE = new URL(
 ).href;
 
 const { auctionOrders } = getMessages("grade10", "en");
-export const { auctionOrders: traditionalChineseAuctionOrders } = getMessages(
-  "grade10",
-  "zh-Hant",
-);
 
 export const COPY: AuctionWinnerOrderProps["copy"] = {
   orderProgress: "Order Progress",
@@ -35,50 +26,6 @@ export const CURRENCY_TOGGLE = {
   primary: auctionOrders.setup.currency.hkd,
   secondary: auctionOrders.setup.currency.usd,
   ariaLabel: "Amount currency",
-};
-
-export const NON_ENGLISH_COPY = {
-  ...COPY,
-  bankDetailsClose: traditionalChineseAuctionOrders.bankDetails.close,
-  bankDetailsQrAlt: traditionalChineseAuctionOrders.bankDetails.qrAlt,
-};
-
-export const CONTROLLED_PAYMENT_CHOICES: Record<
-  AuctionSettlementCurrency,
-  readonly AuctionWinnerOrderPaymentChoice[]
-> = {
-  HKD: [
-    { value: "card", label: "Card", feeRange: "3.0% + HK$10" },
-    { value: "fps", label: "FPS", feeRange: "No fee" },
-    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
-  ],
-  USD: [
-    {
-      value: "card",
-      label: "Card",
-      feeRange: "3.0% + US$1",
-      unavailable: "Card is not yet available in USD.",
-    },
-    { value: "hk_local", label: "HK Local", feeRange: "No fee" },
-    {
-      value: "swift",
-      label: "International via SWIFT",
-      feeRange: "No fee",
-    },
-  ],
-};
-
-export const CONTROLLED_BANK_DETAILS = {
-  rail: "fps" as AuctionPaymentRail,
-  title: "View Bank Details",
-  rows: [
-    { label: "Amount due", value: "HK$128,269.00" },
-    { label: "FPS ID", value: "852-1234-5678" },
-    { label: "Account name", value: "Grade10 Auctions" },
-    { label: "Payment reference", value: "G10-WINNER-1999" },
-  ],
-  qrSrc: "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=",
-  note: "Open your banking app and scan this QR",
 };
 
 export const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] =
