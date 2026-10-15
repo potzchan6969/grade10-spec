@@ -47,7 +47,7 @@ const BANK_PENDING_CONTENT = {
 
 /** Invoice sent — pay by card within 7 days of send (not of lot close). */
 export const PendingPayment: Story = {
-  name: "Pending Payment",
+  name: "Pending Payment — Card",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -152,7 +152,7 @@ export const PendingPaymentBankTransfer: Story = {
 
 /** HKD invoice — the selected HK Local rail has its own bank details. */
 export const PendingPaymentHkdHongKongBankTransfer: Story = {
-  name: "Pending Payment - HKD HK Local - winner-order-SC-95",
+  name: "Pending Payment — HKD Local Bank Transfer",
   args: {
     status: "pending_payment",
     content: WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
@@ -239,7 +239,7 @@ export const PendingPaymentUsdBankTransfer: Story = {
  * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
-  name: "Submit Proof Flow - winner-order-SC-184",
+  name: "Submit Payment Proof Flow",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -328,7 +328,7 @@ export const SubmitBankPaymentProof: Story = {
 
 /** Simulated card host return → Preparing Shipment + Payment received toast. */
 export const PayWithCardCheckout: Story = {
-  name: "Pay with Card",
+  name: "Pay with Card Flow",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -466,7 +466,7 @@ export const PartiallyPaid: Story = {
 
 /** Payment deadline passed — no Pay CTA; contact from the overdue alert. */
 export const ExpiredInvoice: Story = {
-  name: "Expired Invoice",
+  name: "Payment Overdue",
   args: { status: "pending_payment_expired" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -498,7 +498,7 @@ export const ExpiredInvoice: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(canvas.getByText("Pending Payment (expired invoice)")).toBeVisible();
+    expect(canvas.getByText("Payment Overdue")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
       "Auction order IN-LK7P2Q01: payment overdue",
