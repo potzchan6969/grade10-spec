@@ -5,3 +5,5 @@ depends_on:
   - nav-cart-count-badge
 hands:
   dev: "@seankcw"
+reviewed:
+  tasks: 467cabd8
