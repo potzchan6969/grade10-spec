@@ -1,7 +1,7 @@
 import { buttonVariants } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { LinkBreak } from "@phosphor-icons/react";
-import { VISIT_INK_2 } from "./visit-tones";
+import { INK_2 } from "../appointment-booking/booking-look";
 
 type VisitLinkOpensNothingCopy = {
   title: string;
@@ -36,7 +36,7 @@ function VisitLinkOpensNothing({
         aria-hidden
         className={cn(
           "grid size-12 place-items-center rounded-full bg-muted",
-          VISIT_INK_2,
+          INK_2,
         )}
       >
         <LinkBreak size={24} />
@@ -45,7 +45,7 @@ function VisitLinkOpensNothing({
         <h1 className="m-0 text-2xl leading-[30px] font-bold tracking-[-0.01em]">
           {copy.title}
         </h1>
-        <p className={cn("m-0 text-[15px] leading-[22px]", VISIT_INK_2)}>
+        <p className={cn("m-0 text-[15px] leading-[22px]", INK_2)}>
           {copy.lede}
         </p>
       </div>
@@ -78,7 +78,7 @@ function VisitLinkOpensNothing({
           {copy.book}
         </a>
       </div>
-      <p className={cn("m-0 text-[13px] leading-[18px]", VISIT_INK_2)}>
+      <p className={cn("m-0 text-[13px] leading-[18px]", INK_2)}>
         {copy.staff}
       </p>
     </div>

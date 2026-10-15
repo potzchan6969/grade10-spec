@@ -1,5 +1,6 @@
 import { cn } from "@grade10/design-system/lib/utils";
-import { VISIT_INK_2, VISIT_INK_3 } from "./visit-tones";
+import { INK_2 } from "../appointment-booking/booking-look";
+import { VISIT_INK_3 } from "./visit-tones";
 
 type VisitPassCopy = {
   /** The counter once called, drawn under the name on the day's pass only. */
@@ -40,17 +41,11 @@ function VisitPass({ copy, name, size = "compact" }: VisitPassProps) {
       data-size={size}
       data-slot="visit-pass"
     >
-      <span className={cn("text-xs leading-4", VISIT_INK_3)}>
-        {copy.nameLabel}
-      </span>
-      <span
-        className={cn(
-          "font-bold [overflow-wrap:anywhere]",
-          day ? "text-4xl leading-[44px]" : "text-2xl leading-[30px]",
-        )}
-      >
-        {name}
-      </span>
+      <PassName
+        className={day ? "text-4xl leading-[44px]" : "text-2xl leading-[30px]"}
+        label={copy.nameLabel}
+        name={name}
+      />
       {day && copy.title ? (
         <span className="text-[17px] leading-6 font-bold">{copy.title}</span>
       ) : null}
@@ -60,14 +55,14 @@ function VisitPass({ copy, name, size = "compact" }: VisitPassProps) {
             "tabular-nums",
             day
               ? "text-[15px] leading-[22px] font-semibold"
-              : cn("text-[13px] leading-[18px]", VISIT_INK_2),
+              : cn("text-[13px] leading-[18px]", INK_2),
           )}
         >
           {copy.line}
         </span>
       ) : null}
       {copy.note ? (
-        <span className={cn("text-[13px] leading-[18px]", VISIT_INK_2)}>
+        <span className={cn("text-[13px] leading-[18px]", INK_2)}>
           {copy.note}
         </span>
       ) : null}
@@ -75,5 +70,26 @@ function VisitPass({ copy, name, size = "compact" }: VisitPassProps) {
   );
 }
 
+/** The face every pass shares: who the visit is booked for, under its label.
+ * The caller sets the name's size. Internal. */
+function PassName({
+  label,
+  name,
+  className,
+}: {
+  label: string;
+  name: string;
+  className: string;
+}) {
+  return (
+    <>
+      <span className={cn("text-xs leading-4", VISIT_INK_3)}>{label}</span>
+      <span className={cn("font-bold [overflow-wrap:anywhere]", className)}>
+        {name}
+      </span>
+    </>
+  );
+}
+
 export type { VisitPassCopy, VisitPassProps, VisitPassSize };
-export { VisitPass };
+export { PassName, VisitPass };

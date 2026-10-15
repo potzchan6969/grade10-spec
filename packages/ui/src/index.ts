@@ -41,11 +41,6 @@ export {
   type BookingSlotPickerProps,
 } from "./blocks/appointment-booking/booking-slot-picker";
 export {
-  BookingStepDots,
-  type BookingStepDotsCopy,
-  type BookingStepDotsProps,
-} from "./blocks/appointment-booking/booking-step-dots";
-export {
   BookingSummary,
   BookingSummaryBar,
   type BookingSummaryBarProps,
@@ -161,11 +156,6 @@ export {
   type VisitRefusedBookCopy,
   type VisitRefusedBookProps,
 } from "./blocks/appointment-visit/visit-refused-book";
-export {
-  VisitSheet,
-  type VisitSheetCopy,
-  type VisitSheetProps,
-} from "./blocks/appointment-visit/visit-sheet";
 export {
   VisitTicketBody,
   type VisitTicketBodyCopy,
@@ -369,7 +359,6 @@ export type {
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
 export { AuctionRecordRow } from "./blocks/auction-record/auction-record-row";
-export { AuctionRecordTabs } from "./blocks/auction-record/auction-record-tabs";
 export type {
   AuctionRecordCopy,
   AuctionRecordEmptyProps,
@@ -377,7 +366,6 @@ export type {
   AuctionRecordRowCopy,
   AuctionRecordRowProps,
   AuctionRecordRowState,
-  AuctionRecordTabsProps,
   EmailAlertsCopy,
   EmailAlertsToastCopy,
   WatchButtonCopy,

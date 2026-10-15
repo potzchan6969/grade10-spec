@@ -11,8 +11,11 @@ holding a link that manages it.
 - **Shop** — the shops offering it, with their addresses; one shop is
   already picked. The step shows while any service runs at more than one
   shop, so the steps never change with the service picked
+- **Steps** — a row over the flow names the picks, done up to the current
+  one; Back walks them back, and the row itself takes no press
 - **Day** — a month calendar marking the days with something free, no further
-  than the service's horizon
+  than the service's horizon; a full or closed day says so under its number
+  and still picks, to say why. A phone reads a 14-day strip instead
 - **Time** — the day's offered starts, in the shop's zone with the zone named;
   no press jumps to the earliest time
 - **Details** — the account's name, email and phone read as a summary nobody
@@ -77,6 +80,7 @@ finds a guest visit made before by the address it was booked under.
 | Reminders | Decided | Set per service: up to five leads, a day and two hours before by default, each removable. | Product |
 | Services by card count | ❓ Open | Grading drop-off for 1 to 19 cards, 30 min; Bulk grading drop-off for 20 or more, 45 min, in the Grading room. | Operations |
 | Shop step | Decided | Shown while any service runs at more than one shop, whichever service is picked; skipped only when none does. Steps that change under the collector read as a mistake. | Product |
+| Step row | Decided | The design system's stepper, which takes no press; Back is the one way to an earlier pick - decided by the owner, 2026-10-15 | Design |
 | A full day | ❓ Open | Shows the earliest time at each shop; no waitlist. | Product |
 | Prefill | Decided | A signed-in collector books under the account's name, email and phone, shown read-only; a wrong detail is changed on the account. Book again carries the service, the shop and the answers. | Product |
 | Shop facts in 繁中 | ❓ Open | Shop names, addresses, how to get there and counter names are stored in both languages. | Product |

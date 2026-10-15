@@ -1,8 +1,9 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import { useId } from "react";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { VisitFact } from "./types";
-import { VISIT_INK_2, VISIT_INK_3 } from "./visit-tones";
+import { VISIT_INK_3 } from "./visit-tones";
 
 type VisitFactsCopy = { title: string };
 
@@ -65,7 +66,7 @@ function VisitFacts({ copy, facts }: VisitFactsProps) {
                 {fact.value}
               </span>
               {fact.sub ? (
-                <span className={cn("text-[13px] leading-[18px]", VISIT_INK_2)}>
+                <span className={cn("text-[13px] leading-[18px]", INK_2)}>
                   {fact.sub}
                 </span>
               ) : null}

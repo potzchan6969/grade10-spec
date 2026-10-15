@@ -1,11 +1,12 @@
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CreditCard } from "@phosphor-icons/react";
 import { type ReactNode, useId } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncRegion } from "./async-region";
+import { ClockLine } from "./booking-clock-line";
 import { INK_2, SMALL_LINES, STEP_HEADING } from "./booking-look";
-import { BookingOption } from "./booking-option";
 import type { BookingService } from "./types";
 
 type BookingServicePickerCopy = { title: string };
@@ -67,16 +68,21 @@ function BookingServicePicker({
             value={selectedId ?? ""}
           >
             {list.map((service) => (
-              <BookingOption
-                clock={service.durationLabel}
+              <RadioCard
+                description={
+                  service.durationLabel ? (
+                    <ClockLine>{service.durationLabel}</ClockLine>
+                  ) : undefined
+                }
                 key={service.id}
-                onRepick={() => onSelect(service.id)}
-                picked={service.id === selectedId}
+                onClick={() => {
+                  if (service.id === selectedId) onSelect(service.id);
+                }}
                 title={service.name}
                 value={service.id}
               >
                 <ServiceLines service={service} />
-              </BookingOption>
+              </RadioCard>
             ))}
           </RadioList>
         )}
@@ -104,7 +110,12 @@ function ServiceLines({ service }: { service: BookingService }) {
         </span>
       ) : null}
       {notes.length > 0 ? (
-        <span className={cn("mt-1 border-t border-border pt-2.5", SMALL_LINES)}>
+        <span
+          className={cn(
+            "mt-1 self-stretch border-t border-border pt-2.5",
+            SMALL_LINES,
+          )}
+        >
           {notes.map((line, index) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: lines are positional and never reorder
             <span key={index}>{line}</span>

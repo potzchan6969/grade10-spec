@@ -16,6 +16,7 @@ import {
   type ChangeEvent,
   type ComponentProps,
   createContext,
+  type ReactNode,
   type RefObject,
   useCallback,
   useContext,
@@ -37,6 +38,10 @@ import {
 const defaultClassNames = getDefaultClassNames();
 
 const MonthNavContext = createContext<RefObject<boolean> | null>(null);
+
+type DayNote = (date: Date) => ReactNode;
+
+const DayNoteContext = createContext<DayNote | undefined>(undefined);
 
 function startOfMonth(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), 1);
@@ -348,9 +353,11 @@ function CalendarDayButton({
   day,
   modifiers,
   onKeyDown,
+  children,
   ...props
 }: DayButtonProps) {
   const ref = useRef<HTMLButtonElement>(null);
+  const dayNote = useContext(DayNoteContext);
   const { months, dayPickerProps } = useDayPicker();
   const weekStartsOn = dayPickerProps.weekStartsOn ?? 0;
   useEffect(() => {
@@ -365,7 +372,10 @@ function CalendarDayButton({
       ref={ref}
       className={cn(
         className,
-        "relative flex size-8 items-center justify-center rounded-full text-sm text-foreground tabular-nums",
+        "relative flex items-center justify-center text-sm text-foreground tabular-nums",
+        dayNote
+          ? "h-11 w-full min-w-9 flex-col gap-px rounded-lg"
+          : "size-8 rounded-full",
         "transition-[background-color,color,transform] duration-150 ease-out",
         "hover:bg-muted active:scale-95",
         "motion-reduce:transition-none motion-reduce:active:scale-100",
@@ -443,11 +453,24 @@ function CalendarDayButton({
         onKeyDown?.(event);
       }}
       type="button"
-    />
+    >
+      {children}
+      {dayNote ? (
+        <span
+          className="h-3 text-[10px] leading-3"
+          data-slot="calendar-day-note"
+        >
+          {dayNote(day.date)}
+        </span>
+      ) : null}
+    </button>
   );
 }
 
-type CalendarProps = ComponentProps<typeof DayPicker>;
+type CalendarProps = ComponentProps<typeof DayPicker> & {
+  /** A word under a day's number, such as `Full`; days grow to hold it. */
+  dayNote?: DayNote;
+};
 
 const DEFAULT_START_MONTH = new Date(new Date().getFullYear() - 10, 0);
 const DEFAULT_END_MONTH = new Date(new Date().getFullYear() + 10, 11);
@@ -465,6 +488,7 @@ const DEFAULT_END_MONTH = new Date(new Date().getFullYear() + 10, 11);
  * month name (`Sep`) so the caption width holds while paging; the open
  * list uses the full name (`September`). Arrow / Page / Home / End stay
  * on this grid. Unselectable days are the caller's `disabled` matcher.
+ * `dayNote` draws a word under each day's number, such as `Full`.
  *
  * **No Figma component set yet** — Storybook-first. Do not add variant axes
  * until design publishes Calendar.
@@ -486,6 +510,7 @@ function Calendar({
   defaultMonth,
   onMonthChange,
   disabled,
+  dayNote,
   ...props
 }: CalendarProps) {
   const todayDate = today ?? new Date();
@@ -544,91 +569,93 @@ function Calendar({
 
   return (
     <MonthNavContext.Provider value={allowMonthNav}>
-      <div className="w-fit" ref={rootRef}>
-        <DayPicker
-          {...props}
-          animate={animate}
-          captionLayout={captionLayout}
-          className={className}
-          classNames={{
-            root: cn("w-fit", defaultClassNames.root),
-            months: cn(
-              "relative flex flex-col gap-4",
-              defaultClassNames.months,
-            ),
-            month: cn(
-              "grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-4",
-              defaultClassNames.month,
-            ),
-            month_caption: cn(
-              "col-start-2 flex min-h-8 items-center justify-center",
-              defaultClassNames.month_caption,
-            ),
-            caption_label: cn(
-              "text-sm font-medium",
-              defaultClassNames.caption_label,
-            ),
-            nav: cn(
-              "col-span-3 flex items-center justify-between",
-              defaultClassNames.nav,
-            ),
-            button_previous: cn(
-              "col-start-1 row-start-1",
-              defaultClassNames.button_previous,
-            ),
-            button_next: cn(
-              "col-start-3 row-start-1",
-              defaultClassNames.button_next,
-            ),
-            dropdowns: cn(
-              "flex items-center justify-center gap-1 text-sm font-medium [&>span]:text-sm [&>span]:font-medium",
-              defaultClassNames.dropdowns,
-            ),
-            dropdown_root: cn(defaultClassNames.dropdown_root),
-            dropdown: cn(defaultClassNames.dropdown),
-            month_grid: cn(
-              "col-span-3 w-full border-separate border-spacing-[2px]",
-              defaultClassNames.month_grid,
-            ),
-            weekdays: cn(defaultClassNames.weekdays),
-            weekday: cn(
-              "size-8 text-center text-sm font-normal text-secondary-foreground",
-              defaultClassNames.weekday,
-            ),
-            week: cn(defaultClassNames.week),
-            day: cn("p-0 text-center", defaultClassNames.day),
-            today: cn(defaultClassNames.today),
-            selected: cn(defaultClassNames.selected),
-            disabled: cn(defaultClassNames.disabled),
-            outside: cn(defaultClassNames.outside),
-            hidden: cn("invisible", defaultClassNames.hidden),
-            ...classNames,
-          }}
-          components={{
-            Root: CalendarRoot,
-            CaptionLabel: CalendarCaptionLabel,
-            DayButton: CalendarDayButton,
-            Dropdown: CalendarDropdown,
-            PreviousMonthButton: CalendarPreviousMonthButton,
-            NextMonthButton: CalendarNextMonthButton,
-            ...components,
-          }}
-          disabled={disabled}
-          endMonth={endMonth}
-          formatters={{
-            formatWeekdayName: (date) =>
-              weekdayName(date.getDay(), "en").slice(0, 2),
-            ...formatters,
-          }}
-          month={displayMonth}
-          navLayout={navLayout}
-          onMonthChange={handleMonthChange}
-          showOutsideDays={showOutsideDays}
-          startMonth={startMonth}
-          today={todayDate}
-          weekStartsOn={weekStartsOn}
-        />
-      </div>
+      <DayNoteContext.Provider value={dayNote}>
+        <div className="w-fit" ref={rootRef}>
+          <DayPicker
+            {...props}
+            animate={animate}
+            captionLayout={captionLayout}
+            className={className}
+            classNames={{
+              root: cn("w-fit", defaultClassNames.root),
+              months: cn(
+                "relative flex flex-col gap-4",
+                defaultClassNames.months,
+              ),
+              month: cn(
+                "grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-2 gap-y-4",
+                defaultClassNames.month,
+              ),
+              month_caption: cn(
+                "col-start-2 flex min-h-8 items-center justify-center",
+                defaultClassNames.month_caption,
+              ),
+              caption_label: cn(
+                "text-sm font-medium",
+                defaultClassNames.caption_label,
+              ),
+              nav: cn(
+                "col-span-3 flex items-center justify-between",
+                defaultClassNames.nav,
+              ),
+              button_previous: cn(
+                "col-start-1 row-start-1",
+                defaultClassNames.button_previous,
+              ),
+              button_next: cn(
+                "col-start-3 row-start-1",
+                defaultClassNames.button_next,
+              ),
+              dropdowns: cn(
+                "flex items-center justify-center gap-1 text-sm font-medium [&>span]:text-sm [&>span]:font-medium",
+                defaultClassNames.dropdowns,
+              ),
+              dropdown_root: cn(defaultClassNames.dropdown_root),
+              dropdown: cn(defaultClassNames.dropdown),
+              month_grid: cn(
+                "col-span-3 w-full border-separate border-spacing-[2px]",
+                defaultClassNames.month_grid,
+              ),
+              weekdays: cn(defaultClassNames.weekdays),
+              weekday: cn(
+                "size-8 text-center text-sm font-normal text-secondary-foreground",
+                defaultClassNames.weekday,
+              ),
+              week: cn(defaultClassNames.week),
+              day: cn("p-0 text-center", defaultClassNames.day),
+              today: cn(defaultClassNames.today),
+              selected: cn(defaultClassNames.selected),
+              disabled: cn(defaultClassNames.disabled),
+              outside: cn(defaultClassNames.outside),
+              hidden: cn("invisible", defaultClassNames.hidden),
+              ...classNames,
+            }}
+            components={{
+              Root: CalendarRoot,
+              CaptionLabel: CalendarCaptionLabel,
+              DayButton: CalendarDayButton,
+              Dropdown: CalendarDropdown,
+              PreviousMonthButton: CalendarPreviousMonthButton,
+              NextMonthButton: CalendarNextMonthButton,
+              ...components,
+            }}
+            disabled={disabled}
+            endMonth={endMonth}
+            formatters={{
+              formatWeekdayName: (date) =>
+                weekdayName(date.getDay(), "en").slice(0, 2),
+              ...formatters,
+            }}
+            month={displayMonth}
+            navLayout={navLayout}
+            onMonthChange={handleMonthChange}
+            showOutsideDays={showOutsideDays}
+            startMonth={startMonth}
+            today={todayDate}
+            weekStartsOn={weekStartsOn}
+          />
+        </div>
+      </DayNoteContext.Provider>
     </MonthNavContext.Provider>
   );
 }

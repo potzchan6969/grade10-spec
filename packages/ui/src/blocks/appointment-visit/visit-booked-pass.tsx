@@ -18,12 +18,15 @@ import {
 } from "../appointment-booking/booking-look";
 import { formatBookingWhen } from "../appointment-booking/booking-when";
 import type { FactRow } from "../page-blocks/fact-card";
-import type { VisitPassCopy } from "./visit-pass";
+import { PassName, type VisitPassCopy } from "./visit-pass";
 
 type VisitBookedPassCopy = {
   confirmation: BookingConfirmationCopy;
-  /** The pass's words, drawn when the visit has a name. */
-  pass: VisitPassCopy;
+  /** The pass's words; the name's label is drawn when the visit has a name. */
+  pass: Pick<VisitPassCopy, "nameLabel" | "note"> & {
+    /** The pill at the top of the pass: `Booked`. */
+    badge: string;
+  };
   directions: string;
   /** Until when it can be changed or cancelled. */
   until: string;
@@ -133,17 +136,16 @@ function VisitBookedPass({
             <div className="flex items-center justify-between gap-3">
               <span className="text-sm font-bold">{copy.brand ?? ""}</span>
               <span className="inline-flex h-5.5 items-center rounded-full bg-success-muted px-2.5 text-[11px] font-bold text-(--green-700)">
-                {copy.pass.title}
+                {copy.pass.badge}
               </span>
             </div>
             {name ? (
               <div className="flex flex-col gap-1">
-                <span className="text-xs leading-4 text-secondary-foreground">
-                  {copy.pass.nameLabel}
-                </span>
-                <span className="text-[32px] leading-10 font-bold [overflow-wrap:anywhere]">
-                  {name}
-                </span>
+                <PassName
+                  className="text-[32px] leading-10"
+                  label={copy.pass.nameLabel}
+                  name={name}
+                />
               </div>
             ) : null}
             <div className="flex flex-col gap-1">

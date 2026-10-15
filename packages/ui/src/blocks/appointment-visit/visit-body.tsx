@@ -9,6 +9,7 @@ import {
   Info,
 } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useRef } from "react";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { FactRow } from "../page-blocks/fact-card";
 import type { NoteListItem } from "../page-blocks/note-list";
 import type {
@@ -33,7 +34,7 @@ import {
   VisitReconnecting,
   type VisitReconnectingProps,
 } from "./visit-reconnecting";
-import { VISIT_INK_2, VISIT_INK_3, VISIT_TINT } from "./visit-tones";
+import { VISIT_INK_3, VISIT_TINT } from "./visit-tones";
 
 /** A notice: its words under a title, or its words alone, in its tint and
  * behind its glyph. */
@@ -157,7 +158,7 @@ function VisitBody({
         </div>
       ) : null}
       {copy.footNote ? (
-        <p className={cn("m-0 mt-3 text-[13px] leading-[18px]", VISIT_INK_2)}>
+        <p className={cn("m-0 mt-3 text-[13px] leading-[18px]", INK_2)}>
           {copy.footNote}
         </p>
       ) : null}
@@ -178,7 +179,7 @@ function VisitBody({
                 >
                   <span
                     aria-hidden
-                    className={cn("mt-0.5 inline-flex shrink-0", VISIT_INK_2)}
+                    className={cn("mt-0.5 inline-flex shrink-0", INK_2)}
                   >
                     <Check size={16} />
                   </span>
@@ -198,7 +199,7 @@ function VisitBody({
                   className="flex justify-between gap-3 text-sm leading-5"
                   key={row.label}
                 >
-                  <dt className={VISIT_INK_2}>{row.label}</dt>
+                  <dt className={INK_2}>{row.label}</dt>
                   <dd className="m-0 text-right font-semibold tabular-nums">
                     {row.value}
                   </dd>

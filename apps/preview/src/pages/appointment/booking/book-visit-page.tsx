@@ -7,9 +7,9 @@ import {
   BookingServicePicker,
   type BookingSlot,
   BookingSlotPicker,
-  BookingStepDots,
   BookingSummary,
   BookingSummaryBar,
+  StageRail,
   VisitBookedPass,
   VisitFullDay,
   VisitRefusedBook,
@@ -261,12 +261,12 @@ export function BookVisitPage({
             <h1 className="m-0 text-xl leading-snug font-bold">
               {WORDS.title}
             </h1>
-            <BookingStepDots
-              busy={moment.busy}
-              copy={{ label: WORDS.stepsLabel, doneAria: WORDS.doneAria }}
+            <StageRail
+              copy={{
+                label: WORDS.stepsLabel,
+                stages: flow.map((id) => ({ id, label: WORDS.steps[id] })),
+              }}
               current={moment.step}
-              onStep={go}
-              steps={flow.map((id) => ({ id, label: WORDS.steps[id] }))}
             />
           </div>
 
@@ -617,7 +617,7 @@ function After({
           calendar: "Add to calendar",
         },
         pass: {
-          title: "Booked",
+          badge: "Booked",
           nameLabel: "Booked for",
           note: "At the counter, give your phone or email.",
         },

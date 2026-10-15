@@ -236,7 +236,6 @@
       "time": "Pick a time to continue."
     },
     "stepsLabel": "Booking steps",
-    "stepDoneAria": "Step {n}, {label}, done. Go back to it.",
     "notChosen": "Not chosen yet",
     "forLabel": "For",
     "more100": "More than 100 cards?",

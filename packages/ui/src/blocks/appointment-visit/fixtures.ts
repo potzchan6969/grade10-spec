@@ -286,7 +286,7 @@ const MOVE_PANEL_COPY: VisitMovePanelCopy = {
 
 const BOOKED_PASS_COPY: Omit<VisitBookedPassCopy, "confirmation"> = {
   pass: {
-    title: "Booked",
+    badge: "Booked",
     nameLabel: "Booked for",
     note: "At the counter, give your phone or email.",
   },

@@ -94,10 +94,6 @@ export type AuctionRecordCopy = {
   emailAlertsColumn: string;
   /** Status when the collector has not bid. */
   noStanding: string;
-  /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
-  watchingHeading?: string;
-  /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
-  biddingHeading?: string;
   emptyTitle: string;
   emptyDescription: string;
   browseCatalogue: string;
@@ -120,20 +116,6 @@ export type AuctionRecordRowCopy = Pick<
   AuctionRecordCopy,
   "openListing" | "openBidding" | "noStanding" | "viewOrder"
 >;
-
-/** @deprecated Prefer AuctionRecord one-table page; kept for transitional imports. */
-export type AuctionRecordTabsProps = {
-  activeTab: "watching" | "bidding";
-  copy: {
-    watchingHeading?: string;
-    biddingHeading?: string;
-    watching?: string;
-    bidding?: string;
-  };
-  onTabChange: (tab: "watching" | "bidding") => void;
-  children?: ReactNode;
-  className?: string;
-};
 
 export type AuctionRecordRowProps = {
   title: string;

@@ -10,10 +10,7 @@ const VISIT_TINT = {
   bad: "bg-destructive-muted text-foreground",
 } as const satisfies Record<VisitTone, string>;
 
-/** The board's second ink: body copy one step lighter than the heading. */
-const VISIT_INK_2 = "text-(--gray-700)";
-
 /** The board's third ink: labels and fine print. */
 const VISIT_INK_3 = "text-secondary-foreground";
 
-export { VISIT_INK_2, VISIT_INK_3, VISIT_TINT };
+export { VISIT_INK_3, VISIT_TINT };

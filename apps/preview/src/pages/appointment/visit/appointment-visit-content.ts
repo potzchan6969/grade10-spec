@@ -3,6 +3,7 @@ import type {
   NoteListItem,
   VisitAct,
   VisitBodyCopy,
+  VisitBookedPassCopy,
   VisitCancelPanelCopy,
   VisitCancelRefund,
   VisitFact,
@@ -11,7 +12,6 @@ import type {
   VisitLatePanelCopy,
   VisitLinkOpensNothingCopy,
   VisitMovePanelCopy,
-  VisitPassCopy,
   VisitReconnectingCopy,
   VisitTicketBodyCopy,
   VisitWaitBodyCopy,
@@ -437,9 +437,9 @@ const REFUND_KEPT: VisitCancelRefund = {
   tone: "warn",
 };
 
-const BOOKED_PASS_COPY: VisitPassCopy = {
+const BOOKED_PASS_COPY: VisitBookedPassCopy["pass"] = {
   ...PASS_WORDS,
-  title: "Booked",
+  badge: "Booked",
   note: "At the counter, give your phone or email.",
 };
 

@@ -236,7 +236,6 @@
       "time": "請先選擇時間。"
     },
     "stepsLabel": "預約步驟",
-    "stepDoneAria": "第 {n} 步：{label}，已完成。返回此步。",
     "notChosen": "尚未選擇",
     "forLabel": "到店人",
     "more100": "超過 100 張卡？",

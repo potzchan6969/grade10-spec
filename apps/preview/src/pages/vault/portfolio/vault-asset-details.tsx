@@ -1,8 +1,7 @@
-import { Text } from "@grade10/design-system/components/display/text";
+import { DetailRow } from "@grade10/design-system/components/display/detail-row";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { ArrowSquareOut } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
 import type { VaultAsset } from "../../vault-content";
 
 type VaultAssetDetailsProps = {
@@ -11,31 +10,6 @@ type VaultAssetDetailsProps = {
   onRequestRetrieval?: () => void;
   className?: string;
 };
-
-type DetailRowProps = {
-  label: string;
-  value: ReactNode;
-  action?: ReactNode;
-};
-
-function DetailRow({ label, value, action }: DetailRowProps) {
-  return (
-    <div className="flex flex-col items-start justify-between gap-1 border-b border-border py-2 sm:flex-row sm:items-baseline sm:gap-6">
-      <Text className="shrink-0 text-secondary-foreground sm:w-40" size="sm">
-        {label}
-      </Text>
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 sm:justify-end">
-        <Text
-          className="text-sm font-normal tabular-nums break-words"
-          size="sm"
-        >
-          {value}
-        </Text>
-        {action}
-      </div>
-    </div>
-  );
-}
 
 /**
  * Attribute list for the vault asset detail page. Graded assets show grade and
@@ -61,12 +35,11 @@ function VaultAssetDetails({
     <VStack className={className} gap="none" hAlign="stretch">
       {isGraded ? (
         <>
-          <DetailRow label="Grade" value={asset.grade} />
-          <DetailRow
-            label="Cert Number"
-            value={asset.cert}
-            action={
-              verifyHref ? (
+          <DetailRow label="Grade">{asset.grade}</DetailRow>
+          <DetailRow label="Cert Number">
+            <span className="inline-flex flex-wrap items-center justify-end gap-2">
+              {asset.cert}
+              {verifyHref ? (
                 <Link
                   href={verifyHref}
                   rel="noopener noreferrer"
@@ -79,14 +52,14 @@ function VaultAssetDetails({
                 >
                   Verify
                 </Link>
-              ) : undefined
-            }
-          />
+              ) : null}
+            </span>
+          </DetailRow>
         </>
       ) : null}
-      <DetailRow label="Vault Storage ID" value={asset.vaultId} />
-      <DetailRow label="Location" value={asset.location} />
-      <DetailRow label="Condition" value={conditionDisplay} />
+      <DetailRow label="Vault Storage ID">{asset.vaultId}</DetailRow>
+      <DetailRow label="Location">{asset.location}</DetailRow>
+      <DetailRow label="Condition">{conditionDisplay}</DetailRow>
 
       {retrievable && onRequestRetrieval ? (
         <div className="pt-2">

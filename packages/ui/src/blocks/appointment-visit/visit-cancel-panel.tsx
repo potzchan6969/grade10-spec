@@ -3,12 +3,21 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CalendarX, CreditCard, EnvelopeSimple } from "@phosphor-icons/react";
 import { type ComponentType, type ReactNode, useId } from "react";
+import { INK_2 } from "../appointment-booking/booking-look";
 import type { VisitCancelReason } from "./types";
-import { VisitSheet } from "./visit-sheet";
-import { VISIT_INK_2, VISIT_TINT } from "./visit-tones";
+import { VISIT_TINT } from "./visit-tones";
 
 const REASONS = [
   "cant",
@@ -76,14 +85,83 @@ function VisitCancelPanel({
 }: VisitCancelPanelProps) {
   const whyId = useId();
   return (
-    <VisitSheet
-      copy={{
-        title: copy.title,
-        description: copy.description,
-        close: copy.close,
+    <Drawer
+      onOpenChange={(next) => {
+        if (!next) onClose();
       }}
-      footer={
-        <>
+      open
+      showSwipeHandle
+      swipeDirection="down"
+    >
+      <DrawerContent data-sheet="visit-cancel">
+        <DrawerHeader closeLabel={copy.close}>
+          <DrawerTitle>{copy.title}</DrawerTitle>
+          <DrawerDescription>{copy.description}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody data-slot="visit-cancel">
+          <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-sm leading-5">
+            <Consequence icon={CalendarX}>{copy.free}</Consequence>
+            <Consequence icon={EnvelopeSimple}>{copy.mail}</Consequence>
+            {refund ? (
+              <li
+                className={cn(
+                  "-mx-0.5 flex items-start gap-2.5 rounded-[10px] px-3 py-2.5",
+                  VISIT_TINT[refund.tone],
+                )}
+                data-slot="visit-cancel-refund"
+                data-tone={refund.tone}
+              >
+                <span
+                  aria-hidden
+                  className={cn("mt-0.5 inline-flex shrink-0", INK_2)}
+                >
+                  <CreditCard size={16} />
+                </span>
+                <span className="flex flex-col gap-0.5">
+                  <strong className="font-bold">{refund.title}</strong>
+                  <span>{refund.text}</span>
+                </span>
+              </li>
+            ) : null}
+          </ul>
+          <div className="flex flex-col gap-2">
+            <span className="text-[15px] leading-5 font-bold" id={whyId}>
+              {copy.why}
+            </span>
+            <RadioList
+              aria-labelledby={whyId}
+              className="gap-1"
+              onValueChange={(value) =>
+                onReasonChange(value as VisitCancelReason)
+              }
+              value={reason ?? ""}
+            >
+              {REASONS.map((one) => (
+                <RadioListItem
+                  className="min-h-11 items-center gap-3 rounded-[10px] px-3 text-[15px] leading-5 has-[[data-checked]]:bg-muted"
+                  key={one}
+                  value={one}
+                >
+                  {copy.reasons[one]}
+                </RadioListItem>
+              ))}
+            </RadioList>
+          </div>
+          {reason === "other" ? (
+            <TextInput
+              autoComplete="off"
+              label={copy.more}
+              onChange={(event) => onMoreChange(event.target.value)}
+              value={more}
+            />
+          ) : null}
+          {error ? (
+            <Text as="p" role="alert" size="sm" tone="error">
+              {error}
+            </Text>
+          ) : null}
+        </DrawerBody>
+        <DrawerFooter className="flex-row *:flex-1">
           <Button
             className="h-11 border-border-strong text-[15px] font-semibold"
             onClick={onClose}
@@ -102,72 +180,9 @@ function VisitCancelPanel({
           >
             {pending ? copy.cancelling : copy.cancel}
           </Button>
-        </>
-      }
-      footerLayout="row"
-      onClose={onClose}
-      slot="visit-cancel"
-    >
-      <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-sm leading-5">
-        <Consequence icon={CalendarX}>{copy.free}</Consequence>
-        <Consequence icon={EnvelopeSimple}>{copy.mail}</Consequence>
-        {refund ? (
-          <li
-            className={cn(
-              "-mx-0.5 flex items-start gap-2.5 rounded-[10px] px-3 py-2.5",
-              VISIT_TINT[refund.tone],
-            )}
-            data-slot="visit-cancel-refund"
-            data-tone={refund.tone}
-          >
-            <span
-              aria-hidden
-              className={cn("mt-0.5 inline-flex shrink-0", VISIT_INK_2)}
-            >
-              <CreditCard size={16} />
-            </span>
-            <span className="flex flex-col gap-0.5">
-              <strong className="font-bold">{refund.title}</strong>
-              <span>{refund.text}</span>
-            </span>
-          </li>
-        ) : null}
-      </ul>
-      <div className="flex flex-col gap-2">
-        <span className="text-[15px] leading-5 font-bold" id={whyId}>
-          {copy.why}
-        </span>
-        <RadioList
-          aria-labelledby={whyId}
-          className="gap-1"
-          onValueChange={(value) => onReasonChange(value as VisitCancelReason)}
-          value={reason ?? ""}
-        >
-          {REASONS.map((one) => (
-            <RadioListItem
-              className="min-h-11 items-center gap-3 rounded-[10px] px-3 text-[15px] leading-5 has-[[data-checked]]:bg-muted"
-              key={one}
-              value={one}
-            >
-              {copy.reasons[one]}
-            </RadioListItem>
-          ))}
-        </RadioList>
-      </div>
-      {reason === "other" ? (
-        <TextInput
-          autoComplete="off"
-          label={copy.more}
-          onChange={(event) => onMoreChange(event.target.value)}
-          value={more}
-        />
-      ) : null}
-      {error ? (
-        <Text as="p" role="alert" size="sm" tone="error">
-          {error}
-        </Text>
-      ) : null}
-    </VisitSheet>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
@@ -180,10 +195,7 @@ function Consequence({
 }) {
   return (
     <li className="flex items-start gap-2.5">
-      <span
-        aria-hidden
-        className={cn("mt-0.5 inline-flex shrink-0", VISIT_INK_2)}
-      >
+      <span aria-hidden className={cn("mt-0.5 inline-flex shrink-0", INK_2)}>
         <Icon size={16} />
       </span>
       <span>{children}</span>

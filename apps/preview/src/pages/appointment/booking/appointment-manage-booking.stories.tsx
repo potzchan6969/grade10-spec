@@ -40,7 +40,7 @@ export const Moving: Story = {
       canvasElement.querySelector('[data-slot="booking-slot-picker"]'),
     ).not.toBeNull();
     const picked = canvasElement.querySelectorAll(
-      '[data-slot="booking-slot-picker"] [aria-pressed="true"][data-day]',
+      '[data-slot="booking-slot-picker"] [data-selected][data-day]',
     );
     expect(picked.length).toBeGreaterThan(0);
     for (const day of picked) {

@@ -4,13 +4,6 @@
 /** Body text one step quieter than ink: the nearest token to the board's ink-2. */
 const INK_2 = "text-(--gray-700)";
 
-/** A selectable tile: white, a hairline ring, the brand ring when picked. */
-const OPTION_TILE =
-  "rounded-xl bg-card text-left text-foreground shadow-[inset_0_0_0_1px_var(--border-strong)] transition-[box-shadow,background-color] duration-100 outline-none hover:shadow-[inset_0_0_0_1px_var(--foreground)] focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed";
-
-const OPTION_TILE_PICKED =
-  "shadow-[inset_0_0_0_2px_var(--primary)] hover:shadow-[inset_0_0_0_2px_var(--primary)]";
-
 /** A 44px pill on white with a hairline ring: Back, the earliest time, the
  * acts on a notice. */
 const PILL_OUTLINE =
@@ -32,8 +25,6 @@ const SMALL_LINES = `flex flex-col gap-1 text-[13px] leading-[18px] ${INK_2}`;
 
 export {
   INK_2,
-  OPTION_TILE,
-  OPTION_TILE_PICKED,
   PILL_OUTLINE,
   PILL_PRIMARY,
   SMALL_LINES,
