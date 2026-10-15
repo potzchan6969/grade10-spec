@@ -3,15 +3,13 @@
 ## Feature set
 
 - **Order detail**
-  - Settlement currency choice: the setup form offers USD and HKD, nothing preselected, and reports the winner's pick
-  - Rail choices: the payment methods are supplied per currency, each bank rail its own choice
   - Two totals: the summary renders a USD total line then a converted HKD total line when the application supplies both
   - One rail dialog: View Bank Details renders only the rail supplied
-  - Currency policy: the application supplies the order's settlement currency and payment choices
+  - No settlement choice: the order panel never offers a settlement currency or payment method choice; setup in the application owns it
 
 ## ADDED Requirements
 
-### Requirement: The winner order takes the settlement choice, payment choices, two totals and one rail's bank details
+### Requirement: The winner order takes two totals and one rail's bank details
 
 `AuctionWinnerOrder` SHALL take these optional props, each controlled by the
 application, and SHALL render and report them without choosing policy. The
@@ -20,17 +18,9 @@ consuming applications are the `grade10` site's Winner Order page and
 
 | Prop | Shape | The block renders |
 | --- | --- | --- |
-| `settlementCurrency` | `label`, `options` (each a `value` of `AuctionSettlementCurrency`, `USD` or `HKD`, and a `label`), `value` (an option's value or `null`), `onChange` | The settlement currency choice in the setup section, one choice per option, none selected while `value` is `null`; it reports a pick through `onChange` |
-| `paymentChoices` | `label`, `byCurrency` (for each `AuctionSettlementCurrency`, a list of `AuctionWinnerOrderPaymentChoice`), `value` (a choice's value or `null`), `onChange`, optional `none` | The choices listed for the currency `settlementCurrency.value` holds, one choice each, none selected while `value` is `null`; it reports a pick through `onChange`. With no currency picked it lists none. With no choice listed for the currency it shows `none` |
 | `summary.convertedTotal` | A `label` and a `value`, formatted | A second Order Total line below the first, when supplied |
 | `summary.convertedFee` | A `label` and a `value`, formatted | A Payment Processing Fee row after the separator, below the two total lines, when supplied |
 | `bankDetails` | An `AuctionWinnerOrderBankDetails` | The View Bank Details dialog for the one rail it carries |
-
-An `AuctionWinnerOrderPaymentChoice` carries a `value` of `card` or an
-`AuctionPaymentRail` (`fps`, `hk_local` or `swift`), a `label`, a `feeRange`
-text and an optional `unavailable` text. A choice with `unavailable` SHALL
-render that text and SHALL NOT be selectable. Each rail SHALL be its own
-choice; the block SHALL NOT group rails under one bank transfer choice.
 
 An `AuctionWinnerOrderBankDetails` carries one `rail`, a `title`, the rail's
 `rows` (each a label and a value), the bank reference as a labelled row, an
@@ -46,63 +36,11 @@ When `summary.convertedFee` is supplied the block SHALL show it as its own row
 after the separator, below the total lines, and SHALL NOT add it to either
 total line. It SHALL show no such row when none is supplied.
 
-<!-- trace:scenario id=g10.shared-auction-order.SC-cdc rev=1 -->
-#### Scenario: shared-ui-auction-order-SC-21 - The settlement choice offers the options with none selected
-**Serves:** `Order detail` - the setup section offers the settlement currency choice
 
-- **GIVEN** an `AuctionWinnerOrder` supplied with `settlementCurrency` options
-  USD and HKD and a `value` of `null`
-- **WHEN** it renders
-- **THEN** USD and HKD are offered
-- **AND** neither is selected
 
-<!-- trace:scenario id=g10.shared-auction-order.SC-8j6 rev=1 -->
-#### Scenario: shared-ui-auction-order-SC-22 - A currency pick is reported
-**Serves:** `Order detail` - the block reports, never acts
 
-- **GIVEN** an `AuctionWinnerOrder` supplied with USD and HKD options
-- **WHEN** the winner selects HKD
-- **THEN** the block reports HKD through `onChange`
-- **AND** makes no request of its own
 
-<!-- trace:scenario id=g10.shared-auction-order.SC-7if rev=1 -->
-#### Scenario: shared-ui-auction-order-SC-23 - The payment choices follow the currency picked
-**Serves:** `Order detail` - the setup section lists the payment choices the currency offers
 
-- **GIVEN** an `AuctionWinnerOrder` supplied with `paymentChoices` listing card,
-  fps and hk_local for HKD and card, hk_local and swift for USD, and
-  `settlementCurrency` holding HKD
-- **WHEN** it renders
-- **THEN** card, FPS and HK Local are offered, each as its own choice
-- **AND** no SWIFT choice is offered
-
-<!-- trace:scenario id=g10.shared-auction-order.SC-pd1 rev=1 -->
-#### Scenario: shared-ui-auction-order-SC-24 - No currency picked lists no payment choice
-**Serves:** `Order detail` - the setup section lists the payment choices the currency offers
-
-- **GIVEN** an `AuctionWinnerOrder` supplied with `paymentChoices` for both
-  currencies and `settlementCurrency` holding `null`
-- **WHEN** it renders
-- **THEN** no payment choice is listed
-
-<!-- trace:scenario id=g10.shared-auction-order.SC-nxj rev=1 -->
-#### Scenario: shared-ui-auction-order-SC-25 - An unavailable choice cannot be selected
-**Serves:** `Order detail` - the setup section lists the payment choices the currency offers
-
-- **GIVEN** an `AuctionWinnerOrder` whose USD card choice carries `unavailable`
-  text
-- **WHEN** it renders with USD picked
-- **THEN** the card choice shows that text
-- **AND** the winner cannot select it
-
-<!-- trace:scenario id=g10.shared-auction-order.SC-bzz rev=1 -->
-#### Scenario: shared-ui-auction-order-SC-26 - A cleared value shows no selected choice
-**Serves:** `Order detail` - the setup section lists the payment choices the currency offers
-
-- **GIVEN** an `AuctionWinnerOrder` whose `paymentChoices.value` was `swift`
-  under USD
-- **WHEN** the application supplies HKD and a `value` of `null`
-- **THEN** no payment choice is selected
 
 <!-- trace:scenario id=g10.shared-auction-order.SC-z03 rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-27 - Two total lines render when both are supplied
@@ -154,8 +92,7 @@ components for the winner's auction order — `AuctionWinnerOrder`,
 `AuctionAddressForm` and `AuctionPhoneField` — and exactly these types and
 helpers: `AuctionWinnerOrderProps`, `AuctionWinnerOrderCopy`,
 `AuctionWinnerOrderStep`, `AuctionAddressFormProps`, `AuctionAddressFormCopy`,
-`AuctionAddressFormValues`, `AuctionPhoneFieldProps`, `AuctionSettlementCurrency`,
-`AuctionPaymentRail`, `AuctionWinnerOrderPaymentChoice`,
+`AuctionAddressFormValues`, `AuctionPhoneFieldProps`, `AuctionPaymentRail`,
 `AuctionWinnerOrderBankDetails`, `auctionPhoneSoftReady` and
 `auctionPhoneConfirmValue`.
 
@@ -167,9 +104,9 @@ given none. It SHALL take every string through its props, amounts and dates
 already formatted, and report each press through a callback; a PDF or
 tracking link SHALL open the URL the application supplies. It SHALL NOT fetch,
 write or read an order status, convert an amount or choose which payment
-methods a currency offers; the settlement choice, the payment choices, the two
-totals and the bank details follow "The winner order takes the settlement
-choice, payment choices, two totals and one rail's bank details".
+methods a currency offers; the two totals and the bank details follow "The
+winner order takes two totals and one rail's bank details". It SHALL NOT offer
+a settlement currency or payment method choice.
 
 `AuctionAddressForm` SHALL render the fields named in
 `grade10-site/auction/winner-order`, mark the required ones, show an
