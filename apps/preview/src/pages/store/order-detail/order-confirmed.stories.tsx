@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "../../store-content";
 import { showOrderAskToast } from "../order-ask-toast";
-import { RECEIPT_NOTE } from "../order-confirmed-content";
+import { ACCOUNT_ASK_COPY, RECEIPT_NOTE } from "../order-confirmed-content";
 import { ORDER_DETAILS_CONTENT } from "./order-details-content";
 
 /**
@@ -91,9 +91,7 @@ export const JustPaid: Story = {
     expect(
       await ask.findByText("Add this order to your account"),
     ).toBeInTheDocument();
-    expect(
-      ask.getByText("Sign in to earn points for this order."),
-    ).toBeInTheDocument();
+    expect(ask.getByText(ACCOUNT_ASK_COPY.body)).toBeInTheDocument();
     expect(ask.getByRole("button", { name: "Sign in" })).toBeInTheDocument();
     await waitFor(() =>
       expect(
@@ -103,6 +101,6 @@ export const JustPaid: Story = {
     // The order id is the page's one h1 — no confirmation banner.
     expect(canvas.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     // A guest order shows no account facts.
-    expect(canvas.queryByText("Points Earned")).not.toBeInTheDocument();
+    expect(canvas.queryByText(/Points/)).not.toBeInTheDocument();
   },
 };

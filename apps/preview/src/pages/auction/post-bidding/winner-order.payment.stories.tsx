@@ -47,7 +47,7 @@ const BANK_PENDING_CONTENT = {
 
 /** Invoice sent — pay by card within 7 days of send (not of lot close). */
 export const PendingPayment: Story = {
-  name: "Pending Payment",
+  name: "Pending Payment — Card",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -64,15 +64,18 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("18 Sep 2026")).toBeVisible();
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getAllByText("Order Total")).toHaveLength(2);
-    expect(canvas.getByText("US$16,340.00")).toBeVisible();
-    expect(canvas.getByText("HK$128,269.00")).toBeVisible();
+    expect(canvas.getAllByText("Order Total")).toHaveLength(1);
+    expect(canvas.getByText("HK$128,814.00")).toBeVisible();
+    expect(canvas.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
     expect(canvas.getByText("Tax")).toBeVisible();
-    expect(canvas.getByText("US$320.00")).toBeVisible();
+    expect(canvas.getByText("HK$2,512.00")).toBeVisible();
     expect(canvas.getAllByText("Payment Processing Fee")).toHaveLength(1);
     expect(canvas.getByText("HK$545.00")).toBeVisible();
+    expect(
+      canvas.getByText("Converted from US$16,340.00 at 1 USD = 7.85 HKD"),
+    ).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
       sidebar.getByRole("button", { name: "Pay with Card" }),
@@ -127,9 +130,12 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("US$320.00")).toBeVisible();
-    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("HK$2,512.00")).toBeVisible();
+    expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
+    expect(
+      sidebar.getByText("Converted from US$16,340.00 at 1 USD = 7.85 HKD"),
+    ).toBeVisible();
 
     await userEvent.click(
       sidebar.getByRole("button", { name: "View Bank Details" }),
@@ -146,7 +152,7 @@ export const PendingPaymentBankTransfer: Story = {
 
 /** HKD invoice — the selected HK Local rail has its own bank details. */
 export const PendingPaymentHkdHongKongBankTransfer: Story = {
-  name: "Pending Payment - HKD HK Local - winner-order-SC-95",
+  name: "Pending Payment — HKD Local Bank Transfer",
   args: {
     status: "pending_payment",
     content: WINNER_ORDER_HKD_HK_LOCAL_CONTENT,
@@ -165,7 +171,7 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
-    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
 
     await userEvent.click(
@@ -233,7 +239,7 @@ export const PendingPaymentUsdBankTransfer: Story = {
  * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
-  name: "Submit Proof Flow - winner-order-SC-184",
+  name: "Submit Payment Proof Flow",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -322,7 +328,7 @@ export const SubmitBankPaymentProof: Story = {
 
 /** Simulated card host return → Preparing Shipment + Payment received toast. */
 export const PayWithCardCheckout: Story = {
-  name: "Pay with Card",
+  name: "Pay with Card Flow",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -460,7 +466,7 @@ export const PartiallyPaid: Story = {
 
 /** Payment deadline passed — no Pay CTA; contact from the overdue alert. */
 export const ExpiredInvoice: Story = {
-  name: "Expired Invoice",
+  name: "Payment Overdue",
   args: { status: "pending_payment_expired" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -492,7 +498,7 @@ export const ExpiredInvoice: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(canvas.getByText("Pending Payment (expired invoice)")).toBeVisible();
+    expect(canvas.getByText("Payment Overdue")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
       "Auction order IN-LK7P2Q01: payment overdue",

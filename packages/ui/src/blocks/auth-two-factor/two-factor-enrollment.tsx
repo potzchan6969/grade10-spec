@@ -120,6 +120,8 @@ function TwoFactorEnrollment({
               </Text>
               {copySetupKey ? (
                 <Button
+                  focusableWhenDisabled
+                  loading={copySetupKey.pending}
                   onClick={copySetupKey.onAction}
                   size="sm"
                   type="button"
@@ -159,6 +161,8 @@ function TwoFactorEnrollment({
           <HStack gap="sm" wrap>
             {copyBackupCodes ? (
               <Button
+                focusableWhenDisabled
+                loading={copyBackupCodes.pending}
                 onClick={copyBackupCodes.onAction}
                 size="sm"
                 type="button"
@@ -169,6 +173,8 @@ function TwoFactorEnrollment({
             ) : null}
             {downloadBackupCodes ? (
               <Button
+                focusableWhenDisabled
+                loading={downloadBackupCodes.pending}
                 onClick={downloadBackupCodes.onAction}
                 size="sm"
                 type="button"

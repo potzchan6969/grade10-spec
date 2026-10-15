@@ -7,15 +7,20 @@ description: Pick cases for a manual pass, print a trial Google Sheet, and final
 
 | Record | Value |
 | --- | --- |
-| Sheet | Production unless the person asks for sandbox |
-| Environment | `staging` unless the person names `production` |
+| Print target | PROD Sheet unless the person asks for Sandbox Sheet; selected by `sandbox` |
+| Test environment | Tester target: `staging-1`, `staging-2`, `uat`, `preview` or `prod`; default `staging-1`; selected by `env`, independently of print target |
 | Identity | Spreadsheet id and run id; tab name and `gid` can change before merge |
 | Trial | Temporary Sheet registry and workflow artifact; no commit |
-| Finalized | Human-confirmed snapshot; one commit on a dedicated run branch |
+| Finalized | Human-confirmed snapshot; one message-only print commit, reusing the current feature branch |
 | Merged | Immutable; a later pass is a new run |
 
 The durable boundary is [The Run Sheet](../../../docs/governance/specs-to-test-cases.md#the-run-sheet).
-Execution results stay in Sheets. A manifest records coverage and provenance.
+Execution results stay in Sheets. A structured commit message records printed case identities and revisions.
+
+The print target chooses the spreadsheet. The test environment says where the tester
+executes the cases. Printing to PROD Sheet does not mean testing against `prod`.
+Historical `staging` and `production` records stay readable; explicit legacy inputs
+normalize to `staging-1` and `prod` for new selections.
 
 ## Selection
 
@@ -40,7 +45,7 @@ Execution results stay in Sheets. A manifest records coverage and provenance.
      -f action=print -f name=auction \
      -f selection="auction regression" \
      -f cases="<confirmed comma-separated ids>" \
-     -f confirmed="<printed fingerprint>" -f env=staging
+     -f confirmed="<printed fingerprint>" -f env=staging-1
    ```
 
    Pass filters instead of `cases` when they resolved the list. Changing the
@@ -70,48 +75,70 @@ Execution results stay in Sheets. A manifest records coverage and provenance.
 
 1. **Confirm finalization** — the person names the run and confirms its printed fingerprint. Dispatch `action=finalize`, `run_id` and `confirmed`. The writer checks selected cases against latest main; changed cases require a reprint and renewed coverage confirmation
 2. **Download the finalized receipt** — `gh run download <workflow-run-id> --name run-record --dir /tmp/run-<id>`. Repeating finalization exports the same snapshot without resyncing it
-3. **Create its commit** — from a clean checkout run `pnpm tcs:run-record --record /tmp/run-<id>/run-record.json`. It creates a dedicated `codex/print-run-<sheet-key>-<id>` branch with one manifest commit. An identical receipt creates no new commit
-4. **Replace before merge** — after explicit reopening, reprinting and refinalizing, use `--replace` if the old local print commit remains. The command only amends a dedicated branch containing that one manifest commit; unrelated work refuses. If already published, update only that branch with `git push --force-with-lease`. Never rewrite main
-5. **Publish through a PR** — only after finalization. Require the `tcs/run-finalized` check before merge. It compares the manifest with the live registry and refuses cancelled, stale, missing or renamed prints. Keep one print commit per run; never mix tool changes into that branch
+3. **Create its commit** — from a clean checkout run `pnpm tcs:run-record --record /tmp/run-<id>/run-record.json`. It reuses the current feature branch and creates one empty commit with the format below. On main only, it creates a dedicated run branch. Identical printed metadata creates no new commit. No JSON file is committed
+4. **Replace before merge** — after explicit reopening, reprinting and refinalizing, use `--replace` if the old local print commit remains. The command only amends this run's empty HEAD commit; a print commit below later work or a commit changing files refuses. Preserve rule commits. If already published, update only the affected branch with `git push --force-with-lease`. Never rewrite main
+5. **Publish through a PR** — only after finalization. Require the `tcs/run-finalized` check before merge. It compares printed metadata with the live finalized registry and refuses cancelled, stale, missing or renamed prints. Keep one print commit per run. Rule changes may share the branch and PR, in separate commits
 
 No source-suite change automatically updates a finalized run.
 
 ## Run Records
 
 Trial provenance lives in the Google Sheet `_Run records` tab and the workflow artifact.
-Finalized manifests live at `docs/test-runs/<spreadsheet-id>/run-<run-id>.json`.
-Each run has one manifest commit on its dedicated branch. Execution results stay in Sheets.
+Finalized print metadata lives only in the commit message. Do not add repo JSON.
+Use a `chore(auction): record <run name> printed run` subject, then this exact body:
 
-- **Identity** — spreadsheet id, run id, tab name and numeric sheet id (`gid`)
-- **Source** — accepted-suite commit confirmed at finalization; optional source run when copying a pass
-- **Selection** — requested scope, environment, eligibility options, ordered case ids, source paths, trace marker ids, revisions and content digests
-- **Exclusions** — intentionally omitted ids and reasons; property-filter exclusions are not intentional omissions
-- **Confirmation** — printed-content fingerprint and finalization time
+```text
+Run: <tab name>
+Sheet: <spreadsheet ID>
+Tab: <gid>
+Test environment: <provided or default>
+Source: <commit SHA>
 
-Merged manifests are immutable. Configure `tcs/run-finalized` as a required PR check.
-The check reads the live registry and refuses cancelled or stale receipts.
+Printed cases:
+- g10.auction-dmn.US12-TC3 | TC-k4p@4
+- g10.auction-bid-increments.US1-TC5 | TC-kyx@2
+```
+
+- **Identity** — the full tab name includes its run id. Sheet identity and source SHA identify the printed snapshot
+- **Cases** — one line per selected TC, in print order. Use the stable marker suffix and its actual revision. For a source without a marker, write `- <case id> | unmarked`; never invent a revision
+- **Last print** — search the same spreadsheet's most recent merged print commit for the TC identity and revision. Heading ids can change; use the marker with its capability scope when comparing revisions
+- **Limits** — the message records ids and revisions, not content digests or execution results. Case content changes must bump the source marker revision
+- **Merge** — merged print commits are immutable. Preserve their message bodies through merge; do not squash multiple runs into a message that drops their records
+
+Temporary receipts and the Sheet registry still carry the full snapshot needed before
+finalization. Do not commit those JSON receipts. A copied merged run takes the recorded
+case ids with drafts and automated cases eligible, resolves current suites and confirms
+its new coverage before printing.
+
+The workflow-owned checker reads candidate Git messages as data, verifies their format
+and matches them to live finalized Sheet records. It does not execute candidate files.
+Configure `tcs/run-finalized` as a required PR check.
 
 | Code | Path |
 | --- | --- |
 | Writer | `scripts/openspec/run-sheet.mjs` |
-| Record and fingerprint | `scripts/openspec/lib/run-sheet-records.mjs` |
+| Temporary receipt and fingerprint | `scripts/openspec/lib/run-sheet-records.mjs` |
+| Printed message format and lookup | `scripts/openspec/lib/printed-run-message.mjs` |
 | Local commit | `scripts/openspec/run-sheet-record.mjs` |
-| Merge verification | `scripts/openspec/verify-run-record.mjs`, executed from main against candidate JSON files |
+| Merge verification | `scripts/openspec/verify-run-record.mjs`; the workflow embeds the same checker for bootstrap without running candidate files |
 
 ## Printed Cases
 
 - **Order** — specs folder path, then numeric US, then numeric TC. One capability header holds its selected journeys and cases. US1 precedes US12
 - **Case id** — the displayed id ends with the trace marker suffix: `g10.auction-bid-increments.US1-TC5 (TC-kyx)`. Selection still uses the original id. Every expanded row repeats the suffix. A legacy case without a marker keeps its original id
 - **Data** — `Field | Value` setup and single-row column tables fill matching placeholders in Steps and Expected Results. Names match case-sensitively, ignoring header backticks and outer angle brackets. Values print as `[value]`, without enclosing backticks. Missing names and shared fields with several different values print as `` `<name>` ``
+- **Readable lists** — each Test data item and Expected Results item prints with `- `. Test data field labels omit Markdown backticks and outer angle brackets
+- **Row data** — expanded rows keep their own table values and only shared fields referenced by pre-conditions, Steps, Expected Results or those row values. Include indirect dependencies; omit shared fields overridden by a row column. Conflicting values for a referenced shared field remain visible; correct them in the source
 - **Pre-conditions** — retain placeholders as `` `<name>` ``; never substitute them
 - **Multiple rows** — a case saying `Runs once per row of **Test data**.` expands once per run-table value row. Shared setup fills each row; row values take precedence. Filled values are not recursively substituted. Test data remains visible; the per-row reminder is omitted on expanded rows
 - **Four surfaces** — Web, Mobile, Auto web and Auto mobile are separate results. `manual` only: Web/Mobile `to_do`, Auto `n/a`; `automation` only: Web/Mobile `n/a`, Auto `to_do`; mixed: Web/Mobile `to_do`, Auto `to_do` only when automated, otherwise `n/a`
 - **Editing** — the four results and Notes belong to the tester. Case and classification cells are locked. Sort in the Walk filter view, not at sheet level; fix wrong case content in its source suite
+- **Tab order** — Summary first, then run tabs by descending numeric run id. A reprint keeps its run id and position in that order. Other tabs follow the runs
 - **Summary** — four rows per run, one per surface. Identity, environment and source SHA appear on the first. `n/a` is excluded from the pass rate; `skipped` counts against it
 
 ## Boundaries
 
 - **Credentials** — only the workflow writes Sheets. Do not edit layout by hand; change `scripts/openspec/lib/run-sheet-layout.mjs`
-- **Results** — never put execution results into suites or manifests
+- **Results** — never put execution results into suites or print commits
 - **Tabs** — never delete other runs, clear Summary, or rename tabs manually
 - **Verification** — test the writer with fixtures or sandbox only after its coverage is confirmed. Never dispatch a production print to validate code changes

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { LISTING_COPY, PRODUCTS } from "./fixtures";
 import { ProductList } from "./product-list";
 
@@ -118,5 +119,39 @@ export const TileCeilingAndRemainingCount: Story = {
 
     await userEvent.click(increment, { pointerEventsCheck: 0 });
     expect(args.onProductCartQuantityChange).not.toHaveBeenCalled();
+  },
+};
+
+const REFUSAL = "The cart could not be changed. Try again.";
+
+function RefusingList() {
+  const [failed, setFailed] = useState<string>();
+  return (
+    <ProductList
+      copy={LISTING_COPY}
+      onProductCartQuantityChange={() => setFailed(REFUSAL)}
+      products={[
+        { ...PRODUCTS[1], id: "refused", inCart: false, cartFailed: failed },
+      ]}
+    />
+  );
+}
+
+/** A refused cart change shows on the tile it was pressed on, and the tile's
+ * control stays pressable for a retry. */
+export const CartChangeRefused: Story = {
+  render: () => <RefusingList />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByRole("alert")).toBeNull();
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
+
+    cart.focus();
+    await userEvent.keyboard("{Enter}");
+
+    await waitFor(() =>
+      expect(canvas.getByRole("alert")).toHaveTextContent(REFUSAL),
+    );
+    expect(cart).toBeEnabled();
   },
 };

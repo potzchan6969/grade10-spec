@@ -230,6 +230,7 @@ function BidHistoryEntrances({
   activityTimeCopy,
 }: Omit<ListingBidHistoryListProps, "resetKey">) {
   const nowMs = useClockNow(ACTIVITY_TICK_MS);
+  const listRef = useRef<HTMLDivElement>(null);
   const knownIdsRef = useRef<Set<string>>(new Set());
   const skipEntranceRef = useRef(true);
   const [enteredIds, setEnteredIds] = useState<ReadonlySet<string>>(
@@ -255,8 +256,19 @@ function BidHistoryEntrances({
 
   useEffect(() => {
     if (!enteringId) return;
+    // Defer a frame so the browser's own scroll anchoring - which holds the
+    // reader's place as a row is prepended - finishes first, then surface the
+    // new bid.
+    const frame = requestAnimationFrame(() => {
+      listRef.current
+        ?.querySelector(`[data-bid-row-id="${CSS.escape(enteringId)}"]`)
+        ?.scrollIntoView?.({ behavior: "instant", block: "nearest" });
+    });
     const timer = window.setTimeout(() => setEnteringId(null), 500);
-    return () => window.clearTimeout(timer);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+    };
   }, [enteringId]);
 
   if (rows.length === 0) {
@@ -275,7 +287,11 @@ function BidHistoryEntrances({
             {heading}
           </Text>
         ) : null}
-        <VStack className="w-full divide-y divide-border" gap="none">
+        <VStack
+          className="w-full divide-y divide-border"
+          gap="none"
+          ref={listRef}
+        >
           {rows.map((row, index) => (
             <BidHistoryRowItem
               activityTimeCopy={activityTimeCopy}

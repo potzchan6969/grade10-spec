@@ -23,7 +23,13 @@ function AsyncMessage({ message, action, slot, className }: AsyncMessageProps) {
     <VStack className={cn("gap-3", className)} data-slot={slot} hAlign="start">
       <p className="text-sm text-secondary-foreground">{message}</p>
       {action ? (
-        <Button onClick={action.onAction} size="sm" variant="secondary">
+        <Button
+          focusableWhenDisabled
+          loading={action.pending}
+          onClick={action.onAction}
+          size="sm"
+          variant="secondary"
+        >
           {action.label}
         </Button>
       ) : null}

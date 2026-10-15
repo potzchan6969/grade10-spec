@@ -8,6 +8,9 @@ Each brand states which languages its site speaks and which one is the default.
 Every user-facing string then comes out of that brand's catalogs — no surface
 carries copy of its own — while anything a merchant or a seller typed renders
 in the language it was written in rather than being translated at read time.
+One exception: an auction listing's title and description, which an operator
+may write in each language the brand speaks and a collector then reads in
+their own — [Auction Management · Listings](/p/grade10-admin/auction/management#listings).
 
 One shared vocabulary of keys names every string. A brand answers only the keys
 that say something about itself (its name, who runs it, what its surfaces are

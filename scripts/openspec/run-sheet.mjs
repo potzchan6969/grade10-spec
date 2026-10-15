@@ -7,7 +7,7 @@
  *   pnpm run tcs:run-sheet -- --cases-file /tmp/pick.txt --name auction-signin
  *
  * Trial runs can be reprinted after confirmation. Finalized runs are pinned
- * snapshots; merged run manifests permanently prohibit overwriting them.
+ * snapshots; merged print commits permanently prohibit overwriting them.
  *
  * Nothing reads a marked tab back into the store. A run's results live in the
  * sheet, and the Summary tab counts them with live formulas.
@@ -57,6 +57,7 @@ import {
   SURFACE_END,
   SURFACES,
   summaryRows,
+  tabOrderRequests,
   tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
@@ -106,17 +107,17 @@ Selection - one of these, and the first two resolve to the third:
 Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
-  --env <name>        staging or production; defaults to staging
+  --env <name>        Tester target: staging-1, staging-2, uat, preview or prod
   --include-draft     Also take \`draft\` cases (stone-grey in the tab)
   --exclude-automated Leave out cases an automated test already covers
-  --sandbox           Write to TCS_SHEET_SANDBOX_ID instead of TCS_SHEET_ID
+  --sandbox           Print target: Sandbox Sheet; default is PROD Sheet
   --overwrite <id>    Rewrite that run's tab and its Summary block (same id)
   --finalize <id>     Confirm latest TCs and export a finalized production record
   --reopen <id>       Explicitly cancel finalization before reprinting
   --copy-run <id>     Use a merged run's ids for a new run against latest TCs
   --confirmed <hash>  Fingerprint a human confirmed (required to print/finalize)
   --exclusions-file <path> JSON array of {id, reason} for intentional exclusions
-  --record-output <path> Write the run manifest here (CI uploads an artifact)
+  --record-output <path> Write the temporary run receipt here (CI uploads an artifact)
   --sha <sha>         Source revision for dry-run; production writes use latest main
   --source-ref <ref>  Sandbox-only source revision for preview and printing
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID (or sandbox)
@@ -328,7 +329,10 @@ const batchUpdate = (token, id, requests) =>
   call(token, `/${id}:batchUpdate`, { method: "POST", body: { requests } });
 
 const values = (token, id, range) =>
-  call(token, `/${id}/values/${encodeURIComponent(range)}`);
+  call(
+    token,
+    `/${id}/values/${encodeURIComponent(range)}?valueRenderOption=UNFORMATTED_VALUE`,
+  );
 
 const putValues = (token, id, range, rows, raw = true) =>
   call(
@@ -759,6 +763,19 @@ function summaryDressing(sheetId, startRow, rows, runId) {
           "userEnteredFormat(backgroundColor,textFormat,verticalAlignment)",
       },
     },
+    ...[
+      [0, 1],
+      [SUMMARY_COLUMNS.indexOf("Total"), SUMMARY_COLUMNS.indexOf("Total") + 1],
+      [SUMMARY_COLUMNS.indexOf("To do"), SUMMARY_COLUMNS.indexOf("N/A") + 1],
+    ].map(([startColumnIndex, endColumnIndex]) => ({
+      repeatCell: {
+        range: { ...block, startColumnIndex, endColumnIndex },
+        cell: {
+          userEnteredFormat: { numberFormat: { type: "NUMBER", pattern: "0" } },
+        },
+        fields: "userEnteredFormat.numberFormat",
+      },
+    })),
     {
       repeatCell: {
         range: {
@@ -817,7 +834,7 @@ function summaryDressing(sheetId, startRow, rows, runId) {
 
 const args = parseArgs(cliArgs());
 args.env = envOf(args.env);
-if (!args.env) die("--env is staging or production");
+if (!args.env) die("--env is staging-1, staging-2, uat, preview or prod");
 const actionCount = [
   args.overwrite,
   args.finalize,
@@ -831,7 +848,7 @@ if (args.dryRun && (args.finalize || args.reopen))
     "--finalize and --reopen need the live run registry; use --dry-run for selections",
   );
 if (args.sandbox && (args.finalize || args.reopen || args.copyRun))
-  die("Run finalization and copy manifests are production-sheet operations");
+  die("Run finalization and copy receipts are production-sheet operations");
 if (!args.name && !args.finalize && !args.reopen) die("--name is required");
 if (args.sourceRef && !args.sandbox)
   die("--source-ref is only for sandbox runs");
@@ -1036,11 +1053,14 @@ try {
   if (args.copyRun) {
     args.sheet = resolveSpreadsheet(args);
     const source = mergedRecord(ROOT, args.sheet, args.copyRun);
-    if (!source) die(`No merged manifest for run ${args.copyRun}`);
-    args.cases = source.snapshot.selected.map((one) => one.id);
-    args.includeDraft = source.snapshot.options.includeDraft;
-    args.includeAutomated = source.snapshot.options.includeAutomated;
-    copiedFrom = { spreadsheetId: source.spreadsheetId, runId: source.runId };
+    if (!source) die(`No merged print commit for run ${args.copyRun}`);
+    args.cases = source.cases.map((one) => one.id);
+    args.includeDraft = true;
+    args.includeAutomated = true;
+    copiedFrom = {
+      spreadsheetId: source.spreadsheetId,
+      runId: Number(args.copyRun),
+    };
   }
   if (args.finalize) {
     Object.assign(args, {
@@ -1313,6 +1333,15 @@ try {
     );
   }
   if (record) requests.push(await recordRequest(record, currentRow));
+  requests.push(
+    ...tabOrderRequests(
+      [
+        ...sheets.filter((one) => one.properties.title !== found?.tab),
+        { properties: { sheetId, title: tab } },
+      ],
+      summarySheetId,
+    ),
+  );
   // All updates validate together. A failed request leaves the old run intact.
   // https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate
   await batchUpdate(token, args.sheet, requests);

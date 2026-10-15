@@ -44,7 +44,7 @@ close first.
 
 ## Flagged or Still Waiting
 
-🚧 Every order with an open payment flag, and every order that has waited
+Every order with an open payment flag, and every order that has waited
 **48 hours** for an operator action, has one row. Flagged rows lead; then the
 longest wait. A row stays every day until the flag is cleared or the order
 moves on.
@@ -56,7 +56,7 @@ moves on.
 | Check proof | Payment Verifying for 48 hours or more, and not flagged | The winner's latest proof | Payment processing |
 | Dispatch | Preparing Shipment for 48 hours or more, and not flagged | The payment that paid it | Shipment processing |
 
-- 🚧 **One row** - a flagged order has one flagged row at the top, never a
+- **One row** - a flagged order has one flagged row at the top, never a
   second wait row beside it
 - **Row** - the listing code, lot and winner, the action or flag reason, and
   how long it has waited, as days and hours such as `3d 5h`; it opens the
@@ -66,11 +66,11 @@ moves on.
   [Orders · Needs action](/p/grade10-admin/auction/management#post-sale-queue)
 - **Order** - flagged rows first, then longest wait, and equal waits by
   listing code, A to Z
-- 🚧 **Setup Overdue and Payment Overdue** - not listed on their own; Needs
+- **Setup Overdue and Payment Overdue** - not listed on their own; Needs
   you counts them. An overdue order that is also flagged sits under Flagged
-- 🚧 **Warning** - Today, the dialog and the daily Slack list show a warning
+- **Warning** - Today, the dialog and the daily Slack list show a warning
   mark beside the list title
-- 🚧 **Empty** - Today says Nothing flagged or waiting too long. when the
+- **Empty** - Today says Nothing flagged or waiting too long. when the
   operator has no row
 
 ## Who Sees a Row
@@ -113,7 +113,7 @@ Today reads in three columns: What's New, Flagged or still waiting and Needs
 you. The lists are the ones in the dialog, so a closed dialog is never the only
 place to read them.
 
-- 🚧 **Flagged or still waiting** - title carries a warning mark; its caption
+- **Flagged or still waiting** - title carries a warning mark; its caption
   reads **Something wrong or waiting a while, needing your action**
 - **Needs you** - holds the section cards it holds now, one under another,
   with the counts and links unchanged; a failed list shows the same notice and
@@ -154,7 +154,7 @@ post theirs when they add rows.
   row is left out of a message that has rows
 - **Layout** - the heading names the product and the day; each list's
   rows follow one line a row
-- 🚧 **Flagged or still waiting title** - the daily list heading reads
+- **Flagged or still waiting title** - the daily list heading reads
   **Something wrong or waiting a while, needing your action**, with a warning
   mark beside it; flagged rows lead that list
 - **Long lists** - each list shows its first 10 rows by exact wait or close,
@@ -162,7 +162,7 @@ post theirs when they add rows.
 - **Titles** - a lot title over 60 characters is cut to 59 and an ellipsis
 - **One attempt** - the message is sent once; a failure is logged and that
   day's message is not sent later
-- 🚧 **Set per environment** - each product's channel and bot token come
+- **Set per environment** - each product's channel and bot token come
   from its own environment settings, never from the console; two products may
   share them. Both must be non-empty before any daily or lifecycle send. If
   either is missing or empty, that product skips the send, logs that it is
@@ -171,7 +171,7 @@ post theirs when they add rows.
 
 ### Lifecycle Alerts
 
-🚧 Auction posts one Slack message to the same channel when a listing or order
+Auction posts one Slack message to the same channel when a listing or order
 moves, without blocking the bid or order path. A missed post is accepted.
 
 | When | The message carries |
@@ -182,17 +182,18 @@ moves, without blocking the bid or order path. A missed post is accepted.
 | An order becomes Setup Overdue or Payment Overdue | A warning mark, the listing code, lot, and the overdue status |
 | An order is flagged | A warning mark, the listing code, lot, and the flag reason |
 
-- 🚧 **Once** - each transition posts once; staying overdue or flagged does not
-  post again
-- 🚧 **Same channel** - Auction's daily reminder channel and token; both must
+- ❓ **Once** - each transition posts once; staying overdue or flagged does not
+  post again. A go-live can post twice when two five-minute passes both see a
+  start inside the seven-minute window
+- **Same channel** - Auction's daily reminder channel and token; both must
   be set before any message is sent
-- 🚧 **Bypass when unset** - if the bot token or the channel is missing or
+- **Bypass when unset** - if the bot token or the channel is missing or
   empty, Auction skips the send, logs that lifecycle alerts are not
   configured, and the listing or order path continues as if Slack were not
   involved
-- 🚧 **No customer names** - no winner name, email or phone; each row links to
+- **No customer names** - no winner name, email or phone; each row links to
   the listing or order in the console
-- 🚧 **Best effort, last step** - the send runs only after the usual bid,
+- **Best effort, last step** - the send runs only after the usual bid,
   close, extension, overdue or flag step has already completed; it must not
   delay or refuse that step; a failure is logged and the event is not retried
 
@@ -205,21 +206,21 @@ operator, in the console and in the team's Slack.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | A reminder, not a status | Decided | The lists mark no status and add no wording to the worklist or the order page. Chosen over an Overdue mark on the operator's own queue, which [Orders](/p/grade10-admin/auction/management#orders) already decided against. | Product |
-| Flagged or still waiting, not Needs you | 🚧 In flight | The list holds flagged orders and the forgotten jobs: send an invoice, check a proof, dispatch. Setup Overdue and Payment Overdue stay in Needs you unless also flagged. Chosen over listing every Needs action status, which repeats the worklist. | Product |
+| Flagged or still waiting, not Needs you | In flight | The list holds flagged orders and the forgotten jobs: send an invoice, check a proof, dispatch. Setup Overdue and Payment Overdue stay in Needs you unless also flagged. Chosen over listing every Needs action status, which repeats the worklist. | Product |
 | No messages stored | Decided | Both lists are read from current listings and orders; no per-operator message, read state or bell exists. Chosen over a notification table, which could disagree with the worklist. | Product |
 | Hong Kong day | Decided | The previous day, and once a day, are Hong Kong days, as every Orders date is. Chosen over each operator's browser zone, which gives two operators different lists on one morning. | Product |
 | Previous day only | Decided | An operator who was away misses the new rows of earlier days; Flagged or still waiting still catches anything that needs action. Chosen over a window since the last visit, which needs a server-side memory. | Product |
 | 48 hours, one number | Decided | Invoice, proof and dispatch share one threshold. Chosen over a number per status until one proves wrong. | Product |
 | By grant in the console | Decided | Each operator sees what they can act on. Chosen over showing everyone every row, which leaves finance reminded about dispatch. | Product |
 | One row per listing | Decided | A sold listing is its order; an unsold one is the listing. Chosen over a closed-listing row and a new-order row for one lot. | Product |
-| Three columns on Today | 🚧 In flight | What's New, Flagged or still waiting and Needs you side by side; Approvals, Recent and All sections stay below, unchanged. Chosen over folding Approvals into the Needs you column, which squeezes its approve and decline controls. | Product |
+| Three columns on Today | In flight | What's New, Flagged or still waiting and Needs you side by side; Approvals, Recent and All sections stay below, unchanged. Chosen over folding Approvals into the Needs you column, which squeezes its approve and decline controls. | Product |
 | One attempt, no record | Decided | The message is tried once and nothing records the send; a failure is logged and that day's message is lost. Chosen over retries through the day with a record of each day's send, which needs a table and a rule against posting twice. | Product |
-| Flagged orders lead the list | 🚧 In flight | An order with any open payment flag has one flagged row at the top, any age, with the flag reason and wait from the earliest open flag; it is never also a wait row. Chosen over listing it only after 48 hours in a waiting status, which hid a fresh flag. | Product |
+| Flagged orders lead the list | In flight | An order with any open payment flag has one flagged row at the top, any age, with the flag reason and wait from the earliest open flag; it is never also a wait row. Chosen over listing it only after 48 hours in a waiting status, which hid a fresh flag. | Product |
 | One group open on Today, scrolled in the dialog | Decided | Today opens the first product with rows and folds the others to one line, one open at a time, so the page stays short; the dialog shows about four and a half rows of each and scrolls the rest inside the list, fading the edge with more. Chosen over every group folded, so the operator opens Auction on every visit, and over full lists in both, which push Needs you and Approvals down the page and grow the dialog past the screen. | Product |
 | Slack, one message per product | Decided | Each product posts its own message at 08:00 Hong Kong time to its own channel, with the same token or its own. Chosen over one message for every product, which needs one place that reads every product's lists, and over email or a message to each operator, which needs an address or a Slack account for every operator. | Product |
 | Slack carries everyone's rows, no customer names | Decided | A shared channel cannot be scoped to one operator's grants, and a customer's name does not belong in it; the link carries the identity. Chosen over per-grant filtering and over naming the winner. | Product |
-| Lifecycle Slack alerts | 🚧 In flight | Auction posts once when a listing goes live, ends or is extended, and when an order becomes overdue or is flagged, on the same channel as the daily reminder. Chosen over waiting for the morning list, which is late for a live sale or a flag. | Product |
-| Best effort, missable | 🚧 In flight | A lifecycle post runs only after the usual step has completed. Every Auction Slack send - morning post and lifecycle - attempts only when both the bot token and the channel are non-empty; otherwise it is skipped with a not-configured log and leaves the usual path untouched. A missed or failed post is logged and not retried. Chosen over awaiting Slack on the bid path or treating a missing env as an error that blocks work. | Product |
-| Overdue is an alert, not a list row | 🚧 In flight | Setup Overdue and Payment Overdue each get one Slack message when the status is reached; they stay out of Flagged or still waiting unless also flagged. Chosen over listing every overdue order every morning, which repeats Needs you. | Product |
-| Warning mark on the waiting list | 🚧 In flight | Today, the dialog and the daily Slack list show a warning mark beside Flagged or still waiting, and overdue and flagged alerts carry one too. Chosen over a quiet title beside What's New, which understated money and flags waiting. | Product |
+| Lifecycle Slack alerts | In flight | Auction posts once when a listing goes live, ends or is extended, and when an order becomes overdue or is flagged, on the same channel as the daily reminder. Chosen over waiting for the morning list, which is late for a live sale or a flag. | Product |
+| Best effort, missable | In flight | A lifecycle post runs only after the usual step has completed. Every Auction Slack send - morning post and lifecycle - attempts only when both the bot token and the channel are non-empty; otherwise it is skipped with a not-configured log and leaves the usual path untouched. A missed or failed post is logged and not retried. Chosen over awaiting Slack on the bid path or treating a missing env as an error that blocks work. | Product |
+| Overdue is an alert, not a list row | In flight | Setup Overdue and Payment Overdue each get one Slack message when the status is reached; they stay out of Flagged or still waiting unless also flagged. Chosen over listing every overdue order every morning, which repeats Needs you. | Product |
+| Warning mark on the waiting list | In flight | Today, the dialog and the daily Slack list show a warning mark beside Flagged or still waiting, and overdue and flagged alerts carry one too. Chosen over a quiet title beside What's New, which understated money and flags waiting. | Product |
 :::

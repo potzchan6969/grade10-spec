@@ -1,10 +1,10 @@
 /**
  * What the workbench draws for each manual feature, and which journeys its
- * flows walk. A collector-facing feature holds Screens, or Prototypes until
+ * stories walk. A collector-facing feature holds Screens, or Prototypes until
  * its design is agreed; a feature with no surface of its own, or one only
  * operators see, is declared once in apps/preview/coverage.yaml with why.
  *
- *   pnpm storybook:coverage           the two tables, as markdown
+ *   pnpm storybook:coverage           the three tables, as markdown
  *   pnpm storybook:coverage --gaps    only what is missing
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -50,7 +50,7 @@ export function declared(root = rootDirectory) {
   };
 }
 
-/** Per feature: its story titles by kind, the journeys its flows cite, and what it owes. */
+/** Per feature: its story titles by kind, the journeys its stories cite, and what it owes. */
 export function featureCoverage(
   root = rootDirectory,
   index = storyIndex({ root }),
@@ -95,7 +95,7 @@ export function featureCoverage(
   });
 }
 
-/** Per workbench capability: the collector journeys it holds and those a flow walks. */
+/** Per workbench capability: the collector journeys it holds and those a story walks. */
 export function journeyCoverage(
   root = rootDirectory,
   index = storyIndex({ root }),
@@ -117,6 +117,17 @@ export function journeyCoverage(
     })
     .filter((row) => row.held > 0)
     .sort((a, b) => a.capability.localeCompare(b.capability));
+}
+
+/** Per Scenario: the settings staging can be set to. */
+export function scenarioSettings(index = storyIndex({ root: rootDirectory })) {
+  return Object.values(index.files)
+    .filter((file) => file.tags?.includes("scenario"))
+    .map((file) => ({
+      title: file.title,
+      settings: file.settings ?? [],
+    }))
+    .sort((a, b) => a.title.localeCompare(b.title));
 }
 
 const shortId = (id) => id.replace(/^.*-(US-\d+)$/, "$1");
@@ -147,13 +158,22 @@ function main() {
       `| ${row.capability} | ${row.walked.length}/${row.held} | ${row.open.map(shortId).join(", ")} |`,
     );
 
+  const scenarios = scenarioSettings(index).filter(
+    (row) => !gaps || !row.settings.length,
+  );
+  console.log("\n## Scenarios\n");
+  console.log("| Scenario | Settings |");
+  console.log("| --- | --- |");
+  for (const row of scenarios)
+    console.log(`| ${row.title} | ${row.settings.join(", ") || "missing"} |`);
+
   const missing = features.filter((row) =>
     row.status.startsWith("missing"),
   ).length;
   const held = capabilities.reduce((sum, row) => sum + row.held, 0);
   const walked = capabilities.reduce((sum, row) => sum + row.walked.length, 0);
   console.log(
-    `\n${features.length} features, ${missing} without Screens or Prototypes. ${walked} of ${held} collector journeys walked by a flow.`,
+    `\n${features.length} features, ${missing} without Screens or Prototypes. ${walked} of ${held} collector journeys walked by a story.`,
   );
 }
 

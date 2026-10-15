@@ -68,7 +68,8 @@
     "validFor": "兌換後 {days} 天內有效",
     "minimumSpend": "最低消費 {amount}",
     "onlyOnline": "只限網店",
-    "onlyInStore": "只限門市"
+    "onlyInStore": "只限門市",
+    "redeemFailed": "無法兌換此獎賞，請再試一次。"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兌換。",

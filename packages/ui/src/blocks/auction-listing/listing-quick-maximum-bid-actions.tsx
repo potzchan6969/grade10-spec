@@ -479,22 +479,20 @@ function ListingQuickMaximumBidActions({
     setSelectedPresetKey(defaultPresetKey(presets));
   }
 
+  const authorizing = authorizationStatus === "pending";
+
   function handlePlaceBid() {
     if (amountEntryLocked) {
       onLinkCard?.();
       return;
     }
-    if (authorizationStatus === "pending") return;
+    if (authorizing) return;
     if (commitValidation?.ok !== true) return;
     onCommitMaximum(commitValidation.amountMinor);
   }
 
   const primaryLabel = amountEntryLocked ? copy.linkACardToBid : placeBidLabel;
-  const primaryDisabled = amountEntryLocked
-    ? false
-    : authorizationStatus === "pending"
-      ? true
-      : !canPlaceBid;
+  const primaryDisabled = !amountEntryLocked && !canPlaceBid;
 
   const customInvalid = customActive && (customMinor == null || maximumInvalid);
   const helperMessage = !customActive ? undefined : customMinor == null ? (
@@ -620,7 +618,7 @@ function ListingQuickMaximumBidActions({
         <Button
           className="w-full"
           disabled={primaryDisabled}
-          loading={authorizationStatus === "pending"}
+          loading={authorizing}
           onClick={handlePlaceBid}
           size="md"
         >

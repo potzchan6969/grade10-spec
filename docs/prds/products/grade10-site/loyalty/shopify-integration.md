@@ -2,6 +2,7 @@
 title: Shopify Integration
 spec: grade10-site/store/membership
 order: 7
+reviewed: 2026-10-14
 ---
 
 Shopify is the online checkout and the till: it prices the basket, takes the

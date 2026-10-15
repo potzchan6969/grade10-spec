@@ -13,7 +13,7 @@
 - Minting a session without following the sign-in mail
 - Unbanning through this door
 - Store or auction seeds
-- Calling the door from a laptop, or from a run a pull request started
+- Calling the door from a laptop, or from a run a pull request started, other than as Q38's QA agent
 - Sweeping the tester accounts a run leaves behind
 
 ## Decisions
@@ -57,6 +57,8 @@
 | Q35 | Does clearing name an address, given it also acts on a caller? | Yes. Clearing names a tester address and clears the caller's counters alongside it, so every move names an address without exception. | A move that names no address, which would be the one hole in the address gate. |
 | Q36 | Is a mail asked for at the ordinary sign-in surface the one capture records? | Yes. The door records the ordinary send and neither skips nor replaces it, so what a run asks for at the sign-in surface is what capture returns. | A separate send the door makes for itself, which would stop the suite proving that ordinary sign-in still sends. |
 | Q37 | Does prepare grant anything besides `admin`? | No. `admin` on the terms `shared/auth/roles` sets, and nothing else. | A bundle of grants the console happens to need, which drifts from what an ordinary admin holds. |
+| Q38 | May an agent walking a manual QA pass call the door? | Yes, as a second caller beside Q16's workflow, so an agent signs in on staging without a mailbox. How it proves itself, and which moves it may make, is open on the page. | The workflow alone, which leaves agents unable to walk any signed-in case on staging. |
+| Q39 | How does Q38's agent prove itself? | A staging-only QA token committed to the repository, accepted only for a tester address and only to capture, age and clear; a commit rotates it. Anyone who reads the repository can sign in as a tester on staging, accepted so a pass needs no setup. | Q2's refusal of a shared secret, kept for the workflow's own moves: the token never bans or prepares. A token kept in the environment's secrets, which is safer and costs a setup step. |
 
 ## Raised
 

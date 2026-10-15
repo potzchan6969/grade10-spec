@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
-import { userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../forms/button";
 import {
   DropdownMenu,
@@ -211,4 +211,47 @@ export const WithGroups: Story = {
       </DropdownMenuContent>
     </DropdownMenu>
   ),
+};
+
+function WorkItemsExample() {
+  const [archiving, setArchiving] = React.useState(false);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button variant="outline" />}>
+        Row actions
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-52">
+        <DropdownMenuItem>Open</DropdownMenuItem>
+        <DropdownMenuItem
+          pending={archiving}
+          onClick={() => setArchiving(true)}
+        >
+          Archive
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+/**
+ * An item that declares `pending`, even `false`, starts work, so its click
+ * keeps the menu open to draw it; an item without `pending` closes the menu.
+ */
+export const WorkItems: Story = {
+  play: async ({ canvasElement }) => {
+    const page = within(document.body);
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "Row actions" }),
+    );
+    const archive = await page.findByRole("menuitem", { name: "Archive" });
+    expect(archive).not.toHaveAttribute("aria-busy");
+    await userEvent.click(archive);
+    await waitFor(() => expect(archive).toHaveAttribute("aria-busy", "true"));
+    await userEvent.click(archive);
+    expect(page.getByRole("menu")).toBeVisible();
+    await userEvent.click(page.getByRole("menuitem", { name: "Open" }));
+    await waitFor(() => expect(page.queryByRole("menu")).toBeNull());
+  },
+  render: () => <WorkItemsExample />,
 };

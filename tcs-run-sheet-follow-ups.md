@@ -5,7 +5,7 @@
 - [x] Keep the snapshot, eligibility, provenance and execution-record boundary in governance; move operational instructions to the skill
 - [x] Define property filters, explicit ids, capability/domain scope and changed-since selection; preserve human confirmation before Sheet writes
 - [x] Record intentional exclusions with reasons; allow several ids to share a reason
-- [x] Keep a temporary production run record; create one manifest commit only after finalization; detect unchanged prints and protect merged runs
+- [x] Keep a temporary production run record; create one message-only print commit only after finalization; detect unchanged prints and protect merged runs
 - [x] Preserve run id, spreadsheet id, tab name and `gid`, environment, source commit, requested scope, ordered selected ids and excluded ids
 - [x] Stop on renamed or deleted tabs and report their expected identity and link
 - [x] Copy a merged run's selection into a new run against current suites; stop on missing or deprecated ids

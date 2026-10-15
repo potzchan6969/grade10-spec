@@ -1,6 +1,6 @@
 # grade10-site/store/checkout Test Cases
 
-**Status:** pending-review · 0/48
+**Status:** pending-review · 0/43
 **Drafts styled:** 2026-10-09, tcs-rules r4
 
 **Out of suite:** grade10-site-store-checkout-SC-08
@@ -862,133 +862,6 @@ Runs once per row of **Test data**.
 **Deprecated:** Superseded scope; this frontend integration adds no backend, provider, carrier, permission or recovery behavior.
 
 
-<!-- trace:case id=g10.store-checkout.TC-t16 rev=2 covers=g10.store-checkout.SC-ecp -->
-### grade10-site-store-checkout-US1-TC12-2: Unverified goods below the limit reach hosted payment
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member, unverified buyer) is on `<grade10 store url>`.
-* The cart holds available goods worth `<gross goods>`.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| gross goods | HKD 119,999.99, one minor unit below HKD 120,000 |
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Wait for the current review.
-3. Click Proceed to Checkout in the drawer.
-4. Read the hosted invoice.
-
-**Expected Results:**
-
-* No verification feedback appears.
-* The returned hosted URL opens.
-
-<!-- trace:case id=g10.store-checkout.TC-vil rev=3 covers=g10.store-checkout.SC-vsd,g10.store-checkout.SC-ecp -->
-### grade10-site-store-checkout-US1-TC13-3: Unverified goods at the limit require account verification
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member, unverified buyer) is on `<grade10 store url>`.
-* The cart holds `<gross goods>`, with `<accepted tender>`.
-* The site's profile page is enabled.
-
-**Test data:**
-
-| gross goods | `<accepted tender>` | Expected checkout |
-| --- | --- | --- |
-| HKD 120,000.00, the verification limit | Accepted points reducing the estimate below HKD 120,000 | Existing verification feedback and account action |
-| HKD 120,000.01, one minor unit above the limit | Accepted points reducing the estimate below HKD 120,000 | Existing verification feedback and account action |
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Wait for the current review.
-3. Click Proceed to Checkout in the drawer.
-4. Read the verification feedback.
-5. Click the account action.
-
-**Expected Results:**
-
-* The verification message and account action are shown.
-* Gross goods trigger the gate despite the lower estimate.
-* No hosted payment page opens.
-* The account action opens account verification.
-
-<!-- trace:case id=g10.store-checkout.TC-0je rev=2 covers=g10.store-checkout.SC-ecp -->
-### grade10-site-store-checkout-US1-TC14-2: Verified goods at the limit reach hosted payment
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member, verified buyer) is on `<grade10 store url>`.
-* The cart holds available goods worth `<gross goods>`.
-
-**Test data:**
-
-| gross goods | Expected checkout |
-| --- | --- |
-| HKD 120,000.00, the verification limit | Available to the verified buyer |
-| HKD 120,000.01, one minor unit above the limit | Available to the verified buyer |
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Wait for the current review.
-3. Click Proceed to Checkout in the drawer.
-4. Read the hosted invoice.
-
-**Expected Results:**
-
-* The verified buyer can use the checkout action.
-* The returned hosted URL opens.
-
 <!-- trace:case id=g10.store-checkout.TC-doe rev=1 covers=g10.store-checkout.SC-a01,g10.store-checkout.SC-b02,g10.store-checkout.SC-e05,g10.store-checkout.SC-i09,g10.store-checkout.SC-j10,g10.store-checkout.SC-s19,g10.store-checkout.SC-k11,g10.store-checkout.SC-t20,g10.store-checkout.SC-u21,g10.store-checkout.SC-q17,g10.store-checkout.SC-r18,g10.store-checkout.SC-vsd,g10.store-checkout.SC-5x2,g10.store-checkout.SC-cc7 -->
 ### grade10-site-store-checkout-US1-TC15-1: Carrier requests without permission return no usable rate
 
@@ -1379,52 +1252,6 @@ Runs once per row of **Test data**.
 * No checkout action starts an empty purchase.
 * The frontend sends no checkout creation request.
 
-<!-- trace:case id=g10.store-checkout.TC-5g0 rev=2 covers=g10.store-checkout.SC-vsd -->
-### grade10-site-store-checkout-US1-TC26-2: Checkout verification response shows existing account feedback
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member) is on `<grade10 store url>`.
-* The current basket review and accepted tender are ready.
-* Checkout creation is mocked to return the existing verification-required outcome.
-* The site's profile page is `<profile page>`.
-
-**Test data:**
-
-| profile page | Account action |
-| --- | --- |
-| enabled | Shown; opens account verification |
-| disabled | Not shown |
-
-**Steps:**
-
-1. Open the cart drawer.
-2. Click Proceed to Checkout in the drawer.
-3. Read the account-verification feedback.
-4. Click the account action, where shown.
-
-**Expected Results:**
-
-* The existing threshold message is shown.
-* No hosted payment destination opens.
-* The account action appears as the `<profile page>` row states.
-* Where shown, the account action opens account verification.
-
 <!-- trace:case id=g10.store-checkout.TC-zrz rev=1 covers=g10.store-checkout.SC-14a -->
 ### grade10-site-store-checkout-US1-TC27-1: Pending cart and tender writes prevent payment
 
@@ -1707,38 +1534,6 @@ Runs once per row of **Test data**.
 * The order is bound to that same invoice.
 * Owned order facts retain submitted lines and accepted tender.
 
-<!-- trace:case id=g10.store-checkout.TC-q6z rev=1 covers=g10.store-checkout.SC-ecp -->
-### grade10-site-store-checkout-US1-TC34-1: Gross goods gate protects direct Pay at the limit
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-checkout-US-01
-
-**Pre-conditions:**
-
-* customer(member, unverified buyer) has available gross goods of HKD 120,000.
-* Accepted code and points reduce the estimate below HKD 120,000.
-
-**Steps:**
-
-1. Send the checkout request for the reviewed purchase.
-2. Read the API response.
-3. Read the order and invoice records.
-
-**Expected Results:**
-
-* The response requires account verification.
-* No order or hosted invoice is created.
-
 <!-- trace:case id=g10.store-checkout.TC-12c rev=1 covers=g10.store-checkout.SC-e05,g10.store-checkout.SC-uzw -->
 ### grade10-site-store-checkout-US1-TC35-1: A Pay after saved edits sends the edited basket and tender
 
@@ -1783,6 +1578,211 @@ Runs once per row of **Test data**.
 * The drawer shows variant A at `<edited quantity>` and `<edited points>` accepted.
 * The opened invoice shows variant A at `<edited quantity>`.
 * The opened invoice deducts `<edited points>`, not the 10 sent before.
+
+<!-- trace:case id=g10.store-checkout.TC-t16 rev=2 covers=g10.store-checkout.SC-ecp -->
+### grade10-site-store-checkout-US1-TC12-2: Unverified goods below the limit reach hosted payment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member, unverified buyer) is on `<grade10 store url>`.
+* The cart holds available goods worth `<gross goods>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| gross goods | HKD 119,999.99, one minor unit below HKD 120,000 |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the current review.
+3. Click Proceed to Checkout in the drawer.
+4. Read the hosted invoice.
+
+**Expected Results:**
+
+* No verification feedback appears.
+* The returned hosted URL opens.
+
+<!-- trace:case id=g10.store-checkout.TC-vil rev=3 covers=g10.store-checkout.SC-vsd,g10.store-checkout.SC-ecp -->
+### grade10-site-store-checkout-US1-TC13-3: Unverified goods at the limit require account verification
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member, unverified buyer) is on `<grade10 store url>`.
+* The cart holds `<gross goods>`, with `<accepted tender>`.
+* The site's profile page is enabled.
+
+**Test data:**
+
+| gross goods | `<accepted tender>` | Expected checkout |
+| --- | --- | --- |
+| HKD 120,000.00, the verification limit | Accepted points reducing the estimate below HKD 120,000 | Existing verification feedback and account action |
+| HKD 120,000.01, one minor unit above the limit | Accepted points reducing the estimate below HKD 120,000 | Existing verification feedback and account action |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the current review.
+3. Click Proceed to Checkout in the drawer.
+4. Read the verification feedback.
+5. Click the account action.
+
+**Expected Results:**
+
+* The verification message and account action are shown.
+* Gross goods trigger the gate despite the lower estimate.
+* No hosted payment page opens.
+* The account action opens account verification.
+
+<!-- trace:case id=g10.store-checkout.TC-0je rev=2 covers=g10.store-checkout.SC-ecp -->
+### grade10-site-store-checkout-US1-TC14-2: Verified goods at the limit reach hosted payment
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member, verified buyer) is on `<grade10 store url>`.
+* The cart holds available goods worth `<gross goods>`.
+
+**Test data:**
+
+| gross goods | Expected checkout |
+| --- | --- |
+| HKD 120,000.00, the verification limit | Available to the verified buyer |
+| HKD 120,000.01, one minor unit above the limit | Available to the verified buyer |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the current review.
+3. Click Proceed to Checkout in the drawer.
+4. Read the hosted invoice.
+
+**Expected Results:**
+
+* The verified buyer can use the checkout action.
+* The returned hosted URL opens.
+
+<!-- trace:case id=g10.store-checkout.TC-5g0 rev=2 covers=g10.store-checkout.SC-vsd -->
+### grade10-site-store-checkout-US1-TC26-2: Checkout verification response shows existing account feedback
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) is on `<grade10 store url>`.
+* The current basket review and accepted tender are ready.
+* Checkout creation is mocked to return the existing verification-required outcome.
+* The site's profile page is `<profile page>`.
+
+**Test data:**
+
+| profile page | Account action |
+| --- | --- |
+| enabled | Shown; opens account verification |
+| disabled | Not shown |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Click Proceed to Checkout in the drawer.
+3. Read the account-verification feedback.
+4. Click the account action, where shown.
+
+**Expected Results:**
+
+* The existing threshold message is shown.
+* No hosted payment destination opens.
+* The account action appears as the `<profile page>` row states.
+* Where shown, the account action opens account verification.
+
+<!-- trace:case id=g10.store-checkout.TC-q6z rev=1 covers=g10.store-checkout.SC-ecp -->
+### grade10-site-store-checkout-US1-TC34-1: Gross goods gate protects direct Pay at the limit
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** deprecated
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member, unverified buyer) has available gross goods of HKD 120,000.
+* Accepted code and points reduce the estimate below HKD 120,000.
+
+**Steps:**
+
+1. Send the checkout request for the reviewed purchase.
+2. Read the API response.
+3. Read the order and invoice records.
+
+**Expected Results:**
+
+* The response requires account verification.
+* No order or hosted invoice is created.
 
 ---
 

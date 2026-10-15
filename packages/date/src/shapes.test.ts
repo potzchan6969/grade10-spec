@@ -121,18 +121,16 @@ describe("one zone, for every reader", () => {
   });
 });
 
-describe("the format is the platform's, the words are the language's", () => {
+describe("the words and the order are the language's", () => {
   it("words a month in a language the platform ships", () => {
-    expect(formatDay(INSTANT, { locale: "zh-hant" })).toBe("19 8月 2026");
+    expect(formatDay(INSTANT, { locale: "zh-hant" })).toBe("2026年8月19日");
   });
 
-  it("keeps the platform's ordering whatever the language", () => {
+  it("orders the day the way the language writes it", () => {
     const english = formatMoment(INSTANT, { locale: "en" });
     const chinese = formatMoment(INSTANT, { locale: "zh-hant" });
-    expect(english.startsWith("19 ")).toBe(true);
-    expect(chinese.startsWith("19 ")).toBe(true);
-    expect(english.endsWith(" 2026, 14:00")).toBe(true);
-    expect(chinese.endsWith(" 2026, 14:00")).toBe(true);
+    expect(english).toBe("19 Aug 2026, 14:00");
+    expect(chinese).toBe("2026年8月19日 14:00");
   });
 
   it("reads English when no language is named", () => {
@@ -151,7 +149,7 @@ describe("a language tag is matched the way BCP-47 spells it", () => {
   it("takes the canonical casing as readily as the catalog's", () => {
     const canonical = formatDay(INSTANT, { locale: "zh-Hant" });
     expect(canonical).toBe(formatDay(INSTANT, { locale: "zh-hant" }));
-    expect(canonical).toBe("19 8月 2026");
+    expect(canonical).toBe("2026年8月19日");
     expect(formatDay(INSTANT, { locale: "EN" })).toBe("19 Aug 2026");
   });
 });

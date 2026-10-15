@@ -94,13 +94,12 @@ joins one under that email.
   email it was placed under: at payment when that account exists, otherwise
   at that account's next sign-in. Every other guest order under that email
   joins with it
-- **Points after joining** - a guest order earns only if it joined an
-  account before it completed; it then earns on completion like any order,
-  on the usual basis and the member's tier at completion. One that joins
-  after it completed earns nothing -
+- 🚧 **No points** - a guest order never earns, joined or not; only an
+  order placed with an account earns -
   [Points](/p/grade10-site/loyalty/points#rules)
-- **The cart** - this browser's cart is emptied when the guest leaves for
-  Shopify's page; the invoice holds the basket
+- **The cart** - this browser's cart keeps the basket until it reads the
+  order paid, so a guest who leaves Shopify's page unpaid comes back to a full
+  cart; a cart the guest changed after Pay is kept
 - **Post-checkout account** - the order page after payment asks the
   buyer to sign in to add the order to an account; a sign-in that proves
   the order's email adds it -
@@ -124,10 +123,11 @@ joins one under that email.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Guest checkout | Decided | A collector with no session checks out the browser's cart. Shopify's page takes the email; the order belongs to no account until it joins one under that email — paying makes none. Supersedes members-only checkout. | Product |
-| Guest tender | Decided | A guest may type or pick a public code in the drawer; the order earns nothing while it has no owner. Decided 2026-10-13; supersedes the basket-only rule (2026-10-12). | Product |
+| Guest tender | Decided | A guest may type or pick a public code in the drawer, and spends no points. Decided 2026-10-13; supersedes the basket-only rule (2026-10-12). | Product |
 | Guest order link | Decided | Every order now carries a private link to its page, guest and member alike, and every order email's View order button shows it. The link carries its secret and needs no account — see [Order Detail](/p/grade10-site/store/order-detail#order-link). One email, from Shopify; rejected a Grade10 email of its own, which repeated the link and needed the order email read. Decided 2026-10-12; widened 2026-10-13. | Product |
 | Gateway in the footer | Decided | The signed-out drawer's primary button is Check Out as Guest, with a quiet sign-in link under it. Chosen over a choice step after Checkout, which adds a tap for every guest. Decided 2026-10-13. | Product |
-| Guest order linking | Decided | Every paid guest order placed under an email joins the member's account automatically once a sign-in proves that email — a magic link to it or a Google account under it — on any sign-in, including from the prompt. The order gets an owner; one still in progress earns points when it completes, one already complete earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13). | Product |
+| Guest order linking | Decided | Every paid guest order placed under an email joins the member's account automatically once a sign-in proves that email — a magic link to it or a Google account under it — on any sign-in, including from the prompt. The order gets an owner and earns nothing. Decided 2026-10-13; supersedes prompt-only saving (earlier 2026-10-13). | Product |
+| Guest order points | Decided | A guest order never earns, joined or not; only an order placed with an account earns. It joins an account only because Shopify holds it under that email, so Your Orders lists it; no account was there when it was placed, so it earns nothing. Decided 2026-10-14, the owner's answer; supersedes earning on completion when joined before it completed (2026-10-13). | Product |
 | Join at payment | Decided | A guest order placed under the proven email of an existing account joins that account at payment, without waiting for a sign-in. Decided 2026-10-13, the owner's answer. | Product |
 | Prompt location | Decided | The account prompt lives on the Grade10 order page. Rejected a Shopify Thank-you extension, which lives outside the store and limits Google sign-in. Decided 2026-10-13. | Product |
 | Existing-account banner | Decided | Dropped from scope 2026-10-13. Shopify's page holds the email before payment and a lookup there needs an extension. | Product |
@@ -135,6 +135,7 @@ joins one under that email.
 | Frontend scope | Decided | The drawer uses the store's current checkout request and changes no backend. Invoice reuse, recovery and durable retirement are a separate backend change. Decided 2026-10-09. | @kinisworking |
 | Repeated purchase | Decided | The store owns invoice reuse and recovery. The drawer holds no purchase identity; it accepts one Pay at a time. | @kinisworking |
 | Reply after closing | Decided | A still-current successful checkout reply opens Shopify after dismissal. Chosen over ignoring navigation on 2026-10-13. | @kinisworking |
+| Guest paid cart | Decided | A guest's cart empties when this browser reads the order paid, not when the invoice opens; a cart changed after Pay is kept. Decided 2026-10-15, the owner's answer; supersedes emptying at invoice open. | Product |
 | Paid cart | Decided | Preserve later member edits and rebuilt carts; stock or price changes written by the shop's review alone still allow the paid cart to clear. | @kinisworking |
 | Invoice retirement | Decided | Only the member's own line or tender edit retires an open invoice. The shop's stock or price review leaves it for the next Pay to replace. Decided 2026-10-08. | Product |
 | Payment labels | Decided | Follow existing shared status contracts and the order-status capability. A new Awaiting payment badge needs a separate product and shared-contract change. | @kinisworking |

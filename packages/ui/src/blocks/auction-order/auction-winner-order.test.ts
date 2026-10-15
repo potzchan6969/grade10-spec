@@ -59,7 +59,7 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   invoice: "Invoice",
   invoicePdf: "Invoice PDF",
   paymentMethod: "Payment method",
-  view: "View",
+  refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
   bankDetailsClose: "Close",
@@ -513,6 +513,57 @@ describe("AuctionWinnerOrder settlement presentation", () => {
     expect(
       container.querySelector('[data-slot="winner-order-lot"]')?.textContent,
     ).toContain("Winning bid: US$101.00");
+  });
+
+  it("shared-ui-auction-order-SC-s7t - renders a line's subtext under its value", () => {
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        lines: [
+          { label: "Winning Bid", value: "HK$793.00", subtext: "US$101.00" },
+          { label: "Payment Processing Fee", value: "HK$38.73" },
+        ],
+        total: { label: "Order Total", value: "HK$831.73" },
+      },
+    });
+
+    const subtexts = container.querySelectorAll(
+      '[data-slot="winner-order-summary-subtext"]',
+    );
+    expect([...subtexts].map((node) => node.textContent)).toEqual([
+      "US$101.00",
+    ]);
+    expect(summaryRowText(container)).toEqual([
+      "Winning BidHK$793.00US$101.00",
+      "Payment Processing FeeHK$38.73",
+      "Order TotalHK$831.73",
+    ]);
+  });
+
+  it("renders the total's footnote muted under the Order Total row", () => {
+    const { container } = mount({
+      summary: {
+        ...BASE_PROPS.summary,
+        lines: [{ label: "Winning Bid", value: "HK$793.00" }],
+        total: {
+          label: "Order Total",
+          value: "HK$831.73",
+          footnote: "Converted from US$101.00 at 1 USD = 7.85 HKD",
+        },
+      },
+    });
+
+    const totalRow = summaryRow(
+      container,
+      "Order TotalHK$831.73Converted from US$101.00 at 1 USD = 7.85 HKD",
+    );
+    expect(totalRow).not.toBeUndefined();
+    const footnote = totalRow?.querySelector(
+      '[data-slot="winner-order-summary-footnote"]',
+    );
+    expect(footnote?.textContent).toBe(
+      "Converted from US$101.00 at 1 USD = 7.85 HKD",
+    );
   });
 
   it("winner-order-SC-290 and winner-order-SC-304 and shared-ui-auction-order-SC-27 and shared-ui-auction-order-SC-30 - renders USD then HKD totals and keeps the card fee on its own row", () => {

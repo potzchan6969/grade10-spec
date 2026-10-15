@@ -145,7 +145,7 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   invoice: "Invoice",
   invoicePdf: "Invoice PDF",
   paymentMethod: "Payment method",
-  view: "View",
+  refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
   bankDetailsClose: "Close",
@@ -223,6 +223,7 @@ function currentStepFor(
 
 /** Order Summary line money: `$` prefix, at least two decimals; `$0` stays bare. */
 function summaryLineAmount(value: string): string {
+  const currency = value.match(/^(HK|US)\$/)?.[0] ?? "US$";
   const withDollar = value.replaceAll(/(?:HK|US)\$/g, "$");
   return withDollar.replace(
     /^(−?)\$([\d,]+)(?:\.(\d+))?$/,
@@ -230,10 +231,10 @@ function summaryLineAmount(value: string): string {
       const digits = intPart.replaceAll(",", "");
       const fracDigits = frac ?? "";
       if (Number(digits) === 0 && Number(fracDigits || "0") === 0) {
-        return `${sign}US$0`;
+        return `${sign}${currency}0`;
       }
       const decimals = fracDigits.padEnd(2, "0");
-      return `${sign}US$${intPart}.${decimals}`;
+      return `${sign}${currency}${intPart}.${decimals}`;
     },
   );
 }
@@ -312,7 +313,22 @@ function paymentMethodFor(
     : undefined;
 }
 
-/** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
+/** `US$12,800.00` → 12800, so a fee can compute off the displayed bid. */
+function summaryAmountValue(line: string): number | null {
+  const match = /^(?:HK|US)\$([\d,]+)(?:\.(\d+))?$/.exec(line);
+  if (!match) return null;
+  return Number(match[1].replaceAll(",", "")) + Number(`0.${match[2] ?? "0"}`);
+}
+
+/** A computed summary amount, formatted the same way `summaryLineAmount` writes one. */
+function summaryAmountLine(value: number, prefix: "HK$" | "US$"): string {
+  return `${prefix}${value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+/** Sidebar money rows — full invoice when issued; otherwise winning bid + the computed premium + TBD fees. */
 function summaryLinesFor(
   content: WinnerOrderContent,
 ): WinnerOrderInvoiceLine[] {
@@ -330,12 +346,21 @@ function summaryLinesFor(
       { label: "Order Total", value: "—" },
     ];
   }
+  // The premium is Grade10-computed — 20% of the winning bid, or the currency
+  // minimum when that is higher — so it is known at close, ahead of the
+  // operator's invoice. The total shows the known charges; operator-quoted
+  // fees stay TBD until the invoice is sent.
+  const prefix = winningBidLine.startsWith("HK$") ? "HK$" : "US$";
+  const bid = summaryAmountValue(winningBidLine);
+  const premium =
+    bid == null ? null : Math.max(Math.round(bid * 20), 100) / 100;
+  const knownTotal = bid == null || premium == null ? null : bid + premium;
   return [
     { label: "Winning Bid", value: winningBidLine },
     {
       label: "Buyer’s Premium",
-      value: "TBD",
-      muted: true,
+      value: premium == null ? "TBD" : summaryAmountLine(premium, prefix),
+      muted: premium == null,
       tooltip: LINE_TOOLTIPS.buyersPremium,
     },
     {
@@ -362,7 +387,15 @@ function summaryLinesFor(
       muted: true,
       tooltip: LINE_TOOLTIPS.processingFee,
     },
-    { label: "Order Total", value: "TBD", muted: true },
+    {
+      label: "Order Total",
+      value: knownTotal == null ? "TBD" : summaryAmountLine(knownTotal, prefix),
+      muted: knownTotal == null,
+      footnote:
+        knownTotal == null
+          ? undefined
+          : "Shipping, insurance and fees are added at invoice.",
+    },
   ];
 }
 
@@ -673,7 +706,13 @@ function WinnerOrderPageState({
   const lines = summaryLinesFor(content);
   const totalLine = lines.find((line) => line.label === "Order Total");
   const total = totalLine
-    ? { ...totalLine, value: content.usdTotal ?? totalLine.value }
+    ? {
+        ...totalLine,
+        value:
+          content.settlementCurrency === "HKD"
+            ? totalLine.value
+            : (content.usdTotal ?? totalLine.value),
+      }
     : undefined;
   const cardSettlement =
     content.settlementCurrency === "HKD" &&
@@ -682,7 +721,11 @@ function WinnerOrderPageState({
   const summaryLines = lines.filter(
     (line) =>
       line.label !== "Order Total" &&
-      !(cardSettlement && line.label === "Payment Processing Fee"),
+      !(
+        cardSettlement &&
+        !hasIssuedInvoice(content) &&
+        line.label === "Payment Processing Fee"
+      ),
   );
 
   function handleSetupConfirm(result: WinnerOrderSetupResult) {
@@ -810,15 +853,6 @@ function WinnerOrderPageState({
           summary={{
             lines: summaryLines,
             total: total ?? null,
-            convertedTotal: content.convertedTotal
-              ? { label: "Order Total", value: content.convertedTotal }
-              : undefined,
-            convertedFee: content.convertedFee
-              ? {
-                  label: "Payment Processing Fee",
-                  value: content.convertedFee,
-                }
-              : undefined,
             invoicePdf: hasIssuedInvoice(content)
               ? { onOpen: openPlaceholderInvoicePdf }
               : undefined,

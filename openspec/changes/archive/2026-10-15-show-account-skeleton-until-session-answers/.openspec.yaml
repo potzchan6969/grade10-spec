@@ -1,0 +1,20 @@
+schema: grade10-planning
+created: 2026-10-14
+promoted_by: "@seankcw"
+depends_on:
+  - nav-cart-count-badge
+hands:
+  dev: "@seankcw"
+  pm: "@seankcw"
+  tech: "@seankcw"
+reviewed:
+  tasks: 109cd0a8
+  tech-design: "86264744"
+  specs: "03816045"
+  user-journeys: "79604200"
+  ui-design: "86264744"
+  test-cases: "03816045"
+landed_by:
+  decisions: seankcw
+  tech-design: seankcw
+  specs: seankcw

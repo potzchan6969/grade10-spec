@@ -6,6 +6,7 @@ import { describe, it } from "node:test";
 import { pathToFileURL } from "node:url";
 import {
   importPath,
+  loaderOf,
   parseStoryFile,
   rootDirectory,
   sanitize,
@@ -87,16 +88,16 @@ export const OnSale: Story = { name: "On sale" };
     assert.deepEqual(file.tags, ["autodocs"]);
     assert.deepEqual(file.journeys, []);
     assert.deepEqual(file.stories, [
-      { exportName: "Default", name: "Default", journeys: [] },
-      { exportName: "OnSale", name: "On sale", journeys: [] },
+      { exportName: "Default", name: "Default", journeys: [], rules: {} },
+      { exportName: "OnSale", name: "On sale", journeys: [], rules: {} },
     ]);
   });
 
-  it("reads the journeys a flow names on its meta and its stories", () => {
+  it("reads the journeys a story names on its meta and its stories", () => {
     const file = parseStoryFile(
-      "cart-flows.stories.tsx",
+      "cart.scenario.stories.tsx",
       `const meta = {
-  title: "Store/Cart/Flows/Edit",
+  title: "Store/Cart/Screens/Cart Drawer/Scenario",
   parameters: { layout: "fullscreen", journeys: ["a-US-01"] },
 } satisfies Meta;
 export default meta;
@@ -105,6 +106,52 @@ export const Remove: Story = { parameters: { journeys: ["a-US-02"] } };
     );
     assert.deepEqual(file.journeys, ["a-US-01"]);
     assert.deepEqual(file.stories[0].journeys, ["a-US-02"]);
+  });
+
+  it("reads a story's settings and its rules", () => {
+    const file = parseStoryFile(
+      "spend.scenario.stories.tsx",
+      `const meta = {
+  title: "Loyalty/Coupons/Screens/Spend/Scenario",
+  argTypes: { code: { control: "radio" }, "points": {} },
+  parameters: { rules: { code: "a/b: One code" } },
+} satisfies Meta;
+export default meta;
+export const Replace: Story = { parameters: { rules: { points: "a/b: Points" } } };
+`,
+    );
+    assert.deepEqual(file.settings, ["code", "points"]);
+    assert.deepEqual(file.rules, { code: "a/b: One code" });
+    assert.deepEqual(file.stories[0].rules, { points: "a/b: Points" });
+  });
+
+  it("follows settings and rules spread from a module beside the Scenario", () => {
+    const modules = {
+      "pages/basket-walk.ts": `const SHARED = { coupon: {}, points: {} } as const;
+const RULES = { coupon: "a/b: One code" } as const;
+export { SHARED, RULES };`,
+    };
+    const loader = loaderOf((path) => {
+      if (!(path in modules)) throw new Error("ENOENT");
+      return modules[path];
+    });
+    const file = parseStoryFile(
+      "pages/loyalty/coupons/spend.stories.tsx",
+      `import { RULES, SHARED } from "../../basket-walk";
+const meta = {
+  title: "Loyalty/Coupons/Screens/Spend/Scenario",
+  argTypes: { ...SHARED, surface: {} },
+  parameters: { rules: { ...RULES, surface: "a/b: Counter" } },
+} satisfies Meta;
+export default meta;
+`,
+      loader,
+    );
+    assert.deepEqual(file.settings, ["coupon", "points", "surface"]);
+    assert.deepEqual(file.rules, {
+      coupon: "a/b: One code",
+      surface: "a/b: Counter",
+    });
   });
 
   it("reports a file the workbench serves at its index path", () => {

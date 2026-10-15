@@ -21,10 +21,10 @@ export type WinnerOrderStatus =
 
 export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
   awaiting_address: "Awaiting Setup",
-  awaiting_address_expired: "Awaiting Setup (deadline passed)",
+  awaiting_address_expired: "Setup Overdue",
   preparing_invoice: "Preparing Invoice",
   pending_payment: "Pending Payment",
-  pending_payment_expired: "Pending Payment (expired invoice)",
+  pending_payment_expired: "Payment Overdue",
   payment_verifying: "Payment Verifying",
   partially_paid: "Partially Paid",
   processing: "Preparing Shipment",
@@ -48,6 +48,8 @@ export type WinnerOrderInvoiceLine = {
   muted?: boolean;
   /** Brief explanation shown in an info tooltip beside the label. */
   tooltip?: string;
+  /** A quiet left-aligned note under the whole row. */
+  footnote?: string;
 };
 
 /** Absolute datetimes / day-only strings for Order Progress step subtext. */
@@ -184,34 +186,44 @@ export const LINE_TOOLTIPS = {
   processingFee: "Set by your payment method when this invoice was sent.",
 } as const;
 
+/**
+ * HKD-issued card invoice — every line reads its converted HKD amount and the
+ * Order Total's footnote names the USD figure converted and the fixed rate.
+ * The card fee is computed in HKD and has no USD counterpart
+ * (winner-order-SC-290, winner-order-SC-304).
+ */
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "$12,800.00" },
+  { label: "Winning Bid", value: "HK$100,480.00" },
   {
     label: "Buyer’s Premium",
-    value: "$2,560.00",
+    value: "HK$20,096.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "$180.00",
+    value: "HK$1,413.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "$480.00",
+    value: "HK$3,768.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "$320.00",
+    value: "HK$2,512.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
     label: "Payment Processing Fee",
-    value: "$120.00",
+    value: "HK$545.00",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "US$16,340.00" },
+  {
+    label: "Order Total",
+    value: "HK$128,814.00",
+    footnote: "Converted from US$16,340.00 at 1 USD = 7.85 HKD",
+  },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -268,29 +280,30 @@ export const WINNER_ORDER_REFUND_OVERPAID = {
 } as const;
 
 /**
- * Bank transfer invoice — operator fee may be zero; zero reads Free
- * (`winner-order-SC-111`). Order total is the card fixture less the card fee.
+ * HKD-issued bank transfer invoice — operator fee may be zero; zero reads
+ * Free (`winner-order-SC-111`). Order total is the card fixture less the card
+ * fee, and its footnote names the USD figure converted and the fixed rate.
  */
 export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
-  { label: "Winning Bid", value: "$12,800.00" },
+  { label: "Winning Bid", value: "HK$100,480.00" },
   {
     label: "Buyer’s Premium",
-    value: "$2,560.00",
+    value: "HK$20,096.00",
     tooltip: LINE_TOOLTIPS.buyersPremium,
   },
   {
     label: "Shipping & Handling",
-    value: "$180.00",
+    value: "HK$1,413.00",
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
     label: "Insurance",
-    value: "$480.00",
+    value: "HK$3,768.00",
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
     label: "Tax",
-    value: "$320.00",
+    value: "HK$2,512.00",
     tooltip: LINE_TOOLTIPS.tax,
   },
   {
@@ -298,7 +311,11 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "US$16,340.00" },
+  {
+    label: "Order Total",
+    value: "HK$128,269.00",
+    footnote: "Converted from US$16,340.00 at 1 USD = 7.85 HKD",
+  },
 ];
 
 /**

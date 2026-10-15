@@ -4,253 +4,570 @@
 **Drafts styled:** 2026-10-12, tcs-rules r5
 **Out of suite:** none for this change's new scenarios; the scenarios it restates unchanged keep their durable cases.
 
-## Walk 1: Expired invoice keeps Pending Payment without winner card pay
+## Walk 1: Operator handles expired and checked invoices — phase 1
 
 **Starting state:**
 
-- Auction order invoice becomes `expired` at the deadline.
+**Steps 1–1 setup:**
+
+- `<winner_order_1>`'s invoice becomes `expired` at the deadline.
+
+**Steps 2–2 setup:**
+
 - Invoice status is `expired`.
+- The winner order under test is `<winner_order_2>`.
+
+**Steps 3–3 setup:**
+
 - Invoice status is `expired`; operator holds payment-processing.
-- <order_1> had <invoice_1> replaced by <invoice_2>, `pending`.
-- <order_1> is `payment_verifying` on <invoice_1>.
-- <order_1> has an invoice, status `expired`.
-- An auction order's card invoice of HKD3,232.25 (fixed derived value) is `expired`.
-- An auction order's invoice is `payment_verifying`.
+- The winner order under test is `<winner_order_3>`.
+
+**Steps 4–5 setup:**
+
+- `<winner_order_4>` had `<invoice_4_1>` replaced by `<invoice_4_2>`, `pending`.
+
+**Steps 6–7 setup:**
+
+- `<winner_order_5>` is `payment_verifying` on `<invoice_5_1>`.
+
+**Steps 8–8 setup:**
+
+- `<winner_order_6>` has an invoice, status `expired`.
+
+**Steps 9–10 setup:**
+
+- `<winner_order_7>`'s card invoice of `<invoice total>` is `expired`.
+
+**Steps 11–12 setup:**
+
+- `<winner_order_8>`'s invoice is `payment_verifying`.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–1 data:**
+
+| Field | Value |
 | --- | --- |
-| <invoice_1> | The replaced invoice |
-| <invoice_2> | The current invoice |
-| <invoice_1> | The invoice under check |
-| <invoice_2> | Its replacement |
+| winner_order_1 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 2–2 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_2 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 3–3 data:**
+
+| Field | Value |
+| --- | --- |
+| settlement method | An allowed manual-settlement method for this invoice; bind its method only |
+| settlement proof | A valid proof supporting this manual settlement; bind its proof reference only |
+| winner_order_3 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 4–5 data:**
+
+| Field | Value |
+| --- | --- |
+| invoice_4_1 | The replaced invoice; bind its invoice identity only |
+| invoice_4_2 | The current invoice; bind its invoice identity only |
+| winner_order_4 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 6–7 data:**
+
+| Field | Value |
+| --- | --- |
+| invoice_5_1 | The invoice under check; bind its invoice identity only |
+| invoice_5_2 | Its replacement; bind its requested replacement identity only |
+| winner_order_5 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 8–8 data:**
+
+| Field | Value |
+| --- | --- |
+| payment proof | A valid winner payment-proof upload for this fixture; bind its proof reference only |
+| winner_order_6 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 9–10 data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| invoice total | HKD3,232.25 | Fixed derived fixture value retained from this case |
+| winner_order_7 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only | · |
+
+**Steps 11–12 data:**
+
+| Field | Value |
+| --- | --- |
+| invoice total | The seeded invoice total for `<winner_order_8>`; bind its amount only |
+| winner_order_8 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Read derived order status.
-   - Order status is Payment Overdue. g10.auction-order-status.US1-TC1
+1. Read the derived status of `<winner_order_1>`.
+   - Order status is Payment Overdue. `g10.auction-order-status.US1-TC1`
 2. Submit a winner card payment for the invoice.
-   - Payment is refused. g10.auction-order-status.US1-TC2
-   - Invoice remains `expired`. g10.auction-order-status.US1-TC2
-   - Order status remains Payment Overdue. g10.auction-order-status.US1-TC2
-3. Operator records a manual settlement with method and proof.
-   - Invoice becomes `paid`. g10.auction-order-status.US1-TC3
-   - Order derives as Processing. g10.auction-order-status.US1-TC3
-4. Read the order's invoice status.
-5. Read the stored status of <invoice_1>.
-   - The order's invoice status is <invoice_2>'s, `pending`. g10.auction-order-status.US1-TC13
-   - <invoice_1> holds no status and is not `cancelled`. g10.auction-order-status.US1-TC13
-   - The order reads Pending Payment. g10.auction-order-status.US1-TC13
-6. Reissue <invoice_1> as <invoice_2>.
-   - The reissue is refused; no <invoice_2> exists. g10.auction-order-status.US1-TC14
+   - Payment is refused. `g10.auction-order-status.US1-TC2`
+   - Invoice remains `expired`. `g10.auction-order-status.US1-TC2`
+   - Order status remains Payment Overdue. `g10.auction-order-status.US1-TC2`
+3. Operator records a manual settlement for `<winner_order_3>` with method `<settlement method>` and proof `<settlement proof>`.
+   - Invoice becomes `paid`. `g10.auction-order-status.US1-TC3`
+   - Order derives as Processing. `g10.auction-order-status.US1-TC3`
+4. Read `<winner_order_4>`'s invoice status.
+5. Read the stored status of `<invoice_4_1>`.
+   - The order's invoice status is `<invoice_4_2>`'s, `pending`. `g10.auction-order-status.US1-TC13`
+   - `<invoice_4_1>` holds no status and is not `cancelled`. `g10.auction-order-status.US1-TC13`
+   - The order reads Pending Payment. `g10.auction-order-status.US1-TC13`
+6. Reissue `<invoice_5_1>` as `<invoice_5_2>`.
 7. Read the order's current invoice and status.
-   - <invoice_1> is still current and `payment_verifying`. g10.auction-order-status.US1-TC14
-8. Record a winner proof upload.
-   - The write is refused; the status stays `expired`. g10.auction-order-status.US1-TC15
-9. Complete a card payment of HKD3,232.25 (fixed derived value) for the invoice.
+   - The reissue is refused; no `<invoice_5_2>` exists. `g10.auction-order-status.US1-TC14`
+   - `<invoice_5_1>` is still current and `payment_verifying`. `g10.auction-order-status.US1-TC14`
+8. Record winner proof `<payment proof>` for `<winner_order_6>`.
+   - The write is refused; the status stays `expired`. `g10.auction-order-status.US1-TC15`
+9. Complete a card payment of `<invoice total>` for the invoice.
 10. Read the invoice status, the payment and the derived order status.
-   - The invoice status is `paid`. g10.auction-order-status.US1-TC16
-   - The payment is recorded and flagged Paid late. g10.auction-order-status.US1-TC16
-   - The order derives as Preparing Shipment. g10.auction-order-status.US1-TC16
-11. Report a completed card payment for the order total against the invoice, as the payment provider would.
+   - The invoice status is `paid`. `g10.auction-order-status.US1-TC16`
+   - The payment is recorded and flagged Paid late. `g10.auction-order-status.US1-TC16`
+   - The order derives as Preparing Shipment. `g10.auction-order-status.US1-TC16`
+11. Report a completed card payment of `<invoice total>` against `<winner_order_8>`'s invoice, as the payment provider would.
 12. Read the invoice status, the payment and the derived order status.
-   - The payment is recorded and flagged Unexpected status, and counts toward nothing. g10.auction-order-status.US1-TC17
-   - The invoice status is still `payment_verifying`. g10.auction-order-status.US1-TC17
-   - The order still derives as Payment Verifying. g10.auction-order-status.US1-TC17
+   - The payment is recorded and flagged Unexpected status, and counts toward nothing. `g10.auction-order-status.US1-TC17`
+   - The invoice status is still `payment_verifying`. `g10.auction-order-status.US1-TC17`
+   - The order still derives as Payment Verifying. `g10.auction-order-status.US1-TC17`
 
-## Walk 2: Expired invoice keeps Pending Payment without winner card pay
+## Walk 2: Operator handles expired and checked invoices — phase 2
 
 **Starting state:**
 
-- The winner started a card payment for an auction order's total, and an operator then cancelled the order.
-- An auction order's invoice is in the row's invoice status.
-- An auction order whose invoice status is `<status>`.
-- A published lot with a winning bid, whose close is due.
-- ❓ The spec does not identify the surface where the tester waits for `the named lot` to close.
-- An auction order whose invoice status is `expired`.
+**Steps 1–2 setup:**
+
+- The winner started a card payment of `<invoice total>` for `<winner_order_9>`, and an operator then cancelled the order.
+- The winner order under test is `<winner_order_9>`.
+
+**Steps 3–4 setup:**
+
+- `<winner_order_10>`'s invoice is in `<starting invoice status>`.
+
+**Steps 5–6 setup:**
+
+- The winner order `<winner_order_11>` has invoice status is `<status>`.
+
+**Steps 7–9 setup:**
+
+- The published listing `<listing_1>` has a winning bid and is due to close.
+
+**Steps 10–11 setup:**
+
+- The winner order `<winner_order_13>` has invoice status is `expired`.
 - admin(operator with payment processing).
-- An auction order in the row's starting state.
-- An auction order whose bank transfer invoice is `pending` and whose fulfilment status is `unfulfilled`.
+
+**Steps 12–13 setup:**
+
+- The winner order `<winner_order_14>` has invoice status `<starting status>`.
+- admin(operator with payment processing).
+- The `not_issued` row has no confirmed delivery address.
+
+**Steps 14–16 setup:**
+
+- The winner order `<winner_order_15>` has a bank transfer invoice that is `pending` and whose fulfilment status is `unfulfilled`.
+- admin(operator with payment processing).
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–2 data:**
+
+| Field | Value |
+| --- | --- |
+| invoice total | The total of the cancelled order `<winner_order_9>` targeted by the started card payment; bind its amount only |
+| winner_order_9 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 3–4 data:**
+
+| `<starting invoice status>` | `<expected order status>` |
 | --- | --- |
 | `expired` | Payment Overdue |
 | `payment_verifying` | Payment Verifying |
-| Item | `<status>`: `not_issued` |
-| Item | `<status>`: `paid` |
-| Item | `<status>`: `cancelled` |
-| `paid` | Set the invoice status to `pending` |
-| `cancelled` | Record a payment against the invoice |
-| `not_issued`, with no delivery address confirmed | Send the invoice |
-| Item | `<check>`: return; `<invoice status>`: `pending`; `<order status>`: Pending Payment |
-| Item | `<check>`: confirm; `<invoice status>`: `paid`; `<order status>`: Preparing Shipment |
+
+| Field | Value |
+| --- | --- |
+| winner_order_10 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 5–6 data:**
+
+| `<status>` |
+| --- |
+| `not_issued` |
+| `paid` |
+| `cancelled` |
+
+| Field | Value |
+| --- | --- |
+| payment proof | A valid winner payment-proof upload for this fixture; bind its proof reference only |
+| winner_order_11 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 7–9 data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A published listing with a winning bid and a due close; bind its identity only |
+| payment deadline | 2026-09-19T09:00:00Z |
+| winner_order_12 | The winner order created when `<listing_1>` closes with a winner; bind its order identity only |
+
+**Steps 10–11 data:**
+
+| Field | Value |
+| --- | --- |
+| new payment deadline | A fresh deadline later than the reissue time; bind its datetime only |
+| reissue reason | Reissue expired invoice |
+| winner_order_13 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 12–13 data:**
+
+| `<starting status>` | `<attempted write>` | Fixture notes |
+| --- | --- | --- |
+| `paid` | Set the invoice status to `pending` | · |
+| `cancelled` | Record a payment against the invoice | · |
+| `not_issued` | Send the invoice | No delivery address is confirmed |
+
+| Field | Value |
+| --- | --- |
+| winner_order_14 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 14–16 data:**
+
+| `<check>` | `<invoice status>` | `<order status>` |
+| --- | --- | --- |
+| return | `pending` | Pending Payment |
+| confirm | `paid` | Preparing Shipment |
+
+| Field | Value |
+| --- | --- |
+| payment proof | A valid winner payment-proof upload for this fixture; bind its proof reference only |
+| winner_order_15 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Complete that card payment.
+1. Complete the card payment of `<invoice total>` for `<winner_order_9>`.
 2. Read the invoice status, the payment and the derived order status.
-   - The payment is recorded and flagged Paid after cancel, and counts toward nothing. g10.auction-order-status.US1-TC18
-   - The invoice status is still `cancelled`. g10.auction-order-status.US1-TC18
-   - The order still derives as Cancelled. g10.auction-order-status.US1-TC18
+   - The payment is recorded and flagged Paid after cancel, and counts toward nothing. `g10.auction-order-status.US1-TC18`
+   - The invoice status is still `cancelled`. `g10.auction-order-status.US1-TC18`
+   - The order still derives as Cancelled. `g10.auction-order-status.US1-TC18`
 3. As the winner, try to start a card payment for the invoice.
 4. Read the invoice status and the derived order status.
-   - No card payment starts, and no card is charged. g10.auction-order-status.US1-TC19
-   - The invoice status is unchanged. g10.auction-order-status.US1-TC19
-   - The order derives as the row's **The order derives as**. g10.auction-order-status.US1-TC19
-5. Record a winner proof upload against the invoice.
-   - The upload is refused. g10.auction-order-status.US1-TC20
+   - No card payment starts, and no card is charged. `g10.auction-order-status.US1-TC19`
+   - The invoice status is unchanged. `g10.auction-order-status.US1-TC19`
+   - The order derives as `<expected order status>`. `g10.auction-order-status.US1-TC19`
+5. Record winner proof `<payment proof>` against `<winner_order_11>`'s invoice.
 6. Read the invoice status.
-   - The invoice status is still `<status>`. g10.auction-order-status.US1-TC20
-7. Let the lot close, and read the new auction order's invoice and fulfilment statuses.
-   - reads `not_issued` and `unfulfilled`. g10.auction-order-status.US1-TC21
-8. Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment.
+   - The upload is refused. `g10.auction-order-status.US1-TC20`
+   - The invoice status is still `<status>`. `g10.auction-order-status.US1-TC20`
+7. Let `<listing_1>` close, and read `<winner_order_12>`'s invoice and fulfilment statuses.
+   - Step 7 reads `not_issued` and `unfulfilled`. `g10.auction-order-status.US1-TC21`
+8. Send its invoice with a payment deadline of `<payment deadline>`, then let that deadline pass with no payment.
 9. Read both statuses again.
-   - reads `expired` and `unfulfilled`. g10.auction-order-status.US1-TC21
-10. Reissue the invoice with a fresh deadline and a reason.
-   - The invoice status is `pending`. g10.auction-order-status.US1-TC22
+   - Step 9 reads `expired` and `unfulfilled`. `g10.auction-order-status.US1-TC21`
+10. Reissue `<winner_order_13>`'s invoice with deadline `<new payment deadline>` and reason `<reissue reason>`.
 11. Read the invoice status and the payment deadline.
-   - The payment deadline is the one the reissue set. g10.auction-order-status.US1-TC22
-12. Attempt the row's write.
-   - The write is refused. g10.auction-order-status.US1-TC23
+   - The invoice status is `pending`. `g10.auction-order-status.US1-TC22`
+   - The payment deadline reads `<new payment deadline>`. `g10.auction-order-status.US1-TC22`
+12. Attempt this write: `<attempted write>`.
 13. Read the invoice status.
-   - The invoice status is still the row's starting status. g10.auction-order-status.US1-TC23
-14. Record a winner proof upload, and read the invoice status.
-   - reads `payment_verifying`. g10.auction-order-status.US1-TC24
-15. As the operator, <check> the proof.
+   - The write is refused. `g10.auction-order-status.US1-TC23`
+   - The invoice status is still `<starting status>`. `g10.auction-order-status.US1-TC23`
+14. Record winner proof `<payment proof>` for `<winner_order_15>`, and read the invoice status.
+   - Step 14 reads `payment_verifying`. `g10.auction-order-status.US1-TC24`
+15. As the operator, `<check>` the proof.
 16. Read the invoice status and the derived order status.
-   - reads <invoice status> and <order status>. g10.auction-order-status.US1-TC24
+   - Step 16 reads `<invoice status>` and `<order status>`. `g10.auction-order-status.US1-TC24`
 
 ## Walk 3: Refund is terminal after partial collection
 
 **Starting state:**
 
-- An auction order has invoice status `refunded` after partial payment and fulfilment status `unfulfilled`.
-- An auction order has a payment above its invoice total and the difference has been returned.
+**Steps 1–1 setup:**
+
+- `<winner_order_16>` has invoice status `refunded` after partial payment and fulfilment status `unfulfilled`.
+
+**Steps 2–2 setup:**
+
+- `<winner_order_17>` has a payment above its invoice total and the difference has been returned.
+
+**Shared test data:**
+
+**Steps 1–1 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_16 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 2–2 data:**
+
+| Field | Value |
+| --- | --- |
+| status before return | The seeded derived status before the overpayment return for `<winner_order_17>`; bind its status only |
+| winner_order_17 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Read the derived order status.
-   - The status is Refunded. g10.auction-order-status.US2-TC1
-   - It does not return to Partially Paid or Processing. g10.auction-order-status.US2-TC1
-2. Read the derived order status.
-   - The order keeps its status from before the overpayment return. g10.auction-order-status.US2-TC2
-   - The status is not Refunded. g10.auction-order-status.US2-TC2
+1. Read the derived status of `<winner_order_16>`.
+   - The status is Refunded. `g10.auction-order-status.US2-TC1`
+   - It does not return to Partially Paid or Processing. `g10.auction-order-status.US2-TC1`
+2. Read the derived status of `<winner_order_17>`.
+   - The order keeps `<status before return>`, its status from before the overpayment return. `g10.auction-order-status.US2-TC2`
+   - The status is not Refunded. `g10.auction-order-status.US2-TC2`
 
 ## Walk 4: Payment deadline past reads Payment Overdue and adjacent checks
 
 **Starting state:**
 
+**Steps 1–1 setup:**
+
 - An unpaid invoice has stored status `expired` and fulfilment status `unfulfilled`.
-- An auction order has no confirmed address, no invoice and a passed address deadline.
+- The winner order under test is `<winner_order_18>`.
+
+**Steps 2–2 setup:**
+
+- `<winner_order_19>` has no confirmed address, no invoice and a passed address deadline.
+
+**Shared test data:**
+
+**Steps 1–1 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_18 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 2–2 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_19 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Read the derived order status.
-   - The status is Payment Overdue. g10.auction-order-status.US3-TC1
-   - Winner card Pay is unavailable. g10.auction-order-status.US3-TC1
-2. Read the derived order status.
-   - The status is Setup Overdue. g10.auction-order-status.US4-TC1
-   - Winner address confirmation is unavailable. g10.auction-order-status.US4-TC1
+1. Read the derived status of `<winner_order_18>`.
+   - The status is Payment Overdue. `g10.auction-order-status.US3-TC1`
+   - Winner card Pay is unavailable. `g10.auction-order-status.US3-TC1`
+2. Read the derived status of `<winner_order_19>`.
+   - The status is Setup Overdue. `g10.auction-order-status.US4-TC1`
+   - Winner address confirmation is unavailable. `g10.auction-order-status.US4-TC1`
 
 ## Walk 5: Winner misses the address deadline
 
 **Starting state:**
 
-- `<awaiting-address order>` was opened by a lot close, its invoice status is `not_issued`, and no delivery address is confirmed.
+**Steps 1–2 setup:**
+
+- `<winner_order_20>` was opened by a listing close, its invoice status is `not_issued`, and no delivery address is confirmed.
 - Its address window is open.
-- `<preparing-invoice order>`'s invoice status is `not_issued` and its winner confirmed a delivery address.
-- The order's invoice status is `not_issued` and its 48-hour address window closed two hours ago.
-- `<awaiting-address order>`'s address window closed two hours ago, no address
-- customer(winner of `<awaiting-address order>`) is signed in.
+
+**Steps 3–3 setup:**
+
+- `<winner_order_21>`'s invoice status is `not_issued` and its winner confirmed a delivery address.
+
+**Steps 4–4 setup:**
+
+- The selected order `<winner order>`'s invoice status is `not_issued` and its 48-hour address window closed at `<address deadline>`, two hours before `<fixture time>`.
+- The selected order has this delivery-address state: `<address state>`.
+
+**Steps 5–6 setup:**
+
+- `<winner_order_23>`'s address window closed at `<address deadline>`, two hours before `<fixture time>`, no address is confirmed, its invoice status is `not_issued`, and it derives Setup Overdue.
+- customer(winner of `<winner_order_23>`) is signed in.
 
 **Shared test data:**
 
-| Item | Value |
+**Steps 1–2 data:**
+
+| Field | Value |
 | --- | --- |
-| Item | Order: `<awaiting-address order>`; Delivery address: none confirmed; Order status: Setup Overdue |
-| Item | Order: `<preparing-invoice order>`; Delivery address: confirmed inside the window; Order status: Preparing Invoice |
+| winner_order_20 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 3–3 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_21 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 4–4 data:**
+
+| `<winner order>` | `<address state>` | `<expected order status>` |
+| --- | --- | --- |
+| `<winner_order_22>` | none confirmed | Setup Overdue |
+| `<winner_order_22_confirmed>` | confirmed inside the window | Preparing Invoice |
+
+| Field | Value |
+| --- | --- |
+| address deadline | The seeded address deadline; bind its datetime only |
+| fixture time | A fixture-clock moment two hours after `<address deadline>`; bind its datetime only |
+| winner_order_22 | A winner order with invoice status `not_issued`, a 48-hour address window closed two hours ago, and no confirmed address; bind its order identity only |
+| winner_order_22_confirmed | A winner order with invoice status `not_issued`, a 48-hour address window closed two hours ago, and an address confirmed inside the window; bind its order identity only |
+
+**Steps 5–6 data:**
+
+| Field | Value |
+| --- | --- |
+| address deadline | The seeded address deadline; bind its datetime only |
+| fixture time | A fixture-clock moment two hours after `<address deadline>`; bind its datetime only |
+| delivery address | A valid delivery address for this order fixture; bind its address payload only |
+| winner_order_23 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_20>`.
 2. Read the invoice status.
-   - The order status is Awaiting Setup. g10.auction-order-status.US5-TC4
-   - The invoice status is `not_issued`. g10.auction-order-status.US5-TC4
-   - Both the winner and the operator read the same status. g10.auction-order-status.US5-TC4
-3. Read the derived order status.
-   - The order status is Preparing Invoice. g10.auction-order-status.US5-TC5
-   - The invoice status is still `not_issued`. g10.auction-order-status.US5-TC5
-4. Read the derived order status.
-   - The order status is the one the row names. g10.auction-order-status.US5-TC6
-   - A closed window without an address derives Setup Overdue. g10.auction-order-status.US5-TC6
-   - The invoice status is still `not_issued`. g10.auction-order-status.US5-TC6
-5. Submit a delivery address confirmation as the winner.
+   - The order status is Awaiting Setup. `g10.auction-order-status.US5-TC4`
+   - The invoice status is `not_issued`. `g10.auction-order-status.US5-TC4`
+   - Both the winner and the operator read the same status. `g10.auction-order-status.US5-TC4`
+3. Read the derived status of `<winner_order_21>`.
+   - The order status is Preparing Invoice. `g10.auction-order-status.US5-TC5`
+   - The invoice status is still `not_issued`. `g10.auction-order-status.US5-TC5`
+4. Read the derived status of `<winner order>`.
+   - The order status reads `<expected order status>`. `g10.auction-order-status.US5-TC6`
+   - A closed window without an address derives Setup Overdue. `g10.auction-order-status.US5-TC6`
+   - The invoice status is still `not_issued`. `g10.auction-order-status.US5-TC6`
+5. Submit delivery address `<delivery address>` for `<winner_order_23>` as the winner.
 6. Read the order's stored delivery address and status.
-   - The write is refused. g10.auction-order-status.US5-TC7
-   - The order holds no confirmed delivery address. g10.auction-order-status.US5-TC7
-   - The order status is still Setup Overdue. g10.auction-order-status.US5-TC7
+   - The write is refused. `g10.auction-order-status.US5-TC7`
+   - The order holds no confirmed delivery address. `g10.auction-order-status.US5-TC7`
+   - The order status is still Setup Overdue. `g10.auction-order-status.US5-TC7`
 
 ## Walk 6: Operator resolves a missed address deadline
 
 **Starting state:**
 
-- `<preparing-invoice order>`'s invoice status is `not_issued` and its delivery address is confirmed.
-- admin(holds fulfilment) is on `<preparing-invoice order>`.
-- `<awaiting-address order>`'s invoice status is `not_issued` and no delivery address is confirmed.
-- admin(holds payment-processing) is on `<awaiting-address order>`.
-- `<awaiting-address order>` derived as Setup Overdue because its address
-- An operator holding payment-processing has reopened the address form with a reason.
-- `<closed-window order>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
+**Steps 1–2 setup:**
+
+- `<winner_order_24>`'s invoice status is `not_issued` and its delivery address is confirmed.
+- admin(holds fulfilment) is on `<winner_order_24>`.
+
+**Steps 3–4 setup:**
+
+- `<winner_order_25>`'s invoice status is `not_issued` and no delivery address is confirmed.
+- admin(holds payment-processing) is on `<winner_order_25>`.
+
+**Steps 5–7 setup:**
+
+- `<winner_order_26>` derived as Setup Overdue because its address window closed at `<original address deadline>`, two hours before `<fixture time>`, it has no confirmed address, and its invoice status is `not_issued`.
+- An operator holding payment-processing has reopened `<winner_order_26>`'s address form with reason `<reopen reason>`.
+
+**Steps 8–9 setup:**
+
+- `<winner_order_27>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
+
+**Shared test data:**
+
+**Steps 1–2 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_24 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 3–4 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_25 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 5–7 data:**
+
+| Field | Value |
+| --- | --- |
+| original address deadline | The seeded original address deadline; bind its datetime only |
+| fixture time | A fixture-clock moment two hours after `<original address deadline>`; bind its datetime only |
+| delivery address | A valid delivery address for this order fixture; bind its address payload only |
+| reopen reason | Reopen address confirmation |
+| winner_order_26 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 8–9 data:**
+
+| Field | Value |
+| --- | --- |
+| delivery address | A valid delivery address for this order fixture; bind its address payload only |
+| winner_order_27 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Attempt to dispatch `<preparing-invoice order>`.
-2. Read the derived order status.
-   - The dispatch is refused. g10.auction-order-status.US6-TC8
-   - No tracking facts are recorded. g10.auction-order-status.US6-TC8
-   - The order status is still Preparing Invoice. g10.auction-order-status.US6-TC8
+1. Attempt to dispatch `<winner_order_24>`.
+2. Read the derived status of `<winner_order_24>`.
+   - The dispatch is refused. `g10.auction-order-status.US6-TC8`
+   - No tracking facts are recorded. `g10.auction-order-status.US6-TC8`
+   - The order status is still Preparing Invoice. `g10.auction-order-status.US6-TC8`
 3. Attempt to send the invoice.
 4. Read the invoice status.
-   - The send is refused. g10.auction-order-status.US6-TC9
-   - The invoice status is still `not_issued`. g10.auction-order-status.US6-TC9
-   - No payment deadline is started. g10.auction-order-status.US6-TC9
-5. Read the derived order status.
-   - reads Awaiting Setup, derived from the reopened window. g10.auction-order-status.US6-TC10
-6. Submit a delivery address confirmation as the winner.
-   - The write is accepted. g10.auction-order-status.US6-TC10
-7. Read the derived order status again.
-   - reads Preparing Invoice. g10.auction-order-status.US6-TC10
-8. As an operator holding payment-processing, record a delivery address on the order.
+   - The send is refused. `g10.auction-order-status.US6-TC9`
+   - The invoice status is still `not_issued`. `g10.auction-order-status.US6-TC9`
+   - No payment deadline is started. `g10.auction-order-status.US6-TC9`
+5. Read the derived status of `<winner_order_26>`.
+   - Step 5 reads Awaiting Setup, derived from the reopened window. `g10.auction-order-status.US6-TC10`
+6. Submit delivery address `<delivery address>` for `<winner_order_26>` as the winner.
+7. Read the derived status of `<winner_order_26>` again.
+   - The write is accepted. `g10.auction-order-status.US6-TC10`
+   - Step 7 reads Preparing Invoice. `g10.auction-order-status.US6-TC10`
+8. As an operator holding payment-processing, record delivery address `<delivery address>` on `<winner_order_27>`.
 9. Read the order's conditions and derived status.
-   - The write is accepted. g10.auction-order-status.US6-TC12
-   - `address_confirmed` is true and `address_window_open` is still false. g10.auction-order-status.US6-TC12
-   - The order derives as Preparing Invoice. g10.auction-order-status.US6-TC12
+   - The write is accepted. `g10.auction-order-status.US6-TC12`
+   - `address_confirmed` is true and `address_window_open` is still false. `g10.auction-order-status.US6-TC12`
+   - The order derives as Preparing Invoice. `g10.auction-order-status.US6-TC12`
 
 ## Walk 7: Partially Paid status ends self-service Pay for good and adjacent checks
 
 **Starting state:**
 
-- An auction order has invoice status `partially_paid`, a positive remaining balance, and fulfilment status `unfulfilled`.
-- An auction order is Partially Paid and still has money due.
-- An auction order is in Pending Payment, and its only recorded payment counts toward nothing.
-- An auction order exists with invoice `paid` and fulfilment `unfulfilled`.
+**Steps 1–1 setup:**
+
+- `<winner_order_28>` has invoice status `partially_paid`, a positive remaining balance, and fulfilment status `unfulfilled`.
+
+**Steps 2–2 setup:**
+
+- `<winner_order_29>` is Partially Paid and still has money due.
+
+**Steps 3–3 setup:**
+
+- `<winner_order_30>` is in Pending Payment, and its only recorded payment counts toward nothing.
+
+**Steps 4–4 setup:**
+
+- `<winner_order_31>` exists with invoice `paid` and fulfilment `unfulfilled`.
+
+**Shared test data:**
+
+**Steps 1–1 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_28 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 2–2 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_29 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 3–3 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_30 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
+**Steps 4–4 data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_31 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 ### Route
 
-1. Read the derived order status.
-   - The derived status is Partially Paid. g10.auction-order-status.US7-TC3
-   - The remaining balance is not used to derive a different status. g10.auction-order-status.US7-TC3
+1. Read the derived status of `<winner_order_28>`.
+   - The derived status is Partially Paid. `g10.auction-order-status.US7-TC3`
+   - The remaining balance is not used to derive a different status. `g10.auction-order-status.US7-TC3`
 2. Attempt winner card Pay, invoice reissue and operator cancellation.
-   - Winner Pay, reissue and cancellation are refused. g10.auction-order-status.US7-TC4
-   - The order remains Partially Paid. g10.auction-order-status.US7-TC4
-3. Read the derived order status.
-   - The derived status is Pending Payment. g10.auction-order-status.US7-TC5
-   - The derived status is not Partially Paid. g10.auction-order-status.US7-TC5
-4. Read derived order status.
-   - Order derives as Preparing Shipment. g10.auction-order-status.US8-TC7
+   - Winner Pay, reissue and cancellation are refused. `g10.auction-order-status.US7-TC4`
+   - The order remains Partially Paid. `g10.auction-order-status.US7-TC4`
+3. Read the derived status of `<winner_order_30>`.
+   - The derived status is Pending Payment. `g10.auction-order-status.US7-TC5`
+   - The derived status is not Partially Paid. `g10.auction-order-status.US7-TC5`
+4. Read the derived status of `<winner_order_31>`.
+   - Order derives as Preparing Shipment. `g10.auction-order-status.US8-TC7`
 
 ## g10.auction-order-status.US1: Expired invoice keeps Pending Payment without winner card pay
 
@@ -276,11 +593,17 @@
 
 **Pre-conditions:**
 
-* Auction order invoice becomes `expired` at the deadline.
+* `<winner_order_1>`'s invoice becomes `expired` at the deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_1 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read derived order status.
+1. Read the derived status of `<winner_order_1>`.
 
 **Expected Results:**
 
@@ -305,6 +628,13 @@
 **Pre-conditions:**
 
 * Invoice status is `expired`.
+* The winner order under test is `<winner_order_2>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_2 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -335,10 +665,19 @@
 **Pre-conditions:**
 
 * Invoice status is `expired`; operator holds payment-processing.
+* The winner order under test is `<winner_order_3>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| settlement method | An allowed manual-settlement method for this invoice; bind its method only |
+| settlement proof | A valid proof supporting this manual settlement; bind its proof reference only |
+| winner_order_3 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Operator records a manual settlement with method and proof.
+1. Operator records a manual settlement for `<winner_order_3>` with method `<settlement method>` and proof `<settlement proof>`.
 
 **Expected Results:**
 
@@ -364,24 +703,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <order_1> had <invoice_1> replaced by <invoice_2>, `pending`.
+* `<winner_order_4>` had `<invoice_4_1>` replaced by `<invoice_4_2>`, `pending`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <invoice_1> | The replaced invoice |
-| <invoice_2> | The current invoice |
+| invoice_4_1 | The replaced invoice; bind its invoice identity only |
+| invoice_4_2 | The current invoice; bind its invoice identity only |
+| winner_order_4 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the order's invoice status.
-2. Read the stored status of <invoice_1>.
+1. Read `<winner_order_4>`'s invoice status.
+2. Read the stored status of `<invoice_4_1>`.
 
 **Expected Results:**
 
-* The order's invoice status is <invoice_2>'s, `pending`.
-* <invoice_1> holds no status and is not `cancelled`.
+* The order's invoice status is `<invoice_4_2>`'s, `pending`.
+* `<invoice_4_1>` holds no status and is not `cancelled`.
 * The order reads Pending Payment.
 
 ### g10.auction-order-status.US1-TC14: Reissuing is refused while proof is checked
@@ -403,24 +743,25 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <order_1> is `payment_verifying` on <invoice_1>.
+* `<winner_order_5>` is `payment_verifying` on `<invoice_5_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <invoice_1> | The invoice under check |
-| <invoice_2> | Its replacement |
+| invoice_5_1 | The invoice under check; bind its invoice identity only |
+| invoice_5_2 | Its replacement; bind its requested replacement identity only |
+| winner_order_5 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Reissue <invoice_1> as <invoice_2>.
+1. Reissue `<invoice_5_1>` as `<invoice_5_2>`.
 2. Read the order's current invoice and status.
 
 **Expected Results:**
 
-* The reissue is refused; no <invoice_2> exists.
-* <invoice_1> is still current and `payment_verifying`.
+* The reissue is refused; no `<invoice_5_2>` exists.
+* `<invoice_5_1>` is still current and `payment_verifying`.
 
 ### g10.auction-order-status.US1-TC15: An expired invoice cannot enter payment_verifying
 
@@ -439,11 +780,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <order_1> has an invoice, status `expired`.
+* `<winner_order_6>` has an invoice, status `expired`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| payment proof | A valid winner payment-proof upload for this fixture; bind its proof reference only |
+| winner_order_6 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Record a winner proof upload.
+1. Record winner proof `<payment proof>` for `<winner_order_6>`.
 
 **Expected Results:**
 
@@ -467,11 +815,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order's card invoice of HKD3,232.25 (fixed derived value) is `expired`.
+* `<winner_order_7>`'s card invoice of `<invoice total>` is `expired`.
+
+**Test data:**
+
+| Field | Value | Fixture notes |
+| --- | --- | --- |
+| invoice total | HKD3,232.25 | Fixed derived fixture value retained from this case |
+| winner_order_7 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only | · |
 
 **Steps:**
 
-1. Complete a card payment of HKD3,232.25 (fixed derived value) for the invoice.
+1. Complete a card payment of `<invoice total>` for the invoice.
 2. Read the invoice status, the payment and the derived order status.
 
 **Expected Results:**
@@ -498,11 +853,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order's invoice is `payment_verifying`.
+* `<winner_order_8>`'s invoice is `payment_verifying`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| invoice total | The seeded invoice total for `<winner_order_8>`; bind its amount only |
+| winner_order_8 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Report a completed card payment for the order total against the invoice, as the payment provider would.
+1. Report a completed card payment of `<invoice total>` against `<winner_order_8>`'s invoice, as the payment provider would.
 2. Read the invoice status, the payment and the derived order status.
 
 **Expected Results:**
@@ -529,11 +891,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The winner started a card payment for an auction order's total, and an operator then cancelled the order.
+* The winner started a card payment of `<invoice total>` for `<winner_order_9>`, and an operator then cancelled the order.
+* The winner order under test is `<winner_order_9>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| invoice total | The total of the cancelled order `<winner_order_9>` targeted by the started card payment; bind its amount only |
+| winner_order_9 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Complete that card payment.
+1. Complete the card payment of `<invoice total>` for `<winner_order_9>`.
 2. Read the invoice status, the payment and the derived order status.
 
 **Expected Results:**
@@ -562,14 +932,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order's invoice is in the row's invoice status.
+* `<winner_order_10>`'s invoice is in `<starting invoice status>`.
 
 **Test data:**
 
-| Invoice status | The order derives as |
+| `<starting invoice status>` | `<expected order status>` |
 | --- | --- |
 | `expired` | Payment Overdue |
 | `payment_verifying` | Payment Verifying |
+
+| Field | Value |
+| --- | --- |
+| winner_order_10 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -580,7 +954,7 @@ Runs once per row of **Test data**.
 
 * No card payment starts, and no card is charged.
 * The invoice status is unchanged.
-* The order derives as the row's **The order derives as**.
+* The order derives as `<expected order status>`.
 
 ### g10.auction-order-status.US1-TC20: Proof upload is refused on an invoice that is not pending
 
@@ -601,7 +975,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order whose invoice status is `<status>`.
+* The winner order `<winner_order_11>` has invoice status is `<status>`.
 
 **Test data:**
 
@@ -611,9 +985,14 @@ Runs once per row of **Test data**.
 | `paid` |
 | `cancelled` |
 
+| Field | Value |
+| --- | --- |
+| payment proof | A valid winner payment-proof upload for this fixture; bind its proof reference only |
+| winner_order_11 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Record a winner proof upload against the invoice.
+1. Record winner proof `<payment proof>` against `<winner_order_11>`'s invoice.
 2. Read the invoice status.
 
 **Expected Results:**
@@ -638,12 +1017,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* A published lot with a winning bid, whose close is due.
+* The published listing `<listing_1>` has a winning bid and is due to close.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| listing_1 | A published listing with a winning bid and a due close; bind its identity only |
+| payment deadline | 2026-09-19T09:00:00Z |
+| winner_order_12 | The winner order created when `<listing_1>` closes with a winner; bind its order identity only |
 
 **Steps:**
 
-1. Let the lot close, and read the new auction order's invoice and fulfilment statuses.
-2. Send its invoice with a payment deadline of 2026-09-19T09:00:00Z, then let that deadline pass with no payment.
+1. Let `<listing_1>` close, and read `<winner_order_12>`'s invoice and fulfilment statuses.
+2. Send its invoice with a payment deadline of `<payment deadline>`, then let that deadline pass with no payment.
 3. Read both statuses again.
 
 **Expected Results:**
@@ -668,18 +1055,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order whose invoice status is `expired`.
+* The winner order `<winner_order_13>` has invoice status is `expired`.
 * admin(operator with payment processing).
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| new payment deadline | A fresh deadline later than the reissue time; bind its datetime only |
+| reissue reason | Reissue expired invoice |
+| winner_order_13 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Reissue the invoice with a fresh deadline and a reason.
+1. Reissue `<winner_order_13>`'s invoice with deadline `<new payment deadline>` and reason `<reissue reason>`.
 2. Read the invoice status and the payment deadline.
 
 **Expected Results:**
 
 * The invoice status is `pending`.
-* The payment deadline is the one the reissue set.
+* The payment deadline reads `<new payment deadline>`.
 
 ### g10.auction-order-status.US1-TC23: A write the transitions do not allow leaves the invoice status unchanged
 
@@ -700,26 +1095,31 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order in the row's starting state.
+* The winner order `<winner_order_14>` has invoice status `<starting status>`.
 * admin(operator with payment processing).
+* The `not_issued` row has no confirmed delivery address.
 
 **Test data:**
 
-| Starting state | Write |
+| `<starting status>` | `<attempted write>` | Fixture notes |
+| --- | --- | --- |
+| `paid` | Set the invoice status to `pending` | · |
+| `cancelled` | Record a payment against the invoice | · |
+| `not_issued` | Send the invoice | No delivery address is confirmed |
+
+| Field | Value |
 | --- | --- |
-| `paid` | Set the invoice status to `pending` |
-| `cancelled` | Record a payment against the invoice |
-| `not_issued`, with no delivery address confirmed | Send the invoice |
+| winner_order_14 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Attempt the row's write.
+1. Attempt this write: `<attempted write>`.
 2. Read the invoice status.
 
 **Expected Results:**
 
 * The write is refused.
-* The invoice status is still the row's starting status.
+* The invoice status is still `<starting status>`.
 
 ### g10.auction-order-status.US1-TC24: Proof moves a pending invoice to payment_verifying, and an operator moves it on
 
@@ -740,7 +1140,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order whose bank transfer invoice is `pending` and whose fulfilment status is `unfulfilled`.
+* The winner order `<winner_order_15>` has a bank transfer invoice that is `pending` and whose fulfilment status is `unfulfilled`.
 * admin(operator with payment processing).
 
 **Test data:**
@@ -750,16 +1150,21 @@ Runs once per row of **Test data**.
 | return | `pending` | Pending Payment |
 | confirm | `paid` | Preparing Shipment |
 
+| Field | Value |
+| --- | --- |
+| payment proof | A valid winner payment-proof upload for this fixture; bind its proof reference only |
+| winner_order_15 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
+
 **Steps:**
 
-1. Record a winner proof upload, and read the invoice status.
-2. As the operator, <check> the proof.
+1. Record winner proof `<payment proof>` for `<winner_order_15>`, and read the invoice status.
+2. As the operator, `<check>` the proof.
 3. Read the invoice status and the derived order status.
 
 **Expected Results:**
 
 * Step 1 reads `payment_verifying`.
-* Step 3 reads <invoice status> and <order status>.
+* Step 3 reads `<invoice status>` and `<order status>`.
 
 ## g10.auction-order-status.US2: Refund is terminal after partial collection
 
@@ -785,11 +1190,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order has invoice status `refunded` after partial payment and fulfilment status `unfulfilled`.
+* `<winner_order_16>` has invoice status `refunded` after partial payment and fulfilment status `unfulfilled`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_16 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_16>`.
 
 **Expected Results:**
 
@@ -814,15 +1225,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order has a payment above its invoice total and the difference has been returned.
+* `<winner_order_17>` has a payment above its invoice total and the difference has been returned.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| status before return | The seeded derived status before the overpayment return for `<winner_order_17>`; bind its status only |
+| winner_order_17 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_17>`.
 
 **Expected Results:**
 
-* The order keeps its status from before the overpayment return.
+* The order keeps `<status before return>`, its status from before the overpayment return.
 * The status is not Refunded.
 
 ## g10.auction-order-status.US3: Payment deadline past reads Payment Overdue
@@ -850,10 +1268,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * An unpaid invoice has stored status `expired` and fulfilment status `unfulfilled`.
+* The winner order under test is `<winner_order_18>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_18 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_18>`.
 
 **Expected Results:**
 
@@ -884,11 +1309,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order has no confirmed address, no invoice and a passed address deadline.
+* `<winner_order_19>` has no confirmed address, no invoice and a passed address deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_19 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_19>`.
 
 **Expected Results:**
 
@@ -919,12 +1350,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<awaiting-address order>` was opened by a lot close, its invoice status is `not_issued`, and no delivery address is confirmed.
+* `<winner_order_20>` was opened by a listing close, its invoice status is `not_issued`, and no delivery address is confirmed.
 * Its address window is open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_20 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_20>`.
 2. Read the invoice status.
 
 **Expected Results:**
@@ -951,11 +1388,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<preparing-invoice order>`'s invoice status is `not_issued` and its winner confirmed a delivery address.
+* `<winner_order_21>`'s invoice status is `not_issued` and its winner confirmed a delivery address.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_21 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_21>`.
 
 **Expected Results:**
 
@@ -982,22 +1425,30 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The order's invoice status is `not_issued` and its 48-hour address window closed two hours ago.
+* The selected order `<winner order>`'s invoice status is `not_issued` and its 48-hour address window closed at `<address deadline>`, two hours before `<fixture time>`.
+* The selected order has this delivery-address state: `<address state>`.
 
 **Test data:**
 
-| Order | Delivery address | Order status |
+| `<winner order>` | `<address state>` | `<expected order status>` |
 | --- | --- | --- |
-| `<awaiting-address order>` | none confirmed | Setup Overdue |
-| `<preparing-invoice order>` | confirmed inside the window | Preparing Invoice |
+| `<winner_order_22>` | none confirmed | Setup Overdue |
+| `<winner_order_22_confirmed>` | confirmed inside the window | Preparing Invoice |
+
+| Field | Value |
+| --- | --- |
+| address deadline | The seeded address deadline; bind its datetime only |
+| fixture time | A fixture-clock moment two hours after `<address deadline>`; bind its datetime only |
+| winner_order_22 | A winner order with invoice status `not_issued`, a 48-hour address window closed two hours ago, and no confirmed address; bind its order identity only |
+| winner_order_22_confirmed | A winner order with invoice status `not_issued`, a 48-hour address window closed two hours ago, and an address confirmed inside the window; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner order>`.
 
 **Expected Results:**
 
-* The order status is the one the row names.
+* The order status reads `<expected order status>`.
 * A closed window without an address derives Setup Overdue.
 * The invoice status is still `not_issued`.
 
@@ -1019,13 +1470,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<awaiting-address order>`'s address window closed two hours ago, no address
-  is confirmed, its invoice status is `not_issued`, and it derives Setup Overdue.
-* customer(winner of `<awaiting-address order>`) is signed in.
+* `<winner_order_23>`'s address window closed at `<address deadline>`, two hours before `<fixture time>`, no address is confirmed, its invoice status is `not_issued`, and it derives Setup Overdue.
+* customer(winner of `<winner_order_23>`) is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| address deadline | The seeded address deadline; bind its datetime only |
+| fixture time | A fixture-clock moment two hours after `<address deadline>`; bind its datetime only |
+| delivery address | A valid delivery address for this order fixture; bind its address payload only |
+| winner_order_23 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Submit a delivery address confirmation as the winner.
+1. Submit delivery address `<delivery address>` for `<winner_order_23>` as the winner.
 2. Read the order's stored delivery address and status.
 
 **Expected Results:**
@@ -1058,13 +1517,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<preparing-invoice order>`'s invoice status is `not_issued` and its delivery address is confirmed.
-* admin(holds fulfilment) is on `<preparing-invoice order>`.
+* `<winner_order_24>`'s invoice status is `not_issued` and its delivery address is confirmed.
+* admin(holds fulfilment) is on `<winner_order_24>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_24 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Attempt to dispatch `<preparing-invoice order>`.
-2. Read the derived order status.
+1. Attempt to dispatch `<winner_order_24>`.
+2. Read the derived status of `<winner_order_24>`.
 
 **Expected Results:**
 
@@ -1090,8 +1555,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<awaiting-address order>`'s invoice status is `not_issued` and no delivery address is confirmed.
-* admin(holds payment-processing) is on `<awaiting-address order>`.
+* `<winner_order_25>`'s invoice status is `not_issued` and no delivery address is confirmed.
+* admin(holds payment-processing) is on `<winner_order_25>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_25 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -1122,16 +1593,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<awaiting-address order>` derived as Setup Overdue because its address
-  window closed two hours ago, it has no confirmed address, and its invoice
-  status is `not_issued`.
-* An operator holding payment-processing has reopened the address form with a reason.
+* `<winner_order_26>` derived as Setup Overdue because its address window closed at `<original address deadline>`, two hours before `<fixture time>`, it has no confirmed address, and its invoice status is `not_issued`.
+* An operator holding payment-processing has reopened `<winner_order_26>`'s address form with reason `<reopen reason>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| original address deadline | The seeded original address deadline; bind its datetime only |
+| fixture time | A fixture-clock moment two hours after `<original address deadline>`; bind its datetime only |
+| delivery address | A valid delivery address for this order fixture; bind its address payload only |
+| reopen reason | Reopen address confirmation |
+| winner_order_26 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
-2. Submit a delivery address confirmation as the winner.
-3. Read the derived order status again.
+1. Read the derived status of `<winner_order_26>`.
+2. Submit delivery address `<delivery address>` for `<winner_order_26>` as the winner.
+3. Read the derived status of `<winner_order_26>` again.
 
 **Expected Results:**
 
@@ -1157,11 +1636,18 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<closed-window order>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
+* `<winner_order_27>` is unconfirmed Setup Overdue with invoice status `not_issued` and `address_window_open` false.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| delivery address | A valid delivery address for this order fixture; bind its address payload only |
+| winner_order_27 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. As an operator holding payment-processing, record a delivery address on the order.
+1. As an operator holding payment-processing, record delivery address `<delivery address>` on `<winner_order_27>`.
 2. Read the order's conditions and derived status.
 
 **Expected Results:**
@@ -1194,11 +1680,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order has invoice status `partially_paid`, a positive remaining balance, and fulfilment status `unfulfilled`.
+* `<winner_order_28>` has invoice status `partially_paid`, a positive remaining balance, and fulfilment status `unfulfilled`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_28 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_28>`.
 
 **Expected Results:**
 
@@ -1223,7 +1715,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order is Partially Paid and still has money due.
+* `<winner_order_29>` is Partially Paid and still has money due.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_29 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
@@ -1252,11 +1750,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order is in Pending Payment, and its only recorded payment counts toward nothing.
+* `<winner_order_30>` is in Pending Payment, and its only recorded payment counts toward nothing.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_30 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read the derived order status.
+1. Read the derived status of `<winner_order_30>`.
 
 **Expected Results:**
 
@@ -1287,13 +1791,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* An auction order exists with invoice `paid` and fulfilment `unfulfilled`.
+* `<winner_order_31>` exists with invoice `paid` and fulfilment `unfulfilled`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| winner_order_31 | The winner order prepared with the invoice, fulfilment and address conditions in the pre-conditions; bind its order identity only |
 
 **Steps:**
 
-1. Read derived order status.
+1. Read the derived status of `<winner_order_31>`.
 
-**Expected result:**
+**Expected Results:**
 
 * Order derives as Preparing Shipment.
 

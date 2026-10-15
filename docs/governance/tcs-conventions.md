@@ -94,13 +94,14 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **For the value, not the thing** — where the spec names a control, name what the tester clicks
 - **Consistent within a suite** — one surface, one placeholder
 - **Never capitalised** — rewrite a sentence that would put a placeholder first
-- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: Write a **Test data** field reference as an inline-code placeholder, such as `<lot_1>`, in pre-conditions, steps and expected results; use the same name throughout.
+- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: Write a **Test data** field reference as an inline-code placeholder, such as `<listing_1>`, in pre-conditions, steps and expected results; use the same name throughout.
 
 ### Test data
 
+- 2026-10-14, grade10-site/auction/winner-order/feature-tcs.md: Bind every replaceable test-data field by its inline-code `<placeholder>` in the pre-conditions, steps or expected results that use it; row-based tables name each bound column with that placeholder, never "the row's value". Write complete sentences that remain readable after binding concrete values, keeping fixture descriptions and selection notes outside the substituted value. Switch data rows without rewriting the route; keep each row in its stated partition, retain fixed boundaries and configured values, and state how derived results follow its inputs.
 - **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
 - **Rows with one checking** — keep one row when values share the same purpose, route and expected checking. Use separate rows when the expected provider answer or checking differs; use separate cases when the purpose differs
-- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: In a `Field | Value` table, `Field` is a plain name such as `lot_1`. `Value` states the exact value or the conditions a fixture must meet. A test walk binds the name to a concrete value meeting that row, and expected results refer to the binding rather than pasting the row's description.
+- 2026-10-07, grade10-site/auction/account-record/feature-tcs.md: In a `Field | Value` table, `Field` is a plain name such as `listing_1`. `Value` states the exact value or the conditions a fixture must meet. A test walk binds the name to a concrete value meeting that row, and expected results refer to the binding rather than pasting the row's description.
 - 2026-09-25, grade10-site/auction/domain-tcs.md: A value that is not a boundary states an assumption and the range the requirement accepts, for example `HKD 800.00 or JPY 8000 or USD 8.00 (any price > 500 minor units)`. A boundary keeps its exact number and adds a readable reading. An exact reading has no tilde: `1800s (30mins)`. Use `~` only when that reading has a remainder: `1024b (1KiB or ~1KB)`. The exact number stays, so the reading never moves the bound.
 - 2026-09-25, grade10-site/auction/auction/feature-tcs.md: A computed result is a concrete value in **Test data**, as `g10.auction-auction.US2-TC12` does. The expected result states the formula that equals it. A step does not state the outcome.
 - 2026-10-02, grade10-site/auction/bid-panel-enrollment/feature-tcs.md: Rows for a refusal take one value per distinct answer the provider gives, not several values that produce the same answer.
@@ -117,7 +118,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 ### Classification starting shapes
 
-Starting shapes, not substitutes for reading the case: a core positive path `critical` / `high`; a degradation the journey survives `major` / `medium`; an empty state `normal` / `medium`; a presentational fallback `minor` / `low`; a case run through the interface `e2e`; worth a script and a human eye `automation, manual`.
+Read the case against **Step 5: Classify the Case** in [Specs to Test Cases](specs-to-test-cases.md#step-5-classify-the-case). Presentation, code logic and a core-flow label do not determine its classification. A case run through the interface uses `e2e`; one suitable for both a script and a human uses `automation, manual`.
 
 ## Setup Recipes
 
@@ -198,6 +199,7 @@ Lines scoped narrower than the store, one `###` per scope, by its path (`grade10
 
 ### grade10-site/auction
 
+- 2026-10-14, grade10-site/auction/winner-order/feature-tcs.md: Use `listing` for an auctioned item in test prose and fixture names, following the accepted auction contract; keep winner orders distinct from listings. Preserve literal interface text, payload keys and email subjects when their exact wording is the assertion, even where the contract still names `lot`.
 - 2026-09-25, grade10-site/auction/domain-tcs.md: Two bidders use separate sessions. A maximum is entered in the custom maximum on the bid panel.
 - 2026-10-12, grade10-site/auction: For numeric test data, choose a representative value different from the linked scenario's example when the rule accepts a range or equivalence partition. Keep the scenario value when it is a boundary, tier threshold, equality or comparison value, computed fixture, or the specification gives no valid alternate range; bind any derived expected value to the row or formula.
 - 2026-10-13, grade10-site/auction: Every minor-unit test-data fixture uses a compact major-price reading: replaceable values use `HKD280 (range: 1000–79999 minor units)`, source-defined open bounds use `HKD70 (range: >0 minor units)`, and boundary, equality, derived, configured or otherwise fixed values use `HKD10 (fixed ...)`. Omit trailing `.00` for whole major amounts; keep non-zero fractional digits. These readings guide fixture selection and do not assert the product's display text.

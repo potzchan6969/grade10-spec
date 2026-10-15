@@ -1,0 +1,253 @@
+{
+  "version": 2,
+  "change": "localize-listing-title-and-description",
+  "baseline": "6d64eb8b1f223fc1f33790f636467cf5d4541b8781aae09aaaea05cf53eb6358",
+  "fingerprint": "cfc02ccd63b6426d5a74a2d3bbffd5628ef4dd057946bb8be16883e85c846607",
+  "reviewedBy": "mason5991",
+  "acceptedAt": "2026-10-14T18:09:43.961Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-admin/auction/management.md#listings",
+      "sha256": "b1166b76c1f70b729179eb4470a73ed7e60c9e85f1e653dcfaeb7fc63f029cbc",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-admin/inventory/catalog.md#product-identity",
+      "sha256": "337eb329b749472cc3811b93642d1605ab6e2c8a56c945fdbde5f9d9a6df092d",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/auction/display.md#listing-schema",
+      "sha256": "d6f0f2607a015016d84052f581ecd51cdc7c2cc11c73ee23f2f08354e1d5808a",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/decisions.md",
+      "sha256": "44eeeca2a20c66f4ad93fc07e9a622fca2a42596b0ba97fd2c5b13bd1ce9173c",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/proposal.md",
+      "sha256": "b00ca2f1769cb7704de53c39f114b8ef539f99943803613581fde3301999bc8b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "955477d59814e468b5a9f57bc0b41a685d2efd5643081198695c9b65d19a5655",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "dfab29891c0f0d8f32d579aeab1762478e29c6142558610a0f653d82242e2646",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "ca9b3bfc9a2f037ac80093c05420effc145b2159b6a5e10bdbf52a179403144a",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "71f8ef199db752bd6f40cfdb8d7ce2d3aadad67f0754e95f54ee04bd3914644f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "d323e46e68c7af8705ab2ebb8c514e8ea96b870626a3b6f3145fb2e635aaa82d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "c2b2d626455b63980afde89a1f1e10a33de219033380ed6b53164f86b0bfd84b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "dacd1c1aef4a2bff7e2ef5ee5bd0000e750cd9495ecc4cca92494abf84abb18b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "1e44c1b4f6ec701bb093e74a4c2ff1f0679a92747fbd3d0ac4e09659f182b000",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "c4c056f5360d6641eb4e6f9f5bac26d260b92432a595db3746752ba31dc55d6f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "d547c4a71f5889ab56a13e6bff1a1dda2a827f64b547a2efaa8b913612ccd161",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/shared/localization/feature-tcs.md",
+      "sha256": "198e8df3429152737d9bee488f5eddfc2087942a5bc48801100595b5542756f2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/shared/localization/spec.md",
+      "sha256": "b784d1334217d7378725c9637855e5a3a0f86395ebc447da1583f10463ee665e",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/specs/shared/localization/user-journeys.md",
+      "sha256": "d62b756c174cfc89a311b6f93d1173a7bbbd53b2a84e84a48b8a9c324b530c37",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/localize-listing-title-and-description/tech-design.md",
+      "sha256": "0a94fc8ba92ce2ea640c560b32b42417b0592e14dd4b0ee26a0b502ea463874f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "sha256": "b79f59f2692654e7a46dec7fcf79607bdb3cf615361d8d12466bb3d3012a1ca3",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "sha256": "e7a329ff00fc9af57520a158e2fcf0217d284751aa400b63f7c0be3032f56274",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "sha256": "038d766b5f386163bfea1810cb51a463885faf5c86f08c497586af4fffadf3ee",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "sha256": "b7144d415b13e7a07d97244a06fafd53202ff9ef2d4b923b168240654b2b91a4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "sha256": "e6c987d14b3b68410520f88a01d0a6ce87c8f44d512f676ecc34d28f82947d53",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "sha256": "17da987e14413ac3224bd0ef83b43a6b071ae515f16a6a089958cfad4aa20d01",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "sha256": "77c9bc4d9941748a43df4444831c748666e7f16e55e6a745e0aad3cac87a92f2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "sha256": "8416bd2797263f1fb65e07576a22298ba549b64af0d068810f1c9ed26a72b020",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "sha256": "fd3cdd1e5c6bfb27a932c0031a60d606a67508900b0724ead29e737b746414dd",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "sha256": "8158d0de7455581847700678933bc652a4e77dd897d744716544163e189ff5c2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/localization/feature-tcs.md",
+      "sha256": "198e8df3429152737d9bee488f5eddfc2087942a5bc48801100595b5542756f2",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/localization/spec.md",
+      "sha256": "28b978480b181f23879bfe91c64b34a69a4be91cc5b49e9f66cb61ac9a8d09e7",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/localization/user-journeys.md",
+      "sha256": "d62b756c174cfc89a311b6f93d1173a7bbbd53b2a84e84a48b8a9c324b530c37",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-admin/auction/domain-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A closed listing cannot be rewritten here",
+        "Requirement: An operator writes a listing's title and description in each language",
+        "Requirement: Labs listing seeds are written in every language",
+        "Requirement: Relist opens a new draft from an Unsold listing",
+        "Requirement: The Copy block reads a listing's texts in one chosen language",
+        "Requirement: The Listings search finds a listing by a translated title",
+        "Requirement: The customer view previews the lot in each language",
+        "Requirement: What staff quote stays on the English title"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A product's name and description are written in each language",
+        "Requirement: Operators list and edit products",
+        "Requirement: Staff references and imports keep the English name",
+        "Requirement: The Details section reads a product's texts in one chosen language",
+        "Requirement: The product search finds a product by a translated name"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-admin/inventory/catalog/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A lot's address and reference stay the same in every language",
+        "Requirement: A shared lot link unfurls as the lot",
+        "Requirement: The card and the lot page read in the page's language"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/auction/listing-page/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/localization/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/localization/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An auction listing's title and description read in the page's language"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/localization/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

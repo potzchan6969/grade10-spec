@@ -4,7 +4,7 @@ const RECEIPT_NOTE = "Receipt sent to ada@example.com.";
 /** Draft words for the signed-out account ask — a persistent toast. */
 const ACCOUNT_ASK_COPY = {
   title: "Add this order to your account",
-  body: "Sign in to earn points for this order.",
+  body: "Sign in to see it with your other orders.",
   signIn: "Sign in",
 };
 
@@ -15,4 +15,16 @@ const MEMBER_ASK_COPY = {
   signIn: "Sign in",
 };
 
-export { ACCOUNT_ASK_COPY, MEMBER_ASK_COPY, RECEIPT_NOTE };
+/** What the ask says after a sign-in made from the order's page. */
+const ASK_OUTCOME_COPY = {
+  added: "Order added to your account",
+  viewOrder: "View order",
+  notAdded: "This order was not added",
+  placedWith:
+    "It was placed with ada@example.com. We can send a sign-in link there to add it.",
+  sendLink: "Send link",
+  sendFailed: "Could not send the sign-in link.",
+  sent: "Sign-in link sent to ada@example.com",
+};
+
+export { ACCOUNT_ASK_COPY, ASK_OUTCOME_COPY, MEMBER_ASK_COPY, RECEIPT_NOTE };

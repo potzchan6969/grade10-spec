@@ -177,11 +177,17 @@
     "signedIn": "Signed in as {name}.",
     "notYou": "Not you?",
     "signInLine": "Have an account? Sign in and we fill this in.",
+    "signInGate": {
+      "title": "Sign in to book",
+      "body": "Visits are booked under your account. Your picks are kept while you sign in.",
+      "press": "Sign in to book"
+    },
     "signIn": "Sign in",
     "bookAt": "Book {when}",
     "booking": "Booking…",
     "stillTrying": "Booking… still trying",
     "slowNote": "Keep this page open. We won’t book you twice.",
+    "challenge": "Confirm you’re human above, then book.",
     "takenTitle": "{time} on {day} was just taken.",
     "takenBody": "Pick another time. We kept your details.",
     "heldTitle": "You already have a {service}.",
@@ -214,13 +220,13 @@
       "refundShop": "Refunded if the shop cancels.",
       "refundBoth": "Refunded if you cancel at least {hours, plural, one {# hour} other {# hours}} before, or if the shop cancels.",
       "refundNone": "Not refunded if you cancel or miss the visit.",
-      "continue": "Continue to payment",
+      "confirmDeposit": "Confirm booking with {amount} deposit",
+      "confirmFull": "Confirm booking and pay {amount}",
       "opening": "Opening payment…",
       "unavailable": "This service can’t be booked online right now. Call the shop to book it.",
       "now": "Pay now",
       "chargeDeposit": "Deposit {amount}",
       "via": "You pay on a secure Stripe page. Nothing is charged until you finish there.",
-      "hold": "We hold this time for {minutes} minutes",
       "receipt": "Paid {amount}. Your receipt is in that email."
     },
     "continue": "Continue",
@@ -452,8 +458,7 @@
       "pick": "Pick a time",
       "to": "Move to {when}",
       "moving": "Moving…",
-      "moved": "Moved to {when}. We emailed {email}.",
-      "earliest": "Earliest: {when}"
+      "moved": "Moved to {when}. We emailed {email}."
     },
     "cancelSheet": {
       "title": "Cancel your visit?",
@@ -485,6 +490,7 @@
       "staff": "Staff at any shop can find your visit by your phone, email or name."
     },
     "reconnecting": "Reconnecting…",
+    "retryFailed": "Still can't reach us. Check your connection and try again.",
     "offline": "Updated {time}. This page tries again by itself.",
     "tryNow": "Try now",
     "trying": "Trying…",
@@ -570,6 +576,7 @@
     "leaveFailed": "We couldn’t take you out of the line. Try again.",
     "bookTime": "Book a time",
     "reconnecting": "Reconnecting…",
+    "retryFailed": "Still can't reach us. Check your connection and try again.",
     "offBody": "Updated {time}. Your place is kept, and if we call you meanwhile, we hold your turn 10 min.",
     "asOf": "As of {time}",
     "offLine": "The wait shows again once you’re back online.",

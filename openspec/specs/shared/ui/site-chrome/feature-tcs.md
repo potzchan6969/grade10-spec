@@ -611,7 +611,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `Nav` receives a cart slot with its own action, and <Cart handler>.
+* `Nav` receives a cart slot with its own action, and `<Cart handler>`.
 
 **Test data:**
 
@@ -652,7 +652,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a Cart handler, `Basket` as its cart label, and <empty count>.
+* `SiteHeader` receives a Cart handler, `Basket` as its cart label, and `<empty count>`.
 
 **Test data:**
 
@@ -663,7 +663,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render the header with <empty count>.
+1. Render the header with `<empty count>`.
 2. Inspect the cart control.
 
 **Expected Results:**
@@ -692,8 +692,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a Cart handler, `Basket` as its cart label, and <active-line count>.
-* `CartDrawerHeader` receives the same <active-line count>.
+* `SiteHeader` receives a Cart handler, `Basket` as its cart label, and `<active-line count>`.
+* `CartDrawerHeader` receives the same `<active-line count>`.
 
 **Test data:**
 
@@ -705,7 +705,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render the header and the cart drawer header with <active-line count>.
+1. Render the header and the cart drawer header with `<active-line count>`.
 2. Inspect the count indicator on the cart control.
 3. Inspect the drawer title badge.
 4. Inspect the `cartSlot` `SiteHeader` hands `Nav`, and the props `NavProps` takes.
@@ -713,10 +713,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * A brand count indicator appears on the Cart control.
-* The indicator displays the full <active-line count>.
+* The indicator displays the full `<active-line count>`.
 * The Cart control's accessible name reads `Basket (<active-line count>)`.
 * The indicator itself is hidden from assistive technology.
-* The drawer title badge displays the same <active-line count>.
+* The drawer title badge displays the same `<active-line count>`.
 * The badged Cart control is the `cartSlot` `Nav` renders, with no built-in cart control beside it.
 * `NavProps` takes no cart count.
 
@@ -874,7 +874,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render the header at <viewport>.
+1. Render the header at `<viewport>`.
 2. Inspect the account entry's place and the other controls.
 
 **Expected Results:**
@@ -882,7 +882,7 @@ Runs once per row of **Test data**.
 * A round placeholder sits in the account entry's place.
 * The placeholder sits in the bar beside Cart.
 * No Sign In button and no account icon renders.
-* Cart renders in the bar, and primary navigation and language render where <viewport> places them.
+* Cart renders in the bar, and primary navigation and language render where `<viewport>` places them.
 
 <!-- trace:case id=g10.shared-site-chrome.TC-cdi rev=1 covers=g10.shared-site-chrome.SC-z5y -->
 ### g10.shared-site-chrome.US1-TC30: The placeholder offers nothing to press, whatever account handlers are supplied
@@ -977,7 +977,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Render the header at <viewport> with a pending session.
+1. Render the header at `<viewport>` with a pending session.
 2. Record the box of the placeholder and of every other control.
 3. Re-render the same header with a signed-in session.
 4. Record the box of the account icon and of every other control.

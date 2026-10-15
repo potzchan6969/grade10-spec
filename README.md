@@ -31,7 +31,7 @@ pnpm storybook:ui                  # shared compound components alone
 The workbench Storybook on `main` is published at
 [https://storybook.grade10-stg.com](https://storybook.grade10-stg.com). Its
 sidebar follows the manual's domains and pages; where a story goes and how
-designers and agents draw states, flows and prototypes is
+designers and agents draw states, Scenarios and prototypes is
 [`docs/governance/storybook.md`](docs/governance/storybook.md).
 
 For concurrent worktrees, install Playwright once before running browser tests:

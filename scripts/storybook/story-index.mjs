@@ -98,14 +98,147 @@ function stringsOf(node) {
     .map((element) => element.text);
 }
 
-/** `parameters.journeys` of a meta or a story: the journey ids a flow walks. */
+/** `parameters.journeys` of a meta or a story: the journey ids a story walks. */
 function journeysOf(object) {
-  const parameters = objectLiteral(
-    propertyOf(object, "parameters")?.initializer,
-  );
+  const parameters = parametersOf(object);
   return parameters
     ? stringsOf(propertyOf(parameters, "journeys")?.initializer)
     : [];
+}
+
+function parametersOf(object) {
+  return objectLiteral(propertyOf(object, "parameters")?.initializer);
+}
+
+/**
+ * Where one file's names come from: its own top-level consts, and what it
+ * imports from a relative module, read on demand. A Scenario spreads shared
+ * settings and rules from a module beside it, so the check follows them.
+ */
+function moduleScope(path, source, loader) {
+  const t = ts();
+  const declarations = new Map();
+  const imports = new Map();
+  for (const statement of source.statements) {
+    if (t.isVariableStatement(statement))
+      for (const declaration of statement.declarationList.declarations)
+        if (t.isIdentifier(declaration.name))
+          declarations.set(declaration.name.text, declaration.initializer);
+    if (
+      t.isImportDeclaration(statement) &&
+      t.isStringLiteral(statement.moduleSpecifier) &&
+      statement.moduleSpecifier.text.startsWith(".") &&
+      statement.importClause?.namedBindings &&
+      t.isNamedImports(statement.importClause.namedBindings)
+    )
+      for (const element of statement.importClause.namedBindings.elements)
+        imports.set(element.name.text, {
+          from: posixJoin(path, statement.moduleSpecifier.text),
+          name: (element.propertyName ?? element.name).text,
+        });
+  }
+  return { declarations, imports, loader };
+}
+
+const posixJoin = (path, specifier) =>
+  join(dirname(path), specifier).split(sep).join("/");
+
+/** Reads a module once per index, and gives nothing for a file that is not there. */
+export function loaderOf(read) {
+  if (!read) return null;
+  const scopes = new Map();
+  const text = (path) => {
+    try {
+      return read(path);
+    } catch {
+      return null;
+    }
+  };
+  return { scopes, text };
+}
+
+function importedScope(from, loader) {
+  if (!loader) return null;
+  for (const candidate of [`${from}.ts`, `${from}.tsx`, from]) {
+    if (loader.scopes.has(candidate)) return loader.scopes.get(candidate);
+    const text = loader.text(candidate);
+    if (text == null) continue;
+    const t = ts();
+    const source = t.createSourceFile(
+      candidate,
+      text,
+      t.ScriptTarget.Latest,
+      true,
+    );
+    const scope = moduleScope(candidate, source, loader);
+    loader.scopes.set(candidate, scope);
+    return scope;
+  }
+  return null;
+}
+
+/** An object literal behind a node, following names, imports and `as const`. */
+function resolveObject(node, scope, depth = 0) {
+  const t = ts();
+  const literal = objectLiteral(node);
+  if (literal) return { literal, scope };
+  let current = node;
+  while (
+    current &&
+    (t.isSatisfiesExpression(current) ||
+      t.isAsExpression(current) ||
+      t.isParenthesizedExpression(current))
+  )
+    current = current.expression;
+  if (!current || !t.isIdentifier(current) || !scope || depth > 8) return null;
+  const name = current.text;
+  if (scope.declarations.has(name))
+    return resolveObject(scope.declarations.get(name), scope, depth + 1);
+  const imported = scope.imports.get(name);
+  const next = imported && importedScope(imported.from, scope.loader);
+  return next?.declarations.has(imported.name)
+    ? resolveObject(next.declarations.get(imported.name), next, depth + 1)
+    : null;
+}
+
+/** `[key, value node, scope]` for each property, spreads followed in order. */
+function entriesOf(node, scope, depth = 0) {
+  const t = ts();
+  const resolved = resolveObject(node, scope, depth);
+  if (!resolved) return [];
+  const entries = [];
+  for (const property of resolved.literal.properties) {
+    if (t.isSpreadAssignment(property))
+      entries.push(
+        ...entriesOf(property.expression, resolved.scope, depth + 1),
+      );
+    else if (
+      t.isPropertyAssignment(property) &&
+      (t.isIdentifier(property.name) || t.isStringLiteral(property.name))
+    )
+      entries.push([property.name.text, property.initializer, resolved.scope]);
+  }
+  return entries;
+}
+
+/** The keys of an object property, such as a meta's `argTypes`. */
+function keysOf(object, key, scope) {
+  if (!object) return [];
+  const value = propertyOf(object, key)?.initializer;
+  return [...new Set(entriesOf(value, scope).map(([name]) => name))];
+}
+
+/** `parameters.rules`: each setting's `"<capability>: <requirement title>"`. */
+function rulesOf(object, scope) {
+  const t = ts();
+  const parameters = parametersOf(object);
+  const rules = parameters && propertyOf(parameters, "rules")?.initializer;
+  if (!rules) return {};
+  return Object.fromEntries(
+    entriesOf(rules, scope)
+      .filter(([, value]) => t.isStringLiteralLike(value))
+      .map(([key, value]) => [key, value.text]),
+  );
 }
 
 /**
@@ -113,9 +246,10 @@ function journeysOf(object) {
  * title's string literal sits, quotes included, so a rename rewrites that
  * span and nothing else.
  */
-export function parseStoryFile(path, text) {
+export function parseStoryFile(path, text, loader) {
   const t = ts();
   const source = t.createSourceFile(path, text, t.ScriptTarget.Latest, true);
+  const scope = moduleScope(path, source, loader);
   const declarations = new Map();
   const exported = [];
   let metaNode;
@@ -158,6 +292,8 @@ export function parseStoryFile(path, text) {
       : null;
   const tags = stringsOf(propertyOf(meta, "tags")?.initializer);
   const journeys = journeysOf(meta);
+  const settings = keysOf(meta, "argTypes", scope);
+  const rules = rulesOf(meta, scope);
 
   const stories = exported
     .filter((name) => name !== "__namedExportsOrder")
@@ -172,10 +308,20 @@ export function parseStoryFile(path, text) {
         exportName,
         name,
         journeys: story ? journeysOf(story) : [],
+        rules: story ? rulesOf(story, scope) : {},
       };
     });
 
-  return { title, titleSpan, component, tags, journeys, stories };
+  return {
+    title,
+    titleSpan,
+    component,
+    tags,
+    journeys,
+    settings,
+    rules,
+    stories,
+  };
 }
 
 /** `<Meta title="…" />` of an unattached MDX page. */
@@ -220,6 +366,7 @@ export function importPath(path) {
  */
 export function storyIndex({ root = rootDirectory, read } = {}) {
   const readText = read ?? ((path) => readFileSync(join(root, path), "utf8"));
+  const loader = loaderOf(readText);
   const entries = {};
   const files = {};
   for (const path of storyFiles(root)) {
@@ -239,7 +386,7 @@ export function storyIndex({ root = rootDirectory, read } = {}) {
       };
       continue;
     }
-    const parsed = parseStoryFile(path, text);
+    const parsed = parseStoryFile(path, text, loader);
     if (!parsed?.title) continue;
     files[path] = parsed;
     if (parsed.tags.includes("autodocs")) {

@@ -7,6 +7,7 @@ import {
   STORE_LOCATOR_HREF,
   WIDE_MIN,
 } from "./site-header.auction-store.story-shared";
+import { pendingSessionPlay, SessionSwitch } from "./site-header.story-shared";
 
 const meta = {
   title: "Site/Page Shell/Blocks/SiteHeader/Auction & Store/Surfaces",
@@ -73,4 +74,23 @@ export const CartOnAuction: Story = {
       );
     }
   },
+};
+
+/**
+ * The session has not answered: a 40px round placeholder holds the account
+ * entry's place beside Cart, then the story re-renders signed in to prove the
+ * account icon takes the same box and nothing else moves, and back to pending.
+ */
+export const Pending: Story = {
+  name: "Pending",
+  args: { session: "pending" },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 1280 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <SessionSwitch {...args} />,
+  play: pendingSessionPlay(false),
 };

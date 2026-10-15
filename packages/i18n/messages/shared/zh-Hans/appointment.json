@@ -177,11 +177,17 @@
     "signedIn": "你已以 {name} 登入。",
     "notYou": "不是你？",
     "signInLine": "有账户？登入后会自动填写。",
+    "signInGate": {
+      "title": "登入以预约",
+      "body": "预约会记在你的账户下。登入期间，你的选择会保留。",
+      "press": "登入以预约"
+    },
     "signIn": "登入",
     "bookAt": "预约 {when}",
     "booking": "正在预约…",
     "stillTrying": "正在预约…仍在尝试",
     "slowNote": "请保持此页开启，我们不会重复预约。",
+    "challenge": "请先完成上方的真人验证，再预约。",
     "takenTitle": "{day} {time} 刚被其他人预约。",
     "takenBody": "请选择其他时间，你的资料已保留。",
     "heldTitle": "你已有一个{service}预约。",
@@ -214,13 +220,13 @@
       "refundShop": "如店铺取消，可获退款。",
       "refundBoth": "如你于到访前最少 {hours} 小时取消，或店铺取消，可获退款。",
       "refundNone": "取消或缺席均不设退款。",
-      "continue": "前往付款",
+      "confirmDeposit": "确认预约并支付 {amount} 订金",
+      "confirmFull": "确认预约并支付 {amount}",
       "opening": "正在打开付款页面…",
       "unavailable": "此服务暂时无法在网上预约，请致电店铺预约。",
       "now": "现在付款",
       "chargeDeposit": "订金 {amount}",
       "via": "你会在安全的 Stripe 页面付款，完成前不会收取任何费用。",
-      "hold": "我们会为你保留此时段 {minutes} 分钟",
       "receipt": "已付款 {amount}。收据已随电邮寄出。"
     },
     "continue": "继续",
@@ -452,8 +458,7 @@
       "pick": "请选择时间",
       "to": "改到 {when}",
       "moving": "正在更改…",
-      "moved": "已改到 {when}。我们已发电邮到 {email}。",
-      "earliest": "最早：{when}"
+      "moved": "已改到 {when}。我们已发电邮到 {email}。"
     },
     "cancelSheet": {
       "title": "取消这个预约？",
@@ -485,6 +490,7 @@
       "staff": "任何门店的职员都可以用你的电话、电邮或姓名找到你的预约。"
     },
     "reconnecting": "重新连线中…",
+    "retryFailed": "仍未能连线，请检查网络后再试。",
     "offline": "最后更新 {time}。此页会自动重试。",
     "tryNow": "立即重试",
     "trying": "重试中…",
@@ -570,6 +576,7 @@
     "leaveFailed": "未能让你离开轮候，请再试。",
     "bookTime": "预约时间",
     "reconnecting": "重新连线中…",
+    "retryFailed": "仍未能连线，请检查网络后再试。",
     "offBody": "最后更新 {time}。你的位置会保留；如期间叫号，我们会为你保留 10 分钟。",
     "asOf": "截至 {time}",
     "offLine": "恢复连线后会再显示轮候时间。",

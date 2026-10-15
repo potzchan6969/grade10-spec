@@ -10,8 +10,9 @@
   and the `Toast` primitive: the receipt's email rides the header's
   placed-on line via a new `placedOnNote` prop, and the sign-in ask is a
   persistent `toast()` with description and one action, bottom-right.
-  A wrong secret gets the existing `OrderDetailsNotFound` treatment.
-  ❓ TBC — Figma frames pending.
+  Loyalty never renders — no points section or Points summary row, member
+  order or guest. A wrong secret gets the existing `OrderDetailsNotFound`
+  treatment. ❓ TBC — Figma frames pending.
 - **Order History** — guest orders under the member's email listed with the
   member's orders. Composes `SiteHeader`, `OrderHistory` and `Footer`,
   unchanged.
@@ -68,4 +69,4 @@
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| With Guest Orders | Guest orders under the member's email among their orders; one in progress earns when it completes | `g10.store-order-history.US4` |
+| With Guest Orders | Guest orders under the member's email among their orders; none earns points | `g10.store-order-history.US4` |

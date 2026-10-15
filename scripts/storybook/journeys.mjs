@@ -1,6 +1,6 @@
 /**
- * The journeys a flow can cite: every `### <id>: <title>` heading in a
- * `user-journeys.md` beside a spec, durable or in an active change. A flow
+ * The journeys a story can cite: every `### <id>: <title>` heading in a
+ * `user-journeys.md` beside a spec, durable or in an  active change. A story
  * names the ids it walks in `parameters.journeys`, so the check can refuse an
  * id nobody wrote and the coverage report can count what is walked.
  */
@@ -103,4 +103,41 @@ export function citedJourneys(file) {
       ...(file.stories ?? []).flatMap((story) => story.journeys ?? []),
     ]),
   ];
+}
+
+const REQUIREMENT = /^###\s+Requirement:\s*(.+)$/gm;
+
+/**
+ * The requirement titles of a capability, durable or in an active change:
+ * what a Scenario's `parameters.rules` cites as `"<capability>: <title>"`.
+ */
+export function requirementTitles(root, capability) {
+  const paths = [`openspec/specs/${capability}/spec.md`];
+  let changes = [];
+  try {
+    changes = readdirSync(join(root, "openspec/changes"));
+  } catch {}
+  for (const change of changes)
+    if (change !== "archive")
+      paths.push(`openspec/changes/${change}/specs/${capability}/spec.md`);
+  const titles = new Set();
+  for (const path of paths) {
+    let text;
+    try {
+      text = readFileSync(join(root, path), "utf8");
+    } catch {
+      continue;
+    }
+    for (const [, title] of text.matchAll(REQUIREMENT))
+      titles.add(title.trim());
+  }
+  return titles;
+}
+
+/** `"<capability>: <requirement title>"` as `{ capability, title }`. */
+export function parseRule(rule) {
+  const at = rule.indexOf(": ");
+  return at < 0
+    ? null
+    : { capability: rule.slice(0, at), title: rule.slice(at + 2).trim() };
 }

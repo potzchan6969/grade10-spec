@@ -16,7 +16,12 @@ import {
   manualFeatures,
 } from "./coverage.mjs";
 import { DESIGN_SYSTEM, KINDS, START_HERE, titleCase } from "./grammar.mjs";
-import { citedJourneys, readJourneys } from "./journeys.mjs";
+import {
+  citedJourneys,
+  parseRule,
+  readJourneys,
+  requirementTitles,
+} from "./journeys.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
 
 export { DESIGN_SYSTEM, KINDS, START_HERE, titleCase };
@@ -140,7 +145,6 @@ export function placementErrors(root, path, file) {
   const featureFolder = `${sanitize(domain)}/${sanitize(feature)}/`;
   const expected = {
     Screens: PAGES + featureFolder,
-    Flows: PAGES + featureFolder,
     Parts: PAGES + featureFolder,
     Prototypes: PROTOTYPES + featureFolder,
     Blocks: BLOCKS,
@@ -253,7 +257,7 @@ export function resolves(id, entries) {
   return Boolean(entries[id]);
 }
 
-/** A flow names the journeys it walks, and every journey a story cites exists. */
+/** Every journey a story cites exists. */
 export function journeyErrors(root, parsed) {
   const errors = [];
   const warnings = [];
@@ -261,10 +265,6 @@ export function journeyErrors(root, parsed) {
   for (const [path, file] of Object.entries(parsed)) {
     if (!file.title) continue;
     const cited = citedJourneys(file);
-    if (file.title.split("/")[2] === "Flows" && !cited.length)
-      errors.push(
-        `"${file.title}" - a flow names the journeys it walks: parameters: { journeys: ["<id>-US-01"] }, from the user-journeys.md beside its spec`,
-      );
     for (const id of cited) {
       const journey = journeys.get(id);
       if (!journey)
@@ -272,6 +272,53 @@ export function journeyErrors(root, parsed) {
       else if (!journey.durable)
         warnings.push(
           `${path} - journey "${id}" is only in ${journey.path}; it lands with that change`,
+        );
+    }
+  }
+  return { errors, warnings };
+}
+
+/**
+ * A Scenario, a story tagged `scenario`, holds the settings staging can be
+ * set to; each rule it cites names a setting and a requirement that exists.
+ */
+export function settingsErrors(root, parsed) {
+  const errors = [];
+  const warnings = [];
+  const titles = new Map();
+  const requirements = (capability) => {
+    if (!titles.has(capability))
+      titles.set(capability, requirementTitles(root, capability));
+    return titles.get(capability);
+  };
+  for (const [path, file] of Object.entries(parsed)) {
+    if (!file.tags?.includes("scenario")) continue;
+    if (!file.settings?.length)
+      errors.push(
+        `"${file.title}" - a Scenario holds settings: argTypes for the conditions staging can be set to`,
+      );
+    const others = (file.stories ?? []).filter(
+      (story) => story.exportName !== "Scenario",
+    );
+    if (others.length)
+      errors.push(
+        `${path} - a Scenario holds one story, Scenario; its settings reach every case, not ${others.map((story) => story.name).join(", ")}`,
+      );
+    const rules = [
+      file.rules ?? {},
+      ...(file.stories ?? []).map((story) => story.rules ?? {}),
+    ];
+    for (const [setting, rule] of rules.flatMap(Object.entries)) {
+      if (!file.settings?.includes(setting))
+        errors.push(`${path} - rule for "${setting}", which is no setting`);
+      const parsedRule = parseRule(rule);
+      if (!parsedRule)
+        errors.push(
+          `${path} - rule "${rule}" reads "<capability>: <requirement title>"`,
+        );
+      else if (!requirements(parsedRule.capability).has(parsedRule.title))
+        errors.push(
+          `${path} - no requirement "${parsedRule.title}" in ${parsedRule.capability}`,
         );
     }
   }
@@ -328,6 +375,9 @@ export async function checkStories({ root = rootDirectory, files } = {}) {
   const journeyProblems = journeyErrors(root, parsed);
   errors.push(...journeyProblems.errors);
   warnings.push(...journeyProblems.warnings);
+  const settingsProblems = settingsErrors(root, parsed);
+  errors.push(...settingsProblems.errors);
+  warnings.push(...settingsProblems.warnings);
   const coverageProblems = coverageErrors(root, { entries, files: parsed });
   errors.push(...coverageProblems.errors);
   warnings.push(...coverageProblems.warnings);

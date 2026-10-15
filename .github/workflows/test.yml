@@ -2,8 +2,9 @@ name: Test
 
 # No workflow path filter: a required check whose workflow never runs stays
 # pending. Each job skips on its own what it does not read - the Playwright
-# jobs an event that changes only `openspec/changes/**` and `docs/**`, every
-# job a tick's plan - and a skipped job reads green. `scripts/openspec/workflows.test.mjs` holds the filter.
+# jobs an event that changes only `openspec/changes/**` and `docs/**`, the
+# manual's tools a pull request that moves none of them, every job a tick's
+# plan - and a skipped job reads green. `scripts/openspec/workflows.test.mjs` holds the filter.
 on:
   push:
     branches: [main]
@@ -27,6 +28,7 @@ jobs:
     outputs:
       code: ${{ steps.diff.outputs.code }}
       plan: ${{ steps.diff.outputs.plan }}
+      tooling: ${{ steps.diff.outputs.tooling }}
 
     steps:
       - name: Checkout
@@ -37,14 +39,20 @@ jobs:
           fetch-depth: 2
 
       # Anything it cannot read counts as code, and so does a failed run of
-      # this job: the jobs below skip on `code=false` or `plan=true` alone.
-      # `--no-renames`, so a file moved into `docs/` still names where it left.
+      # this job: the jobs below skip on `code=false`, `plan=true` or
+      # `tooling=false` alone. `--no-renames`, so a file moved into `docs/`
+      # still names where it left. TOOLING is what the manual, its walk and
+      # the store's scripts read besides the store itself: they import one
+      # another, so they share one set. A push to main runs them all - the
+      # store's own words are checked there, and by Lint on every pull request.
       - name: Read whether the event reaches code
         id: diff
         env:
           BEFORE: ${{ github.event_name == 'push' && github.event.before || '' }}
           DOCS_ONLY: ^(openspec/changes|docs)/
           PLAN_ONLY: ^openspec/changes/.+/tasks\.md$
+          TOOLING: ^(tools/manual/|tools/openspec-viewer(/|$)|scripts/(openspec|storybook|design-sync)/|packages/(design-system|ui|date)/|openspec/(schemas/|config\.yaml$)|\.design-sync/|\.github/workflows/|package\.json$|pnpm-(lock|workspace)\.yaml$)
+          EVENT: ${{ github.event_name }}
         run: |
           base=HEAD^1
           if [ -n "$BEFORE" ]; then
@@ -62,10 +70,16 @@ jobs:
             else
               echo "plan=true" >> "$GITHUB_OUTPUT"
             fi
+            if [ "$EVENT" != pull_request ] || grep -qE "$TOOLING" <<< "$changed"; then
+              echo "tooling=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "tooling=false" >> "$GITHUB_OUTPUT"
+            fi
           else
             echo "::warning title=Test filter::Could not diff against ${base:-its base}, so every job runs."
             echo "code=true" >> "$GITHUB_OUTPUT"
             echo "plan=false" >> "$GITHUB_OUTPUT"
+            echo "tooling=true" >> "$GITHUB_OUTPUT"
           fi
 
   stories:
@@ -95,9 +109,11 @@ jobs:
       - name: Run tests
         run: pnpm run test:stories
 
+  # The manual's own pages in a browser: a pull request that moves none of
+  # what they read has nothing to walk.
   walk:
     needs: changes
-    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' && needs.changes.outputs.tooling != 'false' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -123,10 +139,11 @@ jobs:
         run: pnpm run test:walk
 
   # Skips the push that ticks a task group, which carries a change's plan
-  # alone: nothing here reads one.
+  # alone, and a pull request that moves none of the manual's tools: its few
+  # tests over the real store repeat what Lint checks on every one.
   manual:
     needs: changes
-    if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' }}
+    if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' && needs.changes.outputs.tooling != 'false' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -156,9 +173,11 @@ jobs:
       - name: Run tests
         run: pnpm run test:manual
 
+  # The store's scripts against their fixtures: a pull request that moves
+  # none of them, nor the schemas they copy, has nothing for them.
   openspec:
     needs: changes
-    if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' }}
+    if: ${{ !cancelled() && needs.changes.outputs.plan != 'true' && needs.changes.outputs.tooling != 'false' }}
     runs-on: ubuntu-latest
 
     steps:

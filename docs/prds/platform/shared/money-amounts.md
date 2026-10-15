@@ -57,7 +57,10 @@ Money takes two shapes, and each surface uses the one its audience calls for.
 | Operator | An admin table, detail view or console row | ISO code | `HKD 2,490.00` | `JPY 249,000` |
 
 - **Digits** — the currency's minor-unit digits always show: two for HKD, none
-  for JPY, three for KWD (`KWD 1,234.567`). A whole amount keeps them.
+  for JPY, three for KWD (`KWD 1,234.567`). A whole amount keeps them, except
+  on [Book a Visit](/p/grade10-site/appointment/booking), whose presses and
+  lines read `HK$100`; an amount with cents keeps every digit there,
+  `HK$100.50`.
 - **Grouping** — thousands are grouped in both shapes. A collector's decimal
   and grouping marks follow the reader's own locale. Sent messages use English.
 - **Bid amounts** — ❓ TBC: whether bid amounts show the digits above or whole
@@ -74,7 +77,7 @@ Money takes two shapes, and each surface uses the one its audience calls for.
 | Helper | Module | Use for |
 | --- | --- | --- |
 | `toMinorUnits`, `fromMinorUnits` | `@grade10/utils/money` | A decimal string from or to an outside system |
-| `formatMoney` | `@grade10/utils/money` | The collector shape, or the operator shape with `currencyDisplay: "code"` |
+| `formatMoney` | `@grade10/utils/money` | The collector shape, or the operator shape with `currencyDisplay: "code"`; `trailingZeros: "strip"` drops the zero cents of a whole amount |
 | `formatAmount` | `@grade10/utils/money` | The number alone, under a header that names the currency |
 | `parseMinorUnits` | `@grade10/utils/money` | A typed amount, or null when the currency cannot hold it |
 | `currencyExponent`, `SUPPORTED_CURRENCY_CODES` | `@grade10/utils/money` | The digits of a code, and the codes in the table above |

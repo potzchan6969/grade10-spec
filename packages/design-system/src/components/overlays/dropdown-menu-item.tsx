@@ -40,8 +40,9 @@ const dropdownMenuItemVariants = cva(
  * binds `Base/secondary-foreground` at regular weight.
  *
  * `pending` is an item whose work is running: a spinner takes the leading
- * slot, the menu stays open, a second press does nothing, and the item stays
- * focusable.
+ * slot, a second press does nothing, and the item stays focusable.
+ * An item that declares `pending`, true or false, starts work, so a click on it
+ * keeps the menu open; an item without it navigates and closes the menu.
  */
 function DropdownMenuItem({
   className,
@@ -51,7 +52,7 @@ function DropdownMenuItem({
   size = "sm",
   leading,
   trailing,
-  pending = false,
+  pending,
   children,
   onClick,
   closeOnClick,
@@ -76,7 +77,7 @@ function DropdownMenuItem({
       {...props}
       aria-busy={pending || undefined}
       aria-current={selected ? "true" : undefined}
-      closeOnClick={pending ? false : closeOnClick}
+      closeOnClick={pending === undefined ? closeOnClick : false}
       onClick={pending ? undefined : onClick}
     >
       {pending ? (

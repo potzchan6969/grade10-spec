@@ -1,6 +1,6 @@
 ---
 name: tcs-review
-description: Review or walk a feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite. Review is journey-led: prepare the suite, give product and walk context, present draft cases, and record human verdicts. Walk mode is read-only and shows walks one by one, then ungrouped cases. Use when QA asks to review, approve, sign off, understand, or manually walk test cases. Invoke as /tcs-review [walk] <capability-or-change|domain|journey|tc>.
+description: Review or walk a feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite. Review is journey-led: scan all non-deprecated cases for duplicate and merge candidates, prepare the suite, present cases, and record human verdicts. Walk mode is read-only and shows walks one by one, then ungrouped cases. Use when QA asks to review, approve, sign off, understand, or manually walk test cases. Invoke as /tcs-review [walk] <capability-or-change|domain|journey|tc>.
 ---
 
 # Reviewing Test Cases With QA
@@ -42,7 +42,7 @@ execution; a review classification is not a pass or fail result.
    `openspec/specs/platform-tcs.md`, plus the first two under
    `openspec/changes/*/specs/`, never `openspec/changes/archive/`. A suite is
    awaiting review when its `**Status:**` is `pending-review` or any case is
-   `**Status:** draft`. Narrow to the argument when given. Before opening one,
+   `**Status:** draft`. An explicit consolidation request also selects suites with only `actual` cases. Narrow to the argument when given. Before opening one,
    check `gh pr list --state open --search "<capability>"` or `git ls-remote
    --heads origin "tcs-review/*-<target>"` and report who is in it and on
    which journey — information, never a refusal.
@@ -81,7 +81,7 @@ execution; a review classification is not a pass or fail result.
    lays out, in its order, each part its own commit, and one push when it is
    all done, before the first journey. The `rev` table under **Naming** says
    what each status allows: `draft` freely, `actual`
-   still `manual` on the reviewer's yes, `automated` and `deprecated` never.
+   still `manual` on the reviewer's yes, `automated` and `deprecated` never for routine restyling. Approved modification, merger and retirement follow **A Case That Already Exists Is Not Written Twice**.
 
 6. **Open the suite and its journeys together.** Read the whole suite and the
    `spec.md` beside it end to end — above feature level, every `user-journeys.md`
@@ -103,15 +103,16 @@ execution; a review classification is not a pass or fail result.
    for that journey, show all walk context
    that references it, then present every `draft` case in full — id and title,
    classification block, pre-conditions, test data, steps, expected results —
-   and `actual` or `deprecated` cases by id and title only. A case preparation
+   and other `actual` or `deprecated` cases by id and title only. Show every candidate for modification, merger or retirement in full regardless of status or automation. A case preparation
    changed carries a one-line note of what changed — steps filled, a result
    sharpened, a value changed, a row added — with test data called out apart
    from the rest. Scenarios are
    offered, never quoted unasked; when asked, quote the whole clause from
-   `spec.md`. Before asking for verdicts, report duplicates — **A Case That
-   Already Exists Is Not Written Twice**, against the journey and the domain
-   suite's `actual` cases — name the pair, quote both expected results, and
-   ask; never merge or drop on your own. Then ask and wait. **Echo before you
+   `spec.md`. Before asking for verdicts, present the duplicate and merge
+   candidates found during preparation under **A Case That Already Exists Is
+   Not Written Twice**. Show their coverage mappings, retained and retiring ids,
+   status changes and cost comparison. Ask for explicit approval of each group
+   or named batch; apply no consolidation during preparation. Then ask and wait. **Echo before you
    write:** repeat the ids about to be marked and what each becomes; "all
    good" covers the cases just shown and nothing else. **A verdict never
    carries forward:** ask again for the next journey. Moving on from a journey
@@ -146,7 +147,7 @@ execution; a review classification is not a pass or fail result.
    | Approve | `**Status:** actual`, unchanged otherwise |
    | Change | Exactly the edit asked for, then ask again; approve only on their yes. An edit adding coverage the spec does not state goes to `spec.md` first, via `/spec-to-tcs` |
    | Defer | Leave `**Status:** draft` and note what they want resolved |
-   | Retire | `**Status:** deprecated`, only when the spec no longer states the behaviour; never delete or renumber |
+   | Retire | `**Status:** deprecated` for removed behaviour or approved coverage transfer; preserve history and add the retirement reason and replacement ids under **A Case That Already Exists Is Not Written Twice** |
 
    Then recompute the header as **The File Header** says, comparing the file
    read before the verdict with the result: a lower approved share writes
@@ -161,7 +162,7 @@ execution; a review classification is not a pass or fail result.
    `## What the Review Taught` below lays out. Before offering a convention,
    run the [Before Adding a Convention](../../../docs/governance/tcs-conventions.md#before-adding-a-convention) gate; a conflict
    with the creation contract is reported as a core-rule finding, not written
-   as a convention. Commit what follows from the accepted verdicts. Run
+   as a convention. Commit what follows from the accepted verdicts. For every deferred automated-test migration, write the rulebook's `TODO:` entry in the commit body; report that debt at handoff. Run
    `pnpm run tcs:validate` and fix what it names. Then push once and
    open the one pull request (`/pr-push`), titled with the range that has
    verdicts — `test(<domain>): approve <target> US<n>–<m> test cases` — its
@@ -233,14 +234,22 @@ the verdict commits hold only the reviewer's decisions.
    revision has its drafts restyled to `docs/governance/tcs-conventions.md`
    instead.
 
-3. **Check formal coverage by anchor.** Read every journey serving the suite
+3. **Scan duplicates and merge candidates.** Apply **A Case That Already
+   Exists Is Not Written Twice** to every non-deprecated case in the selected
+   suite and related higher- and lower-level suites. Read full definitions,
+   including `actual` and `automated` cases. Check replacement dependencies
+   before proposing changes. Finish with candidate groups and coverage/cost
+   comparisons, or an explicit no-candidates result and the suites inspected.
+   Queue proposals for human verdicts; preparation changes no case for consolidation.
+
+4. **Check formal coverage by anchor.** Read every journey serving the suite
    and verify that each anchor has an asserting case or an explicit higher-level
    owner. A case that only names a journey without asserting an outcome does not
    count. Do not create a Cartesian product of values or add a case only because
    a scenario has a different input. Record same-purpose values as rows and
    report unresolved anchor gaps.
 
-4. **Reconcile scenario links only after the independent readings.** When QA2
+5. **Reconcile scenario links only after the independent readings.** When QA2
    material is present, compare each scenario's THEN with the reviewed case's
    Expected Results and add `covers` links through the trace workflow. One case
    may link several scenarios only when one route and one checking fully assert
@@ -248,7 +257,7 @@ the verdict commits hold only the reviewer's decisions.
    never invent a link by title similarity. Record uncovered scenarios,
    over-claimed cases and contradictions for the spec owner.
 
-5. **Fill in the mechanism.** Read the spec's flow requirement,
+6. **Fill in the mechanism.** Read the spec's flow requirement,
    `ui-design.md`, the PRD pages, and the conventions' `## Setup Recipes` and
    `## Where Things Are`. Bring every `draft` to **Executable without
    asking**: where to go, which control, what goes in, how a state is
@@ -263,16 +272,16 @@ the verdict commits hold only the reviewer's decisions.
    Testability plans no `automation`. An `actual` case still `manual` is
    filled only on the reviewer's yes.
 
-6. **Propose test data.** Rows the rule implies, as **Rows may add what the
+7. **Propose test data.** Rows the rule implies, as **Rows may add what the
    rule implies** says, each with the rule it traces. The reviewer takes or
    refuses each row; a taken row is written in. A row added to an `actual`
    case changes what it verifies: `rev` bumped, back to `draft`.
 
-6. **Push, then summarise.** Push the branch once. Then one message before
+8. **Push, then summarise.** Push the branch once. Then one message before
    the first journey: the cases written for bare scenarios and the
    out-of-suite answers, the steps filled per case, the results sharpened,
    the values changed, the rows added and refused, the flow disagreements and
-   how each was classified, the mocked states without automation, and the
+   how each was classified, the mocked states without automation, the duplicate and merge candidates, and the
    questions the spec could not answer. Test data is its own list. The
    regenerate is not narrated.
 

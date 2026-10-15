@@ -279,13 +279,13 @@
 
 **Steps:**
 
-1. Fill the form using **Test data**.
+1. Fill the required form fields, selecting phone country `<Phone country>` and entering `<Phone digits>`.
 2. Click Confirm.
 
 **Expected Results:**
 
 * Confirm succeeds.
-* The confirm callback receives the entered phone country and digits.
+* The confirm callback receives phone country `<Phone country>` and digits `<Phone digits>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-m3r rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
 ### g10.shared-auction-order.US1-TC10: Parseable phone is exported as E.164
@@ -317,13 +317,13 @@
 
 **Steps:**
 
-1. Fill the form using **Test data**.
+1. Fill the required form fields, selecting phone country `<Phone country>` and entering `<Phone digits>`.
 2. Click Confirm.
 3. Read the phone value in the confirm payload.
 
 **Expected Results:**
 
-* The exported phone reads **Expected E.164**.
+* The exported phone reads `<Expected E.164>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-ygt rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
 ### g10.shared-auction-order.US1-TC11: Unusual phone format is still accepted
@@ -355,7 +355,7 @@
 
 **Steps:**
 
-1. Fill the form using **Test data**.
+1. Fill the required form fields, selecting phone country `<Phone country>` and entering `<Phone digits>`.
 2. Click Confirm.
 
 **Expected Results:**
@@ -381,16 +381,16 @@
 
 Runs once per row of **Test data**.
 
+**Pre-conditions:**
+
+* `AuctionAddressForm` is rendered with `<empty field>` blank and the other required fields filled.
+
 **Test data:**
 
-| Empty field | Other required fields |
+| `<empty field>` | Other required fields |
 | --- | --- |
 | Address line 1 | Filled |
 | Postal code | Filled |
-
-**Pre-conditions:**
-
-* `AuctionAddressForm` is rendered with the row's empty field blank and the other required fields filled.
 
 **Steps:**
 
@@ -399,7 +399,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Confirm does not succeed.
-* An error appears beside the empty required field.
+* An error appears beside `<empty field>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-czf rev=1 covers=g10.shared-auction-order.SC-duw,g10.shared-auction-order.SC-2id,g10.shared-auction-order.SC-02t,g10.shared-auction-order.SC-76f,g10.shared-auction-order.SC-0cg -->
 ### g10.shared-auction-order.US1-TC13: Address line 2 may be left empty
@@ -748,20 +748,20 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Settlement currency |
+| `<settlement currency>` |
 | --- |
 | USD |
 | HKD |
 
 **Steps:**
 
-1. Choose the row's settlement currency.
+1. Choose `<settlement currency>`.
 2. Read the spy.
 
 **Expected Results:**
 
-* The row's choice reads selected.
-* The callback is called once with the row's currency.
+* `<settlement currency>` reads selected.
+* The callback is called once with `<settlement currency>`.
 
 <!-- trace:case id=g10.shared-auction-order.TC-giz rev=1 covers=g10.shared-auction-order.SC-7if -->
 ### g10.shared-auction-order.US1-TC25: Payment methods follow the selected currency
@@ -783,23 +783,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` receives different payment methods for USD and HKD.
+* `AuctionWinnerOrder` receives methods `<supplied methods>` for `<settlement currency>`.
 
 **Test data:**
 
-| Settlement currency | Supplied methods | Expected choices |
+| `<settlement currency>` | `<supplied methods>` | `<expected choices>` |
 | --- | --- | --- |
 | USD | card, hk_local and swift | Card, HK Local and SWIFT; no FPS |
 | HKD | card, fps and hk_local | Card, FPS and HK Local; no SWIFT |
 
 **Steps:**
 
-1. Choose the row's currency.
+1. Choose `<settlement currency>`.
 2. Read the payment method choices.
 
 **Expected Results:**
 
-* Only the row's expected choices appear, as separate choices.
+* Only `<expected choices>` appear, as separate choices.
 
 <!-- trace:case id=g10.shared-auction-order.TC-kiy rev=1 covers=g10.shared-auction-order.SC-7if -->
 ### g10.shared-auction-order.US1-TC26: Each bank rail is its own choice
@@ -851,6 +851,8 @@ Runs once per row of **Test data**.
 
 * `AuctionWinnerOrder` is rendered for an HKD order with USD line items and totals.
 
+
+* The summary receives USD line items `<USD line items>`, USD total `<USD total>`, HKD total `<HKD total>` and HKD card fee `<HKD card fee>`.
 **Test data:**
 
 | Field | Value |
@@ -891,11 +893,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `AuctionWinnerOrder` receives details for the row's selected bank rail.
+* `AuctionWinnerOrder` receives details for `<selected rail>`.
 
 **Test data:**
 
-| Selected rail |
+| `<selected rail>` |
 | --- |
 | FPS |
 | HK Local |

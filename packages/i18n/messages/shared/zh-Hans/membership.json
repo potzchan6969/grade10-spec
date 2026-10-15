@@ -68,7 +68,8 @@
     "validFor": "兑换后 {days} 天内有效",
     "minimumSpend": "最低消费 {amount}",
     "onlyOnline": "只限网店",
-    "onlyInStore": "只限门店"
+    "onlyInStore": "只限门店",
+    "redeemFailed": "无法兑换此奖励，请重试。"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兑换。",

@@ -134,10 +134,11 @@ describe("formatCalendarDayLabel", () => {
   });
 
   // A Chinese month keeps its unit, as the collector dates do, and a Korean
-  // month already does; the day and the weekday follow as in English.
+  // month already does. Chinese reads month, day, weekday; Korean keeps the
+  // platform's order.
   it.each([
-    ["zh-Hant", "9月 3, 週四", "12月 25, 週五"],
-    ["zh-Hans", "9月 3, 周四", "12月 25, 周五"],
+    ["zh-Hant", "9月3日 週四", "12月25日 週五"],
+    ["zh-Hans", "9月3日 周四", "12月25日 周五"],
     ["ko", "9월 3, 목", "12월 25, 금"],
   ] as const)("keeps the month's unit in %s", (locale, september, december) => {
     expect(formatCalendarDayLabel("2026-09-03", locale)).toBe(september);

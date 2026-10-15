@@ -8,6 +8,7 @@ import {
   featureCoverage,
   journeyCoverage,
   manualFeatures,
+  scenarioSettings,
 } from "./coverage.mjs";
 import { readJourneys } from "./journeys.mjs";
 import { storyIndex } from "./story-index.mjs";
@@ -24,7 +25,7 @@ function repository(files) {
 const journey = (id, role, title = "Does a thing") =>
   `### ${id}: ${title}\n\n**As a** ${role},\n**I want** it,\n**so that** done.\n\n`;
 
-const flow = (title, journeys) => `const meta = {
+const story = (title, journeys) => `const meta = {
   title: "${title}",
   parameters: { layout: "fullscreen"${journeys ? `, journeys: ${JSON.stringify(journeys)}` : ""} },
 } satisfies Meta;
@@ -43,11 +44,11 @@ const STORE = {
     "## User journeys\n\n**Walked by:** nobody on their own - a policy.\n",
   "openspec/changes/add-thing/specs/grade10-site/store/cart-drawer/user-journeys.md": `## User journeys\n\n${journey("grade10-site-store-cart-drawer-US-09", "collector")}`,
   "apps/preview/coverage.yaml": "no-screen:\n  store/shipping: Shopify's\n",
-  "apps/preview/src/pages/store/cart/cart-flows.stories.tsx": flow(
-    "Store/Cart/Flows/Edit",
+  "apps/preview/src/pages/store/cart/cart.scenario.stories.tsx": story(
+    "Store/Cart/Screens/Cart Drawer/Scenario",
     ["grade10-site-store-cart-drawer-US-01"],
   ),
-  "apps/preview/src/pages/store/cart/cart.stories.tsx": flow(
+  "apps/preview/src/pages/store/cart/cart.stories.tsx": story(
     "Store/Cart/Screens/Cart Drawer",
   ),
 };
@@ -93,8 +94,7 @@ describe("coverage", () => {
     const rows = Object.fromEntries(
       featureCoverage(root).map((row) => [row.key, row]),
     );
-    assert.equal(rows["store/cart"].counts.Screens, 1);
-    assert.equal(rows["store/cart"].counts.Flows, 1);
+    assert.equal(rows["store/cart"].counts.Screens, 2);
     assert.equal(rows["store/cart"].status, "");
     assert.equal(rows["store/shipping"].status, "no screen - Shopify's");
     assert.match(rows["store/home"].status, /^missing/);
@@ -113,18 +113,15 @@ describe("coverage", () => {
 });
 
 describe("journeyErrors", () => {
-  it("refuses a flow with no journeys and an id nobody wrote; warns on a change's", () => {
+  it("refuses an id nobody wrote; warns on a change's", () => {
     const root = repository({
       ...STORE,
-      "apps/preview/src/pages/store/cart/cart-flows.stories.tsx": flow(
-        "Store/Cart/Flows/Edit",
+      "apps/preview/src/pages/store/cart/cart.scenario.stories.tsx": story(
+        "Store/Cart/Screens/Cart Drawer/Scenario",
         [
           "grade10-site-store-cart-drawer-US-99",
           "grade10-site-store-cart-drawer-US-09",
         ],
-      ),
-      "apps/preview/src/pages/store/cart/bare-flows.stories.tsx": flow(
-        "Store/Cart/Flows/Bare",
       ),
     });
     after(() => rmSync(root, { recursive: true, force: true }));
@@ -132,8 +129,7 @@ describe("journeyErrors", () => {
       root,
       storyIndex({ root }).files,
     );
-    assert.equal(errors.length, 2);
-    assert.match(errors.join("\n"), /Flows\/Bare" - a flow names the journeys/);
+    assert.equal(errors.length, 1);
     assert.match(
       errors.join("\n"),
       /no journey "grade10-site-store-cart-drawer-US-99"/,
@@ -162,5 +158,27 @@ describe("coverageErrors", () => {
       warnings.join("\n"),
       /Auth\/Sign In - no Screens or Prototypes/,
     );
+  });
+});
+
+describe("scenarioSettings", () => {
+  it("lists each Scenario's settings", () => {
+    const index = {
+      files: {
+        a: {
+          title: "Store/Cart/Screens/Cart Drawer/Scenario",
+          tags: ["scenario"],
+          settings: ["code", "points"],
+          stories: [{}, {}],
+        },
+        b: { title: "Store/Cart/Screens/Cart", settings: [], stories: [{}] },
+      },
+    };
+    assert.deepEqual(scenarioSettings(index), [
+      {
+        title: "Store/Cart/Screens/Cart Drawer/Scenario",
+        settings: ["code", "points"],
+      },
+    ]);
   });
 });

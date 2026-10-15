@@ -466,7 +466,10 @@ function Nav({
                         locale={locale}
                         localeLabel={copy.locale}
                         locales={locales}
-                        onLocaleChange={onLocaleChange}
+                        onLocaleChange={(value) => {
+                          onLocaleChange(value);
+                          setMenuOpen(false);
+                        }}
                       />
                     </div>
                   ) : null}

@@ -31,6 +31,8 @@ type ProductSummary = {
   cartCount?: ReactNode;
   /** Ceiling for this tile's cart control. Omit it and the control counts on. */
   maxCartQuantity?: number;
+  /** Why the last cart change was refused, already worded. */
+  cartFailed?: string;
   /** How many are left, already worded. Omit it and the tile says nothing. */
   remainingLabel?: ReactNode;
 };

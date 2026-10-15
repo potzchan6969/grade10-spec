@@ -1,6 +1,6 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawerBody } from "./cart-drawer";
 import {
   DEFAULT_CART_COPY,
@@ -175,5 +175,79 @@ export const MixedItemStates: Story = {
       canvas.getByText("Low stock. Quantity adjusted"),
     ).toBeInTheDocument();
     expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
+  },
+};
+
+const OWNED_ITEMS: readonly CartItemSummary[] = SAMPLE_CART_ITEMS.map(
+  (item) => ({ ...item, pending: false }),
+);
+const REMOVED_NAME = SAMPLE_CART_ITEMS[0].name;
+
+function rowOf(canvasElement: HTMLElement, name: string) {
+  const row = within(canvasElement)
+    .getByText(name)
+    .closest<HTMLElement>('[data-slot="cart-item"]');
+  if (!row) throw new Error(`no cart row for ${name}`);
+  return row;
+}
+
+/** A line that owns its removal stays, busy, until the consumer drops it, then leaves */
+export const LineRemovalPending: Story = {
+  render: (args) => {
+    const [items, setItems] = useState(OWNED_ITEMS);
+    return (
+      <CartDrawerBody
+        {...args}
+        items={items}
+        onRemoveItem={(id) => {
+          args.onRemoveItem?.(id);
+          setItems((prev) =>
+            prev.map((i) => (i.id === id ? { ...i, pending: true } : i)),
+          );
+          window.setTimeout(
+            () => setItems((prev) => prev.filter((i) => i.id !== id)),
+            600,
+          );
+        }}
+      />
+    );
+  },
+  play: async ({ canvasElement, args }) => {
+    const row = rowOf(canvasElement, REMOVED_NAME);
+    const remove = within(row).getByRole("button", { name: "Remove item" });
+    await userEvent.click(remove);
+    expect(args.onRemoveItem).toHaveBeenCalledWith(SAMPLE_CART_ITEMS[0].id);
+    expect(row).toHaveAttribute("aria-busy", "true");
+    expect(row).toBeVisible();
+    await userEvent.click(remove);
+    expect(args.onRemoveItem).toHaveBeenCalledTimes(1);
+    await waitFor(
+      () =>
+        expect(
+          within(canvasElement).queryByText(REMOVED_NAME),
+        ).not.toBeInTheDocument(),
+      { timeout: 2000 },
+    );
+  },
+};
+
+/** A refused removal keeps the row, says why on it, and the row is usable again */
+export const LineRemovalRefused: Story = {
+  args: {
+    items: [
+      { ...OWNED_ITEMS[0], failed: "Couldn’t remove this item. Try again." },
+      ...OWNED_ITEMS.slice(1),
+    ],
+  },
+  play: async ({ canvasElement, args }) => {
+    const row = rowOf(canvasElement, REMOVED_NAME);
+    expect(within(row).getByRole("alert")).toHaveTextContent(
+      "Couldn’t remove this item. Try again.",
+    );
+    expect(row).not.toHaveAttribute("aria-busy");
+    await userEvent.click(
+      within(row).getByRole("button", { name: "Remove item" }),
+    );
+    expect(args.onRemoveItem).toHaveBeenCalledWith(SAMPLE_CART_ITEMS[0].id);
   },
 };

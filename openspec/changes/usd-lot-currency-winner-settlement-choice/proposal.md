@@ -29,8 +29,8 @@ the money they hold.
   order letters carry it.
 - **HKD converts at one fixed rate** — 7.85 HKD to 1 USD, rounded up, shown
   nowhere. An HKD invoice and receipt print no USD winning bid.
-- **The Order Summary stays USD** — under HKD its Order Total splits into a USD
-  total line, then the converted HKD total line.
+- **The Order Summary reads the settlement currency** — under HKD each line
+  reads HKD with its USD amount beneath it, and Order Total is one HKD total.
 - **Methods follow the currency** — HKD offers Card, FPS and HK Local; USD
   offers Card, HK Local and International via SWIFT. Each rail is a choice at
   setup.
@@ -54,7 +54,7 @@ None.
   HKD and JPY schedules and ceilings retire.
 - `grade10-site/auction/winner-order` — order setup gains the settlement
   currency; payment methods by rail follow it; HKD conversion, the Order
-  Summary's two total lines and the invoice's disclosure follow it.
+  Summary's HKD lines and the invoice's disclosure follow it.
 - `grade10-admin/auction/listing` — the currency field is USD only and
   defaults to USD; HKD and JPY are refused.
 - `grade10-admin/auction/post-sale` — the operator quote types USD, converts it

@@ -5,6 +5,7 @@ import {
   AvatarFallback,
   avatarInitial,
 } from "@grade10/design-system/components/display/avatar";
+import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import {
@@ -46,7 +47,7 @@ type SiteHeaderCopy = NavCopy & {
   signOut: string;
 };
 
-type SiteHeaderSession = "signed-out" | "signed-in";
+type SiteHeaderSession = "pending" | "signed-out" | "signed-in";
 
 type SiteHeaderProps = {
   copy: SiteHeaderCopy;
@@ -95,7 +96,10 @@ type SiteHeaderProps = {
 /**
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
- * Signed out shows a primary Sign In button. Signed in shows the account icon
+ * Pending holds the account entry's place with a silent 40px round
+ * placeholder, the account icon's footprint, until the application knows the
+ * session; it takes no focus and no press. Signed out shows a primary Sign In
+ * button. Signed in shows the account icon
  * and a menu with the email's initial avatar above the sign-in email, then
  * the supplied items, then Sign Out (destructive, separated). Cart, search,
  * Profile, My Orders, My Auctions,
@@ -150,7 +154,7 @@ function SiteHeader({
     ...navCopy
   } = copy;
 
-  const accountSlot =
+  const signedInMenu =
     session === "signed-in" ? (
       <DropdownMenu defaultOpen={accountMenuDefaultOpen}>
         <DropdownMenuTrigger
@@ -224,6 +228,13 @@ function SiteHeader({
         </DropdownMenuContent>
       </DropdownMenu>
     ) : undefined;
+
+  const accountSlot =
+    session === "pending" ? (
+      <Skeleton aria-hidden className="size-10 shrink-0 rounded-full" />
+    ) : (
+      signedInMenu
+    );
 
   const showCartBadge =
     onCartClick != null && cartItemCount != null && cartItemCount > 0;

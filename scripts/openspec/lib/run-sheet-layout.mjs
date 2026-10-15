@@ -211,15 +211,24 @@ export const SUMMARY_LEAD_COLUMNS = [
   "Env",
 ];
 
-export const ENVIRONMENTS = ["staging", "production"];
-export const DEFAULT_ENV = "staging";
+export const ENVIRONMENTS = [
+  "staging-1",
+  "staging-2",
+  "uat",
+  "preview",
+  "prod",
+];
+// Historical snapshots keep their recorded labels unchanged.
+export const RECORDED_ENVIRONMENTS = [...ENVIRONMENTS, "staging", "production"];
+export const DEFAULT_ENV = "staging-1";
 
 export function envOf(value) {
   const v = String(value ?? "")
     .trim()
     .toLowerCase();
   if (v === "") return DEFAULT_ENV;
-  return ENVIRONMENTS.includes(v) ? v : null;
+  const canonical = { staging: "staging-1", production: "prod" }[v] ?? v;
+  return ENVIRONMENTS.includes(canonical) ? canonical : null;
 }
 
 export const SUMMARY_COLUMNS = [
@@ -364,4 +373,23 @@ export function summaryRows({ runId, tab, date, name, selection, env, sha }) {
       first ? sha : "",
     ];
   });
+}
+
+/** Summary first, then numbered runs from newest to oldest. Other tabs follow. */
+export function tabOrderRequests(sheets, summarySheetId) {
+  const runs = sheets
+    .filter((one) => /^\d+-/.test(one.properties.title))
+    .sort(
+      (a, b) =>
+        Number(b.properties.title.split("-")[0]) -
+        Number(a.properties.title.split("-")[0]),
+    );
+  return [summarySheetId, ...runs.map((one) => one.properties.sheetId)].map(
+    (sheetId, index) => ({
+      updateSheetProperties: {
+        properties: { sheetId, index },
+        fields: "index",
+      },
+    }),
+  );
 }

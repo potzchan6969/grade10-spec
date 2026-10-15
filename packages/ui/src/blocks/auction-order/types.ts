@@ -14,14 +14,20 @@ type AuctionWinnerOrderCopy = {
   invoice: string;
   invoicePdf: string;
   paymentMethod: string;
-  view: string;
+  refundDetails: string;
   winningBid: string;
   bank: string;
   bankDetailsClose: string;
   bankDetailsQrAlt: string;
 };
 
-type AuctionWinnerOrderAction = { label: string; onPress: () => void };
+/** `pending` draws the press busy; `failed` is the refusal shown beside it. */
+type AuctionWinnerOrderAction = {
+  label: string;
+  onPress: () => void;
+  pending?: boolean;
+  failed?: string;
+};
 
 /** A description keeps its line breaks and stacks under the title; `role` overrides the Alert's own. */
 type AuctionWinnerOrderAlert = {
@@ -32,11 +38,17 @@ type AuctionWinnerOrderAlert = {
   action?: AuctionWinnerOrderAction;
 };
 
-/** A PDF the winner opens: a URL to follow, or a press the consumer handles. */
+/**
+ * A PDF the winner opens: a URL to follow, or a press the consumer handles.
+ * `pending` draws the link busy — spinner for the PDF icon, presses swallowed;
+ * `failed` toasts once per value.
+ */
 type AuctionWinnerOrderPdf = {
   href?: string;
   onOpen?: () => void;
   ariaLabel?: string;
+  pending?: boolean;
+  failed?: string;
 };
 
 type AuctionWinnerOrderLine = {
@@ -44,6 +56,10 @@ type AuctionWinnerOrderLine = {
   value: string;
   muted?: boolean;
   tooltip?: string;
+  /** Under the value, muted: the quoted amount in the other currency. */
+  subtext?: string;
+  /** Under the row, left-aligned, muted: a quiet note about the figure. */
+  footnote?: string;
 };
 
 type AuctionSettlementCurrency = "USD" | "HKD";
@@ -119,6 +135,7 @@ type AuctionWinnerOrderProps = {
     label: string;
     value?: string;
     alert?: AuctionWinnerOrderAlert;
+    /** `failed` toasts once per value, like the PDF links. */
     confirm?: AuctionWinnerOrderAction & { deadline?: string };
   };
   billing?: { label: string; value: string };
@@ -189,6 +206,8 @@ type AuctionAddressFormProps = {
   initialValues?: Partial<AuctionAddressFormValues>;
   errors?: Partial<Record<keyof AuctionAddressFormValues, ReactNode>>;
   pending?: boolean;
+  /** A refused confirm, shown above the actions. */
+  failed?: string;
   onConfirm: (values: AuctionAddressFormValues) => void;
   onCancel: () => void;
   className?: string;

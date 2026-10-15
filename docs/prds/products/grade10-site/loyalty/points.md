@@ -14,7 +14,7 @@ reviewed: 2026-10-06
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
 | Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7× |
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
-| Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter. A guest order earns only if it was joined to an account before it completed ([Checkout](/p/grade10-site/store/checkout#guest-checkout)) |
+| Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter |
 
 ## Qualification Criteria
 
@@ -44,8 +44,8 @@ An order's earn is written once, the first time the order completes.
 - **Basis** - the goods paid for less those refunded at completion; every
   later refund is read against it
 - **Till sale** - earns at the counter
-- **Guest order** - earns only if it was joined to an account before it
-  completed - [Checkout](/p/grade10-site/store/checkout#guest-checkout)
+- 🚧 **Guest order** - never earns, joined to an account or not -
+  [Checkout](/p/grade10-site/store/checkout#guest-checkout)
 - **Delivery** - retried until the programme takes it, and taken once, so
   a purchase during an outage still earns, and never twice
 

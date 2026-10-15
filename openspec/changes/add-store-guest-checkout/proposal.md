@@ -14,8 +14,7 @@ secondary: share of guest orders linked to an account.
 
 - **Gateway** — a signed-out drawer's footer carries a primary Check out as
   guest, with a quiet Sign in link under it for points and rewards; no
-  extra step. Goods at **HKD 120,000** or more keep
-  asking a guest to sign in
+  extra step
 - **Guest tender** — a guest may type or pick a public code (from
   `add-store-public-codes`); no points, and no member's codes or rewards are
   shown
@@ -30,7 +29,7 @@ secondary: share of guest orders linked to an account.
   guest's order page is a normal order page whose placed-on line names the
   email the receipt went to, and a persistent toast asks to add the order to
   an account — Sign in
-  to earn points for this order, one Sign in action; closing it hides it
+  to see it with your other orders, one Sign in action; closing it hides it
   for that order. A sign-in that proves the order's email links the order
   to the account — a magic link to that email, or a Google account under
   it. A Google account under another email signs the buyer in and adds
@@ -40,10 +39,8 @@ secondary: share of guest orders linked to an account.
 - **Guest orders join the account** — every paid guest order placed under an
   email is listed in Your Orders automatically once a sign-in proves that
   email, on any sign-in; the order gets an owner
-- **Points on completion** — a linked guest order earns on completion like
-  every order (owned by `earn-points-on-order-completion`), provided it was
-  linked before it completed; one already Completed when linked earns
-  nothing, and one that ends Canceled or fully Refunded never earns
+- **No points for a guest order** — a guest order never earns, linked or
+  not; only an order placed with an account earns
 - **Order link for every order** — every order email's View order button
   carries the private link. Signed out: the public order page names the
   receipt's email on its placed-on line and carries a persistent sign-in
@@ -75,10 +72,6 @@ See [Non-Goals](decisions.md#non-goals).
 - `grade10-site/store/order-history` — guest orders under the member's email
   listed after sign-in. Owned by `add-grade10-customer-order-pages`, which
   this change depends on
-- `grade10-site/loyalty/programme` — durable spec: a linked guest order's
-  earning eligibility (linked before completion) joins the programme's
-  earning rules; the completion trigger itself is owned by
-  `earn-points-on-order-completion`, which this change depends on
 
 ## Impact
 
@@ -90,13 +83,11 @@ See [Non-Goals](decisions.md#non-goals).
   order secret link and its `/orders/<id>` route, linking guest orders on
   sign-in by proven email, a magic link that proves the order's email, the
   View order link in Shopify's notification templates, and the
-  `/orders/latest` prompt. Loyalty hears of a linked order and earns on its
-  completion when it had not completed. These are built in the application
-  repository
+  `/orders/latest` prompt. A linked guest order earns nothing. These are
+  built in the application repository
 - **Depends on** — `add-store-cart-drawer-ui` and
-  `add-grade10-customer-order-pages` landing first,
-  `add-store-public-codes` for the public-code list, and
-  `earn-points-on-order-completion` for the completion earn trigger
+  `add-grade10-customer-order-pages` landing first, and
+  `add-store-public-codes` for the public-code list
 
 ## References
 

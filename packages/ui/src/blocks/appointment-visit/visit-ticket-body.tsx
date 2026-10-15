@@ -131,7 +131,6 @@ function VisitTicketBody({
                 {copy.keep}
               </Button>
               <Button
-                disabled={pending}
                 loading={pending}
                 onClick={onLeave}
                 size="md"

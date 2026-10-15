@@ -260,6 +260,7 @@ consuming applications are the `grade10` site's Winner Order page and
 | `paymentChoices` | `label`, `byCurrency` (for each `AuctionSettlementCurrency`, a list of `AuctionWinnerOrderPaymentChoice`), `value` (a choice's value or `null`), `onChange`, optional `none` | The choices listed for the currency `settlementCurrency.value` holds, one choice each, none selected while `value` is `null`; it reports a pick through `onChange`. With no currency picked it lists none. With no choice listed for the currency it shows `none` |
 | `summary.convertedTotal` | A `label` and a `value`, formatted | A second Order Total line below the first, when supplied |
 | `summary.convertedFee` | A `label` and a `value`, formatted | A Payment Processing Fee row after the separator, below the two total lines, when supplied |
+| `summary.lines[].subtext` | An optional text, formatted | A muted line under that row's value, such as the quoted amount in the other currency; no line when absent |
 | `bankDetails` | An `AuctionWinnerOrderBankDetails` | The View Bank Details dialog for the one rail it carries |
 
 An `AuctionWinnerOrderPaymentChoice` carries a `value` of `card` or an
@@ -370,6 +371,17 @@ total line. It SHALL show no such row when none is supplied.
 - **THEN** Order Total shows the USD line, then the HKD line
 - **AND** the fee row shows after the separator, below both lines
 - **AND** neither total line includes the fee
+
+<!-- trace:scenario id=g10.shared-auction-order.SC-s7t rev=1 -->
+#### Scenario: shared-ui-auction-order-SC-s7t - A line's subtext renders under its value
+**Serves:** `Order detail` - the summary renders a second total line when supplied
+
+- **GIVEN** an `AuctionWinnerOrder` whose summary has a Winning Bid line reading
+  HK$793.00 with subtext US$101.00 and a Payment Processing Fee line reading
+  HK$38.73 with no subtext
+- **WHEN** it renders
+- **THEN** US$101.00 shows muted under HK$793.00
+- **AND** the fee line shows no second line
 
 <!-- trace:scenario id=g10.shared-auction-order.SC-hc5 rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-29 - The bank dialog shows only the rail supplied

@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useRef, useState } from "react";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Button } from "../forms/button";
 import { Toast, type ToastProps, toast } from "./toast";
 
@@ -120,4 +122,63 @@ export const Types: Story = {
       <Toast position={args.position} closeButton={args.dismissible} />
     </>
   ),
+};
+
+function HeldActionExample() {
+  const finish = useRef<() => void>(() => undefined);
+  const [runs, setRuns] = useState(0);
+  const undo = () => {
+    setRuns((count) => count + 1);
+    return new Promise<void>((resolve) => {
+      finish.current = resolve;
+    }).then(() => {
+      toast.success("Restored");
+    });
+  };
+
+  return (
+    <>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() =>
+            toast("Archived", { action: { label: "Undo", onClick: undo } })
+          }
+        >
+          Archive
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => finish.current()}>
+          Finish undo
+        </Button>
+      </div>
+      <p className="text-sm">Undo runs: {runs}</p>
+      <Toast duration={300} />
+    </>
+  );
+}
+
+/**
+ * An action whose `onClick` returns a promise holds the toast: it turns
+ * loading under the same id, outlives its timeout, ignores a second press,
+ * and closes when the work settles; the caller draws the outcome.
+ */
+export const HeldAction: Story = {
+  render: () => <HeldActionExample />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(document.body);
+    await userEvent.click(canvas.getByRole("button", { name: "Archive" }));
+    const undo = await page.findByRole("button", { name: "Undo" });
+    const held = undo.closest("[data-sonner-toast]");
+    await userEvent.click(undo);
+    await waitFor(() => expect(held).toHaveAttribute("data-type", "loading"));
+    await userEvent.click(undo);
+    await new Promise((wait) => setTimeout(wait, 600));
+    expect(held).toBeInTheDocument();
+    expect(canvas.getByText("Undo runs: 1")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "Finish undo" }));
+    await page.findByText("Restored");
+    await waitFor(() => expect(page.queryByText("Archived")).toBeNull());
+  },
 };

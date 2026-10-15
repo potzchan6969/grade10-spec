@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import {
   Tooltip,
   TooltipContent,
@@ -30,11 +31,18 @@ import {
   ArrowCounterClockwise,
   ArrowUpRight,
   Bank,
+  CircleNotch,
   FilePdf,
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -118,12 +126,16 @@ function SummaryRow({
   emphasize = false,
   muted = false,
   tooltip,
+  subtext,
+  footnote,
 }: {
   label: string;
   value: string;
   emphasize?: boolean;
   muted?: boolean;
   tooltip?: string;
+  subtext?: string;
+  footnote?: string;
 }) {
   const labelNode = tooltip ? (
     <HStack className="min-w-0" gap="xs" vAlign="center">
@@ -132,10 +144,11 @@ function SummaryRow({
         <Tooltip>
           <TooltipTrigger
             aria-label={tooltip}
-            className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            onPointerDown={(event) => event.preventDefault()}
-            render={<Info aria-hidden size={12} />}
-          />
+            className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+            closeOnClick={false}
+          >
+            <Info aria-hidden size={12} />
+          </TooltipTrigger>
           <TooltipContent>{tooltip}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -146,7 +159,7 @@ function SummaryRow({
 
   return (
     <div
-      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4"
+      className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2 sm:gap-x-4"
       data-slot="winner-order-summary-line"
     >
       <span
@@ -158,17 +171,48 @@ function SummaryRow({
       >
         {labelNode}
       </span>
-      <span
-        className={cn(
-          "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
-          emphasize && "text-base font-semibold",
-          muted && "text-secondary-foreground",
-        )}
-      >
-        {value}
+      <span className="flex shrink-0 flex-col items-end">
+        <span
+          className={cn(
+            "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
+            emphasize && "text-base font-semibold",
+            muted && "text-secondary-foreground",
+          )}
+        >
+          {value}
+        </span>
+        {subtext ? (
+          <span
+            className="mt-0.5 text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
+            data-slot="winner-order-summary-subtext"
+          >
+            {subtext}
+          </span>
+        ) : null}
       </span>
+      {footnote ? (
+        <span
+          className="col-span-2 mt-0.5 text-left text-xs leading-4 text-secondary-foreground"
+          data-slot="winner-order-summary-footnote"
+        >
+          {footnote}
+        </span>
+      ) : null}
     </div>
   );
+}
+
+function useFailedToast(failed?: string) {
+  const lastToastedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!failed) {
+      lastToastedRef.current = null;
+      return;
+    }
+    if (lastToastedRef.current === failed) return;
+    lastToastedRef.current = failed;
+    toast.error(failed);
+  }, [failed]);
 }
 
 function PdfLink({
@@ -182,9 +226,11 @@ function PdfLink({
   pdf: AuctionWinnerOrderPdf;
   className?: string;
 }) {
-  const { href, onOpen } = pdf;
+  const { href, onOpen, pending, failed } = pdf;
+  useFailedToast(failed);
   return (
     <Link
+      aria-busy={pending ? true : undefined}
       aria-label={ariaLabel}
       className={className}
       href={href ?? "#view-pdf"}
@@ -192,40 +238,64 @@ function PdfLink({
         onOpen
           ? (event) => {
               event.preventDefault();
-              onOpen();
+              if (!pending) onOpen();
             }
           : undefined
       }
       size="sm"
       variant="secondary"
     >
-      <FilePdf aria-hidden size={14} weight="regular" />
+      {pending ? (
+        <span aria-hidden className="inline-flex animate-spin">
+          <CircleNotch size={14} weight="bold" />
+        </span>
+      ) : (
+        <FilePdf aria-hidden size={14} weight="regular" />
+      )}
       {label}
     </Link>
   );
 }
 
-function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
+function ActionFailed({ message }: { message?: string }) {
+  if (!message) return null;
   return (
-    <Alert
-      actions={
-        alert.action ? (
-          <Button onClick={alert.action.onPress} size="sm" variant="outline">
-            {alert.action.label}
-          </Button>
-        ) : undefined
-      }
-      description={
-        alert.description ? (
-          <span className="whitespace-pre-line">{alert.description}</span>
-        ) : undefined
-      }
-      dismissible={false}
-      layout={alert.description ? "block" : "inline"}
-      role={alert.role ?? "alert"}
-      status={alert.status}
-      title={alert.title}
-    />
+    <Text as="p" role="alert" size="sm" tone="error">
+      {message}
+    </Text>
+  );
+}
+
+function OrderAlert({ alert }: { alert: AuctionWinnerOrderAlert }) {
+  const { action } = alert;
+  return (
+    <>
+      <Alert
+        actions={
+          action ? (
+            <Button
+              loading={action.pending}
+              onClick={action.onPress}
+              size="sm"
+              variant="outline"
+            >
+              {action.label}
+            </Button>
+          ) : undefined
+        }
+        description={
+          alert.description ? (
+            <span className="whitespace-pre-line">{alert.description}</span>
+          ) : undefined
+        }
+        dismissible={false}
+        layout={alert.description ? "block" : "inline"}
+        role={alert.role ?? "alert"}
+        status={alert.status}
+        title={alert.title}
+      />
+      <ActionFailed message={action?.failed} />
+    </>
   );
 }
 
@@ -383,7 +453,7 @@ function LotCard({
         {lot.imageSrc ? (
           <img
             alt=""
-            className="absolute inset-0 size-full object-contain p-0.5"
+            className="absolute inset-0 size-full object-cover"
             src={lot.imageSrc}
           />
         ) : null}
@@ -396,7 +466,11 @@ function LotCard({
         >
           {lot.title}
         </Text>
-        <Text className="tabular-nums" size="sm" weight="medium">
+        <Text
+          className="tabular-nums text-secondary-foreground"
+          size="sm"
+          weight="regular"
+        >
           {copy.winningBid}: {lot.winningBid}
         </Text>
       </VStack>
@@ -587,9 +661,11 @@ function OrderSummary({
         gap="none"
         vAlign="center"
       >
-        <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
-          {copy.orderSummary}
-        </h2>
+        <HStack gap="sm" vAlign="center">
+          <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+            {copy.orderSummary}
+          </h2>
+        </HStack>
         {summary.invoicePdf ? (
           <PdfLink
             ariaLabel={summary.invoicePdf.ariaLabel ?? copy.invoicePdf}
@@ -602,9 +678,11 @@ function OrderSummary({
       <VStack className="w-full" gap="sm" hAlign="stretch">
         {summary.lines.map((line) => (
           <SummaryRow
+            footnote={line.footnote}
             key={line.label}
             label={line.label}
             muted={line.muted}
+            subtext={line.subtext}
             tooltip={line.tooltip}
             value={line.value}
           />
@@ -616,14 +694,17 @@ function OrderSummary({
           {summary.total ? (
             <SummaryRow
               emphasize
+              footnote={summary.total.footnote}
               label={summary.total.label}
               muted={summary.total.muted}
+              subtext={summary.total.subtext}
               value={summary.total.value}
             />
           ) : null}
           {summary.convertedTotal ? (
             <SummaryRow
               emphasize
+              footnote={summary.convertedTotal.footnote}
               label={summary.convertedTotal.label}
               muted={summary.convertedTotal.muted}
               value={summary.convertedTotal.value}
@@ -636,6 +717,7 @@ function OrderSummary({
         <>
           <hr className="w-full border-border" />
           <SummaryRow
+            footnote={summary.convertedFee.footnote}
             label={summary.convertedFee.label}
             muted={summary.convertedFee.muted}
             value={summary.convertedFee.value}
@@ -652,7 +734,7 @@ function OrderSummary({
                 size="sm"
                 variant="outline"
               >
-                {copy.view}
+                {copy.refundDetails}
               </Button>
             ) : undefined
           }
@@ -671,16 +753,18 @@ function OrderSummary({
           <Button
             className="w-full"
             disabled={pay.disabled}
-            loading={pay.loading}
+            loading={pay.loading || pay.pending}
             onClick={pay.onPress}
             size="md"
           >
             {pay.label}
           </Button>
+          <ActionFailed message={pay.failed} />
           {pay.secondary ? (
             <Button
               className="w-full"
-              disabled={pay.disabled || pay.loading}
+              disabled={pay.disabled || pay.loading || pay.pending}
+              loading={pay.secondary.pending}
               onClick={onViewBankDetails ?? pay.secondary.onPress}
               size="md"
               variant="outline"
@@ -688,6 +772,7 @@ function OrderSummary({
               {pay.secondary.label}
             </Button>
           ) : null}
+          <ActionFailed message={pay.secondary?.failed} />
           {pay.deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {pay.deadline}
@@ -750,6 +835,7 @@ function AddressBlock({
 }: {
   delivery: NonNullable<AuctionWinnerOrderProps["delivery"]>;
 }) {
+  useFailedToast(delivery.confirm?.failed);
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
       {delivery.value ? (
@@ -765,6 +851,7 @@ function AddressBlock({
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button
             className="w-full"
+            loading={delivery.confirm.pending}
             onClick={delivery.confirm.onPress}
             size="md"
           >
