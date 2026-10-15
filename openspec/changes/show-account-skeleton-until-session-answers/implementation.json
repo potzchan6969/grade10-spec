@@ -53,5 +53,17 @@
         "web"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "Claude Sonnet 5.5, for @seankcw",
+    "reviewedAt": "2026-10-15T06:33:43Z",
+    "changes": [
+      {
+        "path": "openspec/specs/shared/ui/site-chrome/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "a2784ad6a wrapped the angle-bracket test-data parameters in backticks, eleven lines. With backticks removed from both, the file at the claimed baseline and the file now are byte-for-byte identical; case ids, revisions, steps and expected results are unchanged."
+      }
+    ]
+  }
 }
