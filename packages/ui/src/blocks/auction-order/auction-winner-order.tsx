@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import {
   Tooltip,
   TooltipContent,
@@ -30,11 +31,19 @@ import {
   ArrowCounterClockwise,
   ArrowUpRight,
   Bank,
+  CircleNotch,
   FilePdf,
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
-import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -134,10 +143,11 @@ function SummaryRow({
         <Tooltip>
           <TooltipTrigger
             aria-label={tooltip}
-            className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            onPointerDown={(event) => event.preventDefault()}
-            render={<Info aria-hidden size={12} />}
-          />
+            className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+            closeOnClick={false}
+          >
+            <Info aria-hidden size={12} />
+          </TooltipTrigger>
           <TooltipContent>{tooltip}</TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -172,7 +182,7 @@ function SummaryRow({
         </span>
         {subtext ? (
           <span
-            className="text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
+            className="mt-0.5 text-right text-xs leading-4 whitespace-nowrap tabular-nums text-secondary-foreground"
             data-slot="winner-order-summary-subtext"
           >
             {subtext}
@@ -181,6 +191,19 @@ function SummaryRow({
       </span>
     </div>
   );
+}
+
+function useFailedToast(failed?: string) {
+  const lastToastedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!failed) {
+      lastToastedRef.current = null;
+      return;
+    }
+    if (lastToastedRef.current === failed) return;
+    lastToastedRef.current = failed;
+    toast.error(failed);
+  }, [failed]);
 }
 
 function PdfLink({
@@ -195,11 +218,12 @@ function PdfLink({
   className?: string;
 }) {
   const { href, onOpen, pending, failed } = pdf;
-  const link = (
+  useFailedToast(failed);
+  return (
     <Link
-      aria-busy={pending || undefined}
+      aria-busy={pending ? true : undefined}
       aria-label={ariaLabel}
-      className={failed ? undefined : className}
+      className={className}
       href={href ?? "#view-pdf"}
       onClick={
         onOpen
@@ -212,16 +236,15 @@ function PdfLink({
       size="sm"
       variant="secondary"
     >
-      <FilePdf aria-hidden size={14} weight="regular" />
+      {pending ? (
+        <span aria-hidden className="inline-flex animate-spin">
+          <CircleNotch size={14} weight="bold" />
+        </span>
+      ) : (
+        <FilePdf aria-hidden size={14} weight="regular" />
+      )}
       {label}
     </Link>
-  );
-  if (!failed) return link;
-  return (
-    <VStack className={className} gap="xs" hAlign="end">
-      {link}
-      <ActionFailed message={failed} />
-    </VStack>
   );
 }
 
@@ -421,7 +444,7 @@ function LotCard({
         {lot.imageSrc ? (
           <img
             alt=""
-            className="absolute inset-0 size-full object-contain p-0.5"
+            className="absolute inset-0 size-full object-cover"
             src={lot.imageSrc}
           />
         ) : null}
@@ -434,7 +457,11 @@ function LotCard({
         >
           {lot.title}
         </Text>
-        <Text className="tabular-nums" size="sm" weight="medium">
+        <Text
+          className="tabular-nums text-secondary-foreground"
+          size="sm"
+          weight="regular"
+        >
           {copy.winningBid}: {lot.winningBid}
         </Text>
       </VStack>
@@ -618,6 +645,14 @@ function OrderSummary({
   summary: AuctionWinnerOrderProps["summary"];
 }) {
   const { pay } = summary;
+  const [view, setView] = useState<"primary" | "secondary">("primary");
+  const linesId = useId();
+  const currencyToggle =
+    summary.currencyToggle &&
+    (summary.lines.some((line) => line.subtext) || summary.total?.subtext)
+      ? summary.currencyToggle
+      : null;
+  const swapped = view === "secondary";
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <HStack
@@ -625,9 +660,50 @@ function OrderSummary({
         gap="none"
         vAlign="center"
       >
-        <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
-          {copy.orderSummary}
-        </h2>
+        <HStack gap="sm" vAlign="center">
+          <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+            {copy.orderSummary}
+          </h2>
+          {currencyToggle ? (
+            <fieldset
+              className="m-0 inline-flex items-baseline gap-1.5 border-0 p-0 whitespace-nowrap"
+              data-slot="winner-order-currency-toggle"
+            >
+              {currencyToggle.ariaLabel ? (
+                <legend className="sr-only">{currencyToggle.ariaLabel}</legend>
+              ) : null}
+              <Link
+                aria-controls={linesId}
+                aria-pressed={view === "primary"}
+                className={cn(
+                  view === "primary" && "font-medium text-foreground",
+                )}
+                onClick={() => setView("primary")}
+                render={<button type="button" />}
+                size="sm"
+                variant="secondary"
+              >
+                {currencyToggle.primary}
+              </Link>
+              <span aria-hidden className="text-secondary-foreground">
+                |
+              </span>
+              <Link
+                aria-controls={linesId}
+                aria-pressed={view === "secondary"}
+                className={cn(
+                  view === "secondary" && "font-medium text-foreground",
+                )}
+                onClick={() => setView("secondary")}
+                render={<button type="button" />}
+                size="sm"
+                variant="secondary"
+              >
+                {currencyToggle.secondary}
+              </Link>
+            </fieldset>
+          ) : null}
+        </HStack>
         {summary.invoicePdf ? (
           <PdfLink
             ariaLabel={summary.invoicePdf.ariaLabel ?? copy.invoicePdf}
@@ -637,15 +713,15 @@ function OrderSummary({
           />
         ) : null}
       </HStack>
-      <VStack className="w-full" gap="sm" hAlign="stretch">
+      <VStack className="w-full" gap="sm" hAlign="stretch" id={linesId}>
         {summary.lines.map((line) => (
           <SummaryRow
             key={line.label}
             label={line.label}
             muted={line.muted}
-            subtext={line.subtext}
+            subtext={currencyToggle ? undefined : line.subtext}
             tooltip={line.tooltip}
-            value={line.value}
+            value={swapped && line.subtext ? line.subtext : line.value}
           />
         ))}
       </VStack>
@@ -657,11 +733,15 @@ function OrderSummary({
               emphasize
               label={summary.total.label}
               muted={summary.total.muted}
-              subtext={summary.total.subtext}
-              value={summary.total.value}
+              subtext={currencyToggle ? undefined : summary.total.subtext}
+              value={
+                swapped && summary.total.subtext
+                  ? summary.total.subtext
+                  : summary.total.value
+              }
             />
           ) : null}
-          {summary.convertedTotal ? (
+          {summary.convertedTotal && !currencyToggle ? (
             <SummaryRow
               emphasize
               label={summary.convertedTotal.label}
@@ -672,7 +752,7 @@ function OrderSummary({
         </>
       ) : null}
 
-      {summary.convertedFee ? (
+      {summary.convertedFee && !currencyToggle ? (
         <>
           <hr className="w-full border-border" />
           <SummaryRow
@@ -692,7 +772,7 @@ function OrderSummary({
                 size="sm"
                 variant="outline"
               >
-                {copy.view}
+                {copy.refundDetails}
               </Button>
             ) : undefined
           }
@@ -793,6 +873,7 @@ function AddressBlock({
 }: {
   delivery: NonNullable<AuctionWinnerOrderProps["delivery"]>;
 }) {
+  useFailedToast(delivery.confirm?.failed);
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
       {delivery.value ? (
@@ -814,7 +895,6 @@ function AddressBlock({
           >
             {delivery.confirm.label}
           </Button>
-          <ActionFailed message={delivery.confirm.failed} />
           {delivery.confirm.deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {delivery.confirm.deadline}

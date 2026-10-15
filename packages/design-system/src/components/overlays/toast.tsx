@@ -202,7 +202,7 @@ function Toast({
             extra?.toast,
           ),
           icon: cn(
-            "col-start-1 row-start-1 inline-flex size-5 shrink-0 items-center justify-center [&_svg]:size-4",
+            "relative col-start-1 row-start-1 inline-flex size-5 shrink-0 items-center justify-center [&_svg]:size-4",
             extra?.icon,
           ),
           content: cn(

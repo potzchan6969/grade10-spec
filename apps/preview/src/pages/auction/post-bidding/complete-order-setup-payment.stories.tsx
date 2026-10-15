@@ -4,7 +4,7 @@ import { CompleteOrderSetupDemo } from "./complete-order-setup-demo";
 
 const meta = {
   title:
-    "Auction/Post Bidding/Screens/Winner Order/Setup/Complete Order Setup/Payment Method",
+    "Auction/Post Bidding/Parts/CompleteOrderSetupDemo/Payment Method",
   component: CompleteOrderSetupDemo,
   tags: ["autodocs"],
   parameters: {

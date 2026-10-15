@@ -85,14 +85,17 @@ export const ProcessingOverpaid: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalUS$16,340.00",
-      "Order TotalHK$128,269.00",
+      "Order TotalHK$128,814.00",
     ]);
     expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Refund Details" }),
+    ).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "View" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Refund Details" }),
+    );
     const page = within(canvasElement.ownerDocument.body);
     const dialogElement = await waitFor(() => {
       const found = page.getByRole("dialog", { name: "Refund Details" });
@@ -150,9 +153,8 @@ export const ProcessingBankTransfer: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows).toContain("Payment Processing FeeFree");
-    expect(summaryRows).toContain("TaxUS$320.00");
+    expect(summaryRows).toContain("TaxHK$2,512.00");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalUS$16,340.00",
       "Order TotalHK$128,269.00",
     ]);
     expect(summaryRows).not.toContain("Payment Processing FeeHK$545.00");

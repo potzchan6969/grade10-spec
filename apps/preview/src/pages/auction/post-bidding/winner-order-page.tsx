@@ -145,7 +145,7 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   invoice: "Invoice",
   invoicePdf: "Invoice PDF",
   paymentMethod: "Payment method",
-  view: "View",
+  refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
   bankDetailsClose: "Close",
@@ -223,6 +223,7 @@ function currentStepFor(
 
 /** Order Summary line money: `$` prefix, at least two decimals; `$0` stays bare. */
 function summaryLineAmount(value: string): string {
+  const currency = value.match(/^(HK|US)\$/)?.[0] ?? "US$";
   const withDollar = value.replaceAll(/(?:HK|US)\$/g, "$");
   return withDollar.replace(
     /^(−?)\$([\d,]+)(?:\.(\d+))?$/,
@@ -230,10 +231,10 @@ function summaryLineAmount(value: string): string {
       const digits = intPart.replaceAll(",", "");
       const fracDigits = frac ?? "";
       if (Number(digits) === 0 && Number(fracDigits || "0") === 0) {
-        return `${sign}US$0`;
+        return `${sign}${currency}0`;
       }
       const decimals = fracDigits.padEnd(2, "0");
-      return `${sign}US$${intPart}.${decimals}`;
+      return `${sign}${currency}${intPart}.${decimals}`;
     },
   );
 }
@@ -673,7 +674,13 @@ function WinnerOrderPageState({
   const lines = summaryLinesFor(content);
   const totalLine = lines.find((line) => line.label === "Order Total");
   const total = totalLine
-    ? { ...totalLine, value: content.usdTotal ?? totalLine.value }
+    ? {
+        ...totalLine,
+        value:
+          content.settlementCurrency === "HKD"
+            ? totalLine.value
+            : (content.usdTotal ?? totalLine.value),
+      }
     : undefined;
   const cardSettlement =
     content.settlementCurrency === "HKD" &&
@@ -682,7 +689,11 @@ function WinnerOrderPageState({
   const summaryLines = lines.filter(
     (line) =>
       line.label !== "Order Total" &&
-      !(cardSettlement && line.label === "Payment Processing Fee"),
+      !(
+        cardSettlement &&
+        !hasIssuedInvoice(content) &&
+        line.label === "Payment Processing Fee"
+      ),
   );
 
   function handleSetupConfirm(result: WinnerOrderSetupResult) {
@@ -810,6 +821,14 @@ function WinnerOrderPageState({
           summary={{
             lines: summaryLines,
             total: total ?? null,
+            currencyToggle:
+              content.settlementCurrency === "HKD"
+                ? {
+                    primary: "HKD",
+                    secondary: "USD",
+                    ariaLabel: "Amount currency",
+                  }
+                : undefined,
             convertedTotal: content.convertedTotal
               ? { label: "Order Total", value: content.convertedTotal }
               : undefined,

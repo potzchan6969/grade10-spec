@@ -1,28 +1,14 @@
-import { getMessages } from "@grade10/i18n";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
+import {
+  COPY,
+  CURRENCY_TOGGLE,
+  IMAGE,
+  settled,
+} from "./auction-winner-order.story-fixtures";
 import type { AuctionWinnerOrderLine, AuctionWinnerOrderProps } from "./types";
-
-const IMAGE = new URL(
-  "../store-order-history/product.fixture.png",
-  import.meta.url,
-).href;
-
-const { auctionOrders } = getMessages("grade10", "en");
-
-const COPY: AuctionWinnerOrderProps["copy"] = {
-  orderProgress: "Order Progress",
-  orderSummary: "Order summary",
-  invoice: "Invoice",
-  invoicePdf: "Invoice PDF",
-  paymentMethod: "Payment method",
-  view: "View",
-  winningBid: "Winning bid",
-  bank: "Bank",
-  bankDetailsClose: auctionOrders.bankDetails.close,
-  bankDetailsQrAlt: auctionOrders.bankDetails.qrAlt,
-};
 
 const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] = {
   address: { label: "Address", description: "12 Oct 2026, 15:12" },
@@ -106,7 +92,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The Order Summary in the winner's settlement currency. Under USD every line and the Order Total read USD. Under HKD each line reads HKD with its USD amount beneath it, the Payment Processing Fee reads HKD alone, and Order Total is one HKD total. The block formats nothing: the application supplies every amount.",
+          "The Order Summary in the winner's settlement currency. Under USD every line and the Order Total read USD. Under HKD an HKD | USD control in the heading swaps every amount between the HKD invoice lines and the lot's USD figures, Order Total included; the Payment Processing Fee reads HKD alone in both views. The block formats nothing: the application supplies every amount.",
       },
     },
   },
@@ -138,16 +124,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-async function settled(canvasElement: HTMLElement) {
-  await waitFor(() =>
-    expect(
-      canvasElement
-        .querySelector('[data-slot="winner-order"]')
-        ?.getAttribute("data-revealed"),
-    ).toBe("true"),
-  );
-}
-
 function rowFor(canvasElement: HTMLElement, label: string) {
   const row = [
     ...canvasElement.querySelectorAll(
@@ -176,7 +152,7 @@ function subtexts(canvasElement: HTMLElement) {
  * read USD, nothing sits beneath a line, and the fee reads Free
  * (winner-order-SC-291).
  */
-export const UsdBankTransferFreeFee: Story = {
+export const UsdBankNoFee: Story = {
   args: {
     summary: {
       lines: [
@@ -206,6 +182,15 @@ export const UsdBankTransferFreeFee: Story = {
     expect(sidebar.getByText("Free")).toBeInTheDocument();
     expect(subtexts(canvasElement)).toEqual([]);
     expect(sidebar.queryByText(/HK\$/)).not.toBeInTheDocument();
+    const trigger = sidebar.getByLabelText(TOOLTIPS.buyersPremium);
+    await waitFor(() => expect(trigger).toBeVisible());
+    await userEvent.hover(trigger);
+    await waitFor(() =>
+      expect(
+        within(document.body).getByText(TOOLTIPS.buyersPremium),
+      ).toBeInTheDocument(),
+    );
+    await userEvent.unhover(trigger);
   },
 };
 
@@ -213,7 +198,7 @@ export const UsdBankTransferFreeFee: Story = {
  * USD settlement, bank transfer whose fee the operator typed in USD: the fee
  * is a USD line and the Order Total includes it (winner-order-SC-110).
  */
-export const UsdBankTransferWithFee: Story = {
+export const UsdBankWithFee: Story = {
   args: {
     summary: {
       lines: [
@@ -245,13 +230,15 @@ export const UsdBankTransferWithFee: Story = {
 };
 
 /**
- * HKD settlement, bank transfer with no fee: each line reads HKD with its USD
- * amount beneath it, the fee reads Free, and Order Total is one HKD total
- * with no USD total (winner-order-SC-290, winner-order-SC-111).
+ * HKD settlement, bank transfer with no fee: the heading's HKD | USD control
+ * swaps every amount between the HKD invoice lines and the lot's USD figures,
+ * Order Total included; the fee reads Free in both views (winner-order-SC-290,
+ * winner-order-SC-305, winner-order-SC-111).
  */
-export const HkdBankTransferFreeFee: Story = {
+export const HkdBankNoFee: Story = {
   args: {
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: [
         ...HKD_LINES,
         {
@@ -260,7 +247,11 @@ export const HkdBankTransferFreeFee: Story = {
           tooltip: TOOLTIPS.bankFee,
         },
       ],
-      total: { label: "Order Total", value: "HK$1,031.00" },
+      total: {
+        label: "Order Total",
+        value: "HK$1,031.00",
+        subtext: "US$131.21",
+      },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Submit Payment Proof",
@@ -274,17 +265,34 @@ export const HkdBankTransferFreeFee: Story = {
   play: async ({ canvasElement }) => {
     await settled(canvasElement);
     const sidebar = within(within(canvasElement).getByRole("complementary"));
-    expect(subtexts(canvasElement)).toEqual([
-      "US$101.00",
-      "US$20.20",
-      "US$10.01",
-    ]);
+    const hkd = sidebar.getByRole("button", { name: "HKD" });
+    const usd = sidebar.getByRole("button", { name: "USD" });
+    expect(hkd).toHaveAttribute("aria-pressed", "true");
+    expect(usd).toHaveAttribute("aria-pressed", "false");
+    expect(subtexts(canvasElement)).toEqual([]);
     expect(rowFor(canvasElement, "Winning Bid").row.textContent).toContain(
       "HK$793.00",
     );
     expect(sidebar.getByText("HK$1,031.00")).toBeInTheDocument();
-    expect(sidebar.queryByText("US$131.21")).not.toBeInTheDocument();
+
+    await userEvent.click(usd);
+    expect(usd).toHaveAttribute("aria-pressed", "true");
+    expect(subtexts(canvasElement)).toEqual([]);
+    expect(rowFor(canvasElement, "Winning Bid").row.textContent).toContain(
+      "US$101.00",
+    );
+    expect(sidebar.getByText("US$131.21")).toBeInTheDocument();
     expect(rowFor(canvasElement, "Payment Processing Fee").subtext).toBeNull();
+    expect(
+      rowFor(canvasElement, "Payment Processing Fee").row.textContent,
+    ).toContain("Free");
+
+    await userEvent.click(hkd);
+    expect(hkd).toHaveAttribute("aria-pressed", "true");
+    expect(rowFor(canvasElement, "Winning Bid").row.textContent).toContain(
+      "HK$793.00",
+    );
+    expect(sidebar.getByText("HK$1,031.00")).toBeInTheDocument();
     expect(
       within(canvasElement).getByText("Winning bid: US$101.00"),
     ).toBeInTheDocument();
@@ -293,12 +301,13 @@ export const HkdBankTransferFreeFee: Story = {
 
 /**
  * HKD settlement, bank transfer whose US$50.00 fee the operator typed in USD:
- * it converts with the other lines, so it reads HK$393.00 with US$50.00
- * beneath it, and the Order Total adds it (winner-order-SC-302).
+ * it converts with the other lines, so it reads HK$393.00 and swaps to
+ * US$50.00 in the USD view, and the Order Total adds it (winner-order-SC-302).
  */
-export const HkdBankTransferWithFee: Story = {
+export const HkdBankWithFee: Story = {
   args: {
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: [
         ...HKD_LINES,
         {
@@ -308,7 +317,11 @@ export const HkdBankTransferWithFee: Story = {
           tooltip: TOOLTIPS.bankFee,
         },
       ],
-      total: { label: "Order Total", value: "HK$1,424.00" },
+      total: {
+        label: "Order Total",
+        value: "HK$1,424.00",
+        subtext: "US$181.21",
+      },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Submit Payment Proof",
@@ -321,24 +334,26 @@ export const HkdBankTransferWithFee: Story = {
   },
   play: async ({ canvasElement }) => {
     await settled(canvasElement);
-    expect(subtexts(canvasElement)).toEqual([
-      "US$101.00",
-      "US$20.20",
-      "US$10.01",
-      "US$50.00",
-    ]);
-    expect(within(canvasElement).getByText("HK$1,424.00")).toBeInTheDocument();
+    const sidebar = within(within(canvasElement).getByRole("complementary"));
+    expect(subtexts(canvasElement)).toEqual([]);
+    await userEvent.click(sidebar.getByRole("button", { name: "USD" }));
+    expect(subtexts(canvasElement)).toEqual([]);
+    expect(
+      rowFor(canvasElement, "Payment Processing Fee").row.textContent,
+    ).toContain("US$50.00");
+    expect(sidebar.getByText("US$181.21")).toBeInTheDocument();
   },
 };
 
 /**
  * HKD settlement by card: the fee is computed in HKD from the HKD card rule on
- * the HKD subtotal, so it reads HK$38.73 with no USD amount beneath it, and
+ * the HKD subtotal, so it reads HK$38.73 in both views with no USD swap, and
  * the Order Total of HK$1,069.73 includes it (winner-order-SC-304).
  */
-export const HkdCardWithProcessingFee: Story = {
+export const HkdCardWithFee: Story = {
   args: {
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: [
         ...HKD_LINES,
         {
@@ -347,7 +362,11 @@ export const HkdCardWithProcessingFee: Story = {
           tooltip: TOOLTIPS.cardFee,
         },
       ],
-      total: { label: "Order Total", value: "HK$1,069.73" },
+      total: {
+        label: "Order Total",
+        value: "HK$1,069.73",
+        subtext: "US$131.21",
+      },
       invoicePdf: { onOpen: fn() },
       pay: {
         label: "Pay with Card",
@@ -360,16 +379,17 @@ export const HkdCardWithProcessingFee: Story = {
   play: async ({ canvasElement }) => {
     await settled(canvasElement);
     const sidebar = within(within(canvasElement).getByRole("complementary"));
-    expect(subtexts(canvasElement)).toEqual([
+    expect(subtexts(canvasElement)).toEqual([]);
+    await userEvent.click(sidebar.getByRole("button", { name: "USD" }));
+    expect(subtexts(canvasElement)).toEqual([]);
+    expect(rowFor(canvasElement, "Winning Bid").row.textContent).toContain(
       "US$101.00",
-      "US$20.20",
-      "US$10.01",
-    ]);
+    );
     const fee = rowFor(canvasElement, "Payment Processing Fee");
     expect(fee.row.textContent).toContain("HK$38.73");
     expect(fee.subtext).toBeNull();
-    expect(sidebar.getByText("HK$1,069.73")).toBeInTheDocument();
-    expect(sidebar.queryByText(/US\$131/)).not.toBeInTheDocument();
+    expect(sidebar.getByText("US$131.21")).toBeInTheDocument();
+    expect(sidebar.queryByText("HK$1,069.73")).not.toBeInTheDocument();
   },
 };
 
@@ -378,7 +398,7 @@ export const HkdCardWithProcessingFee: Story = {
  * HKD total and no fee, and the lot card keeps the winning bid in USD
  * (winner-order-SC-292).
  */
-export const HkdBeforeInvoiceSent: Story = {
+export const HkdPreInvoice: Story = {
   args: {
     badge: { label: "Preparing Invoice", variant: "default" },
     progress: {
@@ -400,6 +420,9 @@ export const HkdBeforeInvoiceSent: Story = {
     const sidebar = within(within(canvasElement).getByRole("complementary"));
     expect(sidebar.getAllByText("TBD")).toHaveLength(5);
     expect(sidebar.queryByText(/HK\$/)).not.toBeInTheDocument();
+    expect(
+      sidebar.queryByRole("button", { name: "USD" }),
+    ).not.toBeInTheDocument();
     expect(subtexts(canvasElement)).toEqual([]);
     expect(
       within(canvasElement).getByText("Winning bid: US$101.00"),
@@ -407,32 +430,59 @@ export const HkdBeforeInvoiceSent: Story = {
   },
 };
 
-/**
- * The block's two-total props, `summary.convertedTotal` and
- * `summary.convertedFee`, drawn as shared-ui-auction-order-SC-30 states them:
- * a USD total line, the HKD line below it, then the fee row after the
- * separator, in neither total. The winner order page does not use this shape
- * under HKD, which reads one HKD total.
- */
-export const ConvertedTotalAndFeeProps: Story = {
+/** The invoice link spins while its PDF opens, and stays focusable. */
+export const InvoicePdfLoading: Story = {
   args: {
     summary: {
       lines: USD_LINES,
       total: { label: "Order Total", value: "US$131.21" },
-      convertedTotal: { label: "Order Total", value: "HK$1,031.00" },
-      convertedFee: { label: "Payment Processing Fee", value: "HK$38.73" },
-      invoicePdf: { onOpen: fn() },
+      invoicePdf: { onOpen: fn(), pending: true },
     },
-    paymentMethod: { kind: "text", label: "Card" },
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     await settled(canvasElement);
-    const sidebar = within(within(canvasElement).getByRole("complementary"));
-    const totals = sidebar.getAllByText("Order Total");
-    expect(totals).toHaveLength(2);
-    expect(sidebar.getByText("US$131.21")).toBeInTheDocument();
-    expect(sidebar.getByText("HK$1,031.00")).toBeInTheDocument();
-    expect(sidebar.getByText("HK$38.73")).toBeInTheDocument();
-    expect(sidebar.getByText("Payment Processing Fee")).toBeInTheDocument();
+    const link = within(canvasElement).getByRole("link", {
+      name: "Invoice PDF",
+    });
+    expect(link).toHaveAttribute("aria-busy", "true");
+    expect(link.querySelector(".animate-spin")).toBeInTheDocument();
+    link.focus();
+    expect(link).toHaveFocus();
+    await userEvent.click(link);
+    expect(args.summary.invoicePdf?.onOpen).not.toHaveBeenCalled();
+  },
+};
+
+export const InvoicePdfRefused: Story = {
+  args: {
+    summary: {
+      lines: USD_LINES,
+      total: { label: "Order Total", value: "US$131.21" },
+      invoicePdf: {
+        onOpen: fn(),
+        failed: "We couldn’t open the invoice. Try again.",
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <Toast position="bottom-right" />
+        <Story />
+      </>
+    ),
+  ],
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const canvas = within(canvasElement);
+    await waitFor(() =>
+      expect(
+        within(document.body).getByText(
+          "We couldn’t open the invoice. Try again.",
+        ),
+      ).toBeInTheDocument(),
+    );
+    await userEvent.click(canvas.getByRole("link", { name: "Invoice PDF" }));
+    expect(args.summary.invoicePdf?.onOpen).toHaveBeenCalledTimes(1);
   },
 };
