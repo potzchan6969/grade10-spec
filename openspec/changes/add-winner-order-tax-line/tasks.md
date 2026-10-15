@@ -27,7 +27,7 @@ Needs group 1.
 - [x] 2.2 Add the optional Tax amount field beside Insurance on the quote and reissue forms; send `null` for an empty field and show the command's validation refusal without coercing zero to absence
 - [x] 2.3 Show the recalculated Subtotal, Payment Processing Fee and Order Total from the quote preview
 - [x] 2.4 Add the operator field and refusal copy in every Grade10 admin locale
-- [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused admin quote and reissue E2E journey
+- [x] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused admin quote and reissue E2E journey
 
 ## 3. Winner summary, invoice and receipt (grade10) (owner: @htonyl)
 
@@ -37,7 +37,7 @@ Needs group 1.
 - [x] 3.2 Add Tax between Insurance and Payment Processing Fee in the Winner Order line projection: TBD with its tip before send, formatted from the invoice after send and omitted after an untaxed send
 - [x] 3.3 Supply the existing invoice and receipt PDF blocks the `taxLine` when Tax is present (`winner-order-SC-214`), and `null` when absent
 - [x] 3.4 Add the Tax label and `Set by Grade10 for where your order ships. Some orders have none.` tooltip in every Grade10 site locale
-- [ ] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused Winner Order and PDF E2E journey
+- [x] 3.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused Winner Order and PDF E2E journey
 
 ## 4. The walk - the taxed and the untaxed invoice (grade10) (owner: @ecchochan)
 
