@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 5
+tcs_rules_rev: 6
 ---
 
 # Specs to Test Cases
@@ -329,7 +329,7 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 
 - **Every value is stated** — the tester never chooses one; a `Field | Value` table when there is more than one, and the steps refer to it; no input, no section
 - **A value is the rule, or stands for it** — a value that *is* the rule (a constant, a threshold, a boundary, a fixed price, the value at the limit) is the scenario's and never changes. A value that *illustrates* the rule (an example, an `e.g.`, an operand of a stated formula) or only *sets the case up* (which account, which listing, a time inside a window) may change within its equivalence class, its outcome derived from the rule: `1 + 1 = 2` may become `3 + 4 = 7`. Unsure which: it is the rule
-- **Rows may add what the rule implies** — a new row is another value of a class a rule states: another member of a partition, one either side of a stated boundary, a locale or a role the spec names; each row's outcome traces to a stated rule. A value whose outcome no rule states is not a row: it is a gap for the spec's author, or an `exploratory` case a reviewer adds by hand
+- **Rows may add what the rule implies** — a new row is another value of a class a rule states: another member of a partition, one either side of a stated boundary, a locale or a role the spec names; each row's outcome traces to a stated rule. A value whose outcome no rule states is not a row: it is a gap for the spec's author; do not add it as a case until the product behaviour is settled
 - **Runs per row** — same steps, different data: one case, a column per varying value and one for the outcome, and under the title `Runs once per row of **Test data**.` Two refusals with one set of steps is one case
 - **Name the data, then use the name** — a value a run could change gets a `<placeholder>` row and is named from pre-conditions, steps and results; a derived value states its derivation: `Highest bid reads <user B maximum> plus <increment>`, not `530000` — so a changed value never rewrites a result
 - **A name means one thing in the file** — `<listing_1>` the draft with an empty gallery, `<listing_6>` the live one led by user A, numbered by first appearance; the same state shares the name and repeats its row
@@ -363,34 +363,31 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 
 | Property | Value | Means |
 | --- | --- | --- |
-| Severity | `blocker` | the journey cannot start or continue |
-| | `critical` | money, permission or the public record is wrong |
-| | `major` | the main outcome is wrong, nothing irreversible, no rule bypassed |
-| | `normal` | a supporting behaviour is wrong while the journey completes |
-| | `minor` | convenience or presentation, data correct underneath |
-| | `trivial` | cosmetic |
-| Priority | `high` | every pass, including a smoke pass before a release |
-| | `medium` | a full pass of this capability |
-| | `low` | when there is time, or when this area changed |
-| Status | `draft` | generated or edited since its last review; not export-eligible |
+| Severity | `blocker` | a main user flow cannot start or complete |
+| | `critical` | money, data integrity, permission or privacy is wrong |
+| | `major` | a main result or important function is wrong, below blocker and critical |
+| | `minor` | supporting behaviour is wrong; the main flow still completes correctly |
+| | `trivial` | presentation only; understanding, operation and data are unaffected |
+| Priority | `high` | core flows or major product risks; verify first |
+| | `medium` | rules and branches supporting the main functions |
+| | `low` | presentation or convenience that does not affect correct operation |
+| Status | `draft` | new, or verified content changed since its last review; not export-eligible |
 | | `actual` | a reviewer stands behind it against its scenarios; exports |
 | | `deprecated` | behaviour removed or coverage transferred by an approved retirement; kept, never exported, never renumbered |
 | Behaviour | `positive` | the intended thing, and it works |
 | | `negative` | invalid input, a wrong state or a missing permission; refused, stored facts unchanged |
 | | `destructive` | the actor removes, withdraws or cancels, and the product unwinds cleanly |
-| Type | `functional` | a behaviour the requirement states; the default |
-| | `acceptance` | traces to the proposal's acceptance signal; only with a proposal |
-| | `usability` | what renders and how it responds to a person |
-| | `security` | permission, ownership or disclosure |
-| | `performance` | a timing or volume statement the spec makes |
-| | `compatibility` | browsers, devices or locales the spec names |
-| | `integration` | the seam with another service the spec names |
-| | `exploratory` | added by a reviewer by hand; never generated |
-| Suites | `smoke` | its failure makes the journey unusable; at most one per journey |
-| | `regression` | re-run on every change to the capability or domain |
-| | `exploratory` | a time-boxed roam a reviewer added; never generated; carries a `Type` too |
-| | `release` | the pass before a release |
-| | `none` | belongs to no named run |
+| Type | `functional` | correctness of behaviour, business rules and results; the default |
+| | `usability` | whether a person can understand and operate the product effectively |
+| | `security` | identity, permission, ownership and data protection |
+| | `performance` | a timing or capacity requirement the spec states |
+| | `compatibility` | correct behaviour across the browsers, devices or locales the spec names |
+| Suites | `acceptance` | the fixed business-validation baseline for the most important user flows, such as landing, sign-in and payment |
+| | `smoke` | a small set checking that a build's key functions work well enough to proceed with planned testing |
+| | `regression` | protects existing behaviour against adverse effects of changes; manually triggered and selected by impact |
+| | `health-check` | checks availability of the environment, services and required dependencies; not business-rule correctness |
+| | `prod` | confirmed read-only cases suitable for production; may accompany any other suite |
+| | `none` | belongs to no named set; appears alone |
 | Layer | `e2e` | through the interface the actor uses |
 | | `api` | against the contract beneath — a response or a stored fact |
 | | `unit` | a pure rule with no I/O |
@@ -401,16 +398,44 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 | | `automation, manual` | both |
 | Trace | `<app>.<domain>-<capability>.US<n>` | the journey, canonical form; composed levels list every journey walked, comma-separated, in the order reached |
 
-- **Severity** — a refusal that protects money or permission is `critical` even when nothing happens
-- **Priority** — the schedule, where severity is the failure: a `trivial` bug on the first screen can be `high`
+- **Severity** — the expected impact if the verified behaviour fails, not an execution result. Order: blocker, critical, major, minor, trivial; take the higher when both apply. A flow means a main user journey, not every supporting action. A refusal protecting money or permission is critical even when the correct result changes nothing. This project scale does not decide release approval
+- **Priority** — execution order, not defect-fix urgency or release approval. UI, copy and code logic are hints, never fixed grades: an incorrect displayed amount or misleading destructive confirmation is classified by product risk. There is no urgent value
 - **Status** — generation writes `draft`; only `/tcs-review`, with a human's yes, writes `actual`
 - **Behaviour at a limit** — the accepted edge is `positive`, the refused one `negative`
 - **A broken input is `negative`** — an empty payload, a blocked asset, a `500`, a dropped connection, even when the product carries on
-- **Type is exactly one** — the kind of verification; which runs it joins is `Suites`, zero or more comma-separated, written `**Suites:** none` rather than omitted
+- **Type is exactly one** — the primary quality being verified, not a release gate or test entry point. A correct amount sent to another service is functional; its response-time limit is performance; disclosure of another person's data is security. Crossing a service boundary does not make integration a Type
+- **Suites classify selection** — zero or more comma-separated sets, written `**Suites:** none` when empty. They imply neither execution nor a pass or release verdict. Acceptance is this project's narrow core-flow baseline, not every business acceptance condition or every branch of a core feature. Membership stays stable across concurrent versions. Smoke has no one-case-per-journey limit. Regression has no every-PR, fixed-version-count or automatic schedule requirement
+- **Production is read-only** — prod is based on actual business side effects, not whether a step clicks Save. Missing prod means suitability is unconfirmed; do not infer it from priority, severity or health-check. Health-check may run in any environment, after deployment or at another time
+- **No exploratory set** — exploratory is neither a Type nor a Suite. Removing the old tag does not remove the case or automatically make it regression. No core, full or confirmation tag is added; bug-fix confirmation selects the original failure cases for that fix
+- **Selection reference** — the agreed AND/OR semantics and example are under **Filter Reference** below. This reference does not claim implementation or change execution scope.
+- **Classification edits** — content review may rewrite Type, Suites, Severity and Priority from the case's purpose and assertions. Classification-only edits preserve id, rev, review status and automation evidence; they do not approve a case or claim automation. Content changes trigger reclassification, but only a change to verified behaviour triggers the revision and automation rules under **A Case That Already Exists Is Not Written Twice**
+- **Classification migration** — r6 removes Severity normal, Type acceptance and integration, and Suites release and exploratory. Re-read each case; never mechanically rename release to acceptance, transfer Type acceptance to Suites, or fill none with regression. Keep deprecated history. Until reviewed, the validator reports these former values as migration warnings rather than silently converting them; deprecated history remains readable. Drafts stamped r6 or later reject former values. New and reclassified cases use the current values
 - **Trace identity** — every active and durable case carries the stable `trace:case` marker required by [Test Traceability](test-traceability.md), including cases without an automated acceptance link. Its `rev` is the case version. Keep the id across revisions; allocate a new one only for a genuinely new case, through the trace CLI. The marker's `covers` list is optional post-hoc QA2 evidence and may name multiple scenarios; it never replaces the case's required anchor in `**Trace:**`. Resolve unclear legacy coverage with the suite owner; do not guess
 - **Automation status** — generation writes `manual`; engineering flips it when the test lands, with `pnpm run tcs:automated <case…> --decided-by <path>` in this store, editing the line in place, and the flag writing the Decided-by line in the same edit, so the flip rides the commit that landed the test; `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case follows **A Case That Already Exists Is Not Written Twice** when modified, merged or retired; routine restyling still leaves it unchanged. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox. Selected app-test links use [Test Traceability](test-traceability.md)
 - **Trace** — one journey per feature case; a case that would trace two is two cases or a journey not yet written, and a case with no trace does not belong in the file. Every id is defined by a `user-journeys.md` in scope; `<requirement> / <journey title>` only where a spec has no ids
 - **Scenario coverage is post-hoc** — generation does not inspect scenario text or require `covers`; QA2 links scenarios after the independent readings. The validator reports anchor coverage as an error when absent, and scenario-link coverage as pending or a finding according to suite lifecycle; it never derives a link by title or text similarity
+
+### Filter Reference
+
+This is the reference for filter behaviour, not a claim that the command or Sheet implements it. Filter implementation and validation are separate work.
+
+| Selection | Combines With | Meaning |
+| --- | --- | --- |
+| Different fields | AND | A case meets every selected field condition |
+| Multiple Suites | AND | A case carries every selected suite tag |
+| Multiple Severity values | OR | A case has any selected severity |
+
+```text
+Domain = auction
+AND Suites contains acceptance
+AND Type = functional
+AND Severity IN (blocker, critical)
+```
+
+- **Result** — functional cases in the auction domain and acceptance set whose severity is blocker or critical
+- **More suite tags** — adding prod also requires production suitability; it can only retain or reduce the result set
+- **Sheet visibility** — filtering changes which cases are shown, not whether a case is excluded from the run, executed or passed
+- **Other multi-select fields** — this reference does not settle their semantics
 
 ## The File Header
 
@@ -452,12 +477,12 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 
 **Classification:**
 
-* **Severity:** blocker | critical | major | normal | minor | trivial
+* **Severity:** blocker | critical | major | minor | trivial
 * **Priority:** high | medium | low
 * **Status:** draft
 * **Behaviour:** positive | negative | destructive
-* **Type:** functional | acceptance | usability | security | performance | compatibility | integration
-* **Suites:** smoke | regression | release | exploratory | none
+* **Type:** functional | usability | security | performance | compatibility
+* **Suites:** acceptance | smoke | regression | health-check | prod | none
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
@@ -492,7 +517,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 ## <app>.<domain>-<capability>.US<n+1>: <the next journey>
 ````
 
-- **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
+- **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
 - **Decided by** — ``**Decided by:** `<path>`[, `<path>`]*``, the first line after the classification block and before `**Pre-conditions:**`, one or more repository-relative paths, comma-separated. It names what decides the case: a store unit or script test, or the end-to-end walk that drives it. One rule — an automated case of an in-flight change names what decides it, in its place, once; nothing else may — which `pnpm run tcs:validate` reads as three verdicts: no line is refused, a line anywhere but there or a second line is refused, and a line on a case that is not `automated` is a warning. A path to a store test resolves inside the store, to a file that exists; a test or a walk in the application repository is named by its tag, `grade10:<path>`, which the store checks for form and resolves only when `--app-root` or the clone it is a submodule of holds the application repository, and which that repository's own `check:decided-by` holds to a file on every push. A durable suite under `openspec/specs/` owes no line yet; the fold carries across every line the change wrote. Archive compares only accepted claim targets, so a suite target that changed needs a compatibility acknowledgement
 - **No execution record** — no actual result, no pass/fail column; a run lives in the run sheet against a snapshot of the case
 - **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, approved under r3; its `g10.auction-auction.US2-TC1` is a case at the right size. A case pasted here would drift; an approved case is validator-held
