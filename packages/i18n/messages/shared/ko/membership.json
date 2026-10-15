@@ -68,7 +68,8 @@
     "validFor": "교환 후 {days}일간 유효",
     "minimumSpend": "{amount} 이상 구매 시",
     "onlyOnline": "온라인 스토어 전용",
-    "onlyInStore": "매장 전용"
+    "onlyInStore": "매장 전용",
+    "redeemFailed": "리워드를 교환하지 못했습니다. 다시 시도해 주세요."
   },
   "quantityRefusal": {
     "wholeUnits": "{name}은(는) 낱개 단위로만 교환할 수 있습니다.",
