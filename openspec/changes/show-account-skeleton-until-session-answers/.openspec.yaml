@@ -8,4 +8,8 @@ hands:
   pm: "@seankcw"
   tech: "@seankcw"
 reviewed:
-  tasks: 467cabd8
+  tasks: 109cd0a8
+  tech-design: "86264744"
+  specs: "03816045"
+landed_by:
+  decisions: seankcw
