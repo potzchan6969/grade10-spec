@@ -81,10 +81,10 @@
 
 ## 11. Archive Gate (grade10-spec) (owner: @htonyl)
 
-- [ ] 11.1 Acceptance order: this change is accepted without waiting for its dependencies to archive, and `close-overdue-address-confirmation` after this one; `add-winner-partial-payment` and `add-winner-order-tax-line` carry the edits the two would otherwise share (`decisions.md` Q41)
-- [ ] 11.2 Archive gate: what still waits on a dependency's archive
+- [x] 11.1 Acceptance order: this change is accepted without waiting for its dependencies to archive, and `close-overdue-address-confirmation` after this one; `add-winner-partial-payment` and `add-winner-order-tax-line` carry the edits the two would otherwise share (`decisions.md` Q41)
+- [x] 11.2 Archive gate: what still waits on a dependency's archive
   - after `clarify-auction-shipping-progress-copy` archives, optionally carry post-sale SC-100 and order-status SC-47 so their bodies read Preparing Shipment
   - after `refine-auction-order-cancellation` archives, confirm the pointers to its requirements by name only; no body changes
   - at archive, hand-merge payment-settings `## Purpose` into the durable spec (its Feature set and the notifications-order shipped leaf are already written by the fold): the Purpose reads that a payment-processing operator manages the minimum buyer premium and the Stripe card fee rule, and the Feature set gains `auction:payment` for read and write and the card rule, with card offered at setup only in a currency that has one; and hand-merge the notifications-order Feature set leaf for the shipped letter with no tracker link
   `pnpm check:manual`
-- [ ] 11.3 Consistency check against `winner-order-tracking-link`, which carries the winner-side rule: its "Winner Order makes the tracking number the carrier link" (`SC-251`, `SC-276`) and this change's Dispatch paragraph and `SC-237`, `SC-238` in post-sale "Dispatch and delivery are recorded on the order" must agree that the link is the operator's tracker link and that a tracking number with none reads as plain text with no carrier name and no Track shipment control; confirm before accepting, with no wait on its archive
+- [x] 11.3 Consistency check against `winner-order-tracking-link`, which carries the winner-side rule: its "Winner Order makes the tracking number the carrier link" (`SC-251`, `SC-276`) and this change's Dispatch paragraph and `SC-237`, `SC-238` in post-sale "Dispatch and delivery are recorded on the order" must agree that the link is the operator's tracker link and that a tracking number with none reads as plain text with no carrier name and no Track shipment control; confirm before accepting, with no wait on its archive
