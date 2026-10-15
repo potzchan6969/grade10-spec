@@ -80,7 +80,6 @@ const COPY: ListingAuctionBidCardCopy = {
   bidUpTo: "Bid up to {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
-  amountAboveStarting: "{amount} vs starting",
   amountAboveMaximum: "{amount} vs max",
   linkACardToBid: "Link a card to bid",
   maximumAtCeiling: "This is the highest maximum this auction accepts.",

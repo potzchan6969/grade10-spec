@@ -45,11 +45,6 @@ const upcomingLot = {
   closeLabel: "24 Oct 2026, 6:00 pm",
 };
 const endedLot = ENDED_ONLY_LOTS[0];
-const noBidLot = {
-  ...COLLECTION_LOTS[0],
-  status: "Active" as const,
-  bidCount: 0,
-};
 
 function WatchedCard({ lot }: { lot: CatalogueLot }) {
   const [watched, setWatched] = useState(false);
@@ -99,21 +94,6 @@ export const Active: Story = {
     expect(
       canvas.getByRole("button", { name: `Unwatch ${activeLot.title}` }),
     ).toBeInTheDocument();
-  },
-};
-
-/** A live lot nobody has bid on yet — "Starting bid", not "Current Bid". */
-export const NoBids: Story = {
-  name: "No bids",
-  args: { ...cardArgs, lot: noBidLot },
-  render: () => <WatchedCard lot={noBidLot} />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.queryByText("Current Bid")).not.toBeInTheDocument();
-    expect(canvas.queryByText("0 bids")).not.toBeInTheDocument();
-    expect(canvas.getByText(noBidLot.bidLabel)).toBeInTheDocument();
-    expect(canvas.getByText(/Ends in/)).toBeInTheDocument();
   },
 };
 

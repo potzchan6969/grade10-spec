@@ -76,8 +76,6 @@ type ListingQuickMaximumBidActionsCopy = {
   nextEligibleBid: string;
   /** e.g. "{amount} vs current" — money delta above the current bid. */
   amountAboveCurrent: string;
-  /** e.g. "{amount} vs starting" — money delta above the starting bid on a lot nobody has bid on yet. */
-  amountAboveStarting: string;
   /** e.g. "{amount} vs max" — money delta above the viewer's private maximum. */
   amountAboveMaximum: string;
   /** Primary action when amount entry is locked until a card is linked. */
@@ -197,9 +195,7 @@ function ListingQuickMaximumBidActions({
       `${formatLotMoneyPrefix(view.currency, { locale })}${formatMoneyNumeric(deltaMinor, view.currency, locale)}`;
     const raiseDeltaTemplate = isLeadingWithMaximum
       ? copy.amountAboveMaximum
-      : view.hasBids
-        ? copy.amountAboveCurrent
-        : copy.amountAboveStarting;
+      : copy.amountAboveCurrent;
     const ceilingCaption = (amountMinor: number) =>
       amountMinor >= view.ceilingMinor ? copy.ceilingChip : null;
 
@@ -274,7 +270,6 @@ function ListingQuickMaximumBidActions({
     return uniquePresetsByAmount(fallback);
   }, [
     copy.amountAboveCurrent,
-    copy.amountAboveStarting,
     copy.amountAboveMaximum,
     copy.ceilingChip,
     copy.nextEligibleBid,

@@ -186,7 +186,6 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   bidUpTo: "Maximum {amount}",
   nextEligibleBid: "Min. bid",
   amountAboveCurrent: "{amount} vs current",
-  amountAboveStarting: "{amount} vs starting",
   amountAboveMaximum: "{amount} vs max",
   maximumAtCeiling: "This is the highest maximum this auction accepts.",
   biddingAtCeiling:
