@@ -444,7 +444,7 @@ function LotCard({
         {lot.imageSrc ? (
           <img
             alt=""
-            className="absolute inset-0 size-full object-contain p-0.5"
+            className="absolute inset-0 size-full object-cover"
             src={lot.imageSrc}
           />
         ) : null}
