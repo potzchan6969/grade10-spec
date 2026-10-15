@@ -853,23 +853,6 @@ function WinnerOrderPageState({
           summary={{
             lines: summaryLines,
             total: total ?? null,
-            currencyToggle:
-              content.settlementCurrency === "HKD"
-                ? {
-                    primary: "HKD",
-                    secondary: "USD",
-                    ariaLabel: "Amount currency",
-                  }
-                : undefined,
-            convertedTotal: content.convertedTotal
-              ? { label: "Order Total", value: content.convertedTotal }
-              : undefined,
-            convertedFee: content.convertedFee
-              ? {
-                  label: "Payment Processing Fee",
-                  value: content.convertedFee,
-                }
-              : undefined,
             invoicePdf: hasIssuedInvoice(content)
               ? { onOpen: openPlaceholderInvoicePdf }
               : undefined,

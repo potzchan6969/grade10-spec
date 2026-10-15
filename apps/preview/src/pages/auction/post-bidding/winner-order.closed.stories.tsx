@@ -127,7 +127,7 @@ export const Refunded: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,814.00",
+      "Order TotalHK$128,814.00Converted from US$16,340.00 at 1 USD = 7.85 HKD",
     ]);
     expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
     expect(canvas.getByText("Refund HK$128,814")).toBeVisible();

@@ -85,7 +85,7 @@ export const ProcessingOverpaid: Story = {
       ),
     ].map((row) => row.textContent?.replace(/\s+/g, " ").trim() ?? "");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,814.00",
+      "Order TotalHK$128,814.00Converted from US$16,340.00 at 1 USD = 7.85 HKD",
     ]);
     expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
@@ -155,7 +155,7 @@ export const ProcessingBankTransfer: Story = {
     expect(summaryRows).toContain("Payment Processing FeeFree");
     expect(summaryRows).toContain("TaxHK$2,512.00");
     expect(summaryRows.filter((row) => row.startsWith("Order Total"))).toEqual([
-      "Order TotalHK$128,269.00",
+      "Order TotalHK$128,269.00Converted from US$16,340.00 at 1 USD = 7.85 HKD",
     ]);
     expect(summaryRows).not.toContain("Payment Processing FeeHK$545.00");
     expect(summaryRows).not.toContain("Payment Processing FeeUS$120.00");
