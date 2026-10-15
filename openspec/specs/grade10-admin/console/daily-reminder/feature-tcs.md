@@ -1707,9 +1707,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -1746,9 +1748,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -1785,9 +1789,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -1822,9 +1828,11 @@ Runs once per row of **Test data**.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -2350,9 +2358,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -3095,9 +3105,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -3300,9 +3312,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
@@ -3383,9 +3397,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
@@ -3422,9 +3438,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
@@ -3509,9 +3527,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
@@ -3551,9 +3571,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
@@ -3592,9 +3614,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
@@ -3631,9 +3655,11 @@ Runs once per row of **Test data**.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/lifecycle-alerts.spec.ts`
 
 **Pre-conditions:**
 
