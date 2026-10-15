@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { printCommits, printKey } from "./printed-run-message.mjs";
 import { COLUMNS, RECORDED_ENVIRONMENTS } from "./run-sheet-layout.mjs";
 import {
   buildGrid,
@@ -17,10 +18,10 @@ export const FORMAT_VERSION = 2;
 export const digest = (value) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
 
-export function recordPath(spreadsheetId, runId) {
+export function validateRunIdentity(spreadsheetId, runId) {
   if (!/^[\w-]+$/.test(spreadsheetId) || !/^[1-9]\d*$/.test(String(runId)))
     throw new Error("Invalid spreadsheet id or run id");
-  return `docs/test-runs/${spreadsheetId}/run-${runId}.json`;
+  return true;
 }
 
 export function normalizeExclusions(excluded, picked) {
@@ -123,9 +124,9 @@ export function validateRecord(record) {
   for (const key of Object.keys(record))
     if (!fields.has(key))
       throw new Error(
-        `Unexpected run record field: ${key}; manifests carry no execution results`,
+        `Unexpected run record field: ${key}; receipts carry no execution results`,
       );
-  recordPath(record.spreadsheetId, record.runId);
+  validateRunIdentity(record.spreadsheetId, record.runId);
   if (
     record.sandbox ||
     !Number.isInteger(record.runId) ||
@@ -281,10 +282,12 @@ export function refreshMain(root) {
 }
 
 export function mergedRecord(root, spreadsheetId, runId, ref = "origin/main") {
-  const path = recordPath(spreadsheetId, runId);
-  const exists = git(root, ["ls-tree", "--name-only", ref, "--", path]);
-  if (!exists) return null;
-  return validateRecord(JSON.parse(git(root, ["show", `${ref}:${path}`])));
+  validateRunIdentity(spreadsheetId, runId);
+  return (
+    printCommits(root, ref).find(
+      (one) => printKey(one.run) === `${spreadsheetId}:${runId}`,
+    )?.run ?? null
+  );
 }
 
 /** Read accepted suites from a Git snapshot, never from uncommitted files. */
@@ -336,18 +339,27 @@ export function invalidatePublishedRun(
     },
   } = {},
 ) {
-  const ref = git(root, [
-    "ls-remote",
-    "--heads",
-    "origin",
-    recordBranch(record),
+  const refs = git(root, [
+    "for-each-ref",
+    "--format=%(refname) %(objectname)",
+    "refs/remotes/origin",
   ]);
-  if (!ref) return false;
-  const sha = ref.split(/\s+/)[0];
-  if (!/^[0-9a-f]{40}$/.test(sha))
-    throw new Error("Published run branch has no valid commit");
-  postStatus(sha);
-  return true;
+  const seen = new Set();
+  for (const line of refs.split("\n").filter(Boolean)) {
+    const [ref, sha] = line.split(" ");
+    if (ref.endsWith("/main") || ref.endsWith("/HEAD") || seen.has(sha))
+      continue;
+    if (
+      printCommits(root, `origin/main..${ref}`).some(
+        (one) =>
+          printKey(one.run) === `${record.spreadsheetId}:${record.runId}`,
+      )
+    ) {
+      postStatus(sha);
+      seen.add(sha);
+    }
+  }
+  return seen.size > 0;
 }
 
 export function cellRows(rows, { formulaColumns = [] } = {}) {

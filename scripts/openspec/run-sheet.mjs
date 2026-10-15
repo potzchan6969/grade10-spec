@@ -7,7 +7,7 @@
  *   pnpm run tcs:run-sheet -- --cases-file /tmp/pick.txt --name auction-signin
  *
  * Trial runs can be reprinted after confirmation. Finalized runs are pinned
- * snapshots; merged run manifests permanently prohibit overwriting them.
+ * snapshots; merged print commits permanently prohibit overwriting them.
  *
  * Nothing reads a marked tab back into the store. A run's results live in the
  * sheet, and the Summary tab counts them with live formulas.
@@ -117,7 +117,7 @@ Flags:
   --copy-run <id>     Use a merged run's ids for a new run against latest TCs
   --confirmed <hash>  Fingerprint a human confirmed (required to print/finalize)
   --exclusions-file <path> JSON array of {id, reason} for intentional exclusions
-  --record-output <path> Write the run manifest here (CI uploads an artifact)
+  --record-output <path> Write the temporary run receipt here (CI uploads an artifact)
   --sha <sha>         Source revision for dry-run; production writes use latest main
   --source-ref <ref>  Sandbox-only source revision for preview and printing
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID (or sandbox)
@@ -848,7 +848,7 @@ if (args.dryRun && (args.finalize || args.reopen))
     "--finalize and --reopen need the live run registry; use --dry-run for selections",
   );
 if (args.sandbox && (args.finalize || args.reopen || args.copyRun))
-  die("Run finalization and copy manifests are production-sheet operations");
+  die("Run finalization and copy receipts are production-sheet operations");
 if (!args.name && !args.finalize && !args.reopen) die("--name is required");
 if (args.sourceRef && !args.sandbox)
   die("--source-ref is only for sandbox runs");
@@ -1053,11 +1053,14 @@ try {
   if (args.copyRun) {
     args.sheet = resolveSpreadsheet(args);
     const source = mergedRecord(ROOT, args.sheet, args.copyRun);
-    if (!source) die(`No merged manifest for run ${args.copyRun}`);
-    args.cases = source.snapshot.selected.map((one) => one.id);
-    args.includeDraft = source.snapshot.options.includeDraft;
-    args.includeAutomated = source.snapshot.options.includeAutomated;
-    copiedFrom = { spreadsheetId: source.spreadsheetId, runId: source.runId };
+    if (!source) die(`No merged print commit for run ${args.copyRun}`);
+    args.cases = source.cases.map((one) => one.id);
+    args.includeDraft = true;
+    args.includeAutomated = true;
+    copiedFrom = {
+      spreadsheetId: source.spreadsheetId,
+      runId: Number(args.copyRun),
+    };
   }
   if (args.finalize) {
     Object.assign(args, {
