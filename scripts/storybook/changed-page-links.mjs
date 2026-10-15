@@ -606,6 +606,29 @@ async function deletedStoryStates(base, changed) {
   ).then((states) => states.flat());
 }
 
+function candidateIds(affectedPages, index) {
+  const pages = new Set(affectedPages.flatMap(storyImportPaths));
+  const stories = Object.values(index.entries ?? {}).filter(
+    (entry) => entry.type === "story",
+  );
+  return {
+    candidates: stories
+      .filter((entry) => pages.has(entry.importPath))
+      .map((entry) => entry.id),
+    storyIds: stories.map((entry) => entry.id),
+  };
+}
+
+async function readBaseline(path) {
+  if (!path) return null;
+  try {
+    return JSON.parse(await readFile(path, "utf8"));
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+}
+
 // Renders the candidate stories and compares them with the baseline of the
 // last deployed main. Returns null (list every candidate, as before) when no
 // baseline exists yet; writes the refreshed baseline to `snapshotOut`.
@@ -617,22 +640,10 @@ async function renderedChanges({
 }) {
   if (!snapshotOut) return null;
   const { snapshotStories } = await import("./render-snapshots.mjs");
-  let baseline = null;
-  if (baselinePath) {
-    try {
-      baseline = JSON.parse(await readFile(baselinePath, "utf8"));
-    } catch (error) {
-      if (error.code !== "ENOENT") throw error;
-    }
-  }
-
-  const pages = new Set(affectedPages.flatMap(storyImportPaths));
-  const storyIds = Object.values(index.entries ?? {})
-    .filter((entry) => entry.type === "story")
-    .map((entry) => entry.id);
-  const candidates = Object.values(index.entries ?? {})
-    .filter((entry) => entry.type === "story" && pages.has(entry.importPath))
-    .map((entry) => entry.id);
+  const baseline = await readBaseline(baselinePath);
+  const { candidates, storyIds } = candidateIds(affectedPages, index);
+  // A baseline plus no reached story means nothing can differ: no browser.
+  if (baseline && !candidates.length) return new Map();
   // No baseline: render everything so the next run has one to compare with.
   const current = await snapshotStories({
     ids: baseline ? candidates : storyIds,
@@ -663,6 +674,7 @@ async function main() {
       "github-output": { type: "string" },
       baseline: { type: "string" },
       "snapshot-out": { type: "string" },
+      plan: { type: "boolean" },
     },
   });
   const changed = await changedFiles(values.base, values.head);
@@ -675,6 +687,20 @@ async function main() {
       "utf8",
     ),
   );
+  if (values.plan) {
+    // Tells the workflow whether the browser and baseline are needed at all.
+    const { candidates } = candidateIds(affectedPages, index);
+    const baseline = await readBaseline(values.baseline);
+    const needed = !baseline || candidates.length > 0;
+    if (values["github-output"]) {
+      await appendFile(
+        values["github-output"],
+        `render-needed=${needed}\n`,
+      );
+    }
+    process.stdout.write(`render-needed=${needed}\n`);
+    return;
+  }
   const { stdout: commitSha } = await exec("git", ["rev-parse", values.head], {
     cwd: rootDirectory,
   });

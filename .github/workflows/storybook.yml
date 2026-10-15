@@ -93,9 +93,6 @@ jobs:
             core.setOutput("title", pullRequest.title);
             core.setOutput("url", pullRequest.html_url);
 
-      - name: Install Playwright browser
-        run: pnpm run setup:browsers
-
       # The baseline holds each story's render hashes from the last main run.
       # restore-keys picks the newest one; a miss falls back to listing every
       # reached story and seeds the next run.
@@ -105,6 +102,28 @@ jobs:
           path: render-baseline.json
           key: storybook-render-${{ github.sha }}
           restore-keys: storybook-render-
+
+      # Cheap graph pass: the browser is installed and used only when a story
+      # is reached or no baseline exists yet.
+      - name: Plan render
+        id: plan
+        run: |
+          node scripts/storybook/changed-page-links.mjs --plan \
+            --base "${{ github.event.before }}" \
+            --head "${{ github.sha }}" \
+            --baseline render-baseline.json \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browser
+        if: steps.plan.outputs.render-needed == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browser
+        if: steps.plan.outputs.render-needed == 'true'
+        run: pnpm run setup:browsers
 
       - name: Find changed stories
         id: changed-pages
