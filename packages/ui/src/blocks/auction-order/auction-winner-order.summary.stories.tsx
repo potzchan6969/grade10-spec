@@ -1,5 +1,6 @@
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
 import {
   COPY,
@@ -417,5 +418,62 @@ export const HkdPreInvoice: Story = {
     expect(
       within(canvasElement).getByText("Winning bid: US$101.00"),
     ).toBeInTheDocument();
+  },
+};
+
+/** The invoice link spins while its PDF opens, and stays focusable. */
+export const InvoicePdfLoading: Story = {
+  args: {
+    summary: {
+      lines: USD_LINES,
+      total: { label: "Order Total", value: "US$131.21" },
+      invoicePdf: { onOpen: fn(), pending: true },
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const link = within(canvasElement).getByRole("link", {
+      name: "Invoice PDF",
+    });
+    expect(link).toHaveAttribute("aria-busy", "true");
+    expect(link.querySelector(".animate-spin")).toBeInTheDocument();
+    link.focus();
+    expect(link).toHaveFocus();
+    await userEvent.click(link);
+    expect(args.summary.invoicePdf?.onOpen).not.toHaveBeenCalled();
+  },
+};
+
+export const InvoicePdfRefused: Story = {
+  args: {
+    summary: {
+      lines: USD_LINES,
+      total: { label: "Order Total", value: "US$131.21" },
+      invoicePdf: {
+        onOpen: fn(),
+        failed: "We couldn’t open the invoice. Try again.",
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <>
+        <Toast position="bottom-right" />
+        <Story />
+      </>
+    ),
+  ],
+  play: async ({ args, canvasElement }) => {
+    await settled(canvasElement);
+    const canvas = within(canvasElement);
+    await waitFor(() =>
+      expect(
+        within(document.body).getByText(
+          "We couldn’t open the invoice. Try again.",
+        ),
+      ).toBeInTheDocument(),
+    );
+    await userEvent.click(canvas.getByRole("link", { name: "Invoice PDF" }));
+    expect(args.summary.invoicePdf?.onOpen).toHaveBeenCalledTimes(1);
   },
 };

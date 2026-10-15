@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { toast } from "@grade10/design-system/components/overlays/toast";
 import {
   Tooltip,
   TooltipContent,
@@ -30,13 +31,14 @@ import {
   ArrowCounterClockwise,
   ArrowUpRight,
   Bank,
-  CaretDown,
+  CircleNotch,
   FilePdf,
   Hourglass,
   Info,
 } from "@phosphor-icons/react";
 import {
   type ReactNode,
+  useEffect,
   useId,
   useLayoutEffect,
   useRef,
@@ -191,6 +193,19 @@ function SummaryRow({
   );
 }
 
+function useFailedToast(failed?: string) {
+  const lastToastedRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!failed) {
+      lastToastedRef.current = null;
+      return;
+    }
+    if (lastToastedRef.current === failed) return;
+    lastToastedRef.current = failed;
+    toast.error(failed);
+  }, [failed]);
+}
+
 function PdfLink({
   label,
   ariaLabel,
@@ -203,11 +218,12 @@ function PdfLink({
   className?: string;
 }) {
   const { href, onOpen, pending, failed } = pdf;
-  const link = (
+  useFailedToast(failed);
+  return (
     <Link
-      aria-busy={pending || undefined}
+      aria-busy={pending ? true : undefined}
       aria-label={ariaLabel}
-      className={failed ? undefined : className}
+      className={className}
       href={href ?? "#view-pdf"}
       onClick={
         onOpen
@@ -220,16 +236,15 @@ function PdfLink({
       size="sm"
       variant="secondary"
     >
-      <FilePdf aria-hidden size={14} weight="regular" />
+      {pending ? (
+        <span aria-hidden className="inline-flex animate-spin">
+          <CircleNotch size={14} weight="bold" />
+        </span>
+      ) : (
+        <FilePdf aria-hidden size={14} weight="regular" />
+      )}
       {label}
     </Link>
-  );
-  if (!failed) return link;
-  return (
-    <VStack className={className} gap="xs" hAlign="end">
-      {link}
-      <ActionFailed message={failed} />
-    </VStack>
   );
 }
 
@@ -867,6 +882,7 @@ function AddressBlock({
 }: {
   delivery: NonNullable<AuctionWinnerOrderProps["delivery"]>;
 }) {
+  useFailedToast(delivery.confirm?.failed);
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
       {delivery.value ? (
@@ -888,7 +904,6 @@ function AddressBlock({
           >
             {delivery.confirm.label}
           </Button>
-          <ActionFailed message={delivery.confirm.failed} />
           {delivery.confirm.deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {delivery.confirm.deadline}

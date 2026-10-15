@@ -1,7 +1,15 @@
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { useState } from "react";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { AuctionWinnerOrder } from "./auction-winner-order";
-import { BASE_ARGS, SETUP_CONFIRM, STEPS, settled } from "./auction-winner-order.story-fixtures";
+import {
+  BASE_ARGS,
+  SETUP_CONFIRM,
+  STEPS,
+  settled,
+} from "./auction-winner-order.story-fixtures";
+import type { AuctionWinnerOrderProps } from "./types";
 
 const meta = {
   title: "Auction/Post Bidding/Blocks/AuctionWinnerOrder/Setup",
@@ -102,27 +110,61 @@ export const SetupConfirmPending: Story = {
   },
 };
 
-/** A refused confirm says why under the button, which presses again. */
+const SETUP_CONFIRM_FAILED = "We couldn’t start order setup. Try again.";
+
+function RefusedSetupConfirm({ delivery, ...args }: AuctionWinnerOrderProps) {
+  const [failed, setFailed] = useState<string>();
+  return (
+    <AuctionWinnerOrder
+      {...args}
+      delivery={
+        delivery && {
+          ...delivery,
+          confirm: delivery.confirm && {
+            ...delivery.confirm,
+            failed,
+            onPress: () => {
+              delivery.confirm?.onPress();
+              setFailed(SETUP_CONFIRM_FAILED);
+            },
+          },
+        }
+      }
+    />
+  );
+}
+
+/** A refused press toasts the reason; the button stays ready for another press. */
 export const SetupConfirmRefused: Story = {
   args: {
     ...AwaitingSetup.args,
     delivery: {
       label: "Delivery address",
-      confirm: {
-        ...SETUP_CONFIRM,
-        failed: "We couldn't start your order setup. Try again.",
-      },
+      confirm: { ...SETUP_CONFIRM },
     },
   },
+  decorators: [
+    (Story) => (
+      <>
+        <Toast position="bottom-right" />
+        <Story />
+      </>
+    ),
+  ],
+  render: (args) => <RefusedSetupConfirm {...args} />,
   play: async ({ args, canvasElement }) => {
     await settled(canvasElement);
     const sidebar = within(within(canvasElement).getByRole("complementary"));
-    expect(sidebar.getByRole("alert")).toHaveTextContent(
-      "We couldn't start your order setup. Try again.",
-    );
+    expect(sidebar.queryByRole("alert")).toBeNull();
     await userEvent.click(
       sidebar.getByRole("button", { name: "Complete Order Setup" }),
     );
     expect(args.delivery?.confirm?.onPress).toHaveBeenCalledTimes(1);
+    await waitFor(() =>
+      expect(
+        within(document.body).getByText(SETUP_CONFIRM_FAILED),
+      ).toBeInTheDocument(),
+    );
+    expect(sidebar.queryByRole("alert")).toBeNull();
   },
 };

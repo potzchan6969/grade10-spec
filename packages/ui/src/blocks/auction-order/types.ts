@@ -40,7 +40,11 @@ type AuctionWinnerOrderAlert = {
   action?: AuctionWinnerOrderAction;
 };
 
-/** A PDF the winner opens: a URL to follow, or a press the consumer handles. */
+/**
+ * A PDF the winner opens: a URL to follow, or a press the consumer handles.
+ * `pending` draws the link busy — spinner for the PDF icon, presses swallowed;
+ * `failed` toasts once per value.
+ */
 type AuctionWinnerOrderPdf = {
   href?: string;
   onOpen?: () => void;
@@ -133,6 +137,7 @@ type AuctionWinnerOrderProps = {
     label: string;
     value?: string;
     alert?: AuctionWinnerOrderAlert;
+    /** `failed` toasts once per value, like the PDF links. */
     confirm?: AuctionWinnerOrderAction & { deadline?: string };
   };
   billing?: { label: string; value: string };
