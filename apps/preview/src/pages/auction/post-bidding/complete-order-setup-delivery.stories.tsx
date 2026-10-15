@@ -6,7 +6,7 @@ import { WINNER_ORDER_FULL_SAVED_ADDRESSES } from "./winner-order-setup-dialog";
 
 const meta = {
   title:
-    "Auction/Post Bidding/Screens/Winner Order/Setup/Complete Order Setup/Delivery Address",
+    "Auction/Post Bidding/Parts/CompleteOrderSetupDemo/Delivery Address",
   component: CompleteOrderSetupDemo,
   tags: ["autodocs"],
   parameters: {

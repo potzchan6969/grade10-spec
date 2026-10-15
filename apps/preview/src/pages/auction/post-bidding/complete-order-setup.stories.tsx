@@ -3,7 +3,7 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CompleteOrderSetupDemo } from "./complete-order-setup-demo";
 
 const meta = {
-  title: "Auction/Post Bidding/Screens/Winner Order/Setup/Complete Order Setup",
+  title: "Auction/Post Bidding/Parts/CompleteOrderSetupDemo",
   component: CompleteOrderSetupDemo,
   tags: ["autodocs"],
   parameters: {
