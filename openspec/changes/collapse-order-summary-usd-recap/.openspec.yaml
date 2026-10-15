@@ -1,2 +1,11 @@
 schema: grade10-planning
 created: 2026-10-15
+promoted_by: "@tangconst"
+depends_on:
+  - usd-lot-currency-winner-settlement-choice
+hands:
+  design: "@tangconst"
+  dev: "@tangconst"
+ui_waived: "@tangconst waived ui-design on 2026-10-15; the Order Summary
+  stories draw the HKD and USD views as the design reference, as
+  usd-lot-currency-winner-settlement-choice settled its own."
