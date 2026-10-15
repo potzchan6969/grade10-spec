@@ -64,16 +64,26 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("18 Sep 2026")).toBeVisible();
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getAllByText("Order Total")).toHaveLength(2);
-    expect(canvas.getByText("US$16,340.00")).toBeVisible();
-    expect(canvas.getByText("HK$128,269.00")).toBeVisible();
+    expect(canvas.getAllByText("Order Total")).toHaveLength(1);
+    expect(canvas.getByText("HK$128,814.00")).toBeVisible();
+    expect(canvas.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
     expect(canvas.getByText("Tax")).toBeVisible();
-    expect(canvas.getByText("US$320.00")).toBeVisible();
+    expect(canvas.getByText("HK$2,512.00")).toBeVisible();
     expect(canvas.getAllByText("Payment Processing Fee")).toHaveLength(1);
     expect(canvas.getByText("HK$545.00")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
+    const hkdToggle = sidebar.getByRole("button", { name: "HKD" });
+    const usdToggle = sidebar.getByRole("button", { name: "USD" });
+    expect(hkdToggle).toHaveAttribute("aria-pressed", "true");
+    await userEvent.click(usdToggle);
+    expect(usdToggle).toHaveAttribute("aria-pressed", "true");
+    expect(canvas.getByText("US$16,340.00")).toBeVisible();
+    expect(canvas.getByText("US$320.00")).toBeVisible();
+    expect(canvas.getByText("HK$545.00")).toBeVisible();
+    await userEvent.click(hkdToggle);
+    expect(canvas.getByText("HK$128,814.00")).toBeVisible();
     expect(
       sidebar.getByRole("button", { name: "Pay with Card" }),
     ).toBeVisible();
@@ -127,8 +137,8 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
     expect(sidebar.getByText("Tax")).toBeVisible();
-    expect(sidebar.getByText("US$320.00")).toBeVisible();
-    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.getByText("HK$2,512.00")).toBeVisible();
+    expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
 
     await userEvent.click(
@@ -165,7 +175,7 @@ export const PendingPaymentHkdHongKongBankTransfer: Story = {
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
-    expect(sidebar.getByText("US$16,340.00")).toBeVisible();
+    expect(sidebar.queryByText("US$16,340.00")).not.toBeInTheDocument();
     expect(sidebar.getByText("HK$128,269.00")).toBeVisible();
 
     await userEvent.click(

@@ -107,8 +107,8 @@ type AuctionWinnerOrderProps = {
   alerts?: readonly AuctionWinnerOrderAlert[];
   summary: {
     lines: readonly AuctionWinnerOrderLine[];
-    /** Collapses every line's `subtext` behind a toggle reading the labels; without it, a `subtext` renders under its value. */
-    subtextToggle?: { show: string; hide: string };
+    /** Swaps the summary between each row's `value` and its `subtext` behind a two-option control labelled `primary`/`secondary`; without it, a `subtext` renders under its value. */
+    currencyToggle?: { primary: string; secondary: string; ariaLabel?: string };
     total: Omit<AuctionWinnerOrderLine, "tooltip"> | null;
     convertedTotal?: Omit<AuctionWinnerOrderLine, "tooltip">;
     convertedFee?: Omit<AuctionWinnerOrderLine, "tooltip">;

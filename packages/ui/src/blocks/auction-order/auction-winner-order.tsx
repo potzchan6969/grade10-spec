@@ -639,12 +639,14 @@ function OrderSummary({
   summary: AuctionWinnerOrderProps["summary"];
 }) {
   const { pay } = summary;
-  const [subtextsOpen, setSubtextsOpen] = useState(false);
+  const [view, setView] = useState<"primary" | "secondary">("primary");
   const linesId = useId();
-  const subtextToggle =
-    summary.subtextToggle && summary.lines.some((line) => line.subtext)
-      ? summary.subtextToggle
+  const currencyToggle =
+    summary.currencyToggle &&
+    (summary.lines.some((line) => line.subtext) || summary.total?.subtext)
+      ? summary.currencyToggle
       : null;
+  const swapped = view === "secondary";
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <HStack
@@ -652,9 +654,50 @@ function OrderSummary({
         gap="none"
         vAlign="center"
       >
-        <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
-          {copy.orderSummary}
-        </h2>
+        <HStack gap="sm" vAlign="center">
+          <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+            {copy.orderSummary}
+          </h2>
+          {currencyToggle ? (
+            <fieldset
+              className="m-0 inline-flex items-baseline gap-1.5 border-0 p-0 whitespace-nowrap"
+              data-slot="winner-order-currency-toggle"
+            >
+              {currencyToggle.ariaLabel ? (
+                <legend className="sr-only">{currencyToggle.ariaLabel}</legend>
+              ) : null}
+              <Link
+                aria-controls={linesId}
+                aria-pressed={view === "primary"}
+                className={cn(
+                  view === "primary" && "font-medium text-foreground",
+                )}
+                onClick={() => setView("primary")}
+                render={<button type="button" />}
+                size="sm"
+                variant="secondary"
+              >
+                {currencyToggle.primary}
+              </Link>
+              <span aria-hidden className="text-secondary-foreground">
+                |
+              </span>
+              <Link
+                aria-controls={linesId}
+                aria-pressed={view === "secondary"}
+                className={cn(
+                  view === "secondary" && "font-medium text-foreground",
+                )}
+                onClick={() => setView("secondary")}
+                render={<button type="button" />}
+                size="sm"
+                variant="secondary"
+              >
+                {currencyToggle.secondary}
+              </Link>
+            </fieldset>
+          ) : null}
+        </HStack>
         {summary.invoicePdf ? (
           <PdfLink
             ariaLabel={summary.invoicePdf.ariaLabel ?? copy.invoicePdf}
@@ -670,35 +713,11 @@ function OrderSummary({
             key={line.label}
             label={line.label}
             muted={line.muted}
-            subtext={subtextToggle && !subtextsOpen ? undefined : line.subtext}
+            subtext={currencyToggle ? undefined : line.subtext}
             tooltip={line.tooltip}
-            value={line.value}
+            value={swapped && line.subtext ? line.subtext : line.value}
           />
         ))}
-        {subtextToggle ? (
-          <Link
-            aria-controls={linesId}
-            aria-expanded={subtextsOpen}
-            className="self-start"
-            data-slot="winner-order-subtext-toggle"
-            onClick={() => setSubtextsOpen((open) => !open)}
-            render={<button type="button" />}
-            size="sm"
-            trailing={
-              <span
-                className={cn(
-                  "inline-flex transition-transform motion-reduce:transition-none",
-                  subtextsOpen && "rotate-180",
-                )}
-              >
-                <CaretDown aria-hidden size={14} />
-              </span>
-            }
-            variant="secondary"
-          >
-            {subtextsOpen ? subtextToggle.hide : subtextToggle.show}
-          </Link>
-        ) : null}
       </VStack>
       {summary.total || summary.convertedTotal ? (
         <>
@@ -708,11 +727,15 @@ function OrderSummary({
               emphasize
               label={summary.total.label}
               muted={summary.total.muted}
-              subtext={summary.total.subtext}
-              value={summary.total.value}
+              subtext={currencyToggle ? undefined : summary.total.subtext}
+              value={
+                swapped && summary.total.subtext
+                  ? summary.total.subtext
+                  : summary.total.value
+              }
             />
           ) : null}
-          {summary.convertedTotal ? (
+          {summary.convertedTotal && !currencyToggle ? (
             <SummaryRow
               emphasize
               label={summary.convertedTotal.label}
@@ -723,7 +746,7 @@ function OrderSummary({
         </>
       ) : null}
 
-      {summary.convertedFee ? (
+      {summary.convertedFee && !currencyToggle ? (
         <>
           <hr className="w-full border-border" />
           <SummaryRow

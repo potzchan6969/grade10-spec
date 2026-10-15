@@ -31,9 +31,10 @@ export const COPY: AuctionWinnerOrderProps["copy"] = {
   bankDetailsQrAlt: auctionOrders.bankDetails.qrAlt,
 };
 
-export const USD_RECAP = {
-  show: auctionOrders.summary.showUsdAmounts,
-  hide: auctionOrders.summary.hideUsdAmounts,
+export const CURRENCY_TOGGLE = {
+  primary: auctionOrders.setup.currency.hkd,
+  secondary: auctionOrders.setup.currency.usd,
+  ariaLabel: "Amount currency",
 };
 
 export const NON_ENGLISH_COPY = {
@@ -89,12 +90,46 @@ export const STEPS: NonNullable<AuctionWinnerOrderProps["progress"]>["steps"] =
     completed: { label: "Completed" },
   };
 
+export const LINE_TOOLTIPS = {
+  buyersPremium: "Grade10’s fee on the winning bid.",
+  shipping: "Quoted for your confirmed delivery address.",
+  cardFee: "Charged for paying by card. Included in your Order Total.",
+};
+
+/**
+ * HKD-settled invoice lines: each value is the converted HKD amount and its
+ * `subtext` the lot's USD figure, so a summary carrying `currencyToggle` can
+ * swap between the two. The card fee is computed in HKD and carries no USD
+ * counterpart, so it reads HKD in both views (winner-order-SC-290,
+ * winner-order-SC-304).
+ */
 export const INVOICE_LINES = [
-  { label: "Winning Bid", value: "HK$12,800.00" },
-  { label: "Buyer’s Premium", value: "HK$2,560.00" },
-  { label: "Shipping & Handling", value: "HK$180.00" },
-  { label: "Payment Processing Fee", value: "HK$545.00" },
+  { label: "Winning Bid", value: "HK$12,800.00", subtext: "US$12,800.00" },
+  {
+    label: "Buyer’s Premium",
+    value: "HK$2,560.00",
+    subtext: "US$2,560.00",
+    tooltip: LINE_TOOLTIPS.buyersPremium,
+  },
+  {
+    label: "Shipping & Handling",
+    value: "HK$180.00",
+    subtext: "US$180.00",
+    tooltip: LINE_TOOLTIPS.shipping,
+  },
+  {
+    label: "Payment Processing Fee",
+    value: "HK$545.00",
+    tooltip: LINE_TOOLTIPS.cardFee,
+  },
 ];
+
+/** HKD order total for `INVOICE_LINES`, with its USD counterpart. */
+export const INVOICE_TOTAL: AuctionWinnerOrderProps["summary"]["total"] = {
+  label: "Order Total",
+  value: "HK$16,085.00",
+  subtext: "US$15,540.00",
+};
 
 export const DELIVERY = {
   label: "Delivery address",
@@ -120,8 +155,9 @@ export const BASE_ARGS: AuctionWinnerOrderProps = {
     ariaLabel: "1999 Pokémon Base Set Charizard PSA 9 — open lot details",
   },
   summary: {
+    currencyToggle: CURRENCY_TOGGLE,
     lines: INVOICE_LINES,
-    total: { label: "Order Total", value: "HK$16,085.00" },
+    total: INVOICE_TOTAL,
     invoicePdf: { onOpen: fn() },
     pay: {
       label: "Pay with Card",

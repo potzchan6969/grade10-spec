@@ -6,7 +6,9 @@ import {
   BASE_ARGS,
   CONTROLLED_BANK_DETAILS,
   CONTROLLED_PAYMENT_CHOICES,
+  CURRENCY_TOGGLE,
   INVOICE_LINES,
+  INVOICE_TOTAL,
   NON_ENGLISH_COPY,
   settled,
   traditionalChineseAuctionOrders,
@@ -196,6 +198,12 @@ export const PendingPayment: Story = {
       canvas.getByRole("button", { name: "Pay with Card" }),
     );
     expect(args.summary.pay?.onPress).toHaveBeenCalledTimes(1);
+    const hkd = canvas.getByRole("button", { name: "HKD" });
+    expect(hkd).toHaveAttribute("aria-pressed", "true");
+    await userEvent.click(canvas.getByRole("button", { name: "USD" }));
+    expect(canvas.getByText("US$15,540.00")).toBeInTheDocument();
+    await userEvent.click(hkd);
+    expect(canvas.getByText("HK$16,085.00")).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("link", { name: "Invoice PDF" }));
     expect(args.summary.invoicePdf?.onOpen).toHaveBeenCalledTimes(1);
   },
@@ -204,8 +212,9 @@ export const PendingPayment: Story = {
 export const BankTransferDue: Story = {
   args: {
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085.00" },
+      total: INVOICE_TOTAL,
       pay: {
         label: "Submit Payment Proof",
         onPress: fn(),
@@ -227,8 +236,9 @@ export const BankTransferDue: Story = {
 export const CardRedirecting: Story = {
   args: {
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085.00" },
+      total: INVOICE_TOTAL,
       pay: { label: "Redirecting…", onPress: fn(), loading: true },
     },
   },
@@ -254,8 +264,9 @@ export const PaymentVerifying: Story = {
       icon: "hourglass",
     },
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085.00" },
+      total: INVOICE_TOTAL,
     },
     paymentMethod: { kind: "text", label: "Bank transfer" },
   },
@@ -290,8 +301,9 @@ export const PartiallyPaid: Story = {
   args: {
     badge: { label: "Partially Paid", variant: "warning" },
     summary: {
+      currencyToggle: CURRENCY_TOGGLE,
       lines: INVOICE_LINES,
-      total: { label: "Order Total", value: "HK$16,085.00" },
+      total: INVOICE_TOTAL,
       alert: {
         title: "Payment received in part",
         status: "warning",

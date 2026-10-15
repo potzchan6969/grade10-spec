@@ -278,8 +278,9 @@ winner who picks USD pays it unchanged.
 | 🚧 Fixed once sent | The sent invoice never re-prices, and its currency never changes |
 
 - 🚧 **Order Summary under USD** — every line and the Order Total read USD
-- 🚧 **Order Summary under HKD** — each line reads HKD, with its USD amount
-  beneath it; Order Total is one HKD total, which is what the invoice asks for
+- 🚧 **Order Summary under HKD** — an HKD | USD control in the heading swaps
+  every amount between the HKD invoice lines and the lot's USD figures, Order
+  Total included; the summary opens on HKD, which is what the invoice asks for
 - 🚧 **What the HKD total adds up from** — each line converted and rounded up,
   then summed, so the invoice adds up line by line; the card fee is computed
   in HKD from the HKD card rule
@@ -291,7 +292,8 @@ winner who picks USD pays it unchanged.
   picked, keeps the US$ bid; every letter after the winner picks reads the
   settlement currency only, with no USD winning bid
 - 🚧 **Card fee under HKD** — the card fee uses the configured HKD rule and
-  reads HKD only, with no USD amount beneath it; the HKD Order Total includes it
+  reads HKD only in both views, with no USD figure; the HKD Order Total
+  includes it
 - 🚧 **Bank details by currency** — Finance configures the bank details for
   each offered settlement rail; a rail is offered once its details are held
 - 🚧 **Where Finance configures them** — the admin panel, where the bank
@@ -707,7 +709,7 @@ a second payment provider, and changes to the bid-time rules.
 | Rounding | 🚧 In flight | Whole HK$, any fraction up (`100.01` and `100.1` read `101`), each line converted and rounded, then summed. Chosen over the first decimal and over converting the total once, which would leave invoice lines that do not add up. | Product |
 | Payment methods by currency | 🚧 In flight | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. The winner chooses one method or rail. The invoice and bank-details dialog show only the selected rail, with no tabs or copy controls. | Product |
 | Rail-only reissue | 🚧 In flight | Changing FPS to HK Local, or USD HK Local to International via SWIFT, counts as a change by itself and allows invoice reissue. | Product |
-| Order summary under HKD | 🚧 In flight | Each line reads HKD with its USD amount beneath it; Order Total is one HKD total. Chosen over USD lines with a USD and an HKD total, so the winner reads every line in the currency they pay and still sees the bid they won in USD. | Product |
+| Order summary under HKD | 🚧 In flight | An HKD \| USD control in the heading swaps every amount between the HKD invoice lines and the lot's USD figures, Order Total included, opening on HKD. Chosen over USD lines with a USD and an HKD total, then revised from USD beneath each line, so the winner reads one currency at a time and still finds the bid they won in USD. | Product |
 | Transfer contact channel | Decided | An operator reaches a winner about a transfer or a proof on WhatsApp, at the address form's phone number. Chosen over email alone and over both. | Operations |
 | Copy Message confirmation | Decided | Copy Message shows no confirmation beyond the control's own state, and no toast, so the dialog stays the only thing on screen. Chosen over keeping the toast and over no feedback. | Product (@tangconst) |
 | Internal order setup | 🚧 In flight | An internal order has no winner setup, operator setup step or letters. It uses HKD settlement and FPS automatically. | Product |
