@@ -5,7 +5,7 @@ bidder identities, their billing address and the contracts every later group con
 5 can be claimed in parallel, and group 6 builds against the contracts and
 fixtures. The design is in [`tech-design.md`](tech-design.md).
 
-## 1. Manual pages (grade10-spec)
+## 1. Manual pages (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update `docs/prds/products/grade10-site/auction/bidding.md` (Auction Logic), `docs/prds/products/grade10-admin/auction/management.md` (Listings, Orders, Grants), `docs/prds/products/grade10-admin/auction/internal-bid.md` and `docs/prds/products/grade10-site/auction/post-bidding.md` (The Close) so the internal bid on created and published listings, the internal bidder profiles with their billing address and the per-listing pick, its Save limits, the listing-edit clear, Not placed before publishing, House in operator reads, the internal bidder's win - its internal order with the profile's address, no letters, the invoice sent, expired and the order cancelled by hand, House in Orders and the reserve holder's win flag - and `auction:reserve` read as the accepted specs state them, with a Test cases detail embedding `::cases{id="grade10-admin/auction/internal-bid"}` now that the durable spec exists
 - [ ] 1.2 Verify: `pnpm check:manual` and `openspec validate add-auction-internal-bid --strict`
