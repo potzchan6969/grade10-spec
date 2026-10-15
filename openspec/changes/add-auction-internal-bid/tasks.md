@@ -52,7 +52,7 @@ Needs group 2. The commit and raise paths it calls are group 3's.
 - [ ] 5.7 Add `listInternalBidders`, `createInternalBidder` (its `internal` bidder row with an undeliverable email, then the profile with its required billing address, checked by the winner's billing address schema), `updateInternalBidder` (`LABEL_FIXED` once a bid row exists, read under the profile's `FOR UPDATE` lock; a billing address change any time, with `address_changed` audited without the address) and `retireInternalBidder` (`IN_USE` with `listingIds`), and the `internalBidders.{list,create,update,retire}` procedures under `auction:reserve` with `auditDetails` of `{ internalBidderId, act }`, per tech-design Decision 13 (`grade10-admin-auction-internal-bid-SC-60`, `grade10-admin-auction-internal-bid-SC-61`, `grade10-admin-auction-internal-bid-SC-62`, `grade10-admin-auction-internal-bid-SC-63`, `grade10-admin-auction-internal-bid-SC-64`, `grade10-admin-auction-internal-bid-SC-65`, `grade10-admin-auction-internal-bid-SC-66`, `grade10-admin-auction-internal-bid-SC-68`, `grade10-admin-auction-internal-bid-SC-70`, `grade10-admin-auction-internal-bid-SC-72`, `grade10-admin-auction-internal-bid-SC-79`)
 - [ ] 5.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`
 
-## 6. Admin listing editor and Listings table (grade10)
+## 6. Admin listing editor and Listings table (grade10) (owner: @htonyl)
 
 Needs group 2; built against the contracts and fixtures.
 
