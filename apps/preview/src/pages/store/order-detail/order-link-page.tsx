@@ -14,7 +14,9 @@ import { OrderDetailsNotFound } from "./order-details-states";
 
 /**
  * The public order page an order's private link opens: the order, with no
- * account facts — no points, wallet or account details. Signed out, the
+ * account facts — no loyalty points of any kind (no Points to Earn, no
+ * Points Earned, no Points summary row), no wallet or account details,
+ * guest order or member's. Signed out, the
  * placed-on line names the email the receipt went to and a persistent toast
  * offers sign-in — "add this order" on a guest order, "is this your order?"
  * on a member's; a signed-in view shows neither. A wrong secret or unknown

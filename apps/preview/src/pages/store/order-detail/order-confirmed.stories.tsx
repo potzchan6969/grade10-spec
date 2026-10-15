@@ -101,6 +101,6 @@ export const JustPaid: Story = {
     // The order id is the page's one h1 — no confirmation banner.
     expect(canvas.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     // A guest order shows no account facts.
-    expect(canvas.queryByText("Points Earned")).not.toBeInTheDocument();
+    expect(canvas.queryByText(/Points/)).not.toBeInTheDocument();
   },
 };
