@@ -12,6 +12,7 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 | Kind | What it is | Authored by | Class |
 | --- | --- | --- | --- |
 | **Sale price** | The product's compare-at price, above its price | Merchandiser, on the product in Shopify Admin | The price itself |
+| **Product discount** | An automatic amount off named products, variants or collections, a % or a fixed amount off each item, with or without a minimum | Merchandiser, Shopify Admin automatic discounts | Product |
 | **Order discount** | An automatic amount off the whole order, a % or a fixed amount, with or without a spend minimum | Merchandiser, Shopify Admin automatic discounts | Order |
 | **Buy X get Y** | An automatic: a reward product discounted or free after a trigger purchase | Merchandiser, Shopify Admin automatic discounts | Product |
 | **Order coupon** | A code for a fixed amount off the whole order, or off named products or variants; single use, `PREFIX-XXXXXXXX`, one member, an expiry | Operator, the store admin console | Order, or product where it names products |
@@ -30,8 +31,8 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 
 | Discount | Allowed | Combines with |
 | --- | --- | --- |
-| Sale price | **Yes** — the one way to put a product on sale | · — it is the price, so nothing drops it |
-| Automatic amount off products, variants or collections | **No** | · — the shop drops it when a code joins, and one set not to combine refuses every product coupon in the cart |
+| Sale price | **Yes** | · — it is the price, so nothing drops it |
+| Automatic amount off products, variants or collections | **Yes** | **Product and order discounts**, so a code stacks with it; one set not to combine refuses every product coupon in the cart |
 | Automatic amount off order | **Yes**, a spend threshold included | **Product and order discounts**, so a code stacks with it |
 | Automatic buy X get Y | **Yes** | **Order discounts and codes** — its order and product boxes |
 | Order coupon | **Yes** | What its mint states, else the store default: 🚧 product, order and shipping discounts |
@@ -41,12 +42,12 @@ Site discounts are the shop's own automatics, with no code. Amounts are HKD.
 - **Both sides decide** — two discounts stack only when each allows the
   other's class, so an automatic's refusal beats a code's own setting
 
-### Guarding the Rules
+### A Product Discount Beside a Sale Price
 
-- 🚧 **Not shown** — an automatic amount off products, variants or
-  collections is neither struck nor named on the listing or the product page
-- 🚧 **Logged** — the store logs a warning naming each one it reads, so an
-  operator can fix it in the shop
+- **The struck price** - the cut comes off the price, and the compare-at is
+  struck where it is above it: $880, compare-at $1,000, 10% off reads $792
+- **A code joins** - the shop keeps the combination that takes the most off,
+  so a product discount not set to combine can leave the cart above the card
 
 ::cases{id="grade10-site/store/site-discounts"}
 
@@ -99,7 +100,8 @@ keep the combination that takes the most off
 | Order discount, no minimum, a % or a fixed amount off each item | Price after it, the higher struck | Price after it, the higher struck, and named | Not struck | `Discount (<title>)` | On the order |
 | Order discount with a minimum, or a fixed amount once across the order | Nothing | Named | Not struck | `Discount (<title>)`, once reached | On the order |
 | Buy X get Y | Nothing | Named | Price after it, unit price struck | Subtotal after it | On the line |
-| Automatic amount off products | 🚧 Nothing | 🚧 Nothing | Price after it, unit price struck | Subtotal after it | On the line |
+| Product discount, no minimum | Price after it, the higher struck | Price after it, the higher struck, and named | Price after it, unit price struck | Subtotal after it | On the line |
+| Product discount with a minimum | Nothing | Named | Price after it, unit price struck | Subtotal after it | On the line |
 | Code or reward | · | · | Not struck | `Discount (<code or title>)`, Remove | The code |
 | Gift | · | · | 🚧 A line at no charge | In the code's row | The code |
 | Points | · | · | · | `Points`, Remove | 🚧 `Deduction from Points` |
@@ -365,9 +367,9 @@ price already lives.
 | Coupon value | Decided | A percentage coupon is a percentage code online, so 10% off is 10% as the shop rounds it — never a fixed amount the store worked out. A ceiling it would pass is minted as that ceiling, in money. | Product |
 | A site discount for some customers only | ❓ Open | One the shop authors for a customer segment is shown on the listing to everyone; whether the listing hides it from the rest. | Product |
 | A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
-| A product's sale | Decided | The compare-at price, never an automatic amount off products. Shopify never drops a price when discounts combine, but it drops a discount, and a product automatic set not to combine excludes every product coupon at the whole cart. Owner, 2026-10-12. | Product |
+| A product's sale | Decided | The compare-at price, or a product discount in the shop on the products, variants or collections it names. The card and the product page show the price after it, so a merchandiser can run a sale on some items without editing each price. Shopify drops a product discount when a code that does not combine with it joins, and the cart shows what the shop priced. 2026-10-15, replacing the compare-at-only rule of 2026-10-12. | Product |
 | Order discount authoring | Decided | An automatic amount off the order is authored to combine with product and order discounts, so a code stacks with it; a buy X get Y is authored to combine with order discounts and codes. A Shopify order discount cannot exclude products, so one that does not combine leaves the shop keeping the larger. Owner, 2026-10-12. | Product |
-| A product automatic in the shop | Decided | The listing and the product page neither strike nor name it, and the store logs and counts it; the cart still prices what the shop applies. Showing it would promise a cut the shop drops once a coupon joins. | Engineering |
+| A product discount on the card | Decided | Shown like a site-wide one: an unconditional one prices the card and the product page, with the higher of the compare-at and the price struck; one with a minimum is named on the product page alone. Of two on one card the larger shows. 2026-10-15. | Product |
 | Struck price on a cart line | Decided | A line strikes one higher price: the price before a reprice, else its compare-at above the price, else the unit price before a product cut the shop applied. The line strikes what the listing struck. An order discount strikes no line: it is a row of its own after the subtotal, named by its title in the shop, with no Remove, because Shopify's checkout prints it on the order, not the lines. | Design |
 | Points beside a site discount | Decided | Points always redeem — points is a payment method, not a merchandising discount. | Product |
 | Points beside an automatic at the till | Settled | Points are the sale's one custom order discount, which the shop's offer never takes, so the two stack. A spend is capped at what the offers leave, because POS cuts a fixed order discount to fit. | Engineering |
