@@ -13,10 +13,11 @@ from, and the record and letters that follow their lots.
 Every Grade10 listing is absolute — no reserve and no buy-now price — and the
 highest accepted bid at the close wins it.
 
-🚧 An admin may protect a lot with an internal bid: a house maximum, hidden
-from collectors, that Grade10 commits at a set time and then bids like any
-other maximum. A lot an internal bidder wins reads sold to collectors, and its
-order is the internal bidder's - [Internal Bid](/p/grade10-admin/auction/internal-bid)
+🚧 An admin sets a time for Grade10 to commit the house maximum. Before that
+time the house is not in the bidding. The house then bids under a listing
+pseudonym like any collector, and a lot it leads at close reads sold to
+collectors. Collectors do not see that the bidder is the house - [Internal
+Bid](/p/grade10-admin/auction/internal-bid)
 
 | Rule | Value |
 | --- | --- |
@@ -400,9 +401,15 @@ the account's registered address, and the letters about a won lot are
 | Lot watched, sold | The lot stops taking bids with a winner | Watch-only collectors, with Sold for |
 | Lot watched, ended | The lot stops taking bids with no bids | Watch-only collectors, Ended only — never unsold, no sale or Highest bid |
 
-- **One letter** — nobody hears about their own bid, an outbid collector gets
+- **One letter** - nobody hears about their own bid, an outbid collector gets
   the outbid letter and not also a new-bid one, a watcher who bid gets the
-  non-winner letter, and the winner gets only the auction-won order letter
+  non-winner letter, and a collector winner gets only the auction-won order
+  letter; an internal bidder's order sends no letter to anyone - [Post-Bidding ·
+  The Close](/p/grade10-site/auction/post-bidding#the-close)
+- 🚧 **House bids** - collectors outbid by the house get the ordinary outbid
+  letter, other enrolled bidders get the ordinary new-bid letter, and losing
+  bidders and watchers get the ordinary close letters. No letter names the
+  house - [Internal Bid](/p/grade10-admin/auction/internal-bid)
 - **Account master** — Account → Notifications carries an **Auction email
   alerts** switch; off stops all per-lot auction mail without clearing lists
   or bids

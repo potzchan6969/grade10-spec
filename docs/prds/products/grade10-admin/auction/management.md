@@ -142,19 +142,18 @@ the card is in the winner's hands. The collector's half is
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
-- 🚧 **Internal bid** - on a created or published listing, an admin sets a
-  house maximum and the time Grade10 commits it, from the start to the
-  scheduled close. Until that time both can
-  change or be removed. After it, the time is fixed and the amount can go up
-  until the close, or down only where the leader and the current bid stay as
-  they are. A maximum already short of the next bid at its time is not placed,
-  and the admin sees that. Only operators who may see a secret floor see it;
-  other operators see the house's bids and orders labelled House. Relist does not carry it
-- 🚧 **Internal bidder win** - a lot an internal bidder wins opens its order
-  with HKD settlement and FPS set automatically, flagged internal. It has no
-  winner setup or operator setup step; the operator still sends its invoice.
-  It sends no letters. Staff read the buyer as House;
-  only a reserve holder sees the listing flagged as the internal bidder's win
+- 🚧 **Internal bid** - on a Created or Published listing, an admin with
+  `auction:reserve` sets one house maximum and picks one internal bidder. Its
+  rules, Save limits, listing edits and Not placed state are on [Internal
+  Bid](/p/grade10-admin/auction/internal-bid)
+- 🚧 **Internal bidders** - a reserve holder manages profiles with a name,
+  unique email label and required billing address; a profile has no site
+  account. Admins enter a neutral recipient in the address, never the profile's
+  name. The email label is fixed after the profile has bid - [Internal
+  Bid](/p/grade10-admin/auction/internal-bid)
+- 🚧 **Internal bidder win** - a reserve holder sees the listing flagged as
+  won by its internal bidder. Other operators see an ordinary won lot with
+  Open order - [Internal Bid](/p/grade10-admin/auction/internal-bid)
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
   taking bids reads Extended in the Listings table; its status does not change
 - 🚧 **Open order** - a won lot's row opens its order in Orders
@@ -252,6 +251,9 @@ order.
   Test badge on a sandbox lot, the rule behind the status in one sentence, how
   long it has waited, and one primary action, with every other action that
   applies now under More
+- 🚧 **Internal order** - flagged Internal; other operators read the buyer as
+  House, and a reserve holder sees the profile - [Internal
+  Bid](/p/grade10-admin/auction/internal-bid)
 - **The winner** - name, registered email and phone, never a payment-provider
   identifier, beside the deadline, the reissue count and the suspension state
 - 🚧 **One timeline** - the invoice log, the fulfilment log and comments,
@@ -526,6 +528,7 @@ it.
 | 🚧 Clearing a flag, and Payment Settings: the premium minimum and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
 | Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
+| 🚧 Setting and reading internal bids and internal bidder profiles; reading the profile behind a House bid or win | `auction:reserve` - secret-floor access | `admin` |
 | 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
 
 - 🚧 **A control the operator lacks** - stays listed and disabled, naming the
@@ -580,6 +583,8 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 ::cases{id="grade10-admin/auction/post-sale"}
 
 ::cases{id="grade10-admin/auction/payment-settings"}
+
+::cases{id="grade10-admin/auction/internal-bid"}
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -606,8 +611,8 @@ settings.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
-| Internal bid | 🚧 In flight | One house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see its bids labelled House, each with its own time; never its amount, or its commit time before it bids. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
-| House win | 🚧 In flight | Collectors read the lot as sold; its internal order uses HKD settlement and FPS set automatically and is flagged internal. There is no winner setup or operator setup step, but the operator still prepares and sends the invoice. The order sends no letters. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
+| Internal bid | 🚧 In flight | One USD house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see placed bids labelled House, with their public amounts and Accepted At; they see no account, profile or maximum, and no row or commit time before the first house bid. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
+| House win | 🚧 In flight | Collectors read the lot as sold; the internal order is flagged Internal, opens as Preparing Invoice and uses HKD settlement and bank transfer on FPS at close. It uses the profile's billing address for delivery and billing, with a neutral recipient entered by an admin. There is no setup step or invoice at close; an operator sends the invoice by hand. The order sends no letters. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
 | Bid currency | 🚧 In flight | USD is the single bid currency for every listing, with one shared increment schedule and one ceiling. The winner chooses USD or HKD settlement. | Product |
 | Payment Settings currencies | 🚧 In flight | USD and HKD are the settlement currencies. Each has one card fee rule; the premium minimum is one USD amount. A USD card rule is required at launch. | Product |

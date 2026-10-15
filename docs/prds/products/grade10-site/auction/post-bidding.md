@@ -12,18 +12,22 @@ order — set up, invoiced, paid, shipped — and the letters that carry it.
 
 Bidding stops, the result is fixed at once, and only the winner gets an order.
 
-🚧 A lot an internal bidder wins gets an order with HKD settlement and FPS
-set automatically, flagged internal. It has no winner setup or operator setup
-step, and sends no letters. The operator still prepares and sends its invoice
-- [Internal Bid](/p/grade10-admin/auction/internal-bid)
+🚧 A lot an internal bidder wins gets an order with HKD settlement and bank
+transfer on FPS set at close, flagged Internal. It opens as Preparing Invoice
+with the profile's billing address as both delivery and billing address. It
+has no winner setup or invoice at close, and no order letter goes to the
+internal bidder or any other recipient. The operator sends the invoice, lets
+it expire after 7 days if it is unpaid and cancels the order by hand -
+[Internal Bid](/p/grade10-admin/auction/internal-bid)
 
 - **Every lot reads Ended** — with or without a winner, whatever happens to
   the order afterwards — [Lot
   Status](/p/grade10-site/auction/display#auction-details)
 - **No card was charged** — nothing was held on any card while bidding; a
   losing bidder's My Auctions row says their card was not charged
-- **The winner** — gets the auction-won letter asking for setup by `Confirm
-  by …`, naming no amount; their My Auctions row reads Won with View order
+- **A collector winner** - gets the auction-won letter asking for setup by
+  `Confirm by …`, naming no amount; their My Auctions row reads Won with View
+  order
 - **Everyone else hears once** — a bidder who lost, and a watch-only
   collector, each get one letter about the close and nothing after it —
   [Bidding ·
@@ -160,10 +164,6 @@ meaning.
   free-text bank name as secondary text under it. A paid order's payment
   method uses that same layout. Full proof, Stripe reference and audit number
   stay with the operator; a bank refund shows its provider reference as above
-
-Internal orders use HKD settlement and FPS automatically. They have no winner
-setup page, operator setup step or auction letters. The operator still quotes
-and sends the invoice.
 
 ## Order Setup
 
