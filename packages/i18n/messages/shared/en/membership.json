@@ -68,7 +68,8 @@
     "validFor": "Valid for {days, plural, one {# day} other {# days}} from redemption",
     "minimumSpend": "Spend {amount} or more",
     "onlyOnline": "Online store only",
-    "onlyInStore": "In store only"
+    "onlyInStore": "In store only",
+    "redeemFailed": "Couldn’t redeem this reward. Try again."
   },
   "quantityRefusal": {
     "wholeUnits": "{name} is redeemed in whole units.",
