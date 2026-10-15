@@ -14,6 +14,12 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 import {
+  parsePrintCommit,
+  printCommitMessage,
+  printedRunOf,
+} from "./lib/printed-run-message.mjs";
+import { SUMMARY_COLUMNS } from "./lib/run-sheet-layout.mjs";
+import {
   candidatesAt,
   cellRows,
   git,
@@ -23,10 +29,10 @@ import {
   parseRecordRows,
   RECORD_HEADERS,
   recordCells,
-  recordPath,
   selectionSnapshot,
   transition,
   validateRecord,
+  validateRunIdentity,
 } from "./lib/run-sheet-records.mjs";
 import { parseSuite } from "./lib/suites.mjs";
 import { commitRun, runBranch } from "./run-sheet-record.mjs";
@@ -221,16 +227,13 @@ test("registry chunks preserve a long selection and clear trailing old chunks", 
   );
 });
 
-test("a manifest carries stable marker, revision, selected ids and sheet identity, without results", () => {
+test("a receipt carries stable marker, revision, selected ids and sheet identity, without results", () => {
   const finalized = finalize();
   assert.equal(validateRecord(finalized), finalized);
   assert.equal(finalized.snapshot.selected[0].markerId, "demo.thing.TC-abc");
   assert.equal(finalized.snapshot.selected[0].rev, 2);
-  assert.equal(
-    recordPath(finalized.spreadsheetId, 1),
-    "docs/test-runs/production-sheet/run-1.json",
-  );
-  assert.throws(() => recordPath("../bad", 1), /Invalid/);
+  assert.equal(validateRunIdentity(finalized.spreadsheetId, 1), true);
+  assert.throws(() => validateRunIdentity("../bad", 1), /Invalid/);
   assert.throws(
     () => validateRecord({ ...finalized, sandbox: true }),
     /production/,
@@ -248,23 +251,27 @@ test("a manifest carries stable marker, revision, selected ids and sheet identit
 
 test("live verification refuses renamed, missing, stale and reopened runs", () => {
   const record = finalize();
-  verifyRecord(record, record, sheets);
+  verifyRecord(printedRunOf(record), record, sheets);
   assert.throws(
-    () => verifyRecord(record, record, []),
+    () => verifyRecord(printedRunOf(record), record, []),
     /Run 1.*tab missing.*gid=42/,
   );
   assert.throws(
     () =>
-      verifyRecord(record, record, [
+      verifyRecord(printedRunOf(record), record, [
         { properties: { sheetId: 42, title: "renamed" } },
       ]),
     /renamed/,
   );
   assert.throws(
-    () => verifyRecord(record, transition(record, "reopen"), sheets),
+    () =>
+      verifyRecord(printedRunOf(record), transition(record, "reopen"), sheets),
     /cancelled/,
   );
-  assert.throws(() => verifyRecord(trial, trial, sheets), /Only finalized/);
+  assert.throws(
+    () => verifyRecord(printedRunOf(trial), trial, sheets),
+    /Only finalized/,
+  );
 });
 
 function fixture(t) {
@@ -301,13 +308,12 @@ test("trial receipts create no branch or commit; finalized receipts create one c
   assert.equal(git(root, ["rev-list", "--count", "origin/main..HEAD"]), "1");
   assert.equal(commitRun(root, record).changed, false);
   assert.deepEqual(
-    JSON.parse(
-      readFileSync(
-        join(root, recordPath(record.spreadsheetId, record.runId)),
-        "utf8",
-      ),
-    ),
-    record,
+    parsePrintCommit(git(root, ["show", "-s", "--format=%B", "HEAD"])),
+    printedRunOf(record),
+  );
+  assert.equal(
+    git(root, ["ls-tree", "-r", "--name-only", "HEAD", "--", "docs/test-runs"]),
+    "",
   );
   assert.equal(git(root, ["status", "--porcelain"]), "");
 });
@@ -315,7 +321,7 @@ test("trial receipts create no branch or commit; finalized receipts create one c
 test("replacement keeps one commit and requires explicit replace; merged runs refuse replacement", (t) => {
   const { root, record } = fixture(t);
   commitRun(root, record);
-  const replacement = { ...record, finalizedAt: "2026-10-13T05:00:00Z" };
+  const replacement = { ...record, sheetId: 43 };
   assert.throws(() => commitRun(root, replacement), /--replace/);
   commitRun(root, replacement, { replace: true });
   assert.equal(git(root, ["rev-list", "--count", "origin/main..HEAD"]), "1");
@@ -326,7 +332,7 @@ test("replacement keeps one commit and requires explicit replace; merged runs re
   );
   assert.deepEqual(
     mergedRecord(root, record.spreadsheetId, record.runId),
-    replacement,
+    printedRunOf(replacement),
   );
 });
 
@@ -346,12 +352,12 @@ test("cancellation removes only the dedicated print commit; unrelated work refus
   git(root, ["add", "unrelated.txt"]);
   git(root, ["commit", "-m", "test: unrelated"]);
   assert.throws(
-    () => commitRun(root, record, { replace: true }),
-    /more than one commit/,
+    () => commitRun(root, { ...record, sheetId: 43 }, { replace: true }),
+    /not HEAD/,
   );
 });
 
-test("merge checker verifies the production registry and refuses edits to merged manifests", async (t) => {
+test("merge checker verifies printed messages against the registry and refuses duplicate merged runs", async (t) => {
   const { root, record } = fixture(t);
   commitRun(root, record);
   const fetcher = async (url) => ({
@@ -379,12 +385,7 @@ test("merge checker verifies the production registry and refuses edits to merged
   );
   git(root, ["push", "origin", "HEAD:main"]);
   git(root, ["fetch", "origin", "main"]);
-  writeFileSync(
-    join(root, recordPath(record.spreadsheetId, record.runId)),
-    JSON.stringify({ ...record, finalizedAt: "changed" }),
-  );
-  git(root, ["add", "."]);
-  git(root, ["commit", "-m", "test: try editing merged run"]);
+  git(root, ["commit", "--allow-empty", "-m", printCommitMessage(record)]);
   await assert.rejects(
     checkRecords(root, {
       token: "test",
@@ -415,7 +416,7 @@ test("reopening a published run invalidates that branch's earlier green status",
   assert.deepEqual(seen, [git(root, ["rev-parse", "HEAD"])]);
 });
 
-test("the merge workflow detects JSON manifests and executes only main's checker", (t) => {
+test("the merge workflow detects print messages and executes workflow-owned code only", (t) => {
   const { root, record } = fixture(t);
   const workflow = parseYaml(
     readFileSync(
@@ -427,12 +428,19 @@ test("the merge workflow detects JSON manifests and executes only main's checker
     ),
   );
   const steps = workflow.jobs.verify.steps;
-  assert.equal(steps[0].with.ref, "main");
-  assert.match(
-    steps.find((step) => step.id === "verify").run,
-    /^node trusted\/scripts\/openspec\/verify-run-record.mjs/,
-  );
+  assert.equal(steps[0].with.path, "candidate");
   assert.equal(workflow.permissions.statuses, "write");
+  const module = readFileSync(
+    new URL("./lib/printed-run-message.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.ok(
+    steps.find((step) => step.id === "verify").run.includes(module.trim()),
+  );
+  assert.equal(
+    steps.find((step) => step.id === "verify").run.includes("node candidate/"),
+    false,
+  );
   const output = join(dirname(root), "github-output.txt");
   const detect = () => {
     writeFileSync(output, "");
@@ -466,6 +474,7 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     "scripts/openspec/lib/select-cases.mjs",
     "scripts/openspec/lib/run-sheet-layout.mjs",
     "scripts/openspec/lib/run-sheet-records.mjs",
+    "scripts/openspec/lib/printed-run-message.mjs",
     "tools/manual/src/store/markdown.mts",
   ]) {
     mkdirSync(dirname(join(root, rel)), { recursive: true });
@@ -573,7 +582,13 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
         const address = /^([A-Z]+)([0-9]*)/.exec(cells);
         const column = [...address[1]].reduce((n, letter) => n * 26 + letter.charCodeAt(0) - 64, 0) - 1;
         const row = Number(address[2] || 1) - 1;
-        if (method === 'GET') answer = {values: data.slice(row).map(one => one.slice(column))};
+        if (method === 'GET') {
+          const result = data.slice(row).map(one => one.slice(column));
+          if (state.percentRunIds && title === 'Summary' && column === 0 && parsed.searchParams.get('valueRenderOption') !== 'UNFORMATTED_VALUE') {
+            result.forEach(one => { if (typeof one[0] === 'number') one[0] = String(one[0] * 100) + '%'; });
+          }
+          answer = {values: result};
+        }
         else if (path.endsWith(':append')) {
           const start = data.length;
           data.push(...body.values); state.data[title] = data;
@@ -633,6 +648,41 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     ["Summary", printed.tab],
   );
   assert.equal(state().data[printed.tab][3][0], "demo.thing.US1-TC1 (TC-abc)");
+  const formats = state()
+    .log.flatMap((one) => one.body?.requests ?? [])
+    .map((one) => one.repeatCell)
+    .filter((one) => one?.cell?.userEnteredFormat?.numberFormat);
+  assert.deepEqual(
+    formats
+      .filter(
+        (one) => one.cell.userEnteredFormat.numberFormat.type === "NUMBER",
+      )
+      .map((one) =>
+        SUMMARY_COLUMNS.slice(
+          one.range.startColumnIndex,
+          one.range.endColumnIndex,
+        ),
+      ),
+    [
+      ["Run ID"],
+      ["Total"],
+      ["To do", "Pass", "Fail", "Blocked", "Skipped", "N/A"],
+    ],
+  );
+  assert.deepEqual(
+    formats
+      .filter(
+        (one) => one.cell.userEnteredFormat.numberFormat.type === "PERCENT",
+      )
+      .map((one) =>
+        SUMMARY_COLUMNS.slice(
+          one.range.startColumnIndex,
+          one.range.endColumnIndex,
+        ),
+      ),
+    [["Pass rate"]],
+  );
+  writeFileSync(stateFile, JSON.stringify({ ...state(), percentRunIds: true }));
   const afterFirst = state().log.length;
   assert.match(
     run([
@@ -796,11 +846,7 @@ test("the writer prints, skips identical rewrites, renames, finalizes and locks 
     receipt,
   ]);
   const latest = readReceipt();
-  const manifest = join(root, recordPath(latest.spreadsheetId, latest.runId));
-  mkdirSync(dirname(manifest), { recursive: true });
-  writeFileSync(manifest, JSON.stringify(latest));
-  git(root, ["add", "."]);
-  git(root, ["commit", "-m", "test: merged run"]);
+  git(root, ["commit", "--allow-empty", "-m", printCommitMessage(latest)]);
   git(root, ["push", "origin", "main"]);
   const before = state().log.length;
   assert.throws(() => run(["--reopen", "1"]), /merged/);
@@ -877,7 +923,7 @@ test("cell requests interpret only Summary formula columns; user metadata and JS
   );
 });
 
-test("large Unicode manifests grow beyond 26 columns and clear old trailing chunks", () => {
+test("large Unicode registry receipts grow beyond 26 columns and clear old trailing chunks", () => {
   const large = {
     ...trial,
     snapshot: selectionSnapshot(picked, {
@@ -903,4 +949,120 @@ test("large Unicode manifests grow beyond 26 columns and clear old trailing chun
     () => validateRecord({ ...finalize(), results: ["pass"] }),
     /no execution results/,
   );
+});
+
+test("production-sheet records accept UAT and still reject unknown environments", () => {
+  const uat = {
+    ...trial,
+    snapshot: selectionSnapshot(picked, { ...options, env: "uat" }),
+  };
+  assert.equal(validateRecord(uat).snapshot.env, "uat");
+  assert.equal(finalize(uat).snapshot.env, "uat");
+  assert.throws(
+    () =>
+      validateRecord({
+        ...trial,
+        snapshot: selectionSnapshot(picked, { ...options, env: "lab" }),
+      }),
+    /valid selection/,
+  );
+});
+
+test("tester environments are independent of the production Sheet target; historical labels remain readable", () => {
+  for (const env of [
+    "staging-1",
+    "staging-2",
+    "uat",
+    "preview",
+    "prod",
+    "staging",
+    "production",
+  ]) {
+    const record = {
+      ...trial,
+      snapshot: selectionSnapshot(picked, { ...options, env }),
+    };
+    assert.equal(validateRecord(record).snapshot.env, env);
+    assert.equal(record.spreadsheetId, trial.spreadsheetId);
+  }
+  assert.throws(
+    () =>
+      validateRecord({
+        ...trial,
+        snapshot: selectionSnapshot(picked, { ...options, env: "sandbox" }),
+      }),
+    /valid selection/,
+  );
+});
+
+test("agreed message stores run identity, ordered TC revisions and explicit unmarked cases only", () => {
+  const run = {
+    tab: "3-ini-auction-stage3",
+    spreadsheetId: "sheet-id",
+    sheetId: 42,
+    env: "uat",
+    sourceCommit: "a".repeat(40),
+    cases: [
+      { id: "g10.auction-dmn.US12-TC3", marker: "TC-k4p", rev: 4 },
+      { id: "g10.auction-bid-increments.US1-TC5", marker: "TC-kyx", rev: 2 },
+      { id: "legacy-US1-TC1", marker: null, rev: null },
+    ],
+  };
+  const message = printCommitMessage(run);
+  assert.equal(
+    message,
+    `chore(auction): record ini-auction-stage3 printed run\n\nRun: 3-ini-auction-stage3\nSheet: sheet-id\nTab: 42\nTest environment: uat\nSource: ${"a".repeat(40)}\n\nPrinted cases:\n- g10.auction-dmn.US12-TC3 | TC-k4p@4\n- g10.auction-bid-increments.US1-TC5 | TC-kyx@2\n- legacy-US1-TC1 | unmarked\n`,
+  );
+  assert.deepEqual(parsePrintCommit(message), run);
+  assert.throws(
+    () => parsePrintCommit(message.replace("TC-k4p@4", "TC-k4p@0")),
+    /case line/,
+  );
+  assert.throws(
+    () =>
+      parsePrintCommit(
+        message.replace("legacy-US1-TC1", "g10.auction-dmn.US12-TC3"),
+      ),
+    /duplicate/,
+  );
+  assert.throws(
+    () =>
+      parsePrintCommit(
+        message.replace("Test environment: uat", "Test environment: sandbox"),
+      ),
+    /environment/,
+  );
+  assert.equal(
+    parsePrintCommit("docs(base): update rules\n\nRun: tests locally"),
+    null,
+  );
+});
+
+test("message-only commits reuse feature branches with rule changes; cancellation preserves the rules", (t) => {
+  const { root, record } = fixture(t);
+  git(root, ["switch", "-c", "tool/tcs-run-sheet/rules"]);
+  writeFileSync(join(root, "rule.md"), "Rules");
+  git(root, ["add", "rule.md"]);
+  git(root, ["commit", "-m", "docs(tcs): update rules"]);
+  const rule = git(root, ["rev-parse", "HEAD"]);
+  const result = commitRun(root, record);
+  assert.equal(result.branch, "tool/tcs-run-sheet/rules");
+  assert.equal(
+    git(root, ["diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"]),
+    "",
+  );
+  assert.equal(commitRun(root, record).changed, false);
+  assert.equal(
+    commitRun(root, transition(record, "reopen"), { cancel: true }).cancelled,
+    true,
+  );
+  assert.equal(git(root, ["rev-parse", "HEAD"]), rule);
+  assert.equal(readFileSync(join(root, "rule.md"), "utf8"), "Rules");
+});
+
+test("a changed printed marker revision fails live verification", () => {
+  const live = finalize();
+  const message = printedRunOf(live);
+  message.cases[0].rev++;
+  assert.throws(() => verifyRecord(message, live, sheets), /stale/);
 });

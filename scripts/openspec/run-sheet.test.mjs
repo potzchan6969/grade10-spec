@@ -578,7 +578,7 @@ test("a run table prints once per value row, with the cell in square brackets", 
   );
   assert.equal(
     at(rows[0], "Expected results"),
-    "Step 3 no longer lists [The session naming the site].\nStep 3 lists only [The session naming the console].",
+    "- Step 3 no longer lists [The session naming the site].\n- Step 3 lists only [The session naming the console].",
   );
   assert.equal(
     at(rows[0], "Pre-conditions"),
@@ -586,7 +586,7 @@ test("a run table prints once per value row, with the cell in square brackets", 
   );
   assert.equal(
     at(rows[0], "Test data"),
-    "<session to end>: The session naming the site\n<session that remains>: The session naming the console",
+    "- session to end: The session naming the site\n- session that remains: The session naming the console",
   );
   assert.equal(at(rows[0], "Web"), "to_do");
   assert.equal(at(rows[0], "Auto web"), "n/a");
@@ -607,15 +607,15 @@ test("shared Field | Value fills steps on each row; preconditions keep placehold
   );
   assert.equal(
     at(rows[1], "Expected results"),
-    "The collector lands on this brand.\nThe collector is not sent to [<zzz sign-in url>].\nGrade10 answers as the row states.",
+    "- The collector lands on this brand.\n- The collector is not sent to [<zzz sign-in url>].\n- Grade10 answers as the row states.",
   );
   assert.equal(
     at(rows[0], "Expected results"),
-    "The collector lands on this brand.\nThe collector is not sent to [https://collector-rewards.example.com/claim].\nGrade10 answers as the row states.",
+    "- The collector lands on this brand.\n- The collector is not sent to [https://collector-rewards.example.com/claim].\n- Grade10 answers as the row states.",
   );
   assert.equal(
     at(rows[1], "Test data"),
-    "`<collector email>`: collector@example.com, an address with an account\n`<off-brand location>`: <zzz sign-in url>\n`<why it is off brand>`: another brand of this store",
+    "- collector email: collector@example.com, an address with an account\n- off-brand location: <zzz sign-in url>\n- why it is off brand: another brand of this store",
   );
 });
 
@@ -627,7 +627,7 @@ test("a filled cell is not recursively expanded; shared slots outside it are fil
   );
   assert.equal(
     at(row, "Expected results"),
-    "The person enters [the same account, not a second one].\nNo second account exists for [collector-link@example.com, an account created by an emailed link].",
+    "- The person enters [the same account, not a second one].\n- No second account exists for [collector-link@example.com, an account created by an emailed link].",
   );
   assert.equal(
     at(row, "Pre-conditions"),
@@ -635,7 +635,7 @@ test("a filled cell is not recursively expanded; shared slots outside it are fil
   );
   assert.equal(
     at(row, "Test data"),
-    "`<link-created email>`: collector-link@example.com, an account created by an emailed link\n`<method>`: A later emailed link at <link-created email>\n`<outcome>`: the same account, not a second one",
+    "- link-created email: collector-link@example.com, an account created by an emailed link\n- method: A later emailed link at <link-created email>\n- outcome: the same account, not a second one",
   );
 });
 
@@ -648,7 +648,7 @@ test("a header matches case-sensitively, so Closed lot does not fill <closed lot
   assert.equal(at(row, "Steps"), "1. Navigate to `<closed lot url>`.");
   assert.equal(
     at(row, "Test data"),
-    "Closed lot: Sold, with a winner\nViewer: customer(signed in)",
+    "- Closed lot: Sold, with a winner\n- Viewer: customer(signed in)",
   );
 });
 
@@ -658,7 +658,7 @@ test("a single-row column table fills a case without expanding it", () => {
   assert.equal(at(rows[0], "Steps"), "1. End [The session naming the site].");
   assert.equal(
     at(rows[0], "Expected results"),
-    "[The session naming the site] is gone.",
+    "- [The session naming the site] is gone.",
   );
 });
 
@@ -838,9 +838,9 @@ test("a row carries the case, its prefilled results, and its filter axes", () =>
   );
   assert.equal(
     at(row, "Expected results"),
-    "The thing is open.\nIt reads true.",
+    "- The thing is open.\n- It reads true.",
   );
-  assert.equal(at(row, "Test data"), "`<a thing>`: A thing worth 12000000");
+  assert.equal(at(row, "Test data"), "- a thing: A thing worth 12000000");
   assert.equal(at(row, "Product"), "demo");
   assert.equal(at(row, "Domain"), "thing");
   assert.equal(at(row, "Capability"), "widget");
@@ -1032,10 +1032,16 @@ test("draft stone grey is not the result to_do grey", () => {
   assert.notDeepEqual(DRAFT_BACKGROUND, RESULT_COLORS.to_do);
 });
 
-test("env defaults to staging and refuses anything else", () => {
+test("tester environment defaults to staging-1 and rejects print targets", () => {
   assert.equal(envOf(undefined), DEFAULT_ENV);
-  assert.equal(envOf(""), "staging");
-  assert.equal(envOf("Production"), "production");
+  assert.equal(envOf(""), "staging-1");
+  assert.equal(envOf("Production"), "prod");
+  assert.equal(envOf("staging"), "staging-1");
+  for (const env of ["staging-1", "staging-2", "uat", "preview", "prod"]) {
+    assert.equal(envOf(env), env);
+  }
+  assert.equal(envOf("sandbox"), null);
+  assert.equal(envOf(" UAT "), "uat");
   assert.equal(envOf("lab"), null);
 });
 
@@ -1212,7 +1218,7 @@ test("a single shared setup fills Steps and Expected, never Pre-conditions", () 
   );
   assert.equal(
     at(row, "Expected results"),
-    "[An open lot taking bids] shows once, Your Standing Leading.",
+    "- [An open lot taking bids] shows once, Your Standing Leading.",
   );
   assert.equal(
     at(row, "Pre-conditions"),
@@ -1323,7 +1329,7 @@ test("several values for one shared field stay visible without choosing an arbit
   };
   const [row] = caseRows({ ...one, tc });
   assert.equal(at(row, "Steps"), "1. Upload `<media type>` to [An open lot].");
-  assert.equal(at(row, "Expected results"), "`<media type>` is accepted.");
+  assert.equal(at(row, "Expected results"), "- `<media type>` is accepted.");
 });
 
 test("tabs follow Summary in descending numeric run order", () => {
@@ -1344,4 +1350,84 @@ test("tabs follow Summary in descending numeric run order", () => {
       { properties: { sheetId: 1, index: 3 }, fields: "index" },
     ],
   );
+});
+
+test("expanded rows retain only shared data used by that row, including preconditions and indirect dependencies", () => {
+  const one = candidates[0];
+  const tc = {
+    ...one.tc,
+    perRow: true,
+    preconditions: "<listing> exists; <unavailable url> has no listing.",
+    stepTexts: ["Fetch <surface>.", "Open <sitemap url>."],
+    expectedTexts: ["The head names <identity>.", "Status is <status>."],
+    tables: [
+      {
+        headers: ["`<surface>`", "`<identity>`", "`<status>`"],
+        rows: [
+          ["Catalogue at <auction url>", "Catalogue title", "200"],
+          ["<listing>'s address", "<listing>'s title", "200"],
+          ["<unavailable url>", "Not found", "404"],
+        ],
+      },
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["listing", "A published listing"],
+          ["unavailable url", "An absent listing address"],
+          ["auction url", "<base url>/auction"],
+          ["base url", "https://example.com"],
+          ["sitemap url", "https://example.com/sitemap"],
+          ["unused", "Do not print"],
+          ["surface", "Overridden by this row"],
+        ],
+      },
+    ],
+  };
+  const rows = caseRows({ ...one, tc });
+  assert.equal(rows.length, 3);
+  for (const row of rows) {
+    const data = at(row, "Test data");
+    assert.ok(data.includes("- listing: A published listing"));
+    assert.ok(data.includes("- unavailable url: An absent listing address"));
+    assert.ok(data.includes("- sitemap url: https://example.com/sitemap"));
+    assert.equal(data.includes("unused:"), false);
+    assert.equal(data.includes("Overridden by this row"), false);
+    assert.equal(data.includes("`<surface>`:"), false);
+  }
+  assert.ok(
+    at(rows[0], "Test data").includes("- auction url: <base url>/auction"),
+  );
+  assert.ok(
+    at(rows[0], "Test data").includes("- base url: https://example.com"),
+  );
+  assert.equal(at(rows[1], "Test data").includes("auction url:"), false);
+  assert.equal(at(rows[2], "Test data").includes("base url:"), false);
+  assert.ok(at(rows[2], "Test data").endsWith("- status: 404"));
+  assert.equal(
+    at(rows[0], "Expected results"),
+    "- The head names [Catalogue title].\n- Status is [200].",
+  );
+});
+
+test("shared data dependency cycles terminate and unused cycles stay out", () => {
+  const tc = {
+    ...candidates[0].tc,
+    perRow: true,
+    preconditions: "None.",
+    stepTexts: ["Read <surface>."],
+    expectedTexts: ["It is visible."],
+    tables: [
+      { headers: ["surface"], rows: [["<a>"]] },
+      {
+        headers: ["Field", "Value"],
+        rows: [
+          ["a", "<b>"],
+          ["b", "<a>"],
+          ["unused", "<unused>"],
+        ],
+      },
+    ],
+  };
+  const [row] = caseRows({ ...candidates[0], tc });
+  assert.equal(at(row, "Test data"), "- a: <b>\n- b: <a>\n- surface: <a>");
 });
