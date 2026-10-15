@@ -521,8 +521,8 @@ owns selection, confirmation, printing and finalization.
 - **Snapshot** — a finalized run is pinned to the accepted-suite commit confirmed by a person. Later suite changes leave it alone. A merged run cannot be rewritten; another pass is a new run
 - **Eligibility** — actual cases and automated cases are eligible. Drafts require an explicit request; deprecated cases never print
 - **Selection** — every request resolves to an ordered list of case ids confirmed before writing. Intentional exclusions carry reasons
-- **Provenance** — a production run records spreadsheet and tab identity, run id, environment, source commit, requested scope, selected case ids and exclusions. Finalization produces one [manifest](../../.claude/skills/tcs-run-sheet/SKILL.md#run-records) commit per run; trial prints produce none
-- **Execution** — results stay in Sheets. Suites and run manifests carry no execution record
+- **Provenance** — a production run records spreadsheet and tab identity, run id, environment, source commit, requested scope, selected case ids and exclusions. Finalization produces one [structured commit message](../../.claude/skills/tcs-run-sheet/SKILL.md#run-records) per run, listing the printed TC ids and marker revisions without a repo JSON file; trial prints produce none
+- **Execution** — results stay in Sheets. Suites and print commits carry no execution record
 
 ## See Also
 
