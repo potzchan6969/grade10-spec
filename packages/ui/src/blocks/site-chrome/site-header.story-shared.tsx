@@ -2,7 +2,7 @@ import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-
 import { getMessages } from "@grade10/i18n";
 import type { StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   SiteHeader,
   type SiteHeaderProps,
@@ -94,8 +94,10 @@ function controlBoxes(header: HTMLElement) {
 }
 
 /**
- * Play for the pending session, wide or `compact` at 375px. Needs `onSignIn`,
- * `onSignOut` and `onCartClick` spies and `SessionSwitch` as the render.
+ * Play for the pending session, wide or `compact` at 375px. Needs `onCartClick`
+ * and the story's other handlers as spies, and `SessionSwitch` as the render.
+ * It ends on the pending header again, because the manual's cards embed the
+ * story in story mode, which runs this play.
  */
 export const pendingSessionPlay =
   (compact: boolean): NonNullable<StoryObj<typeof SiteHeader>["play"]> =>
@@ -150,16 +152,20 @@ export const pendingSessionPlay =
       "shared-ui-site-chrome-SC-46 - The placeholder cannot be pressed or focused",
       async () => {
         const doc = canvasElement.ownerDocument;
+        const cart = canvas.getByRole("button", { name: "Cart" });
         expect(skeleton).not.toHaveAttribute("tabindex");
         await userEvent.click(skeleton);
-        for (let pass = 0; pass < 8; pass += 1) {
+        const stops = header.querySelectorAll("button, a").length;
+        for (let pass = 0; pass < stops && doc.activeElement !== cart; pass++) {
           await userEvent.tab();
-          expect(doc.activeElement).not.toBe(skeleton);
           expect(skeleton.contains(doc.activeElement)).toBe(false);
         }
-        expect(args.onSignIn).not.toHaveBeenCalled();
-        expect(args.onSignOut).not.toHaveBeenCalled();
-        expect(args.onCartClick).not.toHaveBeenCalled();
+        expect(cart).toHaveFocus();
+        for (const handler of Object.values(args)) {
+          if (typeof handler === "function" && "mock" in handler) {
+            expect(handler).not.toHaveBeenCalled();
+          }
+        }
       },
     );
 
@@ -184,6 +190,16 @@ export const pendingSessionPlay =
           placeholder.height,
         ]);
         expect(controlBoxes(header)).toEqual(others);
+
+        switchSession("pending");
+        await waitFor(() =>
+          expect(
+            canvasElement.querySelector('[data-slot="skeleton"]'),
+          ).not.toBeNull(),
+        );
+        (
+          canvasElement.ownerDocument.activeElement as HTMLElement | null
+        )?.blur();
       },
     );
   };
