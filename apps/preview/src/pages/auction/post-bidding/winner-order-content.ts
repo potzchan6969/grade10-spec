@@ -54,6 +54,8 @@ export type WinnerOrderInvoiceLine = {
    * in HKD and has no USD counterpart.
    */
   subtext?: string;
+  /** A quiet left-aligned note under the whole row. */
+  footnote?: string;
 };
 
 /** Absolute datetimes / day-only strings for Order Progress step subtext. */

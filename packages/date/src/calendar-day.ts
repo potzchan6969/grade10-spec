@@ -6,7 +6,7 @@ import {
   startOfDay as startOfDayIn,
 } from "date-fns";
 import { plainDate } from "./instant.ts";
-import { localeFor } from "./locales.ts";
+import { localeFor, platformLanguageOf } from "./locales.ts";
 import { PLATFORM_ZONE } from "./platform.ts";
 import { PATTERNS, render } from "./render.ts";
 
@@ -179,5 +179,9 @@ export function formatCalendarDayLabel(day: string, locale = "en"): string {
   // Month alone: a whole date hands Chinese the month as `9` and its unit as a
   // literal part, which is dropped above.
   const month = new Intl.DateTimeFormat(tag, { month: "short" }).format(local);
+  const language = platformLanguageOf(locale);
+  if (language === "zh-Hant" || language === "zh-Hans") {
+    return `${month}${parts.day}日 ${parts.weekday}`;
+  }
   return `${month} ${parts.day}, ${parts.weekday}`;
 }

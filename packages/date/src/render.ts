@@ -1,7 +1,7 @@
 import { tz } from "@date-fns/tz";
 import { format } from "date-fns";
 import { assertZone, type Instant, toInstant } from "./instant.ts";
-import { localeFor } from "./locales.ts";
+import { localeFor, platformLanguageOf } from "./locales.ts";
 import { PLATFORM_LOCALE, PLATFORM_ZONE } from "./platform.ts";
 
 export type DateFormat = {
@@ -9,8 +9,9 @@ export type DateFormat = {
    * One of the languages `@grade10/i18n` ships, as a BCP-47 tag - not any tag
    * the runtime knows. This has to have words for the month, so an
    * unrecognized tag throws rather than reading English at a reader who asked
-   * for something else. Only the wording follows it: the ordering is the
-   * platform's on every machine. Defaults to the platform's language.
+   * for something else. The wording and the ordering both follow it -
+   * Chinese reads year, month, day where English walks day to year. Defaults
+   * to the platform's language.
    */
   locale?: string;
   /**
@@ -60,6 +61,35 @@ export const PATTERNS = {
 } as const;
 
 /**
+ * Chinese writes a date largest unit first - year, month, day - where English
+ * walks day to year, and `19 8月 2026` reads as wrong to a Chinese reader as
+ * "August 2026 19" does to an English one. Both Chinese catalogs share the
+ * ordering; the words still come from the locale `localeFor` resolves.
+ */
+const ZH_PATTERNS: Partial<Record<keyof typeof PATTERNS, string>> = {
+  day: "yyyy年M月d日",
+  moment: "yyyy年M月d日 HH:mm",
+  event: "yyyy年M月d日 HH:mm:ss",
+  deadline: "yyyy年M月d日 HH:mm",
+  weekdayOfMonth: "EEE d日",
+  weekday: "M月d日 EEE",
+  weekdayMoment: "M月d日 EEE, HH:mm",
+  shortDay: "M月d日",
+  month: "yyyy年M月",
+  monthName: "yyyy年M月",
+  monthAlone: "M月",
+  monthNameAlone: "M月",
+  weekdayDay: "yyyy年M月d日 EEEE",
+};
+
+const ZH_BY_PATTERN = new Map<string, string>(
+  Object.entries(ZH_PATTERNS).map(([key, zh]) => [
+    PATTERNS[key as keyof typeof PATTERNS],
+    zh,
+  ]),
+);
+
+/**
  * How a deadline, and a heading over times, names the zone it is stated in.
  *
  * For the platform's own zone this is the literal `UTC`, not date-fns's `zzz`
@@ -78,7 +108,12 @@ export function render(
 ): string {
   const instant = toInstant(at);
   assertZone(timeZone);
-  return format(instant, pattern, {
+  const language = platformLanguageOf(locale).toLowerCase();
+  const resolved =
+    language === "zh-hant" || language === "zh-hans"
+      ? (ZH_BY_PATTERN.get(pattern) ?? pattern)
+      : pattern;
+  return format(instant, resolved, {
     in: tz(timeZone),
     locale: localeFor(locale),
   });

@@ -2,6 +2,7 @@
   "aboutThisAuction": "關於本場拍賣",
   "ageAttestation": "我確認本人已滿18歲。",
   "amountAboveCurrent": "比目前出價高 {amount}",
+  "amountAboveStarting": "比起拍價高 {amount}",
   "amountAboveMaximum": "比你的最高出價高 {amount}",
   "auctionClosed": "拍賣已結束",
   "auctionDetails": "拍賣詳情",

@@ -58,6 +58,8 @@ type AuctionWinnerOrderLine = {
   tooltip?: string;
   /** Under the value, muted: the quoted amount in the other currency. */
   subtext?: string;
+  /** Under the row, left-aligned, muted: a quiet note about the figure. */
+  footnote?: string;
 };
 
 type AuctionSettlementCurrency = "USD" | "HKD";
