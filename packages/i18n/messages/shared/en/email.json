@@ -1,9 +1,11 @@
 {
   "login": {
-    "greeting": "Hi,",
-    "body": "Use the link below to sign in. It expires in 5 minutes.",
+    "preheader": "Your sign-in link is ready. It expires in {minutes} minutes.",
+    "heading": "Sign In to {brandName}",
+    "body": "You asked for a sign-in link. Use it once.",
+    "expires": "This link expires in {minutes} minutes.",
     "action": "Sign In",
-    "ignore": "If you didn’t request this, you can ignore this email."
+    "whyYouGotThis": "You asked for a sign-in link on {brandName}."
   },
   "appointment": {
     "greeting": "Hi {name},",
