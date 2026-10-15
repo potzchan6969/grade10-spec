@@ -84,6 +84,13 @@ async function winnerOrderContactSheet(
     "href",
     expect.stringMatching(/^mailto:support@grade10\.com\?subject=/),
   );
+
+  await userEvent.keyboard("{Escape}");
+  await waitFor(() =>
+    expect(
+      page.queryByRole("dialog", { name: "Email Grade10" }),
+    ).not.toBeInTheDocument(),
+  );
 }
 
 type StoryWithin = ReturnType<typeof within>;
