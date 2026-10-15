@@ -101,7 +101,6 @@ describe("a bid history list takes the supplied locale and zone together", () =>
     expect(texts.join(" ")).not.toMatch(NAMES_A_ZONE);
   });
 
-  // A zh-Hant month's wording is not asserted: the day, the year and the clock are.
   it.each([
     ["Asia/Tokyo", "1", "21:00"],
     ["America/New_York", "1", "08:00"],
@@ -110,12 +109,10 @@ describe("a bid history list takes the supplied locale and zone together", () =>
     "reads the older row in zh-Hant and %s as day %s at %s",
     (timeZone, day, clock) => {
       const texts = drawn(rows, "zh-Hant", timeZone);
-      const older = texts.find((text) => /2026, \d\d:\d\d$/.test(text));
+      const older = `2026年9月${day}日 ${clock}`;
 
       expect(texts).toContain("5 分鐘前");
-      expect(older).toBeDefined();
-      expect(older?.split(" ")[0]).toBe(day);
-      expect(older?.endsWith(`2026, ${clock}`)).toBe(true);
+      expect(texts).toContain(older);
       expect(texts.join(" ")).not.toMatch(NAMES_A_ZONE);
     },
   );
