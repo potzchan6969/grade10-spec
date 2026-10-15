@@ -22,7 +22,7 @@ can hold roles it should not, but it cannot invent a permission for one.
   and `admin`; collecting auction money: sending and reissuing an invoice,
   recording a payment, checking proof and cancelling an order — [Auction
   Management](/p/grade10-admin/auction/management#grants)
-- 🚧 **Payment Settings** — the premium minimums and the fee schedule sit
+- **Payment Settings** — the premium minimums and the fee schedule sit
   under `auction:payment`, so finance keeps them — [Auction Management ·
   Payment Settings](/p/grade10-admin/auction/management#payment-settings)
 - **Refund processing** — `auction:refund`, held by `staff` and `admin`;
