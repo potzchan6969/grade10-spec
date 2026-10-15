@@ -1711,7 +1711,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/console/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -1752,7 +1752,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/console/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -1793,7 +1793,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/console/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -1832,7 +1832,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-02
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/console/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -2362,7 +2362,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-03
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/console/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
@@ -3109,7 +3109,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** grade10-admin-console-daily-reminder-US-05
 
-**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/daily-reminder.spec.ts`
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/admin/console/daily-reminder.spec.ts`
 
 **Pre-conditions:**
 
