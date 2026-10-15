@@ -182,6 +182,15 @@ export const UsdBankNoFee: Story = {
     expect(sidebar.getByText("Free")).toBeInTheDocument();
     expect(subtexts(canvasElement)).toEqual([]);
     expect(sidebar.queryByText(/HK\$/)).not.toBeInTheDocument();
+    const trigger = sidebar.getByLabelText(TOOLTIPS.buyersPremium);
+    await waitFor(() => expect(trigger).toBeVisible());
+    await userEvent.hover(trigger);
+    await waitFor(() =>
+      expect(
+        within(document.body).getByText(TOOLTIPS.buyersPremium),
+      ).toBeInTheDocument(),
+    );
+    await userEvent.unhover(trigger);
   },
 };
 
