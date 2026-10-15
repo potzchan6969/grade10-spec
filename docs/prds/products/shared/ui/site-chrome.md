@@ -29,7 +29,7 @@ session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
 sign-in email, then My Auctions and Sign Out
 
-🚧 **Pending session** - while the application says the session has not answered,
+**Pending session** - while the application says the session has not answered,
 the account entry is a placeholder the size of the account icon, with nothing to
 press and nothing read aloud
 
