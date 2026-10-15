@@ -14,7 +14,7 @@ type AuctionWinnerOrderCopy = {
   invoice: string;
   invoicePdf: string;
   paymentMethod: string;
-  view: string;
+  refundDetails: string;
   winningBid: string;
   bank: string;
   bankDetailsClose: string;

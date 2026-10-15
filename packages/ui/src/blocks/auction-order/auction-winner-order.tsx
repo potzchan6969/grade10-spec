@@ -781,7 +781,7 @@ function OrderSummary({
                 size="sm"
                 variant="outline"
               >
-                {copy.view}
+                {copy.refundDetails}
               </Button>
             ) : undefined
           }

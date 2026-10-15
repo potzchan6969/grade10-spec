@@ -131,7 +131,9 @@ export const Refunded: Story = {
     ]);
     expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
     expect(canvas.getByText("Refund HK$128,814")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "View" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Refund Details" }),
+    );
     const page = within(canvasElement.ownerDocument.body);
     const dialogElement = await waitFor(() => {
       const found = page.getByRole("dialog", { name: "Refund Details" });

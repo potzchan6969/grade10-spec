@@ -59,7 +59,7 @@ const COPY: AuctionWinnerOrderProps["copy"] = {
   invoice: "Invoice",
   invoicePdf: "Invoice PDF",
   paymentMethod: "Payment method",
-  view: "View",
+  refundDetails: "Refund Details",
   winningBid: "Winning bid",
   bank: "Bank",
   bankDetailsClose: "Close",

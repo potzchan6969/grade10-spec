@@ -124,7 +124,7 @@ export const Refunded: Story = {
   play: async ({ args, canvasElement }) => {
     await settled(canvasElement);
     await userEvent.click(
-      within(canvasElement).getByRole("button", { name: "View" }),
+      within(canvasElement).getByRole("button", { name: "Refund Details" }),
     );
     expect(args.summary.refund?.onView).toHaveBeenCalledTimes(1);
   },

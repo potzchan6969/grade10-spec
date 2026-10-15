@@ -89,9 +89,13 @@ export const ProcessingOverpaid: Story = {
     ]);
     expect(summaryRows).toContain("Payment Processing FeeHK$545.00");
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Refund Details" }),
+    ).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "View" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Refund Details" }),
+    );
     const page = within(canvasElement.ownerDocument.body);
     const dialogElement = await waitFor(() => {
       const found = page.getByRole("dialog", { name: "Refund Details" });
