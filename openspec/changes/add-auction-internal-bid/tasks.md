@@ -29,7 +29,7 @@ Needs group 2.
 - [ ] 3.5 Add `raiseHouseMaximum` and `lowerHouseMaximum` as the internal bid's own profile, retired or not: a raise is a new commitment with the existing extension rule, a lower is a superseding row accepted only when the in-memory resolution keeps the leader's bid and `top_amount` and the amount is at least every house bid (`grade10-admin-auction-internal-bid-SC-59`, `grade10-site-auction-auto-bidding-SC-40`, `grade10-site-auction-auto-bidding-SC-41`, `grade10-site-auction-auto-bidding-SC-42`, `grade10-site-auction-auto-bidding-SC-43`, `grade10-site-auction-auto-bidding-SC-44`, `grade10-admin-auction-internal-bid-SC-44`, `grade10-admin-auction-internal-bid-SC-45`, `grade10-admin-auction-internal-bid-SC-46`, `grade10-admin-auction-internal-bid-SC-47`, `grade10-admin-auction-internal-bid-SC-50`, `grade10-admin-auction-internal-bid-SC-53`)
 - [ ] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`
 
-## 4. Internal bidder's win, its order and mail (grade10)
+## 4. Internal bidder's win, its order and mail (grade10) (owner: @htonyl)
 
 Needs group 2.
 
