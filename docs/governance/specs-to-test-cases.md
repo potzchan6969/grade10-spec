@@ -407,13 +407,35 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 - **Suites classify selection** — zero or more comma-separated sets, written `**Suites:** none` when empty. They imply neither execution nor a pass or release verdict. Acceptance is this project's narrow core-flow baseline, not every business acceptance condition or every branch of a core feature. Membership stays stable across concurrent versions. Smoke has no one-case-per-journey limit. Regression has no every-PR, fixed-version-count or automatic schedule requirement
 - **Production is read-only** — prod is based on actual business side effects, not whether a step clicks Save. Missing prod means suitability is unconfirmed; do not infer it from priority, severity or health-check. Health-check may run in any environment, after deployment or at another time
 - **No exploratory set** — exploratory is neither a Type nor a Suite. Removing the old tag does not remove the case or automatically make it regression. No core, full or confirmation tag is added; bug-fix confirmation selects the original failure cases for that fix
-- **Selection contract** — different fields combine with AND; multiple Suites combine with AND; multiple Severity values combine with OR. Adding a suite filter can only retain or reduce selection. The command and Sheet need this same contract; implementing those filter changes is separate from this definition revision. Sheet filtering changes visibility, not execution scope or results
+- **Selection reference** — the agreed AND/OR semantics and example are under **Filter Reference** below. This reference does not claim implementation or change execution scope.
 - **Classification edits** — content review may rewrite Type, Suites, Severity and Priority from the case's purpose and assertions. Classification-only edits preserve id, rev, review status and automation evidence; they do not approve a case or claim automation. Content changes trigger reclassification, but only a change to verified behaviour triggers the revision and automation rules under **A Case That Already Exists Is Not Written Twice**
 - **Classification migration** — r6 removes Severity normal, Type acceptance and integration, and Suites release and exploratory. Re-read each case; never mechanically rename release to acceptance, transfer Type acceptance to Suites, or fill none with regression. Keep deprecated history. Until reviewed, the validator reports these former values as migration warnings rather than silently converting them; deprecated history remains readable. Drafts stamped r6 or later reject former values. New and reclassified cases use the current values
 - **Trace identity** — every active and durable case carries the stable `trace:case` marker required by [Test Traceability](test-traceability.md), including cases without an automated acceptance link. Its `rev` is the case version. Keep the id across revisions; allocate a new one only for a genuinely new case, through the trace CLI. The marker's `covers` list is optional post-hoc QA2 evidence and may name multiple scenarios; it never replaces the case's required anchor in `**Trace:**`. Resolve unclear legacy coverage with the suite owner; do not guess
 - **Automation status** — generation writes `manual`; engineering flips it when the test lands, with `pnpm run tcs:automated <case…> --decided-by <path>` in this store, editing the line in place, and the flag writing the Decided-by line in the same edit, so the flip rides the commit that landed the test; `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case follows **A Case That Already Exists Is Not Written Twice** when modified, merged or retired; routine restyling still leaves it unchanged. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox. Selected app-test links use [Test Traceability](test-traceability.md)
 - **Trace** — one journey per feature case; a case that would trace two is two cases or a journey not yet written, and a case with no trace does not belong in the file. Every id is defined by a `user-journeys.md` in scope; `<requirement> / <journey title>` only where a spec has no ids
 - **Scenario coverage is post-hoc** — generation does not inspect scenario text or require `covers`; QA2 links scenarios after the independent readings. The validator reports anchor coverage as an error when absent, and scenario-link coverage as pending or a finding according to suite lifecycle; it never derives a link by title or text similarity
+
+### Filter Reference
+
+This is the reference for filter behaviour, not a claim that the command or Sheet implements it. Filter implementation and validation are separate work.
+
+| Selection | Combines With | Meaning |
+| --- | --- | --- |
+| Different fields | AND | A case meets every selected field condition |
+| Multiple Suites | AND | A case carries every selected suite tag |
+| Multiple Severity values | OR | A case has any selected severity |
+
+```text
+Domain = auction
+AND Suites contains acceptance
+AND Type = functional
+AND Severity IN (blocker, critical)
+```
+
+- **Result** — functional cases in the auction domain and acceptance set whose severity is blocker or critical
+- **More suite tags** — adding prod also requires production suitability; it can only retain or reduce the result set
+- **Sheet visibility** — filtering changes which cases are shown, not whether a case is excluded from the run, executed or passed
+- **Other multi-select fields** — this reference does not settle their semantics
 
 ## The File Header
 
