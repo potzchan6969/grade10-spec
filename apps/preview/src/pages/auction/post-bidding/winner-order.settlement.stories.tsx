@@ -128,10 +128,9 @@ export const AwaitingSetupHkdBeforeInvoice: Story = {
     expect(summaryRows.some((row) => row.textContent?.includes("HK$"))).toBe(
       false,
     );
-    expect(canvas.getByRole("radio", { name: "HKD" })).toHaveAttribute(
-      "aria-checked",
-      "true",
-    );
+    expect(
+      canvas.queryByRole("radio", { name: "HKD" }),
+    ).not.toBeInTheDocument();
   },
 };
 
