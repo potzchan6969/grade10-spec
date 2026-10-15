@@ -37,7 +37,7 @@
   - Covers: `auction-status-SC-31`–`SC-35`; the operator actions' own scenarios
     are `complete-auction-post-sale`'s.
   - Verification: permission, audit and concurrency-boundary checks.
-- [ ] 3.3 Retire the address window at invoice send and keep the existing
+- [x] 3.3 Retire the address window at invoice send and keep the existing
   operator-only expired-invoice collection path, including a Partially Paid
   shortfall. Refusing a card payment received at or after the deadline, holding
   the invoice `pending` while a card session received in time is open, and
@@ -48,11 +48,11 @@
 
 ## 4. Frontend (owner: @htonyl)
 
-- [ ] 4.1 Hide Confirm after the derived deadline condition, then restore it
+- [x] 4.1 Hide Confirm after the derived deadline condition, then restore it
   after an operator reopen. A confirmed address locks on confirm.
   - Verification: focused Winner Order checks for `SC-144`–`SC-146` and
     `SC-148`–`SC-151`.
-- [ ] 4.2 Test first, remove any winner control for changing a confirmed
+- [x] 4.2 Test first, remove any winner control for changing a confirmed
   address that 4.1 built: a failing Winner Order check that no change control
   is offered after confirm, then the removal.
   - Verification: focused Winner Order checks.
