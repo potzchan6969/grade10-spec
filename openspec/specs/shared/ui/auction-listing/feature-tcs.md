@@ -2,7 +2,7 @@
 
 **Status:** pending-review · 0/47
 **Drafts styled:** 2026-10-13, tcs-rules r5
-**Out of suite:** shared-ui-auction-listing-SC-35, shared-ui-auction-listing-SC-36, shared-ui-auction-listing-SC-37, shared-ui-auction-listing-SC-52
+**Out of suite:** none
 
 ## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
@@ -1437,7 +1437,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Raise floor
+* **Trace:** `Raise floor`, `Ceiling reached`
 
 **Pre-conditions:**
 
@@ -1478,7 +1478,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Raise floor
+* **Trace:** Ceiling reached
 
 **Pre-conditions:**
 
@@ -1510,7 +1510,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Bid enrollment
+* **Trace:** `Ceiling reached`, `Bid enrollment`
 
 **Pre-conditions:**
 
