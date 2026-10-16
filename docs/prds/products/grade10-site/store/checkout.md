@@ -55,9 +55,10 @@ In Your Orders.
 
 🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 
-- **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload or a lost answer
+- **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload, from a second tab or after a lost answer; a purchase already paid opens its order
+- **After a refusal** - A Pay after the purchase's order failed or was canceled starts the purchase again
 - **Changed purchase** - A changed basket or tender starts a new purchase and retires the older unpaid invoice. Only the member's own edit retires it; the shop's stock or price review leaves it for the next Pay to replace
-- **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice
+- **Recovery** - An uncertain payment handoff keeps the existing purchase visible and recoverable without opening a second payable invoice; one Shopify cannot name waits for an operator, and the member starts no new purchase until it is settled
 
 🚧 **Return path** - Shopify's Thank You and Order status extension offers a
 Grade10 Your Orders link, and the staging walk proves the matching purchase
