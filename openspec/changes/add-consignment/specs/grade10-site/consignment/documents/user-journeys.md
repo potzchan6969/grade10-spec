@@ -2,7 +2,7 @@
 
 ### grade10-site-consignment-documents-US-01: Consignor signs the agreement electronically
 
-**As a** consignor,
+**As a** collector who consigns,
 **I want** to sign the consignment agreement electronically - at the
 counter or on my own phone - with it naming where I consigned, my
 information and my linked account,
@@ -10,7 +10,7 @@ information and my linked account,
 
 ### grade10-site-consignment-documents-US-02: Consignor signs for a returned item
 
-**As a** consignor whose item is coming back,
+**As a** collector whose consigned item is coming back,
 **I want** to sign the return receipt when it arrives,
 **so that** the return is closed on paper.
 
