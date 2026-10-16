@@ -27,8 +27,7 @@ A fifth directory is not an application:
   (`ui/*`), the admin console vocabulary both admin sites render (`console/*`),
   the Figma-to-code audit rails (`design-sync/*`), and the platform-wide
   formats every surface renders (`dates-and-times`, `money-amounts`,
-  `localization`, `frontend-composition`), and the platform-wide backend
-  convention every service is built to (`backend-service-repository`).
+  `localization`, `frontend-composition`).
 
 Inside a product, capabilities are grouped one level further by the domain they
 belong to, so a product with twenty capabilities reads as five groups rather than
