@@ -1,5 +1,5 @@
 ---
-title: Profile
+title: Membership
 spec: grade10-site/loyalty/programme
 order: 6
 reviewed: 2026-10-06
@@ -90,7 +90,7 @@ a Google account under it -
 ❓ Whether "Points to spend" and the tier-progress labels are the launch
 names.
 
-::story{id="loyalty-profile-blocks-tiercard--gold" title="Tier, balance and progress"}
+::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
 
 ## Member Card
 
@@ -114,9 +114,9 @@ names.
 The same card can be added to a phone wallet —
 [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card).
 
-::story{id="loyalty-profile-blocks-membercard--default" title="The member card"}
+::story{id="loyalty-membership-blocks-membercard--default" title="The member card"}
 
-::story{id="loyalty-profile-blocks-membercard--already-used" title="A code a till has taken"}
+::story{id="loyalty-membership-blocks-membercard--already-used" title="A code a till has taken"}
 
 ## Histories
 

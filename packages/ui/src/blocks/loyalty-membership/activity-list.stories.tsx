@@ -4,7 +4,7 @@ import { ActivityList } from "./activity-list";
 import { ACTIVITY } from "./fixtures";
 
 const meta = {
-  title: "Loyalty/Profile/Blocks/ActivityList",
+  title: "Loyalty/Membership/Blocks/ActivityList",
   component: ActivityList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

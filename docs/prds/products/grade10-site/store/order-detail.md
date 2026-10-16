@@ -96,7 +96,7 @@ credit in the same success style as the cart drawer
 🚧 **No Points row** — on an order whose shop named no points discount, even
 where its points were debited from the rest of the applied total, because that
 figure can hold money staff took off by hand; the debit still shows as Points
-put toward a purchase — [Histories](/p/grade10-site/loyalty/profile#histories)
+put toward a purchase — [Histories](/p/grade10-site/loyalty/membership#histories)
 
 🚧 **Points to earn** — an order that will earn shows Points to Earn until it
 completes, then Points Earned — [Points](/p/grade10-site/loyalty/points)

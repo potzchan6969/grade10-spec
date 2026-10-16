@@ -34,4 +34,4 @@ Benefits page lands.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| grade10-site/loyalty/programme | ❓ where the expiry date reads — Tier & Benefits page 🚧 | profile PRD ❓ — `docs/prds/products/grade10-site/loyalty/profile.md` |
+| grade10-site/loyalty/programme | ❓ where the expiry date reads — Tier & Benefits page 🚧 | profile PRD ❓ — `docs/prds/products/grade10-site/loyalty/membership.md` |

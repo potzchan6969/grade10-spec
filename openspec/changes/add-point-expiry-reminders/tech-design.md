@@ -70,7 +70,7 @@ stops being owed and that nothing is sent. What follows is how it lands.
   `expiresOn`.** Under the one-date rule that is the whole balance; counting
   by day still keeps any lot that lapses earlier off a later day.
 - **Whoever holds points is a member** - registration makes every account a
-  member ([Profile](../../../docs/prds/products/grade10-site/loyalty/profile.md),
+  member ([Membership](../../../docs/prds/products/grade10-site/loyalty/membership.md),
   Member made), so the read keys on a balance. Whom a channel may contact is
   the channel's change.
 - **A deleted account is read off the balance**, which `endMembership` debits

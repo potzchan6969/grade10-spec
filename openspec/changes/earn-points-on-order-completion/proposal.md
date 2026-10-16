@@ -74,4 +74,4 @@ See [Non-Goals](decisions.md#non-goals).
 - [Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)
 - [Points · Backend Flow](../../../docs/prds/products/grade10-site/loyalty/points.md#backend-flow)
 - [Order Status · Badges](../../../docs/prds/products/grade10-site/commerce/order-status.md#badges)
-- [Profile · Purchases Before the Account](../../../docs/prds/products/grade10-site/loyalty/profile.md#purchases-before-the-account)
+- [Membership · Purchases Before the Account](../../../docs/prds/products/grade10-site/loyalty/membership.md#purchases-before-the-account)

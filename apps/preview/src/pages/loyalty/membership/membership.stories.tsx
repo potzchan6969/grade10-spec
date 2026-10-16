@@ -223,7 +223,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
 }
 
 const meta = {
-  title: "Loyalty/Profile/Screens/Membership",
+  title: "Loyalty/Membership/Screens/Membership",
   component: MembershipPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

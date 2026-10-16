@@ -30,7 +30,7 @@
       `retentionLine` and `earnLine` on the membership view and drops the
       expiry helpers; `membership.stories.tsx` draws `variant="gold"` and a
       placeholder Tier & Benefits `href`
-- [x] 2.4 Update `docs/prds/products/grade10-site/loyalty/profile.md`: the
+- [x] 2.4 Update `docs/prds/products/grade10-site/loyalty/membership.md`: the
       Membership row names the tier skin, the worth, the keep-or-upgrade run
       and the Benefits link; the expiry-line bullet becomes the no-expiry
       rule with the relocation marked ❓ on the Tier & Benefits page 🚧
