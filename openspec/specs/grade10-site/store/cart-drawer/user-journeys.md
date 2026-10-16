@@ -59,3 +59,9 @@
 **As a** signed-in collector whose drawer is waiting for an operation,
 **I want** Close, backdrop click and Escape to keep working,
 **so that** I can return to the page without waiting for that operation to finish.
+
+### g10.store-cart-drawer.US14: Collector returns to a tab whose session ended with the cart open
+
+**As a** collector,
+**I want** the cart drawer I left open to be gone when I come back to a tab whose session has ended,
+**so that** I am not left looking at an empty cart beside a header that says Sign In.
