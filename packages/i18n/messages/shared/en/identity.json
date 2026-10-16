@@ -50,5 +50,38 @@
     "inviteLoading": "Opening your invite…",
     "inviteReopen": "This browser cannot keep your invite while you sign in. After signing in, open the invite link again.",
     "loadFailed": "We could not read your business status. Try again in a moment."
+  },
+  "check": {
+    "verify": {
+      "loading": "Opening your identity check…",
+      "noSecretTitle": "This link is incomplete",
+      "noSecretMessage": "Open the link from your invitation again, exactly as it was sent.",
+      "failedTitle": "We could not open your check",
+      "failedMessage": "Something went wrong on our side. Try again in a moment.",
+      "refusedTitle": "This link no longer opens a check",
+      "refusedUnknown": "Ask the Grade10 team for a new invitation.",
+      "refusedExpired": "This invitation has expired. Ask the Grade10 team for a new one.",
+      "startTitle": "Verify your identity",
+      "startMessage": "Grade10 needs to confirm who you are before your vault case can go ahead.",
+      "consentText": "Our identity partner checks your document and a photo of your face. Grade10 keeps the result and the document's details, never the images.",
+      "consentLabel": "I agree to have my identity checked",
+      "startAction": "Start the check",
+      "continueTitle": "Continue your identity check",
+      "continueMessage": "You started this check earlier. Pick up where you left off.",
+      "continueAction": "Continue",
+      "waitTitle": "We are reviewing your check",
+      "waitMessage": "This usually takes a few minutes. You can close this page; we will email you.",
+      "waitAction": "Check again",
+      "doneTitle": "Your identity check is complete",
+      "doneMessage": "Thank you. Your vault case can go ahead.",
+      "retryLabel": "Try again"
+    },
+    "invitation": {
+      "subject": "Verify your identity for your Grade10 vault case",
+      "heading": "Verify your identity",
+      "body": "Before your vault case can go ahead, Grade10 needs to confirm who you are. It takes a few minutes with your ID document and your phone's camera.",
+      "action": "Start the check",
+      "expiry": "This link works for {days} days and only for you. Do not forward it."
+    }
   }
 }
