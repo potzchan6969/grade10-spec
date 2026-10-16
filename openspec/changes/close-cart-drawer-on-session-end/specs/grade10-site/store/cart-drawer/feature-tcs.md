@@ -1,7 +1,7 @@
 # grade10-site/store/cart-drawer Test Cases
 
 **Status:** pending-review · 0/12
-**Drafts styled:** 2026-10-16, tcs-rules r6
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
 ## Walk 1: Sign-out in another tab, then what the collector does next
 
@@ -255,7 +255,7 @@
 * The drawer is still open after step 5, showing `<guest_line>`.
 * No toast or notice appears in steps 1 to 5.
 
-<!-- trace:case id=g10.store-cart-drawer.TC-7jq rev=2 -->
+<!-- trace:case id=g10.store-cart-drawer.TC-7jq rev=2 covers=g10.store-cart-drawer.SC-jq7,g10.store-cart-drawer.SC-gey -->
 #### g10.store-cart-drawer.US14-TC6: Switching member closes the drawer; Cart then opens the new cart
 
 **Classification:**
@@ -590,11 +590,11 @@ Runs once per row of **Test data**.
 | Case | Disposition | Scenarios |
 | --- | --- | --- |
 | `g10.store-cart-drawer.US14-TC1` | Joined: the close on a sign-out in another tab, Sign In in the header with no drawer beside it, no message. The address is now a page that asks for no session, so the result is read on the surface the silent-close scenario names | `g10.store-cart-drawer.SC46`, `g10.store-cart-drawer.SC48` |
-| `g10.store-cart-drawer.US14-TC2` | Kept `draft`: real behaviour no scenario states, a drawer opened after the close is a guest's with nothing of the member's; a scenario is owed in `spec.md` | none |
+| `g10.store-cart-drawer.US14-TC2` | Kept `draft`, no link: a drawer opened after the close is a guest's with nothing of the member's. That rests on the durable rule that a signed-out Cart press opens the same drawer and on `shared/auth/session`; the acceptance review rules no scenario is owed here | none |
 | `g10.store-cart-drawer.US14-TC3` | Joined: signing in again through the header, with the cart not opened between, leaves the drawer closed; its last step is beyond the scenario | `g10.store-cart-drawer.SC53` |
 | `g10.store-cart-drawer.US14-TC4` | Joined: the same close when the session expires, no message, on the same page | `g10.store-cart-drawer.SC47`, `g10.store-cart-drawer.SC48` |
-| `g10.store-cart-drawer.US14-TC5` (rev 2) | Kept `draft`: now claims only a guest's drawer staying open through later reads, which the requirement's sentence on a collector with no session states and no scenario walks; the first-read state moved to `g10.store-cart-drawer.US14-TC11`. A scenario is owed, or the case stays a regression beyond the scenarios | none |
-| `g10.store-cart-drawer.US14-TC6` (rev 2) | Kept `draft`: now asserts the two-step switch of Q7, a closed drawer, then Cart opening the new member's cart. No scenario states it, and the AND of the sign-out scenario (header shows Sign In) cannot hold once the second member has signed in, so no link. The stale link to the direct reading is removed. A scenario is owed | none |
+| `g10.store-cart-drawer.US14-TC5` (rev 2) | Kept `draft`, no link: claims only a guest's drawer staying open through later reads, which the requirement's sentence on a collector with no session states; the first-read state moved to `g10.store-cart-drawer.US14-TC11`. No scenario is owed | none |
+| `g10.store-cart-drawer.US14-TC6` (rev 2) | Joined after the delta pass: step 2 waits until tab 1's header shows Sign In, so the sign-out scenario's header result is asserted before the second member signs in, and the later steps assert that signing in again opens no drawer. Its last steps, Cart opening the new member's cart, rest on `shared/auth/session` | `g10.store-cart-drawer.SC46`, `g10.store-cart-drawer.SC53` |
 | `g10.store-cart-drawer.US14-TC7` | Joined: the drawer stays open while the read is held and after it answers | `g10.store-cart-drawer.SC50` |
 | `g10.store-cart-drawer.US14-TC8` | Kept `draft`: real in part (Q10), with no scenario and no task | none |
 | `g10.store-cart-drawer.US14-TC9` (rev 2) | Joined: checkout meeting an expired session leaves no drawer beside Sign In, and signing in through the header leaves it closed. It no longer asserts a dialog or guest checkout, matching the reworded scenarios | `g10.store-cart-drawer.SC52`, `g10.store-cart-drawer.SC53` |
@@ -604,23 +604,23 @@ Runs once per row of **Test data**.
 
 | Scenario | Cases |
 | --- | --- |
-| `g10.store-cart-drawer.SC46` | `g10.store-cart-drawer.US14-TC1` |
+| `g10.store-cart-drawer.SC46` | `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC6` |
 | `g10.store-cart-drawer.SC47` | `g10.store-cart-drawer.US14-TC4` |
 | `g10.store-cart-drawer.SC48` | `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC4` |
 | `g10.store-cart-drawer.SC49` | `g10.store-cart-drawer.US14-TC11` |
 | `g10.store-cart-drawer.SC50` | `g10.store-cart-drawer.US14-TC7` |
 | `g10.store-cart-drawer.SC51` | `g10.store-cart-drawer.US14-TC10` |
 | `g10.store-cart-drawer.SC52` | `g10.store-cart-drawer.US14-TC9` |
-| `g10.store-cart-drawer.SC53` | `g10.store-cart-drawer.US14-TC3`, `g10.store-cart-drawer.US14-TC9` |
+| `g10.store-cart-drawer.SC53` | `g10.store-cart-drawer.US14-TC3`, `g10.store-cart-drawer.US14-TC6`, `g10.store-cart-drawer.US14-TC9` |
 | `g10.store-cart-drawer.SC54` | `g10.store-cart-drawer.US14-TC12` |
 | Uncovered | none |
 
-- **Anchors** - the journey `g10.store-cart-drawer.US14` is traced by all twelve cases. The Feature set group Session end has a case under each leaf: Member signed out by `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC4` and `g10.store-cart-drawer.US14-TC9`; Silent close by `g10.store-cart-drawer.US14-TC1` and `g10.store-cart-drawer.US14-TC4`; Drawer kept by `g10.store-cart-drawer.US14-TC5`, `g10.store-cart-drawer.US14-TC7`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` and `g10.store-cart-drawer.US14-TC12`. No leaf names a session still being read or unreadable, so `g10.store-cart-drawer.SC50` and `g10.store-cart-drawer.SC54` sit under Drawer kept by reading; an anchor edit would restart both readings, so the wording is left
+- **Anchors** - the journey `g10.store-cart-drawer.US14` is traced by all twelve cases. The Feature set group Session end has a case under each leaf: Member signed out by `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC4` and `g10.store-cart-drawer.US14-TC9`; Silent close by `g10.store-cart-drawer.US14-TC1` and `g10.store-cart-drawer.US14-TC4`; Drawer kept by `g10.store-cart-drawer.US14-TC5`, `g10.store-cart-drawer.US14-TC7`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` and `g10.store-cart-drawer.US14-TC12`. No leaf names a session still being read or unreadable, so `g10.store-cart-drawer.SC50` and `g10.store-cart-drawer.SC54` sit under Drawer kept by reading; an anchor edit would restart both readings, so the wording is left alone
 - **Uncovered scenarios** - none. Each link holds because the case reaches the state the scenario names: `g10.store-cart-drawer.US14-TC10` and `g10.store-cart-drawer.US14-TC11` hold the read in flight, `g10.store-cart-drawer.US14-TC12` makes the request fail, and `g10.store-cart-drawer.US14-TC1` and `g10.store-cart-drawer.US14-TC4` sit on a page that asks for no session
 - **Beyond the scenarios** - assertions no scenario of this change states:
   - `g10.store-cart-drawer.US14-TC2` in full: backed by the durable rule that a signed-out Cart press opens the same drawer, by `shared/auth/session` (a surface whose session ended shows nobody's things), by Q10 and by the last clause of task 2.1
   - `g10.store-cart-drawer.US14-TC5` in full: backed by the requirement's "no session stays open"; no scenario walks a later read
-  - `g10.store-cart-drawer.US14-TC6` in full: the closed drawer is Q7's two-step half, and the new cart after Cart rests on `shared/auth/session` (a surface keeps none of the earlier person's things)
+  - `g10.store-cart-drawer.US14-TC6` in part: Cart opening the new member's cart after signing in rests on `shared/auth/session` (a surface keeps none of the earlier person's things); the closed drawer is stated by the requirement's clause that a tab reading nobody between two members closes it, and by the sign-out scenario
   - `g10.store-cart-drawer.US14-TC8` in full: Q10 backs "closes like any other close"; that a late answer does not bring the drawer back is implied, not decided, and the clause Q10 does state, a late answer reaching a drawer opened afterwards, no case walks
   - `g10.store-cart-drawer.US14-TC3` Step 6: Cart opening the member's cart after signing in rests on the durable cart-open rules
   - `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC4` and `g10.store-cart-drawer.US14-TC8`: "still at `<surface_address>`" rests on the durable rule that closing keeps the address; "the backdrop is gone" in `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC4` and `g10.store-cart-drawer.US14-TC6` sharpens "the drawer closes"
@@ -631,11 +631,11 @@ Runs once per row of **Test data**.
   - Resolved since the first pass: the unpinned surface against Q12 (the address is now a page that asks for no session); the switch case against Q6, Q7 and `shared/auth/session` (it now expects the closed drawer Q7 states); the expired-checkout dialog against the durable checkout (the requirement and the scenario no longer name it)
   - No contradiction: `g10.store-cart-drawer.US14-TC3` against "has not opened the cart since", and `g10.store-cart-drawer.US14-TC9` against the reworded scenarios. A sign-in from the drawer's own Sign in link (Q11) is walked by no case
 - **Weak points** - `g10.store-cart-drawer.US14-TC9` Step 2 says to close "whatever checkout shows over the page, if anything" and does not exclude the drawer, so a tester who finds the drawer still open could close it there and Step 3 would pass wrongly. Q15 limits the case to a path where the tab stays on its surface, and nothing in its steps says what to do on a path that leaves it; the wording is for the next blind pass
-- **Raised, escalated** - QA1's seven rows landed as Q6 to Q12; the refresh's row landed as Q15; the two rows QA2 raised in the first pass landed as Q6, which now follows `shared/auth/session`, and Q14, which is a ❓ on the Checkout page for its owner. Q13 came from a Dev question. The answers are in `## Settled`
+- **Raised, escalated** - QA1's seven rows landed as Q6 to Q12; the refresh's row landed as Q15; the two rows QA2 raised in the first pass landed as Q6, which now follows `shared/auth/session`, and Q14, which is an open row in the Checkout page's decisions block for its owner. Q13 came from a Dev question. The answers are in `## Settled`
 - **Raised by this pass** - none. How long "promptly" is was weighed and not raised: the switch case needs a step that waits for the signed-out reading, not a number
-- **Decisions with no scenario** - Q9 (a guest who becomes a member in another tab), Q10 (work in flight), the reopen of Q11 (stated on the Cart Drawer page and in `add-store-guest-checkout`, in no scenario here), Q12 (the requirement names no surface; the only scenario that does qualifies it, so no case closes a drawer on a surface that needs a session or on Auction) and the two-step half of Q7. Q13 changes nothing, and Q14 and Q15 limit what the suite reads
+- **Decisions with no scenario** - Q9 (a guest who becomes a member in another tab), Q10 (work in flight), the reopen of Q11 (stated on the Cart Drawer page and in `add-store-guest-checkout`, in no scenario here), Q12 (the requirement names no surface; the only scenario that does qualifies it, so no case closes a drawer on a surface that needs a session or on Auction). Q13 changes nothing, and Q14 and Q15 limit what the suite reads
 - **Automation only** - `g10.store-cart-drawer.US14-TC4`, `g10.store-cart-drawer.US14-TC7`, `g10.store-cart-drawer.US14-TC8`, `g10.store-cart-drawer.US14-TC9`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` and `g10.store-cart-drawer.US14-TC12` plan `automation` alone: each needs a state a person cannot make (a session ended on the server, a read held in flight or made to fail, a session that ended after the tab last read it), as `tcs-conventions` asks. None is eligible for a manual run. Task 4.1's walk names routes for `g10.store-cart-drawer.US14-TC1`, `g10.store-cart-drawer.US14-TC2`, `g10.store-cart-drawer.US14-TC3`, `g10.store-cart-drawer.US14-TC4`, `g10.store-cart-drawer.US14-TC6` and `g10.store-cart-drawer.US14-TC9`, and none for `g10.store-cart-drawer.US14-TC5`, `g10.store-cart-drawer.US14-TC7`, `g10.store-cart-drawer.US14-TC8`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` or `g10.store-cart-drawer.US14-TC12`. Task 2.1's component tests cover the scenarios behind `g10.store-cart-drawer.US14-TC7`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` and `g10.store-cart-drawer.US14-TC12`, and those cases are layer `e2e`. Nothing in the tasks decides `g10.store-cart-drawer.US14-TC5` or `g10.store-cart-drawer.US14-TC8`. Task 4.2 flips only what the walk decides, so the rest stay `manual` in Automation status, which is the backlog the governance names
 - **Manual** - no `### Manual` table is written: no test exists to credit, and task 4.2 owes the rows after the walk
 - **Domain suite** - leaves nothing to a domain case: `grade10-site/store/domain-tcs.md` traces no cart drawer journey, so no domain case walks this path
 - **Out of suite** - none
-- **Tasks and requirement** - every scenario is named in a task and every clause of the requirement has a scenario. Not covered: Q9, Q10, Q12, the reopen of Q11 and the two-step half of Q7 have no scenario and no task of their own, and only `g10.store-cart-drawer.US14-TC8` touches Q10; the last clause of task 2.1 (Cart pressed again after the close starts a fresh review on the browser's cart) has no scenario and only `g10.store-cart-drawer.US14-TC2` behind it; tasks 4.1 and 4.2 name no decider for `g10.store-cart-drawer.US14-TC5`, `g10.store-cart-drawer.US14-TC8`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` or `g10.store-cart-drawer.US14-TC12` beyond the component tests; tasks 3.1 and 4.1 pin a dialog Q14 leaves open; tasks 1.1 to 1.3 are documents and make no scenario pass
+- **Tasks and requirement** - every scenario is named in a task and every clause of the requirement has a scenario. Not covered: Q9, Q10, Q12, the reopen of Q11 and have no scenario and no task of their own, and only `g10.store-cart-drawer.US14-TC8` touches Q10; the last clause of task 2.1 (Cart pressed again after the close starts a fresh review on the browser's cart) has no scenario and only `g10.store-cart-drawer.US14-TC2` behind it; tasks 4.1 and 4.2 name no decider for `g10.store-cart-drawer.US14-TC5`, `g10.store-cart-drawer.US14-TC8`, `g10.store-cart-drawer.US14-TC10`, `g10.store-cart-drawer.US14-TC11` or `g10.store-cart-drawer.US14-TC12` beyond the component tests; tasks 1.1 to 1.3 are documents and make no scenario pass
