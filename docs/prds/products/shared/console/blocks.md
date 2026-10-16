@@ -34,3 +34,7 @@ currency code, and renders naming that code — never a symbol two currencies
 could share, in a console where two currencies routinely sit in one column. And
 a queue longer than its page is walkable in both directions, rather than merely
 told it has more.
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="shared/console/blocks"}
+:::
