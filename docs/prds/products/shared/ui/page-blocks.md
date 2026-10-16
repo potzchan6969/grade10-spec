@@ -20,7 +20,7 @@ stages. Each page supplies the words, the figures and the callbacks.
   case stays where it ended, and a narrow screen scrolls the rail, not the
   page
 
-🚧 A page with nothing to show composes the design system's `EmptyState`
+A page with nothing to show composes the design system's `EmptyState`
 directly, passing `data-slot` for the name its tests and walks find it by.
 
 A page finds each block by the slot it gives it; given none, a block keeps
