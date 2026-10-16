@@ -73,8 +73,9 @@ surface changes, and nothing outside this rule has to be edited to let it
 through.
 
 :::detail{title="Code map" for="engineer"}
-- **Surface table, and which lanes carry what** —
-  `apps/frontend/grade10/src/surfaces.ts`
+- **Surface table** — `apps/frontend/grade10/src/surfaces.ts`
+- **Which lanes carry what** — `siteGates` in `@grade10/app-env`
+  (`packages/app-env/src/siteGates.ts`)
 - **The build's own answer** — `apps/frontend/grade10/src/config.ts` for the
   application, `resolveDeployEnv()` for the build configs and the build check
 - **Serving** —
