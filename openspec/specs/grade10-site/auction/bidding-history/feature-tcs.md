@@ -1934,9 +1934,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -1971,9 +1973,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2007,9 +2011,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2043,9 +2049,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2084,9 +2092,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2121,9 +2131,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2158,9 +2170,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2195,9 +2209,11 @@ listing's history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 A visible index or combined history page with a further cursor.
@@ -2224,9 +2240,11 @@ A visible index or combined history page with a further cursor.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
@@ -2572,9 +2590,11 @@ maximums, open on **Bid placed** by default, and list that tab first,
 * **Type:** functional
 * **Suites:** smoke, release
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-auction-bidding-history-US-08
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/auction/bidding-history/bidding-history.spec.ts`
 
 **Pre-conditions:**
 
