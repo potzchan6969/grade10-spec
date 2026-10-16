@@ -44,9 +44,9 @@ A change is in exactly one planning or delivery stage, proven by a file on
   unknown or stale in an environment; a deploy never waits for archive
 - 🚧 **Drafted, then landed on your word** — each planning artifact reaches
   `main` only when its hand lands it, and the landing records whose word it was
-- 🚧 **The Design stage draws the UI alone** — Designed is proven by
+- **The Design stage draws the UI alone** — Designed is proven by
   `ui-design.md` or `ui_waived` and nothing else; the designer is its one hand
-- 🚧 **The tech design inside planning** — Dev writes `tech-design.md` in the
+- **The tech design inside planning** — Dev writes `tech-design.md` in the
   planning run, after QA1 freezes the blind cases and before the scenarios,
   and it proves Specified beside the requirements and the suite; a question it
   cannot settle is a Raised row, which holds acceptance
@@ -105,7 +105,7 @@ keeps its availability visible with both active and archived changes.
 
 One handle per role on each change.
 
-- 🚧 **Five roles** — the tech PIC is retired: the engineer who will build the
+- **Five roles** — the tech PIC is retired: the engineer who will build the
   change challenges the tech design before acceptance, the human who accepts
   the plan judges it whole, and `tech-design.md` is the engineer's
 

@@ -9,9 +9,9 @@ allowed-tools: Read, Grep, Glob, Write, Edit, Bash, Task
 Individual planning artifacts and implementation groups use rounds. Product
 planning after the journeys is one exception: `/planning-dev` runs the frozen
 anchor workflow from QA1 through Dev and QA2, accepts the complete result once,
-and publishes the accepted contract before implementation. The compatibility
-routes `/workflow-tech`, `/workflow-specify`, and `/workflow-tasks` dispatch
-that full invocation; they do not start separate planning rounds. Other line
+and publishes the accepted contract before implementation. The two compatibility
+routes `/workflow-specify` and `/workflow-tasks` dispatch that full
+invocation; they do not start separate planning rounds. Other line
 commands - `/workflow-plan`, `/workflow-design`, `/workflow-build`,
 `/workflow-land` - name the artifact or group they land and follow this skill.
 
@@ -81,8 +81,9 @@ then the change's earlier artifacts in the schema's order - and from the ask.
   workflows
 - **Draft ahead** — a wake drafts the whole chain it can reach, each from its
   own `upstream:` set and with its own readers, pushed after every artifact
-  and landed nowhere; `feature-tcs.md` is drawn from the anchors and never
-  from `spec.md`. A held question never stops the chain; draft on its
+  and landed nowhere; `feature-tcs.md` is drawn blind from the anchors and
+  never from `tech-design.md` or `spec.md`, so the cases come first, then the
+  tech design, then the requirements. A held question never stops the chain; draft on its
   recommendation. Two things do: a dated `awaiting:` line, after which you
   draft nothing that depends on it, and a goal or a non-goal that moved
 - **A drafting push the lease refuses** — the hand pushed while you drafted:

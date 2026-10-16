@@ -395,8 +395,6 @@ function readChange(
   if (decisions !== undefined) {
     const open = readQuestions(decisions, entry.hands, rounds);
     if (open.length > 0) entry.questions = open;
-    const raised = openRaised(decisions);
-    if (raised > 0) entry.raisedOpen = raised;
   }
 
   // Only the landings: the last commit touching the directory is not one —
@@ -644,7 +642,7 @@ function artifactRaisedAgainst(rounds: RoundRow[]): Map<string, string> {
  * with. A cell that opens ❓ and names nobody by that grammar is left to its
  * author rather than routed at a guess.
  *
- * Any role is read, the six or not: a question naming one outside them is
+ * Any role is read, the five or not: a question naming one outside them is
  * listed under that role and routed to its channel, the way an unnamed hand
  * is, and narrowing the set here would drop the question instead.
  *
@@ -722,29 +720,6 @@ export function handsOfRecord(text: string): Record<string, string> {
   }
   const fields = parsed as Record<string, unknown>;
   return readIdMap("hands", fields.hands, handleOf) ?? {};
-}
-
-/**
- * How many rows of `decisions.md`'s `## Raised` table have landed nowhere.
- *
- * The blind reading's questions live there — `Capability | Raised | Landed` —
- * and the requirements are not settled while one of them is unanswered, which
- * is why the ladder reads the count and not only the two files. A row's
- * `Landed` cell is a `Q<n>` of this file or a ❓ on a page; what it says is the
- * `raised` rule's to judge, and an empty cell is what is read here. A file
- * with no table has nothing open, which is the same answer as a table whose
- * every row landed.
- */
-function openRaised(text: string): number {
-  const raised = outline(text)
-    .flatMap((one) => (one.level === 1 ? one.children : [one]))
-    .find((one) => /^Raised\b/.test(one.heading));
-  if (!raised) return 0;
-  // A row whose `Landed` cell is empty, which is the same judgement the
-  // `raised` rule makes of the same cell, over the same rows.
-  return (tableRows(raised.raw) ?? []).filter(
-    (cells) => (cells[2] ?? "") === "",
-  ).length;
 }
 
 /** A written line, or nothing where the key is absent or blank. Anything but

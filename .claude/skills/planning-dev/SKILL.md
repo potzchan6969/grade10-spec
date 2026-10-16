@@ -52,11 +52,9 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    complete. Derive scenarios from the PRD, journeys, UI design and technical
    design: the requirements pass reads `tech-design.md` beside
    `ui-design.md`; a requirement contradicting either is not written. A
-   requirement that reaches a design another hand owns writes a dated wait on
-   them rather than writing over them:
-   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
-   cleared by their edit or by that artifact's `reviewed:` line, and it holds
-   no stage. Use `docs/governance/task-ownership.md` for groups and owners.
+   question the design cannot settle is a row in `decisions.md`'s
+   `## Raised`, never a dated wait on another hand: the row holds acceptance
+   only, and the product manager resolves it with the engineer's challenge. Use `docs/governance/task-ownership.md` for groups and owners.
    Before QA2, check the draft's structure, trace markers and overlaps:
 
    ```bash

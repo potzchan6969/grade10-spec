@@ -148,7 +148,7 @@ describe("what the hands endpoint writes", () => {
 });
 
 describe("what the hands endpoint refuses", () => {
-  it("refuses a role outside the six", async () => {
+  it("refuses a role outside the five", async () => {
     const { root, api } = store();
 
     const answer = await api(

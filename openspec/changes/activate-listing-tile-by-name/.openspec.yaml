@@ -3,7 +3,6 @@ created: 2026-09-11
 hands:
   pm: "@tangconst"
   design: "@ecchochan"
-  tech: "@ecchochan"
   qa: "@ecchochan"
   dev: "@ecchochan"
 depends_on:

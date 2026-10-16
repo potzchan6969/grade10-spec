@@ -68,4 +68,4 @@ Where no change overlaps, or the table opens a new one:
 ## The Whole Plan in One Wake
 
 - **Draft Chain** - Draft the three artifacts in the order the schema gives them, landed nowhere; workflow-round owns the draft-ahead procedure.
-- **Completion** - Return the three drafts and round outcome. Hand the settled artifacts to planning-dev as planning-pm directs; if requirements cannot start, record `awaiting: specs:` with the missing input.
+- **Completion** - Return the three drafts and round outcome. Hand the settled artifacts to planning-dev as planning-pm directs, which drafts the cases, the tech design and the requirements in that order; if requirements cannot start, record `awaiting: specs:` with the missing input.

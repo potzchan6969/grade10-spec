@@ -56,9 +56,9 @@ const asked = {
   text: "**Birthday month** — whether it doubles the month's points",
 };
 
-/** The ❓ line of the second section, addressed to a confirmer outside the six
+/** The ❓ line of the second section, addressed to a confirmer outside the five
  * roles — the store routes it to that word, and nothing narrows it to one of
- * the six on the way to the page. */
+ * the five on the way to the page. */
 const askedOfFinance = {
   artifact: "proposal",
   page: PAGE,
@@ -184,7 +184,7 @@ describe("two linked sections, as the scenario reads them", () => {
     expect(html).toContain("Tier discount");
   });
 
-  it("names a hand outside the six roles by the word the row wrote", () => {
+  it("names a hand outside the five roles by the word the row wrote", () => {
     expect(html).toContain("finance — open");
   });
 });

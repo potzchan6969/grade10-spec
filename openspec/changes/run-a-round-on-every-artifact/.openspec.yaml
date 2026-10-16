@@ -5,7 +5,6 @@ depends_on:
   - stage-changes-and-notify-hands
 hands:
   pm: "@ecchochan"
-  tech: "@ecchochan"
   dev: "@ecchochan"
 reviewed:
   user-journeys: c349839c

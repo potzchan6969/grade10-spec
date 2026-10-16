@@ -16,7 +16,7 @@
     },
     {
       "id": "design",
-      "label": "Designer · Tech PIC"
+      "label": "Designer"
     },
     {
       "id": "qa",
@@ -35,7 +35,6 @@
     "pm-the-sentence",
     "pm-the-first-word",
     "pm-the-first-word_journeys",
-    "tech-pic-the-mirror-and-the-rule",
     "pm-the-two-readings",
     "pm-the-two-readings_spec",
     "engineer-the-plan-then-the-build",
@@ -79,8 +78,8 @@
       "width": 132
     },
     {
-      "id": "tech-pic-the-mirror-and-the-rule",
-      "lane": "design",
+      "id": "dev-the-mirror-and-the-rule",
+      "lane": "eng",
       "col": 3,
       "type": "messagebus",
       "label": "tech-design.md",
@@ -145,10 +144,17 @@
     },
     {
       "from": "pm-the-first-word_journeys",
-      "to": "tech-pic-the-mirror-and-the-rule",
+      "to": "pm-the-two-readings",
       "variant": "emphasis",
       "fromSide": "right",
       "toSide": "top"
+    },
+    {
+      "from": "pm-the-first-word_journeys",
+      "to": "dev-the-mirror-and-the-rule",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left"
     },
     {
       "from": "designer-the-rail",
@@ -156,12 +162,11 @@
       "variant": "dashed"
     },
     {
-      "from": "tech-pic-the-mirror-and-the-rule",
-      "to": "pm-the-two-readings",
-      "variant": "emphasis",
-      "fromSide": "bottom",
-      "toSide": "top",
-      "route": "straight"
+      "from": "dev-the-mirror-and-the-rule",
+      "to": "pm-the-two-readings_spec",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
     },
     {
       "from": "pm-the-two-readings",

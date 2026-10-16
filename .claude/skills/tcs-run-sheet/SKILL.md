@@ -140,5 +140,6 @@ Configure `tcs/run-finalized` as a required PR check.
 
 - **Credentials** — only the workflow writes Sheets. Do not edit layout by hand; change `scripts/openspec/lib/run-sheet-layout.mjs`
 - **Results** — never put execution results into suites or print commits
+- **A failed row** — the sheet posts nothing itself. QA says it in one sentence in the change's thread, naming the case id and what failed; the sheet keeps the row marked failed
 - **Tabs** — never delete other runs, clear Summary, or rename tabs manually
 - **Verification** — test the writer with fixtures or sandbox only after its coverage is confirmed. Never dispatch a production print to validate code changes

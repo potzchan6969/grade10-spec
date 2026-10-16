@@ -108,8 +108,9 @@ classified cases, is
   services with the most decisions per line of code.
 - [Pending](/pending) — the specified changes with no plan yet, oldest first.
   Taking one is writing its `tasks.md`.
-- [Working a change](/guides/working-a-change) — `/workflow-tech` and `/workflow-tasks`, the
-  groups each with its test task first, and the walk the last group leaves.
+- [Working a change](/guides/working-a-change) — `/planning-dev`, which writes the
+  tech design and the plan in one run, the groups each with its test task
+  first, and the walk the last group leaves.
 - [Writing the manual](/guides/writing-the-manual) — the page grammar, for when
   you document what you built.
 

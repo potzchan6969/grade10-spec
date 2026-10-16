@@ -306,7 +306,7 @@ test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settl
 });
 
 test("the retired planning routes all dispatch the integrated planning-dev invocation", () => {
-  for (const name of ["workflow-specify", "workflow-tech", "workflow-tasks"]) {
+  for (const name of ["workflow-specify", "workflow-tasks"]) {
     const text = claims(`.claude/skills/${name}/SKILL.md`);
     assert.match(
       text,
@@ -492,7 +492,11 @@ test("shared-planning-agent-rounds-SC-71 - a wake drafts the chain and lands not
   assert.match(skill, /pushed after every artifact and landed nowhere/i);
   assert.match(
     skill,
-    /`feature-tcs\.md` is drawn from the anchors and never from `spec\.md`/i,
+    /`feature-tcs\.md` is drawn blind from the anchors and\s+never from `tech-design\.md` or `spec\.md`/i,
+  );
+  assert.match(
+    skill,
+    /the cases come first, then the\s+tech design, then the requirements/i,
   );
   assert.match(
     skill,
@@ -504,6 +508,10 @@ test("shared-planning-agent-rounds-SC-71 - a wake drafts the chain and lands not
   assert.match(plan, /The Whole Plan in One Wake/i);
   assert.match(plan, /in the order the schema gives them/i);
   assert.match(plan, /landed nowhere/i);
+  assert.match(
+    plan,
+    /drafts the cases, the tech design and the requirements in that order/i,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-74 - a run posts through the relay and never holds the token", () => {
@@ -747,18 +755,18 @@ test("shared-planning-agent-rounds-SC-48 - a late answer reaches the requirement
   assert.match(claims(ROUND), /read every artifact after the one that moved/i);
 });
 
-test("shared-planning-agent-rounds-SC-49 - the requirements pass reads the design", () => {
+test("shared-planning-agent-rounds-SC-108 - a question the tech design cannot settle is raised, never a wait", () => {
   const skill = claims(".claude/skills/planning-dev/SKILL.md");
   assert.match(
     skill,
     /the requirements pass reads `tech-design\.md` beside\s+`ui-design\.md`; a requirement contradicting either is not written/i,
   );
-});
-
-test("shared-planning-agent-rounds-SC-50 - a requirement reaching the design writes the wait", () => {
-  const skill = claims(".claude/skills/planning-dev/SKILL.md");
-  assert.match(skill, /awaiting: tech-design:/);
-  assert.match(skill, /it holds no stage/i);
+  assert.match(
+    skill,
+    /cannot settle is a row in `decisions\.md`'s\s+`## Raised`/,
+  );
+  assert.doesNotMatch(skill, /awaiting: tech-design:/);
+  assert.match(skill, /holds acceptance\s+only/i);
 });
 
 test("a round from a terminal is the same round", () => {
@@ -807,8 +815,7 @@ test("the round skill's own frontmatter name is workflow-round", () => {
 
 test("each standalone line skill names its artifact and follows the round", () => {
   for (const [name, artifact] of Object.entries(LINES)) {
-    if (["workflow-tech", "workflow-specify", "workflow-tasks"].includes(name))
-      continue;
+    if (["workflow-specify", "workflow-tasks"].includes(name)) continue;
     const path = `.claude/skills/${name}/SKILL.md`;
     const skill = claims(path);
     assert.equal(frontMatter(read(path)).name, name);
@@ -944,5 +951,14 @@ test("current planning skills do not depend on next-version workflow wrappers", 
   assert.match(
     claims(".claude/skills/planning-design/SKILL.md"),
     /Start with `planning-pm`/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-61a - a failed row reaches the thread as QA's sentence, and the sheet posts nothing", () => {
+  const skill = claims(".claude/skills/tcs-run-sheet/SKILL.md");
+  assert.match(skill, /the sheet posts nothing itself/i);
+  assert.match(
+    skill,
+    /one sentence in the change's thread, naming the case id and what failed/i,
   );
 });

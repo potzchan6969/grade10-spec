@@ -231,8 +231,8 @@ test("shared-planning-change-stages-SC-70 - landedText names what landed, whose 
   const line = landedText(
     at("probe", {
       stage: "proposed",
-      roles: ["design", "tech"],
-      hands: { design: "dana", tech: "erin" },
+      roles: ["design"],
+      hands: { design: "dana" },
     }),
     [
       { artifact: "proposal", by: "dana" },
@@ -243,7 +243,7 @@ test("shared-planning-change-stages-SC-70 - landedText names what landed, whose 
 
   assert.equal(
     line,
-    "*Landed* — `proposal`, `decisions`, `user-journeys` by @dana · now at *Proposed* · your turn: @dana (designer), @erin (tech PIC)",
+    "*Landed* — `proposal`, `decisions`, `user-journeys` by @dana · now at *Proposed* · your turn: @dana (designer)",
   );
 });
 

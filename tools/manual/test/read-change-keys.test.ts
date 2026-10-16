@@ -199,7 +199,7 @@ describe("the hands a change names", () => {
     expect(changeWith("").entry.hands).toBeUndefined();
   });
 
-  it("keeps a role the six do not hold, for the rule to refuse", () => {
+  it("keeps a role the five do not hold, for the rule to refuse", () => {
     const { entry } = changeWith(["hands:", "  ops: dana", ""].join("\n"));
 
     expect(entry.error).toBeUndefined();

@@ -40,7 +40,6 @@ const delta: Delta = { spec: SPEC, kinds: ["MODIFIED"], requirements: [] };
 const HANDS = {
   pm: "robin",
   design: "dana",
-  tech: "kim",
   dev: "sam",
   qa: "ari",
   release: "lee",
@@ -374,11 +373,10 @@ describe("the Your turn card", () => {
     expect(
       card.slice(formStart, card.indexOf("<button", formStart)),
     ).not.toContain("disabled=");
-    // The six roles are offered, and the handle names come from the team map.
+    // The five roles are offered, and the handle names come from the team map.
     for (const role of [
       "Product manager",
       "Designer",
-      "Tech PIC",
       "Engineer",
       "QA",
       "Release hand",
@@ -419,7 +417,7 @@ describe("the Your turn card", () => {
 
     // Specified waits on the product manager; Building on the engineer. The
     // picker opens on the stage's own hand rather than on the first of the
-    // six, which is the hand a reader came to the card to name.
+    // five, which is the hand a reader came to the card to name.
     expect(roles).toContain('<option value="pm" selected=""');
     const building = render(change(), store);
     const chosen = building.slice(
@@ -428,7 +426,7 @@ describe("the Your turn card", () => {
     );
     expect(chosen).toContain('<option value="dev" selected=""');
 
-    // Proposed's second half is the designer's and the tech PIC's, and the
+    // Proposed's second half is the designer's, and the
     // card reads that hand itself: the picker opens on the designer rather
     // than back on the product manager the stage table names.
     const proposed = render(change({ stage: "proposed" }), store);
@@ -457,14 +455,14 @@ describe("the Your turn card", () => {
     for (const label of [
       "Product manager",
       "Designer",
-      "Tech PIC",
       "Engineer",
       "QA",
       "Release hand",
     ]) {
       expect(hands).toContain(label);
     }
-    expect(hands.split(">open<").length - 1).toBe(6);
+    expect(hands.split(">open<").length - 1).toBe(5);
+    expect(hands).not.toContain("Tech PIC");
   });
 
   it("offers the archive command after implementation is complete, and only once on the page", () => {
@@ -523,7 +521,6 @@ describe("the hands", () => {
     for (const label of [
       "Product manager",
       "Designer",
-      "Tech PIC",
       "Engineer",
       "QA",
       "Release hand",
@@ -532,7 +529,7 @@ describe("the hands", () => {
     }
     expect(hands).toContain("@robin");
     expect(hands).toContain("@sam");
-    expect(hands.match(/>open</g)).toHaveLength(4);
+    expect(hands.match(/>open</g)).toHaveLength(3);
   });
 });
 

@@ -27,7 +27,7 @@ import { ROLES } from "./types.ts";
 export { ROLE_LABEL, STAGE_LABEL } from "./stages.ts";
 
 /** The roles, in the order the `hands:` table lists them — `ROLES` in
- * `api/types.ts`, the one declaration every reader of the six imports. */
+ * `api/types.ts`, the one declaration every reader of the five imports. */
 export { ROLES };
 
 /**
@@ -50,7 +50,7 @@ export function handlesFor(team: SnapshotTeam, role: Role): string[] {
   return [...own.sort(byHandle), ...rest.sort(byHandle)];
 }
 
-/** A role by its label, where it is one of the six, or the raw word some
+/** A role by its label, where it is one of the five, or the raw word some
  * other confirmer was named by (`operations`) as it was written — read
  * against nothing rather than guessed. Any surface that shows a role a
  * decisions row or a page line named reads it through here. */

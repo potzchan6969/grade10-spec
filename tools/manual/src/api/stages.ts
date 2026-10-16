@@ -59,7 +59,7 @@ export const STAGE_LABEL: Record<Stage, string> = {
 };
 
 /**
- * The six roles as the stage table names them.
+ * The five roles as the stage table names them.
  *
  * Here beside `STAGE_LABEL`, and for the same reason: a Slack message names a
  * role too - the landing reply says whose turn it is now - and the notify
@@ -69,7 +69,6 @@ export const STAGE_LABEL: Record<Stage, string> = {
 export const ROLE_LABEL: Record<Role, string> = {
   pm: "product manager",
   design: "designer",
-  tech: "tech PIC",
   dev: "engineer",
   qa: "QA",
   release: "release hand",
@@ -104,9 +103,8 @@ export function stageOf(
  *
  * `heldBy` is what the change owes next: the first artifact of the unproven
  * rung that is neither written nor waived. Nothing where the rung above is
- * proven by something no hand writes — a ticked box, a deploy, a cut — and
- * nothing where the rung is held by a raised row rather than a file, because
- * naming an artifact there would send a hand to a file that is already in.
+ * proven by something no hand writes — a ticked box, a deploy, a cut. An open
+ * Raised row holds acceptance alone, which `spec:accept` refuses, never a rung.
  */
 export function ladderOf(
   change: ChangeEntry,
@@ -119,8 +117,7 @@ export function ladderOf(
   const proven: Partial<Record<Stage, boolean>> = {
     proposed: PROOF_OF_STAGE.proposed.every(settled),
     designed: PROOF_OF_STAGE.designed.every(settled),
-    specified:
-      PROOF_OF_STAGE.specified.every(settled) && (change.raisedOpen ?? 0) === 0,
+    specified: PROOF_OF_STAGE.specified.every(settled),
     planned:
       PROOF_OF_STAGE.planned.every(settled) && change.promotedBy !== undefined,
     accepted: change.accepted === true,
@@ -159,8 +156,8 @@ export const PROOF_OF_STAGE: Partial<Record<Stage, string[]>> & {
   planned: string[];
 } = {
   proposed: ["proposal", "decisions", "user-journeys"],
-  designed: ["ui-design", "tech-design"],
-  specified: ["specs", "test-cases"],
+  designed: ["ui-design"],
+  specified: ["test-cases", "tech-design", "specs"],
   planned: ["tasks"],
 };
 
@@ -246,11 +243,12 @@ export function handOf(
   return whole ? next : ["pm"];
 }
 
-/** The hands the second half of Proposed passes to, each with the design it
- * draws: a waiver stands for the file, so it stands the hand down too. */
+/** The hand the second half of Proposed passes to, with the design it draws:
+ * a waiver stands for the file, so it stands the hand down too. The tech
+ * design is the engineer's, written inside the planning run, so it hands
+ * nobody a turn here. */
 const SECOND_HANDS: { role: Role; artifact: string }[] = [
   { role: "design", artifact: "ui-design" },
-  { role: "tech", artifact: "tech-design" },
 ];
 
 const HANDS_AT: Record<Stage, Role[]> = {
@@ -306,11 +304,11 @@ export function openHands(change: ChangeEntry, roles: Role[]): Role[] {
  * The roles a change has not yet reached — My turn's "theirs later" list,
  * before it is narrowed to one handle.
  *
- * `HANDS_AT` says which stage each of the six roles turns up at, so a role
+ * `HANDS_AT` says which stage each of the five roles turns up at, so a role
  * whose every occurrence sits at or before the change's own stage is done
  * rather than upcoming, and is left out rather than read as later.
  * `SECOND_HANDS`, filtered by the same waiver `handOf` reads, is Proposed's
- * own second half: design and tech are upcoming exactly while the change is
+ * own second half: the designer is upcoming exactly while the change is
  * still in Proposed and it is not yet their half, and a waived design is
  * never upcoming — nobody will hold a hand nothing will be drawn for.
  */
@@ -344,9 +342,8 @@ export type Drafted = {
   draft: string;
   /** One entry per hand cell the row carries: that hand's move as the table
    * writes it, and the command it pastes. Per role rather than one packed
-   * sentence, because Designed's row carries two cells — the designer and the
-   * tech PIC each draft one design — and a surface that needs one hand's
-   * command would otherwise split a string to find it. */
+   * sentence, so a surface that needs one hand's command never splits a string
+   * to find it. */
   moves: Partial<Record<Role, { move: string; command: string }>>;
 };
 
@@ -366,19 +363,28 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
     moves: { pm: { move: "answer", command: "/workflow-plan <id>" } },
   },
   designed: {
-    draft: "both designs, from the page and the journeys",
+    draft: "the UI design, from the page and the journeys",
     moves: {
       design: { move: "tweak", command: "/workflow-design <id>" },
-      tech: { move: "challenge", command: "/workflow-tech <id>" },
     },
   },
   specified: {
-    draft: "two blind readings, reconciled",
-    moves: { pm: { move: "read", command: "/workflow-specify <id>" } },
+    draft: "the blind cases, the tech design and the requirements, reconciled",
+    moves: {
+      pm: {
+        move: "resolve the open Raised rows",
+        command: "/workflow-specify <id>",
+      },
+    },
   },
   planned: {
     draft: "the plan",
-    moves: { dev: { move: "read", command: "/workflow-tasks <id>" } },
+    moves: {
+      dev: {
+        move: "read the plan and challenge the tech design",
+        command: "/workflow-tasks <id>",
+      },
+    },
   },
   building: {
     draft: "each group, test first",
@@ -397,9 +403,9 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
  * role.
  *
  * The one case this reaches past its own stage for is Proposed: its second
- * half hands the change to the designer and the tech PIC, and the table
- * writes their moves against Designed's row, not Proposed's — so their
- * command is read off the next rung rather than left to a stage that names
+ * half hands the change to the designer, and the table writes the designer's
+ * move against Designed's row, not Proposed's — so the command is read off
+ * the next rung rather than left to a stage that names
  * them nowhere. The window stays narrowed to the stage and the one after it,
  * because that is the only pair the table ever splits this way: every other
  * drafted stage's own row already carries every hand it moves.
@@ -422,9 +428,8 @@ export function moveOf(
 
 /**
  * The role that answers for one artifact, as the schema names it — `hand:`
- * beside `teammate`, which cannot answer it: the tech design and the task
- * list are both the engineer's there, while the hand of one is the tech PIC
- * and the hand of the other is whoever builds it.
+ * beside `teammate`, which says who writes a file rather than who is told
+ * about it.
  *
  * Nothing for an artifact the schema does not issue, or issues with no hand:
  * a wait, an overlay and a landing on it are shown against no role rather
@@ -483,7 +488,7 @@ const LEADING_OPEN = /^❓\s*/;
  * in its Hands table: the role's own label with its article, derived from
  * `ROLE_LABEL` so a renamed label cannot leave this map behind, and the two
  * spellings the pages write outside that shape — QA with no article, and
- * Operations, a confirmer with no role of the six. A name outside all of
+ * Operations, a confirmer with no role of the five. A name outside all of
  * these is nobody's role, so the line stays the product manager's. */
 const ROLE_OF_CONFIRMER: Record<string, string> = {
   ...Object.fromEntries(

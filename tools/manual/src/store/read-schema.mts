@@ -82,7 +82,7 @@ export function schemaArtifacts(
 
 /** The role a schema names as an artifact's hand. A key it does not carry is
  * read as absent — the artifact is shown against no role — but a role outside
- * the six is refused: every surface that names a hand and every message that
+ * the five is refused: every surface that names a hand and every message that
  * addresses one reads this, and a role nothing can route to is a silence
  * where a typo was. */
 function handOf(id: string, value: unknown): SchemaArtifact["hand"] {

@@ -59,7 +59,7 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **One human resolves what stays open** — a question stays open only when
   the test in **A question, not a guess** holds it; the same named human
   answers each before accepting the plan, and an open one holds acceptance
-- 🚧 **The engineer challenges the tech design** — there is no tech PIC: the
+- **The engineer challenges the tech design** — there is no tech PIC: the
   engineer who will build the change challenges the proposed system, its data
   flow and its rejected options before the plan is accepted, and the human who
   accepts judges the requirements and the suite whole; a question the tech

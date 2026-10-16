@@ -50,7 +50,6 @@ function artifacts(): SchemaArtifact[] {
 const HANDS = {
   pm: "robin",
   design: "dana",
-  tech: "kim",
   dev: "sam",
   qa: "ari",
   release: "lee",
@@ -71,8 +70,8 @@ function at(rung: Stage, extra: Partial<ChangeEntry> = {}): ChangeEntry {
   const fields: Partial<ChangeEntry> = { hands: { ...HANDS } };
   const step = STAGES.indexOf(rung);
   const from = (one: Stage) => step >= STAGES.indexOf(one);
-  if (from("designed")) written.push("ui-design", "tech-design");
-  if (from("specified")) written.push("specs", "test-cases");
+  if (from("designed")) written.push("ui-design");
+  if (from("specified")) written.push("test-cases", "tech-design", "specs");
   if (from("planned")) {
     written.push("tasks");
     fields.promotedBy = "sam";
@@ -109,27 +108,47 @@ describe("the stage a change's files prove", () => {
   });
 
   it("does not move past a proof that is missing", () => {
-    // The plan was written before either design: the requirements, the cases
-    // and the task list are all on `main` and the change is still Proposed.
+    // The plan was written before the UI design: the cases, the tech design,
+    // the requirements and the task list are all on `main` and the change is
+    // still Proposed.
     const planned = at("planned", {
-      written: [...PROPOSED, "specs", "test-cases", "tasks"],
+      written: [...PROPOSED, "test-cases", "tech-design", "specs", "tasks"],
     });
 
     expect(stage(planned)).toBe("proposed");
     expect(stage(planned)).not.toBe("planned");
   });
 
-  it("holds Specified until every raised row has landed", () => {
-    expect(stage(at("specified", { raisedOpen: 1 }))).toBe("designed");
-    expect(stage(at("building", { raisedOpen: 2 }))).toBe("designed");
-    expect(stage(at("specified", { raisedOpen: 0 }))).toBe("specified");
+  it("shared-planning-change-stages-SC-86 - holds Specified on the tech design once the cases and the requirements are in", () => {
+    const owed = at("specified", {
+      written: [...PROPOSED, "ui-design", "test-cases", "specs"],
+    });
+
+    expect(stage(owed)).toBe("designed");
+    expect(ladderOf(owed, artifacts()).heldBy).toBe("tech-design");
+    // `design_waived:` still stands for it.
+    expect(stage({ ...owed, designWaived: "no code lands outside" })).toBe(
+      "specified",
+    );
+  });
+
+  it("shared-planning-change-stages-SC-85 - proves Designed by the UI design alone", () => {
+    expect(stage(at("designed"))).toBe("designed");
+    expect(
+      stage(
+        at("designed", {
+          written: [...PROPOSED],
+          uiWaived: "nothing a reader sees moves",
+        }),
+      ),
+    ).toBe("designed");
   });
 
   it("shared-planning-agent-rounds-SC-23 - an open `Q<n>` row moves no stage", () => {
     // A numbered decisions row is answered in the thread while the change
     // keeps moving: the one question that holds anything is a goal or a
-    // non-goal that moved. `## Raised` above is the blind reading's own
-    // table, which does hold Specified — the two are not one list.
+    // non-goal that moved. `## Raised` is the blind reading's own table,
+    // which holds acceptance alone — the two are not one list.
     const asked = [
       {
         id: "Q7",
@@ -169,7 +188,7 @@ describe("the stage a change's files prove", () => {
   it("shared-planning-change-stages-SC-01 - proves Proposed's own rung before Designed's", () => {
     // Only `proposal.md` is on `main`; the decisions are waived, but the
     // journeys are not — neither written nor waived. Designed's own row
-    // (both designs, here both waived) is proven, but Proposed's remaining
+    // (the UI design, here waived) is proven, but Proposed's remaining
     // proof — the journeys — is not, and a rung is reached only when its own
     // proof and every proof before it hold.
     const change = at("proposed", {
@@ -240,7 +259,6 @@ describe("what counts as written before the outline lands", () => {
         "hands:",
         "  pm: robin",
         "  design: dana",
-        "  tech: kim",
         "",
       ].join("\n"),
       [`${CHANGE}/proposal.md`]: PROPOSAL,
@@ -263,10 +281,10 @@ describe("what counts as written before the outline lands", () => {
     );
     expect(entry.written).not.toContain("specs");
     // The stage stays Proposed, and its second half hands the change to the
-    // designer and the tech PIC — the order `CLAUDE.md` documents, where
-    // neither hand opens `spec.md`.
+    // designer — the order `CLAUDE.md` documents, where the designer never
+    // opens `spec.md`.
     expect(stage(entry)).toBe("proposed");
-    expect(handOf(entry, "proposed", artifacts())).toEqual(["design", "tech"]);
+    expect(handOf(entry, "proposed", artifacts())).toEqual(["design"]);
   });
 
   it("shared-planning-change-stages-SC-15 - reads the journeys and the suite off one set of capabilities", () => {
@@ -290,36 +308,81 @@ describe("what counts as written before the outline lands", () => {
   });
 });
 
+describe("an open Raised row, read off the store", () => {
+  const CHANGE = "openspec/changes/raised-probe";
+  const SCHEMA = readFileSync(
+    join(storeRoot, "openspec/schemas/grade10-planning/schema.yaml"),
+    "utf8",
+  );
+  const CAPABILITY = `${CHANGE}/specs/demo-product/alpha`;
+
+  it("shared-planning-change-stages-SC-87 - holds acceptance only, so the change is Specified on the product manager", () => {
+    const root = writeStore({
+      "openspec/schemas/grade10-planning/schema.yaml": SCHEMA,
+      [`${CHANGE}/.openspec.yaml`]: [
+        "schema: grade10-planning",
+        "created: 2026-10-06",
+        "ui_waived: nothing a reader sees moves",
+        "hands:",
+        "  pm: robin",
+        "",
+      ].join("\n"),
+      [`${CHANGE}/proposal.md`]: "# Raised probe\n\n## Why\n\nA probe.\n",
+      [`${CHANGE}/decisions.md`]: [
+        "## Goals",
+        "",
+        "- One outcome.",
+        "",
+        "## Raised",
+        "",
+        "| Capability | Raised | Landed |",
+        "| --- | --- | --- |",
+        "| demo-product/alpha | Can the queue carry it? |  |",
+        "",
+      ].join("\n"),
+      [`${CHANGE}/tech-design.md`]: "# Tech design\n\nOne queue.\n",
+      [`${CAPABILITY}/user-journeys.md`]:
+        "**Walked by:** nobody on their own - a policy nobody reaches\n",
+      [`${CAPABILITY}/spec.md`]: [
+        "## ADDED Requirements",
+        "",
+        "### Requirement: A lane names its stage",
+        "",
+        "#### Scenario: demo-SC-01 - it names it",
+        "",
+        "**WHEN** read **THEN** it names it",
+        "",
+      ].join("\n"),
+      [`${CAPABILITY}/feature-tcs.md`]:
+        "# demo-product/alpha Test Cases\n\n**Status:** draft\n",
+    });
+    const [entry] = readChanges(root, NO_GIT, null);
+
+    expect(entry.error).toBeUndefined();
+    expect(stage(entry)).toBe("specified");
+    expect(handOf(entry, "specified", artifacts())).toEqual(["pm"]);
+    expect(entry.questions ?? []).toEqual([]);
+  });
+});
+
 describe("a waiver standing for the design it names", () => {
   const designed = (extra: Partial<ChangeEntry>) =>
     stage(at("designed", { written: [...PROPOSED], ...extra }));
 
-  it("reaches Designed on either line, or on one of each", () => {
-    expect(
-      designed({
-        written: [...PROPOSED, "tech-design"],
-        uiWaived: "nothing a reader sees moves",
-      }),
-    ).toBe("designed");
-    expect(
-      designed({
-        written: [...PROPOSED, "ui-design"],
-        designWaived: "no code lands outside the store",
-      }),
-    ).toBe("designed");
-    expect(
-      designed({
-        uiWaived: "nothing a reader sees moves",
-        designWaived: "no code lands outside the store",
-      }),
-    ).toBe("designed");
+  it("reaches Designed on the UI design's file or its line", () => {
+    expect(designed({ written: [...PROPOSED, "ui-design"] })).toBe("designed");
+    expect(designed({ uiWaived: "nothing a reader sees moves" })).toBe(
+      "designed",
+    );
   });
 
-  it("leaves Proposed where the other design has neither file nor line", () => {
-    expect(designed({ uiWaived: "nothing a reader sees moves" })).toBe(
+  it("shared-planning-change-stages-SC-08 - leaves Proposed where the UI design has neither file nor line", () => {
+    // The tech design's waiver proves nothing at Designed: the tech design
+    // is Specified's.
+    expect(designed({ designWaived: "nothing lands outside" })).toBe(
       "proposed",
     );
-    expect(designed({ designWaived: "nothing lands outside" })).toBe(
+    expect(designed({ written: [...PROPOSED, "tech-design"] })).toBe(
       "proposed",
     );
   });
@@ -367,26 +430,24 @@ describe("whose turn it is", () => {
     expect(handsAt("proposed", { hands: undefined })).toEqual(["pm"]);
   });
 
-  it("is the designer's and the tech PIC's once the three are in", () => {
-    expect(handsAt("proposed")).toEqual(["design", "tech"]);
+  it("shared-planning-change-stages-SC-15 - is the designer's alone once the three are in", () => {
+    expect(handsAt("proposed")).toEqual(["design"]);
     expect(stage(at("proposed"))).toBe("proposed");
   });
 
-  it("waits on the hands the next stage needs, and stands a waived one down", () => {
-    // Both designs are owed and neither hand is named.
+  it("waits on the designer's name, and a waived UI design needs nobody", () => {
+    // The UI design is owed and nobody is named to draw it.
     expect(handsAt("proposed", { hands: { pm: "robin" } })).toEqual(["pm"]);
-    // The designer is named and the tech design is owed too.
     expect(
       handsAt("proposed", { hands: { pm: "robin", design: "dana" } }),
-    ).toEqual(["pm"]);
-    // The UI design is waived, so nobody draws it: the tech PIC is the only
-    // hand the next stage needs, and the turn passes on that name alone.
-    expect(
-      handsAt("proposed", {
-        hands: { pm: "robin", tech: "kim" },
-        uiWaived: "nothing a reader sees moves",
-      }),
-    ).toEqual(["tech"]);
+    ).toEqual(["design"]);
+    // The UI design is waived, so nobody draws it: the waiver itself is
+    // Designed's proof, and the change is no longer Proposed.
+    const waived = at("proposed", {
+      hands: { pm: "robin" },
+      uiWaived: "nothing a reader sees moves",
+    });
+    expect(stage(waived)).toBe("designed");
   });
 
   it("reads a waived decisions record as the decisions landing", () => {
@@ -395,7 +456,14 @@ describe("whose turn it is", () => {
         written: ["proposal", "user-journeys"],
         decisionsWaived: "the interview settled nothing to keep",
       }),
-    ).toEqual(["design", "tech"]);
+    ).toEqual(["design"]);
+  });
+
+  it("shared-planning-change-stages-SC-16 - is the product manager's alone at Specified, with an open Raised row too", () => {
+    expect(handsAt("specified")).toEqual(["pm"]);
+    expect(moveShown(draftedOf("specified")?.moves ?? [])).toBe(
+      "resolve the open Raised rows",
+    );
   });
 
   it("shared-planning-agent-rounds-SC-89 - keeps suite review out of the Specified hands", () => {
@@ -448,13 +516,12 @@ describe("the roles a change has not yet reached, for My turn's later list", () 
     expect(later("planned")).toEqual(["qa", "release"]);
   });
 
-  it("says the designer and the tech PIC are later while proposed is still the product manager's half", () => {
-    // Tech is unnamed, so the turn has not passed to the design half yet —
-    // both halves of it are still ahead, whether or not their handle is named.
-    const proposed = at("proposed", { hands: { pm: "robin", design: "dana" } });
+  it("says the designer is later while proposed is still the product manager's half", () => {
+    // The designer is unnamed, so the turn has not passed to the design half
+    // yet — it is still ahead.
+    const proposed = at("proposed", { hands: { pm: "robin" } });
     expect(laterRolesOf(proposed, "proposed", artifacts())).toEqual([
       "design",
-      "tech",
       "qa",
       "dev",
       "release",
@@ -466,7 +533,6 @@ describe("the roles a change has not yet reached, for My turn's later list", () 
     // product manager's own second turn, at Specified, is still ahead.
     const roles = later("designed");
     expect(roles).not.toContain("design");
-    expect(roles).not.toContain("tech");
     expect(roles).toContain("pm");
   });
 
@@ -484,7 +550,7 @@ describe("the roles a change has not yet reached, for My turn's later list", () 
     });
     const roles = laterRolesOf(proposed, "proposed", artifacts());
     expect(roles).not.toContain("design");
-    expect(roles).toContain("tech");
+    expect(roles).toContain("dev");
   });
 });
 
@@ -494,19 +560,19 @@ describe("what the ladder stopped at", () => {
 
   it("names the first artifact of the rung that is not proven", () => {
     expect(held("proposed")).toBe("ui-design");
-    expect(held("designed")).toBe("specs");
+    expect(held("designed")).toBe("test-cases");
     expect(held("specified")).toBe("tasks");
-    expect(held("proposed", { written: [...PROPOSED, "ui-design"] })).toBe(
-      "tech-design",
-    );
+    expect(
+      held("designed", {
+        written: [...PROPOSED, "ui-design", "test-cases", "specs"],
+      }),
+    ).toBe("tech-design");
   });
 
   it("names nothing where no artifact is what holds the rung", () => {
     // Every box is ticked and the deploy has not happened: nothing a hand
     // writes stands between the change and On staging.
     expect(held("building", { taskGroups: [group(3, 3)] })).toBeUndefined();
-    // A raised row holds Specified while both its artifacts are in.
-    expect(held("specified", { raisedOpen: 1 })).toBeUndefined();
     expect(held("archived")).toBeUndefined();
   });
 });
@@ -522,7 +588,7 @@ describe("which artifact is whose hand", () => {
       decisions: "pm",
       "user-journeys": "pm",
       "ui-design": "design",
-      "tech-design": "tech",
+      "tech-design": "dev",
       specs: "pm",
       "test-cases": "pm",
       tasks: "dev",
@@ -549,9 +615,11 @@ describe("what the agent drafts and the hand moves", () => {
     const shown = (rung: Stage) => moveShown(draftedOf(rung)?.moves ?? []);
 
     expect(shown("proposed")).toBe("answer");
-    expect(shown("designed")).toBe("tweak · challenge");
-    expect(shown("specified")).toBe("read");
-    expect(shown("planned")).toBe("read");
+    expect(shown("designed")).toBe("tweak");
+    expect(shown("specified")).toBe("resolve the open Raised rows");
+    expect(shown("planned")).toBe(
+      "read the plan and challenge the tech design",
+    );
     expect(shown("building")).toBe("read each landing");
   });
 
@@ -560,12 +628,8 @@ describe("what the agent drafts and the hand moves", () => {
       (draftedOf(rung, "pos")?.moves ?? []).map((one) => one.command);
 
     expect(commands("proposed")).toEqual(["/workflow-plan pos"]);
-    // Two hands take the change while it is still Proposed, and each drafts
-    // one design, so Designed offers one command per hand.
-    expect(commands("designed")).toEqual([
-      "/workflow-design pos",
-      "/workflow-tech pos",
-    ]);
+    // The designer alone takes the change at Designed.
+    expect(commands("designed")).toEqual(["/workflow-design pos"]);
     expect(commands("specified")).toEqual(["/workflow-specify pos"]);
     expect(commands("planned")).toEqual(["/workflow-tasks pos"]);
     expect(commands("building")).toEqual(["/workflow-build pos <group>"]);
@@ -576,9 +640,7 @@ describe("what the agent drafts and the hand moves", () => {
       "the marks and the three files, from what the hand asks",
     );
     expect(draftedOf("building")?.mark).toBe("each group, test first");
-    expect(movedBy(draftedOf("designed")?.moves ?? [])).toBe(
-      "Designer: tweak · Tech PIC: challenge",
-    );
+    expect(movedBy(draftedOf("designed")?.moves ?? [])).toBe("Designer: tweak");
     expect(movedBy(draftedOf("building")?.moves ?? [])).toBe(
       "Engineer: read each landing",
     );
@@ -635,8 +697,8 @@ describe("the five overlays beside the stage", () => {
         artifact: "tech-design",
         text: "2026-09-12 waiting on the increment",
         since: "2026-09-12",
-        role: "tech",
-        hand: "kim",
+        role: "dev",
+        hand: "sam",
       },
       {
         kind: "waiting",
@@ -652,7 +714,7 @@ describe("the five overlays beside the stage", () => {
   it("names the role and no handle where the change names nobody for it", () => {
     const waiting = at("specified", {
       hands: { pm: "robin" },
-      awaiting: [{ artifact: "tech-design", why: "2026-09-12 the increment" }],
+      awaiting: [{ artifact: "tasks", why: "2026-09-12 the increment" }],
     });
 
     // The role, and no `hand`: a handle holding the role's own name would
@@ -660,10 +722,10 @@ describe("the five overlays beside the stage", () => {
     expect(overlays(waiting)).toEqual([
       {
         kind: "waiting",
-        artifact: "tech-design",
+        artifact: "tasks",
         text: "2026-09-12 the increment",
         since: "2026-09-12",
-        role: "tech",
+        role: "dev",
       },
     ]);
   });

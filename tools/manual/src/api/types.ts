@@ -308,11 +308,11 @@ export type EnvironmentReceiptSummary = {
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
 
 /**
- * The six roles, in the order a change passes through them. Declared here,
+ * The five roles, in the order a change passes through them. Declared here,
  * where `Role` is drawn from it; `scripts/openspec/lib/team.mjs` re-exports it
  * for the checks and the scripts, which read this module under plain node.
  */
-export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"] as const;
+export const ROLES = ["pm", "design", "qa", "dev", "release"] as const;
 
 /** A hand a change passes through. */
 export type Role = (typeof ROLES)[number];
@@ -351,7 +351,7 @@ export type OpenQuestion = {
    * for a line under a section the proposal links. */
   artifact: string;
   /** The role it is addressed to, which is where it is routed when the change
-   * names no hand for it. Any role a row names, the six or not. */
+   * names no hand for it. Any role a row names, the five or not. */
   role: string;
   /** The handle `hands:` names for that role, or the role itself where the
    * change names none. */
@@ -586,10 +586,6 @@ export type ChangeEntry = {
    * questions a linked page still carries — merged on here by `markQuestions`
    * when the snapshot is read, where the pages are at hand. */
   questions?: OpenQuestion[];
-  /** How many rows of `decisions.md`'s `## Raised` table have landed nowhere
-   * — the blind reading's questions, which the requirements are not settled
-   * without. Absent where every row landed or the file carries no table. */
-  raisedOpen?: number;
   /** The rounds this change has run, from `rounds.md`, one row per round in
    * landing order. Absent until the first round writes the file — a change
    * opened this morning owes no row, and an empty list is a file with a header
@@ -604,8 +600,7 @@ export type ChangeEntry = {
   stage: Stage;
   /** The artifact the ladder stopped at: what the change owes to reach the
    * next stage. Absent where the next rung is proven by something no hand
-   * writes — a ticked box, a deploy, a cut, the fold — and where the rung is
-   * held by a raised row rather than by a file. */
+   * writes — a ticked box, a deploy, a cut, the fold. */
   heldBy?: string;
   /** What the change says it is waiting for, from `.openspec.yaml`
    * `awaiting:` — an artifact id against the line its author wrote. */
@@ -623,9 +618,8 @@ export type SchemaArtifact = {
   teammate?: string;
   /** The role that answers for it — the hand a wait, an overlay and a landing
    * on this artifact are addressed to. Beside `teammate` rather than derived
-   * from it: the tech design and the task list are both the engineer's there,
-   * while the hand of one is the tech PIC and of the other whoever builds
-   * it. Absent where the schema names no hand. */
+   * from it: `teammate` says who writes a file, `hand` who is told about it.
+   * Absent where the schema names no hand. */
   hand?: Role;
   requires: string[];
   /** The artifacts this one's text is drawn from, in reading order — the

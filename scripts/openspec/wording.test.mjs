@@ -23,10 +23,14 @@ import {
 
 const LINKED = "<https://spec.test/in-flight/probe|Probe>";
 
-test("yourTurnText names the stage and pastes the hand's command", () => {
+test("shared-planning-change-stages-SC-88 - yourTurnText names the stage and pastes the hand's command", () => {
   assert.equal(
     yourTurnText({ id: "probe", stage: "planned" }, "dev", LINKED),
-    `*Your turn* — ${LINKED} is at *Planned*.\nRead: \`/workflow-tasks probe\``,
+    `*Your turn* — ${LINKED} is at *Planned*.\nRead the plan and challenge the tech design: \`/workflow-tasks probe\``,
+  );
+  assert.equal(
+    yourTurnText({ id: "probe", stage: "specified" }, "pm", LINKED),
+    `*Your turn* — ${LINKED} is at *Specified*.\nResolve the open Raised rows: \`/workflow-specify probe\``,
   );
 });
 

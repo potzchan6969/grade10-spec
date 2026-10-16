@@ -6,7 +6,6 @@ depends_on:
   - run-a-round-on-every-artifact
 hands:
   pm: "@ecchochan"
-  tech: "@ecchochan"
   dev: "@ecchochan"
 reviewed:
   user-journeys: dc76e116
