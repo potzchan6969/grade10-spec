@@ -258,15 +258,19 @@ test("the notifier verifies the run listing before choosing the last deployed he
   assert.match(step.run, /git merge-base --is-ancestor "\$base" "\$HEAD_SHA"/);
 });
 
-test("the manual deploys on every push the notifier reads", () => {
-  // A page landing can put an artifact behind, and its hand is told; a change
-  // moving is a milestone. Each must start a deploy, or the notifier never
-  // wakes for it.
+test("shared-planning-change-stages-SC-72 - the manual deploys on every push to main", () => {
+  // The open page's banner promises the site catches up on its own, so every
+  // push to `main` rebuilds it — a path filter made that false — and Lint's
+  // fix push, made with the default token, is caught by Lint finishing.
   const manual = YAML.parse(read(".github/workflows/manual.yml"));
-  for (const path of ["docs/prds/**", "openspec/**"]) {
-    assert.ok(manual.on.push.paths.includes(path), path);
-  }
-  assert.deepEqual(manual.on.push.branches, ["main"]);
+  assert.deepEqual(manual.on.push, { branches: ["main"] });
+  assert.deepEqual(manual.on.workflow_run, {
+    workflows: ["Lint"],
+    types: ["completed"],
+    branches: ["main"],
+  });
+  const build = manual.jobs.deploy.steps.find((step) => step.name === "Build");
+  assert.equal(build.env.RELAY_URL, "${{ vars.RELAY_URL }}");
 });
 
 test("the channel post falls back to the store's own channel", () => {
