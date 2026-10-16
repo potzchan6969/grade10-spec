@@ -71,24 +71,26 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | Tier · points to spend · points earned this year toward the next tier · tier renews · points active until · expiring soon |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits ❓ |
 | Your member card | The member's name, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
 
-- **One expiry line** — the Membership section names how many points
-  expire and the day they go, on one line, and warns inside the last 30 days
+- **No expiry line on the card** — the whole balance lapses on one shared
+  inactivity date, never in parts, so a partial-expiry reminder has nothing
+  to say here. ❓ Where the expiry date reads instead — the Tier & Benefits
+  page is being designed 🚧
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
 - **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 
-❓ Whether "Points to spend" and "Points earned this year" are the launch
+❓ Whether "Points to spend" and the tier-progress labels are the launch
 names.
 
-::story{id="loyalty-profile-blocks-membershipsummary--default" title="Tier, balance and progress"}
+::story{id="loyalty-profile-blocks-tiercard--gold" title="Tier, balance and progress"}
 
 ## Member Card
 
@@ -148,8 +150,9 @@ The same card can be added to a phone wallet —
   refund, and the ledger record survives for audit
 
 :::callout{kind="note"}
-No Figma frame exists for any membership surface, so the `@grade10/ui` blocks
-and their stories are the visual record.
+The tier card's Figma frame lives in Grade10-DS-2026 (node 7141:2000). The
+other membership surfaces have no Figma frame, so their `@grade10/ui` blocks
+and stories remain the visual record.
 :::
 
 :::detail{title="Code map" for="engineer"}
