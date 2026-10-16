@@ -1,0 +1,3 @@
+schema: grade10-planning
+created: 2026-10-16
+design_waived: all work is in this store - the lens primitive, the gallery blocks, catalogs and stories live under packages/ and apps/preview; no application-side technical design

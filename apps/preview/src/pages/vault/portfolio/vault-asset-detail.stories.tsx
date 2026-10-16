@@ -75,7 +75,9 @@ function VaultAssetDetailPage({
       <div className={cn(PAGE_ENTER_CLASS, "delay-[30ms]")}>
         <ListingLotGallery
           copy={{
-            zoom: "Zoom image",
+            zoom: "Hover to magnify",
+            zoomInstructions:
+              "Move the pointer over the image or use the arrow keys to magnify; Escape hides the magnifier.",
             previous: "Previous image",
             next: "Next image",
             images: "Item images",
