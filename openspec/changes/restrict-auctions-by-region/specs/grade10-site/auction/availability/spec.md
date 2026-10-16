@@ -18,12 +18,17 @@ is refused before it reaches the auction.
   - Account menu: no auction entry - My Auctions, watchlist, auction orders
   - Watch controls: none rendered on any surface
 - Restricted page
-  - Direct auction address: the catalogue, a lot, My Auctions or a winner
-    order answers the restriction page
+  - Direct auction address: the catalogue, a lot, My Auctions or the bidding
+    history answers the restriction page
   - Page content: names the restriction and links the store
 - Refused auction actions
-  - Mutations refused: bids, auto-bids, watches and winner-order actions
-    from a restricted region never reach the auction
+  - Mutations refused: bids, auto-bids, card enrollment and watches from a
+    restricted region never reach the auction
+  - Reads refused: the catalogue, a lot, a standing, the bid record and the
+    live channel
+- Commitments already made
+  - Settling: a winner order, its invoice and its payment stay reachable
+  - Withdrawing: unwatching and muting alerts stay open
 - Unaffected surfaces
   - Non-auction pages: the store and every other surface render unchanged
 
@@ -102,9 +107,11 @@ Non-auction entries on the same surface SHALL render unchanged.
 ### Requirement: A direct auction address answers the restriction page
 
 A restricted request for an auction address — the catalogue, a lot page,
-My Auctions, the watchlist or a winner order — SHALL be answered by the
-restriction page, never by the auction surface and never by the not-found
-surface.
+My Auctions or the bidding history — SHALL be answered by the restriction
+page, never by the auction surface and never by the not-found surface.
+
+A winner order and its invoice SHALL NOT be answered by the restriction page:
+a collector who has already won settles from any region.
 
 The restriction page SHALL state that auctions are not available in the
 collector's region and SHALL offer a link to the store.
@@ -120,9 +127,17 @@ collector's region and SHALL offer a link to the store.
 #### Scenario: grade10-site-auction-availability-SC-08 - Direct lot or account visit
 **Serves:** grade10-site-auction-availability-US-02 - an emailed link resolves to the same answer
 
-- **WHEN** a restricted request asks for a lot page, My Auctions, the
-  watchlist or a winner order
+- **WHEN** a restricted request asks for a lot page, My Auctions or the
+  bidding history
 - **THEN** it SHALL be answered by the restriction page
+
+<!-- trace:scenario id=grade10-site-auction-availability.SC-08a rev=1 -->
+#### Scenario: grade10-site-auction-availability-SC-08a - A winner settles from a restricted region
+**Serves:** grade10-site-auction-availability-US-03 - money already committed is never stranded
+
+- **WHEN** a restricted request from the winner asks for their winner order
+  or its invoice, or sends its address, payment or proof
+- **THEN** it SHALL be answered as it is for any winner
 
 <!-- trace:scenario id=grade10-site-auction-availability.SC-09 rev=1 -->
 #### Scenario: grade10-site-auction-availability-SC-09 - The page names the restriction
@@ -134,11 +149,15 @@ collector's region and SHALL offer a link to the store.
 
 ### Requirement: An auction action from a restricted region is refused
 
-A bid, auto-bid, watch or winner-order action arriving from a restricted
-region SHALL be refused before it reaches the auction, and SHALL record no
-commitment: no bid, no watch, no order change. An auction data read serving
-an auction surface — a lot read, a standing read, a live-update channel —
-SHALL be refused the same way.
+A bid, auto-bid, card enrollment or watch arriving from a restricted region
+SHALL be refused before it reaches the auction, and SHALL record no
+commitment: no bid, no watch, no enrollment. An auction data read serving an
+auction surface — the catalogue, a lot read, a standing read, the bid record,
+a live-update channel — SHALL be refused the same way.
+
+An unwatch and an alert mute SHALL be answered as for any collector, so a
+commitment can be withdrawn from anywhere. One public read, whether the
+request's region is offered auctions, SHALL be answered to every region.
 
 <!-- trace:scenario id=grade10-site-auction-availability.SC-10 rev=1 -->
 #### Scenario: grade10-site-auction-availability-SC-10 - A sent bid is refused
@@ -152,10 +171,15 @@ SHALL be refused the same way.
 #### Scenario: grade10-site-auction-availability-SC-11 - A sent watch or order action is refused
 **Serves:** grade10-site-auction-availability-US-03 - no commitment recorded that cannot be settled
 
-- **WHEN** a watch, unwatch or winner-order action arrives from a restricted
-  region
-- **THEN** it SHALL be refused, and no watch or order change SHALL be
-  recorded
+- **WHEN** a watch arrives from a restricted region
+- **THEN** it SHALL be refused, and no watch SHALL be recorded
+
+<!-- trace:scenario id=grade10-site-auction-availability.SC-11b rev=1 -->
+#### Scenario: grade10-site-auction-availability-SC-11b - An unwatch from a restricted region is answered
+**Serves:** grade10-site-auction-availability-US-03 - withdrawing a commitment is never refused
+
+- **WHEN** an unwatch or an alert mute arrives from a restricted region
+- **THEN** it SHALL be answered as it is for any collector
 
 <!-- trace:scenario id=grade10-site-auction-availability.SC-11a rev=1 -->
 #### Scenario: grade10-site-auction-availability-SC-11a - An auction read is refused

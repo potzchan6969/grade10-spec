@@ -63,12 +63,12 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Open questions
 
-- **Restricted collector with open commitments** — ❓ Product: whether a
-  signed-in collector in a restricted region with a standing bid, a watched
-  lot or an unpaid winner invoice keeps read access to settle it. The spec
-  drafts assume read-only access.
-- **zzz-site scope** — ❓ Product: whether ZZZ shares the restriction rule
-  or auctions simply never launch there.
+- **Restricted collector with open commitments** — decided by agent as Q8:
+  the winner order stays reachable to settle, unwatching and muting stay
+  open, everything else is refused.
+- **zzz-site scope** — decided by agent as Q10: ZZZ shares the one list.
+- **The restricted list itself** — ❓ Product and legal confirm the four
+  regions Q9 starts with.
 
 ## References
 

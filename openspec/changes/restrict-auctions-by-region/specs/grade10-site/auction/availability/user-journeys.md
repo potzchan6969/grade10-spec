@@ -15,8 +15,8 @@ the store,
 
 ### grade10-site-auction-availability-US-03: Collector in a restricted region tries to act on an auction
 
-**As a** collector in a restricted region who sends a bid, a watch or an
-order action anyway,
+**As a** collector in a restricted region who sends a bid or a watch
+anyway,
 **I want** the action refused before it reaches the auction,
 **so that** no commitment is recorded that cannot be settled.
 
