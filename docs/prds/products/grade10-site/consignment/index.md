@@ -157,6 +157,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
   statement and a commission invoice, with the contact details for payment
 - **How** - a bank transfer a treasurer records with its reference; a
   correction takes a second holder of the payout grant
+- ❓ Product - **The payout flow** - the proposed directions: a bank
+  transfer directly, a payout the consignor requests and a bank transfer
+  follows, or credits or points; until decided, a bank transfer the
+  treasurer records stands
 - **When** - after the return window by default; an admin may switch a
   channel to paying at the sale, the refund then set against later payouts,
   or to one monthly statement
@@ -196,10 +200,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 
 ## When It Ends
 
-- ❓ Product - **What an unsold item does** - the handling at term's end
-  is unset; the directions on the table: extend the term, a lower price,
-  the other channel or a relist, the vault for long-term storage, or the
-  consignor books a collection at the shop or has it shipped back
+- ❓ Product - **What an unsold item does** - unset; the proposed actions
+  a consignor may take at term's end: reduce the listed price, save it to
+  the vault for long-term custody, or book an appointment to collect it
+  at the shop
 - **Taken back early** - the consignor may take an item back before it
   sells, for the early take-back fee where an admin set one; a lot live at
   auction only once the auction calls it off or it closes
@@ -287,5 +291,6 @@ payouts made on their due day.
 | Graded only | ❓ Open | Proposed: intake takes graded collectables only at launch, there being no grading service on day 1; whether ungraded is ever taken | Product |
 | The figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale and an incentive of **5%** of the estimated value; the exact figures, and whether the paid incentive is set against the payout | Product |
 | The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
-| An unsold item at term's end | ❓ Open | The handling is unset; the directions on the table: extend the term, a lower price, the other channel or a relist, the vault for long-term storage, or the consignor books a collection at the shop or has it shipped back | Product |
+| An unsold item at term's end | ❓ Open | Proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | Product |
+| The payout flow | ❓ Open | Proposed: a bank transfer directly, a payout the consignor requests and a bank transfer follows, or credits or points; until decided, a bank transfer the treasurer records stands | Product |
 :::
