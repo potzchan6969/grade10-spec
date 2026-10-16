@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "9d0d2a53409b775b9ef348cd063eae592e1f21b175aea8aff13f4345ef4c9214"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "98a52814d08e50caed86bdfdf4d9ea0b63f1617e",
+    "capturedAt": "2026-10-16T19:31:06.372Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A saved draft receives an editable generated slug",
+          "Requirement: Relist opens a new draft from an Unsold listing"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-admin/auction/listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}
