@@ -201,9 +201,10 @@ the implementation choices.
    row and `top_amount` would be unchanged and the amount is at least the
    highest `amount` on any house bid row on the listing. It then writes as a
    raise does: a new house row at the same amount and state, the old one
-   `canceled`, a private `automatic_max_lowered` action and no public record.
-   The bid ledger therefore lists every commit, raise and lower with its
-   Accepted At, which the reserve holder's trace reads.
+   `canceled`, and no public record. It writes no bid action group: the house
+   has no account history to read one, and the bid ledger already lists every
+   commit, raise and lower with its Accepted At, which the reserve holder's
+   trace reads (decisions.md Q60).
    - Rejected: updating `maximum` in place. The ledger would lose the
      previous maximum and its Accepted At.
 
@@ -304,10 +305,11 @@ the implementation choices.
 
 13. **Profiles are kept behind one door, and a profile row lock orders
     them.** `internalBidders.{list,create,update,retire}` are
-    `elevatedProcedure("auction:reserve")` with `auditDetails`
-    `{ internalBidderId, act }`, `act` one of `added`, `renamed`,
-    `label_changed`, `retired` - no listing, amount, name or label, so an
-    audit reader without the grant links no profile to a lot. Every writer
+    `elevatedProcedure("auction:reserve")` filed under the profile
+    (`auctionInternalBidder`) with `auditDetails` `{ internalBidderId, acts }`,
+    `acts` from `added`, `renamed`, `label_changed`, `address_changed`,
+    `retired` - no listing, amount, name, label or address, so an audit reader
+    without the grant links no profile to a lot (decisions.md Q62). Every writer
     that depends on a profile's state locks its `internal_bidders` row:
     `saveInternalBid` and `commitDueHouseMaximum` take `FOR SHARE` after the
     listing lock; `update` and `retire` take `FOR UPDATE` and never take a
@@ -465,6 +467,9 @@ erDiagram
 ```
 
 ## Service Interfaces
+
+Every refusal below answers as data, `{ ok: false, code, field?, amountMinor? }`,
+naming the amount or field it turns on (decisions.md Q61).
 
 Every function below but the profile functions runs inside `withListingLock`
 on the listing named, in one transaction; a refusal returns before any write.

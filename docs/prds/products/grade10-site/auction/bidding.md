@@ -13,7 +13,7 @@ from, and the record and letters that follow their lots.
 Every Grade10 listing is absolute — no reserve and no buy-now price — and the
 highest accepted bid at the close wins it.
 
-🚧 An admin sets a time for Grade10 to commit the house maximum. Before that
+An admin sets a time for Grade10 to commit the house maximum. Before that
 time the house is not in the bidding. The house then bids under a listing
 pseudonym like any collector, and a lot it leads at close reads sold to
 collectors. Collectors do not see that the bidder is the house - [Internal
@@ -111,7 +111,7 @@ increment is 100:
   only by beating it
 - **Raise only** — a collector's maximum goes up at any time and never down,
   because lowering would withdraw a commitment others have bid against
-- 🚧 **House maximum lowered** - the house maximum may go down, only while the
+- **House maximum lowered** - the house maximum may go down, only while the
   leader and the current bid stay as they are and never below a bid already
   placed for the house
 - **Own standing** — a bidder reads their maximum, the current bid and whether
@@ -406,7 +406,7 @@ the account's registered address, and the letters about a won lot are
   non-winner letter, and a collector winner gets only the auction-won order
   letter; an internal bidder's order sends no letter to anyone - [Post-Bidding ·
   The Close](/p/grade10-site/auction/post-bidding#the-close)
-- 🚧 **House bids** - collectors outbid by the house get the ordinary outbid
+- **House bids** - collectors outbid by the house get the ordinary outbid
   letter, other enrolled bidders get the ordinary new-bid letter, and losing
   bidders and watchers get the ordinary close letters. No letter names the
   house - [Internal Bid](/p/grade10-admin/auction/internal-bid)
@@ -495,7 +495,7 @@ surface.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Absolute sale | 🚧 In flight | No reserve and no buy-now price; the highest accepted bid at the close wins, and that bid may be the house's internal bid. The house bids under a listing pseudonym and is not disclosed; Legal confirms the auction terms wording before release. Replaces "No reserve and no buy-now price; the highest accepted bid at the close wins." Disclosing the house bid was ruled out, because it tells a collector when to stop. | Product (@htonyl) |
-| Internal bid, lowered | 🚧 In flight | A house maximum already committed may go down only when the leader and the current bid stay as they are, and never below a bid already placed for the house. Collector maximums stay raise only. | Product (@htonyl) |
+| Internal bid, lowered | Decided | A house maximum already committed may go down only when the leader and the current bid stay as they are, and never below a bid already placed for the house. Collector maximums stay raise only. | Product (@htonyl) |
 | Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product |
 | A bid counts when accepted | Decided | A bid stands when it is judged under the lot's lock, and nothing waits on the card. Replaces "a bid counts when its payment confirms", which kept a pending bid and an Authorizing… state. | Product |
 | My Auctions price | Decided | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product |
