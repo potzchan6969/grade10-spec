@@ -18,8 +18,8 @@
 
 ## 3. Consumption (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Supply HKD line amounts and the conversion note on `summary.total.footnote` where the Winner Order page composes an HKD order's summary — the note names the converted lines' USD total and the fixed rate; leave USD and pre-invoice summaries without it (`winner-order-SC-290`, `winner-order-SC-304`, `winner-order-SC-291`, `winner-order-SC-292`)
-- [ ] 3.2 Verify: the page suite covering `winner-order-US27-TC1` and `winner-order-US26-TC7`
+- [x] 3.1 Supply HKD line amounts and the conversion note on `summary.total.footnote` where the Winner Order page composes an HKD order's summary — the note names the converted lines' USD total and the fixed rate; leave USD and pre-invoice summaries without it (`winner-order-SC-290`, `winner-order-SC-304`, `winner-order-SC-291`, `winner-order-SC-292`)
+- [x] 3.2 Verify: the page suite covering `winner-order-US27-TC1` and `winner-order-US26-TC7`
 
 ## 4. The walk (grade10)
 
