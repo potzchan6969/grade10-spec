@@ -22,24 +22,24 @@ decision. Neither answer turns the shop's later acceptance into a guarantee.
   takes, never from an earlier read or a price the browser sends
 - **A sold-out line holds checkout** — Proceed to Checkout stays unavailable
   until the collector removes it
-- 🚧 **A product that left the shop** — a line whose product left the
+- **A product that left the shop** — a line whose product left the
   store's channel, or whose variant no longer exists, leaves the cart when it
   opens or when checkout finds it, and one notice names every line removed. A
   variant the shop still lists but does not sell stays in the cart as Sold
   out for the collector to remove
-- 🚧 **Every moved line at once** — when the checkout read finds lines that
+- **Every moved line at once** — when the checkout read finds lines that
   moved, the drawer stays open and one notice names each of them with what
   happened to it
-- 🚧 **Back to the cart** — a checkout the store's read or the shop refuses
+- **Back to the cart** — a checkout the store's read or the shop refuses
   reads the cart again as opening it does, so each line shows the shop's
   current answer
-- 🚧 **Filled short** — a cart the shop would fill short is refused, naming
+- **Filled short** — a cart the shop would fill short is refused, naming
   the line and how many the shop would fill; nothing is sold short
-- 🚧 **A check that cannot finish** — every affected line reads unchecked,
+- **A check that cannot finish** — every affected line reads unchecked,
   its last availability and price and the cart total are replaced with an
   unchecked state, Retry is offered, and checkout stays unavailable until the
   store has a current answer
-- 🚧 **A cart that never loaded** — Retry is offered and checkout stays
+- **A cart that never loaded** — Retry is offered and checkout stays
   unavailable; the drawer names no line and never says the cart is empty, as
   [Store Cart](/p/shared/ui/store-cart) shows a cart not yet read
 

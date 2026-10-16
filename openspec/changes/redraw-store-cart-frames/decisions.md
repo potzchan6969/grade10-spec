@@ -18,6 +18,8 @@
 | Q2 | Drawer body: what does it show when the first cart read fails and no lines are known? | The loading treatment, never the empty state, beside the application's Retry - decided 2026-10-08 by the product manager, as recommended | A body of its own for this state, drawn in a change of its own |
 | Q3 | Cart line price: how does a screen reader tell the struck list price from the price charged? | Visually hidden labels such as Sale price and Was, supplied by the application as copy, in this change, for every struck price. The options look the same on screen, so it is not the designer's - decided 2026-10-08 | A strike element with no new words, which does not say reliably which price is charged |
 | Q4 | Promo sheet: where does a picked ticket sit once the price check refuses its code? | Apart, muted, with the refusal as its reason and no Apply - decided 2026-10-08 by the product manager, as recommended | Keeping it in place with Apply, which offers an Apply that fails again; or leaving each application to choose |
+| Q5 | Order line: does a refunded or cancelled line's struck amount take the Sale price and Was words? | No: that strike marks a line status, not a sale, and the status badge already says why. Decided by agent: the conservative reading of Q3 | Reading Sale price and Was before amounts that were never a sale |
+| Q6 | Product tile: are the words required on its copy? | Optional on `ProductCardCopy`, required on the cart line and product page copy; the Grade10 site supplies them on every tile. Decided by agent: keeps the tile's many compositions unchanged | Required on the tile, which would force every tile composition to change at once |
 
 ## Raised
 
