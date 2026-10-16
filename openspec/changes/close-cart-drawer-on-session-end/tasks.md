@@ -6,7 +6,7 @@ Documents only. The page already carries the 🚧 line for the outcome and the d
 - [ ] 1.2 Update `docs/prds/products/grade10-site/store/cart.md`: keep the 🚧 **When the session ends** line, and add to its decisions block a row for each choice of `decisions.md` that outlives the change and that the page line carries only in part: Q2, Q4, Q5, Q7 and Q11, restating no requirement
 - [ ] 1.3 Verify: `pnpm check:manual`, `pnpm run validate:changes close-cart-drawer-on-session-end` and `pnpm openspec validate close-cart-drawer-on-session-end --strict`
 
-## 2. The drawer closes with the member's session (grade10)
+## 2. The drawer closes with the member's session (grade10) (owner: @seankcw)
 
 Built ahead of this record: `useCartClosedOnSessionEnd` and its call in `SiteWithCart` exist at `699cafe14` (9gag/grade10#1233) with two tests. This group verifies them against the scenarios and repairs only what a test turns red. It needs nothing from group 3.
 
