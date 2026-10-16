@@ -31,7 +31,7 @@ Apple code identifies and moves nothing.
 - **A missing secret refuses loudly** — adding a pass on a wallet not fully
   configured names the missing secret, rather than issuing one nobody can
   read
-- 🚧 **The launch check names what is missing** - `pnpm run secrets --check`
+- **The launch check names what is missing** - `pnpm run secrets --check`
   fails, naming each missing secret, where `packages/app-env` records a
   wallet's issuer for the brand and environment and one of that wallet's
   secrets is unset. It reports no wallet secret missing wherever no issuer is
@@ -73,7 +73,7 @@ Apple code identifies and moves nothing.
 - **Ending** — immediate; the vendor's own copy is discharged by the sweep
 - **Removing it is not ending** — deleting the pass from the phone's wallet
   app changes nothing about the membership
-- 🚧 **Operator ending** - for a member whose phone is gone. An operator
+- **Operator ending** - for a member whose phone is gone. An operator
   holding `store:write` ends one wallet's pass from the member's record, which
   names the wallets the member holds, and confirms the wallet first. It ends
   at once, as the member's own does, and the member is sent no message. It
