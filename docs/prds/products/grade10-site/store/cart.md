@@ -39,9 +39,11 @@ back to that page.
   message, when the member signs out in another tab of this site or the
   session expires. A guest's drawer stays open, and so does a member's
   through a session read that is still pending or fails. A member who
-  switches by signing out and in elsewhere finds it closed. Signing in
-  again does not reopen it, whether the end came from another tab or from
-  checkout meeting an expired session
+  switches by signing out and in elsewhere finds it closed, while a switch
+  the tab reads directly leaves it open on the new member's cart. Signing
+  in again does not reopen it unless the collector has opened the cart
+  since, whether the end came from another tab or from checkout meeting an
+  expired session
 - **Edits** — quantity and removal write to the same cart the page holds
 - **The choice follows the cart** — the code and the points the member
   chose are held with the lines, so both are still there after a reload and

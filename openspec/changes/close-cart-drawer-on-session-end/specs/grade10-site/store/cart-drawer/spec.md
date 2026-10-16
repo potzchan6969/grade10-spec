@@ -22,12 +22,12 @@ session SHALL stay open, because there is no session to end. A session the tab
 is still reading, or cannot read, SHALL NOT close the drawer, and neither SHALL a
 switch the tab reads directly from one member to another, which leaves the
 drawer open on the new member's cart. A tab that reads nobody between the two
-members closes the drawer, as it does for any sign-out.
+members SHALL close the drawer, as it does for any sign-out.
 
 When Proceed to Checkout meets an expired session, that session has ended like
-any other, and the drawer SHALL close. That close takes precedence over the drawer
-staying open on its redirecting state until the hosted invoice, and over the
-failed state that restores Checkout. What checkout then asks of the collector
+any other, and the drawer SHALL close. A close for a session end SHALL take precedence over the
+drawer staying open on its redirecting state until the hosted invoice, and
+over the failed state that restores Checkout. What checkout then asks of the collector
 is `grade10-site/store/checkout`'s. The drawer SHALL NOT reopen when the
 collector signs in again without having opened the cart since.
 
