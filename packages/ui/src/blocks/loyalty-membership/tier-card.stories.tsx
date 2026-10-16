@@ -140,6 +140,21 @@ export const NoPoints: Story = {
   },
 };
 
+/** A phone-width column: the card fills it instead of overflowing past it. */
+export const Narrow: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ width: 300 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const card = canvasElement.querySelector('[data-slot="tier-card"]');
+    expect(card?.getBoundingClientRect().width).toBeLessThanOrEqual(300);
+  },
+};
+
 /** With only a press handler the card is a button that reports the press. */
 export const Pressed: Story = {
   args: { onClick: fn() },

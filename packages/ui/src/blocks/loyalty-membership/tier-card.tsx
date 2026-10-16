@@ -163,7 +163,7 @@ function TierCard({
   const body = (
     <VStack className="w-full" gap="md">
       <HStack align="center" className="w-full" justify="space-between">
-        <HStack align="center" gap="xs">
+        <HStack align="center" className={cn("min-w-0", skin.tier)} gap="xs">
           {variant === "black" ? (
             <CrownSimple aria-hidden size={12} weight="fill" />
           ) : null}
@@ -180,7 +180,7 @@ function TierCard({
         </HStack>
         <G10LogoMono
           aria-hidden
-          className={cn("h-4 w-auto", skin.logo)}
+          className={cn("h-4 w-auto shrink-0", skin.logo)}
           data-slot="tier-card-logo"
         />
       </HStack>
@@ -220,10 +220,15 @@ function TierCard({
               gap="sm"
               justify="space-between"
             >
-              <Text size="xs" tone="muted" weight="medium">
+              <Text className="min-w-0" size="xs" tone="muted" weight="medium">
                 {copy.qualifying}
               </Text>
-              <Text data-slot="tier-card-qualifying" size="xs" tone="muted">
+              <Text
+                className="shrink-0 whitespace-nowrap"
+                data-slot="tier-card-qualifying"
+                size="xs"
+                tone="muted"
+              >
                 {`${qualifyingPoints} / ${qualifyingThreshold} ${copy.points}`}
               </Text>
             </HStack>
@@ -259,11 +264,16 @@ function TierCard({
         justify="space-between"
       >
         {earnLine ? (
-          <Text data-slot="tier-card-earn" size="xs" tone="muted">
+          <Text
+            className="min-w-0"
+            data-slot="tier-card-earn"
+            size="xs"
+            tone="muted"
+          >
             {earnLine}
           </Text>
         ) : null}
-        <HStack align="center" className="ml-auto" gap="xs">
+        <HStack align="center" className="ml-auto shrink-0" gap="xs">
           <Text data-slot="tier-card-benefits" size="xs" tone="muted">
             {copy.benefits}
           </Text>
@@ -274,7 +284,7 @@ function TierCard({
   );
 
   const cardClass = cn(
-    "relative block w-(--container-sm) overflow-clip rounded-(--radius-3xl) p-5 shadow-[0px_24px_48px_-24px_rgb(0_0_0/0.5)]",
+    "relative block w-full max-w-(--container-sm) overflow-clip rounded-(--radius-3xl) p-5 shadow-[0px_24px_48px_-24px_rgb(0_0_0/0.5)]",
     opens &&
       "cursor-pointer outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
     className,
