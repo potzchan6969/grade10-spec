@@ -1,0 +1,57 @@
+[
+  {
+    "label": "member-pass/shell",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2292",
+    "classes": "w-full max-w-(--container-xs) overflow-clip rounded-(--radius-4xl) drop-shadow-[0px_30px_30px_rgb(0_0_0/0.15)]"
+  },
+  {
+    "label": "member-pass/header",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7158-2871",
+    "classes": "w-full overflow-clip px-5 py-6"
+  },
+  {
+    "label": "member-pass/logo",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7158-2851",
+    "classes": "h-4 w-auto shrink-0 text-primary-foreground"
+  },
+  {
+    "label": "member-pass/tier",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7158-2852",
+    "classes": "border-primary bg-transparent text-primary uppercase"
+  },
+  {
+    "label": "member-pass/email",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7158-2853",
+    "classes": "w-full text-muted-foreground"
+  },
+  {
+    "label": "member-pass/body",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2264",
+    "classes": "w-full bg-card p-5"
+  },
+  {
+    "label": "scan-plate/qr-flat",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2266",
+    "classes": "w-full max-w-56"
+  },
+  {
+    "label": "scan-plate/short-code-label",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2269",
+    "classes": "text-secondary-foreground uppercase"
+  },
+  {
+    "label": "scan-plate/short-code",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2272",
+    "classes": "font-sans text-2xl leading-8 font-medium text-foreground"
+  },
+  {
+    "label": "member-pass/divider",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2747",
+    "classes": "w-full border-t border-border"
+  },
+  {
+    "label": "member-pass/countdown",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7156-2280",
+    "classes": "whitespace-nowrap text-secondary-foreground"
+  }
+]

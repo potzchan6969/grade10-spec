@@ -420,12 +420,12 @@ export {
   type CouponListProps,
 } from "./blocks/loyalty-membership/coupon-list";
 export {
-  MemberCard,
-  type MemberCardCopy,
-  type MemberCardProps,
-  type MemberCardState,
-  type MemberCardUse,
-} from "./blocks/loyalty-membership/member-card";
+  MemberPass,
+  type MemberPassCopy,
+  type MemberPassProps,
+  type MemberPassState,
+  type MemberPassVariant,
+} from "./blocks/loyalty-membership/member-pass";
 export {
   RewardMenu,
   type RewardMenuCopy,
@@ -434,6 +434,7 @@ export {
 export {
   ScanPlate,
   type ScanPlateProps,
+  type ScanPlateVariant,
 } from "./blocks/loyalty-membership/scan-plate";
 export {
   TierCard,
