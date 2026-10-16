@@ -135,7 +135,7 @@ again.
   pay by, what is owed as at that day and what each further day adds, the
   condition on which the item lapses, that taking it is a person's decision,
   and that no further reminder follows
-- 🚧 **Hong Kong time named** - every email's footer reads "Dates and times are
+- **Hong Kong time named** - every email's footer reads "Dates and times are
   in Hong Kong time (GMT+8)." ([Dates and Times](/p/platform/shared/dates-and-times))
 - **Reminders** — **7 days** and **1 day** before the due date, then every
   **7 days** overdue; each names the balance and the date, the overdue one that
