@@ -28,6 +28,8 @@ const COPY = {
   },
   header: {
     onlyLeft: (count: number) => `Only ${count} left`,
+    salePriceLabel: "Sale price",
+    listPriceLabel: "Was",
   },
   metadata: {
     aboutThisItem: "About This Item",

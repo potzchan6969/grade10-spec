@@ -29,5 +29,7 @@
   "sortPriceAsc": "낮은 가격순",
   "sortPriceDesc": "높은 가격순",
   "collections": "컬렉션",
-  "title": "스토어"
+  "title": "스토어",
+  "salePriceLabel": "할인가",
+  "listPriceLabel": "정가"
 }

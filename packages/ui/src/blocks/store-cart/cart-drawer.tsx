@@ -262,10 +262,14 @@ function CartItemContent({
           className={cn("w-full whitespace-nowrap", isSoldOut && "opacity-50")}
         >
           <span className="text-sm font-normal leading-5 text-foreground">
+            {isDiscounted ? (
+              <span className="sr-only">{copy.salePriceLabel} </span>
+            ) : null}
             {item.price}
           </span>
           {isDiscounted ? (
             <span className="text-sm font-normal leading-5 text-secondary-foreground line-through">
+              <span className="sr-only">{copy.listPriceLabel} </span>
               {item.originalPrice}
             </span>
           ) : null}
@@ -362,6 +366,8 @@ function CartItemContent({
 const CART_ITEM_FIXTURE = (
   <CartItemContent
     copy={{
+      salePriceLabel: "Sale price",
+      listPriceLabel: "Was",
       lowStockWarning: "Low stock. Quantity adjusted",
       soldOutLabel: "Sold Out",
       removeItemLabel: "Remove item",

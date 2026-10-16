@@ -29,5 +29,7 @@
   "sortPriceAsc": "Lowest price",
   "sortPriceDesc": "Highest price",
   "collections": "Collections",
-  "title": "Store"
+  "title": "Store",
+  "salePriceLabel": "Sale price",
+  "listPriceLabel": "Was"
 }
