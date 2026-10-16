@@ -101,5 +101,5 @@ This group depends on group 4 alone and runs against the fixture transport.
 
 ## 13. Submodule bump and verification (grade10)
 
-- [ ] 13.1 Point `external/grade10-spec` at the commit carrying groups 1 to 3, add the handbook cards for the new package surfaces, and run `pnpm run check:submodules` and `pnpm run check:handbook`.
+- [x] 13.1 Point `external/grade10-spec` at the commit carrying groups 1 to 3, add the handbook cards for the new package surfaces, and run `pnpm run check:submodules` and `pnpm run check:handbook`.
 - [x] 13.2 Verification: run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, `pnpm run build` and `pnpm run check:migrations`.
