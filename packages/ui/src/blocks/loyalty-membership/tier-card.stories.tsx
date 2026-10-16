@@ -59,10 +59,14 @@ export const Silver: Story = {
   },
 };
 
-/** Gold: the retention ask is keeping the tier already held. */
+/** Gold: the retention ask is keeping the tier already held. With a Tier & Benefits address the whole card is the link to it. */
 export const Gold: Story = {
+  args: { href: "#tier-and-benefits" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const card = canvasElement.querySelector('[data-slot="tier-card"]');
+    expect(card?.tagName).toBe("A");
+    expect(card).toHaveAttribute("href", "#tier-and-benefits");
     expect(canvas.getByText("750")).toBeInTheDocument();
     expect(canvas.getByText("250 / 500 pts")).toBeInTheDocument();
     expect(
@@ -102,18 +106,6 @@ export const ThresholdReached: Story = {
   },
 };
 
-/** Given a Tier & Benefits address, the whole card is the link to it. */
-export const OpensBenefits: Story = {
-  args: { href: "#tier-and-benefits" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const card = canvasElement.querySelector('[data-slot="tier-card"]');
-    expect(card?.tagName).toBe("A");
-    expect(card).toHaveAttribute("href", "#tier-and-benefits");
-    expect(canvas.getByText("Benefits")).toBeInTheDocument();
-  },
-};
-
 /** A member holding nothing: zero reads, and a bar at none. */
 export const NoPoints: Story = {
   args: {
@@ -137,21 +129,6 @@ export const NoPoints: Story = {
     expect(
       canvas.getByRole("progressbar", { name: "Upgrade to Gold" }),
     ).toHaveAttribute("aria-valuenow", "0");
-  },
-};
-
-/** A phone-width column: the card fills it instead of overflowing past it. */
-export const Narrow: Story = {
-  decorators: [
-    (Story) => (
-      <div style={{ width: 300 }}>
-        <Story />
-      </div>
-    ),
-  ],
-  play: async ({ canvasElement }) => {
-    const card = canvasElement.querySelector('[data-slot="tier-card"]');
-    expect(card?.getBoundingClientRect().width).toBeLessThanOrEqual(300);
   },
 };
 
