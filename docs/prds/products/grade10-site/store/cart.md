@@ -35,6 +35,9 @@ back to that page.
 - **Whose cart** - a signed-in member's cart is kept at the store; a guest's
   is kept in this browser. Signing in moves the browser's lines into the
   member's cart
+- 🚧 **When the session ends** - an open drawer closes by itself, with no
+  message, when the member signs out in another tab or the session expires.
+  A guest's drawer stays open
 - **Edits** — quantity and removal write to the same cart the page holds
 - **The choice follows the cart** — the code and the points the member
   chose are held with the lines, so both are still there after a reload and
@@ -172,6 +175,7 @@ and tax before the invoice. A second code on one cart.
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | Product pictures | Decided | Use the product's first picture, as the collection card does, from the current cart read. Chosen over variant-specific pictures or pictures held with the cart, which can differ from the catalogue. | Product |
 | Guest cart | Decided | A signed-out collector's cart is kept in this browser and checked out as a guest; signing in moves its lines into the member's cart. Supersedes one session scope. | Product |
+| Session ends with the drawer open | Decided | The drawer closes by itself, with no message, when the member's session ends in another tab or expires. Chosen over leaving it open and empty, which reads as a cart with nothing in it beside a header that says Sign In. Decided 2026-10-09. | Product |
 | One quote | Decided | The drawer reads one store quote - the lines, the one code or reward, points after it - using the same arithmetic the server rechecks at Pay. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and sent when the drawer starts hosted checkout. Promo editing stays: typed, picked and removed codes cut the total. Display-only promo is not this drawer. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, plus public codes, answered before they are picked; a guest's list holds the public codes only. | Product |
