@@ -1,4 +1,3 @@
 schema: grade10-planning
 created: 2026-10-16
-awaiting:
-  specs: 2026-10-16, planning-dev writes the delta, the blind suite and the scenarios from the journeys and the marked page
+ui_waived: "no new screen or state: an open cart drawer closes through its existing closed state, and no message, toast or prompt is drawn"

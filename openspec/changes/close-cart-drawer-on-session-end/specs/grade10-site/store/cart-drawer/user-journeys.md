@@ -8,7 +8,7 @@
 
 ## ADDED User journeys
 
-### g10.store-cart-drawer.US11: Collector returns to a tab whose session ended with the cart open
+### g10.store-cart-drawer.US14: Collector returns to a tab whose session ended with the cart open
 
 **As a** collector,
 **I want** the cart drawer I left open to be gone when I come back to a tab whose session has ended,
