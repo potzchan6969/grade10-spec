@@ -40,7 +40,7 @@ export type ListingLotGalleryImage = {
   src: string;
   /** Thumbnail rail image. Falls back to `src`. */
   thumbSrc?: string;
-  /** Zoom dialog image. Falls back to `src`. */
+  /** Magnified lens image. Falls back to `src`. */
   zoomSrc?: string;
   alt: string;
   /** Short caption shown next to the slide counter, e.g. `Front`. */

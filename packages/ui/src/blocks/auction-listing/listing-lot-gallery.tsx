@@ -3,16 +3,10 @@ import {
   CarouselProgress,
   CarouselProgressItem,
 } from "@grade10/design-system/components/display/carousel-progress";
+import { Lens } from "@grade10/design-system/components/display/lens";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import {
-  Dialog,
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretLeft, CaretRight, MagnifyingGlass } from "@phosphor-icons/react";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import {
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
@@ -26,8 +20,13 @@ import { LISTING_LOT_GALLERY_CLASS } from "./listing-lot-layout";
 import type { ListingLotGalleryImage } from "./types";
 
 type ListingLotGalleryCopy = {
-  /** Accessible name for the selected image's zoom control and dialog. */
+  /** Accessible name for the magnifier lens on the selected image. */
   zoom: string;
+  /**
+   * Appended to `zoom` in the lens's accessible name — how the magnifier is
+   * driven (pointer, arrow keys, Escape).
+   */
+  zoomInstructions?: string;
   previous: string;
   next: string;
   /** Accessible name for the slide progress control. */
@@ -71,7 +70,6 @@ function ListingLotGallery({
   const [dragPx, setDragPx] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [railVisible, setRailVisible] = useState(false);
-  const [zoomOpen, setZoomOpen] = useState(false);
   const galleryRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLElement>(null);
   const dragRef = useRef<DragSession | null>(null);
@@ -88,6 +86,9 @@ function ListingLotGallery({
   const atEnd = count === 0 || safeIndex >= count - 1;
   const canPrev = many && !atStart;
   const canNext = many && !atEnd;
+  // The lens resets itself: a remount on slide change or drag clears the
+  // magnifier position rather than tracking a stale pointer.
+  const lensKey = `${selectedImageKey}:${dragging}`;
 
   useLayoutEffect(() => {
     const gallery = galleryRef.current;
@@ -109,14 +110,6 @@ function ListingLotGallery({
     return () => observer.disconnect();
   }, [many]);
 
-  const previousSelectedImageKeyRef = useRef(selectedImageKey);
-  useLayoutEffect(() => {
-    if (previousSelectedImageKeyRef.current !== selectedImageKey) {
-      setZoomOpen(false);
-      previousSelectedImageKeyRef.current = selectedImageKey;
-    }
-  }, [selectedImageKey]);
-
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     reduceMotionRef.current = media.matches;
@@ -130,7 +123,6 @@ function ListingLotGallery({
   const goTo = useCallback(
     (next: number) => {
       if (count === 0) return;
-      setZoomOpen(false);
       setIndex(Math.min(Math.max(next, 0), count - 1));
       setDragPx(0);
     },
@@ -293,20 +285,40 @@ function ListingLotGallery({
                 transitionTimingFunction: SLIDE_EASE,
               }}
             >
-              {images.map((slide, slideIndex) => (
-                <section
-                  aria-hidden={slideIndex !== safeIndex}
-                  className="relative h-full w-full shrink-0 grow-0 basis-full"
-                  key={`${slide.src}:${slide.alt}`}
-                >
-                  <img
-                    alt={slideIndex === safeIndex ? slide.alt : ""}
-                    className="pointer-events-none size-full object-contain [-webkit-user-drag:none]"
-                    draggable={false}
-                    src={slide.src}
-                  />
-                </section>
-              ))}
+              {images.map((slide, slideIndex) => {
+                const selected = slideIndex === safeIndex;
+                return (
+                  <section
+                    aria-hidden={!selected}
+                    className="relative h-full w-full shrink-0 grow-0 basis-full"
+                    key={`${slide.src}:${slide.alt}`}
+                  >
+                    {/* ring-inset: the stage clips an outset ring at its
+                        rounded corners. */}
+                    <Lens
+                      className="block size-full rounded-none focus-visible:ring-inset"
+                      instructions={copy.zoomInstructions}
+                      key={lensKey}
+                      label={copy.zoom}
+                      magnified={
+                        <img
+                          alt=""
+                          className="size-full object-contain"
+                          src={slide.zoomSrc ?? slide.src}
+                        />
+                      }
+                      tabIndex={selected ? 0 : -1}
+                    >
+                      <img
+                        alt={selected ? slide.alt : ""}
+                        className="pointer-events-none size-full object-contain [-webkit-user-drag:none]"
+                        draggable={false}
+                        src={slide.src}
+                      />
+                    </Lens>
+                  </section>
+                );
+              })}
             </div>
 
             {many ? (
@@ -359,16 +371,6 @@ function ListingLotGallery({
                 </Badge>
               </>
             ) : null}
-            {selectedImage ? (
-              <IconButton
-                aria-label={copy.zoom}
-                className="pointer-events-auto absolute top-4 right-4 z-20"
-                onClick={() => setZoomOpen(true)}
-                type="button"
-              >
-                <MagnifyingGlass aria-hidden size={12} weight="bold" />
-              </IconButton>
-            ) : null}
           </section>
 
           {many ? (
@@ -419,22 +421,6 @@ function ListingLotGallery({
           </div>
         ) : null}
       </div>
-      {selectedImage && zoomOpen ? (
-        <Dialog onOpenChange={setZoomOpen} open>
-          <DialogContent className="sm:max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>{copy.zoom}</DialogTitle>
-            </DialogHeader>
-            <DialogBody tabIndex={0}>
-              <img
-                alt={selectedImage.alt}
-                className="w-full"
-                src={selectedImage.zoomSrc ?? selectedImage.src}
-              />
-            </DialogBody>
-          </DialogContent>
-        </Dialog>
-      ) : null}
     </div>
   );
 }
