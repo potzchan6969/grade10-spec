@@ -82,6 +82,32 @@ describe("deployment availability", () => {
     expect(rolledBack.availability).toMatchObject([{ state: "no-longer" }]);
   });
 
+  it("reads a replayed receipt once, so a replay keeps a change newly available", () => {
+    const entry = change();
+    projectAvailability(
+      [entry],
+      [
+        receipt({ servingSet: undefined }),
+        receipt({
+          servingSet: undefined,
+          observedAt: "2026-09-25T12:00:00.000Z",
+        }),
+      ],
+    );
+
+    expect(entry.availability).toMatchObject([
+      { environment: "staging", state: "newly" },
+    ]);
+  });
+
+  it("projects active and archived changes from the same receipt", () => {
+    const active = change();
+    const archived = { ...change(), status: "archived" as const };
+    projectAvailability([active, archived], [receipt()]);
+
+    expect(active.availability).toEqual(archived.availability);
+  });
+
   it("treats receipt freshness as the manual fetch time", () => {
     const now = Date.parse("2026-09-26T10:59:59.000Z");
     expect(
