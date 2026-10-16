@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "369972db6fa1888c9dc81cc67092bc7e6bfaf849c2aff6fab20ccca1ce5817f0"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "66cfef51b8e2943a6b6acba7236334b0b66bf0eb",
+    "capturedAt": "2026-10-16T12:43:31.162Z",
+    "targets": [
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: A control has no copy of its own",
+          "Requirement: A gallery image has distinct thumbnail, main, and zoom sources",
+          "Requirement: A gallery magnifies the selected image in place"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10-spec",
+      "commit": "f36f663b9c683900c91031c636872942797ac743",
+      "components": [
+        "preview"
+      ]
+    }
+  ]
+}
