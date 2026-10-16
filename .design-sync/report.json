@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T16:45:16.318Z",
+  "generatedAt": "2026-10-16T19:06:20.398Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -47,6 +47,8 @@
     "List Item": "warn",
     "ListingLotGallery": "warn",
     "Login Dialog": "warn",
+    "Member Pass": "warn",
+    "Member Pass / Header": "warn",
     "Nav": "ok",
     "Navigation List": "skipped",
     "NavigationLink": "ok",
@@ -925,6 +927,12 @@
     "7141-2000": "tier card",
     "7141-2001": "tier card",
     "7154-2075": "tier card",
+    "7156-2292": "Member Pass",
+    "7156-2759": "Member Pass",
+    "7158-2857": "Member Pass / Header",
+    "7158-2858": "Member Pass / Header",
+    "7158-2859": "Member Pass / Header",
+    "7158-2888": "Member Pass / Header",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1023,6 +1031,12 @@
     ],
     "Login Dialog": [
       "Login Dialog: no code component (looked for src/components/**/logindialog.tsx or logindialog.tsx)"
+    ],
+    "Member Pass": [
+      "Member Pass: no code component (looked for src/components/**/memberpass.tsx or memberpass.tsx)"
+    ],
+    "Member Pass / Header": [
+      "Member Pass / Header: no code component (looked for src/components/**/memberpassheader.tsx or header.tsx)"
     ],
     "OTP Dialog": [
       "OTP Dialog: no code component (looked for src/components/**/otpdialog.tsx or otpdialog.tsx)"
