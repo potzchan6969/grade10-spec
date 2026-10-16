@@ -48,10 +48,10 @@ is `grade10-admin/consignment/console`.
 - Ending
   - The term: on sale until the term ends, its remaining days counting
     down, warned at ending soon; the term's figure is unset
-  - What an unsold item does: unsettled - the directions on the table are
-    extending the term, a lower price, the other channel or a relist, the
-    vault for long-term storage, or the consignor booking a collection at
-    the shop or having it shipped back
+  - What an unsold item does: unsettled - the proposed actions a
+    consignor may take are reducing the listed price, saving it to the
+    vault for long-term custody, or booking an appointment to collect it
+    at the shop
   - Taken back early: before it sells, for the early take-back fee where
     one is set
 - Returning

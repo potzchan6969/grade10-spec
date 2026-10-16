@@ -34,6 +34,8 @@ who records the money is `grade10-admin/consignment/console`.
     hammer price less them, the buyer's premium being the house's
   - When: after the return window by default; at the sale, or one monthly
     statement, where the setting runs
+  - The flow: unsettled - a bank transfer directly, a payout the consignor
+    requests and a bank transfer follows, or credits or points
   - Recorded: a treasurer records the bank transfer and its reference; a
     correction takes a second holder of the grant
 - Refunds

@@ -40,7 +40,8 @@
 | Q11 | What an item passes before it is published | An item passes intake inspection and photography before it is published - decided by the round | Publishing straight from the completed consignment form |
 | Q12 | What an item shows while it sells | Each item names its channel - the shop, the online store or the auction - its agreed list price, the commission rate and the consignor's estimated net payout, and counts down the days left on its term - decided by the round | Naming the consignment alone and asking the shop for the rest |
 | Q13 | The term's figure | ❓ Product - the running default is **90** days; the brief asks **30** or **60**; the figure is unset | Treating the default as decided; it predates this change but the owner reopened it |
-| Q14 | What an unsold item does at term's end | ❓ Product - the directions on the table: extend the term, a lower price, the other channel or a relist, the vault for long-term storage, or the consignor books a collection at the shop or has it shipped back | The PRD's earlier choice list, which this question reopens |
+| Q14 | What an unsold item does at term's end | ❓ Product - the proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | The PRD's earlier choice list, which this question reopens |
+| Q15 | The payout flow | ❓ Product - proposed: a bank transfer directly, a payout the consignor requests and a bank transfer follows, or credits or points | Settling on the recorded bank transfer alone; it stands meanwhile |
 
 ## Raised
 

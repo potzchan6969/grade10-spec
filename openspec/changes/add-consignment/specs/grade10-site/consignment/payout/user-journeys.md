@@ -10,9 +10,8 @@ value of my items,
 ### grade10-site-consignment-payout-US-02: Consignor is paid the payout after the window
 
 **As a** consignor,
-**I want** the sale price less commission and fees paid by bank transfer
-after the return window, with a settlement statement and a commission
-invoice,
+**I want** the sale price less commission and fees paid to me after the
+return window, with a settlement statement and a commission invoice,
 **so that** I know what I am paid, what the fee was and when it arrives.
 
 ### grade10-site-consignment-payout-US-03: Treasurer records and corrects payouts
