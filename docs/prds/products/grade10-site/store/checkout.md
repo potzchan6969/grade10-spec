@@ -107,6 +107,12 @@ joins one under that email.
 - **Order link** - every web order's emails, guest and member, carry the
   private link; Grade10 sends no store email of its own -
   [Order Detail](/p/grade10-site/store/order-detail#order-link)
+- ❓ Product — **A session that ends at Proceed to Checkout** - when a member's
+  session has ended as they press it, the drawer closes; does the collector
+  then meet a sign-in dialog, as the drawer opens today, or check out as a
+  guest, as this section says of a collector with no session? Owner:
+  @kinisworking. Recommended: no dialog; the collector presses Cart and checks
+  out as a guest
 
 ## Designs
 
