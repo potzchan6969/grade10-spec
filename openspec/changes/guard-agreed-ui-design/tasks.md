@@ -24,5 +24,5 @@ Needs group 1 on the store's `main`: its first commit bumps `external/grade10-sp
 Uses draft `feature-tcs.md` as its planning input, with groups 1 and 2 landed.
 
 - [x] 3.1 One walk of `shared-design-sync-design-override-US1` through git in a terminal: throwaway copies of the store and the application, hooks set by their own `prepare`, every row of the suite's cases committed and pushed to a local remote, kept as the change's end-to-end suite
-- [ ] 3.2 Flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walk's own commit; the agent waiting for its person and the comments on GitHub stay manual, named in the suite and in the walk's `rounds.md` row
-- [ ] 3.3 Verify: the walk passes, `pnpm run tcs:validate` in the store
+- [x] 3.2 Flip the cases the walk decides with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walk's own commit; the agent waiting for its person and the comments on GitHub stay manual, named in the suite and in the walk's `rounds.md` row — nothing to flip: grade10 retired the walk (`f44d8d54`) as overlapping `scripts/githooks/design-override.test.mjs`, so every case stays `manual` and names no Decided-by line
+- [ ] 3.3 Verify: the walk passes, `pnpm run tcs:validate` in the store — blocked: the walk no longer exists to pass; `tcs:validate` holds this suite with three r6 classification warnings (TC12, TC16, TC17) that need a reviewer, not a rename
