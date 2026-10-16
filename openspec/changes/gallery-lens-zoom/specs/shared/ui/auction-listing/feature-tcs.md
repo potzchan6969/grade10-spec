@@ -1,23 +1,21 @@
 # shared/ui/auction-listing Test Cases
 
 **Status:** pending-review · 0/5
-**Drafts styled:** 2026-10-16, tcs-rules r6
+**Drafts styled:** 2026-10-13, tcs-rules r5
 
 These cases were drafted after implementation landed, on the change's own
 decision (decisions Q6, "code first, spec after"); they are not a blind
-reading. QA2 should read them against the modified and added anchors when it
-reconciles.
+reading. QA2 reconciled them against the modified and added anchors.
 
 ## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
-**Walked by:** nobody on their own - a component contract; the journeys live
-in `grade10-site/auction/listing-page`, which composes the blocks.
+**Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
 
-**As an** application composing the shared galleries,
-**I want** the selected image to magnify in place under a lens,
-**so that** a collector inspects detail without a dialog or a context switch.
+**As an** application composing the shared bid panel,
+**I want** the panel to never offer an amount the supplied currency ceiling refuses,
+**so that** the collector reads the limit instead of a broken raise form.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-9l4 rev=1 covers=g10.shared-auction-listing.SC-teu -->
+<!-- trace:case id=g10.shared-auction-listing.TC-9l4 rev=1 covers=g10.shared-auction-listing.SC-teu,g10.shared-auction-listing.SC-v9a -->
 ### g10.shared-auction-listing.US1-TC65: The lens follows the pointer and reads the zoom source
 
 **Classification:**
@@ -51,7 +49,7 @@ in `grade10-site/auction/listing-page`, which composes the blocks.
 * A magnifier lens shows at the pointer position.
 * The magnified image inside the lens requests `zoomSrc`.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-ar2 rev=1 -->
+<!-- trace:case id=g10.shared-auction-listing.TC-ar2 rev=1 covers=g10.shared-auction-listing.SC-4sr -->
 ### g10.shared-auction-listing.US1-TC66: A missing zoom source magnifies the main one
 
 **Classification:**
@@ -203,11 +201,10 @@ carries, and names what remains pending.
 | A focused lens moves with arrows, never steps, and hides on Escape | Covered by `shared-ui-auction-listing-SC-68`, `shared-ui-auction-listing-SC-69` / `g10.shared-auction-listing.US1-TC67` (`TC-jd4`) |
 | A touch pointer raises no lens and a swipe still steps | Covered by `shared-ui-auction-listing-SC-70` / `g10.shared-auction-listing.US1-TC68` (`TC-br7`) |
 | Non-selected slides and video carry no focusable lens | Covered by `shared-ui-auction-listing-SC-71`, `shared-ui-auction-listing-SC-72` / `g10.shared-auction-listing.US1-TC69` (`TC-v48`) |
-| The magnified view requests `zoomSrc` | Modified `shared-ui-auction-listing-SC-03` is asserted by `g10.shared-auction-listing.US1-TC65`; the `covers` link is pending QA2 because the delta's `SC-v9a` duplicates the durable marker until fold |
-| An omitted zoom source magnifies `src` | Modified `shared-ui-auction-listing-SC-04` is asserted by `g10.shared-auction-listing.US1-TC66` (`TC-ar2`); anchor-only, QA2 link pending for the same reason |
+| The magnified view requests `zoomSrc` | Modified `shared-ui-auction-listing-SC-03` (`SC-v9a`) is covered by `g10.shared-auction-listing.US1-TC65` (`TC-9l4`) |
+| An omitted zoom source magnifies `src` | Modified `shared-ui-auction-listing-SC-04` (`SC-4sr`) is covered by `g10.shared-auction-listing.US1-TC66` (`TC-ar2`) |
 | Labels, including `zoomInstructions`, come from the consumer | Durable `g10.shared-auction-listing.US1-TC10` carries modified `shared-ui-auction-listing-SC-08`; no new case needed |
 | Raised questions from the reading | None — Q1–Q6 settled the dialog removal, the touch limitation, the accessible name, the zoom source, the package, and the order |
 
-**Uncovered anchors:** none. `shared-ui-auction-listing-SC-03`,
-`shared-ui-auction-listing-SC-04`, and `shared-ui-auction-listing-SC-08`
-keep their durable ids; their post-hoc `covers` links land at QA2.
+**Uncovered anchors:** none. Post-hoc `covers` links for the modified
+source scenarios land on TC65 and TC66.
