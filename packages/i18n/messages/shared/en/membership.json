@@ -1,13 +1,11 @@
 {
   "card": {
     "expired": "This code has expired",
-    "expiresIn": "Expires in",
-    "fallbackCode": "Or read this out",
     "inStore": "in store",
     "qrAlt": "Your member code, as a scannable square",
-    "refresh": "New code",
-    "secondsUnit": "s",
-    "used": "This code has already been used",
+    "refresh": "Refresh",
+    "refreshesIn": "Refreshes in",
+    "shortCode": "Short code",
     "walletAdd": "Add to {wallet}",
     "walletAddFailed": "{wallet} could not be added. Try again.",
     "walletApple": "Apple Wallet",
@@ -23,7 +21,7 @@
   },
   "page": {
     "title": "Membership",
-    "card": "Your member card",
+    "card": "Your member pass",
     "rewards": "Rewards",
     "activity": "Activity",
     "spend": "Spend on your basket",
