@@ -20,7 +20,7 @@ the value below is the default it starts on -
 | Minimum commission | per item; none |
 | Fees | listing, return and early take-back; none |
 | Incentive | intended **5%** of the item's estimated value, paid to the consignor at consignment |
-| Term on sale | **90** days |
+| Term on sale | intended **90** days |
 | Return window | **14** days after a store sale is delivered; **7** days after an auction lot is delivered or collected |
 | When a consignor is paid | after the return window |
 | A refund after payout | set against the consignor's next payout |
@@ -36,6 +36,8 @@ the value below is the default it starts on -
 - ❓ Product - **The figures** - the intended consignment fee is **10–12%**
   of the sale price at sale and the intended incentive **5%** of the
   item's estimated value; the exact figures are unset
+- ❓ Product - **The term's figure** - the running default is **90**
+  days; **30** or **60** are asked for; the figure is unset
 - ❓ Product - **The incentive against the payout** - whether the incentive
   already paid at consignment is set against the sale's payout
 - ❓ Product - **Graded only** - intake is proposed to take graded
@@ -111,6 +113,12 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 - 🚧 **Seen before it lists** - an item bound for auction shows on the
   consignor's signed-in page once it is checked in, before its lot is
   listed
+- 🚧 **Checked before it lists** - an item passes intake inspection and
+  photography before it is published
+- 🚧 **Shown while it sells** - each item names its channel - the shop,
+  the online store or the auction - its agreed list price, the commission
+  rate and the consignor's estimated net payout, and counts down the days
+  left on its term
 - ❓ Product - **Selling from the vault** - whether the consignor releases
   the vault case first, or the case passes to the buyer -
   [Services and Hand-offs](/p/grade10-admin/inventory/services#marks-that-share-an-item)
@@ -188,10 +196,10 @@ Once the lot is delivered or collected and the window has passed, the hammer pri
 
 ## When It Ends
 
-- **Ended unsold** - the consignor picks: extend the term, change the price,
-  the other channel, the vault, or collect or ship it back
-- **Unsold at auction** - relist, the store, the vault, or collect or ship it
-  back
+- ❓ Product - **What an unsold item does** - the handling at term's end
+  is unset; the directions on the table: extend the term, a lower price,
+  the other channel or a relist, the vault for long-term storage, or the
+  consignor books a collection at the shop or has it shipped back
 - **Taken back early** - the consignor may take an item back before it
   sells, for the early take-back fee where an admin set one; a lot live at
   auction only once the auction calls it off or it closes
@@ -268,6 +276,8 @@ payouts made on their due day.
 | The account link | Decided | intake records whether the consignor has a Grade10 account and links it, so their consignments show on their signed-in page - decided under the owner's delegation, 2026-10-16 | Product |
 | The sale's paper | Decided | a sale issues the consignor a settlement statement and a commission invoice, with the contact details for payment - decided under the owner's delegation, 2026-10-16 | Product |
 | A tracked return | Decided | an item going back travels under its tracking, and the return closes on a signed return receipt - decided under the owner's delegation, 2026-10-16 | Product |
+| Checked before it lists | Decided | an item passes intake inspection and photography before it is published - decided under the owner's delegation, 2026-10-16 | Product |
+| Shown while it sells | Decided | each item names its channel - the shop, the online store or the auction - its agreed list price, the commission rate and the consignor's estimated net payout, and counts down the days left on its term - decided under the owner's delegation, 2026-10-16 | Product |
 | A consignor's own page | ❓ Open | The service answers a signed-in consignor with each consignment, its items - an auction-bound one showing once checked in, before its lot lists - their prices, sales and payouts, the terms pinned to it, the payouts made, its documents and the emails sent; the screen itself is still to be drawn, and a buyer's seller line waits for a store product that names its item - owner, 2026-10-12, brief 2026-10-16 | Product |
 | Nobody collects | ❓ Open | Reminders, then a written notice, as grading's ladder runs | Legal |
 | Delivery never reported | ❓ Open | When an online sale's return window starts if its delivery is never reported; until decided, it waits for a reported delivery or staff recording one | Product |
@@ -276,4 +286,6 @@ payouts made on their due day.
 | Nothing to set against | ❓ Open | When a refund after payout is asked back from the consignor if no later payout comes | Product |
 | Graded only | ❓ Open | Proposed: intake takes graded collectables only at launch, there being no grading service on day 1; whether ungraded is ever taken | Product |
 | The figures | ❓ Open | Proposed: a consignment fee of **10–12%** of the sale price at sale and an incentive of **5%** of the estimated value; the exact figures, and whether the paid incentive is set against the payout | Product |
+| The term's figure | ❓ Open | The running default is **90** days; **30** or **60** are asked for; the figure is unset | Product |
+| An unsold item at term's end | ❓ Open | The handling is unset; the directions on the table: extend the term, a lower price, the other channel or a relist, the vault for long-term storage, or the consignor books a collection at the shop or has it shipped back | Product |
 :::
