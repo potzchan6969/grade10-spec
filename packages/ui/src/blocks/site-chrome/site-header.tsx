@@ -3,6 +3,7 @@
 import {
   Avatar,
   AvatarFallback,
+  AvatarImage,
   avatarInitial,
 } from "@grade10/design-system/components/display/avatar";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
@@ -74,6 +75,11 @@ type SiteHeaderProps = {
    * falls back to `copy.accountMenuLabel`.
    */
   accountEmail?: string;
+  /**
+   * The collector's profile image, shown in the menu's avatar beside the
+   * email. Omitted, or failing to load, the avatar shows the email's initial.
+   */
+  accountAvatarSrc?: string;
   onProfile?: () => void;
   onMyOrders?: () => void;
   onMyAuctions?: () => void;
@@ -133,6 +139,7 @@ function SiteHeader({
   cartItemCount,
   onSignIn,
   accountEmail,
+  accountAvatarSrc,
   onProfile,
   onMyOrders,
   onMyAuctions,
@@ -182,8 +189,11 @@ function SiteHeader({
               {accountEmail ? (
                 <VStack gap="xs" hAlign="start">
                   <Avatar size="xs">
+                    {accountAvatarSrc ? (
+                      <AvatarImage alt="" src={accountAvatarSrc} />
+                    ) : null}
                     <AvatarFallback aria-hidden>
-                      {avatarInitial(accountEmail)}
+                      {avatarInitial(accountEmail.split("@")[0] ?? "")}
                     </AvatarFallback>
                   </Avatar>
                   {accountEmail}

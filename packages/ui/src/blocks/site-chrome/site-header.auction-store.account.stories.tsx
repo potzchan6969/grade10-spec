@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import { AUCTION_STORE_BASE_ARGS } from "./site-header.auction-store.story-shared";
 import { ACCOUNT_EMAIL } from "./site-header.story-shared";
@@ -101,6 +101,47 @@ export const WithoutEmail: Story = {
     expect(
       canvasElement.ownerDocument.body.querySelector('[data-slot="avatar"]'),
     ).toBeNull();
+  },
+};
+
+const PROFILE_IMAGE =
+  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='64' height='64' fill='%23f59e0b'/></svg>";
+
+/** A profile image: the menu's avatar shows it in place of the initial. */
+export const WithProfileImage: Story = {
+  name: "Open, with profile image",
+  args: { onMembership: undefined, accountAvatarSrc: PROFILE_IMAGE },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await canvas.findByRole("button", { name: "Account" });
+    const doc = canvasElement.ownerDocument.body;
+    await waitFor(() =>
+      expect(doc.querySelector('[data-slot="avatar-image"]')).toHaveAttribute(
+        "src",
+        PROFILE_IMAGE,
+      ),
+    );
+    expect(doc.querySelector('[data-slot="avatar-fallback"]')).toBeNull();
+  },
+};
+
+/** A profile image that fails to load: the email's initial, no broken image. */
+export const WithBrokenProfileImage: Story = {
+  name: "Open, profile image fails",
+  args: {
+    onMembership: undefined,
+    accountAvatarSrc: "https://invalid.example/avatar.png",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await canvas.findByRole("button", { name: "Account" });
+    const doc = canvasElement.ownerDocument.body;
+    await waitFor(() =>
+      expect(
+        doc.querySelector('[data-slot="avatar-fallback"]'),
+      ).toHaveTextContent("C"),
+    );
+    expect(doc.querySelector('[data-slot="avatar-image"]')).toBeNull();
   },
 };
 
