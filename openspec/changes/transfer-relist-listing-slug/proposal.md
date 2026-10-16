@@ -23,6 +23,9 @@ transfer ships.
   is no permanent redirect from a second address.
 - **Activity records the transfer.** Both the Unsold source and the new draft
   gain an activity entry that names the slug move and the other listing.
+- **Admin shows Relisted on the source.** After Relist Save, the Unsold source
+  shows a **Relisted** badge beside **Unsold** on its listing detail header and
+  in the Listings table Status column.
 - **Collision rules follow the move.** After the transfer, the source no longer
   reserves that address; other completed, expired or unsold listings still do.
   Field-exit availability for the Relist draft treats the source's current slug
@@ -41,8 +44,8 @@ None.
 ### Modified Capabilities
 
 - `grade10-admin/auction/listing`: Relist Save transfers the source slug, keeps
-  a distinct listing code, records activity, and adjusts slug reservation for
-  that source.
+  a distinct listing code, records activity, shows Relisted on the Unsold
+  source in admin, and adjusts slug reservation for that source.
 
 ## Impact
 
@@ -51,7 +54,8 @@ None.
   listings, and leaves listing-code allocation unchanged.
 - **Admin app** - Relist editor opens with the source slug; slug helper and
   availability treat that source as the transfer exception; activity shows the
-  transfer on both lots.
+  transfer on both lots; the Unsold source shows Relisted beside Unsold on its
+  detail header and Listings Status column once Relist Save linked a successor.
 - **Site** - `/auction/listings/<slug>` follows whoever holds the slug; after
   Relist Save the Unsold source no longer answers there, and the successor
   answers once published, created-or-closed rules unchanged.

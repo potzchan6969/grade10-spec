@@ -17,17 +17,18 @@ Needs group 1's failing tests.
 - [ ] 2.3 Enrich Relist lifecycle activity so source `relistedAs` and successor `created` name the successor slug and the other listing by listing code and English title when present, else the listing id; update admin activity labels (`grade10-admin-auction-listing-SC-213`)
 - [ ] 2.4 Verify: `pnpm run typecheck`, package lint and the Relist / slug / activity backend tests in grade10 (`grade10-admin-auction-listing-SC-209`, `grade10-admin-auction-listing-SC-210`, `grade10-admin-auction-listing-SC-211`, `grade10-admin-auction-listing-SC-212`, `grade10-admin-auction-listing-SC-213`, `grade10-admin-auction-listing-SC-214`, `grade10-admin-auction-listing-SC-215`, `grade10-admin-auction-listing-SC-216`, `grade10-admin-auction-listing-SC-217`)
 
-## 3. Admin Relist prefill and activity copy (grade10)
+## 3. Admin Relist prefill, activity copy and Relisted badge (grade10)
 
 Needs group 2's API fields.
 
 - [ ] 3.1 Prefill Relist Web address from the Unsold source slug and pass `relistOf` on field-exit availability; update SC-135 expectations (`grade10-admin-auction-listing-SC-135`, `grade10-admin-auction-listing-SC-215`)
 - [ ] 3.2 Show activity copy that names the transferred slug and the other listing by listing code and English title when present, else the listing id, on both lots (`grade10-admin-auction-listing-SC-213`)
-- [ ] 3.3 Verify: `pnpm run typecheck`, package lint and the admin Relist / activity tests in grade10
+- [ ] 3.3 Show a Relisted badge beside Unsold on the Unsold source's listing detail header and Listings table Status column once Relist Save linked a successor (`grade10-admin-auction-listing-SC-218`)
+- [ ] 3.4 Verify: `pnpm run typecheck`, package lint and the admin Relist / activity / Relisted-badge tests in grade10
 
 ## 4. The walk (grade10)
 
 Needs groups 2 and 3 landed. Human TCS review of `feature-tcs.md` happens after deployment and is not a walk dependency.
 
-- [ ] 4.1 Walk Relist Save keeping the shared slug, an operator replace before Save, a cleared Relist slug that generates title-and-code while freeing the source, not found between Save and Publish, Publish opening the successor, and activity on both listings - kept as the change's end-to-end proof (`grade10-admin-auction-listing-SC-209`, `grade10-admin-auction-listing-SC-210`, `grade10-admin-auction-listing-SC-211`, `grade10-admin-auction-listing-SC-212`, `grade10-admin-auction-listing-SC-213`, `grade10-admin-auction-listing-SC-217`)
+- [ ] 4.1 Walk Relist Save keeping the shared slug, an operator replace before Save, a cleared Relist slug that generates title-and-code while freeing the source, not found between Save and Publish, Publish opening the successor, activity on both listings, and Relisted beside Unsold on the source detail and Listings Status column - kept as the change's end-to-end proof (`grade10-admin-auction-listing-SC-209`, `grade10-admin-auction-listing-SC-210`, `grade10-admin-auction-listing-SC-211`, `grade10-admin-auction-listing-SC-212`, `grade10-admin-auction-listing-SC-213`, `grade10-admin-auction-listing-SC-217`, `grade10-admin-auction-listing-SC-218`)
 - [ ] 4.2 Verify: the walk's automated coverage and `pnpm run build` in grade10

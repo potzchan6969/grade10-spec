@@ -328,6 +328,47 @@ Runs once per row of **Test data**.
 * Step 6 shows `<unsold_source>` holding no slug.
 * Step 7 reports no unavailable-slug error for `<shared_slug>`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-rlb rev=1 covers=g10adm.auction-listing.SC-rlb -->
+#### g10adm.auction-listing.US9-TC15: Relisted badge on the Unsold source after Relist Save
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-09
+
+**Pre-conditions:**
+
+* admin(holds auction:operate) is on `<grade10 auction admin listings url>`.
+* `<unsold_source>` closed Unsold in no campaign, its stock is released, and Relist Save has already stored a successor draft from it.
+* `<other_unsold>` closed Unsold, never Relisted.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unsold_source>` | An Unsold listing whose Relist was saved |
+| `<other_unsold>` | An Unsold listing that has never been Relisted |
+
+**Steps:**
+
+1. Open `<unsold_source>`'s listing detail page.
+2. Return to the Listings table and find `<unsold_source>`'s row.
+3. Find `<other_unsold>`'s row.
+
+**Expected Results:**
+
+* Step 1 shows Relisted beside Unsold in the detail header.
+* Step 2 shows Relisted beside Unsold in the Status column.
+* Step 3 shows Unsold without Relisted.
+
 ### g10adm.auction-listing.US73: Operator keeps a usable listing address while drafting
 
 **As an** auction operator,
@@ -477,6 +518,7 @@ Runs once per row of **Test data**.
 
 - Transfer activity names the other listing by listing code and English title when present, else the listing id, and always the slug that moved (Q10)
 - Clearing the prefilled Relist slug before Save stores the ordinary title-and-code generated slug and still frees the source's former slug (Q11)
+- After Relist Save, the Unsold source shows Relisted beside Unsold on its detail header and Listings Status column (Q12)
 
 ## Reconciliation
 

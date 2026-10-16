@@ -12,6 +12,7 @@ Application facts checked at `0385503c15994a4595a96c9a1aebb05ae137f0a2`
 | `packages/grade10-auction/admin-frontend/.../listingForm.ts` | Relist fills product, copy and price from the source; `slug` is taken only from a stored listing, so Relist opens with an empty Web address |
 | `packages/grade10-auction/backend/src/services/admin/listingActivity.ts` | Source shows derived `relistedAs` with the successor id; successor `created` carries `relistedFromListingId`; neither names the slug |
 | `packages/grade10-auction/admin-frontend/.../activityRows.tsx` | Labels: "Relisted as the new draft …" / "Listing created, relisted from …" |
+| `packages/grade10-auction/admin-frontend/.../ListingRecord.tsx` / `listingCells.tsx` / `listingRow.tsx` | Detail header and Listings Status stack Unsold beside Closed; neither reads `relistedListingId` for a badge |
 
 ## Goals / Non-Goals
 
@@ -21,6 +22,7 @@ Application facts checked at `0385503c15994a4595a96c9a1aebb05ae137f0a2`
 - **Prefill and override** - Relist editor opens with the source slug; Save stores whatever the form holds and still frees the source's former value
 - **No generated overwrite** - when the form sends a slug, Relist Save must not replace it with `generatedListingSlug`
 - **Activity names the move** - both listings' activity name the slug the successor holds and the other listing
+- **Relisted badge** - Unsold source detail header and Listings Status column show Relisted beside Unsold once `relistedListingId` is set
 - **Field-exit exception** - before the first Relist Save, availability treats the source's current slug as free for that Relist draft
 
 **Non-Goals:**
@@ -93,6 +95,17 @@ choices below inherit those rows.
   - Rejected: storing a second `transferred_slug` column. The successor row
     already holds the address after Save; recompute from that row.
 
+### Relisted Badge
+
+- **Read the existing successor link** - `listings.list` and `listings.get`
+  already answer `relistedListingId`. When it is non-null, the Unsold source
+  detail header badges and the Listings Status cell stack a **Relisted** badge
+  after **Unsold** (same outline tone as Unsold). No new API field.
+  - Rejected: replace Unsold with Relisted. Operators still need the Unsold
+    outcome; Relisted is an additional fact (Q12).
+  - Rejected: badge only on the detail page. The Listings Status column is
+    where operators scan closed lots (Q12).
+
 ### Public Lookup
 
 - **No site change beyond holder** - Public slug lookup already answers the
@@ -157,7 +170,7 @@ erDiagram
 ## Migration Plan
 
 1. Land failing backend Relist Save / availability / activity tests, then the transaction and contract fields.
-2. Land failing admin prefill, field-exit and activity label tests, then form and copy changes.
-3. No data migration: only future Relist Saves transfer; already-relisted pairs keep today's split addresses.
-4. Verify: Relist Save, operator override, mid-window 404, Publish opens the successor, activity on both, ordinary closed slug still reserved, call-off release unchanged.
+2. Land failing admin prefill, field-exit, activity label and Relisted-badge tests, then form, copy and badge changes.
+3. No data migration: only future Relist Saves transfer; already-relisted pairs keep today's split addresses. Relisted badge appears for any source that already has `relistedListingId`.
+4. Verify: Relist Save, operator override, mid-window 404, Publish opens the successor, activity on both, Relisted beside Unsold on the source, ordinary closed slug still reserved, call-off release unchanged.
 5. Rollback: revert the writers; transferred rows already null on the source stay null (same as call-off release). Do not restore source slugs after a successor has published at that address.

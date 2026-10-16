@@ -3,6 +3,7 @@
 - A shared lot link keeps working for the lot that will sell again after Relist
 - Relist still creates a new listing with its own listing code, stock hold and window
 - Operators can see that the public address moved, on both listings' activity
+- Operators can see on the Unsold source that it was already Relisted
 
 ## Non-Goals
 
@@ -29,6 +30,7 @@
 | Q9 | How is success measured? | Shared `/auction/listings/<slug>` hits that open the live successor after Relist - recommended, recorded @mason5991 2026-10-15 | No measure |
 | Q10 | How does transfer activity name the other listing? | By listing code and English title when present, else the listing id, and always the slug that moved - recommended, recorded @mason5991 2026-10-15 | Listing id alone; code only; admin deep link only |
 | Q11 | If the operator clears the prefilled Relist slug before Save, what is stored? | The ordinary title-and-code generated slug for the new draft's listing code; the source's former slug is still freed in the same transaction - recommended, recorded @mason5991 2026-10-15 | Refuse empty; leave the draft with no slug |
+| Q12 | How does admin show that an Unsold source was already Relisted? | A **Relisted** badge beside **Unsold** on the source listing's detail header and in the Listings table Status column, once Relist Save linked a successor (`relistedListingId`) - @mason5991 2026-10-16 | Relist activity alone; a Status word that replaces Unsold; badge only on the detail page |
 
 ## Raised
 
@@ -43,3 +45,4 @@
 | `grade10-admin/auction/listing` | If the operator clears the prefilled Relist slug before Save, whether Save generates a title-and-code slug or refuses empty | Q11 |
 | `grade10-admin/auction/listing` | When the slug moves on Relist Save | Q2 |
 | `grade10-admin/auction/listing` | Distinct listing code on the successor | Q3 |
+| `grade10-admin/auction/listing` | Admin Relisted badge on the Unsold source after Relist Save | Q12 |

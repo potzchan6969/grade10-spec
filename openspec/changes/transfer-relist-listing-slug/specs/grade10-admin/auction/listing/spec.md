@@ -71,6 +71,7 @@ optional alt live in `grade10-site/auction/listing-media`. An operator also writ
   - Released note: an Unsold listing says its stock was released, and when
   - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Relist public address: Relist Save frees the Unsold source's slug and assigns it to the new draft in one transaction; the new draft keeps its own listing code; both listings' activity records the transfer; no redirect table
+  - Relisted badge: once Relist Save linked a successor, the Unsold source shows Relisted beside Unsold on its listing detail header and in the Listings table Status column
   - Earlier holds freed: holds left by earlier Unsold closes are released once
 - Unit-aware source selection
   - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
@@ -114,7 +115,9 @@ condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
    fields SHALL NOT change. Both listings' activity SHALL name the slug the new
    draft holds and the other listing by listing code and English title when
    present, else the listing id. Grade10 SHALL NOT create a redirect or alias
-   for the move.
+   for the move. Once that Save linked a successor, the Unsold source's listing
+   detail header and its Listings table Status column SHALL show a **Relisted**
+   badge beside **Unsold**.
 
 The gallery SHALL be copied into the new listing, so later edits to either
 gallery do not change the other.
@@ -204,6 +207,19 @@ apply as well.
 - **GIVEN** an Unsold listing whose Relist editor was saved as a new draft
 - **WHEN** an operator holding `auction:operate` opens the Listings table
 - **THEN** the Unsold listing's row shows no Relist
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-rlb rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-218 - Relisted badge on the Unsold source after Relist Save
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing whose Relist editor was saved as a new draft
+- **WHEN** an operator opens that Unsold listing's detail page and the Listings
+  table
+- **THEN** the detail header shows a Relisted badge beside Unsold
+- **AND** the Listings table Status column for that row shows Relisted beside
+  Unsold
+- **AND** an Unsold listing that has never been Relisted shows Unsold without
+  Relisted
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-2m4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-144 - Only the first of two Relist editors saves
