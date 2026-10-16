@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-10-16
+awaiting:
+  specs: 2026-10-16, requirement deltas from /planning-dev
+hands:
+  pm: "@tangconst"
