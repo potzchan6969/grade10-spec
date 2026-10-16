@@ -427,11 +427,6 @@ export {
   type MemberCardUse,
 } from "./blocks/loyalty-membership/member-card";
 export {
-  MembershipSummary,
-  type MembershipSummaryCopy,
-  type MembershipSummaryProps,
-} from "./blocks/loyalty-membership/membership-summary";
-export {
   RewardMenu,
   type RewardMenuCopy,
   type RewardMenuProps,
@@ -440,6 +435,12 @@ export {
   ScanPlate,
   type ScanPlateProps,
 } from "./blocks/loyalty-membership/scan-plate";
+export {
+  TierCard,
+  type TierCardCopy,
+  type TierCardProps,
+  type TierCardVariant,
+} from "./blocks/loyalty-membership/tier-card";
 export type {
   ActivityEntry,
   CouponItem,
