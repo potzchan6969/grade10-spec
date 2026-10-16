@@ -42,6 +42,7 @@
 | Q13 | The term's figure | ❓ Product - the running default is **90** days; the brief asks **30** or **60**; the figure is unset | Treating the default as decided; it predates this change but the owner reopened it |
 | Q14 | What an unsold item does at term's end | ❓ Product - the proposed actions a consignor may take: reduce the listed price, save it to the vault for long-term custody, or book an appointment to collect it at the shop | The PRD's earlier choice list, which this question reopens |
 | Q15 | The payout flow | ❓ Product - proposed: a bank transfer directly, a payout the consignor requests and a bank transfer follows, or credits or points | Settling on the recorded bank transfer alone; it stands meanwhile |
+| Q16 | Where the consignor's pages sit | ❓ Designer - proposed: the signed-in area splits into three sections by what the items mean - Submissions for items in service, Vault Portfolio for held assets, Consignments and Sales for items entrusted to sell; the consignor's pages live under the last | Folding consignor pages into the vault portfolio or the account page |
 
 ## Raised
 
