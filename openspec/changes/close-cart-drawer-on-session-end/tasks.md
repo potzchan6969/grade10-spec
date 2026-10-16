@@ -14,7 +14,7 @@ Built ahead of this record: `useCartClosedOnSessionEnd` and its call in `SiteWit
 - [ ] 2.2 Keep the built hook and its call as they are, and repair only what 2.1 turned red, in the hook or its call in `root.tsx`; add no message, timer or second reading of the session. `g10.store-cart-drawer.SC46`, `g10.store-cart-drawer.SC47`, `g10.store-cart-drawer.SC48`, `g10.store-cart-drawer.SC49`, `g10.store-cart-drawer.SC50`, `g10.store-cart-drawer.SC51`, `g10.store-cart-drawer.SC53`, `g10.store-cart-drawer.SC54`
 - [ ] 2.3 Verify: `pnpm --filter @grade10/web-spa exec vitest run src/chrome/SessionEndsElsewhere.test.tsx`, then `pnpm run typecheck`, `pnpm run lint` and `pnpm check:quick`; do not run `pnpm run test:backend`, since the group touches no backend file
 
-## 3. Checkout meeting an expired session (grade10)
+## 3. Checkout meeting an expired session (grade10) (owner: @seankcw)
 
 Built ahead of this record: the 401 path of the drawer opens the sign-in dialog with no way back to the drawer (`CartDrawerHost.tsx:1077-1085`), and the session-end close already applies to it. This group proves the two together, which the existing test at `CartDrawer.test.tsx:2586-2616` cannot, because its refresh never publishes nobody into the session. It needs nothing from group 2.
 
