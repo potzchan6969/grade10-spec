@@ -2,7 +2,7 @@
 
 ### grade10-site-consignment-consignor-notifications-US-01: Consignor hears each thing that happens
 
-**As a** consignor,
+**As a** collector who consigns,
 **I want** an email for each thing that happens to my consignment -
 received, signed, on sale, repriced, sold, payout set, paid, ending,
 returned - in my language,

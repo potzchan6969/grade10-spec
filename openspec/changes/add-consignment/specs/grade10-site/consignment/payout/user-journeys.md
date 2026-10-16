@@ -2,14 +2,14 @@
 
 ### grade10-site-consignment-payout-US-01: Consignor is paid the incentive at consignment
 
-**As a** consignor,
+**As a** collector who consigns,
 **I want** the incentive paid instantly when I consign, on the estimated
 value of my items,
 **so that** consigning pays me before anything sells.
 
 ### grade10-site-consignment-payout-US-02: Consignor is paid the payout after the window
 
-**As a** consignor,
+**As a** collector who consigns,
 **I want** the sale price less commission and fees paid to me after the
 return window, with a settlement statement and a commission invoice,
 **so that** I know what I am paid, what the fee was and when it arrives.
@@ -24,7 +24,7 @@ grant,
 
 ### grade10-site-consignment-payout-US-04: Consignor sees a refund settled straight
 
-**As a** consignor,
+**As a** collector who consigns,
 **I want** a refund inside the window to reverse the sale and put my item
 back on sale, and a refund after payout to come off my next payout,
 **so that** the money stays straight whichever way it moves.
