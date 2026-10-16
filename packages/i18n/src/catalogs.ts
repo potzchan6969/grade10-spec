@@ -65,6 +65,7 @@ import grade10ZhHantStore from "../messages/grade10/zh-Hant/store.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
+import sharedEnAuctionAvailability from "../messages/shared/en/auctionAvailability.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
 import sharedEnAuctionInvoicePdf from "../messages/shared/en/auctionInvoicePdf.json";
 import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
@@ -93,6 +94,7 @@ import sharedEnVault from "../messages/shared/en/vault.json";
 import sharedEnVerification from "../messages/shared/en/verification.json";
 import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
+import sharedKoAuctionAvailability from "../messages/shared/ko/auctionAvailability.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
 import sharedKoAuctionInvoicePdf from "../messages/shared/ko/auctionInvoicePdf.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
@@ -121,6 +123,7 @@ import sharedKoVault from "../messages/shared/ko/vault.json";
 import sharedKoVerification from "../messages/shared/ko/verification.json";
 import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json";
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
+import sharedZhHansAuctionAvailability from "../messages/shared/zh-Hans/auctionAvailability.json";
 import sharedZhHansAuctionBiddingHistory from "../messages/shared/zh-Hans/auctionBiddingHistory.json";
 import sharedZhHansAuctionInvoicePdf from "../messages/shared/zh-Hans/auctionInvoicePdf.json";
 import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListing.json";
@@ -149,6 +152,7 @@ import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
 import sharedZhHansVerification from "../messages/shared/zh-Hans/verification.json";
 import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json";
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
+import sharedZhHantAuctionAvailability from "../messages/shared/zh-Hant/auctionAvailability.json";
 import sharedZhHantAuctionBiddingHistory from "../messages/shared/zh-Hant/auctionBiddingHistory.json";
 import sharedZhHantAuctionInvoicePdf from "../messages/shared/zh-Hant/auctionInvoicePdf.json";
 import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListing.json";
@@ -190,6 +194,7 @@ import zzzKoStoreHome from "../messages/zzz/ko/storeHome.json";
 export const sharedEn = {
   appointment: sharedEnAppointment,
   auction: sharedEnAuction,
+  auctionAvailability: sharedEnAuctionAvailability,
   auctionBiddingHistory: sharedEnAuctionBiddingHistory,
   auctionInvoicePdf: sharedEnAuctionInvoicePdf,
   auctionRecord: sharedEnAuctionRecord,
@@ -221,6 +226,7 @@ export const sharedEn = {
 export const sharedZhHant = {
   appointment: sharedZhHantAppointment,
   auction: sharedZhHantAuction,
+  auctionAvailability: sharedZhHantAuctionAvailability,
   auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
   auctionInvoicePdf: sharedZhHantAuctionInvoicePdf,
   auctionRecord: sharedZhHantAuctionRecord,
@@ -252,6 +258,7 @@ export const sharedZhHant = {
 export const sharedZhHans = {
   appointment: sharedZhHansAppointment,
   auction: sharedZhHansAuction,
+  auctionAvailability: sharedZhHansAuctionAvailability,
   auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
   auctionInvoicePdf: sharedZhHansAuctionInvoicePdf,
   auctionRecord: sharedZhHansAuctionRecord,
@@ -283,6 +290,7 @@ export const sharedZhHans = {
 export const sharedKo = {
   appointment: sharedKoAppointment,
   auction: sharedKoAuction,
+  auctionAvailability: sharedKoAuctionAvailability,
   auctionBiddingHistory: sharedKoAuctionBiddingHistory,
   auctionInvoicePdf: sharedKoAuctionInvoicePdf,
   auctionRecord: sharedKoAuctionRecord,
