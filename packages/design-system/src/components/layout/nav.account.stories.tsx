@@ -61,9 +61,19 @@ export const WithoutCart: Story = {
     onAccountClick: fn(),
     onCartClick: undefined,
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
-    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
+  play: async ({ canvasElement, step }) => {
+    await step(
+      "shared-ui-site-chrome-SC-04 - A storefront with no cart",
+      () => {
+        const canvas = within(canvasElement);
+        expect(canvas.queryByRole("button", { name: /Cart/ })).toBeNull();
+        const account = canvas.getByRole("button", { name: "Account" });
+        // No space is held for a cart: Account is the trailing control.
+        const controls = canvasElement.querySelector(
+          '[data-slot="nav-controls"]',
+        );
+        expect(controls?.lastElementChild).toBe(account);
+      },
+    );
   },
 };

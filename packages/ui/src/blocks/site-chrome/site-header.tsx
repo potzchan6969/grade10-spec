@@ -162,7 +162,7 @@ function SiteHeader({
           render={
             <IconButton
               aria-busy={signOutPending || undefined}
-              aria-label={navCopy.account ?? "Account"}
+              aria-label={navCopy.account}
               size="md"
               variant="ghost"
             />
@@ -244,9 +244,7 @@ function SiteHeader({
       <span className="relative inline-flex shrink-0">
         <IconButton
           aria-label={
-            showCartBadge
-              ? `${navCopy.cart ?? "Cart"} (${cartItemCount})`
-              : (navCopy.cart ?? "Cart")
+            showCartBadge ? `${navCopy.cart} (${cartItemCount})` : navCopy.cart
           }
           onClick={onCartClick}
           size="md"

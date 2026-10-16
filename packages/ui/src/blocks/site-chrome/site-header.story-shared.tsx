@@ -30,6 +30,8 @@ export const AUCTION_NAV_ITEMS = [
 export const COPY = {
   locale: locale.en,
   account: chrome.accountLabel,
+  cart: chrome.cartLabel,
+  search: chrome.searchLabel,
   signIn: chrome.signIn,
   menu: chrome.menu,
   menuTitle: chrome.menuTitle,

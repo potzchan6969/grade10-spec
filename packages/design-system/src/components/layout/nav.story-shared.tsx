@@ -40,6 +40,7 @@ export const NAV_BASE_ARGS = {
     locale: "English",
     account: "Account",
     cart: "Cart",
+    search: "Search",
     signIn: "Sign In",
     menu: "Menu",
     menuTitle: "Menu",
