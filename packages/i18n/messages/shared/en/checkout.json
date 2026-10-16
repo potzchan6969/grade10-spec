@@ -56,7 +56,12 @@
     "blocked": "Fix the marked lines before paying.",
     "removed": "{count} line(s) the shop no longer sells came out of your basket.",
     "remove": "Remove",
-    "writeFailed": "Your change did not reach the shop. Try again."
+    "writeFailed": "Your change did not reach the shop. Try again.",
+    "soldOut": "{title} has sold out.",
+    "unavailable": "{title} is no longer sold.",
+    "reduced": "{title}: only {count} left, so your quantity was reduced.",
+    "repriced": "{title} now costs {price}.",
+    "filledShort": "{title}: the shop can fill only {count}."
   },
   "line": {
     "soldOut": "Sold out",
