@@ -1,20 +1,20 @@
 # grade10-site/store/cart-drawer Test Cases
 
-**Status:** pending-review · 0/9
+**Status:** pending-review · 0/12
 **Drafts styled:** 2026-10-16, tcs-rules r6
 
 ## Walk 1: Sign-out in another tab, then what the collector does next
 
 **Starting state:**
 
-- customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open.
+- customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
 - A second tab 2 of the same browser is open on any Store surface.
 
 **Shared test data:**
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 | member_line | An available product line in the signed-in customer's cart |
 | settle_wait | 10 seconds, longer than a routine session read |
 
@@ -54,14 +54,14 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
 * A second tab 2 of the same browser is open on any Store surface.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 
 **Steps:**
 
@@ -94,7 +94,7 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
 * The customer's cart holds `<member_line>`.
 * A second tab 2 of the same browser is open on any Store surface.
 
@@ -102,7 +102,7 @@
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 | member_line | An available product line in the signed-in customer's cart |
 | settle_wait | 10 seconds, longer than a routine session read |
 
@@ -138,7 +138,7 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
 * The customer's cart holds `<member_line>`.
 * A second tab 2 of the same browser is open on any Store surface.
 
@@ -146,7 +146,7 @@
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 | member_line | An available product line in the signed-in customer's cart |
 
 **Steps:**
@@ -187,7 +187,7 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
 * A second tab 2 of the same browser is open on any Store surface.
 * The environment can end the customer's session on the server without a sign-out press in any tab.
 
@@ -195,7 +195,7 @@
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 
 **Steps:**
 
@@ -211,8 +211,8 @@
 * No toast, notice or sign-in prompt appears in steps 3 and 4.
 * Tab 1 is still at `<surface_address>`.
 
-<!-- trace:case id=g10.store-cart-drawer.TC-g4z rev=1 -->
-#### g10.store-cart-drawer.US14-TC5: A guest's open drawer stays open across session reads
+<!-- trace:case id=g10.store-cart-drawer.TC-g4z rev=2 -->
+#### g10.store-cart-drawer.US14-TC5: A guest's open drawer stays open across later session reads
 
 **Classification:**
 
@@ -229,35 +229,34 @@
 
 **Pre-conditions:**
 
-* customer(guest) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with `<guest_line>` in this browser's cart.
+* customer(guest) has tab 1 open at `<surface_address>`, with `<guest_line>` in this browser's cart.
 * A second tab 2 of the same browser is open on any Store surface.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 | guest_line | An available product line in this browser's guest cart |
 | settle_wait | 10 seconds, longer than a routine session read |
 
 **Steps:**
 
-1. Reload tab 1.
-2. Click Cart in the header as soon as the page loads.
-3. Wait `<settle_wait>`.
-4. Switch to tab 2.
-5. Switch back to tab 1.
-6. Wait `<settle_wait>`.
+1. Click Cart in the header.
+2. Wait `<settle_wait>`.
+3. Switch to tab 2.
+4. Switch back to tab 1.
+5. Wait `<settle_wait>`.
 
 **Expected Results:**
 
-* Step 2 opens one drawer over `<surface_address>`.
-* The drawer is still open after step 3.
-* The drawer is still open after step 6, showing `<guest_line>`.
-* No toast or notice appears in steps 1 to 6.
+* Step 1 opens one drawer over `<surface_address>`.
+* The drawer is still open after step 2.
+* The drawer is still open after step 5, showing `<guest_line>`.
+* No toast or notice appears in steps 1 to 5.
 
-<!-- trace:case id=g10.store-cart-drawer.TC-7jq rev=1 covers=g10.store-cart-drawer.SC-fg7 -->
-#### g10.store-cart-drawer.US14-TC6: A switch to another member keeps the drawer open on their cart
+<!-- trace:case id=g10.store-cart-drawer.TC-7jq rev=2 covers=g10.store-cart-drawer.SC-fg7 -->
+#### g10.store-cart-drawer.US14-TC6: Switching member closes the drawer; Cart then opens the new cart
 
 **Classification:**
 
@@ -274,7 +273,7 @@
 
 **Pre-conditions:**
 
-* customer A(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open on `<member_a_line>`.
+* customer A(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open on `<member_a_line>`.
 * customer B(member) can sign in and holds a cart with `<member_b_line>` and no `<member_a_line>`.
 * A second tab 2 of the same browser is open on any Store surface.
 
@@ -282,7 +281,7 @@
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 | member_a_line | An available product line in customer A's cart only |
 | member_b_line | An available product line in customer B's cart only |
 | settle_wait | 10 seconds, longer than a routine session read |
@@ -290,15 +289,19 @@
 **Steps:**
 
 1. In tab 2, sign out.
-2. In tab 2, sign in as customer B.
+2. In tab 2, sign in as customer B through the header's Sign In control.
 3. Switch to tab 1.
-4. Wait up to `<settle_wait>` for the drawer to show `<member_b_line>`.
+4. Wait `<settle_wait>`.
+5. Click Cart in the header.
+6. Wait `<settle_wait>`.
 
 **Expected Results:**
 
-* Step 4 shows the drawer still open over `<surface_address>`, with `<member_b_line>`.
-* The drawer shows no `<member_a_line>`.
+* Step 4 shows no cart drawer and no drawer backdrop, with tab 1 still at `<surface_address>`.
 * No toast, notice or sign-in prompt appears in steps 3 and 4.
+* Step 5 opens one drawer over `<surface_address>`.
+* The drawer shows no `<member_a_line>` at any point from step 5 on.
+* The drawer shows `<member_b_line>` after step 6.
 
 <!-- trace:case id=g10.store-cart-drawer.TC-2iv rev=1 covers=g10.store-cart-drawer.SC-dd4 -->
 #### g10.store-cart-drawer.US14-TC7: A session read in flight leaves the drawer open
@@ -318,7 +321,7 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
 * A second tab 2 of the same browser is open on any Store surface.
 * The next session read of tab 1 can be held in flight and then answered with the customer's own session.
 
@@ -326,7 +329,7 @@
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 
 **Steps:**
 
@@ -360,14 +363,14 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open and its cart read held in flight.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open and its cart read held in flight.
 * A second tab 2 of the same browser is open on any Store surface.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 
 **Steps:**
 
@@ -383,8 +386,8 @@
 * Step 5 shows no cart drawer open and the page still at `<surface_address>`.
 * No toast, notice or sign-in prompt appears in steps 2 to 5.
 
-<!-- trace:case id=g10.store-cart-drawer.TC-vcl rev=1 covers=g10.store-cart-drawer.SC-w1i,g10.store-cart-drawer.SC-gey -->
-#### g10.store-cart-drawer.US14-TC9: Checkout meeting an expired session leaves no drawer behind the dialog
+<!-- trace:case id=g10.store-cart-drawer.TC-vcl rev=2 covers=g10.store-cart-drawer.SC-w1i,g10.store-cart-drawer.SC-gey -->
+#### g10.store-cart-drawer.US14-TC9: Checkout meeting an expired session leaves the drawer closed
 
 **Classification:**
 
@@ -401,29 +404,166 @@
 
 **Pre-conditions:**
 
-* customer(signed-in member) has tab 1 open at `<surface_address>` on `<grade10 store url>`, with the cart drawer open on `<member_line>`.
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open on `<member_line>`.
 * The customer's session ended on the server after tab 1 last read it, so tab 1 still shows the member's drawer.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| surface_address | The address of the Store surface that tab 1 shows |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
 | member_line | An available product line in the signed-in customer's cart |
 
 **Steps:**
 
 1. Click the member's checkout button in the drawer.
-2. Wait for the sign-in dialog.
-3. Sign in as the same customer in the dialog.
-4. Wait for the dialog to close.
-5. Click Cart in the header.
+2. Close whatever checkout shows over the page, if anything.
+3. Wait for the header to show Sign In.
+4. Sign in as the same customer through the header's Sign In control.
+5. Wait for the header to show the signed-in state.
 
 **Expected Results:**
 
-* Step 2 opens the sign-in dialog, with no cart drawer open behind it.
-* No cart drawer is open at step 4, and tab 1 is at `<surface_address>`.
-* Step 5 opens one drawer that shows `<member_line>`.
+* Step 3 shows Sign In in the header, with no cart drawer open beside it.
+* No cart drawer is open at any point in steps 4 and 5.
+* What checkout asks of the collector after step 1 is checkout's to say and is not checked here.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-e57 rev=1 -->
+#### g10.store-cart-drawer.US14-TC10: Reading a new member directly keeps the drawer open on their cart
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US14
+
+**Pre-conditions:**
+
+* customer A(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open on `<member_a_line>`.
+* customer B(member) holds a cart with `<member_b_line>` and no `<member_a_line>`.
+* A second tab 2 of the same browser is open on any Store surface.
+* The next session read of tab 1 can be held in flight and then answered with customer B's session, so tab 1 reads customer A and then customer B with no reading of nobody between.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
+| member_a_line | An available product line in customer A's cart only |
+| member_b_line | An available product line in customer B's cart only |
+| settle_wait | 10 seconds, longer than a routine session read |
+
+**Steps:**
+
+1. Switch to tab 2.
+2. Switch back to tab 1, holding the session read in flight.
+3. Answer the session read with customer B's session.
+4. Wait up to `<settle_wait>` for the drawer to show `<member_b_line>`.
+
+**Expected Results:**
+
+* The drawer stays open over `<surface_address>` throughout steps 2 to 4.
+* Step 4 shows `<member_b_line>` in the drawer.
+* The drawer shows no `<member_a_line>` at any point after step 3.
+* No toast, notice or sign-in prompt appears in steps 2 to 4.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-p9t rev=1 -->
+#### g10.store-cart-drawer.US14-TC11: A guest's drawer stays open when the first session read answers nobody
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US14
+
+**Pre-conditions:**
+
+* customer(guest) has tab 1 open at `<surface_address>`, with `<guest_line>` in this browser's cart.
+* The first session read of tab 1 after a reload can be held in flight and then answered with nobody signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
+| guest_line | An available product line in this browser's guest cart |
+| settle_wait | 10 seconds, longer than a routine session read |
+
+**Steps:**
+
+1. Reload tab 1, holding its first session read in flight.
+2. Click Cart in the header.
+3. Look at tab 1.
+4. Answer the held session read with nobody signed in.
+5. Wait `<settle_wait>`.
+
+**Expected Results:**
+
+* Step 2 opens one drawer over `<surface_address>`.
+* Step 3 shows the drawer still open.
+* Step 5 shows the drawer still open, showing `<guest_line>`.
+* No toast or notice appears in steps 1 to 5.
+
+<!-- trace:case id=g10.store-cart-drawer.TC-38f rev=1 -->
+#### g10.store-cart-drawer.US14-TC12: A failed session read leaves a member's drawer open
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** g10.store-cart-drawer.US14
+
+**Pre-conditions:**
+
+* customer(signed-in member) has tab 1 open at `<surface_address>`, with the cart drawer open.
+* A second tab 2 of the same browser is open on any Store surface.
+* The next session request of tab 1 can be made to fail with `<session_failure>`, by blocking it or by answering it with an error.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| surface_address | `<grade10 store url>`, the Store front door, a public page that asks for no session |
+| settle_wait | 10 seconds, longer than a routine session read |
+
+| `<session_failure>` |
+| --- |
+| the service unreachable |
+| a 500 error answer |
+
+**Steps:**
+
+1. Switch to tab 2.
+2. Switch back to tab 1, making its session request fail with `<session_failure>`.
+3. Wait `<settle_wait>`.
+
+**Expected Results:**
+
+* Step 2's session request fails with `<session_failure>`.
+* Step 3 shows the drawer still open over `<surface_address>`.
 
 ## Settled
 
