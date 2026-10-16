@@ -33,10 +33,10 @@ so redefining the reward never rewrites a coupon a member already holds —
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
 
-🚧 **The picture** - the coupon list shown here draws no code and no copy
+**The picture** - the coupon list shown here draws no code and no copy
 action, since a reward coupon carries none
 
-::story{id="loyalty-coupons-blocks-couponlist--default" title="The coupons a member holds"}
+::story{id="loyalty-coupons-blocks-couponlist--wallet" title="The coupons a member holds"}
 
 ## Applying one
 
