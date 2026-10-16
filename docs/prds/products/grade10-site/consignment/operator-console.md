@@ -1,5 +1,6 @@
 ---
 title: Consignment Console
+spec: grade10-admin/consignment/console
 audience: operator
 order: 1
 ---
@@ -35,13 +36,17 @@ the settings the schedule runs on.
 | Items | each item, its list price and floor, its listing in the shop or at auction, and a link to its item page |
 | Channel | each item's store product or lot, whether it carries the latest terms, and every flag on it |
 | Terms | the commission and fees pinned to the agreement, and the term |
-| Documents | the agreement, the receipt and each statement |
+| Documents | the agreement, each receipt, each statement and the commission invoice |
 | Money | the sale, commission, fees and the payout, each with who recorded it |
 | Timeline | every act and every message sent |
 
 - **Acts** - receive, set terms, prepare the agreement, list, change the
   price, take off sale, return, extend, move to the other channel or the
   vault - [Services and Hand-offs](/p/grade10-admin/inventory/services#hand-offs)
+- 🚧 **At intake** - the receive act records where the consignment was
+  taken - the shop or an event - and its channel, the store or the
+  auction, and registers each item's market value and the consignment
+  rates applying to it
 - **Before the act** - a dialog states the rule first: the floor, the
   schedule, the term
 - **Withheld in words** - an act not offered yet says why
@@ -80,7 +85,8 @@ pinned to a consignment when its agreement is prepared.
 
 | Setting | Default | Choices |
 | --- | --- | --- |
-| Commission, for each channel and price band | unset | a share of the price |
+| Commission, for each channel and price band | unset; intended **10–12%** | a share of the price |
+| Incentive, on the estimated value | intended **5%**, paid at consignment | a share of the estimated value |
 | Minimum commission | none | an amount per item |
 | Fees: listing, return, early take-back | none | an amount each |
 | Term on sale | **90** days | any number of days |
@@ -90,6 +96,9 @@ pinned to a consignment when its agreement is prepared.
 | Identity before signing | always verified | above a sale price; never |
 | Ending soon | **7** days before the term ends | any number of days |
 
+- ❓ Product - **The intended figures** - the consignment fee is intended
+  at **10–12%** of the price at sale and the incentive at **5%** of the
+  estimated value; the exact figures are unset
 - **Pinned to the agreement** - a change reaches the next agreement
   prepared; one waiting for a signature keeps the schedule it was prepared on
 - **Unset refuses** - an agreement is not prepared while a figure it prints
@@ -124,4 +133,5 @@ pinned to a consignment when its agreement is prepared.
 | Every figure a setting | Decided | The schedule, the term, the windows, fees, identity and when a consignor is paid are settings admins change in the console, each starting on the recommended default - decided by the owner, 2026-10-08 | Product |
 | One payout per consignment | ❓ Open | Proposed: every sale of a consignment past its window is paid as one payout, and a sale still inside its window waits for its own day | Finance |
 | A schedule version per save | ❓ Open | Proposed: each settings save that moves a figure is the next schedule version, the one an agreement prepared after it pins | Product |
+| The channel and the details at intake | Decided | the receive act records where the consignment was taken, its channel - the store or the auction - and each item's market value and the consignment rates applying to it - decided under the owner's delegation, 2026-10-16 | Product |
 :::
