@@ -62,7 +62,9 @@ What a listing carries, from the operator's form to the card.
 
 | Fact | Set by the operator | Collectors see |
 | --- | --- | --- |
-| Address | A slug, unique among every listing: lower-case title words followed by the lower-case listing code when an operator keeps the generated value | `/auction/listings/<slug>` |
+| Address | A slug, unique among every listing that currently holds one: lower-case title words followed by the lower-case listing code when an operator keeps the generated value | `/auction/listings/<slug>` |
+
+- 🚧 **Relist keeps the address** — Relist Save moves an Unsold listing's slug onto its successor, so a shared link opens the live lot once published — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 | 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters, allocated on the first saved draft and permanently reserved, including after deletion — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Its lower-case form is visible only as the canonical address suffix, never as a labelled page field or a route on its own. Fresh metadata omits the separate code. A cached preview may remain stale without a purge guarantee. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 
 ## Catalogue

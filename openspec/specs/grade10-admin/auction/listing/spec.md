@@ -71,6 +71,8 @@ optional alt live in `grade10-site/auction/listing-media`. An operator also writ
   - Released note: an Unsold listing says its stock was released, and when
   - Relist: an Unsold listing's row in the Listings table opens a new draft with the same product, quantity and catalogue copy, once its stock is released, outside a campaign and once per listing
   - Earlier holds freed: holds left by earlier Unsold closes are released once
+  - Relist public address: Relist Save frees the Unsold source's slug and assigns it to the new draft in one transaction; the new draft keeps its own listing code; both listings' activity records the transfer; no redirect table
+  - Relisted badge: once Relist Save linked a successor, the Unsold source shows Relisted beside Unsold on its listing detail header and in the Listings table Status column
 - Unit-aware source selection
   - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
   - Other media tagged to a printed-Cert record stays outside the main selector; the separately labelled drawer contains only that media, grouped and named by the printed Cert ID, which an explicit Add to listing action names.
@@ -93,6 +95,8 @@ optional alt live in `grade10-site/auction/listing-media`. An operator also writ
   - Translated titles: the search matches the English title and every translated title, in whichever language the operator types
 - Relist
   - Every language carried: a relist draft opens with all three texts
+- Title and description in each language
+  - Every language carried: a listing keeps English, Traditional Chinese and Simplified Chinese titles and descriptions; Relist carries every language across
 
 ## Requirements
 
@@ -1998,13 +2002,23 @@ condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
 
 1. Relist SHALL open the listing editor filled in with the Unsold listing's
    product, quantity, Cert ID choice, title and copy in every language,
-   starting price, currency and gallery.
-2. The editor SHALL start with no slug, listing code or window; every other
-   field SHALL start as on any new draft.
+   starting price, currency, gallery and slug.
+2. The editor SHALL start with no listing code or window; every other field
+   SHALL start as on any new draft.
 3. Nothing SHALL be stored and no stock SHALL be held until the operator saves.
    Relist activated again SHALL open another unsaved editor.
 4. Save SHALL be an ordinary draft save that records which listing it was
-   relisted from, and the Unsold listing SHALL NOT change.
+   relisted from. In the same transaction Save SHALL free the Unsold source's
+   former slug and store the form's slug on the new draft. When the form slug
+   is empty, Save SHALL store the ordinary title-and-code generated slug for
+   the new draft's listing code and SHALL still free the source's former slug.
+   The new draft SHALL receive its own listing code. The Unsold listing's other
+   fields SHALL NOT change. Both listings' activity SHALL name the slug the new
+   draft holds and the other listing by listing code and English title when
+   present, else the listing id. Grade10 SHALL NOT create a redirect or alias
+   for the move. Once that Save linked a successor, the Unsold source's listing
+   detail header and its Listings table Status column SHALL show a **Relisted**
+   badge beside **Unsold**.
 
 The gallery SHALL be copied into the new listing, so later edits to either
 gallery do not change the other.
@@ -2023,7 +2037,8 @@ listing:
 The editor SHALL show the refusal's name inline.
 
 Every refusal of an ordinary draft save, such as available stock below the
-quantity, SHALL apply as well.
+quantity or a slug held by a listing other than this Relist source, SHALL
+apply as well.
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-4ez rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-135 - Relist opens the editor with the lot filled in
@@ -2031,12 +2046,12 @@ quantity, SHALL apply as well.
 
 - **GIVEN** an Unsold listing in no campaign whose stock was released, with a
   product, a Cert ID choice, quantity three, a title, copy, a starting price, a
-  currency and a two-item gallery
+  currency, a two-item gallery and slug `umbreon-v-alt`
 - **WHEN** an operator holding `auction:operate` activates Relist on its row in
   the Listings table
 - **THEN** the editor shows the same product, Cert ID choice, quantity, title,
-  copy, starting price, currency and both gallery items
-- **AND** it has no window, slug or listing code yet
+  copy, starting price, currency, both gallery items and slug `umbreon-v-alt`
+- **AND** it has no window or listing code yet
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-lc6 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-136 - Relist stores nothing until Save
@@ -2047,7 +2062,8 @@ quantity, SHALL apply as well.
 - **WHEN** the operator leaves without saving
 - **THEN** no listing is stored and available is unchanged
 - **AND** when the operator instead saves, a new draft holds three units,
-  available falls by three and the Unsold listing is unchanged
+  available falls by three and the Unsold listing's product, quantity and
+  outcome stay as they were
 
 <!-- trace:scenario id=g10adm.auction-listing.SC-z9c rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-137 - Relist shows on the row of a released Unsold listing only
@@ -2093,6 +2109,19 @@ quantity, SHALL apply as well.
 - **WHEN** an operator holding `auction:operate` opens the Listings table
 - **THEN** the Unsold listing's row shows no Relist
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rlb rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-218 - Relisted badge on the Unsold source after Relist Save
+**Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
+
+- **GIVEN** an Unsold listing whose Relist editor was saved as a new draft
+- **WHEN** an operator opens that Unsold listing's detail page and the Listings
+  table
+- **THEN** the detail header shows a Relisted badge beside Unsold
+- **AND** the Listings table Status column for that row shows Relisted beside
+  Unsold
+- **AND** an Unsold listing that has never been Relisted shows Unsold without
+  Relisted
+
 <!-- trace:scenario id=g10adm.auction-listing.SC-2m4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-144 - Only the first of two Relist editors saves
 **Serves:** grade10-admin-auction-listing-US-09 - the unsold lot goes back on sale in one move
@@ -2124,6 +2153,87 @@ quantity, SHALL apply as well.
 - **THEN** the editor opened with all three titles and the two descriptions written
 - **AND** the new draft stores the same titles and descriptions, and no Simplified Chinese description
 - **AND** the Unsold listing's texts are unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ace rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-209 - Relist Save moves the source slug onto the new draft
+**Serves:** grade10-admin-auction-listing-US-09 - a shared link keeps working for the lot that will sell again
+
+- **GIVEN** an Unsold listing in no campaign whose stock was released, whose
+  slug is `umbreon-v-alt` and whose listing code is `LK423`
+- **WHEN** an operator holding `auction:operate` activates Relist, leaves the
+  prefilled slug as `umbreon-v-alt`, and saves the draft
+- **THEN** the new draft holds slug `umbreon-v-alt` and a listing code other
+  than `LK423`
+- **AND** the Unsold source no longer holds `umbreon-v-alt` and still holds
+  code `LK423`
+- **AND** no redirect or alias is stored
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-d22 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-210 - Relist Save stores a replaced slug and frees the source's former address
+**Serves:** grade10-admin-auction-listing-US-09 - the operator may choose another address before Save
+
+- **GIVEN** an Unsold listing whose slug is `umbreon-v-alt`, opened by Relist
+  with that slug filled in
+- **WHEN** the operator sets Slug to `umbreon-again` and saves
+- **THEN** the new draft holds `umbreon-again`
+- **AND** the Unsold source no longer holds `umbreon-v-alt`
+- **AND** `umbreon-v-alt` is free for another listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-359 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-211 - The shared address is not found between Relist Save and Publish
+**Serves:** grade10-admin-auction-listing-US-09 - draft and created still stay off the public address
+
+- **GIVEN** Relist Save has moved slug `umbreon-v-alt` onto a new draft
+- **WHEN** a collector opens `/auction/listings/umbreon-v-alt` before that
+  draft is published
+- **THEN** Grade10 answers as not found
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-fde rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-212 - After Publish the shared address opens the successor
+**Serves:** grade10-admin-auction-listing-US-09 - a shared link opens the live lot
+
+- **GIVEN** Relist Save moved slug `umbreon-v-alt` onto a new draft that is
+  later published
+- **WHEN** a collector opens `/auction/listings/umbreon-v-alt`
+- **THEN** Grade10 returns that published successor
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-eaf rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-213 - Activity on both listings names the transferred slug
+**Serves:** grade10-admin-auction-listing-US-09 - operators see that the public address moved
+
+- **GIVEN** Relist Save moved slug `umbreon-v-alt` from an Unsold listing whose
+  listing code is `LK423` and English title is `Umbreon V` onto a new draft
+  whose listing code is `MN891` and English title is `Umbreon V`
+- **WHEN** an operator opens activity on the Unsold source and on the new draft
+- **THEN** each listing shows an entry that names `umbreon-v-alt` and the other
+  listing by listing code and English title
+- **AND** the source entry names `MN891` and `Umbreon V`
+- **AND** the draft entry names `LK423` and `Umbreon V`
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-ib3 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-217 - Clearing the Relist slug stores a generated address and frees the source
+**Serves:** grade10-admin-auction-listing-US-09 - the operator may clear the address before Save
+
+- **GIVEN** an Unsold listing titled `Umbreon V` whose slug is `umbreon-v-alt`,
+  opened by Relist with that slug filled in
+- **WHEN** the operator clears Slug and saves
+- **THEN** the new draft stores a title-and-code slug built from `Umbreon V` and
+  its new listing code
+- **AND** the Unsold source no longer holds `umbreon-v-alt`
+- **AND** `umbreon-v-alt` is free for another listing
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-8b7 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-214 - After Relist Save the Unsold source no longer reserves its former slug
+**Serves:** grade10-admin-auction-listing-US-73 - collision follows who currently holds the address
+
+- **GIVEN** Relist Save moved slug `umbreon-v-alt` from an Unsold listing onto
+  a new draft, and a second unrelated draft
+- **WHEN** an operator sets the second draft's slug to `umbreon-v-alt` and
+  saves
+- **THEN** Grade10 refuses the write because the Relist draft holds that slug
+- **AND** when the Relist draft instead holds a different slug, Save of
+  `umbreon-v-alt` on the second draft is accepted and the Unsold source still
+  does not hold it
 
 ### Requirement: Holds left by earlier Unsold closes are released once
 
@@ -2431,7 +2541,10 @@ overwriting an address they chose.
   one hyphen, hyphen collapse, and trim. It SHALL append one hyphen and the
   lower-case listing code. Before appending, Grade10 SHALL truncate the title
   portion so the complete slug is at most 64 characters. When normalization
-  yields no title words, it SHALL use `lot` as the title portion.
+  yields no title words, it SHALL use `lot` as the title portion. When the
+  Save carries a non-empty form slug, including a Relist Save that keeps or
+  replaces the Unsold source's slug, Grade10 SHALL store that form slug and
+  SHALL NOT replace it with the generated value.
 - **Title edits** - When a later title edit occurs while the stored slug equals
   the immediately preceding generated value, Grade10 SHALL replace only its
   title portion and retain the same lower-case code suffix. It SHALL NOT
@@ -2441,6 +2554,8 @@ overwriting an address they chose.
   report whether it is available. The helper text SHALL state: `Slug must be
   unique. Completed, expired, and unsold listings also reserve their
   addresses.` The check SHALL NOT disclose another listing's private details.
+  For an unsaved Relist editor, the Unsold source's current slug SHALL report
+  as available to that Relist draft.
 - **Authoritative save** - Save SHALL remain authoritative. If another listing
   claims a slug after an available field-exit check, Grade10 SHALL refuse the
   Save and leave the draft's stored slug unchanged.
@@ -2492,6 +2607,27 @@ overwriting an address they chose.
 - **GIVEN** Slug reported available on a draft and another listing later claims that slug
 - **WHEN** the operator saves the draft
 - **THEN** Grade10 refuses the Save and leaves the draft's stored slug unchanged
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-c90 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-215 - Relist field exit treats the source slug as available
+**Serves:** grade10-admin-auction-listing-US-73 - the operator learns the transferred address is free for this Relist draft
+
+- **GIVEN** an Unsold listing whose slug is `umbreon-v-alt`, opened by Relist
+  with that slug filled in and not yet saved
+- **WHEN** the operator leaves Slug with `umbreon-v-alt`
+- **THEN** the editor reports available
+- **AND** the check does not expose the Unsold listing's private details
+
+<!-- trace:scenario id=g10adm.auction-listing.SC-c83 rev=1 -->
+#### Scenario: grade10-admin-auction-listing-SC-216 - Relist Save does not overwrite a form slug with a generated address
+**Serves:** grade10-admin-auction-listing-US-73 - a transferred or chosen address survives first Save
+
+- **GIVEN** an Unsold listing titled `Umbreon V` whose slug is `umbreon-v-alt`,
+  opened by Relist
+- **WHEN** the operator saves with slug `umbreon-v-alt` still in the form
+- **THEN** the new draft stores `umbreon-v-alt`
+- **AND** it does not store a title-and-new-code slug built from the new
+  listing code
 
 ### Requirement: A listing is priced in USD and no earlier listing keeps another currency
 
