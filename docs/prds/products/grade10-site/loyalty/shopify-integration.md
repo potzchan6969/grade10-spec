@@ -218,7 +218,7 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 - **Attribution** — through the customer on the sale, or later by an operator
   where the sale was rung up before the member joined; a sale nobody can own
   is marked a walk-in instead —
-  [Purchases Before the Account](/p/grade10-site/loyalty/profile#purchases-before-the-account)
+  [Purchases Before the Account](/p/grade10-site/loyalty/membership#purchases-before-the-account)
 
 ## POS Extension
 
@@ -343,7 +343,7 @@ No order id on the cart, so there is no promise to bind to.
 The sale is recorded with its goods priced and nobody named. A customer on the sale is looked at again on every pass — 5 minutes after the sale, then hourly, and given up on after 30 days. A customer that never finds a member in that time is logged as an error, so a pairing that failed is seen.
 
 ## *Loyalty* — **Earns when the sale is paired**
-The earn is priced on the goods that sale settled, whenever the sale gets an owner. Past the 30 days an operator claims the sale by hand, with what they saw recorded beside their name — [Purchases Before the Account](/p/grade10-site/loyalty/profile#purchases-before-the-account)
+The earn is priced on the goods that sale settled, whenever the sale gets an owner. Past the 30 days an operator claims the sale by hand, with what they saw recorded beside their name — [Purchases Before the Account](/p/grade10-site/loyalty/membership#purchases-before-the-account)
 :::
 
 :::flow{title="At the till" case="Undone before tender" diagram="assets/diagrams/shopify-till-undone.svg"}

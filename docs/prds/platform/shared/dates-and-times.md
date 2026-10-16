@@ -63,7 +63,7 @@ report's month - stays on the brand's zone for every reader. The day a
 collector page shows for a deadline is not judged this way: it reads in the
 viewer's zone, unless the surface's own spec fixes its zone, as the loyalty
 programme's expiry days do
-([Profile](/p/grade10-site/loyalty/profile)). Ordering and punctuation are
+([Membership](/p/grade10-site/loyalty/membership)). Ordering and punctuation are
 the platform's, not the browser's. A date that is not a valid instant, or a
 zone the platform does not recognise, stops the render.
 

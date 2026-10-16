@@ -3,7 +3,7 @@ import { expect, fn, within } from "storybook/test";
 import { TierCard } from "./tier-card";
 
 const meta = {
-  title: "Loyalty/Profile/Blocks/TierCard",
+  title: "Loyalty/Membership/Blocks/TierCard",
   component: TierCard,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

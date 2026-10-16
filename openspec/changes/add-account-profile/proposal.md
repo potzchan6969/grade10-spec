@@ -121,7 +121,7 @@ See [Non-Goals](decisions.md#non-goals).
 - [Profile · Designs](../../../docs/prds/products/grade10-site/account/profile.md#designs)
 - [Profile Blocks · Blocks](../../../docs/prds/products/shared/ui/store-profile.md#blocks)
 - [Profile Blocks · Left to the Application](../../../docs/prds/products/shared/ui/store-profile.md#left-to-the-application)
-- [Profile (loyalty) · Behind the Account](../../../docs/prds/products/grade10-site/loyalty/profile.md#behind-the-account)
+- [Profile (loyalty) · Behind the Account](../../../docs/prds/products/grade10-site/loyalty/membership.md#behind-the-account)
 - [Member Card in a Wallet · On the Pass](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#on-the-pass)
 - [Member Card in a Wallet · Staying Current](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#staying-current)
 - [Shopify Integration · Member Name](../../../docs/prds/products/grade10-site/loyalty/shopify-integration.md#member-name)
