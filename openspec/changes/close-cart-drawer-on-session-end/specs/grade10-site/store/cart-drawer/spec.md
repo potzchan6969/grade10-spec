@@ -24,9 +24,9 @@ switch from one member to another, which leaves the drawer open on the new
 member's cart.
 
 When Proceed to Checkout meets an expired session, that session has ended like
-any other: the drawer SHALL close, and the sign-in dialog that
-`grade10-site/store/checkout` asks for SHALL still open. The drawer SHALL NOT
-reopen when the collector signs in again without having opened the cart since.
+any other, and the drawer SHALL close. What checkout then asks of the collector
+is `grade10-site/store/checkout`'s. The drawer SHALL NOT reopen when the
+collector signs in again without having opened the cart since.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-jq7 rev=1 -->
 #### Scenario: g10.store-cart-drawer.SC46 - Signing out in another tab closes the open drawer
@@ -75,18 +75,17 @@ reopen when the collector signs in again without having opened the cart since.
 **Serves:** g10.store-cart-drawer.US14 - a member who returns to a tab now signed in as somebody else
 
 - **GIVEN** a signed-in member with the cart drawer open
-- **WHEN** a different member signs in to the site in another tab of this browser and this tab shows the new member
+- **WHEN** this tab's next reading of the session is a different member, with no reading of nobody between
 - **THEN** the drawer stays open
 - **AND** it shows the new member's cart and nothing of the first member's
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-w1i rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC52 - Checkout meeting an expired session closes the drawer behind the sign-in dialog
+#### Scenario: g10.store-cart-drawer.SC52 - Checkout meeting an expired session closes the drawer
 **Serves:** g10.store-cart-drawer.US14 - a member whose session ran out while the cart was open and who presses Proceed to Checkout
 
 - **GIVEN** a signed-in member with the cart drawer open on a reviewed cart, whose session has expired
 - **WHEN** the member activates Proceed to Checkout and checkout answers that nobody is signed in
-- **THEN** the sign-in dialog opens
-- **AND** the drawer closes
+- **THEN** the drawer closes
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-gey rev=1 -->
 #### Scenario: g10.store-cart-drawer.SC53 - Signing in again does not reopen the drawer
