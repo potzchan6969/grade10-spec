@@ -291,10 +291,28 @@ export function MainMoved() {
 function checkoutLine(
   standing: CheckoutStanding,
 ): { text: string; pull: boolean } | null {
+  const line = countLine(standing);
+  if (line === null || !standing.stale || standing.fetchedAt === undefined)
+    return line;
+  return {
+    ...line,
+    text: `${line.text} Last read from \`origin\` ${relativeTime(standing.fetchedAt)}.`,
+  };
+}
+
+function countLine(
+  standing: CheckoutStanding,
+): { text: string; pull: boolean } | null {
   const { ahead, behind, dirty } = standing;
   if (behind === 0 && ahead === 0) return null;
   if (dirty) {
-    return { pull: false, text: "Your checkout has uncommitted work." };
+    return {
+      pull: false,
+      text:
+        behind > 0
+          ? `Your checkout is ${commits(behind)} behind \`main\` and has uncommitted work.`
+          : "Your checkout has uncommitted work.",
+    };
   }
   if (behind > 0 && ahead === 0) {
     return {
