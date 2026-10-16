@@ -71,7 +71,7 @@ export const EmptyDisplayName: Story = {
   name: "Empty display name",
   args: {
     mode: "edit",
-    profile: { displayName: "", bio: "" },
+    profile: { displayName: "", bio: "", email: "kitlam@example.com" },
     save: "emptyName",
   },
   play: async ({ canvasElement }) => {

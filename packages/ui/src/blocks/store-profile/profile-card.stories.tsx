@@ -22,8 +22,11 @@ const meta = {
       status: "ready",
       data: (
         <ProfileDetails
+          avatarAlt="Your profile picture"
+          avatarFallback="C"
           bio="Chasing PSA 10s since 2019."
           displayName="Collector"
+          email="collector@example.com"
           copy={{ edit: "Edit profile" }}
           meta={FIXTURE_MEMBER_SINCE}
           onEdit={fn()}
@@ -38,7 +41,36 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-export const Loading: Story = { args: { state: { status: "loading" } } };
+export const Loading: Story = {
+  args: { state: { status: "loading" } },
+  play: async ({ canvasElement }) => {
+    expect(
+      canvasElement.querySelector('[data-slot="profile-loading"]'),
+    ).not.toBeNull();
+    expect(
+      canvasElement.querySelector('[data-slot="profile-details"]'),
+    ).toBeNull();
+  },
+};
+
+/** The application's message and action; no profile fields. */
+export const Empty: Story = {
+  args: {
+    state: {
+      status: "empty",
+      message: "Nothing here yet.",
+      action: { label: "Start", onAction: fn() },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Nothing here yet.")).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Start" })).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="profile-details"]'),
+    ).toBeNull();
+  },
+};
 
 /** The consumer supplies the message and what to call the action. */
 export const ErrorState: Story = {
@@ -48,6 +80,18 @@ export const ErrorState: Story = {
       message: "Could not load your profile.",
       action: { label: common.retry, onAction: fn() },
     },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText("Could not load your profile."),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: common.retry }),
+    ).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="profile-details"]'),
+    ).toBeNull();
   },
 };
 
@@ -84,7 +128,13 @@ export const EditingBody: Story = {
             displayName: "Display name",
             bio: "Bio",
             submit: common.save,
+            chooseAvatar: "Choose picture",
+            removeAvatar: "Remove picture",
           }}
+          avatarAlt="Your profile picture"
+          avatarFallback="C"
+          bioMaxLength={500}
+          displayNameMaxLength={80}
           initialBio=""
           initialDisplayName="Collector"
           onSubmit={fn()}
