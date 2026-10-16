@@ -12,13 +12,9 @@ order — set up, invoiced, paid, shipped — and the letters that carry it.
 
 Bidding stops, the result is fixed at once, and only the winner gets an order.
 
-🚧 A lot an internal bidder wins gets an order with HKD settlement and bank
-transfer on FPS set at close, flagged Internal. It opens as Preparing Invoice
-with the profile's billing address as both delivery and billing address. It
-has no winner setup or invoice at close, and no order letter goes to the
-internal bidder or any other recipient. The operator sends the invoice, lets
-it expire after 7 days if it is unpaid and cancels the order by hand -
-[Internal Bid](/p/grade10-admin/auction/internal-bid)
+🚧 Collectors still read a house win as sold to its listing pseudonym. No
+order letter goes to the internal bidder or any other recipient. The
+operator's order procedure is on [Internal Bid](/p/grade10-admin/auction/internal-bid)
 
 - **Every lot reads Ended** — with or without a winner, whatever happens to
   the order afterwards — [Lot

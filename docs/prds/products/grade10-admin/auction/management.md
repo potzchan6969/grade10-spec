@@ -427,7 +427,8 @@ on winner, In transit, Closed and All, opening on Needs action.
 | Cancelling an order | Value |
 | --- | --- |
 | 🚧 Its reason | One category — Non-payment, Missed setup, Winner asked, Lot issue or Other — and a note, both required; the queue filters cancelled orders by category |
-| 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the winner is emailed, a suspension stays, and the cancel cannot be undone |
+| 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the collector winner is emailed, a suspension stays, and the cancel cannot be undone |
+| 🚧 Internal order confirmation | The dialog says no letter is sent |
 | The lot | Back to stock with no runner-up offer, its hammer price and bid history kept for audit and never carried into a new listing |
 | 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
 | 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, Finance sends the money back outside Grade10, and an operator with payment processing clears the flag with a reason and any return reference once it has gone |
@@ -531,9 +532,10 @@ it.
 | 🚧 Setting and reading internal bids and internal bidder profiles; reading the profile behind a House bid or win | `auction:reserve` - secret-floor access | `admin` |
 | 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
 
-- 🚧 **A control the operator lacks** - stays listed and disabled, naming the
-  access it needs, such as Needs payment processing, and the server refuses
-  it too - [Roles](/p/shared/auth/roles)
+- 🚧 **A control the operator lacks** - it stays listed and disabled, naming
+  the access it needs, such as Needs payment processing; the server refuses
+  it too. Internal-bid and internal-bidder profile controls are hidden
+  without `auction:reserve` - [Roles](/p/shared/auth/roles)
 - 🚧 **Reasons** - an edit before send, a reissue, a recorded payment or
   refund, a cancel, a returned proof, a setup change and a cleared flag each
   need one; a send and a confirmed proof need none. Every entry names the
