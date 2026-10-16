@@ -56,9 +56,13 @@ language and search controls to its left; the Cart control stays where it is
 
 ## Account Menu
 
-**Account menu** - signed in, an initial avatar sits above the email, above
+**Account menu** - signed in, an avatar sits above the email, above
 the items: My Auctions and Sign Out on auction launch; My Orders and My
 Auctions once Store answers, with Sign Out always last. KYC stays out.
+
+**Menu avatar** - the image the collector chose on their
+[Profile](/p/grade10-site/account/profile), and their email's initial where
+they chose none
 
 **Withheld pages** - the menu never offers an item whose page the site
 withholds: My Orders, Profile or Membership
