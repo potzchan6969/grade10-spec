@@ -100,7 +100,7 @@ the card is in the winner's hands. The collector's half is
   has passed still saves
 - **Publish still needs** — a created listing with a Publish at names under
   it each field its publish still needs
-- 🚧 **Call off** - any time before the close, bids or not; the stock is
+- **Call off** - any time before the close, bids or not; the stock is
   released and the listing leaves browse and search. Its former address is
   available for another listing, and so is the address of a listing called
   off earlier. Its listing code stays reserved and never resolves as a route;
@@ -610,7 +610,7 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
+| Called-off address reuse | Decided | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
 | Internal bid | 🚧 In flight | One USD house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see placed bids labelled House, with their public amounts and Accepted At; they see no account, profile or maximum, and no row or commit time before the first house bid. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
 | House win | 🚧 In flight | Collectors read the lot as sold; the internal order is flagged Internal, opens as Preparing Invoice and uses HKD settlement and bank transfer on FPS at close. It uses the profile's billing address for delivery and billing, with a neutral recipient entered by an admin. There is no setup step or invoice at close; an operator sends the invoice by hand. The order sends no letters. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |

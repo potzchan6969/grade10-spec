@@ -143,7 +143,7 @@ lot before any script runs.
   site's not-found surface, never an empty lot page
 - **Hidden from browse/search** - a draft or called-off lot is absent from
   catalogue and search; a draft has no public address.
-- 🚧 **Called-off address** - another listing can take a called-off lot's
+- **Called-off address** - another listing can take a called-off lot's
   former address, including a lot called off earlier, so a saved link to it
   stops opening that lot. An unused address shows Page not found; a reused
   address opens the new public lot.
@@ -273,7 +273,7 @@ Active and Completed filters in bidding history.
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Between the close and the result | Decided | Three statuses stay. Past the close and before the result is recorded, pages show the existing Closed state with no result, and Won or Unsold when the close commits. A fourth status, Closing, with its own copy was ruled out: a new state in four languages for a gap normally under a second. | Product |
 | Draft and Called off | Decided | Draft has no public address. Called-off lots leave browse and search. A collector who bid on a called-off lot still sees it in My Auctions, saying their card was not charged. Explicit hard deletion is outside this capability. | Product |
-| Called-off address reuse | 🚧 In flight | Reuse replaces the former promise of a permanent direct address to a called-off lot. [Issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504) settles the choice; the listing code remains a reserved reference and cannot serve as an alternate public address. | @htonyl |
+| Called-off address reuse | Decided | Reuse replaces the former promise of a permanent direct address to a called-off lot. [Issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504) settles the choice; the listing code remains a reserved reference and cannot serve as an alternate public address. | @htonyl |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
