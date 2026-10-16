@@ -40,8 +40,7 @@ with anything below it needing my written yes,
 ### grade10-site-consignment-lifecycle-US-06: Consignor picks what an unsold item does next
 
 **As a** consignor,
-**I want** to pick what happens when the term ends or the lot goes unsold -
-extend, reprice, the other channel, the vault, or collect or ship it back -
+**I want** to pick what happens when the term ends or the lot goes unsold,
 and to take an item back early,
 **so that** my item is never stranded.
 

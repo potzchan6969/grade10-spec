@@ -17,8 +17,10 @@ the screens that read this are the designers' to draw.
     account
   - Every item's status: an auction-bound one showing once checked in,
     before its lot lists
-  - Prices and terms: each item's list price and floor, and the terms
-    pinned to the agreement
+  - Its channel shown: the shop, the online store or the auction
+  - Prices and terms: each item's agreed list price and floor, the
+    commission rate, the consignor's estimated net payout, the days left
+    on the term, and the terms pinned to the agreement
 - The money
   - Sales: each sale and what the consignor is paid
   - Payouts: the payouts made and when the next is due

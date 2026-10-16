@@ -30,14 +30,16 @@ consignment.
   incentive instantly at consignment; on a sale they receive the settlement
   statement and the commission invoice and, after the return window, the
   payout.
-- **On sale by itself** - each item is logged in Shopify when the
+- **On sale by itself** - an item publishes only once it has passed
+  inspection and photography; each item is logged in Shopify when the
   consignment form is completed and becomes one store product, or a draft
   lot staff place at auction; the store and the auction report each sale,
   delivery and refund, and the first sale wins.
 - **The consignor watches and hears** - a signed-in consignor reads each
   consignment, its items' statuses - an auction-bound one before its lot
-  lists - prices, sales, payouts and documents, and hears each event by
-  email in their language.
+  lists - each item's channel, agreed price, commission rate, estimated
+  net payout and days left on the term, sales, payouts and documents,
+  and hears each event by email in their language.
 - **Staff run one queue** - the Consignment console cuts the queue by what
   each consignment waits for, offers each act on a consignment's page with
   its rule stated first, raises a flag on anything out of step, pays out

@@ -37,6 +37,10 @@
 | Q8 | Whether ungraded items are taken | ❓ Product - recommended: graded collectables only at launch, there being no grading service on day 1 | Ungraded items taken too; the brief says "most likely" |
 | Q9 | The exact consignment figures | ❓ Product - recommended: a consignment fee of **10–12%** of the sale price at sale, and the incentive at **5%** of the estimated value, as the brief states | A single figure; the fee schedule is banded per channel |
 | Q10 | The incentive against the payout | ❓ Product - recommended: not set against it - the incentive is paid at consignment and the payout is the sale less commission and fees | Netting the paid incentive out of the payout |
+| Q11 | What an item passes before it is published | An item passes intake inspection and photography before it is published - decided by the round | Publishing straight from the completed consignment form |
+| Q12 | What an item shows while it sells | Each item names its channel - the shop, the online store or the auction - its agreed list price, the commission rate and the consignor's estimated net payout, and counts down the days left on its term - decided by the round | Naming the consignment alone and asking the shop for the rest |
+| Q13 | The term's figure | ❓ Product - the running default is **90** days; the brief asks **30** or **60**; the figure is unset | Treating the default as decided; it predates this change but the owner reopened it |
+| Q14 | What an unsold item does at term's end | ❓ Product - the directions on the table: extend the term, a lower price, the other channel or a relist, the vault for long-term storage, or the consignor books a collection at the shop or has it shipped back | The PRD's earlier choice list, which this question reopens |
 
 ## Raised
 

@@ -30,6 +30,8 @@ is `grade10-admin/consignment/console`.
   - The schedule pinned: the commission, incentive, fees and term in force
     when the agreement is prepared stay with the consignment
 - On sale
+  - Checked before it publishes: an item passes intake inspection and
+    photography before it is published
   - Logged on the form: each item is logged in Shopify when the consignment
     form is completed
   - One item one channel: one store product, or a draft lot staff place;
@@ -44,9 +46,12 @@ is `grade10-admin/consignment/console`.
     delivery and refund
   - Recorded by hand: only when a channel did not report it
 - Ending
-  - The term: on sale until the term ends, warned at ending soon
-  - The consignor's choices: extend, reprice, the other channel, the vault,
-    or collect or ship it back
+  - The term: on sale until the term ends, its remaining days counting
+    down, warned at ending soon; the term's figure is unset
+  - What an unsold item does: unsettled - the directions on the table are
+    extending the term, a lower price, the other channel or a relist, the
+    vault for long-term storage, or the consignor booking a collection at
+    the shop or having it shipped back
   - Taken back early: before it sells, for the early take-back fee where
     one is set
 - Returning
