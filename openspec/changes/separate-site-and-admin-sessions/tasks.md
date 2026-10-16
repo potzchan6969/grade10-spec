@@ -65,7 +65,7 @@ Needs groups 3 and 4 landed.
 - [x] 6.1 Add a console login to `e2e/helpers/auth.ts`: `loginViaMagicLink` with a surface that sends with `origin: ADMIN_ORIGIN` and a console `callbackURL`, asserts the console session cookie, and keeps the site's suffix match unchanged
 - [x] 6.2 Send `Origin` on helper calls that reach console-only endpoints, and carry the surface through the staging and uat test-door seam; `add-staging-auth-test-door` captures the last sign-in mail and clears the wait per address, so with per-surface keys the door returns the latest mail across surfaces and clears both surfaces' keys
 - [x] 6.3 Move every spec that signs in on the site and then opens `ADMIN_ORIGIN` to the console login, and correct the comment on `ADMIN_ORIGIN` in `e2e/helpers/env.ts`
-- [ ] 6.4 Verify: `pnpm --dir apps/frontend/grade10 run e2e`
+- [ ] 6.4 Verify: `pnpm --dir apps/frontend/grade10 run e2e` — blocked: the isolated stack needs Docker for Postgres (`scripts/e2e/start-isolated.sh`), which this environment does not have; the walks are written in `apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
 
 ## 7. Architecture record (grade10) (owner: @seankcw)
 
@@ -76,7 +76,7 @@ Needs groups 3 and 4 landed.
 
 Uses draft `feature-tcs.md` as its planning input. Needs groups 3 to 6 landed.
 
-- [ ] 8.1 Walk each journey of the five capabilities end to end through the interface its actor uses, on the isolated stack with one browser context holding both cookies, and keep the walks as the change's end-to-end suite (`shared-auth-session-US-07`, `shared-auth-session-US-08`, `shared-auth-session-US-02`, with `shared-auth-session-SC-39`, `shared-auth-session-SC-40` and `shared-auth-session-SC-41` walked among them, `shared-auth-sign-in-US-12`, `shared-auth-sign-out-US-03`, `shared-auth-sessions-US-03`, `shared-auth-sessions-US-04`, `shared-console-user-directory-US-02`)
-- [ ] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`, in the walks' own commit; the cases that stay manual are named in the suite and in the walk's `rounds.md` row
-- [ ] 8.3 Leave trace markers to the trace CLI, which allocates them at the walk; add none by hand
-- [ ] 8.4 Verify: `pnpm --dir apps/frontend/grade10 run e2e` and the hosted auth lane on staging
+- [ ] 8.1 Walk each journey of the five capabilities end to end through the interface its actor uses, on the isolated stack with one browser context holding both cookies, and keep the walks as the change's end-to-end suite (`shared-auth-session-US-07`, `shared-auth-session-US-08`, `shared-auth-session-US-02`, with `shared-auth-session-SC-39`, `shared-auth-session-SC-40` and `shared-auth-session-SC-41` walked among them, `shared-auth-sign-in-US-12`, `shared-auth-sign-out-US-03`, `shared-auth-sessions-US-03`, `shared-auth-sessions-US-04`, `shared-console-user-directory-US-02`) — blocked: the isolated stack needs Docker for Postgres (`scripts/e2e/start-isolated.sh`), which this environment does not have; the walks are written in `apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`
+- [ ] 8.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by grade10:apps/frontend/grade10/e2e/tests/auth/surfaces.spec.ts`, in the walks' own commit; the cases that stay manual are named in the suite and in the walk's `rounds.md` row — blocked: follows 8.1
+- [x] 8.3 Leave trace markers to the trace CLI, which allocates them at the walk; add none by hand — no marker was added by hand
+- [ ] 8.4 Verify: `pnpm --dir apps/frontend/grade10 run e2e` and the hosted auth lane on staging — blocked: the isolated stack needs Docker, and the hosted auth lane needs a reviewed dispatch on staging
