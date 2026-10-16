@@ -9,9 +9,9 @@ import {
   ActivityList,
   CouponList,
   MemberCard,
-  MembershipSummary,
   RewardMenu,
   SiteHeader,
+  TierCard,
   WalletPassLinks,
   type WalletPassWallet,
 } from "@grade10/ui";
@@ -23,7 +23,6 @@ import {
   ACTIVITY_LIST_COPY,
   APPLE_HELD,
   APPLE_OFFERED,
-  balanceExpiryProp,
   COUPON_LIST_COPY,
   GOOGLE_HELD,
   GOOGLE_OFFERED,
@@ -33,15 +32,19 @@ import {
   MEMBER_CARD_COPY,
   MEMBERSHIP_PAGE_COPY,
   MEMBERSHIP_STATE_VIEWS,
-  MEMBERSHIP_SUMMARY_COPY,
   MEMBERSHIP_VIEW,
   type MembershipView,
   REWARD_MENU_COPY,
+  TIER_CARD_COPY,
   WALLET_PASS_COPY,
 } from "../loyalty-content";
 
 /** The member card's code, counting down from this many seconds. */
 const CODE_SECONDS = 480;
+
+/* The Tier & Benefits page is still being designed; until it has a workbench
+   story the card's link points at a placeholder anchor. */
+const TIER_AND_BENEFITS_HREF = "#tier-and-benefits";
 
 /**
  * Membership as a store assembles it: `SiteHeader`, the membership blocks in
@@ -86,8 +89,6 @@ function MembershipPage({ view }: { view: MembershipView }) {
     held.includes("apple") ? APPLE_HELD : APPLE_OFFERED,
   ];
 
-  const expiry = view.balanceExpiry;
-
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <SiteHeader {...STORE_SITE_HEADER} />
@@ -106,19 +107,17 @@ function MembershipPage({ view }: { view: MembershipView }) {
             {MEMBERSHIP_PAGE_COPY.title}
           </h1>
 
-          <MembershipSummary
-            balanceExpiry={
-              expiry && balance > 0
-                ? balanceExpiryProp(balance, expiry)
-                : undefined
-            }
-            balance={balance}
-            copy={MEMBERSHIP_SUMMARY_COPY}
+          <TierCard
+            balance={balance.toLocaleString("en-HK")}
+            copy={TIER_CARD_COPY}
+            earnLine={view.earnLine}
+            href={TIER_AND_BENEFITS_HREF}
             qualifyingPoints={view.qualifyingPoints}
             qualifyingThreshold={view.qualifyingThreshold}
-            renewalDate={view.renewalDate}
+            retentionLine={view.retentionLine}
             tier={view.tier}
-            tierValidity={view.tierValidity}
+            variant={view.tierVariant}
+            worth={view.worth}
           />
 
           <section
@@ -253,9 +252,9 @@ export const Default: Story = {
       ).toBeInTheDocument();
     }
     expect(canvas.getAllByText("Gold").length).toBeGreaterThan(0);
-    expect(canvas.getByText("1250")).toBeInTheDocument();
+    expect(canvas.getByText("1,250")).toBeInTheDocument();
     expect(
-      canvas.getByRole("progressbar", { name: "Points earned this year" }),
+      canvas.getByRole("progressbar", { name: "Keep Gold" }),
     ).toHaveAttribute("aria-valuenow", "320");
     expect(
       canvas.getByRole("button", { name: "Go to checkout" }),
@@ -283,25 +282,14 @@ export const NoPoints: Story = {
   },
 };
 
-/** Inside the last thirty days the expiry line says so, in the warning tone. */
-export const PointsExpireSoon: Story = {
-  args: { view: MEMBERSHIP_STATE_VIEWS.expiresSoon },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const line = canvas.getByText(/points expire on/);
-    expect(line.className).toContain("text-warning");
-    expect(line.textContent).toContain("Use them before then.");
-  },
-};
-
 /** Past the threshold the bar caps at the threshold, and the count still reads true. */
 export const ThresholdReached: Story = {
   args: { view: MEMBERSHIP_STATE_VIEWS.thresholdReached },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("620 / 500")).toBeInTheDocument();
+    expect(canvas.getByText("620 / 500 pts")).toBeInTheDocument();
     expect(
-      canvas.getByRole("progressbar", { name: "Points earned this year" }),
+      canvas.getByRole("progressbar", { name: "Keep Gold" }),
     ).toHaveAttribute("aria-valuenow", "500");
   },
 };
@@ -326,7 +314,7 @@ export const NoCoupons: Story = {
     expect(
       canvas.getByText("You have no coupons yet. Redeem a reward to get one."),
     ).toBeInTheDocument();
-    expect(canvas.getByText("1250")).toBeInTheDocument();
+    expect(canvas.getByText("1,250")).toBeInTheDocument();
   },
 };
 
