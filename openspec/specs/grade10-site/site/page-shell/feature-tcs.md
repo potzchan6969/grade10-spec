@@ -624,7 +624,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 2 opens My Auctions at <grade10 site url><lang>/auction/watchlist.
+* Step 2 opens My Auctions at <grade10 site url><lang>/auction/my-auctions.
 
 ---
 
