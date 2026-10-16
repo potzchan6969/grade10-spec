@@ -31,13 +31,13 @@ returns to it from their watched list on ZZZ without searching.
 ## What Changes
 
 - **A signed-in ZZZ collector watches and unwatches a listing** from the
-  listing page and from the catalogue on ZZZ.
+  listing page on ZZZ; the catalogue tile waits for a ZZZ catalogue
+  (decision Q5).
 - **A ZZZ collector reads their watched listings** on ZZZ, most recently
   watched first, with each listing's current bid and close, and can unwatch
   from that list.
-- **ZZZ carries the auction surfaces watching needs** — a listing's own page,
-  the catalogue, and the watched list — so the controls have somewhere to
-  hang. Watching means what Grade10 already defined; this change does not
+- **ZZZ carries the auction surfaces watching needs** — a listing's own page
+  and the watched list — so the controls have somewhere to hang. Watching means what Grade10 already defined; this change does not
   invent a second list.
 - **Watch, unwatch, and watched-list copy** land in the locales ZZZ answers
   (Korean).
@@ -64,8 +64,8 @@ in `add-auction-watchlist`; this change does not rewrite them.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/zzz` | Fills watch and unwatch on the ZZZ listing page and catalogue tile; adds a watched-listings surface. |
-| `@grade10/i18n` | Watch, unwatch, and watched-list copy for the locales ZZZ answers. |
+| `apps/frontend/zzz` | Adds a listing page with Watch and a watched-listings surface, linked from the profile. |
+| `@grade10/i18n` | None: the shared Korean `auctionListing`, `auctionWatchlist` and `auctionRecord` namespaces already carry the words. |
 | `apps/backend/zzz/store` | Already binds `ZzzAuctionService`; no new watch table — the shared auction owns the row. |
 
 **Ordering.** Ships after `add-auction-watchlist` has the shared contracts and
