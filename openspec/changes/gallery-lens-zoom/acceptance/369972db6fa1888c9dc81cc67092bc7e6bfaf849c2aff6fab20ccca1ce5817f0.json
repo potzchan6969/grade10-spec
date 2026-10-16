@@ -1,0 +1,75 @@
+{
+  "version": 2,
+  "change": "gallery-lens-zoom",
+  "baseline": "29eb65f1e92aed2da6cbf014a24c31b9c774afb502e906d394d5bb0297249e47",
+  "fingerprint": "369972db6fa1888c9dc81cc67092bc7e6bfaf849c2aff6fab20ccca1ce5817f0",
+  "reviewedBy": "mason5991",
+  "acceptedAt": "2026-10-16T12:22:32.387Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/shared/ui/auction-listing.md#gallery",
+      "sha256": "a4e5876f7fe2b19f704c7b0010b18daf1369cd12f0dab7fbbb4cdecda7c10440",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/gallery-lens-zoom/decisions.md",
+      "sha256": "51070c22dab4c9da98ccc3bced76b3d146435e7cc89470919c33e65b81630fb5",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/gallery-lens-zoom/proposal.md",
+      "sha256": "7bd5608850e82af516188d4e7f0bde66a40cc7680761f42f96c05cd3dca142a4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/gallery-lens-zoom/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "9ac8bd7702e6ceee3edee72d836066c06ede74de35c97bb89dbe79e6ba88f40f",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/gallery-lens-zoom/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "d58f0a0032d70c9fdc963656fb868b16c8af56f9177c1203d710cafb3db6051d",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/gallery-lens-zoom/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "626b3ffd0ce71cfbe66bb6a424ca0fbcfff64d079d86c740c5d8ca9033114e02",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "sha256": "aff5dcce4268078cff165b11526ac2085eaee641569703a0d869743a6039f924",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "sha256": "e37c62786af886d054d74cc7e881981711b00552580c7810af0d0801882174d4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "sha256": "f7d569c8d867e2389e7ee5b7c87e25fa71698a52d18fdfae09eaab627ea2c0c6",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: A control has no copy of its own",
+        "Requirement: A gallery image has distinct thumbnail, main, and zoom sources",
+        "Requirement: A gallery magnifies the selected image in place"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/ui/auction-listing/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}
