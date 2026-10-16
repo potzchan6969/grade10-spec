@@ -30,7 +30,7 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   rail when the gallery is wide enough for it beside the main frame, and
   otherwise step with previous/next and progress only; no items render
   nothing and offer no previous or next
-- 🚧 **The magnifier** — a lens follows the pointer over the selected image
+- **The magnifier** — a lens follows the pointer over the selected image
   and enlarges what is beneath it at the zoom source's size; focused, it
   moves with the arrow keys and Escape hides it; a touch pointer never
   raises it, and there is no zoom dialog — [Lens](https://ui.ballmac.com/components/lens)
