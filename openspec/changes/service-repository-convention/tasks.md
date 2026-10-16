@@ -20,4 +20,4 @@
 
 - [x] 4.1 Run the backend lane for every migrated package and worker.
 - [x] 4.2 Run typecheck, lint, and the migration-generation check for each schema change produced by the adoption.
-- [x] 4.3 Review the durable convention against the completed migrations and archive this change only after the application repository confirms the convention is in use. — reviewed: the durable spec at `openspec/specs/shared/backend-service-repository/` now holds the delta, and the convention, the worked slice and the check agree with it
+- [x] 4.3 Review the durable convention against the completed migrations and archive this change only after the application repository confirms the convention is in use. — reviewed: the convention, the worked slice and the check agree with the delta; the delta reaches `openspec/specs/shared/backend-service-repository/` through `pnpm spec:accept`, which was never run for this change, and only then does the archive follow
