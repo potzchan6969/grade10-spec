@@ -1,9 +1,11 @@
 {
   "login": {
-    "greeting": "안녕하세요,",
-    "body": "아래 링크로 로그인하세요. 링크는 5분 후에 만료됩니다.",
+    "preheader": "로그인 링크가 준비됐습니다. {minutes}분 후에 만료됩니다.",
+    "heading": "{brandName} 로그인",
+    "body": "로그인 링크를 요청하셨습니다. 한 번만 사용하세요.",
+    "expires": "이 링크는 {minutes}분 후에 만료됩니다.",
     "action": "로그인",
-    "ignore": "본인이 요청하지 않았다면 이 이메일을 무시하셔도 됩니다."
+    "whyYouGotThis": "{brandName}에서 로그인 링크를 요청하셨습니다."
   },
   "appointment": {
     "greeting": "{name}님, 안녕하세요.",
