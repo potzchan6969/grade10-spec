@@ -1,0 +1,3 @@
+schema: grade10-planning
+created: 2026-10-16
+ui_waived: "no new screen or state: an open cart drawer closes through its existing closed state, and no message, toast or prompt is drawn"
