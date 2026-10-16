@@ -1,4 +1,3 @@
 schema: grade10-planning
 created: 2026-10-13
-awaiting:
-  specs: 2026-10-13, requirement deltas from /planning-dev
+design_waived: "Built before this record on the shop's site-discount read and the quote's held list; the tasks name each"
