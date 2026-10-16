@@ -167,4 +167,5 @@ code mapping — so these stories are the reference until frames are produced.
 | --- | --- | --- | --- |
 | Bid enrollment | Decided | Its own part of the feature set: the setup blocks, their gates, and the signal the bid card reads. | Product |
 | Gallery strip | Decided | Several images show a left rail only when it fits beside the main frame. Stacked galleries keep previous/next and progress, with no strip under the stage. The rule covers `ListingLotGallery`; `ListingGallery` keeps its existing strip behavior, and the width threshold stays in code. The rail uses `thumb`, the main frame uses `detail`, and zoom uses `zoom` for the selected image. | Product |
+| Magnifier | Decided | Magnification is in place under the pointer at the zoom source; focused arrows move it and Escape hides it; a touch pointer never raises it; there is no zoom dialog. The lens lives in the design system; both galleries compose it. | Product |
 :::
