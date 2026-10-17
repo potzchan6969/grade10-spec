@@ -1,3 +1,7 @@
 schema: grade10-planning
 created: 2026-09-29
 design_waived: store-only AuctionRecord presentation; no application-repo task group
+reviewed:
+  proposal: 7f4eda10
+  user-journeys: b2dde55e
+  ui-design: 727de8c3

@@ -1,2 +1,11 @@
 schema: grade10-planning
 created: 2026-10-13
+reviewed:
+  proposal: ad0a1896
+  decisions: a3ac9a67
+  user-journeys: 800e008c
+  ui-design: 1f4b30ae
+  tech-design: 1f4b30ae
+  specs: 4834b1c5
+  test-cases: 763edf60
+  tasks: 450245a5

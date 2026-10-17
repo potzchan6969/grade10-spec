@@ -4,3 +4,8 @@ hands:
   pm: "@ecchochan"
   dev: "@ecchochan"
 ui_waived: "no screen or state moves: the vault backend renders the paper as a PDF, not a store block, and only the value in its Case fact and footer changes"
+reviewed:
+  proposal: 687e182d
+  specs: 2ba8f780
+  test-cases: 7322de53
+  tasks: 788074a9

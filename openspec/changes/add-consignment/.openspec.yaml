@@ -4,3 +4,6 @@ awaiting:
   specs: 2026-10-16, requirement deltas from /planning-dev
 hands:
   pm: "@tangconst"
+reviewed:
+  proposal: f90c5cf5
+  decisions: 9a7ed302

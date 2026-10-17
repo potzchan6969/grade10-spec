@@ -7,3 +7,9 @@ hands:
   dev: "@ecchochan"
 depends_on:
   - add-store-cross-sell
+reviewed:
+  proposal: 4031690a
+  decisions: 0b497f4c
+  user-journeys: e93309a8
+  ui-design: 4c56200e
+  tech-design: 4c56200e

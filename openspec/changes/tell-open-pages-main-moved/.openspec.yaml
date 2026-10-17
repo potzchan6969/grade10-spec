@@ -10,3 +10,9 @@ hands:
 reviewed:
   user-journeys: dc76e116
   tech-design: f5c8035c
+  proposal: 138d6eac
+  decisions: d5c063bf
+  ui-design: 5764c21f
+  specs: c9c958ba
+  test-cases: e4c3e7f9
+  tasks: b6ed2a58

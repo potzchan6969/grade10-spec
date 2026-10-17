@@ -1,2 +1,9 @@
 schema: grade10-planning
 created: 2026-08-28
+reviewed:
+  proposal: 0517ab33
+  decisions: 7dde018f
+  tech-design: 658b49c2
+  specs: e40ed314
+  test-cases: 658b49c2
+  tasks: edaf0094

@@ -3,3 +3,10 @@ promoted_by: "@ecchochan"
 created: 2026-09-10
 depends_on:
   - add-google-wallet-member-card
+reviewed:
+  proposal: aade30ab
+  decisions: 678a288c
+  tech-design: 2daf4fda
+  specs: 5b5e5066
+  test-cases: 2daf4fda
+  tasks: 5918ed2d

@@ -7,3 +7,6 @@ depends_on:
   - add-account-profile
 awaiting:
   specs: 2026-10-08, the WalletPassLinks contract, from /planning-dev now R1 is answered - @ecchochan
+reviewed:
+  proposal: aade30ab
+  decisions: 33717ffa

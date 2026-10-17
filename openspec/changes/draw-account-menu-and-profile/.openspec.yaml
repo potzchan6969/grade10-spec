@@ -4,3 +4,7 @@ hands:
   pm: "@ecchochan"
 awaiting:
   specs: 2026-10-08, requirement deltas for the menu avatar, from /planning-dev - @ecchochan
+reviewed:
+  proposal: 51a20e9d
+  decisions: a336a539
+  user-journeys: ac397561

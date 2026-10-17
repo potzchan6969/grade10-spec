@@ -8,3 +8,11 @@ hands:
   pm: "@ecchochan"
   qa: "@chloe9gag"
   dev: "@ecchochan"
+reviewed:
+  proposal: 0dccf746
+  decisions: 3626f26d
+  user-journeys: c4aa5f9d
+  tech-design: 7620e7bd
+  specs: 329f1687
+  test-cases: 7620e7bd
+  tasks: "88231e73"

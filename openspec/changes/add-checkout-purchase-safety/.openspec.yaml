@@ -4,3 +4,7 @@ page_waived: "Delivers outcomes the checkout PRD already states unmarked under I
 awaiting:
   decisions: backend scope, ordering and owner for the published safe-repeat requirement - /planning-pm
   specs: backend refinements beyond the unchanged published safe-repeat requirement - /planning-dev
+reviewed:
+  decisions: c059355c
+  user-journeys: e417be3c
+  test-cases: 1ea241f4

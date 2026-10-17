@@ -3,3 +3,8 @@ created: 2026-09-28
 promoted_by: "@kinisworking"
 hands:
   dev: "@kinisworking"
+reviewed:
+  proposal: "62960494"
+  decisions: f9f62023
+  specs: 9f14d84d
+  test-cases: 8492a6c4

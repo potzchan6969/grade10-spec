@@ -1,6 +1,9 @@
 schema: grade10-planning
 created: 2026-08-18
 decisions_waived: "legacy change - decisions cannot be restored from past planning sessions"
-goal: Make backend business logic and persistence independently testable while
-  proving SQL behavior against migrated Postgres
+goal: Make backend business logic and persistence independently testable while proving SQL behavior against migrated Postgres
 page_waived: "predates the page rule"
+reviewed:
+  user-journeys: c2c5d118
+  tech-design: 8415abab
+  specs: 4c701c4a

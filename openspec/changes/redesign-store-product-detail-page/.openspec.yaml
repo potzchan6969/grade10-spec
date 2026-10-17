@@ -6,3 +6,6 @@ decisions_waived: "opened before decisions.md existed; the scope is in the propo
 depends_on:
   - add-store-product-status
   - add-store-locator
+reviewed:
+  tech-design: d3aadad0
+  test-cases: b19e565d

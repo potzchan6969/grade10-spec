@@ -6,3 +6,10 @@ hands:
   dev: "@ecchochan"
 reviewed:
   tasks: 7f00227d
+  proposal: d7ae6677
+  decisions: d1dbe05a
+  user-journeys: 56c119a5
+  ui-design: 0db6441e
+  tech-design: 0db6441e
+  specs: efa2d3f4
+  test-cases: bfd15139
