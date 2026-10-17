@@ -34,5 +34,29 @@
         "admin"
       ]
     }
-  ]
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "claude-agent (vault-grading stream, on the owner's delegation)",
+    "reviewedAt": "2026-10-16T10:00:00.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The Confirm before store line left with this change's own fold, and Strip by width arrived from the lot gallery redesign; neither moves upload on drop, replacement, refusal or order persistence, which this change delivered.",
+        "evidence": [
+          "packages/frontend-console/src/MediaGallery.test.tsx",
+          "packages/grade10-auction/admin-frontend/src/features/catalog/listings/presentation/views/dialog/MediaDialog.test.tsx"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite was regenerated with executable walk routes, parameterized test data and quoted case ids; no case this change decides changed its expectation."
+      }
+    ]
+  }
 }

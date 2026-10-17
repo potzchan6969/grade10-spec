@@ -52,3 +52,48 @@ it moves is `grade10-site/consignment/payout`.
     people for money, staff and treasurer sharing none
   - Second factor and audit: required in production, and every act filed
     under its consignment
+
+## ADDED Requirements
+
+### Requirement: Intake records where, who in law and each item's market value
+
+The counter's intake SHALL ask where the consignment is taken, the counter
+or an event named, whether the consignor is an individual or a company with
+its registered office, and the channel; it SHALL register each item only
+with its grade, cert and market value. A consignor SHALL be found in the
+account directory or among past consignors: one with no Grade10 account is
+added in People first, so every consignment is linked to an account.
+
+#### Scenario: grade10-admin-consignment-console-SC-01 - The counter asks the facts before it opens
+**Serves:** grade10-admin-consignment-console-US-03 - staff receive a consignment at intake
+
+- **GIVEN** staff opening a consignment for a company at an event
+- **WHEN** they leave the event's name or the company's registered office blank
+- **THEN** opening is withheld, naming what is missing
+
+### Requirement: Payouts list the incentives due and record one
+
+The Payouts section SHALL list every incentive owed beside the payouts,
+oldest first, each with its consignment, its consignor, the amount and the
+day it fell due, and SHALL record one under the payout grant as a payout is
+recorded, filed on the audit chain under its consignment.
+
+#### Scenario: grade10-admin-consignment-console-SC-02 - A treasurer records an incentive from the due list
+**Serves:** grade10-admin-consignment-console-US-05 - the treasurer works the payout due list
+
+- **GIVEN** a consignment owing an incentive since its seal
+- **WHEN** the treasurer records it with the bank's reference and the day the money left
+- **THEN** it leaves the list and the consignment reads it paid
+
+### Requirement: The incentive's rate is a setting pinned at the agreement
+
+The incentive's rate SHALL be a setting an admin changes, unset until one
+does, pinned to a consignment when its agreement is prepared like every
+other figure the agreement prints.
+
+#### Scenario: grade10-admin-consignment-console-SC-03 - A later rate reaches only the next agreement
+**Serves:** grade10-admin-consignment-console-US-06 - an admin changes a setting
+
+- **GIVEN** a consignment prepared under a 5% incentive
+- **WHEN** an admin saves 4% afterwards
+- **THEN** that consignment still owes 5% of its market values, and the next agreement prepared prints 4%
