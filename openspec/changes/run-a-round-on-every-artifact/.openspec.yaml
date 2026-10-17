@@ -5,7 +5,6 @@ depends_on:
   - stage-changes-and-notify-hands
 hands:
   pm: "@ecchochan"
-  tech: "@ecchochan"
   dev: "@ecchochan"
 reviewed:
   user-journeys: c349839c
@@ -13,3 +12,5 @@ reviewed:
   specs: 9e6211e7
   test-cases: 9e6211e7
   tasks: 7803bc37
+  proposal: 97824adc
+  decisions: 4461f4c8

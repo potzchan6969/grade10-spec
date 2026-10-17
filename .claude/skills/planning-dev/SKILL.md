@@ -58,11 +58,9 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    complete. Derive scenarios from the PRD, journeys, UI design and technical
    design: the requirements pass reads `tech-design.md` beside
    `ui-design.md`; a requirement contradicting either is not written. A
-   requirement that reaches a design another hand owns writes a dated wait on
-   them rather than writing over them:
-   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"`. It is
-   cleared by their edit or by that artifact's `reviewed:` line, and it holds
-   no stage. Use `docs/governance/task-ownership.md` for groups and owners.
+   question the design cannot settle is a row in `decisions.md`'s
+   `## Raised`, never a dated wait on another hand: the row holds acceptance
+   only, and the product manager resolves it with the engineer's challenge. Use `docs/governance/task-ownership.md` for groups and owners.
    Before QA2, check the draft's structure, trace markers and overlaps:
 
    ```bash
@@ -77,8 +75,15 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    may link multiple scenarios when one route, starting state and checking
    fully assert each. Record uncovered scenarios, over-claimed cases and
    contradictions separately from anchor coverage. Put unresolved product
-   questions in `decisions.md`'s `## Raised` table. Return source-linked
-   coverage and dispositions for the acceptance reviewer.
+   questions in `decisions.md`'s `## Raised` table, each with its options and
+   `recommended: <option>`. Close every row the
+   [held test](../../../docs/governance/specs-to-test-cases.md#raised)
+   does not hold on its recommendation: a `Decisions` row written
+   `<answer> - decided by the round`, naming its source - the page line that
+   settles it where one does - and the answer in the suite's `## Settled`;
+   rows one source settles share one `Q<n>`. Only a held row stays open, and a
+   contradiction between the two readings is always held. Return
+   source-linked coverage and dispositions for the acceptance reviewer.
 4. **Resolve and Check** - A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
    [Clarification Request](../../../AGENTS.md#questions-and-blockers).

@@ -126,7 +126,7 @@
       ],
       "testCasesStatus": "pending-review",
       "issuedThrough": {
-        "sc": 7,
+        "sc": 8,
         "us": 1,
         "tc": 2
       }
@@ -254,6 +254,10 @@
         "specs",
         "tasks"
       ],
+      "reviewed": {
+        "specs": "47e63e84",
+        "tasks": "5d89638b"
+      },
       "author": "tester",
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
@@ -336,6 +340,14 @@
         "qa": "tester",
         "dev": "tester",
         "release": "tester"
+      },
+      "reviewed": {
+        "decisions": "a1912404",
+        "user-journeys": "8a3eea61",
+        "ui-design": "bf7dcd25",
+        "specs": "e2bad992",
+        "test-cases": "e2bad992",
+        "tasks": "b6872bbf"
       },
       "author": "tester",
       "suites": [
@@ -465,6 +477,13 @@
         "qa": "tester",
         "dev": "tester"
       },
+      "reviewed": {
+        "decisions": "1d7bbbaa",
+        "user-journeys": "e7ce6426",
+        "specs": "2f3e7021",
+        "test-cases": "2f3e7021",
+        "tasks": "b19408d5"
+      },
       "author": "tester",
       "suites": [
         {
@@ -569,6 +588,10 @@
       "hands": {
         "dev": "tester"
       },
+      "reviewed": {
+        "proposal": "355a7f65",
+        "tasks": "f5914656"
+      },
       "skipSpecs": "the fixture is about the Building stage and the Blocked overlay, not the requirements",
       "author": "tester",
       "sections": [
@@ -604,6 +627,50 @@
       }
     },
     {
+      "id": "demo-design-waived",
+      "dir": "openspec/changes/demo-design-waived",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "designed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "The UI design waived",
+      "why": "The fixture walk needs a change whose designer has written their line in\nplace of a UI design, so a reader can be shown that the waiver alone takes\nthe change to Designed.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys"
+      ],
+      "uiWaived": "nothing is drawn - the change moves no screen",
+      "hands": {
+        "pm": "tester",
+        "design": "tester"
+      },
+      "reviewed": {
+        "decisions": "33640e83",
+        "user-journeys": "61c3d0ae"
+      },
+      "author": "tester",
+      "heldBy": "test-cases",
+      "upstream": {
+        "decisions": {
+          "id": "33640e83",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "61c3d0ae",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        }
+      }
+    },
+    {
       "id": "demo-designed",
       "dir": "openspec/changes/demo-designed",
       "schema": "grade10-planning",
@@ -612,18 +679,20 @@
       "owners": [],
       "created": "2026-09-01",
       "title": "The Designed stage",
-      "why": "The fixture walk needs a change that has drawn both designs and gone no\nfurther, so a reader can tell the Designed stage from the ones beside it.",
+      "why": "The fixture walk needs a change that has drawn its UI design and gone no\nfurther, so a reader can tell the Designed stage from the ones beside it.",
       "taskGroups": [],
       "deltas": [],
       "written": [
         "proposal",
         "decisions",
         "user-journeys",
-        "ui-design",
-        "tech-design"
+        "ui-design"
       ],
       "reviewed": {
-        "ui-design": "0000000"
+        "ui-design": "0000000",
+        "proposal": "355a7f65",
+        "decisions": "5119af73",
+        "user-journeys": "aabcafa3"
       },
       "author": "tester",
       "sections": [
@@ -635,7 +704,7 @@
       "followOns": [
         "The requirements, once somebody takes the two readings."
       ],
-      "heldBy": "specs",
+      "heldBy": "test-cases",
       "upstream": {
         "proposal": {
           "id": "355a7f65",
@@ -644,14 +713,14 @@
           ]
         },
         "decisions": {
-          "id": "65130f4e",
+          "id": "5119af73",
           "items": [
             "docs/prds/products/demo-product/index.md#discounts",
             "proposal"
           ]
         },
         "user-journeys": {
-          "id": "55a6205b",
+          "id": "aabcafa3",
           "items": [
             "docs/prds/products/demo-product/index.md#discounts",
             "proposal",
@@ -659,62 +728,12 @@
           ]
         },
         "ui-design": {
-          "id": "47e81a5a",
+          "id": "6dd83548",
           "items": [
             "docs/prds/products/demo-product/index.md#discounts",
             "proposal",
             "decisions",
             "user-journeys"
-          ]
-        },
-        "tech-design": {
-          "id": "47e81a5a",
-          "items": [
-            "docs/prds/products/demo-product/index.md#discounts",
-            "proposal",
-            "decisions",
-            "user-journeys"
-          ]
-        }
-      }
-    },
-    {
-      "id": "demo-half-designed",
-      "dir": "openspec/changes/demo-half-designed",
-      "schema": "grade10-planning",
-      "status": "in-flight",
-      "stage": "proposed",
-      "owners": [],
-      "created": "2026-09-01",
-      "title": "One design waived, one owed",
-      "why": "The fixture walk needs a change whose designer has written their line and\nwhose tech design is neither a file nor a line, so a reader can be shown\nwhat one waiver alone leaves owed.",
-      "taskGroups": [],
-      "deltas": [],
-      "written": [
-        "proposal",
-        "decisions",
-        "user-journeys"
-      ],
-      "uiWaived": "nothing is drawn - the change moves no screen",
-      "hands": {
-        "pm": "tester",
-        "design": "tester",
-        "tech": "tester"
-      },
-      "author": "tester",
-      "heldBy": "tech-design",
-      "upstream": {
-        "decisions": {
-          "id": "3b47d22e",
-          "items": [
-            "proposal"
-          ]
-        },
-        "user-journeys": {
-          "id": "66986646",
-          "items": [
-            "proposal",
-            "decisions"
           ]
         }
       }
@@ -756,6 +775,9 @@
       "decisionsWaived": "the fixture is about the Implementation complete stage, not the decisions",
       "designWaived": "the fixture is about the Implementation complete stage, not the designs",
       "uiWaived": "the fixture is about the Implementation complete stage, not the designs",
+      "reviewed": {
+        "tasks": "1409ea19"
+      },
       "skipSpecs": "the fixture is about the Implementation complete stage and the Idle overlay, not the requirements",
       "author": "tester",
       "rounds": [
@@ -855,13 +877,15 @@
       "hands": {
         "pm": "tester",
         "design": "tester",
-        "tech": "tester",
         "qa": "tester",
         "dev": "tester"
       },
       "reviewed": {
         "decisions": "00000000",
-        "specs": "00000000"
+        "specs": "00000000",
+        "user-journeys": "951cccd8",
+        "test-cases": "e7d02acc",
+        "tasks": "18984e68"
       },
       "awaiting": [
         {
@@ -966,7 +990,8 @@
       "designWaived": "the fixture is about the Planned stage, not the designs",
       "uiWaived": "the fixture is about the Planned stage, not the designs",
       "reviewed": {
-        "decisions": "1fe721a5"
+        "decisions": "1fe721a5",
+        "tasks": "28f20fd5"
       },
       "skipSpecs": "the fixture is about the Planned stage and the Behind overlay, not the requirements",
       "author": "tester",
@@ -1030,6 +1055,11 @@
       "thread": "C0PLANNING/1758170000.001200",
       "hands": {
         "dev": "tester"
+      },
+      "reviewed": {
+        "proposal": "cea4987f",
+        "decisions": "a25a70e4",
+        "tasks": "7501932c"
       },
       "skipSpecs": "the fixture is about a page's in-flight row and pip, not the requirements",
       "author": "tester",
@@ -1102,6 +1132,12 @@
         "qa": "tester",
         "dev": "tester"
       },
+      "reviewed": {
+        "decisions": "fdbf2cd6",
+        "user-journeys": "a3bddd05",
+        "specs": "0e0b05b5",
+        "test-cases": "0e0b05b5"
+      },
       "author": "tester",
       "suites": [
         {
@@ -1161,6 +1197,98 @@
       }
     },
     {
+      "id": "demo-tech-owed",
+      "dir": "openspec/changes/demo-tech-owed",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "designed",
+      "owners": [],
+      "created": "2026-09-03",
+      "title": "The tech design owed",
+      "why": "The fixture walk needs a change whose blind cases and requirements are in\nwhile its tech design is neither a file nor a line, so a reader can be shown\nthat Specified waits on the tech design.",
+      "taskGroups": [],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The count is shown",
+              "kind": "added",
+              "text": "### Requirement: The count is shown\n\nThe system SHALL show the count.\n\n#### Scenario: alpha-SC-08 - The count is shown\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** the count is shown"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "specs",
+        "test-cases"
+      ],
+      "uiWaived": "the fixture is about the tech design, not the UI design",
+      "hands": {
+        "pm": "tester",
+        "dev": "tester"
+      },
+      "reviewed": {
+        "decisions": "79a6b8e2",
+        "user-journeys": "56977751",
+        "specs": "1cdad93f",
+        "test-cases": "1cdad93f"
+      },
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "path": "openspec/changes/demo-tech-owed/specs/demo-product/alpha/feature-tcs.md",
+          "status": "pending-review",
+          "cases": {
+            "draft": 1,
+            "actual": 0,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 1
+          }
+        }
+      ],
+      "heldBy": "tech-design",
+      "upstream": {
+        "decisions": {
+          "id": "79a6b8e2",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "56977751",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "1cdad93f",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "1cdad93f",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        }
+      }
+    },
+    {
       "id": "demo-unreadable",
       "dir": "openspec/changes/demo-unreadable",
       "schema": "",
@@ -1196,7 +1324,7 @@
       ],
       "hands": {
         "design": "tester",
-        "tech": "tester"
+        "dev": "tester"
       },
       "awaiting": [
         {
@@ -1205,7 +1333,7 @@
         },
         {
           "artifact": "tech-design",
-          "why": "waiting on the tech PIC to say whether the queue can carry it"
+          "why": "waiting on the engineer to say whether the queue can carry it"
         }
       ],
       "author": "tester",
@@ -1232,11 +1360,15 @@
       "uiWaived": "the change draws nothing - no screen moves",
       "hands": {
         "pm": "tester",
-        "design": "tester",
-        "tech": "tester"
+        "design": "tester"
+      },
+      "reviewed": {
+        "decisions": "4c2b1947",
+        "user-journeys": "102106db",
+        "tech-design": "fc395fd1"
       },
       "author": "tester",
-      "heldBy": "specs",
+      "heldBy": "test-cases",
       "upstream": {
         "decisions": {
           "id": "4c2b1947",
@@ -1533,7 +1665,7 @@
         "id": "tech-design",
         "generates": "tech-design.md",
         "teammate": "engineer",
-        "hand": "tech",
+        "hand": "dev",
         "requires": [
           "decisions",
           "user-journeys"
@@ -1590,8 +1722,7 @@
           "proposal",
           "decisions",
           "user-journeys",
-          "ui-design",
-          "tech-design"
+          "ui-design"
         ],
         "perspectives": [],
         "required": true
@@ -1658,7 +1789,6 @@
       "tester": [
         "pm",
         "design",
-        "tech",
         "qa",
         "dev",
         "release"

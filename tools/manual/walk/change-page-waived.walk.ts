@@ -30,8 +30,8 @@ test("shared-planning-change-stages-SC-07 - a waiver stands for its design on th
     .element(page.getByRole("heading", { name: "The waived design" }))
     .toBeVisible();
 
-  // The stage the two lines prove: one waiver and one written design reach
-  // Designed, read off the eyebrow above the title.
+  // The stage the waiver proves on its own: Designed, read off the eyebrow
+  // above the title.
   const eyebrow = document.querySelector("h1")?.previousElementSibling;
   if (!eyebrow) throw new Error("no eyebrow above the change title");
   await expect

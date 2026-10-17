@@ -8,3 +8,10 @@ hands:
   qa: tester
   dev: tester
   release: tester
+reviewed:
+  decisions: a1912404
+  user-journeys: 8a3eea61
+  ui-design: bf7dcd25
+  specs: e2bad992
+  test-cases: e2bad992
+  tasks: b6872bbf

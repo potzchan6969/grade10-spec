@@ -236,7 +236,10 @@ describe("what the store reads as before an artifact", () => {
     ]);
     expect(
       behindOf(
-        { ...entry, reviewed: { "ui-design": "00000000" } },
+        {
+          ...entry,
+          reviewed: { ...reviewedOf(entry), "ui-design": "00000000" },
+        },
         artifacts(root),
       ),
     ).toEqual([]);
@@ -320,6 +323,17 @@ describe("what the store reads as before an artifact", () => {
   });
 });
 
+/** What `behindOf` gives where what moved could not be recovered: the whole
+ * of what is before the artifact, each item a major move. */
+const wholeOf = (artifact: string, changed: string[], since?: string) => ({
+  artifact,
+  changed,
+  whole: true,
+  moved: changed.map((item) => ({ item, key: item, major: true })),
+  holds: true,
+  ...(since ? { since } : {}),
+});
+
 describe("whether an artifact is behind", () => {
   it("shared-planning-change-stages-SC-27 - is fresh where the read record matches the tree", () => {
     const root = store();
@@ -336,47 +350,33 @@ describe("whether an artifact is behind", () => {
     expect(behindOf({ ...read(root), reviewed }, artifacts(root))).toEqual([]);
   });
 
-  it("is behind where a linked section changed after it was read again", () => {
+  it("is behind the whole of what is before it where the before cannot be recovered", () => {
     const root = store();
     const reviewed = reviewedOf(read(root));
     // The page's `Points` section gains a clause after every artifact was
-    // read again against it.
+    // read again against it, and no history holds what the lines were read
+    // against.
     const moved = RULES.replace(
       "A point is earned per dollar spent.",
       "A point is earned per dollar spent, and a refund takes it back.",
     );
     const after = read(root, NO_GIT, pageOf(moved));
 
-    // The recorded id says each artifact's upstream moved and cannot say
-    // which part of it, so each row carries the whole of what is before it
-    // and `whole` says the id is what named it.
     expect(behindOf({ ...after, reviewed }, artifacts(root))).toEqual([
-      { artifact: "proposal", changed: [`${PAGE}#points`], whole: true },
-      {
-        artifact: "decisions",
-        changed: [`${PAGE}#points`, "proposal"],
-        whole: true,
-      },
-      {
-        artifact: "ui-design",
-        changed: [`${PAGE}#points`, "proposal", "decisions"],
-        whole: true,
-      },
-      {
-        artifact: "specs",
-        changed: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
-        whole: true,
-      },
+      wholeOf("proposal", [`${PAGE}#points`]),
+      wholeOf("decisions", [`${PAGE}#points`, "proposal"]),
+      wholeOf("ui-design", [`${PAGE}#points`, "proposal", "decisions"]),
+      wholeOf("specs", [
+        `${PAGE}#points`,
+        "proposal",
+        "decisions",
+        "ui-design",
+      ]),
     ]);
   });
 
   it("shared-planning-change-stages-SC-49 - a stale `reviewed:` id still carries `since`, the newest of what changed", () => {
     const root = store();
-    // The spec delta is reformatted (a commit that changes no content) after
-    // the decisions moved, so its own commit outdates what actually changed
-    // before it — the reading a `reviewed:` id compares against has to be the
-    // newest of what is before the artifact, not filtered by the artifact's
-    // own commit, or this case would carry no date at all.
     const entry = read(
       root,
       dating({
@@ -393,12 +393,11 @@ describe("whether an artifact is behind", () => {
     const reviewed = { ...reviewedOf(entry), specs: "00000000" };
 
     expect(behindOf({ ...entry, reviewed }, artifacts(root))).toEqual([
-      {
-        artifact: "specs",
-        changed: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
-        whole: true,
-        since: "2026-09-05T00:00:00Z",
-      },
+      wholeOf(
+        "specs",
+        [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        "2026-09-05T00:00:00Z",
+      ),
     ]);
   });
 
@@ -414,139 +413,75 @@ describe("whether an artifact is behind", () => {
     expect(after).toEqual(before);
   });
 
-  it("says nothing about an artifact no record line names", () => {
+  it("reads an artifact no record line names as behind everything before it, whole and major", () => {
     const root = store();
 
-    expect(behindOf(read(root), artifacts(root))).toEqual([]);
-  });
-});
-
-describe("with no read record at all", () => {
-  const DATES = {
-    [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
-    [`${CHANGE}/decisions.md`]: "2026-09-02T00:00:00Z",
-    [UI_FILE]: "2026-09-03T00:00:00Z",
-    [SPEC_FILE]: "2026-09-04T00:00:00Z",
-  };
-
-  it("shared-planning-change-stages-SC-49 - dates `since` from the first thing that moved after the artifact was drawn", () => {
-    const root = store();
-    // The decisions moved on the 3rd and the UI design on the 9th, both
-    // after the delta was drawn on the 2nd: the delta went behind on the 3rd,
-    // so that is the day the digest's seven are counted from. Read off the
-    // newest of the two, a change behind since the 3rd would first be listed
-    // on the 16th.
-    const entry = read(
-      root,
-      dating({
-        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
-        [`${CHANGE}/decisions.md`]: "2026-09-03T00:00:00Z",
-        [UI_FILE]: "2026-09-09T00:00:00Z",
-        [SPEC_FILE]: "2026-09-02T00:00:00Z",
-      }),
-      pageOf(RULES, "2026-09-05"),
-    );
-
-    expect(behindOf(entry, artifacts(root))).toEqual([
-      {
-        artifact: "specs",
-        changed: ["decisions", "ui-design"],
-        since: "2026-09-03T00:00:00Z",
-      },
+    expect(
+      behindOf(read(root), artifacts(root)).map((one) => [
+        one.artifact,
+        one.whole,
+        one.holds,
+      ]),
+    ).toEqual([
+      ["proposal", true, true],
+      ["decisions", true, true],
+      ["ui-design", true, true],
+      ["specs", true, true],
     ]);
   });
 
-  it("reads a linked page section as putting nothing behind", () => {
+  it("is never made fresh, nor behind, by a commit date", () => {
     const root = store();
-    const entry = read(root, dating(DATES), pageOf(RULES, "2026-09-10"));
+    const dates = dating({
+      [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
+      [`${CHANGE}/decisions.md`]: "2026-09-09T00:00:00Z",
+      [UI_FILE]: "2026-09-03T00:00:00Z",
+      [SPEC_FILE]: "2026-09-04T00:00:00Z",
+    });
+    const entry = read(root, dates, pageOf(RULES, "2026-09-10"));
 
-    // The page landed after every artifact was drawn, and no record line
-    // dates the edit: a commit on the page dates every section of it, so the
-    // date alone cannot say the linked one moved.
-    expect(behindOf(entry, artifacts(root))).toEqual([]);
-  });
-
-  it("reads the artifact as behind where an artifact before it is newer", () => {
-    const root = store();
-    const entry = read(
-      root,
-      dating({ ...DATES, [`${CHANGE}/decisions.md`]: "2026-09-09T00:00:00Z" }),
-      pageOf(RULES, "2026-09-05"),
-    );
-
-    // The decisions are newer than everything before them, so they are the
-    // one artifact the dates leave alone. `since` is decisions' own commit
-    // date — the one thing that moved after either artifact was drawn — which
-    // is what the digest counts its seven days from.
-    expect(behindOf(entry, artifacts(root))).toEqual([
-      {
-        artifact: "ui-design",
-        changed: ["decisions"],
-        since: "2026-09-09T00:00:00Z",
-      },
-      {
-        artifact: "specs",
-        changed: ["decisions"],
-        since: "2026-09-09T00:00:00Z",
-      },
-    ]);
-  });
-
-  it("says nothing where no commit dates the artifact", () => {
-    const root = store();
-    const entry = read(
-      root,
-      dating({ [`${CHANGE}/decisions.md`]: "2026-09-09T00:00:00Z" }),
-      pageOf(RULES, "2026-09-10"),
-    );
-
-    expect(entry.upstream?.["ui-design"]?.newer).toBeUndefined();
-    expect(behindOf(entry, artifacts(root))).toEqual([]);
-  });
-
-  it("omits `newer` where nothing before it is newer", () => {
-    const root = store();
-    const entry = read(root, dating(DATES), pageOf(RULES, "2026-09-10"));
-
-    expect(entry.upstream?.["ui-design"]).not.toHaveProperty("newer");
-  });
-
-  it("says nothing where no commit dates what is before it", () => {
-    const root = store();
-    const entry = read(root, dating(DATES), pageOf(RULES));
-
-    expect(behindOf(entry, artifacts(root))).toEqual([]);
-  });
-
-  it("says nothing where no commit dates anything at all", () => {
-    const root = store();
-
-    expect(behindOf(read(root), artifacts(root))).toEqual([]);
+    // The decisions are newer than the UI design and the delta, and the
+    // lines say both were read against what stands: nothing is behind.
+    expect(
+      behindOf({ ...entry, reviewed: reviewedOf(entry) }, artifacts(root)),
+    ).toEqual([]);
   });
 });
 
 describe("what the row names", () => {
-  it("names what changed where the commit dates single items out", () => {
-    expect(
-      behindLabelOf({ artifact: "specs", changed: [`${PAGE}#points`] }),
-    ).toBe(`${PAGE}#points changed`);
-  });
-
-  it("names what is before it where the recorded id dates no edit", () => {
+  it("names what moved and that a major move holds", () => {
     expect(
       behindLabelOf({
         artifact: "specs",
-        changed: [`${PAGE}#points`, "decisions"],
-        whole: true,
+        changed: ["decisions"],
+        moved: [{ item: "decisions", key: "Q3", major: true }],
+        holds: true,
       }),
+    ).toBe("decisions moved — holds the next landing");
+  });
+
+  it("names a small move as holding only the fold", () => {
+    expect(
+      behindLabelOf({
+        artifact: "specs",
+        changed: ["proposal"],
+        moved: [{ item: "proposal", key: "## Why", major: false }],
+        holds: false,
+      }),
+    ).toBe("proposal moved — small, holds only the fold");
+  });
+
+  it("names everything before it where what moved could not be recovered", () => {
+    expect(
+      behindLabelOf(wholeOf("specs", [`${PAGE}#points`, "decisions"])),
     ).toBe(`read again against ${PAGE}#points, decisions`);
   });
 });
 
 describe("over a real history", () => {
-  /** The change and the page it draws from, in one repository whose commits
-   * carry the day they were made — the dates the fallback reads are git's
-   * here, not an injected index's. */
+  /** The change and the page it draws from, in one repository, with each
+   * artifact's `reviewed:` line written by a commit of its own record — the
+   * commit the store reads the before at. */
   async function history() {
     const { root, write, commit } = gitStore("manual-behind-");
     for (const [path, text] of Object.entries(filesOf())) write(path, text);
@@ -562,23 +497,30 @@ describe("over a real history", () => {
         asts: new Map([[PAGE, parsePage(source)]]),
       });
     };
+    const reviewed = reviewedOf(await at());
+    write(
+      `${CHANGE}/.openspec.yaml`,
+      `schema: grade10-planning\ncreated: 2026-09-18\nreviewed:\n${Object.entries(
+        reviewed,
+      )
+        .map(([id, content]) => `  ${id}: "${content}"\n`)
+        .join("")}`,
+    );
+    commit("every artifact read again", 4);
     return { root, write, commit, at };
   }
 
   it("is unmoved by a commit on a section the change does not link", async () => {
     const { root, write, commit, at } = await history();
-    const reviewed = reviewedOf(await at());
 
     write(PAGE, RULES.replace("Three tiers", "Four tiers"));
     commit("a section the change links nowhere", 3);
-    const after = await at();
 
-    expect(behindOf({ ...after, reviewed }, artifacts(root))).toEqual([]);
+    expect(behindOf(await at(), artifacts(root))).toEqual([]);
   });
 
-  it("is behind where a commit moves a linked section, once a record line dates the read", async () => {
+  it("shared-planning-agent-rounds-US-17 - quotes the linked section before and after, a major move every artifact after it holds on", async () => {
     const { root, write, commit, at } = await history();
-    const reviewed = reviewedOf(await at());
 
     write(
       PAGE,
@@ -588,16 +530,92 @@ describe("over a real history", () => {
       ),
     );
     commit("the linked section moves", 3);
-    const after = await at();
+    const behind = behindOf(await at(), artifacts(root));
 
-    expect(
-      behindOf({ ...after, reviewed }, artifacts(root)).map(
-        ({ artifact }) => artifact,
+    expect(behind.map(({ artifact }) => artifact)).toEqual([
+      "proposal",
+      "decisions",
+      "ui-design",
+      "specs",
+    ]);
+    const [proposal] = behind;
+    expect(proposal.holds).toBe(true);
+    expect(proposal.whole).toBeUndefined();
+    expect(proposal.moved).toHaveLength(1);
+    expect(proposal.moved[0]).toMatchObject({
+      item: `${PAGE}#points`,
+      major: true,
+    });
+    expect(proposal.moved[0].before).toContain(
+      "A point is earned per dollar spent.",
+    );
+    expect(proposal.moved[0].after).toContain("a refund takes it back");
+  });
+
+  it("shared-planning-agent-rounds-US-18 - a reworded Why is a small move that holds nothing", async () => {
+    const { root, write, commit, at } = await history();
+
+    write(
+      `${CHANGE}/proposal.md`,
+      PROPOSAL.replace(
+        "So an artifact can fall behind what it was drawn from.",
+        "So an artifact can fall behind what it is drawn from.",
       ),
-    ).toEqual(["proposal", "decisions", "ui-design", "specs"]);
-    // The same commit, read with no record line at all: the page's date says
-    // the page moved and nothing says the linked section did.
-    expect(behindOf(after, artifacts(root))).toEqual([]);
+    );
+    commit("the Why reworded", 3);
+    const behind = behindOf(await at(), artifacts(root));
+
+    expect(behind.map(({ artifact }) => artifact)).toEqual([
+      "decisions",
+      "ui-design",
+      "specs",
+    ]);
+    for (const one of behind) {
+      expect(one.holds).toBe(false);
+      expect(one.moved).toEqual([
+        expect.objectContaining({ item: "proposal", key: "## Why" }),
+      ]);
+    }
+  });
+
+  it("shared-planning-agent-rounds-US-19 - an answer that takes the recommendation moves nothing, and one that overturns it holds", async () => {
+    const { root, write, commit, at } = await history();
+    const asked = (decided: string) =>
+      `${DECISIONS}\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Who is told? | ${decided} | One hand |\n`;
+    write(`${CHANGE}/decisions.md`, asked("❓ pm - recommended: Every hand"));
+    commit("a question held", 3);
+    const held = await at();
+    write(
+      `${CHANGE}/.openspec.yaml`,
+      `schema: grade10-planning\ncreated: 2026-09-18\nreviewed:\n${Object.entries(
+        reviewedOf(held),
+      )
+        .map(([id, content]) => `  ${id}: "${content}"\n`)
+        .join("")}`,
+    );
+    commit("read again against the held row", 2);
+
+    write(`${CHANGE}/decisions.md`, asked("Every hand - the owner's word"));
+    commit("the recommendation taken", 1);
+    expect(behindOf(await at(), artifacts(root))).toEqual([]);
+
+    write(`${CHANGE}/decisions.md`, asked("One hand - the owner's word"));
+    commit("the recommendation overturned", 0);
+    const behind = behindOf(await at(), artifacts(root));
+    expect(behind.map(({ artifact }) => artifact)).toEqual([
+      "ui-design",
+      "specs",
+    ]);
+    expect(behind[0].holds).toBe(true);
+    expect(behind[0].moved).toEqual([
+      {
+        item: "decisions",
+        key: "Q1",
+        before: "❓ pm - recommended: Every hand",
+        after: "One hand - the owner's word",
+        major: true,
+      },
+    ]);
   });
 });
 
@@ -617,16 +635,7 @@ describe("behind holds no tick, claim or wait", () => {
     const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
     files[`${CHANGE}/tasks.md`] = TASKS;
     const root = writeStore(files);
-    const entry = read(
-      root,
-      dating({
-        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
-        [`${CHANGE}/decisions.md`]: "2026-09-10T00:00:00Z",
-        [UI_FILE]: "2026-09-03T00:00:00Z",
-        [SPEC_FILE]: "2026-09-04T00:00:00Z",
-      }),
-      pageOf(RULES, "2026-09-05"),
-    );
+    const entry = read(root);
 
     // The tick and the claim.
     expect(entry.taskGroups[0]).toMatchObject({
@@ -639,35 +648,15 @@ describe("behind holds no tick, claim or wait", () => {
     expect(entry.awaiting).toEqual([
       { artifact: "tech-design", why: "waiting on the vendor" },
     ]);
-    // The change is still behind: the decisions are newer than what is
-    // drawn from them.
-    expect(behindOf(entry, artifacts(root))).toEqual([
-      {
-        artifact: "ui-design",
-        changed: ["decisions"],
-        since: expect.any(String),
-      },
-      { artifact: "specs", changed: ["decisions"], since: expect.any(String) },
-    ]);
+    // The change is still behind: no line says anything was read again.
+    expect(behindOf(entry, artifacts(root)).length).toBeGreaterThan(0);
   });
 
   it("accepts the wait itself: the record's own rule raises nothing on it", () => {
-    // The wait is accepted rather than refused, over the same behind store —
-    // `checkAwaiting`, not the whole of `runChecks`, since this is the one
-    // rule the wait could trip.
     const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
     files[`${CHANGE}/tasks.md`] = TASKS;
     const root = writeStore(files);
-    const entry = read(
-      root,
-      dating({
-        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
-        [`${CHANGE}/decisions.md`]: "2026-09-10T00:00:00Z",
-        [UI_FILE]: "2026-09-03T00:00:00Z",
-        [SPEC_FILE]: "2026-09-04T00:00:00Z",
-      }),
-      pageOf(RULES, "2026-09-05"),
-    );
+    const entry = read(root);
 
     const report = createReport();
     const ctx = createContext(rootsOf(root), report, {

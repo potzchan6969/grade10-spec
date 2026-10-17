@@ -115,5 +115,6 @@ One table, blockers first:
   `decisions.md`, then the delta, then cases and tasks, per
   [PRDs and OpenSpec](../../../docs/governance/prd-and-openspec.md)
 
+- **Closed rows** - List each Raised row QA2 closed on its recommendation with the source it names; a closed row holds nothing, and the accepting human reopens one with one reply
 - **Human input** - List blockers requiring an unresolved human decision using [Clarification Request](../../../AGENTS.md#questions-and-blockers). A blocker with one clear source repair stays in the findings table.
 - **Verdict** - End with `Ready to accept`, or `Not ready - <n> blockers`. Pass findings to planning-dev for its source-repair and QA restart procedure; use the rerun rule above for this review.

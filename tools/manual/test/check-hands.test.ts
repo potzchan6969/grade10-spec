@@ -22,7 +22,7 @@ describe("`hands:` on the change's record", () => {
     expect(await hands("", "hands")).toEqual([]);
   });
 
-  it("names a role outside the six", async () => {
+  it("names a role outside the five", async () => {
     const [found] = await hands("hands:\n  product: alice\n", "hands");
 
     expect(found.level).toBe("fail");
@@ -30,6 +30,14 @@ describe("`hands:` on the change's record", () => {
     expect(found.reason).toContain("`hands.product`");
     expect(found.reason).toContain("no role this store knows");
     expect(found.reason).toContain("`pm`");
+  });
+
+  it("shared-planning-change-stages-SC-14 - refuses the retired tech role", async () => {
+    const [found] = await hands("hands:\n  tech: alice\n", "hands");
+
+    expect(found.level).toBe("fail");
+    expect(found.reason).toContain("`hands.tech`");
+    expect(found.reason).toContain("no role this store knows");
   });
 
   it("names a value shaped like more than one handle", async () => {

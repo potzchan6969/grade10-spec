@@ -47,10 +47,8 @@ test("the Board opens", async () => {
  * agent's mark and the hand's move — is read from the stage alone, so every
  * change in that stage would carry the same words. Implementation complete
  * and Archived are an evidence record and the archive: no agent drafts them,
- * so their headings carry neither. Scoped one lane at a time, because Specified and
- * Planned both name their hand's move "read" — the word the store reuses for
- * two different stages — and a page-wide search for it would not say which
- * lane it came from. */
+ * so their headings carry neither. Scoped one lane at a time, because a
+ * page-wide search for a move would not say which lane it came from. */
 test("shared-planning-change-stages-SC-10 - the mark and the move on a lane heading", async () => {
   await openManual("/in-flight");
   await expect
@@ -65,15 +63,20 @@ test("shared-planning-change-stages-SC-10 - the mark and the move on a lane head
     },
     {
       stage: "designed",
-      draft: "both designs, from the page and the journeys",
-      move: "tweak · challenge",
+      draft: "the UI design, from the page and the journeys",
+      move: "tweak",
     },
     {
       stage: "specified",
-      draft: "two blind readings, reconciled",
-      move: "read",
+      draft:
+        "the blind cases, the tech design and the requirements, reconciled",
+      move: "resolve the open Raised rows",
     },
-    { stage: "planned", draft: "the plan", move: "read" },
+    {
+      stage: "planned",
+      draft: "the plan",
+      move: "read the plan and challenge the tech design",
+    },
     {
       stage: "building",
       draft: "each group, test first",
@@ -348,9 +351,8 @@ test("shared-planning-change-stages-SC-05 - one change, one stage everywhere", a
 });
 
 /** A waiver on the board: `demo-waived` says in one line that it draws
- * nothing and writes the other design, and the lane it sits in is where the
- * reader meets that — Designed, proven by one line and one file rather than
- * by two files. `change-page-waived.walk.ts` reads the same fixture's rows,
+ * nothing, and the lane it sits in is where the reader meets that —
+ * Designed, proven by the line alone. `change-page-waived.walk.ts` reads the same fixture's rows,
  * which is the other half `SC-07` asks for. */
 test("shared-planning-change-stages-SC-07 - a waiver reaches the Designed lane", async () => {
   await openManual("/in-flight");
@@ -361,6 +363,23 @@ test("shared-planning-change-stages-SC-07 - a waiver reaches the Designed lane",
   const designed = laneSection("designed");
   if (!designed.contains(document.getElementById("demo-waived"))) {
     throw new Error("demo-waived is not in the Designed lane");
+  }
+});
+
+/** The Design stage draws the UI alone: a change whose only design is the
+ * UI design's waiver sits at Designed, and so does one whose cases and
+ * requirements are in while its tech design is not. */
+test("shared-planning-change-stages-SC-85, shared-planning-change-stages-SC-86 - the waived and the tech-owed change at Designed", async () => {
+  await openManual("/in-flight");
+  await expect
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
+    .toBeVisible();
+
+  const designed = laneSection("designed");
+  for (const id of ["demo-design-waived", "demo-tech-owed"]) {
+    if (!designed.contains(document.getElementById(id))) {
+      throw new Error(`${id} is not in the Designed lane`);
+    }
   }
 });
 

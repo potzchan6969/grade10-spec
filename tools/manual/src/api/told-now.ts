@@ -1,10 +1,11 @@
 import {
-  behindText,
   linkOf,
+  movedText,
   permalinkOf,
   toldBodyOf,
 } from "../../../../scripts/openspec/lib/wording.mjs";
-import { behindOf, handOf, handOfArtifact } from "./stages.ts";
+import { behindOf, handOf } from "./stages.ts";
+import { toldOf } from "./told.ts";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types.ts";
 
 /**
@@ -16,8 +17,9 @@ import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types.ts";
  * thing about a change while Slack says another. What is left here is what
  * only the manual knows: where its own reader can reach the change.
  *
- * Which messages: one per hand the stage waits on, and one for the earliest
- * behind artifact, which is the message the workflow sends about it. Nothing
+ * Which messages: one per hand the stage waits on, and one per person whose
+ * artifacts are behind, listing every one of them and what moved before it,
+ * which is the message the workflow sends them. Nothing
  * for a stage that waits on no hand — Designed, Released and Archived are a
  * design pair's, a cut's and the fold's, and nobody is being sent anything
  * about them.
@@ -88,14 +90,17 @@ export function toldNowOf(
     });
   }
 
-  const [behind] = behindOf(change, artifacts);
-  const hand = behind && handOfArtifact(behind.artifact, artifacts);
-  if (behind && hand) {
+  for (const person of toldOf(
+    [],
+    behindOf(change, artifacts),
+    artifacts,
+    change.hands ?? {},
+  )) {
     told.push({
-      role: hand,
-      ...named(hand),
+      role: person.roles[0],
+      ...(person.hand ? { hand: person.hand } : {}),
       kind: "behind",
-      text: behindText(behind, linked),
+      text: movedText(person, linked),
     });
   }
   return told;

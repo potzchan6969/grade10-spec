@@ -446,6 +446,63 @@
       "Q1": "2026-09-07T09:00:00+08:00"
     }
   },
+  "demo-design-waived": {
+    "id": "demo-design-waived",
+    "dir": "openspec/changes/demo-design-waived",
+    "schema": "grade10-planning",
+    "schemaKnown": true,
+    "artifacts": [
+      {
+        "name": "proposal",
+        "kind": "doc",
+        "path": "openspec/changes/demo-design-waived/proposal.md",
+        "present": true,
+        "text": "# The UI design waived\n\n**Author:** @tester - 2026-09-01\n\n## Why\n\nThe fixture walk needs a change whose designer has written their line in\nplace of a UI design, so a reader can be shown that the waiver alone takes\nthe change to Designed.\n\n## What Changes\n\n- **The UI design is waived**, and the planning run is next.\n"
+      },
+      {
+        "name": "decisions",
+        "kind": "doc",
+        "path": "openspec/changes/demo-design-waived/decisions.md",
+        "present": true,
+        "text": "## Goals\n\n- Both designs are answered before a requirement is written.\n\n## Non-Goals\n\n- Letting one line answer for the other design.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Whether one waiver answers both designs | No, each design is answered on its own | One line standing for two files |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n"
+      },
+      {
+        "name": "user-journeys",
+        "kind": "journeys",
+        "present": false
+      },
+      {
+        "name": "ui-design",
+        "kind": "doc",
+        "path": "openspec/changes/demo-design-waived/ui-design.md",
+        "present": false
+      },
+      {
+        "name": "tech-design",
+        "kind": "doc",
+        "path": "openspec/changes/demo-design-waived/tech-design.md",
+        "present": false
+      },
+      {
+        "name": "specs",
+        "kind": "specs",
+        "present": false
+      },
+      {
+        "name": "test-cases",
+        "kind": "cases",
+        "present": false
+      },
+      {
+        "name": "tasks",
+        "kind": "tasks",
+        "path": "openspec/changes/demo-design-waived/tasks.md",
+        "present": false
+      }
+    ],
+    "deltas": [],
+    "history": []
+  },
   "demo-designed": {
     "id": "demo-designed",
     "dir": "openspec/changes/demo-designed",
@@ -457,7 +514,7 @@
         "kind": "doc",
         "path": "openspec/changes/demo-designed/proposal.md",
         "present": true,
-        "text": "# The Designed stage\n\n**Author:** @tester - 2026-09-01\n\n## Why\n\nThe fixture walk needs a change that has drawn both designs and gone no\nfurther, so a reader can tell the Designed stage from the ones beside it.\n\n## What Changes\n\n- **Both designs land**, and nothing after them.\n\n## References\n\n- [Demo Product · Discounts](../../../docs/prds/products/demo-product/index.md#discounts)\n\n## Follow-on changes\n\n- The requirements, once somebody takes the two readings.\n"
+        "text": "# The Designed stage\n\n**Author:** @tester - 2026-09-01\n\n## Why\n\nThe fixture walk needs a change that has drawn its UI design and gone no\nfurther, so a reader can tell the Designed stage from the ones beside it.\n\n## What Changes\n\n- **Both designs land**, and nothing after them.\n\n## References\n\n- [Demo Product · Discounts](../../../docs/prds/products/demo-product/index.md#discounts)\n\n## Follow-on changes\n\n- The requirements, once somebody takes the two readings.\n"
       },
       {
         "name": "decisions",
@@ -482,8 +539,7 @@
         "name": "tech-design",
         "kind": "doc",
         "path": "openspec/changes/demo-designed/tech-design.md",
-        "present": true,
-        "text": "# Tech design: the Designed stage\n\n## Context\n\nA fixture change that stops once both designs land.\n\n## Decisions\n\n- Nothing to decide - the fixture holds here on purpose.\n"
+        "present": false
       },
       {
         "name": "specs",
@@ -499,63 +555,6 @@
         "name": "tasks",
         "kind": "tasks",
         "path": "openspec/changes/demo-designed/tasks.md",
-        "present": false
-      }
-    ],
-    "deltas": [],
-    "history": []
-  },
-  "demo-half-designed": {
-    "id": "demo-half-designed",
-    "dir": "openspec/changes/demo-half-designed",
-    "schema": "grade10-planning",
-    "schemaKnown": true,
-    "artifacts": [
-      {
-        "name": "proposal",
-        "kind": "doc",
-        "path": "openspec/changes/demo-half-designed/proposal.md",
-        "present": true,
-        "text": "# One design waived, one owed\n\n**Author:** @tester - 2026-09-01\n\n## Why\n\nThe fixture walk needs a change whose designer has written their line and\nwhose tech design is neither a file nor a line, so a reader can be shown\nwhat one waiver alone leaves owed.\n\n## What Changes\n\n- **The UI design is waived** and the tech design is still to come.\n"
-      },
-      {
-        "name": "decisions",
-        "kind": "doc",
-        "path": "openspec/changes/demo-half-designed/decisions.md",
-        "present": true,
-        "text": "## Goals\n\n- Both designs are answered before a requirement is written.\n\n## Non-Goals\n\n- Letting one line answer for the other design.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Whether one waiver answers both designs | No, each design is answered on its own | One line standing for two files |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n"
-      },
-      {
-        "name": "user-journeys",
-        "kind": "journeys",
-        "present": false
-      },
-      {
-        "name": "ui-design",
-        "kind": "doc",
-        "path": "openspec/changes/demo-half-designed/ui-design.md",
-        "present": false
-      },
-      {
-        "name": "tech-design",
-        "kind": "doc",
-        "path": "openspec/changes/demo-half-designed/tech-design.md",
-        "present": false
-      },
-      {
-        "name": "specs",
-        "kind": "specs",
-        "present": false
-      },
-      {
-        "name": "test-cases",
-        "kind": "cases",
-        "present": false
-      },
-      {
-        "name": "tasks",
-        "kind": "tasks",
-        "path": "openspec/changes/demo-half-designed/tasks.md",
         "present": false
       }
     ],
@@ -941,6 +940,112 @@
               "title": "Reader watches the count rise",
               "traces": [
                 "alpha-SC-04"
+              ],
+              "status": "draft",
+              "automationStatus": "automated"
+            }
+          ]
+        }
+      }
+    ],
+    "history": []
+  },
+  "demo-tech-owed": {
+    "id": "demo-tech-owed",
+    "dir": "openspec/changes/demo-tech-owed",
+    "schema": "grade10-planning",
+    "schemaKnown": true,
+    "artifacts": [
+      {
+        "name": "proposal",
+        "kind": "doc",
+        "path": "openspec/changes/demo-tech-owed/proposal.md",
+        "present": true,
+        "text": "# The tech design owed\n\n**Author:** @tester - 2026-09-03\n\n## Why\n\nThe fixture walk needs a change whose blind cases and requirements are in\nwhile its tech design is neither a file nor a line, so a reader can be shown\nthat Specified waits on the tech design.\n\n## What Changes\n\n- **The cases and the requirements land**, and the tech design is still to come.\n\n## Capabilities\n\n- **Modified Capabilities**: demo-product/alpha\n"
+      },
+      {
+        "name": "decisions",
+        "kind": "doc",
+        "path": "openspec/changes/demo-tech-owed/decisions.md",
+        "present": true,
+        "text": "## Goals\n\n- The requirements exist before the plan is drawn.\n\n## Non-Goals\n\n- Planning the delivery - a later fixture's job.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Whether the suite ships blind first | Yes, blind before the scenarios | Deriving the suite from the scenarios |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n"
+      },
+      {
+        "name": "user-journeys",
+        "kind": "journeys",
+        "present": true
+      },
+      {
+        "name": "ui-design",
+        "kind": "doc",
+        "path": "openspec/changes/demo-tech-owed/ui-design.md",
+        "present": false
+      },
+      {
+        "name": "tech-design",
+        "kind": "doc",
+        "path": "openspec/changes/demo-tech-owed/tech-design.md",
+        "present": false
+      },
+      {
+        "name": "specs",
+        "kind": "specs",
+        "present": true
+      },
+      {
+        "name": "test-cases",
+        "kind": "cases",
+        "present": true
+      },
+      {
+        "name": "tasks",
+        "kind": "tasks",
+        "path": "openspec/changes/demo-tech-owed/tasks.md",
+        "present": false
+      }
+    ],
+    "deltas": [
+      {
+        "spec": "demo-product/alpha",
+        "path": "openspec/changes/demo-tech-owed/specs/demo-product/alpha/spec.md",
+        "text": "## ADDED Requirements\n\n### Requirement: The count is shown\n\nThe system SHALL show the count.\n\n#### Scenario: alpha-SC-08 - The count is shown\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** the count is shown\n",
+        "sections": [
+          {
+            "kind": "added",
+            "requirements": [
+              {
+                "name": "The count is shown",
+                "text": "The system SHALL show the count.",
+                "scenarios": [
+                  {
+                    "name": "The count is shown",
+                    "text": "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** the count is shown",
+                    "id": "alpha-SC-08",
+                    "serves": [
+                      "alpha-US-01"
+                    ],
+                    "servesProse": "Reader follows the thing end to end"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "journeys": [
+          {
+            "id": "alpha-US-01",
+            "title": "Reader follows the thing end to end",
+            "text": "**As a** reader,\n**I want** the thing to happen once and leave a record,\n**so that** I can tell whether it already happened."
+          }
+        ],
+        "suite": {
+          "status": "pending-review",
+          "cases": [
+            {
+              "id": "alpha-TC-07",
+              "title": "Reader sees the count",
+              "traces": [
+                "alpha-SC-08"
               ],
               "status": "draft",
               "automationStatus": "automated"

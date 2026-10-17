@@ -262,3 +262,32 @@ describe("the page's own order", () => {
     );
   });
 });
+
+describe("what is behind on the reader", () => {
+  it("shared-planning-agent-rounds-SC-128 - lists each artifact of theirs to read again, a small move as much as a major one", () => {
+    const behind = changeEntry("moved-change", [], {
+      title: "A change whose plan is behind",
+      stage: "building",
+      written: ["proposal", "decisions", "user-journeys", "ui-design", "tasks"],
+      hands: { pm: "dana", design: "robin", dev: "robin" },
+      reviewed: { tasks: "old", "ui-design": "old" },
+      upstream: {
+        "ui-design": {
+          id: "new",
+          items: ["decisions"],
+          moved: [{ item: "decisions", key: "Q3", major: true }],
+        },
+        tasks: {
+          id: "new",
+          items: ["proposal"],
+          moved: [{ item: "proposal", key: "## Why", major: false }],
+        },
+      },
+    });
+    const html = render([behind], "robin");
+
+    expect(html).toContain("To read again");
+    expect(html).toContain("decisions moved — holds the next landing");
+    expect(html).toContain("proposal moved — small, holds only the fold");
+  });
+});

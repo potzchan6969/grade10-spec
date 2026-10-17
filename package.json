@@ -86,6 +86,7 @@
     "archive:preflight": "node scripts/openspec/archive-preflight.mjs",
     "spec:view": "bash scripts/openspec-viewer/spec-view.sh",
     "spec:id": "node scripts/openspec/spec-id.mjs",
+    "spec:issue": "node scripts/openspec/spec-issue.mjs",
     "openspec": "pnpm dlx @fission-ai/openspec@1.8.0",
     "lint:fix": "biome check --write .",
     "validate:changes": "node scripts/openspec/validate-changes.mjs --strict"

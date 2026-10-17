@@ -32,6 +32,7 @@
 | Q8 | Who says an artifact was read again? | Its hand: `--reviewed` lands on the hand's word, as any landing does - decided by the round | The agent marking it read |
 | Q9 | What does the one-off backfill write? | Today's id for each written, unwaived artifact nothing names behind today, and no line for one that is behind, which stays held whole until read - the owner's word | Also no line where a before moved since the artifact's last commit, which today's dates never showed; the id each artifact had at its last commit, which needs a walk back through history |
 | Q10 | What of a linked page section is before an artifact? | The whole section, as it is hashed today, so a reworded unmarked line or another change's fold in it is major - the owner's word | Only its marked and open lines, which needs a mark-aware reading and a new id for every artifact linking a page |
+| Q11 | Does this change run the planning pass before it is built? | No - decided by agent: the owner asked every active change built as a working version, so the requirements and the plan were written from the landed tech design and verified by the build | Running `/planning-dev` and an acceptance first |
 
 ## Raised
 

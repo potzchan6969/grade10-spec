@@ -1,3 +1,7 @@
 schema: grade10-planning
 created: 2026-10-09
 page_waived: "Delivers outcomes the checkout PRD already states unmarked under Integration readiness"
+reviewed:
+  decisions: c059355c
+  user-journeys: e417be3c
+  test-cases: 1ea241f4

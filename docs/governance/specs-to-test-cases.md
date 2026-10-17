@@ -33,7 +33,9 @@ A feature run reads a bundle the caller assembles, and nothing outside it.
 
 The blind reading ends with its raised questions: every point the input did not settle, as a question for the author. Not cases, not defects — the things the reader had to decide for itself in order to write anything at all.
 
-They go to the change's `decisions.md`, under `## Raised`, one row per question — `Capability | Raised | Landed` — the file the author already reads, one table for every capability in the order raised. Not to the suite, which carries no such section.
+They go to the change's `decisions.md`, under `## Raised`, one row per question — `Capability | Raised | Landed` — the file the author already reads, one table for every capability in the order raised. Not to the suite, which carries no such section. Each row carries its options and `recommended: <option>` in the Raised cell, the held row's own spelling.
+
+- **QA2 closes what the held test does not hold** — in planning-dev's reconciliation, each row the [held test](../../.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) does not hold closes on its recommendation, as a `Decisions` row written `<answer> - decided by the round` naming its source, and its answer goes to the suite's `## Settled`; rows one source settles land on one `Q<n>`. Any hand reopens a closed row with one reply. Only a held row stays open and holds acceptance; a contradiction between the two readings is held whatever the default
 
 - **What belongs** — a rule the input is silent on. "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off as failures and never places scheduled on either side." That is a question the material cannot answer, and it is how a state nobody had thought about gets found
 - **What does not** — anything the input settles and the reader missed; anything for the technical design rather than the behaviour; anything the reader merely wants to know more about
@@ -94,7 +96,8 @@ The suite has two different coverage relationships. They must not be collapsed i
 - **Scenario marker ids are immutable** — never change the `id` inside an existing `trace:scenario` marker. New scenario headings use the current human-facing form; the CLI may allocate a separate machine marker id, and old marker ids remain valid evidence for existing case markers
 - **A case heading may move** — when a case moves from `US1-TC1` to `US2-TC4`, change only the heading and its suite references. Keep the adjacent case marker unchanged. Bump `rev` only when the behaviour changes
 - **No local case reference** — the full heading id is the case reference in a walk, report, manual row or higher-level suite. Do not add a second `(US<n>-TC<m>)` suffix
-- **Numbers are permanent within a suite** — a new case takes the next unused `TC<m>` for its journey. A deprecated case keeps its heading history and number; the number is never reused
+- **Issued by a command** — a new journey, scenario or case takes the id `pnpm run spec:issue <prefix> US|SC` or `pnpm run spec:issue <journey> TC` prints, read from the branch and the fetched `main` together; nobody counts by hand. A landing or an acceptance that refuses an id another change holds names `pnpm run spec:issue move <change>`, which moves the branch's ids above `main`'s and rewrites every citation inside the change
+- **Numbers are permanent within a suite** — a new case takes the `TC<m>` `spec:issue` issues for its journey. A deprecated case keeps its heading history and number; the number is never reused
 - **`rev` tracks behaviour, not prose** — `rev=1` is the first written version. It is bumped only when product behaviour changes what the case verifies. Walk-route optimization, restyling and purpose-preserving heading changes do not bump it
 
 | What happened | `rev` | `Status` |

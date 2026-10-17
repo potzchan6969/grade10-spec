@@ -1,3 +1,11 @@
 schema: grade10-planning
 promoted_by: '@kinisworking'
 created: 2026-09-14
+reviewed:
+  proposal: 55b9224f
+  decisions: 6ed8ed03
+  user-journeys: 0128d100
+  ui-design: c343bc6c
+  tech-design: c343bc6c
+  specs: 1b071b1f
+  test-cases: 40dcc75b

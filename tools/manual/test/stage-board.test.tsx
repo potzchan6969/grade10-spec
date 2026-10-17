@@ -41,7 +41,6 @@ const delta: Delta = { spec: SPEC, kinds: ["MODIFIED"], requirements: [] };
 const HANDS = {
   pm: "robin",
   design: "dana",
-  tech: "kim",
   dev: "sam",
   qa: "ari",
   release: "lee",
@@ -326,8 +325,7 @@ describe("the card", () => {
     const second = render([whole]);
     expect(second).toContain("@dana");
     expect(second).toContain("designer");
-    expect(second).toContain("@kim");
-    expect(second).toContain("tech PIC");
+    expect(second).not.toContain("tech PIC");
     expect(second).toContain(">Proposed<");
   });
 
@@ -355,7 +353,7 @@ describe("the card", () => {
 
     expect(html).toContain("2026-09-01 the queue is not settled");
     expect(html).toContain("the empty state is undrawn");
-    expect(html).toContain("@kim");
+    expect(html).toContain("@sam");
     expect(html).toContain("@dana");
     expect(overlaysOn(html).filter((kind) => kind === "waiting")).toHaveLength(
       2,

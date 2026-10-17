@@ -8,3 +8,7 @@ depends_on:
   - close-overdue-address-confirmation
 reviewed:
   user-journeys: 344e8f11
+  proposal: 2ed196f0
+  decisions: f2cb2613
+  tech-design: 7b22fb75
+  test-cases: 4fc04cd0

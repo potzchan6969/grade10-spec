@@ -19,6 +19,7 @@ import {
   slackPayload,
 } from "./changed-changes.mjs";
 import { deliver, sendAll } from "./lib/notify.mjs";
+import { FRESH } from "./test/fresh.mjs";
 
 test("parses regular and renamed OpenSpec files from git's NUL format", () => {
   assert.deepEqual(
@@ -277,7 +278,7 @@ const SCHEMA = [
   "    requires: [decisions]",
   "    upstream: [proposal, decisions]",
   "  - id: tech-design",
-  "    hand: tech",
+  "    hand: dev",
   "    required: false",
   "    generates: tech-design.md",
   "    requires: [decisions]",
@@ -316,7 +317,7 @@ const TEAM = [
   "  erin:",
   "    email: erin@test",
   "    slack: U-ERIN",
-  "    roles: [tech, dev]",
+  "    roles: [dev]",
   "  fred:",
   "    email: fred@test",
   "    slack: U-FRED",
@@ -331,7 +332,6 @@ const TEAM = [
   "channels:",
   "  pm: C-PM",
   "  design: C-DESIGN",
-  "  tech: C-TECH",
   "  dev: C-DEV",
   "  qa: C-QA",
   "  release: C-RELEASE",
@@ -342,7 +342,6 @@ const HANDS = [
   "hands:",
   "  pm: dana",
   "  design: dana",
-  "  tech: erin",
   "  dev: erin",
   "  qa: hana",
   "  release: fred",
@@ -404,7 +403,14 @@ function sandbox() {
     }
   };
   const drop = (path) => rmSync(join(root, path), { force: true });
+  /** A commit stands for a landing: every artifact with no `reviewed:` line
+   * is read again against what is before it as it stands, so what a later
+   * commit moves is what reaches a hand. */
   const commit = (message, daysAgo = 0, email) => {
+    const fresh = spawnSync(process.execPath, [FRESH, root], {
+      encoding: "utf8",
+    });
+    if (fresh.status !== 0) throw new Error(fresh.stderr);
     git(["add", "-A"], 0, email);
     git(["commit", "--quiet", "-m", message], daysAgo, email);
     return git(["rev-parse", "HEAD"]);
@@ -484,12 +490,8 @@ test("shared-planning-change-stages-SC-40 and shared-planning-change-stages-SC-4
   assert.equal(reached[CHANGE], "proposed");
   assert.deepEqual(messages.map((one) => one.key).sort(), [
     "probe:proposed:design",
-    "probe:proposed:tech",
   ]);
-  assert.deepEqual(messages.map((one) => one.channel).sort(), [
-    "U-DANA",
-    "U-ERIN",
-  ]);
+  assert.deepEqual(messages.map((one) => one.channel).sort(), ["U-DANA"]);
   for (const message of messages) {
     assert.equal(message.kind, "your-turn");
     assert.equal(message.to, "member");
@@ -522,7 +524,7 @@ test("shared-planning-change-stages-SC-40 - --stages links the change's thread w
 
   const { messages } = stages(root, ["--base", base, "--head", head]).read();
 
-  assert.equal(messages.length, 2);
+  assert.equal(messages.length, 1);
   for (const message of messages) {
     // The thread's permalink, in place of the change page's link: the
     // workspace host, the channel, and the timestamp with its dot taken out.
@@ -588,7 +590,6 @@ test("shared-planning-change-stages-SC-47 - --stages tells each hand of its own 
   assert.deepEqual(payload.blocks, []);
   assert.deepEqual(messages.map((one) => one.key).sort(), [
     "other:proposed:design",
-    "other:proposed:tech",
     "probe:planned:dev",
   ]);
 });
@@ -705,10 +706,13 @@ test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand w
 
   assert.deepEqual(
     messages.map((one) => [one.key, one.kind, one.channel]),
-    [["probe:behind:decisions", "behind", "U-DANA"]],
+    [["probe:behind:dana", "behind", "U-DANA"]],
   );
-  assert.match(textOf(messages, "probe:behind:decisions"), /decisions/);
-  assert.match(textOf(messages, "probe:behind:decisions"), /proposal/);
+  assert.match(textOf(messages, "probe:behind:dana"), /before `decisions`/);
+  assert.match(
+    textOf(messages, "probe:behind:dana"),
+    /`proposal` ## Why, small — before: Nobody has\. — after: Nobody has\. Again\./,
+  );
 });
 
 /** One capability's suite beside the change's delta, one draft case. */
@@ -802,12 +806,12 @@ test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one
 
   assert.deepEqual(
     first.messages.map((one) => one.key),
-    ["probe:behind:decisions"],
+    ["probe:behind:dana"],
   );
   assert.deepEqual(second.messages, []);
   // Rewording a proposal crosses no milestone, so no channel post is keyed.
   assert.deepEqual(readFileSync(keys, "utf8").trim().split("\n"), [
-    "probe:behind:decisions",
+    "probe:behind:dana",
   ]);
 });
 
@@ -837,11 +841,11 @@ test("--stages keeps an unaccepted plan off implementation and QA notifications"
 });
 
 test("shared-planning-change-stages-SC-41 - --stages posts to the role's channel when the hand is unnamed", () => {
-  // Planned, not Proposed: Proposed holds the product manager until both
-  // second hands are named (decisions Q49), so an unnamed hand there is no
-  // turn of its own.
+  // Planned, not Proposed: Proposed holds the product manager until the
+  // designer is named (decisions Q49), so an unnamed hand there is no turn of
+  // its own.
   const { root, write, commit } = sandbox();
-  const named = ["hands:", "  pm: dana", "  design: dana", "  tech: erin"];
+  const named = ["hands:", "  pm: dana", "  design: dana"];
   write({
     [`${DIR}/.openspec.yaml`]: record(...named),
     [`${DIR}/proposal.md`]: proposalOf(),
@@ -878,7 +882,6 @@ test("shared-planning-change-stages-SC-42 - --stages posts to the role's channel
       "hands:",
       "  pm: dana",
       "  design: dana",
-      "  tech: erin",
       'promoted_by: "@dana"',
     ),
   });
@@ -1153,10 +1156,7 @@ test("shared-planning-change-stages-SC-70 - --stages replies in the thread when 
     /\*Landed\* — `proposal`, `decisions`, `user-journeys` by @dana/,
   );
   assert.match(landed.text, /now at \*Proposed\*/);
-  assert.match(
-    landed.text,
-    /your turn: @dana \(designer\), @erin \(tech PIC\)/,
-  );
+  assert.match(landed.text, /your turn: @dana \(designer\)$/);
 });
 
 test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread for a landing a run marked with the `Wake:` trailer", () => {
@@ -1185,7 +1185,6 @@ test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread 
   // anybody.
   assert.deepEqual(messages.map((one) => one.key).sort(), [
     "probe:proposed:design",
-    "probe:proposed:tech",
   ]);
 });
 
@@ -1225,10 +1224,7 @@ test("shared-planning-change-stages-SC-70 - --stages posts no landing reply for 
 
   const { messages } = stages(root, ["--base", base, "--head", head]).read();
 
-  assert.deepEqual(messages.map((one) => one.kind).sort(), [
-    "your-turn",
-    "your-turn",
-  ]);
+  assert.deepEqual(messages.map((one) => one.kind).sort(), ["your-turn"]);
 });
 
 test("--stages matrix names the change the push touched, as its id alone", () => {

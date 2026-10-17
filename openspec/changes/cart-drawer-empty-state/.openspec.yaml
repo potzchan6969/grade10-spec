@@ -2,3 +2,9 @@ schema: grade10-planning
 created: 2026-09-09
 purpose_rewritten:
   shared/ui/store-cart: the durable Purpose names the 5-slot baseline grid of items and placeholder slots this change removes
+reviewed:
+  proposal: 47c4f4a5
+  decisions: 38cf419f
+  ui-design: e027ca02
+  tech-design: e027ca02
+  tasks: cb117566

@@ -290,26 +290,31 @@ export class Room {
     const compare = await compareFiles(repo, "main", op.sha);
     if ("truncated" in compare) return refused("compare-truncated");
     const record = recordPath(change);
+    let senderHandle: string | null = null;
+    if (state.senderSlack) {
+      try {
+        senderHandle = await this.team.handleOf(state.senderSlack);
+      } catch (error) {
+        if (error instanceof HostError) throw error;
+        // A map the relay cannot parse fails closed, and names itself: it
+        // is a check like every other, not the relay being broken.
+        return refused("map-unreadable");
+      }
+    }
     let verdict: Verdict;
     if (op.kind === "reviewed") {
+      // A read again is its hand's word, as any landing is.
       verdict = checkReviewed({
         change,
+        artifact: op.artifact,
+        word: state.word,
+        senderHandle,
+        schema: await readFileAt(repo, SCHEMA_PATH, op.sha),
         paths: compare.paths,
         atMain: await readFileAt(repo, record, "main"),
         atSha: await readFileAt(repo, record, op.sha),
       });
     } else {
-      let senderHandle: string | null = null;
-      if (state.senderSlack) {
-        try {
-          senderHandle = await this.team.handleOf(state.senderSlack);
-        } catch (error) {
-          if (error instanceof HostError) throw error;
-          // A map the relay cannot parse fails closed, and names itself: it
-          // is a check like every other, not the relay being broken.
-          return refused("map-unreadable");
-        }
-      }
       verdict = checkWord({
         change,
         artifact: op.artifact,

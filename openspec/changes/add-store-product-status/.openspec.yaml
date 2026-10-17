@@ -4,3 +4,8 @@ promoted_by: "@kinisworking"
 depends_on:
   - cart-drawer-empty-state
   - add-shopify-checkout-integration
+reviewed:
+  proposal: 849501b6
+  decisions: e78e0239
+  user-journeys: 0b61a27e
+  specs: 52bd7c74

@@ -34,11 +34,11 @@ Depends on `stage-changes-and-notify-hands` groups 1 to 5 for the record's keys,
 - [x] 3.8 The chain in the skills: a wake drafts every artifact it can reach on `claude/<id>` - the prefix `perspectives.mjs` and the demo store resolve a change from, in place of `change/<id>` - and lands nothing, and a re-read that edits redraws each artifact after it from the one before it; a held row against a row decided by the round, and the rule for which is which; `land` landing every drafted artifact of the hand and stopping at another hand, `land with recommendations` taking the held rows; `/workflow-round <change>` alone reading the thread's ask; a fix pass off a demonstration or a whole-change reading as a round with its row; the run posting through `relay-post.mjs` and ending with `--done`, which lands after 5.9; with the skill tests claiming each - `shared-planning-agent-rounds-SC-04`, `shared-planning-agent-rounds-SC-21`, `shared-planning-agent-rounds-SC-23`, `shared-planning-agent-rounds-SC-41`, `shared-planning-agent-rounds-SC-71`, `shared-planning-agent-rounds-SC-72`, `shared-planning-agent-rounds-SC-74`, `shared-planning-agent-rounds-SC-79`
 - [x] 3.9 The role skills hold the rules and the line commands the procedure: the run diagram, the commit order, the pull request, the branch, the commands each command skill prints and every copy of `openspec status` cut from `planning-pm`, `planning-qa`, `planning-design` and `planning-dev`, and each naming the line command where a `/planning-x` stood - `Q84`
 - [x] 3.10 `openspec-propose`, `spec-push` and `dev-help` retired, and every skill and governance page that named them swept: `spec-push`'s conflict rules in `/workflow-land`'s refusal list, the suite-impact line carrying no gate, and the spec row's rules `planning-qa`'s alone; verified by the skill-reference assertion and the `SKILLS_BUDGET` map in `scripts/openspec/instruction-budget.test.mjs` - `Q84`; the three kept as they stood, each opening with its replacement, until the flow is adopted
-- [ ] 3.11 `planning-qa` cut to what `/workflow-specify` needs, each other section checked for its home in `docs/governance/specs-to-test-cases.md`, `spec-to-tcs` or `tcs-review` before it goes
-- [ ] 3.12 `openspec-apply-change` folded into `/workflow-build`: its two check bullets into that skill's step 2, its rules line rewritten, `openspec/config.yaml:82`, `openspec/README.md:7` and `planning-dev` repointed, and the file deleted
+- [x] 3.11 `planning-qa` cut to what `/workflow-specify` needs, each other section checked for its home in `docs/governance/specs-to-test-cases.md`, `spec-to-tcs` or `tcs-review` before it goes
+- [x] 3.12 `openspec-apply-change` folded into `/workflow-build`: its two check bullets into that skill's step 2, its rules line rewritten, `openspec/config.yaml:82`, `openspec/README.md:7` and `planning-dev` repointed, and the file deleted
 - [x] 3.13 The plan skill reads the changes in flight before it opens one - `plan:preflight` for what is in flight, `spec:id <capability>` for the change carrying a delta on it, the change page for its stage, and `openspec/changes/archive/` for the `depends_on:` row alone - and answers a sentence that overlaps one in that change's thread by the requirement's own table, restating nothing beyond it; `round-skill.test.mjs` reads the eight stage labels from `stages.ts` and holds every row of that table and the clause deciding it - `shared-planning-agent-rounds-SC-80`
 - [x] 3.14 The eight line skills renamed `workflow-<artifact>` - `.claude/skills/workflow-plan/`, `workflow-design/`, `workflow-tech/`, `workflow-specify/`, `workflow-tasks/`, `workflow-build/`, `workflow-land/` and `workflow-round/` - and every `/<name>` and `skills/<name>/` reference swept across the skills, the agents, the governance pages, the guides, the reference, the active changes, the schema, the Routine prompt and the manual's paste commands (`Q94`)
-- [ ] 3.15 At this change's archive, the three kept skills go and `ROUND_RECORD_SINCE` takes the day after, so every change opened from then is held to its rows - `Q95`, `Q96`, `Q97`, `shared-planning-agent-rounds-SC-84`
+- [ ] 3.15 At this change's archive, the three kept skills go and `ROUND_RECORD_SINCE` takes the day after, so every change opened from then is held to its rows - `Q95`, `Q96`, `Q97`, `shared-planning-agent-rounds-SC-84` — blocked: an archive-time task: it runs when this change archives
 
 ## 4. The surfaces and the run sheet (grade10-spec)
 
@@ -68,10 +68,10 @@ The relay supersedes what 5.1 and 5.4 built: 5.5 to 5.11 replace the session in 
 
 ## 6. The application repository (grade10)
 
-- [ ] 6.1 `/workflow-build` there calls the same round against a task group: the tests the group's scenario ids name in their own commit, then the code, then the readers from `apply.perspectives`, then the landing summary in the thread, with the group's row landing in the store before the tick - `shared-planning-agent-rounds-SC-57`, `shared-planning-agent-rounds-SC-58`
-- [ ] 6.2 `pnpm plan done` refuses a tick naming a scenario id no test cites in the tree the group's repository tag names - `(grade10)` that clone, `(grade10-spec)` this store - naming the id and the tree, and takes a tick whose task names no scenario id - `shared-planning-agent-rounds-SC-63`
-- [ ] 6.3 `/workflow-build` and `/workflow-round` there as thin skills naming this store's rules and holding no copy: the session reaches the `workflow-round` skill, the schema's `perspectives:` and the reader prompts through `/add-dir` on a clone of this store, never through `external/grade10-spec`
-- [ ] 6.4 Tests there: the tick's refusal and its acceptance over a fixture tree, the group's tests landing in a commit carrying no code, and the skills naming the store clone and never the submodule path - `shared-planning-agent-rounds-SC-57`, `shared-planning-agent-rounds-SC-58`, `shared-planning-agent-rounds-SC-63`
+- [x] 6.1 `/workflow-build` there calls the same round against a task group: the tests the group's scenario ids name in their own commit, then the code, then the readers from `apply.perspectives`, then the landing summary in the thread, with the group's row landing in the store before the tick - `shared-planning-agent-rounds-SC-57`, `shared-planning-agent-rounds-SC-58`
+- [x] 6.2 `pnpm plan done` refuses a tick naming a scenario id no test cites in the tree the group's repository tag names - `(grade10)` that clone, `(grade10-spec)` this store - naming the id and the tree, and takes a tick whose task names no scenario id - `shared-planning-agent-rounds-SC-63`
+- [x] 6.3 `/workflow-build` and `/workflow-round` there as thin skills naming this store's rules and holding no copy: the session reaches the `workflow-round` skill, the schema's `perspectives:` and the reader prompts through `/add-dir` on a clone of this store, never through `external/grade10-spec`
+- [x] 6.4 Tests there: the tick's refusal and its acceptance over a fixture tree, the group's tests landing in a commit carrying no code, and the skills naming the store clone and never the submodule path - `shared-planning-agent-rounds-SC-57`, `shared-planning-agent-rounds-SC-58`, `shared-planning-agent-rounds-SC-63`
 
 ## 7. The walk (grade10-spec)
 
@@ -80,42 +80,42 @@ Uses draft `feature-tcs.md` as its planning input.
 This group is its own test task: the walks are what prove the change. The job that runs them on every push to `main` is `stage-changes-and-notify-hands`' 8.4; the smoke cases on a staging deploy and a release cut are the release line's change (`Q35`).
 
 - [x] 7.1 The walks of `shared-planning-agent-rounds-US-08` and `shared-planning-agent-rounds-US-09` in the harness `stage-changes-and-notify-hands`' group 8 leaves, one file per journey, against its demo-store fixtures - `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-61`
-- [ ] 7.2 The journeys and the cases no script drives - the moves a hand makes in Slack's own client and the round inside an agent's session - walked once by hand in 8.2's first walk, their cases left manual with the reason on each, and named in that walk's `rounds.md` row; the walks 7.1 landed flipped their cases in their own commits - `shared-planning-agent-rounds-SC-59`
+- [ ] 7.2 The journeys and the cases no script drives - the moves a hand makes in Slack's own client and the round inside an agent's session - walked once by hand in 8.2's first walk, their cases left manual with the reason on each, and named in that walk's `rounds.md` row; the walks 7.1 landed flipped their cases in their own commits - `shared-planning-agent-rounds-SC-59` — blocked: a walk by hand in Slack and inside an agent session, after the deploy 8.1 needs
 - [x] 7.3 One reader argues the simpler shape for the whole change after the last group lands and before it goes to staging, with its row in `rounds.md`, which is the fix pass's row `US9-TC10-1` reads on the change page; the reading taken before the relay (row 8) reads a shape that no longer exists
 
 ## 8. The deploy and the first walk (grade10-spec)
 
 Operations' group, with a dated wait: nothing here is an agent's to tick, and the record says so.
 
-- [ ] 8.1 The deploy, Operations' with a dated wait: the real `REPO` and channel in `wrangler.jsonc`, the secrets set, `wrangler deploy`, the Routine created with its API trigger and the prompt from `routine-prompt.md`, the Slack app's event subscription pointed at `<origin>/slack/events` and Interactivity turned on with `<origin>/slack/actions` as its request URL - the 200 Slack's save-time `ssl_check` is answered with is that leg's proof, as the webhook's `pong` is the code host's - `AGENT_WAKE_URL` and `AGENT_WAKE_TOKEN` on the repository, then `AGENT_REREAD` on
-- [ ] 8.2 The first walk by hand, once 8.1 has deployed: a sentence addressed to the app opens a change and the reply names the id; an asker the map does not know is answered and asked for a handle; the chain is drafted and nothing lands; one word lands the hand's artifacts and a held row stops it until answered or waved through; the summary waiting on that word carries its button, a press lands what the typed word lands, the thread reads who pressed, the button is replaced by who confirmed it, and a press by a member the map does not name lands nothing; a landing moves `main` through the relay, and a `main` that moved is retried once; a read that changed nothing lands with no word; a wake left to time out is said so in the thread; the same round from a terminal lands the same artifact. The walk's row in `rounds.md` names the cases of `feature-tcs.md` it walked, and flips none
+- [ ] 8.1 The deploy, Operations' with a dated wait: the real `REPO` and channel in `wrangler.jsonc`, the secrets set, `wrangler deploy`, the Routine created with its API trigger and the prompt from `routine-prompt.md`, the Slack app's event subscription pointed at `<origin>/slack/events` and Interactivity turned on with `<origin>/slack/actions` as its request URL - the 200 Slack's save-time `ssl_check` is answered with is that leg's proof, as the webhook's `pong` is the code host's - `AGENT_WAKE_URL` and `AGENT_WAKE_TOKEN` on the repository, then `AGENT_REREAD` on — blocked: the deploy needs Operations: the relay's secrets, `wrangler deploy`, the Routine and the Slack app's subscriptions
+- [ ] 8.2 The first walk by hand, once 8.1 has deployed: a sentence addressed to the app opens a change and the reply names the id; an asker the map does not know is answered and asked for a handle; the chain is drafted and nothing lands; one word lands the hand's artifacts and a held row stops it until answered or waved through; the summary waiting on that word carries its button, a press lands what the typed word lands, the thread reads who pressed, the button is replaced by who confirmed it, and a press by a member the map does not name lands nothing; a landing moves `main` through the relay, and a `main` that moved is retried once; a read that changed nothing lands with no word; a wake left to time out is said so in the thread; the same round from a terminal lands the same artifact. The walk's row in `rounds.md` names the cases of `feature-tcs.md` it walked, and flips none — blocked: the first walk by hand needs 8.1's deploy and the human hands in Slack
 
 ## 9. Name an application test by its tag (grade10-spec) (owner: @sean)
 
 Raised by `close-revoked-session-cache-gap`, whose suite copies carry cases a grade10 walk decides; Q111 holds the form.
 
-- [ ] 9.1 Tests: `tcs:validate` accepts a `grade10:<path>` Decided by line with no application clone beside it, refuses an unknown tag and a path that climbs out, and refuses a file the application clone does not hold when `--app-root` names one; `tcs:automated` writes the tagged form as given - `shared-planning-agent-rounds-SC-107`
-- [ ] 9.2 `validate-test-cases.mjs` reads a `<tag>:<path>` entry: a store path as before, and a `grade10:` path held to its form, and to the file in the clone `--app-root` or the superproject names when one is there - `shared-planning-agent-rounds-SC-107`
-- [ ] 9.3 Verify: `pnpm run test:openspec`, `pnpm run tcs:validate`, `pnpm check:manual`
+- [x] 9.1 Tests: `tcs:validate` accepts a `grade10:<path>` Decided by line with no application clone beside it, refuses an unknown tag and a path that climbs out, and refuses a file the application clone does not hold when `--app-root` names one; `tcs:automated` writes the tagged form as given - `shared-planning-agent-rounds-SC-107`
+- [x] 9.2 `validate-test-cases.mjs` reads a `<tag>:<path>` entry: a store path as before, and a `grade10:` path held to its form, and to the file in the clone `--app-root` or the superproject names when one is there - `shared-planning-agent-rounds-SC-107`
+- [x] 9.3 Verify: `pnpm run test:openspec`, `pnpm run tcs:validate`, `pnpm check:manual`
 
 ## 10. Hold the tagged file in the application repository (grade10) (owner: @sean)
 
 Needs group 9 on this store's `main` and pinned, so the pinned suites can carry the tagged form.
 
-- [ ] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-107`
-- [ ] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and `check:libs` runs it on every CI pass - `shared-planning-agent-rounds-SC-107`
-- [ ] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`
+- [x] 10.1 Tests: `check:decided-by` refuses a `grade10:` Decided by path that names no file in the repository, passes one that does, and leaves a store path alone - `shared-planning-agent-rounds-SC-107`
+- [x] 10.2 `pnpm run check:decided-by` reads every Decided by line in the pinned store's suites, the archive aside, and `check:libs` runs it on every CI pass - `shared-planning-agent-rounds-SC-107`
+- [x] 10.3 Verify: `pnpm run check:decided-by`, `pnpm run lint`, `pnpm run typecheck --all`
 
 ## 11. The engineer challenges the tech design (grade10-spec)
 
 The revision of 2026-10-05 and 2026-10-06 (`Q112` to `Q115`). It lands in one push with `stage-changes-and-notify-hands`' group 10, which retires `/workflow-tech`, the `tech` role and `planning-dev`'s dated wait; this group holds only what that one does not, and 11.2 is the reason they move together: 10.7's edit to `planning-dev` breaks the `SC-50` test it retires.
 
-- [ ] 11.1 Tests, in their own commit before 11.2: one `round-skill.test.mjs` test that `planning-dev`'s requirements pass reads `tech-design.md` beside `ui-design.md`, sends a question the design cannot settle to a Raised row, and names no `awaiting: tech-design:` line - `shared-planning-agent-rounds-SC-108`
-- [ ] 11.2 Retire the tests of shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) from `round-skill.test.mjs`, beside group 10's edit to `planning-dev` step 2 - `shared-planning-agent-rounds-SC-108`
-- [ ] 11.4 Tests, in 11.1's commit: the `SC-71` test in `round-skill.test.mjs` reads that `workflow-round` draws `feature-tcs.md` never from `tech-design.md` or `spec.md`, and that `workflow-plan` drafts the cases, the tech design and the requirements in that order - `shared-planning-agent-rounds-SC-71`
-- [ ] 11.5 `workflow-round`'s Draft ahead and `workflow-plan`'s The Whole Plan in One Wake name that order and the cases drawn blind from the anchors, before the tech design; the cases' `upstream:` without `tech-design` is group 10's 10.14 - `shared-planning-agent-rounds-SC-71`
-- [ ] 11.6 `tcs-run-sheet` says a failed row is QA's one sentence in the change's thread naming the case id, and that the sheet posts nothing itself; a `round-skill.test.mjs` test in 11.1's commit reads it - `shared-planning-agent-rounds-SC-61a`
-- [ ] 11.3 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm check:manual` and `openspec validate run-a-round-on-every-artifact --strict`
+- [x] 11.1 Tests, in their own commit before 11.2: one `round-skill.test.mjs` test that `planning-dev`'s requirements pass reads `tech-design.md` beside `ui-design.md`, sends a question the design cannot settle to a Raised row, and names no `awaiting: tech-design:` line - `shared-planning-agent-rounds-SC-108`
+- [x] 11.2 Retire the tests of shared-planning-agent-rounds-SC-49 and shared-planning-agent-rounds-SC-50 (retired by Q113) from `round-skill.test.mjs`, beside group 10's edit to `planning-dev` step 2 - `shared-planning-agent-rounds-SC-108`
+- [x] 11.4 Tests, in 11.1's commit: the `SC-71` test in `round-skill.test.mjs` reads that `workflow-round` draws `feature-tcs.md` never from `tech-design.md` or `spec.md`, and that `workflow-plan` drafts the cases, the tech design and the requirements in that order - `shared-planning-agent-rounds-SC-71`
+- [x] 11.5 `workflow-round`'s Draft ahead and `workflow-plan`'s The Whole Plan in One Wake name that order and the cases drawn blind from the anchors, before the tech design; the cases' `upstream:` without `tech-design` is group 10's 10.14 - `shared-planning-agent-rounds-SC-71`
+- [x] 11.6 `tcs-run-sheet` says a failed row is QA's one sentence in the change's thread naming the case id, and that the sheet posts nothing itself; a `round-skill.test.mjs` test in 11.1's commit reads it - `shared-planning-agent-rounds-SC-61a`
+- [x] 11.3 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm check:manual` and `openspec validate run-a-round-on-every-artifact --strict`
 
 ## 12. Scope a group's reading to what it cites (grade10-spec)
 
@@ -123,17 +123,17 @@ Raised by the context profile of 2026-10-05: a reader of one `add-card-grading`
 group is given about 700K tokens of the change, and a first read of the plan
 ends before group 27 starts; Q117 holds the scope.
 
-- [ ] 12.1 Tests: a group's bundle holds the plan's opening and its own section,
+- [x] 12.1 Tests: a group's bundle holds the plan's opening and its own section,
       and of the capabilities only the blocks its section cites; a cited journey
       brings its cases; a group citing none of the change's ids gets no
       capability; a linked page section is given as its own lines, and a link to
       no section as the whole page; a bare id the change issues refuses the
       reading - `shared-planning-agent-rounds-SC-109`, `shared-planning-agent-rounds-SC-110`, `shared-planning-agent-rounds-SC-111`, `shared-planning-agent-rounds-SC-112`, `shared-planning-agent-rounds-SC-113`
-- [ ] 12.2 `bundleFor` gives line ranges, reading the group's citations against
+- [x] 12.2 `bundleFor` gives line ranges, reading the group's citations against
       the ids the change's own files issue and the page sections through the
       manual's section boundary, with no entry over 45 KB - `shared-planning-agent-rounds-SC-109`, `shared-planning-agent-rounds-SC-110`, `shared-planning-agent-rounds-SC-111`, `shared-planning-agent-rounds-SC-112`, `shared-planning-agent-rounds-SC-113`
-- [ ] 12.3 Each reader's definition says how to read its bundle in one message;
+- [x] 12.3 Each reader's definition says how to read its bundle in one message;
       a reader a task group's or the tech design's round dispatches runs on
       `opus`, held by `scripts/agent-platform/check-agent-readers.mjs`
-- [ ] 12.4 Verify: `pnpm run test:openspec`, `pnpm run agent:check-parity`,
+- [x] 12.4 Verify: `pnpm run test:openspec`, `pnpm run agent:check-parity`,
       `pnpm check:manual`, `pnpm run validate:changes run-a-round-on-every-artifact`

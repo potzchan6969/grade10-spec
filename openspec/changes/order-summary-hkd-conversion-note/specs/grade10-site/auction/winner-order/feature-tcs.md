@@ -11,7 +11,7 @@
 **so that** I pay and keep records in one currency without working out a rate.
 
 <!-- trace:case id=g10.auction-winner-order.TC-7qs rev=2 covers=g10.auction-winner-order.SC-kdr -->
-### g10.auction-winner-order.US26-TC7: Only the Order Summary's note names the conversion rate
+### g10.auction-winner-order.US26-TC9: Only the Order Summary's note names the conversion rate
 
 **Classification:**
 
