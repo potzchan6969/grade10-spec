@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
@@ -9,6 +8,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowsCounterClockwise, CircleNotch } from "@phosphor-icons/react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ScanPlate } from "./scan-plate";
+import { TierBadge } from "./tier-badge";
 
 /** The words the pass says, whoever holds it. */
 type MemberPassCopy = {
@@ -58,21 +58,18 @@ type MemberPassProps = {
   className?: string;
 };
 
-const SKIN: Record<MemberPassVariant, { background: string; badge: string }> = {
+const SKIN: Record<MemberPassVariant, { background: string }> = {
   silver: {
     background:
       "radial-gradient(90% 90% at 100% 0%, rgb(208 231 246 / 0.4) 0%, rgb(208 231 246 / 0) 55%), linear-gradient(173.77deg, var(--slate-900) 8.5%, var(--slate-950) 91.5%)",
-    badge: "border-slate-300 text-slate-300",
   },
   gold: {
     background:
       "radial-gradient(90% 90% at 100% 0%, var(--primary-muted-hover) 0%, rgb(196 144 61 / 0) 55%), linear-gradient(173.77deg, var(--orange-900) 8.5%, var(--orange-950) 91.5%)",
-    badge: "border-primary text-primary",
   },
   black: {
     background:
       "radial-gradient(90% 90% at 100% 0%, var(--primary-muted-hover) 0%, rgb(196 144 61 / 0) 55%), linear-gradient(173.77deg, var(--orange-900) 8.5%, var(--orange-950) 91.5%)",
-    badge: "border-primary-foreground text-primary-foreground",
   },
 };
 
@@ -175,13 +172,7 @@ function MemberPass({
             className="h-4 w-auto shrink-0 text-primary-foreground"
             data-slot="member-pass-logo"
           />
-          <Badge
-            className={cn("bg-transparent uppercase", skin.badge)}
-            data-slot="member-pass-tier"
-            variant="outline"
-          >
-            {tier}
-          </Badge>
+          <TierBadge slot="member-pass-tier" tier={tier} variant={variant} />
         </HStack>
         <Text
           className="w-full text-muted-foreground"

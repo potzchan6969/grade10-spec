@@ -136,12 +136,16 @@ export const Silver: Story = {
   },
 };
 
-/** The black pass shares gold's warm header; the white badge is what says it. */
+/** The black pass shares gold's warm header; the crowned white badge is
+ * what says it — the same badge the tier card wears. */
 export const Black: Story = {
   args: { tier: "Black", variant: "black" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Black")).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="member-pass-tier"] svg'),
+    ).toBeInTheDocument();
   },
 };
 

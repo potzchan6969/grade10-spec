@@ -1,11 +1,11 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { CaretRight, CrownSimple } from "@phosphor-icons/react";
+import { CaretRight } from "@phosphor-icons/react";
 import type { MouseEvent } from "react";
+import { TierBadge } from "./tier-badge";
 
 /** The words the card says, whoever's membership is in it. */
 type TierCardCopy = {
@@ -63,7 +63,6 @@ const SKIN: Record<
   TierCardVariant,
   {
     background: string;
-    badge: string;
     ring: string;
     worth: string;
     logo: string;
@@ -73,7 +72,6 @@ const SKIN: Record<
   silver: {
     background:
       "radial-gradient(90% 90% at 100% 0%, rgb(208 231 246 / 0.4) 0%, rgb(208 231 246 / 0) 55%), linear-gradient(165deg, var(--slate-900) 8.5%, var(--slate-950) 91.5%)",
-    badge: "border-slate-300 text-slate-300",
     ring: "border-(--blue-100)",
     worth: "text-(--slate-300)",
     logo: "text-(--slate-50)",
@@ -82,7 +80,6 @@ const SKIN: Record<
   gold: {
     background:
       "radial-gradient(90% 90% at 100% 0%, rgb(196 144 61 / 0.4) 0%, rgb(196 144 61 / 0) 55%), linear-gradient(165deg, var(--orange-900) 8.5%, var(--orange-950) 91.5%)",
-    badge: "border-primary text-primary",
     ring: "border-(--orange-400)",
     worth: "text-(--accent-foreground)",
     logo: "text-(--accent-foreground)",
@@ -91,7 +88,6 @@ const SKIN: Record<
   black: {
     background:
       "radial-gradient(90% 90% at 100% 0%, rgb(255 255 255 / 0.4) 0%, rgb(255 255 255 / 0) 55%), linear-gradient(169deg, var(--gray-900) 8.5%, var(--gray-950) 91.5%)",
-    badge: "border-primary-foreground text-primary-foreground",
     ring: "border-(--slate-50)",
     worth: "text-(--accent-foreground)",
     logo: "text-(--slate-50)",
@@ -164,16 +160,7 @@ function TierCard({
   const body = (
     <VStack className="w-full" gap="md">
       <HStack align="center" className="w-full" justify="space-between">
-        <Badge
-          className={cn("bg-transparent uppercase", skin.badge)}
-          data-slot="tier-card-tier"
-          variant="outline"
-        >
-          {variant === "black" ? (
-            <CrownSimple aria-hidden size={12} weight="fill" />
-          ) : null}
-          {tier}
-        </Badge>
+        <TierBadge slot="tier-card-tier" tier={tier} variant={variant} />
         <G10LogoMono
           aria-hidden
           className={cn("h-4 w-auto shrink-0", skin.logo)}
