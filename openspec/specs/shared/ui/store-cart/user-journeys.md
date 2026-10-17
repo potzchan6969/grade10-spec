@@ -115,3 +115,15 @@ after the Subtotal, with no line struck and no Remove,
 **As a** shopper whose drawer is no longer waiting,
 **I want** only currently available actions to return without repeating an earlier action,
 **so that** I decide what happens next from the accepted cart or its failure feedback.
+
+### shared.ui-store-cart.US21: Shopper sees a guest checkout in the cart footer
+
+**As a** shopper who is not signed in,
+**I want** the footer to offer a guest checkout action with a sign-in link under it and no points block or wallet section,
+**so that** I can continue to checkout without the benefits a guest does not hold.
+
+### shared.ui-store-cart.US22: Shopper sees public codes in the picker
+
+**As a** shopper,
+**I want** the promo-code picker to list the public codes the consumer passes in their own section,
+**so that** I can pick a code open to everyone beside whatever codes are mine.

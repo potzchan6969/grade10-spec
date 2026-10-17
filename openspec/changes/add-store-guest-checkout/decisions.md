@@ -46,4 +46,4 @@ storefront checkout".
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/store/order-detail` | Does a Google sign-in under a different email than the order's save the order? | Landed as Q10: only the order's own email links it. Decided by the owner 2026-10-13 |
+| `grade10-site/store/order-detail` | Does a Google sign-in under a different email than the order's save the order? | Q10 |

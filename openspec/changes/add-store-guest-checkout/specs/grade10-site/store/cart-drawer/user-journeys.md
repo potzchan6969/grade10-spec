@@ -1,6 +1,6 @@
 ## ADDED User journeys
 
-### g10.store-cart-drawer.US10: Signed-out collector finds guest checkout first
+### g10.store-cart-drawer.US14: Signed-out collector finds guest checkout first
 
 **As a** signed-out collector whose cart is ready,
 **I want** Check Out as Guest as the primary action, with a quiet sign-in link under it,

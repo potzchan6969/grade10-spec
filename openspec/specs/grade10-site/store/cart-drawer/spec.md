@@ -533,6 +533,58 @@ authoritative reread resolves the accepted choice.
 - **THEN** the choice is read from the member cart and the drawer's live quote re-quotes both points and code
 - **AND** only accepted spendPoints and the existing code reach the checkout session the drawer creates
 
+### Requirement: A signed-out drawer leads with guest checkout
+
+A signed-out collector's drawer SHALL offer Check out as guest as its primary
+action, with a quiet Sign in link under it for points and rewards, and no
+extra step between them and Shopify's page. A guest SHALL see no points
+controls and no member's codes or rewards. Signing in from the drawer SHALL
+hand this browser's cart to the account and reopen the drawer on the same
+page, where points and the wallet then show.
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-1dq rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC50 - A signed-out drawer checks out as a guest
+**Serves:** g10.store-cart-drawer.US14 - Signed-out collector finds guest checkout first
+
+- **GIVEN** a signed-out collector with a reviewed browser cart
+- **WHEN** the drawer opens
+- **THEN** its primary action is Check out as guest, with a Sign in link under it
+- **AND** no points controls or member codes show
+- **AND** pressing Check out as guest sends a guest checkout for the reviewed lines
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-ftc rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC51 - Signing in from the drawer keeps the cart
+**Serves:** g10.store-cart-drawer.US11 - Collector signs in from the drawer and keeps the cart
+
+- **GIVEN** a signed-out collector with lines in the browser cart
+- **WHEN** they choose Sign in under the checkout action and complete sign-in
+- **THEN** the browser's lines merge into their member cart
+- **AND** the drawer reopens on the same page with points and their wallet codes
+
+### Requirement: The promo picker lists public codes to everyone
+
+The drawer's promo picker SHALL list the public codes the quote answers for
+the reviewed basket. A guest SHALL see the public codes alone. A member SHALL
+see them in one list with their own codes and rewards, the codes that fit
+first and the soonest to expire first among them, across both kinds.
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-f9m rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC52 - A guest picks a public code
+**Serves:** g10.store-cart-drawer.US12 - Guest applies a public code
+
+- **GIVEN** a signed-out collector and a live public code that fits the basket
+- **WHEN** they open the promo picker
+- **THEN** the public code is listed with no member section or loyalty call to action
+- **AND** picking or typing it applies it to the quote
+
+<!-- trace:scenario id=g10.store-cart-drawer.SC-7rc rev=1 -->
+#### Scenario: g10.store-cart-drawer.SC53 - A member sees public codes beside their own
+**Serves:** g10.store-cart-drawer.US13 - Member sees public codes beside their own
+
+- **GIVEN** a member holding a wallet code and a live public code
+- **WHEN** they open the promo picker
+- **THEN** both are listed under one heading, those that fit first and the soonest to expire first
+
 ### Requirement: Pending drawer operations hold actions until work ends
 
 The drawer SHALL disable quantity and removal, promo and points inputs and
