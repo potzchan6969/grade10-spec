@@ -31,6 +31,8 @@ type FilterPanelProps = {
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
   searchSuggestions?: readonly SearchSuggestionGroup[];
+  /** Suggestions for the draft are still on their way. */
+  searchPending?: boolean;
   onSearchCommit?: (value: string) => void;
   onSearchSuggestionSelect?: (
     suggestion: SearchSuggestion,
@@ -80,6 +82,7 @@ function FilterPanel({
   onSearchChange,
   onSearchClear,
   searchSuggestions,
+  searchPending,
   onSearchCommit,
   onSearchSuggestionSelect,
   groups,
@@ -113,6 +116,7 @@ function FilterPanel({
           onSearchClear={onSearchClear}
           onSearchCommit={onSearchCommit}
           onSearchSuggestionSelect={onSearchSuggestionSelect}
+          searchPending={searchPending}
           searchSuggestions={searchSuggestions}
           searchValue={searchValue}
           selection={selection}
