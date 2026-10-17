@@ -455,6 +455,7 @@ const VAULT_SITE_HEADER = {
     cart: "Cart",
     signIn: "Sign In",
     menu: "Menu",
+    search: "Search",
     menuTitle: "Menu",
     language: "Language",
     accountMenuLabel: "Account",

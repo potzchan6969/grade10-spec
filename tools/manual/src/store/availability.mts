@@ -95,7 +95,14 @@ export function projectAvailability(
   receipts: DeploymentReceipt[],
 ): EnvironmentReceiptSummary[] {
   const history = new Map<string, DeploymentReceipt[]>();
+  const seen = new Set<string>();
   for (const receipt of receipts) {
+    // A replayed receipt says nothing new: the same environment, ref and
+    // change, fingerprint and status read once, so a replay never turns a
+    // newly available change into a still available one.
+    const key = replayKey(receipt);
+    if (seen.has(key)) continue;
+    seen.add(key);
     const rows = history.get(receipt.environment) ?? [];
     rows.push(receipt);
     history.set(receipt.environment, rows);
@@ -192,4 +199,14 @@ export function projectAvailability(
       components: latest.components,
     };
   });
+}
+
+function replayKey(receipt: DeploymentReceipt): string {
+  return JSON.stringify([
+    receipt.environment,
+    receipt.resolvedRef,
+    receipt.changes
+      .map((one) => [one.change, one.fingerprint, one.status ?? "available"])
+      .sort(),
+  ]);
 }

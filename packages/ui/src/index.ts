@@ -449,6 +449,7 @@ export type {
   RewardMenuItem,
 } from "./blocks/loyalty-membership/types";
 export {
+  type WalletPassArtwork,
   WalletPassLinks,
   type WalletPassLinksCopy,
   type WalletPassLinksProps,
@@ -545,6 +546,13 @@ export {
   type StoreSectionHeaderProps,
 } from "./blocks/store-home/store-section-header";
 export type { StoreCollectionSummary } from "./blocks/store-home/types";
+// shared/ui/store-locator
+export {
+  StoreLocator,
+  type StoreLocatorCopy,
+  type StoreLocatorHoursRow,
+  type StoreLocatorProps,
+} from "./blocks/store-locator/store-locator";
 export { loyaltyPointsHeading } from "./blocks/store-order-detail/loyalty-points-heading";
 // shared-ui/store-order-detail
 export {

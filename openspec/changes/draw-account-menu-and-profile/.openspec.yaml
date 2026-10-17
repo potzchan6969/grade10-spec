@@ -1,6 +1,13 @@
 schema: grade10-planning
 created: 2026-10-07
+design_waived: the site's one change passes an image the profile read already answers to a prop the header already takes; no new service, table or contract
 hands:
   pm: "@ecchochan"
 awaiting:
   specs: 2026-10-08, requirement deltas for the menu avatar, from /planning-dev - @ecchochan
+reviewed:
+  proposal: 51a20e9d
+  decisions: a336a539
+  user-journeys: ac397561
+  specs: 4a7cb479
+  tasks: 60fd004b

@@ -168,11 +168,16 @@ describe("a decisions row nobody has settled", () => {
     expect(entry.questions?.some((one) => one.id === "Q1")).toBe(false);
   });
 
-  it("counts the raised rows that landed nowhere", () => {
-    // What a `Landed` cell says is the `raised` rule's to judge; an empty one
-    // is what is read here. The header, the rule under it and the template's
-    // own commented placeholders are not rows anybody asked.
-    expect(changeWith("").raisedOpen).toBe(1);
+  it("shared-planning-change-stages-SC-88 - lists no open Raised row as an open question", () => {
+    // `Which day is a tier judged on?` has landed nowhere: it holds
+    // acceptance, which `spec:accept` names, and is no question a count, My
+    // turn or the digest lists.
+    const entry = changeWith("");
+
+    expect(
+      entry.questions?.some((one) => one.text.includes("tier judged")),
+    ).toBe(false);
+    expect(entry).not.toHaveProperty("raisedOpen");
   });
 
   it("counts every open row against the decisions", () => {

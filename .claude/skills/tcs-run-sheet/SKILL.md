@@ -14,8 +14,7 @@ description: Pick cases for a manual pass, print a trial Google Sheet, and final
 | Finalized | Human-confirmed snapshot; one message-only print commit, reusing the current feature branch |
 | Merged | Immutable; a later pass is a new run |
 
-The durable boundary is [The Run Sheet](../../../docs/governance/specs-to-test-cases.md#the-run-sheet).
-Execution results stay in Sheets. A structured commit message records printed case identities and revisions.
+Execution results stay in Sheets, never in a suite or a print commit. A structured commit message records printed case identities and revisions.
 
 The print target chooses the spreadsheet. The test environment says where the tester
 executes the cases. Printing to PROD Sheet does not mean testing against `prod`.
@@ -32,6 +31,28 @@ normalize to `staging-1` and `prod` for new selections.
 - **Judgment** — read the capability's spec, journeys, feature suite and relevant domain suite; resolve the request to explicit ids
 - **Intentional exclusions** — record ids and reasons in a JSON array, `[{"id":"...","reason":"..."}]`. Several ids may use the same reason. The array removes cases from property-filter selections. An id cannot be both explicitly selected and excluded. Natural filter exclusions need no individual reason. Intentionally removing an eligible case from an explicit reprint list requires a reason
 - **Copied runs** — `--copy-run <id>` takes a merged run's ids, resolves the latest accepted cases and creates a new run. Missing or deprecated ids stop for a revised selection. The new record names its source run
+
+## Filter Semantics
+
+This is the reference for filter behaviour, not a claim that the command or Sheet implements it. Filter implementation and validation are separate work.
+
+| Selection | Combines With | Meaning |
+| --- | --- | --- |
+| Different fields | AND | A case meets every selected field condition |
+| Multiple Suites | AND | A case carries every selected suite tag |
+| Multiple Severity values | OR | A case has any selected severity |
+
+```text
+Domain = auction
+AND Suites contains acceptance
+AND Type = functional
+AND Severity IN (blocker, critical)
+```
+
+- **Result** — functional cases in the auction domain and acceptance set whose severity is blocker or critical
+- **More suite tags** — adding prod also requires production suitability; it can only retain or reduce the result set
+- **Sheet visibility** — filtering changes which cases are shown, not whether a case is excluded from the run, executed or passed
+- **Other multi-select fields** — this reference does not settle their semantics
 
 ## Printing
 
@@ -140,5 +161,6 @@ Configure `tcs/run-finalized` as a required PR check.
 
 - **Credentials** — only the workflow writes Sheets. Do not edit layout by hand; change `scripts/openspec/lib/run-sheet-layout.mjs`
 - **Results** — never put execution results into suites or print commits
+- **A failed row** — the sheet posts nothing itself. QA says it in one sentence in the change's thread, naming the case id and what failed; the sheet keeps the row marked failed
 - **Tabs** — never delete other runs, clear Summary, or rename tabs manually
 - **Verification** — test the writer with fixtures or sandbox only after its coverage is confirmed. Never dispatch a production print to validate code changes

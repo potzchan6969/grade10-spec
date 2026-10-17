@@ -49,12 +49,8 @@ See [Non-Goals](decisions.md#non-goals).
 ## Impact
 
 - **Application** - nothing moves for the for-sale-first order or for a price
-  order on the lowest price of every variant: both run. A price order on the
-  tile's price, if Q2 lands there, changes
-  `packages/grade10-store/backend/src/services/catalog/` and owes a technical
-  design. Inside a collection the shop's own price sort orders the cards
-  (`collection.ts:26-35`), so the tile's price there needs the store to order
-  the collection itself
+  order on the lowest price of every variant: both run, and the store's
+  catalog tests hold them
 - **Cases** - every listing case that expects the lowest-priced card first is
   read again against the for-sale grouping
 - **Overlap** - `add-store-product-status` carries no ordering requirement and
@@ -63,8 +59,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Open Questions
 
-- ❓ **Price order basis** - Product: does a price order sort on the price the
-  tile shows? Recommended: yes (Q2)
+None. The price order's basis is settled as it runs (Q2).
 
 ## References
 

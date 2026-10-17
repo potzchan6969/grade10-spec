@@ -2,3 +2,11 @@ schema: grade10-planning
 promoted_by: "@sean"
 created: 2026-09-10
 decisions_waived: "legacy change - decisions cannot be restored from past planning sessions"
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped, 2026-10-17; awaiting the submodule bump, the fold at acceptance and archive"
+reviewed:
+  proposal: 6533f601
+  ui-design: 5378307a
+  user-journeys: 714d1f7d
+  tech-design: 6e6b0886
+  specs: 95a1858a
+  tasks: f1f05809

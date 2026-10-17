@@ -466,7 +466,7 @@ artifacts:
   - id: tech-design
     required: false
     teammate: engineer
-    hand: tech
+    hand: dev
     # `tech-design.md` is `.claude/agents/tech.md`'s own subject, so its four
     # readings (`system-design.md`'s "Where a Reader Applies It" row) run
     # every round, whatever the draft touched.
@@ -964,7 +964,6 @@ artifacts:
       - decisions
       - user-journeys
       - ui-design
-      - tech-design
   - id: tasks
     required: true
     teammate: engineer

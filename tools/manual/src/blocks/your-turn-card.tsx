@@ -129,7 +129,7 @@ export function YourTurnCard({
         {/* The first hand the stage waits on, read from this card's own
          * `handOf`, so Proposed's second half opens on the designer rather
          * than back on the product manager. A stage that names nobody —
-         * Designed, Released, Archived — opens on the first of the six, which
+         * Designed, Released, Archived — opens on the first of the five, which
          * is a reader naming a hand for a stage still to come. */}
         <Assign change={change} role={roles[0] ?? ROLES[0]} />
       </CardContent>

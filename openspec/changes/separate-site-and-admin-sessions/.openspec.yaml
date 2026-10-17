@@ -2,3 +2,12 @@ schema: grade10-planning
 created: 2026-10-06
 hands:
   dev: "@seankcw"
+reviewed:
+  proposal: 860ae621
+  decisions: f504840f
+  user-journeys: 6f16c858
+  ui-design: fc80fd81
+  tech-design: fc80fd81
+  specs: 710b8869
+  test-cases: 6278661d
+  tasks: e4a0e579

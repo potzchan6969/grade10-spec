@@ -1,0 +1,37 @@
+{
+  "heading": "位置及營業時間",
+  "hoursHeading": "營業時間",
+  "mapTitle": "香港 Grade10 商店地圖",
+  "openMap": "在 Google 地圖開啟香港 Grade10 商店",
+  "address": "香港銅鑼灣白沙道13號",
+  "hours": {
+    "monday": {
+      "day": "星期一",
+      "hours": "上午11時 – 晚上9時"
+    },
+    "tuesday": {
+      "day": "星期二",
+      "hours": "上午11時 – 晚上9時"
+    },
+    "wednesday": {
+      "day": "星期三",
+      "hours": "上午11時 – 晚上9時"
+    },
+    "thursday": {
+      "day": "星期四",
+      "hours": "上午11時 – 晚上9時"
+    },
+    "friday": {
+      "day": "星期五",
+      "hours": "上午11時 – 晚上9時"
+    },
+    "saturday": {
+      "day": "星期六",
+      "hours": "上午11時 – 晚上9時"
+    },
+    "sunday": {
+      "day": "星期日",
+      "hours": "上午11時 – 晚上9時"
+    }
+  }
+}

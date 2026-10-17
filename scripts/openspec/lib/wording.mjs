@@ -124,10 +124,61 @@ export function toldBodyOf(at, role, { linked }) {
   return { kind: "your-turn", text: lines.join("\n") };
 }
 
-/** The artifact that is behind, and what moved before it. */
-export function behindText(behind, linked) {
-  const changed = behind.changed.map((one) => `\`${one}\``).join(", ");
-  return `*Behind* — \`${behind.artifact}\` on ${linked} is behind ${changed || "what it was drawn from"}.`;
+/**
+ * What moved before one person's artifacts, in one message: each artifact the
+ * landing reached, each unit that moved quoted before and after with its
+ * class, and which of them holds the next landing. A move that could not be
+ * split names the item it sits in and is read again whole.
+ */
+export function movedText(told, linked) {
+  const artifacts = told.behind.map((one) => `\`${one.artifact}\``);
+  const lines = [`*What moved* on ${linked}, before ${artifacts.join(", ")}`];
+  const quoted = new Set();
+  for (const behind of told.behind) {
+    for (const one of behind.moved) {
+      const unit = `${one.item}\u0000${one.key}\u0000${one.after ?? ""}`;
+      if (quoted.has(unit)) continue;
+      quoted.add(unit);
+      lines.push(movedLine(one));
+    }
+  }
+  const holding = told.behind.filter((one) => one.holds);
+  lines.push(
+    holding.length > 0
+      ? `Holds every landing after ${holding.map((one) => `\`${one.artifact}\``).join(", ")} until you read it again or land it.`
+      : "Holds nothing but the fold: read it again when you can.",
+  );
+  return lines.join("\n");
+}
+
+/** One unit that moved: where it sits, its class, and what it read before
+ * and after — a unit with neither side quoted is the whole item. */
+function movedLine(one) {
+  const where =
+    one.key === one.item ? `\`${one.item}\`` : `\`${one.item}\` ${one.key}`;
+  const kind = one.major ? "major" : "small";
+  if (one.before === undefined && one.after === undefined)
+    return `${where}, ${kind} — read it again whole`;
+  const sides = [
+    `before: ${one.before === undefined ? "(none)" : clip(one.before)}`,
+    `after: ${one.after === undefined ? "(removed)" : clip(one.after)}`,
+  ];
+  return `${where}, ${kind} — ${sides.join(" — ")}`;
+}
+
+/** A quote cut to what one line of a message holds. */
+function clip(text) {
+  const flat = text.replace(/\s+/g, " ").trim();
+  return flat.length > QUOTE ? `${flat.slice(0, QUOTE - 1)}…` : flat;
+}
+
+const QUOTE = 200;
+
+/** The label a chip and a row give one behind artifact: what moved, and
+ * whether it holds the next landing. */
+export function behindLabelOf(behind) {
+  if (behind.whole) return `read again against ${behind.changed.join(", ")}`;
+  return `${behind.changed.join(", ")} moved — ${behind.holds ? "holds the next landing" : "small, holds only the fold"}`;
 }
 
 /** A hand as a thread names it: `@<handle> (<role>)`, or `<role> (open)`

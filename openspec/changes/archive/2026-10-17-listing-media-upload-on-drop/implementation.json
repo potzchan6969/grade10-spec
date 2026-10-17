@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "5bc68c01684451d3072a506077d169f6a91c802c769d0e95e6e50ab8710eea2d"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "ef68697f380af32a4c6dcd30f49699b77475c32b",
+    "capturedAt": "2026-10-06T05:05:16.205Z",
+    "targets": [
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: An operator confirms an image before it is stored",
+          "Requirement: An operator stores a chosen image without confirmation"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": [
+    {
+      "repository": "9gag/grade10",
+      "commit": "ea765d7ba722eb6aef58eb29f1125570ae767679",
+      "components": [
+        "admin"
+      ]
+    }
+  ],
+  "compatibilityAcknowledgement": {
+    "reviewedBy": "claude-agent (vault-grading stream, on the owner's delegation)",
+    "reviewedAt": "2026-10-16T10:00:00.000Z",
+    "changes": [
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/spec.md",
+        "anchors": [
+          "Feature set"
+        ],
+        "classification": "semantic",
+        "reason": "The Confirm before store line left with this change's own fold, and Strip by width arrived from the lot gallery redesign; neither moves upload on drop, replacement, refusal or order persistence, which this change delivered.",
+        "evidence": [
+          "packages/frontend-console/src/MediaGallery.test.tsx",
+          "packages/grade10-auction/admin-frontend/src/features/catalog/listings/presentation/views/dialog/MediaDialog.test.tsx"
+        ]
+      },
+      {
+        "path": "openspec/specs/grade10-site/auction/listing-media/feature-tcs.md",
+        "anchors": [],
+        "classification": "editorial",
+        "reason": "The suite was regenerated with executable walk routes, parameterized test data and quoted case ids; no case this change decides changed its expectation."
+      }
+    ]
+  }
+}

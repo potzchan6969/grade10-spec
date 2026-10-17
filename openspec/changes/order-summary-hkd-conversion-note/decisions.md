@@ -21,6 +21,7 @@
 | Q2 | May the summary name the rate? | Yes, once, in the note — the fixed 7.85 rate is the fact the winner needs to check the conversion; every other page, invoice, receipt and letter still names none | "Grade10 SHALL show the rate on no page, invoice, receipt or letter" holding against the note |
 | Q3 | Which USD figure does the note name? | The converted lines' USD total — a card fee computed in HKD adds nothing to it; a bank fee typed in USD counts as a converted line | The order's payable total, or the winning bid alone |
 | Q4 | How does the contract take it? | `summary.total.footnote`, the existing muted note under the Order Total row; no new prop, no state in the block | A dedicated `conversionNote` prop, or the `currencyToggle` prop added for the retracted change |
+| Q5 | Do `summary.convertedTotal` and `summary.convertedFee` leave `AuctionWinnerOrder`'s contract? | No, not in this change. Decided by agent, 2026-10-16: the Winner Order page supplies neither, so the block draws one Order Total and the note; the props stay in `shared/ui/auction-order` until a contract change retires them with their scenarios `shared-ui-auction-order-SC-27`, `-SC-28` and `-SC-30` | Removing them here, which amends an accepted block contract this proposal's Impact does not name |
 
 ## Raised
 

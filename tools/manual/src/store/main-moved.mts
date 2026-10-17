@@ -84,6 +84,7 @@ export function originMain(
 ): OriginMain {
   let readAt = 0;
   let fetchedAt: string | undefined;
+  let failed = false;
   /** The pull that is running, while one is. */
   let running: Promise<PullOutcome> | null = null;
 
@@ -98,8 +99,10 @@ export function originMain(
     try {
       await call(root, ["fetch", "origin", MAIN], OVER_THE_NETWORK);
     } catch {
+      failed = true;
       return;
     }
+    failed = false;
     fetchedAt = at;
   };
 
@@ -110,6 +113,7 @@ export function originMain(
       ...counts,
       dirty,
       ...(fetchedAt === undefined ? {} : { fetchedAt }),
+      ...(failed && fetchedAt !== undefined ? { stale: true as const } : {}),
     };
   };
 

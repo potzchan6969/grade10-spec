@@ -1,7 +1,6 @@
 # grade10-site/store/membership Test Cases
 
 **Status:** pending-review · 0/0
-**Drafts styled:** 2026-10-17, tcs-rules r4
 
 ## Reconciliation
 

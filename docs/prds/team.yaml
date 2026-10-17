@@ -26,31 +26,31 @@ handles:
     roles: [design]
   htonyl: # @tony on Slack
     email: tony@9gag.com
-    roles: [tech, dev]
+    roles: [dev]
   ecchochan: # @echo on Slack
     email: ecchochan@gmail.com
-    roles: [pm, tech, dev]
+    roles: [pm, dev]
   seankcw: # @sean on Slack
     email: seankcw@gmail.com
-    roles: [tech, dev]
+    roles: [dev]
   kinisworking: # @kin on Slack
     email: kin@9gag.com
-    roles: [tech, dev]
+    roles: [dev]
   mason5991: # @mason on Slack
     email: mason@9gag.com
-    roles: [tech, dev]
+    roles: [dev]
   gareth0712: # @gareth on Slack
     email: gareth_0712@hotmail.com
-    roles: [tech, dev]
+    roles: [dev]
   rita-liu: # @rita.liu on Slack
     email: runjing.liu@gmail.com
-    roles: [tech, dev]
+    roles: [dev]
   caspertsang99: # @casper on Slack
     email: casper@9gag.com
-    roles: [tech, dev]
+    roles: [dev]
   cheunglok97: # @william on Slack
     email: wowcheunglok@gmail.com
-    roles: [tech, dev]
+    roles: [dev]
   chloe9gag: # @chloe on Slack
     email: chloe@9gag.com
     roles: [qa]

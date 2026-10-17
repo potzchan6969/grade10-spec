@@ -13,7 +13,7 @@ from, and the record and letters that follow their lots.
 Every Grade10 listing is absolute — no reserve and no buy-now price — and the
 highest accepted bid at the close wins it.
 
-🚧 An admin sets a time for Grade10 to commit the house maximum. Before that
+An admin sets a time for Grade10 to commit the house maximum. Before that
 time the house is not in the bidding. The house then bids under a listing
 pseudonym like any collector, and a lot it leads at close reads sold to
 collectors. Collectors do not see that the bidder is the house - [Internal
@@ -24,8 +24,8 @@ Bid](/p/grade10-admin/auction/internal-bid)
 | Bidding window | From the scheduled start to the recorded close |
 | Extension duration | **30 minutes** by default, set per listing; **0** turns extended bidding off |
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
-| 🚧 Bid currency | **USD** for every lot; a collector always types USD — [Currencies](#currencies) |
-| 🚧 Bid ceiling | **USD 10,000,000** on every lot |
+| Bid currency | **USD** for every lot; a collector always types USD — [Currencies](#currencies) |
+| Bid ceiling | **USD 10,000,000** on every lot |
 | 🚧 Verified bidder | A bid of **USD 15,000** or more, or any new or raised maximum from an account Grade10 asked to verify - [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Card | The card on file; nothing is held or charged on it when a collector bids, and only the winner pays, by the invoice on their order |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
@@ -36,13 +36,13 @@ Auction bids use USD. Winners choose USD or HKD for settlement.
 
 | | Bid currency | Settlement currency |
 | --- | --- | --- |
-| Which | 🚧 **USD** | 🚧 **USD** or **HKD** |
+| Which | **USD** | **USD** or **HKD** |
 | Chosen by | Fixed for every lot | The winner, once, at [Order Setup](/p/grade10-site/auction/post-bidding#order-setup) |
 | What it is for | The unit of every lot, bid and maximum | What the invoice, order total, fees and letters are paid in |
 
 - 🚧 **One unit for every lot** — a bid, a maximum, a quick bid, the ceiling
   and the increment are all USD; no lot is priced in another currency
-- 🚧 **Settlement currency** — a USD fact becomes an HKD fact only at
+- **Settlement currency** — a USD fact becomes an HKD fact only at
   settlement, at one fixed rate — [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
 
 ### Extended Bidding
@@ -111,7 +111,7 @@ increment is 100:
   only by beating it
 - **Raise only** — a collector's maximum goes up at any time and never down,
   because lowering would withdraw a commitment others have bid against
-- 🚧 **House maximum lowered** - the house maximum may go down, only while the
+- **House maximum lowered** - the house maximum may go down, only while the
   leader and the current bid stay as they are and never below a bid already
   placed for the house
 - **Own standing** — a bidder reads their maximum, the current bid and whether
@@ -149,7 +149,7 @@ lower bound. Grade10 sets one schedule, and no listing overrides it.
 | A bidder offers more | $100 | $105 | $120 is accepted as $120; nothing rounds it to a multiple |
 | Lot at the ceiling | $10,000,000 | — | Every further bid is refused |
 
-- 🚧 **One schedule** — the USD tiers above apply to every lot
+- **One schedule** — the USD tiers above apply to every lot
 - **What a collector sees** — the next minimum for the lot, never the
   schedule
 - **A first maximum** — must reach the opening price, and the public price it
@@ -185,9 +185,10 @@ any maximum.
 - **An answer lost on the way** — when a bid's answer never arrives, the bid
   reads as placed if the bidder's standing holds it, and the bid form says
   **Could not place this bid.** if it does not
-- 🚧 **Restricted region** — a bid, watch or order action sent from a region
-  where auctions are not offered is refused before the auction hears of it;
-  the restriction page, not a bid-form line, is the answer
+- **Restricted region** — a bid or a watch sent from a region where auctions
+  are not offered is refused before the auction hears of it; the restriction
+  page, not a bid-form line, is the answer. A winner's order stays open there,
+  so a won lot is settled, and unwatching or muting alerts is never refused
 
 ## Auction Panel
 
@@ -201,8 +202,8 @@ Blocks](/p/shared/ui/auction-listing).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid or from their own maximum when they lead; before any bid, chip **1×** is the opening price itself, the next eligible bid |
 | Custom maximum | Whole USD units only, up to the USD bid ceiling; extra typed digits stop, and an oversized paste or replacement becomes the ceiling silently |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
-| Chips beyond the ceiling | 🚧 A quick bid above the ceiling is offered at the ceiling, captioned as the limit; duplicates collapse to one chip |
-| Nothing left to offer | 🚧 Their maximum at the ceiling, or the lot's next minimum above it, collapses the chips, custom field and bid action to the amount reached and a limit line; the buyer-fee line stays |
+| Chips beyond the ceiling | A quick bid above the ceiling is offered at the ceiling, captioned as the limit; duplicates collapse to one chip |
+| Nothing left to offer | Their maximum at the ceiling, or the lot's next minimum above it, collapses the chips, custom field and bid action to the amount reached and a limit line; the buyer-fee line stays |
 
 :::flow{title="From sign-in to a standing bid"}
 ## *Collector* — **Opens a live lot**
@@ -302,7 +303,7 @@ account's bids address; signed out, sign-in runs first.
 One record of every lot a collector bookmarks, by watching or by bidding, and
 the letters that follow those lots.
 
-🚧 On a small viewport, My Auctions shows the same lots and actions as the
+On a small viewport, My Auctions shows the same lots and actions as the
 table without horizontal scrolling; each lot is a stacked card below `md`.
 
 | Rule | Value |
@@ -406,7 +407,7 @@ the account's registered address, and the letters about a won lot are
   non-winner letter, and a collector winner gets only the auction-won order
   letter; an internal bidder's order sends no letter to anyone - [Post-Bidding ·
   The Close](/p/grade10-site/auction/post-bidding#the-close)
-- 🚧 **House bids** - collectors outbid by the house get the ordinary outbid
+- **House bids** - collectors outbid by the house get the ordinary outbid
   letter, other enrolled bidders get the ordinary new-bid letter, and losing
   bidders and watchers get the ordinary close letters. No letter names the
   house - [Internal Bid](/p/grade10-admin/auction/internal-bid)
@@ -495,7 +496,7 @@ surface.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Absolute sale | 🚧 In flight | No reserve and no buy-now price; the highest accepted bid at the close wins, and that bid may be the house's internal bid. The house bids under a listing pseudonym and is not disclosed; Legal confirms the auction terms wording before release. Replaces "No reserve and no buy-now price; the highest accepted bid at the close wins." Disclosing the house bid was ruled out, because it tells a collector when to stop. | Product (@htonyl) |
-| Internal bid, lowered | 🚧 In flight | A house maximum already committed may go down only when the leader and the current bid stay as they are, and never below a bid already placed for the house. Collector maximums stay raise only. | Product (@htonyl) |
+| Internal bid, lowered | Decided | A house maximum already committed may go down only when the leader and the current bid stay as they are, and never below a bid already placed for the house. Collector maximums stay raise only. | Product (@htonyl) |
 | Extended bidding | Decided | Starts at the scheduled close for a listing with a bid, runs 30 minutes by default, restarts on each accepted bid that moves the price, and ends at the listing's optional cap. A listing with no bid, or with the duration or the cap set to 0, closes on schedule. Replaces "restarts on every accepted bid", which let a leader keep a lot open by raising their own maximum. | Product |
 | A bid counts when accepted | Decided | A bid stands when it is judged under the lot's lock, and nothing waits on the card. Replaces "a bid counts when its payment confirms", which kept a pending bid and an Authorizing… state. | Product |
 | My Auctions price | Decided | A bidding row shows the auction's current or final price, as Bidding History does, and the standing after the close comes from the recorded result. The collector's own last bid was ruled out: a losing bidder misreads what the lot sold for. | Product |
@@ -503,20 +504,20 @@ surface.
 | Public Recent bids Winner | 🚧 In flight | After close sold, public Recent bids mark the winning row with a primary crown after the amount; every row tied on amount with a row above it shows an Info tip in the amount tone (when maximums match, the earlier one leads), at the current price and at any older tie lower down. Live lots keep leading as first-row treatment only, with no winner crown. | Product and design (@tangconst) |
 | Public Recent bids avatar | Decided | Each public Recent Bids avatar shows one letter from the bidder email local part (first A-Z or 0-9, uppercased; `B` when none or the email is erased). Readable label stays Bidder N. Full email and name stay private. Separate public field from the label. | Product (@mason5991) |
 | Hidden cap, raise only | Decided | A leading maximum is not public; a collector's can go up but never down. | Product |
-| Increments | 🚧 In flight | Grade10 owns one USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
-| Bid ceiling | 🚧 In flight | USD 10,000,000 on every lot, refused above it. The custom field uses that same ceiling. | Product |
+| Increments | Decided | Grade10 owns one USD schedule for every lot, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
+| Bid ceiling | Decided | USD 10,000,000 on every lot, refused above it. The custom field uses that same ceiling. | Product |
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
 | A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the USD ceiling, which shows no maximum-bid message. | Product |
 | Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the USD ceiling; never in the bidder's record. | Product and engineering |
 | An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
 | Verified bidder | 🚧 In flight | A bid of USD 15,000 or more, or any new or raised maximum from an account Grade10 asked to verify, needs what is asked, checked by the storefront before the auction hears of the bid. | Product |
-| Bid currency | 🚧 In flight | USD is the single bid currency for every lot. Winners choose USD or HKD settlement. Chosen over per-lot bid currencies, which made bids incomparable and required separate increments and ceilings. | Product |
-| Existing lots | 🚧 In flight | Every existing lot is test data: its currency is overwritten to USD with the amounts unchanged and no conversion. | Product |
+| Bid currency | Decided | USD is the single bid currency for every lot. Winners choose USD or HKD settlement. Chosen over per-lot bid currencies, which made bids incomparable and required separate increments and ceilings. | Product |
+| Existing lots | Decided | Every existing lot is test data: its currency is overwritten to USD with the amounts unchanged and no conversion. | Product |
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You’re only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
 | Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only. | Product |
 | Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment - from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1. Custom entry uses the USD ceiling: extra typed digits retain the prior draft, an oversized paste or replacement becomes the ceiling, and no maximum-bid message appears. Replaces the universal 9,999,999,999 field cap and restore-only rule, following [the owner's decision](https://github.com/9gag/grade10/issues/1008#issuecomment-6076137634). | Product (@tangconst) |
-| Ceiling reached | 🚧 In flight | A quick bid computed above the ceiling is offered at the ceiling, captioned as the limit; when no legal amount remains — the collector's maximum already at it, or the lot's next minimum above it — chips, custom field and bid action collapse to the amount reached and a line that the auction accepts no higher amount, with the buyer fee still shown. Keeping the controls disabled was ruled out: every number they showed was above what the auction accepts. | Product (@tangconst) |
+| Ceiling reached | Decided | A quick bid computed above the ceiling is offered at the ceiling, captioned as the limit; when no legal amount remains — the collector's maximum already at it, or the lot's next minimum above it — chips, custom field and bid action collapse to the amount reached and a line that the auction accepts no higher amount, with the buyer fee still shown. Keeping the controls disabled was ruled out: every number they showed was above what the auction accepts. | Product (@tangconst) |
 | Buyer fee on the panel | Decided | The 20% rate is disclosed under the bid action, never behind a tooltip; the amount first appears on the invoice. | Product |
 | Your bidding | Decided | The lot's personal dialog: two tabs, Bid placed then Your maximums, amount and time only, owner only; the live maximum stays on the panel. | Product |
 | Watch ≠ email alerts | Decided | Watch is list membership; email alerts are a per-lot preference, on by default when watched, off on unwatch; mute is not unwatch. An account-wide Auction email alerts switch covers every lot without clearing lists. | Product |
@@ -532,6 +533,6 @@ surface.
 | Card line on the non-winner letter | Decided | The letter omits it; My Auctions says the card was not charged. | Product |
 | Send-log retention | Decided | 90 days. Troubleshooting only; Resend keeps the durable trail. | Engineering |
 | One-hour reminder | Decided | Dropped. Bidding closes in 24 hours is the last warning before close; extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
-| Restricted regions | 🚧 In flight | A region where auctions are not offered sees no auction entry point — the Auction nav item, account-menu auction items, watch controls and My Auctions included — and a direct auction address answers the restriction page. Bids, watches and order actions from that region are refused before the auction hears of them. | Product |
-| Restricted collector with open commitments | ❓ Open | Whether a signed-in collector in a restricted region who holds a standing bid, a watched lot or an unpaid winner invoice keeps read access to My Auctions and the order to settle it, or loses the auction surface entirely. The spec drafts assume read-only access to commitments already made; Product confirms. | Product |
+| Restricted regions | Decided | A region where auctions are not offered sees no auction entry point — the Auction nav item, account-menu auction items, watch controls and My Auctions included — and a direct auction address answers the restriction page. Bids and watches from that region are refused before the auction hears of them. The regions are CU, IR, KP and SY, ❓ Product and legal confirm the list. | Product |
+| Restricted collector with open commitments | Decided | A winner's order and invoice stay open with their address, payment and proof actions, so money already won is settled; unwatching and muting alerts stay open. My Auctions, the bidding history, standings and new bids are refused. | Engineering (agent) |
 :::

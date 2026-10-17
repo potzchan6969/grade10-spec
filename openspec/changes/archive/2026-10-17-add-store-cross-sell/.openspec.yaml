@@ -1,0 +1,17 @@
+schema: grade10-planning
+promoted_by: "@htonyl"
+created: 2026-09-21
+hands:
+  pm: "@jeffffej0909"
+  design: "@ecchochan"
+  qa: "@ecchochan"
+  dev: "@ecchochan"
+depends_on:
+  - redesign-store-product-detail-page
+reviewed:
+  proposal: fdad9af4
+  decisions: 6b1f6ffe
+  ui-design: "96073965"
+  tech-design: "96073965"
+  specs: 97fb84e5
+  test-cases: 0be77ae0

@@ -56,7 +56,12 @@
     "blocked": "付款前请先修正标记的项目。",
     "removed": "商店已不再销售的 {count} 项已从购物车中移除。",
     "remove": "移除",
-    "writeFailed": "你的更改没有送达商店。请再试一次。"
+    "writeFailed": "你的更改没有送达商店。请再试一次。",
+    "soldOut": "{title} 已售罄。",
+    "unavailable": "{title} 已不再销售。",
+    "reduced": "{title}：仅剩 {count} 件，已减少你的数量。",
+    "repriced": "{title} 现价 {price}。",
+    "filledShort": "{title}：商店只能供应 {count} 件。"
   },
   "line": {
     "soldOut": "已售罄",
@@ -80,7 +85,9 @@
     "wrong_channel": "此优惠码不能在这里使用。",
     "birthday_unavailable": "此优惠码要等计划记录了你的生日才可使用。",
     "not_eligible": "此优惠码不能用于此购物车。",
-    "idempotency_conflict": "此优惠码正用于另一个结账，请稍后再试。",
+    "idempotency_conflict": "此优惠码已用于另一张订单。",
+    "held_elsewhere": "较早的一张订单仍带着此优惠码。",
+    "took_too_long": "此结账处理时间过长，请再提交一次。",
     "one_coupon": "每单只可用一个优惠码。",
     "riding_elsewhere": "此优惠码已用于另一个未完成的结账。",
     "no_tender": "这里不能使用奖励优惠码。",

@@ -33,7 +33,7 @@ const TEAM = `handles:
   ecchochan:
     email: ecchochan@gmail.com
     slack: U0PM
-    roles: [pm, tech, dev]
+    roles: [pm, dev]
   kinisworking:
     slack: U0DEV
     roles: [dev]
@@ -1220,34 +1220,54 @@ describe("a landing on a word", () => {
 });
 
 describe("a landing on a read again", () => {
-  it("shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word", async () => {
+  it("shared-planning-agent-rounds-SC-77 - a read again lands on its hand's word", async () => {
     const relay = harness({
       compare: { body: { files: [{ filename: RECORD_PATH }] } },
       files: {
         ...FILES,
-        [`${RECORD_PATH}@${SHA}`]: `${RECORD}  tech-design: 5e6f7a8b\n`,
+        [`${RECORD_PATH}@${SHA}`]: `${RECORD}  proposal: 5e6f7a8b\n`,
         [`${RECORD_PATH}@main`]: RECORD,
       },
     });
-    await landing(relay, "hold on");
+    await landing(relay);
     const before = relay.mark();
     const response = await relay.send(CHANGE_ROOM, {
       op: "land",
       wake: 1,
       sha: SHA,
       kind: "reviewed",
-      artifact: "ui-design",
+      artifact: "proposal",
     });
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ landed: SHA });
-    // No word, so no team map and no schema: the record at both ends is all
-    // this landing reads.
     expect(relay.hostCalls(before).map((call) => call.url)).toEqual([
       `https://api.github.com/repos/9gag/grade10-spec/compare/main...${SHA}`,
+      `https://api.github.com/repos/9gag/grade10-spec/contents/${SCHEMA_PATH}?ref=${SHA}`,
       `https://api.github.com/repos/9gag/grade10-spec/contents/${RECORD_PATH}?ref=main`,
       `https://api.github.com/repos/9gag/grade10-spec/contents/${RECORD_PATH}?ref=${SHA}`,
       "https://api.github.com/repos/9gag/grade10-spec/git/refs/heads/main",
     ]);
+  });
+
+  it("moves nothing for a read again nobody said land on", async () => {
+    const relay = harness({
+      compare: { body: { files: [{ filename: RECORD_PATH }] } },
+      files: {
+        ...FILES,
+        [`${RECORD_PATH}@${SHA}`]: `${RECORD}  proposal: 5e6f7a8b\n`,
+        [`${RECORD_PATH}@main`]: RECORD,
+      },
+    });
+    await landing(relay, "hold on");
+    const response = await relay.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "reviewed",
+      artifact: "proposal",
+    });
+    expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({ reason: "word-not-said" });
   });
 
   it("moves nothing where the record says more than reviewed", async () => {
@@ -1255,17 +1275,17 @@ describe("a landing on a read again", () => {
       compare: { body: { files: [{ filename: RECORD_PATH }] } },
       files: {
         ...FILES,
-        [`${RECORD_PATH}@${SHA}`]: `${RECORD.replace("@ecchochan", "@dee")}  tech-design: 5e6f7a8b\n`,
+        [`${RECORD_PATH}@${SHA}`]: `${RECORD.replace('proposal: "@ecchochan"', 'proposal: "@kinisworking"')}  proposal: 5e6f7a8b\n`,
         [`${RECORD_PATH}@main`]: RECORD,
       },
     });
-    await landing(relay, "hold on");
+    await landing(relay);
     const response = await relay.send(CHANGE_ROOM, {
       op: "land",
       wake: 1,
       sha: SHA,
       kind: "reviewed",
-      artifact: "ui-design",
+      artifact: "proposal",
     });
     expect(response.status).toBe(403);
     expect(await response.json()).toEqual({ reason: "not-only-reviewed" });
@@ -1278,12 +1298,12 @@ describe("a landing on a read again", () => {
         ...FILES,
         [`${RECORD_PATH}@${SHA}`]: RECORD.replace(
           "reviewed:\n  ui-design: 1a2b3c4d\n",
-          "reviewed:\n  tech-design: 5e6f7a8b\n",
+          "reviewed:\n  proposal: 5e6f7a8b\n",
         ),
         [`${RECORD_PATH}@main`]: RECORD,
       },
     });
-    await landing(relay, "hold on");
+    await landing(relay);
     expect(
       await (
         await relay.send(CHANGE_ROOM, {
@@ -1291,7 +1311,7 @@ describe("a landing on a read again", () => {
           wake: 1,
           sha: SHA,
           kind: "reviewed",
-          artifact: "tech-design",
+          artifact: "proposal",
         })
       ).json(),
     ).toEqual({ reason: "reviewed-line-removed" });

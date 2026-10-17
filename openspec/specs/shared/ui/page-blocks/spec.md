@@ -3,17 +3,18 @@
 ## Purpose
 
 The page parts every site page composes rather than drawing its own: a
-titled card of facts and its loading cards, a list of short lines, a rail of
-stages, and an empty panel. The vault's collector pages and grading's
-collector pages both compose them, so neither draws cards, lists, tables,
-steppers or empty states of its own.
+titled card of facts and its loading cards, a list of short lines, and a
+rail of stages. The vault's collector pages and grading's collector pages
+both compose them, so neither draws cards, lists, tables or steppers of its
+own. A page with nothing to show composes the design system's empty state
+directly.
 
 Every word, figure and callback reaches them through props.
 
 ## Feature set
 
 - The export contract
-  - Named components: the five page blocks and their prop and copy types
+  - Named components: the four page blocks and their prop and copy types
     from the package entry
   - Words through props: no block reads a catalogue, fetches, routes or
     stores
@@ -49,7 +50,7 @@ The parts a site page composes, named once so no page draws its own.
 
 **Components** - the shared UI package SHALL export from its public entry
 exactly these components for site pages: `FactCard`, `FactCardSkeleton`,
-`NoteList`, `StageRail` and `EmptyPanel`.
+`NoteList` and `StageRail`.
 
 **Types** - each component SHALL carry a `<Name>Props` and a `<Name>Copy`
 type exported beside it; `FactCard` SHALL also carry `FactRow`, `NoteList`
@@ -61,9 +62,9 @@ route or subscribe to data.
 
 **Found by slot** - each block SHALL take an optional slot and draw it as its
 `data-slot`; given none, it SHALL keep the slot the design system's part
-carries: `card` on `FactCard`, `stack` on `FactCardSkeleton`, `list` on
-`NoteList` and `empty-state` on `EmptyPanel`. `StageRail`'s root SHALL carry
-none, and the design system's stepper inside it keeps `stepper`.
+carries: `card` on `FactCard`, `stack` on `FactCardSkeleton` and `list` on
+`NoteList`. `StageRail`'s root SHALL carry none, and the design system's
+stepper inside it keeps `stepper`.
 
 <!-- trace:scenario id=g10.shared-page-blocks.SC-zu0 rev=1 -->
 #### Scenario: shared-ui-page-blocks-SC-01 - An application imports the page blocks
@@ -81,6 +82,18 @@ none, and the design system's stepper inside it keeps `stepper`.
 - **WHEN** a page block's source is read
 - **THEN** it imports no message catalogue
 - **AND** it fetches, stores, routes and subscribes to nothing
+
+<!-- trace:scenario id=g10.shared-page-blocks.SC-33c rev=1 -->
+#### Scenario: shared-ui-page-blocks-SC-18 - A consumer finds a block by its slot
+**Serves:** The export contract - a page's tests and walks find its parts by name
+
+- **WHEN** `FactCard`, `FactCardSkeleton`, `NoteList` or `StageRail` is given
+  a slot
+- **THEN** the block carries it as its `data-slot`
+- **AND** given none, `FactCard` carries `card`, `FactCardSkeleton` `stack`
+  and `NoteList` `list`
+- **AND** given none, `StageRail`'s root carries no slot and its stepper
+  carries `stepper`
 
 ### Requirement: The fact card draws its parts in one order
 
@@ -259,28 +272,3 @@ focus so a keyboard can scroll it.
 - **WHEN** the financed lane's eight stages are drawn 320 pixels wide
 - **THEN** the rail scrolls sideways to Home
 - **AND** the page does not scroll sideways
-
-### Requirement: The empty panel says nothing is here yet
-
-`EmptyPanel` SHALL draw the design system's empty state with the title it is
-given, the line under it when given, and the consumer's actions when given.
-
-<!-- trace:scenario id=g10.shared-page-blocks.SC-kyu rev=1 -->
-#### Scenario: shared-ui-page-blocks-SC-17 - An empty panel with a way out
-**Serves:** Nothing here yet - a collector with no submissions reads how to start one
-
-- **WHEN** `EmptyPanel` is given a title and a Start action, and no line
-- **THEN** the title reads, with no line under it
-- **AND** pressing Start reports it to the consumer
-
-<!-- trace:scenario id=g10.shared-page-blocks.SC-33c rev=1 -->
-#### Scenario: shared-ui-page-blocks-SC-18 - A consumer finds a block by its slot
-**Serves:** The export contract - a page's tests and walks find its parts by name
-
-- **WHEN** `FactCard`, `FactCardSkeleton`, `NoteList`, `StageRail` or
-  `EmptyPanel` is given a slot
-- **THEN** the block carries it as its `data-slot`
-- **AND** given none, `FactCard` carries `card`, `FactCardSkeleton` `stack`,
-  `NoteList` `list` and `EmptyPanel` `empty-state`
-- **AND** given none, `StageRail`'s root carries no slot and its stepper
-  carries `stepper`

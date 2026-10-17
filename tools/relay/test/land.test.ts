@@ -69,6 +69,7 @@ function word(over: Partial<WordLanding> = {}): WordLanding {
 const AT_MAIN = `schema: grade10-planning
 hands:
   pm: "@ecchochan"
+  dev: "@kinisworking"
 reviewed:
   ui-design: 1a2b3c4d
 `;
@@ -76,9 +77,13 @@ reviewed:
 function reviewed(over: Partial<ReviewedLanding> = {}): ReviewedLanding {
   return {
     change: CHANGE,
+    artifact: "tasks",
+    word: "land",
+    senderHandle: "kinisworking",
+    schema: SCHEMA,
     paths: [`openspec/changes/${CHANGE}/.openspec.yaml`],
     atMain: AT_MAIN,
-    atSha: `${AT_MAIN}  tech-design: 5e6f7a8b\n`,
+    atSha: `${AT_MAIN}  tasks: 5e6f7a8b\n`,
     ...over,
   };
 }
@@ -104,7 +109,7 @@ describe("whose word lands which artifact", () => {
     });
   });
 
-  it("refuses an artifact the schema gives no role in the six", () => {
+  it("refuses an artifact the schema gives no role in the five", () => {
     expect(roleFor(SCHEMA, "specs")).toEqual({ check: "unknown-role" });
     expect(roleFor(SCHEMA, "release-notes")).toEqual({ check: "unknown-role" });
   });
@@ -324,8 +329,23 @@ is no page.
 });
 
 describe("a landing on a read again", () => {
-  it("shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word", () => {
+  it("shared-planning-agent-rounds-SC-77 - a read again lands on its hand's word", () => {
     expect(checkReviewed(reviewed())).toEqual({ ok: true });
+  });
+
+  it("refuses a read again nobody said, or said by a hand it is not", () => {
+    expect(checkReviewed(reviewed({ word: null }))).toEqual({
+      ok: false,
+      check: "word-not-said",
+    });
+    expect(checkReviewed(reviewed({ senderHandle: null }))).toEqual({
+      ok: false,
+      check: "sender-unknown",
+    });
+    expect(checkReviewed(reviewed({ senderHandle: "ecchochan" }))).toEqual({
+      ok: false,
+      check: "not-the-hand",
+    });
   });
 
   it("takes a line rewritten in place", () => {
@@ -342,8 +362,9 @@ describe("a landing on a read again", () => {
     expect(
       checkReviewed(
         reviewed({
-          atMain: "schema: grade10-planning\n",
-          atSha: "schema: grade10-planning\nreviewed:\n  proposal: 1a2b3c4d\n",
+          atMain: 'schema: grade10-planning\nhands:\n  dev: "@kinisworking"\n',
+          atSha:
+            'schema: grade10-planning\nhands:\n  dev: "@kinisworking"\nreviewed:\n  tasks: 1a2b3c4d\n',
         }),
       ),
     ).toEqual({ ok: true });
@@ -397,7 +418,10 @@ describe("a landing on a read again", () => {
     ).toEqual({ ok: false, check: "not-only-reviewed" });
     expect(
       checkReviewed(
-        reviewed({ atSha: "schema: grade10-planning\nreviewed: yesterday\n" }),
+        reviewed({
+          atSha:
+            'schema: grade10-planning\nhands:\n  pm: "@ecchochan"\n  dev: "@kinisworking"\nreviewed: yesterday\n',
+        }),
       ),
     ).toEqual({ ok: false, check: "not-only-reviewed" });
   });

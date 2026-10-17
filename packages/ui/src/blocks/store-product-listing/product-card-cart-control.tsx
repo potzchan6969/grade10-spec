@@ -167,6 +167,7 @@ function ProductCardCartControl({
         </div>
 
         <div
+          inert={!isExpanded}
           className={cn(
             "absolute inset-0 transition-[opacity,transform] duration-200 ease-out motion-reduce:transition-none",
             isExpanded
@@ -189,6 +190,7 @@ function ProductCardCartControl({
             onIncrement={() => report(quantity + 1)}
             qty={quantity}
             removeLabel={copy.removeFromCart}
+            shown={isExpanded}
           />
         </div>
       </div>

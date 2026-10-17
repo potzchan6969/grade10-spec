@@ -6,6 +6,16 @@
   "editLabel": "Edit profile",
   "emptyBio": "No bio yet.",
   "memberSince": "Member since {date}",
+  "chooseAvatar": "Choose picture",
+  "removeAvatar": "Remove picture",
+  "avatarAlt": "Your profile picture",
+  "displayNameRequired": "Enter a display name.",
+  "displayNameTooLong": "Display name can be at most {max} characters.",
+  "bioTooLong": "Bio can be at most {max} characters.",
+  "nothingToSave": "Nothing to save.",
+  "avatarType": "Choose a JPEG, PNG or WebP picture.",
+  "avatarTooLarge": "Picture can be at most 5 MB.",
+  "saveFailed": "Could not save your profile. Try again.",
   "consignments": {
     "view": {
       "new": "Request received",

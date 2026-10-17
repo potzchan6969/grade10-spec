@@ -89,7 +89,7 @@ their words.
   holds is a held row in the draft's summary, never applied as a default
 - **What is decided** — every other choice is applied as a default and listed
   under "decided by the round" in the same message, each with the option it
-  took; one reply overturns any of them
+  took and the source it names; one reply overturns any of them
 - **`not now`** — the change stays Proposed with a dated `awaiting:` line on
   `proposal`, naming the product manager, and nothing is drafted ahead until
   they lift it

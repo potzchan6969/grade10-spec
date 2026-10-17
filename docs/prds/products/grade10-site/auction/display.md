@@ -40,7 +40,7 @@ What a listing carries, from the operator's form to the card.
 | Title | Required, **1 to 200** characters | The card and the lot page |
 | Description | Optional, at most **4,000** characters | The lot page |
 | Gallery | **1 to 8** images and videos, in order | The first item on the card, all of them on the lot page |
-| 🚧 Currency and starting price | **USD** and a whole amount | The current price, in USD |
+| Currency and starting price | **USD** and a whole amount | The current price, in USD |
 | Bidding window | A start, a close and the extension rule — [Bidding](/p/grade10-site/auction/bidding#auction-logic) | The close and the time left |
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
@@ -145,11 +145,11 @@ lot before any script runs.
   site's not-found surface, never an empty lot page
 - **Hidden from browse/search** - a draft or called-off lot is absent from
   catalogue and search; a draft has no public address.
-- 🚧 **Called-off address** - another listing can take a called-off lot's
+- **Called-off address** - another listing can take a called-off lot's
   former address, including a lot called off earlier, so a saved link to it
   stops opening that lot. An unused address shows Page not found; a reused
   address opens the new public lot.
-- 🚧 **Restricted regions** — where auctions are not offered, a request from
+- **Restricted regions** — where auctions are not offered, a request from
   that region sees no auction entry point anywhere on the site, and a direct
   auction address — the catalogue or a lot — answers the restriction page
   rather than the auction. The store and the rest of the site are unchanged —
@@ -252,6 +252,8 @@ and publishes it; from the close on, the sale is worked in Orders
 ::cases{id="grade10-site/auction/listing-page"}
 
 ::cases{id="grade10-site/auction/listing-media"}
+
+::cases{id="grade10-site/auction/availability"}
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -275,9 +277,9 @@ Active and Completed filters in bidding history.
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Between the close and the result | Decided | Three statuses stay. Past the close and before the result is recorded, pages show the existing Closed state with no result, and Won or Unsold when the close commits. A fourth status, Closing, with its own copy was ruled out: a new state in four languages for a gap normally under a second. | Product |
 | Draft and Called off | Decided | Draft has no public address. Called-off lots leave browse and search. A collector who bid on a called-off lot still sees it in My Auctions, saying their card was not charged. Explicit hard deletion is outside this capability. | Product |
-| Called-off address reuse | 🚧 In flight | Reuse replaces the former promise of a permanent direct address to a called-off lot. [Issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504) settles the choice; the listing code remains a reserved reference and cannot serve as an alternate public address. | @htonyl |
+| Called-off address reuse | Decided | Reuse replaces the former promise of a permanent direct address to a called-off lot. [Issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504) settles the choice; the listing code remains a reserved reference and cannot serve as an alternate public address. | @htonyl |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
-| Restriction page indexability | ❓ Open | Whether the restriction page emits `noindex` or stays indexable like the not-found surface; Product and SEO confirm. | Product |
+| Restriction page indexability | Decided | The restriction page renders in the browser at the auction's own address, so the document a crawler reads is the auction's and no `noindex` is needed. | Engineering (agent) |
 :::

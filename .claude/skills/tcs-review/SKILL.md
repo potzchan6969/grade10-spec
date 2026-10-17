@@ -135,7 +135,7 @@ execution; a review classification is not a pass or fail result.
    spec's author.
    Check the journey, the file, then the domain suite for one that covers it;
    on a hit show both and ask: update, add as distinct, or drop. Write it as
-   `draft` at the next unused `TC<m>`, `rev=1`, and walk it like any
+   `draft` at the `TC<m>` `pnpm run spec:issue <journey> TC` issues, `rev=1`, and walk it like any
    other draft — never straight to `actual`, even dictated. Record what
    distinguishes a case added over a duplicate.
 
@@ -209,21 +209,14 @@ Before the first journey, in this order. Each part is its own commit, named in
 the review steps above; the branch is pushed once, when every part is done, so
 the verdict commits hold only the reviewer's decisions.
 
-1. **Migrate legacy case headings.** Before restyling or presenting a case,
-   convert every legacy case heading in the selected suite to
-   `### <scope>.TC-<sequence> (US<n>-TC<m>): <title>`. Keep the existing
-   trace marker id, `rev`, local journey number, case number, title and case
-   content unchanged. A case with no marker receives one through the trace
-   CLI or a validated batch manifest; preserve its current `Trace` journey and
-   preserve any existing `covers` links. If no links are present, leave the
-   marker anchor-only for QA2; never derive links from scenario text or title
-   similarity. If its formal anchor cannot be resolved, record the case as a
-   preparation blocker for the suite owner rather than inventing a marker.
-   After migration,
-   within every journey group, including groups under `## Ungrouped`, preserve
-   the order of non-deprecated cases and move every `deprecated` case to the
-   bottom. This is a presentation-only reorder: it changes no purpose, status,
-   id or `rev`. Migration and ordering are one preparation commit.
+1. **Migrate legacy case headings.** Bring every case heading in the
+   selected suite to the form under **Naming**, keeping the trace marker,
+   `rev`, case number, title and content unchanged. A case with no marker gets
+   one through the trace CLI, anchor-only where it carries no `covers`; one
+   whose anchor cannot be resolved is a preparation blocker for the suite
+   owner. Then, within every journey group, move each `deprecated` case to the
+   bottom, as **Deprecated cases come last** says. Migration and ordering are
+   one preparation commit.
 
 2. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
    `tcs_rules_rev` has its drafts regenerated, as **Rules Revisions** says,
@@ -242,20 +235,16 @@ the verdict commits hold only the reviewer's decisions.
    comparisons, or an explicit no-candidates result and the suites inspected.
    Queue proposals for human verdicts; preparation changes no case for consolidation.
 
-4. **Check formal coverage by anchor.** Read every journey serving the suite
-   and verify that each anchor has an asserting case or an explicit higher-level
-   owner. A case that only names a journey without asserting an outcome does not
-   count. Do not create a Cartesian product of values or add a case only because
-   a scenario has a different input. Record same-purpose values as rows and
-   report unresolved anchor gaps.
+4. **Check formal coverage by anchor.** Every anchor serving the suite has an
+   asserting case or a higher-level owner, under **Coverage and
+   Traceability**; values stay rows, as **Partitions are representative**
+   says. Report unresolved anchor gaps.
 
-5. **Reconcile scenario links only after the independent readings.** When QA2
-   material is present, compare each scenario's THEN with the reviewed case's
-   Expected Results and add `covers` links through the trace workflow. One case
-   may link several scenarios only when one route and one checking fully assert
-   each. A case with no link remains anchor-covered and scenario-link-pending;
-   never invent a link by title similarity. Record uncovered scenarios,
-   over-claimed cases and contradictions for the spec owner.
+5. **Reconcile scenario links only after the independent readings.** Where QA2
+   material is present, add `covers` links through the trace workflow under
+   **Coverage and Traceability**, never by title similarity, and record
+   uncovered scenarios, over-claimed cases and contradictions for the spec
+   owner.
 
 6. **Fill in the mechanism.** Read the spec's flow requirement,
    `ui-design.md`, the PRD pages, and the conventions' `## Setup Recipes` and
@@ -322,30 +311,17 @@ When the verdicts are done, and before the pull request is marked ready:
 
 Before the file goes `approved`, do three things.
 
-**Check the raised rows landed.** They are in the change's `decisions.md`,
-under `## Raised`, one row per question the blind pass could not settle, each
-owing a landing — a `Decisions` row in that file, or a ❓ on the capability's
-PRD. A row with an empty landing is the pass's finding about to be lost, and it
-is the reviewer's to chase before the suite is signed off. Where the change is
-already archived, read the table there and check the landings it names still
-stand.
+**Check the raised rows landed.** Every `## Raised` row in the change's
+`decisions.md` owes a landing, under **Raised**; an empty one is the reviewer's
+to chase before sign-off. Where the change is archived, check the landings it
+names still stand.
 
-Then do two things to the file's `## Reconciliation`.
+**Walk the rejected rows with the reviewer.** A row survives only if no rule
+anywhere states what the case claimed; a wrong rejection leaves no trace.
 
-**Walk the rejected rows with the reviewer.** Dropping a blind-pass finding as a
-misreading is the cheapest way to finish a planning run, and a wrong rejection
-leaves no trace afterwards. A row survives only if no rule anywhere states what
-the case claimed.
-
-**Copy each surviving rejection into `## Settled`** — one line, the claim and
-why no rule states it, no scenario ids. The next blind pass reads that section,
-so a rejection you agree with is answered once rather than raised by every run
-from here on.
-
-**Strip the scenario ids** from `## Reconciliation`, leaving the dispositions
-and the reasons. Those ids
-belong to the change's lifetime alone: the next blind pass reads this file for
-id continuity, and an id left here is how it stops being blind.
+**Copy each surviving rejection into `## Settled`**, as **Settled stays
+settled** says, and strip the scenario ids from `## Reconciliation`, as
+**Scenario ids are temporary here** says.
 
 A case carrying `**Blocked:**` is an open question, not a draft you are late in
 reviewing. It stays `draft`, it does not hold the file's status against the

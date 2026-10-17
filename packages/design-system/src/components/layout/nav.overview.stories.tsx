@@ -7,6 +7,17 @@ import { NAV_BASE_ARGS, NAV_ITEMS } from "./nav.story-shared";
 
 const cartSlotClick = fn();
 
+/** Another brand's words, every one supplied. */
+const KO_COPY = {
+  locale: "한국어",
+  search: "검색",
+  account: "계정",
+  cart: "장바구니",
+  signIn: "로그인",
+  menu: "메뉴",
+  language: "언어",
+};
+
 const meta = {
   title: "Design System/Layout/Nav/Overview",
   component: Nav,
@@ -80,10 +91,46 @@ export const CartSlot: Story = {
         expect(cart).toBeInTheDocument();
         expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
 
+        cartSlotClick.mockClear();
         await userEvent.click(cart);
 
         expect(cartSlotClick).toHaveBeenCalledTimes(1);
         expect(args.onCartClick).not.toHaveBeenCalled();
+      },
+    );
+  },
+};
+
+const slotOnlyClick = fn();
+
+/** A cart slot with no `onCartClick`: the slot alone is the cart. */
+export const CartSlotOnly: Story = {
+  name: "Cart slot only",
+  args: {
+    onCartClick: undefined,
+    cartSlot: (
+      <IconButton
+        aria-label="Cart (2)"
+        onClick={slotOnlyClick}
+        size="md"
+        variant="ghost"
+      >
+        <ShoppingBag aria-hidden size={14} />
+      </IconButton>
+    ),
+  },
+  play: async ({ canvasElement, step }) => {
+    await step(
+      "shared-ui-site-chrome-SC-22 - Cart slot stands in with no handler",
+      async () => {
+        const canvas = within(canvasElement);
+        const cart = canvas.getByRole("button", { name: "Cart (2)" });
+        expect(canvas.getAllByRole("button", { name: /^Cart/ })).toEqual([
+          cart,
+        ]);
+        slotOnlyClick.mockClear();
+        await userEvent.click(cart);
+        expect(slotOnlyClick).toHaveBeenCalledTimes(1);
       },
     );
   },
@@ -109,7 +156,7 @@ export const AnotherBrand: Story = {
       { label: "NEW", href: "#new", current: true },
       { label: "BRANDS", href: "#brands" },
     ],
-    copy: { locale: "한국어" },
+    copy: KO_COPY,
     locales: [{ value: "ko", label: "한국어" }],
     locale: "ko",
   },
@@ -137,7 +184,7 @@ export const NoDefaultCopy: Story = {
     logo: "ZZZ",
     utilityLinks: [],
     navItems: [],
-    copy: { locale: "한국어" },
+    copy: KO_COPY,
     locales: [],
     onLocaleChange: undefined,
     onSearchClick: undefined,

@@ -22,7 +22,12 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import { handOf, STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
+import {
+  behindOf,
+  handOf,
+  handOfArtifact,
+  STAGE_LABEL,
+} from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
@@ -120,21 +125,25 @@ function linesFor(handle, changes, ctx) {
         text: `${named} — nothing landed for ${idle.days} days`,
       });
     }
-    // The earliest behind artifact, as the card and the Behind message name
-    // it. The week is counted from `since`, the day it went behind, which
-    // `behindOf` carries whichever comparison says the artifact moved.
-    const behind = overlays.find((one) => one.kind === "behind");
-    const days =
-      behind?.since === undefined
-        ? undefined
-        : daysBetween(behind.since, ctx.now, TIME_ZONE);
-    if (behind?.hand === handle && days !== undefined && days >= AFTER_DAYS) {
+    // Every artifact of theirs that is still behind, a small move as much as
+    // a major one: a small move holds nothing but stays on the hand's list
+    // until they read it. The week is counted from `since`, the day it went
+    // behind.
+    const artifacts = ctx.artifactsOf(change);
+    for (const behind of behindOf(change, artifacts)) {
+      const role = handOfArtifact(behind.artifact, artifacts);
+      if (!role || change.hands?.[role] !== handle) continue;
+      const days =
+        behind.since === undefined
+          ? undefined
+          : daysBetween(behind.since, ctx.now, TIME_ZONE);
+      if (days === undefined || days < AFTER_DAYS) continue;
       lines.push({
         kind: "behind",
         change: change.id,
         days,
         artifact: behind.artifact,
-        text: `\`${behind.artifact}\` on ${named} — behind for ${days} days`,
+        text: `\`${behind.artifact}\` on ${named} — behind for ${days} days${behind.holds ? "" : ", a small move"}`,
       });
     }
     for (const wait of overlays) {

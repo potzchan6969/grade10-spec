@@ -42,6 +42,8 @@ not read. While the read runs, it shows a blank body, a skeleton for the
 title's count and no footer. A cart read empty shows the empty state, even
 when its price check fails.
 
+::story{id="store-cart-blocks-cartdrawer--loading-no-lines" title="A cart not read yet"}
+
 🚧 **First read fails** - the drawer keeps that blank body, never the empty
 state, while the application offers Retry and names no line, as
 [Cart Validation](../../grade10-site/store/cart-validation.md) asks for a cart
@@ -55,7 +57,7 @@ the footer and no count on the drawer title.
 
 ## Pending Operations
 
-🚧 **Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
+**Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
@@ -69,10 +71,10 @@ the footer and no count on the drawer title.
 
 ## Tender Actions
 
-🚧 **Unresolved choice** - tender actions and Checkout wait while the
+**Unresolved choice** - tender actions and Checkout wait while the
 application saves a choice; accepted figures stay visible until it answers.
 
-🚧 **Tender actions need an answer** - a promo or points action appears only
+**Tender actions need an answer** - a promo or points action appears only
 when the application supplies the callback that can perform it. The drawer can
 show current tender context without offering an action that cannot change it.
 
@@ -82,7 +84,7 @@ A site sale is a cut the shop applies to products or collections with no code.
 The application's quote decides whether a promo code stacks on it, is refused, or
 replaces it; the drawer shows that outcome and works out no amount.
 
-🚧 **On sale** - a line on the sale shows the sale price with the list price
+**On sale** - a line on the sale shows the sale price with the list price
 struck through, even a list price equal to the sale price. The summary adds no
 Store sale row.
 
@@ -91,30 +93,34 @@ such as a spend threshold, is a row of its own after the Subtotal, with the
 name the application gives it and no Remove. No line is struck for it, and
 the Subtotal reads before it.
 
-🚧 **Which price is charged** - hidden words the application supplies, such
+**Which price is charged** - hidden words the application supplies, such
 as Sale price and Was, tell a screen reader which price is charged.
 
-🚧 **Subtotal** - the sum of each line's price times its quantity, leaving
+**Subtotal** - the sum of each line's price times its quantity, leaving
 out sold-out and unavailable lines, as the drawer title's count does.
 
-🚧 **Stacked** - a code that stacks leaves the sale on the lines; the summary
+**Stacked** - a code that stacks leaves the sale on the lines; the summary
 shows only the code's discount.
 
-🚧 **Refused** - a refused code leaves the lines and the totals on the sale;
+**Refused** - a refused code leaves the lines and the totals on the sale;
 the promo sheet says why. A held code the shopper picked then moves apart from
 the ones that can apply, muted, with the refusal as its reason and no Apply.
 
-🚧 **Replaced** - a code that replaces the sale puts each line it takes the
+**Replaced** - a code that replaces the sale puts each line it takes the
 sale from at the list price, with nothing struck through; the summary shows
 only the code's discount.
 
-🚧 **Removed** - removing the code drops its discount. Where the code had
+**Removed** - removing the code drops its discount. Where the code had
 replaced the sale, the sale returns to the lines while it still runs.
 
-🚧 **Held, cannot apply** - a held code that cannot apply on this cart is
+**Held, cannot apply** - a held code that cannot apply on this cart is
 listed apart from the ones that can, muted with its reason and no Apply.
 
 ::story{id="store-cart-blocks-cartitem-price--sale-price" title="A line on the site sale"}
+
+::story{id="store-cart-blocks-cartitem-price--equal-list-price" title="A list price equal to the price, still struck"}
+
+::story{id="store-cart-blocks-cartdrawer-auto-discount--on-sale" title="A cart on the site sale with no code"}
 
 ::story{id="store-cart-blocks-cartitem-price--product-coupon" title="A product coupon on the line"}
 
@@ -136,7 +142,7 @@ listed apart from the ones that can, muted with its reason and no Apply.
 
 ::story{id="store-cart-blocks-cartdrawer--empty-state" title="An empty cart"}
 
-::story{id="store-cart-blocks-cartdrawer--fetching-on-open" title="The skeleton state while the drawer re-reads prices"}
+::story{id="store-cart-blocks-cartdrawer--loading-with-lines" title="The skeleton state while the drawer re-reads prices"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Historical Figma — superseded by Storybook"}
 

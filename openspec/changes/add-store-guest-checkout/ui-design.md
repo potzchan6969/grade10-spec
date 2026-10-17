@@ -49,24 +49,24 @@
 
 ### Cart Drawer
 
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Guest | Guest checkout primary, quiet sign-in line under it, public codes, no points | `g10.store-cart-drawer.US10` |
-| Guest At The Bar | Sign-in ask where the guest button was; no checkout starts | `g10.store-checkout.US9` |
+| State | Shows | Anchor | Scenario / Disposition |
+| --- | --- | --- | --- |
+| Guest | Guest checkout primary, quiet sign-in line under it, public codes, no points | `g10.store-cart-drawer.US15` | `g10.store-cart-drawer.SC55`, `g10.store-cart-drawer.SC56`, `shared-ui-store-cart-SC-80` |
+| Guest At The Bar | Sign-in ask where the guest button was; no checkout starts | `g10.store-checkout.US9` | **Out of suite:** dropped 2026-10-14 with the identity bar ([Non-Goals](decisions.md#non-goals)); no state ships |
 
 ### Order Link
 
-| State | Shows | Anchor |
-| --- | --- | --- |
-| Back From Checkout | A guest back from payment — a normal order page; the placed-on line names the receipt's email; a persistent toast carries one Sign in action | `g10.store-order-detail.US3` |
-| Ask outcomes | The ask's results ride the toast's standard variants — no stories of their own: sent (names where the link went), added (success + View in your orders), another email (names the order's email, offers a magic link to it), send failed (error + retry, `design-system-overlays-toast--types`) | `g10.store-order-detail.US4` |
-| Guest Order From Email | The same page opened cold from the order email's View order link | `g10.store-order-detail.US5` |
-| Member Order Signed Out | The same page, with a persistent "Is this your order?" toast offering sign-in | `g10.store-order-detail.US5` |
-| Owner Signed In | Redirect to the order inside the account | `g10.store-order-detail.US6` |
-| Not Found | Unknown order or wrong secret: the same not-found treatment | `g10.store-order-detail.US5` |
+| State | Shows | Anchor | Scenario / Disposition |
+| --- | --- | --- | --- |
+| Back From Checkout | A guest back from payment — a normal order page; the placed-on line names the receipt's email; a persistent toast carries one Sign in action | `g10.store-order-detail.US3` | `grade10-site-store-checkout-SC-69`; **Out of suite:** the ask's toasts are `OrderLinkPage` tests until `grade10-site/store/order-detail` is durable |
+| Ask outcomes | The ask's results ride the toast's standard variants — no stories of their own: sent (names where the link went), added (success + View in your orders), another email (names the order's email, offers a magic link to it), send failed (error + retry, `design-system-overlays-toast--types`) | `g10.store-order-detail.US4` | `grade10-site-store-checkout-SC-69`; **Out of suite:** the ask's toasts are `OrderLinkPage` tests until `grade10-site/store/order-detail` is durable |
+| Guest Order From Email | The same page opened cold from the order email's View order link | `g10.store-order-detail.US5` | `grade10-site-store-checkout-SC-69`; **Out of suite:** the ask's toasts are `OrderLinkPage` tests until `grade10-site/store/order-detail` is durable |
+| Member Order Signed Out | The same page, with a persistent "Is this your order?" toast offering sign-in | `g10.store-order-detail.US5` | `grade10-site-store-checkout-SC-69`; **Out of suite:** the ask's toasts are `OrderLinkPage` tests until `grade10-site/store/order-detail` is durable |
+| Owner Signed In | Redirect to the order inside the account | `g10.store-order-detail.US6` | **Out of suite:** `OrderLinkPage` tests; `grade10-site/store/order-detail` is introduced by `add-grade10-customer-order-pages` |
+| Not Found | Unknown order or wrong secret: the same not-found treatment | `g10.store-order-detail.US5` | `grade10-site-store-checkout-SC-70` |
 
 ### Order History
 
-| State | Shows | Anchor |
-| --- | --- | --- |
-| With Guest Orders | Guest orders under the member's email among their orders; none earns points | `g10.store-order-history.US4` |
+| State | Shows | Anchor | Scenario / Disposition |
+| --- | --- | --- | --- |
+| With Guest Orders | Guest orders under the member's email among their orders; none earns points | `g10.store-order-history.US4` | `grade10-site-store-checkout-SC-71`, `grade10-site-store-checkout-SC-75` |

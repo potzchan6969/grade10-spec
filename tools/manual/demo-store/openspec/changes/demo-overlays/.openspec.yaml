@@ -6,7 +6,6 @@ design_waived: "the fixture is about the overlays, not the designs"
 hands:
   pm: tester
   design: tester
-  tech: tester
   qa: tester
   dev: tester
 depends_on:
@@ -16,3 +15,6 @@ awaiting:
 reviewed:
   decisions: "00000000"
   specs: "00000000"
+  user-journeys: 951cccd8
+  test-cases: e7d02acc
+  tasks: "18984e68"

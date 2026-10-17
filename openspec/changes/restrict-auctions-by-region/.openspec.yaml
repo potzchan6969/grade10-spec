@@ -5,3 +5,12 @@ depends_on:
   - show-account-skeleton-until-session-answers
 awaiting:
   ui-design: 2026-10-08, Figma frame for the auction-restriction page — the not-found page is the interim composition
+page_waived: "built: its 🚧 lines came off when the outcomes shipped, 2026-10-16; the deployed walk and the legal sign-off on the region list, a ❓ on the Restricted regions decision, remain"
+reviewed:
+  proposal: 2c3824d1
+  decisions: 96ba4f85
+  user-journeys: f08e9f61
+  ui-design: 30c5edda
+  specs: de7caeb8
+  tech-design: b6488772
+  test-cases: 9ecd870d

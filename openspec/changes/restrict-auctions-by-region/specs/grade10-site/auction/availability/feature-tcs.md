@@ -207,26 +207,25 @@ the store,
 
 **Pre-conditions:**
 
-* A signed-in collector whose request is judged restricted; open items —
-  My Auctions, the watchlist, a winner order — awaiting the ❓ decision on
-  whether commitments already made keep read access.
+* A signed-in collector whose request is judged restricted, holding a won
+  lot whose order is unpaid.
 
 **Steps:**
 
 1. Enter the My Auctions address.
-2. Enter a winner-order address.
+2. Enter the bidding history address.
+3. Enter the won lot's winner-order address.
 
 **Expected Results:**
 
-* Each answers the restriction page, or — if the ❓ decision lands on
-  read-only access — a read-only rendering of the commitment with no action
-  controls. This case is **Blocked:** the open-commitments decision on the
-  Bidding page, owed by Product.
+* My Auctions and the bidding history answer the restriction page.
+* The winner order renders as it does for any winner, with its address,
+  payment and proof actions.
 
 ## grade10-site-auction-availability-US3: Collector in a restricted region tries to act on an auction
 
-**As a** collector in a restricted region who sends a bid, a watch or an
-order action anyway,
+**As a** collector in a restricted region who sends a bid or a watch
+anyway,
 **I want** the action refused before it reaches the auction,
 **so that** no commitment is recorded that cannot be settled.
 
@@ -277,15 +276,18 @@ order action anyway,
 
 **Pre-conditions:**
 
-* A watch, unwatch or winner-order action sent from a restricted region.
+* A watch, an unwatch and an alert mute sent from a restricted region
+  against a lot the collector watches.
 
 **Steps:**
 
-1. Send each action.
+1. Send the watch against an unwatched lot.
+2. Send the unwatch and the alert mute against the watched lot.
 
 **Expected Results:**
 
-* Each is refused; no watch or order change is recorded.
+* The watch is refused and no watch is recorded.
+* The unwatch and the alert mute are answered as for any collector.
 
 ### grade10-site-auction-availability-US3-TC3-1: An auction read opened by hand returns nothing
 
@@ -389,10 +391,11 @@ None yet — this is the suite's first run.
   `grade10-site-auction-availability-US3-TC3-1`
 - **Raised** — whether the restriction page is indexable or emits `noindex`:
   escalated, ❓ on the Auction Display page owed by Product
-- **Deferred** — what a restricted signed-in collector with a standing bid,
-  watched lot or unpaid invoice still sees: ❓ on the Bidding page owed by
-  Product; `grade10-site-auction-availability-US2-TC3-1` stays **Blocked**
-  on that answer
+- **Decided** — what a restricted signed-in collector with a standing bid,
+  watched lot or unpaid invoice still sees: the winner order and its
+  invoice, and unwatching and muting, stay open (decision Q8);
+  `grade10-site-auction-availability-US2-TC3-1` and `-US3-TC2-1` revised in
+  place to walk it
 - **Uncovered anchors** — none: every journey carries at least one case
 
 **Run:** Read only the isolated bundle — the capability's `## Purpose` and

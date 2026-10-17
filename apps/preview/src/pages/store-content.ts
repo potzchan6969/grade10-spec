@@ -46,6 +46,7 @@ const STORE_SITE_HEADER = {
     cart: "Cart",
     signIn: "Sign In",
     menu: "Menu",
+    search: "Search",
     menuTitle: "Menu",
     language: "Language",
     accountMenuLabel: "Account",
@@ -326,6 +327,8 @@ const STORE_HOME_PRODUCT_CARD_COPY = {
   removeFromCart: "Remove from cart",
   adjustQuantity: "Adjust cart quantity",
   sale: "SALE",
+  salePriceLabel: "Sale price",
+  listPriceLabel: "Was",
 };
 
 /** Cart drawer copy owned by the workbench the same way nav and footer copy are. */
@@ -335,6 +338,8 @@ const STORE_CART_COPY = {
     closeCartLabel: "Close cart",
   },
   item: {
+    salePriceLabel: "Sale price",
+    listPriceLabel: "Was",
     lowStockWarning: "Low stock. Quantity adjusted",
     soldOutLabel: "Sold Out",
     removeItemLabel: "Remove item",

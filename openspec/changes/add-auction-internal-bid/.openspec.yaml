@@ -1,7 +1,14 @@
 schema: grade10-planning
 created: 2026-10-07
-ui_waived: "Author waived on 2026-10-07: the admin internal-bid section follows
-  the existing listing editor form; no collector-facing surface changes"
+ui_waived: "Author waived on 2026-10-07: the admin internal-bid section follows the existing listing editor form; no collector-facing surface changes"
 hands:
   pm: "@htonyl"
   dev: "@htonyl"
+reviewed:
+  proposal: d1ce2671
+  decisions: d636aaa5
+  user-journeys: "99139576"
+  tech-design: a7ee4745
+  specs: 09feef29
+  test-cases: a7ee4745
+  tasks: 095fb99a

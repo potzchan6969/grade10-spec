@@ -1,5 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { PRODUCT_CARD_CART_COPY } from "./fixtures";
 import { ProductCard } from "./product-card";
 
@@ -72,6 +72,57 @@ function photo(canvasElement: HTMLElement) {
   ) as HTMLImageElement;
 }
 
+/** The photo's own press target, which is no stop and names nothing. */
+function photoTarget(canvasElement: HTMLElement) {
+  return canvasElement.querySelector(
+    '[data-slot="product-card-image"] > :first-child',
+  ) as HTMLElement;
+}
+
+/** The name's own underline, as drawn. */
+const underline = (element: HTMLElement) =>
+  getComputedStyle(element).textDecorationLine;
+
+/**
+ * Whether a pointer over `element` underlines it: some style rule the page
+ * holds, read with its nesting resolved, draws an underline under `:hover`
+ * on a selector the element matches. The simulated pointer of a play test
+ * does not set the browser's own hover state, so the rule is read instead.
+ */
+function underlinedOnHover(element: HTMLElement) {
+  const visit = (rules: CSSRuleList, parent: string): boolean =>
+    Array.from(rules).some((rule) => {
+      if (rule instanceof CSSStyleRule) {
+        const selector = parent
+          ? rule.selectorText.replaceAll("&", parent)
+          : rule.selectorText;
+        if (
+          selector.includes(":hover") &&
+          rule.style.textDecorationLine === "underline" &&
+          element.matches(selector.replaceAll(":hover", ""))
+        ) {
+          return true;
+        }
+        return visit(rule.cssRules, selector);
+      }
+      return "cssRules" in rule
+        ? visit((rule as CSSGroupingRule).cssRules, parent)
+        : false;
+    });
+  /* A sheet from another origin, such as a web font's, cannot be read. */
+  const readable = (sheet: CSSStyleSheet) => {
+    try {
+      return sheet.cssRules;
+    } catch {
+      return null;
+    }
+  };
+  return Array.from(document.styleSheets).some((sheet) => {
+    const rules = readable(sheet);
+    return rules != null && visit(rules, "");
+  });
+}
+
 /** Whether the photo grows on hover: the transition that scales it is on. */
 const growsOnHover = (img: HTMLImageElement) =>
   getComputedStyle(img).transitionProperty.includes("scale");
@@ -103,19 +154,97 @@ async function pressLink(
   return prevented;
 }
 
-/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert where
- * the surface sells, address or not: no link, no button, and the dim photo
- * takes no hover. */
+/** Scenario: shared-ui-store-product-listing-SC-88 - A sold-out tile stays
+ * inert where it sells. Figma `soldOut=true`: the SOLD OUT badge, no cart
+ * action, and a tile given a callback, an address and a cart handler draws no
+ * link and no button; pressing the name and the photo reports nothing, and
+ * the dim photo takes no hover. */
 export const SoldOut: Story = {
-  args: { soldOut: true, href: "/store/products/abyss-eye-booster-box" },
+  args: {
+    soldOut: true,
+    href: "/store/products/abyss-eye-booster-box",
+    onClick: fn(),
+    onCartQuantityChange: fn(),
+  },
   decorators: well,
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(copy.soldOut)).toBeVisible();
     expect(canvas.queryAllByRole("button")).toHaveLength(0);
     expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    expect(canvasElement.querySelector("a")).toBeNull();
+    await userEvent.click(canvas.getByText(defaults.name));
+    await userEvent.click(photo(canvasElement));
+    expect(args.onClick).not.toHaveBeenCalled();
     expect(getComputedStyle(photo(canvasElement)).opacity).toBe("0.5");
     expect(growsOnHover(photo(canvasElement))).toBe(false);
+  },
+};
+
+/** Scenario: shared-ui-store-product-listing-SC-89 - No activation without a
+ * callback or an address. The name and the photo report nothing and are no
+ * control; the cart control is still there, and the name takes no underline
+ * and no focus. */
+export const Inert: Story = {
+  args: { onClick: undefined, href: undefined, onCartQuantityChange: fn() },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const name = canvas.getByText(defaults.name);
+    await userEvent.click(name);
+    await userEvent.click(photo(canvasElement));
+    expect(canvas.queryAllByRole("link")).toHaveLength(0);
+    expect(
+      canvas.queryAllByRole("button", { name: defaults.name }),
+    ).toHaveLength(0);
+    expect(canvas.getByRole("button", { name: copy.cart })).toBeInTheDocument();
+    expect(underline(name)).toBe("none");
+    expect(underlinedOnHover(name)).toBe(false);
+    name.focus();
+    expect(name).not.toHaveFocus();
+  },
+};
+
+/** Scenario: shared-ui-store-product-listing-SC-100 - A tile given its
+ * address alone is a link. The name is the one link named for the product,
+ * to that address, and the photo's link carries the same address. */
+export const AddressOnly: Story = {
+  args: {
+    onClick: undefined,
+    href: "/store/products/abyss-eye-booster-box",
+  },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [name] = canvas.getAllByRole("link", { name: defaults.name });
+    expect(canvas.getAllByRole("link", { name: defaults.name })).toHaveLength(
+      1,
+    );
+    expect(name).toHaveAttribute("href", args.href);
+    expect(name).toHaveTextContent(defaults.name);
+    expect(photoTarget(canvasElement)).toHaveAttribute("href", args.href);
+  },
+};
+
+/** Scenario: shared-ui-store-product-listing-SC-98 - A tile has one stop to
+ * open, on a tile that does not sell: Tab stops on the name alone, no cart
+ * control is drawn, and Enter on the name reports once. */
+export const NamedOnceNotSelling: Story = {
+  args: { onClick: fn(), onCartQuantityChange: undefined },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const name = canvas.getByRole("button", { name: defaults.name });
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-cart-control"]'),
+    ).toBeNull();
+    await userEvent.tab();
+    expect(name).toHaveFocus();
+    await userEvent.tab();
+    expect(canvasElement.contains(document.activeElement)).toBe(false);
+    name.focus();
+    await userEvent.keyboard("{Enter}");
+    expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };
 
@@ -159,24 +288,46 @@ export const BoneyardCapture: Story = {
 };
 
 /**
- * Scenario: A tile is named once. What the card is called is the product's
- * own name, and what the cart control is called is the list's word for it —
- * neither repeated in a prop of its own.
+ * Scenarios: shared-ui-store-product-listing-SC-87 - The product name
+ * activates the tile; shared-ui-store-product-listing-SC-98 - A tile has one
+ * stop to open; shared-ui-store-product-listing-SC-99 - The name shows that
+ * it opens; shared-ui-store-product-listing-SC-51 - Keyboard reveals the cart
+ * control. Tab stops on the cart control, shown when focused, then on the
+ * name, and on nothing else in the tile; one control is named for the
+ * product, and Enter then Space on it each report once. The name is
+ * underlined on hover and on keyboard focus, never at rest.
  */
 export const NamedOnce: Story = {
   decorators: well,
   args: { onCartQuantityChange: () => {}, onClick: fn() },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    const name = canvas.getByRole("button", { name: defaults.name });
+    const cart = canvas.getByRole("button", { name: copy.cart });
+    expect(canvas.getAllByRole("button", { name: defaults.name })).toHaveLength(
+      1,
+    );
+    expect(underline(name)).toBe("none");
 
-    const nameControls = canvas.getAllByRole("button", {
-      name: defaults.name,
-    });
-    expect(nameControls.length).toBe(2);
-    expect(canvas.getByRole("button", { name: copy.cart })).toBeInTheDocument();
+    await userEvent.tab();
+    expect(cart).toHaveFocus();
+    const control = cart.closest(".cart-control") as HTMLElement;
+    await waitFor(() => expect(getComputedStyle(control).opacity).toBe("1"));
+    await userEvent.tab();
+    expect(name).toHaveFocus();
+    expect(underline(name)).toBe("underline");
+    await userEvent.tab();
+    expect(canvasElement.contains(document.activeElement)).toBe(false);
 
-    await userEvent.click(nameControls[1]);
+    name.focus();
+    await userEvent.keyboard("{Enter}");
     expect(args.onClick).toHaveBeenCalledTimes(1);
+    await userEvent.keyboard(" ");
+    expect(args.onClick).toHaveBeenCalledTimes(2);
+
+    name.blur();
+    expect(underline(name)).toBe("none");
+    expect(underlinedOnHover(name)).toBe(true);
   },
 };
 
@@ -349,10 +500,10 @@ export const SoldOutWithRemainingCount: Story = {
   },
 };
 
-/** shared-ui-store-product-listing-SC-91: a sold-out tile still opens where
- * an activation handler is supplied and no cart handler is — a surface that
- * carries the shopper on rather than selling. Its dim photo grows on hover
- * like an available one, and it takes the keyboard's focus (Q50). The
+/** Scenario: shared-ui-store-product-listing-SC-97 - A sold-out tile opens
+ * where it does not sell: given an activation handler and no cart handler.
+ * Its dim photo grows on hover like an available one. Pressing the name, then
+ * the photo, reports each; the name is the stop and the photo is none. The
  * suite's grade10-site-store-cross-sell-US1-TC6-1 credits this story with a
  * sold-out pick's place, its words and its activation. */
 export const SoldOutOpensWhereNothingSells: Story = {
@@ -369,14 +520,15 @@ export const SoldOutOpensWhereNothingSells: Story = {
       canvasElement.querySelector('[data-slot="product-card-cart-control"]'),
     ).toBeNull();
     const controls = canvas.getAllByRole("button", { name: defaults.name });
-    expect(controls).toHaveLength(2);
-    const [photoWell, nameControl] = controls;
+    expect(controls).toHaveLength(1);
+    const [nameControl] = controls;
     await userEvent.tab();
-    expect(photoWell).toHaveFocus();
+    expect(nameControl).toHaveFocus();
+    expect(photoTarget(canvasElement)).toHaveAttribute("tabindex", "-1");
     expect(getComputedStyle(photo(canvasElement)).opacity).toBe("0.5");
     expect(growsOnHover(photo(canvasElement))).toBe(true);
-    await userEvent.click(photoWell);
     await userEvent.click(nameControl);
+    await userEvent.click(photoTarget(canvasElement));
     expect(args.onClick).toHaveBeenCalledTimes(2);
   },
 };
@@ -394,8 +546,13 @@ export const OpensAsALink: Story = {
   decorators: well,
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    const links = canvas.getAllByRole("link", { name: defaults.name });
-    expect(links).toHaveLength(2);
+    expect(canvas.getAllByRole("link", { name: defaults.name })).toHaveLength(
+      1,
+    );
+    const links = [
+      photoTarget(canvasElement),
+      canvas.getByRole("link", { name: defaults.name }),
+    ];
     for (const link of links) {
       expect(link).toHaveAttribute("href", args.href);
     }
@@ -425,12 +582,16 @@ export const SoldOutOpensAsALink: Story = {
   decorators: well,
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    const links = canvas.getAllByRole("link", { name: defaults.name });
-    expect(links).toHaveLength(2);
+    const name = canvas.getByRole("link", { name: defaults.name });
+    expect(canvas.getAllByRole("link", { name: defaults.name })).toHaveLength(
+      1,
+    );
+    expect(photoTarget(canvasElement)).toHaveAttribute("href", args.href);
     expect(getComputedStyle(photo(canvasElement)).opacity).toBe("0.5");
     expect(growsOnHover(photo(canvasElement))).toBe(true);
-    await userEvent.click(links[0]);
-    expect(args.onClick).toHaveBeenCalledTimes(1);
+    await userEvent.click(photoTarget(canvasElement));
+    await userEvent.click(name);
+    expect(args.onClick).toHaveBeenCalledTimes(2);
   },
 };
 

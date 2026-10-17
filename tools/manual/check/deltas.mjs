@@ -15,6 +15,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findRequirement } from "../src/api/requirements.ts";
 import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
+import { heldElsewhere, issuedIds } from "../src/store/issued-ids.mts";
 import {
   findSection,
   JOURNEY_ID,
@@ -78,6 +79,7 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkFolded(ctx, files, shape);
   checkOverlap(files, ctx.add);
   checkIssued(ctx, files, shape);
+  checkIssuedCases(ctx, changes);
   checkFuse(ctx, files, pages);
   checkAnchors(ctx, files);
   checkBlind(ctx, files, shape);
@@ -699,7 +701,7 @@ function checkIssued(ctx, files, shape) {
       ctx.add(
         "issued",
         one.file,
-        `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed`,
+        `reuses \`${id}\`, which ${named} also issues — an id is issued once and never freed; ${moveHint(one.change)}`,
       );
     }
     // An accepted change's scenarios are the ones its acceptance published.
@@ -712,7 +714,7 @@ function checkIssued(ctx, files, shape) {
           ctx.add(
             "issued",
             one.file,
-            `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed`,
+            `${label(requirement)} issues \`${id}\`, which \`${durable.get(id)}\` already issues — an id is issued once and never freed; ${moveHint(one.change)}`,
           );
         }
       if (requirement.kind !== "modified") continue;
@@ -734,6 +736,41 @@ function checkIssued(ctx, files, shape) {
     }
   }
 }
+
+/** RULE `issued`, for cases: a case number is issued once at every suite
+ * level, read by its readable id with its `<v>` stripped and its trace id. A
+ * case carried with its own trace id is the same record; the same readable id
+ * under another trace id, in the durable suites or another change, is two. */
+function checkIssuedCases(ctx, changes) {
+  const all = issuedIds(ctx.roots.store);
+  for (const change of changes) {
+    if (change.status !== "in-flight") continue;
+    const mine = all.filter(
+      (one) => one.where === change.id && one.kind === "TC",
+    );
+    if (mine.length === 0) continue;
+    const others = change.accepted
+      ? all.filter((one) => one.where !== "durable")
+      : all;
+    for (const { id, by } of heldElsewhere(mine, others)) {
+      const named =
+        by.where === "durable"
+          ? `\`${by.file}\``
+          : by.where.startsWith("archive:")
+            ? `the archived \`${by.where.slice(8)}\``
+            : `\`${by.where}\``;
+      ctx.add(
+        "issued",
+        id.file,
+        `issues case \`${id.id}\` under \`${id.trace}\`, which ${named} issues under \`${by.trace}\` — a case number is issued once; ${moveHint(change.id)}`,
+      );
+    }
+  }
+}
+
+/** The command that moves a change's ids above every id `main` holds. */
+const moveHint = (change) =>
+  `move this change's ids with \`pnpm run spec:issue move ${change}\``;
 
 /** RULE `fuse`: a page selects a requirement by name, and a REMOVED or
  * RENAMED delta is about to move it. Archiving that change leaves the archive

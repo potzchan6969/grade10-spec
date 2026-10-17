@@ -167,13 +167,13 @@ test("shared-planning-change-stages-SC-21 - a wait, dated or not, on the card", 
   await expect
     .element(
       card.getByText(
-        "waiting on the tech PIC to say whether the queue can carry it",
+        "waiting on the engineer to say whether the queue can carry it",
         { exact: true },
       ),
     )
     .toBeVisible();
 
-  // Against the hand that owes it: the designer's line and the tech PIC's
+  // Against the hand that owes it: the designer's line and the engineer's
   // line both read `@tester`, the handle this fixture names for each role.
   const owed = Array.from(
     cardFor("demo-waiting").querySelectorAll('[data-overlay="waiting"]'),

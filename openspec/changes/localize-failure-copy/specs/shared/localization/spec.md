@@ -17,13 +17,15 @@ kind.
 **Closed set of kinds** - A call to a backend that fails SHALL be classified
 as exactly one kind, from a closed set:
 
-| Kind | Assigned when |
-| --- | --- |
-| No connection | the request never reached a backend |
-| Backend fault | the backend answered with a server-fault status, `500` and above |
-| Request refused | the backend answered refusing the request, `400` through `499` |
-| Unreadable answer | the backend answered in a shape the running build cannot read |
-| Unclassified | the failure fits none of the above |
+| Kind | Key | Assigned when |
+| --- | --- | --- |
+| No connection | `offline` | the request never reached a backend |
+| Backend fault | `outage` | the backend answered with a server-fault status, `500` and above |
+| Request refused | `refused` | the backend answered refusing the request, `400` through `499`, a refusal for want of sign-in included |
+| Unreadable answer | `unreadable` | the backend answered in a shape the running build cannot read |
+| Unclassified | `unclassified` | the failure fits none of the above |
+
+Where both a status and an unreadable answer are present, the status decides.
 
 **Classified once** - The classification SHALL be made in one place and reused
 by every surface that shows a failure, on a collector-facing site and in an
@@ -53,15 +55,17 @@ string is.
 
 A collector reads the catalog's words for the kind, never the backend's.
 
-**Words from the catalogs** - A collector-facing surface SHALL render, as a
-failure's notice, the message vocabulary's value for that failure's kind in
-the active locale.
+**Words from the catalogs** - A collector-facing surface SHALL render a
+failure's notice from the message catalogs in the active locale: the
+vocabulary's value for that failure's kind under `failure`, or, where the
+surface names what failed in a line of its own, that catalog line.
 
 **Every kind a key** - Every kind SHALL be a key of the shared vocabulary,
 answered in every locale of both brands on the same terms as every other key.
 
-**Nothing from the backend** - A surface SHALL NOT render text a backend sent,
-nor any words it holds itself, as a failure notice.
+**Nothing from the backend** - A collector-facing surface SHALL NOT render
+text a backend sent, nor any words held outside the catalogs, as a failure
+notice.
 
 **Technical account** - The failing call and whatever the backend said SHALL
 be kept as the technical account, reaching logs and never a screen.

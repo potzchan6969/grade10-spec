@@ -1,3 +1,12 @@
 schema: grade10-planning
 created: 2026-09-29
 design_waived: store-only AuctionRecord presentation; no application-repo task group
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped, 2026-10-16; its delta awaits the fold at acceptance, then archive"
+reviewed:
+  proposal: 7f4eda10
+  user-journeys: b2dde55e
+  ui-design: 727de8c3
+  decisions: 74bbaa4e
+  specs: 36f77bf2
+  test-cases: 36f77bf2
+  tasks: 287178da

@@ -5,8 +5,7 @@ import { AuctionRestrictedPage } from "./auction-restricted-page";
 
 /**
  * The auction restriction surface: chrome with every auction entry point
- * removed, static catalog copy, and Browse the Store. Words match the
- * planned `@grade10/i18n` shared `auctionAvailability` keys.
+ * removed, the shared `auctionAvailability` copy, and Browse the Store.
  */
 const meta = {
   title: "Auction/Display/Screens/Auction Restricted",
@@ -30,6 +29,7 @@ export const Default: Story = {
         name: AUCTION_RESTRICTED_COPY.title,
       }),
     ).toBeVisible();
+    expect(canvas.getByText(AUCTION_RESTRICTED_COPY.description)).toBeVisible();
     const browseStore = canvas.getByRole("button", {
       name: AUCTION_RESTRICTED_COPY.browseStore,
     });

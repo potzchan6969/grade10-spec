@@ -33,5 +33,5 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/loyalty/programme` | Does Your Profile or Histories show points pending on an order not yet completed? | Landed as Q7: Order Details' Points to Earn section; no pending line elsewhere. Owner 2026-10-13 |
-| `grade10-site/loyalty/programme` | Orders paid but not yet completed when this ships - do they earn? | Landed as Q8: they earn on completion, guarded never to earn twice. Owner 2026-10-13 |
+| `grade10-site/loyalty/programme` | Does Your Profile or Histories show points pending on an order not yet completed? | Q7 |
+| `grade10-site/loyalty/programme` | Orders paid but not yet completed when this ships - do they earn? | Q8 |

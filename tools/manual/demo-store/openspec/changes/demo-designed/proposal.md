@@ -4,7 +4,7 @@
 
 ## Why
 
-The fixture walk needs a change that has drawn both designs and gone no
+The fixture walk needs a change that has drawn its UI design and gone no
 further, so a reader can tell the Designed stage from the ones beside it.
 
 ## What Changes

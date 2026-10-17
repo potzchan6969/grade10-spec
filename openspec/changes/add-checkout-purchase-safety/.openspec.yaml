@@ -1,6 +1,10 @@
 schema: grade10-planning
 created: 2026-10-09
-page_waived: "Delivers outcomes the checkout PRD already states unmarked under Integration readiness; 🚧 marks follow acceptance"
-awaiting:
-  decisions: backend scope, ordering and owner for the published safe-repeat requirement - /planning-pm
-  specs: backend refinements beyond the unchanged published safe-repeat requirement - /planning-dev
+page_waived: "Delivers outcomes the checkout PRD already states unmarked under Integration readiness"
+reviewed:
+  decisions: c059355c
+  user-journeys: e417be3c
+  test-cases: 1ea241f4
+  tech-design: 53d2f3f5
+  specs: e0aa4359
+  tasks: d84d5d26

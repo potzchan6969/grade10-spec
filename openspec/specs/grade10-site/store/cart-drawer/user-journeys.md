@@ -60,6 +60,30 @@
 **I want** Close, backdrop click and Escape to keep working,
 **so that** I can return to the page without waiting for that operation to finish.
 
+### g10.store-cart-drawer.US15: Signed-out collector finds guest checkout first
+
+**As a** signed-out collector whose cart is ready,
+**I want** Check Out as Guest as the primary action, with a quiet sign-in link under it,
+**so that** I can pay without an account wall.
+
+### g10.store-cart-drawer.US11: Collector signs in from the drawer and keeps the cart
+
+**As a** signed-out collector who chooses the sign-in link,
+**I want** my browser cart to merge into my member cart and the drawer to reopen with points and my wallet codes,
+**so that** signing in costs me nothing I had already chosen.
+
+### g10.store-cart-drawer.US12: Guest applies a public code
+
+**As a** signed-out collector,
+**I want** to pick or type a public code in the cart,
+**so that** I can take a promotion without an account.
+
+### g10.store-cart-drawer.US13: Member sees public codes beside their own
+
+**As a** signed-in collector,
+**I want** the picker's public codes listed beside my wallet codes and rewards,
+**so that** I choose the saving that suits the cart from one list.
+
 ### g10.store-cart-drawer.US14: Collector returns to a tab whose session ended with the cart open
 
 **As a** collector,

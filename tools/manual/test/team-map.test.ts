@@ -14,7 +14,7 @@ import { writeStore } from "./tmp-store";
  * The team map is read by one module both halves of the repository import,
  * and the manual is one of them. What is asserted here is the seam: that the
  * reader's answer is the shape the manual's surfaces name a hand from, and
- * that the six roles the app knows are the six the reader knows.
+ * that the five roles the app knows are the five the reader knows.
  *
  * Over a fixture, never over `docs/prds/team.yaml` itself. The file is a live
  * record — a handle with no Slack member today has one the day Operations

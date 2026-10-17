@@ -27,6 +27,7 @@
 | Q6 | Who decides when to ask? | The application chooses when to supply suggestion groups. The shared field only shows what it is given - decided by the round | A character threshold in the shared field |
 | Q7 | How is a filter hit labelled? | The facet value as the row label and World or Type as trailing chrome - decided by the round | A single "World · value" string |
 | Q8 | Can they commit when nothing matched? | No match shows that nothing matched. Enter still commits the typed words - decided by the round | Blocking commit until a hit exists |
+| Q9 | From how many typed characters does the listing ask? | From the first character that folds to something, once typing rests 300 ms; each group is cut to five, the filters group worlds first, then types. Decided by agent, 2026-10-16 | A threshold of two or three characters |
 
 ## Raised
 

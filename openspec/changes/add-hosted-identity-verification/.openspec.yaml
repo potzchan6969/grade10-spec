@@ -3,3 +3,9 @@ promoted_by: "@ecchochan"
 created: 2026-09-04
 decisions_waived: "legacy change - decisions cannot be restored from past planning sessions"
 page_waived: "predates the page rule"
+reviewed:
+  user-journeys: 8f9b9ab8
+  specs: 243da3d1
+  ui-design: 21e0bf0f
+  tech-design: 21e0bf0f
+  tasks: "11074952"

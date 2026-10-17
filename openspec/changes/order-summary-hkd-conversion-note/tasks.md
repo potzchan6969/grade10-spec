@@ -23,4 +23,4 @@
 
 ## 4. The walk (grade10)
 
-- [ ] 4.1 Walk `winner-order-US-27`: a winner with an HKD Pending Payment order reads the Order Summary in HKD on one clean list, and finds the conversion named once beneath the Order Total (`winner-order-SC-290`, `winner-order-SC-304`)
+- [ ] 4.1 Walk `winner-order-US-27`: a winner with an HKD Pending Payment order reads the Order Summary in HKD on one clean list, and finds the conversion named once beneath the Order Total (`winner-order-SC-290`, `winner-order-SC-304`) — blocked: the E2E stack needs Docker and Playwright browsers, neither available to this run; `winnerOrderView.test.ts` and `AuctionWinnerOrderPage.test.tsx` prove the note and the HKD lines

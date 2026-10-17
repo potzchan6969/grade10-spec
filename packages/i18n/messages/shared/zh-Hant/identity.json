@@ -50,5 +50,38 @@
     "inviteLoading": "正在開啟您的邀請…",
     "inviteReopen": "此瀏覽器無法在您登入期間保留邀請。登入後，請重新開啟邀請連結。",
     "loadFailed": "無法讀取您的企業狀態，請稍後再試。"
+  },
+  "check": {
+    "verify": {
+      "loading": "正在開啟你的身份核實…",
+      "noSecretTitle": "這條連結不完整",
+      "noSecretMessage": "請按邀請中的原連結重新開啟。",
+      "failedTitle": "無法開啟你的核實",
+      "failedMessage": "我們這邊出了問題，請稍後再試。",
+      "refusedTitle": "這條連結已不能開啟核實",
+      "refusedUnknown": "請向 Grade10 團隊索取新的邀請。",
+      "refusedExpired": "這個邀請已過期，請向 Grade10 團隊索取新的邀請。",
+      "startTitle": "核實你的身份",
+      "startMessage": "Grade10 需要先確認你的身份，你的保管個案才能繼續。",
+      "consentText": "我們的身份核實夥伴會檢查你的證件及你的面部相片。Grade10 只保留核實結果及證件資料，不保留影像。",
+      "consentLabel": "我同意進行身份核實",
+      "startAction": "開始核實",
+      "continueTitle": "繼續你的身份核實",
+      "continueMessage": "你早前已開始這次核實，可從上次的地方繼續。",
+      "continueAction": "繼續",
+      "waitTitle": "我們正在審核你的核實",
+      "waitMessage": "通常只需幾分鐘。你可以關閉此頁，我們會以電郵通知你。",
+      "waitAction": "再次查看",
+      "doneTitle": "你的身份核實已完成",
+      "doneMessage": "謝謝。你的保管個案可以繼續。",
+      "retryLabel": "再試一次"
+    },
+    "invitation": {
+      "subject": "為你的 Grade10 保管個案核實身份",
+      "heading": "核實你的身份",
+      "body": "你的保管個案繼續之前，Grade10 需要確認你的身份。準備好身份證明文件及手機鏡頭，只需幾分鐘。",
+      "action": "開始核實",
+      "expiry": "此連結在 {days} 天內有效，只供你本人使用，請勿轉發。"
+    }
   }
 }

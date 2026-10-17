@@ -2,3 +2,6 @@ schema: grade10-planning
 created: 2026-10-13
 awaiting:
   specs: 2026-10-13, requirement deltas from /planning-dev
+reviewed:
+  proposal: 09daa078
+  decisions: cab6f90d

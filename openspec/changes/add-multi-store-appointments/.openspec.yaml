@@ -3,3 +3,9 @@ promoted_by: "@brianchacha6969"
 created: 2026-09-05
 decisions_waived: "legacy change - decisions cannot be restored from past planning sessions"
 page_waived: "predates the page rule"
+reviewed:
+  user-journeys: ad0865c2
+  tech-design: cb063c05
+  specs: c669a9c1
+  ui-design: cb063c05
+  tasks: 28f92533

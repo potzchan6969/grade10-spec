@@ -13,9 +13,9 @@ destination, and every control that does something.
   - `SiteHeader`: shared header composition with application-supplied content and session
   - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
-  - Handler-gated: search, account, cart, Profile, My Orders, and Membership
-    render only when their handler is supplied, or, for account and cart,
-    their slot; Membership also needs its copy
+  - Handler-gated: search, account, cart, Profile, My Orders, My Auctions,
+    and Membership render only when their handler is supplied, or, for
+    account and cart, their slot; Membership also needs its copy
   - No wishlist: the header does not offer a wishlist control
   - Account menu: Sign In when signed out; signed in, an initial avatar above
     the sign-in email, or the account label alone with no email, above the
@@ -285,7 +285,7 @@ sign-in handler when that button is activated.
 account icon and SHALL open a menu that shows a small (`xs`) initial avatar
 above `accountEmail`, both above the items. When `accountEmail` is not
 supplied, the menu SHALL show `copy.accountMenuLabel` in its place and no
-avatar. The items SHALL include at minimum My Auctions and Sign Out. The
+avatar. The items SHALL include at minimum Sign Out. The
 menu SHALL NOT include KYC. Activating each item SHALL invoke the matching
 supplied handler.
 
@@ -298,15 +298,16 @@ expose no role, name, or busy state to assistive technology.
 
 **Sign Out label** - The account menu's sign-out item SHALL read "Sign Out".
 
-**Profile, Cart, search, My Orders, and Membership** - Profile, Cart, search,
-My Orders, and Membership SHALL remain absent unless the application
-supplies their handlers; Membership additionally requires `copy.membership`.
-The account menu's items SHALL follow the fixed order Profile, My Orders, My
-Auctions, Membership, Sign Out, each of Profile, My Orders, and Membership
-omitted independently wherever its own handler (and, for Membership, its
-copy) is not supplied, opening directly on whichever item is next. The menu
-SHALL offer no item beyond these five, so `SiteHeaderProps` and
-`SiteHeaderCopy` take no handler or label for a second orders item.
+**Profile, Cart, search, My Orders, My Auctions, and Membership** - Profile,
+Cart, search, My Orders, My Auctions, and Membership SHALL remain absent
+unless the application supplies their handlers; Membership additionally
+requires `copy.membership`. The account menu's items SHALL follow the fixed
+order Profile, My Orders, My Auctions, Membership, Sign Out, each of
+Profile, My Orders, My Auctions, and Membership omitted independently
+wherever its own handler (and, for Membership, its copy) is not supplied,
+opening directly on whichever item is next. The menu SHALL offer no item
+beyond these five, so `SiteHeaderProps` and `SiteHeaderCopy` take no handler
+or label for a second orders item.
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-ff5 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
@@ -484,6 +485,16 @@ SHALL offer no item beyond these five, so `SiteHeaderProps` and
 - **GIVEN** an application renders `SiteHeader`
 - **WHEN** it passes `onOrders`, or `orders` in `copy`
 - **THEN** its type check refuses each
+
+#### Scenario: shared-ui-site-chrome-SC-44 - Signed in with no My Auctions handler
+**Serves:** Header controls - the account menu omits My Auctions until its own handler is supplied
+
+- **GIVEN** `session` is `"signed-in"` and no `onMyAuctions` handler is
+  supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers Sign Out, and every other gated item whose own
+  handler is supplied
+- **AND** the menu does not offer My Auctions
 
 <!-- trace:scenario id=g10.shared-site-chrome.SC-nal rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-45 - A pending session holds the account entry's place

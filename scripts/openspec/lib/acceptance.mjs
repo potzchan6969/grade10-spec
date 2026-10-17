@@ -36,6 +36,7 @@ import {
   reusedInChange,
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
+import { idsMainHolds } from "../spec-issue.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { foldGroups, holding, labelOf, splitGroups } from "./feature-set.mjs";
 import { foldChecks, purposeOf } from "./fold-checks.mjs";
@@ -1498,20 +1499,32 @@ export function acceptanceReadiness(
           (line) =>
             /^\s*\|/.test(line) && !/^\s*\|\s*(?:Capability|---)/.test(line),
         );
-      if (
-        rows.some(
-          (line) =>
-            /<!--|(?:\bTBC\b|❓)/iu.test(line) ||
-            line
-              .split("|")
-              .slice(1, -1)
-              .some((cell) => cell.trim() === ""),
-        )
-      )
-        errors.push("decisions.md ## Raised still has an unanswered row");
+      for (const line of rows) {
+        if (/^\s*\|\s*<!--/.test(line)) continue;
+        const cells = line
+          .split("|")
+          .slice(1, -1)
+          .map((cell) => cell.trim());
+        const open =
+          /(?:\bTBC\b|❓)/iu.test(line) || cells.some((cell) => cell === "");
+        if (open) errors.push(openRaisedRow(cells));
+      }
     }
   }
   return errors;
+}
+
+/**
+ * One open Raised row as acceptance names it: the capability, the question,
+ * the recommendation it carries and whose answer it waits on — the role a ❓
+ * in its Landed cell names, or the product manager, who resolves every
+ * question before acceptance.
+ */
+function openRaisedRow([capability = "", raised = "", landed = ""]) {
+  const recommended = /recommended:\s*(.+?)\s*$/i.exec(raised)?.[1];
+  const question = raised.replace(/\s*recommended:.*$/i, "").trim();
+  const role = /❓\s+([a-z][a-z0-9._-]*)/.exec(landed)?.[1] ?? "pm";
+  return `decisions.md ## Raised still holds an open row - ${capability || "(no capability)"}: ${question || "(no question)"}${recommended ? ` - recommended: ${recommended}` : " - no recommendation"} - the ${role}'s to answer, or QA2's to close on its recommendation`;
 }
 
 function baselineOf(root, outputs) {
@@ -1677,6 +1690,19 @@ export function acceptanceGate(prepared, command) {
     prepared.changeId,
   ]);
   if (changes) refuse("validate:changes", changes);
+  // Acceptance reads the fetched `main`, not the branch alone: an id another
+  // change landed first is refused before a fingerprint names it.
+  for (const held of idsMainHolds(prepared.root, prepared.changeId, {
+    accepted: existsSync(
+      join(
+        prepared.root,
+        "openspec/changes",
+        prepared.changeId,
+        "acceptance.json",
+      ),
+    ),
+  }))
+    refuse("issued", held);
   for (const finding of foldChecks(prepared))
     (finding.level === "warn" ? warnings : failures).push(finding);
   const tree = foldedTree(prepared);
@@ -2118,6 +2144,12 @@ export function acceptChange(
     throw new Error(
       `durable baseline changed since preflight (now ${prepared.baselineFingerprint}); run accept:preflight again and review the result`,
     );
+  const held = idsMainHolds(root, changeId, {
+    accepted: existsSync(
+      join(root, "openspec/changes", changeId, "acceptance.json"),
+    ),
+  });
+  if (held.length > 0) throw new Error(held.join("\n"));
   const backups = new Map();
   const changeDir = join(root, "openspec", "changes", changeId);
   const record = join(changeDir, "acceptance.json");

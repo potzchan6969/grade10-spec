@@ -22,7 +22,7 @@ document rules into either application.
 
 - **The application** resolves the document data, amounts, dates, payment
   rails, and copy, then passes them to the renderer
-- 🚧 **GMT+8** — every date on the invoice and the receipt is Hong Kong
+- **GMT+8** — every date on the invoice and the receipt is Hong Kong
   time, labelled GMT+8, with the date's words in English whatever language the
   document is written in
 - **The block** lays out the supplied content and returns PDF bytes; it does not
@@ -52,9 +52,9 @@ document rules into either application.
 - **One lot per invoice** - an order holds one lot, so each document draws one
   item today; combining lots is not part of this table -
   [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
-- 🚧 **A replacement invoice** — names the invoice it replaces as plain
+- **A replacement invoice** — names the invoice it replaces as plain
   text, with no link to that invoice's PDF
-- 🚧 **Bank details** — an invoice shows only the bank rails that are
+- **Bank details** — an invoice shows only the bank rails that are
   enabled
 
 ::changes{spec="shared/ui/invoice-and-receipt-pdf"}

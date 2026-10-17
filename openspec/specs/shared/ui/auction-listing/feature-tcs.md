@@ -4,6 +4,10 @@
 **Drafts styled:** 2026-10-13, tcs-rules r5
 **Out of suite:** none
 
+## Background
+
+* The catalogue tile `AuctionLotCard` is a preview part, not a `@grade10/ui` export: it renders under Auction / Display / Screens / Auction List in the preview workbench, and its `locale` and `timeZone` props are settable in the Controls panel.
+
 ## g10.shared-auction-listing.US1: The listing surface's rendering contract
 
 **Walked by:** nobody on their own - a component contract; the journeys live in `grade10-site/auction/listing-page`, which composes the blocks
@@ -1106,7 +1110,7 @@ Runs once in set mode and once in raise mode.
 * No row shows a crown.
 * No row carries an accessible name the copy does not supply, Winner included.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=1 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
+<!-- trace:case id=g10.shared-auction-listing.TC-pz8 rev=2 covers=g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-as2 -->
 ### g10.shared-auction-listing.US1-TC55: A catalogue tile close follows the viewer zone
 
 **Classification:**
@@ -1124,11 +1128,11 @@ Runs once in set mode and once in raise mode.
 
 **Pre-conditions:**
 
-* The same close instant is rendered on `AuctionCard` once with `Asia/Hong_Kong` and once with `America/New_York`.
+* The same close instant is rendered on a closed `AuctionLotCard` once with `Asia/Hong_Kong` and once with `America/New_York`.
 
 **Steps:**
 
-1. Read each card's Ends / Opens / Closed line.
+1. Read each tile's close line.
 
 **Expected Results:**
 
@@ -1261,7 +1265,7 @@ Runs once in set mode and once in raise mode.
 * No gallery item is shown.
 * Previous and next are not available.
 
-<!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
+<!-- trace:case id=g10.shared-auction-listing.TC-n6b rev=2 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
 ### g10.shared-auction-listing.US1-TC57: A tile's close line takes the supplied locale and zone together
 
 Runs once per row of **Test data**.
@@ -1283,11 +1287,11 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* Storybook renders `AuctionCard` closing at 2027-09-01T12:00:00Z with locale zh-Hant and time zone `<viewer zone>`.
+* The preview workbench renders a closed `AuctionLotCard` closing at 2027-09-01T12:00:00Z with locale zh-Hant and time zone <viewer zone>.
 
 **Test data:**
 
-| `<viewer zone>` | `<local time>` | `<zone name>` |
+| Viewer zone | Local time | Zone name |
 | --- | --- | --- |
 | Asia/Tokyo | 21:00 | GMT+9 |
 | America/New_York | 08:00 | EDT |
@@ -1298,8 +1302,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The clock reads `<local time>`, not Hong Kong's 20:00.
-* The line names `<zone name>`, in English though the locale is zh-Hant, and not HKT.
+* The clock reads <local time>, not Hong Kong's 20:00.
+* The line names <zone name>, in English though the locale is zh-Hant, and not HKT.
 
 <!-- trace:case id=g10.shared-auction-listing.TC-ae5 rev=1 covers=g10.shared-auction-listing.SC-as2,g10.shared-auction-listing.SC-9gi,g10.shared-auction-listing.SC-tzc,g10.shared-auction-listing.SC-acp -->
 ### g10.shared-auction-listing.US1-TC58: A bid row's display text replaces its formatted time
@@ -2009,6 +2013,13 @@ openspec/changes/archive/.
 **Cases** - All 14 cases remain drafts. `TC-fb2@4` covers SC-9e0 and SC-q3n; `TC-ygd@3` SC-8ym; `TC-35i@3` SC-wdd; `TC-jr1@3` SC-z2x and SC-qdv; `TC-bfp@3` SC-y2e; `TC-hsy@3` SC-xxl; `TC-ftm@3` SC-z2x; `TC-g02@3` SC-6n7; `TC-dej@2` SC-huw; `TC-w4r@2` SC-atq; `TC-9rx@2` SC-v6g and SC-1mi; `TC-5dh@2` SC-cfl; `TC-swf@2` SC-rnz; and `TC-oem@1` SC-2wv. `TC-fb2` was repaired in place at rev4 to assert the exact 1,000,000,000 USD-minor-unit callback in both set and raise routes. No case was added.
 
 **Scenario coverage** - The 16 linked scenarios are fully asserted. `SC-7o5`, `SC-t9f`, `SC-2s5` and `SC-dv0` remain out of suite and are exercised by their existing durable cases. Those unchanged durable rows still have older HKD/JPY fixtures for archive reconciliation. Automated `Decided by` labels on draft cases are not execution evidence. `TC-19` remains a draft manual case after the callback repair. No contradictory assertion remains.
+
+**Run:** no blind pass - a carrier repoint: `AuctionCard` is removed and the tile deadline requirement moves to `AuctionLotCard`, the tile the catalogue draws. The two tile cases were revised in place; no case joins or leaves.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| US1-TC55 | Revised as US1-TC55-2, rev 2 | Its carrier is now a closed `AuctionLotCard`; the expected zone names are unchanged |
+| US1-TC57 | Revised as US1-TC57-2, rev 2 | Its carrier is now the preview workbench tile; the deciding formatter test `packages/date/src/local.test.ts` is unchanged, same rows and results |
 
 **Run:** Not a blind pass — the change was written code-first on its own
 decision (decisions Q6), so these cases were drafted with sight of the

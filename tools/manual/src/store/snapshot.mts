@@ -50,7 +50,7 @@ import { checkWarnings } from "./warnings.mts";
 /** `docs/prds/team.yaml`, projected to what the browser needs: a handle
  * against the roles it may take, its e-mail, Slack member and channels left
  * behind — those address a message, which is the notify script's own job.
- * A role the map does not spell as one of the six is dropped rather than
+ * A role the map does not spell as one of the five is dropped rather than
  * carried into a type that promises only those six: `checkHands` is where a
  * change's own `hands:` is held to that set, and the map itself owes no such
  * check yet. */

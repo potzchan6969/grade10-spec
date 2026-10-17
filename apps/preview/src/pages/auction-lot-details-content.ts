@@ -149,6 +149,8 @@ export const AUCTION_SITE_HEADER = {
     account: "Account",
     signIn: "Sign In",
     menu: "Menu",
+    search: "Search",
+    cart: "Cart",
     menuTitle: "Menu",
     language: "Language",
     accountMenuLabel: "Account",

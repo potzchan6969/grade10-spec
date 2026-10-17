@@ -8,5 +8,9 @@ hands:
   qa: "@chloe9gag"
   dev: "@ecchochan"
 ui_waived: "the rule moves the store's records and checks; Pending already lists a wait under the hand who owes it"
-awaiting:
-  specs: "2026-10-07, the outline, the blind suite and the requirements - @ecchochan"
+reviewed:
+  proposal: 3cedd9db
+  decisions: 2a0e1506
+  specs: e4078d50
+  tasks: f05e5f00
+  user-journeys: 6def2af7

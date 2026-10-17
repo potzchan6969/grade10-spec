@@ -1,0 +1,12 @@
+schema: grade10-planning
+created: 2026-10-13
+ui_waived: removal only - no new surface, state or variant to design; pages compose the existing EmptyState primitive
+design_waived: all work is in this store - the single task group is tagged (grade10-spec); no application-side technical design
+purpose_rewritten:
+  shared/ui/page-blocks: the capability no longer carries an empty panel - a page with nothing to show composes the design system's EmptyState directly
+reviewed:
+  proposal: e5286efe
+  decisions: d4d025d2
+  user-journeys: 2cfc77e4
+  specs: 72e4daaf
+  test-cases: 72e4daaf

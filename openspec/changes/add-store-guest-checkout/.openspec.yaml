@@ -1,4 +1,10 @@
 schema: grade10-planning
 created: 2026-10-13
-awaiting:
-  specs: 2026-10-13, requirement deltas from /planning-dev
+design_waived: "Built before this record across existing seams - the guest checkout procedure, the order link page and the drawer footer props; the tasks name each"
+reviewed:
+  proposal: 49a9f785
+  decisions: 33a68ef4
+  user-journeys: de3c4806
+  ui-design: 0ea4ad44
+  specs: 2bd7a703
+  tasks: e92c8289

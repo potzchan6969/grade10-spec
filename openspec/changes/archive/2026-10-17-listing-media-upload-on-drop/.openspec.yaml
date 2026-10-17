@@ -1,0 +1,18 @@
+schema: grade10-planning
+created: 2026-09-27
+promoted_by: "@htonyl"
+hands:
+  pm: "@htonyl"
+  design: "@htonyl"
+  qa: "@htonyl"
+  dev: "@htonyl"
+  release: "@htonyl"
+ui_waived: existing auction and inventory media dialogs already use the shared gallery; this change adds no new screen or design state
+reviewed:
+  decisions: a7eaa90b
+  user-journeys: 6d97feab
+  tasks: 3246f5b9
+  proposal: 15c9a66a
+  tech-design: 87b48453
+  specs: c556c6f7
+  test-cases: 87b48453

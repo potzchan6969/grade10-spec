@@ -42,7 +42,7 @@ Amendment (`decisions.md` Q18-Q20). Needs this change's rewritten `spec.md`/`fea
 
 Needs group 3 landed.
 
-- [ ] 4.1 Add sample fixtures to `fixtures.ts` (an invoice and a receipt, each with a full `copy` argument) for both story files and `apps/preview`'s pages to share — deferred: each of the four story files (two here, two in `apps/preview`) inlines its own sample data today, duplicated rather than shared; low risk, but the file this task names does not exist yet
+- [x] 4.1 Add sample fixtures to `fixtures.ts` (an invoice and a receipt, each with a full `copy` argument) for both story files and `apps/preview`'s pages to share — `fixtures.ts` holds the HKD, USD, bank-transfer, replacement and tax samples the block's stories import
 - [x] 4.2 Rewrite `invoice-pdf.stories.tsx`/`receipt-pdf.stories.tsx` to call `InvoicePdf`/`ReceiptPdf` on sample data and preview the returned bytes with `pdf-preview.tsx`'s `PdfPreview` (a small `pdfjs-dist`-based canvas viewer), keeping the `Auction Invoice And Receipt Pdf/…` Storybook title (`decisions.md` Q17)
 - [x] 4.3 Add `pdfjs-dist` as a devDependency of `packages/ui`, which hosts `pdf-preview.tsx`
 - [x] 4.4 Rewrite `apps/preview/src/pages/auction/post-bidding/winner-order.invoice-pdf.stories.tsx`/`winner-order.receipt-pdf.stories.tsx` the same way, replacing their `<InvoicePdf/>`/`<ReceiptPdf/>` JSX (landed by group 2.4, now stale — this was a live typecheck break, `PartyAddress`/`bankRails`/`orderValue`/`taxLine` all gone) with a call to the renderer and `pdf-preview.tsx`'s `PdfPreview`, imported via `@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview` since it is not part of the `../../index` barrel
@@ -68,24 +68,24 @@ Needs groups 3-4 landed on `main` and the submodule bumped first.
 
 Uses draft `feature-tcs.md` as its planning input.
 
-- [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a replacement invoice (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-98`). Confirm the replacement document names the replaced invoice, as this change's `SC-51` requires.
-- [ ] 6.2 Walk `winner-order-US-02` opening the receipt PDF once paid and before payment (`winner-order-SC-67`, `winner-order-SC-68`) — `winner-order-SC-18`/`SC-19`'s manually-settled distinction is not a claim this contract makes any more (`decisions.md` Q19); walk it against whatever `winner-order/spec.md` still requires there, not against a mark this renderer does not draw
-- [ ] 6.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 3-4's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
-- [ ] 6.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)
+- [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a replacement invoice (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-98`). Confirm the replacement document names the replaced invoice, as this change's `SC-51` requires. — blocked: a walk through the deployed Winner Order page needs the E2E stack (Docker, Playwright browsers), unavailable to this run; `invoicePdf.test.ts` (grade10) and the renderer suites here prove the documents
+- [ ] 6.2 Walk `winner-order-US-02` opening the receipt PDF once paid and before payment (`winner-order-SC-67`, `winner-order-SC-68`) — `winner-order-SC-18`/`SC-19`'s manually-settled distinction is not a claim this contract makes any more (`decisions.md` Q19); walk it against whatever `winner-order/spec.md` still requires there, not against a mark this renderer does not draw — blocked: a walk through the deployed Winner Order page needs the E2E stack (Docker, Playwright browsers), unavailable to this run; `invoicePdf.test.ts` (grade10) and the renderer suites here prove the documents
+- [ ] 6.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 3-4's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row — blocked: waits on the walks in 6.1 and 6.2
+- [ ] 6.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there) — blocked: the unit lane passes (`invoicePdf.test.ts`, `samples.test.ts`, `PdfLabPage.test.tsx`); the E2E lane needs Docker
 
 ## 7. Reconcile invoice rendering with the accepted PDF contract (grade10-spec) (owner: @htonyl)
 
 7.1 and 7.2 rewrite spacing lines in `invoice-pdf.ts`, which the Design Override check stops. The first commit that changes the block waits for the person's yes, here or in group 9, whichever lands first (`ui-design.md`); each later stopped commit carries its own `Design-Override:` line.
 
-- [ ] 7.1 Update `InvoicePdfBankRails` and `drawBankRails` so only supplied enabled rails receive columns, and use `bankRails.reference` in the note; cover two enabled rails and an absent third (`SC-49`, `SC-50`).
-- [ ] 7.2 Add optional `replacesInvoice` to `InvoicePdfData`, render the replaced invoice ID in its own plain-text row (`SC-51`). Cover presence and absence. Keep the document's own invoice number distinct.
-- [ ] 7.3 Add the phone line to `addressLines` in `pdf-document.ts`, after company and before address line 1: it draws when the address supplies `phone` and leaves no line when it does not, on both documents. The function draws six lines today and no phone. Cover both cases in `pdf-document.test.ts` (`SC-31`, `SC-32`).
-- [ ] 7.5 Add the accepted optional `taxLine` to both renderers, before Subtotal when supplied and omitted without a reserved row when null or absent; cover both documents (`shared-ui-invoice-and-receipt-pdf-SC-52`, `shared-ui-invoice-and-receipt-pdf-SC-53`).
-- [ ] 7.6 Verify the focused renderer suites, public exports, shared sample fixtures, Storybook previews, and typechecks.
+- [x] 7.1 Update `InvoicePdfBankRails` and `drawBankRails` so only supplied enabled rails receive columns, and use `bankRails.reference` in the note; cover two enabled rails and an absent third (`SC-49`, `SC-50`).
+- [x] 7.2 Add optional `replacesInvoice` to `InvoicePdfData`, render the replaced invoice ID in its own plain-text row (`SC-51`). Cover presence and absence. Keep the document's own invoice number distinct.
+- [x] 7.3 Add the phone line to `addressLines` in `pdf-document.ts`, after company and before address line 1: it draws when the address supplies `phone` and leaves no line when it does not, on both documents. The function draws six lines today and no phone. Cover both cases in `pdf-document.test.ts` (`SC-31`, `SC-32`).
+- [x] 7.5 Add the accepted optional `taxLine` to both renderers, before Subtotal when supplied and omitted without a reserved row when null or absent; cover both documents (`shared-ui-invoice-and-receipt-pdf-SC-52`, `shared-ui-invoice-and-receipt-pdf-SC-53`).
+- [x] 7.6 Verify the focused renderer suites, public exports, shared sample fixtures, Storybook previews, and typechecks.
 
 ## 8. Integrate the reconciled PDF contract (grade10) (owner: @htonyl)
 
-- [ ] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.
+- [x] 7.4 Update the invoice samples and Grade10 backend caller to pass only enabled bank rails, `reference`, and the replacement relationship when one exists; run the focused renderer tests, Grade10 PDF service tests, Storybook preview, and typechecks.
 
 ## 9. Item table in the shared renderer (grade10-spec) (owner: @seankcw)
 

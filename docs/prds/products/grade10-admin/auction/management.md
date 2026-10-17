@@ -14,8 +14,8 @@ the card is in the winner's hands. The collector's half is
 
 | Rule | Value |
 | --- | --- |
-| 🚧 Currency | **USD** for every listing; **USD** when omitted |
-| 🚧 Bid floor | The USD price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
+| Currency | **USD** for every listing; **USD** when omitted |
+| Bid floor | The USD price schedule — [Bidding · Bid Increments](/p/grade10-site/auction/bidding#auction-logic); no minimum-increment field |
 | Title | Required at create; **1 to 200** characters |
 | Copy | Optional; at most **4,000** characters |
 | Slug | **1 to 64** characters, lower-case words joined by hyphens, unique among the listings that hold one; a called-off listing holds none |
@@ -107,7 +107,7 @@ the card is in the winner's hands. The collector's half is
   has passed still saves
 - **Publish still needs** — a created listing with a Publish at names under
   it each field its publish still needs
-- 🚧 **Call off** - any time before the close, bids or not; the stock is
+- **Call off** - any time before the close, bids or not; the stock is
   released and the listing leaves browse and search. Its former address is
   available for another listing, and so is the address of a listing called
   off earlier. Its listing code stays reserved and never resolves as a route;
@@ -150,16 +150,16 @@ the card is in the winner's hands. The collector's half is
   adds it. A `No Cert ID` listing represents regular stock, has no Cert record,
   and starts with untagged product media. Each selected source is copied into
   the listing gallery.
-- 🚧 **Internal bid** - on a Created or Published listing, an admin with
+- **Internal bid** - on a Created or Published listing, an admin with
   `auction:reserve` sets one house maximum and picks one internal bidder. Its
   rules, Save limits, listing edits and Not placed state are on [Internal
   Bid](/p/grade10-admin/auction/internal-bid)
-- 🚧 **Internal bidders** - a reserve holder manages profiles with a name,
+- **Internal bidders** - a reserve holder manages profiles with a name,
   unique email label and required billing address; a profile has no site
   account. Admins enter a neutral recipient in the address, never the profile's
   name. The email label is fixed after the profile has bid - [Internal
   Bid](/p/grade10-admin/auction/internal-bid)
-- 🚧 **Internal bidder win** - a reserve holder sees the listing flagged as
+- **Internal bidder win** - a reserve holder sees the listing flagged as
   won by its internal bidder. Other operators see an ordinary won lot with
   Open order - [Internal Bid](/p/grade10-admin/auction/internal-bid)
 - 🚧 **Extended bidding** - a published lot past its scheduled close and still
@@ -240,7 +240,7 @@ order.
 | Payment window | **7 calendar days** from send |
 | 🚧 Address window | **48 hours** from actual close for the winner to confirm setup, which locks it; a reasoned operator reopen of unconfirmed Setup Overdue gives a fresh **48 hours**; after confirmation only an operator changes it |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
-| 🚧 Buyer's premium | **20%** of the USD winning bid or the one USD minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
+| Buyer's premium | **20%** of the USD winning bid or the one USD minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
 | Status | Segment | Primary action | Waited since |
 | --- | --- | --- | --- |
@@ -259,7 +259,7 @@ order.
   Test badge on a sandbox lot, the rule behind the status in one sentence, how
   long it has waited, and one primary action, with every other action that
   applies now under More
-- 🚧 **Internal order** - flagged Internal; other operators read the buyer as
+- **Internal order** - flagged Internal; other operators read the buyer as
   House, and a reserve holder sees the profile - [Internal
   Bid](/p/grade10-admin/auction/internal-bid)
 - **The winner** - name, registered email and phone, never a payment-provider
@@ -325,7 +325,7 @@ on winner, In transit, Closed and All, opening on Needs action.
   winning bid and the premium, enters Shipping & Handling (zero allowed) and
   optional Insurance (above zero), reads the Payment Processing Fee, the
   total and the deadline to the minute, and sends, which starts the 7 days
-- 🚧 **Tax** — a third quoted amount beside Shipping & Handling and
+- **Tax** — a third quoted amount beside Shipping & Handling and
   Insurance, optional and above zero. Grade10 computes no rate: the operator
   decides what is owed and enters it
 - 🚧 **Billing address** — shown beside the delivery address on the quote;
@@ -339,7 +339,7 @@ on winner, In transit, Closed and All, opening on Needs action.
   every amount in USD, the bank transfer fee included; for an HKD order Grade10
   converts each line at the fixed rate and shows the operator no rate —
   [Post-Bidding · Settling in HKD](/p/grade10-site/auction/post-bidding#settling-in-hkd)
-- 🚧 **Historical bank rail** - An ordinary order already confirmed for bank
+- **Historical bank rail** - An ordinary order already confirmed for bank
   transfer may have no recorded rail. The operator reads that rail as unknown;
   current Finance configuration is not used to guess it. The confirmed setup,
   sent invoice amounts and currencies, and existing instruction artifact stay
@@ -503,12 +503,12 @@ it.
 
 | Rule | Value |
 | --- | --- |
-| 🚧 Premium minimum | One USD amount, **0** at first; it applies to the USD winning bid |
-| 🚧 Card rule per settlement currency | One rule for USD and one for HKD; Finance sets each percentage and fixed amount |
-| 🚧 Currencies held | USD and HKD, the two settlement currencies. The premium minimum is one USD amount, read in the bid currency |
-| 🚧 Card fee rule | One per currency: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
-| 🚧 At launch | A USD card rule is required. Card is unavailable in a settlement currency until its rule is saved |
-| 🚧 Typed as | Percent and fixed amount in the settlement currency's major units, stored as minor units |
+| Premium minimum | One USD amount, **0** at first; it applies to the USD winning bid |
+| Card rule per settlement currency | One rule for USD and one for HKD; Finance sets each percentage and fixed amount |
+| Currencies held | USD and HKD, the two settlement currencies. The premium minimum is one USD amount, read in the bid currency |
+| Card fee rule | One per currency: a percentage of at least 0 and below 100, to two decimal places, and a fixed amount of zero or more; or no rule, and half a rule is refused |
+| At launch | A USD card rule is required. Card is unavailable in a settlement currency until its rule is saved |
+| Typed as | Percent and fixed amount in the settlement currency's major units, stored as minor units |
 | Who | 🚧 Operators with payment processing, `auction:payment`; others neither read nor change it |
 | Saved | Whole, replacing both settlement currencies' rules at once and recording the operator and the time; a new value applies to card invoices sent or reissued after it, and never re-prices a sent one |
 | Refused | A missing or unsupported currency, a negative amount or one finer than the currency's smallest unit, or a read or save without that access — nothing stored changes |
@@ -537,7 +537,7 @@ it.
 | 🚧 Clearing a flag, and Payment Settings: the premium minimum and the card fee rule | `auction:payment` - payment processing | `finance`, `treasurer` and `admin` |
 | Dispatch and delivery | `auction:shipment` - shipment processing | `staff` and `admin` |
 | Recording a refund | `auction:refund` - refund processing | `staff` and `admin` |
-| 🚧 Setting and reading internal bids and internal bidder profiles; reading the profile behind a House bid or win | `auction:reserve` - secret-floor access | `admin` |
+| Setting and reading internal bids and internal bidder profiles; reading the profile behind a House bid or win | `auction:reserve` - secret-floor access | `admin` |
 | 🚧 Making a test winner, outside production | `auction:operate` and `user:create` | `admin` |
 
 - 🚧 **A control the operator lacks** - it stays listed and disabled, naming
@@ -562,7 +562,7 @@ sandbox lot, so QA walks the winner's order by hand as a real winner would.
 | Where | Local, staging, staging-2 and UAT only; never production or a preview, whose console carries no Test tab |
 | Email | The operator's own address with a `+qa-<code>` tag, checked by Grade10, so every letter lands in their own inbox. The same address makes one test winner; one that holds a verified account is refused |
 | The lot | `Test lot <code>`, a sandbox lot closed through the real close, now or up to 30 days back, so its order and letters are the real ones; never biddable |
-| 🚧 Bid and settlement | The sandbox lot bids in USD. Its test winner chooses USD or HKD settlement and an offered payment method at order setup, with nothing preselected |
+| Bid and settlement | The sandbox lot bids in USD. Its test winner chooses USD or HKD settlement and an offered payment method at order setup, with nothing preselected |
 | Sign-in | The ordinary sign-in link, which the console emails to the test address after making it and again on request; opened in a private window, so the operator stays signed in |
 
 - 🚧 **The list** - Winners in the Test tab lists test winners newest first,
@@ -620,12 +620,12 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Called-off address reuse | 🚧 In flight | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
-| Internal bid | 🚧 In flight | One USD house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see placed bids labelled House, with their public amounts and Accepted At; they see no account, profile or maximum, and no row or commit time before the first house bid. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
-| House win | 🚧 In flight | Collectors read the lot as sold; the internal order is flagged Internal, opens as Preparing Invoice and uses HKD settlement and bank transfer on FPS at close. It uses the profile's billing address for delivery and billing, with a neutral recipient entered by an admin. There is no setup step or invoice at close; an operator sends the invoice by hand. The order sends no letters. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
+| Called-off address reuse | Decided | Another listing can take a called-off listing's former address. This replaces permanent canonical-address retention, per [issue 956 clarification](https://github.com/9gag/grade10/issues/956#issuecomment-6119982504). The listing code remains a reserved reference, separate from the reusable address. | @htonyl |
+| Internal bid | Decided | One USD house maximum per listing, committed at a time the admin sets between the start and the scheduled close, under `auction:reserve`. Other operators see placed bids labelled House, with their public amounts and Accepted At; they see no account, profile or maximum, and no row or commit time before the first house bid. Chosen over committing it at the start, which shows the house's hand from the first bid, and over `auction:operate`, which shows staff which lots are protected. | Product (@htonyl) |
+| House win | Decided | Collectors read the lot as sold; the internal order is flagged Internal, opens as Preparing Invoice and uses HKD settlement and bank transfer on FPS at close. It uses the profile's billing address for delivery and billing, with a neutral recipient entered by an admin. There is no setup step or invoice at close; an operator sends the invoice by hand. The order sends no letters. Chosen over Bought in with no order, which the author dropped. | Product (@htonyl) |
 | Catalogue Featured | Decided | At most 3 ordered slots from Manage Featured on Listings; each binds one published listing and one operator-uploaded front page image for the site carousel. Not gallery picks, not auto Top-N, not the campaign cover alone. | Design |
-| Bid currency | 🚧 In flight | USD is the single bid currency for every listing, with one shared increment schedule and one ceiling. The winner chooses USD or HKD settlement. | Product |
-| Payment Settings currencies | 🚧 In flight | USD and HKD are the settlement currencies. Each has one card fee rule; the premium minimum is one USD amount. A USD card rule is required at launch. | Product |
+| Bid currency | Decided | USD is the single bid currency for every listing, with one shared increment schedule and one ceiling. The winner chooses USD or HKD settlement. | Product |
+| Payment Settings currencies | Decided | USD and HKD are the settlement currencies. Each has one card fee rule; the premium minimum is one USD amount. A USD card rule is required at launch. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
 | Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
 | A consigned lot | Decided | Consignment makes it as a draft with no stock hold and owns its start price, which is the consignment's floor, and its relist. | Product |
@@ -645,7 +645,7 @@ settings.
 | Orders workspace | 🚧 In flight | One worklist in segments with counts - Needs action, Waiting on winner, In transit, Closed, All - and one page per order with one primary action and each action in its own dialog. Chosen over a listing-level queue beside a separate winner orders tab, which split one order across two surfaces. | Product and Operations |
 | What was seen is sent | 🚧 In flight | The send and the reissue carry the total the operator read and are refused when Grade10 now prices the order differently. Chosen over sending whatever the server computes, which can bill a total nobody saw. | Product and finance |
 | Money that lands | 🚧 In flight | A card payment is always recorded, and one the invoice did not expect carries a flag until an operator clears it with a reason. On an expired invoice it pays the invoice, since it paid the whole total; on a replaced or cancelled invoice, at an amount that differs, or on an invoice in any state that cannot take a card payment, it counts toward nothing and blocks nothing, and finance returns it outside Grade10. Chosen over refusing or dropping it, which loses track of money Grade10 holds, and over never moving a status, which leaves an expired invoice the winner paid in full to be settled a second time. | Product and finance |
-| Test winners | 🚧 In flight | Outside production, one action makes a test account on the operator's own tagged address that won a USD-bid sandbox lot through the real close. The test winner confirms the address, settlement currency and an offered payment method with nothing preselected; the operator then prepares and sends its invoice. The real winner letters go out. It signs in with the ordinary link in a private window, and Cancel is the order's own. Chosen over seeding an order around the real close, which skipped its letters, and over a sign-in link of its own, which auth would have to guard. | Product and Engineering |
+| Test winners | Decided | Outside production, one action makes a test account on the operator's own tagged address that won a USD-bid sandbox lot through the real close. The test winner confirms the address, settlement currency and an offered payment method with nothing preselected; the operator then prepares and sends its invoice. The real winner letters go out. It signs in with the ordinary link in a private window, and Cancel is the order's own. Chosen over seeding an order around the real close, which skipped its letters, and over a sign-in link of its own, which auth would have to guard. | Product and Engineering |
 | How long an order waited | 🚧 In flight | Each row and order page shows how long the order has waited in its status. Setup Overdue is the status at the 48-hour address deadline, and Preparing Invoice carries no mark; its payment timer starts at send. Chosen over a second Overdue mark beside the Setup Overdue status, which also marked the operator's own queue after 72 hours. | Product |
 | Partial payment stays operator-only | Decided | Recorded through Record payment, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
 | Who records a refund | Decided | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:payment`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |

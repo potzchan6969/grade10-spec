@@ -42,18 +42,18 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 ## Bid History
 
 - **Accepted instants** — each row keeps the accepted time as data
-- 🚧 **Localized** — recent activity reads in relative form and older activity
+- **Localized** — recent activity reads in relative form and older activity
   in the viewer's local zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
   own display text; collector deadline and catalogue tile close lines use
   the same locale and zone, and a deadline that shows a clock names the
   viewer's zone: its short name in US English, HKT in Hong Kong, or an offset
   such as GMT+9 where US English has none
-- 🚧 **Closed lot** - the bid card names the viewer's zone after a closed lot's
+- **Closed lot** - the bid card names the viewer's zone after a closed lot's
   close time when it shows a clock, as it does after an open lot's deadline; a
   close day alone names none
   ([Dates and Times](/p/platform/shared/dates-and-times))
-- 🚧 **Catalogue tile** — the tile carrying the close line is the catalogue's
+- **Catalogue tile** — the tile carrying the close line is the catalogue's
   `AuctionLotCard`: a closed lot draws a collector deadline naming the
   viewer's zone, and the shared `AuctionCard` block leaves the package
 - **Winner after close** — when the lot is closed and sold, the winning
@@ -114,7 +114,7 @@ cancelled.
 - 🚧 **A leader's typed raise** — starts at the greater of the listing's next
   minimum and their maximum plus 100 minor units; that floor is not the first
   chip
-- 🚧 **Chips at the ceiling** — a quick bid computed above the USD bid
+- **Chips at the ceiling** — a quick bid computed above the USD bid
   ceiling is offered at the ceiling, captioned as the limit; two chips landing
   on the same amount collapse to one
 - 🚧 **No amount left** — when nothing legal remains to offer — the collector's

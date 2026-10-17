@@ -103,11 +103,21 @@ export const Empty: Story = {
     items: [],
   },
   play: async ({ canvasElement }) => {
+    // shared-ui-store-cart-SC-44
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
+    const empty = canvasElement.querySelector('[data-slot="empty-state"]');
     expect(
-      canvas.getByText("Items you add will appear here"),
+      empty?.querySelector('[data-slot="empty-state-icon"]'),
     ).toBeInTheDocument();
+    expect(
+      empty?.querySelector('[data-slot="empty-state-title"]'),
+    ).toHaveTextContent("Your cart is empty");
+    expect(
+      empty?.querySelector('[data-slot="empty-state-description"]'),
+    ).toHaveTextContent("Items you add will appear here");
+    expect(
+      empty?.querySelector('[data-slot="empty-state-actions"]'),
+    ).toBeNull();
     expect(canvas.queryByRole("button")).not.toBeInTheDocument();
   },
 };

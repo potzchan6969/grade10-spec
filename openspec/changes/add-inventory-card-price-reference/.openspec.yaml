@@ -2,3 +2,10 @@ schema: grade10-planning
 created: 2026-09-03
 page_waived: "predates the page rule"
 decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"
+reviewed:
+  user-journeys: 7625e0f2
+  specs: 490a3677
+  test-cases: 1a0a1fc6
+  ui-design: dc2872cf
+  tech-design: dc2872cf
+  tasks: 730539b9

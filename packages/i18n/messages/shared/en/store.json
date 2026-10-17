@@ -19,6 +19,13 @@
   "sale": "SALE",
   "searchLabel": "Search products",
   "searchPlaceholder": "Search…",
+  "searchEmpty": "No results found.",
+  "searchSearching": "Searching…",
+  "searchChip": "“{query}”",
+  "searchProducts": "Products",
+  "searchFilters": "Filters",
+  "searchWorld": "World",
+  "searchType": "Type",
   "seeAllWorlds": "See all worlds",
   "showResults": "Show Results",
   "soldOut": "SOLD OUT",
@@ -29,5 +36,7 @@
   "sortPriceAsc": "Lowest price",
   "sortPriceDesc": "Highest price",
   "collections": "Collections",
-  "title": "Store"
+  "title": "Store",
+  "salePriceLabel": "Sale price",
+  "listPriceLabel": "Was"
 }

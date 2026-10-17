@@ -33,10 +33,12 @@ import grade10EnIdentity from "../messages/grade10/en/identity.json";
 import grade10EnMarketing from "../messages/grade10/en/marketing.json";
 import grade10EnOrderDetail from "../messages/grade10/en/orderDetail.json";
 import grade10EnOrderHistory from "../messages/grade10/en/orderHistory.json";
+import grade10EnProduct from "../messages/grade10/en/product.json";
 import grade10EnProfile from "../messages/grade10/en/profile.json";
 import grade10EnSignIn from "../messages/grade10/en/signIn.json";
 import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
+import grade10EnStoreLocator from "../messages/grade10/en/storeLocator.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
 import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
@@ -46,10 +48,12 @@ import grade10ZhHansIdentity from "../messages/grade10/zh-Hans/identity.json";
 import grade10ZhHansMarketing from "../messages/grade10/zh-Hans/marketing.json";
 import grade10ZhHansOrderDetail from "../messages/grade10/zh-Hans/orderDetail.json";
 import grade10ZhHansOrderHistory from "../messages/grade10/zh-Hans/orderHistory.json";
+import grade10ZhHansProduct from "../messages/grade10/zh-Hans/product.json";
 import grade10ZhHansProfile from "../messages/grade10/zh-Hans/profile.json";
 import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
 import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
+import grade10ZhHansStoreLocator from "../messages/grade10/zh-Hans/storeLocator.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
 import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
@@ -59,12 +63,15 @@ import grade10ZhHantIdentity from "../messages/grade10/zh-Hant/identity.json";
 import grade10ZhHantMarketing from "../messages/grade10/zh-Hant/marketing.json";
 import grade10ZhHantOrderDetail from "../messages/grade10/zh-Hant/orderDetail.json";
 import grade10ZhHantOrderHistory from "../messages/grade10/zh-Hant/orderHistory.json";
+import grade10ZhHantProduct from "../messages/grade10/zh-Hant/product.json";
 import grade10ZhHantProfile from "../messages/grade10/zh-Hant/profile.json";
 import grade10ZhHantSignIn from "../messages/grade10/zh-Hant/signIn.json";
 import grade10ZhHantStore from "../messages/grade10/zh-Hant/store.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
+import grade10ZhHantStoreLocator from "../messages/grade10/zh-Hant/storeLocator.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
+import sharedEnAuctionAvailability from "../messages/shared/en/auctionAvailability.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
 import sharedEnAuctionInvoicePdf from "../messages/shared/en/auctionInvoicePdf.json";
 import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
@@ -76,6 +83,7 @@ import sharedEnChrome from "../messages/shared/en/chrome.json";
 import sharedEnCommon from "../messages/shared/en/common.json";
 import sharedEnDates from "../messages/shared/en/dates.json";
 import sharedEnEmail from "../messages/shared/en/email.json";
+import sharedEnFailure from "../messages/shared/en/failure.json";
 import sharedEnGrading from "../messages/shared/en/grading.json";
 import sharedEnIdentity from "../messages/shared/en/identity.json";
 import sharedEnLegal from "../messages/shared/en/legal.json";
@@ -93,6 +101,7 @@ import sharedEnVault from "../messages/shared/en/vault.json";
 import sharedEnVerification from "../messages/shared/en/verification.json";
 import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
+import sharedKoAuctionAvailability from "../messages/shared/ko/auctionAvailability.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
 import sharedKoAuctionInvoicePdf from "../messages/shared/ko/auctionInvoicePdf.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
@@ -104,6 +113,7 @@ import sharedKoChrome from "../messages/shared/ko/chrome.json";
 import sharedKoCommon from "../messages/shared/ko/common.json";
 import sharedKoDates from "../messages/shared/ko/dates.json";
 import sharedKoEmail from "../messages/shared/ko/email.json";
+import sharedKoFailure from "../messages/shared/ko/failure.json";
 import sharedKoGrading from "../messages/shared/ko/grading.json";
 import sharedKoIdentity from "../messages/shared/ko/identity.json";
 import sharedKoLegal from "../messages/shared/ko/legal.json";
@@ -121,6 +131,7 @@ import sharedKoVault from "../messages/shared/ko/vault.json";
 import sharedKoVerification from "../messages/shared/ko/verification.json";
 import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json";
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
+import sharedZhHansAuctionAvailability from "../messages/shared/zh-Hans/auctionAvailability.json";
 import sharedZhHansAuctionBiddingHistory from "../messages/shared/zh-Hans/auctionBiddingHistory.json";
 import sharedZhHansAuctionInvoicePdf from "../messages/shared/zh-Hans/auctionInvoicePdf.json";
 import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListing.json";
@@ -132,6 +143,7 @@ import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
 import sharedZhHansCommon from "../messages/shared/zh-Hans/common.json";
 import sharedZhHansDates from "../messages/shared/zh-Hans/dates.json";
 import sharedZhHansEmail from "../messages/shared/zh-Hans/email.json";
+import sharedZhHansFailure from "../messages/shared/zh-Hans/failure.json";
 import sharedZhHansGrading from "../messages/shared/zh-Hans/grading.json";
 import sharedZhHansIdentity from "../messages/shared/zh-Hans/identity.json";
 import sharedZhHansLegal from "../messages/shared/zh-Hans/legal.json";
@@ -149,6 +161,7 @@ import sharedZhHansVault from "../messages/shared/zh-Hans/vault.json";
 import sharedZhHansVerification from "../messages/shared/zh-Hans/verification.json";
 import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json";
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
+import sharedZhHantAuctionAvailability from "../messages/shared/zh-Hant/auctionAvailability.json";
 import sharedZhHantAuctionBiddingHistory from "../messages/shared/zh-Hant/auctionBiddingHistory.json";
 import sharedZhHantAuctionInvoicePdf from "../messages/shared/zh-Hant/auctionInvoicePdf.json";
 import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListing.json";
@@ -160,6 +173,7 @@ import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
 import sharedZhHantCommon from "../messages/shared/zh-Hant/common.json";
 import sharedZhHantDates from "../messages/shared/zh-Hant/dates.json";
 import sharedZhHantEmail from "../messages/shared/zh-Hant/email.json";
+import sharedZhHantFailure from "../messages/shared/zh-Hant/failure.json";
 import sharedZhHantGrading from "../messages/shared/zh-Hant/grading.json";
 import sharedZhHantIdentity from "../messages/shared/zh-Hant/identity.json";
 import sharedZhHantLegal from "../messages/shared/zh-Hant/legal.json";
@@ -190,6 +204,7 @@ import zzzKoStoreHome from "../messages/zzz/ko/storeHome.json";
 export const sharedEn = {
   appointment: sharedEnAppointment,
   auction: sharedEnAuction,
+  auctionAvailability: sharedEnAuctionAvailability,
   auctionBiddingHistory: sharedEnAuctionBiddingHistory,
   auctionInvoicePdf: sharedEnAuctionInvoicePdf,
   auctionRecord: sharedEnAuctionRecord,
@@ -201,6 +216,7 @@ export const sharedEn = {
   common: sharedEnCommon,
   dates: sharedEnDates,
   email: sharedEnEmail,
+  failure: sharedEnFailure,
   grading: sharedEnGrading,
   identity: sharedEnIdentity,
   legal: sharedEnLegal,
@@ -221,6 +237,7 @@ export const sharedEn = {
 export const sharedZhHant = {
   appointment: sharedZhHantAppointment,
   auction: sharedZhHantAuction,
+  auctionAvailability: sharedZhHantAuctionAvailability,
   auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
   auctionInvoicePdf: sharedZhHantAuctionInvoicePdf,
   auctionRecord: sharedZhHantAuctionRecord,
@@ -232,6 +249,7 @@ export const sharedZhHant = {
   common: sharedZhHantCommon,
   dates: sharedZhHantDates,
   email: sharedZhHantEmail,
+  failure: sharedZhHantFailure,
   grading: sharedZhHantGrading,
   identity: sharedZhHantIdentity,
   legal: sharedZhHantLegal,
@@ -252,6 +270,7 @@ export const sharedZhHant = {
 export const sharedZhHans = {
   appointment: sharedZhHansAppointment,
   auction: sharedZhHansAuction,
+  auctionAvailability: sharedZhHansAuctionAvailability,
   auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
   auctionInvoicePdf: sharedZhHansAuctionInvoicePdf,
   auctionRecord: sharedZhHansAuctionRecord,
@@ -263,6 +282,7 @@ export const sharedZhHans = {
   common: sharedZhHansCommon,
   dates: sharedZhHansDates,
   email: sharedZhHansEmail,
+  failure: sharedZhHansFailure,
   grading: sharedZhHansGrading,
   identity: sharedZhHansIdentity,
   legal: sharedZhHansLegal,
@@ -283,6 +303,7 @@ export const sharedZhHans = {
 export const sharedKo = {
   appointment: sharedKoAppointment,
   auction: sharedKoAuction,
+  auctionAvailability: sharedKoAuctionAvailability,
   auctionBiddingHistory: sharedKoAuctionBiddingHistory,
   auctionInvoicePdf: sharedKoAuctionInvoicePdf,
   auctionRecord: sharedKoAuctionRecord,
@@ -294,6 +315,7 @@ export const sharedKo = {
   common: sharedKoCommon,
   dates: sharedKoDates,
   email: sharedKoEmail,
+  failure: sharedKoFailure,
   grading: sharedKoGrading,
   identity: sharedKoIdentity,
   legal: sharedKoLegal,
@@ -322,10 +344,12 @@ export const grade10En = {
   marketing: grade10EnMarketing,
   orderDetail: grade10EnOrderDetail,
   orderHistory: grade10EnOrderHistory,
+  product: grade10EnProduct,
   profile: grade10EnProfile,
   signIn: grade10EnSignIn,
   store: grade10EnStore,
   storeHome: grade10EnStoreHome,
+  storeLocator: grade10EnStoreLocator,
 };
 
 export const grade10ZhHant = {
@@ -338,10 +362,12 @@ export const grade10ZhHant = {
   marketing: grade10ZhHantMarketing,
   orderDetail: grade10ZhHantOrderDetail,
   orderHistory: grade10ZhHantOrderHistory,
+  product: grade10ZhHantProduct,
   profile: grade10ZhHantProfile,
   signIn: grade10ZhHantSignIn,
   store: grade10ZhHantStore,
   storeHome: grade10ZhHantStoreHome,
+  storeLocator: grade10ZhHantStoreLocator,
 };
 
 export const grade10ZhHans = {
@@ -354,10 +380,12 @@ export const grade10ZhHans = {
   marketing: grade10ZhHansMarketing,
   orderDetail: grade10ZhHansOrderDetail,
   orderHistory: grade10ZhHansOrderHistory,
+  product: grade10ZhHansProduct,
   profile: grade10ZhHansProfile,
   signIn: grade10ZhHansSignIn,
   store: grade10ZhHansStore,
   storeHome: grade10ZhHansStoreHome,
+  storeLocator: grade10ZhHansStoreLocator,
 };
 
 export const zzzKo = {

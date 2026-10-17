@@ -922,8 +922,8 @@ describe("permanent ids across the whole store", () => {
       ),
     });
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which `second` also issues — an id is issued once and never freed",
-      "openspec/changes/second/specs/demo-product/beta/spec.md — reuses `beta-SC-01`, which `first` also issues — an id is issued once and never freed",
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which `second` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move first`",
+      "openspec/changes/second/specs/demo-product/beta/spec.md — reuses `beta-SC-01`, which `first` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move second`",
     ]);
   });
 
@@ -935,7 +935,7 @@ describe("permanent ids across the whole store", () => {
         "## ADDED Requirements\n\n### Requirement: Beta was here\n\n#### Scenario: beta-SC-01 - it was here\n\n- **WHEN** asked\n- **THEN** it happened\n",
     });
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which the archived `add-beta` also issues — an id is issued once and never freed",
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which the archived `add-beta` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move first`",
     ]);
   });
 
@@ -956,8 +956,56 @@ describe("permanent ids across the whole store", () => {
       journeys("Someone new"),
     );
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `g10.demo-alpha.US7`, which the archived `add-beta` also issues — an id is issued once and never freed",
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `g10.demo-alpha.US7`, which the archived `add-beta` also issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move first`",
     ]);
+  });
+
+  it("allocate-ids-across-open-changes - fails a case number another change issues under another trace id, at any suite level", async () => {
+    const suite = (trace: string, title: string) =>
+      [
+        "# demo-product/alpha Test Cases",
+        "",
+        "## alpha-US-01: Reader follows the thing",
+        "",
+        `<!-- trace:case id=${trace} rev=1 -->`,
+        `### alpha-US1-TC1-1: ${title}`,
+        "",
+      ].join("\n");
+    const root = changing("first", issuing("alpha", ["alpha-SC-71"]), {
+      "openspec/changes/first/specs/demo-product/alpha/feature-tcs.md": suite(
+        "g10.demo-alpha.TC-aaa",
+        "The count rises",
+      ),
+      "openspec/changes/second/proposal.md": proposal("Second"),
+      "openspec/changes/second/specs/demo-product/alpha/domain-tcs.md": suite(
+        "g10.demo-alpha.TC-bbb",
+        "Somebody else's case",
+      ),
+    });
+    const found = lines(await runChecks(root, NO_GIT), "issued");
+    expect(found).toContain(
+      "openspec/changes/first/specs/demo-product/alpha/feature-tcs.md — issues case `alpha-US1-TC1-1` under `g10.demo-alpha.TC-aaa`, which `second` issues under `g10.demo-alpha.TC-bbb` — a case number is issued once; move this change's ids with `pnpm run spec:issue move first`",
+    );
+  });
+
+  it("passes a case carried into a second change under its own trace id", async () => {
+    const suite = [
+      "# demo-product/alpha Test Cases",
+      "",
+      "<!-- trace:case id=g10.demo-alpha.TC-aaa rev=2 -->",
+      "### alpha-US1-TC1-2: The count rises, revised",
+      "",
+    ].join("\n");
+    const root = changing("first", issuing("alpha", ["alpha-SC-72"]), {
+      "openspec/changes/first/specs/demo-product/alpha/feature-tcs.md": suite,
+      "openspec/changes/second/proposal.md": proposal("Second"),
+      "openspec/changes/second/specs/demo-product/alpha/feature-tcs.md": suite,
+    });
+    expect(
+      lines(await runChecks(root, NO_GIT), "issued").filter((one) =>
+        one.includes("issues case"),
+      ),
+    ).toEqual([]);
   });
 
   it("passes a REMOVED requirement naming the ids an archived change issued", async () => {
@@ -994,7 +1042,7 @@ describe("permanent ids across the whole store", () => {
       ].join("\n"),
     );
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
-      "openspec/changes/reissuing/specs/demo-product/alpha/spec.md — ADDED `Alpha counts things` issues `alpha-SC-02`, which `demo-product/alpha` already issues — an id is issued once and never freed",
+      "openspec/changes/reissuing/specs/demo-product/alpha/spec.md — ADDED `Alpha counts things` issues `alpha-SC-02`, which `demo-product/alpha` already issues — an id is issued once and never freed; move this change's ids with `pnpm run spec:issue move reissuing`",
     ]);
   });
 

@@ -648,6 +648,44 @@ promo sheet, listed apart from the held codes that can apply, with its
 - **THEN** the code that can apply shows its Apply control, and the code that
   cannot is listed apart from it, muted, with its reason and no Apply control
 
+### Requirement: The footer offers a signed-out shopper a sign-in under checkout
+
+`CartDrawerFooter` and `CartDrawer` SHALL accept an optional `onSignIn`
+callback. With `onSignIn` and `copy.signInAction` supplied, the footer SHALL
+render one quiet line under the checkout button — `copy.signInPrompt`, the
+`copy.signInAction` link and `copy.signInSuffix` — whose link calls
+`onSignIn`, disabled under the same loading, pending and redirecting rules as
+checkout. Without `onSignIn` the line SHALL NOT render. `heldPromoCodes: null`
+SHALL hide the member's held-code section, its empty state and the loyalty
+call to action.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-v4g rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-80 - A guest footer offers sign-in under checkout
+**Serves:** shared.ui-store-cart.US21 - Shopper sees a guest checkout in the cart footer
+
+- **GIVEN** a footer given `onSignIn`, `copy.signInAction` and `heldPromoCodes: null`
+- **WHEN** it renders a ready cart
+- **THEN** a sign-in line shows under the checkout button and its link calls `onSignIn`
+- **AND** no member held-code section, empty state or loyalty call to action shows
+- **AND** while the drawer is pending or redirecting the link is disabled
+
+### Requirement: The promo sheet merges the public codes it is given
+
+`CartDrawer` SHALL accept an optional `publicPromoCodes` list of
+`HeldPromoCode` and `copy.publicPromoCodes` heading. The promo sheet SHALL
+list the codes that can apply — held first, then public — under that heading,
+and the codes that cannot apply apart from them, muted with their reasons. A
+public code SHALL be picked through `onSelectHeldPromo` like a held one.
+
+<!-- trace:scenario id=g10.shared-store-cart.SC-g6x rev=1 -->
+#### Scenario: shared-ui-store-cart-SC-81 - Public codes join the held list under one heading
+**Serves:** shared.ui-store-cart.US22 - Shopper sees public codes in the picker
+
+- **GIVEN** a drawer given one applicable held code, one applicable public code and one public code that cannot apply
+- **WHEN** the shopper opens the promo sheet
+- **THEN** both applicable codes are listed under `copy.publicPromoCodes` with an Apply control
+- **AND** the inapplicable public code is listed apart, muted with its reason
+
 ### Requirement: A replacing promo takes the sale from its lines and shows only the code's discount
 
 The consumer SHALL supply each line the code takes the sale from at its list

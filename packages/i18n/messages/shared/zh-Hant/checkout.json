@@ -56,7 +56,12 @@
     "blocked": "付款前請先修正標記的項目。",
     "removed": "商店已不再販售的 {count} 項已從購物車中移除。",
     "remove": "移除",
-    "writeFailed": "你的更改沒有送達商店。請再試一次。"
+    "writeFailed": "你的更改沒有送達商店。請再試一次。",
+    "soldOut": "{title} 已售罄。",
+    "unavailable": "{title} 已不再販售。",
+    "reduced": "{title}：僅剩 {count} 件，已減少你的數量。",
+    "repriced": "{title} 現價 {price}。",
+    "filledShort": "{title}：商店只能供應 {count} 件。"
   },
   "line": {
     "soldOut": "已售罄",
@@ -80,7 +85,9 @@
     "wrong_channel": "此優惠碼不能在這裡使用。",
     "birthday_unavailable": "此優惠碼要等計劃記錄了你的生日才可使用。",
     "not_eligible": "此優惠碼不能用於此購物車。",
-    "idempotency_conflict": "此優惠碼正用於另一個結帳，請稍後再試。",
+    "idempotency_conflict": "此優惠碼已用於另一張訂單。",
+    "held_elsewhere": "較早的一張訂單仍帶著此優惠碼。",
+    "took_too_long": "此結帳處理時間過長，請再提交一次。",
     "one_coupon": "每單只可用一個優惠碼。",
     "riding_elsewhere": "此優惠碼已用於另一個未完成的結帳。",
     "no_tender": "這裡不能使用獎賞優惠碼。",

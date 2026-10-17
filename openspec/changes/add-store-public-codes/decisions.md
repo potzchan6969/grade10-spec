@@ -27,6 +27,6 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/store/discounts` | Where do public codes come from? | Landed as Q3: Shopify discounts tagged `public`, read by the store. Decided by the owner 2026-10-13 |
-| `grade10-site/store/discounts` | How do public codes order beside wallet codes? | Landed as Q4: fit first, then soonest expiry, across both lists. Decided by the owner 2026-10-13 |
+| `grade10-site/store/discounts` | Where do public codes come from? | Q3 |
+| `grade10-site/store/discounts` | How do public codes order beside wallet codes? | Q4 |
 | `grade10-site/store/discounts` | A public code beside the cart's own code - does the invoice take a second code? | ❓ Product - open row on the discounts page; adjacent to this change, not settled by it |
