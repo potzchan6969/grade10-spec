@@ -42,3 +42,21 @@ describe("what a store surface says it is", () => {
     },
   );
 });
+
+describe("what Store Locator says it is", () => {
+  /* Scenario: grade10-site-store-store-locator-SC-03 - Store Locator says
+     what it is, apart from every other surface's head. */
+  it.each(localesOf("grade10"))(
+    "differs from every other head entry for grade10 in %s",
+    (locale) => {
+      const { head } = getMessages("grade10", locale);
+      const { storeLocator, site: _site, ...others } = head;
+      expect(storeLocator.title.trim()).not.toBe("");
+      expect(storeLocator.description.trim()).not.toBe("");
+      for (const other of Object.values(others)) {
+        expect(other.title).not.toBe(storeLocator.title);
+        expect(other.description).not.toBe(storeLocator.description);
+      }
+    },
+  );
+});

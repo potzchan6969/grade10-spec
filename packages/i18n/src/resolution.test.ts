@@ -42,7 +42,6 @@ const PRODUCT_DETAIL_KEYS = [
   "shippingAndPickup",
   "shippingCalculatedAtCheckout",
   "shippingFee",
-  "hongKongGrade10Store",
   "freePickupAt",
   "onlyLeft",
   "showMore",
@@ -253,6 +252,19 @@ describe("what a brand and a language answer between them", () => {
       }
     },
   );
+
+  /* The store name is the brand's own: only a brand with a shop says it, in
+     every language it speaks, and a brand without one names none. */
+  it.each(localesOf("grade10"))("names grade10's shop in %s", (locale) => {
+    expect(getMessages("grade10", locale).product.hongKongGrade10Store).toEqual(
+      expect.any(String),
+    );
+  });
+
+  it("names no shop for zzz", () => {
+    const product = flatten(getMessages("zzz", "ko").product);
+    expect(product.hongKongGrade10Store).toBeUndefined();
+  });
 
   /* Scenario: The listing's filter panel names its facet groups, its
      invitation and its utility row in every language it serves. */

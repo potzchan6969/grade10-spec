@@ -33,10 +33,12 @@ import grade10EnIdentity from "../messages/grade10/en/identity.json";
 import grade10EnMarketing from "../messages/grade10/en/marketing.json";
 import grade10EnOrderDetail from "../messages/grade10/en/orderDetail.json";
 import grade10EnOrderHistory from "../messages/grade10/en/orderHistory.json";
+import grade10EnProduct from "../messages/grade10/en/product.json";
 import grade10EnProfile from "../messages/grade10/en/profile.json";
 import grade10EnSignIn from "../messages/grade10/en/signIn.json";
 import grade10EnStore from "../messages/grade10/en/store.json";
 import grade10EnStoreHome from "../messages/grade10/en/storeHome.json";
+import grade10EnStoreLocator from "../messages/grade10/en/storeLocator.json";
 import grade10ZhHansAuctionListing from "../messages/grade10/zh-Hans/auctionListing.json";
 import grade10ZhHansAuctionOrders from "../messages/grade10/zh-Hans/auctionOrders.json";
 import grade10ZhHansChrome from "../messages/grade10/zh-Hans/chrome.json";
@@ -46,10 +48,12 @@ import grade10ZhHansIdentity from "../messages/grade10/zh-Hans/identity.json";
 import grade10ZhHansMarketing from "../messages/grade10/zh-Hans/marketing.json";
 import grade10ZhHansOrderDetail from "../messages/grade10/zh-Hans/orderDetail.json";
 import grade10ZhHansOrderHistory from "../messages/grade10/zh-Hans/orderHistory.json";
+import grade10ZhHansProduct from "../messages/grade10/zh-Hans/product.json";
 import grade10ZhHansProfile from "../messages/grade10/zh-Hans/profile.json";
 import grade10ZhHansSignIn from "../messages/grade10/zh-Hans/signIn.json";
 import grade10ZhHansStore from "../messages/grade10/zh-Hans/store.json";
 import grade10ZhHansStoreHome from "../messages/grade10/zh-Hans/storeHome.json";
+import grade10ZhHansStoreLocator from "../messages/grade10/zh-Hans/storeLocator.json";
 import grade10ZhHantAuctionListing from "../messages/grade10/zh-Hant/auctionListing.json";
 import grade10ZhHantAuctionOrders from "../messages/grade10/zh-Hant/auctionOrders.json";
 import grade10ZhHantChrome from "../messages/grade10/zh-Hant/chrome.json";
@@ -59,10 +63,12 @@ import grade10ZhHantIdentity from "../messages/grade10/zh-Hant/identity.json";
 import grade10ZhHantMarketing from "../messages/grade10/zh-Hant/marketing.json";
 import grade10ZhHantOrderDetail from "../messages/grade10/zh-Hant/orderDetail.json";
 import grade10ZhHantOrderHistory from "../messages/grade10/zh-Hant/orderHistory.json";
+import grade10ZhHantProduct from "../messages/grade10/zh-Hant/product.json";
 import grade10ZhHantProfile from "../messages/grade10/zh-Hant/profile.json";
 import grade10ZhHantSignIn from "../messages/grade10/zh-Hant/signIn.json";
 import grade10ZhHantStore from "../messages/grade10/zh-Hant/store.json";
 import grade10ZhHantStoreHome from "../messages/grade10/zh-Hant/storeHome.json";
+import grade10ZhHantStoreLocator from "../messages/grade10/zh-Hant/storeLocator.json";
 import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
@@ -322,10 +328,12 @@ export const grade10En = {
   marketing: grade10EnMarketing,
   orderDetail: grade10EnOrderDetail,
   orderHistory: grade10EnOrderHistory,
+  product: grade10EnProduct,
   profile: grade10EnProfile,
   signIn: grade10EnSignIn,
   store: grade10EnStore,
   storeHome: grade10EnStoreHome,
+  storeLocator: grade10EnStoreLocator,
 };
 
 export const grade10ZhHant = {
@@ -338,10 +346,12 @@ export const grade10ZhHant = {
   marketing: grade10ZhHantMarketing,
   orderDetail: grade10ZhHantOrderDetail,
   orderHistory: grade10ZhHantOrderHistory,
+  product: grade10ZhHantProduct,
   profile: grade10ZhHantProfile,
   signIn: grade10ZhHantSignIn,
   store: grade10ZhHantStore,
   storeHome: grade10ZhHantStoreHome,
+  storeLocator: grade10ZhHantStoreLocator,
 };
 
 export const grade10ZhHans = {
@@ -354,10 +364,12 @@ export const grade10ZhHans = {
   marketing: grade10ZhHansMarketing,
   orderDetail: grade10ZhHansOrderDetail,
   orderHistory: grade10ZhHansOrderHistory,
+  product: grade10ZhHansProduct,
   profile: grade10ZhHansProfile,
   signIn: grade10ZhHansSignIn,
   store: grade10ZhHansStore,
   storeHome: grade10ZhHansStoreHome,
+  storeLocator: grade10ZhHansStoreLocator,
 };
 
 export const zzzKo = {

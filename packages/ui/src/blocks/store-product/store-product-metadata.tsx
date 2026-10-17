@@ -17,16 +17,35 @@ type StoreProductMetadataCopy = {
 type StoreProductMetadataProps = {
   badges: readonly string[];
   copy: StoreProductMetadataCopy;
+  /** The shop's page. Omitted, the store name is the line's own text. */
   pickupHref?: string;
+  /** The shipping fee's page. Omitted, the label is the line's own text. */
   shippingFeeHref?: string;
   sku?: string | null;
 };
 
+/** A fulfilment label: a link where a page answers it, plain text where none
+ * does, so no label reads as a link that leads nowhere. */
+function FulfilmentLabel({ href, label }: { href?: string; label: string }) {
+  if (href == null) {
+    return (
+      <Text as="span" size="sm">
+        {label}
+      </Text>
+    );
+  }
+  return (
+    <Link href={href} size="sm">
+      {label}
+    </Link>
+  );
+}
+
 function StoreProductMetadata({
   badges,
   copy,
-  pickupHref = "#",
-  shippingFeeHref = "#",
+  pickupHref,
+  shippingFeeHref,
   sku,
 }: StoreProductMetadataProps) {
   return (
@@ -55,17 +74,16 @@ function StoreProductMetadata({
             <Text as="span" size="sm">
               {copy.shippingCalculatedAtCheckout}{" "}
             </Text>
-            <Link href={shippingFeeHref} size="sm">
-              {copy.shippingFee}
-            </Link>
+            <FulfilmentLabel href={shippingFeeHref} label={copy.shippingFee} />
           </li>
           <li>
             <Text as="span" size="sm">
               {copy.freePickupAt}{" "}
             </Text>
-            <Link href={pickupHref} size="sm">
-              {copy.hongKongGrade10Store}
-            </Link>
+            <FulfilmentLabel
+              href={pickupHref}
+              label={copy.hongKongGrade10Store}
+            />
           </li>
         </ul>
       </VStack>

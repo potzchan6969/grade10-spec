@@ -55,5 +55,9 @@
   "bookWalkIn": {
     "title": "现场到店 — Grade10",
     "description": "Grade10 门店今天的现场排队时间及营业时间。"
+  },
+  "storeLocator": {
+    "title": "门店查询 — Grade10",
+    "description": "Grade10 铜锣湾门店的位置及营业时间。"
   }
 }

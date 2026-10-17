@@ -55,5 +55,9 @@
   "bookWalkIn": {
     "title": "即場到店 — Grade10",
     "description": "Grade10 門市今天的即場輪候時間及營業時間。"
+  },
+  "storeLocator": {
+    "title": "門市查詢 — Grade10",
+    "description": "Grade10 銅鑼灣門市的位置及營業時間。"
   }
 }

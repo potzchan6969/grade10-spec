@@ -1,0 +1,37 @@
+{
+  "heading": "位置及营业时间",
+  "hoursHeading": "营业时间",
+  "mapTitle": "香港 Grade10 商店地图",
+  "openMap": "在 Google 地图打开香港 Grade10 商店",
+  "address": "香港铜锣湾白沙道13号",
+  "hours": {
+    "monday": {
+      "day": "星期一",
+      "hours": "上午11时 – 晚上9时"
+    },
+    "tuesday": {
+      "day": "星期二",
+      "hours": "上午11时 – 晚上9时"
+    },
+    "wednesday": {
+      "day": "星期三",
+      "hours": "上午11时 – 晚上9时"
+    },
+    "thursday": {
+      "day": "星期四",
+      "hours": "上午11时 – 晚上9时"
+    },
+    "friday": {
+      "day": "星期五",
+      "hours": "上午11时 – 晚上9时"
+    },
+    "saturday": {
+      "day": "星期六",
+      "hours": "上午11时 – 晚上9时"
+    },
+    "sunday": {
+      "day": "星期日",
+      "hours": "上午11时 – 晚上9时"
+    }
+  }
+}

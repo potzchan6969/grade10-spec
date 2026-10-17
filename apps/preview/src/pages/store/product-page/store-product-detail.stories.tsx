@@ -1,5 +1,6 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import { STORE_LOCATOR_HREF } from "../../workbench-story-nav";
 import {
   PRODUCT_DETAIL_PRODUCT,
   SOLD_OUT_PRODUCT,
@@ -43,6 +44,17 @@ export const Default: Story = {
     expect(canvas.getByText("HK$105.00")).toBeVisible();
     expect(canvas.getByText("SKU: G10-M5-ABYSS-STD")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
+    /* grade10-site-store-product-page-SC-25 and SC-38: the store name opens
+       Store Locator, and Shipping fee, with no page, is text. */
+    const metadata = canvasElement.querySelector(
+      '[data-slot="store-product-metadata"]',
+    ) as HTMLElement;
+    const links = within(metadata).getAllByRole("link");
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute("href", STORE_LOCATOR_HREF);
+    expect(
+      within(metadata).queryByRole("link", { name: /shipping fee/i }),
+    ).toBeNull();
   },
 };
 
