@@ -29,5 +29,7 @@
   "sortPriceAsc": "價格由低至高",
   "sortPriceDesc": "價格由高至低",
   "collections": "系列",
-  "title": "商店"
+  "title": "商店",
+  "salePriceLabel": "特價",
+  "listPriceLabel": "原價"
 }

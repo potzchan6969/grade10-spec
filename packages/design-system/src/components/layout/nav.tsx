@@ -61,19 +61,21 @@ type NavCopy = {
   /** What the locale control displays — the active language label. Shown
    * whether or not the control can be switched. */
   locale: string;
-  /** Accessible names for the controls a handler backs. A control with no
-   * handler is not rendered, so its name is never read. */
-  search?: string;
-  account?: string;
-  cart?: string;
+  /** Accessible names for the controls a handler backs. Each is required,
+   * so a word the application leaves out is a type error rather than a word
+   * the chrome makes up. */
+  search: string;
+  account: string;
+  cart: string;
   /** Visible label when `accountPresentation` is `"sign-in"`. */
-  signIn?: string;
+  signIn: string;
   /** Accessible name for the compact-viewport menu trigger. */
-  menu?: string;
-  /** Title shown at the top of the compact menu drawer. */
+  menu: string;
+  /** Title shown at the top of the compact menu drawer; the menu's own
+   * name where omitted. */
   menuTitle?: string;
   /** Title of the compact language nested drawer. */
-  language?: string;
+  language: string;
 };
 
 type NavProps = ComponentProps<"header"> & {
@@ -273,13 +275,13 @@ function AccountControl({
         size="md"
         variant="default"
       >
-        {copy.signIn ?? "Sign In"}
+        {copy.signIn}
       </Button>
     );
   }
   return (
     <IconButton
-      aria-label={copy.account ?? "Account"}
+      aria-label={copy.account}
       onClick={onAccountClick}
       size="md"
       variant="ghost"
@@ -300,9 +302,9 @@ function AccountControl({
  * for four primary items (including Help) without overlapping trailing
  * controls.
  *
- * Brand, navigation, and locale content is required rather than defaulted. A
- * control renders only where a handler backs it (or an `accountSlot` is
- * supplied).
+ * Brand, navigation, locale and control words are required rather than
+ * defaulted. A control renders only where a handler backs it or its
+ * `accountSlot` or `cartSlot` is supplied.
  */
 function Nav({
   className,
@@ -326,9 +328,9 @@ function Nav({
   const showAccount = accountSlot != null || onAccountClick != null;
   const showCart = cartSlot != null || onCartClick != null;
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuLabel = copy.menu ?? "Menu";
+  const menuLabel = copy.menu;
   const menuTitle = copy.menuTitle ?? menuLabel;
-  const languageTitle = copy.language ?? "Language";
+  const languageTitle = copy.language;
 
   return (
     <IconProvider>
@@ -456,7 +458,7 @@ function Nav({
                       size="md"
                       variant="ghost"
                     >
-                      {copy.search ?? "Search"}
+                      {copy.search}
                     </Button>
                   ) : null}
                   {locales.length > 0 && onLocaleChange ? (
@@ -511,7 +513,7 @@ function Nav({
               />
               {onSearchClick ? (
                 <IconButton
-                  aria-label={copy.search ?? "Search"}
+                  aria-label={copy.search}
                   onClick={onSearchClick}
                   size="md"
                   variant="ghost"
@@ -533,7 +535,7 @@ function Nav({
                 cartSlot
               ) : (
                 <IconButton
-                  aria-label={copy.cart ?? "Cart"}
+                  aria-label={copy.cart}
                   onClick={onCartClick}
                   size="md"
                   variant="ghost"

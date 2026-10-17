@@ -56,7 +56,12 @@
     "blocked": "付款前請先修正標記的項目。",
     "removed": "商店已不再販售的 {count} 項已從購物車中移除。",
     "remove": "移除",
-    "writeFailed": "你的更改沒有送達商店。請再試一次。"
+    "writeFailed": "你的更改沒有送達商店。請再試一次。",
+    "soldOut": "{title} 已售罄。",
+    "unavailable": "{title} 已不再販售。",
+    "reduced": "{title}：僅剩 {count} 件，已減少你的數量。",
+    "repriced": "{title} 現價 {price}。",
+    "filledShort": "{title}：商店只能供應 {count} 件。"
   },
   "line": {
     "soldOut": "已售罄",

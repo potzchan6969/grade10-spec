@@ -5,6 +5,10 @@ import type { StoreProductSaleItem } from "./types";
 
 type StoreProductHeaderCopy = {
   onlyLeft: (count: number) => string;
+  /** Read before the price charged when a list price is struck, never shown. */
+  salePriceLabel: string;
+  /** Read before the struck list price, never shown. */
+  listPriceLabel: string;
 };
 
 type StoreProductHeaderProps = {
@@ -30,6 +34,9 @@ function StoreProductHeader({
         <VStack gap="xs">
           <HStack gap="sm" vAlign="baseline" className="flex-wrap">
             <Text className="font-semibold" size="xl">
+              {saleItem.compareAtPrice ? (
+                <span className="sr-only">{copy.salePriceLabel} </span>
+              ) : null}
               {saleItem.price}
             </Text>
             {saleItem.compareAtPrice ? (
@@ -37,6 +44,7 @@ function StoreProductHeader({
                 className="line-through text-secondary-foreground"
                 size="base"
               >
+                <span className="sr-only">{copy.listPriceLabel} </span>
                 {saleItem.compareAtPrice}
               </Text>
             ) : null}

@@ -10,7 +10,12 @@ import type { ProductCardImageCopy } from "./product-card-image";
 import { ProductCardImage } from "./product-card-image";
 
 /** What a tile says whichever product is in it. */
-type ProductCardCopy = ProductCardImageCopy;
+type ProductCardCopy = ProductCardImageCopy & {
+  /** Read before the price charged when a list price is struck, never shown. */
+  salePriceLabel?: string;
+  /** Read before the struck list price, never shown. */
+  listPriceLabel?: string;
+};
 
 type ProductCardProps = {
   copy: ProductCardCopy;
@@ -181,10 +186,16 @@ function ProductCardContent({
                 : "font-normal text-card-foreground",
             )}
           >
+            {originalPrice != null && copy.salePriceLabel ? (
+              <span className="sr-only">{copy.salePriceLabel} </span>
+            ) : null}
             {price}
           </p>
           {originalPrice != null ? (
             <p className="text-base font-normal text-secondary-foreground line-through">
+              {copy.listPriceLabel ? (
+                <span className="sr-only">{copy.listPriceLabel} </span>
+              ) : null}
               {originalPrice}
             </p>
           ) : null}

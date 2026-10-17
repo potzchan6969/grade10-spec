@@ -4,35 +4,39 @@ type CartItemStatus = "default" | "adjusted" | "soldOut" | "unavailable";
 
 /**
  * One line item in the shopping cart.
- * All amounts and strings are display-ready presentation values.
+ * All amounts and strings are display-ready presentation values, and the
+ * consumer's quote owns every one: the drawer computes no amount.
  *
  * Discount display (each dollar once):
- * - **Product-class site sale** — `price` + optional `originalPrice`
- *   (compare-at); no `couponCode`. A catalogue, product or collection sale
- *   uses this shape on every line it cuts.
- * - **Order-class site discount** — a cut off the whole order, such as a
- *   storewide or spend-threshold discount, never touches the lines: it is an
- *   `OrderDiscountRow` in the footer, after the Subtotal it is taken from.
- * - **Product promo/coupon** — `couponCode` on this line with the discounted
- *   unit `price` (and optional pre-coupon `originalPrice`). That cut MUST NOT
- *   also appear as `PromoState` `applied` on the footer.
- * - **Order-level promo/coupon/points** — lines stay at catalogue/sale prices
- *   with no `couponCode`; the footer summary carries the cut.
- * - **Site sale × order promo** — Shopify combine rules decide refuse, stack,
- *   or replace. A product-class sale shows as line `price` + `originalPrice`
- *   (compare-at); do not also name it as a footer row. Stack adds only the
- *   code cut in the footer on the post-sale Subtotal. Replace lifts the line
- *   sale and shows only the code.
+ * - **Site sale** - the shop's automatic cut on products or collections shows
+ *   only on the lines it cuts: `price` is the sale price and `originalPrice`
+ *   the list price, each the price of one; no `couponCode`, and never a
+ *   summary row.
+ * - **Order discount** - a cut off the whole order, such as a spend
+ *   threshold, never touches the lines: it is an `OrderDiscountRow` in the
+ *   footer, after the Subtotal it is taken from.
+ * - **Subtotal** - each line's price times its quantity, leaving out sold-out
+ *   and unavailable lines, in every outcome.
+ * - **A code that meets a site sale** - reaches the drawer only as
+ *   `PromoState`. The quote decides whether it stacks (the lines keep the
+ *   sale; the footer adds only the code's discount), is refused (lines and
+ *   totals stay; the promo sheet says why), or replaces the sale (the quote
+ *   decides line by line which lines it takes; each such line shows its list
+ *   price with no `originalPrice`).
+ * - **A code shown on a line** - `couponCode` with the discounted unit
+ *   `price`; outside the site sale and promo outcomes above, and never also
+ *   `PromoState` `applied`.
  */
 type CartItemSummary = {
   id: string;
   name: string;
   price: ReactNode;
-  /** Compare-at / pre-discount unit price; struck through when set. */
+  /** List price of one, struck through whenever set, even when it equals
+   * `price`. */
   originalPrice?: ReactNode;
   /**
-   * Product (item-level) promo/coupon code shown under the price line.
-   * Order-level codes belong on the footer, not here.
+   * A code shown on this line, under the price. Outside the site sale and
+   * promo outcomes: a code that meets a site sale is `PromoState`, not this.
    */
   couponCode?: ReactNode;
   imageSrc?: string;
@@ -59,8 +63,9 @@ type CartItemSummary = {
 };
 
 /**
- * Footer promo affordance. `applied` is for **order-level** codes only —
- * product coupons update the matching line’s `couponCode` / `price` instead.
+ * Footer promo affordance, and the only way a code that meets a site sale
+ * reaches the drawer. `applied` carries the code's discount as the quote
+ * priced it; a code shown on a line uses `couponCode` instead.
  */
 type PromoState =
   | { status: "collapsed" }
@@ -112,6 +117,10 @@ type PointsState =
   | { status: "applied"; amountLabel: ReactNode };
 
 type CartItemCopy = {
+  /** Read before the price a struck line charges, never shown. */
+  salePriceLabel: string;
+  /** Read before a struck list price, never shown. */
+  listPriceLabel: string;
   lowStockWarning: string;
   soldOutLabel: string;
   removeItemLabel: string;

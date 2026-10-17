@@ -131,6 +131,10 @@ The refusals are the coupon's own —
 
 ::story{id="store-cart-blocks-cartdrawerfooter-guest--member-with-public-codes" title="A member's codes beside the public ones"}
 
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/store/cart-drawer"}
+:::
+
 :::detail{title="Code map" for="engineer"}
 - **The quote** - `quote.basket`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
 - **The held choice** — `cart.tender` and `cart.setTender`, `packages/grade10-store/backend/src/services/cart/tender.ts`

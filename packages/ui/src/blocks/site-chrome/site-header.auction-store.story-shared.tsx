@@ -44,9 +44,9 @@ export const AUCTION_STORE_BASE_ARGS = {
   onSignOut: fn(),
 };
 
-export function cartBadge(canvasElement: HTMLElement) {
+export function cartBadge(canvasElement: HTMLElement, label = "Cart") {
   const cart = within(canvasElement).getByRole("button", {
-    name: /Cart/,
+    name: new RegExp(`^${label}`),
   });
   return cart.parentElement?.querySelector(
     '[data-slot="status-indicator"][data-type="count"]',

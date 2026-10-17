@@ -69,6 +69,10 @@ export const NotApplicable: Story = {
       canvas.getByText(inapplicable.inapplicableReason!),
     ).toBeInTheDocument();
     expect(canvas.queryByRole("button")).not.toBeInTheDocument();
+    // shared-ui-store-cart-SC-29: muted, its reason shown, no Apply.
+    const ticket = canvas.getByRole("group", { name: inapplicable.label });
+    expect(ticket).toHaveAttribute("aria-disabled", "true");
+    expect(ticket).toHaveClass("opacity-70");
   },
 };
 

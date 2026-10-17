@@ -24,9 +24,11 @@ at the prices I see on them.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-13
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -62,9 +64,11 @@ at the prices I see on them.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-13
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -112,9 +116,11 @@ at the prices I see on them.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-13
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -159,9 +165,11 @@ row.
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-14
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -212,9 +220,11 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-15
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -260,9 +270,11 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-15
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -301,9 +313,11 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-15
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -340,9 +354,11 @@ prices alone and tell me why, including on a held ticket I cannot Apply,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-ui-store-cart-US-15
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -399,9 +415,11 @@ the sale from and show only that code's Discount in the footer,
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-16
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -453,9 +471,11 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-17
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
@@ -497,9 +517,11 @@ the site sale, put the sale back on the lines while the sale still runs,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-ui-store-cart-US-17
+
+**Decided by:** `packages/ui/src/blocks/store-cart/cart-drawer.auto-discount.stories.tsx`
 
 **Pre-conditions:**
 
