@@ -10,3 +10,7 @@
 
 - [ ] 2.1 Write the `grade10-site/vault/portfolio` spec delta from the journeys — blocked: the product manager owns it (`awaiting: specs` on `.openspec.yaml`)
 - [ ] 2.2 Draw the Request Retrieval, Intake Tracker and Book a Visit frames in Figma — blocked: owed by Design in Figma
+
+## 3. The walk (grade10-spec)
+
+- [ ] 3.1 Walk Portfolio and Asset Detail in `apps/preview` against the journeys, once the delta lands and Design's frames are drawn, and name the cases each walk reaches in this change's `rounds.md` — blocked: waits on 2.1 and 2.2
