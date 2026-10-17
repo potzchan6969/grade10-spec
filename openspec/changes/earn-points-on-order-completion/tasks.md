@@ -7,4 +7,8 @@
 
 ## 2. The contract (grade10-spec)
 
-- [x] 2.1 The programme's delta states the earn's trigger, and the durable spec carries it
+- [x] 2.1 The programme's delta states the earn's trigger; the archive folds it into the durable spec
+
+## 3. The walk (grade10)
+
+- [ ] 3.1 On staging, a member's order earns when it is Completed, not when it is paid — blocked: needs staging

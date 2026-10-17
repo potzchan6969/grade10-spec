@@ -9,3 +9,7 @@
 
 - [x] 2.1 `MemberCardSection` names each platform's artwork in the member's language
 - [ ] 2.2 Google's publishing review accepts the save action — blocked: needs Google Wallet publishing access
+
+## 3. The walk (grade10)
+
+- [ ] 3.1 On staging, a member on `/membership` meets each wallet's own artwork as the save action — blocked: needs staging with a wallet issuer recorded
