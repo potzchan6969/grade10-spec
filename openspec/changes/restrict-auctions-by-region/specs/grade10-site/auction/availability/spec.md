@@ -32,7 +32,7 @@ is refused before it reaches the auction.
 - Unaffected surfaces
   - Non-auction pages: the store and every other surface render unchanged
 
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Each request is judged on its own observed region
 

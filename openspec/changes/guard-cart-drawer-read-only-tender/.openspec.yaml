@@ -2,6 +2,7 @@ schema: grade10-planning
 created: 2026-09-16
 promoted_by: "@kinisworking"
 decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped, 2026-10-16; its delta awaits the fold at acceptance, then archive"
 reviewed:
   proposal: e35a61f9
   user-journeys: df73937f

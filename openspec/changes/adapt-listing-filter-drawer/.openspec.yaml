@@ -1,6 +1,7 @@
 schema: grade10-planning
 created: 2026-09-11
 decisions_waived: "legacy change - decisions cannot be restored from past planning sessions"
+page_waived: "delivered: its 🚧 lines came off when the outcomes shipped, 2026-10-17; its delta awaits the fold at acceptance, then archive"
 reviewed:
   proposal: dd56ddf3
   user-journeys: "07469049"
