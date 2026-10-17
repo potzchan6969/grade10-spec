@@ -29,6 +29,6 @@ design; no `/planning-dev` run (`Q11`).
 ## 4. The backfill and the page (grade10-spec)
 
 - [x] 4.1 `scripts/openspec/backfill-reviewed.mjs` writes today's id for every in-flight, written, unwaived artifact with no line that the retired date comparison does not name behind (`Q9`); run on the store and, with `--all`, on the manual's demo store, in a commit that touches only `reviewed:` keys
-- [ ] 4.2 Rerun the backfill on the store's `main` just before this lands, then delete the script - blocked: it runs on the integrated `main`, after the coordinator merges
+- [x] 4.2 Rerun the backfill on the integrated branch just before this lands, then delete the script; the four records the loyalty stream still edits are left out
 - [x] 4.3 The planning pages say the rule once: what moved quoted, major holds and small is told, fresh is a hand's word
 - [x] 4.4 Verify: `pnpm run test:openspec`, `pnpm --dir tools/manual test`, `pnpm --dir tools/relay test`, `pnpm check:manual`
