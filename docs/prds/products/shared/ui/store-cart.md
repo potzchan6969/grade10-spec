@@ -57,7 +57,7 @@ the footer and no count on the drawer title.
 
 ## Pending Operations
 
-🚧 **Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
+**Waiting for an answer** - the drawer disables its actions while the application reads or saves the cart or starts checkout; clearing that wait restores only actions whose current state permits them. Closing remains available.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
@@ -71,7 +71,7 @@ the footer and no count on the drawer title.
 
 ## Tender Actions
 
-🚧 **Unresolved choice** - tender actions and Checkout wait while the
+**Unresolved choice** - tender actions and Checkout wait while the
 application saves a choice; accepted figures stay visible until it answers.
 
 **Tender actions need an answer** - a promo or points action appears only

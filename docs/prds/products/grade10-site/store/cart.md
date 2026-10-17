@@ -45,7 +45,7 @@ back to that page.
 
 ## Pending Operations
 
-🚧 **Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
+**Wait before another action** - the drawer accepts no cart edits, promo or points actions, or product and checkout links while it reads, saves or starts checkout. The collector can still close it.
 
 ::story{id="store-cart-blocks-cartdrawer--interaction-pending" title="A cart drawer that stays dismissible while pending"}
 
@@ -87,20 +87,20 @@ The refusals are the coupon's own —
 
 ## Points
 
-- 🚧 **Offered** — to a member the programme knows, with the balance, the
+- **Offered** — to a member the programme knows, with the balance, the
   rate and the most this cart can take after the code
-- 🚧 **Applied** — Apply or Use max carries the accepted points choice to
+- **Applied** — Apply or Use max carries the accepted points choice to
   checkout and shows the store-quoted saving. Remove clears points and keeps
   the existing code; a failed change keeps the last accepted choice. An ask
   past the ceiling is trimmed to it
-- 🚧 **Nothing left** — a code that took the whole of the goods leaves
+- **Nothing left** — a code that took the whole of the goods leaves
   points nothing to pay, and the field says so
-- 🚧 **Not offered** — to a guest, a member outside the programme, or
+- **Not offered** — to a guest, a member outside the programme, or
   while the programme has not answered
 
 ## Checkout
 
-- 🚧 **Created from the drawer** — Proceed to Checkout sends the reviewed
+- **Created from the drawer** — Proceed to Checkout sends the reviewed
   lines, the code and the points straight to Shopify; there is no separate
   checkout page to reopen or re-read them
 - 🚧 **Sent** — the order is promised with the same code and points the
