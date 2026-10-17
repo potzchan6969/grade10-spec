@@ -730,7 +730,7 @@ test("shared-planning-agent-rounds-SC-37 - a landing with changed content puts e
     ),
   );
   git("add", "-A");
-  git("commit", "--quiet", "-m", "read every artifact again");
+  git("commit", "--quiet", "--allow-empty", "-m", "read every artifact again");
   git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
   const fresh = await readChangeEntry(root, CHANGE);
   assert.deepEqual(behindOf(fresh.entry, fresh.artifacts), []);
