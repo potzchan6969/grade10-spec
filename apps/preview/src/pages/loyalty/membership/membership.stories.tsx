@@ -5,10 +5,11 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import {
   ActivityList,
   CouponList,
-  MemberCard,
+  MemberPass,
   RewardMenu,
   SiteHeader,
   TierCard,
@@ -29,7 +30,7 @@ import {
   ISSUED_COUPON,
   LOYALTY_PAY_PART_OF_BASKET_HREF,
   MEMBER,
-  MEMBER_CARD_COPY,
+  MEMBER_PASS_COPY,
   MEMBERSHIP_PAGE_COPY,
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
@@ -130,14 +131,15 @@ function MembershipPage({ view }: { view: MembershipView }) {
             >
               {MEMBERSHIP_PAGE_COPY.cardHeading}
             </h2>
-            <MemberCard
-              copy={MEMBER_CARD_COPY}
-              displayName={MEMBER.displayName}
+            <MemberPass
+              copy={MEMBER_PASS_COPY}
+              email={MEMBER.email}
               fallbackCode={MEMBER.fallbackCode}
               onRefresh={() => setCodes((value) => value + 1)}
               state={{ status: "live", remainingSeconds: CODE_SECONDS }}
               tier={view.tier}
               token={`${MEMBER.token}.${codes}`}
+              variant={view.tierVariant}
             />
             <WalletPassLinks
               copy={WALLET_PASS_COPY}
@@ -218,6 +220,7 @@ function MembershipPage({ view }: { view: MembershipView }) {
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
+      <Toast position="bottom-right" />
     </div>
   );
 }
@@ -241,7 +244,7 @@ export const Default: Story = {
       canvas.getByRole("heading", { level: 1, name: "Membership" }),
     ).toBeInTheDocument();
     for (const name of [
-      "Your member card",
+      "Your member pass",
       "Rewards",
       "Your coupons",
       "Spend on your basket",

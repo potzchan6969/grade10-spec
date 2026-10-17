@@ -6,7 +6,7 @@ import type {
   CartItemSummary,
   CouponItem,
   CouponListCopy,
-  MemberCardCopy,
+  MemberPassCopy,
   RewardMenuCopy,
   RewardMenuItem,
   TierCardCopy,
@@ -32,6 +32,8 @@ const COUPON_VALID = formatDay(Date.UTC(2027, 0, 11));
 
 const MEMBER = {
   displayName: "Mei Lin",
+  /** No name is collected at registration; the pass carries the account email. */
+  email: "mei.lin@example.com",
   /** Eight letters, none of I, L, O or U. */
   fallbackCode: "KRMT-QWPB",
   /** Opaque, single-use, minted by the programme; this one only looks the part. */
@@ -46,14 +48,12 @@ const TIER_CARD_COPY: TierCardCopy = {
   benefits: "Benefits",
 };
 
-const MEMBER_CARD_COPY: MemberCardCopy = {
+const MEMBER_PASS_COPY: MemberPassCopy = {
   qrAlt: "Your member QR code",
-  fallbackCode: "Short code",
-  refresh: "Get a new code",
-  expiresIn: "Expires in",
-  secondsUnit: "s",
-  expired: "This code has expired. Get a new one.",
-  used: "This code has already been used",
+  shortCode: "Short code",
+  refresh: "Refresh",
+  refreshesIn: "Refreshes in",
+  expired: "This code has expired. Refresh for a new one.",
 };
 
 const REWARD_MENU_COPY: RewardMenuCopy = {
@@ -92,7 +92,7 @@ const WALLET_PASS_COPY: WalletPassLinksCopy = {
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
   title: "Membership",
-  cardHeading: "Your member card",
+  cardHeading: "Your member pass",
   rewardsHeading: "Rewards",
   couponsHeading: "Your coupons",
   spendHeading: "Spend on your basket",
@@ -334,7 +334,7 @@ export {
   LOYALTY_PAY_PART_OF_BASKET_HREF,
   LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
   MEMBER,
-  MEMBER_CARD_COPY,
+  MEMBER_PASS_COPY,
   MEMBERSHIP_PAGE_COPY,
   MEMBERSHIP_STATE_VIEWS,
   MEMBERSHIP_VIEW,
