@@ -547,7 +547,7 @@ hand this browser's cart to the account and reopen the drawer on the same
 page, where points and the wallet then show.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-1dq rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC50 - A signed-out drawer checks out as a guest
+#### Scenario: g10.store-cart-drawer.SC55 - A signed-out drawer checks out as a guest
 **Serves:** g10.store-cart-drawer.US15 - Signed-out collector finds guest checkout first
 
 - **GIVEN** a signed-out collector with a reviewed browser cart
@@ -557,7 +557,7 @@ page, where points and the wallet then show.
 - **AND** pressing Check out as guest sends a guest checkout for the reviewed lines
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-ftc rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC51 - Signing in from the drawer keeps the cart
+#### Scenario: g10.store-cart-drawer.SC56 - Signing in from the drawer keeps the cart
 **Serves:** g10.store-cart-drawer.US11 - Collector signs in from the drawer and keeps the cart
 
 - **GIVEN** a signed-out collector with lines in the browser cart
@@ -573,7 +573,7 @@ see them in one list with their own codes and rewards, the codes that fit
 first and the soonest to expire first among them, across both kinds.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-f9m rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC52 - A guest picks a public code
+#### Scenario: g10.store-cart-drawer.SC57 - A guest picks a public code
 **Serves:** g10.store-cart-drawer.US12 - Guest applies a public code
 
 - **GIVEN** a signed-out collector and a live public code that fits the basket
@@ -582,7 +582,7 @@ first and the soonest to expire first among them, across both kinds.
 - **AND** picking or typing it applies it to the quote
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-7rc rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC53 - A member sees public codes beside their own
+#### Scenario: g10.store-cart-drawer.SC58 - A member sees public codes beside their own
 **Serves:** g10.store-cart-drawer.US13 - Member sees public codes beside their own
 
 - **GIVEN** a member holding a wallet code and a live public code

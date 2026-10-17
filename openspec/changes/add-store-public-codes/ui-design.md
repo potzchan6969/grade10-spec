@@ -27,5 +27,5 @@
 
 | State | Shows | Anchor | Scenario / Disposition |
 | --- | --- | --- | --- |
-| Guest With Public Code | The merged list — no empty state or loyalty CTA | `g10.store-cart-drawer.US12` | `g10.store-cart-drawer.SC52`, `shared-ui-store-cart-SC-81` |
-| Member With Public Codes | Held and public codes under one "Promo codes" heading, before "Not valid for this order" | `g10.store-cart-drawer.US13` | `g10.store-cart-drawer.SC53`, `shared-ui-store-cart-SC-81` |
+| Guest With Public Code | The merged list — no empty state or loyalty CTA | `g10.store-cart-drawer.US12` | `g10.store-cart-drawer.SC57`, `shared-ui-store-cart-SC-81` |
+| Member With Public Codes | Held and public codes under one "Promo codes" heading, before "Not valid for this order" | `g10.store-cart-drawer.US13` | `g10.store-cart-drawer.SC58`, `shared-ui-store-cart-SC-81` |

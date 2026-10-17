@@ -10,7 +10,7 @@ see them in one list with their own codes and rewards, the codes that fit
 first and the soonest to expire first among them, across both kinds.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-f9m rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC52 - A guest picks a public code
+#### Scenario: g10.store-cart-drawer.SC57 - A guest picks a public code
 **Serves:** g10.store-cart-drawer.US12 - Guest applies a public code
 
 - **GIVEN** a signed-out collector and a live public code that fits the basket
@@ -19,7 +19,7 @@ first and the soonest to expire first among them, across both kinds.
 - **AND** picking or typing it applies it to the quote
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-7rc rev=1 -->
-#### Scenario: g10.store-cart-drawer.SC53 - A member sees public codes beside their own
+#### Scenario: g10.store-cart-drawer.SC58 - A member sees public codes beside their own
 **Serves:** g10.store-cart-drawer.US13 - Member sees public codes beside their own
 
 - **GIVEN** a member holding a wallet code and a live public code
