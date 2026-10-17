@@ -43,7 +43,7 @@ press and nothing read aloud
 🚧 **No other item** - the menu offers nothing beyond these, KYC and a second
 orders item included
 
-🚧 **Profile image** - the menu's avatar shows the profile's image where the
+**Profile image** - the menu's avatar shows the profile's image where the
 collector has one, and the initial where they do not
 
 **Avatar without an email** - when `accountEmail` is not supplied, the menu

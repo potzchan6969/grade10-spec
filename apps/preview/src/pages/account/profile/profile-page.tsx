@@ -1,3 +1,4 @@
+import { avatarInitial } from "@grade10/design-system/components/display/avatar";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -20,6 +21,7 @@ import {
   PROFILE_COPY,
   PROFILE_DETAILS_COPY,
   PROFILE_FORM_COPY,
+  PROFILE_LIMITS,
   type ProfileView,
   SAVED_PROFILE,
 } from "./profile-content";
@@ -71,8 +73,15 @@ function ProfilePage({
         return;
       }
       setSaved({
+        ...saved,
         displayName: values.displayName,
         bio: values.bio,
+        avatarSrc:
+          values.avatar.outcome === "unchanged"
+            ? saved.avatarSrc
+            : values.avatar.outcome === "removed"
+              ? undefined
+              : URL.createObjectURL(values.avatar.file),
         memberSince: saved.memberSince ?? FIRST_SAVE_DATE,
       });
       setMode("view");
@@ -111,6 +120,10 @@ function ProfilePage({
             data:
               mode === "view" ? (
                 <ProfileDetails
+                  avatarAlt={PROFILE_COPY.avatarAlt}
+                  avatarFallback={avatarInitial(saved.displayName)}
+                  avatarSrc={saved.avatarSrc}
+                  email={saved.email}
                   bio={saved.bio || PROFILE_COPY.emptyBio}
                   copy={readOnly ? undefined : PROFILE_DETAILS_COPY}
                   displayName={saved.displayName}
@@ -123,7 +136,12 @@ function ProfilePage({
                 />
               ) : (
                 <ProfileForm
+                  {...PROFILE_LIMITS}
+                  avatarAlt={PROFILE_COPY.avatarAlt}
+                  avatarFallback={avatarInitial(saved.displayName)}
+                  avatarSrc={saved.avatarSrc}
                   copy={PROFILE_FORM_COPY}
+                  email={saved.email}
                   error={error}
                   initialBio={saved.bio}
                   initialDisplayName={saved.displayName}

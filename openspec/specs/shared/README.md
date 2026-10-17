@@ -37,6 +37,7 @@ application that shows it.
 | [`ui/store-product-listing`](ui/store-product-listing/spec.md) | The product-browsing surface — sidebar, result header, product grid, pagination — and its export contract. |
 | [`ui/store-cart`](ui/store-cart/spec.md) | The cart drawer surface — item list, promo redemption, order summary, checkout CTA — and its export contract. |
 | [`ui/store-order-history`](ui/store-order-history/spec.md) | The order history surface — status badge, line item, order card, and the Active/Past compound — and its export contract. |
+| [`ui/store-profile`](ui/store-profile/spec.md) | The account-profile surface — card, read view and form, with the avatar and the read-only email — and its export contract. |
 | [`ui/auction-listing`](ui/auction-listing/spec.md) | The auction listing product-page blocks: media gallery, bid panel, and details section. |
 
 ## `console` — admin console

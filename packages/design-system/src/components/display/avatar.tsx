@@ -58,18 +58,14 @@ function AvatarFallback({
   );
 }
 
-/** One uppercase character for fallback avatars — the first letter of an email's
- * local part, or the first alphanumeric character of any label. */
+/** One character for fallback avatars: the first letter or digit of the
+ * value, in any script, upper-cased where that stays one character. A caller
+ * holding an email passes the part before the `@`. */
 function avatarInitial(value: string): string {
-  const trimmed = value.trim();
-  if (!trimmed) return "?";
-
-  const source = trimmed.includes("@")
-    ? trimmed.slice(0, trimmed.indexOf("@"))
-    : trimmed;
-  const match = source.match(/[A-Za-z0-9]/);
-
-  return match ? match[0].toUpperCase() : "?";
+  const match = value.match(/[\p{L}\p{N}]/u);
+  if (!match) return "?";
+  const upper = match[0].toUpperCase();
+  return [...upper].length === 1 ? upper : match[0];
 }
 
 function AvatarBadge({ className, ...props }: React.ComponentProps<"span">) {

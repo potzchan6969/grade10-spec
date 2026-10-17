@@ -24,6 +24,13 @@ belong to.
 | [`store/home`](store/home/spec.md) | What the store address serves: the hero, the collections, and the merchandised row. |
 | [`store/product-listing`](store/product-listing/spec.md) | Where the browse listing answers, and how an address narrows it to one collection. |
 | [`store/product-page`](store/product-page/spec.md) | What one card's address serves, and the refusal when the catalogue holds no such card. |
+| [`store/account-profile`](store/account-profile/spec.md) | The basic information a signed-in collector holds about themselves in the store: display name, bio, avatar, the address they signed in with, and member-since. |
+| [`store/account-identity`](store/account-identity/spec.md) | A collector verifying their identity from their own account, and being recognised as verified wherever Grade10 asks. |
+| [`store/checkout`](store/checkout/spec.md) | A member's or a guest's checkout: a live decision on a current basket before a Shopify-hosted payment. |
+| [`store/discounts`](store/discounts/spec.md) | How a code, a store coupon, a reward, points or a site discount reaches a draft order. |
+| [`store/membership`](store/membership/spec.md) | A member's commerce customer, in-store identification, the till session, and points coming of age. |
+| [`store/site-discounts`](store/site-discounts/spec.md) | Storewide cuts configured in Shopify's automatic discounts, and how the site shows them. |
+| [`store/wallet-member-card`](store/wallet-member-card/spec.md) | The member card in Google Wallet and Apple Wallet, and how it follows the member's standing. |
 
 ## `auction`
 

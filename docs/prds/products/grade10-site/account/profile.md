@@ -12,25 +12,25 @@ own account page and shown to nobody else. Grade10 and ZZZ show the same page.
 1. **Display name** - required, at most **80** characters, trimmed; two
    collectors may share one
 2. **Bio** - optional, at most **500** characters, trimmed
-3. 🚧 **Avatar** - an image of the collector's own, cropped square at
+3. **Avatar** - an image of the collector's own, cropped square at
    **512 px**; with none, the display name's first letter or digit stands in,
    in any script, upper-cased, as in the account menu: `Kit Lam` shows `K`,
    `陳大文` shows `陳`, `@kitlam` shows `K`, `🃏🃏` shows `?`
 4. **Email** - the address signed in with, shown and not editable here
-5. 🚧 **Member since** - the date of the first save; absent until then
+5. **Member since** - the date of the first save; absent until then
 
 - **Length** - counted as the field counts it: a Chinese character is one, an
   emoji can be two
-- 🚧 **Avatar file** - any image the browser can read, whatever its type or
+- **Avatar file** - any image the browser can read, whatever its type or
   size, is made square at **512 px** before it is sent; a file the browser
   cannot read is refused
-- 🚧 **Avatar address** - anyone holding the image's address can open it,
+- **Avatar address** - anyone holding the image's address can open it,
   with no sign-in, so it can be cached. The address is the profile's own,
   changes with the image and cannot be worked out from it, so only the
   collector learns it
-- 🚧 **Account picture** - the picture an account already has, such as a
+- **Account picture** - the picture an account already has, such as a
   Google sign-up's, never stands in; the letter does
-- 🚧 **Earlier saves** - a profile saved before member-since was recorded
+- **Earlier saves** - a profile saved before member-since was recorded
   shows no date until its next save, which it then dates
 
 ## Before the First Save
@@ -42,27 +42,27 @@ for.
 - **Display name** - the name the till and the wallet pass show: the account
   name, else the address before the `@` -
   [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card)
-- 🚧 **A name nobody chose** - the placeholder an older record carries is never
+- **A name nobody chose** - the placeholder an older record carries is never
   shown as the collector's; the default stands in, at the till and on the pass
   too
-- 🚧 **Saving the default** - a save that leaves the prefilled name as shown
+- **Saving the default** - a save that leaves the prefilled name as shown
   keeps no name as the collector's, so it still follows the account name
 
 ## Editing
 
 - **Explicit** - edit, then save or cancel; a save that would clear the
   display name is refused
-- 🚧 **Avatar apart** - the avatar is saved on its own, so a refused name never
+- **Avatar apart** - the avatar is saved on its own, so a refused name never
   undoes an accepted image
-- 🚧 **Avatar first** - a refused or failed image saves nothing else; the form
+- **Avatar first** - a refused or failed image saves nothing else; the form
   keeps the typed text and the chosen image for one retry
-- 🚧 **Replaced or removed** - the old image stops answering at its address,
+- **Replaced or removed** - the old image stops answering at its address,
   and storage deletes it once it is a day old
 
 ## Failures
 
 - **A failed save** - keeps what was typed
-- 🚧 **A failed read** - says the profile could not be loaded, shows no field,
+- **A failed read** - says the profile could not be loaded, shows no field,
   and offers to try again
 
 ## Address
@@ -73,10 +73,10 @@ for.
 
 ## Designs
 
-- 🚧 **Avatar and email** - built from the requirements on the design system's
+- **Avatar and email** - built from the requirements on the design system's
   avatar, with no frames: the avatar, its choose and remove controls, its
   preview and the email row
-- 🚧 **Bio field** - several lines, in the design system's own multi-line
+- **Bio field** - several lines, in the design system's own multi-line
   field; the read view shows the lines as typed
 
 ::story{id="account-profile-blocks-profilecard--default" title="The profile, read"}

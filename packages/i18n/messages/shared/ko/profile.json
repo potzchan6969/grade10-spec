@@ -6,6 +6,16 @@
   "editLabel": "프로필 수정",
   "emptyBio": "아직 소개가 없습니다.",
   "memberSince": "{date}부터 함께하고 있습니다",
+  "chooseAvatar": "사진 선택",
+  "removeAvatar": "사진 삭제",
+  "avatarAlt": "내 프로필 사진",
+  "displayNameRequired": "표시 이름을 입력하세요.",
+  "displayNameTooLong": "표시 이름은 최대 {max}자까지 입력할 수 있습니다.",
+  "bioTooLong": "소개는 최대 {max}자까지 입력할 수 있습니다.",
+  "nothingToSave": "저장할 내용이 없습니다.",
+  "avatarType": "JPEG, PNG 또는 WebP 사진을 선택하세요.",
+  "avatarTooLarge": "사진은 최대 5MB까지 가능합니다.",
+  "saveFailed": "프로필을 저장하지 못했습니다. 다시 시도하세요.",
   "consignments": {
     "view": {
       "new": "요청 접수됨",
