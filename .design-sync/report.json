@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T19:06:20.398Z",
+  "generatedAt": "2026-10-17T04:23:23.166Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -47,7 +47,7 @@
     "List Item": "warn",
     "ListingLotGallery": "warn",
     "Login Dialog": "warn",
-    "Member Pass": "warn",
+    "Member Pass": "skipped",
     "Member Pass / Header": "warn",
     "Nav": "ok",
     "Navigation List": "skipped",
@@ -123,6 +123,16 @@
     "layout: nav/bar": "skipped",
     "layout: nav/promo": "ok",
     "layout: navigation-list/root": "ok",
+    "loyalty-membership: member-pass/body": "ok",
+    "loyalty-membership: member-pass/countdown": "ok",
+    "loyalty-membership: member-pass/divider": "skipped",
+    "loyalty-membership: member-pass/email": "ok",
+    "loyalty-membership: member-pass/header": "ok",
+    "loyalty-membership: member-pass/logo": "ok",
+    "loyalty-membership: member-pass/tier": "skipped",
+    "loyalty-membership: scan-plate/qr-flat": "skipped",
+    "loyalty-membership: scan-plate/short-code": "ok",
+    "loyalty-membership: scan-plate/short-code-label": "ok",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
     "overlays: tooltip-content/body": "ok",
@@ -927,11 +937,21 @@
     "7141-2000": "tier card",
     "7141-2001": "tier card",
     "7154-2075": "tier card",
+    "7156-2264": "loyalty-membership: member-pass/body",
+    "7156-2266": "loyalty-membership: scan-plate/qr-flat",
+    "7156-2269": "loyalty-membership: scan-plate/short-code-label",
+    "7156-2272": "loyalty-membership: scan-plate/short-code",
+    "7156-2280": "loyalty-membership: member-pass/countdown",
     "7156-2292": "Member Pass",
+    "7156-2747": "loyalty-membership: member-pass/divider",
     "7156-2759": "Member Pass",
+    "7158-2851": "loyalty-membership: member-pass/logo",
+    "7158-2852": "loyalty-membership: member-pass/tier",
+    "7158-2853": "loyalty-membership: member-pass/email",
     "7158-2857": "Member Pass / Header",
     "7158-2858": "Member Pass / Header",
     "7158-2859": "Member Pass / Header",
+    "7158-2871": "loyalty-membership: member-pass/header",
     "7158-2888": "Member Pass / Header",
     "86-3366": "Button",
     "86-3459": "Button",
@@ -1031,9 +1051,6 @@
     ],
     "Login Dialog": [
       "Login Dialog: no code component (looked for src/components/**/logindialog.tsx or logindialog.tsx)"
-    ],
-    "Member Pass": [
-      "Member Pass: no code component (looked for src/components/**/memberpass.tsx or memberpass.tsx)"
     ],
     "Member Pass / Header": [
       "Member Pass / Header: no code component (looked for src/components/**/memberpassheader.tsx or header.tsx)"
