@@ -452,7 +452,7 @@ function ShowsPage() {
             </div>
           </div>
           <Card
-            className={cn(REVEAL, "self-end", pageIsRevealed && REVEALED)}
+            className={cn(REVEAL, "gap-0 self-end", pageIsRevealed && REVEALED)}
             padding={false}
             style={{
               transitionDelay: pageIsRevealed ? "120ms" : "0ms",
