@@ -2387,6 +2387,7 @@ lands. Stage (c).
 - [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
+      — partly: the grading suites, `check:libs`, the typecheck and lint pass; `check:app-bundles` fails on the base, where the auction's winner-order view reads `@grade10/i18n`'s root into the console's orders chunk, and the stories lane was not run
 - [x] 30.9 Read the notice period off the detail's pinned terms in
       `PostNoticeDialog` and the timeline's notice entry, the detail carrying
       `noticePeriodDays`, its tests red first; needs 20.6; then run 30.8's
@@ -2444,7 +2445,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       and 29.9
 - [ ] 31.6 Render the grading nav item from the `chrome` key task 1.6 added, so
       the collector reaches `/grading` from the shell
-- [ ] 31.7 Verify: `pnpm run test`, `pnpm run check:libs`,
+- [x] 31.7 Verify: `pnpm run test`, `pnpm run check:libs`,
       `pnpm run typecheck`, `pnpm run lint`
 - [ ] 31.8 Make `grading` `prerendered` and public as `book` is, once 31.2
       has landed: its head meta, the `/tc` and `/sc` variants, the sitemap
