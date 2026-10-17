@@ -447,6 +447,7 @@ export type {
   RewardMenuItem,
 } from "./blocks/loyalty-membership/types";
 export {
+  type WalletPassArtwork,
   WalletPassLinks,
   type WalletPassLinksCopy,
   type WalletPassLinksProps,

@@ -165,10 +165,13 @@ hands out the new QR code
 - **Scanner** — `apps/backend/grade10/tcg-ar`; its platform API —
   `apps/backend/grade10/tcg-ar/docs/PLATFORM.md`
 - **Store's catalogue mirror** — `packages/grade10-store/backend/src/durables/CatalogKeeper/`
+- **Store's shelf pass** — `packages/grade10-store/backend/src/services/shelfScan/`
 - **Store schedule** — `packages/grade10-store/backend/src/sweeps/cron.ts`
+- **Scanner's contracts** — `packages/tcg-ar/contracts` (`@grade10/tcg-ar-contracts`)
 - **Photo run** — `.github/workflows/tcg-ar-ops.yml`, job `photos`;
   `apps/backend/grade10/tcg-ar/scripts/process-photos.ts`
-- **Slab facts** — inventory items, `packages/inventory/backend/src/db/schema/items.ts`
+- **Slab facts** — inventory items, `packages/inventory/backend/src/db/schema/items.ts`,
+  read through `StoreItemSlabs` (`@grade10/inventory-contracts/items`)
 - **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 

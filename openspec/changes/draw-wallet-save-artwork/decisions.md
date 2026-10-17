@@ -20,6 +20,8 @@
 | Q1 | Who carries the save action's artwork? | This change, through the shared `WalletPassLinks` export - launch-wallet-passes Q12, tasks 5.9 and 6.10 | That change - it moves its frozen anchors, and QA1 and Dev run again |
 | Q2 | When is the Apple pass offered? | Where the pass type identifier, the certificate, the push credential and `WALLET_PASS_AUTH_KEY` are all set - the page's Wallets section and Apple step 8, `packages/grade10-store/backend/src/services/wallet/deps.ts:140-157` and `:261-262`, and `applePush.ts:204-208` in grade10. launch-wallet-passes Q25 hands the widening here | The durable text's identifier and certificate alone - a pass the worker can neither answer nor push to |
 | Q3 | Does a member on `/membership` see each wallet's artwork as the vendor publishes it, or a version redrawn around it? | As each vendor publishes it, since both guidelines expect it unaltered - decided 2026-10-08 by the product manager, as recommended | A version redrawn around it |
+| Q4 | Who supplies the artwork, the block or the consumer? | The block, for a wallet the consumer names - decided by agent, since the artwork is fixed per vendor and every consumer would otherwise copy the same files | Taking the image from each consumer |
+| Q5 | What does the Apple offer draw before Apple's licensed badge is in the package? | A placeholder drawn to the badge's proportions, marked as a placeholder on the page, and replaced by Apple's file before Apple Wallet is offered to members - decided by agent | Keeping the text button for Apple alone |
 
 ## Raised
 

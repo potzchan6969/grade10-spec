@@ -228,7 +228,7 @@ code, points and the site discounts it accepts:
 - **Points** (order-wise discount)
 - **Shipping** ([Shipping](/p/grade10-site/store/shipping)) fee is determined by custom carrier service API, conditionally free
 
-🚧 Nothing is held for a draft order: points and a discount code alike stay
+Nothing is held for a draft order: points and a discount code alike stay
 spendable until a paid order takes them.
 
 - **The newer promise retires the older** — an online checkout, and a sale planned at a counter,
@@ -237,7 +237,7 @@ spendable until a paid order takes them.
   member's cart keeps its lines
 - **A retired counter sale keeps its cart** — the shop owns that cart and it
   can still collect, so the sale is never cancelled; it takes no new plan
-- 🚧 **A retired counter sale gives back its reward** — whatever reward it
+- **A retired counter sale gives back its reward** — whatever reward it
   holds, the one the newer sale claims or another; its code is deactivated,
   and a gift's line stays on the cart — [Coupons](/p/grade10-site/loyalty/coupons)
 
@@ -301,8 +301,8 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **The member taken off the sale** — the promise goes back for everything the sale no longer shows, and what can still be removed is. A cut nobody can remove keeps its ride and the order id with it: no sale binds while the cart names no customer, and the member coming back is what spends it
 - **After tender** — a refund, on the refund's own rule
 - **Walked away** — the promise lives an hour, then the row goes `expired`, never `canceled`: the shop's cart can still collect, and `expired → paid` stays legal
-- 🚧 **Walked away with a reward** — at that hour the reward comes off and its code is deactivated; the sale keeps its cart, a gift's line with it, and a cart still carrying the code or that line is settled against what it carried — [Coupons](/p/grade10-site/loyalty/coupons)
-- 🚧 **A reward's code removed** — once it leaves the sale, no reward goes back on that sale, that coupon or another; points still go on, and a reward needs a new sale
+- **Walked away with a reward** — at that hour the reward comes off and its code is deactivated; the sale keeps its cart, a gift's line with it, and a cart still carrying the code or that line is settled against what it carried — [Coupons](/p/grade10-site/loyalty/coupons)
+- **A reward's code removed** — once it leaves the sale, no reward goes back on that sale, that coupon or another; points still go on, and a reward needs a new sale
 - **A second person steps up** — a reopened modal reads the cart back; a sale the shop's open promises name as this member's stays, points and all, anybody else's benefits are stripped before the new session
 
 ### What guarantees it
@@ -314,8 +314,8 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 - **Every unhappy answer is a value** — the sale is happening whatever the programme thinks; nothing throws, nothing leaves staff on a spinner
 - **Replay is dead** — a card presentation is consumed by one guarded update, so two tills scanning at once open exactly one session
 - **Throttles** — short-code misses ten per five minutes per shop, email and phone twenty, plans twenty per session
-- 🚧 **A row that closed cannot be rewritten** — a sale that landed, whose own hour ran out, or that a newer promise retired, refuses the next plan and asks staff to ring the goods on a new sale rather than reopening itself: a fresh scan would leave a deactivated code on the same cart
-- 🚧 **A fresh scan on an open sale's cart** - a till session lives ten minutes and a sale's hour outlasts it, so staff reach the cart again through a fresh scan; on the member's own open sale it continues that sale and the code it carries, and on their closed sale still carrying a reward's code it is refused
+- **A row that closed cannot be rewritten** — a sale that landed, whose own hour ran out, or that a newer promise retired, refuses the next plan and asks staff to ring the goods on a new sale rather than reopening itself: a fresh scan would leave a deactivated code on the same cart
+- **A fresh scan on an open sale's cart** - a till session lives ten minutes and a sale's hour outlasts it, so staff reach the cart again through a fresh scan; on the member's own open sale it continues that sale and the code it carries, and on their closed sale still carrying a reward's code it is refused
 - **A fresh scan on a closed sale's cart that carries no reward's code** - after a sale with only points or a gift's line runs out its hour, the apply takes that gift's line and points off the cart and opens a new sale on it; a cart tendered without a new apply still names the closed sale, and one paid showing its gift's line is reported and settled as [Coupons](/p/grade10-site/loyalty/coupons#spending-one) says
 - **A tender reaches stored value, and comes back only whole** — one discount over every line the shop sold, so a gift card on the sale is part-paid by points (`store.points_tender.gift_card_on_sale`) and nothing comes back while the card is kept; the member left short is counted (`store.points_tender.return_held`) and paid by hand
 :::
