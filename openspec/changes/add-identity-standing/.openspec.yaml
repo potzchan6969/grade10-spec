@@ -6,3 +6,5 @@ page_waived: "predates the page rule"
 reviewed:
   tech-design: 1a9c6fd3
   specs: 22f6eada
+  user-journeys: d0fa7127
+  tasks: b1915be7

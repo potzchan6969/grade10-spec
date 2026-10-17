@@ -1,3 +1,9 @@
 schema: grade10-planning
 created: 2026-09-17
 page_waived: "ZZZ auction PRD not drafted yet — surfaces still being planned"
+reviewed:
+  decisions: f01ea9b2
+  user-journeys: fd4c4362
+  tech-design: fbd361e0
+  specs: 887f4b26
+  tasks: b85863a0

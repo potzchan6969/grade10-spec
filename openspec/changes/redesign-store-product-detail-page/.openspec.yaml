@@ -9,3 +9,7 @@ depends_on:
 reviewed:
   tech-design: d3aadad0
   test-cases: b19e565d
+  user-journeys: 4a635c55
+  ui-design: d3aadad0
+  specs: "82783317"
+  tasks: b8bc685e

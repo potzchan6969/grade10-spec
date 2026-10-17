@@ -5,3 +5,4 @@ design_waived: "no code moves: the order already runs in services/catalog/, and 
 reviewed:
   decisions: 93428ff2
   user-journeys: de234c07
+  tasks: 509c7f56

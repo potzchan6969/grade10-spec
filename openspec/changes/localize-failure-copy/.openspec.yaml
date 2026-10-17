@@ -5,3 +5,5 @@ design_waived: "one classifier in the shared data layer and one hook over it - d
 reviewed:
   user-journeys: fa0bea74
   specs: 61cb7d38
+  decisions: fa0bea74
+  tasks: 320a2aa2
