@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 import { VAULT_ASSET_DETAILS } from "../../vault-content";
 import { VaultAssetCustodyDocuments } from "./vault-asset-custody-documents";
 
@@ -35,5 +35,25 @@ export const Default: Story = {
     expect(canvas.getByText("Stored in vault")).toBeVisible();
     expect(canvas.getByText("Received at Grade10 intake")).toBeVisible();
     expect(canvas.queryByText("Vault intake certificate")).toBeNull();
+  },
+};
+
+/** The Documents tab: the grading institute's report opens its own site in a new tab. */
+export const Documents: Story = {
+  args: {
+    asset: VAULT_ASSET_DETAILS[0],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("tab", { name: "Documents" }));
+    expect(await canvas.findByText("PSA cert report")).toBeVisible();
+    const report = canvas.getByRole("button", { name: "View" });
+    expect(report).toHaveAttribute(
+      "href",
+      "https://www.psacard.com/cert/63261276",
+    );
+    expect(report).toHaveAttribute("target", "_blank");
+    expect(report).toHaveAttribute("rel", "noreferrer");
+    expect(canvas.getAllByRole("button", { name: "PDF" })).toHaveLength(2);
   },
 };

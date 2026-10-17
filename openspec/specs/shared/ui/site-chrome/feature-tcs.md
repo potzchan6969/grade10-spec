@@ -1,6 +1,6 @@
 # shared/ui/site-chrome Test Cases
 
-**Status:** pending-review · 0/30
+**Status:** pending-review · 0/31
 **Drafts styled:** 2026-10-14, tcs-rules r5
 
 **Out of suite:** none.
@@ -989,6 +989,37 @@ Runs once per row of **Test data**.
 * Step 4: every other control's box matches its box from step 2.
 * Step 4: the placeholder no longer renders.
 
+### g10.shared-site-chrome.US1-TC28: My Auctions is omitted when onMyAuctions is not supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and no `onMyAuctions` handler.
+
+**Steps:**
+
+1. Render the header.
+2. Click the account control.
+3. Read the account menu's items.
+
+**Expected Results:**
+
+* Step 3: the menu offers Sign Out, and every other gated item whose handler
+  is supplied.
+* Step 3: no My Auctions item.
+
 <!-- trace:case id=g10.shared-site-chrome.TC-9d7 rev=2 covers=none -->
 ### g10.shared-site-chrome.US1-TC9: Signed-in chrome presents the account menu
 
@@ -1215,3 +1246,14 @@ Runs once per row of **Test data**.
 | Uncovered scenarios | Every scenario the delta adds or changes has a case | None |
 | Over-claimed cases | Each marker names one scenario its case asserts whole | None |
 | Contradicted readings | No case and scenario disagree | None |
+
+- **Raised** — nothing: the durable contract gates every other account-menu
+  item on its handler, and this change extends the same rule to My Auctions
+- **Uncovered anchors** — none of this delta's:
+  `shared-ui-site-chrome-SC-44` is walked by
+  `shared-ui-site-chrome-US1-TC28-1`
+
+**Run:** Read the durable capability's `## Purpose` and `## Feature set`,
+its `user-journeys.md`, the change's `decisions.md` and `ui-design.md`, and
+the durable suite for id continuity; denied `## Requirements` sections and
+`openspec/changes/archive/`.

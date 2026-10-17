@@ -147,7 +147,7 @@ lot before any script runs.
   former address, including a lot called off earlier, so a saved link to it
   stops opening that lot. An unused address shows Page not found; a reused
   address opens the new public lot.
-- 🚧 **Restricted regions** — where auctions are not offered, a request from
+- **Restricted regions** — where auctions are not offered, a request from
   that region sees no auction entry point anywhere on the site, and a direct
   auction address — the catalogue or a lot — answers the restriction page
   rather than the auction. The store and the rest of the site are unchanged —
@@ -250,6 +250,8 @@ and publishes it; from the close on, the sale is worked in Orders
 ::cases{id="grade10-site/auction/listing-page"}
 
 ::cases{id="grade10-site/auction/listing-media"}
+
+::cases{id="grade10-site/auction/availability"}
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -277,5 +279,5 @@ Active and Completed filters in bidding history.
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
-| Restriction page indexability | ❓ Open | Whether the restriction page emits `noindex` or stays indexable like the not-found surface; Product and SEO confirm. | Product |
+| Restriction page indexability | Decided | The restriction page renders in the browser at the auction's own address, so the document a crawler reads is the auction's and no `noindex` is needed. | Engineering (agent) |
 :::

@@ -17,7 +17,7 @@ capability is the component contract underneath it.
   Watching sections; each lot shows Auction (image, title, close), Current
   Bid, Status (a badge, or the application's no-standing placeholder),
   Email alerts, and Unwatch only when the application supplies a watch toggle
-- 🚧 **Small viewport** — below `md`, each lot is a stacked card with identity,
+- **Small viewport** — below `md`, each lot is a stacked card with identity,
   inline current bid, Status when labelled, and a footer for Email alerts and
   Unwatch or View order; the whole card opens the lot or Winner Order; from
   `md`, the five-column table

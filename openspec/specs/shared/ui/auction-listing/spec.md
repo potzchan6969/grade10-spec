@@ -250,9 +250,11 @@ line. A closed lot's close is a collector deadline: when it shows a clock it
 SHALL be stated in that zone and SHALL name the viewer's zone, as an open lot's
 deadline does, and when it shows only a day it SHALL name none.
 
-`AuctionCard` SHALL require `locale` and `timeZone` and SHALL format its
-static Ends / Opens / Closed line as a collector deadline in that zone, naming
-the viewer's zone.
+The catalogue lot tile `AuctionLotCard` SHALL require `locale` and `timeZone`.
+A tile whose lot has not closed SHALL keep the countdown it draws and SHALL
+read its open or close as a collector deadline in that zone to a screen
+reader; a closed tile SHALL draw that collector deadline, with a closed
+prefix, as its close line. Either line names the viewer's zone.
 
 The viewer's zone is named as `shared/dates-and-times` names it: its short name
 in US English (`HKT`, `EDT`), or its offset in English where US English has none
@@ -271,8 +273,8 @@ in US English (`HKT`, `EDT`), or its offset in English where US English has none
 #### Scenario: shared-ui-auction-listing-SC-55 - A catalogue tile close follows the viewer
 **Serves:** Bid history - catalogue tile close follows the viewer
 
-- **GIVEN** the same close instant rendered on `AuctionCard` for `Asia/Hong_Kong` and `America/New_York`
-- **WHEN** each card renders its clock line
+- **GIVEN** the same close instant rendered on a closed `AuctionLotCard` for `Asia/Hong_Kong` and `America/New_York`
+- **WHEN** each tile's close line is read
 - **THEN** the clock values differ
 - **AND** the Hong Kong line names `HKT`
 - **AND** the New York line names `EDT` and does not contain `HKT`

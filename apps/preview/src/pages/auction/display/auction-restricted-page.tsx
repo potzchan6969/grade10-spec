@@ -13,7 +13,7 @@ type AuctionRestrictedPageProps = {
 /**
  * The auction restriction surface as the app assembles it for a request
  * judged restricted: `SiteHeader` with no Auction nav item and no My
- * Auctions account entry, static title, Browse the Store, and `Footer`.
+ * Auctions account entry, static title and line, Browse the Store, and `Footer`.
  * No nav item is current.
  */
 function AuctionRestrictedPage({ onBrowseStore }: AuctionRestrictedPageProps) {
@@ -32,9 +32,14 @@ function AuctionRestrictedPage({ onBrowseStore }: AuctionRestrictedPageProps) {
           gap="lg"
           hAlign="center"
         >
-          <h2 className="text-2xl leading-tight font-bold text-balance text-foreground sm:text-3xl">
-            {AUCTION_RESTRICTED_COPY.title}
-          </h2>
+          <VStack className="w-full" gap="sm" hAlign="center">
+            <h2 className="text-2xl leading-tight font-bold text-balance text-foreground sm:text-3xl">
+              {AUCTION_RESTRICTED_COPY.title}
+            </h2>
+            <p className="text-base leading-6 text-pretty text-secondary-foreground">
+              {AUCTION_RESTRICTED_COPY.description}
+            </p>
+          </VStack>
           <Button onClick={onBrowseStore} size="md">
             {AUCTION_RESTRICTED_COPY.browseStore}
           </Button>
