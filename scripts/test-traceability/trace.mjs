@@ -1168,15 +1168,15 @@ function initialize(kind, values) {
   const index = exactTargetIndex(lines, target, file);
   ensureNoAdjacentTrace(lines, index);
   const markerKind = kind === "scenario" ? "SC" : "TC";
-  const sequence = nextSequence(
-    storeRoot,
-    app,
-    product,
-    capability,
-    markerKind,
-    target,
-  );
-  const id = formatReference(app, product, markerKind, capability, sequence);
+  const id =
+    heldTraceOf(storeRoot, file, target, kind) ??
+    formatReference(
+      app,
+      product,
+      markerKind,
+      capability,
+      nextSequence(storeRoot, app, product, capability, markerKind, target),
+    );
   let marker;
   if (kind === "scenario") {
     if (!/^\s*####\s+Scenario:\s+\S/.test(target))
@@ -1198,6 +1198,68 @@ function initialize(kind, values) {
     marker = `trace:case id=${id} rev=${revision}${covers.length > 0 ? ` covers=${covers.join(",")}` : ""}`;
   }
   insertMarker({ file, target, marker, syntax: "html", dryRun: values.dryRun });
+}
+
+/**
+ * The trace id a record copied into another file keeps: the one its readable
+ * id already holds in the durable specs or an open change, matched on the
+ * readable id the target heading carries — a case's with its `<v>` stripped —
+ * never on the heading's text. Nothing where the readable id is held nowhere
+ * else, so a new record takes a fresh id; refused where it is held with no
+ * marker, or under more than one.
+ */
+function heldTraceOf(storeRoot, targetFile, target, kind) {
+  const readable = readableIdOf(target, kind);
+  if (!readable) return undefined;
+  const files = ["openspec/specs", "openspec/changes"].flatMap((dir) =>
+    walk(
+      resolve(storeRoot, dir),
+      (path) =>
+        extname(path) === ".md" &&
+        path !== targetFile &&
+        !path.includes(`${sep}archive${sep}`),
+    ),
+  );
+  const held = new Set();
+  const bare = [];
+  for (const file of files) {
+    const lines = readFileSync(file, "utf8").split(/\r?\n/);
+    lines.forEach((line, index) => {
+      if (readableIdOf(line, kind) !== readable) return;
+      const comment = traceComment(lines[index - 1] ?? "");
+      const marker =
+        comment?.syntax === "html"
+          ? /^(?:scenario|case)\s+.*?\bid=(\S+)/.exec(comment.body)?.[1]
+          : undefined;
+      const parsed = parseReference(marker);
+      if (parsed) held.add(parsed.canonical);
+      else bare.push(relative(storeRoot, file));
+    });
+  }
+  if (held.size > 1)
+    fail(
+      `${readable} is held under more than one trace id (${[...held].join(", ")}) — settle which record it is before copying it`,
+    );
+  if (bare.length > 0)
+    fail(
+      `${readable} is held with no trace marker in ${bare.join(", ")} — initialise that record first, so the copy keeps its id`,
+    );
+  return held.size === 1 ? [...held][0] : undefined;
+}
+
+/** The readable id a scenario or case heading carries, a case's with its
+ * `<v>` stripped; nothing for a line that is no such heading. */
+function readableIdOf(line, kind) {
+  if (kind === "scenario") {
+    return /^\s*####\s+Scenario:\s+([a-z0-9][a-z0-9.-]*(?:-SC-\d+|\.SC\d+)[a-z]?)(?:\s|$)/.exec(
+      line,
+    )?.[1];
+  }
+  const id =
+    /^\s*#{3,4}\s+([a-z0-9][a-z0-9.-]*(?:-|\.)US-?\d+-TC-?\d+(?:-\d+)?):/.exec(
+      line,
+    )?.[1];
+  return id?.replace(/(TC-?\d+)-\d+$/, "$1");
 }
 
 function initializeBatch(values) {

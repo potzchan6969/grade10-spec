@@ -36,6 +36,7 @@ import {
   reusedInChange,
 } from "../../../tools/manual/src/store/reused-ids.mts";
 import { parseTraceGraph } from "../../test-traceability/trace.mjs";
+import { idsMainHolds } from "../spec-issue.mjs";
 import { git, textAt } from "../store-main.mjs";
 import { foldGroups, holding, labelOf, splitGroups } from "./feature-set.mjs";
 import { foldChecks, purposeOf } from "./fold-checks.mjs";
@@ -1677,6 +1678,19 @@ export function acceptanceGate(prepared, command) {
     prepared.changeId,
   ]);
   if (changes) refuse("validate:changes", changes);
+  // Acceptance reads the fetched `main`, not the branch alone: an id another
+  // change landed first is refused before a fingerprint names it.
+  for (const held of idsMainHolds(prepared.root, prepared.changeId, {
+    accepted: existsSync(
+      join(
+        prepared.root,
+        "openspec/changes",
+        prepared.changeId,
+        "acceptance.json",
+      ),
+    ),
+  }))
+    refuse("issued", held);
   for (const finding of foldChecks(prepared))
     (finding.level === "warn" ? warnings : failures).push(finding);
   const tree = foldedTree(prepared);
@@ -2118,6 +2132,12 @@ export function acceptChange(
     throw new Error(
       `durable baseline changed since preflight (now ${prepared.baselineFingerprint}); run accept:preflight again and review the result`,
     );
+  const held = idsMainHolds(root, changeId, {
+    accepted: existsSync(
+      join(root, "openspec/changes", changeId, "acceptance.json"),
+    ),
+  });
+  if (held.length > 0) throw new Error(held.join("\n"));
   const backups = new Map();
   const changeDir = join(root, "openspec", "changes", changeId);
   const record = join(changeDir, "acceptance.json");

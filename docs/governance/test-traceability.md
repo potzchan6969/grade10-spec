@@ -22,6 +22,7 @@ test("the gallery refuses a ninth media item", () => {});
 test("supporting gallery behavior", () => {});
 ```
 
+- **Carried records** - `trace init` on a scenario or case copied into a second change reuses the trace id its readable id already holds in the durable specs or an open change, matched on the readable id with a case's `<v>` stripped, never on the heading's text; a readable id held with no marker, or under more than one, is refused.
 - **Reference** - Existing trace markers keep their issued machine ids. Human-facing journey and case headings use `<app>.<domain>-<capability>.US<n>` and `<app>.<domain>-<capability>.US<n>-TC<m>`; composed headings use the same suffix under their level scope. Apps are `g10`, `zzz`, `g10adm`, `zzzadm`, and future `g10str`. `US` identifies a journey, `SC` a scenario, and `TC` a test case.
 - **Casing** - App, product, capability, and sequence are stored in lowercase. Product and capability are lowercase hyphenated slugs. The kind token is uppercase. CLI inputs are case-insensitive and are written in canonical casing. A stored marker with different casing fails validation as `noncanonical-id`.
 - **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.

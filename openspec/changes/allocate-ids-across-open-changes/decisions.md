@@ -29,6 +29,8 @@
 | Q5 | What id does a record copied into a second change take? | The trace id its readable id already holds in its scope, in the durable spec or an open change, matched on the readable id the target heading carries (`…-SC-<n>`, `…-US<n>-TC<m>` with `<v>` stripped), never on the heading's text - decided by the round | A fresh id, as `trace init` issues today, so one scenario carries two; matching on the heading's text, which gives a reworded or revised copy a fresh id |
 | Q6 | What does acceptance read? | `accept:preflight` and `spec:accept` read the fetched `main` and refuse an id it holds before writing the fingerprint. A change accepted on its branch and beaten to the landing moves its ids with the command and is accepted again with `--supersedes` - decided by the round | The branch's tree alone, which lets two branches each be accepted with one id and leaves the second no way forward |
 | Q7 | Which copied record does `trace init` refuse? | One whose readable id is held elsewhere with no marker, or under more than one - the owner's word | Every id with no marker, which refuses every new record |
+| Q8 | Does this change run the planning pass before it is built? | No - decided by agent: the owner asked every active change built as a working version, so the requirements and the plan were written from the landed proposal and decisions and verified by the build | Running `/planning-dev` and an acceptance first |
+| Q9 | What does the command name itself? | `spec:issue`, as the proposal's Impact names it, with `move <change>` as its second form - decided by agent | A `next-id` and a `move-ids` command, two entry points for one reading |
 
 ## Raised
 

@@ -99,7 +99,8 @@ The suite has two different coverage relationships. They must not be collapsed i
 - **Scenario marker ids are immutable** — never change the `id` inside an existing `trace:scenario` marker. New scenario headings use the current human-facing form; the CLI may allocate a separate machine marker id, and old marker ids remain valid evidence for existing case markers
 - **A case heading may move** — when a case moves from `US1-TC1` to `US2-TC4`, change only the heading and its suite references. Keep the adjacent case marker unchanged. Bump `rev` only when the behaviour changes
 - **No local case reference** — the full heading id is the case reference in a walk, report, manual row or higher-level suite. Do not add a second `(US<n>-TC<m>)` suffix
-- **Numbers are permanent within a suite** — a new case takes the next unused `TC<m>` for its journey. A deprecated case keeps its heading history and number; the number is never reused
+- **Issued by a command** — a new journey, scenario or case takes the id `pnpm run spec:issue <prefix> US|SC` or `pnpm run spec:issue <journey> TC` prints, read from the branch and the fetched `main` together; nobody counts by hand. A landing or an acceptance that refuses an id another change holds names `pnpm run spec:issue move <change>`, which moves the branch's ids above `main`'s and rewrites every citation inside the change
+- **Numbers are permanent within a suite** — a new case takes the `TC<m>` `spec:issue` issues for its journey. A deprecated case keeps its heading history and number; the number is never reused
 - **`rev` tracks behaviour, not prose** — `rev=1` is the first written version. It is bumped only when product behaviour changes what the case verifies. Walk-route optimization, restyling and purpose-preserving heading changes do not bump it
 
 | What happened | `rev` | `Status` |

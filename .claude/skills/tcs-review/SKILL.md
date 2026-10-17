@@ -135,7 +135,7 @@ execution; a review classification is not a pass or fail result.
    spec's author.
    Check the journey, the file, then the domain suite for one that covers it;
    on a hit show both and ask: update, add as distinct, or drop. Write it as
-   `draft` at the next unused `TC<m>`, `rev=1`, and walk it like any
+   `draft` at the `TC<m>` `pnpm run spec:issue <journey> TC` issues, `rev=1`, and walk it like any
    other draft — never straight to `actual`, even dictated. Record what
    distinguishes a case added over a duplicate.
 
