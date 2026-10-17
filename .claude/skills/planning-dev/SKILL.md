@@ -14,7 +14,7 @@ description: Plan and accept one OpenSpec change in one invocation: QA1 writes b
   [What Does Not Go on the PRD](../../../docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd)
   allows: a rule no spec states as one ❓ line, a constraint that changes an
   outcome as one 🚧 or ❓ line. Cases, mechanisms and scenarios stay in their
-  own artifacts; run the `Cut` pass of `docs/governance/writing.md` on any line
+  own artifacts; run `docs/governance/writing.md`'s `Cut` pass on any line
   added.
 - **Cases** - Planning produces draft cases. Human classification and execution
   belong to `tcs-review` and `tcs-run-sheet` after deployment.
@@ -59,8 +59,8 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    design: the requirements pass reads `tech-design.md` beside
    `ui-design.md`; a requirement contradicting either is not written. A
    question the design cannot settle is a row in `decisions.md`'s
-   `## Raised`, never a dated wait on another hand: the row holds acceptance
-   only, and the product manager resolves it with the engineer's challenge. Use `docs/governance/task-ownership.md` for groups and owners.
+   `## Raised`, never a dated wait on another hand; it holds acceptance
+   only, resolved by the product manager with the engineer's challenge. Use `docs/governance/task-ownership.md` for groups and owners.
    Before QA2, check the draft's structure, trace markers and overlaps:
 
    ```bash
@@ -79,10 +79,10 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    `recommended: <option>`. Close every row the
    [held test](../../../docs/governance/specs-to-test-cases.md#raised)
    does not hold on its recommendation: a `Decisions` row written
-   `<answer> - decided by the round`, naming its source - the page line that
-   settles it where one does - and the answer in the suite's `## Settled`;
-   rows one source settles share one `Q<n>`. Only a held row stays open, and a
-   contradiction between the two readings is always held. Return
+   `<answer> - decided by the round`, naming its source - the settling page
+   line where one exists - and the answer in the suite's `## Settled`;
+   rows one source settles share one `Q<n>`. Only a held row stays open; a
+   contradiction between the readings is always held. Return
    source-linked coverage and dispositions for the acceptance reviewer.
 4. **Resolve and Check** - A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
