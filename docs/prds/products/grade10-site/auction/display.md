@@ -40,7 +40,7 @@ What a listing carries, from the operator's form to the card.
 | Title | Required, **1 to 200** characters | The card and the lot page |
 | Description | Optional, at most **4,000** characters | The lot page |
 | Gallery | **1 to 8** images and videos, in order | The first item on the card, all of them on the lot page |
-| 🚧 Currency and starting price | **USD** and a whole amount | The current price, in USD |
+| Currency and starting price | **USD** and a whole amount | The current price, in USD |
 | Bidding window | A start, a close and the extension rule — [Bidding](/p/grade10-site/auction/bidding#auction-logic) | The close and the time left |
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |

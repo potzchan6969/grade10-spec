@@ -42,7 +42,7 @@ Link](/p/shared/auth/sign-in#following-the-link).
 
 ## Verified Identity
 
-- 🚧 **The bar** — a bid of **USD 15,000** or more asks for a verified
+- **The bar** — a bid of **USD 15,000** or more asks for a verified
   identity; below it, nothing is asked
 - **A request** - an account Grade10 asked to verify its identity or its
   business has every new or raised maximum held, at any amount, until it
@@ -90,7 +90,7 @@ book's own management is the one part nobody has specified.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Email paths | Decided | The sign-in link alone; the code is withdrawn — [Sign-In](/p/shared/auth/sign-in). | Product |
-| Verified bidder | 🚧 In flight | A bid of USD 15,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
+| Verified bidder | Decided | A bid of USD 15,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
 | Held on request | Decided | An account Grade10 asked to verify has every new or raised maximum held until it passes; a standing maximum keeps bidding, decided 2026-10-13. | Owner |
 | Saved address cap | Decided | Five named addresses per account; at the cap a one-time address still settles an order, and saving waits until one is removed. | Product (@tangconst) |
 | Managing the book | ❓ Open | No surface adds, edits or removes a saved address outside an order. | Product and design |

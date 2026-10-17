@@ -38,14 +38,14 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
 ## Bid History
 
 - **Accepted instants** — each row keeps the accepted time as data
-- 🚧 **Localized** — recent activity reads in relative form and older activity
+- **Localized** — recent activity reads in relative form and older activity
   in the viewer's local zone; the application supplies the locale, the
   time zone and the activity copy, and a non-timestamp state may supply its
   own display text; collector deadline and catalogue tile close lines use
   the same locale and zone, and a deadline that shows a clock names the
   viewer's zone: its short name in US English, HKT in Hong Kong, or an offset
   such as GMT+9 where US English has none
-- 🚧 **Closed lot** - the bid card names the viewer's zone after a closed lot's
+- **Closed lot** - the bid card names the viewer's zone after a closed lot's
   close time when it shows a clock, as it does after an open lot's deadline; a
   close day alone names none
   ([Dates and Times](/p/platform/shared/dates-and-times))

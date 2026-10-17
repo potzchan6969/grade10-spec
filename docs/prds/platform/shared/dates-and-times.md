@@ -9,22 +9,22 @@ zone of its own. What a person reads depends on the surface.
 
 ## Collector Surfaces
 
-- 🚧 **Viewer local** — a clock on a collector page uses the viewer's own
+- **Viewer local** — a clock on a collector page uses the viewer's own
   zone, supplied as the page's `timeZone`, and so does the day of a deadline
   that shows only a day, except on a shop-clock page, or where the surface's own
   spec fixes its zone, which it keeps
-- 🚧 **Every deadline named** - a deadline on a collector page that shows a
+- **Every deadline named** - a deadline on a collector page that shows a
   clock names the viewer's zone, a closed lot's close time too, never a pinned
   HKT for every reader, except on a shop-clock page; a deadline that shows only
   a day reads that day in the viewer's zone and names no zone
-- 🚧 **Zone names** - HKT in Hong Kong, otherwise the zone's short name in US
+- **Zone names** - HKT in Hong Kong, otherwise the zone's short name in US
   English (EDT, EST and PDT in North America), and the offset in English (GMT+9,
   GMT+5:30) where US English has none, whatever language the page reads in; a
   zone at zero offset reads GMT
 - **Relative remaining** — Ends in and Opens in carry no zone
 - **Activity** — recent rows are a short relative label; older rows are a
   local moment with no zone suffix
-- 🚧 **First paint** - until the browser reports its zone, a deadline may read
+- **First paint** - until the browser reports its zone, a deadline may read
   UTC named GMT, then it switches to the viewer's zone
 - **Shop's clock** - a page that books or confirms a visit, or a vault or
   signing page, keeps the shop's clock whatever zone the viewer is in; no rule
@@ -35,13 +35,13 @@ zone of its own. What a person reads depends on the surface.
 
 ## Documents and Messages
 
-- 🚧 **GMT+8** - invoices, the application's invoice page included, receipts,
+- **GMT+8** - invoices, the application's invoice page included, receipts,
   terms, and every message the platform sends state Asia/Hong_Kong and name
   GMT+8, the same for every viewer and recipient; a document's date words stay
   English whatever language it is written in
-- 🚧 **Grading letters** - the footer reads "Dates and times are Hong Kong time
+- **Grading letters** - the footer reads "Dates and times are Hong Kong time
   (GMT+8)." ([What the Collector Hears](/p/grade10-site/grading/messages))
-- 🚧 **Vault letters** - the footer reads "Dates and times are in Hong Kong time
+- **Vault letters** - the footer reads "Dates and times are in Hong Kong time
   (GMT+8)." ([Collector Pages](/p/grade10-site/vault/collector-pages#messages))
 - **A day with no clock** - a calendar day in a message names no zone; the day
   is the brand's
