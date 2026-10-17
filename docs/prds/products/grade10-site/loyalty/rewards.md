@@ -150,7 +150,7 @@ one and not the other. It is an operator's move, never a member's.
   reversal never lengthens the life of points
 - **Used does not** — a used coupon stays used; cancelling or refunding the
   order that carried it changes nothing, and the points stay spent
-- 🚧 **Claimed by a sale does not** — refused, naming that sale, until the
+- **Claimed by a sale does not** — refused, naming that sale, until the
   sale gives the coupon back
 - **A lapsed balance does not** — there is nothing left to return into
 - **Tier is untouched** — a redemption never touched tier progress, so

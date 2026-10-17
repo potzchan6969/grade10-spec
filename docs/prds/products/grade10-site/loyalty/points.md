@@ -331,7 +331,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
   latest activity put it
 - **Settled first** — whatever is already dead is written off before the date
   moves, so no date reaches back over a lapse
-- 🚧 **A warning is owed** — the programme works out which members are close
+- **A warning is owed** — the programme works out which members are close
   to losing points; nothing tells them yet —
   [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders)
 - **Dead at once** — points past the date stop counting the instant they are

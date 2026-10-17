@@ -60,6 +60,27 @@ export const Default: Story = {
   },
 };
 
+/** A reward coupon carries no code: it is spent from the wallet by id, so
+ * no row draws a code or a copy action. */
+export const Wallet: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: COUPONS.map(({ code: _code, ...coupon }) => coupon),
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvasElement.querySelector('[data-slot="coupon-list-code"]'),
+    ).toBeNull();
+    expect(canvas.queryByText("GRD-50-7Q2M")).not.toBeInTheDocument();
+    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
+    expect(canvas.getByText("HK$50 off any order")).toBeInTheDocument();
+    expect(canvas.getByText("Used")).toBeInTheDocument();
+  },
+};
+
 /** A surface that must withhold codes masks every one with the same word. */
 export const Masked: Story = {
   args: { masked: true },

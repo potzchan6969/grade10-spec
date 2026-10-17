@@ -33,10 +33,10 @@ so redefining the reward never rewrites a coupon a member already holds —
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
 
-🚧 **The picture** - the coupon list shown here draws no code and no copy
+**The picture** - the coupon list shown here draws no code and no copy
 action, since a reward coupon carries none
 
-::story{id="loyalty-coupons-blocks-couponlist--default" title="The coupons a member holds"}
+::story{id="loyalty-coupons-blocks-couponlist--wallet" title="The coupons a member holds"}
 
 ## Applying one
 
@@ -47,17 +47,17 @@ action, since a reward coupon carries none
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
-- 🚧 **Nothing is held** — a coupon stays available until a paid order spends
+- **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
-- 🚧 **The newest claim is the only live one** — choosing a coupon again takes
+- **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
-- 🚧 **A sale that ends gives it back** — a counter sale nobody paid releases
+- **A sale that ends gives it back** — a counter sale nobody paid releases
   its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
-- 🚧 **An online checkout that took the money keeps it** — and so does one the shop will not close,
+- **An online checkout that took the money keeps it** — and so does one the shop will not close,
   or a sale still being submitted, for its first five minutes; the claim is refused
-- 🚧 **A sale that gave it back can take it again** — a till sale carries it
+- **A sale that gave it back can take it again** — a till sale carries it
   on the plan after a refused one; a sale the shop collected never does
 - **A sale that beats it** — where the two cannot stack the shop keeps the
   larger cut and the coupon goes back to the wallet —
@@ -80,7 +80,7 @@ action, since a reward coupon carries none
 - **Before the commit** — the request's own guard, on every exit
 - **After it** — a release attempt as the write lands, then the outbox,
   retried until an hour past the programme's sweep
-- 🚧 **A claim whose order was never written** — released by the next claim on
+- **A claim whose order was never written** — released by the next claim on
   that coupon once the claim is five minutes old
 - **Under all three** — the programme releases any claim still standing 25 hours
   after it was made: an expired online order's once its code is dead, or one
@@ -127,7 +127,7 @@ Frees the earlier sale's claim and code, and claims it there instead.
 An earlier sale paid with its old code spends nothing, and is reported.
 :::
 
-:::flow{title="Refused" case="🚧 An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
+:::flow{title="Refused" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
 ## *Member* — **Picks a coupon**
 An earlier sale of theirs is carrying it.
 
@@ -155,8 +155,8 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
 | 🚧 Online only by scope | A coupon scoped to named products or a catalog filter, presented at the till from the member's phone, whatever channels it names; it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
-| 🚧 An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
-| 🚧 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
+| An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
+| Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
 
 ### Basket
 
@@ -176,9 +176,9 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 **The paid order stamps it used, and nothing else does.** A coupon on a draft
 nobody paid was never spent.
 
-- 🚧 **A sale that did not carry it did not spend it** — a counter sale whose
+- **A sale that did not carry it did not spend it** — a counter sale whose
   cut the shop never gave hands the coupon back
-- 🚧 **A code collected after it was let go** — reported to an operator with
+- **A code collected after it was let go** — reported to an operator with
   the order on it; the paid sale spends the coupon unless another sale
   claims it
 - **Used has no way back** — cancelling or refunding that order leaves the
