@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T09:38:58.838Z",
+  "generatedAt": "2026-10-17T22:51:24.742Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -34,6 +34,8 @@
     "Dropdown Menu Group Label": "warn",
     "Dropdown Menu Item": "skipped",
     "Empty State": "ok",
+    "Event Card": "warn",
+    "Event Record": "warn",
     "Featured": "warn",
     "Featured Auction": "warn",
     "Featured Lot Card": "warn",
@@ -957,7 +959,8 @@
     "7172-2923": "About",
     "7172-7233": "About (small vp)",
     "7180-7423": "Shows",
-    "7180-8088": "Card",
+    "7180-8647": "Event Card",
+    "7193-9607": "Event Record",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1028,6 +1031,12 @@
     ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
+    ],
+    "Event Card": [
+      "Event Card: no code component (looked for src/components/**/eventcard.tsx or eventcard.tsx)"
+    ],
+    "Event Record": [
+      "Event Record: no code component (looked for src/components/**/eventrecord.tsx or eventrecord.tsx)"
     ],
     "Featured": [
       "Featured: no code component (looked for src/components/**/featured.tsx or featured.tsx)"
