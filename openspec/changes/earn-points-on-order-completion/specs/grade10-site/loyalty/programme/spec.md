@@ -23,7 +23,7 @@ when the paid order lands. Order Details SHALL name no points for an order
 that will never earn.
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ec1 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-255 - A web order earns when it completes, not when it is paid
+#### Scenario: grade10-site-loyalty-programme-SC-259 - A web order earns when it completes, not when it is paid
 **Serves:** g10.loyalty-programme.US13 - Member earns when the order completes
 
 - **GIVEN** a member's paid web order that is not yet fulfilled
@@ -32,7 +32,7 @@ that will never earn.
 - **AND** when every item is fulfilled it earns once, on its qualifying goods
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ec2 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-256 - A refund before completion lowers what the completion earns
+#### Scenario: grade10-site-loyalty-programme-SC-260 - A refund before completion lowers what the completion earns
 **Serves:** g10.loyalty-programme.US13 - Member earns when the order completes
 
 - **GIVEN** a member's paid web order, part of whose goods are refunded before it is fulfilled
@@ -41,7 +41,7 @@ that will never earn.
 - **AND** the completion earns on the goods left
 
 <!-- trace:scenario id=g10.loyalty-programme.SC-ec3 rev=1 -->
-#### Scenario: grade10-site-loyalty-programme-SC-257 - An order that earned at payment earns nothing again
+#### Scenario: grade10-site-loyalty-programme-SC-261 - An order that earned at payment earns nothing again
 **Serves:** g10.loyalty-programme.US13 - Member earns when the order completes
 
 - **GIVEN** a web order paid before this rule, whose payment earned
