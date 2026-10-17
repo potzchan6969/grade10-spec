@@ -35,7 +35,9 @@ A feature run reads a bundle the caller assembles, and nothing outside it.
 
 The blind reading ends with its raised questions: every point the input did not settle, as a question for the author. Not cases, not defects — the things the reader had to decide for itself in order to write anything at all.
 
-They go to the change's `decisions.md`, under `## Raised`, one row per question — `Capability | Raised | Landed`. Not to the suite, which carries no such section.
+They go to the change's `decisions.md`, under `## Raised`, one row per question — `Capability | Raised | Landed`. Not to the suite, which carries no such section. Each row carries its options and `recommended: <option>` in the Raised cell, the held row's own spelling.
+
+- **QA2 closes what the held test does not hold** — in planning-dev's reconciliation, each row the [held test](../../.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) does not hold closes on its recommendation, as a `Decisions` row written `<answer> - decided by the round` naming its source, and its answer goes to the suite's `## Settled`; rows one source settles land on one `Q<n>`. Any hand reopens a closed row with one reply. Only a held row stays open and holds acceptance; a contradiction between the two readings is held whatever the default
 
 - **What belongs** — a rule the input is silent on. "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off as failures and never places scheduled on either side." That is a question the material cannot answer, and it is how a state nobody had thought about gets found
 - **What does not** — anything the input settles and the reader missed; anything for the technical design rather than the behaviour; anything the reader merely wants to know more about

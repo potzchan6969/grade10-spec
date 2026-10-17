@@ -212,10 +212,12 @@ Every preference and every product decision is a row. Which kind decides who
 reads it next.
 
 - **Held or decided** — a preference or a product decision is the next unused
-  `Q<n>` row in the change's `decisions.md`, in one of two grammars. A row is
-  held, and keeps the ❓, when it moves scope, is costly to undo, needs a fact
-  only a person has, or divides its options by more than a task group of
-  work: it is written `❓ <role> - recommended: <option>`. Every other
+  `Q<n>` row in the change's `decisions.md`, met by the round or raised by a
+  reading, in one of two grammars. The one held test for every
+  question. A row is held, and keeps the ❓, when it moves scope, is costly to
+  undo, needs a fact only a person has, or divides its options by more than a
+  task group of work, and a contradiction between the two blind readings is
+  always held: it is written `❓ <role> - recommended: <option>`. Every other
   preference you decide on the best option and write as `<option> - decided
   by the round`; any hand overturns it with one reply, and the cascade
   redraws what depended on it. Both carry what they passed over in `Instead
@@ -254,8 +256,8 @@ stopping at the first artifact of another hand, who the landing tells it is
 their turn. `plan:land` refuses while a held row is open and names the rows;
 `land with recommendations` is the same command with `--with-recommendations`,
 which writes each held row's recommendation in the landing commit as
-`<option> - decided by the round`, with a `reviewed:` line for every drafted
-artifact after the decisions. The commit is cut from `main` with that one
+`<option> - decided by the round`; a taken recommendation moves nothing
+after it. Each landing writes its own artifact's `reviewed:` line. The commit is cut from `main` with that one
 artifact's own files, `landed_by:` and the row; the gate runs against its
 tree, `main` fast-forwards onto it, and the branch is rebased on top so the
 drafts sit above the landing.
@@ -297,8 +299,8 @@ are the command's header's.
    order of the upstream set
 2. **Nothing changed** — `pnpm run plan:land <change> <artifact> --reviewed`
    writes that artifact's `reviewed:` line alone, in one commit, and no round's
-   row: it lands rowless, and the thread line says what you read and that
-   nothing changed
+   row: it lands rowless, on its hand's word, and the thread line says what
+   you read and that nothing changed
 3. **Something changed** — write no `reviewed:` line. Open a round for that
    artifact's hand, naming what reached it, and draft ahead: redraw each
    artifact after it from the redrawn one before it, on the branch, with
@@ -317,9 +319,9 @@ are the command's header's.
 Each answer is written as a decisions row, and nothing after `decisions.md`
 lands until it arrives.
 
-A `reviewed:` line for an artifact you read and found right is the one thing
-you land on your own - from a wake, through the relay as a `reviewed`
-landing, which needs no word. Every other landing waits for a hand's word.
+A `reviewed:` line for an artifact you read and found right lands like any
+other: through the relay as a `reviewed` landing, on that artifact's hand's
+word.
 
 ## What This Skill Never Does
 

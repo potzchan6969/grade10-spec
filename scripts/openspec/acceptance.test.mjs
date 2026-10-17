@@ -1274,6 +1274,38 @@ test("acceptance rejects incomplete rename instructions and unresolved visible c
   );
 });
 
+test("shared-planning-change-stages-SC-79 - acceptance names each open Raised row with its recommendation and whose it is, and not a closed one", () => {
+  const { root } = sandbox();
+  writeFileSync(
+    join(root, "openspec/changes/build-alpha/decisions.md"),
+    [
+      "## Decisions",
+      "",
+      "| Q | Asked | Decided | Instead of |",
+      "| --- | --- | --- | --- |",
+      "| Q1 | Does a refund take the point back? | Yes - decided by the round | No |",
+      "",
+      "## Raised",
+      "",
+      "| Capability | Raised | Landed |",
+      "| --- | --- | --- |",
+      "| site/search | Does a refund take the point back? A: yes. B: no. recommended: A | Q1 |",
+      "| site/search | Which day is a tier judged on? A: the order's. B: today. recommended: A |  |",
+      "| site/search | Is a scheduled lot open to bid on? | ❓ design - nobody has said |",
+      "",
+    ].join("\n"),
+  );
+
+  const refused = acceptanceReadiness(root, CHANGE).filter((one) =>
+    one.includes("## Raised"),
+  );
+
+  assert.deepEqual(refused, [
+    "decisions.md ## Raised still holds an open row - site/search: Which day is a tier judged on? A: the order's. B: today. - recommended: A - the pm's to answer, or QA2's to close on its recommendation",
+    "decisions.md ## Raised still holds an open row - site/search: Is a scheduled lot open to bid on? - no recommendation - the design's to answer, or QA2's to close on its recommendation",
+  ]);
+});
+
 test("acceptance accepts a populated reconciliation table and rejects its empty template", () => {
   const populated = sandbox();
   const suitePath = join(

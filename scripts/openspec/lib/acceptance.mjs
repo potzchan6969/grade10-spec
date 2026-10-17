@@ -1499,20 +1499,32 @@ export function acceptanceReadiness(
           (line) =>
             /^\s*\|/.test(line) && !/^\s*\|\s*(?:Capability|---)/.test(line),
         );
-      if (
-        rows.some(
-          (line) =>
-            /<!--|(?:\bTBC\b|❓)/iu.test(line) ||
-            line
-              .split("|")
-              .slice(1, -1)
-              .some((cell) => cell.trim() === ""),
-        )
-      )
-        errors.push("decisions.md ## Raised still has an unanswered row");
+      for (const line of rows) {
+        if (/^\s*\|\s*<!--/.test(line)) continue;
+        const cells = line
+          .split("|")
+          .slice(1, -1)
+          .map((cell) => cell.trim());
+        const open =
+          /(?:\bTBC\b|❓)/iu.test(line) || cells.some((cell) => cell === "");
+        if (open) errors.push(openRaisedRow(cells));
+      }
     }
   }
   return errors;
+}
+
+/**
+ * One open Raised row as acceptance names it: the capability, the question,
+ * the recommendation it carries and whose answer it waits on — the role a ❓
+ * in its Landed cell names, or the product manager, who resolves every
+ * question before acceptance.
+ */
+function openRaisedRow([capability = "", raised = "", landed = ""]) {
+  const recommended = /recommended:\s*(.+?)\s*$/i.exec(raised)?.[1];
+  const question = raised.replace(/\s*recommended:.*$/i, "").trim();
+  const role = /❓\s+([a-z][a-z0-9._-]*)/.exec(landed)?.[1] ?? "pm";
+  return `decisions.md ## Raised still holds an open row - ${capability || "(no capability)"}: ${question || "(no question)"}${recommended ? ` - recommended: ${recommended}` : " - no recommendation"} - the ${role}'s to answer, or QA2's to close on its recommendation`;
 }
 
 function baselineOf(root, outputs) {

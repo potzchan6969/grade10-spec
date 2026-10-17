@@ -177,6 +177,8 @@ Every wait:
 
 A wait on `specs` and `skip_specs: true` are opposites and never appear together: one says requirements are coming, the other that none are owed.
 
+A question about a look waits in one designer's change per capability, extended by the next question on it: `awaiting: ui-design` naming the designer, `hands: design` set, and no `awaiting: specs`. A look-only answer closes it with `skip_specs: true` and `skip_specs_why`; an answer that moves a requirement replaces the wait with a delta. The feature names no dependency on it and ships its interim meanwhile.
+
 ### 6. Keep component contracts aligned
 
 A capability spec names the exact exports a consuming application must provide. The change that alters one must:

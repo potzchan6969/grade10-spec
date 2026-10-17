@@ -69,8 +69,15 @@ Record each answer on the page and in `decisions.md` before drafting. Raise newl
    may link multiple scenarios when one route, starting state and checking
    fully assert each. Record uncovered scenarios, over-claimed cases and
    contradictions separately from anchor coverage. Put unresolved product
-   questions in `decisions.md`'s `## Raised` table. Return source-linked
-   coverage and dispositions for the acceptance reviewer.
+   questions in `decisions.md`'s `## Raised` table, each with its options and
+   `recommended: <option>`. Close every row the
+   [held test](../../../docs/governance/specs-to-test-cases.md#raised)
+   does not hold on its recommendation: a `Decisions` row written
+   `<answer> - decided by the round`, naming its source - the page line that
+   settles it where one does - and the answer in the suite's `## Settled`;
+   rows one source settles share one `Q<n>`. Only a held row stays open, and a
+   contradiction between the two readings is always held. Return
+   source-linked coverage and dispositions for the acceptance reviewer.
 4. **Resolve and Check** - A question the readings cannot settle goes to the
    same human, as a numbered `Q<n>` row, and is put to them as a
    [Clarification Request](../../../AGENTS.md#questions-and-blockers).

@@ -101,7 +101,7 @@ For a new product feature:
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
 
-Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
+Ask only what the [held test](.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round) holds: questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
 ## Design Override
 
