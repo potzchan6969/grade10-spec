@@ -209,3 +209,7 @@ the code holds until they do.
 | Capacity | Decided | Eighteen is the age of majority; nothing beyond it is asked | Legal |
 | Reads that carry personal data | Decided | The elevated ladder records any call that declares audit details, not only a mutation; a search leaves who searched, when, the kind of term and the hit count, and never the term | Engineering |
 :::
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/vault/identity-verification"}
+:::

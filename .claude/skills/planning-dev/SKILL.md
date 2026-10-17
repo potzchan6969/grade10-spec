@@ -10,6 +10,12 @@ description: Plan and accept one OpenSpec change in one invocation: QA1 writes b
   unresolved decisions, acceptance review and publication.
 - **Inputs** - Honor recorded decisions and existing user authorization. Ask
   only about unresolved choices; do not repeat settled readiness reviews.
+- **The PRD** - QA and Dev put on the PRD only what their row of
+  [What Does Not Go on the PRD](../../../docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd)
+  allows: a rule no spec states as one ❓ line, a constraint that changes an
+  outcome as one 🚧 or ❓ line. Cases, mechanisms and scenarios stay in their
+  own artifacts; run the `Cut` pass of `docs/governance/writing.md` on any line
+  added.
 - **Cases** - Planning produces draft cases. Human classification and execution
   belong to `tcs-review` and `tcs-run-sheet` after deployment.
 

@@ -59,3 +59,7 @@ Non-goals:
 - **Not custom roles** — closed set only
 - **Not ZZZ** — Grade10 console only
 :::
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-admin/console/roles-and-permissions"}
+:::

@@ -181,6 +181,23 @@ describe("what the checkout stands at", () => {
   });
 });
 
+describe("a read of `origin` that fails after one that worked", () => {
+  it("shared-planning-change-stages-SC-73 - keeps the last counts and when they were read", async () => {
+    const store = checkout();
+    moveMain(store.remote, "one");
+    const first = await upstreamOf(store.api);
+
+    store.git(["remote", "set-url", "origin", join(tmpdir(), "manual-gone")]);
+    store.waitAMinute();
+    const later = await upstreamOf(store.api);
+
+    expect(first).toMatchObject({ behind: 1 });
+    expect(first.stale).toBeUndefined();
+    expect(later).toMatchObject({ behind: 1, stale: true });
+    expect(later.fetchedAt).toBe(first.fetchedAt);
+  });
+});
+
 describe("the pull", () => {
   const pull = (store: ReturnType<typeof checkout>) =>
     store.api({ method: "POST", path: "/api/pull" });

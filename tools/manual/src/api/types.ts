@@ -943,6 +943,9 @@ export type CheckoutStanding = {
    * a checkout with no `origin`, or a read that failed, leaves the counts
    * against whatever refs the clone already had. */
   fetchedAt?: string;
+  /** The latest read of `origin` failed after one that worked: the counts
+   * are as of `fetchedAt`, and the page says so. */
+  stale?: true;
 };
 
 /** `POST /api/pull` — the fast-forward onto `main`, or the line the reader is
