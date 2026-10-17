@@ -1,11 +1,5 @@
 import { DRAFTED, moveOf, ROLE_LABEL, STAGES } from "./stages.ts";
-import type {
-  BehindArtifact,
-  OpenQuestion,
-  Role,
-  SnapshotTeam,
-  Stage,
-} from "./types";
+import type { OpenQuestion, Role, SnapshotTeam, Stage } from "./types";
 import { ROLES } from "./types.ts";
 
 /**
@@ -171,14 +165,9 @@ export function movedBy(moves: DraftedMove[]): string {
 }
 
 /**
- * What is behind one artifact, as its chip and its row name it.
- *
- * Two sentences, because the two readings answer different questions. Where
- * commit dates single items out, those items changed. Where the recorded
- * content id is what says the upstream moved, it cannot say which part of it
- * did, so the row names everything the artifact is read again against.
+ * What is behind one artifact, as its chip and its row name it: the items
+ * that moved and whether the move holds the next landing, or, where what
+ * moved could not be recovered, everything it is read again against. The
+ * words are `wording.mjs`'s, so the chip and the message say one thing.
  */
-export function behindLabelOf(behind: BehindArtifact): string {
-  if (behind.whole) return `read again against ${behind.changed.join(", ")}`;
-  return `${behind.changed.join(", ")} changed`;
-}
+export { behindLabelOf } from "../../../../scripts/openspec/lib/wording.mjs";

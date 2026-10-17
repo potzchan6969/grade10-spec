@@ -802,6 +802,8 @@ describe("the five overlays beside the stage", () => {
         artifact: "decisions",
         changed: ["proposal"],
         whole: true,
+        moved: [{ item: "proposal", key: "proposal", major: true }],
+        holds: true,
         role: "pm",
         hand: "robin",
       },

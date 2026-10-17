@@ -398,13 +398,13 @@ test("shared-planning-agent-rounds-SC-72 - the same word lands once both rows ar
   assert.match(recordOf(root), /landed_by:\n\s+ui-design: dana/);
 });
 
-test("shared-planning-agent-rounds-SC-72 - land with recommendations reads the drafts after the decisions again against the rows it took", async () => {
-  // The drafts above the decisions were drawn from those recommendations, so
-  // the same commit that answers the rows records them as read again against
-  // them and nothing goes behind (Q60).
+test("shared-planning-agent-rounds-SC-118, shared-planning-agent-rounds-SC-120 - land with recommendations writes the decisions' own line and marks no draft read", async () => {
+  // A taken recommendation is no move, so the drafts drawn on it are not put
+  // behind by it; no answer marks a draft read on its own (Q6).
   const { root, remote } = draftedAhead({
     [`${DIR}/decisions.md`]: HELD_DECISIONS,
   });
+  const before = textAt(remote, "main", `${DIR}/.openspec.yaml`);
 
   const taken = await run([
     CHANGE,
@@ -423,65 +423,14 @@ test("shared-planning-agent-rounds-SC-72 - land with recommendations reads the d
   assert.match(record, /landed_by:\n\s+decisions: dana/);
   assert.match(
     record,
-    /reviewed:\n(?:\s+\S+: [0-9a-f]{8}\n)*\s+ui-design: [0-9a-f]{8}/,
+    new RegExp(`\\s+decisions: "?${contentIdOf([PROPOSAL])}"?`),
   );
-  assert.match(record, /\s+tech-design: [0-9a-f]{8}/);
-  // `tasks` is not drafted on this branch: nothing to read again, no line.
-  assert.doesNotMatch(record, /\s+tasks: [0-9a-f]{8}/);
-  assert.match(taken.stdout, /read again against Q1, Q2/);
-});
-
-test("shared-planning-agent-rounds-SC-72 - the reviewed: ids are the branch's own texts, not the drafts main still holds", async () => {
-  // Every draft above the decisions is on the branch, `tasks` included, and
-  // `main` holds an older text of each. The id `tasks` is read again against
-  // is computed from what the branch drew it from — the recommendations as
-  // this landing writes them and the drafts beside them — never from the
-  // landing commit's tree, which carries `main`'s drafts of everything the
-  // landing does not itself land.
-  const UI = "## Screens\n\nTwo screens, and a state each.\n";
-  const TECH =
-    "## Decisions\n\nThe drafted decision, waiting on the engineer.\n";
-  const TASKS =
-    "## 1. Build it (grade10-spec)\n\n- [ ] 1.1 Ship it, and say so\n";
-  const { root, remote, git } = draftedAhead({
-    [`${DIR}/decisions.md`]: HELD_DECISIONS,
-  });
-  writeFileSync(join(root, DIR, "tasks.md"), TASKS);
-  git("add", "-A");
-  git("commit", "--quiet", "-m", "draft the plan ahead too");
-  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
-
-  const taken = await run([
-    CHANGE,
-    "decisions",
-    "--root",
-    root,
-    "--with-recommendations",
-    "--perspectives",
-    "verifier",
-    "--stood",
-    "nothing stood",
-  ]);
-
-  assert.equal(taken.status, 0, taken.stderr);
-  const record = textAt(remote, "main", `${DIR}/.openspec.yaml`);
-  // `tasks`' upstream, in the schema's order: the proposal, the decisions as
-  // the landing answers them, then the two drafts above them.
-  const branchId = contentIdOf([
-    PROPOSAL,
-    takeRecommendations(HELD_DECISIONS),
-    UI,
-    TECH,
-  ]);
-  const landingTreeId = contentIdOf([
-    PROPOSAL,
-    takeRecommendations(HELD_DECISIONS),
-    "## Screens\n\nThe one screen.\n",
-    "## Decisions\n\nThe one decision.\n",
-  ]);
-  assert.notEqual(branchId, landingTreeId);
-  assert.match(record, new RegExp(`\\s+tasks: ${branchId}`));
-  assert.doesNotMatch(record, new RegExp(`\\s+tasks: ${landingTreeId}`));
+  assert.doesNotMatch(taken.stdout, /read again against Q1, Q2/);
+  // The drafts' own lines are what they were.
+  for (const id of ["ui-design", "tech-design", "tasks"]) {
+    const line = new RegExp(`^\\s+${id}: .*$`, "m");
+    assert.equal(record.match(line)?.[0], before.match(line)?.[0], id);
+  }
 });
 
 test("a wake was expected and no relay.json is there: the landing fails loudly", async () => {
@@ -943,7 +892,7 @@ test("a landing wake with sender: null refuses a word landing: nobody said land"
   assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
-test("shared-planning-agent-rounds-SC-77 - a landing wake with sender: null still lands a --reviewed read, which asks nobody's word", async () => {
+test("shared-planning-agent-rounds-SC-119 - a landing wake with sender: null lands no read again, which is its hand's word", async () => {
   const seen = {};
   const server = await landingRelay(granted(seen));
   const { root } = sandbox();
@@ -952,7 +901,7 @@ test("shared-planning-agent-rounds-SC-77 - a landing wake with sender: null stil
   const result = await run([CHANGE, "decisions", "--root", root, "--reviewed"]);
   server.close();
 
-  assert.equal(result.status, 0, result.stderr);
-  assert.equal(seen.kind, "reviewed");
-  assert.doesNotMatch(recordOf(root), /landed_by:/);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /this wake has no word behind it/);
+  assert.equal(seen.kind, undefined);
 });

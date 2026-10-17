@@ -6,6 +6,7 @@ import { Link } from "react-router";
 import { useHandle } from "../api/handle";
 import { type MyTurnChange, myTurnOf } from "../api/my-turn";
 import {
+  behindLabelOf,
   movesOfHands,
   ROLE_LABEL,
   roleTitle,
@@ -67,13 +68,18 @@ export function MyTurnPage() {
 
 function MyTurnBody({ handle }: { handle: string }) {
   const index = useManualIndex();
-  const { questions, now, later } = myTurnOf(
+  const { questions, now, later, toRead } = myTurnOf(
     index.snapshot.changes,
     index.snapshot.schemas,
     handle,
   );
 
-  if (questions.length === 0 && now.length === 0 && later.length === 0) {
+  if (
+    questions.length === 0 &&
+    now.length === 0 &&
+    later.length === 0 &&
+    toRead.length === 0
+  ) {
     return (
       <EmptyState
         description="No open question is addressed to you, and no change in flight names you for a hand."
@@ -126,6 +132,35 @@ function MyTurnBody({ handle }: { handle: string }) {
 
       {later.length > 0 ? (
         <ChangeSection changes={later} title="Yours later" />
+      ) : null}
+
+      {toRead.length > 0 ? (
+        <section className="mb-8">
+          <h2 className="mb-2.5 font-heading font-bold text-base">
+            To read again
+          </h2>
+          <ul className="flex flex-col gap-2">
+            {toRead.map(({ change, behind }) => (
+              <li
+                className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
+                key={`${change.id}:${behind.artifact}`}
+              >
+                <Badge size="sm" variant={behind.holds ? "warning" : "outline"}>
+                  {behind.artifact}
+                </Badge>
+                <Link
+                  className="font-medium text-sm hover:underline"
+                  to={`/in-flight/${change.id}`}
+                >
+                  <InlineMarkdown text={change.title} />
+                </Link>
+                <Text as="span" size="sm" tone="secondary">
+                  {behindLabelOf(behind)}
+                </Text>
+              </li>
+            ))}
+          </ul>
+        </section>
       ) : null}
     </>
   );

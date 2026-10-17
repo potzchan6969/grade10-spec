@@ -15,10 +15,12 @@
  * `digest.test.mjs` and `changed-changes.test.mjs` read their own fixtures
  * still; they can move onto this one in a follow-up.
  */
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { contentIdOf } from "../../../tools/manual/src/store/content-id.mts";
+import { FRESH } from "./fresh.mjs";
 
 export const CHANGE = "round-probe";
 export const DIR = `openspec/changes/${CHANGE}`;
@@ -162,6 +164,18 @@ export const TEAM = [
  * `unmarked` rule both need telling why.
  */
 export function record(...lines) {
+  const { reviewed, rest } = splitReviewed(lines.join("\n"));
+  const merged = { ...REVIEWED, ...reviewed };
+  return bareRecord(
+    ...rest,
+    "reviewed:",
+    ...Object.entries(merged).map(([id, content]) => `  ${id}: "${content}"`),
+  );
+}
+
+/** The record with no `reviewed:` line but the ones a test passes: every
+ * artifact the line leaves out is read as behind, whole. */
+export function bareRecord(...lines) {
   return [
     "# The change's record.",
     "schema: demo-planning",
@@ -176,6 +190,40 @@ export function record(...lines) {
     ...lines,
     "",
   ].join("\n");
+}
+
+/** The two designs' texts, read before the plan. */
+const UI_DESIGN = "## Screens\n\nThe one screen.\n";
+const TECH_DESIGN = "## Decisions\n\nThe one decision.\n";
+
+/** Each artifact's `reviewed:` id as the fixture writes it: read again against
+ * exactly what is before it, so nothing is behind until a test moves it. */
+export const REVIEWED = {
+  decisions: contentIdOf([PROPOSAL]),
+  "ui-design": contentIdOf([PROPOSAL, DECISIONS]),
+  "tech-design": contentIdOf([PROPOSAL, DECISIONS]),
+  tasks: contentIdOf([PROPOSAL, DECISIONS, UI_DESIGN, TECH_DESIGN]),
+};
+
+/** A `reviewed:` block a test passes, read apart from its other lines. */
+function splitReviewed(text) {
+  const reviewed = {};
+  const rest = [];
+  let inside = false;
+  for (const line of text.split("\n")) {
+    if (line === "reviewed:") {
+      inside = true;
+      continue;
+    }
+    const entry = inside && /^\s+([\w-]+):\s*"?([^"]*)"?\s*$/.exec(line);
+    if (entry) {
+      reviewed[entry[1]] = entry[2];
+      continue;
+    }
+    inside = false;
+    if (line !== "") rest.push(line);
+  }
+  return { reviewed, rest };
 }
 
 /** The fixture's package.json: only what `validate-changes.mjs`'s `cli()`
@@ -203,8 +251,8 @@ const FILES = {
   [`${DIR}/.openspec.yaml`]: record(),
   [`${DIR}/proposal.md`]: PROPOSAL,
   [`${DIR}/decisions.md`]: DECISIONS,
-  [`${DIR}/ui-design.md`]: "## Screens\n\nThe one screen.\n",
-  [`${DIR}/tech-design.md`]: "## Decisions\n\nThe one decision.\n",
+  [`${DIR}/ui-design.md`]: UI_DESIGN,
+  [`${DIR}/tech-design.md`]: TECH_DESIGN,
   [`${DIR}/tasks.md`]: PLAN,
 };
 
@@ -220,10 +268,23 @@ const FILES = {
  */
 export function sandbox({ remote = true, files = {} } = {}) {
   const root = mkdtempSync(join(tmpdir(), "round-scripts-"));
-  for (const [path, text] of Object.entries({ ...FILES, ...files })) {
+  // A record the test does not write is read again against the files as the
+  // test wrote them, so an artifact is fresh until the test moves something.
+  const ownRecord = files[`${DIR}/.openspec.yaml`] === undefined;
+  for (const [path, text] of Object.entries({
+    ...FILES,
+    ...(ownRecord ? { [`${DIR}/.openspec.yaml`]: bareRecord() } : {}),
+    ...files,
+  })) {
     const file = join(root, path);
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, text);
+  }
+  if (ownRecord) {
+    const fresh = spawnSync(process.execPath, [FRESH, root], {
+      encoding: "utf8",
+    });
+    if (fresh.status !== 0) throw new Error(fresh.stderr);
   }
   const git = (...args) =>
     execFileSync(

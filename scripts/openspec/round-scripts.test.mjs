@@ -15,6 +15,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { ROUNDS_HEADER } from "./lib/rounds.mjs";
 import {
+  bareRecord,
   CHANGE,
   DECISIONS,
   DIR,
@@ -75,7 +76,9 @@ const reviewed = (root, artifact, args = []) =>
   ]);
 
 test("shared-planning-agent-rounds-SC-36 - plan:land --reviewed writes the content id of what is before the artifact", async () => {
-  const { root } = sandbox();
+  const { root } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
   const result = reviewed(root, "decisions");
 
   assert.equal(result.status, 0, result.stderr);
@@ -111,7 +114,9 @@ test("plan:land --reviewed keeps every other line of the record", () => {
 });
 
 test("plan:land --reviewed writes the named artifact's line and no other", () => {
-  const { root } = sandbox();
+  const { root } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
   const result = reviewed(root, "decisions");
 
   assert.equal(result.status, 0, result.stderr);
@@ -123,7 +128,9 @@ test("plan:land --reviewed writes the named artifact's line and no other", () =>
 });
 
 test("plan:land --reviewed refuses an artifact the schema does not issue", () => {
-  const { root } = sandbox();
+  const { root } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
   const result = reviewed(root, "ui-desgin");
 
   assert.equal(result.status, 1);
@@ -138,7 +145,7 @@ test("shared-planning-agent-rounds-SC-32 - plan:land --reviewed tells apart draw
   // written yet, and the schema still names what would be before it.
   const { root } = sandbox({
     files: {
-      [`${DIR}/.openspec.yaml`]: record(
+      [`${DIR}/.openspec.yaml`]: bareRecord(
         'ui_waived: "nothing a reader sees moves"\n',
       ),
     },
@@ -518,7 +525,9 @@ test("plan:land --whole names no artifact and no group beside it", () => {
 });
 
 test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass with --reviewed, and every other flag only a row can use", () => {
-  const { root } = sandbox();
+  const { root } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
   const result = run("plan-land.mjs", [
     CHANGE,
     "ui-design",
@@ -713,7 +722,7 @@ test("shared-planning-agent-rounds-SC-37 - a landing with changed content puts e
   const drafted = await readChangeEntry(root, CHANGE);
   writeFileSync(
     join(root, DIR, ".openspec.yaml"),
-    record(
+    bareRecord(
       "reviewed:",
       ...Object.entries(drafted.entry.upstream).map(
         ([id, read]) => `  ${id}: ${read.id}`,
@@ -1001,11 +1010,15 @@ test("shared-planning-agent-rounds-SC-73 - the draft refusal reads what main hol
 });
 
 test("shared-planning-agent-rounds-SC-73 - a hand's answer in decisions.md travels with the group's landing", () => {
-  // The plan and the decisions apart: a row a hand answered on the branch is
-  // the group's own to carry, not a draft the landing refuses.
+  // The plan and the decisions apart: a row a hand reworded on the branch is
+  // the group's own to carry, not a draft the landing refuses — and a small
+  // move, so it holds nothing.
   const answered = built({
     drafts: {
-      [`${DIR}/decisions.md`]: `${DECISIONS}| Q2 | Which screen first? | The one screen | Two |\n`,
+      [`${DIR}/decisions.md`]: DECISIONS.replace(
+        "Who writes the row?",
+        "Who writes the row, and when?",
+      ),
     },
   });
   const taken = landBuilt(answered);
@@ -1361,15 +1374,14 @@ test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose tasks c
 });
 
 test("shared-planning-agent-rounds-SC-39 - plan:land --reviewed writes the line, commits and pushes it in one transaction", () => {
-  const { root, remote, git } = sandbox();
-  // A different local e-mail than any hand's — no hand's word is asked for a
-  // read that changed nothing, and the agent lands it regardless.
-  git("config", "user.email", "nobody@test");
+  const { root, remote, git } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
 
   const result = reviewed(root, "decisions");
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /no hand's word is asked/);
+  assert.match(result.stdout, /@dana is the pm and the hand of decisions/);
   assert.match(recordOf(root), new RegExp(`decisions: ${BEFORE_DECISIONS}`));
   // No row and no `landed_by:`: the read ran no perspective and waits on
   // nobody's word.
@@ -1387,6 +1399,19 @@ test("shared-planning-agent-rounds-SC-39 - plan:land --reviewed writes the line,
   );
 });
 
+test("shared-planning-agent-rounds-SC-119 - plan:land --reviewed refuses a read again by a hand it is not, naming whose word it waits on", () => {
+  const { root, git } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
+  git("config", "user.email", "erin@test");
+
+  const result = reviewed(root, "decisions");
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /decisions waits on @dana's word, not @erin's/);
+  assert.doesNotMatch(recordOf(root), /reviewed:/);
+});
+
 test("plan:land --reviewed refuses a task group", () => {
   const { root } = sandbox();
   const result = reviewed(root, "1");
@@ -1396,7 +1421,9 @@ test("plan:land --reviewed refuses a task group", () => {
 });
 
 test("plan:land --reviewed's dry run writes the line nowhere and pushes nothing", () => {
-  const { root, remote } = sandbox();
+  const { root, remote } = sandbox({
+    files: { [`${DIR}/.openspec.yaml`]: bareRecord() },
+  });
   const before = execFileSync("git", ["-C", remote, "rev-parse", "main"], {
     encoding: "utf8",
   }).trim();

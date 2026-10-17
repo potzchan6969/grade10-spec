@@ -8,3 +8,7 @@ skip_specs_why: "the fixture is about a page's in-flight row and pip, not the re
 hands:
   dev: tester
 thread: "C0PLANNING/1758170000.001200"
+reviewed:
+  proposal: cea4987f
+  decisions: a25a70e4
+  tasks: 7501932c

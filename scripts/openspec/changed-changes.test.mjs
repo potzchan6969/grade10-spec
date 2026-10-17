@@ -19,6 +19,7 @@ import {
   slackPayload,
 } from "./changed-changes.mjs";
 import { deliver, sendAll } from "./lib/notify.mjs";
+import { FRESH } from "./test/fresh.mjs";
 
 test("parses regular and renamed OpenSpec files from git's NUL format", () => {
   assert.deepEqual(
@@ -402,7 +403,14 @@ function sandbox() {
     }
   };
   const drop = (path) => rmSync(join(root, path), { force: true });
+  /** A commit stands for a landing: every artifact with no `reviewed:` line
+   * is read again against what is before it as it stands, so what a later
+   * commit moves is what reaches a hand. */
   const commit = (message, daysAgo = 0, email) => {
+    const fresh = spawnSync(process.execPath, [FRESH, root], {
+      encoding: "utf8",
+    });
+    if (fresh.status !== 0) throw new Error(fresh.stderr);
     git(["add", "-A"], 0, email);
     git(["commit", "--quiet", "-m", message], daysAgo, email);
     return git(["rev-parse", "HEAD"]);
@@ -698,10 +706,13 @@ test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand w
 
   assert.deepEqual(
     messages.map((one) => [one.key, one.kind, one.channel]),
-    [["probe:behind:decisions", "behind", "U-DANA"]],
+    [["probe:behind:dana", "behind", "U-DANA"]],
   );
-  assert.match(textOf(messages, "probe:behind:decisions"), /decisions/);
-  assert.match(textOf(messages, "probe:behind:decisions"), /proposal/);
+  assert.match(textOf(messages, "probe:behind:dana"), /before `decisions`/);
+  assert.match(
+    textOf(messages, "probe:behind:dana"),
+    /`proposal` ## Why, small — before: Nobody has\. — after: Nobody has\. Again\./,
+  );
 });
 
 /** One capability's suite beside the change's delta, one draft case. */
@@ -795,12 +806,12 @@ test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one
 
   assert.deepEqual(
     first.messages.map((one) => one.key),
-    ["probe:behind:decisions"],
+    ["probe:behind:dana"],
   );
   assert.deepEqual(second.messages, []);
   // Rewording a proposal crosses no milestone, so no channel post is keyed.
   assert.deepEqual(readFileSync(keys, "utf8").trim().split("\n"), [
-    "probe:behind:decisions",
+    "probe:behind:dana",
   ]);
 });
 

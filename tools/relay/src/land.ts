@@ -75,6 +75,14 @@ export interface WordLanding {
 
 export interface ReviewedLanding {
   change: string;
+  /** The artifact read again. */
+  artifact: string;
+  /** The text of the message that woke the run, or null. */
+  word: string | null;
+  /** The sender's handle, resolved through the team map. */
+  senderHandle: string | null;
+  /** `openspec/schemas/grade10-planning/schema.yaml` at the landing sha. */
+  schema: string;
   paths: string[];
   /** The change's record as it reads on `main`. */
   atMain: string;
@@ -88,7 +96,7 @@ export interface ReviewedLanding {
  * the plan.
  *
  * Nothing is guessed. An id the schema does not issue is refused, and so is
- * one it issues with a role outside the six — a schema that names a seventh
+ * one it issues with a role outside the five — a schema that names a sixth
  * role names nobody the record's `hands:` can be keyed by. One `find`, so the
  * artifact and the `hand:` on it are one reading of the file.
  */
@@ -174,14 +182,23 @@ export function checkWord(landing: WordLanding): Verdict {
 }
 
 /**
- * A landing on a read again. It writes one key of one file, so it needs
- * nobody's word: the run is recording what it read, not deciding anything.
+ * A landing on a read again. It writes one key of one file, and it is the
+ * artifact's hand's word that they read it, as any landing is: the word said,
+ * by the hand the record names for the artifact.
  *
  * The record is read as YAML at both ends rather than as patch text: a diff
  * says where lines moved, and what this has to know is whether anything but
  * `reviewed:` says something different now.
  */
 export function checkReviewed(landing: ReviewedLanding): Verdict {
+  if (!isLandingWord(landing.word)) return refuse("word-not-said");
+  if (!landing.senderHandle) return refuse("sender-unknown");
+  const role = roleFor(landing.schema, landing.artifact);
+  if ("check" in role) return refuse(role.check);
+  const hand = handFor(landing.atSha, role.role);
+  if (!hand || handleOf(hand) !== handleOf(landing.senderHandle))
+    return refuse("not-the-hand");
+
   const record = recordPath(landing.change);
   if (landing.paths.length !== 1 || landing.paths[0] !== record)
     return refuse("not-only-reviewed");

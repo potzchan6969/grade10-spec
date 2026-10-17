@@ -168,20 +168,34 @@ describe("the stages that say something else", () => {
     expect(html).not.toContain(">the run sheet<");
   });
 
-  it("tells the hand of a behind artifact what changed before it", () => {
+  it("shared-planning-agent-rounds-SC-128 - tells the hand of a behind artifact what moved before it, and whether it holds", () => {
     const behind = gift({
       stage: "planned",
       written: ["proposal", "decisions", "user-journeys", "tasks"],
       reviewed: { tasks: "stale" },
       upstream: {
-        tasks: { id: "fresh", items: ["decisions"], newer: ["decisions"] },
+        tasks: {
+          id: "fresh",
+          items: ["decisions"],
+          moved: [
+            {
+              item: "decisions",
+              key: "Q3",
+              before: "Every move holds",
+              after: "A major move holds",
+              major: true,
+            },
+          ],
+        },
       },
     });
     const html = render(behind, "planned");
 
-    expect(html).toContain("<strong>Behind</strong>");
+    expect(html).toContain("<strong>What moved</strong>");
     expect(html).toContain("tasks");
-    expect(html).toContain("decisions");
+    expect(html).toContain("Every move holds");
+    expect(html).toContain("A major move holds");
+    expect(html).toContain("until you read it again or land it");
   });
 
   it("says so for a stage that waits on no hand", () => {

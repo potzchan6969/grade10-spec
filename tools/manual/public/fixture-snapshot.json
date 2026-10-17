@@ -254,6 +254,10 @@
         "specs",
         "tasks"
       ],
+      "reviewed": {
+        "specs": "47e63e84",
+        "tasks": "5d89638b"
+      },
       "author": "tester",
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
@@ -336,6 +340,14 @@
         "qa": "tester",
         "dev": "tester",
         "release": "tester"
+      },
+      "reviewed": {
+        "decisions": "a1912404",
+        "user-journeys": "8a3eea61",
+        "ui-design": "bf7dcd25",
+        "specs": "e2bad992",
+        "test-cases": "e2bad992",
+        "tasks": "b6872bbf"
       },
       "author": "tester",
       "suites": [
@@ -465,6 +477,13 @@
         "qa": "tester",
         "dev": "tester"
       },
+      "reviewed": {
+        "decisions": "1d7bbbaa",
+        "user-journeys": "e7ce6426",
+        "specs": "2f3e7021",
+        "test-cases": "2f3e7021",
+        "tasks": "b19408d5"
+      },
       "author": "tester",
       "suites": [
         {
@@ -569,6 +588,10 @@
       "hands": {
         "dev": "tester"
       },
+      "reviewed": {
+        "proposal": "355a7f65",
+        "tasks": "f5914656"
+      },
       "skipSpecs": "the fixture is about the Building stage and the Blocked overlay, not the requirements",
       "author": "tester",
       "sections": [
@@ -625,6 +648,10 @@
         "pm": "tester",
         "design": "tester"
       },
+      "reviewed": {
+        "decisions": "33640e83",
+        "user-journeys": "61c3d0ae"
+      },
       "author": "tester",
       "heldBy": "test-cases",
       "upstream": {
@@ -662,7 +689,10 @@
         "ui-design"
       ],
       "reviewed": {
-        "ui-design": "0000000"
+        "ui-design": "0000000",
+        "proposal": "355a7f65",
+        "decisions": "5119af73",
+        "user-journeys": "aabcafa3"
       },
       "author": "tester",
       "sections": [
@@ -745,6 +775,9 @@
       "decisionsWaived": "the fixture is about the Implementation complete stage, not the decisions",
       "designWaived": "the fixture is about the Implementation complete stage, not the designs",
       "uiWaived": "the fixture is about the Implementation complete stage, not the designs",
+      "reviewed": {
+        "tasks": "1409ea19"
+      },
       "skipSpecs": "the fixture is about the Implementation complete stage and the Idle overlay, not the requirements",
       "author": "tester",
       "rounds": [
@@ -849,7 +882,10 @@
       },
       "reviewed": {
         "decisions": "00000000",
-        "specs": "00000000"
+        "specs": "00000000",
+        "user-journeys": "951cccd8",
+        "test-cases": "e7d02acc",
+        "tasks": "18984e68"
       },
       "awaiting": [
         {
@@ -954,7 +990,8 @@
       "designWaived": "the fixture is about the Planned stage, not the designs",
       "uiWaived": "the fixture is about the Planned stage, not the designs",
       "reviewed": {
-        "decisions": "1fe721a5"
+        "decisions": "1fe721a5",
+        "tasks": "28f20fd5"
       },
       "skipSpecs": "the fixture is about the Planned stage and the Behind overlay, not the requirements",
       "author": "tester",
@@ -1018,6 +1055,11 @@
       "thread": "C0PLANNING/1758170000.001200",
       "hands": {
         "dev": "tester"
+      },
+      "reviewed": {
+        "proposal": "cea4987f",
+        "decisions": "a25a70e4",
+        "tasks": "7501932c"
       },
       "skipSpecs": "the fixture is about a page's in-flight row and pip, not the requirements",
       "author": "tester",
@@ -1089,6 +1131,12 @@
       "hands": {
         "qa": "tester",
         "dev": "tester"
+      },
+      "reviewed": {
+        "decisions": "fdbf2cd6",
+        "user-journeys": "a3bddd05",
+        "specs": "0e0b05b5",
+        "test-cases": "0e0b05b5"
       },
       "author": "tester",
       "suites": [
@@ -1185,6 +1233,12 @@
       "hands": {
         "pm": "tester",
         "dev": "tester"
+      },
+      "reviewed": {
+        "decisions": "79a6b8e2",
+        "user-journeys": "56977751",
+        "specs": "1cdad93f",
+        "test-cases": "1cdad93f"
       },
       "author": "tester",
       "suites": [
@@ -1307,6 +1361,11 @@
       "hands": {
         "pm": "tester",
         "design": "tester"
+      },
+      "reviewed": {
+        "decisions": "4c2b1947",
+        "user-journeys": "102106db",
+        "tech-design": "fc395fd1"
       },
       "author": "tester",
       "heldBy": "test-cases",

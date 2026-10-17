@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
-  behindText,
   escapeSlackText,
   linkedOf,
+  movedText,
   threadPathOf,
   toldBodyOf,
   yourTurnText,
@@ -113,17 +113,77 @@ test("shared-planning-agent-rounds-SC-89 - QA's ordinary body names no suite", (
   assert.doesNotMatch(toldBodyOf(at, "qa", { linked: LINKED }).text, /Suite:/);
 });
 
-test("behindText names the artifact and what changed before it", () => {
+test("shared-planning-agent-rounds-US-18 - movedText says a small move holds nothing but the fold", () => {
+  const text = movedText(
+    {
+      behind: [
+        {
+          artifact: "tasks",
+          changed: ["proposal"],
+          moved: [
+            {
+              item: "proposal",
+              key: "## Why",
+              before: "Why one.",
+              after: "Why two.",
+              major: false,
+            },
+          ],
+          holds: false,
+        },
+      ],
+    },
+    LINKED,
+  );
   assert.equal(
-    behindText({ artifact: "tasks", changed: ["decisions", "specs"] }, LINKED),
-    `*Behind* — \`tasks\` on ${LINKED} is behind \`decisions\`, \`specs\`.`,
+    text,
+    [
+      `*What moved* on ${LINKED}, before \`tasks\``,
+      "`proposal` ## Why, small — before: Why one. — after: Why two.",
+      "Holds nothing but the fold: read it again when you can.",
+    ].join("\n"),
   );
 });
 
-test("behindText names what it was drawn from where nothing singles an item out", () => {
+test("movedText quotes a unit once however many artifacts it reaches, and names a whole move", () => {
+  const unit = {
+    item: "decisions",
+    key: "Q3",
+    before: "Every move holds",
+    after: "A major move holds",
+    major: true,
+  };
+  const text = movedText(
+    {
+      behind: [
+        {
+          artifact: "ui-design",
+          changed: ["decisions"],
+          moved: [unit],
+          holds: true,
+        },
+        {
+          artifact: "tasks",
+          changed: ["decisions"],
+          moved: [unit],
+          holds: true,
+        },
+        {
+          artifact: "specs",
+          changed: ["ui-design"],
+          whole: true,
+          moved: [{ item: "ui-design", key: "ui-design", major: true }],
+          holds: true,
+        },
+      ],
+    },
+    LINKED,
+  );
+  assert.equal(text.match(/`decisions` Q3/g)?.length, 1);
+  assert.match(text, /`ui-design`, major — read it again whole/);
   assert.match(
-    behindText({ artifact: "tasks", changed: [] }, LINKED),
-    /is behind what it was drawn from\.$/,
+    text,
+    /Holds every landing after `ui-design`, `tasks`, `specs` until you read it again or land it\./,
   );
 });
 

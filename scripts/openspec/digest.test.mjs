@@ -7,6 +7,7 @@ import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
 import { weekOf } from "./digest.mjs";
+import { FRESH } from "./test/fresh.mjs";
 
 /**
  * Monday's digest, over one store committed at fixed dates.
@@ -99,7 +100,13 @@ function sandbox() {
       writeFileSync(file, text);
     }
   };
+  /** A commit stands for a landing: an artifact with no `reviewed:` line is
+   * read again against what is before it as it stands. */
   const commit = (message, daysAgo = 0) => {
+    const fresh = spawnSync(process.execPath, [FRESH, root], {
+      encoding: "utf8",
+    });
+    if (fresh.status !== 0) throw new Error(fresh.stderr);
     git(["add", "-A"]);
     git(["commit", "--quiet", "-m", message], daysAgo);
     return git(["rev-parse", "HEAD"]);
@@ -310,9 +317,10 @@ test("shared-planning-change-stages-SC-49 - the digest counts the days from the 
     "openspec/changes/first-moved/ui-design.md": "## Screens\n\nOne screen.\n",
   });
   commit("propose first-moved", 20);
-  // The UI design is drawn from both: the proposal moved seven days ago, so
-  // that is the day it went behind, and the decisions moving again yesterday
-  // does not restart the week.
+  // The decisions are drawn from the proposal, which moved seven days ago:
+  // that is the day they went behind. The UI design is drawn from both, and
+  // the decisions moving again yesterday is its newest move, so its week
+  // starts yesterday.
   write({
     "openspec/changes/first-moved/proposal.md": proposalOf(
       "First moved",
@@ -330,7 +338,7 @@ test("shared-planning-change-stages-SC-49 - the digest counts the days from the 
 
   assert.deepEqual(
     behind.map((one) => [one.artifact, one.days]),
-    [["ui-design", 7]],
+    [["decisions", 7]],
   );
 });
 
@@ -503,15 +511,12 @@ test("shared-planning-change-stages-SC-49 - the digest counts a behind artifact'
   });
   // What puts `decisions` behind: `proposal.md` reworded 9 days ago.
   commit("reword behind-it", 9);
+  const recordPath = join(root, "openspec/changes/behind-it/.openspec.yaml");
   write({
-    "openspec/changes/behind-it/.openspec.yaml": [
-      "schema: demo-planning",
-      "created: 2026-10-01",
-      "hands:",
-      "  pm: dana",
-      "  design: dana",
-      "",
-    ].join("\n"),
+    "openspec/changes/behind-it/.openspec.yaml": readFileSync(
+      recordPath,
+      "utf8",
+    ).replace("  pm: dana\n", "  pm: dana\n  design: dana\n"),
   });
   // A later, unrelated commit on the same change: naming a second hand moves
   // `lastMoved` to 2 days ago without touching what `decisions` is behind.

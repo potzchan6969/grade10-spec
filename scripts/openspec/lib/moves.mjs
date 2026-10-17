@@ -14,15 +14,15 @@
 import {
   behindOf,
   handOf,
-  handOfArtifact,
   taskTotals,
 } from "../../../tools/manual/src/api/stages.ts";
+import { toldOf } from "../../../tools/manual/src/api/told.ts";
 import { addressOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
 import {
-  behindText,
   landedText,
   linkOf,
+  movedText,
   threadPartsOf,
   toldBodyOf,
 } from "./wording.mjs";
@@ -81,20 +81,19 @@ export function movesBetween(base, head) {
   return moves;
 }
 
-/** The earliest artifact of each change that was not behind at the base and
- * is behind at the head — the one the card names and the one the message goes
- * to. An artifact behind already is told about once and not again. */
-export function newlyBehind(base, head) {
-  const fresh = [];
+/**
+ * Who each change's landing tells what moved, one entry per person: every
+ * artifact of theirs a unit that moved at the head and not at the base
+ * reaches, through `toldOf` — the reading Told now shows with an empty base.
+ */
+export function toldBetween(base, head) {
+  const told = [];
   for (const [id, at] of head) {
-    const was = new Set(
-      (base.get(id)?.behind ?? []).map((one) => one.artifact),
-    );
-    const first = at.behind.find((one) => !was.has(one.artifact));
-    if (!first) continue;
-    fresh.push({ id, artifact: first.artifact, changed: first.changed });
+    const was = base.get(id)?.behind ?? [];
+    for (const person of toldOf(was, at.behind, at.artifacts, at.hands))
+      told.push({ id, ...person });
   }
-  return fresh;
+  return told;
 }
 
 /**
@@ -267,17 +266,16 @@ export function messagesOf(base, head, map, options) {
     );
   }
 
-  for (const behind of newlyBehind(base, head)) {
-    const at = head.get(behind.id);
-    const role = at ? handOfArtifact(behind.artifact, at.artifacts) : undefined;
-    if (!role) continue;
+  for (const person of toldBetween(base, head)) {
+    const at = head.get(person.id);
+    const [role] = person.roles;
     take(
       at,
-      `${behind.id}:behind:${behind.artifact}`,
+      `${person.id}:behind:${person.hand ?? role}`,
       "behind",
       role,
-      at.hands[role],
-      behindText(behind, linkedTitle(at, options)),
+      person.hand,
+      movedText(person, linkedTitle(at, options)),
     );
   }
   return { messages, skipped };

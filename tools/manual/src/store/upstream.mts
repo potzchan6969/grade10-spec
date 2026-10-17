@@ -1,12 +1,14 @@
 import { join } from "node:path";
+import { movedOf } from "../api/moved.ts";
 import type {
   ChangeEntry,
+  Moved,
   PageEntry,
   SchemaArtifact,
   UpstreamRead,
 } from "../api/types.ts";
 import { waivedOf } from "../api/waivers.ts";
-import type { PageAst } from "../content/grammar.ts";
+import { type PageAst, parsePage } from "../content/grammar.ts";
 import { sectionTextOf } from "../content/sections.ts";
 import { type ChangeCapability, capabilitiesOf } from "./capabilities.mts";
 import { contentIdOf } from "./content-id.mts";
@@ -19,8 +21,9 @@ import type { GitIndex } from "./git.mts";
  * Read here rather than derived in the app because both halves of it are the
  * store's: the hash is `node:crypto`'s, and the page sections are the page
  * reader's. What is written onto the entry is the reading — the content id of
- * what is before each artifact, the things that are before it, and which of
- * them a commit dates later than the artifact itself. The verdict is not
+ * what is before each artifact, the things that are before it, and, where the
+ * artifact's `reviewed:` line holds another id, what moved since that line
+ * was written, unit by unit. The verdict is not
  * written anywhere: `behindOf` compares this, so no check and no surface has
  * to be reordered to see a freshness field, and a fixture can carry a
  * behind artifact without a repository behind it.
@@ -34,10 +37,8 @@ import type { GitIndex } from "./git.mts";
  * a waived artifact is skipped, so it is never behind and never puts anything
  * behind; and a page section the change does not link is not read at all.
  *
- * Only the change's own artifacts are dated. A commit on a page dates every
- * section of it, so a date on a linked section cannot say that section moved
- * — the recorded `reviewed:` id is what says it, and until the round writes
- * one a linked section puts nothing behind.
+ * A commit date never says an artifact is fresh: only its hand's landing or
+ * read does, through the `reviewed:` line.
  */
 export function upstreamOf(
   root: string,
@@ -65,14 +66,21 @@ export function upstreamOf(
       // broken one.
       if (text === undefined) return [];
       // No date: the page's last commit dates the whole page.
-      return [{ item: `${ref.page}#${ref.slug}`, text }];
+      return [
+        {
+          item: `${ref.page}#${ref.slug}`,
+          text,
+          parts: [{ path: ref.page, text, slug: ref.slug }],
+        },
+      ];
     })
     .sort((a, b) => a.item.localeCompare(b.item));
 
   /** One text before an artifact: the item as a row names it, the text that
-   * is hashed, and the date where the item is one the change owns. */
-  type Before = { item: string; text: string; date?: string };
-  type Own = { text: string; date?: string };
+   * is hashed, the files it is read from, and the date where the item is one
+   * the change owns. */
+  type Before = { item: string; text: string; parts: Part[]; date?: string };
+  type Own = { text: string; parts: Part[]; date?: string };
   const own = new Map<string, Own | undefined>();
   const capabilities = capabilitiesOf(root, join(root, change.dir));
   // Nothing where a file the artifact is written as reads absent, and nothing
@@ -89,6 +97,7 @@ export function upstreamOf(
         ? undefined
         : {
             text: texts.join("\n"),
+            parts: files.map((path, at) => ({ path, text: texts[at] ?? "" })),
             date: newest(files.map((file) => git.commitOf(file)?.date)),
           };
     own.set(artifact.id, read);
@@ -117,19 +126,10 @@ export function upstreamOf(
       id: contentIdOf(before.map((one) => one.text)),
       items: before.map((one) => one.item),
     };
-    const drawnAt =
-      drawn.date === undefined ? undefined : Date.parse(drawn.date);
-    const newerItems =
-      drawnAt === undefined
-        ? []
-        : before.filter(
-            (one) => one.date !== undefined && Date.parse(one.date) > drawnAt,
-          );
-    if (newerItems.length > 0) {
-      read.newer = newerItems.map((one) => one.item);
-      // `firstNewerOn`: the first of them to move.
-      const firstNewerOn = oldest(newerItems.map((one) => one.date));
-      if (firstNewerOn !== undefined) read.firstNewerOn = firstNewerOn;
+    const reviewed = change.reviewed?.[artifact.id];
+    if (reviewed !== undefined && reviewed !== read.id) {
+      const moved = movedSince(change, reviewed, before, git);
+      if (moved) read.moved = moved;
     }
     // `beforeOn`: the newest commit among everything before the artifact.
     const beforeOn = newest(before.map((one) => one.date));
@@ -196,7 +196,63 @@ function newest(dates: (string | undefined)[]): string | undefined {
   return dated(dates).at(-1);
 }
 
-/** The oldest of the dates that exist, or nothing where none does. */
-function oldest(dates: (string | undefined)[]): string | undefined {
-  return dated(dates).at(0);
+/** One file an item before an artifact is read from; a page section's own
+ * slug where the item is one. */
+type Part = { path: string; text: string; slug?: string };
+
+/**
+ * What moved before an artifact since its `reviewed:` line was written: the
+ * commit that wrote the line is found in the record's history, and what was
+ * before the artifact is read at that commit. Where the before hashes to the
+ * id the line holds, each item is compared unit by unit; where the commit,
+ * a file or the hash cannot be recovered, nothing is answered and
+ * `behindOf` reads a whole, major move.
+ */
+function movedSince(
+  change: ChangeEntry,
+  reviewed: string,
+  before: { item: string; text: string; parts: Part[] }[],
+  git: GitIndex,
+): Moved[] | undefined {
+  const sha = git.writerOf?.(`${change.dir}/.openspec.yaml`, reviewed);
+  if (!sha) return undefined;
+  const was: string[][] = [];
+  for (const { parts } of before) {
+    const texts: string[] = [];
+    for (const part of parts) {
+      const text = textAt(git, sha, part);
+      if (text === undefined) return undefined;
+      texts.push(text);
+    }
+    was.push(texts);
+  }
+  if (contentIdOf(was.map((texts) => texts.join("\n"))) !== reviewed)
+    return undefined;
+  return before.flatMap(({ item, parts }, at) =>
+    parts.flatMap((part, index) =>
+      movedOf(item, was[at][index], part.text).map((one) =>
+        parts.length > 1
+          ? { ...one, key: `${dirOf(part.path)}/${one.key}` }
+          : one,
+      ),
+    ),
+  );
+}
+
+/** One part as one commit held it: a file whole, or a page's section. */
+function textAt(git: GitIndex, sha: string, part: Part): string | undefined {
+  const source = git.showAt?.(sha, part.path);
+  if (source === undefined || part.slug === undefined) return source;
+  try {
+    return sectionTextOf({ ast: parsePage(source) }, part.slug);
+  } catch {
+    return undefined;
+  }
+}
+
+/** The capability a `specs/**` file sits in, as a key's prefix. */
+function dirOf(path: string): string {
+  const specs = path.indexOf("/specs/");
+  const dir = path.slice(0, path.lastIndexOf("/"));
+  return specs === -1 ? dir : dir.slice(specs + "/specs/".length);
 }

@@ -1,6 +1,7 @@
 // Explicit extensions: `check:manual`, the store's reader and the notify
 // script all load this under plain node, which resolves no extensionless path.
 
+import { holdsOf, whole } from "./moved.ts";
 import type {
   BehindArtifact,
   ChangeEntry,
@@ -502,16 +503,17 @@ const ROLE_OF_CONFIRMER: Record<string, string> = {
  * Which artifacts are behind what they were drawn from.
  *
  * A pure comparison over the store's reading — `entry.upstream`, which the
- * store computes where the pages and the history are. The recorded id is the
- * answer where the record carries one; otherwise the commit dates are, and
- * neither side being dated is no answer at all, so a depth-1 checkout marks
- * nothing. An artifact the change has not written and one a waiver stands for
- * are never read, because the store never reads an upstream for them.
+ * store computes where the pages and the history are. An artifact is fresh
+ * because its hand landed or read it, which writes its `reviewed:` line, and
+ * never because a later commit touched the file: with no line, or a line the
+ * store could not read the before of, the artifact is behind everything
+ * before it, whole and major. Where the store recovered what moved, the
+ * artifact is behind only if something did, and it holds the next landing
+ * only where a move is major.
  *
- * In the schema's order, so the first answer is the earliest behind artifact:
- * the one the card names and the one the message goes to. Both answers carry
- * `since`, the day the artifact went behind, which each comparison reads off
- * its own field of the reading — `BehindArtifact.since` says why.
+ * An artifact the change has not written and one a waiver stands for are
+ * never read, because the store never reads an upstream for them. In the
+ * schema's order, so the first answer is the earliest behind artifact.
  */
 export function behindOf(
   change: ChangeEntry,
@@ -522,28 +524,29 @@ export function behindOf(
     const read = change.upstream?.[id];
     if (!read) continue;
     const reviewed = change.reviewed?.[id];
-    if (reviewed !== undefined) {
-      // `whole`: the id says something before it moved and cannot say which,
-      // so what is read again against is all of it.
-      if (reviewed !== read.id) {
-        behind.push({
-          artifact: id,
-          changed: read.items,
-          whole: true,
-          // `beforeOn` is this comparison's day, `BehindArtifact.since` why.
-          ...(read.beforeOn ? { since: read.beforeOn } : {}),
-        });
-      }
-      continue;
-    }
-    if (read.newer?.length) {
+    if (reviewed === read.id) continue;
+    const since = read.beforeOn ? { since: read.beforeOn } : {};
+    if (reviewed !== undefined && read.moved !== undefined) {
+      if (read.moved.length === 0) continue;
       behind.push({
         artifact: id,
-        changed: read.newer,
-        // `firstNewerOn` is this one's.
-        ...(read.firstNewerOn ? { since: read.firstNewerOn } : {}),
+        changed: read.items.filter((item) =>
+          read.moved?.some((one) => one.item === item),
+        ),
+        moved: read.moved,
+        holds: holdsOf(read.moved),
+        ...since,
       });
+      continue;
     }
+    behind.push({
+      artifact: id,
+      changed: read.items,
+      whole: true,
+      moved: read.items.map((item) => whole(item)),
+      holds: true,
+      ...since,
+    });
   }
   return behind;
 }
