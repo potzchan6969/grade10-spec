@@ -24,3 +24,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/store/product-listing | Delivery reading, 2026-10-16: the proposal held the price basis open, which left the requirement unwritable - does a price order sort on the tile's price or the cheapest variant? | Q2 |

@@ -21,3 +21,7 @@ one hours row; the block invents none of them
 ::story{id="store-store-locator-blocks-storelocator--narrow" title="One column on a phone"}
 
 🚧 **Agreed look** - the Storybook assembly; no Figma frame is drawn
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="shared/ui/store-locator"}
+:::
