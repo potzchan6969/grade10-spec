@@ -56,7 +56,7 @@ beforeEach(() => {
     );
     if (url.pathname === "/api/relay") return json(relay);
     if (url.origin === RELAY) return json({ main: null });
-    return real.fetch(input, init);
+    return real.fetch.call(window, input, init);
   }) as typeof fetch;
 });
 
