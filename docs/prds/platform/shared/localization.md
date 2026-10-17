@@ -23,7 +23,10 @@ preferences; an explicit pick applies immediately and wins on every return.
 Each language answers at its own public address so search engines and shared
 links land in the right one, each page declares its active language for
 assistive technology, and the sign-in email arrives in the language of the page
-the sign-in started from. Admin panels are out of scope by decision — operator
+the sign-in started from. A failure notice reads in the page's language too:
+the platform names what kind of failure it was - no connection, a fault on our
+side, a refused request, an answer the page cannot read - and the catalogs say
+it, while what the server said stays in the logs. Admin panels are out of scope by decision — operator
 copy is literals.
 
 :::callout{kind="warning"}
