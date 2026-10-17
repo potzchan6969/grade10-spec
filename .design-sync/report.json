@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T04:23:23.166Z",
+  "generatedAt": "2026-10-17T04:46:05.995Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -129,10 +129,10 @@
     "loyalty-membership: member-pass/email": "ok",
     "loyalty-membership: member-pass/header": "ok",
     "loyalty-membership: member-pass/logo": "ok",
-    "loyalty-membership: member-pass/tier": "skipped",
     "loyalty-membership: scan-plate/qr-flat": "skipped",
     "loyalty-membership: scan-plate/short-code": "ok",
     "loyalty-membership: scan-plate/short-code-label": "ok",
+    "loyalty-membership: tier-badge/tier": "skipped",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
     "overlays: tooltip-content/body": "ok",
@@ -946,7 +946,7 @@
     "7156-2747": "loyalty-membership: member-pass/divider",
     "7156-2759": "Member Pass",
     "7158-2851": "loyalty-membership: member-pass/logo",
-    "7158-2852": "loyalty-membership: member-pass/tier",
+    "7158-2852": "loyalty-membership: tier-badge/tier",
     "7158-2853": "loyalty-membership: member-pass/email",
     "7158-2857": "Member Pass / Header",
     "7158-2858": "Member Pass / Header",
