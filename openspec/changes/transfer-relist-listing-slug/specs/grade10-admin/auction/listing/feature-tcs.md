@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review · 0/9
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-15, tcs-rules r6
 
 ## Walk 1: Relist keeps the shared address through to Publish
