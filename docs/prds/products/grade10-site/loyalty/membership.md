@@ -123,8 +123,9 @@ names.
   where and when a till already took a code; there is no member or
   operator surface for it
 
-❓ The pass's drop-shadow and the silver badge's palette colours have no
-token binding yet — the token choice is the designer's.
+The pass's drop-shadow and the silver badge's slate-300 are the design's
+own values, not semantic bindings — slate-300 is a foundational colour
+token, deliberately unbound to a semantic rung.
 
 The same pass can be added to a phone wallet —
 [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card).
