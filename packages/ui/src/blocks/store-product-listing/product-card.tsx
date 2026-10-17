@@ -5,9 +5,12 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 import skeletonImage from "./product-card.fixture.png";
-import { ProductCardActivation } from "./product-card-activation";
+import {
+  ProductCardActivation,
+  productCardOpens,
+} from "./product-card-activation";
 import type { ProductCardImageCopy } from "./product-card-image";
-import { ProductCardImage } from "./product-card-image";
+import { ProductCardImageWell } from "./product-card-image";
 
 /** What a tile says whichever product is in it. */
 type ProductCardCopy = ProductCardImageCopy & {
@@ -131,9 +134,12 @@ function ProductCardContent({
   href,
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
-  const opens =
-    (onClick != null || href != null) &&
-    (!soldOut || onCartQuantityChange == null);
+  const opens = productCardOpens({
+    onClick,
+    href,
+    soldOut,
+    onCartQuantityChange,
+  });
 
   return (
     <VStack
@@ -143,7 +149,7 @@ function ProductCardContent({
       data-sold-out={soldOut || undefined}
       gap="none"
     >
-      <ProductCardImage
+      <ProductCardImageWell
         cartCount={cartCount}
         copy={copy}
         discounted={originalPrice != null}
@@ -152,9 +158,10 @@ function ProductCardContent({
         inCart={inCart}
         maxCartQuantity={maxCartQuantity}
         name={name}
-        href={opens ? href : undefined}
+        href={href}
         onCartQuantityChange={onCartQuantityChange}
-        onClick={opens ? onClick : undefined}
+        onClick={onClick}
+        pointerOnly
         soldOut={soldOut}
       />
 

@@ -11,7 +11,7 @@ follow from there.
 - **Where it starts** — Shopify, always. A collector has no action that starts
   one, and the store never refunds on its own
 - **What the collector sees** — the amount refunded, beside what they paid
-- 🚧 **Order badge** — the one [Order Status](/p/grade10-site/commerce/order-status)
+- **Order badge** — the one [Order Status](/p/grade10-site/commerce/order-status)
   gives the order
 - **What comes back to them** — the money the shop sent, on the card or wallet
   that paid

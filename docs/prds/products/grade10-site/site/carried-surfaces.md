@@ -44,7 +44,7 @@ already opened and is carried everywhere.
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
-🚧 **Store Locator** — the shop's location and hours page joins the store's
+**Store Locator** — the shop's location and hours page joins the store's
 set, so it waits for the store's launch —
 [Store Locator](/p/grade10-site/store/store-locator)
 

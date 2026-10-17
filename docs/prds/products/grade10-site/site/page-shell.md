@@ -24,7 +24,7 @@ cart stays absent
 in the header on every surface — including Auction and other non-Store pages —
 so a collector can reach checkout without returning to Store
 
-🚧 **Store Locator** — in the header and footer only where the build carries
+**Store Locator** — in the header and footer only where the build carries
 [Store Locator](/p/grade10-site/store/store-locator), which waits with the
 store; auction-first chrome has none
 

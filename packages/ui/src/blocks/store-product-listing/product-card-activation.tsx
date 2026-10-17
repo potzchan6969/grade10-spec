@@ -6,6 +6,9 @@ type ProductCardActivationProps = {
   /** Reported on a plain press, in place of the link's own navigation. */
   onClick?: () => void;
   "aria-label"?: string;
+  /** A pointer target alone: out of the tab order and the accessibility
+   * tree, since another control in the tile is its one stop. */
+  pointerOnly?: boolean;
   className: string;
   children: ReactNode;
 };
@@ -20,10 +23,14 @@ type ProductCardActivationProps = {
 function ProductCardActivation({
   href,
   onClick,
+  pointerOnly = false,
   className,
   children,
-  ...labelled
+  ...given
 }: ProductCardActivationProps) {
+  const labelled = pointerOnly
+    ? { tabIndex: -1, "aria-hidden": true as const }
+    : given;
   if (href == null) {
     return (
       <button
@@ -57,4 +64,26 @@ function ProductCardActivation({
   );
 }
 
-export { ProductCardActivation };
+type ProductCardOpensProps = {
+  onClick?: () => void;
+  href?: string;
+  soldOut?: boolean;
+  onCartQuantityChange?: (quantity: number) => void;
+};
+
+/**
+ * Whether a product opens: given a callback or its address, unless it is sold
+ * out on a surface that sells. The photo, the name and the image used alone
+ * all ask this one rule.
+ */
+function productCardOpens({
+  onClick,
+  href,
+  soldOut = false,
+  onCartQuantityChange,
+}: ProductCardOpensProps): boolean {
+  if (onClick == null && href == null) return false;
+  return !(soldOut && onCartQuantityChange != null);
+}
+
+export { ProductCardActivation, productCardOpens };

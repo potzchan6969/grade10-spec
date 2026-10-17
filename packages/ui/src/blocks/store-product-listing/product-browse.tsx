@@ -45,6 +45,8 @@ type ProductBrowseProps = {
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
   searchSuggestions?: readonly SearchSuggestionGroup[];
+  /** Suggestions for the draft are still on their way. */
+  searchPending?: boolean;
   onSearchCommit?: (value: string) => void;
   onSearchSuggestionSelect?: (
     suggestion: SearchSuggestion,
@@ -128,6 +130,7 @@ function ProductBrowse({
   onSearchChange,
   onSearchClear,
   searchSuggestions,
+  searchPending,
   onSearchCommit,
   onSearchSuggestionSelect,
   groups,
@@ -160,6 +163,7 @@ function ProductBrowse({
     onSearchClear,
     onSearchCommit,
     onSearchSuggestionSelect,
+    searchPending,
     searchSuggestions,
     searchValue,
   } as const;

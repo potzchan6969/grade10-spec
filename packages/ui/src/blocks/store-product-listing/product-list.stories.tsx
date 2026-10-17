@@ -42,14 +42,41 @@ export const AddressedProducts: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const links = canvas.getAllByRole("link", { name: PRODUCTS[1].name });
-    expect(links).toHaveLength(2);
+    const name = canvas.getByRole("link", { name: PRODUCTS[1].name });
+    const tile = name.closest('[data-slot="product-card"]') as HTMLElement;
+    const links = [
+      name,
+      tile.querySelector('[data-slot="product-card-image"] a') as HTMLElement,
+    ];
+    expect(
+      canvas.getAllByRole("link", { name: PRODUCTS[1].name }),
+    ).toHaveLength(1);
     for (const link of links) {
       expect(link).toHaveAttribute("href", "/store/products/addressed");
     }
     expect(
       canvas.getByRole("button", { name: "Add to cart" }),
     ).toBeInTheDocument();
+  },
+};
+
+/** Scenario: shared-ui-store-product-listing-SC-87 - The product name
+ * activates the tile. Pressing one product's name, then its photo, reports
+ * that product's id each time. */
+export const NameAndPhotoOpenTheirProduct: Story = {
+  args: { onProductCartQuantityChange: fn() },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const product = PRODUCTS.find((each) => !each.soldOut) ?? PRODUCTS[0];
+    const name = canvas.getByRole("button", { name: product.name });
+    const tile = name.closest('[data-slot="product-card"]') as HTMLElement;
+    await userEvent.click(name);
+    await userEvent.click(
+      tile.querySelector('[data-slot="product-card-image"] img') as HTMLElement,
+    );
+    expect(args.onProductClick).toHaveBeenCalledTimes(2);
+    expect(args.onProductClick).toHaveBeenNthCalledWith(1, product.id);
+    expect(args.onProductClick).toHaveBeenNthCalledWith(2, product.id);
   },
 };
 

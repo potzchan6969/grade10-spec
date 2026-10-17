@@ -51,6 +51,13 @@ function nameLink(tile: HTMLElement) {
   ) as HTMLAnchorElement;
 }
 
+/** A tile's photo link, read by its slot: it is no stop and names nothing. */
+function photoLink(tile: HTMLElement) {
+  return tile.querySelector(
+    '[data-slot="product-card-image"] a',
+  ) as HTMLAnchorElement;
+}
+
 /** Whether a tile shows whole inside the row, give or take a pixel. */
 function whole(tile: HTMLElement, scroller: HTMLElement) {
   const edge = scroller.getBoundingClientRect();
@@ -102,10 +109,12 @@ export const PicksAndSimilar: Story = {
       RELATED_RAIL_STORY.map((card) => card.name),
     );
     for (const [index, tile] of drawn.entries()) {
-      const links = within(tile).getAllByRole("link", {
-        name: RELATED_RAIL_STORY[index].name,
-      });
-      expect(links).toHaveLength(2);
+      expect(
+        within(tile).getAllByRole("link", {
+          name: RELATED_RAIL_STORY[index].name,
+        }),
+      ).toHaveLength(1);
+      const links = [nameLink(tile), photoLink(tile)];
       for (const link of links) {
         expect(link).toHaveAttribute("href", RELATED_RAIL_STORY[index].href);
       }
@@ -165,9 +174,9 @@ export const OneCard: Story = {
   },
 };
 
-/** shared-ui-store-product-listing-SC-91 on the rail: a sold-out pick keeps
+/** shared-ui-store-product-listing-SC-97 on the rail: a sold-out pick keeps
  * its treatment and price, and still opens its card from the photo well as
- * from the name. */
+ * from the name, the name its one control. */
 export const SoldOutPickOpens: Story = {
   args: { cards: [RELATED_RAIL_SOLD_OUT] },
   play: async ({ canvasElement, args }) => {
@@ -176,11 +185,11 @@ export const SoldOutPickOpens: Story = {
     expect(
       within(tile).getByText(RELATED_RAIL_COPY.card.soldOut),
     ).toBeVisible();
-    const controls = within(tile).getAllByRole("link", {
-      name: RELATED_RAIL_SOLD_OUT.name,
-    });
-    expect(controls).toHaveLength(2);
-    for (const control of controls) await userEvent.click(control);
+    expect(
+      within(tile).getAllByRole("link", { name: RELATED_RAIL_SOLD_OUT.name }),
+    ).toHaveLength(1);
+    for (const control of [photoLink(tile), nameLink(tile)])
+      await userEvent.click(control);
     expect(args.onCardClick).toHaveBeenCalledTimes(2);
     expect(args.onCardClick).toHaveBeenCalledWith(RELATED_RAIL_SOLD_OUT.id);
     expect(

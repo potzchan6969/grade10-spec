@@ -11,29 +11,29 @@ rule.
 
 ## Badges
 
-🚧 The badge reads Shopify's order, payment and fulfilment facts for the order,
+The badge reads Shopify's order, payment and fulfilment facts for the order,
 and nothing else.
 
 | Badge | Reads as |
 | --- | --- |
-| 🚧 Processing | Open and not yet fulfilled, or a combination nothing else claims |
-| 🚧 Shipped | Fulfilled in part, or fulfilled and not yet paid in full |
-| 🚧 Completed | Every item fulfilled and paid in full - not carrier-confirmed delivery |
-| 🚧 Canceled | The order was canceled, or its payment voided |
-| 🚧 Refunded | Money has moved back to the collector, and the order is not on hold or scheduled |
+| Processing | Open and not yet fulfilled, or a combination nothing else claims |
+| Shipped | Fulfilled in part, or fulfilled and not yet paid in full |
+| Completed | Every item fulfilled and paid in full - not carrier-confirmed delivery |
+| Canceled | The order was canceled, or its payment voided |
+| Refunded | Money has moved back to the collector, and the order is not on hold or scheduled |
 
-- 🚧 **Order of rules** - a cancellation or a void always wins; a refund comes
+- **Order of rules** - a cancellation or a void always wins; a refund comes
   next, ahead of fulfilment, so a partly refunded order never shows as Shipped
   or Completed
-- 🚧 **Never blank** - every combination Shopify can report reads as one of the
+- **Never blank** - every combination Shopify can report reads as one of the
   five
-- 🚧 **Till sales** - a sale at the counter reads through the same rules as a
+- **Till sales** - a sale at the counter reads through the same rules as a
   web order; where an order was sold never decides its badge
-- 🚧 **Orders covered** - orders Shopify holds. Your Orders lists a web
+- **Orders covered** - orders Shopify holds. Your Orders lists a web
   checkout once the shop records it
-- 🚧 **No archiving** - the shop does not archive orders, so whether Shopify
+- **No archiving** - the shop does not archive orders, so whether Shopify
   archived an order never decides its badge
-- 🚧 **Partly refunded** - a partly refunded order not on hold or scheduled
+- **Partly refunded** - a partly refunded order not on hold or scheduled
   reads Refunded
   and stays with the orders needing attention in
   [Your Orders](/p/grade10-site/store/order-history) while items are still
@@ -42,25 +42,29 @@ and nothing else.
 
 ## Updates from Shopify
 
-🚧 Both pages read one stored copy of Shopify's facts, so after a reload Your
+Both pages read one stored copy of Shopify's facts, so after a reload Your
 Orders shows the same badge as Order Details.
 
 | Change in Shopify | Reaches both pages |
 | --- | --- |
-| 🚧 Paid in full, refunded or canceled | Within 5 minutes |
-| 🚧 Any other change: fulfilled, returned, or a payment voided or expired | Within the hour, for an order not canceled, placed in the last 90 days |
+| Paid in full, refunded or canceled | Within 5 minutes |
+| Any other change: fulfilled, returned, or a payment voided or expired | Within the hour, for an order not canceled, placed in the last 90 days |
 
 ## Secondary Note
 
-🚧 The rule also names one note for each combination the product has
+The rule also names one note for each combination the product has
 confirmed, such as an order on hold or a partial refund already shipped, and
 no note for any other. No surface shows the note in this delivery.
 
 ## Pickup
 
-🚧 Pickup has no badge of its own in this delivery: Grade10's Shopify data does
+Pickup has no badge of its own in this delivery: Grade10's Shopify data does
 not yet tell a pickup order from a shipped one. The shared status pill keeps
 its pickup rung for when it does.
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/commerce/order-status"}
+:::
 
 :::detail{title="Product decisions" for="pm"}
 A collector cannot tell where an order stands when it is partly refunded, held
