@@ -13,7 +13,7 @@ page, where points and the wallet then show.
 
 <!-- trace:scenario id=g10.store-cart-drawer.SC-1dq rev=1 -->
 #### Scenario: g10.store-cart-drawer.SC50 - A signed-out drawer checks out as a guest
-**Serves:** g10.store-cart-drawer.US14 - Signed-out collector finds guest checkout first
+**Serves:** g10.store-cart-drawer.US15 - Signed-out collector finds guest checkout first
 
 - **GIVEN** a signed-out collector with a reviewed browser cart
 - **WHEN** the drawer opens

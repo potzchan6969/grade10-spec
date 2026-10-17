@@ -1,5 +1,5 @@
 ---
-title: Profile
+title: Membership
 spec: grade10-site/loyalty/programme
 order: 6
 reviewed: 2026-10-06
@@ -71,26 +71,28 @@ a Google account under it -
 
 | Section | Shows |
 | --- | --- |
-| Membership | Tier · points to spend · points earned this year toward the next tier · tier renews · points active until · expiring soon |
-| Your member card | The member's name, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
+| Membership | A tier-skinned card — silver, gold or black — with the points to spend, what they pay at checkout, the run to keep or upgrade the tier where the tier has one, and the tier's earn rate. The whole card opens Tier & Benefits ❓ |
+| Your member pass | The tier's skin and the member's email, the QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
 
-- **One expiry line** — the Membership section names how many points
-  expire and the day they go, on one line, and warns inside the last 30 days
+- **No expiry line on the card** — the whole balance lapses on one shared
+  inactivity date, never in parts, so a partial-expiry reminder has nothing
+  to say here. ❓ Where the expiry date reads instead — the Tier & Benefits
+  page is being designed 🚧
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
 - **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 
-❓ Whether "Points to spend" and "Points earned this year" are the launch
+❓ Whether "Points to spend" and the tier-progress labels are the launch
 names.
 
-::story{id="loyalty-profile-blocks-membershipsummary--default" title="Tier, balance and progress"}
+::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
 
-## Member Card
+## Member Pass
 
 | Rule | Value |
 | --- | --- |
@@ -99,6 +101,18 @@ names.
 | Uses | **Once** — whichever a till takes first; the other is refused and says where and when |
 | Wrong codes | **10 in 5 minutes** pause code entry for that shop |
 
+- **Email, not name** — no name is collected at registration, so the pass
+  carries the member's account email under the tier badge
+- **Its own page on a phone** — the pass is presented alone and the page
+  holds a screen wake lock while it is up, so the phone cannot dim or lock
+  mid-scan; a web page cannot raise screen brightness, so keeping the screen
+  awake is the part that is feasible
+- **A code swaps in and out** — a fresh code dips the square out of view,
+  fading and easing down, and settles the new pair in; the short code and
+  its label never move, so a scanner never loses its square mid-read
+- **A taken code just rotates** — a code the till accepts is answered by
+  the next one arriving; the pass never freezes on a used surface, and
+  the refusal a replayed code earns stays on the till
 - **New code on demand** — the earlier code stays alive until it is used or
   expires, so reopening the page in the queue does not end a code the member
   has just read out
@@ -109,12 +123,14 @@ names.
   where and when a till already took a code; there is no member or
   operator surface for it
 
-The same card can be added to a phone wallet —
+The pass's drop-shadow and the silver badge's slate-300 are the design's
+own values, not semantic bindings — slate-300 is a foundational colour
+token, deliberately unbound to a semantic rung.
+
+The same pass can be added to a phone wallet —
 [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card).
 
-::story{id="loyalty-profile-blocks-membercard--default" title="The member card"}
-
-::story{id="loyalty-profile-blocks-membercard--already-used" title="A code a till has taken"}
+::story{id="loyalty-membership-blocks-memberpass--default" title="The member pass"}
 
 ## Histories
 
@@ -148,8 +164,9 @@ The same card can be added to a phone wallet —
   refund, and the ledger record survives for audit
 
 :::callout{kind="note"}
-No Figma frame exists for any membership surface, so the `@grade10/ui` blocks
-and their stories are the visual record.
+The tier card's Figma frame lives in Grade10-DS-2026 (node 7141:2000). The
+other membership surfaces have no Figma frame, so their `@grade10/ui` blocks
+and stories remain the visual record.
 :::
 
 :::detail{title="Code map" for="engineer"}

@@ -1,0 +1,78 @@
+{
+  "version": 2,
+  "change": "close-cart-drawer-on-session-end",
+  "baseline": "d527ba3d954e6ee5019a5cf933d2f176b04e878d1e4ee4afbd699123e9acf135",
+  "fingerprint": "8117725d5d4d2a899d03a9751c69e22ab19787e4d605f42f94a755ec10faa626",
+  "reviewedBy": "seankcw",
+  "acceptedAt": "2026-10-16T09:18:57.676Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/store/cart.md#reviewing-the-cart",
+      "sha256": "0574708845f290ee9dab057c41f46e6c760434ec30af272ec8f249c2b17a4c8c",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/close-cart-drawer-on-session-end/decisions.md",
+      "sha256": "c68b647b44783da3e4f208cdf42850c7d9b274704178a4b08089367834f95c7b",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-cart-drawer-on-session-end/proposal.md",
+      "sha256": "5b8ec4d7fde3c8b2efc82c01a9314319fce34b330aac9fdf75de77ebba4dc079",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-cart-drawer-on-session-end/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "sha256": "99a5eab3f8a862868b649b589c6902c8d48dc47752ce995baece19362caff280",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-cart-drawer-on-session-end/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "4e882cd42fdc1d1a9323d58258cc959fad71a0623d44be07f3b6bf77620ca2f7",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-cart-drawer-on-session-end/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "3494584bdfdcd61b39712039cebdcc1b9ed8a60afdb2b93d69e791cc584ca228",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/close-cart-drawer-on-session-end/tech-design.md",
+      "sha256": "6f2eda57680ee4afac50ad21d6a27cb692872d43953c526fffc690f61bd7dca2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "sha256": "f848cee86c1981bccfde95237b31b2c539301297ca02c3a9cfffcebdf82cddb1",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "sha256": "0914bbc83b16c15fc27cf10beeef4d04065f17d7d35a366824a293382c2a9b51",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "sha256": "c6f59438266932aa82e836cb2695e13dba8b1054b50055602a867e415c7b416d",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: An open drawer closes when its member's session ends"
+      ]
+    },
+    {
+      "path": "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

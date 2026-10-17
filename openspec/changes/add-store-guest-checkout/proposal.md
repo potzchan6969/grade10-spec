@@ -97,6 +97,6 @@ See [Non-Goals](decisions.md#non-goals).
 - [Order Details · Order Link](../../../docs/prds/products/grade10-site/store/order-detail.md#order-link)
 - [Order Details · Back From Checkout](../../../docs/prds/products/grade10-site/store/order-detail.md#back-from-checkout)
 - [Your Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
-- [Profile · Purchases Before the Account](../../../docs/prds/products/grade10-site/loyalty/profile.md#purchases-before-the-account)
+- [Membership · Purchases Before the Account](../../../docs/prds/products/grade10-site/loyalty/membership.md#purchases-before-the-account)
 - [Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)
 - [Discounts · Public Codes](../../../docs/prds/products/grade10-site/store/discounts.md#public-codes)

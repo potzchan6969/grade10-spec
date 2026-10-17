@@ -37,7 +37,7 @@
   "ceilingBidIs": "Maximum bid is {amount}.",
   "ceilingChip": "Limit",
   "changeCard": "Change",
-  "clickToZoom": "Click to zoom",
+  "clickToZoom": "Hover to magnify",
   "closed": "Closed",
   "closedAt": "Closed {when}",
   "closedSummary": "Closed at {time}. Ran {duration}",
@@ -163,5 +163,6 @@
   "winningBid": "Winning bid",
   "youDidntWin": "Did not win",
   "yourBid": "Your bid: {amount}",
-  "yourBidLabel": "Your bid"
+  "yourBidLabel": "Your bid",
+  "zoomInstructions": "Move the pointer over the image or use the arrow keys to magnify; Escape hides the magnifier."
 }

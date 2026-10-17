@@ -30,6 +30,10 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   rail when the gallery is wide enough for it beside the main frame, and
   otherwise step with previous/next and progress only; no items render
   nothing and offer no previous or next
+- **The magnifier** — a lens follows the pointer over the selected image
+  and enlarges what is beneath it at the zoom source's size; focused, it
+  moves with the arrow keys and Escape hides it; a touch pointer never
+  raises it, and there is no zoom dialog — [Lens](https://ui.ballmac.com/components/lens)
 - **On its own** — the gallery renders without the bid panel, so a lot can
   be shown before it can be bid on
 
@@ -163,4 +167,5 @@ code mapping — so these stories are the reference until frames are produced.
 | --- | --- | --- | --- |
 | Bid enrollment | Decided | Its own part of the feature set: the setup blocks, their gates, and the signal the bid card reads. | Product |
 | Gallery strip | Decided | Several images show a left rail only when it fits beside the main frame. Stacked galleries keep previous/next and progress, with no strip under the stage. The rule covers `ListingLotGallery`; `ListingGallery` keeps its existing strip behavior, and the width threshold stays in code. The rail uses `thumb`, the main frame uses `detail`, and zoom uses `zoom` for the selected image. | Product |
+| Magnifier | Decided | Magnification is in place under the pointer at the zoom source; focused arrows move it and Escape hides it; a touch pointer never raises it; there is no zoom dialog. The lens lives in the design system; both galleries compose it. | Product |
 :::

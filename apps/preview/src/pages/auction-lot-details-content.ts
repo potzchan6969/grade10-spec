@@ -218,7 +218,9 @@ export const AUCTION_LOT_DETAILS_COPY = {
     },
   },
   gallery: {
-    zoom: "Click to zoom",
+    zoom: "Hover to magnify",
+    zoomInstructions:
+      "Move the pointer over the image or use the arrow keys to magnify; Escape hides the magnifier.",
     previous: "Previous image",
     next: "Next image",
     images: "Auction images",

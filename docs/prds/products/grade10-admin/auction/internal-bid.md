@@ -28,13 +28,18 @@ any maximum - [Bidding · Auto-Bidding](/p/grade10-site/auction/bidding#auto-bid
   recipient in each billing address, never the profile's name
 - **Kept by a bid** - a Placed or Not placed bid keeps its profile and
   commit time, even if the profile is retired
-- **Before its time** - the amount and the time can change or be removed;
-  the house is not in the bidding
-- **At its time** - Grade10 commits it once; an amount short of the minimum
-  next bid, or a listing still Created, leaves it Not placed. Publishing a
-  Created listing later does not place it. Once the lot takes bids, saving at
-  or above the minimum next bid places it
-- **After it bids** - the time is fixed; the amount goes up whenever the
+- 🚧 **Before its time** - a reserve holder may change the amount or commit
+  time, or remove the whole internal bid. The house has not bid before its
+  commit time
+- 🚧 **At its time** - Grade10 commits it once. An amount below the minimum
+  next bid, or a listing still Created, leaves it Not placed; publishing a
+  Created listing later does not place it
+- 🚧 **Not placed** - until the effective close, a reserve holder may remove
+  it or save it again with the same profile and commit time. A save while the
+  listing is still Created keeps it Not placed. Once bidding opens, a save at
+  or above the minimum next bid places it; a lower amount below that minimum
+  stays Not placed, while a raise or unchanged amount below it is refused
+- 🚧 **After it bids** - the time is fixed; the amount goes up whenever the
   lot takes a bid, or down only where the leader and the current bid stay the
   same and never below a bid already placed for the house
 - **Listing edits** - a window or starting-price change on a Created

@@ -37,7 +37,7 @@
   "ceilingBidIs": "최대 입찰가는 {amount}입니다.",
   "ceilingChip": "한도",
   "changeCard": "변경",
-  "clickToZoom": "클릭하면 확대됩니다",
+  "clickToZoom": "마우스를 올리면 확대",
   "closed": "마감됨",
   "closedAt": "{when} 종료",
   "closedSummary": "{time}에 종료. 진행 {duration}",
@@ -163,5 +163,6 @@
   "winningBid": "낙찰가",
   "youDidntWin": "낙찰되지 않음",
   "yourBid": "내 입찰: {amount}",
-  "yourBidLabel": "내 입찰"
+  "yourBidLabel": "내 입찰",
+  "zoomInstructions": "포인터를 이미지 위로 움직이거나 방향 키로 확대하고, Escape 키를 누르면 확대가 숨겨집니다."
 }

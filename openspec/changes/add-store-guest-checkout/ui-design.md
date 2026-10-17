@@ -51,7 +51,7 @@
 
 | State | Shows | Anchor | Scenario / Disposition |
 | --- | --- | --- | --- |
-| Guest | Guest checkout primary, quiet sign-in line under it, public codes, no points | `g10.store-cart-drawer.US14` | `g10.store-cart-drawer.SC50`, `g10.store-cart-drawer.SC51`, `shared-ui-store-cart-SC-80` |
+| Guest | Guest checkout primary, quiet sign-in line under it, public codes, no points | `g10.store-cart-drawer.US15` | `g10.store-cart-drawer.SC50`, `g10.store-cart-drawer.SC51`, `shared-ui-store-cart-SC-80` |
 | Guest At The Bar | Sign-in ask where the guest button was; no checkout starts | `g10.store-checkout.US9` | **Out of suite:** dropped 2026-10-14 with the identity bar ([Non-Goals](decisions.md#non-goals)); no state ships |
 
 ### Order Link

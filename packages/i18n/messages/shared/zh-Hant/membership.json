@@ -1,13 +1,11 @@
 {
   "card": {
     "expired": "此碼已過期",
-    "expiresIn": "尚餘",
-    "fallbackCode": "或讀出這組編號",
     "inStore": "門市",
     "qrAlt": "你的會員碼，可供掃描的方格",
-    "refresh": "換一組新碼",
-    "secondsUnit": "秒",
-    "used": "此碼已被使用",
+    "refresh": "更新",
+    "refreshesIn": "尚餘",
+    "shortCode": "短碼",
     "walletAdd": "新增至{wallet}",
     "walletAddFailed": "未能新增至{wallet}，請重試。",
     "walletApple": "Apple 錢包",
@@ -23,7 +21,7 @@
   },
   "page": {
     "title": "會員",
-    "card": "你的會員卡",
+    "card": "你的會員通行證",
     "rewards": "獎賞",
     "activity": "紀錄",
     "spend": "用於購物車",

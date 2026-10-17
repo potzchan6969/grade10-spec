@@ -21,7 +21,9 @@ const CART_FETCH_MS = 400;
 const COPY = {
   description: { showLess: "Show less", showMore: "Show more" },
   gallery: {
-    zoom: "Click to zoom",
+    zoom: "Hover to magnify",
+    zoomInstructions:
+      "Move the pointer over the image or use the arrow keys to magnify; Escape hides the magnifier.",
     previous: "Previous image",
     next: "Next image",
     images: "Product images",

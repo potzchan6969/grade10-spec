@@ -37,7 +37,7 @@
   "ceilingBidIs": "最高出價為 {amount}。",
   "ceilingChip": "上限",
   "changeCard": "更改",
-  "clickToZoom": "點擊放大",
+  "clickToZoom": "懸停放大",
   "closed": "已結束",
   "closedAt": "已於{when}結束",
   "closedSummary": "於 {time} 結束。歷時 {duration}",
@@ -163,5 +163,6 @@
   "winningBid": "得標價",
   "youDidntWin": "未得標",
   "yourBid": "你的出價：{amount}",
-  "yourBidLabel": "你的出價"
+  "yourBidLabel": "你的出價",
+  "zoomInstructions": "將指標移到圖片上，或使用方向鍵放大；按 Escape 隱藏放大鏡。"
 }
