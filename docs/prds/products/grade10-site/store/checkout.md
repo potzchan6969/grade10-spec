@@ -47,13 +47,13 @@ In Your Orders.
 
 ## Integration readiness
 
-🚧 **Checkout integration** - The drawer sends the reviewed lines, the accepted promo code and points through the store's checkout request, and shows its answer.
+**Checkout integration** - The drawer sends the reviewed lines, the accepted promo code and points through the store's checkout request, and shows its answer.
 
-🚧 **One Pay at a time** - While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
+**One Pay at a time** - While a Pay is starting, drawer actions wait as the [Cart Drawer](/p/grade10-site/store/cart#pending-operations) describes. An answer for an older cart, tender or member opens nothing.
 
-🚧 **Closing during Pay** - The collector can close the drawer while checkout starts. A successful reply still opens Shopify if the submitted cart, tender and member remain current. Closing does not cancel the request.
+**Closing during Pay** - The collector can close the drawer while checkout starts. A successful reply still opens Shopify if the submitted cart, tender and member remain current. Closing does not cancel the request.
 
-🚧 **Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
+**Later cart** - Payment clears the cart it bought unless the member edited or rebuilt it afterwards; the shop's stock or price review alone does not keep a paid cart.
 
 - **Another Pay** - An unchanged purchase returns its existing invoice or order state, including after reload, from a second tab or after a lost answer; a purchase already paid opens its order
 - **After a refusal** - A Pay after the purchase's order failed or was canceled starts the purchase again
@@ -95,7 +95,7 @@ joins one under that email.
   email it was placed under: at payment when that account exists, otherwise
   at that account's next sign-in. Every other guest order under that email
   joins with it
-- 🚧 **No points** - a guest order never earns, joined or not; only an
+- **No points** - a guest order never earns, joined or not; only an
   order placed with an account earns -
   [Points](/p/grade10-site/loyalty/points#rules)
 - **The cart** - this browser's cart keeps the basket until it reads the
