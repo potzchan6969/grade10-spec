@@ -15,7 +15,7 @@
     "classes": "h-4 w-auto shrink-0 text-primary-foreground"
   },
   {
-    "label": "member-pass/tier",
+    "label": "tier-badge/tier",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7158-2852",
     "classes": "border-primary bg-transparent text-primary uppercase"
   },

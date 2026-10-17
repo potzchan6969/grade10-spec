@@ -90,6 +90,9 @@ export const Black: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("6,900")).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="tier-card-tier"] svg'),
+    ).toBeInTheDocument();
     expect(canvas.queryByRole("progressbar")).not.toBeInTheDocument();
     expect(canvas.queryByText(/pts\//)).not.toBeInTheDocument();
   },
