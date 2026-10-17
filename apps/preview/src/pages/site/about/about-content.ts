@@ -48,7 +48,7 @@ const GRADE10_AI_LINK: AboutLink = {
 };
 
 const ABOUT_PAGE = {
-  heading: "Grade10",
+  heading: "About Us",
   intro: [
     { text: "Grade10 is a trading card venture backed by " },
     { text: "MemeStrategy", link: MEMESTRATEGY_LINK },
