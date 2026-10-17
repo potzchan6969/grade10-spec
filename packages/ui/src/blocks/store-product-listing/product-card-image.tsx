@@ -1,7 +1,10 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import { ProductCardActivation } from "./product-card-activation";
+import {
+  ProductCardActivation,
+  productCardOpens,
+} from "./product-card-activation";
 import {
   ProductCardCartControl,
   parseCartQuantity,
@@ -47,13 +50,15 @@ type ProductCardImageProps = {
   maxCartQuantity?: number;
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
-  /** Tile activation for the photo well. The card passes none for a sold-out
-   * tile on a surface that sells, so a well with a handler always opens. */
+  /** Tile activation for the photo well. The image applies the tile's rule:
+   * it opens given this or `href`, unless sold out where a cart handler is
+   * supplied. */
   onClick?: () => void;
-  /** The product's own address. Given one, the well is a link to it; the card
-   * passes none for a tile that does not open. */
+  /** The product's own address. Where the image opens, the well is a link to
+   * it. */
   href?: string;
-  /** The product's own name, which names the well for a screen reader. */
+  /** The product's own name, which names the image's control where it opens.
+   * An image that opens needs it. */
   name?: string;
   className?: string;
 };
@@ -72,7 +77,14 @@ type ProductCardImageProps = {
  * available and not already in the cart; coarse pointers and narrow viewports
  * keep it visible; in-cart always shows it; sold-out never does.
  */
-function ProductCardImage({
+type ProductCardImageWellProps = ProductCardImageProps & {
+  /** Inside a card the name is the tile's one stop, so the photo is a pointer
+   * target alone: no tab stop, nothing announced. */
+  pointerOnly: boolean;
+};
+
+function ProductCardImageWell({
+  pointerOnly,
   className,
   copy,
   imageSrc,
@@ -86,10 +98,15 @@ function ProductCardImage({
   onClick,
   href,
   name,
-}: ProductCardImageProps) {
+}: ProductCardImageWellProps) {
   const showCart = !soldOut && onCartQuantityChange != null;
   const quantity = parseCartQuantity(cartCount, inCart);
-  const opens = onClick != null || href != null;
+  const opens = productCardOpens({
+    onClick,
+    href,
+    soldOut,
+    onCartQuantityChange,
+  });
 
   const photoClassName = cn(
     "size-full rounded-(--radius-3xl) object-contain",
@@ -159,10 +176,11 @@ function ProductCardImage({
         </div>
       ) : (
         <ProductCardActivation
-          aria-label={name}
+          aria-label={pointerOnly ? undefined : name}
           className="absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           href={href}
           onClick={onClick}
+          pointerOnly={pointerOnly}
         >
           {well}
         </ProductCardActivation>
@@ -181,5 +199,10 @@ function ProductCardImage({
   );
 }
 
+/** The photo well on its own, a product's one control where it opens. */
+function ProductCardImage(props: ProductCardImageProps) {
+  return <ProductCardImageWell {...props} pointerOnly={false} />;
+}
+
 export type { ProductCardImageCopy, ProductCardImageProps };
-export { ProductCardImage };
+export { ProductCardImage, ProductCardImageWell };
