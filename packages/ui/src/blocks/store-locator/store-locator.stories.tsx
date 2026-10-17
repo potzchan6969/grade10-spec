@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { STORE_LOCATOR_PROPS } from "./fixtures";
 import { StoreLocator } from "./store-locator";
 
@@ -24,9 +24,12 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", { level: 1, name: args.copy.heading }),
-    ).toBeVisible();
+    /* The sections fade in once on first paint; read them once settled. */
+    await waitFor(() =>
+      expect(
+        canvas.getByRole("heading", { level: 1, name: args.copy.heading }),
+      ).toBeVisible(),
+    );
     expect(
       canvas.getByRole("heading", { level: 2, name: args.copy.hoursHeading }),
     ).toBeVisible();
