@@ -123,9 +123,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Raising a reminder
+
+**Decided by:** `grade10:packages/loyalty/backend/src/testing/suites/expiryReminderWalk.ts`
 
 **Pre-conditions:**
 
@@ -644,9 +646,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Keeping a reminder true
+
+**Decided by:** `grade10:packages/loyalty/backend/src/testing/suites/expiryReminderWalk.ts`
 
 **Pre-conditions:**
 
