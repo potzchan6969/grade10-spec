@@ -33,10 +33,11 @@
 | Q3 | Does the pass still need `expired` and `used` states, when the code refreshes? | `expired` stays — a lapsed code says so until the next pair arrives. `used` leaves — a code the till takes is answered by silently rotating to the next minted pair, not by freezing the pass on a used surface; the replay refusal naming where and when stays the till's answer (`store/membership`, SC-09 amended), and the member's notification on a landed spend is US-04's own path | Keeping `used` — the member standing at the till watched the code scan, and a frozen pass argues with a refresh loop that is the whole point of the redesign |
 | Q4 | What does the header identify the member by? | The account `email` — no name is collected at registration, and staff already identify by exact email | `displayName` — there is no name to display |
 | Q5 | How does the phone's brightness rise? | It cannot — no standard web API sets or restores screen brightness; the standalone page holds a screen wake lock so the screen cannot dim or lock mid-scan, and a native shell's bridge is the consumer's | Pretending CSS or the `screen` API can — they cannot; the ask is recorded honestly in the PRD |
+| Q6 | Do the pass's drop-shadow and silver-badge palette bind semantic tokens? | No — they are the design's own values: the badge's slate-300 is a foundational colour token, and both stay deliberately unbound to a semantic rung | Adding semantic tokens — these are fixed design values, not theme rungs a mode could swap |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | grade10-site/loyalty/programme | Can a web page raise and restore the phone's brightness while the pass is up? No standard API exposes it — the standalone page holds a screen wake lock instead, and a native shell's bridge is the consumer's. Owner: product manager | Q5 |
-| grade10-site/loyalty/programme | The pass's drop-shadow and the silver badge's palette classes have no token binding — the linter flags them as unbound; the token decision is the designer's. Owner: designer | ❓ on the membership PRD |
+| grade10-site/loyalty/programme | The pass's drop-shadow and the silver badge's palette classes have no token binding — the linter flags them as unbound; the token decision is the designer's. Owner: designer | Q6 |
