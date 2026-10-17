@@ -12,8 +12,8 @@ answers without a session, like any public surface —
 
 ## The Page
 
-- 🚧 **Hero** — Grade10 Shows over "Where Cards Come Alive. Where
-  Collectors Belong.", an Explore Shows jump into the formats and a
+- 🚧 **Hero** — Grade10 Shows over "Asia’s card shows, at full scale.",
+  an Explore Shows jump into the formats and a
   Press Releases link to `/press-releases`, beside a Latest Shows card
   listing the next three dates
 - 🚧 **Event scale** — Real Trends. In the Room. over a show-floor photo
@@ -40,9 +40,8 @@ answers without a session, like any public surface —
 - ❓ Copy - **Grade10 Festival 2025 date** - the frame dates the edition
   card NOV 2026 while the live page shows November 2025; the page carries
   the frame's text until design confirms
-- ❓ Copy - **Seoul Auction record wording** - the description keeps the
-  frame and live site's literal "× ZZZ ×" placeholder; the real partner
-  name is unconfirmed
+- **Copy - Seoul Auction record wording** - ZZZ is the real partner name,
+  not a placeholder; the record reads Seoul Auction × ZZZ × Grade10
 - ❓ Copy - **Hero card label** - the frame reads LATEST SHOWS while the
   live page reads "Upcoming Shows"; the page carries the frame's text
 - ❓ Media - **Video and poster provenance** - the YouTube ids and poster

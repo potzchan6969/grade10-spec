@@ -36,11 +36,11 @@ None.
 
 **Expected Results:**
 
-* "Where Cards Come Alive. Where Collectors Belong." is the page's
+* "Asia’s card shows, at full scale." is the page's
   top-level heading beside a Latest Shows card.
 * An Event Scale section headed "Real Trends. In the Room." holds three
-  statistic cards: 25,000+ visitors per show, 120+ exhibitors, millions in
-  industry revenue.
+  statistic cards: 25,000+ visitors at Grade10 FEST Summer 2026, 120+
+  exhibitors, millions in industry revenue.
 * An Event Formats section headed "Three Platforms. One Community."
   carries the Hong Kong, Overseas Partnership and Chinese Mainland
   chapters.

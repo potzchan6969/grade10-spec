@@ -29,8 +29,8 @@ and the record of every show — and where each link on it leads.
 
 ### Requirement: The page presents the events
 The Shows surface SHALL present, in order: Grade10 Shows as the eyebrow
-over the top-level heading "Where Cards Come Alive. Where Collectors
-Belong." beside a Latest Shows card, an Event Scale section headed "Real
+over the top-level heading "Asia’s card shows, at full scale."
+beside a Latest Shows card, an Event Scale section headed "Real
 Trends. In the Room." with three statistic cards, an Event Formats section
 headed "Three Platforms. One Community." carrying the Hong Kong, Overseas
 Partnership and Chinese Mainland chapters, and an Event Records section
