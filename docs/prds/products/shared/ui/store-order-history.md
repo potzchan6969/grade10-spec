@@ -12,7 +12,7 @@ Every store application renders them from that one source, supplying copy,
 imagery, formatted values and callbacks — the blocks fetch nothing and format
 nothing themselves.
 
-🚧 The application chooses which of the six a badge shows, and the badge gives
+The application chooses which of the six a badge shows, and the badge gives
 it no meaning of its own: for a Store order,
 [Order Status](/p/grade10-site/commerce/order-status) decides it.
 

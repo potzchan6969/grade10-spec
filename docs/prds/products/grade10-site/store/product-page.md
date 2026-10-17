@@ -14,7 +14,7 @@ item a collector can add.
   [Discounts](/p/grade10-site/store/discounts#where-each-shows)
 - **One item to buy** — the page offers no size, option or variant choice.
   Shopify's sale identifier stays internal to availability and cart handling
-- 🚧 **Buy** — choose a quantity, add the product, and stay on the page; while
+- **Buy** — choose a quantity, add the product, and stay on the page; while
   the add is pending the controls show Adding…; after it settles the cart
   drawer opens, the quantity resets, and the cart total updates; adding it
   again stays on one line
@@ -43,15 +43,15 @@ with no sign-in; signing in later moves those lines into the member's cart -
 
 ## Free Pick-up
 
-🚧 **Opens Store Locator** - the store name in the free pick-up claim opens
+**Opens Store Locator** - the store name in the free pick-up claim opens
 Store Locator in the same tab, in the page's language
 
-🚧 **No dead label** - Shipping fee has no page behind it, so it is plain
+**No dead label** - Shipping fee has no page behind it, so it is plain
 text, not a link
 
 ## You May Also Like
 
-🚧 **You may also like** — related cards under the card —
+**You may also like** — related cards under the card —
 [You May Also Like](/p/grade10-site/store/cross-sell)
 
 ## Designs

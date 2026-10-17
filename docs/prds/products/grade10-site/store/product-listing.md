@@ -29,12 +29,6 @@ The product listing lets collectors browse the catalogue and open a product.
   whatever the current narrowing counts behind it, zero included, so the
   collector can see what a narrowing (their own or a sibling's) starved and
   undo it
-- 🚧 **Filter on a small screen** — a Filter control opens a left drawer for
-  worlds and types; the catalogue search field stays on the listing outside
-  that drawer
-- 🚧 **Worlds and Types as tabs on a small screen** — inside the filter drawer
-  the two facet groups sit as tabs so expanding worlds does not push types
-  down the scroll; the wide sidebar still stacks them
 - **Sale** — a card on sale shows the lower price with the higher struck
   through — [Discounts](/p/grade10-site/store/discounts#where-each-shows)
 - ❓ **A conditional offer on the tile** — a spend threshold, a quantity or a
@@ -84,7 +78,7 @@ with no sign-in; signing in later moves those lines into the member's cart -
 
 ## Adaptive Filter
 
-🚧 **Narrow pills** — below the wide breakpoint the listing shows the result
+**Narrow pills** — below the wide breakpoint the listing shows the result
 count and pills for sort and each facet group (Worlds, Types). Sort opens a
 bottom drawer and applies on choose. A facet pill opens a bottom drawer for
 that group; Show Results applies the draft; Clear empties that group’s draft.
@@ -99,15 +93,15 @@ The listing search field lives with the filters on a wide viewport. Narrow
 chrome has no search. Typing drafts locally; Enter or a suggestion
 selection is what acts.
 
-- 🚧 **Suggestions while typing** — matching products and matching world or
+- **Suggestions while typing** — matching products and matching world or
   type filters, at most five of each, over the whole catalogue even when
   facets are already on; store hits only
-- 🚧 **Filter hit** — a world or type suggestion shows the choice's name,
+- **Filter hit** — a world or type suggestion shows the choice's name,
   and World or Type beside it
-- 🚧 **Empty and waiting** — no match shows that nothing matched; while hits
+- **Empty and waiting** — no match shows that nothing matched; while hits
   are still resolving the field shows it is searching; Enter still commits
   the typed words either way
-- 🚧 **Commit and pick** — Enter puts free text in force as a dismissible
+- **Commit and pick** — Enter puts free text in force as a dismissible
   chip with the other applied filters and clears the field; picking a product
   opens that product and clears the field; picking a filter applies that
   facet, clears the field, and does not put free text in force
@@ -126,15 +120,15 @@ The listing answers from the store's mirror of the shop's catalogue.
   sells out or brings back reaches the cards, the counts and the sidebar
   within seconds, the same at every location; the store reads the product back
   from the shop rather than trusting the report
-- 🚧 **The re-read as the net** — the store reads the whole catalogue again
+- **The re-read as the net** — the store reads the whole catalogue again
   every 5 minutes, so a change the shop never reported shows within 5 minutes
-- 🚧 **No collector waits on the mirror** — a listing view answers from the
+- **No collector waits on the mirror** — a listing view answers from the
   copy its own location holds, and the location asks the mirror for a newer one
   at most every 3 seconds, however many collectors it is serving
 - 🚧 **A quiet location answers too** — the first collector at a location that
   has not served the listing waits on no read of the catalogue, and gets the
   cards, counts and sidebar everyone else gets
-- 🚧 **While the shop is unreachable** — the cards, the counts and the sidebar
+- **While the shop is unreachable** — the cards, the counts and the sidebar
   keep answering from the mirror until the shop answers again; opening a
   product and the cart's review wait on the shop
 - **What still lags** — a product's own page and a listing narrowed to a

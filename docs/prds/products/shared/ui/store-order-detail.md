@@ -15,13 +15,13 @@ does not know.
 
 ## Optional Sections
 
-🚧 **Composed detail** — applications can assemble the reusable Order Details
+**Composed detail** — applications can assemble the reusable Order Details
 body from supplied header, item, money, delivery, payment and address facts
 
-🚧 **Honest omission** — payment, address, delivery, loyalty and individual
+**Honest omission** — payment, address, delivery, loyalty and individual
 money rows disappear independently when the application has no fact to show
 
-🚧 **Supplied action** — tracking stays a display-only action until the
+**Supplied action** — tracking stays a display-only action until the
 application provides the callback that owns the navigation
 
 ## Designs

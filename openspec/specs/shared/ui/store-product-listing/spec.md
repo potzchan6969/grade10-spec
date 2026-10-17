@@ -42,9 +42,17 @@ more can be loaded are decided by the application.
 - What is left, said
   - Supplied remaining count: the card displays how many are left, in the consumer's own words
   - Consumer decides when: the card shows what it is given and judges nothing about scarcity
+- Adaptive filter chrome
+  - Narrow viewport: result count plus pills for sort and each facet group; bottom drawers; no listing search
+  - Wide viewport: sidebar keeps search above stacked facet groups
+  - Sort: short-name pill; bottom drawer applies on choose and closes
+  - Facet pills: label from none / one / many; bottom drawer drafts until Show Results; Clear clears that group’s draft
+- Listing search suggestions
+  - Supplied groups: product and filter rows the consumer supplies under the field
+  - Draft, commit, select: the field reports typing, submitting, and picking a row; it never fetches or navigates
+  - Row shape: id, label, optional image and trailing chrome the consumer supplies
 
 ## Requirements
-
 ### Requirement: The listing surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
@@ -52,10 +60,11 @@ components for the listing surface — `ProductBrowse`, `FilterPanel`,
 `ProductFilter`, `ProductListHeader`, `ProductList`, `ProductCard`, and
 `ProductCardImage` — and exactly these types: `AsyncState`, `AsyncAction`,
 `ProductSummary`, `FilterGroup`, `FilterOption`, `FilterSelection`,
-`AppliedFilter`, `SortOption`, `UtilityLink`, `ProductBrowseProps`,
-`FilterPanelProps`, `ProductFilterProps`, `ProductListHeaderProps`,
-`ProductListProps`, `ProductCardProps`, `ProductCardImageProps`, and the copy
-type of each of those components.
+`AppliedFilter`, `SortOption`, `UtilityLink`, `SearchSuggestion`,
+`SearchSuggestionGroup`, `ProductBrowseProps`, `FilterPanelProps`,
+`ProductFilterProps`, `ProductListHeaderProps`, `ProductListProps`,
+`ProductCardProps`, `ProductCardImageProps`, and the copy type of each of
+those components.
 
 Each of those components SHALL take the words it renders in a single `copy`
 prop of its own copy type, and `ProductBrowseCopy` SHALL be composed of the
@@ -69,7 +78,6 @@ the next.
 `ProductCard`, and `ProductCardImage` SHALL each be renderable on their own,
 outside `ProductBrowse`, so a later surface can reuse one without the others.
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-32i rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
 
@@ -77,20 +85,18 @@ outside `ProductBrowse`, so a later surface can reuse one without the others.
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-eio rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-02 - A part is reused alone
 **Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders the product list, the filter panel, the product filter, the list header, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-vlj rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-03 - A tile is named once
 **Serves:** Surface exports - a tile is named once
 
 - **GIVEN** a product tile whose card is activatable and whose cart control needs a name
 - **WHEN** the consumer supplies the tiles and the words around them
-- **THEN** the card's accessible name is the product's own name, supplied once per product
+- **THEN** the tile's one control that opens it is named by the product's own name, supplied once per product
 - **AND** the cart control's name comes from the list's copy, supplied once for every tile
 - **AND** no prop repeats either
 
@@ -242,23 +248,23 @@ product is sold out, or hold a cart quantity.
 
 The product list SHALL lay out tiles in an auto-fill grid with a minimum tile
 width of 240px and gaps of 32px horizontally and vertically. The column
-count SHALL grow or shrink with the width remaining after the fixed sidebar.
-A tile SHALL remain fully readable and its controls fully operable at every
-column count.
+count SHALL grow or shrink with the width remaining for results — after the
+fixed sidebar on a wide viewport, and across the full listing width when the
+sidebar is not inline. A tile SHALL remain fully readable and its controls
+fully operable at every column count.
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-sdb rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-10 - Narrow viewport
 **Serves:** Responsive layout - narrow viewport
 
 - **WHEN** the surface is rendered at mobile width
 - **THEN** the list displays one column
 - **AND** no content overflows the viewport horizontally
+- **AND** facets and sort are reached through pills above the grid, not an inline full-width filter column
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-5rg rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-11 - Wide viewport
 **Serves:** Responsive layout - wide viewport
 
-- **WHEN** the surface is rendered with enough width for four 240px tiles
+- **WHEN** the surface is rendered with enough width for four 240px tiles beside the sidebar
 - **THEN** the list displays four columns
 
 ### Requirement: Empty and no-match results are distinguished
@@ -268,18 +274,18 @@ consumer supplied for that condition, and SHALL allow the consumer to
 distinguish an empty catalog from a filter selection that matches nothing by
 supplying a different message and an optional action for each.
 
-The sidebar SHALL remain displayed and usable in both conditions.
+Filter chrome SHALL remain reachable and usable in both conditions: the
+inline sidebar on a wide viewport, and the narrow pills (and their drawers)
+on a narrow viewport.
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-o35 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-12 - Filters match nothing
 **Serves:** Browse states - filters match nothing
 
 - **GIVEN** a resolved result set with no products and a supplied no-match message
 - **THEN** that message is displayed in place of the list
-- **AND** the sidebar is still displayed with the current search query and filter selection intact
-- **AND** a clear-filters action is offered when the consumer supplied one, reporting activation through a callback
+- **AND** the current filter selection remains intact in the filter chrome
+- **AND** a clear-filters action is offered when the consumer supplied one on a wide viewport, reporting activation through a callback
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-1wv rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-13 - An empty catalog
 **Serves:** Browse states - an empty catalog
 
@@ -438,29 +444,26 @@ When results are loading, empty, or in error, the surface SHALL NOT report
 
 ### Requirement: Filter groups and result regions resolve independently
 
-The sidebar filter groups and the product results SHALL each be supplied as
-an independent asynchronous boundary, each carrying its own loading, empty,
+The filter groups and the product results SHALL each be supplied as an
+independent asynchronous boundary, each carrying its own loading, empty,
 error, and resolved condition. A condition on one SHALL NOT change what the
 other displays.
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-cdy rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-27 - Results fail while filter groups stand
 **Serves:** Browse states - results fail while filter groups stand
 
 - **GIVEN** filter groups that have resolved and results that are in an error condition
-- **THEN** the sidebar still displays its heading, search field, filter groups, and utility links, still usable
+- **THEN** filter chrome still offers its controls, still usable
 - **AND** the results region displays the supplied error message
 - **AND** a retry affordance is offered when the consumer supplied one, reporting activation through a callback
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-83y rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-28 - Filter groups load while results are ready
 **Serves:** Browse states - filter groups load while results are ready
 
 - **GIVEN** filter groups that are still loading and results that have resolved
 - **THEN** the results and their count are displayed
-- **AND** the sidebar displays a loading treatment rather than an empty filter list
+- **AND** the filter chrome displays a loading treatment rather than an empty filter list
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-3rm rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-29 - One boundary is not inferred from the other
 **Serves:** Browse states - one boundary is not inferred from the other
 
@@ -469,63 +472,67 @@ other displays.
 
 ### Requirement: The sidebar displays a heading, search, filter groups, and utility links
 
-The filter panel SHALL display a consumer-supplied heading, a search field,
-the product filter, and any utility links the consumer supplied, in that
-order. It SHALL be a complementary landmark with an accessible name the
-consumer supplies.
+On a wide viewport, the filter panel SHALL display a consumer-supplied
+heading, a search field, the product filter, and any utility links the
+consumer supplied, in that order. It SHALL be a complementary landmark with
+an accessible name the consumer supplies.
 
-The search field SHALL display the supplied placeholder and the supplied query
-value, and SHALL report each change to the query through a callback. When the
-consumer supplies a clear handler and a non-empty query, a clear affordance
-SHALL be offered that reports activation through that callback.
+On a narrow viewport, the listing SHALL NOT display a listing search field and
+SHALL NOT open facets from a left Filter drawer. It SHALL display the result
+count and a row of pills: one for sort when sort options are supplied, and one
+for each supplied filter group that has options, in group order.
 
-The product filter SHALL display each supplied filter group in the order
-supplied, each with its label and its options in the order supplied. Each
-option SHALL be selectable together with other options in the same group and
-in other groups. An option SHALL be displayed as selected only when the
-supplied selection contains it. A group whose supplied selection contains no
-option SHALL display every option as unselected. That empty selection is valid
-and SHALL NOT hide or replace the supplied results — it is the unrestricted
-state of the group. Selecting a second option SHALL report it without
-clearing the first. A change SHALL name the group and the option.
+The search field (wide only) SHALL display the supplied placeholder and the
+supplied query value, and SHALL report each change to the query through a
+callback. When the consumer supplies a clear handler and a non-empty query, a
+clear affordance SHALL be offered that reports activation through that
+callback.
+
+On a wide viewport, the product filter SHALL display each supplied filter
+group that has options in the order supplied, each with its label and its
+options. Each option SHALL be selectable together with other options in the
+same group and in other groups. An option SHALL be displayed as selected only
+when the supplied selection contains it. A group whose supplied selection
+contains no option SHALL display every option as unselected. That empty
+selection is valid and SHALL NOT hide or replace the supplied results — it is
+the unrestricted state of the group. Selecting a second option SHALL report it
+without clearing the first. A change SHALL name the group and the option.
 
 An option MAY carry a consumer-supplied count, displayed as supplied. A group
 whose option list is empty SHALL not be displayed. When a group carries an
-expand label, an expand affordance SHALL be offered that reports activation
-through a callback naming the group.
+expand label on a wide viewport, an expand affordance SHALL be offered that
+reports activation through a callback naming the group. When a group carries a
+collapse label on a wide viewport, a collapse affordance SHALL be offered that
+reports activation through a callback naming the group.
 
-Utility links SHALL be displayed in the order supplied, each with the
-supplied label and destination. When no utility links are supplied, that
-region SHALL occupy no space.
+Utility links SHALL be displayed in the order supplied on a wide viewport,
+each with the supplied label and destination. When no utility links are
+supplied, that region SHALL occupy no space.
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-cfw rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-30 - Search is displayed and reported as supplied
 **Serves:** Filters and sort - search is displayed and reported as supplied
 
-- **GIVEN** a supplied search query of `pika`
+- **GIVEN** a wide viewport and a supplied search query of `pika`
 - **THEN** the search field displays `pika`
 - **WHEN** a shopper edits the field and the consumer supplies no new query
 - **THEN** the field still displays `pika`
 - **AND** the change was reported once through the callback
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-xmk rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-31 - Search clear is offered only when appropriate
 **Serves:** Filters and sort - search clear is offered only when appropriate
 
-- **GIVEN** a non-empty supplied search query and a supplied clear handler
+- **GIVEN** a wide viewport, a non-empty supplied search query, and a supplied clear handler
 - **THEN** a clear affordance is displayed
 - **WHEN** a shopper activates it
 - **THEN** the clear handler is reported once
 - **AND** the field still displays the supplied query until the consumer supplies a new one
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-7lp rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-32 - No clear affordance without a handler
 **Serves:** No defaulted content - no clear affordance without a handler
 
-- **GIVEN** a non-empty supplied search query and no clear handler
+- **GIVEN** a wide viewport, a non-empty supplied search query, and no clear handler
 - **THEN** no clear affordance is displayed
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-phu rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-33 - No filter selected is unrestricted
 **Serves:** Filters and sort - no filter selected is unrestricted
 
@@ -533,7 +540,6 @@ region SHALL occupy no space.
 - **THEN** every option is displayed as unselected
 - **AND** the supplied results are still displayed
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-nqo rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-34 - A sidebar filter is reported
 **Serves:** Filters and sort - a sidebar filter is reported
 
@@ -543,29 +549,32 @@ region SHALL occupy no space.
 - **AND** every other option in the group stays unselected
 - **AND** the change was reported once, naming the group and the option
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-9mo rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-35 - Two filter options selected
 **Serves:** Filters and sort - two filter options selected
 
 - **GIVEN** a filter group whose supplied selection contains two options
 - **THEN** both options are displayed as selected together
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-0y8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-36 - An empty filter group
 **Serves:** Filters and sort - an empty filter group
 
 - **GIVEN** a resolved filter list that includes a group with no options
 - **THEN** that group is not displayed
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-far rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-37 - A group expand is reported
 **Serves:** Filters and sort - a group expand is reported
 
-- **GIVEN** a filter group with a supplied expand label
+- **GIVEN** a filter group with a supplied expand label on a wide viewport
 - **WHEN** a shopper activates the expand affordance
-- **THEN** the expand handler is reported once, naming the group
+- **THEN** the expand callback is reported once, naming the group
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-tdz rev=1 -->
+#### Scenario: shared-ui-store-product-listing-SC-86 - A group collapse is reported
+**Serves:** Adaptive filter chrome - a group collapse is reported
+
+- **GIVEN** a filter group with a supplied collapse label on a wide viewport
+- **WHEN** a shopper activates the collapse affordance
+- **THEN** the collapse callback is reported once, naming the group
+
 #### Scenario: shared-ui-store-product-listing-SC-38 - No utility links
 **Serves:** No defaulted content - no utility links
 
@@ -574,34 +583,37 @@ region SHALL occupy no space.
 
 ### Requirement: The product list header displays the result count, applied filters, and the sort control
 
-The product list header SHALL display the total result count exactly as the
-consumer supplied it, as a formatted string, and SHALL NOT derive the count
-from the number of products on the current page. It SHALL NOT display a
-separate title.
+On a wide viewport, the product list header SHALL display the total result
+count exactly as the consumer supplied it, as a formatted string, and SHALL
+NOT derive the count from the number of products on the current page. It SHALL
+NOT display a separate title.
 
-It SHALL display a sort control listing exactly the sort options supplied, in
-the order supplied, with the active option marked as selected. The sort
-trigger SHALL display the consumer-supplied trigger label. Choosing an option
-SHALL report it through a callback and SHALL dismiss the list. Choosing an
+On a wide viewport it SHALL display a sort control listing exactly the sort
+options supplied, in the order supplied, with the active option marked as
+selected. The sort trigger SHALL display the consumer-supplied trigger label
+when supplied, otherwise the active option’s label. Choosing an option SHALL
+report it through a callback and SHALL dismiss the list. Choosing an
 already-active option SHALL report nothing. An empty list of sort options
 SHALL hide the sort control.
 
-It SHALL display each supplied applied filter as a chip that can be dismissed,
-reporting a change that names the group and the option as unselected. When
-the consumer supplies a clear handler and at least one applied filter, a
-clear affordance SHALL be offered that reports activation through that
-callback. When no applied filter is supplied, the applied-filter region SHALL
-occupy no space. Sort and applied filters SHALL be selectable at the same
-time.
+On a wide viewport it SHALL display each supplied applied filter as a chip that
+can be dismissed, reporting a change that names the group and the option as
+unselected. When the consumer supplies a clear handler and at least one
+applied filter, a clear affordance SHALL be offered that reports activation
+through that callback. When no applied filter is supplied, the applied-filter
+region SHALL occupy no space. Sort and applied filters SHALL be selectable at
+the same time.
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-le1 rev=1 -->
+On a narrow viewport the header region SHALL follow the narrow pill chrome in
+*Narrow viewports use sort and facet pills with bottom drawers* instead of
+chips and a dropdown sort trigger.
+
 #### Scenario: shared-ui-store-product-listing-SC-39 - The count is not derived
 **Serves:** Filters and sort - the count is not derived
 
 - **GIVEN** a supplied result count of `38` and a page carrying 8 products
 - **THEN** the header displays the supplied `38`
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-6e5 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-40 - Sorting is reported
 **Serves:** Filters and sort - sorting is reported
 
@@ -610,43 +622,38 @@ time.
 - **AND** the option list is dismissed
 - **AND** the previously active option stays marked as selected until the consumer supplies a new one
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-sfk rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-41 - No sort options supplied
 **Serves:** Filters and sort - no sort options supplied
 
 - **GIVEN** an empty list of sort options
 - **THEN** the sort control is not displayed and the result count is still displayed
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-5u5 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-42 - No applied filters
 **Serves:** Filters and sort - no applied filters
 
-- **GIVEN** no applied filters supplied
+- **GIVEN** a wide viewport and no applied filters supplied
 - **THEN** the applied-filter region is not displayed
 - **AND** the result count is still displayed
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-kir rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-43 - An applied filter is removed
 **Serves:** Filters and sort - an applied filter is removed
 
-- **GIVEN** a supplied applied filter
-- **WHEN** a shopper dismisses that chip and the consumer supplies no new list
-- **THEN** the chip is still displayed
-- **AND** the change was reported once, naming the group and the option as unselected
+- **GIVEN** a wide viewport and a supplied applied filter
+- **WHEN** a shopper dismisses that chip
+- **THEN** a change is reported naming the group and the option as unselected
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-4q8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-44 - Applied filters are cleared
 **Serves:** Filters and sort - applied filters are cleared
 
-- **GIVEN** at least one supplied applied filter and a supplied clear handler
+- **GIVEN** a wide viewport, at least one supplied applied filter, and a supplied clear handler
 - **WHEN** a shopper activates the clear affordance
 - **THEN** the clear handler is reported once
 - **AND** the chips are still displayed until the consumer supplies a new list
 
-<!-- trace:scenario id=g10.shared-store-product-listing.SC-5vd rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-45 - Sort and applied filters combine
 **Serves:** Filters and sort - sort and applied filters combine
 
+- **GIVEN** a wide viewport
 - **WHEN** a sort option is selected and at least one applied filter is supplied
 - **THEN** both remain displayed together
 
@@ -981,3 +988,206 @@ on hover, the well MAY clip the grown photo until the hover ends.
 - **THEN** the photo is centred and meets the two edges of the well along its longer side, all four where it is square
 - **AND** where it reaches into the well's rounded corners, it follows their curve
 - **AND** no other part of the photo is cropped by the well
+
+### Requirement: Narrow viewports use sort and facet pills with bottom drawers
+
+Below the wide breakpoint, `ProductBrowse` SHALL NOT stack a full-width
+inline filter column, SHALL NOT show a listing search field, and SHALL NOT
+open a left Filter drawer. It SHALL show the result count and a horizontal
+row of pills.
+
+When sort options are supplied, a sort pill SHALL show the active option’s
+short label when the consumer supplies one, otherwise the active option’s
+label. Activating the sort pill SHALL open a bottom drawer listing the sort
+options. Choosing an option other than the active one SHALL report it through
+the sort callback and SHALL close the drawer. Choosing the active option SHALL
+close the drawer and SHALL NOT report. Closing without a new choice SHALL
+leave the active sort unchanged.
+
+For each supplied filter group that has options, a facet pill SHALL show:
+
+- the group label when that group’s supplied selection is empty
+- that option’s label when exactly one option is selected
+- the group’s compact label and the selected count when two or more options
+  are selected (e.g. World (2))
+
+Activating a facet pill SHALL open a bottom drawer for that group only. Opening
+SHALL seed a draft from the supplied selection for that group and SHALL request
+group expand when the group carries an expand label. Toggling options SHALL
+change only the draft until Show Results. Show Results SHALL apply the draft
+for that group through the filter-change callback (selecting and unselecting
+as needed to match the draft), then close the drawer. Clear SHALL empty the
+draft for that group and SHALL NOT apply until Show Results. Escape or an
+outside press SHALL close without applying the draft.
+
+On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
+
+#### Scenario: shared-ui-store-product-listing-SC-80 - Narrow chrome shows count and pills
+**Serves:** Adaptive filter chrome - narrow chrome shows count and pills
+
+- **GIVEN** the surface at a narrow viewport with sort options and two filter groups with options
+- **THEN** the result count is displayed
+- **AND** a sort pill and a pill for each filter group are displayed
+- **AND** no listing search field is displayed
+- **AND** no left Filter control is displayed
+
+#### Scenario: shared-ui-store-product-listing-SC-81 - Sort applies on choose
+**Serves:** Adaptive filter chrome - sort applies on choose
+
+- **GIVEN** an open sort bottom drawer and an inactive sort option
+- **WHEN** a shopper activates that option
+- **THEN** that option is reported once through the sort callback
+- **AND** the drawer closes
+
+#### Scenario: shared-ui-store-product-listing-SC-82 - Facet pill labels follow selection
+**Serves:** Adaptive filter chrome - facet pill labels follow selection
+
+- **GIVEN** a narrow viewport and a Types group with no selection
+- **THEN** the Types pill shows the group label
+- **WHEN** the consumer supplies a selection of exactly `Booster Box`
+- **THEN** the Types pill shows `Booster Box`
+- **WHEN** the consumer supplies a selection of two options in Worlds
+- **THEN** the Worlds pill shows the compact label with count `2`
+
+#### Scenario: shared-ui-store-product-listing-SC-83 - Facet draft applies on Show Results
+**Serves:** Adaptive filter chrome - facet draft applies on Show Results
+
+- **GIVEN** an open Worlds bottom drawer seeded from an empty selection
+- **WHEN** a shopper selects two options in the draft, then activates Show Results
+- **THEN** both options are reported as selected through the filter-change callback
+- **AND** the drawer closes
+- **AND** options not in the draft that were previously selected are reported as unselected
+
+#### Scenario: shared-ui-store-product-listing-SC-84 - Facet Clear empties the draft only
+**Serves:** Adaptive filter chrome - facet Clear empties the draft only
+
+- **GIVEN** an open Types bottom drawer whose draft contains one option
+- **WHEN** a shopper activates Clear
+- **THEN** the draft shows no option selected
+- **AND** no filter-change is reported until Show Results
+
+#### Scenario: shared-ui-store-product-listing-SC-85 - Wide viewport stacks facet groups
+**Serves:** Adaptive filter chrome - wide viewport stacks facet groups
+
+- **GIVEN** the surface at a wide viewport with two filter groups with options
+- **THEN** both groups' labels and options are offered in a stack in the sidebar
+- **AND** the listing search field is displayed in the sidebar
+- **AND** no narrow pill row is offered
+
+### Requirement: A search suggestion carries display fields
+
+A `SearchSuggestion` SHALL carry the fields below. A `SearchSuggestionGroup`
+SHALL carry an id, a label, and an ordered list of suggestions. The surface
+SHALL render optional image and trailing content when supplied and SHALL NOT
+invent either.
+
+| Field | Required | Purpose |
+| --- | --- | --- |
+| `id` | yes | Stable identity for the row within its group |
+| `label` | yes | Primary text the shopper reads on the row |
+| `imageSrc` | no | Optional leading image URL for a product row |
+| `imageAlt` | no | Accessible name for that image when supplied |
+| `trailing` | no | Optional trailing chrome the consumer assembles |
+
+#### Scenario: shared-ui-store-product-listing-SC-73 - Optional image and trailing render as supplied
+**Serves:** Listing search suggestions - optional image and trailing render as supplied
+
+- **GIVEN** a suggestion supplied with an image URL and trailing content
+- **WHEN** that suggestion is displayed
+- **THEN** the row shows that image and that trailing content
+- **AND** no other image or trailing chrome is invented
+
+### Requirement: The listing search field offers supplied suggestions
+
+The search field on the filter panel SHALL display suggestion groups the
+consumer supplies while the shopper types, and SHALL report each draft change
+to the query through the existing change callback. It SHALL NOT put free text
+in force by itself: committing the field with no suggestion selected SHALL
+report a search commit through a named callback. Selecting a suggestion SHALL
+report that selection through a named callback identifying the suggestion.
+
+When the consumer omits suggestion groups, the suggestion panel SHALL stay
+closed and the field SHALL still accept draft edits and search commits. When
+the consumer supplies an empty suggestion list with a non-empty draft, the
+field SHALL show its empty-suggestions copy and SHALL still accept a search
+commit. When the consumer marks suggestions as pending, the field SHALL show
+its searching indication and SHALL NOT invent suggestion rows. Suggestion
+rows SHALL be operable by keyboard alone with a visible focus indicator.
+Closing the suggestion panel without selecting SHALL leave the draft query as
+supplied.
+
+The surface SHALL NOT fetch suggestions, decide which products or filters
+match, cap how many rows a group may hold, or navigate. Those stay with the
+consumer.
+
+`ProductFilterProps`, `FilterPanelProps`, and `ProductBrowseProps` SHALL admit
+the suggestion list, a pending indication, and the commit and selection
+callbacks. `ProductFilterCopy` SHALL admit empty-suggestions and searching
+copy.
+
+#### Scenario: shared-ui-store-product-listing-SC-67 - Suggestions are displayed as supplied
+**Serves:** Listing search suggestions - suggestions are displayed as supplied
+
+- **GIVEN** a draft query and supplied suggestion groups with product and
+  filter rows
+- **WHEN** the search field is focused with that draft
+- **THEN** those groups and rows are displayed under the field
+- **AND** no other suggestion is invented
+
+#### Scenario: shared-ui-store-product-listing-SC-68 - A draft change is reported
+**Serves:** Listing search suggestions - a draft change is reported
+
+- **GIVEN** a supplied search query of `pi`
+- **WHEN** a shopper edits the field and the consumer supplies no new query
+- **THEN** the field still displays `pi`
+- **AND** the change was reported once through the draft callback
+
+#### Scenario: shared-ui-store-product-listing-SC-69 - Committing reports a search commit
+**Serves:** Listing search suggestions - committing reports a search commit
+
+- **GIVEN** a non-empty draft query and no suggestion selected
+- **WHEN** a shopper commits the search field
+- **THEN** the search commit is reported once with that draft
+- **AND** the field still displays the supplied query until the consumer
+  supplies a new one
+
+#### Scenario: shared-ui-store-product-listing-SC-70 - Selecting a suggestion is reported
+**Serves:** Listing search suggestions - selecting a suggestion is reported
+
+- **GIVEN** a displayed suggestion row
+- **WHEN** a shopper activates that row
+- **THEN** the selection is reported once, identifying that suggestion
+- **AND** the surface does not navigate or change filters itself
+
+#### Scenario: shared-ui-store-product-listing-SC-71 - No suggestions still commits
+**Serves:** Listing search suggestions - no suggestions still commits
+
+- **GIVEN** a non-empty draft query and an empty suggestion list supplied
+- **WHEN** a shopper commits the search field
+- **THEN** the search commit is reported once with that draft
+- **AND** before commit the field showed its empty-suggestions copy
+
+#### Scenario: shared-ui-store-product-listing-SC-72 - Suggestions are keyboard operable
+**Serves:** Listing search suggestions - suggestions are keyboard operable
+
+- **WHEN** a shopper using a keyboard alone opens suggestions under the
+  search field
+- **THEN** each suggestion row can be reached and activated
+- **AND** the focused row is visibly indicated
+
+#### Scenario: shared-ui-store-product-listing-SC-74 - Pending suggestions show searching
+**Serves:** Listing search suggestions - pending suggestions show searching
+
+- **GIVEN** a non-empty draft query and suggestions marked pending
+- **WHEN** the search field is open
+- **THEN** the field shows its searching indication
+- **AND** no suggestion row is invented
+
+#### Scenario: shared-ui-store-product-listing-SC-94 - Omitted groups keep the panel closed
+**Serves:** Listing search suggestions - omitted groups keep the panel closed
+
+- **GIVEN** a draft query and no suggestion groups supplied
+- **WHEN** a shopper focuses the search field and commits it
+- **THEN** no suggestion panel opens
+- **AND** the search commit is reported once with that draft
+
