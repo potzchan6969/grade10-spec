@@ -214,3 +214,8 @@ and stories remain the visual record.
 - **Design record** —
   [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
 :::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Member pass on the workbench** - walk the pass alone at a phone width: the code counting down, Refresh swapping in a new square and short code, and the screen held awake; blocked on a person walking it - QA
+- [ ] **Tier card on the workbench** - walk each skin, silver and gold with the retention run, black with the crown, and none; the whole card opens Tier & Benefits, and the gold member's page shows no expiry line; blocked on a person walking it - QA
+:::

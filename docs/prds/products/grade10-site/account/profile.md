@@ -12,7 +12,7 @@ own account page and shown to nobody else. Grade10 and ZZZ show the same page.
 1. **Display name** - required, at most **80** characters, trimmed; two
    collectors may share one
 2. **Bio** - optional, at most **500** characters, trimmed
-3. **Avatar** - an image of the collector's own, cropped square at
+3. 🚧 **Avatar** - an image of the collector's own, cropped square at
    **512 px**; with none, the display name's first letter or digit stands in,
    in any script, upper-cased, as in the account menu: `Kit Lam` shows `K`,
    `陳大文` shows `陳`, `@kitlam` shows `K`, `🃏🃏` shows `?`
@@ -103,4 +103,9 @@ page is worth opening before they have saved anything.
 | Member since | Decided | The first save, never the date the store first wrote a record for the account, which can come from a webhook the collector never triggered. | Product |
 | Avatar address | Decided | Anyone holding the image's address opens it, with no sign-in, so the edge caches it; the edge copy is cleared when the avatar is replaced or removed. Chosen over showing it to the signed-in collector alone on every view, which no cache can absorb and a public profile would have to undo. | Product (@ecchochan) |
 | Mobile number | Decided | Not on this page: the change that verifies numbers brings it here, since the till's phone lookup waits on that verification. Rejected adding it here, which specifies number entry without verification. | Product (@tangconst) |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Avatar bucket** - create the avatars bucket for both brands' store workers in each Cloudflare account, and confirm it binds on staging before the workers deploy; blocked on the Cloudflare accounts - engineering
+- [ ] **Walk on staging** - one walk per journey through the account page, the till and the wallet pass; blocked on the avatar bucket and a staging deploy - QA
 :::

@@ -504,3 +504,10 @@ for the points spent. Retitling orders already paid.
 | Title | Decided | "Deduction from Points", the owner's choice, because "Points" reads as a count of points rather than money taken off. English, like "Coupon": a discount title is one value written into Shopify and is not translated. | Product |
 | Older title | Decided | "Points" counts as the same discount for as long as orders exist, because a paid order keeps the title it was paid with. | Product |
 :::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Release 1 tablet walk** - on the staging tablet, a spend, a strip and a paid sale settle as before, and a discount keyed as "Deduction from Points" keeps its whole title on the cart row, the order summary and the paid order; blocked on the staging tablet - @ecchochan
+- [ ] **Release 1 in production** - deploy the store, have every location's manager activate the till version, and record its client version for the release 2 gate; blocked on production deploys and every location's manager - @ecchochan
+- [ ] **Release 2 walk on staging** - a spend online and at the till passes the till's write confirmation under "Deduction from Points", and the cart row, the printed receipt and the paid order show it whole; record the walk and a new recording of the three sales in the verification doc; blocked on staging and a staging till version from the branch - @ecchochan
+- [ ] **Release 2 in production** - once every location runs release 1 and the audit rows show no older client for 7 days, merge, deploy the store and publish the till version, with release notes naming release 1 the oldest version that may be activated; blocked on the release gate - @ecchochan
+:::

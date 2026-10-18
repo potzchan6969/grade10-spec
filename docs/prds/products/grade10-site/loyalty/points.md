@@ -463,3 +463,7 @@ spend rather than lose a balance that was about to lapse.
 | Orders in flight at cutover | Decided | An order paid but not yet completed when the completion rule ships earns when it completes, guarded so no order earns twice — one that already earned at payment under the old rule earns nothing again. Decided 2026-10-13. | Product |
 | Completion, not the badge | Decided | An order earns the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds. Not the Completed badge: any refund turns the badge to Refunded, so a partly refunded order would never earn. Decided 2026-10-13. | Product |
 :::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Walk on staging** - a member's web order earns when it completes, not when it is paid; blocked on staging - QA
+:::

@@ -65,6 +65,10 @@ Apple code identifies and moves nothing.
 - **Language** — the membership page's own words, in every language the site
   speaks; the phone picks, and a phone set to none of them reads the brand's
   default, English for Grade10
+- 🎨 **Google pass artwork** — the class's logo, the issuer's name, the
+  programme's name and one background colour; none is drawn yet
+- 🎨 **Apple pass artwork** — the icon and logo at every scale, the
+  programme's name, and the background and label colours; none is drawn yet
 - **Apple note** — the pass says "Identifies you at the counter. Points are
   spent from this page.", so a pass that identifies and cannot spend never
   reads as broken
@@ -80,6 +84,10 @@ Apple code identifies and moves nothing.
   vendors' brand guidelines expect; a screen reader reads its whole label
 
 ::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--vendor-artwork" title="Each wallet's own save action"}
+
+- 🎨 **Apple's badge** — the save action draws a marked placeholder until
+  Apple's licensed "Add to Apple Wallet" badge replaces it, downloaded by a
+  person under the Wallet Marketing Agreement
 
 - **Each wallet apart** — a pass held in one wallet never hides the other's
   offer; adding, ending and a failure are shown per wallet, and a failure
@@ -318,4 +326,14 @@ for ZZZ.
 | Reason for an operator ending | Decided | None typed. The cause is always the lost phone, the act moves no value, and the member adds a new pass in a tap | Product |
 | Message to the member | Decided | None. The member asked for the ending, and their own page shows the wallet no longer held | Product |
 | Ending on one's own record | Decided | Allowed. Their own page ends it anyway, and an ending widens nothing | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Google enrolment** - create the issuer account in Demo Mode, complete the Business Profile and the payments profile, request publishing access until Google's review accepts the save action, and carry the class from draft to approved; blocked on the Google Pay & Wallet Console account - operations
+- [ ] **Google service account and secrets** - create the service account and its key, set the two Google secrets, then record the issuer, the class and the service account for staging and production; blocked on Google enrolment - engineering
+- [ ] **Apple enrolment** - enrol in the Developer Program in the organisation's name, name the owner by role, and register the staging and production pass type identifiers; blocked on the D-U-N-S number and the legal-entity check - operations
+- [ ] **Pass web service hostname** - fix it before the first pass exists; blocked on Apple enrolment - engineering
+- [ ] **Apple certificate, push key and secrets** - take the certificate and its key, create the push key scoped to the pass type identifier, set the Apple secrets, then record the identifiers; blocked on Apple enrolment - engineering
+- [ ] **Device test on an iPhone** - name the phone's holder by role, push to it three ways, record which produces a list request, and write the push credential and header it settles into Apple step 9 of Setting Up; blocked on the Apple certificate and push key - engineering
+- [ ] **Walk on staging** - on a real phone, save a pass on each wallet from its own save action, be identified at the counter, then end one from the member's record and see the counter no longer identify the member by it; blocked on both enrolments - QA
 :::

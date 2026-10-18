@@ -55,6 +55,8 @@ action, since a reward coupon carries none
   [Discounts](/p/grade10-site/store/discounts)
 - **The newest claim is the only live one** — choosing a coupon again takes
   it off every earlier sale first
+- 🚧 **Two sales at once** — two sales claiming one coupon at the same moment
+  leave one live claim, and neither is told the coupon is unavailable
 - **A sale that ends gives it back** — a counter sale nobody paid releases
   its coupon when a newer promise retires it, or an hour after its last plan,
   not the next day
@@ -237,4 +239,9 @@ are on [Discounts](/p/grade10-site/store/discounts).
 | What the member is shown | Decided | A coupon a sale claims reads as it would unclaimed: no claimed state, no sale named, and nothing said when a claim moves. A till spend they were told had landed is still corrected if its sale is abandoned unpaid. | Product |
 | An online order that expires | Decided | It keeps its claim until its code can no longer be collected, and the programme's clock then releases it. A counter sale gives its coupon back at its hour. | Engineering |
 | A code collected after it was let go | Decided | The paid sale spends the coupon where no other sale claims it, so a counter sale that pays with its old code costs the member the coupon once. Where another sale claims it, that sale spends it and the paid one is reported. | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Walk on staging** - leave an online checkout and a counter sale each holding a coupon, spend both coupons elsewhere, pay a counter sale past its hour with its old code, and be refused by name where an earlier checkout will not close; blocked on staging - QA
+- [ ] **Read the coupon list on the published page** - confirm the coupon list this page shows draws no code and no copy action; blocked on a person reading the published manual - design
 :::
