@@ -549,16 +549,16 @@
 
 - The catalogue publishes no listing for `<unknown_listing_url>`.
 
-**Steps 8–10 setup:**
+**Steps 8–9 setup:**
 
 - A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
-- The listing is closed or settled, and removed from browse and search without explicit deletion.
+- The listing is closed or settled, without explicit deletion.
 - The listing was not called off.
 
-**Steps 11–12 setup:**
+**Steps 10–11 setup:**
 
 - A preview for `<listing_url>` was cached while the listing was publicly available.
-- The listing is subsequently removed from browse and search, without explicit deletion.
+- The listing subsequently closes, without explicit deletion.
 - An authorized admin or the winner knows `<listing_code>`.
 
 **Shared test data:**
@@ -569,19 +569,19 @@
 | --- | --- |
 | unknown_listing_url | An auction listing URL with no published listing or eligible holder; bind the URL only |
 
-**Steps 8–10 data:**
+**Steps 8–9 data:**
 
 | Field | Value |
 | --- | --- |
 | listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+| listing_url | The canonical URL of the listing in this case, retained after the close; bind the URL only |
 
-**Steps 11–12 data:**
+**Steps 10–11 data:**
 
 | Field | Value |
 | --- | --- |
 | listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+| listing_url | The canonical URL of the listing in this case, retained after the close; bind the URL only |
 
 ### Route
 
@@ -600,19 +600,16 @@
    - Response status is 404. `g10.auction-listing-page.US10-TC10`
    - No listing code appears anywhere in the response. `g10.auction-listing-page.US10-TC10`
    - No listing content or separate payment reference appears. `g10.auction-listing-page.US10-TC10`
-8. Browse the auction catalogue and search for the listing.
-9. Open `<listing_url>` directly.
-10. Inspect the rendered page, response source and fresh share-preview metadata.
-   - Browse and search do not return the listing. `g10.auction-listing-page.US10-TC11`
+8. Open `<listing_url>` directly.
+9. Inspect the rendered page, response source and fresh share-preview metadata.
    - `<listing_url>` still returns its public listing page. `g10.auction-listing-page.US10-TC11`
    - The page and fresh preview identify the listing by its public title and canonical URL. `g10.auction-listing-page.US10-TC11`
    - Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata. `g10.auction-listing-page.US10-TC11`
-   - Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`. `g10.auction-listing-page.US10-TC11`
-11. Request the existing cached preview for `<listing_url>`.
-12. Inspect its title, description, URL, image and embedded metadata.
+   - Closing does not release or replace `<listing_url>` or `<listing_code>`. `g10.auction-listing-page.US10-TC11`
+10. Request the existing cached preview for `<listing_url>`.
+11. Inspect its title, description, URL, image and embedded metadata.
    - The cached preview may continue to show previously cached public listing metadata and `<listing_url>`. `g10.auction-listing-page.US10-TC12`
    - It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data. `g10.auction-listing-page.US10-TC12`
-   - A persistent preview does not make the listing discoverable through browse or search. `g10.auction-listing-page.US10-TC12`
 
 ## Walk 10: Collector contacts support about a listing
 
@@ -2616,7 +2613,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 * No listing code appears anywhere in the response.
 * No listing content or separate payment reference appears.
 
-<!-- trace:case id=g10.auction-listing-page.TC-90g rev=3 -->
+<!-- trace:case id=g10.auction-listing-page.TC-90g rev=4 -->
 ### g10.auction-listing-page.US10-TC11: Closed and settled listings retain their public addresses
 
 **Classification:**
@@ -2635,7 +2632,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **Pre-conditions:**
 
 * A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
-* The listing is closed or settled, and removed from browse and search without explicit deletion.
+* The listing is closed or settled, without explicit deletion.
 * The listing was not called off.
 
 **Test data:**
@@ -2643,24 +2640,22 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 | Field | Value |
 | --- | --- |
 | listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+| listing_url | The canonical URL of the listing in this case, retained after the close; bind the URL only |
 
 **Steps:**
 
-1. Browse the auction catalogue and search for the listing.
-2. Open `<listing_url>` directly.
-3. Inspect the rendered page, response source and fresh share-preview metadata.
+1. Open `<listing_url>` directly.
+2. Inspect the rendered page, response source and fresh share-preview metadata.
 
 **Expected Results:**
 
-* Browse and search do not return the listing.
 * `<listing_url>` still returns its public listing page.
 * The page and fresh preview identify the listing by its public title and canonical URL.
 * Outside the lower-case suffix of `<listing_url>`, `<listing_code>` is absent from the page, embedded data, network responses and fresh preview metadata.
-* Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
+* Closing does not release or replace `<listing_url>` or `<listing_code>`.
 
-<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=2 -->
-### g10.auction-listing-page.US10-TC12: A cached preview may persist after browse/search removal without private data
+<!-- trace:case id=g10.auction-listing-page.TC-k71 rev=3 -->
+### g10.auction-listing-page.US10-TC12: A cached preview may persist after the close without private data
 
 **Classification:**
 
@@ -2678,7 +2673,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 **Pre-conditions:**
 
 * A preview for `<listing_url>` was cached while the listing was publicly available.
-* The listing is subsequently removed from browse and search, without explicit deletion.
+* The listing subsequently closes, without explicit deletion.
 * An authorized admin or the winner knows `<listing_code>`.
 
 **Test data:**
@@ -2686,7 +2681,7 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 | Field | Value |
 | --- | --- |
 | listing_code | The stable listing code of the listing in this case, known from the surface stated in Pre-conditions; bind the code only |
-| listing_url | The canonical URL of the listing in this case, retained after browse/search removal; bind the URL only |
+| listing_url | The canonical URL of the listing in this case, retained after the close; bind the URL only |
 
 **Steps:**
 
@@ -2697,7 +2692,6 @@ purge or regeneration. A fresh preview fetch must satisfy the absence above.
 
 * The cached preview may continue to show previously cached public listing metadata and `<listing_url>`.
 * It contains no separate listing code or payment reference, internal/provider reference, winner data or admin-only data.
-* A persistent preview does not make the listing discoverable through browse or search.
 
 ---
 

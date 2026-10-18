@@ -87,6 +87,9 @@ the card is in the winner's hands. The collector's half is
   published. The new draft still receives its own listing code. No redirect
   table. Both listings' activity logs record the transfer. The Unsold source
   shows Relisted beside Unsold once Relist Save linked a successor
+- **A relist's first photo saves it** — Relist stores nothing until Save,
+  except that the first media upload makes that Save first, so the photo has
+  a listing to belong to; a later Save keeps the same draft
 - 🚧 **Listing code** — a stable opaque 5-character code, always leading with
   2 letters, allocated on the first saved draft and shown read-only in the
   Listings table and on its admin screen under the existing listing-read
@@ -630,6 +633,7 @@ settings.
 | Schedule order | Decided | Publish at, then the start, then the close; a Publish at at the start is allowed. Each typed time must be after now, and a stored time that has passed is kept, so a live listing still saves. Publish now ignores the order and removes the Publish at after asking. Chosen over warnings only, which let a listing publish already closed. | Product |
 | A consigned lot | Decided | Consignment makes it as a draft with no stock hold and owns its start price, which is the consignment's floor, and its relist. | Product |
 | Unsold stock | Decided | Released automatically at the Unsold close, and once for every hold an earlier Unsold close left behind; not an operator step. Relist opens a new draft and never reopens the closed listing. | Product |
+| A relist's first upload | Decided | The first media upload in a Relist editor makes the Relist Save, holding stock and moving the slug, and later Saves keep that draft. Holding uploads until Save was ruled out: the editor would have to stage media with no listing behind it. | Product |
 | Relist public address | Decided | Relist Save moves the Unsold source's slug onto the new draft and frees it on the source, in one transaction; the new draft keeps its own listing code. Chosen over a redirect from the old address, so one canonical URL stays with the lot that is live. Activity on both listings records the transfer. | Product (@jeff) |
 | Listing gallery sources | Decided | One combined gallery may hold selected product assets and direct uploads; the operator freely orders both. | Product |
 | Listing media snapshot | Decided | Selected product assets are copied into the listing at Save; later product-gallery changes do not alter the lot. | Product |

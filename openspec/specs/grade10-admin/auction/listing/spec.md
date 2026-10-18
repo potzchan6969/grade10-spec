@@ -2005,8 +2005,10 @@ condition holds, and SHALL NOT show it otherwise; no other row SHALL offer it:
    starting price, currency, gallery and slug.
 2. The editor SHALL start with no listing code or window; every other field
    SHALL start as on any new draft.
-3. Nothing SHALL be stored and no stock SHALL be held until the operator saves.
-   Relist activated again SHALL open another unsaved editor.
+3. Nothing SHALL be stored and no stock SHALL be held until the operator saves,
+   except that the first media upload SHALL make that Save before the upload,
+   so the media has a listing to belong to; a later Save SHALL update that
+   same draft. Relist activated again SHALL open another unsaved editor.
 4. Save SHALL be an ordinary draft save that records which listing it was
    relisted from. In the same transaction Save SHALL free the Unsold source's
    former slug and store the form's slug on the new draft. When the form slug

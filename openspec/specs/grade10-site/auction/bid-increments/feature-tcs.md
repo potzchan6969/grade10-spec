@@ -126,9 +126,9 @@
 14. Read the highest bid.
    - Step 14: the highest bid is `<higher bid>`. `g10.auction-bid-increments.US1-TC6`
 15. Enter `<bid amount>` in the custom maximum field.
-16. Confirm the bid.
-   - Step 16: the bid is refused and names `<opening price>` as the minimum. `g10.auction-bid-increments.US1-TC7`
-17. Read the bid panel.
+16. Read the bid panel.
+   - Step 16: the custom field says Min: `<opening price>`, and the bid action stays disabled. `g10.auction-bid-increments.US1-TC7`
+17. Reload the listing page and read the bid panel.
    - The listing remains without an accepted bid, and the minimum remains `<opening price>`. `g10.auction-bid-increments.US1-TC7`
 18. As customer A, submit a bid of `<ceiling>` on `<listing_1>`.
 19. Read the API response.
@@ -535,7 +535,7 @@ Runs once per row of **Test data**.
 * Step 3: the higher bid is accepted.
 * Step 4: the highest bid is `<higher bid>`.
 
-<!-- trace:case id=g10.auction-bid-increments.TC-9do rev=3 covers=g10.auction-bid-increments.SC-b2w -->
+<!-- trace:case id=g10.auction-bid-increments.TC-9do rev=4 covers=g10.auction-bid-increments.SC-b2w -->
 ### g10.auction-bid-increments.US1-TC7: First bid below opening price is refused
 
 Runs once per row of **Test data**.
@@ -568,12 +568,12 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Enter `<bid amount>` in the custom maximum field.
-2. Confirm the bid.
-3. Read the bid panel.
+2. Read the bid panel.
+3. Reload the listing page and read the bid panel.
 
 **Expected Results:**
 
-* Step 2: the bid is refused and names `<opening price>` as the minimum.
+* Step 2: the custom field says Min: `<opening price>`, and the bid action stays disabled.
 * The listing remains without an accepted bid, and the minimum remains `<opening price>`.
 
 <!-- trace:case id=g10.auction-bid-increments.TC-4ox rev=3 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-pd0 -->

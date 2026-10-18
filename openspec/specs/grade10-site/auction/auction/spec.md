@@ -1042,12 +1042,17 @@ above-ceiling response SHALL show no maximum-bid message or generic refusal
 message, SHALL NOT reset the custom field from the response, and SHALL NOT
 automatically retry.
 
+A maximum below the minimum next bid the page shows SHALL NOT be sent: the
+custom field says Min: {amount} with that minimum, and the bid action stays
+disabled. `AMOUNT_TOO_LOW` answers a minimum that moved after the page showed
+it.
+
 | Refused when | Code | The bid form says |
 | --- | --- | --- |
 | The amount is not a whole count of minor units above zero, checked by the bid form before it sends | None: the request is never sent | Enter a valid amount. |
 | At or above the identity bar without a verified identity, at the storefront | `IDENTITY_REQUIRED` | Bids this high need a verified identity. Verify from your account, then bid again. with a Verify link |
 | A request the account does not meet, at the storefront | `IDENTITY_REQUIRED` | We asked you to verify before you bid again. with a Verify link |
-| Below the minimum next bid | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
+| Below the minimum next bid, after it moved past the one the page showed | `AMOUNT_TOO_LOW` | Minimum bid is {amount}. with the minimum next bid |
 | Above the currency's ceiling | `AMOUNT_TOO_HIGH` | No message |
 | Not above the bidder's own maximum on the listing | `MAXIMUM_NOT_RAISED` | Your new maximum must be higher than your current one. |
 | No linked card, or the bidder was never registered with one | `PAYMENT_METHOD_REQUIRED`, `NOT_REGISTERED` | Link a card to bid. |
@@ -1069,13 +1074,14 @@ log entry at the auction service, naming the bidder, the listing, the code, the
 maximum sent and, where the refusal names one, the floor or the ceiling: the
 minimum next bid or the currency's highest maximum. The entry is for operators and SHALL NOT reach the bidder's record.
 
-<!-- trace:scenario id=g10.auction-auction.SC-rl3 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-rl3 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-89 - A refused first bid leaves no trace
 **Serves:** grade10-site-auction-auction-US-14 - a collector's first bid on a lot is refused because the price moved
 
 - **GIVEN** an open `HKD` listing at a current bid of 120000 HKD minor units,
   whose minimum next bid is 124000 HKD minor units, and a collector with a
-  linked card and no bid on it
+  linked card and no bid on it, whose page still shows a minimum next bid of
+  122000 HKD minor units
 - **WHEN** they submit a maximum of 122000 HKD minor units
 - **THEN** the bid form says Minimum bid is {amount}. with 124000 HKD minor
   units
@@ -1083,12 +1089,13 @@ minimum next bid or the currency's highest maximum. The entry is for operators a
   history
 - **AND** the current bid, the leader and the bid count are unchanged
 
-<!-- trace:scenario id=g10.auction-auction.SC-lu0 rev=1 -->
+<!-- trace:scenario id=g10.auction-auction.SC-lu0 rev=2 -->
 #### Scenario: grade10-site-auction-auction-SC-90 - An Outbid bidder's refused raise leaves their row where it was
 **Serves:** grade10-site-auction-auction-US-14 - an Outbid bidder's raise is refused because the price moved
 
 - **GIVEN** bidder B, Outbid with a maximum of 110000 HKD minor units on an
-  open `HKD` listing whose minimum next bid is 124000 HKD minor units
+  open `HKD` listing whose minimum next bid is 124000 HKD minor units, B's
+  page still showing a minimum next bid of 122000 HKD minor units
 - **WHEN** B submits a maximum of 122000 HKD minor units
 - **THEN** the bid form says Minimum bid is {amount}. with 124000 HKD minor
   units

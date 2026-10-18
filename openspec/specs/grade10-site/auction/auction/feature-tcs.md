@@ -1280,7 +1280,7 @@
 
 | Refused when | `<account_state>` | `<listing_state>` | `<amount_entered>` | `<refusal_message>` | Fixture notes |
 | --- | --- | --- | --- | --- | --- |
-| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | HKD5,280 | Minimum bid is, naming `<next minimum>` | `<amount_entered>`: (fixed derived value), one major unit below `<next minimum>` |
+| Below the next minimum | In good standing | Open, minimum next bid moved to `<next minimum>` after the page showed HKD5,280, the page's live updates held back | HKD5,280 | Minimum bid is, naming `<next minimum>` | `<amount_entered>`: (fixed derived value), one major unit below `<next minimum>` |
 | Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. | · |
 | Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. | · |
 | After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. | · |
@@ -4674,7 +4674,7 @@ Runs once per row of **Test data**.
 **I want** above-ceiling attempts to show no maximum-bid message and other refusals to say why on the bid form, with no trace of a refused bid anywhere else,
 **so that** an oversized entry does not interrupt my review and I never read a bid I did not place as one I did.
 
-<!-- trace:case id=g10.auction-auction.TC-r0p rev=2 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-auction.SC-cfg -->
+<!-- trace:case id=g10.auction-auction.TC-r0p rev=3 covers=g10.auction-auction.SC-rl3,g10.auction-auction.SC-lu0,g10.auction-auction.SC-fnt,g10.auction-auction.SC-nh5,g10.auction-auction.SC-ulv,g10.auction-auction.SC-cfg -->
 ### g10.auction-auction.US14-TC1: A refused bid says why on the bid form and places nothing
 
 Runs once per row of **Test data**.
@@ -4702,7 +4702,7 @@ Runs once per row of **Test data**.
 
 | Refused when | `<account_state>` | `<listing_state>` | `<amount_entered>` | `<refusal_message>` | Fixture notes |
 | --- | --- | --- | --- | --- | --- |
-| Below the next minimum | In good standing | Open, minimum next bid `<next minimum>` | HKD5,280 | Minimum bid is, naming `<next minimum>` | `<amount_entered>`: (fixed derived value), one major unit below `<next minimum>` |
+| Below the next minimum | In good standing | Open, minimum next bid moved to `<next minimum>` after the page showed HKD5,280, the page's live updates held back | HKD5,280 | Minimum bid is, naming `<next minimum>` | `<amount_entered>`: (fixed derived value), one major unit below `<next minimum>` |
 | Bidding suspended on the account | Bidding suspended | Open | `<next minimum>` | Bidding is suspended on this account. Contact Us to resolve it. | · |
 | Account banned from bidding | Banned from bidding | Open | `<next minimum>` | This account cannot bid. | · |
 | After the close | In good standing | Past its effective close, its close not yet recorded, the page's live updates held back | `<next minimum>` | Your bid did not go through. | · |
