@@ -19,9 +19,8 @@ const REVEALED = "translate-y-0 opacity-100 filter-none";
  * One media card: the whole card is the external link. The frame's Card
  * instance is restyled past the published set — `radius-3xl`, `gap-6`
  * padding, `size-56` minimum height, and `border-strong` with a soft
- * shadow and subtle lift on hover — so the overrides live here until
- * design settles
- * the contract. Every card holds one height: the publication truncates
+ * shadow and lift on hover — quick in, springy on the return — so the
+ * overrides live here until design settles the contract. Every card holds one height: the publication truncates
  * to one line and the title clamps — three lines on small viewports,
  * four at `sm` — so a longer CMS entry ends in an ellipsis rather than
  * a taller card. Small viewports slim the card: `p-5`, `min-h-48`, and
@@ -36,7 +35,7 @@ function MediaCard({ item }: { item: MediaItem }) {
       target="_blank"
     >
       <Card
-        className="h-full min-h-48 rounded-3xl transition-[border-color,box-shadow,transform] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong hover:shadow-[0_8px_16px_var(--shadow-color)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-56"
+        className="h-full min-h-48 rounded-3xl motion-safe:[transition:transform_350ms_cubic-bezier(0.34,3.85,0.64,1),border-color_250ms_cubic-bezier(0.22,1,0.36,1),box-shadow_250ms_cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong hover:shadow-[0_8px_16px_var(--shadow-color)] motion-safe:hover:[transition:transform_200ms_cubic-bezier(0.22,1,0.36,1),border-color_250ms_cubic-bezier(0.22,1,0.36,1),box-shadow_250ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:hover:translate-y-0 sm:min-h-56"
         padding={false}
       >
         <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
