@@ -15,6 +15,7 @@
       "!tools/manual/public/fixture-snapshot.json",
       "!tools/manual/public/fixture-changes.json",
       "!scripts/diagrams/vendor/archify",
+      "!packages/ui/src/blocks/loyalty-membership/wallet-artwork",
       "!.claude/skills/*/workflow.js",
       "!openspec/changes/**/*.html",
       "!openspec/changes/**/implementation.json",

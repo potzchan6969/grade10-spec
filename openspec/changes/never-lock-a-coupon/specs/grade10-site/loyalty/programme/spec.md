@@ -442,10 +442,10 @@ reloads between attempts.
 ### Requirement: The membership surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the membership surface — `MembershipSummary`, `RewardMenu`,
+components for the membership surface — `TierCard`, `RewardMenu`,
 `CouponList`, and `ActivityList` — and the props and copy type of each.
 
-`MembershipSummary` SHALL render the two counts as two counts, never one
+`TierCard` SHALL render the two counts as two counts, never one
 total, alongside the tier held, the date its validity ends, and progress
 toward retention. Where it is given an expiry line it SHALL render one line
 naming how many points expire and the day they go, in the tone supplied with
