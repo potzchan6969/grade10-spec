@@ -61,5 +61,5 @@ were, at the scroll position they left.
 :::callout{kind="note"}
 The header and footer have frames; the not-found surface, the marketing page
 and the profile do not. What those three look like is settled in code and in
-Storybook rather than in Figma.
+Storybook rather than in a design file.
 :::

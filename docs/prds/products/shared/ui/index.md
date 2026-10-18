@@ -26,7 +26,7 @@ running backend to see, the block is doing too much.
 
 Both brands' storefront applications, and the page workbench that assembles
 whole pages from them. A shopper sees its output on every screen; an engineer
-building a page is the direct consumer; a designer owns the Figma frames each
+building a page is the direct consumer; a designer owns the design frames each
 block was converted from, and an automated audit holds the two together.
 
 ## Capabilities

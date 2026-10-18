@@ -89,5 +89,5 @@ lot is its own capability.
 | Auction money | Decided | Every lot is bid in USD. The winner chooses USD or HKD settlement at order setup; HKD uses the fixed 7.85 rate, named only in the note under the HKD Order Summary's total. | Product |
 | Operator grants | Decided | Payment processing and shipment processing are different grants and different roles (`finance` vs `staff`); `admin` holds both. Publishing a lot is neither. | Product |
 | Chapters, not capability pages | Decided | The manual cuts the auction into four chapters a reader meets in order; each capability is a section of one chapter, names its spec there, and is what a proposal links. | Product |
-| Design frames | ❓ Open | No Figma frame exists for any auction surface; the shipped Storybook stories are the reference until Design names the screens drawn first. | Design |
+| Design frames | ❓ Open | No design frame exists for any auction surface; the shipped Storybook stories are the reference until Design names the screens drawn first. | Design |
 :::

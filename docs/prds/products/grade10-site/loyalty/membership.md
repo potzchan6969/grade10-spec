@@ -164,8 +164,8 @@ The same pass can be added to a phone wallet —
   refund, and the ledger record survives for audit
 
 :::callout{kind="note"}
-The tier card's Figma frame lives in Grade10-DS-2026 (node 7141:2000). The
-other membership surfaces have no Figma frame, so their `@grade10/ui` blocks
+The tier card has a design frame. The
+other membership surfaces have no design frame, so their `@grade10/ui` blocks
 and stories remain the visual record.
 :::
 

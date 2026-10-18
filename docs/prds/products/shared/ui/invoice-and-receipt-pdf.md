@@ -27,7 +27,7 @@ document rules into either application.
   document is written in
 - **The block** lays out the supplied content and returns PDF bytes; it does not
   fetch, store, navigate, calculate totals, or import application copy
-- 🚧 **UI design** - no Figma frame draws these PDFs. The item table is built
+- 🚧 **UI design** - no design draws these PDFs yet. The item table is built
   from the requirements and previewed in Storybook
 
 ## On the Page
