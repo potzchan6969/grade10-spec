@@ -24,7 +24,7 @@ once so nine consoles stop rebuilding the same shapes and drifting apart.
 confirmations behind changing an account.
 
 What an operator is *allowed* to do is not here: that is
-[sign-in and accounts](/p/shared/auth). This product governs what the components
+[sign-in and accounts](/p/grade10-site/account/accounts). This product governs what the components
 render and what they expose.
 
 :::callout{kind="warning"}

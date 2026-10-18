@@ -1,5 +1,5 @@
 # Features with no screen in the workbench, and why. Every other feature with a
-# page under docs/prds/products/grade10-site/ or shared/auth/ holds Screens, or
+# page under docs/prds/products/grade10-site/ or grade10-site/account/ holds Screens, or
 # Prototypes until its design is agreed. `pnpm storybook:coverage` reads this.
 
 # No screen of its own: events, counters, backend and policy, or a piece whose
@@ -34,11 +34,11 @@ no-screen:
   store/shipping: Shopify takes the address; tracking is on Your Orders
   vault/case-lifecycle: the status machine; drawn on the case page
   vault/compliance-and-readiness: policy
-  auth/audit: the trail; read in the console
-  auth/roles: the role vocabulary
-  auth/session: how a session is kept
-  auth/sign-out: a control in the account menu and on Profile
-  auth/test-sign-in: a door for the staging job
+  account/audit: the trail; read in the console
+  account/roles: the role vocabulary
+  account/session: how a session is kept
+  account/sign-out: a control in the account menu and on Profile
+  account/test-sign-in: a door for the staging job
 
 # Seen only behind the counter. The workbench draws collector screens.
 operator:
@@ -46,5 +46,5 @@ operator:
   doc-sign/service: the documents service and its operator tools
   loyalty/operator-console: the loyalty console
   vault/operator-console: the vault console
-  auth/sessions: the console's session list
-  auth/users: the console's user directory
+  account/sessions: the console's session list
+  account/users: the console's user directory

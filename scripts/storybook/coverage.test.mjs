@@ -38,7 +38,7 @@ const STORE = {
   "docs/prds/products/grade10-site/store/cart.md": "# Cart\n",
   "docs/prds/products/grade10-site/store/shipping.md": "# Shipping\n",
   "docs/prds/products/grade10-site/store/home.md": "# Home\n",
-  "docs/prds/products/shared/auth/sign-in.md": "# Sign-In\n",
+  "docs/prds/products/grade10-site/account/sign-in.md": "# Sign-In\n",
   "openspec/specs/grade10-site/store/cart-drawer/user-journeys.md": `## User journeys\n\n${journey("grade10-site-store-cart-drawer-US-01", "collector")}${journey("grade10-site-store-cart-drawer-US-02", "member of shop staff")}${journey("grade10-site-store-cart-drawer-US-03", "winner or operator")}`,
   "openspec/specs/grade10-site/store/policy/user-journeys.md":
     "## User journeys\n\n**Walked by:** nobody on their own - a policy.\n",

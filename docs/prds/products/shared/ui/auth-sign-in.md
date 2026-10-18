@@ -31,7 +31,7 @@ application supplies as the last node.
 ## Boundaries
 
 The dialog is the surface; what a successful sign-in creates is
-[the sign-in capability](/p/shared/auth/sign-in). Every word arrives through
+[the sign-in capability](/p/grade10-site/account/sign-in). Every word arrives through
 the copy props, and the email step is its own export for a surface that
 composes it differently.
 

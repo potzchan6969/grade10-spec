@@ -5,7 +5,7 @@ order: 1
 
 What a collector needs before bidding: an account, a verified identity above
 the bar, and a delivery address to confirm onto a won lot. Sign-in and the
-identity check are the same across Grade10 — [Sign-In](/p/shared/auth/sign-in)
+identity check are the same across Grade10 — [Sign-In](/p/grade10-site/account/sign-in)
 and [KYC](/p/grade10-site/account/kyc) hold their rules — so this chapter
 states what the auction meets.
 
@@ -19,7 +19,7 @@ enables it.
 | Ways in | An emailed sign-in link, or a verified Google address where the brand enables Google |
 | Registration | The first successful sign-in for an address creates the account; letter case never makes a second one |
 | Resend | Off for **60 seconds** after each send; a new link replaces the one before it |
-| Session | 🚧 The site's own, and no other brand's — [Session](/p/shared/auth/session#two-sessions) |
+| Session | 🚧 The site's own, and no other brand's — [Session](/p/grade10-site/account/session#two-sessions) |
 
 :::flow{title="Signing in"}
 ## *Collector* — **Asks for a link**
@@ -30,7 +30,7 @@ The newest email in the inbox is always the one that works.
 ## *Collector* — **Follows it**
 A working unused link signs them in. A used, replaced or expired link creates
 no session, and a toast says which — [Sign-In · One-Time
-Use](/p/shared/auth/sign-in#one-time-use).
+Use](/p/grade10-site/account/sign-in#one-time-use).
 :::
 
 - **Where the auction asks** — the bid panel, a watch and My Auctions each
@@ -89,7 +89,7 @@ book's own management is the one part nobody has specified.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Email paths | Decided | The sign-in link alone; the code is withdrawn — [Sign-In](/p/shared/auth/sign-in). | Product |
+| Email paths | Decided | The sign-in link alone; the code is withdrawn — [Sign-In](/p/grade10-site/account/sign-in). | Product |
 | Verified bidder | Decided | A bid of USD 15,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
 | Held on request | Decided | An account Grade10 asked to verify has every new or raised maximum held until it passes; a standing maximum keeps bidding, decided 2026-10-13. | Owner |
 | Saved address cap | Decided | Five named addresses per account; at the cap a one-time address still settles an order, and saving waits until one is removed. | Product (@tangconst) |

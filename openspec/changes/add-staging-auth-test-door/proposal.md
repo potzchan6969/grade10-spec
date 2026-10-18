@@ -86,14 +86,14 @@ No platform impact: no path crosses a product.
 ## Open questions
 
 - **The tester domain, and its catch-all** — Ops. Until they land, the door
-  has no subjects. ❓ on [Sign-In Tests · Testers](../../../docs/prds/products/shared/auth/test-sign-in.md#testers).
+  has no subjects. ❓ on [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/test-sign-in.md#testers).
 - **Sweeping tester accounts** — Ops. A run leaves one account per test
-  behind. ❓ on [Sign-In Tests · Testers](../../../docs/prds/products/shared/auth/test-sign-in.md#testers).
+  behind. ❓ on [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/test-sign-in.md#testers).
 
 ## References
 
-- [Sign-In Tests · Who May Call](../../../docs/prds/products/shared/auth/test-sign-in.md#who-may-call)
-- [Sign-In Tests · Testers](../../../docs/prds/products/shared/auth/test-sign-in.md#testers)
-- [Sign-In Tests · What the Job May Do](../../../docs/prds/products/shared/auth/test-sign-in.md#what-the-job-may-do)
-- [Sign-In Tests · Closed](../../../docs/prds/products/shared/auth/test-sign-in.md#closed)
-- [Accounts · Tests](../../../docs/prds/products/shared/auth/index.md#tests)
+- [Sign-In Tests · Who May Call](../../../docs/prds/products/grade10-site/account/test-sign-in.md#who-may-call)
+- [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/test-sign-in.md#testers)
+- [Sign-In Tests · What the Job May Do](../../../docs/prds/products/grade10-site/account/test-sign-in.md#what-the-job-may-do)
+- [Sign-In Tests · Closed](../../../docs/prds/products/grade10-site/account/test-sign-in.md#closed)
+- [Accounts · Tests](../../../docs/prds/products/grade10-site/account/accounts.md#tests)

@@ -45,10 +45,10 @@ None. A second customer site on a brand would sign in on its own under this chan
 
 ## References
 
-- [Session · Two Sessions](../../../docs/prds/products/shared/auth/session.md#two-sessions)
-- [Sign-In](../../../docs/prds/products/shared/auth/sign-in.md)
-- [Sign-Out](../../../docs/prds/products/shared/auth/sign-out.md)
-- [Sessions · Revoke](../../../docs/prds/products/shared/auth/sessions.md#revoke)
+- [Session · Two Sessions](../../../docs/prds/products/grade10-site/account/session.md#two-sessions)
+- [Sign-In](../../../docs/prds/products/grade10-site/account/sign-in.md)
+- [Sign-Out](../../../docs/prds/products/grade10-site/account/sign-out.md)
+- [Sessions · Revoke](../../../docs/prds/products/grade10-site/account/sessions.md#revoke)
 - [User Directory · Account Panel](../../../docs/prds/products/shared/console/user-directory.md#account-panel)
-- [Accounts · Collector Half](../../../docs/prds/products/shared/auth/index.md#collector-half)
+- [Accounts · Collector Half](../../../docs/prds/products/grade10-site/account/accounts.md#collector-half)
 - [Account · Registration and Login](../../../docs/prds/products/grade10-site/auction/account.md#registration-and-login)

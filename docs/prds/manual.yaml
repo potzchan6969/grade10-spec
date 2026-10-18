@@ -18,7 +18,6 @@ groups:
   ZZZ:
     - zzz-site/site
   Shared:
-    - shared/auth
     - shared/appointment
   Admin:
     - grade10-admin/audit

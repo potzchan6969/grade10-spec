@@ -30,7 +30,7 @@ kept next door rather than merged.
   the session may open that page
 
 Shared rules for the read and the components:
-[Users](/p/shared/auth/users),
+[Users](/p/grade10-site/account/users),
 [User Directory](/p/shared/console/user-directory).
 
 ## Identity

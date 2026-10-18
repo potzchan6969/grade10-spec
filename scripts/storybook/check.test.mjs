@@ -44,7 +44,7 @@ const MANUAL = {
     - shared/ui
 `,
   "docs/prds/products/grade10-site/store/cart.md": "# Cart\n",
-  "docs/prds/products/shared/auth/sign-in.md": "# Sign-In\n",
+  "docs/prds/products/grade10-site/account/sign-in.md": "# Sign-In\n",
 };
 
 describe("names", () => {

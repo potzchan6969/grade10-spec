@@ -53,7 +53,7 @@ Every session it holds ends, new sign-ins are refused, and money stops. The acco
 - **Admin is protected** — an operator cannot strip `admin` from another admin. An admin may remove their own `admin` when another admin remains. The last admin keeps `admin`
 - **Reflects within 70 seconds** — an ordinary read of the person's permissions shows the new roles within 70 seconds, not only on an elevated call
 
-Each of these changes lands on the identity trail — [Audit Log](/p/shared/auth/audit). The Grade10 page that uses this read is the [Users access desk](/p/grade10-admin/console/user-directory).
+Each of these changes lands on the identity trail — [Audit Log](/p/grade10-site/account/audit). The Grade10 page that uses this read is the [Users access desk](/p/grade10-admin/console/user-directory).
 
 ## Create Account
 
