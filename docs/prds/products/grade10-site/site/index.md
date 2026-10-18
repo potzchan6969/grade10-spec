@@ -58,8 +58,6 @@ document title becomes that surface's. Pressing back returns them to where they
 were, at the scroll position they left.
 :::
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9023" title="Store page — the reference assembly the shell was drawn against"}
-
 :::callout{kind="note"}
 The header and footer have frames; the not-found surface, the marketing page
 and the profile do not. What those three look like is settled in code and in

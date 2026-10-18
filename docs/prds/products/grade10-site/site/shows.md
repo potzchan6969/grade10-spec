@@ -37,12 +37,6 @@ answers without a session, like any public surface —
   beside the photo, and editions side by side; narrow viewports stack
   everything at the page inset
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7180-7423" title="Shows — the desktop frame"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7180-8647" title="Shows — the event edition card"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7193-9607" title="Shows — the event record"}
-
 ::story{id="site-shows-screens-shows--default" title="The shows page, whole"}
 
 ::story{id="site-shows-screens-shows--narrow" title="The shows page, narrow"}

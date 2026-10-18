@@ -116,8 +116,6 @@ these, not live
 collector is signed in; a guest's drawer and count show the cart this browser
 holds - [Cart Drawer](/p/grade10-site/store/cart)
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
-
 ::story{id="site-page-shell-blocks-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
 ::story{id="site-page-shell-blocks-siteheader-auction-first--signed-in" title="Auction first — signed in"}

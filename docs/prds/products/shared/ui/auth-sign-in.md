@@ -24,9 +24,9 @@ application supplies as the last node.
   hugging secondary Resend with a sixty-second countdown (**Resend (45)**). No
   Back control. The email-step action reads **Sign In with Email**.
 
-::story{id="auth-sign-in-blocks-signincard--link-sent" title="Link sent"}
+::story{id="account-sign-in-blocks-signincard--link-sent" title="Link sent"}
 
-::story{id="auth-sign-in-blocks-signinlinksent--resend-cooldown" title="Resend countdown"}
+::story{id="account-sign-in-blocks-signinlinksent--resend-cooldown" title="Resend countdown"}
 
 ## Boundaries
 
@@ -34,5 +34,3 @@ The dialog is the surface; what a successful sign-in creates is
 [the sign-in capability](/p/grade10-site/account/sign-in). Every word arrives through
 the copy props, and the email step is its own export for a surface that
 composes it differently.
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}

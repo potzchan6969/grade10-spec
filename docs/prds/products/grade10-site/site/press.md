@@ -50,9 +50,3 @@ answers without a session, like any public surface —
 - **Content - article sample** - the workbench's article carries the
   live CARDJOY x Grade10 Guangzhou release verbatim; every other release
   answers the same template
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7201-9699" title="Press — the desktop frame"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7201-10240" title="Press — the release row"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7204-10315" title="Press — the release article template"}

@@ -75,10 +75,6 @@ browser holds. Design-system `Nav` stays
 count-agnostic: a header that shows a count hands `Nav` its own cart control
 through an optional cart slot, as it does for account.
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
-
 ::story{id="design-system-layout-nav-overview--all-controls" title="Nav — all controls"}
 
 ::story{id="site-page-shell-blocks-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}

@@ -144,8 +144,6 @@ listed apart from the ones that can, muted with its reason and no Apply.
 
 ::story{id="store-cart-blocks-cartdrawer--loading-with-lines" title="The skeleton state while the drawer re-reads prices"}
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Historical Figma — superseded by Storybook"}
-
 :::detail{title="Test cases" for="qa"}
 ::cases{id="shared/ui/store-cart"}
 :::

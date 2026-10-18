@@ -58,7 +58,7 @@ Each of these changes lands on the identity trail — [Audit Log](/p/grade10-sit
 ## Create Account
 
 - **Create** — an operator holding `user:create` makes a passwordless Auth account with a name, an email and roles from the closed set. A duplicate email is refused. A role other than `user` also needs `user:set-role`. No loyalty enrolment or invite mail is sent
-- ❓ **Email verification on create** — whether a new account starts unverified, until the person proves the address, or verified, because an operator typed it. Owner: Product
+- **Email verification** — a new account starts unverified. It becomes verified once the person proves the address
 
 :::callout{kind="note"}
 Auction bidder bans are a separate thing with a separate switch. The auction service keeps its own flag, because an identity ban does not cross brands and the auction is shared across them.
@@ -76,6 +76,7 @@ Auction bidder bans are a separate thing with a separate switch. The auction ser
 | Who may create | Decided | Offer Create only with `user:create`. A non-`user` role also needs `user:set-role`. | Product |
 | Password and invitation | Decided | Passwordless, with no password field. The create is silent, with no invite or magic-link email. | Product |
 | Empty roles | Decided | The account is left as `user` only. | Product |
+| Email verification on create | Decided | Unverified until the person proves the address. An operator typing it does not verify it. | Product |
 | Name and email | Decided | Both are required. Confirm stays disabled until both are present after trim. | Product |
 | Which moves close within 70 seconds | Decided | Ban, revoke and role change. Account deletion is not a capability here yet, so a deleted account's cached read keeps its five minutes until a change specifies deletion. | Product |
 | Closing bound | Decided | 70 seconds everywhere: the session store's one-minute spread plus a 10-second margin. Not "the next read", which only the location that made the change can keep. Under a minute needs sessions off the edge session store. | Engineering |

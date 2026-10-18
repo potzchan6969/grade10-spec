@@ -70,19 +70,17 @@ A link works once. A link that does not work creates no session.
 
 The dialogs and messages above, as the design system draws them.
 
-::story{id="auth-sign-in-blocks-signinemailform--default" title="The email step"}
+::story{id="account-sign-in-blocks-signinemailform--default" title="The email step"}
 
-::story{id="auth-sign-in-blocks-signinemailform--link-request-running" title="The send in flight"}
+::story{id="account-sign-in-blocks-signinemailform--link-request-running" title="The send in flight"}
 
-::story{id="auth-sign-in-blocks-linkfollowtoasts--expired" title="Expired link toast"}
+::story{id="account-sign-in-blocks-linkfollowtoasts--expired" title="Expired link toast"}
 
-::story{id="auth-sign-in-blocks-linkfollowtoasts--no-longer-works" title="Link no longer works toast"}
+::story{id="account-sign-in-blocks-linkfollowtoasts--no-longer-works" title="Link no longer works toast"}
 
-::story{id="auth-sign-in-blocks-linkfollowtoasts--banned" title="Banned account toast"}
+::story{id="account-sign-in-blocks-linkfollowtoasts--banned" title="Banned account toast"}
 
-::story{id="auth-sign-in-blocks-linkfollowtoasts--different-account" title="Different account toast"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
+::story{id="account-sign-in-blocks-linkfollowtoasts--different-account" title="Different account toast"}
 
 :::detail{title="Code map" for="engineer"}
 - **Link lifetime** — `SIGN_IN_LINK_TTL_SECONDS`, beside `SIGN_IN_SEND_WINDOW_SECONDS`, in [`packages/grade10-auth/contracts`](https://github.com/9gag/grade10/blob/main/packages/grade10-auth/contracts/src/signIn.ts)
@@ -97,7 +95,6 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | --- | --- | --- | --- |
 | Email paths | Decided | The link alone. The code is withdrawn, and codes in flight at deploy stop working. | Product |
 | Operator second factor | Decided | Untouched: a different code, proven after sign-in. | Product |
-| Figma `OTP Dialog` frame | ❓ Open | Retire, or keep as reference for the second-factor dialog. | Design |
 | Failed link follow copy | Decided | Expired is its own toast. Used, replaced and invalid share one. Banned is its own and does not nudge a resend. | Product |
 | Link while signed in as someone else | Decided | No automatic switch. Switch enters that account. Stay or dismiss keeps the current session, and the link stays unused. | Product |
 | Mismatch against an invalid link | Decided | The invalid-link check runs first, so the mismatch toast never reaches an invalid link. | Product |
@@ -107,7 +104,7 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | Waits across surfaces | Decided | Only a wait on the same surface stops when the address signs in. | Product |
 | An operator action's link for a customer | Decided | The site. A link that signed in the console would sign the test account in to the console and break the test-winner flow. It is the one exception to the surface that asked. | Product |
 | Link lifetime | Decided | Five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
-| How a locale writes the number | ❓ Open | A digit in every language, or each language's own word for five. | Product |
+| How a locale writes the number | Decided | A digit in every language. | Product |
 | A device still waiting | Decided | It ends its own wait with a message and gains no session. Whether an address has a session is never revealed. | Product |
 | Google One Tap | Decided | It yields to the sign-in dialog, is offered wherever Google sign-in is brand-offered, ships to all eligible traffic at merge with no flag, and stays suppressed for the rest of a visit after a decline. | Product |
 :::

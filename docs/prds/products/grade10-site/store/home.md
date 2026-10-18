@@ -25,12 +25,6 @@ row of cards. Links people already hold still land here.
 
 ## Designs
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9051" title="Hero section"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4195-1050" title="Collection cards — the bento grid"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-11875" title="Merchandised row"}
-
 ::story{id="store-home-screens-store-home--default" title="The main page, whole"}
 
 ::story{id="store-home-blocks-storecollectiongrid--default" title="The collection grid"}

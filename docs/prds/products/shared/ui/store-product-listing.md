@@ -123,10 +123,6 @@ catalogue itself is empty.
 The tile reports the quantity change and the application updates the cart.
 :::
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-1868" title="Product Listing — the browse page — historical, superseded by Storybook"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4200-155" title="Product Card — historical, superseded by Storybook"}
-
 ::story{id="store-product-listing-blocks-productbrowse--default" title="The whole browse surface"}
 
 ::story{id="store-product-listing-blocks-productbrowse-states--no-match" title="A search that matched nothing"}

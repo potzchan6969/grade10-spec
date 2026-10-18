@@ -24,7 +24,7 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 
 - **Named testers** — staging and uat each name four: a collector, a plus-tag sibling, a ban-only address and an admin-only address. Production names its collector alone. They are written into the code, so a new tester is a commit
 - **A minted plus-tag** — on staging and uat, a run mints a unique plus-tag of a named tester, so a test that needs an unused address gets one. Production takes no plus-tag
-- ❓ **Sweeping** — accounts for minted plus-tags build up on staging and uat. How old one gets before it is removed is open. Owner: Ops
+- **Sweeping** — accounts for minted plus-tags build up on staging and uat. Each is removed in the next sweep after the run that minted it
 
 ## What the Job May Do
 
@@ -65,7 +65,7 @@ Measured on the share of staging auth cases that finish a sign-in without a mail
 | Who may call | Decided | One workflow, from main, on a reviewed dispatch, and a QA agent walking a manual pass on staging. Proving the repository alone is not enough. | Product |
 | How a QA agent proves itself | Decided | A staging-only QA token committed to the repository, for capture, age and clear on a tester address. Anyone who reads the repository can sign in as a tester on staging. That is accepted for an easy setup. | Product |
 | Which addresses | Decided | Each environment's named testers, written into the code, and on staging and uat a unique plus-tag of one. | Product |
-| Sweeping tester accounts | ❓ Open | How old before a minted plus-tag's account is removed. | Ops |
+| Sweeping tester accounts | Decided | A minted plus-tag's account is removed in the next sweep after the run that minted it. | Ops |
 | Capture, age, ban, prepare, a scoped role, clear | Decided | Those six, for a tester address only. A scoped role only on a minted plus-tag of the collector. | Product |
 | Session mint without mail | Decided | No. Follow the captured link. | Product |
 | Unban | Decided | No. A run that needs an unbanned address mints one. | Product |

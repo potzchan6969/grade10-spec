@@ -31,5 +31,3 @@ Designers, because a drifted value is reported against the frame they own.
 Engineers, because the audit is the thing that lets them change a component
 without re-reading the design. And whoever inherits both, because the rail keeps
 answering after everyone who set it up has gone.
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026" title="Grade10-DS-2026 — the one design file every mapping points into"}
