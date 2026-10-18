@@ -6,17 +6,6 @@ order: 8
 
 QA walks sign-in on the hosted stacks through a locked door. Collectors never see it.
 
-## Values
-
-| Rule | Value |
-| --- | --- |
-| Who may call | The hosted lane's own workflow, on a dispatch a reviewer approved |
-| A QA agent | Holds the staging QA token, committed to the repository |
-| Which addresses | Each environment's named testers, and on staging and uat a unique plus-tag of one |
-| Where it is open | Staging and uat, every move. Production and preview, capture and clear for the collector alone |
-| How long a captured mail stays readable | **Fifteen minutes**, so it outlives the link |
-| Link lifetime | Five minutes — [Sign-In](/p/shared/auth/sign-in) sets it |
-
 ## Who May Call
 
 - **The lane's own workflow** — one workflow opens the door, in the environment a reviewer approves. Proving the repository is not enough. Every job in it proves the same thing, including one running code a pull request wrote
@@ -24,6 +13,11 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 - **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
 - **What the token may do** — capture, age and clear. Never ban or prepare, so a holder can grant nothing
 - **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on
+
+## Where It Opens
+
+- **Staging and uat** — every move, for the named testers and a unique plus-tag of one
+- **Production and preview** — capture and clear, for the collector alone
 
 ## Testers
 
@@ -35,7 +29,7 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 
 Only for a tester address:
 
-- **Capture the link** — the last sign-in mail for that address, without opening the mailbox, so the job can follow it
+- **Capture the link** — the last sign-in mail for that address, without opening the mailbox, so the job can follow it. The mail stays readable for **fifteen minutes**, so it outlives the five-minute link
 - **Age the unused link** — so an expired follow can be walked without waiting five minutes
 - **Ban the address** — so a banned follow can be walked without the Users desk
 - **Prepare the address** — so it holds `admin` before the link is followed

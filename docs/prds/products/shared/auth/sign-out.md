@@ -4,16 +4,6 @@ spec: shared/auth/sign-out
 order: 3
 ---
 
-## Values
-
-| Rule | Value |
-| --- | --- |
-| Second press | Refused until the request settles |
-| Success | The surface returns to its signed-out presentation |
-| Refusal | The person is told what happened |
-| Retry | Clears the message |
-| Scope | The surface's own session |
-
 ## Signing Out
 
 - **Running** — pressing sign out shows the request running, and refuses a second press until it settles

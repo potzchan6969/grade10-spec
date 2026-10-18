@@ -4,14 +4,9 @@ spec: shared/auth/session
 order: 2
 ---
 
-## Values
+## The Caller
 
-| Rule | Value |
-| --- | --- |
-| Caller on a signed-in request | Id, email, name and roles |
-| Caller on a signed-out request | No person at all |
-| Identity key | The user id, and nothing else |
-| Scope | The surface it was made on, never another brand |
+A signed-in request carries the person's id, email, name and roles. A signed-out request carries no person at all.
 
 ## Identity Key
 

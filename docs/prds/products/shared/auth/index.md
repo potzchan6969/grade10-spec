@@ -3,18 +3,7 @@ title: Accounts
 icon: key
 ---
 
-Accounts is how a person gets into a brand's site or console, and what happens to their account once they are in.
-
-## Values
-
-| Rule | Value |
-| --- | --- |
-| Sign-in | An emailed link, or Google where the brand offers it. No password and no code |
-| Link lifetime | Five minutes |
-| Resend wait | Sixty seconds after each send |
-| Roles | Seven, from one closed set |
-| Ban or revoke takes effect | Within 70 seconds, on every read |
-| Refused outright | Banning yourself, or any account holding `admin` |
+Accounts is how a person gets into a brand's site or console, and what happens to their account once they are in. A person signs in with an emailed link, or with Google where the brand offers it. Each surface keeps its own session. Operators manage roles, users, sessions and the audit trail on the same accounts, each behind its own permission.
 
 ## Pages
 
@@ -51,10 +40,10 @@ There is no password. A person types their email and a sign-in link is emailed t
 
 :::flow{title="Signing in by link"}
 ## *Collector* — **Asks for a link**
-Asking again within a minute is answered with a wait, not a second email.
+Asking again too soon is answered with a wait, not a second email.
 
 ## *Auth* — **Emails the link**
-The link lasts five minutes, and the email says so.
+The link expires, and the email says when.
 
 ## *Collector* — **Follows the link**
 The first use signs them in. A new address gets its account here.

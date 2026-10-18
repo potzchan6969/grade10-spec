@@ -5,21 +5,13 @@ order: 1
 reviewed: 2026-09-28
 ---
 
-## Values
-
-| Rule | Value |
-| --- | --- |
-| Methods | An emailed link, and Google where the brand enables it |
-| Link lifetime | Five minutes, and the email says five minutes |
-| Resend wait | Sixty seconds after each successful send |
-| Account per address | One, created by the first successful sign-in |
-
 ## Sending a Link
 
 A person types their email, and a sign-in link is emailed to it. There is no password and no code. Google appears only on a brand that has enabled it, and only a verified Google address signs anyone in.
 
 - **One intent, one request** — pressing the button again while the request runs starts no second request
 - **One email a minute** — asking again within a minute is answered with a wait, not a second message
+- **Link lifetime** — a link lasts five minutes, and the email says so
 - **The newest link works** — a new link invalidates the one sent before it, so the newest email in an inbox is always the one that works
 - **One account per address** — letter case does not create a second account. A plus-tag is a different address
 - **Trusted products** — a trusted product may create or enter an account from an email it has already verified. Checkout uses this, and a later sign-in with the same address is the same person

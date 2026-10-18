@@ -6,20 +6,9 @@ order: 5
 reviewed: 2026-09-29
 ---
 
-## Values
-
-| Rule | Value |
-| --- | --- |
-| Who sees the list | Holders of the directory grant |
-| Search | Name or email, letter case ignored. An account opens by user id |
-| Ban or unban closes | Within 70 seconds, on every read |
-| Role change reflects | Within 70 seconds, on an ordinary read |
-| Refused outright | Banning yourself, or any account holding `admin` |
-| The last admin | Keeps `admin` |
-
 ## Directory
 
-The list narrows by elevated or user population, a named elevated role, status and email verification, several at once. The caller chooses the order, newest first when none is asked. A banned account stays in the directory, marked. A person nobody can find is a person nobody can unban.
+Only holders of the directory grant see the list. Search matches a name or an email, letter case ignored, and an account opens by user id. The list narrows by elevated or user population, a named elevated role, status and email verification, several at once. The caller chooses the order, newest first when none is asked. A banned account stays in the directory, marked. A person nobody can find is a person nobody can unban.
 
 ## Ban and Unban
 

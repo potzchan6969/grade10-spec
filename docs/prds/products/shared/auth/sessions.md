@@ -5,15 +5,6 @@ audience: operator
 order: 6
 ---
 
-## Values
-
-| Rule | Value |
-| --- | --- |
-| Listing | One person's sessions, by user id |
-| Secret | Never carried in the listing |
-| Revoke scope | One session, or every session the account holds |
-| Revoked session stops answering | Within 70 seconds, on every read |
-
 ## Listing
 
 An operator holding the session-list grant lists one person's sessions by user id. The listing names each session without ever carrying the secret that authenticates it, so reading the list can never hand anyone a way in.

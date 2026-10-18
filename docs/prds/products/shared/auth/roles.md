@@ -5,15 +5,9 @@ audience: operator
 order: 4
 ---
 
-## Values
+## Roles
 
-| Rule | Value |
-| --- | --- |
-| Roles | Seven, from one closed set: `user`, `staff`, `support`, `finance`, `treasurer`, `auditor`, `admin`. A name outside it is dropped |
-| Grant check | A permission, never a role string |
-| Permission | `resource:action`, from one list every product shares |
-| Gate layers | Three, all fail-closed |
-| Second factor | Required in production for every brand. Optional in staging and development — `ADMIN_TWO_FACTOR` in [`packages/app-env`](https://github.com/9gag/grade10/blob/main/packages/app-env) |
+There are seven roles, from one closed set: `user`, `staff`, `support`, `finance`, `treasurer`, `auditor` and `admin`. A name outside the set is dropped.
 
 ## Holding a Role
 
@@ -30,6 +24,11 @@ That split limits a compromised operator account. It can hold roles it should no
 :::detail{title="Gate layers" for="operator"}
 Permissions are the first of three layers, all fail-closed. An elevated call re-reads the session straight from the auth worker with no cookie cache, so a ban or a role change acts at once. Then it checks every named permission. Then it requires a live second-factor stamp where the environment enforces one. Then it appends to the audit trail, without which the action refuses to run. A raw byte route — an identity capture, a sealed document, an item photo — climbs the same ladder.
 :::
+
+## Second Factor
+
+- **Production** — required for every brand
+- **Staging and development** — optional. `ADMIN_TWO_FACTOR` in [`packages/app-env`](https://github.com/9gag/grade10/blob/main/packages/app-env) sets it
 
 ## Permissions
 
