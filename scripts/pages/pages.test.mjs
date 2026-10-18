@@ -27,6 +27,11 @@ title: Points
 :::example{title="Shipping refunded" id="refund-shipping" tier="Gold"}
 - Gengar single $139
 :::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Apple enrolment** - blocked: the Developer Program
+- [x] **Bucket** - done
+:::
 `;
 
 const CASES = `---
@@ -50,6 +55,10 @@ test("a page carries its marks and its cases, examples and rows alike", () => {
   assert.equal(page.building.length, 1);
   assert.equal(page.open.length, 1);
   assert.equal(page.design.length, 1);
+  assert.deepEqual(
+    page.work.map((one) => one.text),
+    ["**Apple enrolment** - blocked: the Developer Program"],
+  );
   assert.equal(page.reviewed, "2026-10-18");
   assert.deepEqual(
     page.cases.map((one) => [one.id, one.section, one.source]),

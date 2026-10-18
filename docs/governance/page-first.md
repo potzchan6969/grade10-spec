@@ -67,6 +67,26 @@ reviewed: 2026-10-18 @qa-handle
 A rule that holds a number holds a worked value. **$139** at **1.2×** =
 **15** is a case already; a cases row repeats it only to tag it.
 
+## Open Work
+
+Work a 🚧 line waits on that no code or test closes - an enrolment, a
+credential, a bucket, a production gate, a walk on staging by hand - is a
+checklist in one collapsed block at the foot of the page, one item per
+task, naming what blocks it and who acts.
+
+```markdown
+:::detail{title="Open work" for="engineer"}
+- [ ] **Apple enrolment** - the Developer Program in the organisation's name; blocked on the account - operations
+- [ ] **Walk on staging** - save a pass on each wallet on a real phone and be identified at the counter - QA
+:::
+```
+
+- **Not here** - code to write (the 🚧 line and its cases say it), a check
+  to run, a test to link, a submodule to bump, artwork to draw (a 🎨 line)
+- **Ticked, then gone** - an item done is deleted in the push that takes the
+  🚧 off its line; the history is git's
+- **Read** - `pnpm pages:board [prefix] --work`
+
 ## The Work
 
 1. **Mark the page** - one 🚧 line per outcome, ❓ on what is open, 🎨 on what

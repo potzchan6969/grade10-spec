@@ -9,7 +9,7 @@ The page says what; this repository or the application decides how. There is
 no proposal, spec or task list to write.
 
 1. **Find the work** - `pnpm pages:board <prefix> --build` lists the 🚧
-   lines. Read the whole page, its cases (`pnpm pages:cases <page>`), the
+   lines, `--work` the open work they wait on. Read the whole page, its cases (`pnpm pages:cases <page>`), the
    pages it links, and any `::story` it embeds.
 2. **Stop on what is open** - a ❓ that the 🚧 line depends on goes back to
    the person in the Clarification Request format of `AGENTS.md`. A 🎨 line
@@ -29,5 +29,8 @@ no proposal, spec or task list to write.
    submodule bump that ships it. Write a design note in the application's
    `docs/architecture/` only for a mechanism a later reader needs, and link
    it from the page's `Code map`.
-7. **Check** - `pnpm run lint`, `pnpm run typecheck`, the tests the change
+7. **Hand over what code cannot close** - an enrolment, a credential, a
+   production gate, a walk by hand: an item in the page's `Open work`
+   detail, naming its blocker and who acts. Delete an item once it is done.
+8. **Check** - `pnpm run lint`, `pnpm run typecheck`, the tests the change
    touches, `pnpm check:manual`, `pnpm pages:check`.

@@ -3,7 +3,7 @@
  * The product pages as the work list: what is being built, what is open,
  * what needs a design, and the cases that prove each page.
  *
- *   pnpm pages:board [prefix] [--build|--open|--design]
+ *   pnpm pages:board [prefix] [--build|--open|--design|--work]
  *   pnpm pages:cases <prefix> [--cited <app-dir>] [--tsv]
  *   pnpm pages:check
  *
@@ -30,6 +30,7 @@ const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 export const PAGES = "docs/prds/products";
 export const CASES = "docs/cases";
 export const DESIGN = /🎨/;
+export const OPEN_WORK = "Open work";
 const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const REF = /\b([a-z0-9-]+(?:\/[a-z0-9-]+)+)#([a-z0-9]+(?:-[a-z0-9]+)*)\b/g;
 const SKIP = new Set(["node_modules", ".git", "dist", "build", ".turbo"]);
@@ -67,6 +68,24 @@ function sectioned(blocks) {
     out.push({ block, section });
   }
   return out;
+}
+
+/** The unticked `- [ ]` items of a page's `Open work` detail: the blocked
+ * or human work a 🚧 line still waits on - an enrolment, a credential, a
+ * staging walk - that no test or code change closes. */
+export function openWork(ast) {
+  const items = [];
+  for (const block of ast.blocks) {
+    if (block.type !== "detail" || block.title !== OPEN_WORK) continue;
+    for (const item of block.body) {
+      if (item.type !== "prose") continue;
+      for (const line of item.markdown.split("\n")) {
+        const open = line.match(/^\s*[-*] \[ \] (.+)$/);
+        if (open) items.push({ text: open[1], where: { title: OPEN_WORK } });
+      }
+    }
+  }
+  return items;
 }
 
 /** One cases file: its sign-off and its rows, each with the line it sits on. */
@@ -178,6 +197,7 @@ export function readPages(root = ROOT) {
       building: marksOfPage(page, BUILDING),
       open: openMarksOfPage(page),
       design: marksOfPage(page, DESIGN),
+      work: openWork(ast),
       cases,
       unnamed,
       casesFile: file ? relative(root, file) : null,
@@ -248,12 +268,14 @@ function board(pages, mode) {
     build: [["🚧", "building"]],
     open: [["❓", "open"]],
     design: [["🎨", "design"]],
+    work: [["☐", "work"]],
   }[mode] ?? [
     ["🚧", "building"],
     ["❓", "open"],
     ["🎨", "design"],
+    ["☐", "work"],
   ];
-  const totals = { building: 0, open: 0, design: 0, cases: 0 };
+  const totals = { building: 0, open: 0, design: 0, work: 0, cases: 0 };
   const out = [];
   for (const page of pages) {
     const lines = [];
@@ -326,7 +348,7 @@ function main(argv) {
   }
   const { pages } = readPages();
   if (command === "board") {
-    const mode = ["build", "open", "design"].find((one) =>
+    const mode = ["build", "open", "design", "work"].find((one) =>
       flags.has(`--${one}`),
     );
     process.stdout.write(board(select(pages), mode));
