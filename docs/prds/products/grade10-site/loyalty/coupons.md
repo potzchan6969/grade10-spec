@@ -45,10 +45,13 @@ action, since a reward coupon carries none
 | Channel | How it lands |
 | --- | --- |
 | Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
-| At the till | For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
+| At the till | 🎨 For a scope the till can match, chosen inside the till session - a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; a product coupon's Shopify Discount is minted the moment it is chosen and reused for that sale, and a gift goes on as its own line, discounted to nothing |
 
 - **Answered before chosen** — the drawer answers every coupon against the
   cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
+
+::story{id="store-cart-blocks-cartdrawerfooter-promo-sheet--held-promo-sheet" title="Held coupons, answered against the cart"}
+
 - **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
@@ -147,7 +150,7 @@ They read that an earlier sale holds the cut, never that the coupon is unavailab
 
 ## Refusals
 
-The member reads which refusal answered; no basket quietly loses a coupon.
+🎨 The member reads which refusal answered; no basket quietly loses a coupon.
 
 ### Coupon
 
@@ -156,11 +159,11 @@ The member reads which refusal answered; no basket quietly loses a coupon.
 | Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
-| Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
+| 🎨 Wrong channel | Not good in the channel it is being spent in - [Validity](#validity). At the till the panel marks it online only and staff cannot apply it; presented from the member's phone it reads `This coupon cannot be used on this sale.` |
 | 🚧 Online only by scope | A coupon scoped to named products or a catalog filter, presented at the till from the member's phone, whatever channels it names; it reads as Wrong channel does |
 | Not eligible | The definition's eligibility is not met |
 | An earlier sale stands | An online checkout carrying this coupon that took the money or could not be closed, or a sale still being submitted with it, so its cut still stands |
-| Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
+| 🎨 Written too late | A checkout or counter sale whose order is written more than a minute after its claim; the coupon is back in the wallet. The member reads that the checkout took too long and to submit it again; staff, that the sale took too long and to apply it again |
 
 ### Basket
 

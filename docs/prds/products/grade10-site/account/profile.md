@@ -21,7 +21,7 @@ own account page and shown to nobody else. Grade10 and ZZZ show the same page.
 
 - **Length** - counted as the field counts it: a Chinese character is one, an
   emoji can be two
-- **Avatar file** - any image the browser can read, whatever its type or
+- 🎨 **Avatar file** - any image the browser can read, whatever its type or
   size, is made square at **512 px** before it is sent; a file the browser
   cannot read is refused
 - **Avatar address** - anyone holding the image's address can open it,
@@ -30,8 +30,13 @@ own account page and shown to nobody else. Grade10 and ZZZ show the same page.
   collector learns it
 - **Account picture** - the picture an account already has, such as a
   Google sign-up's, never stands in; the letter does
+
+::story{id="account-profile-blocks-profiledetails--default" title="The letter standing in"}
+
 - **Earlier saves** - a profile saved before member-since was recorded
   shows no date until its next save, which it then dates
+
+::story{id="account-profile-screens-profile--no-member-since" title="Saved before member-since"}
 
 ## Before the First Save
 
@@ -39,9 +44,14 @@ A collector who has never saved still sees every field but member-since,
 filled from what sign-in already knows, and an empty field says what it is
 for.
 
+::story{id="account-profile-screens-profile--never-saved" title="Never saved"}
+
 - **Display name** - the name the till and the wallet pass show: the account
   name, else the address before the `@` -
   [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card)
+
+::story{id="account-profile-screens-profile--nameless-session" title="The address before the @ as the name"}
+
 - **A name nobody chose** - the placeholder an older record carries is never
   shown as the collector's; the default stands in, at the till and on the pass
   too
@@ -52,9 +62,12 @@ for.
 
 - **Explicit** - edit, then save or cancel; a save that would clear the
   display name is refused
+
+::story{id="account-profile-screens-profile-edit--empty-display-name" title="A cleared name, refused"}
+
 - **Avatar apart** - the avatar is saved on its own, so a refused name never
   undoes an accepted image
-- **Avatar first** - a refused or failed image saves nothing else; the form
+- 🎨 **Avatar first** - a refused or failed image saves nothing else; the form
   keeps the typed text and the chosen image for one retry
 - **Replaced or removed** - the old image stops answering at its address,
   and storage deletes it once it is a day old
@@ -62,6 +75,9 @@ for.
 ## Failures
 
 - **A failed save** - keeps what was typed
+
+::story{id="account-profile-screens-profile-edit--failed-save" title="A failed save"}
+
 - **A failed read** - says the profile could not be loaded, shows no field,
   and offers to try again
 
@@ -71,13 +87,20 @@ for.
 - **Way in** - the account menu offers Profile first wherever this page is
   carried - [Page Shell · Account Menu](/p/grade10-site/site/page-shell#account-menu)
 
+::story{id="site-page-shell-blocks-siteheader-auction-store-account-menu--with-profile" title="Profile in the account menu"}
+
 ## Designs
 
 - **Avatar and email** - built from the requirements on the design system's
   avatar, with no frames: the avatar, its choose and remove controls, its
   preview and the email row
+
+::story{id="account-profile-blocks-profileform--with-avatar" title="The avatar and email, being edited"}
+
 - **Bio field** - several lines, in the design system's own multi-line
   field; the read view shows the lines as typed
+
+::story{id="account-profile-blocks-profiledetails--bio-over-several-lines" title="A bio over several lines"}
 
 ::story{id="account-profile-blocks-profilecard--default" title="The profile, read"}
 

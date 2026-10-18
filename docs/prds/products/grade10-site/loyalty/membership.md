@@ -95,6 +95,8 @@ The refund came first, and is replayed after the earn, in the order it happened.
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
 
+::story{id="loyalty-membership-screens-membership--default" title="The membership page"}
+
 - 🎨 **Tier & Benefits** — the page the whole card opens; it has no design yet
 - 🚧 **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
@@ -112,7 +114,7 @@ The refund came first, and is replayed after the earn, in the order it happened.
   not in it
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
-- **Each section loads on its own** — a catalog that failed to load is no
+- 🎨 **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 
 ❓ Whether "Points to spend" and the tier-progress labels are the launch
@@ -135,9 +137,15 @@ names.
   holds a screen wake lock while it is up, so the phone cannot dim or lock
   mid-scan; a web page cannot raise screen brightness, so keeping the screen
   awake is the part that is feasible
+
+::story{id="loyalty-membership-screens-member-pass--default" title="The pass on its own page"}
+
 - 🚧 **A code swaps in and out** — a fresh code dips the square out of view,
   fading and easing down, and settles the new pair in; the short code and
   its label never move, so a scanner never loses its square mid-read
+
+::story{id="loyalty-membership-blocks-memberpass--code-rotates" title="A new code swaps in"}
+
 - 🚧 **A taken code just rotates** — a code the till accepts is answered by
   the next one arriving; the pass never freezes on a used surface, and
   the refusal a replayed code earns stays on the till
@@ -173,7 +181,9 @@ The same pass can be added to a phone wallet —
 | Points revoked | A refund's claw-back |
 | Points returned | A reversed redemption, or a cancelled or refunded sale that points paid for |
 
-- **Notified** — every identification the member did not show a code for —
+::story{id="loyalty-membership-blocks-activitylist--channel-is-named" title="The member's activity"}
+
+- 🎨 **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
   once
 - **Archived reward** — an entry for a reward since archived still names it

@@ -49,9 +49,9 @@ Apple code identifies and moves nothing.
 
 ## On the Pass
 
-- **Shows** — the member's name, the tier they hold, and the points they can
+- 🎨 **Shows** — the member's name, the tier they hold, and the points they can
   spend
-- **As of** — the pass says when what it shows was current
+- 🎨 **As of** — the pass says when what it shows was current
 - **Name** — the one the site shows: the name chosen for the shop, else the
   account name, else the address before the `@`; carried whole, and the wallet
   app lays it out
@@ -68,7 +68,7 @@ Apple code identifies and moves nothing.
   programme's name and one background colour; none is drawn yet
 - 🎨 **Apple pass artwork** — the icon and logo at every scale, the
   programme's name, and the background and label colours; none is drawn yet
-- **Apple note** — the pass says "Identifies you at the counter. Points are
+- 🎨 **Apple note** — the pass says "Identifies you at the counter. Points are
   spent from this page.", so a pass that identifies and cannot spend never
   reads as broken
 
@@ -78,6 +78,9 @@ Apple code identifies and moves nothing.
   anybody
 - **From `/membership`** — the member adds a pass from their own page, which
   names the wallets they carry a pass in, with the ending beside each
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--held-both-ends-each" title="Wallets held, an ending beside each"}
+
 - 🚧 **The save action's look** - each wallet's own artwork: Apple's "Add to
   Apple Wallet" badge and Google's "Add to Google Wallet" button, as both
   vendors' brand guidelines expect; a screen reader reads its whole label
@@ -91,8 +94,14 @@ Apple code identifies and moves nothing.
 - **Each wallet apart** — a pass held in one wallet never hides the other's
   offer; adding, ending and a failure are shown per wallet, and a failure
   stays, naming its wallet, after the other wallet's act succeeds
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--one-wallet-failed" title="One wallet failed, the other fine"}
+
 - **Passes that cannot be read** — the page says it could not check, never
   shows an empty offer, and keeps the ending
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--unreachable" title="Passes that could not be read"}
+
 - **One per wallet** — added and ended independently of the other
 - **A new pass replaces the old** — adding a second pass to a wallet already
   holding one ends the earlier pass first
@@ -101,7 +110,7 @@ Apple code identifies and moves nothing.
   copy is discharged by the sweep
 - **Removing it is not ending** — deleting the pass from the phone's wallet
   app changes nothing about the membership
-- 🚧 **Operator ending** - for a member whose phone is gone. An operator
+- 🚧 🎨 **Operator ending** - for a member whose phone is gone. An operator
   holding `store:write` ends one wallet's pass from the member's record, which
   names the wallets the member holds, and confirms the wallet first; declined,
   it ends nothing. The other wallet's pass stays live. It ends
@@ -115,7 +124,7 @@ Apple code identifies and moves nothing.
   forbidden, never as though no pass existed; the pass stays live. A
   record whose wallets cannot be read says so and offers no ending, never that
   the member holds none
-- **Welcome message** — carries no save action, in either wallet
+- 🎨 **Welcome message** — carries no save action, in either wallet
 - **Erasure** — the pass identifies nobody from that moment, whatever the
   phone shows, and a device fetching it sees nobody. Google is told until it
   confirms; Apple keeps no copy, and its phones are forgotten

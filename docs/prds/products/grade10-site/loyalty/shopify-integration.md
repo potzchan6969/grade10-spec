@@ -247,9 +247,9 @@ The loyalty terminal is a Shopify POS UI extension.
 
 | Surface | Job | Spends |
 | --- | --- | --- |
-| Home tile | Opens the modal; badges only "membership unavailable" | Never |
-| Modal | Identify, read the panel, spend, confirm a collection | Through a session |
-| Customer details badge | The member's name, tier and balance for any paired customer staff find in Shopify's own search | Never |
+| 🎨 Home tile | Opens the modal; badges only "membership unavailable" | Never |
+| 🎨 Modal | Identify, read the panel, spend, confirm a collection | Through a session |
+| 🎨 Customer details badge | The member's name, tier and balance for any paired customer staff find in Shopify's own search | Never |
 
 - **Three apps** — development, staging and production, each extension-only
   with no server, no scopes and no admin access of its own; a manager
@@ -259,11 +259,11 @@ The loyalty terminal is a Shopify POS UI extension.
 
 ### Member Name
 
-- 🚧 **The member's name** - on the badge and in the modal, the one the site
+- 🚧 🎨 **The member's name** - on the badge and in the modal, the one the site
   shows: the name chosen for the shop, else the account name, else the
   address before the `@`; sent whole, uncut -
   [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card#on-the-pass)
-- 🚧 **Account service down** - a name chosen for the shop still shows; a member
+- 🚧 🎨 **Account service down** - a name chosen for the shop still shows; a member
   without one shows as 會員
 
 ### Session
@@ -284,20 +284,20 @@ The loyalty terminal is a Shopify POS UI extension.
 | Phone | A number staff type | With Phone spend | Only when it may spend | Phone lookup · Phone spend |
 | Cart customer | The customer already on the sale | With Cart spend | Always | Cart identify · Cart spend |
 
-- **Single use** — the QR and the short code are short-lived and taken once;
+- 🎨 **Single use** — the QR and the short code are short-lived and taken once;
   a used code is refused, naming where and when it was first used, and
   repeated failed entries pause entry for that shop
 - **Recorded** — every lookup, read and spend, with how the member was
   identified and the staff and location labels the till sends; an email
   lookup keeps the account, never the address
-- **A miss says nothing** — a staff-typed email matching no member answers
+- 🎨 **A miss says nothing** — a staff-typed email matching no member answers
   only that none was found, and repeated lookups are throttled
-- **A lookup that finds nobody** — the member stays on the sale with the
+- 🎨 **A lookup that finds nobody** — the member stays on the sale with the
   points and coupons staff chose, and the panel says what the lookup answered
 - **A lookup that finds another member** — replaces the first; what starts
   after acts for the new member only, and nothing started before moves the
   till back
-- **Panel** — the member's name, tier, points to spend, progress in the
+- 🎨 **Panel** — the member's name, tier, points to spend, progress in the
   qualifying window, tier renewal and lapse dates, recent activity, and open
   coupons, the store's own and the member's rewards alike
 - **Attach** — the terminal sets the customer on the cart and checks it;
@@ -308,9 +308,9 @@ The loyalty terminal is a Shopify POS UI extension.
   plans in 5 minutes
 - **Discount on the cart** — the store's order id first, then the points
   discount; the promise is trimmed to what the cart shows
-- **Shown before it commits** — points spent, money still due, balance after
+- 🎨 **Shown before it commits** — points spent, money still due, balance after
   and points this sale will earn, priced by the platform
-- **Confirm** — the button locks while it runs, so a double tap spends once
+- 🎨 **Confirm** — the button locks while it runs, so a double tap spends once
 - **Undo before tender** — staff remove the discounts, then the order id, and
   the promise is dropped
 - **No reversal at the till** — undoing before tender only drops the
@@ -319,17 +319,17 @@ The loyalty terminal is a Shopify POS UI extension.
 - **Expiry** — a promise nobody tenders expires after 1 hour; a sale the cart
   pays after that still settles
 - **Earning** — the customer on the sale is enough, terminal or not
-- **Member told once it settles** — with the points, the amount and the
+- 🎨 **Member told once it settles** — with the points, the amount and the
   location, when the sale is paid or the till trims to what landed; never at
   Apply, and never with the code
-- **Correction** — a spend the member was told landed, on a sale then left
+- 🎨 **Correction** — a spend the member was told landed, on a sale then left
   unpaid, sends a correction notice; a sale that never got that far sends
   nothing
 - 🚧 **Older title at the till** — on a sale carrying the store's order id, a
   "Points" discount counts as the member's points and comes off before the
   order id, like "Deduction from Points"; only the sale's one custom
   fixed-amount discount counts, never an offer or a code titled the same
-- 🚧 **A points title nobody marked** — on a sale with no order id, a discount
+- 🚧 🎨 **A points title nobody marked** — on a sale with no order id, a discount
   under either title is somebody else's; the panel offers no points, no
   coupons and no Apply until staff remove it
 
