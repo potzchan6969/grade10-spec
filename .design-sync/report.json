@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T22:51:24.742Z",
+  "generatedAt": "2026-10-18T03:53:18.366Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -34,7 +34,6 @@
     "Dropdown Menu Group Label": "warn",
     "Dropdown Menu Item": "skipped",
     "Empty State": "ok",
-    "Event Card": "warn",
     "Event Record": "warn",
     "Featured": "warn",
     "Featured Auction": "warn",
@@ -138,6 +137,8 @@
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
     "overlays: tooltip-content/body": "ok",
+    "press list item": "warn",
+    "press list item/Event Card": "warn",
     "store-cart: cart-drawer/body": "ok",
     "store-home: store-collection-tile/featured": "ok",
     "store-home: store-collection-tile/standard": "ok",
@@ -959,8 +960,12 @@
     "7172-2923": "About",
     "7172-7233": "About (small vp)",
     "7180-7423": "Shows",
-    "7180-8647": "Event Card",
+    "7180-8647": "press list item/Event Card",
     "7193-9607": "Event Record",
+    "7201-10222": "press list item",
+    "7201-10240": "press list item",
+    "7201-10241": "press list item",
+    "7201-9699": "Press",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -1031,9 +1036,6 @@
     ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
-    ],
-    "Event Card": [
-      "Event Card: no code component (looked for src/components/**/eventcard.tsx or eventcard.tsx)"
     ],
     "Event Record": [
       "Event Record: no code component (looked for src/components/**/eventrecord.tsx or eventrecord.tsx)"
@@ -1139,6 +1141,12 @@
     ],
     "Vault Asset Status": [
       "Vault Asset Status: no code component (looked for src/components/**/vaultassetstatus.tsx or vaultassetstatus.tsx)"
+    ],
+    "press list item": [
+      "press list item: no code component (looked for src/components/**/presslistitem.tsx or presslistitem.tsx)"
+    ],
+    "press list item/Event Card": [
+      "press list item/Event Card: no code component (looked for src/components/**/presslistitemeventcard.tsx or presslistitemeventcard.tsx)"
     ],
     "tier card": [
       "tier card.tier: no getEnum('tier') in any template — this Figma axis reaches no code prop"
