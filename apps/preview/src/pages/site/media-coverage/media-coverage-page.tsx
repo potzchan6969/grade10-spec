@@ -18,11 +18,11 @@ const REVEALED = "translate-y-0 opacity-100 filter-none";
 /**
  * One media card: the whole card is the external link. The frame's Card
  * instance is restyled past the published set — `radius-3xl`, `gap-6`
- * padding, `size-56` minimum height, `border-strong` on hover — so the
- * overrides live here until design settles the contract. Every card
- * holds one height: the publication truncates to one line and the title
- * clamps at four, so a longer CMS entry ends in an ellipsis rather than
- * a taller card.
+ * padding, `size-56` minimum height, a soft shadow, `border-strong` plus
+ * a subtle lift on hover — so the overrides live here until design settles
+ * the contract. Every card holds one height: the publication truncates
+ * to one line and the title clamps at four, so a longer CMS entry ends
+ * in an ellipsis rather than a taller card.
  */
 function MediaCard({ item }: { item: MediaItem }) {
   return (
@@ -33,7 +33,7 @@ function MediaCard({ item }: { item: MediaItem }) {
       target="_blank"
     >
       <Card
-        className="h-full min-h-56 rounded-3xl transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-border-strong"
+        className="h-full min-h-56 rounded-3xl shadow-[0_8px_16px_var(--shadow-color)] transition-[border-color,transform] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong motion-reduce:transition-none motion-reduce:hover:translate-y-0"
         padding={false}
       >
         <div className="flex flex-1 flex-col gap-4 p-6">
