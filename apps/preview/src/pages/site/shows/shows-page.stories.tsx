@@ -162,8 +162,8 @@ export const Default: Story = {
     expect(embed.src).toContain(
       `youtube.com/embed/${SHOWS_PAGE.formats.chapters[0].video?.youtubeId}`,
     );
-    // The embed plays on load — one click on the poster is the play.
-    expect(embed.src).toContain("autoplay=1");
+    // The embed loads paused — the visitor presses play in the player.
+    expect(embed.src).not.toContain("autoplay=1");
     expect(
       canvas.queryByRole("button", {
         name: `Play ${SHOWS_PAGE.formats.chapters[0].video?.badge} video`,

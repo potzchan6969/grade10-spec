@@ -89,10 +89,10 @@ function EventVideo({ video }: { video: NonNullable<ShowChapter["video"]> }) {
     <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border sm:aspect-[1232/512] sm:rounded-3xl">
       {playing ? (
         <iframe
-          allow="autoplay; encrypted-media; picture-in-picture"
+          allow="encrypted-media; picture-in-picture"
           allowFullScreen
           className="size-full"
-          src={`https://www.youtube.com/embed/${video.youtubeId}?rel=0&autoplay=1`}
+          src={`https://www.youtube.com/embed/${video.youtubeId}?rel=0`}
           title={`${video.badge} video`}
         />
       ) : (

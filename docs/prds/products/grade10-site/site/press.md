@@ -5,7 +5,8 @@ order: 8
 ---
 
 `/press-releases` is the record page: every release Grade10 has
-published, grouped by year newest first. It sits inside the same shell
+published, grouped by year newest first, each row opening its article
+at `/press-releases/{slug}`. It sits inside the same shell
 as every surface — [Page Shell](/p/grade10-site/site/page-shell) — and
 answers without a session, like any public surface —
 [Crawlable Pages](/p/grade10-site/site/crawlable-pages).
@@ -24,10 +25,20 @@ answers without a session, like any public surface —
 - 🚧 **Responsive** — wide viewports lay the filter beside the intro and
   each release as a date-title-arrow row; narrow viewports stack the
   filter under the header and each date over its title
+- 🚧 **Article header** — a Press breadcrumb back to the record over the
+  release's title, its publish date and its location badges
+- 🚧 **Feature image** — the article's 1200:630 lead image; the same
+  asset is its OG image
+- 🚧 **Article body** — what an editor composes in the admin portal:
+  paragraphs, bold and inline links, headings two through six, bullet
+  and numbered lists, blockquotes, and images with or without captions,
+  each drawn in the template's own styles
+- 🚧 **Sidebar** — About Grade10, About MemeStrategy and Media
+  Enquiries, fixed editable cards every article shares; sticky beside
+  the body on a wide viewport, after it on a narrow one
 
-- ❓ Copy - **Date style** - the frame writes `15 SEP, 2026` while the
-  live page writes `Sep 15, 2026`; the page carries the frame's style
-  until design confirms
+- **Copy - Date style** - the page writes `Sep 15, 2026`: the live
+  page's month-first title casing, confirmed by design
 - ❓ Product - **Filter semantics** - the frame draws an All Time
   dropdown with a checked item; the page treats it as a year filter
   rather than jump navigation to each group
@@ -36,10 +47,12 @@ answers without a session, like any public surface —
 - **Content - release list** - the list carries the live
   `grade10.com/press-releases` record verbatim; the frame's items are
   placeholders
-- **Product - article surface** - the `/press-releases/{slug}` articles
-  the rows link to are still work in progress; this page ships the
-  destinations
+- **Content - article sample** - the workbench's article carries the
+  live CARDJOY x Grade10 Guangzhou release verbatim; every other release
+  answers the same template
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7201-9699" title="Press — the desktop frame"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7201-10240" title="Press — the release row"}
+
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7204-10315" title="Press — the release article template"}
