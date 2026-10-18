@@ -9,6 +9,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { join, sep } from "node:path";
 import { promisify } from "node:util";
 import { parse } from "yaml";
+import { readPages } from "../pages/pages.mjs";
 import {
   COVERAGE_FILE,
   declared,
@@ -23,6 +24,26 @@ import {
   requirementTitles,
 } from "./journeys.mjs";
 import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
+
+const PAGE_CASE = /^([a-z0-9-]+(?:\/[a-z0-9-]+)+)#([a-z0-9-]+)$/;
+const pageCases = new Map();
+
+/** `<page>#<case id>` cites a case of a product page: true when the page
+ * holds that case, false when it does not, null when it is no page case. */
+function pageCase(root, ref) {
+  const match = PAGE_CASE.exec(ref);
+  if (!match) return null;
+  if (!pageCases.has(root))
+    pageCases.set(
+      root,
+      new Set(
+        readPages(root).pages.flatMap((page) =>
+          page.cases.map((one) => `${page.id}#${one.id}`),
+        ),
+      ),
+    );
+  return pageCases.get(root).has(ref);
+}
 
 export { DESIGN_SYSTEM, KINDS, START_HERE, titleCase };
 
@@ -266,6 +287,10 @@ export function journeyErrors(root, parsed) {
     if (!file.title) continue;
     const cited = citedJourneys(file);
     for (const id of cited) {
+      const onPage = pageCase(root, id);
+      if (onPage === false)
+        errors.push(`${path} - no case "${id}" on a product page`);
+      if (onPage !== null) continue;
       const journey = journeys.get(id);
       if (!journey)
         errors.push(`${path} - no journey "${id}" in any user-journeys.md`);
@@ -311,10 +336,14 @@ export function settingsErrors(root, parsed) {
     for (const [setting, rule] of rules.flatMap(Object.entries)) {
       if (!file.settings?.includes(setting))
         errors.push(`${path} - rule for "${setting}", which is no setting`);
+      const onPage = pageCase(root, rule);
+      if (onPage === false)
+        errors.push(`${path} - no case "${rule}" on a product page`);
+      if (onPage !== null) continue;
       const parsedRule = parseRule(rule);
       if (!parsedRule)
         errors.push(
-          `${path} - rule "${rule}" reads "<capability>: <requirement title>"`,
+          `${path} - rule "${rule}" reads "<page>#<case id>" or "<capability>: <requirement title>"`,
         );
       else if (!requirements(parsedRule.capability).has(parsedRule.title))
         errors.push(

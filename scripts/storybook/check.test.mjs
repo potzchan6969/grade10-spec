@@ -339,7 +339,22 @@ describe("settingsErrors", () => {
     assert.equal(errors.length, 3);
     assert.match(errors[0], /"points", which is no setting/);
     assert.match(errors[1], /no requirement "Not a requirement"/);
-    assert.match(errors[2], /reads "<capability>: <requirement title>"/);
+    assert.match(errors[2], /reads "<page>#<case id>"/);
+  });
+
+  it("takes a product page's case as a rule", () => {
+    const { errors } = settingsErrors(
+      process.cwd(),
+      scenario({
+        settings: ["points", "balance"],
+        rules: {
+          points: "grade10-site/loyalty/paying-with-points#pay-online",
+          balance: "grade10-site/loyalty/paying-with-points#no-such-case",
+        },
+      }),
+    );
+    assert.equal(errors.length, 1);
+    assert.match(errors[0], /no case ".*#no-such-case" on a product page/);
   });
 
   it("refuses a story beside Scenario; its settings reach every case", () => {

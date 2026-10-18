@@ -93,9 +93,9 @@ Storybook holds it.
 - **Combinations** — a journey whose outcome turns on what staging is set to
   is walked by the Screen's Scenario, below; there is no separate Flows folder
 - **Journeys cited** — a click-through screen or a Scenario names the journeys
-  it walks, by their ids in the
-  `user-journeys.md` beside the spec:
-  `parameters: { journeys: ["grade10-site-store-cart-drawer-US-01"] }`, on
+  it walks, by a product page's flow or case, `<page>#<id>`, or by their ids
+  in the `user-journeys.md` beside a legacy spec:
+  `parameters: { journeys: ["grade10-site/loyalty/membership#pass-rotates"] }`, on
   the meta or one story. The workbench lists them under the canvas in their
   own words
 - **Collector journeys** — the workbench draws what a collector, member,
@@ -118,9 +118,10 @@ a combination behaves without a staging order, and checks staging against it.
   values. `render` maps the settings to the props the Screen already takes,
   computed by a walk module beside the feature, as `pages/basket-walk.ts` prices
   the basket
-- **Rules** - each setting names the requirement that decides it,
-  `parameters: { rules: { coupon: "<capability>: <requirement title>" } }`;
-  `pnpm storybook:check` refuses a title the spec does not hold, and a Scenario
+- **Rules** - each setting names the case that decides it,
+  `parameters: { rules: { points: "<page>#<case id>" } }`, or a legacy spec's
+  requirement, `"<capability>: <requirement title>"`; `pnpm storybook:check`
+  refuses a case the page does not hold, a title the spec does not hold, and a Scenario
   with no settings
 - **One story** - the file holds the one `Scenario` story and no presets
   beside it; its settings reach every case worth checking, and the Given
