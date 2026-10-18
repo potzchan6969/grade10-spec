@@ -182,7 +182,7 @@ function AboutPage() {
                           </p>
                         ) : null}
                       </div>
-                      <p className="flex-1 text-base leading-6 sm:text-lg sm:leading-7">
+                      <p className="flex-1 text-base leading-6">
                         <Segments segments={milestone.body} />
                       </p>
                     </li>
