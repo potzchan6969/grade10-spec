@@ -92,12 +92,17 @@ const PRESS_PAGE_STORY_ID = "site-press-screens-press--default";
 /** Storybook story id for the press-release article assembly. */
 const PRESS_ARTICLE_STORY_ID = "site-press-screens-press-release--default";
 
+/** Storybook story id for the Media Coverage page assembly. */
+const MEDIA_COVERAGE_PAGE_STORY_ID =
+  "site-media-coverage-screens-media-coverage--default";
+
 /**
  * Real routes that resolve to a page story in the workbench: the href
  * stays the surface's true address and a click in the canvas jumps to
  * that route's story. Add a row when a page story lands.
  */
 const ROUTE_STORY_IDS: Record<string, string> = {
+  "/media-coverage": MEDIA_COVERAGE_PAGE_STORY_ID,
   "/press-releases": PRESS_PAGE_STORY_ID,
 };
 
@@ -157,6 +162,7 @@ export {
   HELP_HREF,
   HELP_NAV_ITEM,
   interceptWorkbenchStoryLinks,
+  MEDIA_COVERAGE_PAGE_STORY_ID,
   MY_AUCTIONS_PAGE_HREF,
   MY_AUCTIONS_PAGE_STORY_ID,
   navigateToStory,
