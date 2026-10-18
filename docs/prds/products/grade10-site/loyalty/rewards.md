@@ -55,6 +55,7 @@ variant alone, so a coupon scoped to named products or a filter is online only
 What a member can buy right now: in stock, inside its window, not archived.
 Stock reads as a yes or no, never a count.
 
+- **Read signed out** - cost and coupon validity, never stock or edits
 - **One debit** - a single debit of the balance, oldest points first
 - **All or nothing** - a balance short of the cost is refused whole, never
   part paid
@@ -65,8 +66,9 @@ Stock reads as a yes or no, never a count.
   reach, and the one channel it is good at where there is only one
 - 🚧 **Online only on the menu** - a reward scoped to named products or a
   catalog filter reads online only, whatever channels it names
+- 🚧 **Twice costs once** - a redemption sent again, reload or not, records one
 
-:::example{title="Buying from the shop"}
+:::example{title="Buying from the shop" id="shop-buy-and-short"}
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Holds | 700 points already earned |  | 700 |
@@ -97,6 +99,8 @@ carrying the definition it was bought under.
   [Reward Types](#reward-types)
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
+- 🚧 **A free item is never added** — its coupon needs the line in the
+  basket, or it is refused as Nothing matches
 - **One discount at a time** — an order carries one discount at a time,
   and a reward is in that count, so a free item and a money-off coupon are
   two sales
@@ -127,6 +131,7 @@ Every reward the programme knows, on sale or not; the
 | Cost | Points per redemption, copied onto the redemption when it is made |
 | Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken - [Authoring a Reward](/p/grade10-site/loyalty/operator-console#authoring-a-reward) |
 | Stock | Optional; a stocked reward is never oversold |
+| Coupon validity | Whole days the coupon runs, copied onto the coupon when redeemed, so changing it never shortens a coupon already taken |
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
 
@@ -145,6 +150,7 @@ A reversal takes back a coupon the member still holds and returns the
 points that bought it — both move together, or the member ends up holding
 one and not the other. It is an operator's move, never a member's.
 
+- 🚧 **On the record** — in the operator log, with who and why
 - **Unused reverses** — the coupon is voided, and the points go back to the
   day the balance still runs to, even onto a balance brought to nothing, so a
   reversal never lengthens the life of points
@@ -155,6 +161,7 @@ one and not the other. It is an operator's move, never a member's.
 - **A lapsed balance does not** — there is nothing left to return into
 - **Tier is untouched** — a redemption never touched tier progress, so
   reversing one leaves it exactly where it was
+- 🚧 **Stock** — a unit goes back only where the redemption took one
 
 Where a reversal is refused and the member is still owed something, an
 operator gives rather than takes back:
@@ -163,7 +170,7 @@ operator gives rather than takes back:
   for
 - **Grant points instead** — where the reward no longer suits them
 
-:::example{title="Reversing a redemption"}
+:::example{title="Reversing a redemption" id="reverse-unused"}
 | Step | Event | Points | Balance |
 | --- | --- | --- | --- |
 | Holds | 500 points |  | 500 |

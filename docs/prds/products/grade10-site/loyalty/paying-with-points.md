@@ -15,6 +15,8 @@ reviewed: 2026-09-15
 | Never pays for | **Shipping or tax** |
 | Cap | **Qualifying goods minus the site discounts and the code**, and the balance — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused — [Discounts](/p/grade10-site/store/discounts#order-of-application) |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
+| Activity | **Yes** — points paid against a bill move the balance's lapse date, as a redemption does — [Points](/p/grade10-site/loyalty/points#expiry) |
+| Auctions | 🚧 **Never** — points pay nothing toward an auction purchase |
 | Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
 | Discount | 🚧 **One order-level discount titled "Deduction from Points"**, outside the order's one-coupon count, so a coupon and points can be used on the same order; "Points", the title older orders carry, counts as the same discount — [Discounts](/p/grade10-site/store/discounts#one-discount-at-a-time) |
 
@@ -33,11 +35,13 @@ reviewed: 2026-09-15
 - **Scaled only when something went wrong** — where the shop applied less
   than promised, or the balance fell below it meanwhile, the debit is the
   smaller figure and the shortfall is logged and alerted
+- 🚧 **No points title on the paid order** — the debit is what the shop
+  applied less every other discount, never more than promised
 
 The systems' steps, with the draft order and the webhook, are on
 [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout).
 
-:::example{title="Paying at checkout"}
+:::example{title="Paying at checkout" id="pay-online"}
 - Order $300
 
 | Step | Event | Points | Balance |
@@ -48,7 +52,7 @@ The systems' steps, with the draft order and the webhook, are on
 Nothing moves until the order is paid.
 :::
 
-:::example{title="Checkout abandoned"}
+:::example{title="Checkout abandoned" id="pay-abandoned"}
 - Order $300
 
 | Step | Event | Points | Balance |
@@ -59,7 +63,7 @@ Nothing moves until the order is paid.
 An order never paid was never debited.
 :::
 
-:::example{title="Shop applies less than promised"}
+:::example{title="Shop applies less than promised" id="pay-shop-applies-less"}
 - Order $300
 
 | Step | Event | Points | Balance |
@@ -87,9 +91,16 @@ The debit follows what the shop applied, not what was promised.
 - **Beside the shop's offer** — points go on beside an automatic offer,
   capped at what the offers leave of the goods; a staff order discount on
   the sale refuses the spend until staff take it off
+- 🚧 **A discount staff keyed** — a points title on a sale the extension
+  never marked is someone else's discount; the panel offers no points, no
+  coupon and no Apply until staff take it off
 - **Paid** — the shopkeeper takes payment
 - **Debited** — when the paid sale lands, the same way as online; clearing
   the discounts before payment undoes the promise, and nothing was debited
+- **Member told once it lands** — when the sale is paid, or trimmed to what
+  landed, the member is notified of the points, the amount and the
+  location, never a code; a sale abandoned after that notice sends a
+  correction
 - **Reversed only by the console** — once a spend is paid, an operator
   undoes it from the loyalty admin; the till itself never reverses one
 
@@ -112,7 +123,7 @@ The session, the switches and the cart are on
 - **Points earned** — clawed back separately, line by line —
   [Points](/p/grade10-site/loyalty/points)
 
-:::example{title="Whole order refunded"}
+:::example{title="Whole order refunded" id="refund-whole-order"}
 - Order $300
 
 | Step | Event | Points | Balance |
@@ -124,7 +135,7 @@ The session, the switches and the cart are on
 The whole of the order's goods came back, so the points paid come back too.
 :::
 
-:::example{title="Part of the order refunded"}
+:::example{title="Part of the order refunded" id="refund-part-order"}
 - Order $300
 
 | Step | Event | Points | Balance |

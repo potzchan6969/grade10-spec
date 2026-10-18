@@ -29,6 +29,9 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Expiry | Read off the clock, never written down |
 
 - **Expired is spent** — an unused coupon past its end returns nothing, and is counted as breakage
+- 🚧 **Its own clock** — the balance lapsing neither ends it nor moves it
+- 🚧 **States** — the member reads each as available, used, void or expired
+- 🚧 **Never at an auction** — no coupon applies to an auction purchase
 - **Birthday month** `TBC` — a definition can hold a coupon to the month of
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
@@ -91,7 +94,7 @@ action, since a reward coupon carries none
 
 ## Cases
 
-:::flow{title="Online" case="Retaken, then paid" diagram="assets/diagrams/coupon-retaken-paid.svg"}
+:::flow{title="Online" id="online-retaken-paid" case="Retaken, then paid" diagram="assets/diagrams/coupon-retaken-paid.svg"}
 ## *Member* — **Reaches checkout with a coupon**
 A code is minted for the cart, ephemeral.
 
@@ -102,7 +105,7 @@ Frees the earlier cart's claim and code, and claims it there instead.
 The paid order stamps it used. The earlier cart was cancelled with its code, so it cannot pay.
 :::
 
-:::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
+:::flow{title="At the till" id="till-walked-away" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
 ## *Shopkeeper* — **Applies it at the till**
 From the member's panel, or the member opens it on their phone and the till scans it.
 
@@ -116,7 +119,7 @@ An hour after its last plan, not a day.
 Its code is deactivated, or a gift's line stays on the cart, and the coupon is back in the wallet. A sale paid anyway is settled as [Spending one](#spending-one) says.
 :::
 
-:::flow{title="At the till" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
+:::flow{title="At the till" id="till-retaken-paid" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
 ## *Shopkeeper* — **Applies it on a sale**
 A product coupon's code is minted the moment it is chosen.
 
@@ -127,7 +130,7 @@ Frees the earlier sale's claim and code, and claims it there instead.
 An earlier sale paid with its old code spends nothing, and is reported.
 :::
 
-:::flow{title="Refused" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
+:::flow{title="Refused" id="refused-earlier-sale-stands" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
 ## *Member* — **Picks a coupon**
 An earlier sale of theirs is carrying it.
 
