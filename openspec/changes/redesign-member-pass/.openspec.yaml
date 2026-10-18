@@ -1,7 +1,0 @@
-schema: grade10-planning
-created: 2026-10-17
-ui_waived: the design is the designer's Figma frames (Grade10-DS-2026, nodes 7156:2292 and 7158:2858); the change implements them rather than choosing a look
-design_waived: all work is in this store - a `@grade10/ui` block rewrite with its stories and preview call sites; no application-side technical design
-page_waived: the membership PRD's marked lines land in this same change - the section row, the Member Pass section and the story embeds it already names
-depends_on:
-  - redesign-tier-card
