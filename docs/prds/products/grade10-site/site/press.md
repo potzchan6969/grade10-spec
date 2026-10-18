@@ -25,9 +25,9 @@ answers without a session, like any public surface —
   each release as a date-title-arrow row; narrow viewports stack the
   filter under the header and each date over its title
 
-- ❓ Copy - **Date style** - the frame writes `15 SEP, 2026` while the
-  live page writes `Sep 15, 2026`; the page carries the frame's style
-  until design confirms
+- ❓ Copy - **Date style** - the page writes `SEP 15, 2026` while the
+  live page writes `Sep 15, 2026`; the page carries the frame's
+  month-first casing until design confirms
 - ❓ Product - **Filter semantics** - the frame draws an All Time
   dropdown with a checked item; the page treats it as a year filter
   rather than jump navigation to each group

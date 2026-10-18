@@ -28,13 +28,13 @@
 | --- | --- | --- | --- |
 | Q1 | Whose press items does the list carry? | The live `grade10.com/press-releases` record verbatim - decided by the round | The frame's items — it repeats one placeholder release four times; the task names the live page as the content source |
 | Q2 | What does the All Time dropdown do? | A single-select year filter — one option per year the record holds, narrowing the groups shown - decided by the round | Anchor links to each year group — the frame draws a selected item with a check, which reads as a filter |
-| Q3 | Which date style wins? | The frame's `15 SEP, 2026` - decided by the round | The live page's `Sep 15, 2026` — the frame is the redesign; flagged ❓ on the PRD for design to confirm |
+| Q3 | Which date style wins? | `SEP 15, 2026` — month-first in the frame's casing - decided by the round | The live page's `Sep 15, 2026` — the frame is the redesign; flagged ❓ on the PRD for design to confirm |
 | Q4 | How does the page reveal? | Mount-enter reveal like About - decided by the round | Scroll-driven reveals — the page's below-fold content is a plain list, not a composition that greets the scroll |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| `grade10-site/site/press` | Is the date style `15 SEP, 2026` or `Sep 15, 2026`? | ❓ on [Press](/p/grade10-site/site/press) — the page carries the frame's text |
+| `grade10-site/site/press` | Is the date style `SEP 15, 2026` or `Sep 15, 2026`? | ❓ on [Press](/p/grade10-site/site/press) — the page carries the frame's casing |
 | `grade10-site/site/press` | Is the All Time dropdown a filter or jump navigation? | ❓ on [Press](/p/grade10-site/site/press) — a filter ships |
 | `grade10-site/site/press` | Where does the Press entry sit in the chrome? | ❓ on [Press](/p/grade10-site/site/press) — no item marked current today |
