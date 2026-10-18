@@ -21,8 +21,8 @@ title and the link, nothing else.
 - 🚧 **The record** — the coverage as a grid of media cards, each naming
   the story's publication and title over a Read article affordance
 - 🚧 **Every card a link** — the whole card opens its story on the
-  publisher's site in a new tab; the card lifts a touch and its border
-  strengthens on hover
+  publisher's site in a new tab; on hover the card lifts a touch, draws
+  a soft shadow, and its border strengthens
 - 🚧 **Responsive** — wide viewports lay the cards four across; narrow
   viewports stack them in a single column under the header, each card
   slimmer (smaller padding, minimum height and title)
@@ -34,8 +34,8 @@ title and the link, nothing else.
   `border-strong` hover; the published `Card` set binds `radius-2xl` and
   `gap-4`. The page composes the frame's values as overrides until design
   confirms which is the contract
-- ❓ Design - **Card shadow** - the frame's card draws a soft drop
-  shadow bound to no variable; the page ships the house shadow
+- ❓ Design - **Card shadow** - the frame's hover variant draws a soft
+  drop shadow bound to no variable; the page ships the house shadow
   (`0 8px 16px` of `--shadow-color`, the popover-pill value) until
   design names the effect
 - ❓ Design - **Publication colour** - the label draws `#77736b`, bound

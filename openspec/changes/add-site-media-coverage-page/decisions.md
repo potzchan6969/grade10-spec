@@ -28,7 +28,7 @@
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
 | Q1 | Whose media items does the grid carry? | The live `grade10.com/media-coverage` record verbatim - decided by the round | The frame's items — it repeats one placeholder card five times; the task names the live page as the content source |
-| Q2 | What does a media card's hover do? | The card lifts 4px and its border strengthens to `border-strong` - decided by the designer | A fill or arrow move — the frame's hover variant binds `Base/border-strong`; the lift is the designer's addition on top of the frame |
+| Q2 | What does a media card's hover do? | The card lifts 4px, draws a soft shadow, and its border strengthens to `border-strong` - decided by the designer | A fill or arrow move — the frame's hover variant draws the shadow and binds `Base/border-strong`; the lift is the designer's addition on top |
 | Q3 | How does the page reveal? | Mount-enter reveal like About and Press - decided by the round | Scroll-driven reveals — the page's below-fold content is a plain grid, not a composition that greets the scroll |
 | Q4 | How does the grid collapse on a narrow viewport? | One column, two at `sm`, four at `lg`; the card slims to `p-5`, `min-h-48` and a `text-base` title - decided by the designer | No small-viewport frame exists; the collapse and the compaction follow the sibling pages' conventions |
 | Q5 | Do cards grow with long CMS entries? | No — every card holds one height: the publication truncates to one line and the title clamps, three lines on small viewports and four at `sm`, ending in an ellipsis - decided by the designer | Free-height cards — the frame's `self-start` rows let card heights vary |
@@ -39,5 +39,5 @@
 | --- | --- | --- |
 | `grade10-site/site/media-coverage` | The card instance in the frame binds `radius-3xl`, `gap-6`, `size-56` and `container-3xs`; the published `Card` set binds `radius-2xl` and `gap-4`. Intentional override or drift? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — the page composes the frame's values as overrides |
 | `grade10-site/site/media-coverage` | The publication label binds no colour variable (`#77736b`). Which token? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — `secondary-foreground` ships |
-| `grade10-site/site/media-coverage` | The card's drop shadow binds no variable. Which effect? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — the house `0 8px 16px --shadow-color` ships |
+| `grade10-site/site/media-coverage` | The card's hover drop shadow binds no variable. Which effect? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — the house `0 8px 16px --shadow-color` ships |
 | `grade10-site/site/media-coverage` | Where does the Media Coverage entry sit in the chrome? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — no item marked current today |
