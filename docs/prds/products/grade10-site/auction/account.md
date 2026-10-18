@@ -29,8 +29,8 @@ within a minute is answered with a wait rather than a second message.
 The newest email in the inbox is always the one that works.
 ## *Collector* — **Follows it**
 A working unused link signs them in. A used, replaced or expired link creates
-no session, and a toast says which — [Sign-In · Following the
-Link](/p/shared/auth/sign-in#following-the-link).
+no session, and a toast says which — [Sign-In · One-Time
+Use](/p/shared/auth/sign-in#one-time-use).
 :::
 
 - **Where the auction asks** — the bid panel, a watch and My Auctions each

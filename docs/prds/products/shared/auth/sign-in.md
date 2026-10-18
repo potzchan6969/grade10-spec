@@ -5,58 +5,70 @@ order: 1
 reviewed: 2026-09-28
 ---
 
-## Sending a Link
+People sign in with an emailed link, or with Google where the brand offers it. There is no password and no code. A session covers the site or console it was made on, and no other brand. A return address the brand does not trust is ignored.
 
-A person types their email, and a sign-in link is emailed to it. There is no password and no code. Google appears only on a brand that has enabled it, and only a verified Google address signs anyone in.
+## Google Sign-In
 
-- **One intent, one request** — pressing the button again while the request runs starts no second request
-- **One email a minute** — asking again within a minute is answered with a wait, not a second message
-- **Link lifetime** — a link lasts five minutes, and the email says so
-- **The newest link works** — a new link invalidates the one sent before it, so the newest email in an inbox is always the one that works
-- **One account per address** — letter case does not create a second account. A plus-tag is a different address
-- **Trusted products** — a trusted product may create or enter an account from an email it has already verified. Checkout uses this, and a later sign-in with the same address is the same person
+### Button
 
-## Surfaces
+Google shows only on brands that turn it on. Only a verified Google address can sign someone in.
 
-Sign-in stays on the brand. A session covers the surface it was made on and no other brand, and a redirect target the brand does not trust is ignored rather than followed.
+- 🚧 **Site or console** — Google on the console signs in the console only. Google on the site signs in the site only, never the console. A product's sign-in from a verified email signs in the site, never the console
 
-- 🚧 **A link signs in the surface that asked for it** — a console link signs in the console only, and a site link signs in the site only. A person already signed in as someone else is judged on the surface the link belongs to. A return location on the other surface is ignored, and the person lands on the asking surface
-- 🚧 **An operator action can send a site link** — an elevated console action, such as Email sign-in link beside a [test winner](/p/grade10-admin/auction/management#test-winners), may send a customer account a link for the site. It signs in the site and never the console. Only a console session holding `user:create` can send it. Otherwise the request is refused and nothing is sent
-- 🚧 **The wait and the newest link count per surface** — a console link asked for right after a site link for the same address is sent, and neither cancels the other
-- 🚧 **Google and a product's sign-in follow their surface** — Google on the console signs in the console only. A product's sign-in from a verified email signs in the site and never the console
+### One Tap
 
-## After the Send
+Signed-out people on a brand with Google sign-in see Google's prompt in the corner of the page. They do not open the sign-in dialog first. Tapping the prompt signs them in, the same as the Google button. Leaving it alone changes nothing.
 
-- **Confirmation** — the dialog is titled **Check Your Email**, the address sits on its own line, and Resend is offered. There is no Back control. Dismiss the dialog to leave
-- **Resend wait** — Resend stays off for sixty seconds after each successful send, and counts down as **Resend (45)**. It turns on again at zero
-- **Email-step wording** — the send action reads **Sign In with Email**. Collectors never see the term magic link
-- **Leaving** — dismissing the dialog is the way out. Signing in again starts at the email step, so a mistyped address can be corrected
+- **Any page** — the prompt can appear on any page a signed-out person opens
+- **One at a time** — the prompt stays hidden while the sign-in dialog is open. Opening the dialog hides it
+- **After a decline** — if the prompt is showing, and the person opens the dialog and closes it with no sign-in, that counts as a decline. The prompt stays away for the rest of that visit
+- 🚧 **Console sign-in does not hide it** — the prompt belongs to the site. A person signed in only on the console is still offered it on the site
 
-## Following the Link
+## Email Sign-In
 
-A working, unused link signs the person in. A link that cannot creates no session. A site link that cannot lands the person on the brand home, with a toast.
+A person types their email, and a sign-in link is sent to it. Following the link signs them in.
+
+### Requesting a Link
+
+- **One request at a time** — pressing the button again while a request runs does not send a second one
+- **One account per address** — capital letters do not make a second account. A plus-tag is a different address
+- **Trusted products** — a trusted product can create or enter an account from an email it has already checked. Checkout does this. Signing in later with the same address is the same person
+- **Wording** — the button reads **Sign In with Email**. Collectors never see the term magic link
+- 🚧 **Site or console** — a console link signs in the console only, and a site link signs in the site only. If someone is already signed in as another person, the link is checked against the site or console it was sent for. A return address on the other one is ignored, and the person lands where they asked
+- 🚧 **An operator can send a site link** — from a console action, such as Email sign-in link beside a [test winner](/p/grade10-admin/auction/management#test-winners), an operator can send a customer a link for the site. It never signs the customer in to the console. Only a console session with `user:create` can send it. Otherwise nothing is sent, and the request is refused
+
+### Resend
+
+After a send, the dialog reads **Check Your Email**, with the address on its own line. There is no Back button. Dismiss the dialog to leave. Signing in again starts at the email step, so a wrong address can be fixed.
+
+- **Wait** — Resend stays off for sixty seconds after each successful send. It counts down as **Resend (45)**, then turns on
+- **Asking early** — asking again during the wait gets a message, not a second email
+- **Newest link works** — a new link stops the one before it from working, so the newest email is the one to use
+- 🚧 **Waits are per site or console** — a console link asked for just after a site link for the same address is sent, and neither cancels the other
+- 🚧 **Waits end on the same site or console only** — a console sign-in leaves a site wait running, and the other way round
+- **Another device** — a dialog still waiting learns when that address signs in on another device for the same site or console. It then ends its wait with a message. It gets no session. Only the device that signed in has one
+
+### Link Expiry
+
+A link lasts five minutes, and the email says so. An expired link does not sign anyone in.
+
+### One-Time Use
+
+A link works once. A link that does not work creates no session.
 
 | Link | Result |
 | --- | --- |
-| Working and unused | Signs in. The tab that asked shows the collector signed in without a reload, and the stopped action carries on. It is tried once |
+| Working and unused | Signs in. The tab that asked shows the person signed in without a reload, and the action they started carries on. The link is used once |
 | Expired | A toast says the link has expired |
-| Used, replaced or invalid | One toast says the link no longer works |
-| Banned | Says they cannot sign in, and does not invite another link |
-| Signed in as someone else, on the site | No switch. A toast says so, names the link's email, and offers **Switch** or **Stay**. Dismissing keeps the current session |
+| Used, replaced or invalid | A toast says the link no longer works |
+| Banned | Says the account cannot sign in, and does not offer another link |
+| Signed in as someone else, on the site | No switch. A toast names the link's email and offers **Switch** or **Stay**. Dismissing keeps the current session |
 
-- 🚧 **A console link that cannot lands on the console's sign-in page** — the failure, the ban and the different-account choice show as a message in the page, since the console has no toasts. Switch and Stay sit in the page too
-- **Settled on another device** — a surface still showing Check Your Email learns when that address signs in on another device to the same surface, and ends its own wait with a message. It gains no session. Only the device that signed in has one
-- 🚧 **Waits end on the same surface only** — a console sign-in leaves a site wait running, and the other way round
+- 🚧 **Console failures show on the sign-in page** — an expired, used, banned or different-account link lands on the console's sign-in page, and the message shows there, since the console has no toasts. Switch and Stay sit on the page too
 
-## Google One Tap
+## Screens
 
-A signed-out collector on a brand that offers Google sign-in sees Google's own prompt in the browser corner, without opening sign-in first. Tapping it signs them in as the Google control does. Leaving it alone leaves the page as it was.
-
-- **Brand-offered** — a brand without Google sign-in never shows it
-- **One ask at a time** — the prompt does not appear while the sign-in dialog is open, and opening the dialog dismisses it
-- **Every page** — it can appear on any page a signed-out collector visits
-- **Suppressed after a decline** — opening the dialog while the prompt shows counts as a decline once the dialog closes with no session. The prompt stays away for the rest of that visit
-- 🚧 **A console session does not withhold it** — the prompt is the site's and reads the site's session, so a person signed in on the console only is still offered it on the site
+The dialogs and messages above, as the design system draws them.
 
 ::story{id="auth-sign-in-blocks-signinemailform--default" title="The email step"}
 
