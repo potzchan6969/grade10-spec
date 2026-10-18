@@ -26,7 +26,7 @@ reminder.
 - **Lead times that cannot work are refused** - a lead-time setting written
   with no lead in it, a lead repeated, a lead under 1 day, or a lead as long
   as the shortest the window can run or longer, 365 days on 12 months, stops
-  the programme from starting
+  the programme from starting, naming what it refuses
 - **Named by its lead** - the reminder carries which lead time raised it,
   so two lead times on one date are two reminders and never one repeated
 - **Raised once** - the same member, day and lead time raise one reminder,
@@ -45,14 +45,40 @@ reminder.
   [Points](/p/grade10-site/loyalty/points#expiry)
 - **Gone at once** - a reminder stops being owed the moment its day moves,
   its balance empties, the balance lapses or the programme starts without its
-  lead time, with nothing waiting on a nightly pass
+  lead time, with nothing waiting on a nightly pass, whether or not anything
+  has read it
+
+:::example{title="A reminder from 30 days before the day" id="reminder-thirty-days"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/12/03 | 31 days before the day · nothing owed | 0 | 15 |
+| 2026/12/04 | 30 days before the day · reminder owed, 15 points | 0 | 15 |
+| 2026/12/10 | campaign grant · takes 2027/01/03 · same reminder, 115 points | +100 | 115 |
+| 2027/01/03 | lapse · reminder gone | −115 | 0 |
+
+The grant leaves the day in place, so the count changes and no second
+reminder is raised.
+:::
+
+:::example{title="Buying drops the reminder" id="reminder-day-moves"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/12/04 | reminder owed for 2027/01/03, 15 points | 0 | 15 |
+| 2026/12/10 | earn → lapses 2027/12/10 · reminder dropped | +10 | 25 |
+| 2027/11/10 | reminder owed for 2027/12/10, 25 points | 0 | 25 |
+
+Nothing is owed for the new day until it is 30 days away.
+:::
 
 ## What a Reminder Holds
 
 - **The member** - who it is owed to
 - **The day** - the day their balance expires
 - **The points** - how many of their points expire on it, kept current
-  while the day stands
+  while the day stands; a grant, a correction, a claw-back or a reversal that
+  leaves the day in place changes the count and raises no second reminder
 - **The lead time** - which one raised it
 
 ## Delivery
