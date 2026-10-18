@@ -16,6 +16,18 @@ test("planning text lands on main and owes the planning checks", () => {
     "changes",
     "test-cases",
     "manual",
+    "pages",
+    "stories",
+  ]);
+});
+
+test("a cases file owes the page checks", () => {
+  assert.deepEqual(ids(["docs/cases/grade10/x.md"]), [
+    "biome",
+    "changes",
+    "test-cases",
+    "manual",
+    "pages",
     "stories",
   ]);
 });

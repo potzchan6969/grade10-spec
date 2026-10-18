@@ -45,6 +45,7 @@ const COMMANDS = {
   ],
   "test-cases": () => ["node", ["scripts/openspec/validate-test-cases.mjs"]],
   manual: () => ["node", ["tools/manual/check/check-manual.mjs"]],
+  pages: () => ["node", ["scripts/pages/pages.mjs", "check"]],
   stories: () => ["node", ["scripts/storybook/check.mjs"]],
   parity: () => ["bash", ["scripts/agent-platform/check-parity.sh"]],
 };

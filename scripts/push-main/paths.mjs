@@ -13,6 +13,8 @@ const STATUS =
   /^openspec\/changes\/(?!archive\/)([^/]+)\/(tasks\.md|rounds\.md|implementation\.json|acceptance\.json|\.openspec\.yaml)$/;
 
 const PLANNING = /^(openspec\/|docs\/)/;
+/** A product page or its cases file. */
+const PAGES = /^docs\/(prds\/products|cases)\//;
 const AGENT =
   /^(\.claude\/|\.codex\/|\.cursor\/|(AGENTS|AGENT|CLAUDE|GEMINI)\.md$)/;
 const CHANGE = /^openspec\/changes\/(?!archive\/)([^/]+)\//;
@@ -36,6 +38,7 @@ export function classify(paths) {
   } else if (planning.length) {
     checks.push({ id: "changes" }, { id: "test-cases" }, { id: "manual" });
   }
+  if (paths.some((path) => PAGES.test(path))) checks.push({ id: "pages" });
 
   if (paths.some((path) => STORIES.test(path) && !STATUS.test(path)))
     checks.push({ id: "stories" });
