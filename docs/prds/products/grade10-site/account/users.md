@@ -29,9 +29,9 @@ They open the directory, which they see only if they hold the listing grant, and
 
 The console asks for confirmation in its own dialog, with the reason it will record.
 
-## The system refuses the two forbidden cases
+## The system refuses the forbidden cases
 
-Nobody can ban themselves, and nobody can ban the last admin.
+Nobody can ban themselves, or any admin.
 
 ## The gate is walked
 

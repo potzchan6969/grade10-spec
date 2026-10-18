@@ -17,6 +17,7 @@ An operator with the session-list grant lists one person's sessions by user id. 
 An operator with the revoke grant can end one session, or every session an account holds. Revoking the session they are using signs them out too.
 
 - 🚧 **Ending every session ends both** — revoking all of an account's sessions closes its site and console sessions alike. A ban does the same
+- **Admins are protected** — nobody can revoke a session of an account holding `admin`, unless the caller holds `admin`
 - **Closes within 70 seconds** — a revoked session stops answering signed-in reads within 70 seconds, on every read. Not only on a change or an elevated call. A browse page's cached session would otherwise last five minutes. Seventy, not zero: the session store takes up to a minute to reach every location
 
 ## Ban or Revoke

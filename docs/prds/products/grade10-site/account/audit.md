@@ -8,7 +8,7 @@ order: 7
 ## What Lands on the Trail
 
 - **Identity writes** — ban, unban, set-role, revoke, a trusted product creating a new user id or flipping one to verified, account deletion, and second-factor enable, disable and recovery regenerate
-- **Refusals too** — a refused action is recorded, as a success is
+- **Refusals too** — a refused ban, unban, role change or revoke is recorded, as a success is
 - **Entries keep the reason** — an entry keeps the operator's stated reason
 - **Named by user id** — an entry names the account by user id. It never carries a secret, a recovery code or an email
 - **Not on the trail** — collector sign-in and sign-out. A trusted product that finds an account already there, with no data change, does not write

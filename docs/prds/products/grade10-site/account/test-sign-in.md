@@ -8,16 +8,17 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 
 ## Who May Call
 
-- **The lane's own workflow** — one workflow opens the door, in an environment a reviewer approves. Proving the repository is not enough. Every job in it proves the same thing, including a job running code a pull request wrote
+- **The lane's own workflow** — one workflow, from main, opens the door in an environment a reviewer approves. Proving the repository is not enough. A run a pull request starts is refused
 - **A QA agent** — an agent walking a manual pass on staging captures a tester's sign-in link through the door, so it signs in without a mailbox — [Manual QA Passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
 - **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
-- **What the token may do** — capture, age and clear. Never ban or prepare, so a holder can grant nothing
-- **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on
+- **What the token may do** — capture, age and clear. Never ban or prepare. A holder can still sign in as any tester
+- ❓ **Admin tester** — whether the token may reach the admin-only tester, whose sign-in gives `admin` on staging. Owner: Product
+- **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on. Anyone who reads the repository gets the new token too, so rotation cuts off only copies made earlier
 
 ## Where It Opens
 
 - **Staging and uat** — every move, for the named testers and a unique plus-tag of one
-- **Production and preview** — capture and clear, for the collector alone
+- **Production and preview** — capture and clear, for the collector alone, by the workflow only
 
 ## Testers
 

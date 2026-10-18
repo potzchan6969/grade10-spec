@@ -35,7 +35,7 @@ A person types their email, and a sign-in link is sent to it. Following the link
 - **Trusted products** — a trusted product can create or enter an account from an email it has already checked. Checkout does this. Signing in later with the same address is the same person
 - **Wording** — the button reads **Sign In with Email**. Collectors never see the term magic link
 - 🚧 **Site or console** — a console link signs in the console only, and a site link signs in the site only. If someone is already signed in as another person, the link is checked against the site or console it was sent for. A return address on the other one is ignored, and the person lands where they asked
-- 🚧 **An operator can send a site link** — from a console action, such as Email sign-in link beside a [test winner](/p/grade10-admin/auction/management#test-winners), an operator can send a customer a link for the site. It never signs the customer in to the console. Only a console session with `user:create` can send it. Otherwise nothing is sent, and the request is refused
+- 🚧 **An operator can send a site link** — from a console action, such as Email sign-in link beside a [test winner](/p/grade10-admin/auction/management#test-winners), an operator can send a customer a link for the site. It never signs the customer in to the console. Only an elevated console session with `user:create` and a proven second factor can send it. Otherwise nothing is sent, and the request is refused
 
 ### Resend
 

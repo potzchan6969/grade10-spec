@@ -10,7 +10,7 @@ A session keeps a person signed in on one site or console. Each has its own sess
 
 - 🚧 **The console is its own sign-in** — signing in to the console does not sign anyone in on the site, and signing in on the site does not open the console. A person can hold one, the other or both, as two different accounts
 - 🚧 **Each session ends on its own** — the site session ending says nothing about the console's, and the other way round
-- 🚧 **Operator actions need the console's sign-in** — a site sign-in never counts as the recent sign-in an operator action asks for
+- 🚧 **Operator actions need the console's sign-in** — a site sign-in never counts as the second factor, or the recent sign-in, an operator action asks for
 - 🚧 **Release asks operators to sign in once more** — the console stops honouring the site's session at release. Customer sessions are untouched
 
 ## Open Tabs

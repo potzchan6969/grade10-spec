@@ -16,7 +16,7 @@ Accounts is how a person gets into a brand's site or console, and what happens t
 | [Users](/p/grade10-site/account/users) | The directory, bans, role changes, creating accounts and erasure |
 | [Sessions](/p/grade10-site/account/sessions) | An operator listing and ending one person's sessions |
 | [Audit Log](/p/grade10-site/account/audit) | The trail every identity write lands on |
-| [Sign-In Tests](/p/grade10-site/account/test-sign-in) | How QA walks sign-in on staging |
+| [Sign-In Tests](/p/grade10-site/account/test-sign-in) | How QA walks sign-in on the hosted stacks |
 
 :::callout{kind="note"}
 `session` and `sessions` are two capabilities, not a typo. The singular one is who the caller is. The plural one is an operator listing and ending somebody else's sessions.
