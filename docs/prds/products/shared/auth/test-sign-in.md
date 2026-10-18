@@ -8,7 +8,7 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 
 ## Who May Call
 
-- **The lane's own workflow** — one workflow opens the door, in the environment a reviewer approves. Proving the repository is not enough. Every job in it proves the same thing, including one running code a pull request wrote
+- **The lane's own workflow** — one workflow opens the door, in an environment a reviewer approves. Proving the repository is not enough. Every job in it proves the same thing, including a job running code a pull request wrote
 - **A QA agent** — an agent walking a manual pass on staging captures a tester's sign-in link through the door, so it signs in without a mailbox — [Manual QA Passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
 - **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
 - **What the token may do** — capture, age and clear. Never ban or prepare, so a holder can grant nothing
@@ -22,26 +22,26 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 ## Testers
 
 - **Named testers** — staging and uat each name four: a collector, a plus-tag sibling, a ban-only address and an admin-only address. Production names its collector alone. They are written into the code, so a new tester is a commit
-- **A minted plus-tag** — on staging and uat a run mints a unique plus-tag of a named tester, so a test that needs an address nobody has used gets one. Production takes no plus-tag
-- ❓ **Sweeping** — accounts for minted plus-tags accumulate on staging and uat. How old one gets before it is removed is open. Owner: Ops
+- **A minted plus-tag** — on staging and uat, a run mints a unique plus-tag of a named tester, so a test that needs an unused address gets one. Production takes no plus-tag
+- ❓ **Sweeping** — accounts for minted plus-tags build up on staging and uat. How old one gets before it is removed is open. Owner: Ops
 
 ## What the Job May Do
 
 Only for a tester address:
 
-- **Capture the link** — the last sign-in mail for that address, without opening the mailbox, so the job can follow it. The mail stays readable for **fifteen minutes**, so it outlives the five-minute link
+- **Capture the link** — the last sign-in mail for that address, read without opening the mailbox. The mail stays readable for **fifteen minutes**, so it outlives the five-minute link
 - **Age the unused link** — so an expired follow can be walked without waiting five minutes
 - **Ban the address** — so a banned follow can be walked without the Users desk
 - **Prepare the address** — so it holds `admin` before the link is followed
 - **Prepare a scoped role** — `staff`, `support`, `finance`, `treasurer` or `auditor` on a unique plus-tag of the collector, never on a named tester
-- **Clear the sign-in limits** — the wait between two sign-in mails, and the limit on how many a caller may ask for, so a suite is not throttled as an attacker would be
+- **Clear the sign-in limits** — the wait between two sign-in mails, and the cap on how many a caller may ask for, so a suite is not throttled as an attacker would be
 
 Ban and prepare answer for an address that has never signed in. The account is created, then put in the state the move names. The collector still asks for the link the ordinary way. The job only captures, ages, bans, prepares or clears.
 
 ## Closed
 
 - **Production** — capture and clear only, for the collector. Preview runs the production backends and answers the same
-- **Everywhere else** — local stacks open no move, and the disposable `/dev` door stays closed on staging, uat and production. The job does not mint a session without following the mail, it does not unban, and it does not seed store or auction data here
+- **Everywhere else** — local stacks open no move, and the disposable `/dev` door stays closed on staging, uat and production. The job does not mint a session without following the mail, does not unban, and does not seed store or auction data here
 
 :::detail{title="Code map" for="engineer"}
 - **Door** — [`packages/grade10-auth/backend/src/routes/testDoor.ts`](https://github.com/9gag/grade10/blob/main/packages/grade10-auth/backend/src/routes/testDoor.ts)

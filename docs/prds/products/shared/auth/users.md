@@ -8,13 +8,17 @@ reviewed: 2026-09-29
 
 ## Directory
 
-Only holders of the directory grant see the list. Search matches a name or an email, letter case ignored, and an account opens by user id. The list narrows by elevated or user population, a named elevated role, status and email verification, several at once. The caller chooses the order, newest first when none is asked. A banned account stays in the directory, marked. A person nobody can find is a person nobody can unban.
+- **Who sees it** — only holders of the directory grant
+- **Search** — a name or an email, letter case ignored. An account opens by user id
+- **Filters** — elevated or user population, a named elevated role, status and email verification. Several at once
+- **Order** — newest first, unless the caller chooses another
+- **Banned accounts** — they stay in the directory, marked. A person nobody can find is a person nobody can unban
 
 ## Ban and Unban
 
 - **Blunt by design** — a ban ends every session the account holds, refuses new sign-ins and stops money moving. An unban restores sign-in
-- **Refused outright** — banning yourself, or any account holding `admin`, peers included, not only support or the last admin
-- **Closes within 70 seconds** — a ban stops answering signed in on every read within 70 seconds, not only on a mutation or an elevated call. A browse page's cached copy of the session would otherwise last five minutes
+- **Refused outright** — nobody can ban themselves, or any account holding `admin`, peers included
+- **Closes within 70 seconds** — a banned account stops answering signed in within 70 seconds, on every read. Not only on a change or an elevated call. A browse page's cached session would otherwise last five minutes
 
 :::flow{title="Banning an account"}
 ## The operator finds the account
@@ -44,17 +48,17 @@ Every session it holds ends, new sign-ins are refused, and money stops. The acco
 
 ## Role Changes
 
-- **Who may change** — an operator holding the set-role grant, from the same directory, their own account included
+- **Who may change** — an operator holding the set-role grant, from the same directory, including their own account
 - **Clearing roles** — clearing every operator role leaves a plain user
 - **Admin is protected** — an operator cannot strip `admin` from another admin. An admin may remove their own `admin` when another admin remains. The last admin keeps `admin`
-- **Reflects within 70 seconds** — an ordinary, non-elevated read of the person's permissions answers the new roles within 70 seconds, not only on an elevated call
+- **Reflects within 70 seconds** — an ordinary read of the person's permissions shows the new roles within 70 seconds, not only on an elevated call
 
-Everything on this page is what an operator may do. Each of these moves lands on the identity trail — [Audit Log](/p/shared/auth/audit). The page of Grade10 that uses this read is the [Users access desk](/p/grade10-admin/console/user-directory).
+Each of these changes lands on the identity trail — [Audit Log](/p/shared/auth/audit). The Grade10 page that uses this read is the [Users access desk](/p/grade10-admin/console/user-directory).
 
 ## Create Account
 
-- **Create** — an operator holding `user:create` may create a passwordless Auth account with a name, an email and roles from the closed set. A duplicate email is refused. Creating with a role other than `user` also requires `user:set-role`. No loyalty enrolment or invite mail is sent
-- ❓ **Email verification on create** — what verification standing a newly created Auth account starts with: unverified until the person proves the address, or verified because an operator typed it. Owner: Product
+- **Create** — an operator holding `user:create` makes a passwordless Auth account with a name, an email and roles from the closed set. A duplicate email is refused. A role other than `user` also needs `user:set-role`. No loyalty enrolment or invite mail is sent
+- ❓ **Email verification on create** — whether a new account starts unverified, until the person proves the address, or verified, because an operator typed it. Owner: Product
 
 :::callout{kind="note"}
 Auction bidder bans are a separate thing with a separate switch. The auction service keeps its own flag, because an identity ban does not cross brands and the auction is shared across them.
@@ -62,7 +66,7 @@ Auction bidder bans are a separate thing with a separate switch. The auction ser
 
 ## Erasure
 
-- **The account holder files their own request** — from a product's Your data page, and cancels it there inside the seven days. A self-filed request bans nothing — [Account Data](/platform/account-data#erasure)
+- **The account holder files their own request** — from a product's Your data page, and cancels it there inside seven days. A self-filed request bans nothing — [Account Data](/platform/account-data#erasure)
 - **Standing waits for the request** — while an erasure request is open, a ban or an unban of that account is refused by name. The request closing, cancelled or completed is what changes standing
 
 :::detail{title="Product decisions" for="pm"}

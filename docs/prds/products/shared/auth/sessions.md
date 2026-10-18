@@ -7,23 +7,23 @@ order: 6
 
 ## Listing
 
-An operator holding the session-list grant lists one person's sessions by user id. The listing names each session without ever carrying the secret that authenticates it, so reading the list can never hand anyone a way in.
+An operator with the session-list grant lists one person's sessions by user id. The list never shows the secret that signs a session in, so reading it gives no one a way in.
 
-- 🚧 **The list names the surface** — each session reads as a site or a console session, so an operator can tell where a person is signed in
-- 🚧 **A session from before release reads as the site's** — one made before the separation carries no surface and is listed as a site session
+- 🚧 **The list names the surface** — each session reads as a site or console session, so an operator can tell where a person is signed in
+- 🚧 **Sessions from before release read as the site's** — one made before the separation has no surface, and is listed as a site session
 
 ## Revoke
 
-An operator holding the revoke grant can end one session or every session that account holds. Revoking the session they are using signs them out, which is the honest outcome rather than a special case.
+An operator with the revoke grant can end one session, or every session an account holds. Revoking the session they are using signs them out too.
 
-- 🚧 **Ending every session ends both** — revoking all of an account's sessions closes its site and console sessions alike, and a ban does the same
-- **Closes within 70 seconds** — a revoked session stops answering signed in on every read within 70 seconds, not only on a mutation or an elevated call. A browse page's cached copy of the session would otherwise last five minutes. Seventy, not zero: the session store takes up to a minute to reach every location
+- 🚧 **Ending every session ends both** — revoking all of an account's sessions closes its site and console sessions alike. A ban does the same
+- **Closes within 70 seconds** — a revoked session stops answering signed-in reads within 70 seconds, on every read. Not only on a change or an elevated call. A browse page's cached session would otherwise last five minutes. Seventy, not zero: the session store takes up to a minute to reach every location
 
 ## Ban or Revoke
 
 - **Ban** — disables the whole account and refuses new sign-ins — [Users](/p/shared/auth/users)
 - **Revoke** — ends a session and leaves the person able to sign in again. That is what a lost laptop needs
-- **Sign-out** — ends the surface you are on, and is a different capability again — [Sign-Out](/p/shared/auth/sign-out)
+- **Sign-out** — ends the surface you are on. It is a separate capability — [Sign-Out](/p/shared/auth/sign-out)
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |

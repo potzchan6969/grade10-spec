@@ -11,15 +11,15 @@ There are seven roles, from one closed set: `user`, `staff`, `support`, `finance
 
 ## Holding a Role
 
-A product asks whether the caller holds a permission. Roles stack when a person holds several. No operator can widen what a role grants, because who holds a role is data in the database, while what a role grants lives in reviewed code.
-
-That split limits a compromised operator account. It can hold roles it should not, but it cannot invent a permission for one.
+A product checks permissions, never whether a role matches. Roles stack when one person holds several.
 
 - **Payment processing** — `auction:payment`, held by `finance`, `treasurer` and `admin`. It collects auction money: sending and reissuing an invoice, recording a payment, checking proof and cancelling an order — [Auction Management](/p/grade10-admin/auction/management#grants)
 - **Payment Settings** — the premium minimums and the fee schedule sit under `auction:payment`, so finance keeps them — [Auction Management · Payment Settings](/p/grade10-admin/auction/management#payment-settings)
-- **Refund processing** — `auction:refund`, held by `staff` and `admin`. It records an auction refund, apart from `auction:payment`, which collects money — [Auction Management](/p/grade10-admin/auction/management#grants)
+- **Refund processing** — `auction:refund`, held by `staff` and `admin`. It records an auction refund. `auction:payment` is the grant that collects money — [Auction Management](/p/grade10-admin/auction/management#grants)
 - **Moving items** — `inventory:transfer`, held by `staff` and `admin`. It moves an item to a new owner and opens its proof — [Items](/p/grade10-admin/inventory/items#permissions)
-- **Staff and treasurer together** — one person may hold both, and the grants stack. No act that approves another is taken by the person who recorded it, so a step that needs two people still needs two
+- **Staff and treasurer together** — one person may hold both, and the grants stack. Whoever records an act cannot approve it, so a step that needs two people still needs two
+
+No operator can widen a role. Who holds a role is data in the database. What a role grants is reviewed code. A compromised operator account can hold roles it should not, but it cannot invent a permission.
 
 :::detail{title="Gate layers" for="operator"}
 Permissions are the first of three layers, all fail-closed. An elevated call re-reads the session straight from the auth worker with no cookie cache, so a ban or a role change acts at once. Then it checks every named permission. Then it requires a live second-factor stamp where the environment enforces one. Then it appends to the audit trail, without which the action refuses to run. A raw byte route — an identity capture, a sealed document, an item photo — climbs the same ladder.
