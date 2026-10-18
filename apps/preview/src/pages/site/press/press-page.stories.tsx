@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, waitFor, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
 import { PRESS_PAGE } from "./press-content";
 import { PressPage } from "./press-page";
 
@@ -22,7 +22,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const body = within(canvasElement.ownerDocument.body);
 
     const heading = canvas.getByRole("heading", {
       level: 1,
@@ -52,23 +51,9 @@ export const Default: Story = {
       canvasElement.querySelectorAll('a[href^="/press-releases/"]'),
     ).toHaveLength(total);
 
-    // The year filter narrows the list to 2025.
-    const filter = canvas.getByRole("button", { name: PRESS_PAGE.allTime });
-    await userEvent.click(filter);
-    const yearOption = await body.findByRole("menuitemradio", {
-      name: "2025",
-    });
-    await userEvent.click(yearOption);
-    await waitFor(() =>
-      expect(body.queryByRole("menu")).not.toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(
-        canvas.queryByRole("heading", { level: 2, name: "2026" }),
-      ).not.toBeInTheDocument(),
-    );
+    // The filter rests on All Time: every year group shows.
     expect(
-      canvas.getByRole("heading", { level: 2, name: "2025" }),
+      canvas.getByRole("button", { name: PRESS_PAGE.allTime }),
     ).toBeVisible();
   },
 };

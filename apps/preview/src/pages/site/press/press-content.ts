@@ -22,7 +22,7 @@ const PRESS_PAGE = {
   eyebrow: "Press",
   heading: "Press Releases",
   intro:
-    "The official record of Grade10 — the card festivals, the vault, the partnerships, and the growth of Asia’s trading-card market.",
+    "The official record of Grade10: the card festivals, the vault, the partnerships, and the growth of Asia’s trading-card market.",
   allTime: "All Time",
   groups: [
     {

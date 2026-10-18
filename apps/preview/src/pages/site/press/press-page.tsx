@@ -28,14 +28,16 @@ const ALL_TIME = "all";
 function PressListItem({ item }: { item: PressItem }) {
   return (
     <a
-      className="group flex flex-col gap-2 border-border border-b px-4 py-6 transition-colors hover:bg-muted sm:grid sm:grid-cols-[160px_minmax(0,1fr)_160px] sm:gap-x-8"
+      className="group flex flex-col gap-2 border-border border-b px-4 py-6 transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-muted sm:grid sm:grid-cols-[160px_minmax(0,1fr)_160px] sm:gap-x-8"
       href={item.href}
     >
-      <span className="flex min-h-7 items-center font-medium text-secondary-foreground text-sm leading-5">
+      <span className="self-start font-medium text-secondary-foreground text-sm leading-6 sm:leading-7">
         {item.date}
       </span>
-      <span className="font-medium text-xl leading-7">{item.title}</span>
-      <span className="hidden h-7 min-w-7 items-center justify-center justify-self-end pr-3 group-hover:pr-0 sm:flex">
+      <span className="font-medium text-base leading-6 sm:text-xl sm:leading-7">
+        {item.title}
+      </span>
+      <span className="hidden h-6 min-w-7 items-center justify-center justify-self-end text-secondary-foreground transition-[padding,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:pr-0 sm:flex sm:h-7 sm:pr-3">
         <ArrowRight aria-hidden size={16} />
       </span>
     </a>
@@ -79,7 +81,7 @@ function PressPage() {
         }))}
       />
       <main className="w-full flex-1">
-        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-12 px-5 py-10 sm:px-6 sm:py-20">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-12 px-4 py-10 sm:px-6 sm:py-20">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div
               className={cn(

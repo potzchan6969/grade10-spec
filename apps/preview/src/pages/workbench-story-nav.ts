@@ -86,6 +86,18 @@ const AUCTION_LOT_DETAILS_HREF = storyHref(
 /** Preview href for Winner Order → My Auctions list. */
 const MY_AUCTIONS_PAGE_HREF = storyHref(MY_AUCTIONS_PAGE_STORY_ID);
 
+/** Storybook story id for the Press page assembly. */
+const PRESS_PAGE_STORY_ID = "site-press-screens-press--default";
+
+/**
+ * Real routes that resolve to a page story in the workbench: the href
+ * stays the surface's true address and a click in the canvas jumps to
+ * that route's story. Add a row when a page story lands.
+ */
+const ROUTE_STORY_IDS: Record<string, string> = {
+  "/press-releases": PRESS_PAGE_STORY_ID,
+};
+
 /** Jump the workbench Storybook iframe to another page story. */
 function navigateToStory(storyId: string) {
   const target = window.top ?? window;
@@ -113,10 +125,11 @@ function interceptWorkbenchStoryLinks(event: MouseEvent) {
   if (!href) return;
 
   const match = /(?:\?|&)path=\/story\/([^&#]+)/.exec(href);
-  if (!match) return;
+  const storyId = match ? decodeURIComponent(match[1]) : ROUTE_STORY_IDS[href];
+  if (!storyId) return;
 
   event.preventDefault();
-  navigateToStory(decodeURIComponent(match[1]));
+  navigateToStory(storyId);
 }
 
 export {
@@ -130,6 +143,7 @@ export {
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
   ORDER_HISTORY_STORY_ID,
+  PRESS_PAGE_STORY_ID,
   PRIVACY_POLICY_HREF,
   PRIVACY_POLICY_STORY_ID,
   STORE_LOCATOR_HREF,

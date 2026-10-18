@@ -74,7 +74,7 @@ function AboutPage() {
         }))}
       />
       <main className="w-full flex-1">
-        <div className="mx-auto w-full max-w-[1280px] px-5 py-8 sm:px-8 sm:py-12">
+        <div className="mx-auto w-full max-w-[1280px] px-4 py-8 sm:px-8 sm:py-12">
           <section
             aria-labelledby="about-heading"
             className="flex flex-col gap-6 py-8 sm:grid sm:grid-cols-2 sm:items-start sm:gap-16 sm:py-20"

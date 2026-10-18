@@ -396,7 +396,7 @@ function ShowsPage() {
         {/* Hero */}
         <section
           aria-labelledby="shows-heading"
-          className="mx-auto grid w-full max-w-[1280px] gap-12 px-5 py-10 sm:grid-cols-[2fr_1fr] sm:gap-24 sm:px-6 sm:py-20"
+          className="mx-auto grid w-full max-w-[1280px] gap-12 px-4 py-10 sm:grid-cols-[2fr_1fr] sm:gap-24 sm:px-6 sm:py-20"
         >
           <div className="flex flex-col items-start gap-6 sm:gap-8">
             <p
@@ -491,7 +491,7 @@ function ShowsPage() {
 
         {/* Event scale */}
         <section aria-labelledby="shows-scale-heading" className="bg-muted">
-          <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-10 px-5 py-12 sm:px-6 sm:py-20">
+          <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-10 px-4 py-12 sm:px-6 sm:py-20">
             <Reveal>
               <div className="flex flex-col gap-3 sm:gap-4">
                 <p className="font-semibold text-accent-foreground text-sm leading-5 uppercase sm:text-lg sm:leading-7">
@@ -545,7 +545,7 @@ function ShowsPage() {
         {/* Event formats */}
         <section
           aria-labelledby="shows-formats-heading"
-          className="mx-auto flex w-full max-w-[1280px] scroll-mt-4 flex-col gap-12 px-5 py-14 sm:gap-20 sm:px-6 sm:py-28"
+          className="mx-auto flex w-full max-w-[1280px] scroll-mt-4 flex-col gap-12 px-4 py-14 sm:gap-20 sm:px-6 sm:py-28"
           id="shows-formats"
         >
           <Reveal>
@@ -573,7 +573,7 @@ function ShowsPage() {
 
         {/* Event records */}
         <section aria-labelledby="shows-records-heading" className="bg-muted">
-          <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-10 px-5 py-12 sm:px-6 sm:py-20">
+          <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-10 px-4 py-12 sm:px-6 sm:py-20">
             <Reveal>
               <div className="flex flex-col items-center gap-3 text-center sm:gap-4">
                 <p className="font-semibold text-accent-foreground text-sm leading-5 uppercase sm:text-lg sm:leading-7">
