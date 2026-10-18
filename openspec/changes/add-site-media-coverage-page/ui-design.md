@@ -30,8 +30,8 @@
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Wide viewport | The header block, then the cards four across in the frame's grid | `grade10-site-site-media-coverage-SC-02` |
-| Narrow viewport | Header stacked over a single column of cards | `grade10-site-site-media-coverage-SC-03` |
+| Narrow viewport | Header stacked over a single column of slimmer cards — `p-5`, `min-h-48`, `text-base` title | `grade10-site-site-media-coverage-SC-03` |
 | Media card hover | The card lifts 4px and its border strengthens to `border-strong` | **Out of suite:** a CSS pseudo-state of the card the link requirement already binds |
-| Long entry | The publication truncates to one line, the title clamps at four; every card holds one height | **Out of suite:** CSS truncation on the card the coverage requirement already binds |
+| Long entry | The publication truncates to one line, the title clamps — three lines on small viewports, four at `sm`; every card holds one height | **Out of suite:** CSS truncation on the card the coverage requirement already binds |
 | Entering | Header and grid reveal on mount | **Out of suite:** the workbench stories' play pass waits on the reveal before asserting |
 | Reduced motion | All content visible immediately, no transition | **Out of suite:** the workbench's `data-storybook-pause-motion` harness, which the page's `motion-reduce` fallback answers |

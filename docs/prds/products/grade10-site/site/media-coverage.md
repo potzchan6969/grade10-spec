@@ -24,7 +24,8 @@ title and the link, nothing else.
   publisher's site in a new tab; the card lifts a touch and its border
   strengthens on hover
 - 🚧 **Responsive** — wide viewports lay the cards four across; narrow
-  viewports stack them in a single column under the header
+  viewports stack them in a single column under the header, each card
+  slimmer (smaller padding, minimum height and title)
 
 - **Copy - Eyebrow style** - the page writes `IN THE NEWS` from a
   sentence-case source; the uppercase is the style, not the data
@@ -44,8 +45,9 @@ title and the link, nothing else.
   chrome is undecided; the header marks no item current for the page
   today
 - **Copy - Title length** - every card holds one height: the publication
-  truncates to one line and the title clamps at four, so a long CMS
-  title ends in an ellipsis rather than a taller card
+  truncates to one line and the title clamps — three lines on small
+  viewports, four at `sm` — so a long CMS title ends in an ellipsis
+  rather than a taller card
 - **Content - coverage list** - the grid carries the live
   `grade10.com/media-coverage` record verbatim; the frame's items are
   placeholders

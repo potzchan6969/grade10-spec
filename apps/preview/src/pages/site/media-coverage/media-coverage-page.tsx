@@ -21,8 +21,10 @@ const REVEALED = "translate-y-0 opacity-100 filter-none";
  * padding, `size-56` minimum height, a soft shadow, `border-strong` plus
  * a subtle lift on hover — so the overrides live here until design settles
  * the contract. Every card holds one height: the publication truncates
- * to one line and the title clamps at four, so a longer CMS entry ends
- * in an ellipsis rather than a taller card.
+ * to one line and the title clamps — three lines on small viewports,
+ * four at `sm` — so a longer CMS entry ends in an ellipsis rather than
+ * a taller card. Small viewports slim the card: `p-5`, `min-h-48`, and
+ * a `text-base` title.
  */
 function MediaCard({ item }: { item: MediaItem }) {
   return (
@@ -33,15 +35,15 @@ function MediaCard({ item }: { item: MediaItem }) {
       target="_blank"
     >
       <Card
-        className="h-full min-h-56 rounded-3xl shadow-[0_8px_16px_var(--shadow-color)] transition-[border-color,transform] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+        className="h-full min-h-48 rounded-3xl shadow-[0_8px_16px_var(--shadow-color)] transition-[border-color,transform] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:min-h-56"
         padding={false}
       >
-        <div className="flex flex-1 flex-col gap-4 p-6">
+        <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
           <div className="flex flex-1 flex-col gap-2">
             <p className="truncate font-medium text-secondary-foreground text-xs uppercase leading-4">
               {item.publication}
             </p>
-            <p className="line-clamp-4 font-medium text-card-foreground text-lg leading-7">
+            <p className="line-clamp-3 font-medium text-card-foreground text-base leading-6 sm:line-clamp-4 sm:text-lg sm:leading-7">
               {item.title}
             </p>
           </div>
