@@ -5,32 +5,34 @@ audience: operator
 order: 6
 ---
 
-An operator holding the session-list grant can list one person's sessions by
-user id. The listing names each session without ever carrying the secret that
-authenticates it, so reading the list can never hand anyone a way in.
+## Values
+
+| Rule | Value |
+| --- | --- |
+| Listing | One person's sessions, by user id |
+| Secret | Never carried in the listing |
+| Revoke scope | One session, or every session the account holds |
+| Revoked session stops answering | Within 70 seconds, on every read |
+
+## Listing
+
+An operator holding the session-list grant lists one person's sessions by user id. The listing names each session without ever carrying the secret that authenticates it, so reading the list can never hand anyone a way in.
+
+- 🚧 **The list names the surface** — each session reads as a site or a console session, so an operator can tell where a person is signed in
+- 🚧 **A session from before release reads as the site's** — one made before the separation carries no surface and is listed as a site session
 
 ## Revoke
 
-An operator holding the revoke grant can end one session or every session that
-account holds. Revoking the session they are using signs them out, which is the
-honest outcome rather than a special case.
+An operator holding the revoke grant can end one session or every session that account holds. Revoking the session they are using signs them out, which is the honest outcome rather than a special case.
 
-🚧 **The list names the surface** - each session reads as a site or a console session, so an operator can tell where a person is signed in.
+- 🚧 **Ending every session ends both** — revoking all of an account's sessions closes its site and console sessions alike, and a ban does the same
+- **Closes within 70 seconds** — a revoked session stops answering signed in on every read within 70 seconds, not only on a mutation or an elevated call. A browse page's cached copy of the session would otherwise last five minutes. Seventy, not zero: the session store takes up to a minute to reach every location
 
-🚧 **A session from before release reads as the site's** - one made before the separation carries no surface and is listed as a site session.
+## Ban or Revoke
 
-🚧 **Ending every session ends both** - revoking all of an account's sessions closes its site and console sessions alike, and a ban does the same.
-
-This is the surgical version of a ban. A ban disables the whole account and
-refuses new sign-ins; a revoke ends a session and leaves the person able to sign
-in again, which is what a lost laptop needs. Signing out of the surface you are
-on is a different capability again.
-
-- **Closes within 70 seconds** — a revoked session stops answering signed
-  in on every read within 70 seconds, not only on a mutation or an elevated
-  call, rather than after the five minutes a browse page's cached copy of the
-  session would otherwise last. Seventy, not zero: the session store takes up
-  to a minute to reach every location.
+- **Ban** — disables the whole account and refuses new sign-ins — [Users](/p/shared/auth/users)
+- **Revoke** — ends a session and leaves the person able to sign in again. That is what a lost laptop needs
+- **Sign-out** — ends the surface you are on, and is a different capability again — [Sign-Out](/p/shared/auth/sign-out)
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
