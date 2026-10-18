@@ -106,6 +106,8 @@ export type DetailBlock = {
 export type FlowBlock = {
   type: "flow";
   title: string;
+  /** The case's id: tests and the cases file cite it as `<page>#<id>`. */
+  id?: string;
   case?: string;
   diagram?: string;
   body: BodyItem[];
@@ -117,6 +119,8 @@ export type FlowBlock = {
 export type ExampleBlock = {
   type: "example";
   title: string;
+  /** The case's id: tests and the cases file cite it as `<page>#<id>`. */
+  id?: string;
   tier?: string;
   shipping?: string;
   periods?: string;
@@ -234,6 +238,7 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
     container: true,
     attrs: [
       { name: "title", required: true },
+      { name: "id" },
       { name: "case" },
       { name: "diagram" },
     ],
@@ -242,6 +247,7 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
     container: true,
     attrs: [
       { name: "title", required: true },
+      { name: "id" },
       { name: "tier" },
       { name: "shipping" },
       { name: "periods" },

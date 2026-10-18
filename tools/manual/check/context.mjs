@@ -213,11 +213,6 @@ export const RULES = [
     title: "MODIFIED scenarios restating a durable id with no trace marker",
   },
   {
-    key: "marks",
-    level: "fail",
-    title: "🚧 lines no in-flight change delivers",
-  },
-  {
     key: "fuse",
     level: "fail",
     title: "Page selectors an in-flight change would break",

@@ -1399,45 +1399,6 @@ describe("a page committed before the specs it embeds", () => {
   });
 });
 
-describe("a 🚧 line and the change delivering it", () => {
-  const marked =
-    "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- 🚧 **Refunds** — the points come back\n";
-  const durable = {
-    "docs/prds/products/demo-product/alpha.md": marked,
-    "openspec/specs/demo-product/alpha/spec.md": spec(
-      "Alpha",
-      requirement("Alpha does things", "alpha-SC-01", "the thing"),
-    ),
-    "openspec/specs/demo-product/alpha/user-journeys.md": NOBODY,
-  };
-
-  it("fails the line when no in-flight change touches the page or its spec", async () => {
-    const result: Result = await runChecks(writeStore(durable), NO_GIT);
-    expect(lines(result, "marks")).toEqual([
-      "docs/prds/products/demo-product/alpha.md — 🚧 `Refunds — the points come back` under `Rules` — no in-flight change on `demo-product/alpha` delivers it",
-    ]);
-    expect(result.findings.find((one) => one.rule === "marks")?.level).toBe(
-      "fail",
-    );
-  });
-
-  it("is satisfied by a delta on the spec, or a proposal linking the section", async () => {
-    const byDelta = writeStore({
-      ...durable,
-      "openspec/changes/build-alpha/proposal.md": proposal("Build alpha"),
-      "openspec/changes/build-alpha/specs/demo-product/alpha/spec.md":
-        "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n",
-    });
-    expect(lines(await runChecks(byDelta, NO_GIT), "marks")).toEqual([]);
-
-    const byLink = writeStore({
-      ...durable,
-      "openspec/changes/build-alpha/proposal.md": `${proposal("Build alpha")}\n## References\n\n- [Alpha · Rules](../../../docs/prds/products/demo-product/alpha.md#rules)\n`,
-    });
-    expect(lines(await runChecks(byLink, NO_GIT), "marks")).toEqual([]);
-  });
-});
-
 /** The record rules read the change's marks and its application design. */
 describe("the record a change leaves", () => {
   const durable = {
