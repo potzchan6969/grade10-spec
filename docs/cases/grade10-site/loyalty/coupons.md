@@ -18,6 +18,7 @@ Cite one as `grade10-site/loyalty/coupons#<id>`.
 | coupon-states | a member holding an available, a used, a void and an expired coupon | they read their coupons | each reads its own state | building |
 | no-code-shown | a reward coupon and a store coupon | the member reads their list | the store coupon shows its code; the reward coupon shows none | |
 | auction-refused | a member with a coupon | they try it on an auction purchase | refused | building |
+| codes-masked | a surface that must not show codes | it lists the member's coupons | every code is masked with the same word | |
 
 ## Applying one
 

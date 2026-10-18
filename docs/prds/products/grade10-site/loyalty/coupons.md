@@ -40,6 +40,14 @@ action, since a reward coupon carries none
 
 ::story{id="loyalty-coupons-blocks-couponlist--wallet" title="The coupons a member holds"}
 
+- **Codes withheld** - a surface that must not show codes masks every one with
+  the same word
+
+::story{id="loyalty-coupons-blocks-couponlist--masked" title="Codes masked"}
+
+- **Loading and empty** - the list holds its place while it is read, and says
+  so when the member holds no coupon
+
 ## Applying one
 
 | Channel | How it lands |

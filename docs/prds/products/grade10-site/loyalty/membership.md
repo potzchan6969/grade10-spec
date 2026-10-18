@@ -116,11 +116,43 @@ The refund came first, and is replayed after the earn, in the order it happened.
   time zone
 - 🎨 **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
+- **Rewards loading** — the rewards section holds its place while the catalog
+  is read
+
+::story{id="loyalty-membership-screens-membership--rewards-loading" title="Rewards still loading"}
+
+- **Nothing yet** — a new member reads 0 on both counts, an empty ledger, no
+  coupons and nothing to redeem; with no coupon alone, that section says so
+  and the rest of the page reads as usual
+
+::story{id="loyalty-membership-screens-membership--no-points" title="Nothing earned yet"}
+
+- **Past the threshold** — the progress bar stops at the threshold; the count
+  still reads the true figure
+
+::story{id="loyalty-membership-screens-membership--threshold-reached" title="Past the threshold"}
+
+- **A pass in a wallet** — the page names the wallet the card is carried in,
+  with that pass's ending beside it —
+  [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card)
+
+::story{id="loyalty-membership-screens-membership--pass-added" title="The card in a wallet"}
+
+- **On a phone** — the whole page fits a phone's width, with no sideways
+  scroll
+
+::story{id="loyalty-membership-screens-membership--narrow" title="The page on a phone"}
 
 ❓ Whether "Points to spend" and the tier-progress labels are the launch
 names.
 
 ::story{id="loyalty-membership-blocks-tiercard--gold" title="Tier, balance and progress"}
+
+- **Each tier its skin** — silver wears slate; gold and black share the warm
+  header, and black's crowned white badge is what tells them apart. Black is
+  held by invitation and shows no progress
+
+::story{id="loyalty-membership-blocks-tiercard--black" title="The black tier card"}
 
 ## Member Pass
 
@@ -152,6 +184,18 @@ names.
 - **New code on demand** — the earlier code stays alive until it is used or
   expires, so reopening the page in the queue does not end a code the member
   has just read out
+- **Out of time** — a code past its 10 minutes dims, the pass says so, and
+  Refresh stays offered
+
+::story{id="loyalty-membership-blocks-memberpass--expired" title="A code out of time"}
+
+- **Refreshing** — Refresh draws busy while a new code is made; the pass stays
+  shown
+- **Refresh refused** — the reason shows once, as a toast, and Refresh can be
+  pressed again; nothing stays under it
+
+::story{id="loyalty-membership-blocks-memberpass--refresh-failed" title="A refused refresh"}
+
 - **Never stored** — the QR payload is answered once, and only its digest is
   kept
 - **Letters only** — no digits, and none of I, L, O or U

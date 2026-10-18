@@ -81,6 +81,20 @@ Apple code identifies and moves nothing.
 
 ::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--held-both-ends-each" title="Wallets held, an ending beside each"}
 
+- **Nothing held** — both wallets are offered
+- **Adding** — the wallet being added waits, and a second tap does nothing
+  until it lands; the other wallet stays usable
+- **Saveable** — once made, the save action becomes the link that installs
+  the pass, under the same name, and takes the member's focus; the link
+  arrives only after the tap, since the address is a credential
+- **Held** — no offer beside a held pass, since adding again ends it; the
+  install link stays while the pass is live
+- **Ending** — the wallet being ended waits; the other stays usable
+- **No wallet for the shop** — a shop offering no wallet shows nothing
+- **Not read yet** — nothing is offered or claimed until the answer arrives
+
+::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--each-wallet-its-own-state" title="Each wallet in its own state"}
+
 - 🚧 **The save action's look** - each wallet's own artwork: Apple's "Add to
   Apple Wallet" badge and Google's "Add to Google Wallet" button, as both
   vendors' brand guidelines expect; a screen reader reads its whole label

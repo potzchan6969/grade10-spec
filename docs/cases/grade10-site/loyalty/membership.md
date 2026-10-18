@@ -42,6 +42,8 @@ below prove what no example walks. Cite one as
 | programme-balance | a sale a channel recorded that the programme has not yet taken | the member reads the balance | it does not include that sale | |
 | dates-hong-kong | a member abroad | they read any date on the page | it reads in Hong Kong time | |
 | section-fails-alone | the reward catalog fails to load | the member opens the page | the balance and the other sections still show | |
+| page-nothing-yet | a new member | they open the page | both counts read 0, the ledger is empty, and the coupons section says there are none | |
+| page-threshold-passed | a member past the next tier's threshold | they read the card | the bar stops at the threshold; the count reads the true figure | |
 
 ## Member Pass
 
@@ -55,6 +57,8 @@ below prove what no example walks. Cite one as
 | pass-email | a member | the pass shows | their account email under the tier badge, no name | building |
 | pass-rotates | a code the till accepts | the till takes it | the pass shows the next code; it never shows a used state | building |
 | pass-wake-lock | the pass alone on a phone | it stays up | the screen does not dim or lock | building |
+| pass-out-of-time | a code past its 10 minutes | the member reads the pass | the code dims, the pass says so, and Refresh stays offered | |
+| pass-refresh-refused | a refresh refused | the member reads the pass | the reason shows once, as a toast, and Refresh can be pressed again | |
 
 ## Histories
 
