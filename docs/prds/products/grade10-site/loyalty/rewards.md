@@ -74,15 +74,10 @@ Stock reads as a yes or no, never a count.
 
 ::story{id="loyalty-rewards-blocks-rewardmenu--collection-window-is-stated" title="A collection window, stated"}
 
-- **Redeeming** - the reward being taken draws busy; every other reward stays
-  pressable
 - **Refused** - a refused redemption says why on its own row, and can be
   pressed again
 
 ::story{id="loyalty-rewards-blocks-rewardmenu--redeem-failed" title="A refused redemption"}
-
-- **Loading and empty** - the shop holds its place while the catalog is read,
-  and says so when nothing is on sale
 
 :::example{title="Buying from the shop" id="shop-buy-and-short"}
 | Step | Event | Points | Balance |

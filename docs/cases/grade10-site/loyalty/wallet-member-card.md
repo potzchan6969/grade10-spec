@@ -54,8 +54,7 @@ none yet. The rows below prove what the page states. Cite one as
 | operator-nothing-held | a member with no live pass in a wallet | an operator ends that wallet's pass | nothing ends, the record says no pass was held, the audit trail records the attempt | building |
 | operator-wallets-unread | a member whose wallets cannot be read | an operator opens the record | it says so, offers no ending, and never says the member holds none | building |
 | erased-identifies-nobody | a member who asks to be erased | a code from their pass is scanned, and a device fetches the pass | it identifies nobody; the fetch names no member, tier or points | smoke |
-| link-after-tap | a member adding a pass | the pass is made | the save action becomes the install link and takes focus; no link exists before the tap | |
-| adding-waits | a pass being added to one wallet | the member taps again | nothing happens until it lands; the other wallet stays usable | |
+| link-after-tap | a member who has not asked for a pass | they read `/membership` | no install link exists; it appears only once they ask for the pass | |
 
 ## Staying Current
 
