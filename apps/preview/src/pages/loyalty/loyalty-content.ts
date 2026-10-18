@@ -6,10 +6,10 @@ import type {
   CartItemSummary,
   CouponItem,
   CouponListCopy,
-  MemberPassCopy,
+  MemberCardCopy,
+  MembershipSummaryCopy,
   RewardMenuCopy,
   RewardMenuItem,
-  TierCardCopy,
   WalletPassLinksCopy,
   WalletPassWallet,
 } from "@grade10/ui";
@@ -28,32 +28,34 @@ const LOYALTY_PAY_PART_OF_BASKET_HREF = storyHref(
 );
 
 const RENEWS = formatDay(Date.UTC(2027, 2, 1));
+const EXPIRES_LATER = formatDay(Date.UTC(2027, 1, 14));
+const EXPIRES_SOON = formatDay(Date.UTC(2026, 10, 2));
 const COUPON_VALID = formatDay(Date.UTC(2027, 0, 11));
 
 const MEMBER = {
   displayName: "Mei Lin",
-  /** No name is collected at registration; the pass carries the account email. */
-  email: "mei.lin@example.com",
   /** Eight letters, none of I, L, O or U. */
   fallbackCode: "KRMT-QWPB",
   /** Opaque, single-use, minted by the programme; this one only looks the part. */
   token: "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c",
 };
 
-const TIER_CARD_COPY: TierCardCopy = {
+const MEMBERSHIP_SUMMARY_COPY: MembershipSummaryCopy = {
+  title: "My membership",
+  tier: "Tier",
   balance: "Points to spend",
-  points: "pts",
-  worthSuffix: "off at checkout",
-  qualifying: "Keep Gold",
-  benefits: "Benefits",
+  qualifying: "Points earned this year",
+  renewal: "Tier renews",
 };
 
-const MEMBER_PASS_COPY: MemberPassCopy = {
+const MEMBER_CARD_COPY: MemberCardCopy = {
   qrAlt: "Your member QR code",
-  shortCode: "Short code",
-  refresh: "Refresh",
-  refreshesIn: "Refreshes in",
-  expired: "This code has expired. Refresh for a new one.",
+  fallbackCode: "Short code",
+  refresh: "Get a new code",
+  expiresIn: "Expires in",
+  secondsUnit: "s",
+  expired: "This code has expired. Get a new one.",
+  used: "This code has already been used",
 };
 
 const REWARD_MENU_COPY: RewardMenuCopy = {
@@ -92,7 +94,7 @@ const WALLET_PASS_COPY: WalletPassLinksCopy = {
 const MEMBERSHIP_PAGE_COPY = {
   breadcrumbAccount: "Account",
   title: "Membership",
-  cardHeading: "Your member pass",
+  cardHeading: "Your member card",
   rewardsHeading: "Rewards",
   couponsHeading: "Your coupons",
   spendHeading: "Spend on your basket",
@@ -221,18 +223,39 @@ const APPLE_HELD: WalletPassWallet = {
   endLabel: "End Apple pass",
 };
 
+/** The day the balance lapses, and the tone the consumer says it in. */
+type BalanceExpiry = { day: string; tone: "normal" | "warning" };
+
+/** The expiry prop the summary takes, worded by the consumer from the balance. */
+function balanceExpiryProp(
+  balance: number,
+  expiry: BalanceExpiry,
+): { line: string; tone: BalanceExpiry["tone"] } {
+  const line =
+    expiry.tone === "warning"
+      ? `${balance} points expire on ${expiry.day}. Use them before then.`
+      : `${balance} points expire on ${expiry.day}`;
+  return { line, tone: expiry.tone };
+}
+
+const BALANCE_EXPIRES_LATER: BalanceExpiry = {
+  day: EXPIRES_LATER,
+  tone: "normal",
+};
+const BALANCE_EXPIRES_SOON: BalanceExpiry = {
+  day: EXPIRES_SOON,
+  tone: "warning",
+};
+
 /** The membership figures a view draws; every state is a variant of it. */
 type MembershipView = {
   tier: string;
-  /** The skin the held tier's card wears. */
-  tierVariant: "silver" | "gold" | "black";
   balance: number;
-  /** What the balance pays at checkout, formatted for the page. */
-  worth: string;
   qualifyingPoints: number;
   qualifyingThreshold: number;
-  retentionLine?: string;
-  earnLine?: string;
+  renewalDate: string;
+  tierValidity?: string;
+  balanceExpiry?: BalanceExpiry;
   rewards: AsyncState<readonly RewardMenuItem[]>;
   coupons: AsyncState<readonly CouponItem[]>;
   activity: AsyncState<readonly ActivityEntry[]>;
@@ -242,13 +265,13 @@ type MembershipView = {
 
 const MEMBERSHIP_VIEW: MembershipView = {
   tier: "Gold",
-  tierVariant: "gold",
   balance: 1250,
-  worth: "HK$125",
   qualifyingPoints: 320,
   qualifyingThreshold: 500,
-  retentionLine: `Earn 180+ pts by ${RENEWS} to stay Gold`,
-  earnLine: "Gold earning 1.2x points",
+  renewalDate: RENEWS,
+  tierValidity:
+    "Gold earns 1.2× points. Keep it with 500 points earned by then.",
+  balanceExpiry: BALANCE_EXPIRES_LATER,
   rewards: { status: "ready", data: REWARDS },
   coupons: { status: "ready", data: COUPONS },
   activity: { status: "ready", data: ACTIVITY },
@@ -260,12 +283,10 @@ const MEMBERSHIP_STATE_VIEWS = {
   noPoints: {
     ...MEMBERSHIP_VIEW,
     tier: "Silver",
-    tierVariant: "silver" as const,
     balance: 0,
-    worth: "HK$0",
     qualifyingPoints: 0,
-    retentionLine: undefined,
-    earnLine: "Silver earning 1x points",
+    tierValidity: "Silver. Earn on every paid purchase to start toward Gold.",
+    balanceExpiry: undefined,
     coupons: {
       status: "empty",
       message: "You have no coupons yet. Redeem a reward to get one.",
@@ -274,6 +295,10 @@ const MEMBERSHIP_STATE_VIEWS = {
       status: "empty",
       message: "No activity yet. Purchases appear here once they are recorded.",
     },
+  },
+  expiresSoon: {
+    ...MEMBERSHIP_VIEW,
+    balanceExpiry: BALANCE_EXPIRES_SOON,
   },
   thresholdReached: {
     ...MEMBERSHIP_VIEW,
@@ -315,13 +340,16 @@ const CART_ITEMS: readonly CartItemSummary[] = [
 const CART_SUBTOTAL = "HK$1,400.00";
 const POINTS_BALANCE_LABEL = "You’ve 1,250 pts.";
 
-export type { MembershipView };
+export type { BalanceExpiry, MembershipView };
 export {
   ACTIVITY,
   ACTIVITY_LIST_COPY,
   APPLE_HELD,
   APPLE_OFFERED,
   APPLE_PASS_URL,
+  BALANCE_EXPIRES_LATER,
+  BALANCE_EXPIRES_SOON,
+  balanceExpiryProp,
   CART_ITEMS,
   CART_SUBTOTAL,
   COUPON_ACTION_COPY,
@@ -334,13 +362,13 @@ export {
   LOYALTY_PAY_PART_OF_BASKET_HREF,
   LOYALTY_PAY_PART_OF_BASKET_STORY_ID,
   MEMBER,
-  MEMBER_PASS_COPY,
+  MEMBER_CARD_COPY,
   MEMBERSHIP_PAGE_COPY,
   MEMBERSHIP_STATE_VIEWS,
+  MEMBERSHIP_SUMMARY_COPY,
   MEMBERSHIP_VIEW,
   POINTS_BALANCE_LABEL,
   REWARD_MENU_COPY,
   REWARDS,
-  TIER_CARD_COPY,
   WALLET_PASS_COPY,
 };

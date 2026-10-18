@@ -1,5 +1,5 @@
 import type { ActivityTimeCopy } from "@grade10/date";
-import { formatDay } from "@grade10/date";
+import { formatDay, formatMoment } from "@grade10/date";
 import { getMessages } from "@grade10/i18n";
 
 export const FIXTURE_SHIPPED_LOCALE = "en" as const;
@@ -24,6 +24,7 @@ export const FIXTURE_BID_LANDED_AT_MS = Date.UTC(2026, 7, 21, 11, 16);
 export const FIXTURE_ORDER_PLACED_AT_MS = Date.UTC(2026, 7, 26);
 export const FIXTURE_ORDER_SHIPPED_AT_MS = Date.UTC(2026, 7, 27);
 export const FIXTURE_REFUND_AT_MS = Date.UTC(2026, 7, 28);
+export const FIXTURE_MEMBER_FIRST_USE_AT_MS = Date.UTC(2026, 7, 24, 20, 41);
 export const FIXTURE_LOYALTY_PURCHASE_AT_MS = Date.UTC(2026, 7, 18);
 export const FIXTURE_LOYALTY_REDEEM_AT_MS = Date.UTC(2026, 7, 2);
 export const FIXTURE_LOYALTY_ADJUST_AT_MS = Date.UTC(2026, 6, 28);
@@ -41,6 +42,10 @@ export const FIXTURE_ORDER_SHIPPED_DAY = formatDay(
   viewerClock,
 );
 export const FIXTURE_REFUND_DAY = formatDay(FIXTURE_REFUND_AT_MS, viewerClock);
+export const FIXTURE_MEMBER_FIRST_USE_AT = formatMoment(
+  FIXTURE_MEMBER_FIRST_USE_AT_MS,
+  viewerClock,
+);
 export const FIXTURE_PLACED_ON = `Placed on ${FIXTURE_ORDER_PLACED_DAY}`;
 export const FIXTURE_PLACED_ON_WITH_PERIOD = `Placed on ${FIXTURE_ORDER_PLACED_DAY}.`;
 export const FIXTURE_BALANCE_EXPIRY_DAY = formatDay(
