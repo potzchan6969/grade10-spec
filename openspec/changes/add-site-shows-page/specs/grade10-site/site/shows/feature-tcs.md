@@ -136,6 +136,37 @@ None.
 * The next arrow advances the photo and marks the second dot current.
 * The first dot returns the first photo and marks itself current.
 
+<!-- trace:case id=g10.site-shows.TC-rec rev=1 covers=g10.site-shows.SC-aa1 -->
+### grade10-site-site-shows-US1-TC5-1: The records read in frame order
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-shows-US-01
+
+**Pre-conditions:**
+None.
+
+**Steps:**
+
+1. Navigate to <grade10 shows url>.
+2. Read the event-records list.
+
+**Expected Results:**
+
+* The five editions appear in order: Seoul Auction Private Sale &
+  Exhibition (2026), Grade10 FEST Summer 2026 (2026), CARDJOY × Grade10
+  Shanghai (2026), CARDJOY × Grade10 Hangzhou (2026), Grade10 Festival
+  2025 (2025), each with title, description and image.
+
 ## grade10-site-site-shows-US2: Collector follows a link from Shows to a press surface
 
 **As a** collector,
@@ -220,37 +251,6 @@ None.
   container — Hong Kong plays `Nf4UZyct5uM`, Chinese Mainland plays
   `fy7AfZ8ZhQo`.
 * The page does not navigate.
-
-<!-- trace:case id=g10.site-shows.TC-rec rev=1 covers=g10.site-shows.SC-aa1 -->
-### grade10-site-site-shows-US1-TC5-1: The records read in frame order
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-shows-US-01
-
-**Pre-conditions:**
-None.
-
-**Steps:**
-
-1. Navigate to <grade10 shows url>.
-2. Read the event-records list.
-
-**Expected Results:**
-
-* The five editions appear in order: Seoul Auction Private Sale &
-  Exhibition (2026), Grade10 FEST Summer 2026 (2026), CARDJOY × Grade10
-  Shanghai (2026), CARDJOY × Grade10 Hangzhou (2026), Grade10 Festival
-  2025 (2025), each with title, description and image.
 
 ## Settled
 

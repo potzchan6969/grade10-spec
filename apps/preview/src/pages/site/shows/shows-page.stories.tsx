@@ -65,10 +65,42 @@ export const Default: Story = {
       }
     }
 
-    // Latest-shows card rows.
-    for (const show of SHOWS_PAGE.hero.latestShows) {
-      expect(canvas.getAllByText(show.title).length).toBeGreaterThan(0);
-      expect(canvas.getAllByText(show.city).length).toBeGreaterThan(0);
+    // Latest-shows card rows: only shows whose month has not passed
+    // render — past entries never read as upcoming.
+    const MONTHS = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const now = new Date();
+    const thisMonth = new Date(now.getFullYear(), now.getMonth());
+    const upcoming = SHOWS_PAGE.hero.latestShows.filter(
+      (show) =>
+        new Date(Number(show.year), MONTHS.indexOf(show.month)) >= thisMonth,
+    );
+    const past = SHOWS_PAGE.hero.latestShows.filter(
+      (show) =>
+        new Date(Number(show.year), MONTHS.indexOf(show.month)) < thisMonth,
+    );
+    const card = canvas.getByText(SHOWS_PAGE.hero.latestLabel)
+      .parentElement as HTMLElement;
+    const rows = within(card).getAllByRole("listitem");
+    expect(rows).toHaveLength(upcoming.length);
+    for (const show of upcoming) {
+      expect(within(card).getByText(show.title)).toBeInTheDocument();
+      expect(within(card).getByText(show.city)).toBeInTheDocument();
+    }
+    for (const show of past) {
+      expect(within(card).queryByText(show.title)).toBeNull();
     }
 
     // Stat values.
@@ -77,19 +109,20 @@ export const Default: Story = {
       expect(canvas.getAllByText(stat.detail).length).toBeGreaterThan(0);
     }
 
-    // The chapter tab list is jump navigation — three tabs, first selected.
-    const tabs = canvas.getByRole("tablist", {
+    // The chapter pill list is jump navigation — a nav landmark of three
+    // hash links, the first marked current. Links navigate natively, so
+    // keyboard focus and selection always follow the chapter.
+    const nav = canvas.getByRole("navigation", {
       name: "Event format chapters",
     });
-    const triggers = within(tabs).getAllByRole("tab");
-    expect(triggers).toHaveLength(3);
-    expect(triggers[0]).toHaveAttribute("aria-selected", "true");
-    // Each trigger is a hash anchor to its chapter — jump navigation works
-    // even without the click handler.
+    const links = within(nav).getAllByRole("link");
+    expect(links).toHaveLength(3);
+    expect(links[0]).toHaveAttribute("aria-current", "location");
+    expect(canvas.queryByRole("tablist")).toBeNull();
     for (const chapter of SHOWS_PAGE.formats.chapters) {
-      const trigger = triggers.find((tab) => tab.textContent === chapter.tab);
-      expect(trigger).toBeTruthy();
-      expect(trigger).toHaveAttribute("href", `#${chapter.id}`);
+      const link = links.find((a) => a.textContent === chapter.tab);
+      expect(link).toBeTruthy();
+      expect(link).toHaveAttribute("href", `#${chapter.id}`);
     }
 
     // Press-release destinations: hero link and every edition/chapter link.
@@ -129,6 +162,8 @@ export const Default: Story = {
     expect(embed.src).toContain(
       `youtube.com/embed/${SHOWS_PAGE.formats.chapters[0].video?.youtubeId}`,
     );
+    // The embed plays on load — one click on the poster is the play.
+    expect(embed.src).toContain("autoplay=1");
     expect(
       canvas.queryByRole("button", {
         name: `Play ${SHOWS_PAGE.formats.chapters[0].video?.badge} video`,

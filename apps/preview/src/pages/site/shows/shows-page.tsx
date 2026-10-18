@@ -4,11 +4,6 @@ import {
   CarouselProgress,
   CarouselProgressItem,
 } from "@grade10/design-system/components/display/carousel-progress";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
@@ -97,7 +92,7 @@ function EventVideo({ video }: { video: NonNullable<ShowChapter["video"]> }) {
           allow="autoplay; encrypted-media; picture-in-picture"
           allowFullScreen
           className="size-full"
-          src={`https://www.youtube.com/embed/${video.youtubeId}?rel=0`}
+          src={`https://www.youtube.com/embed/${video.youtubeId}?rel=0&autoplay=1`}
           title={`${video.badge} video`}
         />
       ) : (
@@ -218,41 +213,51 @@ function useNarrowViewport() {
   return narrow;
 }
 
-/** The sticky pill tab list — jump navigation over the stacked chapters. */
-function ChapterTabs({
+/** The sticky pill list — jump navigation over the stacked chapters,
+ * drawn with the same pill track as the Tabs primitive but built from
+ * real links: every entry navigates to its chapter's hash anchor, and
+ * `aria-current` marks the chapter on screen. */
+function ChapterNav({
   chapters,
   value,
-  onValueChange,
+  onSelect,
 }: {
   chapters: readonly ShowChapter[];
   value: string;
-  onValueChange: (value: string) => void;
+  onSelect: (value: string) => void;
 }) {
   const narrow = useNarrowViewport();
   return (
-    <Tabs
-      className="sticky top-4 z-10"
-      onValueChange={onValueChange}
-      value={value}
-    >
-      <TabsList
-        aria-label="Event format chapters"
-        className="mx-auto max-w-full overflow-x-auto"
-        size={narrow ? "sm" : "md"}
-        variant="pill"
+    <nav aria-label="Event format chapters" className="sticky top-4 z-10">
+      <ul
+        className={cn(
+          "mx-auto flex w-fit max-w-full items-center gap-0.5 overflow-x-auto rounded-(--radius-full) bg-muted p-0.5",
+          narrow ? "h-9" : "h-11",
+        )}
       >
-        {chapters.map((chapter) => (
-          <TabsTrigger
-            key={chapter.id}
-            nativeButton={false}
-            render={<a href={`#${chapter.id}`} />}
-            value={chapter.id}
-          >
-            {chapter.tab}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
+        {chapters.map((chapter) => {
+          const active = chapter.id === value;
+          return (
+            <li key={chapter.id}>
+              <a
+                aria-current={active ? "location" : undefined}
+                className={cn(
+                  "relative z-[1] inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-(--radius-full) border border-transparent font-medium whitespace-nowrap text-foreground transition-[background-color,color] duration-150 ease-out focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+                  narrow ? "h-8 gap-1 px-3 text-xs" : "h-10 px-4 text-sm",
+                  active
+                    ? "bg-background shadow-[0_8px_16px_var(--shadow-color,rgb(117_114_111_/_20%))]"
+                    : "hover:bg-background-subtle",
+                )}
+                href={`#${chapter.id}`}
+                onClick={() => onSelect(chapter.id)}
+              >
+                {chapter.tab}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 }
 
@@ -321,11 +326,38 @@ function ChapterSection({ chapter }: { chapter: ShowChapter }) {
   );
 }
 
+// Month names as written in `LatestShow.month`.
+const SHOW_MONTHS: Record<string, number> = {
+  January: 0,
+  February: 1,
+  March: 2,
+  April: 3,
+  May: 4,
+  June: 5,
+  July: 6,
+  August: 7,
+  September: 8,
+  October: 9,
+  November: 10,
+  December: 11,
+};
+
+/** The card lists upcoming shows — an entry whose month has already run
+ * out drops off rather than reads as next. An unparsed month stays so the
+ * list never silently empties on a typo. */
+function isUpcomingShow(show: { month: string; year: string }) {
+  const month = SHOW_MONTHS[show.month];
+  if (month === undefined) return true;
+  const shown = new Date(Number(show.year), month);
+  const now = new Date();
+  return shown >= new Date(now.getFullYear(), now.getMonth());
+}
+
 /**
  * The `/shows` surface as the app assembles it: `SiteHeader`, the Figma
- * Shows frame composed from design-system primitives, and `Footer`. The tab
- * list is jump navigation — all three chapters stay mounted and selecting a
- * tab scrolls its chapter into view.
+ * Shows frame composed from design-system primitives, and `Footer`. The
+ * pill list is jump navigation — all three chapters stay mounted and a
+ * link click scrolls its chapter into view.
  */
 function ShowsPage() {
   const reduceMotion = useReducedMotion();
@@ -343,9 +375,10 @@ function ShowsPage() {
     };
   }, []);
 
-  // Scroll-spy: the chapter crossing the middle band owns the active tab.
+  // Scroll-spy: the chapter crossing the middle band owns the active
+  // link. Reduced motion only changes how the page scrolls, never which
+  // chapter is on screen, so the spy runs regardless.
   useEffect(() => {
-    if (reduceMotion) return;
     const nodes = SHOWS_PAGE.formats.chapters
       .map((c) => document.getElementById(c.id))
       .filter((node): node is HTMLElement => Boolean(node));
@@ -362,7 +395,7 @@ function ShowsPage() {
       observer.observe(node);
     });
     return () => observer.disconnect();
-  }, [reduceMotion]);
+  }, []);
 
   // Native hash navigation is the jump mechanism (the workbench stubs
   // `scrollIntoView`); smooth-scroll the document so chapter jumps glide.
@@ -462,7 +495,7 @@ function ShowsPage() {
               {hero.latestLabel}
             </p>
             <ul>
-              {hero.latestShows.map((show) => (
+              {hero.latestShows.filter(isUpcomingShow).map((show) => (
                 <li
                   className="flex gap-6 border-border border-b px-6 py-5 last:border-b-0"
                   key={`${show.month}-${show.title}`}
@@ -561,9 +594,9 @@ function ShowsPage() {
               </h2>
             </div>
           </Reveal>
-          <ChapterTabs
+          <ChapterNav
             chapters={formats.chapters}
-            onValueChange={onTabChange}
+            onSelect={onTabChange}
             value={chapter}
           />
           {formats.chapters.map((chapterItem) => (
