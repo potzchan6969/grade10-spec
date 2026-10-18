@@ -52,7 +52,7 @@ An order's earn is written once, the first time the order completes.
 ❓ The diagrams below still draw the earn starting from Order paid — the old
 trigger — and need redrawing to start from the order's completion.
 
-:::flow{title="From a paid order to points" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
+:::flow{title="From a paid order to points" id="earn-normal" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
 ## *Shop* — **Order paid**
 The shop sends the paid order: its lines, their discounts, and the goods total it stated
 
@@ -89,7 +89,7 @@ The lines judged by that read, a gift card, a fee, a grading service left out, a
 Reached by an order event, not by the sale waiting: **$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15** — as a dated entry, never edited
 :::
 
-:::flow{title="From a paid order to points" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
+:::flow{title="From a paid order to points" id="earn-unclassified-line" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
 ## *Shop* — **Order paid**
 A line names a product, but nothing here says its type or tags yet — only the read can tell real goods from a fee or a top-up
 
@@ -121,7 +121,7 @@ A read that answers prices the order as usual; a read that fails writes no earni
 No amount, so no order event and no points — counted, and granted when a retry classifies the sale
 :::
 
-:::flow{title="From a paid order to points" case="A total with no lines" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
+:::flow{title="From a paid order to points" id="earn-no-lines" case="A total with no lines" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
 ## *Shop* — **Order paid**
 One goods total and no lines at all
 
@@ -139,7 +139,7 @@ The store's own item prices, the whole-order discount shared across them by valu
 As usual, on the amount the order carries
 :::
 
-:::flow{title="From a paid order to points" case="A custom sale" diagram="assets/diagrams/loyalty-pricing-custom-sale.svg"}
+:::flow{title="From a paid order to points" id="earn-custom-sale" case="A custom sale" diagram="assets/diagrams/loyalty-pricing-custom-sale.svg"}
 ## *Shop* — **Order paid**
 A line rung at the till names no catalog product — a consignment, a repair, a price override
 
@@ -197,7 +197,7 @@ the member still holds from them.
 - **Tier** — the contribution the points made leaves with them, and the tier
   is judged again at once — [Tiers](/p/grade10-site/loyalty/tiers)
 
-:::example{title="Shipping refunded" tier="Gold" shipping="$30"}
+:::example{title="Shipping refunded" id="refund-shipping" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -208,7 +208,7 @@ the member still holds from them.
 The store sends no goods for shipping, so nothing comes back.
 :::
 
-:::example{title="Part of the goods refunded" tier="Gold" shipping="$30"}
+:::example{title="Part of the goods refunded" id="refund-part" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -219,7 +219,7 @@ The store sends no goods for shipping, so nothing comes back.
 39 of the 139 that earned 15, floored.
 :::
 
-:::example{title="Whole order refunded" tier="Gold" shipping="$30"}
+:::example{title="Whole order refunded" id="refund-whole" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -230,7 +230,7 @@ The store sends no goods for shipping, so nothing comes back.
 The goods share is the whole single, $139, and 15 is all it earned.
 :::
 
-:::example{title="Refund in two parts" tier="Gold" shipping="$30"}
+:::example{title="Refund in two parts" id="refund-in-two-parts" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -243,7 +243,7 @@ Priced apart the two would take 14. Together they take what one refund of
 $139 takes.
 :::
 
-:::example{title="Refund before the earn" tier="Gold" shipping="$30"}
+:::example{title="Refund before the earn" id="refund-before-earn" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -255,7 +255,7 @@ A refund before completion prices the earn down — the basis is the net
 the order has paid at completion, so nothing needs clawing back.
 :::
 
-:::example{title="Points already spent" tier="Gold" shipping="$30"}
+:::example{title="Points already spent" id="refund-after-spend" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -268,7 +268,7 @@ the order has paid at completion, so nothing needs clawing back.
 as spent, and the balance stays at 0.
 :::
 
-:::example{title="Points already expired" tier="Gold" shipping="$30"}
+:::example{title="Points already expired" id="refund-after-expiry" tier="Gold" shipping="$30"}
 - Gengar single $139
 
 | Step | Event | Points | Balance |
@@ -281,7 +281,7 @@ Nothing is held from the order, so nothing comes back. The missing 15 are
 counted as expired.
 :::
 
-:::example{title="Gift card returned" tier="Gold"}
+:::example{title="Gift card returned" id="refund-gift-card" tier="Gold"}
 - Gengar single $139
 - Gift card $500
 
@@ -293,7 +293,7 @@ counted as expired.
 A gift card never earned, so the store sends no goods for it.
 :::
 
-:::example{title="Two rates on one order" tier="Silver"}
+:::example{title="Two rates on one order" id="refund-two-rates" tier="Silver"}
 - PSA 10 Charizard slab $6,000
 - Booster box $1,000
 
@@ -337,7 +337,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
 
-:::example{title="Buying or redeeming keeps the balance alive"}
+:::example{title="Buying or redeeming keeps the balance alive" id="expiry-activity-extends"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -351,7 +351,7 @@ so the January points live as long as the November redemption does. The
 date after the arrow is when the balance lapses if nothing else happens.
 :::
 
-:::example{title="A spend too small to earn still counts"}
+:::example{title="A spend too small to earn still counts" id="expiry-small-spend"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -362,7 +362,7 @@ date after the arrow is when the balance lapses if nothing else happens.
 The purchase is activity even when it credits nothing.
 :::
 
-:::example{title="Expired points do not come back"}
+:::example{title="Expired points do not come back" id="expiry-no-revival"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -373,7 +373,7 @@ The new purchase starts a fresh balance. The fifteen that lapsed stay
 lapsed.
 :::
 
-:::example{title="A grant takes the balance's date"}
+:::example{title="A grant takes the balance's date" id="expiry-grant-takes-date"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -385,7 +385,7 @@ an operator correction. Both take the date the balance already has, so the
 member reads one day for everything.
 :::
 
-:::example{title="A grant to an empty balance moves the date out"}
+:::example{title="A grant to an empty balance moves the date out" id="expiry-grant-empty-balance"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -396,7 +396,7 @@ Nothing was live to join, so the grant lapses twelve months from its own day,
 the later of that and 2027/01/03.
 :::
 
-:::example{title="An operator restarts the window"}
+:::example{title="An operator restarts the window" id="expiry-operator-restart"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -408,7 +408,7 @@ The restart moves the whole balance, the grant and the earn alike. Nothing
 else moves a live balance's date without the member buying or redeeming.
 :::
 
-:::example{title="A late record shortens nothing"}
+:::example{title="A late record shortens nothing" id="expiry-late-record"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/03/08 | earn → lapses 2027/03/08 | +15 | 15 |
@@ -419,7 +419,7 @@ The date only moves forward. The January order would have put it at 3 Jan
 2027, so it moves nothing.
 :::
 
-:::example{title="A record older than a year is written already lapsed"}
+:::example{title="A record older than a year is written already lapsed" id="expiry-old-record"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
@@ -430,7 +430,7 @@ A record whose own year has run out buys nothing: the points are on the
 ledger for the audit, and count nothing.
 :::
 
-:::example{title="A leap day lapses on the 28th"}
+:::example{title="A leap day lapses on the 28th" id="expiry-leap-day"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2028/02/29 | earn → lapses 2029/02/28 | +15 | 15 |
@@ -454,6 +454,7 @@ spend rather than lose a balance that was about to lapse.
 | Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
 | What moving those dates costs | Decided | Nothing; the move ran on staging alone, which holds play data. A production database starts under the one date. | Finance |
 | Warning a member before the day | Decided | Who is owed one is worked out apart from what tells them - [Expiry Reminders](/p/grade10-site/loyalty/expiry-reminders). | Product |
+| Rounding order | Decided | Fixed: whole base points first, then the tier multiplier, floored again - **$139** at **1.2×** is **15**. Not a deployment setting. Decided 2026-10-18. | Product |
 | Earn on completion | Decided | Every store order earns when it completes, by the rule under [Rules](#rules), on the net it has paid then, at the member's tier at completion; a till sale completes at the counter. An order canceled or refunded in full before it completes never earns; a refund before completion lowers the basis, one after claws back as today; the inactivity clock counts the earn on its completion date. Decided 2026-10-13; supersedes earn-when-paid. | Product |
 | Pending points | Decided | No pending line anywhere else — Order Details' own points section reads Points to Earn before completion and Points Earned after, and is absent when the order won't earn. Decided 2026-10-13. | Product |
 | Orders in flight at cutover | Decided | An order paid but not yet completed when the completion rule ships earns when it completes, guarded so no order earns twice — one that already earned at payment under the old rule earns nothing again. Decided 2026-10-13. | Product |
