@@ -18,8 +18,8 @@ walks. Cite one as `grade10-site/loyalty/points#<id>`.
 | foreign-currency | an order priced in USD | it completes | refused; no points, no ledger entry | |
 | clock-hong-kong | an order completing at 00:30 Hong Kong time on 1 January | the member reads the ledger | the entry is dated 1 January | |
 | earn-on-completion | a paid web order with two items, one fulfilled | the second item is fulfilled | the points land then, not at payment and not at carrier delivery | smoke, building |
-| earn-partly-refunded | a paid web order, part refunded before its last item ships | the last item is fulfilled | it completes and earns on the net paid, though its badge reads Refunded | |
-| earn-fully-refunded | a paid web order refunded in full | its items are fulfilled | it never earns | |
+| earn-partly-refunded | a paid web order, part refunded before its last item ships | the last item is fulfilled | it completes and earns on the net paid, though its badge reads Refunded | building |
+| earn-fully-refunded | a paid web order refunded in full | its items are fulfilled | it never earns | building |
 | earn-till | a member's sale rung at the till | the sale is paid at the counter | the points land at the counter | smoke |
 | earn-guest-order | a site guest order, its email joined to an account or not | it completes | no points | building |
 | earn-once | an order's completion delivered twice, or during a loyalty outage | delivery is retried until taken | the order earns exactly once | |
