@@ -90,8 +90,11 @@ surface. Top to bottom:
 ## Blocks
 
 The page itself carries the shape we want — plain prose and the visuals below.
-Requirement text stays in the store: a page states the rule in its own
-words and links the capability, and never embeds the contract.
+It is the contract: engineers build from it and QA's cases cite it. An
+`:::example` or a `:::flow` takes an `id` (`id="refund-shipping"`), which the
+manual does not show and tests cite as `<page>#<id>` - [Page First](../../governance/page-first.md).
+
+The `cases` block below shows a legacy OpenSpec suite while one exists.
 
 What a page does embed is acceptance: the spec's test-case suite, out of the
 spec named in the frontmatter. The block renders the suite's index — each
