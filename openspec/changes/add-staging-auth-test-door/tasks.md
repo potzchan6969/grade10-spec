@@ -10,6 +10,9 @@
 - [x] 2.3 Match the named address against `TEST_DOOR_TESTER_DOMAIN`, declared optional in the auth app's secrets: the part after the last `@` equal to it and nothing more, read without regard to case, with a plus tag keeping two addresses apart and an unset domain refusing every address (`shared-auth-test-sign-in-SC-06`, `shared-auth-test-sign-in-SC-07`, `shared-auth-test-sign-in-SC-30`, `shared-auth-test-sign-in-SC-31`, `shared-auth-test-sign-in-SC-34`) — shipped as the named testers and their unique plus-tags (decisions Q40); there is no `TEST_DOOR_TESTER_DOMAIN`
 - [x] 2.4 Refuse a move that names no address, on every move including clear (`shared-auth-test-sign-in-SC-08`)
 - [x] 2.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:backend`
+- [ ] 2.6 Refuse the QA token for the admin-only tester on every move, with the same silent refusal as any wrong caller (`shared-auth-test-sign-in-SC-97`) — not shipped: `qaTokenTestDoorMoves` accepts the token for any tester on staging (decisions Q43)
+- [ ] 2.7 Record the door's bans, prepares, scoped roles and created accounts on the identity trail, naming the caller's kind in place of a user id, and no entry for capture, age or clear (`shared-auth-audit-SC-38`, `shared-auth-audit-SC-39`) — not shipped: `testDoor.ts` writes no audit entry (decisions Q45)
+- [ ] 2.8 Verify the QA token is refused off staging on uat, preview and production (`shared-auth-test-sign-in-SC-98`) — shipped as `qaTokenTestDoorMoves` returning no moves outside staging (decisions Q44); confirm with `pnpm run test:backend`
 
 ## 3. The five moves (grade10)
 

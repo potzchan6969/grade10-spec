@@ -46,7 +46,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-None.
+- `shared/auth/audit`: the door's bans, prepares, scoped roles and created accounts land on the identity trail, named by the caller's kind.
 
 ## Impact
 

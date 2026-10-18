@@ -11,7 +11,7 @@ Operators still walk ban and role on `shared/auth/users`.
 
 - Who may call
   - The door's own workflow: a run that proves it is this repository's Actions, running that one workflow from the main branch, on a dispatch a reviewer approved
-  - The QA token: a staging-only token committed to the repository, held by a QA agent, for capture, age and clear alone
+  - The QA token: a staging-only token committed to the repository, held by a QA agent, for capture, age and clear alone, on a tester address other than the admin-only one
   - Every other caller is refused
 - Testers
   - The named testers: each environment's own, written into the code, and on staging and uat a unique plus-tag of one minted per run; any other address is refused, and an account is created when a move needs one
@@ -127,6 +127,29 @@ Which run the door acts for, and what a refused call leaves behind.
 - **WHEN** it asks to ban or prepare a tester address, or carries a token a later commit replaced
 - **THEN** the door refuses the call
 - **AND** nothing is changed
+
+### Requirement: The QA token never reaches the admin-only tester and works on staging alone
+
+The QA token SHALL NOT act on the admin-only tester, on any environment. It
+SHALL act only on staging, and every other environment SHALL refuse it as it
+refuses any wrong caller.
+
+#### Scenario: shared-auth-test-sign-in-SC-97 - The QA token is refused for the admin-only tester
+**Serves:** Who may call - the QA agent walking a manual pass
+
+- **GIVEN** a call on staging carrying the current QA token, and the admin-only tester's address holding an unused sign-in mail
+- **WHEN** it asks for that address's last sign-in mail, or to age its link
+- **THEN** the door refuses the call
+- **AND** nothing is changed, and the refusal names no rule
+
+#### Scenario: shared-auth-test-sign-in-SC-98 - The QA token is refused off staging
+**Serves:** Who may call - the QA agent walking a manual pass
+
+- **GIVEN** a call on uat, on preview, or on production carrying the current QA token, and a tester address holding an unused sign-in mail
+- **WHEN** it asks for that address's last sign-in mail
+- **THEN** the door refuses the call
+- **AND** nothing is changed
+
 
 ### Requirement: Every move names one of the environment's testers
 
