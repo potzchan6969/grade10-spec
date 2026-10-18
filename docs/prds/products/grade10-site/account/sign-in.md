@@ -106,5 +106,6 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | Link lifetime | Decided | Five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
 | How a locale writes the number | Decided | A digit in every language. | Product |
 | A device still waiting | Decided | It ends its own wait with a message and gains no session. Whether an address has a session is never revealed. | Product |
+| Trusted product entry | Decided | A trusted product creates or enters an account only from an address its own email check has verified. A ban still refuses the sign-in, and entry never changes the account's roles. Staging QA can walk it with a plus-tag address. | Product |
 | Google One Tap | Decided | It yields to the sign-in dialog, is offered wherever Google sign-in is brand-offered, ships to all eligible traffic at merge with no flag, and stays suppressed for the rest of a visit after a decline. | Product |
 :::

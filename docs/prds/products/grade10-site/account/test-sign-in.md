@@ -11,8 +11,8 @@ QA walks sign-in on the hosted stacks through a locked door. Collectors never se
 - **The lane's own workflow** — one workflow, from main, opens the door in an environment a reviewer approves. Proving the repository is not enough. A run a pull request starts is refused
 - **A QA agent** — an agent walking a manual pass on staging captures a tester's sign-in link through the door, so it signs in without a mailbox — [Manual QA Passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
 - **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
-- **What the token may do** — capture, age and clear. Never ban or prepare. A holder can still sign in as any tester
-- ❓ **Admin tester** — whether the token may reach the admin-only tester, whose sign-in gives `admin` on staging. Owner: Product
+- **What the token may do** — capture, age and clear on a tester address, and on staging alone. Never ban or prepare. A holder can sign in as any tester on staging except the admin-only one
+- **The admin-only tester** — the token never reaches it, on any environment. Its link is followed by the workflow, which prepares its `admin` before the follow
 - **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on. Anyone who reads the repository gets the new token too, so rotation cuts off only copies made earlier
 
 ## Where It Opens
@@ -64,6 +64,8 @@ Measured on the share of staging auth cases that finish a sign-in without a mail
 | Where the door is open | Decided | Staging and uat, every move. Production and preview, capture and clear for the collector alone. | Product |
 | Who may call | Decided | One workflow, from main, on a reviewed dispatch, and a QA agent walking a manual pass on staging. Proving the repository alone is not enough. | Product |
 | How a QA agent proves itself | Decided | A staging-only QA token committed to the repository, for capture, age and clear on a tester address. Anyone who reads the repository can sign in as a tester on staging. That is accepted for an easy setup. | Product |
+| The admin-only tester and the QA token | Decided | Refused on every environment. The token never reaches it, so a reader of the repository cannot sign in as `admin`. | Product |
+| Test-door writes on the trail | Decided | A ban, a prepare, a scoped role and an account the door creates are on the audit trail, named by the caller's kind. Capture, age and clear write none. | Product |
 | Which addresses | Decided | Each environment's named testers, written into the code, and on staging and uat a unique plus-tag of one. | Product |
 | Sweeping tester accounts | Decided | A minted plus-tag's account is removed in the next sweep after the run that minted it. | Ops |
 | Capture, age, ban, prepare, a scoped role, clear | Decided | Those six, for a tester address only. A scoped role only on a minted plus-tag of the collector. | Product |
