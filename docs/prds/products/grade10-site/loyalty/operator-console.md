@@ -6,6 +6,48 @@ order: 9
 reviewed: 2026-10-07
 ---
 
+## Permissions
+
+Each action takes its own permission, so an operator can hold one without
+the others.
+
+| Permission | Allows |
+| --- | --- |
+| Read members | Find a member and read their loyalty state and activity |
+| Move points | Campaign grants, corrections, and restarting the expiry |
+| Grant invitations | Give and take back an invitation to Black — [Tiers](/p/grade10-site/loyalty/tiers#black-tier) |
+| Remove a tier | Take a tier a member holds back |
+| Edit rewards | Create, edit and archive rewards |
+| Cancel a redemption | Cancel a member's redemption — [Rewards](/p/grade10-site/loyalty/rewards#cancelling-a-redemption) |
+| Identity | Names and email addresses, the identity system's own permission |
+
+❓ **Removing a tier** — the spec gives it its own permission; Tiers says it
+takes the permission that grants an invitation. Product confirms.
+
+- **Sections follow permissions** — the console shows only what the
+  operator may do; one who may only read members sees no section that moves
+  points, restarts the expiry, grants invitations, edits rewards, removes a
+  tier, cancels a redemption or shows the log
+- **Second factor** — every action needs a verified second factor on the
+  session; an operator without one is taken to verify, and the action
+  completes after
+- **On the record** — every change is written to an operator log that cannot
+  be rewritten unseen; verifying it names where it breaks. An action the log
+  cannot record does not run
+
+## Reading a Member
+
+- **Find and read** — a member's tier, balance, activity, and what they lost
+  to expiry; the log and its check sit beside them
+- **Member link** — the address of a member's view opens the same member for
+  whoever it is shared with
+- **Names and emails** — read from the identity system under its own
+  permission and a second factor, never through a loyalty permission alone,
+  and never kept by the programme. The log records who read which members and
+  how many, never the names
+- **Identity unreachable** — the console says so, and shows no member with a
+  blank name
+
 ## Moving Points
 
 An operator moves points by hand from the admin console two ways, and the two
@@ -21,7 +63,8 @@ part on one question: do the points count toward the tier?
   from their own day and the day still running —
   [Points](/p/grade10-site/loyalty/points#expiry)
 - **The form states the date** — before the operator writes, it names the
-  day the points will lapse
+  day the points will lapse, and says when they start the member's window
+  rather than join one
 - **Both carry a reason** — what the operator types goes to the audit trail;
   the ledger carries only its digest
 
@@ -44,7 +87,7 @@ An operator gives a balance more time without the member buying or redeeming.
 
 ## Authoring a Reward
 
-An operator writes a reward's whole definition in the console's reward form,
+🎨 An operator writes a reward's whole definition in the console's reward form,
 with no call to the admin API. The form offers three choices, each saved as
 one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-types).
 
@@ -55,7 +98,7 @@ one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-ty
   opens, and duplicates, as a Free item
 - **A new choice starts empty** - moving to another of the three carries
   nothing over from the one before
-- **Online only by product or filter** - the form saves such a reward for
+- 🚧 **Online only by product or filter** - the form saves such a reward for
   online alone, one stored for the till as well included; moving its scope to
   named variants or the whole order shows the channels it was stored with
   again - [Reward Types](/p/grade10-site/loyalty/rewards#reward-types)
@@ -66,7 +109,8 @@ one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-ty
 - **Missing parts** - nothing is saved while the choice lacks a part it
   needs, or the window ends before it starts; the form names what is missing
 - **Basket check** - beside the form, the operator builds a basket by search
-  and reads what the coupon would take off it, before saving
+  and reads what the coupon would take off it, or why it would not apply,
+  before saving
 - **Currency mark** - `HKD` in front of a money field, as console tables
   name the currency
 
