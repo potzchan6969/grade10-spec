@@ -89,6 +89,9 @@ const MY_AUCTIONS_PAGE_HREF = storyHref(MY_AUCTIONS_PAGE_STORY_ID);
 /** Storybook story id for the Press page assembly. */
 const PRESS_PAGE_STORY_ID = "site-press-screens-press--default";
 
+/** Storybook story id for the press-release article assembly. */
+const PRESS_ARTICLE_STORY_ID = "site-press-screens-press-release--default";
+
 /**
  * Real routes that resolve to a page story in the workbench: the href
  * stays the surface's true address and a click in the canvas jumps to
@@ -96,6 +99,14 @@ const PRESS_PAGE_STORY_ID = "site-press-screens-press--default";
  */
 const ROUTE_STORY_IDS: Record<string, string> = {
   "/press-releases": PRESS_PAGE_STORY_ID,
+};
+
+/**
+ * Route prefixes that resolve to a page story when no exact route matches:
+ * every release slug opens the one article template story.
+ */
+const ROUTE_PREFIX_STORY_IDS: Record<string, string> = {
+  "/press-releases/": PRESS_ARTICLE_STORY_ID,
 };
 
 /** Jump the workbench Storybook iframe to another page story. */
@@ -125,7 +136,15 @@ function interceptWorkbenchStoryLinks(event: MouseEvent) {
   if (!href) return;
 
   const match = /(?:\?|&)path=\/story\/([^&#]+)/.exec(href);
-  const storyId = match ? decodeURIComponent(match[1]) : ROUTE_STORY_IDS[href];
+  // A trailing slash means the list route, not a slug under it.
+  const route =
+    href.length > 1 && href.endsWith("/") ? href.slice(0, -1) : href;
+  const storyId = match
+    ? decodeURIComponent(match[1])
+    : (ROUTE_STORY_IDS[route] ??
+      Object.entries(ROUTE_PREFIX_STORY_IDS).find(([prefix]) =>
+        route.startsWith(prefix),
+      )?.[1]);
   if (!storyId) return;
 
   event.preventDefault();
@@ -143,6 +162,7 @@ export {
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
   ORDER_HISTORY_STORY_ID,
+  PRESS_ARTICLE_STORY_ID,
   PRESS_PAGE_STORY_ID,
   PRIVACY_POLICY_HREF,
   PRIVACY_POLICY_STORY_ID,
