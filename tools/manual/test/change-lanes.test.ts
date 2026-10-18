@@ -213,11 +213,11 @@ describe("the real store's board", () => {
    * drops a delta's journeys, so nothing but the delta files remembers
    * them. The ceiling covers both. */
   it("states an id ceiling covering the durable file and every delta", () => {
-    const loyalty = snapshot.specs.find(
-      (one) => one.id === "grade10-site/loyalty/programme",
+    const discounts = snapshot.specs.find(
+      (one) => one.id === "grade10-site/store/discounts",
     );
     const durable = Math.max(
-      ...(loyalty?.requirements.flatMap((one) =>
+      ...(discounts?.requirements.flatMap((one) =>
         one.scenarios.flatMap((scenario) =>
           scenario.id ? [Number(scenario.id.split("-").pop())] : [],
         ),
@@ -227,10 +227,10 @@ describe("the real store's board", () => {
       0,
       ...snapshot.changes.flatMap((one) =>
         one.deltas
-          .filter((delta) => delta.spec === loyalty?.id)
+          .filter((delta) => delta.spec === discounts?.id)
           .flatMap((delta) => delta.requirements)
           .flatMap((requirement) =>
-            [...(requirement.text ?? "").matchAll(/programme-SC-(\d+)/g)].map(
+            [...(requirement.text ?? "").matchAll(/discounts-SC-(\d+)/g)].map(
               (match) => Number(match[1]),
             ),
           ),
@@ -242,7 +242,7 @@ describe("the real store's board", () => {
     // proposal makes false again. That is the store's state, not a defect,
     // and the ceiling still has to cover whatever has been issued — the
     // assertion below is what this test is for, and it holds either way.
-    expect(loyalty?.issuedThrough?.sc).toBeGreaterThanOrEqual(
+    expect(discounts?.issuedThrough?.sc).toBeGreaterThanOrEqual(
       Math.max(durable, inFlight),
     );
     // A spec whose scenarios carry no permanent ids has issued nothing and

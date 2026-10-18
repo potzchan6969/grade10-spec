@@ -26,8 +26,8 @@ drops a field you typed is worse than one that refuses to save.
 
 ```yaml
 ---
-title: Points and Rewards
-spec: grade10-site/loyalty/programme
+title: Bid Increments
+spec: grade10-site/auction/bid-increments
 order: 1
 ---
 ```
@@ -102,7 +102,7 @@ case, its status, and the journey it traces — so a page never lists a case
 in prose; the check warns on a suite no page shows.
 
 ```md
-::cases{id="grade10-site/loyalty/programme"}
+::cases{id="grade10-site/auction/bid-increments"}
 ```
 
 A chapter — one page whose `##` sections are the capabilities a reader meets
@@ -119,7 +119,7 @@ A page that names a spec in its frontmatter already shows that spec's in-flight
 changes. Author this block only to show a *different* spec's:
 
 ```md
-::changes{spec="grade10-site/loyalty/programme"}
+::changes{spec="grade10-site/auction/bid-increments"}
 ```
 
 What the changes about a capability said would come next — the
@@ -127,7 +127,7 @@ What the changes about a capability said would come next — the
 or whose `## References` cite it, in flight and shipped alike:
 
 ```md
-::next{spec="grade10-site/loyalty/programme"}
+::next{spec="grade10-site/auction/bid-increments"}
 ```
 
 Every bullet stays under the change that wrote it, dated by that change, and
@@ -350,8 +350,8 @@ Prose can cite the store by id, and the reference stays honest when the
 store moves. Write the id in double brackets:
 
 ```md
-Expiry is exact — [[grade10-site-loyalty-programme-SC-96]] — and a balance is never negative
-([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
+A boundary takes the higher tier — [[grade10-site-auction-bid-increments-SC-02]] — and a bid under the minimum is refused
+([[grade10-site/auction/bid-increments#grade10-site-auction-bid-increments-SC-04]]).
 ```
 
 **A page never cites a scenario.** `…-SC-32` says nothing to the person
@@ -363,7 +363,7 @@ A reference renders the target's current title as a link, so a renamed
 scenario can never orphan the prose that cites it. On a page with a `spec`
 in its frontmatter, a bare id resolves inside that spec; anywhere else —
 this guide, say — qualify it as `spec-id#item-id`, like
-[[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]. A reference that resolves to
+[[grade10-site/auction/bid-increments#grade10-site-auction-bid-increments-SC-04]]. A reference that resolves to
 nothing renders as a marked dead link and draws a check warning.
 
 ## Canonical Form

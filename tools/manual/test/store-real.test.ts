@@ -51,17 +51,17 @@ describe("the real store", () => {
    * capabilities of the same name — `grade10-site/site/navigation` and
    * `zzz-site/site/navigation` — cannot both issue `navigation-SC-01`. */
   it("carries permanent ids where the store has issued them", () => {
-    const loyalty = snapshot.specs.find(
-      (spec) => spec.id === "grade10-site/loyalty/programme",
+    const increments = snapshot.specs.find(
+      (spec) => spec.id === "grade10-site/auction/bid-increments",
     );
-    const prefix = "grade10-site-loyalty-programme";
+    const prefix = "grade10-site-auction-bid-increments";
     const scenarios =
-      loyalty?.requirements.flatMap((one) => one.scenarios) ?? [];
+      increments?.requirements.flatMap((one) => one.scenarios) ?? [];
     expect(scenarios.some((one) => one.id?.startsWith(`${prefix}-SC-`))).toBe(
       true,
     );
     expect(
-      loyalty?.journeys?.some((one) => one.id.startsWith(`${prefix}-US-`)),
+      increments?.journeys?.some((one) => one.id.startsWith(`${prefix}-US-`)),
     ).toBe(true);
   });
 

@@ -377,7 +377,7 @@ claim. A counter sale that runs out its hour, or that a newer promise
 retires, SHALL give its coupon back: its code SHALL be deactivated, and the
 sale SHALL keep its cart. A claim on the coupon from another sale SHALL
 deactivate the code of the sale that held it, unless the claim is refused by
-name — `grade10-site/loyalty/programme`'s own requirement.
+name — a rule the [Coupons](../../../../../docs/prds/products/grade10-site/loyalty/coupons.md) page holds.
 
 The shop goes on honouring a code a cart already carries, so a counter sale
 paid with a reward's code its order had given up — or, for a gift, with the

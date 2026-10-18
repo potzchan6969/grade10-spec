@@ -2,7 +2,8 @@
 
 The grade10 site — the collector-facing application. It holds the shell every
 page renders in, how the site answers an address, and every surface inside it:
-the store, the auction, the loyalty programme, and the vault. The operator
+the store, the auction and the vault. The loyalty programme is page-first:
+its product pages under `docs/prds/products/grade10-site/loyalty/` hold it. The operator
 surfaces that publish and close out an auction listing, and the ones that work
 the vault's queue and its book, belong to `grade10-admin`.
 
@@ -28,9 +29,7 @@ belong to.
 | [`store/account-identity`](store/account-identity/spec.md) | A collector verifying their identity from their own account, and being recognised as verified wherever Grade10 asks. |
 | [`store/checkout`](store/checkout/spec.md) | A member's or a guest's checkout: a live decision on a current basket before a Shopify-hosted payment. |
 | [`store/discounts`](store/discounts/spec.md) | How a code, a store coupon, a reward, points or a site discount reaches a draft order. |
-| [`store/membership`](store/membership/spec.md) | A member's commerce customer, in-store identification, the till session, and points coming of age. |
 | [`store/site-discounts`](store/site-discounts/spec.md) | Storewide cuts configured in Shopify's automatic discounts, and how the site shows them. |
-| [`store/wallet-member-card`](store/wallet-member-card/spec.md) | The member card in Google Wallet and Apple Wallet, and how it follows the member's standing. |
 
 ## `auction`
 
@@ -41,12 +40,6 @@ belong to.
 | [`auction/auto-bidding`](auction/auto-bidding/spec.md) | A collector commits a maximum, and Grade10 bids for them only as far as needed to lead. |
 | [`auction/bidding-history`](auction/bidding-history/spec.md) | A collector's private index of every bid they placed on their own account. |
 | [`auction/listing-media`](auction/listing-media/spec.md) | Alt text and named public sizes for a listing's gallery images, and how the catalogue consumes them. |
-
-## `loyalty`
-
-| Capability | What it governs |
-| --- | --- |
-| [`loyalty/programme`](loyalty/programme/spec.md) | The points-and-tiers membership programme: earning, expiry, tiers, the reward menu, and the operator actions that run it. |
 
 ## `analytics`
 
