@@ -69,6 +69,20 @@ Stock reads as a yes or no, never a count.
 - 🚧 🎨 **Online only on the menu** - a reward scoped to named products or a
   catalog filter reads online only, whatever channels it names
 - 🚧 **Twice costs once** - a redemption sent again, reload or not, records one
+- **A collection window** - a reward collected in person states the window it
+  must be collected in; a money-off coupon states its validity instead
+
+::story{id="loyalty-rewards-blocks-rewardmenu--collection-window-is-stated" title="A collection window, stated"}
+
+- **Redeeming** - the reward being taken draws busy; every other reward stays
+  pressable
+- **Refused** - a refused redemption says why on its own row, and can be
+  pressed again
+
+::story{id="loyalty-rewards-blocks-rewardmenu--redeem-failed" title="A refused redemption"}
+
+- **Loading and empty** - the shop holds its place while the catalog is read,
+  and says so when nothing is on sale
 
 :::example{title="Buying from the shop" id="shop-buy-and-short"}
 | Step | Event | Points | Balance |
@@ -139,8 +153,8 @@ Every reward the programme knows, on sale or not; the
 
 - **How it is obtained** `TBC` - no field carries it, so every live reward
   is on sale
-- **Units per redemption** `TBC` - a reward is taken one at a time until
-  the per-redemption and per-day bounds are chosen
+- **One unit per redemption** - a reward is taken one at a time; a member
+  who wants two redeems twice
 - ❓ **The physical catalog** - which items, and their point prices; Product's
   call
 
@@ -182,6 +196,16 @@ operator gives rather than takes back:
 
 Points paid against a bill are returned by their own rules —
 [Paying with Points](/p/grade10-site/loyalty/paying-with-points).
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Units per redemption | Decided | One. A member who wants two redeems twice; the reward menu offers no quantity. Decided 2026-10-18. | Product |
+:::
+
+:::detail{title="Open work" for="engineer"}
+- [ ] **Quantity off the reward menu** - the menu's quantity stepper and its stories (`QuantityChangeIsReported`, `QuantityAtBound`) go, since a reward is taken one unit at a time; blocked on the designer, whose look the block is - Design
+:::
 
 :::detail{title="Code map" for="engineer"}
 - **Rewards service** — `packages/loyalty/backend/src/services/rewards`,

@@ -31,6 +31,9 @@ example walks. Cite one as `grade10-site/loyalty/rewards#<id>`.
 | shop-repriced | a member bought a reward at 500 points | the reward is repriced to 700 | the earlier redemption still reads 500 | smoke |
 | shop-menu-online-only | a reward scoped to named products, naming the till too | a member reads the menu | it reads online only, before any points go | building |
 | shop-twice-costs-once | a member buying a reward | the same redemption is sent twice, with a reload between | one redemption, one debit | building |
+| one-unit | a member who wants two of a reward | they redeem | the menu offers no quantity; they redeem twice, paying the cost each time | |
+| collection-window | a reward collected in person and a money-off reward | the member reads the menu | the first states its collection window; the second states its validity | |
+| redeem-refused | a redemption refused | the member reads the menu | the refused row says why and can be pressed again; the other rows stay pressable | |
 
 ## Using a Reward
 
