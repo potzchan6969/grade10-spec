@@ -35,7 +35,7 @@ function MediaCard({ item }: { item: MediaItem }) {
       target="_blank"
     >
       <Card
-        className="h-full min-h-48 rounded-3xl motion-safe:[transition:transform_350ms_cubic-bezier(0.34,3.85,0.64,1),border-color_250ms_cubic-bezier(0.22,1,0.36,1),box-shadow_250ms_cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong hover:shadow-[0_8px_16px_var(--shadow-color)] motion-safe:hover:[transition:transform_200ms_cubic-bezier(0.22,1,0.36,1),border-color_250ms_cubic-bezier(0.22,1,0.36,1),box-shadow_250ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:hover:translate-y-0 sm:min-h-56"
+        className="h-full min-h-48 rounded-3xl motion-safe:[transition:translate_350ms_cubic-bezier(0.34,1.36,0.64,1),border-color_250ms_cubic-bezier(0.22,1,0.36,1),box-shadow_250ms_cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-strong hover:shadow-[0_8px_16px_var(--shadow-color)] motion-safe:hover:[transition:translate_200ms_cubic-bezier(0.22,1,0.36,1),border-color_250ms_cubic-bezier(0.22,1,0.36,1),box-shadow_250ms_cubic-bezier(0.22,1,0.36,1)] motion-reduce:hover:translate-y-0 sm:min-h-56"
         padding={false}
       >
         <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
