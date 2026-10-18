@@ -380,10 +380,8 @@ const BASKET_RULES = {
     "grade10-site/store/discounts: A draft order carries at most one discount code",
   shopAnswer:
     "grade10-site/store/site-discounts: Shopify's rules decide how a site discount meets a discount code, and grade10 accepts what the shop priced",
-  points:
-    "grade10-site/store/membership: Points come off as one order-level discount either channel accepts",
-  balance:
-    "grade10-site/loyalty/programme: Points pay at checkout, at the programme's exchange rate",
+  points: "grade10-site/loyalty/paying-with-points#pay-online",
+  balance: "grade10-site/loyalty/paying-with-points#rate-one-dollar",
   lines:
     "shared/ui/store-cart: Fetching status and price info on open with Boneyard skeletons",
 } as const;

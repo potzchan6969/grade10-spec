@@ -1,6 +1,5 @@
 ---
 title: Coupons
-spec: grade10-site/loyalty/programme
 order: 5
 reviewed: 2026-10-06
 ---

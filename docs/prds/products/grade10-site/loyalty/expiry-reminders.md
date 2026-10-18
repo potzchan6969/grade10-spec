@@ -1,6 +1,5 @@
 ---
 title: Expiry Reminders
-spec: grade10-site/loyalty/expiry-reminders
 order: 10
 ---
 

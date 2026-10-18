@@ -1,6 +1,5 @@
 ---
 title: Points
-spec: grade10-site/loyalty/programme
 order: 1
 reviewed: 2026-10-06
 ---

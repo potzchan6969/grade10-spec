@@ -107,7 +107,7 @@ const meta = {
   globals: { viewport: { value: "mobile1" } },
   parameters: {
     layout: "fullscreen",
-    journeys: ["grade10-site-store-membership-US-02"],
+    journeys: ["grade10-site/loyalty/membership#pass-rotates"],
   },
 } satisfies Meta<typeof MemberPassPage>;
 

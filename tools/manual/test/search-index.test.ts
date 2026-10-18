@@ -29,8 +29,8 @@ describe("the query that found nothing it was about", () => {
 
     expect(partial).toBe(false);
     expect(where.slice(0, 2)).toEqual([
-      "/p/grade10-site/loyalty/shopify-integration#grade10-site-store-membership-SC-24",
-      "/p/grade10-site/loyalty/coupons#grade10-site-loyalty-programme-SC-89",
+      "/p/grade10-site/store/shelf-scanning#g10.store-shelf-scanning.SC2",
+      "/p/grade10-site/store/shelf-scanning#g10.store-shelf-scanning.US1-TC4",
     ]);
 
     // The whole point: not eighteen pages that merely say "card". Stated as

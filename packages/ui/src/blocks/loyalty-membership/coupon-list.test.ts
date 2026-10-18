@@ -25,7 +25,7 @@ const codesIn = (items: readonly CouponItem[]) => {
 };
 
 describe("CouponList", () => {
-  it("grade10-site-loyalty-programme-SC-243 shows a store coupon's code and none for a reward coupon", () => {
+  it("grade10-site/loyalty/coupons#no-code-shown shows a store coupon's code and none for a reward coupon", () => {
     expect(
       codesIn([
         {

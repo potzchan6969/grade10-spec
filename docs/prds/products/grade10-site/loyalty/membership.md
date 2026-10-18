@@ -1,6 +1,5 @@
 ---
 title: Membership
-spec: grade10-site/loyalty/programme
 order: 6
 reviewed: 2026-10-06
 ---

@@ -1,6 +1,5 @@
 ---
 title: Paying with Points
-spec: grade10-site/loyalty/programme
 order: 4
 reviewed: 2026-09-15
 ---
