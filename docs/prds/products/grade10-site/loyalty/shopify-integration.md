@@ -87,6 +87,10 @@ Every online checkout is a Shopify draft order and its invoice.
   environment; one brand switch turns it off on both channels, as an
   emergency stop, and nothing already promised or paid is touched
 
+❓ The flows below still grant the earn on the paid order — the old trigger.
+An order earns when it completes — [Points](/p/grade10-site/loyalty/points#rules).
+The points spent still leave on the paid order.
+
 :::flow{title="Online checkout" id="online-paid" case="Paid" diagram="assets/diagrams/shopify-online-paid.svg"}
 ## *Member* — **Chooses points and a coupon**
 On the store's own `/checkout` page, before Shopify has seen the basket.
