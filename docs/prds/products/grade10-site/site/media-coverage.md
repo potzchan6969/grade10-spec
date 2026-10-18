@@ -38,8 +38,9 @@ title and the link, nothing else.
 - ❓ Product - **Navigation entry** - where Media Coverage sits in the
   chrome is undecided; the header marks no item current for the page
   today
-- ❓ Product - **Title length** - the frame does not clamp titles; a
-  long CMS title grows its card. No cap until editorial names one
+- **Copy - Title length** - every card holds one height: the publication
+  truncates to one line and the title clamps at four, so a long CMS
+  title ends in an ellipsis rather than a taller card
 - **Content - coverage list** - the grid carries the live
   `grade10.com/media-coverage` record verbatim; the frame's items are
   placeholders

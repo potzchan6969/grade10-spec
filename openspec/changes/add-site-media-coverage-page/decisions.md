@@ -31,6 +31,7 @@
 | Q2 | What does a media card's hover do? | The card's border strengthens to `border-strong` - decided by the round | A fill or arrow move — the frame's hover variant binds `Base/border-strong` and nothing else |
 | Q3 | How does the page reveal? | Mount-enter reveal like About and Press - decided by the round | Scroll-driven reveals — the page's below-fold content is a plain grid, not a composition that greets the scroll |
 | Q4 | How does the grid collapse on a narrow viewport? | One column, two at `sm`, four at `lg` - decided by the round | No small-viewport frame exists; the collapse follows the About page's convention |
+| Q5 | Do cards grow with long CMS entries? | No — every card holds one height: the publication truncates to one line and the title clamps at four, ending in an ellipsis - decided by the designer | Free-height cards — the frame's `self-start` rows let card heights vary |
 
 ## Raised
 

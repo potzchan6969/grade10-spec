@@ -19,26 +19,29 @@ const REVEALED = "translate-y-0 opacity-100 filter-none";
  * One media card: the whole card is the external link. The frame's Card
  * instance is restyled past the published set — `radius-3xl`, `gap-6`
  * padding, `size-56` minimum height, `border-strong` on hover — so the
- * overrides live here until design settles the contract.
+ * overrides live here until design settles the contract. Every card
+ * holds one height: the publication truncates to one line and the title
+ * clamps at four, so a longer CMS entry ends in an ellipsis rather than
+ * a taller card.
  */
 function MediaCard({ item }: { item: MediaItem }) {
   return (
     <a
-      className="block"
+      className="block h-full"
       href={item.href}
       rel="noopener noreferrer"
       target="_blank"
     >
       <Card
-        className="min-h-56 rounded-3xl transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-border-strong"
+        className="h-full min-h-56 rounded-3xl transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-border-strong"
         padding={false}
       >
         <div className="flex flex-1 flex-col gap-4 p-6">
           <div className="flex flex-1 flex-col gap-2">
-            <p className="font-medium text-secondary-foreground text-xs uppercase leading-4">
+            <p className="truncate font-medium text-secondary-foreground text-xs uppercase leading-4">
               {item.publication}
             </p>
-            <p className="flex-1 font-medium text-card-foreground text-lg leading-7">
+            <p className="line-clamp-4 font-medium text-card-foreground text-lg leading-7">
               {item.title}
             </p>
           </div>
@@ -107,7 +110,7 @@ function MediaCoveragePage() {
           </div>
           <ul
             className={cn(
-              "grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-4",
+              "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4",
               REVEAL,
               pageIsRevealed && REVEALED,
             )}
