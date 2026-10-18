@@ -86,7 +86,7 @@ describe("coverage", () => {
   it("lists every feature page, not the domain's index", () => {
     assert.deepEqual(
       manualFeatures(root).map((feature) => feature.key),
-      ["store/cart", "store/home", "store/shipping", "auth/sign-in"],
+      ["account/sign-in", "store/cart", "store/home", "store/shipping"],
     );
   });
 
@@ -156,7 +156,7 @@ describe("coverageErrors", () => {
     assert.match(warnings.join("\n"), /Store\/Home - no Screens or Prototypes/);
     assert.match(
       warnings.join("\n"),
-      /Auth\/Sign In - no Screens or Prototypes/,
+      /Account\/Sign In - no Screens or Prototypes/,
     );
   });
 });

@@ -51,7 +51,7 @@ function LinkToastPage({ toast: kind }: LinkToastPageProps) {
 }
 
 const meta = {
-  title: "Auth/Sign In/Screens/Sign In/Link Toasts",
+  title: "Account/Sign In/Screens/Sign In/Link Toasts",
   component: LinkToastPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

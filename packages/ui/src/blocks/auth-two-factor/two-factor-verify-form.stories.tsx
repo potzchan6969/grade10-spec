@@ -3,7 +3,7 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { TwoFactorVerifyForm } from "./two-factor-verify-form";
 
 const meta = {
-  title: "Auth/Roles/Blocks/TwoFactorVerifyForm",
+  title: "Account/Roles/Blocks/TwoFactorVerifyForm",
   component: TwoFactorVerifyForm,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

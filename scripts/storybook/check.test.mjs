@@ -98,7 +98,7 @@ describe("placementErrors", () => {
     assert.deepEqual(
       place(
         "packages/ui/src/blocks/auth-sign-in/sign-in-card.stories.tsx",
-        "Auth/Sign In/Blocks/SignInCard",
+        "Account/Sign In/Blocks/SignInCard",
         "SignInCard",
       ),
       [],
@@ -278,7 +278,7 @@ describe("checkStories", () => {
       'docs/prds/products/grade10-site/store/cart.md:2 - no story "store-cart-screens-cart--gone"',
     ]);
     assert.deepEqual(warnings, [
-      "Auth/Sign In - no Screens or Prototypes; draw them, or say why in apps/preview/coverage.yaml",
+      "Account/Sign In - no Screens or Prototypes; draw them, or say why in apps/preview/coverage.yaml",
       'openspec/changes/add-x/ui-design.md:1 - no story "store-cart-cart--later"',
     ]);
   });

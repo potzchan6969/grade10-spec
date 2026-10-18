@@ -52,7 +52,7 @@ const googleContinue = (
 );
 
 const meta = {
-  title: "Auth/Sign In/Blocks/SignInCard",
+  title: "Account/Sign In/Blocks/SignInCard",
   component: SignInCard,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
