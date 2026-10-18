@@ -39,5 +39,5 @@
 | --- | --- | --- |
 | `grade10-site/site/media-coverage` | The card instance in the frame binds `radius-3xl`, `gap-6`, `size-56` and `container-3xs`; the published `Card` set binds `radius-2xl` and `gap-4`. Intentional override or drift? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — the page composes the frame's values as overrides |
 | `grade10-site/site/media-coverage` | The publication label binds no colour variable (`#77736b`). Which token? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — `secondary-foreground` ships |
-| `grade10-site/site/media-coverage` | The card's hover drop shadow binds no variable. Which effect? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — the house `0 8px 16px --shadow-color` ships |
+| `grade10-site/site/media-coverage` | The card's hover drop shadow binds no variable. Which effect? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — a weakened `0 4px 16px -4px --shadow-color` ships |
 | `grade10-site/site/media-coverage` | Where does the Media Coverage entry sit in the chrome? | ❓ on [Media Coverage](/p/grade10-site/site/media-coverage) — no item marked current today |

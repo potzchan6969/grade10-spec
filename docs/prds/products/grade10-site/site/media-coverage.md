@@ -35,9 +35,9 @@ title and the link, nothing else.
   `gap-4`. The page composes the frame's values as overrides until design
   confirms which is the contract
 - ❓ Design - **Card shadow** - the frame's hover variant draws a soft
-  drop shadow bound to no variable; the page ships the house shadow
-  (`0 8px 16px` of `--shadow-color`, the popover-pill value) until
-  design names the effect
+  drop shadow bound to no variable; the page ships a weakened house
+  shadow (`0 4px 16px -4px` of `--shadow-color`) until design names
+  the effect
 - ❓ Design - **Publication colour** - the label draws `#77736b`, bound
   to no variable; the page renders `secondary-foreground` until design
   names the token
