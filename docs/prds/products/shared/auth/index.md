@@ -3,60 +3,114 @@ title: Accounts
 icon: key
 ---
 
-`shared-auth` is how a person gets into a brand's site or console, and what
-happens to their account once they are in. It is shaped by brand rather than by
-product: one contract serves grade10 and ZZZ alike, so a collector signing in on
-the grade10 site and an operator signing in to the ZZZ console meet the same
-rules.
+Accounts is how a person gets into a brand's site or console, and what happens to their account once they are in.
 
-## Collector half
+## Values
 
-There is no password anywhere. A person signs in with an emailed link or —
-where the brand offers it — Google. One verified email address is one account:
-the first successful sign-in creates it, and every later visit is the same
-person. A session covers the surface it was made on and none of another brand, and
-signing out happens in exactly one place per surface, always with feedback.
-🚧 The admin console holds a session of its own, apart from the site's.
+| Rule | Value |
+| --- | --- |
+| Sign-in | An emailed link, or Google where the brand offers it. No password and no code |
+| Link lifetime | Five minutes |
+| Resend wait | Sixty seconds after each send |
+| Roles | Seven, from one closed set |
+| Ban or revoke takes effect | Within 70 seconds, on every read |
+| Refused outright | Banning yourself, or any account holding `admin` |
 
-Three capabilities carry that: **sign-in** (the methods and their limits),
-**session** (who the caller is, once they are in), and **sign-out** (leaving
-one). A product's own account page — a profile, a verified identity — is
-product data, not this contract: see Grade10's
-[Account](/p/grade10-site/account).
+## Pages
 
-## Operator half
+| Page | What it holds |
+| --- | --- |
+| [Sign-In](/p/shared/auth/sign-in) | The emailed link, Google, the waits, and following a link |
+| [Session](/p/shared/auth/session) | Who the caller is, the two sessions, and open tabs |
+| [Sign-Out](/p/shared/auth/sign-out) | Ending one surface's session |
+| [Roles and Permissions](/p/shared/auth/roles) | The closed role set and the permissions each grants |
+| [Users](/p/shared/auth/users) | The directory, bans, role changes, creating accounts and erasure |
+| [Sessions](/p/shared/auth/sessions) | An operator listing and ending one person's sessions |
+| [Audit Log](/p/shared/auth/audit) | The trail every identity write lands on |
+| [Sign-In Tests](/p/shared/auth/test-sign-in) | How QA walks sign-in on staging |
 
-An operator is a person holding a role above `user`. **Roles** names the closed
-set and what each grants. **Users** is the identity directory — listing
-accounts, banning, unbanning, changing roles. **Sessions** is listing where a
-person is signed in and ending those sessions. **Audit** is the trail all four
-of those moves land on: ban, unban, set-role and revoke, successes and refusals
-alike. An action whose record cannot be written does not run.
+:::callout{kind="note"}
+`session` and `sessions` are two capabilities, not a typo. The singular one is who the caller is. The plural one is an operator listing and ending somebody else's sessions.
+:::
 
-An auditor holds exactly one grant and reads that trail without seeing names or
-emails, which sit behind the directory grant everywhere else.
+## Collector Half
+
+### Signing In
+
+There is no password. A person types their email and a sign-in link is emailed to them.
+
+| Method | Offered on |
+| --- | --- |
+| Emailed link | Every brand |
+| Google | A brand that has enabled it, and only a verified Google address |
+
+- **One account per address** — the first successful sign-in creates it. Letter case does not make a second account. A plus-tag is a different address
+- **One link at a time** — a new link replaces the one sent before it, so the newest email always works
+- **Stays on the brand** — a session covers the surface it was made on and no other brand. A return location the brand does not trust is ignored
+- 🚧 **A link signs in the surface that asked for it** — a console link signs in the console only, and a site link signs in the site only
+
+:::flow{title="Signing in by link"}
+## *Collector* — **Asks for a link**
+Asking again within a minute is answered with a wait, not a second email.
+
+## *Auth* — **Emails the link**
+The link lasts five minutes, and the email says so.
+
+## *Collector* — **Follows the link**
+The first use signs them in. A new address gets its account here.
+:::
+
+### Two Sessions
+
+The console is its own sign-in. Each surface holds its own session.
+
+| Surface | Who signs in | Ends with |
+| --- | --- | --- |
+| Site | A collector | Signing out on the site |
+| Console | An operator | Signing out of the console |
+
+- 🚧 **Separate sessions** — signing in on one surface does not sign anyone in on the other. A person may hold one, the other or both, as two different accounts
+- 🚧 **Each ends on its own** — ending one session does not end the other
+- 🚧 **Operator actions need the console's sign-in** — a site sign-in never counts as the recent sign-in an operator action asks for
+- 🚧 **Release asks operators to sign in once more** — the console stops honouring the site's session at release. Customer sessions are untouched
+
+### Open Tabs
+
+Tabs on one surface share one session. A sign-in or sign-out in one tab shows in the others. A tab that cannot reach us keeps what it last showed.
+
+## Operator Half
+
+An operator is a person holding a role above `user`.
+
+- **Permissions decide** — a product asks whether the caller holds a permission, never whether a role matches. Roles are data; what a role grants is reviewed code — [Roles and Permissions](/p/shared/auth/roles)
+- **Three gates, fail-closed** — the role's permission, then a second factor where the environment enforces one, then the audit write. An action whose record cannot be written does not run — [Audit Log](/p/shared/auth/audit)
+- **Ban is blunt** — it ends every session the account holds, refuses new sign-ins and stops money moving. The account stays in the directory, marked — [Users](/p/shared/auth/users)
+- **Revoke is surgical** — it ends one session, or every session an account holds, and leaves the person able to sign in again — [Sessions](/p/shared/auth/sessions)
+- **Auditors read, never act** — an auditor holds one grant, reads the trail, and sees no names or emails
+
+## Not in Scope
+
+- **Passwords** — there are none, on any surface
+- **Profile and verified identity** — product data, not this contract. Grade10's is [Account](/p/grade10-site/account)
 
 ## Tests
 
-🚧 QA walks sign-in on staging through a locked door —
-[Sign-In Tests](/p/shared/auth/test-sign-in). Collectors never see it.
+🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a locked door. Collectors never see it — [Sign-In Tests](/p/shared/auth/test-sign-in)
 
-:::callout{kind="note"}
-`session` and `sessions` are two different capabilities, not a typo. The
-singular one is who the caller is; the plural one is an operator listing and
-ending somebody else's sessions.
+:::detail{title="Code map" for="engineer"}
+- **Contract** — `openspec/specs/shared/auth/`, one spec per capability
+- **Enforcement** — `elevatedProcedure` and `elevatedRoute` are the only doors to an admin operation
+- **Design records** — [security](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md) and [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
 :::
 
-:::detail{title="Enforcement" for="engineer"}
-Three fail-closed layers gate every admin surface: role permissions, a second
-factor, and a tamper-evident trail
-([docs/architecture/security.md](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md)).
-`elevatedProcedure` and `elevatedRoute` are the only doors to an admin
-operation — never a signed-in procedure plus a role check in the resolver.
+:::detail{title="Product decisions" for="pm"}
+Measured on the share of email sign-ins that end in a session, from the send to the session.
 
-Account deletion has one door too: an admin-only, elevated call on the auth
-worker, in one transaction that asserts the account exists, writes a tombstone,
-deletes the row, and appends to the trail. A failed append rolls the deletion
-back. See
-[docs/architecture/account-data.md](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md).
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Shape | Decided | Shaped by brand, not product. One contract serves grade10 and ZZZ alike, so a collector and an operator meet the same rules. | Product |
+| Operator grants | Decided | Permissions are reviewed code. A person's roles are data, so an operator account cannot invent a grant. | Product |
+| Closing bound | Decided | 70 seconds on every read. Under a minute needs sessions off the edge session store, so it is not offered. | Engineering |
+| Session lifetime | ❓ Open | How long a session lasts, and what ends one besides signing out. | Product |
+| Standing of a new account | ❓ Open | Whether a newly created account starts verified or unverified. | Product |
 :::
