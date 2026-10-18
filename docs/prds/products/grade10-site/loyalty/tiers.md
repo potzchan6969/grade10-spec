@@ -31,6 +31,13 @@ and it expires 12 months after the last activity.
 Only earning moves the progress. Redeeming takes from the balance and leaves
 the progress untouched, so spending can never cost a member their tier.
 
+❓ **Campaign grant** — this page counts only earning toward the progress; the
+programme spec and [Operator Console](/p/grade10-site/loyalty/operator-console#moving-points)
+also count a campaign grant, and never a correction. The owner confirms which.
+
+- **Tier lost** — the balance stays as it is
+- **A late record** — counts toward the period its own day falls in
+
 :::callout{kind="note"}
 A refund takes back the points its order earned, counted against the day of
 that order rather than the day of the refund. Where those points were the only
@@ -58,6 +65,10 @@ end of it.
 - **≥ 500 points** — the period extends 12 months from its own end
 - **< 500 points** — the member falls to the highest tier they still hold,
   Silver unless a Black invitation is live
+- **Inside the period** — lost only through a refund or an operator; spent
+  or lapsed points never cost it
+- **Climb starts again** — once a tier is lost, points earned before count
+  toward no tier
 - **Taken back by an operator** — a tier reached or granted in error is
   removed on the record, whatever its period says; it takes the same
   permission as granting an invitation, so an operator who may only move
@@ -80,7 +91,7 @@ is the intended nudge is the owner's call.
 We have a cron sweep to render the record for analytics purposes.
 :::
 
-:::example{title="A member's three years" periods="Gold=gold"}
+:::example{title="A member's three years" id="three-years" periods="Gold=gold"}
 | When | Event | Points | Balance | Progress | Period |
 | --- | --- | --- | --- | --- | --- |
 | 2025/02/10 | buys $2,500 · 250 at 1× | +250 | 250 | 250 | Silver |
@@ -102,6 +113,10 @@ We have a cron sweep to render the record for analytics purposes.
   when it ends; revocable, and a member holds at most one live invitation per
   tier
 - **No end date** — it holds until it is revoked
+- **Refused** — a grant naming a tier the programme does not have, or Silver,
+  records nothing
+- **Live invitations listed** — each with its member, tier, reason and end
+  date, so an operator can find one and revoke it
 - **Its end is observed, not scheduled** — the member stops holding Black the
   instant the date passes, and the history records it at the next evaluation
 - **Never the earned floor** — every evaluation runs twice, once ignoring

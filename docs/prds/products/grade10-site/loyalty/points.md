@@ -12,9 +12,9 @@ reviewed: 2026-10-06
 | Currency | **HKD**. A foreign currency is refused |
 | Clock | **Asia/Hong_Kong** |
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
-| Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7× |
+| Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7×, at the tier held before the order is priced, so an order that promotes earns at the old rate — [Tiers](/p/grade10-site/loyalty/tiers#earn-multiplier) |
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
-| Timing | **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter |
+| Timing | 🚧 **When the order completes** - a web order completes the first time every item is fulfilled, it is paid or partly refunded, and goods remain after its refunds; not carrier-confirmed delivery. A partly refunded order still completes, so the Completed badge is not the trigger ([Order Status](/p/grade10-site/commerce/order-status)). A till sale earns at the counter |
 
 ## Qualification Criteria
 
@@ -31,6 +31,8 @@ land on the part of a basket that earns nothing.
 | Credit top-ups | **No**, excluded as a product rather than as a tender |
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
+| The part paid with points | **No** — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
+| Sales outside the store and the till | **No**; the sale still completes |
 
 A fully discounted order earns nothing and writes no ledger entry.
 
@@ -38,10 +40,10 @@ A fully discounted order earns nothing and writes no ledger entry.
 
 An order's earn is written once, the first time the order completes.
 
-- **Complete** - every item fulfilled, paid or partly refunded, and goods
+- 🚧 **Complete** - every item fulfilled, paid or partly refunded, and goods
   left after its refunds. A partly refunded order still completes, so the
   earn never waits for the Completed badge
-- **Basis** - the goods paid for less those refunded at completion; every
+- 🚧 **Basis** - the goods paid for less those refunded at completion; every
   later refund is read against it
 - **Till sale** - earns at the counter
 - 🚧 **Guest order** - never earns, joined to an account or not -
@@ -191,7 +193,7 @@ the member still holds from them.
   two halves take exactly what one refund of the whole takes
 - **Never below zero** — a claw-back takes only what the member still holds
   from that money; the gap is counted, spent points first, expired next
-- **Refund before the earn** — a refund that lands before the order
+- 🚧 **Refund before the earn** — a refund that lands before the order
   completes lowers what it earns on: the basis is the net paid at completion.
   One after completion claws back as below
 - **Tier** — the contribution the points made leaves with them, and the tier
@@ -319,6 +321,7 @@ Every point a member holds lapses on the same day, whatever recorded it.
 | A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
 | A grant or a correction | Unchanged; those points take the date the balance already has |
 | A grant or a correction with nothing live to join | The later of twelve months from its own day and the day still running, which moves out to it; with neither ahead, it is written already lapsed |
+| 🚧 A refund, a claw-back, or a reward an operator hands over outright | Unchanged |
 | Points a reversal gives back, or points paid at checkout that a refund or an operator returns | Unchanged; they go back to the day still running, even onto a balance brought to nothing |
 | An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
 | A record older than the window | Unchanged; those points are written already lapsed |
