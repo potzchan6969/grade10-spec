@@ -166,7 +166,8 @@ any maximum.
 
 | Refused when | What the bid form says |
 | --- | --- |
-| Below the next minimum | **Minimum bid is** the minimum |
+| Below the next minimum the page shows | Nothing is sent: the custom field says **Min:** the minimum, and the bid action stays disabled |
+| Below a next minimum that moved after the page showed it | **Minimum bid is** the minimum |
 | Above the USD ceiling | No maximum-bid message; custom entry already stops or corrects the amount at the ceiling |
 | Not above the bidder's own maximum | **Your new maximum must be higher than your current one.** |
 | At or above the bar without a verified identity | **Bids this high need a verified identity. Verify from your account, then bid again.** and a **Verify** link |
@@ -509,6 +510,7 @@ surface.
 | Card on file | Decided | A bid is placed on the card linked to the account and holds nothing on it; only the winner pays, by the invoice on their order. No backwards compatibility, since nothing is launched. Replaces the optional bid-time hold. | Product and finance |
 | If card holds return | Decided | The line stays at acceptance: a bid exists only once every precondition, a card authorization included, has succeeded and been judged under the lot's lock. The authorization is taken outside the lock, for the maximum, keyed to the attempt, and released if the attempt is refused; a later failure or expiry never revokes an accepted bid and is the winner's settlement at the close. Accepting first and revoking later moves the price down, swaps the leader and unwinds automatic bids, extensions and closes; eBay, Catawiki, Heritage, real-time bidding and exchanges all draw the line at acceptance. | Product and engineering |
 | A refused bid is not a bid | Decided | No My Auctions row, no Bidding History entry and no standing moves. The form explains refusals except an amount above the USD ceiling, which shows no maximum-bid message. | Product |
+| Below the minimum on the page | Decided | The bid action stays disabled and the custom field says Min: the minimum; nothing is sent. The server's Minimum bid is refusal answers only a minimum that moved after the page showed it. Enabling the action to let the server refuse was ruled out: it costs a round trip for a bid the page already knows is too low ([#1007](https://github.com/9gag/grade10/issues/1007)). | Product |
 | Refusals kept for operators | Decided | One structured operational log at the auction service per refusal, naming the bidder, the lot, the reason, the amount sent and, where the refusal names one, the floor or the USD ceiling; never in the bidder's record. | Product and engineering |
 | An erased leader | Decided | The highest maximum left takes the lead, priced from the maxima left and never above the price before. Forfeiting the lead with the price kept was ruled out: it left a lot with no leader at a price nobody had bid. | Product |
 | Verified bidder | 🚧 In flight | A bid of USD 15,000 or more, or any new or raised maximum from an account Grade10 asked to verify, needs what is asked, checked by the storefront before the auction hears of the bid. | Product |
