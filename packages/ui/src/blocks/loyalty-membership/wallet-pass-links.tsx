@@ -5,6 +5,8 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { useEffect, useRef } from "react";
+import type { WalletPassArtwork } from "./wallet-artwork";
+import { resolveArtwork } from "./wallet-artwork";
 
 /** The words the block says, whichever wallets a brand offers. */
 type WalletPassLinksCopy = {
@@ -51,6 +53,11 @@ type WalletPassWallet = {
   id: string;
   /** The offer to add it here. Absent where it is no longer offered. */
   offer?: WalletPassOffer;
+  /**
+   * The vendor's own artwork to draw as the offer, its label read as the
+   * control's name. Absent, the offer is the card's own text button.
+   */
+  artwork?: WalletPassArtwork;
   /** This wallet's mint is in flight. Only this wallet's control waits. */
   adding?: boolean;
   /** The whole sentence saying the member carries a pass here. */
@@ -86,6 +93,68 @@ type WalletPassLinksProps = {
 /** Whether this wallet has anything for the member to act on or read. */
 function drawable(wallet: WalletPassWallet): boolean {
   return Boolean(wallet.offer || wallet.heldLabel || wallet.failedLabel);
+}
+
+/**
+ * One wallet's offer drawn as that wallet's own artwork: a button that mints,
+ * then a link that installs. The artwork is never dimmed or covered, so a
+ * mint in flight says so to assistive technology and ignores a second tap.
+ */
+function WalletBadge({
+  id,
+  artwork,
+  label,
+  saveUrl,
+  adding,
+  onAdd,
+  linkRef,
+}: {
+  id: string;
+  artwork: WalletPassArtwork;
+  label: string;
+  saveUrl?: string;
+  adding: boolean;
+  onAdd: () => void;
+  linkRef: (node: HTMLAnchorElement | null) => void;
+}) {
+  const drawn = resolveArtwork(artwork);
+  const image = (
+    <img
+      alt={label}
+      className="block h-10 w-auto"
+      data-artwork={drawn.placeholder ? "placeholder" : "vendor"}
+      height={drawn.height}
+      src={drawn.src}
+      width={drawn.width}
+    />
+  );
+  const frame =
+    "inline-flex rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+  return saveUrl ? (
+    <a
+      className={frame}
+      data-slot="wallet-pass-save"
+      data-wallet={id}
+      href={saveUrl}
+      ref={linkRef}
+    >
+      {image}
+    </a>
+  ) : (
+    <button
+      aria-busy={adding || undefined}
+      aria-disabled={adding || undefined}
+      className={frame}
+      data-slot="wallet-pass-add"
+      data-wallet={id}
+      onClick={() => {
+        if (!adding) onAdd();
+      }}
+      type="button"
+    >
+      {image}
+    </button>
+  );
 }
 
 /**
@@ -147,19 +216,40 @@ function WalletPassLinks({
               link and a member who cannot see that swap has no other signal
               that their tap did anything. */}
           <HStack align="center" aria-live="polite" gap="sm" wrap>
-            {offers.map((wallet) =>
-              wallet.offer?.saveUrl ? (
+            {offers.map((wallet) => {
+              const offer = wallet.offer;
+              if (!offer) return null;
+              const remember = (node: HTMLAnchorElement | null) => {
+                links.current.set(wallet.id, node);
+              };
+              const add = () => {
+                pressed.current = wallet.id;
+                onAdd(wallet.id);
+              };
+              if (wallet.artwork) {
+                return (
+                  <WalletBadge
+                    adding={wallet.adding ?? false}
+                    artwork={wallet.artwork}
+                    id={wallet.id}
+                    key={wallet.id}
+                    label={offer.label}
+                    linkRef={remember}
+                    onAdd={add}
+                    saveUrl={offer.saveUrl}
+                  />
+                );
+              }
+              return offer.saveUrl ? (
                 <Link
                   data-slot="wallet-pass-save"
                   data-wallet={wallet.id}
-                  href={wallet.offer.saveUrl}
+                  href={offer.saveUrl}
                   key={wallet.id}
-                  ref={(node: HTMLAnchorElement | null) => {
-                    links.current.set(wallet.id, node);
-                  }}
+                  ref={remember}
                   size="sm"
                 >
-                  {wallet.offer.label}
+                  {offer.label}
                 </Link>
               ) : (
                 <Button
@@ -167,18 +257,15 @@ function WalletPassLinks({
                   data-wallet={wallet.id}
                   key={wallet.id}
                   loading={wallet.adding ?? false}
-                  onClick={() => {
-                    pressed.current = wallet.id;
-                    onAdd(wallet.id);
-                  }}
+                  onClick={add}
                   size="sm"
                   type="button"
                   variant="outline"
                 >
-                  {wallet.offer?.label}
+                  {offer.label}
                 </Button>
-              ),
-            )}
+              );
+            })}
           </HStack>
         </>
       ) : null}
@@ -237,6 +324,7 @@ function WalletPassLinks({
   );
 }
 
+export type { WalletPassArtwork } from "./wallet-artwork";
 export type {
   WalletPassLinksCopy,
   WalletPassLinksProps,
