@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { check, citedRefs, parseCases, readPages } from "./pages.mjs";
+import { check, citedRefs, gate, parseCases, readPages } from "./pages.mjs";
 
 function store(files) {
   const root = mkdtempSync(join(tmpdir(), "pages-"));
@@ -22,7 +23,9 @@ title: Points
 
 - 🚧 **Guest order** - never earns
 - ❓ **Launch name** - not settled
-- 🎨 **Empty ledger** - needs a design
+- **Earned once** - an order earns once {#earn-once}
+
+::story{id="loyalty-points--ledger"}
 
 :::example{title="Shipping refunded" id="refund-shipping" tier="Gold"}
 - Gengar single $139
@@ -54,7 +57,10 @@ test("a page carries its marks and its cases, examples and rows alike", () => {
   assert.equal(page.id, "site/loyalty/points");
   assert.equal(page.building.length, 1);
   assert.equal(page.open.length, 1);
-  assert.equal(page.design.length, 1);
+  assert.deepEqual(
+    page.design.map((one) => one.text.split(" · ")[0]),
+    ["story"],
+  );
   assert.deepEqual(
     page.work.map((one) => one.text),
     ["**Apple enrolment** - blocked: the Developer Program"],
@@ -63,11 +69,13 @@ test("a page carries its marks and its cases, examples and rows alike", () => {
   assert.deepEqual(
     page.cases.map((one) => [one.id, one.section, one.source]),
     [
+      ["earn-once", "Rules", "rule"],
       ["refund-shipping", "Rules", "example"],
       ["foreign-currency", "Rules", "cases"],
     ],
   );
-  assert.deepEqual(page.cases[1].tags, ["smoke"]);
+  assert.equal(page.cases[0].expect, "**Earned once** - an order earns once");
+  assert.deepEqual(page.cases[2].tags, ["smoke"]);
   assert.deepEqual(check(root), { failures: [], warnings: [] });
 });
 
@@ -104,13 +112,82 @@ test("a cases file with no page fails, and unnamed examples warn", () => {
   assert.equal(warnings.length, 1);
 });
 
-test("a test that names a case automates it", () => {
+test("only a running test's title cites an id", () => {
   const root = store({
-    "app/a.test.ts": `// site/loyalty/points#refund-shipping\nit("x")`,
-    "app/node_modules/b.ts": "site/loyalty/points#ignored",
+    "app/src/a.test.ts": [
+      'it("site/loyalty/points#refund-shipping refunds", () => {});',
+      "// site/loyalty/points#in-a-comment",
+      'it.skip("site/loyalty/points#skipped", () => {});',
+    ].join("\n"),
+    "app/src/earn.ts": 'it("site/loyalty/points#not-a-test-file")',
+    "app/docs/notes.md": "site/loyalty/points#a-note",
+    "app/node_modules/b.test.ts": 'it("site/loyalty/points#ignored")',
+    "app/vendor/spec/.git": "gitdir: ../../.git/modules/spec",
+    "app/vendor/spec/c.test.ts": 'it("site/loyalty/points#submodule")',
   });
+  const cited = citedRefs(join(root, "app"));
   assert.deepEqual(
-    [...citedRefs(join(root, "app"))],
-    ["site/loyalty/points#refund-shipping"],
+    [...cited],
+    [["site/loyalty/points#refund-shipping", ["src/a.test.ts:1"]]],
   );
+});
+
+test("the gate refuses a dangling citation and an uncited Always rule", () => {
+  const root = store({
+    "docs/prds/products/site/loyalty/points.md": `${PAGE}
+## Always
+
+- **One account** - one per person {#one-account}
+- **Server clock** - never the device's {#server-clock}
+`,
+  });
+  const { pages } = readPages(root);
+  const cited = new Map([
+    ["site/loyalty/points#one-account", ["a.test.ts:1"]],
+    ["site/loyalty/points#typo", ["a.test.ts:2"]],
+    ["other/thing#x", ["a.test.ts:3"]],
+  ]);
+  assert.deepEqual(gate(pages, cited, ["site/loyalty/points#server-clock"]), [
+    "a.test.ts:2 cites site/loyalty/points#typo, which no page holds",
+  ]);
+  const failures = gate(pages, cited, ["site/loyalty/points#one-account"]);
+  assert.equal(failures.length, 3);
+  assert.match(
+    failures[1],
+    /server-clock is an Always rule no running test cites/,
+  );
+  assert.match(failures[2], /one-account is cited now/);
+});
+
+test("a vanished id and a live promise changed under its id warn", () => {
+  const before = `---
+title: Points
+---
+
+## Rules
+
+- **Earned once** - an order earns once {#earn-once}
+- 🚧 **Guest order** - never earns {#guest}
+- **Till** - earns at the counter {#till}
+`;
+  const root = store({ "docs/prds/products/site/points.md": before });
+  const git = (...args) =>
+    execFileSync("git", args, { cwd: root, stdio: "ignore" });
+  git("init", "-q");
+  git("add", ".");
+  git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "base");
+  writeFileSync(
+    join(root, "docs/prds/products/site/points.md"),
+    before
+      .replace("an order earns once", "an order earns twice")
+      .replace("never earns", "earns half")
+      .replace("- **Till** - earns at the counter {#till}\n", ""),
+  );
+  const { warnings } = check(root, { base: "HEAD" });
+  assert.equal(warnings.length, 2);
+  assert.match(
+    warnings[0],
+    /site\/points#earn-once is live and its text changed/,
+  );
+  assert.match(warnings[1], /site\/points#till vanished/);
 });
