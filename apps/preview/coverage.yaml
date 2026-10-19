@@ -36,9 +36,6 @@ no-screen:
   vault/compliance-and-readiness: policy
   account/audit: the trail; read in the console
   account/roles: the role vocabulary
-  account/session: how a session is kept
-  account/sign-out: a control in the account menu and on Profile
-  account/test-sign-in: a door for the staging job
 
 # Seen only behind the counter. The workbench draws collector screens.
 operator:
