@@ -24,6 +24,8 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the door's own workflow
 
+**QA2 disposition:** kept with a note - asserts the capture move only; the scenario states any move. Covers: shared-auth-test-sign-in-SC-01.
+
 **Pre-conditions:**
 
 * The door's workflow exists on main.
@@ -64,6 +66,8 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the door's own workflow
 
+**QA2 disposition:** kept with a note - refusal and no link asserted; the scenario's "nothing is changed" is not. Covers: none.
+
 **Pre-conditions:**
 
 * The door's workflow is present on a pull request branch.
@@ -101,6 +105,8 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the door's own workflow
+
+**QA2 disposition:** kept with a note - "does not reach the door" states a mechanism; the scenario's "door refuses the call" is what a tester sees. "Nothing is changed" is not asserted. Covers: none.
 
 **Pre-conditions:**
 
@@ -141,6 +147,8 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the door's own workflow
 
+**QA2 disposition:** kept with a note - refusal and no link asserted; "nothing is changed" is not. Covers: none.
+
 **Pre-conditions:**
 
 * A workflow other than the door's workflow exists on main in this repository.
@@ -178,6 +186,8 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Every other caller is refused
+
+**QA2 disposition:** kept with a note - refusal and no link asserted; "nothing is changed" is not. Covers: none.
 
 **Pre-conditions:**
 
@@ -223,6 +233,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the QA token
 
+**QA2 disposition:** kept with a note - the pre-condition does not say the mail is unused; the returned link is the same either way. Covers: shared-auth-test-sign-in-SC-94.
+
 **Pre-conditions:**
 
 * The QA agent holds the QA token committed to the repository.
@@ -261,6 +273,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the QA token
+
+**QA2 disposition:** kept with a note - route and refusal match the QA token off staging; "nothing is changed" is not asserted, so not linked. Covers: none.
 
 **Pre-conditions:**
 
@@ -307,6 +321,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the QA token
 
+**QA2 disposition:** kept with a note - capture only; the scenario's age move, "names no rule" and "nothing is changed" are not asserted. Covers: none.
+
 **Pre-conditions:**
 
 * The admin-only tester has a sign-in mail sent less than fifteen minutes ago.
@@ -349,6 +365,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the QA token
+
+**QA2 disposition:** kept with a note - ban and prepare route only; the scenario's replaced-token route is not asserted. Covers: none.
 
 **Pre-conditions:**
 
@@ -396,6 +414,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Who may call, the QA token
 
+**QA2 disposition:** kept with a note - "marked expired" names a state the spec does not state ("past its lifetime"); the QA token's age and clear rights are correct. Covers: none.
+
 **Pre-conditions:**
 
 * The staging named collector has an unused sign-in link.
@@ -440,6 +460,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Testers, the named testers
+
+**QA2 disposition:** kept with a note - named testers accepted on staging and uat; no scenario states this, so the requirement needs a scenario in spec.md. Covers: none.
 
 **Pre-conditions:**
 
@@ -487,6 +509,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Testers, the named testers
 
+**QA2 disposition:** kept as-is. Covers: shared-auth-test-sign-in-SC-06, shared-auth-test-sign-in-SC-09.
+
 **Pre-conditions:**
 
 * The staging named collector has never been used as a plus-tag base in this run.
@@ -527,6 +551,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Testers, the named testers
+
+**QA2 disposition:** kept with a note - CONTRADICTION, held: the case refuses mixed-case addresses; shared-auth-test-sign-in-SC-34 and the spec's "Case" rule say a named tester is matched without regard to case. Raised in decisions.md. Covers: none.
 
 **Pre-conditions:**
 
@@ -571,6 +597,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Testers, the named testers
+
+**QA2 disposition:** kept with a note - refusal and no account asserted; "that address is unchanged" is not, and "no account is created" is narrower. Covers: none.
 
 **Pre-conditions:**
 
@@ -617,6 +645,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Testers, the named testers
 
+**QA2 disposition:** kept as-is. Covers: shared-auth-test-sign-in-SC-08.
+
 **Pre-conditions:**
 
 * None.
@@ -654,6 +684,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, capture the link
+
+**QA2 disposition:** kept with a note - capture half of shared-auth-test-sign-in-SC-12; following the link is TC18. Covers: none.
 
 **Pre-conditions:**
 
@@ -694,6 +726,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, capture the link
 
+**QA2 disposition:** kept with a note - "the call is not refused" is not asserted. Covers: none.
+
 **Pre-conditions:**
 
 * The staging named collector's last sign-in mail was sent more than fifteen minutes ago.
@@ -731,6 +765,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, capture the link
 
+**QA2 disposition:** kept with a note - follow half of shared-auth-test-sign-in-SC-12; starts from a capture the scenario does not set up. Covers: none.
+
 **Pre-conditions:**
 
 * A sign-in link for the staging named collector was captured less than five minutes ago.
@@ -766,6 +802,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, age the unused link
+
+**QA2 disposition:** kept with a note - no session asserted; "account unchanged" and "caller waited no part" are not. Covers: none.
 
 **Pre-conditions:**
 
@@ -804,6 +842,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, ban the address
 
+**QA2 disposition:** kept as-is. Covers: shared-auth-test-sign-in-SC-19.
+
 **Pre-conditions:**
 
 * The staging ban-only address has a captured sign-in link, and the workflow has banned the address.
@@ -839,6 +879,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, prepare the address
+
+**QA2 disposition:** kept as-is. Covers: shared-auth-test-sign-in-SC-20.
 
 **Pre-conditions:**
 
@@ -879,6 +921,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, prepare a scoped role
+
+**QA2 disposition:** kept with a note - the role-holds half of shared-auth-test-sign-in-SC-96; the named-tester refusal is TC23. Covers: none.
 
 **Pre-conditions:**
 
@@ -930,6 +974,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, prepare a scoped role
 
+**QA2 disposition:** kept with a note - the named-tester half of shared-auth-test-sign-in-SC-96; "holds no scoped role" stands in for "unchanged". Covers: none.
+
 **Pre-conditions:**
 
 * None.
@@ -974,6 +1020,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: What the job may do, clear the sign-in limits
 
+**QA2 disposition:** kept with a note - the second expected result ("count ... is not reached") is unclear and does not test a caller past the cap (shared-auth-test-sign-in-SC-33). Covers: shared-auth-test-sign-in-SC-21.
+
 **Pre-conditions:**
 
 * The staging named collector has just been sent a sign-in mail.
@@ -1011,6 +1059,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Where it opens, staging and uat
+
+**QA2 disposition:** kept with a note - the title says every move on uat, but uat rows cover two moves; one staging row uses a minted plus-tag, not a named tester. "Every move on uat" has no scenario, so the requirement needs one in spec.md. Covers: none.
 
 **Pre-conditions:**
 
@@ -1060,6 +1110,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Where it opens, production and preview
 
+**QA2 disposition:** kept with a note - capture half of shared-auth-test-sign-in-SC-24; the clear row has no expected result; preview capture has no scenario. Covers: none.
+
 **Pre-conditions:**
 
 * The production collector has a sign-in mail sent less than fifteen minutes ago.
@@ -1104,6 +1156,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Where it opens, production and preview
+
+**QA2 disposition:** kept with a note - the preview ban is one row of shared-auth-test-sign-in-SC-23 (age and prepare on preview are not asserted); production age, prepare and scoped-role refusals have no scenario. Covers: none.
 
 **Pre-conditions:**
 
@@ -1151,6 +1205,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Where it opens, production and preview
 
+**QA2 disposition:** kept with a note - refusal and no link asserted; "that address is unchanged" (shared-auth-test-sign-in-SC-30) is not. Covers: none.
+
 **Pre-conditions:**
 
 * None.
@@ -1188,6 +1244,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Closed, everywhere else
+
+**QA2 disposition:** kept with a note - the local-stack refusal is stated by the requirement but no scenario states it; fold it into spec.md. Covers: none.
 
 **Pre-conditions:**
 
@@ -1233,6 +1291,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Closed, everywhere else
 
+**QA2 disposition:** over-claimed - asserts status 403, which the Closed anchor does not state; Q23 leaves the refused status to the design (Q48). The refusal and no session match shared-auth-test-sign-in-SC-25. Covers: shared-auth-test-sign-in-SC-25.
+
 **Pre-conditions:**
 
 * None.
@@ -1276,6 +1336,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Closed, everywhere else
 
+**QA2 disposition:** kept with a note - "returns no session" does not assert that the call is refused (shared-auth-test-sign-in-SC-26). Covers: none.
+
 **Pre-conditions:**
 
 * The staging named collector has never signed in.
@@ -1312,6 +1374,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Closed, everywhere else
+
+**QA2 disposition:** kept as-is. Covers: shared-auth-test-sign-in-SC-27.
 
 **Pre-conditions:**
 
@@ -1350,6 +1414,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** g10.shared-test-sign-in.US1 - Feature set: Closed, everywhere else
+
+**QA2 disposition:** kept as-is. Covers: shared-auth-test-sign-in-SC-28.
 
 **Pre-conditions:**
 
