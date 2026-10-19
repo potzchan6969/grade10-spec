@@ -51,6 +51,10 @@ Runs once per row of **Test data**.
 * The entry names the caller kind from the row in place of a user id.
 * The entry keeps the reason from the row.
 
+**QA2 disposition:** kept with a note. The workflow row asserts the ban entry, the caller kind and the user id. The no-email and no-token clause is not asserted on this route (see Reconciliation).
+
+**Blocked:** product manager, on the QA-token question in `decisions.md` under Raised. The QA-token row is held.
+
 ### shared-auth-audit-US-01-TC2: Test door scoped role writes a set-role entry naming the caller's kind
 
 Runs once per row of **Test data**.
@@ -92,6 +96,10 @@ Runs once per row of **Test data**.
 * The entry names the target account by user id.
 * The entry names the caller kind from the row in place of a user id.
 * The entry keeps the reason from the row.
+
+**QA2 disposition:** kept with a note. The workflow row asserts the scoped-role entry. The change has no scenario for the scoped-role entry, so Dev folds one into `spec.md`. The QA-token row is held. The tester account must be a unique plus tag of the collector, per Q42 in `decisions.md`, not a named tester.
+
+**Blocked:** product manager, on the QA-token question in `decisions.md` under Raised. The QA-token row is held.
 
 ### shared-auth-audit-US-01-TC3: Test door capture, age and clear write no entry
 
@@ -135,6 +143,8 @@ Runs once per row of **Test data**.
 * The entry count is unchanged from step 1.
 * No entry names the test door caller kind.
 
+**QA2 disposition:** kept with a note. The no-entry result for capture, age and clear is asserted on the workflow route only. The QA-token capture the change names is not asserted (see Reconciliation).
+
 ### shared-auth-audit-US-01-TC4: Entries written by the test door carry no token, address or email
 
 Runs once per row of **Test data**.
@@ -176,6 +186,10 @@ Runs once per row of **Test data**.
 * The entry holds no session token, no recovery code, no password and no address.
 * The entry does not contain `<tester address>`.
 
+**QA2 disposition:** kept with a note. The Create account row is over-claimed: the door has no create move (Q47 in `decisions.md`). The Ban, Scoped role and Prepare rows are kept, and every row runs on the QA-token route.
+
+**Blocked:** product manager, on the QA-token question in `decisions.md` under Raised. The QA-token rows are held.
+
 ### shared-auth-audit-US-01-TC5: A refused test door ban is recorded naming the caller's kind
 
 **Classification:**
@@ -215,6 +229,8 @@ Runs once per row of **Test data**.
 * The trail holds one new entry recording the refused ban.
 * The entry names the caller kind in place of a user id.
 * The entry keeps the reason.
+
+**QA2 disposition:** kept with a note. A refused door ban is on the trail (Q46 in `decisions.md`). The change has no scenario for it, so Dev folds one into `spec.md`.
 
 ---
 
@@ -264,6 +280,8 @@ Runs once per row of **Test data**.
 * The auditor is not shown the proof.
 * The auditor sees no names and no emails in the entries.
 
+**QA2 disposition:** kept as-is.
+
 ### shared-auth-audit-US-02-TC2: Auditor reading test door entries leaves no entry
 
 **Classification:**
@@ -303,6 +321,8 @@ Runs once per row of **Test data**.
 
 * The entry count after step 6 is the same as in step 1.
 * No entry records the auditor's reads or listings.
+
+**QA2 disposition:** kept as-is.
 
 ---
 
@@ -356,6 +376,8 @@ Runs once per row of **Test data**.
 * The account's state is unchanged from step 1.
 * The trail holds no new entry for the refused action.
 
+**QA2 disposition:** kept with a note. The Create account row is over-claimed: the door has no create move (Q47 in `decisions.md`). The Ban, Scoped role and Prepare rows are kept.
+
 ### shared-auth-audit-US-03-TC2: A test door entry on the trail cannot be changed
 
 **Classification:**
@@ -391,6 +413,8 @@ Runs once per row of **Test data**.
 
 * The change is refused.
 * The entry keeps the reason `<operator reason>`.
+
+**QA2 disposition:** kept as-is.
 
 ---
 
@@ -441,6 +465,10 @@ Runs once per row of **Test data**.
 * The entry names the account by user id.
 * The entry carries no email.
 
+**QA2 disposition:** kept with a note. The workflow row is kept. The QA-token row is held by the QA-token question.
+
+**Blocked:** product manager, on the QA-token question in `decisions.md` under Raised. The QA-token row is held.
+
 ### shared-auth-audit-US-04-TC2: Test door creates a tester account and writes a created entry naming the caller's kind
 
 Runs once per row of **Test data**.
@@ -482,6 +510,8 @@ Runs once per row of **Test data**.
 * The entry names the caller kind from the row in place of a user id.
 * The entry does not contain `<tester address>`.
 
+**QA2 disposition:** over-claimed. The door has no create action; an account for an address that never signed in is made by ban or prepare (Q47 in `decisions.md`). The author rewrites this case onto ban or prepare of an unsigned address, or drops it.
+
 ### shared-auth-audit-US-04-TC3: Test door prepare on an account already in its state writes no entry
 
 Runs once per row of **Test data**.
@@ -522,3 +552,39 @@ Runs once per row of **Test data**.
 * The prepare returns the account in the state named in the row.
 * The entry count is unchanged from step 1.
 * No entry is written for the find.
+
+**QA2 disposition:** held as a contradiction. The change's requirement says every door prepare is recorded; this case expects no entry for a prepare that changes nothing.
+
+**Blocked:** product manager, on the unchanged-prepare question in `decisions.md` under Raised.
+
+## Settled
+
+- A refused door ban is on the trail, naming the caller's kind in place of a user id (Q46).
+- The door has no create move. An account for an address that never signed in is made by ban or prepare (Q47).
+
+## Reconciliation
+
+Run: QA2 on 2026-10-19 read this suite's blind cases; the change's `spec.md` (requirement text and its scenarios); the durable `openspec/specs/shared/auth/audit/spec.md`, for the requirements the cases cite; `decisions.md`; the PRD `docs/prds/products/grade10-site/account/audit.md`; `docs/governance/specs-to-test-cases.md`; and planning-dev step 3. Not read: `tech-design.md`, `tasks.md`, `proposal.md`, and the archive.
+
+### Covered Scenarios
+
+None linked. The draft holds no `trace:case` markers, so there is no marker to carry a `covers` list. The trace command issues the markers, and the links follow from this reconciliation.
+
+### Uncovered Scenarios
+
+- **shared-auth-audit-SC-38** (a test-door ban is on the trail): no single case asserts its whole THEN. `US-01-TC1`, workflow row, asserts the ban entry, the caller kind and the user id. The no-email and no-token clause is asserted only on the QA-token route, by `US-01-TC4`. Disposition: a scenario no case reaches. Add a workflow-route check for the no-token clause, or name a verifier under Out of suite.
+- **shared-auth-audit-SC-39** (a capture writes no entry): no case asserts it on the QA-token route. `US-01-TC3` asserts no entry for capture, age and clear, on the workflow route only. Disposition: add a QA-token row to `US-01-TC3`, or name a verifier under Out of suite.
+- **Behaviour the change's requirement states with no scenario** (real; Dev folds these into `spec.md`): the scoped-role entry, the prepare entry, the entry for an account the door creates, the no-entry result for age and clear, the no-secret clause for non-ban writes, and the refused door ban.
+- **Durable scenarios**: the cases also cite durable behaviour that the change does not restate, such as the read and check outcomes and the no-change rules. No delta scenario covers them. Nothing is linked to them here.
+
+### Over-claimed Cases
+
+- `US-04-TC2`: calls a create action the door does not have (Q47).
+- `US-01-TC4` and `US-03-TC1`, the Create account row: same claim (Q47).
+
+### Contradictions
+
+1. `US-04-TC3` against the requirement: this case expects no entry for a prepare that changes nothing; the requirement says every prepare is recorded. Held as the unchanged-prepare question in `decisions.md` under Raised.
+2. The QA-token rows of `US-01-TC1`, `US-01-TC2`, `US-01-TC4` and `US-04-TC1` have the token ban, set a scoped role and prepare. Q39 says the token never bans or prepares; Q43 and Q44 say the shipped code accepts it for any staging tester except the admin-only one. Held as the QA-token question in `decisions.md` under Raised.
+
+No case claims an entry for capture, age or clear, other than the no-entry result in `US-01-TC3`.
