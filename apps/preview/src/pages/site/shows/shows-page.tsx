@@ -103,7 +103,7 @@ function EventVideo({ video }: { video: NonNullable<ShowChapter["video"]> }) {
             loading="lazy"
             src={video.poster}
           />
-          <Badge className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+          <Badge className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
             {video.badge}
           </Badge>
           <div className="absolute inset-0 grid place-items-center">
@@ -326,7 +326,7 @@ function ChapterSection({ chapter }: { chapter: ShowChapter }) {
   );
 }
 
-// Month names as written in `LatestShow.month`.
+// Month names as written in `UpcomingShow.month`.
 const SHOW_MONTHS: Record<string, number> = {
   January: 0,
   February: 1,
@@ -415,6 +415,9 @@ function ShowsPage() {
   }, []);
 
   const { hero, eventScale, formats, records } = SHOWS_PAGE;
+  // The card lists current and upcoming shows only — when every entry
+  // has run its month out, the block leaves the hero entirely.
+  const upcomingShows = hero.upcomingShows.filter(isUpcomingShow);
 
   return (
     <div className="flex min-h-svh w-full flex-col bg-background text-foreground">
@@ -484,42 +487,48 @@ function ShowsPage() {
               </Button>
             </div>
           </div>
-          <Card
-            className={cn(REVEAL, "gap-0 self-end", pageIsRevealed && REVEALED)}
-            padding={false}
-            style={{
-              transitionDelay: pageIsRevealed ? "120ms" : "0ms",
-            }}
-          >
-            <p className="px-6 pt-6 font-medium text-secondary-foreground text-sm leading-5 uppercase">
-              {hero.latestLabel}
-            </p>
-            <ul>
-              {hero.latestShows.filter(isUpcomingShow).map((show) => (
-                <li
-                  className="flex gap-6 border-border border-b px-6 py-5 last:border-b-0"
-                  key={`${show.month}-${show.title}`}
-                >
-                  <div className="w-24 shrink-0">
-                    <p className="font-semibold text-base leading-6">
-                      {show.month}
-                    </p>
-                    <p className="text-secondary-foreground text-sm leading-5">
-                      {show.year}
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-0.5">
-                    <p className="font-medium text-base leading-6">
-                      {show.title}
-                    </p>
-                    <p className="text-secondary-foreground text-sm leading-5">
-                      {show.city}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </Card>
+          {upcomingShows.length ? (
+            <Card
+              className={cn(
+                REVEAL,
+                "gap-0 self-end",
+                pageIsRevealed && REVEALED,
+              )}
+              padding={false}
+              style={{
+                transitionDelay: pageIsRevealed ? "120ms" : "0ms",
+              }}
+            >
+              <p className="px-6 pt-6 font-medium text-secondary-foreground text-sm leading-5 uppercase">
+                {hero.upcomingLabel}
+              </p>
+              <ul>
+                {upcomingShows.map((show) => (
+                  <li
+                    className="flex gap-6 border-border border-b px-6 py-5 last:border-b-0"
+                    key={`${show.month}-${show.title}`}
+                  >
+                    <div className="w-24 shrink-0">
+                      <p className="font-semibold text-base leading-6">
+                        {show.month}
+                      </p>
+                      <p className="text-secondary-foreground text-sm leading-5">
+                        {show.year}
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <p className="font-medium text-base leading-6">
+                        {show.title}
+                      </p>
+                      <p className="text-secondary-foreground text-sm leading-5">
+                        {show.city}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          ) : null}
         </section>
 
         {/* Event scale */}

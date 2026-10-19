@@ -5,7 +5,7 @@
   both viewports (`g10.site-shows.SC-01`..`SC-07`) — ticked last, in its
   own commit before the group's code
 - [x] 1.2 Compose the page at `apps/preview/src/pages/site/shows/`: the
-  production chrome, the four sections in order, the latest-shows card,
+  production chrome, the four sections in order, the upcoming-shows card,
   the statistic cards, the sticky chapter tab list as jump navigation, the
   poster-first video containers, the edition carousels, the
   press-release destinations table, the records in frame order, and the

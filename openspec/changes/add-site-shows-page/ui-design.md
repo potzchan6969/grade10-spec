@@ -16,7 +16,7 @@
   rendered with no item marked current.
 - `Footer` from `@grade10/design-system/components/layout/footer`.
 - `Card` from `@grade10/design-system/components/display/card` — the
-  Latest Shows card and the three stat cards, with `padding={false}` where
+  Upcoming Shows card and the three stat cards, with `padding={false}` where
   the frames hand the slot insets to the content.
 - `Tabs`/`TabsList`/`TabsTrigger` (`variant="pill"`) — the sticky chapter
   list, driven as jump navigation over stacked sections rather than as

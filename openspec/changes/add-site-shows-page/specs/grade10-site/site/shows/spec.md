@@ -8,8 +8,9 @@ and the record of every show — and where each link on it leads.
 ## Feature set
 
 - What the page tells
-  - Hero: Grade10 Shows over the page's top-level heading, beside a Latest
-    Shows card listing the next three dates
+  - Hero: Grade10 Shows over the page's top-level heading, beside an
+    Upcoming Shows card listing the next dates — hidden when no show is
+    current or upcoming
   - Event scale: a statement about physical proof over a show-floor photo
     and three statistic cards
   - Event formats: three chapters — Hong Kong, Overseas Partnership,
@@ -30,11 +31,13 @@ and the record of every show — and where each link on it leads.
 ### Requirement: The page presents the events
 The Shows surface SHALL present, in order: Grade10 Shows as the eyebrow
 over the top-level heading "Asia’s card shows, at full scale."
-beside a Latest Shows card, an Event Scale section headed "Real
+beside an Upcoming Shows card, an Event Scale section headed "Real
 Trends. In the Room." with three statistic cards, an Event Formats section
 headed "Three Platforms. One Community." carrying the Hong Kong, Overseas
 Partnership and Chinese Mainland chapters, and an Event Records section
-headed "Every Show. A Milestone.".
+headed "Every Show. A Milestone.". The Upcoming Shows card SHALL list only
+shows whose month has not passed, and SHALL leave the hero when no show
+is current or upcoming.
 
 <!-- trace:scenario id=g10.site-shows.SC-zem rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-01 - A collector reads the page top to bottom
@@ -46,8 +49,9 @@ headed "Every Show. A Milestone.".
   order
 
 ### Requirement: The page fits the viewport
-On a wide viewport the Shows surface SHALL lay the hero beside the Latest
-Shows card, the statistics beside the photo, the editions side by side,
+On a wide viewport the Shows surface SHALL lay the hero beside the
+Upcoming Shows card, the statistics beside the photo, the editions side by
+side,
 and each record's image beside its text; on a narrow viewport it SHALL
 stack every section at the page inset.
 
@@ -56,9 +60,9 @@ stack every section at the page inset.
 **Serves:** grade10-site-site-shows-US-01 - Collector sizes up the shows
 
 - **WHEN** a collector opens `/shows` on a wide viewport
-- **THEN** the hero SHALL sit beside the Latest Shows card, the statistics
-  SHALL sit beside the photo, editions SHALL sit two per row, and records
-  SHALL lay image beside text
+- **THEN** the hero SHALL sit beside the Upcoming Shows card, the
+  statistics SHALL sit beside the photo, editions SHALL sit two per row,
+  and records SHALL lay image beside text
 
 <!-- trace:scenario id=g10.site-shows.SC-npo rev=1 -->
 #### Scenario: grade10-site-site-shows-SC-03 - The page stacks on a narrow viewport
