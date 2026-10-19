@@ -1,0 +1,210 @@
+[
+  {
+    "kind": "shot",
+    "src": "shots/lot-page.jpg",
+    "caption": "The lot page at 1280 wide, after the scheduled close"
+  },
+  {
+    "kind": "shot",
+    "src": "shots/lot-page-phone.jpg",
+    "phone": true,
+    "caption": "The same lot on a phone"
+  },
+  {
+    "kind": "beforeNow",
+    "before": "shots/cart-before.jpg",
+    "now": "shots/cart-now.jpg",
+    "caption": "The cart drawer with an order discount, before and now"
+  },
+  {
+    "kind": "mock",
+    "frame": "phone",
+    "title": "Lot 12",
+    "caption": "What a bidder sees in extended bidding",
+    "items": [
+      {
+        "label": "Current bid",
+        "value": "HKD 25,000"
+      },
+      {
+        "label": "Time left (extended)",
+        "value": "29:12"
+      },
+      {
+        "tip": "After the scheduled close, each bid restarts a 30-minute timer."
+      },
+      {
+        "notice": "You are leading",
+        "tone": "ok"
+      },
+      {
+        "button": "Place bid",
+        "primary": true
+      }
+    ]
+  },
+  {
+    "kind": "mock",
+    "frame": "desktop",
+    "url": "grade10.com/account/notifications",
+    "caption": "Option B adds a switch beside the auction alerts",
+    "items": [
+      {
+        "h": "Notifications"
+      },
+      {
+        "switch": "Auction email alerts",
+        "on": true
+      },
+      {
+        "switch": "Points reminders",
+        "on": true,
+        "draft": true,
+        "added": true
+      },
+      {
+        "field": "Email",
+        "value": "member@example.com"
+      },
+      {
+        "divider": true
+      },
+      {
+        "text": "Changes save at once.",
+        "muted": true
+      },
+      {
+        "badge": "New",
+        "tone": "accent",
+        "added": true
+      }
+    ]
+  },
+  {
+    "kind": "mock",
+    "frame": "email",
+    "from": "Grade10",
+    "subject": "Your points expire in 30 days",
+    "caption": "The reminder letter",
+    "items": [
+      {
+        "h": "1,200 points expire on 12 Nov",
+        "draft": true
+      },
+      {
+        "text": "Spend them on any order before then."
+      },
+      {
+        "button": "Shop now",
+        "primary": true
+      }
+    ]
+  },
+  {
+    "kind": "mock",
+    "frame": "push",
+    "app": "Grade10",
+    "title": "Points expire soon",
+    "body": "1,200 points expire on 12 Nov.",
+    "added": true,
+    "caption": "Option C sends a push as well"
+  },
+  {
+    "kind": "flow",
+    "caption": "A vault case from intake to payout",
+    "steps": [
+      {
+        "who": "Collector",
+        "text": "Books a drop-off"
+      },
+      {
+        "who": "Operator",
+        "text": "Receives the case",
+        "arrow": "on the day"
+      },
+      {
+        "who": "Grader",
+        "text": "Grades each card",
+        "arrow": "3 to 5 days"
+      },
+      {
+        "who": "Grade10",
+        "text": "Sends the payout",
+        "arrow": "same day",
+        "tone": "ok"
+      }
+    ]
+  },
+  {
+    "kind": "lanes",
+    "caption": "Two bidders after the scheduled close at 20:00",
+    "lanes": ["Bidder A", "Bidder B", "Grade10"],
+    "events": [
+      {
+        "at": "20:10",
+        "lane": "Bidder B",
+        "to": "Grade10",
+        "text": "Bids HKD 27,500"
+      },
+      {
+        "at": "20:10",
+        "lane": "Grade10",
+        "text": "Close moves to 20:40"
+      },
+      {
+        "at": "20:40",
+        "lane": "Grade10",
+        "text": "Bidder B wins",
+        "tone": "ok"
+      }
+    ]
+  },
+  {
+    "kind": "states",
+    "caption": "A listing's status",
+    "states": [
+      {
+        "name": "Draft",
+        "means": "Only staff see it",
+        "by": "Created in the console",
+        "who": "Operators"
+      },
+      {
+        "name": "Live",
+        "means": "Bidders can bid",
+        "by": "An operator publishes it",
+        "who": "Operators"
+      },
+      {
+        "name": "Closed",
+        "means": "No more bids count",
+        "by": "The timer runs out",
+        "who": "Nobody; it happens on its own"
+      }
+    ]
+  },
+  {
+    "kind": "table",
+    "caption": "What moved",
+    "columns": ["", "Before", "Now"],
+    "rows": [
+      ["Extension", "None", "30 minutes"],
+      ["Cap", "None", "Optional, per listing"]
+    ]
+  },
+  {
+    "kind": "bars",
+    "unit": "s",
+    "caption": "Median time to place a bid",
+    "items": [
+      {
+        "label": "Before",
+        "value": 4.2
+      },
+      {
+        "label": "Now",
+        "value": 1.1
+      }
+    ]
+  }
+]

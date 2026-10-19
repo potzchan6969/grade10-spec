@@ -1,0 +1,315 @@
+{
+  "example": true,
+  "title": "Extended Bidding Label",
+  "page": "feature",
+  "verdict": "decide",
+  "reason": "Ready to merge once 1 decision is made",
+  "stamp": {
+    "repo": "9gag/grade10",
+    "branch": "example/extended-bidding-label",
+    "commit": "0000000",
+    "date": "2026-10-13",
+    "version": "v1"
+  },
+  "decide": {
+    "questions": [
+      {
+        "n": 1,
+        "title": "Tooltip words",
+        "ask": "Should the **Time left (extended)** tooltip also name the listing cap?",
+        "options": [
+          {
+            "key": "A",
+            "label": "Duration only",
+            "recommended": true,
+            "outcome": "The tooltip says how long each bid extends the lot, and nothing more",
+            "cost": "One catalog sentence changes in every language",
+            "picture": {
+              "kind": "mock",
+              "frame": "phone",
+              "title": "Lot 12",
+              "items": [
+                {
+                  "label": "Current bid",
+                  "value": "HKD 25,000"
+                },
+                {
+                  "label": "Time left (extended)",
+                  "value": "29:12"
+                },
+                {
+                  "tip": "After the scheduled close, each bid restarts a 30-minute timer.",
+                  "draft": true
+                },
+                {
+                  "button": "Place bid",
+                  "primary": true
+                }
+              ]
+            }
+          },
+          {
+            "key": "B",
+            "label": "Duration and cap",
+            "outcome": "The tooltip keeps today's words, which also name the listing cap",
+            "cost": "The bidding page says the tooltip names the duration only, so the page changes instead",
+            "picture": {
+              "kind": "mock",
+              "frame": "phone",
+              "title": "Lot 12",
+              "items": [
+                {
+                  "label": "Current bid",
+                  "value": "HKD 25,000"
+                },
+                {
+                  "label": "Time left (extended)",
+                  "value": "29:12"
+                },
+                {
+                  "tip": "After the scheduled close, each bid restarts a 30-minute timer. Bidding ends when the timer runs out with no new bid, up to the listing cap."
+                },
+                {
+                  "button": "Place bid",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "why": "Bidders read the tooltip when they decide whether to bid again",
+        "blocks": "The tooltip's catalog entry and its test",
+        "reasons": [
+          {
+            "text": "Bidding · Time left (extended)",
+            "href": "https://github.com/9gag/grade10-spec/blob/main/docs/prds/products/grade10-site/auction/bidding.md"
+          },
+          {
+            "text": "auctionListing.json · autoExtendedTooltip",
+            "href": "https://github.com/9gag/grade10-spec/blob/main/packages/i18n/messages/shared/en/auctionListing.json"
+          }
+        ]
+      }
+    ],
+    "blockers": [
+      {
+        "n": 1,
+        "title": "Staging deploy",
+        "action": "Add the `deploy:staging` label to the pull request",
+        "who": "Anyone with write access to the repository",
+        "why": "The phone walk needs a deployed build",
+        "blocks": "The staging walk in Proof",
+        "reasons": [
+          {
+            "text": "Deployment",
+            "href": "https://github.com/9gag/grade10/blob/main/docs/deployment.md"
+          }
+        ]
+      }
+    ],
+    "agentDecisions": [
+      {
+        "decision": "Label words",
+        "taken": "**Time left (extended)**, the catalog's existing entry",
+        "why": "The words already exist in every language, so nothing waits on translation"
+      }
+    ]
+  },
+  "changes": [
+    {
+      "id": "extended-label",
+      "kind": "changed",
+      "who": ["Bidders", "Watchers"],
+      "title": "Time left says when a lot is in extended bidding",
+      "before": "**Time left** counts down with no sign that the lot has extended",
+      "now": "The label reads **Time left (extended)** until the lot closes",
+      "picture": [
+        {
+          "kind": "mock",
+          "frame": "phone",
+          "title": "Lot 12",
+          "caption": "Before",
+          "items": [
+            {
+              "label": "Current bid",
+              "value": "HKD 25,000"
+            },
+            {
+              "label": "Time left",
+              "value": "29:12"
+            },
+            {
+              "button": "Place bid",
+              "primary": true
+            }
+          ],
+          "rendered": "0000000"
+        },
+        {
+          "kind": "mock",
+          "frame": "phone",
+          "title": "Lot 12",
+          "caption": "Now",
+          "items": [
+            {
+              "label": "Current bid",
+              "value": "HKD 25,000"
+            },
+            {
+              "label": "Time left (extended)",
+              "value": "29:12"
+            },
+            {
+              "button": "Place bid",
+              "primary": true
+            }
+          ],
+          "rendered": "0000000"
+        }
+      ]
+    },
+    {
+      "id": "extension-tooltip",
+      "kind": "new",
+      "who": ["Bidders"],
+      "title": "The label's tooltip explains the new close",
+      "now": "Tapping **Time left (extended)** shows how long each bid extends the lot",
+      "picture": {
+        "kind": "lanes",
+        "caption": "A lot scheduled to close at 20:00, with a 30-minute extension",
+        "lanes": ["Bidder A", "Bidder B", "Grade10"],
+        "events": [
+          {
+            "at": "20:00",
+            "lane": "Grade10",
+            "text": "Scheduled close: **Time left (extended)**"
+          },
+          {
+            "at": "20:10",
+            "lane": "Bidder B",
+            "to": "Grade10",
+            "text": "Bids HKD 27,500"
+          },
+          {
+            "at": "20:10",
+            "lane": "Grade10",
+            "text": "Close moves to 20:40"
+          },
+          {
+            "at": "20:35",
+            "lane": "Bidder A",
+            "to": "Grade10",
+            "text": "Bids HKD 30,000"
+          },
+          {
+            "at": "20:35",
+            "lane": "Grade10",
+            "text": "Close moves to 21:05"
+          },
+          {
+            "at": "21:05",
+            "lane": "Grade10",
+            "text": "No new bid: Bidder A wins",
+            "tone": "ok"
+          }
+        ]
+      }
+    }
+  ],
+  "try": {
+    "where": "Run the branch with `pnpm dev`, or walk it on staging once blocker 1 is done",
+    "steps": [
+      {
+        "role": "Bidder",
+        "when": "Before the scheduled close",
+        "title": "Bid on a lot that closes in a few minutes",
+        "where": "Auctions, any open lot",
+        "do": "Press **Place bid** and confirm",
+        "success": "Leading"
+      },
+      {
+        "role": "Bidder",
+        "when": "After the scheduled close",
+        "title": "Watch the label change",
+        "do": "Stay on the lot page as the clock passes the scheduled close",
+        "success": "Time left (extended)"
+      },
+      {
+        "role": "Watcher",
+        "when": "Before the scheduled close",
+        "title": "Watch the lot",
+        "where": "The lot page",
+        "do": "Press **Watch**",
+        "success": "Watching"
+      },
+      {
+        "role": "Watcher",
+        "when": "After the scheduled close",
+        "title": "Open the letter",
+        "where": "Your inbox",
+        "do": "Open the letter Grade10 sends when the lot enters extended bidding",
+        "success": "Extended bidding has started"
+      }
+    ]
+  },
+  "proof": [
+    {
+      "claim": "The label reads Time left (extended) while the lot is in extended bidding",
+      "how": "Unit test on the listing view",
+      "revision": "0000000",
+      "status": "verified",
+      "change": "extended-label"
+    },
+    {
+      "claim": "A lot that has not extended still reads Time left",
+      "how": "Unit test on the listing view",
+      "revision": "0000000",
+      "status": "verified",
+      "change": "extended-label"
+    },
+    {
+      "claim": "A bidder sees the label change at the scheduled close",
+      "how": "E2E on the lot page",
+      "revision": "0000000",
+      "status": "partial",
+      "why": "Passed locally; CI has not run on this commit",
+      "change": "extended-label"
+    },
+    {
+      "claim": "The tooltip reads well on a phone",
+      "how": "Walk on staging",
+      "status": "not-run",
+      "why": "Waits on blocker 1",
+      "change": "extension-tooltip"
+    }
+  ],
+  "ship": {
+    "needs": ["The merge only: no migration, secret or flag"],
+    "risk": "A wrong state check would show **Time left (extended)** on a lot that has not extended",
+    "undo": "Revert the merge; nothing is stored"
+  },
+  "followups": [
+    {
+      "id": "letter-duration",
+      "title": "Name the extension duration in the Extended bidding has started letter",
+      "why": "Bidders away from the page learn the new close from the letter",
+      "owner": "Product",
+      "due": "Before the next sale"
+    }
+  ],
+  "engineers": {
+    "commits": [
+      {
+        "sha": "0000000",
+        "subject": "feat(auction): say when a lot is in extended bidding"
+      }
+    ],
+    "files": [
+      "packages/grade10-auction/frontend/src/features/listings/presentation/views/ListingView.tsx",
+      "external/grade10-spec/packages/ui/src/blocks/auction-listing/listing-auction-bid-fields.tsx"
+    ],
+    "notes": [
+      "The words come from `auctionListing.json`: `timeLeft`, `timeLeftExtended` and `autoExtendedTooltip`"
+    ]
+  }
+}

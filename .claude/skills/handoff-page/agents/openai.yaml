@@ -1,0 +1,3 @@
+interface:
+  display_name: "Handoff Page"
+  short_description: "Hand off finished or blocked work as one page to verify and decide on"

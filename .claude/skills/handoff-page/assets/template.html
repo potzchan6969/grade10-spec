@@ -1,0 +1,2494 @@
+<title>Handoff Page</title>
+<style>
+  /* Layout: one reading column; the verdict line, then straight into the first section; asks and changes are cards with their pictures inside */
+  :root {
+    --bg: #f5f5f4;
+    --surface: #ffffff;
+    --sunk: #fafaf9;
+    --fg: #1b1918;
+    --muted: #6b6866;
+    --line: #e6e5e5;
+    --line-strong: #d5d3d2;
+    --accent: #856128;
+    --accent-soft: #f8f2e8;
+    --ok: #53753d;
+    --ok-soft: #eff5eb;
+    --warn: #776827;
+    --warn-soft: #f6f3e4;
+    --bad: #ae3f2d;
+    --bad-soft: #fbf0ef;
+    --info: #2173a6;
+    --info-soft: #eaf4fb;
+    --none: #6b6866;
+    --none-soft: #efeeed;
+    --shadow: 0 1px 2px rgb(27 25 24 / 6%), 0 6px 20px rgb(27 25 24 / 4%);
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --r: 12px;
+    --r-sm: 8px;
+    /* The product's own screen, drawn light in both page themes on purpose */
+    --g-bg: #ffffff;
+    --g-subtle: #fafaf9;
+    --g-fg: #1b1918;
+    --g-muted: #75726f;
+    --g-line: #e6e5e5;
+    --g-primary: #c4903d;
+    --g-on-primary: #ffffff;
+    --g-bezel: #2e2c2a;
+    --g-font: "canada-type-gibson", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f0e0d;
+      --surface: #1b1918;
+      --sunk: #151413;
+      --fg: #f5f5f4;
+      --muted: #a7a4a1;
+      --line: #2e2c2a;
+      --line-strong: #42403e;
+      --accent: #d3ac6e;
+      --accent-soft: rgb(196 144 61 / 16%);
+      --ok: #9dc086;
+      --ok-soft: rgb(102 144 75 / 20%);
+      --warn: #cdb965;
+      --warn-soft: rgb(177 154 58 / 18%);
+      --bad: #e39d91;
+      --bad-soft: rgb(207 88 68 / 20%);
+      --info: #77bae4;
+      --info-soft: rgb(41 141 204 / 20%);
+      --none: #a7a4a1;
+      --none-soft: rgb(157 154 151 / 16%);
+      --shadow: none;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f0e0d;
+    --surface: #1b1918;
+    --sunk: #151413;
+    --fg: #f5f5f4;
+    --muted: #a7a4a1;
+    --line: #2e2c2a;
+    --line-strong: #42403e;
+    --accent: #d3ac6e;
+    --accent-soft: rgb(196 144 61 / 16%);
+    --ok: #9dc086;
+    --ok-soft: rgb(102 144 75 / 20%);
+    --warn: #cdb965;
+    --warn-soft: rgb(177 154 58 / 18%);
+    --bad: #e39d91;
+    --bad-soft: rgb(207 88 68 / 20%);
+    --info: #77bae4;
+    --info-soft: rgb(41 141 204 / 20%);
+    --none: #a7a4a1;
+    --none-soft: rgb(157 154 151 / 16%);
+    --shadow: none;
+    color-scheme: dark;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.55 var(--font);
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: break-word;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  a {
+    color: var(--accent);
+    text-underline-offset: 2px;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    padding: 0 4px;
+    border-radius: 4px;
+    background: var(--sunk);
+    border: 1px solid var(--line);
+    overflow-wrap: anywhere;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .page,
+  .top,
+  .sec,
+  .sec-body,
+  .card,
+  .head-main,
+  .option,
+  .pic,
+  .path,
+  .band,
+  .step-body,
+  .eng-body,
+  .mock-body,
+  .ledger,
+  .rows,
+  .list,
+  .bars {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .page {
+    max-width: 840px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 20px 72px;
+    display: grid;
+    gap: 28px;
+  }
+  @media (min-width: 720px) {
+    .page {
+      padding-inline: 32px;
+      padding-block: 36px 96px;
+      gap: 40px;
+    }
+  }
+
+  .top {
+    display: grid;
+    gap: 8px;
+  }
+  .top-name {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .verdict {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 4px 12px 4px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--tone-soft);
+    color: var(--tone);
+  }
+  .verdict::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentcolor;
+  }
+  .top h1 {
+    margin: 0;
+    font-size: clamp(22px, 4.4vw, 30px);
+    line-height: 1.2;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .stamp {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .since {
+    margin: 4px 0 0;
+    padding: 10px 14px;
+    border-radius: var(--r-sm);
+    background: var(--accent-soft);
+  }
+  .flag {
+    justify-self: start;
+    margin: 0;
+    padding: 6px 12px;
+    border-radius: var(--r-sm);
+    font-weight: 700;
+    background: var(--tone-soft);
+    color: var(--tone);
+  }
+
+  .tone-ok {
+    --tone: var(--ok);
+    --tone-soft: var(--ok-soft);
+  }
+  .tone-accent {
+    --tone: var(--accent);
+    --tone-soft: var(--accent-soft);
+  }
+  .tone-warn {
+    --tone: var(--warn);
+    --tone-soft: var(--warn-soft);
+  }
+  .tone-bad {
+    --tone: var(--bad);
+    --tone-soft: var(--bad-soft);
+  }
+  .tone-info {
+    --tone: var(--info);
+    --tone-soft: var(--info-soft);
+  }
+  .tone-none {
+    --tone: var(--none);
+    --tone-soft: var(--none-soft);
+  }
+
+  .nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    display: flex;
+    gap: 6px;
+    margin-block: -12px;
+    padding-block: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--bg);
+  }
+  .nav a {
+    flex: none;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--fg);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .nav a:hover {
+    border-color: var(--line-strong);
+  }
+  .nav .n {
+    color: var(--muted);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sec {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+    scroll-margin-top: 64px;
+  }
+  .sec-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  .sec-head h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 750;
+  }
+  .count {
+    color: var(--muted);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .sec-body {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+  }
+  .phase {
+    margin: 10px 0 0;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    align-items: baseline;
+  }
+
+  .card {
+    display: grid;
+    gap: 14px;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    scroll-margin-top: 64px;
+  }
+  @media (min-width: 720px) {
+    .card {
+      padding: 20px 22px;
+    }
+  }
+  .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .card-head h3 {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.35;
+    font-weight: 700;
+  }
+  .head-main {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .num {
+    flex: none;
+    display: grid;
+    place-items: center;
+    min-width: 26px;
+    height: 26px;
+    padding-inline: 6px;
+    border-radius: 999px;
+    background: var(--fg);
+    color: var(--surface);
+    font-size: 13px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+  }
+  .num.tone-bad {
+    background: var(--bad);
+  }
+  .ask-text {
+    margin: 0;
+    font-size: 15.5px;
+  }
+  .card.closed {
+    gap: 8px;
+    background: var(--sunk);
+    box-shadow: none;
+  }
+  .closed-pick {
+    margin: 0;
+  }
+  .options {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  }
+  .option {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    min-width: 0;
+    padding: 12px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r);
+    background: var(--sunk);
+    cursor: pointer;
+  }
+  .option:hover {
+    border-color: var(--line-strong);
+  }
+  .option:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .option:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .opt-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 8px;
+    cursor: pointer;
+  }
+  .radio {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--line-strong);
+    background: var(--surface);
+  }
+  .option:has(input:checked) .radio {
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 3px var(--surface);
+    background: var(--accent);
+  }
+  .opt-key {
+    font-weight: 800;
+  }
+  .opt-label {
+    flex: 1 1 0;
+    min-width: min(100%, 120px);
+    font-weight: 650;
+  }
+  .rec {
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: var(--ok-soft);
+    color: var(--ok);
+    font-size: 11.5px;
+    font-weight: 750;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .opt-text,
+  .opt-cost {
+    margin: 0;
+    font-size: 14px;
+  }
+  .opt-cost {
+    color: var(--muted);
+  }
+  .opt-cost strong {
+    color: var(--fg);
+    font-weight: 650;
+  }
+
+  .meta {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+    font-size: 14px;
+  }
+  .meta > div {
+    display: grid;
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .meta dt {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .meta dd {
+    margin: 0;
+    min-width: 0;
+  }
+  @media (max-width: 560px) {
+    .meta > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+  }
+  .answer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+  }
+  .note {
+    flex: 1 1 220px;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--fg);
+    font: inherit;
+    font-size: 14px;
+  }
+  .who {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .done {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .done input,
+  .fu input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  .decisions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .decisions li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding-block: 10px;
+    border-top: 1px solid var(--line);
+  }
+  .decisions li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .decisions p {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+  }
+  .decisions .why {
+    display: block;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .lead {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .bar {
+    z-index: 4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    padding: 12px 14px;
+    border-radius: var(--r);
+    background: var(--fg);
+    color: var(--bg);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 22%);
+  }
+  .bar.live {
+    position: sticky;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  }
+  .bar .line {
+    flex: 1 1 140px;
+    min-width: 0;
+    margin: 0;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar .status,
+  .bar .msg {
+    flex-basis: 100%;
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.85;
+  }
+  .bar .msg:empty {
+    display: none;
+  }
+  .btn {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  @media (max-width: 560px) {
+    .bar {
+      padding: 10px 12px;
+      gap: 6px 8px;
+    }
+    .bar .btn {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+  }
+  .copy-out {
+    flex-basis: 100%;
+    min-width: 0;
+    padding: 8px;
+    border-radius: var(--r-sm);
+    border: 0;
+    font: 13px/1.4 var(--mono);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--tone-soft, var(--none-soft));
+    color: var(--tone, var(--muted));
+    font-size: 12.5px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  a.chip {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  a.chip:hover {
+    text-decoration: underline;
+  }
+  .role {
+    padding: 1px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .bn-text {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 14px;
+    margin: 0;
+    font-size: 15px;
+  }
+  .bn-text dt {
+    padding-top: 3px;
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .bn-text dt.now-label {
+    color: var(--accent);
+  }
+  .bn-text dd {
+    margin: 0;
+  }
+
+  .pics {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    min-width: 0;
+  }
+  .pics > .pic-table {
+    grid-column: 1 / -1;
+  }
+  .pic {
+    container-type: inline-size;
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+  }
+  .pic figcaption {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .pic.added {
+    outline: 2px dashed var(--accent);
+    outline-offset: 4px;
+    border-radius: var(--r-sm);
+  }
+  .rendered {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-style: italic;
+  }
+  .key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .k-draft {
+    text-decoration: underline dotted var(--accent) 2px;
+    text-underline-offset: 3px;
+  }
+  .k-added {
+    padding: 0 4px;
+    border-radius: 3px;
+    outline: 2px dashed var(--accent);
+    outline-offset: 1px;
+  }
+
+  .shot {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--sunk);
+    cursor: zoom-in;
+  }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .shot.phone img {
+    object-fit: contain;
+  }
+  .bn {
+    --x: 50%;
+    position: relative;
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--sunk);
+  }
+  .bn img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .bn .bn-before {
+    clip-path: inset(0 calc(100% - var(--x)) 0 0);
+  }
+  .bn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--x);
+    width: 2px;
+    margin-left: -1px;
+    background: var(--accent);
+  }
+  .bn-tag {
+    position: absolute;
+    top: 8px;
+    z-index: 1;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgb(11 10 10 / 72%);
+    color: #fafaf9;
+    font-size: 11.5px;
+    font-weight: 700;
+  }
+  .bn-tag-before {
+    left: 8px;
+  }
+  .bn-tag-now {
+    right: 8px;
+  }
+  .slider {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  .mock {
+    justify-self: center;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    background: var(--g-bg);
+    color: var(--g-fg);
+    font: 13px/1.45 var(--g-font);
+  }
+  .mock-phone {
+    max-width: 300px;
+    border: 6px solid var(--g-bezel);
+    border-radius: 24px;
+  }
+  .mock-status,
+  .mock-bar,
+  .mock-mailhead {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: var(--g-subtle);
+    border-bottom: 1px solid var(--g-line);
+    font-size: 11.5px;
+  }
+  .mock-status {
+    justify-content: space-between;
+    font-weight: 650;
+  }
+  .mock-title {
+    min-width: 0;
+    text-align: right;
+    font-weight: 700;
+  }
+  .dots {
+    flex: none;
+    width: 34px;
+    height: 8px;
+    background: radial-gradient(circle at 4px 4px, var(--g-line) 3.5px, transparent 4px) 0 0 / 13px 8px repeat-x;
+  }
+  .mock-url {
+    flex: 1;
+    min-width: 0;
+    padding: 2px 10px;
+    border: 1px solid var(--g-line);
+    border-radius: 999px;
+    background: var(--g-bg);
+    color: var(--g-muted);
+    overflow-wrap: anywhere;
+  }
+  .mock-mailhead {
+    display: grid;
+    gap: 2px;
+    font-size: 12px;
+  }
+  .mock-mailhead p {
+    margin: 0;
+  }
+  .mock-mailhead b {
+    color: var(--g-muted);
+    font-weight: 600;
+  }
+  .mock-body {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 14px;
+  }
+  .m-h {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .m-text {
+    margin: 0;
+  }
+  .m-muted {
+    color: var(--g-muted);
+  }
+  .m-row,
+  .m-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .m-row {
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--g-line);
+  }
+  .m-val {
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-btn {
+    justify-self: start;
+    padding: 8px 16px;
+    border: 1px solid var(--g-line);
+    border-radius: 8px;
+    background: var(--g-bg);
+    font-weight: 650;
+  }
+  .m-primary {
+    justify-self: stretch;
+    text-align: center;
+    border-color: var(--g-primary);
+    background: var(--g-primary);
+    color: var(--g-on-primary);
+  }
+  .m-toggle {
+    position: relative;
+    flex: none;
+    width: 34px;
+    height: 20px;
+    border-radius: 999px;
+    background: var(--g-line);
+  }
+  .m-toggle::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--g-bg);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 25%);
+  }
+  .m-toggle.on {
+    background: var(--g-primary);
+  }
+  .m-toggle.on::after {
+    left: 16px;
+  }
+  .m-field {
+    display: grid;
+    gap: 4px;
+  }
+  .m-field-label {
+    color: var(--g-muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .m-input {
+    min-height: 36px;
+    padding: 8px 10px;
+    border: 1px solid var(--g-line);
+    border-radius: 8px;
+  }
+  .m-notice {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    background: #eaf4fb;
+    color: #19557b;
+  }
+  .m-notice.tone-warn {
+    background: #f6f3e4;
+    color: #584d1d;
+  }
+  .m-notice.tone-ok {
+    background: #eff5eb;
+    color: #3e572d;
+  }
+  .m-notice.tone-bad {
+    background: #fbf0ef;
+    color: #822f21;
+  }
+  .m-tip {
+    position: relative;
+    justify-self: start;
+    max-width: 100%;
+    margin: 0;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: var(--g-fg);
+    color: var(--g-bg);
+    font-size: 12px;
+  }
+  .m-badge {
+    justify-self: start;
+    padding: 1px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--g-line);
+    background: var(--g-subtle);
+    font-size: 11.5px;
+    font-weight: 700;
+  }
+  .m-badge.tone-accent {
+    border-color: var(--g-primary);
+    color: #62481e;
+    background: #f8f2e8;
+  }
+  .m-divider {
+    width: 100%;
+    margin: 2px 0;
+    border: 0;
+    border-top: 1px solid var(--g-line);
+  }
+  .draft {
+    text-decoration: underline dotted var(--g-primary) 2px;
+    text-underline-offset: 3px;
+  }
+  .added {
+    outline: 2px dashed var(--g-primary);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .mock-push {
+    display: grid;
+    padding: 16px 14px;
+    border: 0;
+    border-radius: 20px;
+    background: linear-gradient(160deg, #42403e, #1b1918);
+  }
+  .push {
+    display: grid;
+    gap: 2px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgb(250 250 249 / 94%);
+    color: #1b1918;
+  }
+  .push-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: #75726f;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .push p {
+    margin: 0;
+  }
+
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .flow-step {
+    flex: 1 1 0;
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+    align-content: start;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--sunk);
+    font-size: 14px;
+  }
+  .flow-step[class*="tone-"] {
+    border-color: var(--tone);
+    background: var(--tone-soft);
+  }
+  .flow-who {
+    color: var(--muted);
+    font-size: 11.5px;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .flow-arrow {
+    flex: 0 1 auto;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    max-width: 96px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.25;
+    text-align: center;
+  }
+  .flow-arrow::after {
+    content: "\2192";
+    font-size: 18px;
+    line-height: 1;
+    color: var(--accent);
+  }
+  @container (max-width: 600px) {
+    .flow {
+      flex-direction: column;
+    }
+    .flow-arrow {
+      max-width: none;
+      grid-auto-flow: column;
+      justify-content: start;
+      gap: 8px;
+      padding-left: 18px;
+    }
+    .flow-arrow::after {
+      content: "\2193";
+      grid-row: 1;
+    }
+  }
+
+  .scroll-x {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .lanes {
+    display: grid;
+    grid-template-columns: 44px repeat(var(--n), minmax(84px, 1fr));
+    min-width: calc(44px + var(--n) * 84px);
+    row-gap: 4px;
+    font-size: 12.5px;
+    line-height: 1.35;
+  }
+  .lane-head {
+    grid-row: 1;
+    padding: 4px 4px 8px;
+    border-bottom: 2px solid var(--line-strong);
+    font-size: 12.5px;
+    font-weight: 750;
+    text-align: center;
+  }
+  .lane-at {
+    grid-column: 1;
+    padding-top: 7px;
+    color: var(--muted);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .lane-cell {
+    background: linear-gradient(var(--line-strong), var(--line-strong)) center / 2px 100% no-repeat;
+  }
+  .lane-ev {
+    position: relative;
+    z-index: 1;
+    margin: 2px 3px;
+    padding: 5px 6px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    text-align: center;
+  }
+  .lane-ev[class*="tone-"] {
+    border-color: var(--tone);
+    background: var(--tone-soft);
+  }
+  .lane-ev.msg {
+    border-color: transparent;
+    background: transparent;
+    padding-bottom: 16px;
+  }
+  .lane-ev.msg::after {
+    content: "";
+    position: absolute;
+    bottom: 7px;
+    left: calc(50% / var(--span));
+    right: calc(50% / var(--span));
+    border-top: 2px solid var(--accent);
+  }
+  .lane-ev.msg::before {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    border-block: 5px solid transparent;
+  }
+  .lane-ev.to-right::before {
+    right: calc(50% / var(--span) - 2px);
+    border-left: 8px solid var(--accent);
+  }
+  .lane-ev.to-left::before {
+    left: calc(50% / var(--span) - 2px);
+    border-right: 8px solid var(--accent);
+  }
+
+  .chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chain-state {
+    padding: 4px 12px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    font-size: 13.5px;
+    font-weight: 650;
+  }
+  .chain-arrow {
+    color: var(--accent);
+  }
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .tbl th,
+  .tbl td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .tbl thead th {
+    border-bottom-width: 2px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .tbl tbody th {
+    font-weight: 650;
+  }
+  .bars {
+    display: grid;
+    gap: 8px;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: minmax(64px, 28%) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+  }
+  .bar-track {
+    height: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--sunk);
+  }
+  .bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--accent);
+  }
+  .bar-val {
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .where {
+    margin: 0;
+  }
+  .roles {
+    justify-self: start;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--sunk);
+  }
+  .roles label {
+    position: relative;
+    padding: 6px 14px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .roles label:has(input:checked) {
+    background: var(--surface);
+    color: var(--fg);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 12%);
+  }
+  .roles label:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+  }
+  .roles input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .path {
+    display: grid;
+    gap: 18px;
+  }
+  .band {
+    display: grid;
+    gap: 12px;
+  }
+  .band h3 {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .steps {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 4px 14px;
+    padding-bottom: 20px;
+  }
+  .step::before {
+    content: "";
+    position: absolute;
+    top: 34px;
+    bottom: 2px;
+    left: 15px;
+    width: 2px;
+    background: var(--line);
+  }
+  .step:last-child::before {
+    display: none;
+  }
+  .step-n {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--accent);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .step-body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+    padding-top: 4px;
+  }
+  .step-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .step-body p {
+    margin: 0;
+  }
+  .step-where {
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .success {
+    justify-self: start;
+    padding: 5px 10px;
+    border-radius: var(--r-sm);
+    background: var(--ok-soft);
+    color: var(--ok);
+    font-size: 14px;
+    font-weight: 650;
+  }
+
+  .tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ledger {
+    display: grid;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1.4fr) minmax(0, 1fr) 104px;
+    gap: 12px;
+    align-items: start;
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    scroll-margin-top: 64px;
+  }
+  .ledger-row:first-child {
+    border-top: 0;
+  }
+  .ledger-head {
+    background: var(--sunk);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .ledger-row .chip {
+    justify-self: start;
+  }
+  .claim-why {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .lbl {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .ledger-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+    .ledger-head {
+      display: none;
+    }
+    .lbl {
+      display: inline;
+      color: var(--muted);
+      font-weight: 650;
+    }
+  }
+
+  .rows,
+  .list {
+    display: grid;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+  .rows > div {
+    display: grid;
+    grid-template-columns: 124px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+  }
+  .rows > div:first-child {
+    border-top: 0;
+  }
+  .rows dt {
+    color: var(--muted);
+    font-weight: 650;
+  }
+  .rows dd {
+    margin: 0;
+    min-width: 0;
+  }
+  .rows ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  @media (max-width: 560px) {
+    .rows > div {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+  }
+  .fu {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 2px 12px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 64px;
+  }
+  .fu:first-child {
+    border-top: 0;
+  }
+  .fu input {
+    grid-row: span 3;
+    margin-top: 2px;
+  }
+  .fu-title {
+    font-weight: 650;
+  }
+  .fu-why,
+  .fu-owner {
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  .fu-owner {
+    font-weight: 600;
+  }
+  .fu.is-done .fu-title {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  .eng {
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+  .eng summary {
+    padding: 14px 18px;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .eng-body {
+    display: grid;
+    gap: 14px;
+    padding: 0 18px 18px;
+    font-size: 14px;
+  }
+  .eng-body h3 {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .eng-body ul {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .lightbox {
+    max-width: min(1200px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    padding: 0;
+    overflow: auto;
+    border: 0;
+    border-radius: var(--r);
+    background: var(--surface);
+    color: var(--fg);
+  }
+  .lightbox::backdrop {
+    background: rgb(11 10 10 / 72%);
+  }
+  .lightbox figure {
+    margin: 0;
+  }
+  .lightbox img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .lightbox figcaption {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .lightbox .btn {
+    position: sticky;
+    top: 10px;
+    float: right;
+    margin: 10px;
+    background: var(--fg);
+    color: var(--bg);
+  }
+</style>
+<main id="page" class="page"></main>
+<dialog id="lightbox" class="lightbox">
+  <button type="button" class="btn" id="lightbox-close">Close</button>
+  <figure><img id="lightbox-img" alt="" /><figcaption id="lightbox-caption"></figcaption></figure>
+</dialog>
+<template id="handoff-extra"></template>
+<script type="application/json" id="handoff-data">
+  { "title": "Handoff Page", "verdict": "not-ready", "reason": "Build this page from its data with scripts/build.mjs" }
+</script>
+<script>
+  (() => {
+    const DATA = (() => {
+      try {
+        return JSON.parse(document.getElementById("handoff-data").textContent);
+      } catch (e) {
+        return { title: "Handoff", verdict: "not-ready", reason: `The page data did not load: ${e.message}` };
+      }
+    })();
+    const QUESTIONS = DATA.decide?.questions ?? [];
+    const BLOCKERS = DATA.decide?.blockers ?? [];
+    const Q = QUESTIONS.filter((q) => !q.answered);
+    const B = BLOCKERS.filter((b) => !b.done);
+    const AD = DATA.decide?.agentDecisions ?? [];
+    const CH = DATA.changes ?? [];
+    const PR = DATA.proof ?? [];
+    const TRY = DATA.try ?? {};
+    const STEPS = TRY.steps ?? [];
+    const FU = DATA.followups ?? [];
+    const ENG = DATA.engineers ?? {};
+    const VERDICT = {
+      ready: ["Ready", "ok"],
+      decide: ["Ready once you decide", "accent"],
+      "not-ready": ["Not ready", "warn"],
+      blocked: ["Blocked", "bad"],
+    };
+    const KIND = { new: ["New", "info"], changed: ["Changed", "accent"], removed: ["Removed", "none"], settled: ["Settled", "ok"] };
+    const STATUS = {
+      verified: ["Verified", "ok"],
+      partial: ["Partial", "warn"],
+      "not-run": ["Not run", "none"],
+      failed: ["Failed", "bad"],
+    };
+    const KEPT = "Picks stay in this browser; copy them into a PR comment or the chat.";
+    const LOCAL = "handoff-answers";
+    const state = { picks: {}, notes: {}, done: {}, ticks: {} };
+
+    const esc = (s) =>
+      String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+    const md = (s) =>
+      esc(s)
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\[([^\]]+)\]\(((?:https?:\/\/|#)[^)\s]+)\)/g, (_, text, href) =>
+          href.startsWith("#") ? `<a href="${href}">${text}</a>` : `<a href="${href}" target="_blank" rel="noopener">${text}</a>`,
+        );
+    const list = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
+    const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+
+    function h(tag, props, ...kids) {
+      const el = document.createElement(tag);
+      for (const [k, v] of Object.entries(props ?? {})) {
+        if (v == null || v === false) continue;
+        if (k === "class") el.className = v;
+        else if (k === "html") el.innerHTML = v;
+        else if (k === "style") el.style.cssText = v;
+        else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+        else el.setAttribute(k, v === true ? "" : v);
+      }
+      for (const kid of kids.flat(Infinity)) {
+        if (kid == null || kid === false) continue;
+        el.append(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+      }
+      return el;
+    }
+
+    function fill(el, ...kids) {
+      for (const kid of kids.flat(Infinity)) if (kid != null && kid !== false) el.append(kid);
+      return el;
+    }
+
+    function section(id, title, count) {
+      const body = h("div", { class: "sec-body" });
+      const el = h(
+        "section",
+        { class: "sec", id, "aria-labelledby": `${id}-h` },
+        h("div", { class: "sec-head" }, h("h2", { id: `${id}-h` }, title), count ? h("span", { class: "count" }, count) : null),
+        body,
+      );
+      return { el, body };
+    }
+
+    function meta(rows) {
+      const kept = rows.filter(([, v]) => v && (!(v instanceof Node) || v.childNodes.length));
+      if (!kept.length) return null;
+      return h(
+        "dl",
+        { class: "meta" },
+        kept.map(([k, v]) => h("div", {}, h("dt", {}, k), v instanceof Node ? h("dd", {}, v) : h("dd", { html: md(v) }))),
+      );
+    }
+
+    function reasons(items) {
+      const all = list(items);
+      if (!all.length) return null;
+      return h(
+        "span",
+        {},
+        all.flatMap((r, i) => [i ? " · " : null, r.href ? h("a", { href: r.href, target: "_blank", rel: "noopener" }, r.text ?? r.href) : h("span", { html: md(r.text) })]),
+      );
+    }
+
+    const PICTURES = {
+      shot: (p) =>
+        h(
+          "button",
+          {
+            type: "button",
+            class: `shot${p.phone ? " phone" : ""}`,
+            "data-full": p.src,
+            "data-caption": p.caption ?? "",
+            "aria-label": `Open ${p.caption ?? "the screenshot"} full size`,
+          },
+          h("img", { src: p.src, alt: p.caption ?? "", loading: "lazy" }),
+        ),
+      beforeNow: (p) => {
+        const frame = h(
+          "div",
+          { class: "bn" },
+          h("img", { class: "bn-now", src: p.now, alt: "Now", loading: "lazy" }),
+          h("img", { class: "bn-before", src: p.before, alt: "Before", loading: "lazy" }),
+          h("span", { class: "bn-tag bn-tag-before" }, "Before"),
+          h("span", { class: "bn-tag bn-tag-now" }, "Now"),
+        );
+        const range = h("input", {
+          type: "range",
+          class: "slider",
+          min: "0",
+          max: "100",
+          value: "50",
+          "aria-label": "Slide between before and now",
+          oninput: (e) => frame.style.setProperty("--x", `${e.target.value}%`),
+        });
+        return [frame, range];
+      },
+      mock: (p) => {
+        const frame = p.frame ?? "phone";
+        if (frame === "push") {
+          return h(
+            "div",
+            { class: "mock mock-push" },
+            h(
+              "div",
+              { class: "push" },
+              h("div", { class: "push-head" }, h("span", {}, p.app ?? "Grade10"), h("span", {}, p.time ?? "now")),
+              h("strong", { class: p.draft ? "draft" : null }, p.title ?? ""),
+              p.body ? h("p", { class: p.draft ? "draft" : null }, p.body) : null,
+            ),
+          );
+        }
+        const chrome =
+          frame === "desktop"
+            ? h("div", { class: "mock-bar" }, h("span", { class: "dots" }), h("span", { class: "mock-url" }, p.url ?? ""))
+            : frame === "email"
+              ? h(
+                  "div",
+                  { class: "mock-mailhead" },
+                  h("p", {}, h("b", {}, "From "), p.from ?? "Grade10"),
+                  h("p", {}, h("b", {}, "Subject "), h("span", { class: p.draft ? "draft" : null }, p.subject ?? "")),
+                )
+              : h("div", { class: "mock-status" }, h("span", {}, "9:41"), h("span", { class: "mock-title" }, p.title ?? ""));
+        return h("div", { class: `mock mock-${frame}` }, chrome, h("div", { class: "mock-body" }, list(p.items).map(mockItem)));
+      },
+      flow: (p) =>
+        h(
+          "ol",
+          { class: "flow" },
+          list(p.steps).map((s, i) => [
+            i ? h("li", { class: "flow-arrow", "aria-hidden": s.arrow ? null : "true" }, s.arrow ? h("span", {}, s.arrow) : null) : null,
+            h(
+              "li",
+              { class: `flow-step${s.tone ? ` tone-${s.tone}` : ""}` },
+              s.who ? h("span", { class: "flow-who" }, s.who) : null,
+              h("span", { html: md(s.text) }),
+            ),
+          ]),
+        ),
+      lanes: (p) => {
+        const lanes = list(p.lanes);
+        const grid = h(
+          "div",
+          { class: "lanes", style: `--n:${lanes.length}` },
+          lanes.map((l, i) => h("span", { class: "lane-head", style: `grid-column:${i + 2}` }, l)),
+        );
+        list(p.events).forEach((ev, r) => {
+          const row = r + 2;
+          const a = Math.max(0, lanes.indexOf(ev.lane));
+          const b = ev.to == null ? a : Math.max(0, lanes.indexOf(ev.to));
+          const lo = Math.min(a, b);
+          const span = Math.abs(a - b) + 1;
+          grid.append(h("span", { class: "lane-at", style: `grid-row:${row}` }, ev.at ?? ""));
+          for (let i = 0; i < lanes.length; i++) {
+            grid.append(h("span", { class: "lane-cell", style: `grid-row:${row};grid-column:${i + 2}` }));
+          }
+          const way = a === b ? "" : b > a ? " msg to-right" : " msg to-left";
+          grid.append(
+            h("span", {
+              class: `lane-ev${way}${ev.tone ? ` tone-${ev.tone}` : ""}`,
+              style: `grid-row:${row};grid-column:${lo + 2} / span ${span};--span:${span}`,
+              html: md(ev.text),
+            }),
+          );
+        });
+        return h("div", { class: "scroll-x" }, grid);
+      },
+      states: (p) => [
+        h(
+          "ol",
+          { class: "chain" },
+          list(p.states).map((s, i) => [i ? h("li", { class: "chain-arrow", "aria-hidden": "true" }, "→") : null, h("li", { class: "chain-state" }, s.name)]),
+        ),
+        h(
+          "div",
+          { class: "scroll-x" },
+          h(
+            "table",
+            { class: "tbl" },
+            h("thead", {}, h("tr", {}, ["State", "Means", "Gets there by", "Who can"].map((t) => h("th", { scope: "col" }, t)))),
+            h(
+              "tbody",
+              {},
+              list(p.states).map((s) =>
+                h("tr", {}, h("th", { scope: "row" }, s.name), h("td", { html: md(s.means) }), h("td", { html: md(s.by) }), h("td", { html: md(s.who) })),
+              ),
+            ),
+          ),
+        ),
+      ],
+      table: (p) =>
+        h(
+          "div",
+          { class: "scroll-x" },
+          h(
+            "table",
+            { class: "tbl" },
+            p.columns ? h("thead", {}, h("tr", {}, list(p.columns).map((c) => h("th", { scope: "col", html: md(c) })))) : null,
+            h(
+              "tbody",
+              {},
+              list(p.rows).map((row) => h("tr", {}, list(row).map((c, i) => (i ? h("td", { html: md(c) }) : h("th", { scope: "row", html: md(c) }))))),
+            ),
+          ),
+        ),
+      bars: (p) => {
+        const items = list(p.items);
+        const max = Math.max(0, ...items.map((i) => Number(i.value) || 0)) || 1;
+        return h(
+          "div",
+          { class: "bars" },
+          items.map((i) =>
+            h(
+              "div",
+              { class: "bar-row" },
+              h("span", {}, i.label),
+              h("span", { class: "bar-track" }, h("span", { class: "bar-fill", style: `width:${((Number(i.value) || 0) / max) * 100}%` })),
+              h("span", { class: "bar-val" }, `${i.value}${p.unit ? ` ${p.unit}` : ""}`),
+            ),
+          ),
+        );
+      },
+    };
+
+    function mockItem(it) {
+      let el = null;
+      if (it.h != null) el = h("p", { class: "m-h" }, it.h);
+      else if (it.text != null) el = h("p", { class: `m-text${it.muted ? " m-muted" : ""}` }, it.text);
+      else if (it.label != null) el = h("div", { class: "m-row" }, h("span", {}, it.label), h("span", { class: "m-val" }, it.value ?? ""));
+      else if (it.button != null) el = h("span", { class: `m-btn${it.primary ? " m-primary" : ""}` }, it.button);
+      else if (it.switch != null) el = h("div", { class: "m-switch" }, h("span", {}, it.switch), h("span", { class: `m-toggle${it.on ? " on" : ""}` }));
+      else if (it.field != null) el = h("div", { class: "m-field" }, h("span", { class: "m-field-label" }, it.field), h("span", { class: "m-input" }, it.value ?? ""));
+      else if (it.notice != null) el = h("p", { class: `m-notice${it.tone ? ` tone-${it.tone}` : ""}` }, it.notice);
+      else if (it.tip != null) el = h("p", { class: "m-tip" }, it.tip);
+      else if (it.badge != null) el = h("span", { class: `m-badge${it.tone ? ` tone-${it.tone}` : ""}` }, it.badge);
+      else if (it.divider) el = h("hr", { class: "m-divider" });
+      if (el && it.draft) el.classList.add("draft");
+      if (el && it.added) el.classList.add("added");
+      return el;
+    }
+
+    function picture(p) {
+      if (!p) return null;
+      if (Array.isArray(p)) return p.length ? h("div", { class: "pics" }, p.map(picture)) : null;
+      const draw = PICTURES[p.kind];
+      if (!draw) return null;
+      return h(
+        "figure",
+        { class: `pic pic-${p.kind}${p.added ? " added" : ""}` },
+        draw(p),
+        p.rendered ? h("p", { class: "rendered" }, `Rendered from code at ${p.rendered}, not captured`) : null,
+        p.caption ? h("figcaption", { html: md(p.caption) }) : null,
+      );
+    }
+
+    const drafted = (v) => /"(draft|added)":true/.test(JSON.stringify(v ?? null));
+    const key = () =>
+      h(
+        "p",
+        { class: "key" },
+        h("span", {}, h("span", { class: "k-draft" }, "Dotted underline"), ": words not written yet"),
+        h("span", {}, h("span", { class: "k-added" }, "Dashed outline"), ": what the option adds"),
+      );
+
+    function header() {
+      let [word, tone] = VERDICT[DATA.verdict] ?? VERDICT["not-ready"];
+      const verified = PR.filter((p) => p.status === "verified").length;
+      if (DATA.verdict === "ready" && verified < PR.length) {
+        word = `Ready, ${verified} of ${PR.length} claims verified`;
+        tone = "warn";
+      }
+      const s = DATA.stamp ?? {};
+      if (DATA.page === "digest") [word, tone] = [`Since ${s.from ?? "the last checkpoint"}`, "info"];
+      const range = s.from && s.commit ? h("code", {}, `${s.from}..${s.commit}`) : s.commit ? h("code", {}, s.commit) : null;
+      const bits = [s.repo, s.branch, range, s.date, s.version].filter(Boolean);
+      return h(
+        "header",
+        { class: "top" },
+        DATA.example ? h("p", { class: "flag tone-bad" }, "Example data: replace every value before you publish") : null,
+        h("p", { class: "top-name" }, DATA.title ?? ""),
+        h("p", { class: `verdict tone-${tone}` }, word),
+        h("h1", { html: md(DATA.reason) }),
+        bits.length ? h("p", { class: "stamp" }, bits.flatMap((b, i) => (i ? [h("span", { "aria-hidden": "true" }, "·"), b] : [b]))) : null,
+        DATA.since ? h("p", { class: "since" }, h("strong", {}, `Changed in ${s.version ?? "this version"}: `), h("span", { html: md(DATA.since) })) : null,
+      );
+    }
+
+    function decideSection() {
+      if (!QUESTIONS.length && !BLOCKERS.length && !AD.length) return null;
+      const closed = QUESTIONS.length + BLOCKERS.length - Q.length - B.length;
+      const counts = [Q.length ? plural(Q.length, "question") : null, B.length ? plural(B.length, "blocker") : null, closed ? `${closed} answered` : null]
+        .filter(Boolean)
+        .join(" · ");
+      const sec = section("decide", "Decide", counts);
+      for (const q of QUESTIONS) sec.body.append(q.answered ? closedCard(q, q.answered, `q${q.n}`) : questionCard(q));
+      for (const b of BLOCKERS) sec.body.append(b.done ? closedCard(b, b.done, `b${b.n}`) : blockerCard(b));
+      if (AD.length) sec.body.append(agentCard());
+      if (drafted(Q)) sec.body.append(key());
+      if (Q.length || B.length) sec.body.append(answerBar());
+      return sec;
+    }
+
+    function questionCard(q) {
+      const id = `q${q.n}`;
+      const card = h("article", { class: "card ask", id, "data-ask": id });
+      const options = h(
+        "fieldset",
+        { class: "options" },
+        h("legend", { class: "sr-only" }, `Options for question ${q.n}`),
+        list(q.options).map((o) => {
+          const input = h("input", { type: "radio", name: id, id: `${id}-${o.key}`, value: o.key, onchange: () => pick(id, o.key) });
+          return h(
+            "div",
+            {
+              class: "option",
+              onclick: (e) => {
+                if (!e.target.closest("a, button, input, label, .bn")) input.click();
+              },
+            },
+            input,
+            h(
+              "label",
+              { class: "opt-head", for: `${id}-${o.key}` },
+              h("span", { class: "radio", "aria-hidden": "true" }),
+              h("span", { class: "opt-key" }, o.key),
+              h("span", { class: "opt-label", html: md(o.label) }),
+              o.recommended ? h("span", { class: "rec" }, "Recommended") : null,
+            ),
+            picture(o.picture),
+            o.outcome ? h("p", { class: "opt-text", html: md(o.outcome) }) : null,
+            o.cost ? h("p", { class: "opt-cost" }, h("strong", {}, "Cost: "), h("span", { html: md(o.cost) })) : null,
+          );
+        }),
+      );
+      fill(card, 
+        h("div", { class: "card-head" }, h("span", { class: "num" }, q.n), h("h3", { html: md(q.title) })),
+        q.ask ? h("p", { class: "ask-text", html: md(q.ask) }) : null,
+        picture(q.picture),
+        options,
+        meta([
+          ["Why it matters", q.why],
+          ["Blocks", q.blocks],
+          ["Reasons", reasons(q.reasons)],
+        ]),
+        h(
+          "div",
+          { class: "answer" },
+          noteInput(id),
+          h("span", { class: "who", "data-who": id }, "No answer yet"),
+        ),
+      );
+      return card;
+    }
+
+    function blockerCard(b) {
+      const id = `b${b.n}`;
+      const card = h("article", { class: "card ask", id, "data-ask": id });
+      fill(card, 
+        h(
+          "div",
+          { class: "card-head" },
+          h("span", { class: "num tone-bad", title: "Blocker" }, b.n),
+          h("h3", { html: md(b.title) }),
+        ),
+        h("p", { class: "ask-text", html: md(b.action) }),
+        meta([
+          ["Who can", b.who],
+          ["Why it matters", b.why],
+          ["Blocks", b.blocks],
+          ["Reasons", reasons(b.reasons)],
+        ]),
+        h(
+          "div",
+          { class: "answer" },
+          h("label", { class: "done" }, h("input", { type: "checkbox", id: `${id}-done`, onchange: (e) => markDone(id, e.target.checked) }), "Done"),
+          noteInput(id),
+          h("span", { class: "who", "data-who": id }, "Not done yet"),
+        ),
+      );
+      return card;
+    }
+
+    function closedCard(item, s, id) {
+      const isQuestion = id.startsWith("q");
+      const picked = isQuestion ? list(item.options).find((o) => o.key === s.option) : null;
+      const card = h("article", { class: "card closed", id });
+      return fill(
+        card,
+        h(
+          "div",
+          { class: "card-head" },
+          h("span", { class: `num${isQuestion ? "" : " tone-bad"}` }, item.n),
+          h("h3", { html: md(item.title) }),
+          h("span", { class: "chip tone-ok" }, picked ? `Answered: ${picked.key}` : "Done"),
+        ),
+        h("p", { class: "ask-text", html: md(isQuestion ? item.ask : item.action) }),
+        picked
+          ? h("p", { class: "closed-pick" }, h("strong", {}, `${picked.key} - `), h("span", { html: md(picked.label) }), picked.outcome ? [": ", h("span", { html: md(picked.outcome) })] : null)
+          : null,
+        s.text ? h("p", { class: "lead" }, "Recorded in ", s.href ? h("a", { href: s.href, target: "_blank", rel: "noopener" }, s.text) : s.text) : null,
+      );
+    }
+
+    function noteInput(id) {
+      return h("input", {
+        type: "text",
+        class: "note",
+        id: `${id}-note`,
+        maxlength: "500",
+        placeholder: "Add a note (optional)",
+        "aria-label": "Note",
+        onchange: (e) => setNote(id, e.target.value),
+      });
+    }
+
+    function agentCard() {
+      const card = h("article", { class: "card", id: "agent-decisions" });
+      fill(card, 
+        h("div", { class: "card-head" }, h("h3", {}, "Decisions made by Agents")),
+        h("p", { class: "lead" }, "Each was decided without asking. Overrule one in a PR comment."),
+        h(
+          "ul",
+          { class: "decisions" },
+          AD.map((d) => {
+            const row = h("li", {});
+            fill(row, 
+              h(
+                "p",
+                {},
+                h("strong", { html: md(d.decision) }),
+                ": ",
+                h("span", { html: md(d.taken) }),
+                d.why ? h("span", { class: "why", html: md(d.why) }) : null,
+              ),
+            );
+            return row;
+          }),
+        ),
+      );
+      return card;
+    }
+
+    function answerBar() {
+      return h(
+        "div",
+        { class: "bar", id: "answers" },
+        h("p", { class: "line", id: "answer-line" }),
+        h("button", { type: "button", class: "btn", id: "copy-answers", onclick: copyAnswers }, "Copy answers"),
+        h("textarea", { class: "copy-out", id: "answer-copy", rows: "2", readonly: true, hidden: true, "aria-label": "Answers to copy" }),
+        h("p", { class: "msg", id: "answer-msg", role: "status" }),
+        h("p", { class: "status", id: "answer-status" }),
+      );
+    }
+
+    function changedSection() {
+      if (!CH.length) return null;
+      const title = DATA.page === "decision" ? "What is settled" : "What changed";
+      const sec = section("changed", title, kinds(CH));
+      const phases = [...new Set(CH.map((c) => c.phase).filter(Boolean))];
+      if (phases.length) {
+        for (const phase of phases) {
+          const group = CH.filter((c) => c.phase === phase);
+          sec.body.append(h("h3", { class: "phase" }, phase, h("span", { class: "count" }, kinds(group))));
+          for (const c of group) sec.body.append(changeCard(c));
+        }
+        for (const c of CH.filter((c) => !c.phase)) sec.body.append(changeCard(c));
+      } else {
+        for (const c of CH) sec.body.append(changeCard(c));
+      }
+      if (drafted(CH)) sec.body.append(key());
+      return sec;
+    }
+
+    function kinds(items) {
+      const n = (k) => items.filter((c) => c.kind === k).length;
+      return [
+        ["new", "new"],
+        ["changed", "changed"],
+        ["removed", "removed"],
+        ["settled", "settled"],
+      ]
+        .map(([k, word]) => (n(k) ? `${n(k)} ${word}` : null))
+        .filter(Boolean)
+        .join(" · ");
+    }
+
+    function changeCard(c) {
+      const card = h("article", { class: "card change", id: c.id });
+      const [word, tone] = KIND[c.kind] ?? [];
+      const proofs = PR.map((p, i) => [p, i]).filter(([p]) => p.change === c.id);
+      fill(card, 
+        h(
+          "div",
+          { class: "card-head" },
+          h(
+            "div",
+            { class: "head-main" },
+            word || c.who
+              ? h("div", { class: "chips" }, word ? h("span", { class: `chip tone-${tone}` }, word) : null, list(c.who).map((w) => h("span", { class: "role" }, w)))
+              : null,
+            h("h3", { html: md(c.title) }),
+          ),
+        ),
+        picture(c.picture),
+        c.before || c.now
+          ? h(
+              "dl",
+              { class: "bn-text" },
+              c.before ? [h("dt", {}, "Before"), h("dd", { html: md(c.before) })] : null,
+              c.now ? [h("dt", { class: "now-label" }, DATA.page === "decision" ? "Settled" : "Now"), h("dd", { html: md(c.now) })] : null,
+            )
+          : null,
+        proofs.length ? h("div", { class: "chips" }, proofs.map(([p, i]) => proofChip(p, i))) : null,
+      );
+      return card;
+    }
+
+    function proofChip(p, i) {
+      const [word, tone] = STATUS[p.status] ?? STATUS["not-run"];
+      return h("a", { class: `chip tone-${tone}`, href: `#proof-${i + 1}`, title: `${p.claim} (${p.how})` }, `${word}: ${p.claim}`);
+    }
+
+    function extraSection() {
+      const fragment = document.getElementById("handoff-extra");
+      if (!DATA.extra?.title || !fragment?.content.childNodes.length) return null;
+      const sec = section("extra", DATA.extra.title, null);
+      sec.body.append(document.importNode(fragment.content, true));
+      return sec;
+    }
+
+    function trySection() {
+      if (!STEPS.length && !TRY.where) return null;
+      const sec = section("try", "Try it", STEPS.length ? plural(STEPS.length, "step") : null);
+      if (TRY.where) sec.body.append(h("p", { class: "where", html: md(TRY.where) }));
+      const roles = [...new Set(STEPS.map((s) => s.role).filter(Boolean))];
+      const paths = roles.length ? roles : [null];
+      const views = paths.map((role) => {
+        const steps = STEPS.filter((s) => !s.role || !role || s.role === role);
+        const el = h("div", { class: "path", "data-role": role ?? "" });
+        let n = 0;
+        for (const when of [...new Set(steps.map((s) => s.when ?? ""))]) {
+          const band = h("div", { class: "band" }, when ? h("h3", {}, when) : null);
+          band.append(h("ol", { class: "steps" }, steps.filter((s) => (s.when ?? "") === when).map((s) => stepItem(s, ++n))));
+          el.append(band);
+        }
+        return el;
+      });
+      if (roles.length > 1) {
+        const remembered = readLocal("handoff-role");
+        const first = roles.includes(remembered) ? remembered : roles[0];
+        const show = (role) => {
+          for (const v of views) v.hidden = v.dataset.role !== role;
+          for (const r of sec.body.querySelectorAll(".roles input")) r.checked = r.value === role;
+          writeLocal("handoff-role", role);
+        };
+        sec.body.append(
+          h(
+            "div",
+            { class: "roles", role: "radiogroup", "aria-label": "Whose path" },
+            roles.map((r, i) => h("label", {}, h("input", { type: "radio", name: "try-role", id: `try-role-${i}`, value: r, onchange: () => show(r) }), r)),
+          ),
+        );
+        sec.body.append(...views);
+        show(first);
+        window.handoffViews = roles.map((r) => [r, () => show(r)]);
+      } else {
+        sec.body.append(...views);
+      }
+      return sec;
+    }
+
+    function stepItem(s, n) {
+      return h(
+        "li",
+        { class: "step" },
+        h("span", { class: "step-n" }, n),
+        h(
+          "div",
+          { class: "step-body" },
+          h("p", { class: "step-title", html: md(s.title) }),
+          s.where ? h("p", { class: "step-where", html: md(s.where) }) : null,
+          s.do ? h("p", { html: md(s.do) }) : null,
+          s.success ? h("p", { class: "success", html: `✓ “${md(s.success)}”` }) : null,
+          picture(s.picture),
+        ),
+      );
+    }
+
+    function proofSection() {
+      if (!PR.length) return null;
+      const tally = Object.entries(STATUS)
+        .map(([k, [word, tone]]) => [PR.filter((p) => p.status === k).length, word, tone])
+        .filter(([n]) => n);
+      const sec = section("proof", "Proof", `${PR.filter((p) => p.status === "verified").length} of ${PR.length} verified`);
+      sec.body.append(h("div", { class: "tally" }, tally.map(([n, word, tone]) => h("span", { class: `chip tone-${tone}` }, `${n} ${word.toLowerCase()}`))));
+      sec.body.append(
+        h(
+          "div",
+          { class: "ledger" },
+          h("div", { class: "ledger-row ledger-head" }, h("span", {}, "Status"), h("span", {}, "Claim"), h("span", {}, "How"), h("span", {}, "Revision")),
+          PR.map((p, i) => {
+            const [word, tone] = STATUS[p.status] ?? STATUS["not-run"];
+            return h(
+              "div",
+              { class: "ledger-row", id: `proof-${i + 1}` },
+              h("span", { class: `chip tone-${tone}` }, word),
+              h("span", {}, h("span", { html: md(p.claim) }), p.why ? h("span", { class: "claim-why", html: md(p.why) }) : null),
+              h("span", {}, h("span", { class: "lbl" }, "How: "), h("span", { html: md(p.how) })),
+              h(
+                "span",
+                {},
+                h("span", { class: "lbl" }, "Revision: "),
+                p.revision ? (p.href ? h("a", { href: p.href, target: "_blank", rel: "noopener" }, h("code", {}, p.revision)) : h("code", {}, p.revision)) : "—",
+              ),
+            );
+          }),
+        ),
+      );
+      return sec;
+    }
+
+    function shipSection() {
+      const s = DATA.ship;
+      if (!s) return null;
+      const sec = section("ship", "Ship it", null);
+      const rows = [
+        ["Needs", list(s.needs).length ? h("ul", {}, list(s.needs).map((n) => h("li", { html: md(n) }))) : null],
+        ["Risk", s.risk ? h("span", { html: md(s.risk) }) : null],
+        ["Undo", s.undo ? h("span", { html: md(s.undo) }) : null],
+      ].filter(([, v]) => v);
+      sec.body.append(h("dl", { class: "rows" }, rows.map(([k, v]) => h("div", {}, h("dt", {}, k), h("dd", {}, v)))));
+      return sec;
+    }
+
+    function followupsSection() {
+      if (!FU.length) return null;
+      const sec = section("followups", "Follow-ups", `${FU.length} left`);
+      sec.body.append(
+        h(
+          "div",
+          { class: "list" },
+          FU.map((f) =>
+            h(
+              "div",
+              { class: "fu", id: `fu-${f.id}` },
+              h("input", { type: "checkbox", id: `fu-${f.id}-done`, "aria-label": `Done: ${f.title}`, onchange: (e) => tick(f.id, e.target.checked) }),
+              h("span", { class: "fu-title", html: md(f.title) }),
+              f.why ? h("span", { class: "fu-why", html: md(f.why) }) : null,
+              h("span", { class: "fu-owner" }, [f.owner, f.due].filter(Boolean).join(" · ")),
+            ),
+          ),
+        ),
+      );
+      return sec;
+    }
+
+    function engineersSection() {
+      const commits = list(ENG.commits);
+      const files = list(ENG.files);
+      const notes = list(ENG.notes);
+      const links = list(ENG.links);
+      if (!commits.length && !files.length && !notes.length && !links.length) return null;
+      const part = (title, items) => (items.length ? [h("h3", {}, title), h("ul", {}, items)] : null);
+      const el = h(
+        "section",
+        { class: "sec", id: "engineers" },
+        h(
+          "details",
+          { class: "eng" },
+          h("summary", {}, "For engineers"),
+          h(
+            "div",
+            { class: "eng-body" },
+            part(
+              "Commits",
+              commits.map((c) =>
+                h("li", {}, c.href ? h("a", { href: c.href, target: "_blank", rel: "noopener" }, h("code", {}, c.sha)) : h("code", {}, c.sha), " ", h("span", { html: md(c.subject) })),
+              ),
+            ),
+            part(
+              "Files",
+              files.map((f) => h("li", {}, h("code", {}, f))),
+            ),
+            part(
+              "Notes",
+              notes.map((n) => h("li", { html: md(n) })),
+            ),
+            part(
+              "Links",
+              links.map((l) => h("li", {}, h("a", { href: l.href, target: "_blank", rel: "noopener" }, l.text ?? l.href))),
+            ),
+          ),
+        ),
+      );
+      return { el, body: el };
+    }
+
+    function readLocal(k) {
+      try {
+        return localStorage.getItem(k);
+      } catch {
+        return null;
+      }
+    }
+    function writeLocal(k, v) {
+      try {
+        localStorage.setItem(k, v);
+      } catch {}
+    }
+    function loadLocal() {
+      try {
+        const s = JSON.parse(readLocal(LOCAL) ?? "{}");
+        for (const part of ["picks", "notes", "done", "ticks"]) Object.assign(state[part], s[part]);
+      } catch {}
+    }
+    function saveLocal() {
+      writeLocal(LOCAL, JSON.stringify({ picks: state.picks, notes: state.notes, done: state.done, ticks: state.ticks }));
+    }
+
+    function answerLine() {
+      const picked = Q.filter((q) => state.picks[`q${q.n}`]).map((q) => `${q.n}${state.picks[`q${q.n}`]}`);
+      const done = B.filter((b) => state.done[`b${b.n}`]).map((b) => b.n);
+      const notes = [...Q.map((q) => [`${q.n}`, state.notes[`q${q.n}`]]), ...B.map((b) => [`blocker ${b.n}`, state.notes[`b${b.n}`]])]
+        .filter(([, t]) => t?.trim())
+        .map(([k, t]) => `${k}: ${t.trim()}`);
+      let line = `Answers: ${picked.join(", ") || "none yet"}`;
+      if (done.length) line += `; blockers done: ${done.join(", ")}`;
+      if (notes.length) line += ` - ${notes.join("; ")}`;
+      return line;
+    }
+
+    function pick(id, option) {
+      state.picks[id] = option;
+      saveLocal();
+      refresh();
+    }
+    function markDone(id, done) {
+      state.done[id] = done;
+      saveLocal();
+      refresh();
+    }
+    function setNote(id, text) {
+      state.notes[id] = text.slice(0, 500);
+      saveLocal();
+      refresh();
+    }
+    function tick(id, done) {
+      state.ticks[id] = done;
+      saveLocal();
+      refresh();
+    }
+
+    function say(text) {
+      const msg = document.getElementById("answer-msg");
+      if (msg) msg.textContent = text;
+    }
+
+    async function copyAnswers() {
+      const text = answerLine();
+      const out = document.getElementById("answer-copy");
+      try {
+        await navigator.clipboard.writeText(text);
+        out.hidden = true;
+        say(`Copied: ${text}`);
+      } catch {
+        out.hidden = false;
+        out.value = text;
+        out.focus();
+        out.select();
+        say("Copy the selected line with your keyboard.");
+      }
+    }
+
+    function whoText(id) {
+      if (id.startsWith("q")) return state.picks[id] ? `Picked ${state.picks[id]}` : "No answer yet";
+      return state.done[id] ? "Done" : "Not done yet";
+    }
+
+    function refresh() {
+      for (const q of Q) {
+        const id = `q${q.n}`;
+        for (const r of document.querySelectorAll(`input[name="${id}"]`)) r.checked = r.value === state.picks[id];
+      }
+      for (const b of B) {
+        const box = document.getElementById(`b${b.n}-done`);
+        if (box) box.checked = !!state.done[`b${b.n}`];
+      }
+      for (const id of [...Q.map((q) => `q${q.n}`), ...B.map((b) => `b${b.n}`)]) {
+        const input = document.getElementById(`${id}-note`);
+        if (input && document.activeElement !== input) input.value = state.notes[id] ?? "";
+      }
+      for (const f of FU) {
+        const box = document.getElementById(`fu-${f.id}-done`);
+        if (!box) continue;
+        box.checked = !!state.ticks[f.id];
+        box.closest(".fu")?.classList.toggle("is-done", box.checked);
+      }
+      const line = document.getElementById("answer-line");
+      if (line) line.textContent = answerLine();
+      document.getElementById("answers")?.classList.toggle("live", Object.values(state.picks).some(Boolean) || Object.values(state.done).some(Boolean));
+      const status = document.getElementById("answer-status");
+      if (status) status.textContent = KEPT;
+      for (const el of document.querySelectorAll("[data-who]")) el.textContent = whoText(el.dataset.who);
+    }
+
+    function lightbox() {
+      const dialog = document.getElementById("lightbox");
+      document.addEventListener("click", (e) => {
+        const shot = e.target.closest(".shot");
+        if (!shot || typeof dialog.showModal !== "function") return;
+        document.getElementById("lightbox-img").src = shot.dataset.full;
+        document.getElementById("lightbox-img").alt = shot.dataset.caption;
+        document.getElementById("lightbox-caption").textContent = shot.dataset.caption;
+        dialog.showModal();
+      });
+      document.getElementById("lightbox-close").addEventListener("click", () => dialog.close());
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+    }
+
+    function reveal() {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
+    }
+
+    function init() {
+      const page = document.getElementById("page");
+      const waits = (DATA.verdict === "decide" || DATA.verdict === "blocked") && DATA.lead !== "changes";
+      const base = waits
+        ? [decideSection, changedSection, trySection, extraSection, proofSection, shipSection, followupsSection, engineersSection]
+        : [changedSection, trySection, extraSection, proofSection, decideSection, shipSection, followupsSection, engineersSection];
+      const order = DATA.lead === "extra" ? [extraSection, ...base.filter((s) => s !== extraSection)] : base;
+      const sections = order.map((build) => build()).filter(Boolean);
+      const counts = {
+        decide: Q.length + B.length || null,
+        changed: CH.length || null,
+        proof: PR.length ? `${PR.filter((p) => p.status === "verified").length}/${PR.length}` : null,
+        followups: FU.length || null,
+      };
+      const label = (sec) => sec.el.querySelector("h2")?.textContent ?? "For engineers";
+      page.append(
+        header(),
+        sections.length > 1
+          ? h(
+              "nav",
+              { class: "nav", "aria-label": "Sections" },
+              sections.map((sec) => h("a", { href: `#${sec.el.id}` }, label(sec), counts[sec.el.id] ? h("span", { class: "n" }, counts[sec.el.id]) : null)),
+            )
+          : null,
+        ...sections.map((sec) => sec.el),
+      );
+      loadLocal();
+      lightbox();
+      refresh();
+      reveal();
+      window.addEventListener("hashchange", reveal);
+    }
+
+    init();
+  })();
+</script>

@@ -1,0 +1,124 @@
+name: Handoff page
+
+# The handoff-page skill's publish.mjs force-pushes a built page and its shots
+# to handoff/pr-<n>, then dispatches this run, which uploads them to the e2e
+# reports bucket and keeps one comment on #<n> with the link. The bucket serves
+# them behind the team's Cloudflare login and expires everything under
+# reports/ after 30 days. Closing the PR deletes the branch.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request whose handoff/pr-<n> branch to publish
+        required: true
+        type: number
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: handoff-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: true
+
+env:
+  BUCKET: ${{ vars.E2E_REPORTS_R2_BUCKET || 'acetrader-e2e-reports' }}
+  HOST: ${{ vars.E2E_REPORTS_BASE_URL || 'https://e2e-reports.memeland-qa.9gaginc.com' }}
+  ACCESS_LOGIN: https://memeland-qa.cloudflareaccess.com/cdn-cgi/access/login/e2e-reports.memeland-qa.9gaginc.com
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch'
+    name: Publish the page
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.E2E_REPORTS_R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.E2E_REPORTS_R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.E2E_REPORTS_R2_ACCOUNT_ID }}
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ inputs.pr }}
+    steps:
+      - name: Require an open or merged pull request
+        run: |
+          state=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state --jq .state)
+          case "$state" in
+            OPEN | MERGED) echo "STATE=$state" >> "$GITHUB_ENV" ;;
+            *) echo "::error::#$PR is $state, neither open nor merged."; exit 1 ;;
+          esac
+
+      - uses: actions/checkout@v4
+        with:
+          ref: handoff/pr-${{ inputs.pr }}
+          path: page
+          persist-credentials: false
+
+      - name: Require R2 keys
+        run: |
+          if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$R2_ACCOUNT_ID" ]; then
+            echo "::error::The E2E_REPORTS_R2_* secrets are empty here."
+            exit 1
+          fi
+
+      # A page is the team's. Uploading to a host that Access does not guard
+      # would publish it to anyone with the link.
+      - name: Require Cloudflare Access on the host
+        run: |
+          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/reports/grade10-spec/pr-$PR/handoff/")
+          case "$location" in
+            "$ACCESS_LOGIN"*) ;;
+            *) echo "::error::$HOST answered without the team's Cloudflare Access login."; exit 1 ;;
+          esac
+
+      - name: Upload
+        run: |
+          aws s3 sync page "s3://$BUCKET/reports/grade10-spec/pr-$PR/handoff" \
+            --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
+            --exclude ".git/*" --no-follow-symlinks --delete \
+            --cache-control "no-store" --only-show-errors
+          echo "URL=$HOST/reports/grade10-spec/pr-$PR/handoff/index.html" >> "$GITHUB_ENV"
+
+      - name: Comment the link
+        run: |
+          marker='<!-- handoff-page -->'
+          {
+            echo "$marker"
+            echo "**Handoff page** - $URL"
+            echo
+            echo "Behind the team's Cloudflare login; expires 30 days after this upload from \`$(git -C page rev-parse --short=9 HEAD)\`."
+          } > comment.md
+          id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" | head -1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -F body=@comment.md >/dev/null
+          else
+            gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file comment.md
+          fi
+          echo "$URL" >> "$GITHUB_STEP_SUMMARY"
+
+      # A merged pull request's close already ran `clean`, so nothing else
+      # would delete the page branch.
+      - name: Delete the page branch of a merged pull request
+        if: env.STATE == 'MERGED'
+        run: gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/handoff/pr-$PR"
+
+  clean:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    name: Delete the page branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: handoff/pr-${{ github.event.pull_request.number }}
+    steps:
+      - run: |
+          if gh api "repos/$GITHUB_REPOSITORY/branches/$BRANCH" --silent 2>/dev/null; then
+            gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$BRANCH"
+          fi
