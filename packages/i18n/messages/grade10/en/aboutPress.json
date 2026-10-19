@@ -2,7 +2,8 @@
   "index": {
     "eyebrow": "Latest News",
     "title": "Press Releases",
-    "lede": "The official record of Grade10 - the card festivals, the vault, the partnerships, and the growth of Asia’s trading-card market."
+    "lede": "The official record of Grade10 - the card festivals, the vault, the partnerships, and the growth of Asia’s trading-card market.",
+    "empty": "No press releases yet."
   },
   "release": {
     "headTitle": "{name} — Grade10",
@@ -16,6 +17,7 @@
     "eyebrow": "Press",
     "title": "Media Coverage",
     "lede": "External reporting and feature coverage across Grade10 events, collectible markets, vaulting, finance, and the wider trading card ecosystem.",
-    "newTab": "opens in a new tab"
+    "newTab": "opens in a new tab",
+    "empty": "No coverage yet."
   }
 }
