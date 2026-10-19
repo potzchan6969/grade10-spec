@@ -4,7 +4,7 @@ icon: user-circle
 ---
 
 A collector's own page on the Grade10 site, at `grade10.com/profile`. Signed
-out, it asks for sign-in — [Accounts](/p/shared/auth) covers what a session is
+out, it asks for sign-in — [Accounts](/p/grade10-site/account/accounts) covers what a session is
 and how sign-in and sign-out work, the same way across every brand.
 
 - **Profile** — what a collector shows about themselves, and the address they

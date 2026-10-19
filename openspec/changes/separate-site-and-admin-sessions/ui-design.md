@@ -19,7 +19,7 @@ The operator's sign-in, filling the window: `SignInPanel`, an internal view of
 `AdminSignInFlow`. It carries the failure notice (a failed, expired, banned
 console-asked link) and the Switch and Stay choice (a different-account link),
 both inline in the page. The site's own toasts are unchanged
-([Link follow toasts](../../../docs/prds/products/shared/auth/sign-in.md#following-the-link)).
+([Link follow toasts](../../../docs/prds/products/grade10-site/account/sign-in.md#following-the-link)).
 
 ### Console session list
 

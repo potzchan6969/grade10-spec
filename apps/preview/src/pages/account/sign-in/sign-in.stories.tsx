@@ -9,7 +9,7 @@ import {
 import { SignInPage } from "./sign-in-page";
 
 const meta = {
-  title: "Auth/Sign In/Screens/Sign In",
+  title: "Account/Sign In/Screens/Sign In",
   component: SignInPage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },

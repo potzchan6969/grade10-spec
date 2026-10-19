@@ -160,7 +160,7 @@ cancelled.
 :::
 
 :::detail{title="Product decisions" for="pm"}
-No auction block is mapped to a Figma node — no frame, no audit table, no
+No auction block is mapped to a design node — no frame, no audit table, no
 code mapping — so these stories are the reference until frames are produced.
 
 | Item | Status | Decision | Owner |

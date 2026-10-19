@@ -23,7 +23,7 @@ of adding a service's first operator action, not a follow-up.
 An elevated action refused for want of a permission or a second factor never
 runs, so its service's trail writes nothing. The identity trail is the
 exception: a refused ban, unban, set-role or revoke is recorded
-([Audit Log](/p/shared/auth/audit)).
+([Audit Log](/p/grade10-site/account/audit)).
 
 Prevention and proof are separate mechanisms. Prevention is database triggers
 that reject update, delete and truncate while leaving insert open — appending is

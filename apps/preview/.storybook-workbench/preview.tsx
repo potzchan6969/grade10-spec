@@ -37,7 +37,6 @@ const preview: Preview = {
           "Finance",
           "Site",
           "Analytics",
-          "Auth",
           "Commerce",
           "Design System",
         ];

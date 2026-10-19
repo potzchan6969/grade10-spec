@@ -141,7 +141,7 @@ const PRODUCT_DETAIL_STORY_ID =
 
 /** Storybook story id of the Pay For The Cart flow the drawer's checkout continues to. */
 /** Storybook story id of the sign-in screen a guest's sign-in link opens. */
-const SIGN_IN_STORY_ID = "auth-sign-in-screens-sign-in--from-add-to-cart";
+const SIGN_IN_STORY_ID = "account-sign-in-screens-sign-in--from-add-to-cart";
 
 /** Storybook story id of the Order Confirmed screen a guest checkout returns to. */
 const ORDER_CONFIRMED_STORY_ID =

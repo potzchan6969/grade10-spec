@@ -75,8 +75,8 @@ the tone, and whether a reason is collected; the dialog reports one signature.
 
 ## Allowance
 
-What an operator may do here is [the identity directory](/p/shared/auth/users)
-and [where a person is signed in](/p/shared/auth/sessions). This capability
+What an operator may do here is [the identity directory](/p/grade10-site/account/users)
+and [where a person is signed in](/p/grade10-site/account/sessions). This capability
 governs only what the components render.
 
 ## Role Links

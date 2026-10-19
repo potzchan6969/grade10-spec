@@ -83,7 +83,7 @@ classified cases, is
   open questions addressed to you, then what is yours now, then what is coming.
 - [Points](/p/grade10-site/loyalty/points) — journeys, the
   scenarios that accept them, and the test cases tracing back.
-- [Sign-In](/p/shared/auth/sign-in) and [Sessions](/p/shared/auth/sessions) —
+- [Sign-In](/p/grade10-site/account/sign-in) and [Sessions](/p/grade10-site/account/sessions) —
   the flows every other product sits on.
 - [Money amounts](/platform/shared/money-amounts) — the rounding and formatting rules
   a bug report should quote.
@@ -102,7 +102,7 @@ classified cases, is
   lives and what an application is allowed to load.
 - [Package Rules](/p/shared/ui/component-package) — what to compose before
   writing a control from scratch.
-- [Roles](/p/shared/auth/roles) — the permission vocabulary every backend
+- [Roles](/p/grade10-site/account/roles) — the permission vocabulary every backend
   checks against.
 - [Document signing](/p/grade10-site/doc-sign) and [KYC](/p/grade10-site/account/kyc) — the two
   services with the most decisions per line of code.
@@ -126,5 +126,5 @@ classified cases, is
   reads it.
 - [Appointments](/p/grade10-site/appointment) — running the diary: shops, weekly opening
   rules, and closing a day.
-- [Roles](/p/shared/auth/roles) — what each role can reach, and why some moves
+- [Roles](/p/grade10-site/account/roles) — what each role can reach, and why some moves
   take two people.

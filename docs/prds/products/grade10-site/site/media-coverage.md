@@ -51,7 +51,3 @@ title and the link, nothing else.
 - **Content - coverage list** - the grid carries the live
   `grade10.com/media-coverage` record verbatim; the frame's items are
   placeholders
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7204-11244" title="Media Coverage — the desktop frame"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7204-11432" title="Media Coverage — the media card"}

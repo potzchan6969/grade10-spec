@@ -1,18 +1,17 @@
 # shared/auth/test-sign-in Test Cases
 
-**Status:** pending-review · 0/31
-**Drafts styled:** 2026-09-21, tcs-rules r3.0
+**Status:** pending-review · 0/24
+**Drafts styled:** 2026-10-19, tcs-rules r6
 
-## g10.shared-test-sign-in.US1: The locked staging door for sign-in tests
+## g10.shared-test-sign-in.US1: Sign-in without the /dev endpoint
 
-**Walked by:** nobody on their own - a makers door for the staging Actions job; collectors walk sign-in, operators walk ban and role on the Users desk
+**As a** QA agent,
+**I want** a tester to sign in on staging without a mailbox,
+**so that** the sign-in suite runs without the disposable /dev endpoint
 
-**As an** admin,
-**I want** the staging door to answer one approved workflow, act on tester addresses only, and do only the five moves,
-**so that** staging auth cases finish a sign-in without a mailbox and nothing else mints a session.
+Walked by nobody on their own. The Trace line names the Feature set group.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-6jb rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
-### g10.shared-test-sign-in.US1-TC1: An approved dispatch from main is answered
+### g10.shared-test-sign-in.US1-TC1: A reviewer-approved run of the test-endpoint workflow from main opens the endpoint on staging
 
 **Classification:**
 
@@ -20,30 +19,40 @@
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
+* **Type:** security
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Who may call
+* **Testability:** manual
+* **Trace:** Who may call / The test endpoint's own workflow
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+* A dispatch of the test-endpoint workflow targets the main branch, and a reviewer is available to approve it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Environment | staging, host `grade10-stg.com` |
+| Tester | `<collector address>` |
 
 **Steps:**
 
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`.
-2. Ask the door to age that link.
+1. Open the pending dispatch of the test-endpoint workflow in GitHub Actions and approve it for the staging environment.
+2. Open the run and read its repository, workflow name and branch.
+3. Send a capture request for `<collector address>` to the test endpoint on `grade10-stg.com`.
 
 **Expected Results:**
 
-* Step 1 returns the link from that address's last sign-in mail.
-* Step 2 is answered, and the link no longer signs the address in.
+* The run shows this repository's Actions running the test-endpoint workflow from the main branch.
+* Step 3 is accepted and the endpoint returns a sign-in link for `<collector address>`.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-3ni rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
-### g10.shared-test-sign-in.US1-TC2: Callers that are not the door's own workflow are refused
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-01.
+
+### g10.shared-test-sign-in.US1-TC2: A run not started by an approved dispatch from main is refused
 
 Runs once per row of **Test data**.
 
@@ -54,130 +63,406 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Who may call
+* **Testability:** manual
+* **Trace:** Who may call / The test endpoint's own workflow
 
 **Pre-conditions:**
 
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+* The test-endpoint workflow can be started on staging from the row's source.
 
 **Test data:**
 
-| Caller | Outcome |
+| Run started by | Branch | Reviewer approved | Outcome |
+| --- | --- | --- | --- |
+| A pull request | the pull request's branch | Yes | Refused |
+| A dispatch | a branch other than main | Yes | Refused |
+| A dispatch | main | No | Refused |
+
+**Steps:**
+
+1. Start the test-endpoint workflow with the row's source and branch.
+2. If the run waits for approval, record the reviewer decision set in the row.
+3. From that run, send a capture request for `<collector address>` to the test endpoint on `grade10-stg.com`.
+
+**Expected Results:**
+
+* The row's outcome holds: the run does not open the endpoint.
+* The capture request returns no sign-in link.
+
+**QA2 disposition:** kept with a note - the refusal and the no-link check are asserted; "nothing is changed" in SC-03, SC-04 and SC-32 is not.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC3: A QA agent with the committed staging token captures a named tester's sign-in link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Who may call / The QA token
+
+**Pre-conditions:**
+
+* `<collector address>` is a named tester on staging, and its sign-in link has been requested in the last fifteen minutes.
+
+**Test data:**
+
+| Field | Value |
 | --- | --- |
-| A laptop sending the same request with no run identity and no QA token | refused |
-| A run of `<another workflow of this repository>` | refused |
-| A run in a fork of this repository | refused |
-| A run in another repository | refused |
+| Caller | QA agent with the committed staging QA token |
+| Tester | `<collector address>` |
 
 **Steps:**
 
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>` as the caller in the row.
-2. Ask the door for the same mail from an approved dispatch of `<the door's workflow>` on the main branch.
+1. As the QA agent, send a capture request for `<collector address>` to the test endpoint on `grade10-stg.com`, with the committed QA token.
+2. Read the returned sign-in link.
+3. Open the link in a new browser session without a mailbox.
 
 **Expected Results:**
 
-* The caller in the row is refused and gets no link.
-* Step 2 returns the link, unchanged by the refused call.
+* Step 1 is accepted and returns the sign-in link.
+* Step 3 signs in as `<collector address>`.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-xa3 rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
-### g10.shared-test-sign-in.US1-TC3: The door's workflow off the main branch is refused
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-94.
+
+### g10.shared-test-sign-in.US1-TC4: A named tester with no account gets one when an action needs it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Testers / The named testers
+
+**Pre-conditions:**
+
+* `<admin-only address>` has never signed in on staging and has no account.
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a grant of `admin` for `<admin-only address>`.
+3. Read the account for `<admin-only address>` on staging.
+
+**Expected Results:**
+
+* Step 2 is accepted.
+* An account for `<admin-only address>` exists after step 2 and holds `admin`.
+
+**QA2 disposition:** kept with a note - a named tester with no account; SC-10 states a plus-tag, so the named-tester start is not linked.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC5: A staging run generates a unique plus-tag of a named tester on each run
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Testers / The named testers
+
+**Pre-conditions:**
+
+* Two runs of the test-endpoint workflow are approved on staging, one after the other.
+
+**Steps:**
+
+1. In the first run, request a generated plus-tag for a test that needs an unused address, and record it as `<plus-tag A>`.
+2. In the second run, request a generated plus-tag for the same kind of test, and record it as `<plus-tag B>`.
+3. Compare the two addresses with the named testers on staging.
+
+**Expected Results:**
+
+* `<plus-tag A>` and `<plus-tag B>` are each a plus-tag of one named tester.
+* `<plus-tag A>` and `<plus-tag B>` differ from each other.
+
+**QA2 disposition:** over-claimed - asserts that each run's generated plus-tag is unique; no scenario states it. Fold into spec.md as a scenario.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC6: Capture returns the last sign-in mail link for a tester without a mailbox
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** What the workflow may do / Capture the link
+
+**Pre-conditions:**
+
+* `<collector address>` has requested a sign-in link on staging in the last fifteen minutes, and the link has not been followed.
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a capture request for `<collector address>`.
+3. Open the returned link in a new browser session.
+
+**Expected Results:**
+
+* Step 2 returns the link from the most recent sign-in mail for `<collector address>`.
+* Step 3 signs in as `<collector address>`, with no mailbox opened.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-12.
+
+### g10.shared-test-sign-in.US1-TC7: Expiring an unused link refuses its follow without a five-minute wait
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** What the workflow may do / Expire the unused link
+
+**Pre-conditions:**
+
+* `<collector address>` has requested a sign-in link on staging, and the link has not been followed.
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send an expire for `<collector address>`.
+3. Follow the sign-in link immediately, without waiting.
+
+**Expected Results:**
+
+* Step 2 is accepted.
+* Step 3 is refused as an expired link, and no session is created.
+
+**QA2 disposition:** kept with a note - the no-account-change check from SC-16 is not asserted.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC8: Banning an address refuses a later sign-in follow
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** What the workflow may do / Ban the address
+
+**Pre-conditions:**
+
+* `<ban-only address>` has signed in on staging before.
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a ban for `<ban-only address>`.
+3. Request a sign-in link for `<ban-only address>` and follow it.
+
+**Expected Results:**
+
+* Step 2 is accepted.
+* Step 3 is refused as a banned account, and no session is created.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-19.
+
+### g10.shared-test-sign-in.US1-TC9: Granting the admin-only tester admin lets its followed link sign in as admin
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** security
-* **Suites:** regression
-* **Layer:** api
+* **Suites:** none
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Who may call
+* **Testability:** manual
+* **Trace:** What the workflow may do / Grant the address
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running from a branch other than main.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+* `<admin-only address>` has an account on staging that does not yet hold `admin`.
 
 **Steps:**
 
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`.
-2. Ask the door for the same mail from an approved dispatch of the same workflow on the main branch.
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a grant of `admin` for `<admin-only address>`.
+3. From that run, send a capture for `<admin-only address>` and follow the link.
 
 **Expected Results:**
 
-* Step 1 is refused and gets no link.
-* Step 2 returns the link.
+* Step 2 is accepted.
+* Step 3 signs in as `<admin-only address>` and the session holds `admin`.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-fwx rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
-### g10.shared-test-sign-in.US1-TC4: A run a pull request started is refused
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-20.
+
+### g10.shared-test-sign-in.US1-TC10: A scoped role granted to a generated plus-tag of the collector signs in with that role only
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
+* **Severity:** major
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
+* **Behaviour:** positive
 * **Type:** security
-* **Suites:** regression
-* **Layer:** api
+* **Suites:** none
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Who may call
+* **Testability:** manual
+* **Trace:** What the workflow may do / Grant a scoped role
 
 **Pre-conditions:**
 
-* A run of `<the door's workflow>` is started by a pull request against this repository.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+* The run generates a unique plus-tag of `<collector address>`, recorded as `<collector plus-tag>`.
+
+**Test data:**
+
+| Role |
+| --- |
+| staff |
+| support |
+| finance |
+| treasurer |
+| auditor |
 
 **Steps:**
 
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`.
-2. Ask the door to prepare `<tester address>` so it holds `admin`.
+1. Approve a run of the test-endpoint workflow on staging, and generate `<collector plus-tag>`.
+2. From that run, send a grant of the row's role for `<collector plus-tag>`.
+3. Send a capture for `<collector plus-tag>` and follow the link.
 
 **Expected Results:**
 
-* Both moves are refused.
-* The address holds no `admin` afterwards.
+* Step 2 is accepted.
+* Step 3 signs in as `<collector plus-tag>` holding the row's role.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-b5b rev=1 covers=g10.shared-test-sign-in.SC-xog,g10.shared-test-sign-in.SC-gpm,g10.shared-test-sign-in.SC-sy2,g10.shared-test-sign-in.SC-57d,g10.shared-test-sign-in.SC-6c0,g10.shared-test-sign-in.SC-93o -->
-### g10.shared-test-sign-in.US1-TC5: A dispatch no reviewer approved is refused
+**QA2 disposition:** kept with a note - the title says "only" and the expected results do not; SC-96's named-tester refusal is not asserted.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-06.
+
+### g10.shared-test-sign-in.US1-TC11: Clearing the sign-in limits stops the wait between mails and the count cap from throttling a suite
 
 **Classification:**
 
-* **Severity:** critical
-* **Priority:** high
+* **Severity:** minor
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Who may call
+* **Testability:** manual
+* **Trace:** What the workflow may do / Clear the sign-in limits
 
 **Pre-conditions:**
 
-* A dispatch of `<the door's workflow>` on the main branch is waiting for a reviewer and has not been approved.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+* `<collector address>` has recently received sign-in mails on staging, so the wait between mails applies.
 
 **Steps:**
 
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>` from that dispatch.
-2. Have a reviewer approve the dispatch, then ask for the same mail.
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a clear of the sign-in limits.
+3. Request sign-in mails for `<collector address>` in quick succession, up to the cap a caller may ask for.
 
 **Expected Results:**
 
-* Step 1 is refused and gets no link.
-* Step 2 returns the link.
+* Step 2 is accepted.
+* Every request in step 3 receives a mail, with no throttle answer.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-12e rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
-### g10.shared-test-sign-in.US1-TC6: A move on an address that never signed in creates the account
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-21. The cap step does not reach SC-33, which clears after the cap is reached.
+
+### g10.shared-test-sign-in.US1-TC12: Every action opens on staging and uat
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Where it opens / Staging and uat
+
+**Pre-conditions:**
+
+* The test-endpoint workflow can be approved for the row's environment.
+
+**Test data:**
+
+| Environment | Host |
+| --- | --- |
+| staging | `grade10-stg.com` |
+| uat | `<uat host>` |
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow for the row's environment.
+2. From that run, send, in turn, a capture, an expire, a ban, a grant of `admin`, a scoped role grant on a generated plus-tag, and a clear of the sign-in limits, each for `<collector address>` or its plus-tag.
+
+**Expected Results:**
+
+* Every action in step 2 is accepted on the row's environment.
+
+**QA2 disposition:** kept with a note - the scoped role is on a plus-tag, as Q42 settles; SC-100 names a named tester (see Reconciliation).
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC13: Capture and clear work on production and preview for the production collector
 
 Runs once per row of **Test data**.
 
@@ -188,39 +473,38 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
+* **Testability:** manual
+* **Trace:** Where it opens / Production, and preview with it
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and has never signed in.
+* The production collector `<collector address>` is the only tester named for production.
 
 **Test data:**
 
-| Move | State after |
+| Environment | Host |
 | --- | --- |
-| Ban the address | the account exists and is banned |
-| Prepare the address | the account exists and holds `admin` |
+| production | `<production host>` |
+| preview | `<preview host>` |
 
 **Steps:**
 
-1. Ask the door for the move in the row on `<tester address>`.
-2. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
-3. Ask the door for the last sign-in mail for that address.
-4. Open the link the door returns.
+1. Approve a run of the test-endpoint workflow for the row's environment.
+2. From that run, send a capture for `<collector address>`.
+3. From that run, send a clear of the sign-in limits.
 
 **Expected Results:**
 
-* An account exists for `<tester address>` after step 1.
-* It is in the state the row names.
-* Step 4 is refused for the banned row and signs in holding `admin` for the prepared row.
+* Steps 2 and 3 are accepted on the row's environment.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-z9o rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
-### g10.shared-test-sign-in.US1-TC7: An address outside the tester domain is refused
+**QA2 disposition:** kept with a note - steps 2 and 3 are asserted accepted, not the link returned; SC-24 and SC-102 are not fully asserted.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC14: The QA token is refused for the admin-only tester and for an address that is not a tester
 
 Runs once per row of **Test data**.
 
@@ -231,37 +515,38 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
+* **Testability:** manual
+* **Trace:** Who may call / The QA token
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* No account exists for the address in the row.
+* `<admin-only address>` is the admin-only tester on staging.
 
 **Test data:**
 
 | Address | Outcome |
 | --- | --- |
-| A collector's own address on another domain | refused |
-| An address whose domain is a subdomain of `<tester domain>` | refused |
-| An address with `<tester domain>` in its local part | refused |
+| `<admin-only address>` | Refused |
+| `<non-tester address>` | Refused |
 
 **Steps:**
 
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for the address in the row.
-2. Ask the door to ban the address in the row.
+1. Send a capture request for the row's address to the test endpoint on `grade10-stg.com`, with the committed QA token.
+2. Read the response.
 
 **Expected Results:**
 
-* Both moves are refused and no link is returned.
-* No account exists for that address afterwards.
+* The response refuses the request, and no sign-in link is returned.
+* The account for the row's address is unchanged and no session is created for it.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-qtf rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
-### g10.shared-test-sign-in.US1-TC8: A move naming no address is refused
+**QA2 disposition:** over-claimed - the non-tester row through the QA token has no scenario; fold into spec.md as a scenario. The admin-only row matches SC-97 but does not assert that the refusal names no rule.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC15: The QA token is refused for ban, grant and scoped-role actions on a tester
 
 Runs once per row of **Test data**.
 
@@ -272,460 +557,71 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
+* **Testability:** manual
+* **Trace:** Who may call / The QA token
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, holds an unused sign-in mail, is not banned and holds no `admin`.
+* `<collector address>` is a named tester on staging.
 
 **Test data:**
 
-| Move | Outcome |
+| Action | Outcome |
 | --- | --- |
-| Capture the last sign-in mail | refused |
-| Age the unused link | refused |
-| Ban the address | refused |
-| Prepare the address | refused |
-| Clear the sign-in limits | refused |
+| Ban `<collector address>` | Refused |
+| Grant `admin` to `<collector address>` | Refused |
+| Grant `staff` on a plus-tag of `<collector address>` | Refused |
 
 **Steps:**
 
-1. Ask the door for the move in the row without naming an address.
-2. Ask the door for the last sign-in mail for `<tester address>`.
+1. Send the row's action to the test endpoint on `grade10-stg.com`, with the committed QA token.
+2. Read the response.
 
 **Expected Results:**
 
-* Step 1 is refused.
-* No address is read as a default: step 2 returns the same link, the address is neither banned nor holding `admin`, and the sign-in wait on that address still holds.
+* The response refuses the action.
+* The account for `<collector address>` is unchanged.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-6j4 rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
-### g10.shared-test-sign-in.US1-TC9: Two tester addresses differing by a plus tag stay apart
+**QA2 disposition:** kept with a note - asserts the ban and grant route of SC-95 only; the replaced-token route is not asserted.
 
-**Classification:**
+**QA2 covers:** none.
 
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` and `<plus-tagged tester address>` are minted under `<tester domain>`, and both hold an unused sign-in mail, the plus-tagged one sent last.
-
-**Steps:**
-
-1. Ask the door for the last sign-in mail for `<tester address>`.
-2. Open the link the door returns on `<grade10 staging site url>`.
-
-**Expected Results:**
-
-* The link differs from the one sent to `<plus-tagged tester address>`.
-* The signed-in account is `<tester address>`.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-lil rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
-### g10.shared-test-sign-in.US1-TC10: A sign-in mail to a tester address is sent the ordinary way
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`.
-
-**Steps:**
-
-1. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
-2. Ask the door for the last sign-in mail for `<tester address>`.
-
-**Expected Results:**
-
-* The mail is sent the ordinary way.
-* The door returns that link.
-* The door neither skipped nor replaced the send.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-x9g rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC11: The job captures the link and follows it into a session
+### g10.shared-test-sign-in.US1-TC16: The QA token is refused on production
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and has never signed in.
-
-**Steps:**
-
-1. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
-2. Ask the door for the last sign-in mail for that address.
-3. Open the link the door returns.
-
-**Expected Results:**
-
-* Step 2 returns the link with no mailbox opened.
-* Step 3 signs `<tester address>` in on `<grade10 staging site url>`.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-d7d rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC12: Capture for an address with no last mail returns no link
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and has been sent no sign-in mail.
-
-**Steps:**
-
-1. Ask the door for the last sign-in mail for `<tester address>`.
-2. Ask `<grade10 staging site url>` for a sign-in mail for that address.
-3. Ask the door for the last sign-in mail again.
-
-**Expected Results:**
-
-* Step 1 returns no link.
-* Step 3 returns the link from the mail step 2 sent.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-mdj rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC13: Capture returns only the named address's last mail
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` and `<second tester address>` are minted under `<tester domain>`, and both hold an unused sign-in mail, `<second tester address>`'s sent last.
-
-**Steps:**
-
-1. Ask the door for the last sign-in mail for `<tester address>`.
-2. Open the link the door returns on `<grade10 staging site url>`.
-
-**Expected Results:**
-
-* The link is `<tester address>`'s, not the newer one sent to `<second tester address>`.
-* The signed-in account is `<tester address>`.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-30m rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC14: A second capture returns the same link until another send
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
+* **Testability:** manual
+* **Trace:** Who may call / The QA token
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+* `<collector address>` is the production collector.
 
 **Steps:**
 
-1. Ask the door for the last sign-in mail for `<tester address>` and open the link.
-2. Ask the door for the last sign-in mail for that address again.
-3. Ask `<grade10 staging site url>` for a second sign-in mail for that address.
-4. Ask the door for the last sign-in mail a third time.
+1. Send a capture request for `<collector address>` to the test endpoint on `<production host>`, with the committed QA token.
+2. Read the response.
 
 **Expected Results:**
 
-* Step 2 returns the link step 1 used.
-* Step 4 returns the link from the mail step 3 sent.
+* The response refuses the request, and no sign-in link is returned.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-2dr rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC15: An aged unused link is refused before its lifetime passes
+**QA2 disposition:** kept with a note - production only; SC-98's nothing-changed check and its uat and preview routes are not asserted.
 
-**Classification:**
+**QA2 covers:** none.
 
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail sent less than `<link lifetime>` ago.
-
-**Steps:**
-
-1. Ask the door for the last sign-in mail for `<tester address>`.
-2. Ask the door to age that link.
-3. Open the link on `<grade10 staging site url>`.
-
-**Expected Results:**
-
-* Step 3 is refused as expired.
-* No session starts, and less than `<link lifetime>` has passed since the mail was sent.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-lfd rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC16: Aging a used link changes nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
-
-**Steps:**
-
-1. Ask the door for the last sign-in mail for `<tester address>` and open the link.
-2. Open the same link a second time and note the answer.
-3. Ask the door to age that link.
-4. Open the link again.
-
-**Expected Results:**
-
-* Step 4 answers exactly as step 2 did.
-* No new session starts.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-o35 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC17: Aging an address with no link ages nothing
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and has been sent no sign-in mail.
-
-**Steps:**
-
-1. Ask the door to age the link for `<tester address>`.
-2. Ask `<grade10 staging site url>` for a sign-in mail for that address.
-3. Ask the door for the last sign-in mail and open the link it returns.
-
-**Expected Results:**
-
-* No link exists to open after step 1.
-* Step 3 signs `<tester address>` in, inside `<link lifetime>`.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-xm8 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC18: A banned tester address cannot follow its captured link
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, is not banned, and holds an unused sign-in mail.
-
-**Steps:**
-
-1. Ask the door for the last sign-in mail for `<tester address>`.
-2. Ask the door to ban `<tester address>`.
-3. Open the captured link on `<grade10 staging site url>`.
-
-**Expected Results:**
-
-* Step 3 is refused for a banned address.
-* No session starts.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-tka rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC19: A prepared tester address holds admin once the link is followed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, holds no `admin`, and holds an unused sign-in mail.
-
-**Steps:**
-
-1. Ask the door to prepare `<tester address>` so it holds `admin`.
-2. Ask the door for the last sign-in mail for that address.
-3. Open the link the door returns.
-4. Open `<grade10 admin console url>`.
-
-**Expected Results:**
-
-* Step 3 signs the address in.
-* Step 4 admits the session, which holds `admin`.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-6x5 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC20: Clearing the limits sends a second mail without the wait
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and was sent a sign-in mail less than `<the send wait>` ago.
-
-**Steps:**
-
-1. Ask `<grade10 staging site url>` for a second sign-in mail for `<tester address>`.
-2. Ask the door to clear the sign-in limits for `<tester address>`.
-3. Ask for a second sign-in mail again.
-4. Ask the door for the last sign-in mail for that address.
-
-**Expected Results:**
-
-* Step 1 is held by the wait between two mails.
-* Step 3 sends the mail at once.
-* Step 4 returns the newer link.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-b7v rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC21: Clearing the limits lets the caller ask past the count
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, and the run has already asked for `<the mail count>` sign-in mails, the limit on how many a caller may ask for.
-
-**Steps:**
-
-1. Ask `<grade10 staging site url>` for one more sign-in mail for `<tester address>`.
-2. Ask the door to clear the sign-in limits for the caller and `<tester address>`.
-3. Ask for one more sign-in mail.
-4. Ask the door for the last sign-in mail for that address.
-
-**Expected Results:**
-
-* Step 1 is held by the count a caller may ask for.
-* Step 3 sends the mail.
-* Step 4 returns its link.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-2ca rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
-### g10.shared-test-sign-in.US1-TC22: The door is closed on preview and production
+### g10.shared-test-sign-in.US1-TC17: Callers other than the workflow and the QA token are refused
 
 Runs once per row of **Test data**.
 
@@ -736,139 +632,40 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
+* **Testability:** manual
+* **Trace:** Who may call / Every other caller is refused
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, is not banned, and holds an unused sign-in mail on staging.
-
-**Test data:**
-
-| Where | Outcome |
-| --- | --- |
-| `<grade10 preview site url>` | refused |
-| `<grade10 production site url>` | refused |
-
-**Steps:**
-
-1. Ask the door at the place in the row for the last sign-in mail for `<tester address>`.
-2. Ask the door at the same place to ban `<tester address>`.
-
-**Expected Results:**
-
-* Both moves are refused and no link is returned.
-* `<tester address>` is not banned afterwards.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-brm rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
-### g10.shared-test-sign-in.US1-TC23: The disposable dev door on staging stays 403
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* `<tester address>` is minted under `<tester domain>`.
+* `<collector address>` is a named tester on staging.
 
 **Test data:**
 
 | Caller | Outcome |
 | --- | --- |
-| An approved dispatch of `<the door's workflow>` on the main branch | 403 |
-| A signed-out visitor in a browser | 403 |
+| No credential | Refused |
+| A wrong token value | Refused |
+| A signed-in customer session | Refused |
 
 **Steps:**
 
-1. Open `<the disposable dev door on staging>` as the caller in the row.
-2. Ask it for a session for `<tester address>`.
+1. Send a capture request for `<collector address>` to the test endpoint on `grade10-stg.com`, from the row's caller.
+2. Read the response.
 
 **Expected Results:**
 
-* Both steps answer 403.
-* No session starts on `<grade10 staging site url>`.
+* The response refuses the request, and no sign-in link is returned.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-dv3 rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
-### g10.shared-test-sign-in.US1-TC24: The door mints no session without the mail
+**QA2 disposition:** over-claimed - the wrong-token and signed-in customer-session rows have no scenario; fold into spec.md as a scenario. The no-credential row matches SC-05 but does not assert that nothing is changed.
 
-**Classification:**
+**QA2 covers:** none.
 
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
+### g10.shared-test-sign-in.US1-TC18: An address that is not a named tester is refused, and no account is created for it
 
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and has been sent no sign-in mail.
-
-**Steps:**
-
-1. Ask the door for a session for `<tester address>` without a mail.
-2. Open `<grade10 staging site url>`.
-
-**Expected Results:**
-
-* Step 1 is refused and returns no session.
-* Step 2 shows nobody signed in.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-z4u rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
-### g10.shared-test-sign-in.US1-TC25: The door does not unban
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and was banned through the door.
-
-**Steps:**
-
-1. Ask the door to unban `<tester address>`.
-2. Ask `<grade10 staging site url>` for a sign-in mail for that address.
-3. Ask the door for the last sign-in mail for that address.
-4. Open the link the door returns.
-
-**Expected Results:**
-
-* Step 1 is refused.
-* Step 4 is refused for a banned address.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-rzt rev=1 covers=g10.shared-test-sign-in.SC-tx7,g10.shared-test-sign-in.SC-56z,g10.shared-test-sign-in.SC-u3l,g10.shared-test-sign-in.SC-i2h,g10.shared-test-sign-in.SC-d7r,g10.shared-test-sign-in.SC-9gy -->
-### g10.shared-test-sign-in.US1-TC26: The door seeds no store or auction data
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -877,152 +674,70 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`.
-
-**Steps:**
-
-1. Ask the door to seed a store product for `<tester address>`.
-2. Ask the door to seed an auction listing for `<tester address>`.
-3. Open `<grade10 staging store url>`.
-4. Open `<grade10 staging auction url>`.
-
-**Expected Results:**
-
-* Both seed moves are refused.
-* No new product shows in step 3 and no new listing in step 4.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-pb7 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC27: Clearing one address leaves another address's wait standing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<first tester address>` and `<second tester address>` are minted under `<tester domain>`, and each was sent a sign-in mail less than `<the send wait>` ago.
-
-**Steps:**
-
-1. Ask the door to clear the sign-in limits for `<first tester address>`.
-2. Ask `<grade10 staging site url>` for a second sign-in mail for `<second tester address>`.
-
-**Expected Results:**
-
-* Step 2 is held by the wait between two mails.
-* No second mail is sent to `<second tester address>`.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-u45 rev=1 covers=g10.shared-test-sign-in.SC-w6r,g10.shared-test-sign-in.SC-a82,g10.shared-test-sign-in.SC-tjs,g10.shared-test-sign-in.SC-i3g,g10.shared-test-sign-in.SC-fdk,g10.shared-test-sign-in.SC-xo7,g10.shared-test-sign-in.SC-xe4,g10.shared-test-sign-in.SC-bj0,g10.shared-test-sign-in.SC-21a,g10.shared-test-sign-in.SC-tfs,g10.shared-test-sign-in.SC-cy4,g10.shared-test-sign-in.SC-to0,g10.shared-test-sign-in.SC-dcz -->
-### g10.shared-test-sign-in.US1-TC28: A mail older than the capture window is no longer readable
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** low
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the job may do
+* **Trace:** Testers / The named testers
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>` and was sent a sign-in mail more than `<the capture window>` ago.
+* The row's address has no account on staging.
+
+**Test data:**
+
+| Address | Outcome |
+| --- | --- |
+| `<non-tester address>` | Refused |
+| A plus-tag of `<non-tester address>` | Refused |
 
 **Steps:**
 
-1. Ask the door for the last sign-in mail for `<tester address>`.
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a capture request for the row's address.
 
 **Expected Results:**
 
-* The call is not refused.
-* No link is returned, as for an address no mail was sent to.
+* The request is refused, and no sign-in link is returned.
+* No account exists for the row's address afterwards.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-ug2 rev=1 covers=g10.shared-test-sign-in.SC-4tc,g10.shared-test-sign-in.SC-n68,g10.shared-test-sign-in.SC-y6k,g10.shared-test-sign-in.SC-wse,g10.shared-test-sign-in.SC-u90,g10.shared-test-sign-in.SC-o4r,g10.shared-test-sign-in.SC-q44,g10.shared-test-sign-in.SC-1xt,g10.shared-test-sign-in.SC-bap -->
-### g10.shared-test-sign-in.US1-TC29: A tester address in mixed case is acted on
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-07.
+
+### g10.shared-test-sign-in.US1-TC19: A sign-in mail older than fifteen minutes can no longer be captured
 
 **Classification:**
 
 * **Severity:** minor
-* **Priority:** low
+* **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
+* **Testability:** manual
+* **Trace:** What the workflow may do / Capture the link
 
 **Pre-conditions:**
 
-* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, written with its domain in mixed case.
+* The last sign-in mail for `<collector address>` on staging was sent more than fifteen minutes ago.
 
 **Steps:**
 
-1. Ask the door to ban `<tester address>`.
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a capture request for `<collector address>`.
 
 **Expected Results:**
 
-* The move is carried out.
-* That address is banned.
+* No sign-in link is returned for the old mail.
 
-<!-- trace:case id=g10.shared-test-sign-in.TC-lfa rev=1 covers=g10.shared-test-sign-in.SC-l73 -->
-### g10.shared-test-sign-in.US1-TC30: The QA token captures a tester's link on staging
+**QA2 disposition:** kept with a note - SC-29's "call is not refused" is not asserted.
 
-**Classification:**
+**QA2 covers:** none.
 
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** smoke
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** Who may call
-
-**Pre-conditions:**
-
-* `<tester address>` is minted under `<tester domain>` and has asked for a sign-in link on `<grade10 staging site url>`.
-
-**Steps:**
-
-1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`, carrying the QA token from the repository.
-2. Follow the returned link.
-
-**Expected Results:**
-
-* Step 1 returns the link.
-* Step 2 signs `<tester address>` in.
-
-<!-- trace:case id=g10.shared-test-sign-in.TC-jia rev=1 covers=g10.shared-test-sign-in.SC-kgh -->
-### g10.shared-test-sign-in.US1-TC31: The QA token is refused for ban, prepare and after rotation
+### g10.shared-test-sign-in.US1-TC20: A scoped role is refused for every named tester
 
 Runs once per row of **Test data**.
 
@@ -1033,57 +748,213 @@ Runs once per row of **Test data**.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
-* **Suites:** regression
+* **Suites:** none
 * **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Who may call
+* **Testability:** manual
+* **Trace:** What the workflow may do / Grant a scoped role
 
 **Pre-conditions:**
 
-* `<tester address>` is minted under `<tester domain>` and holds no ban and no role.
+* The four named testers on staging are `<collector address>`, `<plus-tag sibling address>`, `<ban-only address>` and `<admin-only address>`.
 
 **Test data:**
 
-| Call | Outcome |
+| Tester | Outcome |
 | --- | --- |
-| Ban `<tester address>` with the current QA token | refused |
-| Prepare `<tester address>` with the current QA token | refused |
-| Capture for `<tester address>` with a QA token a later commit replaced | refused |
+| `<collector address>` | Refused |
+| `<plus-tag sibling address>` | Refused |
+| `<ban-only address>` | Refused |
+| `<admin-only address>` | Refused |
 
 **Steps:**
 
-1. Send the call in the row to the door on `<grade10 staging site url>`.
-2. Read `<tester address>`'s account.
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send a grant of `staff` for the row's tester.
 
 **Expected Results:**
 
-* Step 1 is refused.
-* Step 2 shows no ban and no role.
+* The grant is refused.
+* The row's tester does not hold `staff`.
+
+**QA2 disposition:** kept with a note - asserts the named-tester refusal in the staff role only; SC-96's plus-tag grant is not asserted.
+
+**QA2 covers:** none.
+
+### g10.shared-test-sign-in.US1-TC21: Ban, grant, expire and scoped-role actions are refused on production
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Where it opens / Production, and preview with it
+
+**Pre-conditions:**
+
+* `<collector address>` is the production collector.
+
+**Test data:**
+
+| Action | Outcome |
+| --- | --- |
+| Ban `<collector address>` | Refused |
+| Grant `admin` to `<collector address>` | Refused |
+| Expire the unused link for `<collector address>` | Refused |
+| Grant `staff` on a plus-tag of `<collector address>` | Refused |
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow for production.
+2. From that run, send the row's action.
+
+**Expected Results:**
+
+* The row's action is refused.
+* The account and its sign-in link for `<collector address>` are unchanged.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-101. The ban row does not reach SC-24, which also asserts a link is received.
+
+### g10.shared-test-sign-in.US1-TC22: Local stacks open no test-endpoint action
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Closed / Everywhere else
+
+**Pre-conditions:**
+
+* A local stack runs the auth backend from this repository.
+
+**Steps:**
+
+1. Send a capture request for `<collector address>` to the test endpoint on the local stack.
+2. Send a ban for `<ban-only address>` to the same endpoint on the local stack.
+
+**Expected Results:**
+
+* Both requests are refused.
+* No sign-in link is returned and no account changes.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-103.
+
+### g10.shared-test-sign-in.US1-TC23: The disposable `/dev` endpoint stays closed on staging, uat and production
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Closed / Everywhere else
+
+**Pre-conditions:**
+
+* The row's environment is deployed.
+
+**Test data:**
+
+| Environment | Host |
+| --- | --- |
+| staging | `grade10-stg.com` |
+| uat | `<uat host>` |
+| production | `<production host>` |
+
+**Steps:**
+
+1. Send a request for `<collector address>` to the `/dev` endpoint on the row's host.
+2. Read the response.
+
+**Expected Results:**
+
+* The endpoint answers closed, and no session is created.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-25.
+
+### g10.shared-test-sign-in.US1-TC24: The test-endpoint workflow does not generate a session, unban an address or seed store and auction data
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Closed / Everywhere else
+
+**Pre-conditions:**
+
+* `<ban-only address>` is banned on staging.
+
+**Test data:**
+
+| Request | Outcome |
+| --- | --- |
+| Generate a session for `<collector address>` without following the mail | Refused, no session |
+| Unban `<ban-only address>` | Refused, still banned |
+| Seed store or auction data | Refused, no data created |
+
+**Steps:**
+
+1. Approve a run of the test-endpoint workflow on staging.
+2. From that run, send the row's request.
+
+**Expected Results:**
+
+* The row's outcome holds.
+* The account state and store or auction data are unchanged.
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-26, shared-auth-test-sign-in-SC-27, shared-auth-test-sign-in-SC-28.
 
 ## Reconciliation
 
-The blind suite pass never read the scenarios; the scenario pass never read the suite. This block is what changed when they were put side by side, and who moved.
+Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenarios, `decisions.md` (Q1 to Q51) and the procedure. Nothing else. Case steps and expected results are unchanged.
 
-**Uncovered anchors:** none.
+**Covered in full** - SC-01 (TC1), SC-06 (TC10), SC-07 (TC18), SC-12 (TC6), SC-19 (TC8), SC-20 (TC9), SC-21 (TC11), SC-25 (TC23), SC-26, SC-27, SC-28 (TC24), SC-94 (TC3), SC-101 (TC21), SC-103 (TC22). SC-NN is shared-auth-test-sign-in-SC-NN.
 
-**Raised by the blind pass, answered as a decision:** twenty questions, every one landed in `decisions.md` under `## Raised`. Ten needed a new decision — Q23 to Q32 — and the rest were already answered by a scenario the blind pass could not see.
+**Not covered in full** - no case asserts the scenario: SC-02, SC-08, SC-09, SC-11, SC-13, SC-14, SC-15, SC-17, SC-18, SC-22, SC-23, SC-30, SC-31, SC-33, SC-34, SC-99. Partly asserted, see the case notes: SC-03, SC-04, SC-05, SC-32 (no nothing-changed check), SC-10, SC-16, SC-24, SC-29, SC-95, SC-96, SC-97, SC-98, SC-102. SC-100 is contradicted, below.
 
-**Raised by the blind pass, folded into the spec:** four, each a case the blind pass wrote that no scenario proved.
+**Over-claimed** - TC5 (unique plus-tag per run), TC14 (non-tester row via the QA token), TC17 (wrong-token and customer-session rows). Each states behaviour no scenario states; fold into spec.md.
 
-- A subdomain of the tester domain — `shared-auth-test-sign-in-US1-TC7-1` → `shared-auth-test-sign-in-SC-30`.
-- A mixed-case domain, which the blind pass raised beside the subdomain and its refusal table could not hold, because the answer is acceptance — `shared-auth-test-sign-in-SC-34`, with `TC29` added for it.
-- Two addresses differing only by a plus tag — `shared-auth-test-sign-in-US1-TC9-1` → `shared-auth-test-sign-in-SC-31`.
-- The door's own workflow off the main branch — `shared-auth-test-sign-in-US1-TC3-1` → `shared-auth-test-sign-in-SC-32`. The requirement had the bullet; only the pull-request half had a scenario.
+**Contradictions** - SC-100 says uat sets a scoped role for a named tester. The requirement "Grant a scoped role" and SC-96 refuse that, and Q42 settles it: never a named tester. TC12 already uses a plus-tag. Dev corrects SC-100.
 
-**Found in the scenario pass, patched into the suite:** two, where a scenario had no case.
+**Repairs** - None. No case contradicts a settled decision.
 
-- Clearing one address leaves another's wait standing — `shared-auth-test-sign-in-SC-22` → `TC27`.
-- The caller's own count, cleared — `shared-auth-test-sign-in-SC-33`, written after `TC21` was found to prove a bound no scenario stated.
-
-**Found in review, patched into both:** two, and they came from neither pass.
-
-- A governance review of the earlier draft found the fifteen-minute capture window living only in `tech-design.md`, which made the second-capture requirement stronger than what ships. It is now `Q22`, a 🚧 row on the page, `shared-auth-test-sign-in-SC-29`, and `TC28`.
-- The merge review found age taking a `seconds` knob the spec did not grant, clear able to name no address in `SC-33`, and a catch-all SHALL the page marked ❓. Age takes `{ email }` only; `SC-33` names an address; `SC-11` is the ordinary send, not the inbox.
-
-**Out of suite:** none.
+**Raised** - None unsettled; `decisions.md` is unchanged. Q48 and Q51 cite TC30 and TC13, which this suite no longer holds.

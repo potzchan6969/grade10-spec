@@ -31,10 +31,6 @@ without a session, like any public surface —
   copywriting review; whether it must reproduce issuer boilerplate verbatim
   is unconfirmed
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7172-2923" title="About — the desktop frame"}
-
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=7172-7233" title="About — the small viewport"}
-
 ::story{id="site-about-screens-about--default" title="The about page, whole"}
 
 ::story{id="site-about-screens-about--narrow" title="The about page, narrow"}

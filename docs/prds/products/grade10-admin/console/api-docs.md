@@ -49,7 +49,7 @@ auction worker — the procedure names the service that does the work.
 
 ## Designs
 
-There are no Figma frames for the admin, by decision. The layout is drawn on a
+There are no design frames for the admin, by decision. The layout is drawn on a
 canvas: [Grade10 API Docs](https://claude.ai/code/artifact/9b0c8ff4-71ca-4132-80c8-4e12369580c6)
 — the console shell with the surface under Dev, the services rail, one
 router's procedure table, and the detail panel for one procedure.

@@ -24,7 +24,7 @@ once so nine consoles stop rebuilding the same shapes and drifting apart.
 confirmations behind changing an account.
 
 What an operator is *allowed* to do is not here: that is
-[sign-in and accounts](/p/shared/auth). This product governs what the components
+[sign-in and accounts](/p/grade10-site/account/accounts). This product governs what the components
 render and what they expose.
 
 :::callout{kind="warning"}
@@ -37,7 +37,7 @@ loyalty has no console requirement at all.
 :::
 
 :::callout{kind="note"}
-There are no Figma frames for the admin, by decision. The in-flight change
+There are no design frames for the admin, by decision. The in-flight change
 `admin-visual-standard` is what settles the console's visual vocabulary across
 both brands' consoles and the seven operator packages they assemble from.
 :::

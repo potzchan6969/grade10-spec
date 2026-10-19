@@ -16,7 +16,6 @@ import { rootDirectory, sanitize, storyIndex } from "./story-index.mjs";
 
 export const COVERAGE_FILE = "apps/preview/coverage.yaml";
 const SITE = "docs/prds/products/grade10-site";
-const AUTH = "docs/prds/products/shared/auth";
 
 /** Every feature the workbench sidebar can hold, as `domain/feature` slugs. */
 export function manualFeatures(root = rootDirectory) {
@@ -36,7 +35,6 @@ export function manualFeatures(root = rootDirectory) {
   for (const domain of readdirSync(join(root, SITE)).sort())
     if (existsSync(join(root, SITE, domain)) && !domain.includes("."))
       pages(`${SITE}/${domain}`, domain);
-  pages(AUTH, "auth");
   return features;
 }
 

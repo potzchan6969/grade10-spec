@@ -546,7 +546,7 @@ it.
 - 🚧 **A control the operator lacks** - it stays listed and disabled, naming
   the access it needs, such as Needs payment processing; the server refuses
   it too. Internal-bid and internal-bidder profile controls are hidden
-  without `auction:reserve` - [Roles](/p/shared/auth/roles)
+  without `auction:reserve` - [Roles](/p/grade10-site/account/roles)
 - 🚧 **Reasons** - an edit before send, a reissue, a recorded payment or
   refund, a cancel, a returned proof, a setup change and a cleared flag each
   need one; a send and a confirmed proof need none. Every entry names the
