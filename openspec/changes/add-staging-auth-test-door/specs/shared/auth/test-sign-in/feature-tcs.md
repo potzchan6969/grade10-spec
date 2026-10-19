@@ -24,7 +24,7 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The test endpoint's own workflow
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -67,7 +67,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The test endpoint's own workflow
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -109,7 +109,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -150,7 +150,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Testers / The named testers
+* **Trace:** Testers
 
 **Pre-conditions:**
 
@@ -184,7 +184,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Testers / The named testers
+* **Trace:** Testers
 
 **Pre-conditions:**
 
@@ -218,7 +218,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Capture the link
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -252,7 +252,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Expire the unused link
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -286,7 +286,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Ban the address
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -320,7 +320,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Grant the address
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -356,7 +356,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Grant a scoped role
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -400,7 +400,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Clear the sign-in limits
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -436,7 +436,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Where it opens / Staging and uat
+* **Trace:** Where it opens
 
 **Pre-conditions:**
 
@@ -477,7 +477,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Where it opens / Production, and preview with it
+* **Trace:** Where it opens
 
 **Pre-conditions:**
 
@@ -519,7 +519,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -561,7 +561,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -602,7 +602,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -636,7 +636,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / Every other caller is refused
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -678,7 +678,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Testers / The named testers
+* **Trace:** Testers
 
 **Pre-conditions:**
 
@@ -718,7 +718,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Capture the link
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -752,7 +752,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Grant a scoped role
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -796,7 +796,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Where it opens / Production, and preview with it
+* **Trace:** Where it opens
 
 **Pre-conditions:**
 
@@ -838,7 +838,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Closed / Everywhere else
+* **Trace:** Closed
 
 **Pre-conditions:**
 
@@ -873,7 +873,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Closed / Everywhere else
+* **Trace:** Closed
 
 **Pre-conditions:**
 
@@ -915,7 +915,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Closed / Everywhere else
+* **Trace:** Closed
 
 **Pre-conditions:**
 
