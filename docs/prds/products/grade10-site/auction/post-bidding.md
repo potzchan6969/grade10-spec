@@ -169,8 +169,8 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | Nothing preselected |
-| Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | Nothing preselected |
+| Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | **HKD** preselected |
+| Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | **Card** preselected where the currency offers it |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and

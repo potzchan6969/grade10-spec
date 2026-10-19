@@ -189,7 +189,7 @@ type WinnerOrderSetupDialogProps = {
   cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>;
   /**
    * Settlement currencies offered at Payment Method. One entry fixes the
-   * currency and hides the choice; two show an unselected Pay in picker.
+   * currency and hides the choice; a choice preselects HKD with Card.
    */
   settlementCurrencies?: readonly WinnerOrderSettlementCurrency[];
   /** Called when the winner finishes all setup steps. */
@@ -279,11 +279,23 @@ function CountryRegionField({
 
 const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 
-/** A single offered currency is fixed; a choice between currencies starts empty. */
+/** HKD is preselected when offered; a single offered currency is fixed. */
 function defaultSettlementCurrency(
   currencies: readonly WinnerOrderSettlementCurrency[],
 ): WinnerOrderSettlementCurrency | null {
+  if (currencies.includes("HKD")) return "HKD";
   return currencies.length === 1 ? (currencies[0] ?? null) : null;
+}
+
+/** Card is preselected where the currency offers it; otherwise nothing is. */
+function defaultPaymentMethod(
+  currency: WinnerOrderSettlementCurrency | null,
+  cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>,
+): WinnerOrderSetupPaymentMethod | null {
+  return currency != null &&
+    paymentMethodIsAvailable(currency, "card", cardFeePercentages)
+    ? "card"
+    : null;
 }
 
 function paymentMethodsForCurrency(
@@ -431,7 +443,12 @@ function WinnerOrderSetupDialog({
       defaultSettlementCurrency(settlementCurrencies),
     );
   const [paymentMethod, setPaymentMethod] =
-    useState<WinnerOrderSetupPaymentMethod | null>(null);
+    useState<WinnerOrderSetupPaymentMethod | null>(() =>
+      defaultPaymentMethod(
+        defaultSettlementCurrency(settlementCurrencies),
+        cardFeePercentages,
+      ),
+    );
   const [sameAsDelivery, setSameAsDelivery] = useState(true);
   const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
   const [saveForFuture, setSaveForFuture] = useState(
@@ -463,7 +480,12 @@ function WinnerOrderSetupDialog({
         : null;
     setDeliverySnapshot(seeded);
     setSettlementCurrency(defaultSettlementCurrency(settlementCurrencies));
-    setPaymentMethod(null);
+    setPaymentMethod(
+      defaultPaymentMethod(
+        defaultSettlementCurrency(settlementCurrencies),
+        cardFeePercentages,
+      ),
+    );
     setSameAsDelivery(true);
     setStep(initialStep);
     setNewAddressOpen(initialNewAddressOpen);
