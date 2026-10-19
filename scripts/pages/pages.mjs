@@ -451,6 +451,12 @@ export function gate(pages, cited, allowed = []) {
 const short = (text, max = 110) =>
   text.length > max ? `${text.slice(0, max - 1)}…` : text;
 const flat = (text) => text.replace(/\s*\n\s*/g, " ");
+/** A line as the board prints it: its ids first, as `#id`. */
+const shown = (text) => {
+  const ids = [...text.matchAll(RULE_ID)].map(([, id]) => `#${id}`);
+  const rest = text.replace(RULE_ID, "").trim();
+  return ids.length ? `${ids.join(" ")} ${rest}` : rest;
+};
 
 function board(pages, mode) {
   const kinds = {
@@ -471,7 +477,7 @@ function board(pages, mode) {
       for (const mark of page[key]) {
         totals[key] += 1;
         const where = mark.where ? `${mark.where.title} - ` : "";
-        lines.push(`- ${where}${short(flat(mark.text))}`);
+        lines.push(`- ${where}${short(shown(flat(mark.text)))}`);
       }
     }
     totals.cases += page.cases.length;
