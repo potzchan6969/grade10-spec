@@ -28,7 +28,7 @@ The workflow uploads the page, posts the link, then moves the checkpoint, in tha
 
 - **Where** - `refs/checkpoints/<branch>` on `origin`, pointing at the last commit a digest covered; it is no branch and no tag, so it shows in no branch list and triggers no push workflow
 - **Read** - `range` fetches it and prints `from`, `to`, `commits` and `base`
-- **First run** - with no checkpoint, `range` starts from the last commit older than 7 days (`CHECKPOINT_FIRST_RUN` changes it), and `base` reads `first-run`
+- **First run** - with no checkpoint, `range` starts from the branch as it stood at the end of last Friday, Hong Kong time (`CHECKPOINT_FIRST_RUN` takes any other date), and `base` reads `first-run`
 - **Rewritten branch** - when a force-push left the checkpoint off the branch, `range` starts where the two still agree, and `base` reads `merge-base`; say so in the post
 - **Two runs at once** - `advance` pushes with a lease on the value it read, so the second run is refused and says so; it posted a range the first run also posted, and nothing is lost
 - **Who moves it** - the workflow, with its own token; a session never needs push rights for it

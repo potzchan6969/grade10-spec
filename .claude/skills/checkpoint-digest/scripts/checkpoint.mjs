@@ -5,7 +5,7 @@
 import { execFileSync } from "node:child_process";
 
 const REMOTE = process.env.CHECKPOINT_REMOTE ?? "origin";
-const FIRST_RUN = process.env.CHECKPOINT_FIRST_RUN ?? "7 days ago";
+const FIRST_RUN = process.env.CHECKPOINT_FIRST_RUN ?? endOfLastFriday();
 const LIMIT = 40;
 
 const AREAS = [
@@ -77,7 +77,7 @@ function range() {
   }
   if (!from) {
     from =
-      tryGit("rev-list", "-1", `--before=${FIRST_RUN}`, to) ||
+      tryGit("rev-list", "-1", "--first-parent", `--before=${FIRST_RUN}`, to) ||
       git("rev-list", "--max-parents=0", to).split("\n").pop();
     base = "first-run";
   }
@@ -277,6 +277,19 @@ function flatten(value, prefix = "", out = {}) {
       flatten(v, prefix ? `${prefix}.${k}` : k, out);
   } else out[prefix] = String(value);
   return out;
+}
+
+// Midnight after the last Friday before today, on the Hong Kong clock the store counts days on.
+function endOfLastFriday(now = new Date()) {
+  const HK = 8 * 3600 * 1000;
+  const day = new Date(now.getTime() + HK);
+  const back = (day.getUTCDay() + 2) % 7 || 7;
+  const midnight = Date.UTC(
+    day.getUTCFullYear(),
+    day.getUTCMonth(),
+    day.getUTCDate() - back + 1,
+  );
+  return new Date(midnight - HK).toISOString();
 }
 
 function areaOf(path) {
