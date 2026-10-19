@@ -119,8 +119,11 @@ QA token, its own three actions. Today an action the environment does not mount
 answers 404 and a wrong caller answers 403, so a prober can tell the endpoint
 is on production and which actions it mounts there. Every call the access check
 refuses answers 404 with no body, as the worker answers a path it does not
-have (Q23). Only an admitted caller reads the `{ error }` shape, for an address
-that is no tester.
+have (Q23). A refusal after the access check — no address, an address that is
+no tester, the admin-only tester for the QA token, a scoped role on a named
+tester, or `admin` asked as a scoped role — answers the same 404, so every
+refusal reads alike and names no rule. The answer is a design choice made
+without asking; Q48 leaves the status to the design.
 
 **The subjects are named testers, not a domain.** `grade10TestDoorEmails` in
 `@grade10/auth-contracts` names four testers on staging and four on uat — a
@@ -166,8 +169,9 @@ the scoped role call `appendAuditLog` from `@grade10/postgres/audit` in the
 same transaction as the write, as the operator's own identity writes do. Only
 the workflow can make these writes, so the actor is `test-endpoint-workflow` in
 place of a user id (Q45). A ban, grant or scoped role refused after the access
-check, for an address that is no tester, writes a refused entry the same way
-(Q46). A ban that creates the account writes one entry naming `ban` and the new
+check — an address that is no tester, a scoped role on a named tester, or
+`admin` asked as a scoped role — writes a refused entry the same way, naming no
+subject when the address holds no account (Q46). A ban that creates the account writes one entry naming `ban` and the new
 user id (Q53). Capture, expire
 and clear write nothing. The entry holds no token, address or email. A write
 the trail cannot record does not run.
@@ -246,8 +250,7 @@ GET  <url>                                                        → 302 + sess
 Six routes on the auth worker, all `POST` under `/auth/test/`, each requiring
 `Authorization: Bearer <github-oidc-token>` or, on staging, the
 `x-grade10-qa-token` header. A call the access check refuses answers 404 with no
-body; an admitted call naming an address that is no tester answers the
-worker's standard `{ error }` shape. No existing
+body, and so does every refusal after it. No existing
 endpoint changes shape. `/dev/*` keeps answering 403 on every hosted stack.
 
 ## Risks / Trade-offs

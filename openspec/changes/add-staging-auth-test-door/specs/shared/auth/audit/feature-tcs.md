@@ -79,23 +79,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The caller holds the test-endpoint kind `<caller kind>`.
+* The caller is `<caller>`.
+* `<tester address>` is a tester address on staging.
 
 **Test data:**
 
-| Action | Caller kind |
+| Action | Caller |
 | --- | --- |
-| capture | test-endpoint-workflow |
+| capture | the workflow |
 | capture | QA token |
-| expire | test-endpoint-workflow |
+| expire | the workflow |
 | expire | QA token |
-| clear | test-endpoint-workflow |
+| clear | the workflow |
 | clear | QA token |
 
 **Steps:**
 
 1. Note the number of entries on the identity trail.
-2. Call the test endpoint to `<action>` for `<tester address>` as `<caller kind>`.
+2. Call the test endpoint to `<action>` for `<tester address>` as `<caller>`.
 3. Read the number of entries on the identity trail.
 
 **Expected Results:**
@@ -243,7 +244,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-02
 
-**QA2 disposition:** over-claimed. The clause "The auditor sees no names" is stated by no scenario or decision; see Raised. The rest rests on the durable read and consistency scenarios and names the workflow's entry, which SC-38 states only in part.
+**QA2 disposition:** over-claimed. The clause "The auditor sees no names" goes beyond Q52, which settles that the auditor sees user ids. The rest rests on the durable read and consistency scenarios and names the workflow's entry, which SC-38 states only in part.
 
 **QA2 covers:** none
 
@@ -381,7 +382,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-04
 
-**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` row is removed (Q50). The create step is now a ban, because Q47 gives the endpoint no create action and Q20 has a ban create the account. The expected action is `ban`, not `created`; that choice is raised. The case names no new user id, so it fully covers no scenario.
+**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` row is removed (Q50). The create step is now a ban, because Q47 gives the endpoint no create action and Q20 has a ban create the account. The expected action is `ban`, not `created`, as Q53 settles. The case names no new user id, so it fully covers no scenario.
 
 **QA2 covers:** none
 

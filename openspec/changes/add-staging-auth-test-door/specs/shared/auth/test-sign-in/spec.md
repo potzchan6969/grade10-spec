@@ -14,7 +14,7 @@ Operators still walk ban and role on `shared/auth/users`.
   - The QA token: a staging-only token committed to the repository, held by a QA agent, for capture, expire and clear alone, on a tester address other than the admin-only one
   - Every other caller is refused
 - Testers
-  - The named testers: each environment's own, written into the code, and on staging and uat a unique plus-tag of one generated per run, its account removed in the next cleanup; any other address is refused, and an account is created when an action needs one
+  - The named testers: each environment's own, written into the code, and on staging and uat a unique plus-tag of one generated per run, its account removed in the next daily cleanup; any other address is refused, and an account is created when an action needs one
 - What the workflow may do
   - Capture the link: the last sign-in mail for a tester address, without a mailbox
   - Expire the unused link: so an expired follow can be walked without waiting five minutes
@@ -52,9 +52,10 @@ Which run the test endpoint acts for, and what a refused call leaves behind.
 - **Anyone else** — a call from a laptop, a fork, or another repository that
   carries no current QA token SHALL be refused
 - **A refused call** — a call the test endpoint refuses SHALL change nothing: no
-  account, no role, no ban, no link, no limit; a refused ban, grant or scoped role
-  from an admitted caller is still recorded on the identity trail
-  (`shared/auth/audit`)
+  account, no role, no ban, no link, no limit; a ban, grant or scoped role
+  refused after the access check `shared/auth/audit` defines — the caller, the
+  environment's actions and the QA token's three — is still recorded on the
+  identity trail there
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-xog rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-01 - The test endpoint acts for its own workflow
@@ -203,7 +204,7 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 - **THEN** the test endpoint refuses the call
 - **AND** that address is unchanged
 
-#### Scenario: shared-auth-test-sign-in-SC-104 - A generated plus-tag's account is removed in the next cleanup
+#### Scenario: shared-auth-test-sign-in-SC-104 - A generated plus-tag's account is removed in the next daily cleanup
 **Serves:** Testers - a unique plus-tag of a named tester
 
 - **GIVEN** a staging run that generated a unique plus-tag of the collector and banned it
@@ -532,7 +533,7 @@ shut beside it.
 - **AND** nothing is changed
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-56z rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-24 - Production captures and clears for its collector alone
+#### Scenario: shared-auth-test-sign-in-SC-24 - Production captures and clears for its named testers alone
 **Serves:** Where it opens - production, and preview with it
 
 - **GIVEN** the test endpoint's own workflow, from the main branch, on a dispatch a
@@ -552,7 +553,7 @@ shut beside it.
 
 
 #### Scenario: shared-auth-test-sign-in-SC-101 - Production refuses expire, grant and a scoped role
-**Serves:** Where it opens - production, capture and clear for the collector alone
+**Serves:** Where it opens - production, and preview with it
 
 - **GIVEN** a production run of the test endpoint's workflow
 - **WHEN** it expires a link, grants `admin` or sets a scoped role

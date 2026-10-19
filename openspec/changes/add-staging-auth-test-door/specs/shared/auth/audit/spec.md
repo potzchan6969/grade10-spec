@@ -18,7 +18,8 @@ the creation SHALL NOT write an entry of its own. Only the test endpoint's own
 workflow can make these writes, and it has no user id and holds no role, so the
 entry SHALL name its kind, `test-endpoint-workflow`, in place of the actor's
 user id and roles. The entry SHALL keep
-the action, the subject's user id, whether it succeeded, and when, and SHALL NOT
+the action, the subject's user id, whether it succeeded, and when — a refused
+entry for an address that holds no account names no subject — and SHALL NOT
 carry the token, the address, or an email. A ban, grant or scoped role the
 endpoint refuses after its access check admitted the call SHALL be recorded as
 refused. The access check is the caller, the environment's actions and, for
@@ -67,7 +68,7 @@ same as any identity write.
 
 - **WHEN** the test endpoint's workflow asks to ban an address that is not a tester, and the endpoint refuses it
 - **THEN** the trail holds one entry naming `test-endpoint-workflow`, the ban, and the refusal
-- **AND** the entry carries no address
+- **AND** the entry names no subject and carries no address
 
 #### Scenario: shared-auth-audit-SC-46 - A call the access check refuses writes no entry
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded

@@ -221,7 +221,7 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | The admin-only tester and the QA token | Decided | Refused on every environment. The token never reaches it, so a reader of the repository cannot sign in as `admin`. | Product |
 | Test-endpoint writes on the trail | Decided | A ban, a grant, a scoped role and an account the test endpoint creates are on the audit trail, named by the caller's kind. Capture, expire and clear write none. | Product |
 | Which addresses | Decided | Each environment's named testers, written into the code, and on staging and uat a unique plus-tag of one. | Product |
-| Removing tester accounts | Decided | A generated plus-tag's account is removed in the next cleanup after the run that generated it. | Ops |
+| Removing tester accounts | Decided | A generated plus-tag's account is removed in the next daily cleanup after the run that generated it. | Ops |
 | Capture, expire, ban, grant, a scoped role, clear | Decided | Those six, for a tester address only. A scoped role only on a generated plus-tag of the collector. | Product |
 | Session generate without mail | Decided | No. Follow the captured link. | Product |
 | Unban | Decided | No. A run that needs an unbanned address generates one. | Product |
