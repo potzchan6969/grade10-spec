@@ -10,13 +10,13 @@ Accounts is how a person gets into a brand's site or console, and what happens t
 | Page | What it holds |
 | --- | --- |
 | [Sign-In](/p/grade10-site/account/sign-in) | Google, the emailed link, resends, expiry and one-time use |
-| [Session](/p/grade10-site/account/session) | The two sessions, open tabs and who is signed in |
-| [Sign-Out](/p/grade10-site/account/sign-out) | Ending one site's or console's session |
+| [Session](/p/grade10-site/account/sign-in#session) | The two sessions, open tabs and who is signed in |
+| [Sign-Out](/p/grade10-site/account/sign-in#sign-out) | Ending one site's or console's session |
 | [Roles and Permissions](/p/grade10-site/account/roles) | The closed role set and the permissions each grants |
 | [Users](/p/grade10-site/account/users) | The directory, bans, role changes, creating accounts and erasure |
 | [Sessions](/p/grade10-site/account/sessions) | An operator listing and ending one person's sessions |
 | [Audit Log](/p/grade10-site/account/audit) | The trail every identity write lands on |
-| [Sign-In Tests](/p/grade10-site/account/test-sign-in) | How QA walks sign-in on the hosted stacks |
+| [Sign-In Tests](/p/grade10-site/account/sign-in#staging-tests) | How QA walks sign-in on the hosted stacks |
 
 :::callout{kind="note"}
 `session` and `sessions` are two capabilities, not a typo. The singular one is who the caller is. The plural one is an operator listing and ending somebody else's sessions.
@@ -24,7 +24,7 @@ Accounts is how a person gets into a brand's site or console, and what happens t
 
 ## Collector Half
 
-A collector signs in with an emailed link or Google, and signs out from the site. Start with [Sign-In](/p/grade10-site/account/sign-in). Then read [Session](/p/grade10-site/account/session) for what stays signed in, and [Sign-Out](/p/grade10-site/account/sign-out) for ending it.
+A collector signs in with an emailed link or Google, and signs out from the site. Start with [Sign-In](/p/grade10-site/account/sign-in). Then read [Session](/p/grade10-site/account/sign-in#session) for what stays signed in, and [Sign-Out](/p/grade10-site/account/sign-in#sign-out) for ending it.
 
 ## Operator Half
 
@@ -43,7 +43,7 @@ An operator is a person holding a role above `user`.
 
 ## Tests
 
-🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a gated endpoint. Collectors never see it — [Sign-In Tests](/p/grade10-site/account/test-sign-in)
+🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a gated endpoint. Collectors never see it — [Sign-In Tests](/p/grade10-site/account/sign-in#staging-tests)
 
 :::detail{title="Code map" for="engineer"}
 - **Contract** — `openspec/specs/shared/auth/`, one spec per capability

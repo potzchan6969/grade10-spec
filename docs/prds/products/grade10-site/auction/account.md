@@ -19,7 +19,7 @@ enables it.
 | Ways in | An emailed sign-in link, or a verified Google address where the brand enables Google |
 | Registration | The first successful sign-in for an address creates the account; letter case never makes a second one |
 | Resend | Off for **60 seconds** after each send; a new link replaces the one before it |
-| Session | 🚧 The site's own, and no other brand's — [Session](/p/grade10-site/account/session#two-sessions) |
+| Session | 🚧 The site's own, and no other brand's — [Session](/p/grade10-site/account/sign-in#session#two-sessions) |
 
 :::flow{title="Signing in"}
 ## *Collector* — **Asks for a link**

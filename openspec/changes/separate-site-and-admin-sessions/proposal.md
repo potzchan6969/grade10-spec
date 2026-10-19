@@ -45,7 +45,7 @@ None. A second customer site on a brand would sign in on its own under this chan
 
 ## References
 
-- [Session · Two Sessions](../../../docs/prds/products/grade10-site/account/session.md#two-sessions)
+- [Session · Two Sessions](../../../docs/prds/products/grade10-site/account/sign-in.md#two-sessions)
 - [Sign-In](../../../docs/prds/products/grade10-site/account/sign-in.md)
 - [Sign-Out](../../../docs/prds/products/grade10-site/account/sign-out.md)
 - [Sessions · Revoke](../../../docs/prds/products/grade10-site/account/sessions.md#revoke)

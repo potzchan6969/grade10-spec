@@ -91,8 +91,8 @@ account is removed in the next cleanup after the run that generated it (Q21).
 
 ## References
 
-- [Sign-In Tests · Who May Call](../../../docs/prds/products/grade10-site/account/test-sign-in.md#who-may-call)
-- [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/test-sign-in.md#testers)
-- [Sign-In Tests · What the Workflow May Do](../../../docs/prds/products/grade10-site/account/test-sign-in.md#what-the-workflow-may-do)
-- [Sign-In Tests · Closed](../../../docs/prds/products/grade10-site/account/test-sign-in.md#closed)
+- [Sign-In Tests · Who May Call](../../../docs/prds/products/grade10-site/account/sign-in.md#staging-tests#who-may-call)
+- [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/sign-in.md#staging-tests#testers)
+- [Sign-In Tests · What the Workflow May Do](../../../docs/prds/products/grade10-site/account/sign-in.md#staging-tests#what-the-workflow-may-do)
+- [Sign-In Tests · Closed](../../../docs/prds/products/grade10-site/account/sign-in.md#staging-tests#closed)
 - [Accounts · Tests](../../../docs/prds/products/grade10-site/account/accounts.md#tests)
