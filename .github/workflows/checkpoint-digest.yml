@@ -1,0 +1,116 @@
+name: Checkpoint digest
+
+# The checkpoint-digest skill's publish.mjs force-pushes a built digest, its
+# shots and its range to digest/<branch>, then dispatches this run. It uploads
+# the page to the e2e reports bucket, posts its link to the digest channel, and
+# only then moves refs/checkpoints/<branch> to the commit the digest covers,
+# with a lease on the value the digest read. A run that fails before the move
+# leaves the checkpoint where it was, so the next digest tells the same range.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Branch whose digest/<branch> page to publish
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checkpoint-digest-${{ inputs.branch }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.14.1
+  BUCKET: ${{ vars.E2E_REPORTS_R2_BUCKET || 'acetrader-e2e-reports' }}
+  HOST: ${{ vars.E2E_REPORTS_BASE_URL || 'https://e2e-reports.memeland-qa.9gaginc.com' }}
+  ACCESS_LOGIN: https://memeland-qa.cloudflareaccess.com/cdn-cgi/access/login/e2e-reports.memeland-qa.9gaginc.com
+
+jobs:
+  publish:
+    name: Publish, post and move the checkpoint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.E2E_REPORTS_R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.E2E_REPORTS_R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.E2E_REPORTS_R2_ACCOUNT_ID }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL: ${{ vars.CHECKPOINT_DIGEST_SLACK_CHANNEL }}
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: ${{ inputs.branch }}
+    steps:
+      # Full history: the move pushes the covered commit, which must be here.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/checkout@v4
+        with:
+          ref: digest/${{ inputs.branch }}
+          path: page
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Require the keys and the channel
+        run: |
+          missing=""
+          [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ] && [ -n "$R2_ACCOUNT_ID" ] || missing="$missing E2E_REPORTS_R2_*"
+          [ -n "$SLACK_BOT_TOKEN" ] || missing="$missing SLACK_BOT_TOKEN"
+          [ -n "$SLACK_CHANNEL" ] || missing="$missing vars.CHECKPOINT_DIGEST_SLACK_CHANNEL"
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            exit 1
+          fi
+
+      - name: Read the range
+        run: |
+          node -e '
+            const { range } = require("./page/digest.json");
+            if (range.branch !== process.env.BRANCH) throw new Error(`the page covers ${range.branch}, not ${process.env.BRANCH}`);
+            const env = [`FROM=${range.from}`, `TO=${range.to}`, `SHORT=${range.to.slice(0, 7)}`];
+            require("fs").appendFileSync(process.env.GITHUB_ENV, env.join("\n") + "\n");
+          '
+          echo "PREFIX=reports/grade10-spec/digest/${BRANCH//\//-}" >> "$GITHUB_ENV"
+
+      # A page is the team's. Uploading to a host that Access does not guard
+      # would publish it to anyone with the link.
+      - name: Require Cloudflare Access on the host
+        run: |
+          location=$(curl -sS -o /dev/null -w '%{redirect_url}' "$HOST/$PREFIX/$SHORT/")
+          case "$location" in
+            "$ACCESS_LOGIN"*) ;;
+            *) echo "::error::$HOST answered without the team's Cloudflare Access login."; exit 1 ;;
+          esac
+
+      - name: Upload
+        run: |
+          aws s3 sync page "s3://$BUCKET/$PREFIX/$SHORT" \
+            --endpoint-url "https://$R2_ACCOUNT_ID.r2.cloudflarestorage.com" \
+            --exclude ".git/*" --exclude "digest.json" --no-follow-symlinks \
+            --cache-control "no-store" --only-show-errors
+          echo "URL=$HOST/$PREFIX/$SHORT/index.html" >> "$GITHUB_ENV"
+
+      - name: Post the link to Slack
+        run: |
+          node .claude/skills/checkpoint-digest/scripts/slack.mjs page/digest.json --url "$URL" --send | tee posted.json
+          echo "$URL" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Move the checkpoint
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          node .claude/skills/checkpoint-digest/scripts/checkpoint.mjs advance \
+            --branch "$BRANCH" --to "$TO" --from "$FROM"
+
+      - name: Delete the page branch
+        run: gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/digest/$BRANCH"

@@ -1,11 +1,11 @@
 ---
 name: checkpoint-digest
-description: "Tell the team in Slack what moved on a branch since its last checkpoint: read the commits between the checkpoint and the branch head, draw what changed as one page of pictures, post it with its pictures to a Slack channel, then move the checkpoint. Use when a push or a schedule runs the digest, or when asked what changed on a branch since the last digest."
+description: "Tell the team in Slack what moved on a branch since its last checkpoint: read the commits between the checkpoint and the branch head, draw what changed as one page of pictures, and publish it; CI uploads the page, posts its link to Slack and moves the checkpoint. Use when a push or a schedule runs the digest, or when asked what changed on a branch since the last digest."
 ---
 
 # Checkpoint digest
 
-One Slack post that tells the team what moved on a branch since the last post: the changes a reader would notice, each drawn as a picture, with the full page in the thread. The checkpoint, the commit the last digest was drawn to, lives in the repository as `refs/checkpoints/<branch>`, so every run starts where the last one stopped, on any machine. A push or a schedule runs it unattended; nobody answers anything on the page.
+One Slack post that tells the team what moved on a branch since the last post: the changes a reader would notice, listed by area, with a link to the page that draws each one. The page sits behind the team's Cloudflare login, like a handoff page. The checkpoint, the commit the last digest was drawn to, lives in the repository as `refs/checkpoints/<branch>`, so every run starts where the last one stopped, on any machine. A push or a schedule runs it unattended; nobody answers anything on the page.
 
 The page is a `handoff-page` page of kind `digest`: you write the facts as one data file, and that skill's builder draws and checks it. Read `.claude/skills/handoff-page/SKILL.md` for Principles, Data, Pictures and Check; this skill names only what a digest does differently.
 
@@ -18,10 +18,11 @@ The page is a `handoff-page` page of kind `digest`: you write the facts as one d
 3. **Facts** - `node <skill>/scripts/checkpoint.mjs facts --branch <branch> > <scratchpad>/digest/facts.json`, then read what Gather names
 4. **Write the data** - copy `<skill>/assets/example.json` to `<scratchpad>/digest/data.json`, replace every value with your own, and delete `"example"`
 5. **Build and check** - `node .claude/skills/handoff-page/scripts/build.mjs <scratchpad>/digest/data.json`, then the `next:` line it prints, from `apps/preview` or any folder where Playwright resolves; fix every `FAIL`, and look at `check/page-1280-light-changed.png`
-6. **Post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/data.json` prints what it would send; add `--send` to post it
-7. **Move the checkpoint** - only after the post went out, `node <skill>/scripts/checkpoint.mjs advance --branch <branch> --to <to> --from <saved>`, with `to` and `saved` from step 2; `saved` is empty on a first run
+6. **Preview the post** - `node <skill>/scripts/slack.mjs <scratchpad>/digest/data.json --url https://example.com` prints the message CI will send
+7. **Publish** - from the repository root, `node <skill>/scripts/publish.mjs <scratchpad>/digest/page.html --branch <branch> --to <to> --from <saved>`, with `to` and `saved` from step 2 (`saved` is `null` on a first run, and `--from null` passes it); it force-pushes the page, its shots and its range to `digest/<branch>` and dispatches the Checkpoint digest workflow (`.github/workflows/checkpoint-digest.yml`)
+8. **Confirm** - wait for that run (`gh run watch`); its summary holds the page's link, and the post is in the channel
 
-A run that fails before step 7 leaves the checkpoint where it was, so the next run tells the same range again. A post is never lost; at worst it is sent twice.
+The workflow uploads the page, posts the link, then moves the checkpoint, in that order. A run that fails before the move leaves the checkpoint where it was, so the next digest tells the same range again. A post is never lost; at worst it is sent twice.
 
 ## The Checkpoint
 
@@ -30,6 +31,7 @@ A run that fails before step 7 leaves the checkpoint where it was, so the next r
 - **First run** - with no checkpoint, `range` starts from the last commit older than 7 days (`CHECKPOINT_FIRST_RUN` changes it), and `base` reads `first-run`
 - **Rewritten branch** - when a force-push left the checkpoint off the branch, `range` starts where the two still agree, and `base` reads `merge-base`; say so in the post
 - **Two runs at once** - `advance` pushes with a lease on the value it read, so the second run is refused and says so; it posted a range the first run also posted, and nothing is lost
+- **Who moves it** - the workflow, with its own token; a session never needs push rights for it
 - **Look at it** - `git ls-remote origin 'refs/checkpoints/*'`; move it by hand with `advance --to <sha>`
 
 ## Gather
@@ -41,10 +43,10 @@ A run that fails before step 7 leaves the checkpoint where it was, so the next r
 
 ## What the Reader Gets
 
-### One post, then the thread
+### One post and one page
 
-- **Post** - the page's title as a header, the reason, the repository, branch, range and date, then one block per area listing each change as its title and its now line, then Follow-ups
-- **Thread** - the What changed picture, the extra section when there is one, Ship it and Follow-ups, each as an image at 1280 wide, then the page itself as `page.html` to open in a browser
+- **Post** - the page's title as a header, the reason with an Open the page button, the repository, branch, range and date, then one block per area listing each change as its title and its now line, then Follow-ups
+- **Page** - every change drawn, at `reports/grade10-spec/digest/<branch>/<commit>/` on the reports host, behind the team's Cloudflare login; the host drops it 30 days after upload
 - **Title** - `<Branch> Branch Digest`, such as `Main Branch Digest`
 - **Reason** - the two or three moves that matter most, in one line: `3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added`
 
@@ -70,13 +72,16 @@ Each change is one card with a `phase` naming its area; the page groups and coun
 
 ## Running It Unattended
 
-A push or a schedule runs this skill in a session or a CI job; the runner provides:
+A push or a schedule runs this skill in a session or a CI job. The session needs:
 
-- **`SLACK_BOT_TOKEN`** - a bot token with `chat:write` and `files:write`, the bot invited to the channel
-- **`SLACK_CHANNEL`** - the channel id, such as `C0123456789`; `--channel` overrides it
-- **Push rights** - the runner pushes `refs/checkpoints/<branch>` to `origin`; a GitHub job needs `contents: write`
 - **History** - `range` unshallows a shallow clone; a checkout with `fetch-depth: 0` skips that
 - **A browser** - Playwright and Chromium for the check; `pnpm setup:browsers` installs them
-- **One run per branch at a time** - a GitHub job sets `concurrency: checkpoint-digest-<branch>` with `cancel-in-progress: false`
+- **Push rights for `digest/*`** and **`gh`** - to push the page and dispatch the workflow, as a handoff page does
 
-On a push to the branch, pass the branch with `--branch`; the head of the checkout is `to`. A schedule that finds no commits posts nothing.
+The Checkpoint digest workflow needs, in the repository's settings:
+
+- **`E2E_REPORTS_R2_*`** - the secrets the Handoff page workflow already uses
+- **`SLACK_BOT_TOKEN`** - the bot the weekly digest already uses, with `chat:write`, invited to the channel
+- **`vars.CHECKPOINT_DIGEST_SLACK_CHANNEL`** - the channel id, such as `C0123456789`
+
+The workflow runs one digest per branch at a time and refuses a run whose secrets or channel are missing. On a push to the branch, pass the branch with `--branch`; the head of the checkout is `to`. A schedule that finds no commits posts nothing.

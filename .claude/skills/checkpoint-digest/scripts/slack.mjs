@@ -1,10 +1,9 @@
-// Post a built digest to Slack: one message drawn from its data, then its pictures and the page in the message's thread.
-// node slack.mjs <data.json> [--channel <id>] [--send] - without --send it prints what it would post and calls nothing.
-import { existsSync, readFileSync, statSync } from "node:fs";
-import { basename, dirname, join, resolve } from "node:path";
+// Post a published digest to Slack: one message drawn from its data, with the page's link.
+// node slack.mjs <data.json> --url <page link> [--channel <id>] [--send] - without --send it prints what it would post and calls nothing.
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 const API = "https://slack.com/api";
-const SECTIONS = ["extra", "changed", "ship", "followups"];
 const MAX_TEXT = 2900;
 
 const args = process.argv.slice(2);
@@ -13,27 +12,26 @@ const option = (name) => {
   return i === -1 ? undefined : args[i + 1];
 };
 const file = args.find(
-  (a, i) => !a.startsWith("--") && !args[i - 1]?.startsWith("--channel"),
+  (a, i) => !a.startsWith("--") && !/^--(url|channel)$/.test(args[i - 1]),
 );
-if (!file) fail("usage: node slack.mjs <data.json> [--channel <id>] [--send]");
-const dir = dirname(resolve(file));
+const url = option("url");
+if (!file || !url)
+  fail(
+    "usage: node slack.mjs <data.json> --url <page link> [--channel <id>] [--send]",
+  );
 const data = JSON.parse(readFileSync(resolve(file), "utf8"));
 const channel = option("channel") ?? process.env.SLACK_CHANNEL;
 const token = process.env.SLACK_BOT_TOKEN;
-const send = args.includes("--send");
 
 const message = {
   channel,
   text: `${data.title}: ${plain(data.reason)}`,
   blocks: blocks(),
+  unfurl_links: false,
 };
-const uploads = [
-  ...SECTIONS.map((id) => join(dir, "check", `page-1280-light-${id}.png`)),
-  join(dir, "page.html"),
-].filter(existsSync);
 
-if (!send) {
-  console.log(JSON.stringify({ message, uploads }, null, 2));
+if (!args.includes("--send")) {
+  console.log(JSON.stringify(message, null, 2));
   console.log("dry run: add --send to post");
   process.exit(0);
 }
@@ -41,39 +39,12 @@ if (!token) fail("SLACK_BOT_TOKEN is not set");
 if (!channel) fail("name the channel: --channel <id> or SLACK_CHANNEL");
 
 const posted = await call("chat.postMessage", message);
-const files = [];
-for (const path of uploads) {
-  const { upload_url, file_id } = await call(
-    "files.getUploadURLExternal",
-    new URLSearchParams({
-      filename: basename(path),
-      length: String(statSync(path).size),
-    }),
-  );
-  const put = await fetch(upload_url, {
-    method: "POST",
-    body: readFileSync(path),
-  });
-  if (!put.ok) fail(`upload of ${basename(path)} refused: ${put.status}`);
-  files.push({ id: file_id, title: titleOf(path) });
-}
-if (files.length)
-  await call("files.completeUploadExternal", {
-    files,
-    channel_id: posted.channel,
-    thread_ts: posted.ts,
-  });
 const { permalink } = await call(
   "chat.getPermalink",
   new URLSearchParams({ channel: posted.channel, message_ts: posted.ts }),
 );
 console.log(
-  JSON.stringify({
-    channel: posted.channel,
-    ts: posted.ts,
-    permalink,
-    files: files.length,
-  }),
+  JSON.stringify({ channel: posted.channel, ts: posted.ts, permalink }),
 );
 
 function blocks() {
@@ -84,7 +55,16 @@ function blocks() {
       type: "header",
       text: { type: "plain_text", text: data.title.slice(0, 150) },
     },
-    { type: "section", text: { type: "mrkdwn", text: mrkdwn(data.reason) } },
+    {
+      type: "section",
+      text: { type: "mrkdwn", text: mrkdwn(data.reason) },
+      accessory: {
+        type: "button",
+        text: { type: "plain_text", text: "Open the page" },
+        url,
+        style: "primary",
+      },
+    },
     {
       type: "context",
       elements: [
@@ -98,8 +78,7 @@ function blocks() {
     },
   ];
   const changes = data.changes ?? [];
-  const phases = [...new Set(changes.map((c) => c.phase ?? ""))];
-  for (const phase of phases) {
+  for (const phase of [...new Set(changes.map((c) => c.phase ?? ""))]) {
     const lines = changes
       .filter((c) => (c.phase ?? "") === phase)
       .map((c) => `• *${mrkdwn(c.title)}* - ${mrkdwn(c.now)}`);
@@ -135,7 +114,10 @@ function blocks() {
   out.push({
     type: "context",
     elements: [
-      { type: "mrkdwn", text: "Pictures and the full page are in the thread." },
+      {
+        type: "mrkdwn",
+        text: `<${url}|The page> draws each change; it is behind the team's Cloudflare login for 30 days.`,
+      },
     ],
   });
   return out.slice(0, 50);
@@ -157,16 +139,6 @@ function plain(s) {
 
 function clip(text) {
   return text.length > MAX_TEXT ? `${text.slice(0, MAX_TEXT - 2)} …` : text;
-}
-
-function titleOf(path) {
-  const id = basename(path).match(/-light-(\w+)\.png$/)?.[1];
-  if (!id) return `${data.title} - full page`;
-  if (id === "extra") return data.extra?.title ?? "Overview";
-  return (
-    { changed: "What changed", ship: "Ship it", followups: "Follow-ups" }[id] ??
-    id
-  );
 }
 
 async function call(method, body) {
