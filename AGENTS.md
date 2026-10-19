@@ -47,8 +47,9 @@ Use this Clarification Request format whenever human input is needed.
 
 | Need | Canonical location | Notes |
 | --- | --- | --- |
-| What the product is and should be | `docs/prds/products/<product>/<domain>/<page>.md` | The one source of truth: rules, flows, worked examples, 🚧/❓/🎨 marks and the `Product decisions` block. Built from directly. See [`Page First`](docs/governance/page-first.md). Page grammar: `docs/prds/guides/writing-the-manual.md`. |
-| Test cases | The page's `:::example` and `:::flow` blocks with an `id`, plus `docs/cases/<product>/<domain>/<page>.md` | One row per case no example walks. Tests cite a case as `<page>#<id>`. |
+| What the product is and should be | `docs/prds/products/<product>/<domain>/<page>.md` | The only spec: values, flows in order, `## Always`, `## Later`, worked examples, rule ids `{#id}`, 🚧/❓ marks and the `Product decisions` block. Built from directly. See [`Page First`](docs/governance/page-first.md). Page grammar: `docs/prds/guides/writing-the-manual.md`. |
+| Proof | Application tests, each titled with `<page>#<id>` | The application's CI runs `scripts/pages/pages.mjs gate`. |
+| Cases no example walks | `docs/cases/<product>/<domain>/<page>.md` | QA's rows: abuse, boundaries, another tab, failures, records in flight, walks by hand. Never a page value restated. |
 | Source material behind a decision | `docs/references/<doc>.md` | Explanatory, never authoritative. See `docs/references/README.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
@@ -58,9 +59,7 @@ Use this Clarification Request format whenever human input is needed.
 
 Bugs follow `docs/governance/bug-fixes.md`.
 
-Read [`docs/governance/system-design.md`](docs/governance/system-design.md) before designing or building.
-
-Read [`docs/governance/design-system-workflows.md`](docs/governance/design-system-workflows.md) when you know the task but not the rail: it routes tokens, primitives, blocks, a page conversion and an audit finding to the command, skill and governing document that own them.
+Read [`docs/governance/system-design.md`](docs/governance/system-design.md) before designing or building, and [`docs/governance/design-system-workflows.md`](docs/governance/design-system-workflows.md) when you know the task but not the rail.
 
 ## Product workflow
 
@@ -68,17 +67,17 @@ A feature is a change to its page, built straight from it. Read [`docs/governanc
 
 | Step | Who | Skill | Output |
 | --- | --- | --- | --- |
-| 1. Mark the page | Product manager, or whoever learns the detail | `prd-authoring` | 🚧 per outcome, ❓ on what is open, 🎨 on what needs a design, a decisions row |
-| 2. Design | Designer | `storybook-workbench` | A story under each 🎨 line, the mark swapped for `::story` |
-| 3. Cases | QA | `page-cases` | Rows in the page's cases file |
-| 4. Build | Engineer or agent | `page-build` | Tests citing `<page>#<id>`, then code; 🚧 taken off in the same push |
-| 5. Run | QA | `page-cases` | A run sheet from `pnpm pages:cases <prefix> --cited <app-dir>` |
+| 1. Mark the page | Product manager, or whoever learns the detail | `prd-authoring` | 🚧 and an id per outcome, ❓ on what is open, a decisions row |
+| 2. Read it fresh | A fresh agent, or QA | `page-cases` | Gaps as ❓ lines; cases no example walks |
+| 3. Design | Designer | `storybook-workbench` | A story under each 🚧 line the board lists with `none` |
+| 4. Build | Engineer or agent | `page-build` | Tests titled `<page>#<id>`, then code |
+| 5. Release | Whoever ships | `page-build` | 🚧 off once a release carries the line and its ids pass |
+| 6. Run | QA | `page-cases` | A run sheet from `pnpm pages:cases <prefix> --cited <app-dir>` |
 
-`pnpm pages:board [prefix] [--build|--open|--design]` is everyone's work list.
+`pnpm pages:board [prefix] [--build|--open|--design|--work]` is everyone's work list.
 
 Ask only what changes scope or an irreversible product choice. Otherwise write a ❓ line on the page and go on.
-
-The `planning-*`, `workflow-*`, `accept-*`, `spec-to-tcs`, `tcs-review` and `tcs-run-sheet` skills serve only OpenSpec changes opened before page-first.
+The `planning-*`, `workflow-*`, `accept-*`, `spec-to-tcs`, `tcs-*` skills serve only OpenSpec changes opened before Page First.
 
 ## Design Override
 
@@ -107,12 +106,12 @@ Use the `design-system-primitives` skill whenever creating or changing a primiti
 - The package is consumed from source: `exports` point at `src/`, there is no build step, and no `dist/` is committed.
 - Stories sit beside each primitive: [`docs/governance/storybook.md`](docs/governance/storybook.md).
 - Token flow: `tokens.json` is the source of truth, `tokens.config.json` holds the engineer-owned projection rules, and Figma plus the theme CSS files are both projections. Read `packages/design-system/DESIGN.md` before touching any leg of that pipeline.
-- Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, mark it 🎨 on the product page rather than absorbing it into the Code Connect template.
+- Read [`docs/governance/design-code-sync.md`](docs/governance/design-code-sync.md) before adding a primitive or changing one that has a Figma counterpart. A component may not offer a variant or size the Figma component set does not define; where code and design genuinely disagree, write it as a ❓ line on the product page rather than absorbing it into the Code Connect template.
 - The Figma legs (`tokens:import`, `tokens:push`, `tokens:plugin`) require a human to run a plugin inside Figma; they have no unattended path.
 
 ## Sharing with consuming apps
 
-Consumers add this repository as a Git submodule and build from the product pages and their cases, and the design tokens for values. Shared compound components are consumed from `@grade10/ui` from source, so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
+Consumers add this repository as a Git submodule, build from the product pages and the design tokens, and run `node <submodule>/scripts/pages/pages.mjs gate . [--allow <file>]` in CI. Shared compound components are consumed from `@grade10/ui` from source, so a shared component change lands once here and reaches every application through a submodule bump. Application-owned state, adapters, and wiring remain implementation work in each application.
 
 Pin the submodule SHA in the application repository; updates are normal pull requests that move that SHA. Do not use git submodules inside this repository; this repository itself is the reusable submodule.
 
@@ -121,10 +120,8 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm push:main` runs `pnpm check:manual` and `pnpm pages:check` on what it sends, plus the legacy OpenSpec checks while `openspec/` exists; run one alone while drafting. `check:manual` refuses a page that does not parse or links nothing; `pages:check` refuses a bad or reused case id; `check:manual` warns (`dense`) past the budget in `docs/governance/writing.md`.
-- Legacy OpenSpec: `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
-- Legacy OpenSpec: `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
-- Legacy OpenSpec: `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
+- `pnpm push:main` runs `pnpm check:manual` and `pnpm pages:check` on what it sends, plus the legacy OpenSpec checks while `openspec/` exists; run one alone while drafting. `check:manual` refuses a page that does not parse or links nothing; `pages:check` refuses a bad or reused id, warns on an id that vanished or a live rule changed under its id, and refuses this file past 150 lines.
+- Legacy OpenSpec: `pnpm run archive:preflight <change-id>` before closing a change; `pnpm run test:openspec` after `scripts/openspec/` changes.
 - `pnpm --dir tools/relay test` after anything under `tools/relay/` changes.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.

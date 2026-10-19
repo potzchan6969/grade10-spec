@@ -1,38 +1,50 @@
 ---
 name: page-cases
-description: Derive, review and run the test cases of a product page - its examples, flows and its cases file under docs/cases/ - and print a run sheet with what is automated. Use when QA asks for test cases, a review or sign-off, a smoke or regression pass, or cases for a 🚧 feature.
+description: Read a product page fresh for what it leaves out, keep its cases file to what no example walks, and print a run sheet with what is automated. Use when QA asks for test cases, a review or sign-off, a smoke or regression pass, or before a 🚧 line is built.
 ---
 
 # Cases From a Page
 
-A page's cases are its `:::example` and `:::flow` blocks with an `id`, plus
-the rows of `docs/cases/<page>.md`. The format is in
-[Page First](../../../docs/governance/page-first.md#cases).
+A page's ids are its rules that end in `{#id}`, its `:::example` and
+`:::flow` blocks with an `id`, and the rows of `docs/cases/<page>.md`. The
+format is in [Page First](../../../docs/governance/page-first.md#cases).
 
-## Derive
+## Read Fresh
 
-1. **Read the page alone** - its rules, flows, examples and marks. Do not
-   read the code or `openspec/` first: the cases are a reading of the page.
-2. **List what a rule promises** - every value, every rule bullet, every
-   "never", every boundary. An example on the page already proves its rule;
-   skip it.
-3. **Write one row per remaining promise** - Given, When, Then in the page's
-   words and values; ids kebab-case and unique across the page and its
-   examples; sections follow the page's `## ` headings. Tag `smoke` on the
-   handful a release cannot ship without, `building` on a 🚧 line's cases.
-4. **Raise what the page does not say** - a case you cannot write because
-   the page is silent becomes a ❓ line on the page, not a guess in the row.
-5. **Check** - `pnpm pages:check`.
+Read the sections alone - not the code, not the tests. For each rule ask:
+
+- **Abuse** - what does a person gain by doing it twice, fast, or out of order
+- **Boundaries** - the value exactly at, one under and one over each limit
+- **Another tab or device** - what the second one sees, and when
+- **Slow or failed** - what the person sees while waiting, and after a failure
+- **In flight at launch** - a record that started under the old rule
+- **Measured** - what tells us it works in production
+- **Disputed** - what a member or an operator could contest, and the record
+  that settles it
+- **Stated twice** - where else the fact is written, and whether it agrees
+
+An answer the page already gives is a test to write, cited to its id. An
+answer it does not give becomes a ❓ line on the page, never a guess in a
+row.
+
+## Keep the File Narrow
+
+A row is only for a case no page example walks and a test cites. It never
+restates a page value; a row that only repeats a rule or a Rules table cell
+is deleted. Ids are kebab-case and unique across the page; sections follow
+the page's `## ` headings. Tag `smoke` on the handful a release cannot ship
+without, `manual` on a walk by hand. Then `pnpm pages:check`.
 
 ## Review
 
-Walk the rows with the person: merge duplicates, cut rows a page example
-already proves, fix the wording. On sign-off set `reviewed:` to the date and
-their handle.
+Walk the rows with the person: merge duplicates, cut rows the page already
+proves, fix the wording. On sign-off set `reviewed:` to the date and their
+handle.
 
 ## Run
 
-`pnpm pages:cases <prefix> --cited <app-dir> --tsv` prints every case with
-`Automated` yes or no - yes where an application test cites `<page>#<id>`.
-Paste it into a sheet, walk the `no` rows (or only `smoke` for a smoke pass),
-and file a failure as a bug against the case id.
+`pnpm pages:cases <prefix> --cited <app-dir> --tsv` prints every id with
+`Automated` yes or no - yes where a running application test cites
+`<page>#<id>` in its title - and warns on a citation no page holds. Walk the
+`no` rows (only `smoke` for a smoke pass) and file a failure as a bug
+against the id.
