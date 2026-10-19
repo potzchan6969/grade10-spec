@@ -25,7 +25,7 @@ A session belongs to the browser, not to one tab. Every tab of the same site or 
 
 ## Session Lifetime
 
-- ❓ **How long a session lasts** — proposed: a site session lasts 24 hours. A console session lasts 8 hours, or ends after 30 minutes idle. Nothing extends a session yet, so the proposal stands until a refresh mechanism exists, when a week is reconsidered. The sign-in link's five minutes does not bound it, because the link is used up when it creates the session. Owner: Product
+- ❓ **How long a session lasts** — a site session lasts one week, and a refresh extends it. A console session lasts 8 hours, or ends after 30 minutes idle, as proposed. No change specifies the refresh yet. The sign-in link's five minutes does not bound it, because the link is used up when it creates the session. Owner: Product
 
 ## Who Is Signed In
 
