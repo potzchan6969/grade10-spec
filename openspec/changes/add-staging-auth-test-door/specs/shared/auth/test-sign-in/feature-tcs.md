@@ -3,7 +3,13 @@
 **Status:** pending-review · 0/24
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
-## g10.shared-test-sign-in.US1
+## g10.shared-test-sign-in.US1: Sign-in without the /dev endpoint
+
+**As a** QA agent,
+**I want** a tester to sign in on staging without a mailbox,
+**so that** the sign-in suite runs without the disposable /dev endpoint
+
+Walked by nobody on their own. The Trace line names the Feature set group.
 
 ### g10.shared-test-sign-in.US1-TC1: A reviewer-approved run of the test-endpoint workflow from main opens the endpoint on staging
 

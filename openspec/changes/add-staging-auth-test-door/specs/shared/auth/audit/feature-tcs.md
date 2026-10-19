@@ -1,6 +1,6 @@
 # shared/auth/audit Test Cases
 
-**Status:** pending-review · 0/9
+**Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
 ## shared-auth-audit-US-01: Operator's identity action is recorded
@@ -9,7 +9,7 @@
 **I want** a ban, unban, set-role, or revoke — including a refusal — on the identity trail,
 **so that** a dispute can name who did what, by user id, without secrets.
 
-### shared-auth-audit-US-01-TC1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
+### g10.shared-auth-audit.US1-TC1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
 
 Runs once per row of **Test data**.
 
@@ -56,7 +56,7 @@ Runs once per row of **Test data**.
 * The new entry records `<action>`.
 * The new entry names `<caller kind>` in place of a user id.
 
-### shared-auth-audit-US-01-TC2: Test-endpoint capture, expire and clear write no entry
+### g10.shared-auth-audit.US1-TC2: Test-endpoint capture, expire and clear write no entry
 
 Runs once per row of **Test data**.
 
@@ -103,7 +103,7 @@ Runs once per row of **Test data**.
 * Step 2 succeeds.
 * The trail holds the same number of entries as in Step 1.
 
-### shared-auth-audit-US-01-TC3: Test-endpoint entries carry no token, address or email
+### g10.shared-auth-audit.US1-TC3: Test-endpoint entries carry no token, address or email
 
 **Classification:**
 
@@ -147,7 +147,7 @@ Runs once per row of **Test data**.
 * No field of either entry holds the tester address.
 * No field of either entry holds an email address.
 
-### shared-auth-audit-US-01-TC4: A refused test-endpoint ban is on the trail under the caller's kind
+### g10.shared-auth-audit.US1-TC4: A refused test-endpoint ban is on the trail under the caller's kind
 
 **Classification:**
 
@@ -192,7 +192,7 @@ Runs once per row of **Test data**.
 **I want** to read the trail and check it is consistent,
 **so that** I can answer whether the record holds without being shown the proof.
 
-### shared-auth-audit-US-02-TC1: An auditor reads test-endpoint entries and the consistency check passes
+### g10.shared-auth-audit.US2-TC1: An auditor reads test-endpoint entries and the consistency check passes
 
 **Classification:**
 
@@ -238,7 +238,7 @@ Runs once per row of **Test data**.
 **I want** an action that cannot be recorded to be refused,
 **so that** the trail is not a best-effort log of what already happened.
 
-### shared-auth-audit-US-03-TC1: A test-endpoint action the trail cannot record does not run
+### g10.shared-auth-audit.US3-TC1: A test-endpoint action the trail cannot record does not run
 
 Runs once per row of **Test data**.
 
@@ -284,7 +284,7 @@ Runs once per row of **Test data**.
 * The state read in Step 3 is the same as the state read in Step 1.
 * The identity trail holds no new entry.
 
-### shared-auth-audit-US-03-TC2: A test-endpoint entry cannot be rewritten
+### g10.shared-auth-audit.US3-TC2: A test-endpoint entry cannot be rewritten
 
 **Classification:**
 
@@ -328,7 +328,7 @@ Runs once per row of **Test data**.
 **I want** a new user id, a verify that flips, and an account deletion on the identity trail,
 **so that** a dispute can name how that user id appeared or left, without the email.
 
-### shared-auth-audit-US-04-TC1: A test-endpoint account create is on the trail as created under the caller's kind
+### g10.shared-auth-audit.US4-TC1: A test-endpoint account create is on the trail as created under the caller's kind
 
 Runs once per row of **Test data**.
 
@@ -373,54 +373,9 @@ Runs once per row of **Test data**.
 * The new entry records `ban`.
 * The new entry names `<caller kind>` in place of a user id.
 
-### shared-auth-audit-US-04-TC2: A test-endpoint find of an existing account with no change writes no entry
+## shared-auth-audit-US-05: Auditor traces a second-factor write
 
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** minor
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** none
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-audit-US-04
-
-**QA2 disposition:** over-claimed. Its only action is "create or find", and Q47 gives the test endpoint no create action. Q49 records every grant, so a grant cannot be the no-change find either. No scenario states the outcome for the endpoint.
-
-**QA2 covers:** none
-
-**Blocked:** product manager, on Q47 and Q49: no test-endpoint step reaches a no-change find, so the case stays draft until a find action is decided.
-
-**Pre-conditions:**
-
-* An account for `<tester address>` already exists and is `<verification status>`.
-* The caller holds the test-endpoint kind `test-endpoint-workflow`.
-
-**Test data:**
-
-| Verification status |
-| --- |
-| verified |
-| unverified |
-
-**Steps:**
-
-1. Note the number of entries on the identity trail.
-2. Call the test endpoint to create or find the account for `<tester address>` as `test-endpoint-workflow`.
-3. Read the number of entries on the identity trail, and read the account's verification status.
-
-**Expected Results:**
-
-* Step 2 returns the existing account.
-* The trail holds the same number of entries as in Step 1.
-* The account's verification status is the same as before Step 2.
-
----
+No case in this change. The test endpoint writes no second-factor entry, so the second-factor cases stay in the durable suite.
 
 ## Reconciliation
 
