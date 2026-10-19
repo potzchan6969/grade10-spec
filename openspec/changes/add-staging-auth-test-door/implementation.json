@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "acceptance": {
+    "fingerprint": "8f87992012484463f7b587d96fd00a03bcbc4e3a1ad9b52642731953247bf245"
+  },
+  "contractBaseline": {
+    "repository": "9gag/grade10-spec",
+    "commit": "723e9e71567bb77ed3ccf55e0783356a6fb5a588",
+    "capturedAt": "2026-10-19T23:47:40.596Z",
+    "targets": [
+      {
+        "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/audit/spec.md",
+        "anchors": [
+          "Feature set",
+          "Requirement: The test endpoint's identity writes are on the trail"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/test-sign-in/feature-tcs.md",
+        "anchors": []
+      },
+      {
+        "path": "openspec/specs/shared/auth/test-sign-in/spec.md",
+        "anchors": [
+          "Feature set",
+          "Purpose",
+          "Requirement: Ban puts a tester address in the banned state",
+          "Requirement: Capture returns the last sign-in mail for the address named",
+          "Requirement: Clearing the sign-in limits frees a tester from the throttle",
+          "Requirement: Every action names one of the environment's testers",
+          "Requirement: Expire ends an unused link's life early",
+          "Requirement: Grant a scoped role on a generated collector address",
+          "Requirement: Grant puts `admin` on a tester address",
+          "Requirement: Only the test endpoint's own workflow and the QA token may call",
+          "Requirement: The QA token never reaches the admin-only tester and works on staging alone",
+          "Requirement: The test endpoint makes no action beyond those six",
+          "Requirement: The test endpoint opens where a hosted lane runs"
+        ]
+      },
+      {
+        "path": "openspec/specs/shared/auth/test-sign-in/user-journeys.md",
+        "anchors": []
+      }
+    ]
+  },
+  "repositories": []
+}

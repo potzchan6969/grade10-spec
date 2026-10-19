@@ -3,7 +3,7 @@
 - [x] 1.1 Fill the page's code map with the test endpoint's module, its environment predicate, and the name of the tester-domain secret, replacing the two placeholder links — the code map names the test endpoint, `testDoorMoves`, the access check, the testers in `@grade10/auth-contracts` and the lane; no tester-domain secret ships (decisions Q40)
 - [x] 1.2 Verify: `pnpm check:manual`
 
-## 2. The test endpoint and its lock (grade10)
+## 2. The test endpoint and its lock (grade10) (owner: @brianchacha6969)
 
 - [x] 2.1 Add `allowsStagingTestDoor` and mount `/test/*` on the auth worker so it answers on staging and is refused on preview and production, with `/dev` on staging still refused (`shared-auth-test-sign-in-SC-23`, `shared-auth-test-sign-in-SC-24`, `shared-auth-test-sign-in-SC-25`) — shipped as `testDoorMoves` in `@grade10/utils/env`, opening staging and uat, and production for capture and clear (decisions Q41)
 - [x] 2.2 Verify a GitHub Actions OIDC token on every `/test/*` call against the whole claim set — this repository by id, this audience, the test endpoint's own `job_workflow_ref`, `ref` on main, and a `workflow_dispatch` in the reviewed environment — refusing every other caller (`shared-auth-test-sign-in-SC-01`, `shared-auth-test-sign-in-SC-02`, `shared-auth-test-sign-in-SC-03`, `shared-auth-test-sign-in-SC-04`, `shared-auth-test-sign-in-SC-05`, `shared-auth-test-sign-in-SC-32`)
