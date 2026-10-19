@@ -43,11 +43,11 @@ An operator is a person holding a role above `user`.
 
 ## Tests
 
-🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a locked door. Collectors never see it — [Sign-In Tests](/p/grade10-site/account/test-sign-in)
+🚧 **Sign-in without a mailbox** — QA walks sign-in on staging through a gated endpoint. Collectors never see it — [Sign-In Tests](/p/grade10-site/account/test-sign-in)
 
 :::detail{title="Code map" for="engineer"}
 - **Contract** — `openspec/specs/shared/auth/`, one spec per capability
-- **Enforcement** — `elevatedProcedure` and `elevatedRoute` are the only doors to an admin operation
+- **Enforcement** — `elevatedProcedure` and `elevatedRoute` are the only endpoints to an admin operation
 - **Design records** — [security](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md) and [account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
 :::
 

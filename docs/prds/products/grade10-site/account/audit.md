@@ -9,7 +9,7 @@ order: 7
 
 - **Identity writes** — ban, unban, set-role, revoke, a trusted product creating a new user id or flipping one to verified, account deletion, and second-factor enable, disable and recovery regenerate
 - **Refusals too** — a refused ban, unban, role change or revoke is recorded, as a success is
-- **Test-door writes** — a ban, a prepare, a scoped role, and an account the door creates for a tester address. The entry names the caller's kind, `test-door-workflow` or `test-door-qa-token`, in place of a user id. Capture, age and clear write no entry — [Sign-In Tests](/p/grade10-site/account/test-sign-in)
+- **Test-endpoint writes** — a ban, a grant, a scoped role, and an account the test endpoint creates for a tester address. The entry names the caller's kind, `test-endpoint-workflow` or `test-endpoint-qa-token`, in place of a user id. Capture, expire and clear write no entry — [Sign-In Tests](/p/grade10-site/account/test-sign-in)
 - **Entries keep the reason** — an entry keeps the operator's stated reason
 - **Named by user id** — an entry names the account by user id. It never carries a secret, a recovery code or an email
 - **Not on the trail** — collector sign-in and sign-out. A trusted product that finds an account already there, with no data change, does not write
