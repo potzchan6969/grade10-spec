@@ -30,6 +30,7 @@ import {
   type SectionSeed,
 } from "../content/mark-pips";
 import { REF_PATTERN, resolveRef } from "../content/refs";
+import { ruleIds } from "../content/rule-ids";
 import {
   columnCount,
   EQUAL_WIDTH_PROPERTY,
@@ -441,8 +442,8 @@ export function MarkdownView({
   >(
     () =>
       pips
-        ? [remarkGfm, equalWidthTables, [markSections, pipSeed]]
-        : [remarkGfm, equalWidthTables],
+        ? [remarkGfm, ruleIds, equalWidthTables, [markSections, pipSeed]]
+        : [remarkGfm, ruleIds, equalWidthTables],
     [pips, pipSeed],
   );
 
