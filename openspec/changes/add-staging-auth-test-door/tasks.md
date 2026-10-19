@@ -17,7 +17,7 @@
 - [x] 2.10 Mount each environment's actions and testers: staging and uat every action for their four named testers, production and preview capture and clear for production's named testers, local stacks none (`shared-auth-test-sign-in-SC-99` to `shared-auth-test-sign-in-SC-103`, decisions Q40, Q41) — shipped as `testDoorMoves` and `grade10TestDoorEmails`
 - [ ] 2.11 Answer every refusal as the worker answers a path it does not have — a wrong caller, an action the environment does not mount, a QA-token call outside its three actions, and every refusal after the access check — and read a refusal by status alone in the e2e seam (decisions Q23, Q48) — not shipped: an unmounted action answers 404, a wrong caller 403, and an admitted refusal `{ error }`
 
-## 3. The five actions (grade10)
+## 3. The five actions (grade10) (owner: @brianchacha6969)
 
 Needs group 2 landed: every task here sits behind that gate and cannot be verified without it.
 
