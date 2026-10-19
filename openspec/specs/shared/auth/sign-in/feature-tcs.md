@@ -1,9 +1,8 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** reopened · 51/105
+**Status:** reopened · 51/108
 **Drafts styled:** 2026-10-06, tcs-rules r4
 **Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
-**Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
 
@@ -743,6 +742,44 @@ Runs once per row of **Test data**.
 * The surface still shows the person as signed out.
 
 ---
+
+### shared-auth-sign-in-US1-TC19-1: The sign-in email says the link lasts five minutes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Emailed link
+
+**Pre-conditions:**
+
+* `<collector email>` can receive mail in the test environment.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector email | An address that can receive mail in the test environment |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| email language | Each language the brand sends sign-in mail in |
+
+**Steps:**
+
+1. On `<grade10 store url>`, in `<email language>`, ask for a sign-in link for `<collector email>`.
+2. Open the sign-in email.
+
+**Expected Results:**
+
+* Step 2's body says the link lasts five minutes.
+* Step 2 names no other lifetime.
+* Step 2 says it in `<email language>`.
 
 ## shared-auth-sign-in-US3: Collector signs in with Google when the brand offers it
 
@@ -2291,6 +2328,44 @@ Runs once per row of **Test data**.
 
 ---
 
+### shared-auth-sign-in-US8-TC12-1: A sign-in dialog on a tab that did not ask closes when the link is followed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Emailed link
+
+**Pre-conditions:**
+
+* Two tabs of `<grade10 store url>` are open in one browser, signed out, each showing the sign-in dialog.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector email | An address that can receive mail in the test environment |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+
+**Steps:**
+
+1. In the first tab, ask for a sign-in link for `<collector email>`.
+2. Follow the link from the email in a third tab of the same browser.
+3. Return to the first tab.
+4. Return to the second tab.
+
+**Expected Results:**
+
+* Step 3 shows no sign-in dialog and shows `<collector email>`'s account signed in.
+* Step 4 shows no sign-in dialog and shows `<collector email>`'s account signed in.
+
 ## shared-auth-sign-in-US9: Collector follows a link meant for a different account
 
 **As a** collector already signed in,
@@ -2942,6 +3017,40 @@ Runs once per row of **Test data**.
 * Nothing in the response states whether `<signed-in address>` holds a session.
 
 ---
+
+### shared-auth-sign-in-US10-TC10-1: Checking an address without the asking flow's secret does not reveal its session
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Emailed link
+
+**Pre-conditions:**
+
+* `<collector email>` is signed in on `<grade10 store url>` on another device.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector email | An address that currently holds a session |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+
+**Steps:**
+
+1. Without asking for a sign-in link, check whether `<collector email>` has signed in, as the waiting dialog does.
+
+**Expected Results:**
+
+* Step 1's answer is the same as for an address that holds no session.
 
 ## shared-auth-sign-in-US11: Collector is offered Google sign-in without opening the dialog
 

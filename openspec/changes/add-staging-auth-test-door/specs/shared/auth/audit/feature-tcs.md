@@ -1,15 +1,15 @@
 # shared/auth/audit Test Cases
 
-**Status:** pending-review · 0/8
+**Status:** pending-review · 0/10
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
-## shared-auth-audit-US-01: Operator's identity action is recorded
+## shared-auth-audit-US1: Operator's identity action is recorded
 
 **As an** operator,
 **I want** a ban, unban, set-role, or revoke — including a refusal — on the identity trail,
 **so that** a dispute can name who did what, by user id, without secrets.
 
-### shared-auth-audit.US1-TC1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
+### shared-auth-audit-US1-TC7-1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
 
 Runs once per row of **Test data**.
 
@@ -33,7 +33,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `<caller kind>`.
-* `<target user id>` is an account that is not banned and holds no `<scope>` role.
+* `<tester address>` is a unique plus-tag of the collector whose account is not banned and holds no `<scope>` role.
 
 **Test data:**
 
@@ -46,7 +46,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Note the number of entries on the identity trail.
-2. Call the test endpoint to `<action>` `<target user id>` as `<caller kind>`.
+2. Call the test endpoint to `<action>` `<tester address>` as `<caller kind>`.
 3. Read the identity trail.
 
 **Expected Results:**
@@ -56,7 +56,7 @@ Runs once per row of **Test data**.
 * The new entry records `<action>`.
 * The new entry names `<caller kind>` in place of a user id.
 
-### shared-auth-audit.US1-TC2: Test-endpoint capture, expire and clear write no entry
+### shared-auth-audit-US1-TC8-1: Test-endpoint capture, expire and clear write no entry
 
 Runs once per row of **Test data**.
 
@@ -79,23 +79,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The caller holds the test-endpoint kind `<caller kind>`.
+* The caller is `<caller>`.
+* `<tester address>` is a tester address on staging.
 
 **Test data:**
 
-| Action | Caller kind |
+| Action | Caller |
 | --- | --- |
-| capture | test-endpoint-workflow |
-| capture | test-endpoint-qa-token |
-| expire | test-endpoint-workflow |
-| expire | test-endpoint-qa-token |
-| clear | test-endpoint-workflow |
-| clear | test-endpoint-qa-token |
+| capture | the workflow |
+| capture | QA token |
+| expire | the workflow |
+| expire | QA token |
+| clear | the workflow |
+| clear | QA token |
 
 **Steps:**
 
 1. Note the number of entries on the identity trail.
-2. Call the test endpoint to `<action>` as `<caller kind>`.
+2. Call the test endpoint to `<action>` for `<tester address>` as `<caller>`.
 3. Read the number of entries on the identity trail.
 
 **Expected Results:**
@@ -103,7 +104,7 @@ Runs once per row of **Test data**.
 * Step 2 succeeds.
 * The trail holds the same number of entries as in Step 1.
 
-### shared-auth-audit.US1-TC3: Test-endpoint entries carry no token, address or email
+### shared-auth-audit-US1-TC9-1: Test-endpoint entries carry no token, address or email
 
 **Classification:**
 
@@ -125,7 +126,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<target user id>` is an account that is not banned.
+* `<tester address>` is a unique plus-tag of the collector whose account is not banned.
 
 **Test data:**
 
@@ -136,8 +137,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Call the test endpoint to ban `<target user id>`.
-2. Call the test endpoint to grant `<scope>` to `<target user id>`.
+1. Call the test endpoint to ban `<tester address>`.
+2. Call the test endpoint to grant `<scope>` to `<tester address>`.
 3. Read the two entries written by Steps 1 and 2.
 
 **Expected Results:**
@@ -147,7 +148,7 @@ Runs once per row of **Test data**.
 * No field of either entry holds the tester address.
 * No field of either entry holds an email address.
 
-### shared-auth-audit.US1-TC4: A refused test-endpoint ban is on the trail under the caller's kind
+### shared-auth-audit-US1-TC10-1: A refused test-endpoint ban is on the trail under the caller's kind
 
 **Classification:**
 
@@ -162,37 +163,73 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-01
 
-**QA2 disposition:** kept with a note. The refused call is by the workflow, and Q46 puts a refused endpoint ban on the trail. No scenario states this route: SC-43 covers the QA-token attempt only.
+**QA2 disposition:** kept. A workflow ban on an address that is no tester is refused after the access check, so it is on the trail (Q46).
 
-**QA2 covers:** none
+**QA2 covers:** shared-auth-audit-SC-43
 
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<target user id>` is already banned, so a further ban is refused.
+* `<other address>` is not a tester address of the environment and holds no account.
 
 **Steps:**
 
-1. Note the number of entries on the identity trail and the state of `<target user id>`.
-2. Call the test endpoint to ban `<target user id>` as `test-endpoint-workflow`.
-3. Read the identity trail and the state of `<target user id>`.
+1. Note the number of entries on the identity trail.
+2. Call the test endpoint to ban `<other address>` as `test-endpoint-workflow`.
+3. Read the identity trail.
 
 **Expected Results:**
 
 * Step 2 is refused.
 * The trail holds one more entry than in Step 1.
 * The new entry records a refused ban and names `test-endpoint-workflow` in place of a user id.
-* The state of `<target user id>` is the same as in Step 1.
+* No field of the new entry holds `<other address>`.
+
+
+### shared-auth-audit-US1-TC11-1: A ban the access check refuses writes no entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-01
+
+**QA2 disposition:** kept. A QA-token ban is refused by the access check, which writes no entry.
+
+**QA2 covers:** shared-auth-audit-SC-46
+
+**Pre-conditions:**
+
+* The caller carries only the staging QA token.
+* `<tester address>` is a tester address on staging.
+
+**Steps:**
+
+1. Note the number of entries on the identity trail.
+2. Call the test endpoint to ban `<tester address>` with only the QA token.
+3. Read the identity trail.
+
+**Expected Results:**
+
+* Step 2 is refused.
+* The trail holds the same number of entries as in Step 1.
 
 ---
 
-## shared-auth-audit-US-02: Auditor reads the identity trail
+## shared-auth-audit-US2: Auditor reads the identity trail
 
 **As an** auditor,
 **I want** to read the trail and check it is consistent,
 **so that** I can answer whether the record holds without being shown the proof.
 
-### shared-auth-audit.US2-TC1: An auditor reads test-endpoint entries and the consistency check passes
+### shared-auth-audit-US2-TC4-1: An auditor reads test-endpoint entries and the consistency check passes
 
 **Classification:**
 
@@ -207,13 +244,13 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-02
 
-**QA2 disposition:** over-claimed. The clause "The auditor sees no names" is stated by no scenario or decision; see Raised. The rest rests on the durable read and consistency scenarios and names the workflow's entry, which SC-38 states only in part.
+**QA2 disposition:** over-claimed. The clause "The auditor sees no names" goes beyond Q52, which settles that the auditor sees user ids. The rest rests on the durable read and consistency scenarios and names the workflow's entry, which SC-38 states only in part.
 
 **QA2 covers:** none
 
 **Pre-conditions:**
 
-* The caller performs one test-endpoint ban of `<target user id>` as `test-endpoint-workflow`.
+* The caller performs one test-endpoint ban of `<tester address>` as `test-endpoint-workflow`.
 * An auditor holds the audit read grant and nothing else.
 
 **Steps:**
@@ -232,13 +269,13 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-auth-audit-US-03: Operator cannot act off the trail
+## shared-auth-audit-US3: Operator cannot act off the trail
 
 **As an** operator,
 **I want** an action that cannot be recorded to be refused,
 **so that** the trail is not a best-effort log of what already happened.
 
-### shared-auth-audit.US3-TC1: A test-endpoint action the trail cannot record does not run
+### shared-auth-audit-US3-TC4-1: A test-endpoint action the trail cannot record does not run
 
 Runs once per row of **Test data**.
 
@@ -263,7 +300,7 @@ Runs once per row of **Test data**.
 
 * The test environment makes the identity trail refuse its next write.
 * The caller holds the test-endpoint kind `<caller kind>`.
-* `<target user id>` is an account that is not banned and holds no `<scope>` role.
+* `<tester address>` is a unique plus-tag of the collector whose account is not banned and holds no `<scope>` role.
 
 **Test data:**
 
@@ -274,9 +311,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the state of `<target user id>`.
-2. Call the test endpoint to `<action>` as `<caller kind>`.
-3. Read the state of `<target user id>`, and read the identity trail.
+1. Read the state of `<tester address>`.
+2. Call the test endpoint to `<action>` for `<tester address>` as `<caller kind>`.
+3. Read the state of `<tester address>`, and read the identity trail.
 
 **Expected Results:**
 
@@ -284,7 +321,7 @@ Runs once per row of **Test data**.
 * The state read in Step 3 is the same as the state read in Step 1.
 * The identity trail holds no new entry.
 
-### shared-auth-audit.US3-TC2: A test-endpoint entry cannot be rewritten
+### shared-auth-audit-US3-TC5-1: A test-endpoint entry cannot be rewritten
 
 **Classification:**
 
@@ -305,7 +342,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The caller performs one test-endpoint ban of `<target user id>` as `test-endpoint-workflow`.
+* The caller performs one test-endpoint ban of `<tester address>` as `test-endpoint-workflow`.
 
 **Steps:**
 
@@ -322,13 +359,13 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-auth-audit-US-04: Auditor traces an account lifecycle write
+## shared-auth-audit-US4: Auditor traces an account lifecycle write
 
 **As an** auditor,
 **I want** a new user id, a verify that flips, and an account deletion on the identity trail,
 **so that** a dispute can name how that user id appeared or left, without the email.
 
-### shared-auth-audit.US4-TC1: A test-endpoint account create is on the trail as created under the caller's kind
+### shared-auth-audit-US4-TC8-1: A ban that creates an account is one ban entry under the caller's kind
 
 Runs once per row of **Test data**.
 
@@ -345,7 +382,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-04
 
-**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` row is removed (Q50). The create step is now a ban, because Q47 gives the endpoint no create action and Q20 has a ban create the account. The expected action is `ban`, not `created`; that choice is raised. The case names no new user id, so it fully covers no scenario.
+**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` row is removed (Q50). The create step is now a ban, because Q47 gives the endpoint no create action and Q20 has a ban create the account. The expected action is `ban`, not `created`, as Q53 settles. The case names no new user id, so it fully covers no scenario.
 
 **QA2 covers:** none
 
@@ -373,28 +410,60 @@ Runs once per row of **Test data**.
 * The new entry records `ban`.
 * The new entry names `<caller kind>` in place of a user id.
 
+### shared-auth-audit-US4-TC9-1: The daily cleanup's removal of a plus-tag account is one deletion entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-audit-US-04
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-audit-SC-47
+
+**Pre-conditions:**
+
+* A staging run generated `<tester address>`, a unique plus-tag of the collector, and banned it, so it has an account.
+
+**Steps:**
+
+1. Note `<tester address>`'s user id and the number of entries on the identity trail.
+2. Wait for the next daily cleanup to finish.
+3. Read the identity trail.
+
+**Expected Results:**
+
+* The trail holds one more entry than in Step 1.
+* The new entry records a deletion of the user id from Step 1 and names `test-endpoint-cleanup` in place of a user id.
+* No field of the new entry holds `<tester address>`.
+
+---
+
 ## Reconciliation
 
-**Run:** QA2, fresh context. Read: this file, the change's `specs/shared/auth/audit/spec.md` delta, the durable `openspec/specs/shared/auth/audit/spec.md` for the requirements the cases cite, and the change's `decisions.md`. Denied: everything else, including the archive.
+**Run:** QA2, fresh context, then refreshed on 2026-10-19 after the user settled Q50, Q41 and Q53. Read: this file, the change's `specs/shared/auth/audit/spec.md` delta, the durable `openspec/specs/shared/auth/audit/spec.md` for the requirements the cases cite, and the change's `decisions.md`.
 
-**Covers:** Delta scenarios SC-38 to SC-45 only. Fully covered: shared-auth-audit-SC-39 and shared-auth-audit-SC-45, by US-01-TC2.
+**Covers:** Delta scenarios SC-38 to SC-47. Fully covered: SC-39 and SC-45 by US1-TC8-1, SC-43 by US1-TC10-1, SC-46 by US1-TC11-1, SC-47 by US4-TC9-1.
 
-**Scenarios no case covers:**
+**Scenarios no case covers in full:**
 
-* shared-auth-audit-SC-38 and shared-auth-audit-SC-40: naming and action are asserted, but no case asserts the subject's user id, and the no-secret clause sits in TC3 only.
+* shared-auth-audit-SC-38 and shared-auth-audit-SC-40: naming and action are asserted, but no case asserts the subject's user id, and the no-secret clause sits in TC9 only.
 * shared-auth-audit-SC-41: no case asserts the role or the subject's user id.
-* shared-auth-audit-SC-42: no case asserts the new user id.
-* shared-auth-audit-SC-43: no case has the QA token attempt a ban. US-01-TC4 is the workflow's refusal.
+* shared-auth-audit-SC-42: US4-TC8-1 asserts the one `ban` entry but not the new user id.
 * shared-auth-audit-SC-44: no case grants `admin` to an address that already holds it.
 
-**Over-claimed cases:** US-02-TC1 (the "no names" clause), US-04-TC2 (its create-or-find action).
+**Over-claimed cases:** US2-TC4-1 (the "no names" clause; Q52 settles it as user ids only).
 
-**Outcomes no scenario states:** US-01-TC4 (a refused workflow ban, Q46), US-01-TC2's workflow rows (Q45), US-03-TC1 and US-03-TC2 (the requirement sentence and the durable append-only rule).
+**Outcomes no scenario states:** US1-TC8-1's workflow rows (Q45), US3-TC4-1 and US3-TC5-1 (the requirement sentence and the durable append-only rule).
 
-**Contradictions:**
+**Contradictions:** none open. Q50 removed the QA-token write rows; Q47 and Q53 make an account-creating ban one `ban` entry; Q54 retired the create-or-find case.
 
-* Q50, repaired: US-01-TC1, US-01-TC3, US-03-TC1, US-04-TC1 (the QA token ban, grant, scoped role and create rows).
-* Q47, repaired: US-01-TC3, US-03-TC1, US-04-TC1 (the create action).
-* Q47, not repaired: US-04-TC2, which is Blocked.
-* Undecided, raised in `decisions.md` under Raised: US-02-TC1 "no names"; US-04-TC1's action `ban` or `created`; US-04-TC2's find.
-* Not on the repair list, left as written: US-01-TC2's capture, expire and clear steps name no address, against Q9 and Q35.
+**Raised:** none open. Q52, Q53 and Q54 are settled in `decisions.md`.

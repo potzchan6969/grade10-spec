@@ -1,6 +1,6 @@
 # shared/auth/test-sign-in Test Cases
 
-**Status:** pending-review · 0/24
+**Status:** pending-review · 0/25
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
 ## g10.shared-test-sign-in.US1: Sign-in without the /dev endpoint
@@ -24,7 +24,7 @@ Walked by nobody on their own. The Trace line names the Feature set group.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The test endpoint's own workflow
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -67,7 +67,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The test endpoint's own workflow
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -109,7 +109,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -150,7 +150,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Testers / The named testers
+* **Trace:** Testers
 
 **Pre-conditions:**
 
@@ -184,7 +184,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Testers / The named testers
+* **Trace:** Testers
 
 **Pre-conditions:**
 
@@ -218,7 +218,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Capture the link
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -252,7 +252,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Expire the unused link
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -286,7 +286,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Ban the address
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -320,7 +320,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Grant the address
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -356,7 +356,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Grant a scoped role
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -400,7 +400,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Clear the sign-in limits
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -436,7 +436,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Where it opens / Staging and uat
+* **Trace:** Where it opens
 
 **Pre-conditions:**
 
@@ -458,7 +458,7 @@ Runs once per row of **Test data**.
 
 * Every action in step 2 is accepted on the row's environment.
 
-**QA2 disposition:** kept with a note - the scoped role is on a plus-tag, as Q42 settles; SC-100 names a named tester (see Reconciliation).
+**QA2 disposition:** kept with a note - the scoped role is on a plus-tag, as Q42 settles; SC-100 names no scoped role.
 
 **QA2 covers:** none.
 
@@ -477,7 +477,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Where it opens / Production, and preview with it
+* **Trace:** Where it opens
 
 **Pre-conditions:**
 
@@ -519,7 +519,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -561,7 +561,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -602,7 +602,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / The QA token
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -636,7 +636,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Who may call / Every other caller is refused
+* **Trace:** Who may call
 
 **Pre-conditions:**
 
@@ -678,7 +678,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Testers / The named testers
+* **Trace:** Testers
 
 **Pre-conditions:**
 
@@ -718,7 +718,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Capture the link
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -752,7 +752,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** What the workflow may do / Grant a scoped role
+* **Trace:** What the workflow may do
 
 **Pre-conditions:**
 
@@ -796,7 +796,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Where it opens / Production, and preview with it
+* **Trace:** Where it opens
 
 **Pre-conditions:**
 
@@ -838,7 +838,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Closed / Everywhere else
+* **Trace:** Closed
 
 **Pre-conditions:**
 
@@ -873,7 +873,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Closed / Everywhere else
+* **Trace:** Closed
 
 **Pre-conditions:**
 
@@ -915,7 +915,7 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Closed / Everywhere else
+* **Trace:** Closed
 
 **Pre-conditions:**
 
@@ -943,18 +943,54 @@ Runs once per row of **Test data**.
 
 **QA2 covers:** shared-auth-test-sign-in-SC-26, shared-auth-test-sign-in-SC-27, shared-auth-test-sign-in-SC-28.
 
+### g10.shared-test-sign-in.US1-TC25: A generated plus-tag's account is gone after the next daily cleanup
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Testers
+
+**QA2 disposition:** kept.
+
+**QA2 covers:** shared-auth-test-sign-in-SC-104
+
+**Pre-conditions:**
+
+* A run of the test-endpoint workflow is approved on staging.
+
+**Steps:**
+
+1. From that run, generate a unique plus-tag `<plus-tag address>` of the collector and ban it.
+2. Read the account for `<plus-tag address>` on staging.
+3. Wait for the next daily cleanup after the run to finish.
+4. Read the account for `<plus-tag address>`, and for each named tester, on staging.
+
+**Expected Results:**
+
+* Step 2 finds an account for `<plus-tag address>`.
+* Step 4 finds no account for `<plus-tag address>`.
+* Step 4 finds every named tester's account.
+
 ## Reconciliation
 
-Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenarios, `decisions.md` (Q1 to Q51) and the procedure. Nothing else. Case steps and expected results are unchanged.
+Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenarios, `decisions.md` (Q1 to Q54) and the procedure. Nothing else. TC25 was added on 2026-10-19; no other case's steps or expected results changed.
 
-**Covered in full** - SC-01 (TC1), SC-06 (TC10), SC-07 (TC18), SC-12 (TC6), SC-19 (TC8), SC-20 (TC9), SC-21 (TC11), SC-25 (TC23), SC-26, SC-27, SC-28 (TC24), SC-94 (TC3), SC-101 (TC21), SC-103 (TC22). SC-NN is shared-auth-test-sign-in-SC-NN.
+**Covered in full** - SC-01 (TC1), SC-06 (TC10), SC-07 (TC18), SC-12 (TC6), SC-19 (TC8), SC-20 (TC9), SC-21 (TC11), SC-25 (TC23), SC-26, SC-27, SC-28 (TC24), SC-94 (TC3), SC-101 (TC21), SC-103 (TC22), SC-104 (TC25, added 2026-10-19). SC-NN is shared-auth-test-sign-in-SC-NN.
 
-**Not covered in full** - no case asserts the scenario: SC-02, SC-08, SC-09, SC-11, SC-13, SC-14, SC-15, SC-17, SC-18, SC-22, SC-23, SC-30, SC-31, SC-33, SC-34, SC-99. Partly asserted, see the case notes: SC-03, SC-04, SC-05, SC-32 (no nothing-changed check), SC-10, SC-16, SC-24, SC-29, SC-95, SC-96, SC-97, SC-98, SC-102. SC-100 is contradicted, below.
+**Not covered in full** - no case asserts the scenario: SC-02, SC-08, SC-09, SC-11, SC-13, SC-14, SC-15, SC-17, SC-18, SC-22, SC-23, SC-30, SC-31, SC-33, SC-34, SC-99. Partly asserted, see the case notes: SC-03, SC-04, SC-05, SC-32 (no nothing-changed check), SC-10, SC-16, SC-24, SC-29, SC-95, SC-96, SC-97, SC-98, SC-102.
 
 **Over-claimed** - TC5 (unique plus-tag per run), TC14 (non-tester row via the QA token), TC17 (wrong-token and customer-session rows). Each states behaviour no scenario states; fold into spec.md.
 
-**Contradictions** - SC-100 says uat sets a scoped role for a named tester. The requirement "Grant a scoped role" and SC-96 refuse that, and Q42 settles it: never a named tester. TC12 already uses a plus-tag. Dev corrects SC-100.
+**Contradictions** - None open. SC-100 once set a scoped role for a named tester, against Q42; it now names capture, expire, ban, grant `admin` and clear only.
 
 **Repairs** - None. No case contradicts a settled decision.
 
-**Raised** - None unsettled; `decisions.md` is unchanged. Q48 and Q51 cite TC30 and TC13, which this suite no longer holds.
+**Raised** - None unsettled.

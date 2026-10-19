@@ -1,7 +1,8 @@
 # shared/auth/users Test Cases
 
-**Status:** approved · 44/44
-**Reviewed:** 2026-10-06, tcs-rules r4
+**Status:** reopened · 44/45
+**Drafts styled:** 2026-10-19, tcs-rules r6
+**Reviewed:** 2026-10-06, tcs-rules r4, lapsed 2026-10-19
 
 ## shared-auth-users-US1: Operator lists people in the identity directory
 
@@ -1934,6 +1935,42 @@ Signed in as `<a subject user id>`. `<a subject user id>` holds no open erasure 
 
 * Step 2 reads the request cancelled, closed on `<first cancel day>`.
 * Step 3 reads unbanned, as before.
+
+### shared-auth-users-US6-TC11-1: A cancelled erasure request closed a second time stays cancelled
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Erasure requests
+
+**Pre-conditions:**
+
+* `<account holder>` filed an erasure request, and it has been cancelled.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| account holder | An account with a cancelled erasure request |
+
+**Steps:**
+
+1. Read `<account holder>`'s record.
+2. Cancel the same erasure request again.
+3. Read `<account holder>`'s record again.
+
+**Expected Results:**
+
+* Step 2 leaves the request cancelled.
+* Step 3 matches Step 1.
 
 ## Settled
 

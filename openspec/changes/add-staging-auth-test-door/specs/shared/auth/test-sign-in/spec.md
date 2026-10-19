@@ -14,7 +14,7 @@ Operators still walk ban and role on `shared/auth/users`.
   - The QA token: a staging-only token committed to the repository, held by a QA agent, for capture, expire and clear alone, on a tester address other than the admin-only one
   - Every other caller is refused
 - Testers
-  - The named testers: each environment's own, written into the code, and on staging and uat a unique plus-tag of one generated per run; any other address is refused, and an account is created when an action needs one
+  - The named testers: each environment's own, written into the code, and on staging and uat a unique plus-tag of one generated per run, its account removed in the next daily cleanup; any other address is refused, and an account is created when an action needs one
 - What the workflow may do
   - Capture the link: the last sign-in mail for a tester address, without a mailbox
   - Expire the unused link: so an expired follow can be walked without waiting five minutes
@@ -24,7 +24,7 @@ Operators still walk ban and role on `shared/auth/users`.
   - Clear the sign-in limits: the wait between two mails and the count a caller may ask for, so a suite is not throttled as an attacker would be
 - Where it opens
   - Staging and uat: every action
-  - Production, and preview with it: capture and clear alone, for the production collector
+  - Production, and preview with it: capture and clear alone, for production's named testers, so a smoke test can sign in there
 - Closed
   - Everywhere else: local stacks open no action, and `/dev` stays closed on staging, uat and production; the workflow does not generate a session without following the mail, does not unban, and does not seed store or auction data
 
@@ -47,12 +47,15 @@ Which run the test endpoint acts for, and what a refused call leaves behind.
 - **The QA token** — a call carrying the current QA token SHALL be acted on
   for capture, expire and clear on a tester address; the token is committed to
   the repository, and staging alone accepts it
-- **The token's limits** — a ban or a grant carrying only the QA token
-  SHALL be refused, and a token a later commit replaced SHALL be refused
+- **The token's limits** — a ban, a grant or a scoped role carrying only the
+  QA token SHALL be refused, and a token a later commit replaced SHALL be refused
 - **Anyone else** — a call from a laptop, a fork, or another repository that
   carries no current QA token SHALL be refused
 - **A refused call** — a call the test endpoint refuses SHALL change nothing: no
-  account, no role, no ban, no link, no limit
+  account, no role, no ban, no link, no limit; a ban, grant or scoped role
+  refused after the access check `shared/auth/audit` defines — the caller, the
+  environment's actions and the QA token's three — is still recorded on the
+  identity trail there
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-xog rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-01 - The test endpoint acts for its own workflow
@@ -120,11 +123,11 @@ Which run the test endpoint acts for, and what a refused call leaves behind.
 - **THEN** the test endpoint returns the link
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-kgh rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-95 - The QA token cannot ban, grant, or outlive its rotation
+#### Scenario: shared-auth-test-sign-in-SC-95 - The QA token cannot ban, grant, set a role, or outlive its rotation
 **Serves:** Who may call - the QA agent walking a manual pass
 
 - **GIVEN** a call on staging carrying only the QA token
-- **WHEN** it asks to ban or grant a tester address, or carries a token a later commit replaced
+- **WHEN** it asks to ban, grant or set a scoped role on a tester address, or carries a token a later commit replaced
 - **THEN** the test endpoint refuses the call
 - **AND** nothing is changed
 
@@ -160,7 +163,8 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 - **The named testers** — each environment's testers are written into the
   code, not configured: staging and uat each name four — a collector, a
   plus-tag sibling, a ban-only and an admin-only address — and production
-  names its collector alone; any other environment names none
+  names its own smoke testers, today its collector alone; any other
+  environment names none
 - **A generated plus-tag** — on staging and uat, a unique plus-tag of a named
   tester SHALL count as a tester for capture, expire and clear, and a unique
   plus-tag of the collector for ban, grant and a scoped role; production
@@ -177,6 +181,10 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
   put it in the state the action names
 - **The send** — the test endpoint SHALL NOT skip or replace a sign-in send to a tester
   address; the mail goes the ordinary way
+- **Removing** — the account of a generated plus-tag SHALL be removed in the
+  next daily cleanup after the run that generated it, on the identity trail
+  (`shared/auth/audit`); a named tester's account SHALL
+  never be removed
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-4tc rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-06 - An address a run generated is acted on
@@ -195,6 +203,14 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 - **WHEN** the test endpoint's own workflow calls an action on it
 - **THEN** the test endpoint refuses the call
 - **AND** that address is unchanged
+
+#### Scenario: shared-auth-test-sign-in-SC-104 - A generated plus-tag's account is removed in the next daily cleanup
+**Serves:** Testers - a unique plus-tag of a named tester
+
+- **GIVEN** a staging run that generated a unique plus-tag of the collector and banned it
+- **WHEN** the next daily cleanup after that run has finished
+- **THEN** no account exists for that plus-tag
+- **AND** every named tester's account is still there
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-y6k rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-30 - A plus-tag on production is refused
@@ -499,7 +515,7 @@ shut beside it.
 
 - **Staging and uat** — the test endpoint SHALL answer every action on staging and on uat
 - **Production** — on production the test endpoint SHALL answer capture and clear
-  alone, for the production collector; expire, ban, grant and a scoped role
+  alone, for production's named testers; expire, ban, grant and a scoped role
   SHALL be refused and SHALL change nothing. Preview runs the production
   backends, so it answers as production does
 - **Anywhere else** — a local or disposable stack SHALL open no action
@@ -517,7 +533,7 @@ shut beside it.
 - **AND** nothing is changed
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-56z rev=1 -->
-#### Scenario: shared-auth-test-sign-in-SC-24 - Production captures and clears for its collector alone
+#### Scenario: shared-auth-test-sign-in-SC-24 - Production captures and clears for its named testers alone
 **Serves:** Where it opens - production, and preview with it
 
 - **GIVEN** the test endpoint's own workflow, from the main branch, on a dispatch a
@@ -537,7 +553,7 @@ shut beside it.
 
 
 #### Scenario: shared-auth-test-sign-in-SC-101 - Production refuses expire, grant and a scoped role
-**Serves:** Where it opens - production, capture and clear for the collector alone
+**Serves:** Where it opens - production, and preview with it
 
 - **GIVEN** a production run of the test endpoint's workflow
 - **WHEN** it expires a link, grants `admin` or sets a scoped role

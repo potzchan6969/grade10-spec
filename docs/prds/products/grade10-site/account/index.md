@@ -22,7 +22,7 @@ Verification has its own page, `grade10.com/verification`: the identity card,
 the business card and any request from Grade10.
 
 :::detail{title="Code map" for="engineer"}
-`packages/grade10-store/backend/src/kyc/` hosts the KYC gate and the
-case; the profile is `@grade10/store-frontend`'s own slice. Background:
-[docs/architecture/account-data.md](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md).
+- **KYC gate and case** — `packages/grade10-store/backend/src/kyc/`
+- **Profile** — `@grade10/store-frontend`'s own slice
+- **Background** — [docs/architecture/account-data.md](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
 :::

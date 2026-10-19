@@ -69,6 +69,10 @@ Auction bidder bans are a separate thing with a separate switch. The auction ser
 - **The account holder files their own request** — from a product's Your data page, and cancels it there inside seven days. A self-filed request bans nothing — [Account Data](/platform/account-data#erasure)
 - **Standing waits for the request** — while an erasure request is open, a ban or an unban of that account is refused by name. The request closing, cancelled or completed is what changes standing
 
+:::detail{title="Test cases" for="qa"}
+::cases{id="shared/auth/users"}
+:::
+
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

@@ -61,3 +61,7 @@ A permission is one resource and one action, written `resource:action`. A permis
 - **Staff** — holds `vault:operate` and `vault:approve`, and `kyc:read`
 - **Treasurer** — holds `vault:read` and `vault:payout`, and no identity document
 - **Money** — `vault:payout` is the only vault grant that moves money
+
+:::detail{title="Test cases" for="qa"}
+::cases{id="shared/auth/roles"}
+:::

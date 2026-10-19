@@ -1,0 +1,158 @@
+{
+  "version": 2,
+  "change": "add-staging-auth-test-door",
+  "baseline": "8fecd17d29c3b40f5a77081ff53c01b78f23534191230049eaa192af0ad17157",
+  "fingerprint": "8f87992012484463f7b587d96fd00a03bcbc4e3a1ad9b52642731953247bf245",
+  "reviewedBy": "brianchacha6969",
+  "acceptedAt": "2026-10-19T23:29:02.104Z",
+  "artifacts": [
+    {
+      "path": "docs/prds/products/grade10-site/account/accounts.md#tests",
+      "sha256": "0d2ae7356dad148f4558f8ba08f1c7785fb594a95451c08943dd4d41bff4c19f",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/account/audit.md#what-lands-on-the-trail",
+      "sha256": "6a5f5226f03a22acfb58ac99f90c8d46181269ae64f0acd064f33467f7b82d90",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/account/sign-in.md#closed",
+      "sha256": "5e52e44835c43c066fdbab5811b4ca9a89fa63719c8b403cfb8277bd3f8b2665",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/account/sign-in.md#testers",
+      "sha256": "1610d6529f57ed473dfdfccc5f88b605bc49b694e55b4af71c4e75d745c3fccf",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/account/sign-in.md#what-the-workflow-may-do",
+      "sha256": "20db4d5f10d151f7f87ef9bff932ad0c1c9b8e66178f4a86abd0c4929308e9c0",
+      "role": "prd-source"
+    },
+    {
+      "path": "docs/prds/products/grade10-site/account/sign-in.md#who-may-call",
+      "sha256": "aa83a64a04609cd732e8efe2993fbb0468e265fc2cc70f06bbc24f3b6a93d059",
+      "role": "prd-source"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/decisions.md",
+      "sha256": "b29b7e409033aa7f1a4eced96155d41236586686fba562b095ad52e745397824",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/proposal.md",
+      "sha256": "3cb1956ff25e26bfde9fc707bbc9b2278891d1a297c32a6746bc00a6b0e264e2",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/specs/shared/auth/audit/feature-tcs.md",
+      "sha256": "647156d5858b8e4a2064107a36116b1453af218b073b9ca79b3208b88b4520f8",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/specs/shared/auth/audit/spec.md",
+      "sha256": "08de6bfa398d41f2026a9b1b5b3ca2be9a7071b3a91a4b73dad6ae7df9abbb38",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/specs/shared/auth/audit/user-journeys.md",
+      "sha256": "1e245950e4d720ee9a7b022e0f783a1a5db939949e0a4e0c33ca9c5e9dcb1c21",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/specs/shared/auth/test-sign-in/feature-tcs.md",
+      "sha256": "a8f2d8acc3de318f23f0247f568b237c278d47639b3864e5b1b805473a6857e4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/specs/shared/auth/test-sign-in/spec.md",
+      "sha256": "9d1b57b33347c315d131a86f518b2ba70a9551a974835b54c4a0e4dc9133f9a4",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/specs/shared/auth/test-sign-in/user-journeys.md",
+      "sha256": "681e18a02e14041ae5d263a35687aff463b4c3793766fb4868e9f176e1448d15",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/changes/add-staging-auth-test-door/tech-design.md",
+      "sha256": "c4d1b4c8593c7dfc188b0917df2ee5db85922544a757d81ab983444fbd21e7b1",
+      "role": "change-input"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+      "sha256": "1012a0987c106ddffe08e4249c3443385dc3ddc9e4347fea4c92a50dc26dae2f",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/spec.md",
+      "sha256": "2d083f51fb1864a4b997afdbc563b4528e7126c88b235e25f315294f435799e8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+      "sha256": "196645f4717c0dbc9558b35fddf2b3c2c7700f55db3e3ec9f9785f7bab7479a4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/test-sign-in/feature-tcs.md",
+      "sha256": "a8f2d8acc3de318f23f0247f568b237c278d47639b3864e5b1b805473a6857e4",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/test-sign-in/spec.md",
+      "sha256": "dce8423caff1f23f6c94a76dbe2d8cd38b692fa836342728824dd6a9f75526c8",
+      "role": "durable-result"
+    },
+    {
+      "path": "openspec/specs/shared/auth/test-sign-in/user-journeys.md",
+      "sha256": "681e18a02e14041ae5d263a35687aff463b4c3793766fb4868e9f176e1448d15",
+      "role": "durable-result"
+    }
+  ],
+  "contractTargets": [
+    {
+      "path": "openspec/specs/shared/auth/audit/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/spec.md",
+      "anchors": [
+        "Feature set",
+        "Requirement: The test endpoint's identity writes are on the trail"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/audit/user-journeys.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/test-sign-in/feature-tcs.md",
+      "anchors": []
+    },
+    {
+      "path": "openspec/specs/shared/auth/test-sign-in/spec.md",
+      "anchors": [
+        "Feature set",
+        "Purpose",
+        "Requirement: Ban puts a tester address in the banned state",
+        "Requirement: Capture returns the last sign-in mail for the address named",
+        "Requirement: Clearing the sign-in limits frees a tester from the throttle",
+        "Requirement: Every action names one of the environment's testers",
+        "Requirement: Expire ends an unused link's life early",
+        "Requirement: Grant a scoped role on a generated collector address",
+        "Requirement: Grant puts `admin` on a tester address",
+        "Requirement: Only the test endpoint's own workflow and the QA token may call",
+        "Requirement: The QA token never reaches the admin-only tester and works on staging alone",
+        "Requirement: The test endpoint makes no action beyond those six",
+        "Requirement: The test endpoint opens where a hosted lane runs"
+      ]
+    },
+    {
+      "path": "openspec/specs/shared/auth/test-sign-in/user-journeys.md",
+      "anchors": []
+    }
+  ]
+}

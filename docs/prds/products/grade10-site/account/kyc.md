@@ -102,6 +102,10 @@ and the hosted check's states - [KYC Service](/p/grade10-site/account/kyc-servic
 - **The service** - [KYC Service](/p/grade10-site/account/kyc-service)
 :::
 
+:::detail{title="Test cases" for="qa"}
+::cases{id="grade10-site/store/account-identity"}
+:::
+
 :::detail{title="Product decisions" for="pm"}
 The check is the collector's to complete on their own device, because a
 document read at a counter produces no liveness or tamper signal; the service
