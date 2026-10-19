@@ -1,0 +1,47 @@
+{
+  "home": "Grade10 主页",
+  "division": "迷策略MemeStrategy（HKEX：2440）旗下品牌",
+  "divisionLockup": "<line>迷策略MemeStrategy</line><line>（HKEX：2440）旗下品牌</line>",
+  "localeCode": {
+    "en": "EN",
+    "zh-Hant": "繁",
+    "zh-Hans": "简"
+  },
+  "language": "语言：{name}",
+  "menu": {
+    "open": "打开菜单",
+    "close": "关闭菜单"
+  },
+  "nav": {
+    "label": "主菜单",
+    "shows": "卡牌盛事",
+    "retail": "零售",
+    "finance": "金融服务",
+    "vault": "保管库",
+    "solutions": "解决方案",
+    "index": "指数",
+    "press": "新闻中心",
+    "about": "关于我们"
+  },
+  "footer": {
+    "label": "页脚",
+    "tagline": "亚洲顶尖卡牌与藏品殿堂",
+    "address": "香港中环士丹利街28号2602室",
+    "copyright": "© 2026 Grade10。版权所有。",
+    "wordmark": "Grade10",
+    "explore": "立即探索",
+    "company": "公司",
+    "indexes": "市场指数",
+    "follow": "关注我们",
+    "pressReleases": "新闻稿",
+    "mediaCoverage": "媒体报道",
+    "contact": "联系我们",
+    "hatPriceIndex": "Hat Price Index",
+    "ptcg100": "PTCG 100 (BETA版)",
+    "ptcg500": "PTCG 500 (BETA版)",
+    "opcg100": "OPCG 100 (BETA版)",
+    "instagram": "Instagram",
+    "threads": "Threads",
+    "facebook": "Facebook"
+  }
+}

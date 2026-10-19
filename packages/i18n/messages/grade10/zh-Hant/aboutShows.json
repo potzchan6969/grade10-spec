@@ -1,0 +1,163 @@
+{
+  "hero": {
+    "eyebrow": "Grade10 卡牌盛事",
+    "title": "賦予牌魂　藏家殿堂",
+    "lede": "我們透過卡牌盛事，讓龐大的卡牌生態圈轉化成觸手可及的平台，讓收藏家、參展商、合作夥伴、珍稀資產及跨地域需求匯聚同一空間。"
+  },
+  "upcoming": {
+    "title": "盛事預告",
+    "shows": {
+      "seoul": {
+        "date": "2026年11月",
+        "event": "Seoul Auction x Gana Art 高端私人銷售活動"
+      }
+    }
+  },
+  "scale": {
+    "eyebrow": "盛事規模",
+    "title": "洞悉市場脈動　共聚盛會現場",
+    "lede": "親臨現場，見證 Grade10 的市場影響力。我們橫跨中國香港、中國內地、南韓及更多海外市場，匯聚龐大人流、頂尖參展商、持續卡牌盛事與深厚的合作夥伴網絡。",
+    "photo": "數以千計的收藏家擠滿 Grade10 FEST Summer 2026 宴會廳展場。",
+    "stats": {
+      "visitors": {
+        "value": "25,000+",
+        "label": "每場盛事入場人次"
+      },
+      "exhibitors": {
+        "value": "120+",
+        "label": "來自全球的參展商"
+      },
+      "revenue": {
+        "value": "數以千萬計",
+        "label": "為產業帶動的經濟效益"
+      }
+    }
+  },
+  "formats": {
+    "eyebrow": "活動模式",
+    "title": "三大平台　同一社群",
+    "play": "播放{title}精華片段",
+    "photo": "{title}相片（第 {number} 張，共 {count} 張）",
+    "previous": "上一張{title}相片",
+    "next": "下一張{title}相片",
+    "pick": "顯示第 {number} 張相片，共 {count} 張",
+    "photos": "{title}相片選擇",
+    "chapters": {
+      "festival": {
+        "region": "香港",
+        "title": "Grade10 FEST 香港",
+        "dek": "亞洲最大型卡牌盛事，至今已成功舉辦五屆並持續擴展，每場均吸引逾 25,000 名收藏家參與。",
+        "caption": "Grade10 FEST Summer 2026",
+        "poster": "Grade10 FEST 香港精華片段"
+      },
+      "seoul": {
+        "region": "海外合作",
+        "title": "Seoul Auction x Gana Art",
+        "dek": "聯乘韓國頂尖拍賣行，將珍稀卡牌提升至藝術品層次，持續為高端收藏家打造拍賣及尊貴的私人銷售體驗",
+        "poster": "Seoul Auction x ZZZ x Grade10 卡牌展覽現場及高端寶可夢藏卡牆"
+      },
+      "cardjoy": {
+        "region": "中國內地",
+        "title": "CARDJOY × Grade10",
+        "dek": "中國內地最大規模的 TCG 卡牌展會，盛大登陸杭州與上海。",
+        "caption": "CARDJOY x Grade10上海站",
+        "poster": "CARDJOY × Grade10 精華片段"
+      }
+    },
+    "editions": {
+      "summer2026": {
+        "date": "2026年6月",
+        "title": "Grade10 FEST Summer 2026",
+        "desc": "於合和酒店舉辦為期三天的寶可夢 30 週年主題卡展，吸引逾 25,000人次入場及120多家參展商進駐。"
+      },
+      "festival2025": {
+        "date": "2025年11月",
+        "title": "Grade10 Festival 2025",
+        "desc": "創下香港卡展新紀錄，並以矚目的「梵高比卡超」藏卡牆為最大亮點，匯聚香港藏家社群。"
+      },
+      "privateSale2026": {
+        "date": "2026年7月",
+        "title": "Seoul Auction 寶可夢卡牌展覽及銷售活動",
+        "desc": "集換式卡牌首次在亞洲以高端藝術品的形式隆重登場。"
+      },
+      "shanghai2026": {
+        "date": "2026年6月",
+        "title": "CARDJOY x Grade10上海站",
+        "desc": "上海站展出面積擴大至 5,000 平方米，匯聚逾 200家參展商，為業界注入跨市場發展動力。"
+      },
+      "hangzhou2026": {
+        "date": "2026年3月",
+        "title": "CARDJOY x Grade10杭州站",
+        "desc": "首場 CARDJOY × Grade10 全國巡迴盛事於杭州揭幕，吸引逾 10,000 人次入場及 100 多家參展商進駐。"
+      }
+    }
+  },
+  "record": {
+    "eyebrow": "盛事紀錄",
+    "title": "見證收藏家社群的焦點時刻",
+    "items": {
+      "privateSale2026": {
+        "title": "Seoul Auction 寶可夢卡牌展覽及銷售活動",
+        "desc": "Seoul Auction × ZZZ × Grade10：由國際頂級拍賣行 Seoul Auction、ZZZ 與 Grade10 攜手舉辦的卡牌展覽及私人銷售活動。這是集換式卡牌首次在亞洲以高端藝術品的形式隆重登場。",
+        "photo": "Seoul Auction x ZZZ x Grade10 卡牌展覽現場及高端寶可夢藏卡牆",
+        "facts": "Gana Art | 高端藝術品 | 首爾"
+      },
+      "summer2026": {
+        "title": "Grade10 FEST Summer 2026",
+        "desc": "於合和酒店舉辦為期三天的寶可夢 30 週年主題卡展，吸引逾 25,000人次入場及120多家參展商進駐。",
+        "photo": "Grade10 Festival 展場人頭湧湧，參加者圍滿卡牌攤位。",
+        "facts": "25K+ 入場人次 | 120+ 參展商 | 香港"
+      },
+      "shanghai2026": {
+        "title": "CARDJOY x Grade10上海站",
+        "desc": "上海站展出面積擴大至 5,000 平方米，匯聚逾 200家參展商，為業界注入跨市場發展動力。",
+        "photo": "收藏家在 CARDJOY x Grade10 卡展場內排隊。",
+        "facts": "5,000 平方米 | 200+ 參展商 | 上海"
+      },
+      "hangzhou2026": {
+        "title": "CARDJOY x Grade10杭州站",
+        "desc": "首場 CARDJOY × Grade10 全國巡迴盛事於杭州揭幕，吸引逾 10,000 人次入場及 100 多家參展商進駐。",
+        "photo": "收藏家抵達 CARDJOY x Grade10 展會場地外。",
+        "facts": "10K+ 入場人次 | 100+ 參展商 | 杭州"
+      },
+      "festival2025": {
+        "title": "Grade10 Festival 2025",
+        "desc": "在香港掀起熱潮的重量級卡展，以「梵高比卡超」特展為核心焦點，創下逾 23,000 人次入場紀錄。",
+        "photo": "Grade10 Festival 合作夥伴於主背板前合照。",
+        "facts": "23K+ 入場人次 | 梵高比卡超 | 香港"
+      }
+    }
+  },
+  "past": {
+    "eyebrow": "歷屆盛事",
+    "title": "步步足跡　精彩見證",
+    "latest": "最新",
+    "events": {
+      "summer2026": {
+        "date": "2026年6月",
+        "city": "香港",
+        "title": "Grade10 FEST Summer 2026",
+        "recap": "為期三日的寶可夢 30 週年主題卡展，吸引逾 25,000 人次共襄盛舉。"
+      },
+      "shanghai2026": {
+        "date": "2026年6月",
+        "city": "上海",
+        "title": "CARDJOY x Grade10 上海站",
+        "recap": "展出面積擴大至 5,000 平方米，匯聚超過 200 家參展商，為行業注入跨地域活力。"
+      },
+      "hangzhou2026": {
+        "date": "2026年3月",
+        "city": "杭州",
+        "title": "CARDJOY x Grade10杭州站",
+        "recap": "首場 CARDJOY × Grade10 全國巡迴盛事於杭州揭幕，吸引逾 10,000 人次入場及 100 多家參展商進駐。"
+      },
+      "festival2025": {
+        "date": "2025年11月",
+        "city": "香港",
+        "title": "Grade10 Festival 2025",
+        "recap": "創下香港卡展新紀錄，並以矚目的「梵高比卡超」藏卡牆為最大亮點，匯聚香港藏家社群。"
+      }
+    }
+  },
+  "pressRelease": "新聞稿"
+}

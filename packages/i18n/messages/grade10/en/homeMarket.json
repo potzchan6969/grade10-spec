@@ -1,0 +1,86 @@
+{
+  "solutions": {
+    "eyebrow": "The Grade10 suite",
+    "title": "Solutions for the collector journey",
+    "finance": {
+      "title": "Grade10 Finance",
+      "text": "Card-backed liquidity for premium collections, without selling.",
+      "badge": "Planned for Q4 2026"
+    },
+    "vault": {
+      "title": "Grade10 Vault",
+      "text": "Museum-grade storage with digital ownership records.",
+      "badge": "Invite-only launch"
+    },
+    "ai": {
+      "title": "Grade10 AI",
+      "text": "Instant card lookup, live pricing and market context.",
+      "badge": "app.grade10.com"
+    }
+  },
+  "indexes": {
+    "eyebrow": "Market indexes",
+    "title": "A real-time pulse of the card market",
+    "lede": "The first indexes to track price movement across the market’s most liquid cards, from the Grey Felt Hat Pikachu to broad Pokémon and One Piece benchmarks.",
+    "tabs": "Indexes",
+    "weekly": "Weekly",
+    "beta": "Beta",
+    "facts": {
+      "components": "Components",
+      "frequency": "Frequency",
+      "rebalance": "Rebalance",
+      "grade": "Grade",
+      "baseDate": "Base date",
+      "launched": "Launched",
+      "status": "Status",
+      "game": "Game"
+    },
+    "values": {
+      "daily": "Daily",
+      "quarterly": "Quarterly",
+      "onePiece": "One Piece"
+    },
+    "hpi": {
+      "name": "Hat Price Index",
+      "updated": "Hat Price Index (HPI), updated {date}",
+      "change": "Up {change}% on last week",
+      "signal": "Cooling: 12-week Z of {z}",
+      "chart": "HPI over the last 52 weeks, between {low} and {high}",
+      "window": "Last 52 weeks",
+      "text": "A single-asset cultural index tracking the PSA 10 Grey Felt Hat Pikachu, published weekly.",
+      "cta": "View the Index"
+    },
+    "ptcg100": {
+      "label": "PTCG100 Index",
+      "title": "The global benchmark for Pokémon cards",
+      "text": "The world’s first broad-market benchmark index, tracking the 100 most representative PSA 10 Pokémon cards. It is grounded in actual transaction data to remove subjective valuation and reflect market trends objectively.",
+      "cta": "View PTCG100"
+    },
+    "ptcg500": {
+      "label": "PTCG500 Index",
+      "title": "The wider Pokémon market",
+      "text": "A market benchmark index tracking the 500 most representative PSA 10 Pokémon cards.",
+      "cta": "View PTCG500"
+    },
+    "opcg100": {
+      "label": "OPCG100 Index",
+      "title": "The One Piece benchmark",
+      "text": "A market benchmark index tracking the 100 most representative One Piece trading cards.",
+      "cta": "View OPCG100"
+    }
+  },
+  "news": {
+    "eyebrow": "Press releases",
+    "title": "Latest news",
+    "all": "All Press Releases",
+    "items": {
+      "cantonFair": "MemeStrategy (HKEX: 2440) and POKECOLOR Bring CARDJOY x Grade10 Card Show to the Canton Fair Complex in Guangzhou, China",
+      "ganaArt": "Grade10 and Gana Art Announce Plans to Establish Joint Venture to Advance South Korea’s Trading Card Culture, Showcasing Vision through THEMGOOD Debut at Seoul Art Week",
+      "benchmarkIndices": "Grade10 Launches World’s First TCG Market Benchmark Indices, Establishing Institutional Pricing Standards for Alternative Assets and Ushering Trading Cards into the Data-Driven Era",
+      "seoulAuction": "Grade10 Takes Its Trading Card Business to the Next Level with Official Entry into the South Korean Market, Partners with Leading Auction House Seoul Auction for Pokémon Card Exhibition and Private Sales Event",
+      "festConcludes": "MemeStrategy (HKEX: 2440)’s Premier Asian Trading Card Event Grade10 FEST Summer 2026 Concludes Successfully, Attracting Over 25,000 Attendees and Convening 120+ Local and International Exhibitors Over Three Days",
+      "festOpening": "Hong Kong’s Largest Card Show - Grade10 FEST Summer 2026 Grand Opening Today, Celebrating Pokémon’s 30th Anniversary with Hong Kong’s Largest Nostalgic Showcase! Tens of Millions of HKD Worth of Vintage Pokémon Cards on Display",
+      "financeLaunch": "MemeStrategy (HKEX: 2440) to launch Trading Card Financing Service “Grade10 Finance,” Asia’s First Trading Card Financing Service by a Listed Company, Unlocking Liquidity for Trading Cards and Building an Asia Collectibles Financial Ecosystem"
+    }
+  }
+}

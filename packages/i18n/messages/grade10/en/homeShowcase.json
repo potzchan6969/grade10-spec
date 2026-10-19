@@ -1,0 +1,93 @@
+{
+  "ecosystem": {
+    "eyebrow": "Grade10 ecosystem",
+    "title": "<line>Six</line> <line>pillars</line>",
+    "lede": "An industry pioneer in Asia, with the region’s most comprehensive ecosystem for cards and collectibles, backed by a publicly listed company.",
+    "explore": "Explore {pillar}",
+    "comingSoon": "Coming soon",
+    "caption": "One platform at the core: grading, financing, vaulting, retail, shows and publishing, all connected through Grade10.",
+    "pillars": {
+      "grading": {
+        "name": "Grading",
+        "blurb": "Submission and authentication via PSA, CGC and BGS."
+      },
+      "financing": {
+        "name": "Financing",
+        "blurb": "Card-backed lending, fund tokenization and market indexes."
+      },
+      "vaulting": {
+        "name": "Vaulting",
+        "blurb": "Museum-grade storage in partnership with Crown Fine Art."
+      },
+      "retail": {
+        "name": "Retail",
+        "blurb": "Flagship store in Hong Kong, paired with an online marketplace."
+      },
+      "shows": {
+        "name": "Shows",
+        "blurb": "Asia’s largest trading-card festivals, 25,000+ visitors per show."
+      },
+      "publishing": {
+        "name": "Publishing",
+        "blurb": "Production and marketing for card and IP merchandise."
+      }
+    }
+  },
+  "events": {
+    "eyebrow": "Grade10 events",
+    "title": "Celebrating the culture, building the community",
+    "stats": {
+      "visitors": {
+        "value": "25,000+",
+        "label": "Visitors per show"
+      },
+      "exhibitors": {
+        "value": "120+",
+        "label": "Exhibitors from around the world"
+      },
+      "revenue": {
+        "value": "Millions",
+        "label": "In revenue generated for the industry"
+      }
+    },
+    "shows": {
+      "festival": {
+        "region": "Hong Kong",
+        "title": "Grade10 FEST HK",
+        "photo": "Collectors at Grade10 FEST Summer 2026 in Hong Kong"
+      },
+      "seoul": {
+        "region": "Overseas partnership",
+        "title": "Seoul Auction x Gana Art",
+        "photo": "The Seoul Auction x ZZZ x Grade10 trading card exhibition floor with the premium Pokémon card wall"
+      },
+      "cardjoy": {
+        "region": "Chinese Mainland",
+        "title": "CARDJOY × Grade10",
+        "photo": "The CARDJOY x Grade10 show floor in Shanghai"
+      }
+    },
+    "editions": {
+      "summer2026": {
+        "date": "Jun 2026",
+        "title": "Grade10 FEST Summer 2026"
+      },
+      "festival2025": {
+        "date": "Nov 2025",
+        "title": "Grade10 Festival 2025"
+      },
+      "privateSale2026": {
+        "date": "Jul 2026",
+        "title": "Seoul Auction Private Sale & Exhibition"
+      },
+      "shanghai2026": {
+        "date": "Jun 2026",
+        "title": "CARDJOY x Grade10 Shanghai"
+      },
+      "hangzhou2026": {
+        "date": "Mar 2026",
+        "title": "CARDJOY x Grade10 Hangzhou"
+      }
+    }
+  }
+}

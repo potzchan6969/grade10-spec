@@ -1,0 +1,93 @@
+{
+  "ecosystem": {
+    "eyebrow": "Grade10 生態圈",
+    "title": "<line>六大</line><line>支柱</line>",
+    "lede": "亞洲行業先驅，背靠香港上市公司，打造亞洲最完善的卡牌與收藏品生態圈。",
+    "explore": "了解{pillar}",
+    "comingSoon": "即將推出",
+    "caption": "以Grade10為核心平台，將評級、金融、保管、零售、盛事及發行深度整合，構建全方位卡牌生態圈。",
+    "pillars": {
+      "grading": {
+        "name": "鑑定評級",
+        "blurb": "代辦 PSA、CGC 及 BGS 鑑定評級與真偽認證。"
+      },
+      "financing": {
+        "name": "金融服務",
+        "blurb": "提供收藏卡融資服務、代幣化基金及指數分析。"
+      },
+      "vaulting": {
+        "name": "保管庫",
+        "blurb": "與Crown Fine Art合作，提供博物館級保管庫服務。"
+      },
+      "retail": {
+        "name": "零售",
+        "blurb": "將設有香港實體旗艦店，並完美結合線上交易平台，打通全渠道買賣。"
+      },
+      "shows": {
+        "name": "卡牌盛事",
+        "blurb": "舉辦亞洲最大型卡牌盛會，每場吸引逾 25,000 人次入場。"
+      },
+      "publishing": {
+        "name": "發行",
+        "blurb": "為知名 IP 週邊與卡牌策劃市場推廣及發行。"
+      }
+    }
+  },
+  "events": {
+    "eyebrow": "Grade10 盛事",
+    "title": "推廣卡牌文化　凝聚社群",
+    "stats": {
+      "visitors": {
+        "value": "25,000+",
+        "label": "每場盛事入場人次"
+      },
+      "exhibitors": {
+        "value": "120+",
+        "label": "來自全球的參展商"
+      },
+      "revenue": {
+        "value": "數以千萬計",
+        "label": "為產業帶動的經濟效益"
+      }
+    },
+    "shows": {
+      "festival": {
+        "region": "香港",
+        "title": "Grade10 FEST 香港",
+        "photo": "收藏家齊聚香港 Grade10 FEST Summer 2026"
+      },
+      "seoul": {
+        "region": "海外合作",
+        "title": "Seoul Auction x Gana Art",
+        "photo": "Seoul Auction x ZZZ x Grade10 卡牌展覽現場及高端寶可夢藏卡牆"
+      },
+      "cardjoy": {
+        "region": "中國內地",
+        "title": "CARDJOY × Grade10",
+        "photo": "上海 CARDJOY x Grade10 展會現場"
+      }
+    },
+    "editions": {
+      "summer2026": {
+        "date": "2026年6月",
+        "title": "Grade10 FEST Summer 2026"
+      },
+      "festival2025": {
+        "date": "2025年11月",
+        "title": "Grade10 Festival 2025"
+      },
+      "privateSale2026": {
+        "date": "2026年7月",
+        "title": "Seoul Auction 寶可夢卡牌展覽及銷售活動"
+      },
+      "shanghai2026": {
+        "date": "2026年6月",
+        "title": "CARDJOY x Grade10上海站"
+      },
+      "hangzhou2026": {
+        "date": "2026年3月",
+        "title": "CARDJOY x Grade10杭州站"
+      }
+    }
+  }
+}

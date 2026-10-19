@@ -1,0 +1,160 @@
+{
+  "hero": {
+    "eyebrow": "Grade10 Vault",
+    "title": "Museum-grade custody for trading cards",
+    "lede": "Store graded cards with Crown Fine Art, track ownership online, and connect each vaulted asset to a verifiable digital record.",
+    "vault": "Vault now",
+    "how": "How it works",
+    "note": "Available to invited partners & collectors during launch."
+  },
+  "partners": {
+    "listed": "Listed-company backing",
+    "facility": "Storage facility provider",
+    "strategic": "Strategic partners"
+  },
+  "protection": {
+    "eyebrow": "Protection that goes further",
+    "title": "Five Layers of Certainty",
+    "lede": "A simple custody model: secure storage, verified assets, digital ownership, clear access, and traceable status.",
+    "security": {
+      "title": "Museum-Grade Security",
+      "text": "Stored with Crown Fine Art in a museum-grade vault - 24/7 surveillance, multi-layered security systems, and climate control."
+    },
+    "authenticated": {
+      "title": "Authenticated & Secure",
+      "text": "Each card is authenticated by the Grade10 team alongside professional graders, and protected throughout storage and ownership."
+    },
+    "tokenized": {
+      "title": "Tokenized Ownership",
+      "text": "Each card is minted as a digital twin on the Solana blockchain, ensuring immutable, verifiable ownership."
+    },
+    "complimentary": {
+      "title": "Complimentary Storage",
+      "text": "All PSA, CGC, SGC and BGS graded cards are vaulted free during launch - exclusively for invited partners and collectors."
+    },
+    "traceable": {
+      "title": "Real-Time Traceability",
+      "text": "Track your card at every step, from intake to secure storage, with clear status updates throughout."
+    }
+  },
+  "digital": {
+    "eyebrow": "Digital proof",
+    "title": "What Happens After a Card Is Vaulted",
+    "lede": "Physical custody, ownership records, and market value are connected into one traceable asset view.",
+    "custody": {
+      "kicker": "Physical custody",
+      "title": "The Card Stays Protected",
+      "text": "The graded card remains in secure storage with Crown Fine Art."
+    },
+    "twin": {
+      "kicker": "Digital twin",
+      "title": "Ownership Is Recorded",
+      "text": "A matching on-chain record links the owner to the vaulted asset."
+    },
+    "value": {
+      "kicker": "Live value",
+      "title": "Pricing Stays Visible",
+      "text": "Market data and Grade10 AI help keep valuation context current."
+    },
+    "solana": {
+      "title": "What’s Solana?",
+      "body": "The public blockchain used for fast, transparent ownership records linked to the vaulted physical card.",
+      "whyLabel": "Why it matters",
+      "why": "Ownership can be verified without moving the physical card out of secure custody."
+    }
+  },
+  "how": {
+    "eyebrow": "How to vault",
+    "title": "Three Simple Steps",
+    "request": {
+      "title": "Submit Your Vault Request",
+      "text": "Use the Vault form to reserve a drop-off appointment or register a mail-in shipment."
+    },
+    "handOff": {
+      "title": "Hand Off Your Cards",
+      "text": "Drop off in person, or ship with your Shipment ID via SF Express, FedEx, DHL, or another major courier."
+    },
+    "track": {
+      "title": "Track Secure Custody",
+      "text": "After intake, your cards move into secure storage and appear online with traceable status and ownership records."
+    }
+  },
+  "form": {
+    "title": "Submit Your Vault Request",
+    "type": {
+      "label": "Submission type",
+      "mailIn": "Mail-in",
+      "dropOff": "In-person drop-off",
+      "privateCollection": "Private collection"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "Your name"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "you@email.com"
+    },
+    "cards": {
+      "label": "Cards",
+      "placeholder": "12"
+    },
+    "date": {
+      "label": "Preferred date"
+    },
+    "notes": {
+      "label": "Notes",
+      "placeholder": "Card types, grading companies, or handling requests"
+    },
+    "submit": "Submit request"
+  },
+  "why": {
+    "eyebrow": "Why choose us",
+    "title": "Built for Trust",
+    "custody": {
+      "title": "Secure Custody",
+      "text": "Stored with Crown Fine Art in a climate-controlled facility with 24/7 surveillance and controlled access."
+    },
+    "access": {
+      "title": "Clear Access",
+      "text": "View ownership records and vault status online after intake."
+    },
+    "records": {
+      "title": "Auditable Records",
+      "text": "Traceable status, independent reports, and a clean custody history."
+    },
+    "viewing": {
+      "title": "Private Viewing",
+      "text": "Vault visits available by request for vaulted cards."
+    }
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Good Questions, Answered",
+    "secure": {
+      "q": "Is the Vault secure?",
+      "a": "Yes. All cards are stored with Crown Fine Art in a museum-grade vault with 24/7 surveillance, multi-layered security, and climate control - under institutional governance and independent audits."
+    },
+    "send": {
+      "q": "How do I send my items to the Vault?",
+      "a": "Start with the on-page Vault request form. Choose drop-off or mail-in, then our team confirms the appointment or shipment details before intake."
+    },
+    "view": {
+      "q": "Can I view my items once they’re in the Vault?",
+      "a": "Anytime. Track digital ownership records online on the Grade10 website, and request private on-site vault visits to view your cards in person."
+    },
+    "fees": {
+      "q": "What fees should I expect?",
+      "a": "During the launch period, storage is complimentary for invited partners and collectors - all PSA, CGC, SGC and BGS graded cards are vaulted free."
+    },
+    "tokenization": {
+      "q": "How does tokenization work for vaulted cards?",
+      "a": "Each card is minted as a digital twin on the Solana blockchain, creating an immutable ownership record linked to its secure physical custody."
+    }
+  },
+  "cta": {
+    "title": "Questions About Vaulting?",
+    "body": "Our team responds promptly. Ask about eligibility, intake, custody, or viewing access during launch.",
+    "contact": "Contact us"
+  }
+}

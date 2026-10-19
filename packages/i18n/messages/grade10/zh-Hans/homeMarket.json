@@ -1,0 +1,86 @@
+{
+  "solutions": {
+    "eyebrow": "Grade10 专属方案",
+    "title": "为收藏家打造的完整生态解决方案",
+    "finance": {
+      "title": "Grade10 Finance",
+      "text": "无需割爱珍藏，凭卡牌即可灵活释放资产流动性。",
+      "badge": "预计 2026 年第四季度推出"
+    },
+    "vault": {
+      "title": "Grade10 保管库",
+      "text": "博物馆级藏卡保管服务，并配备数字所有权凭证。",
+      "badge": "上线初期仅限受邀"
+    },
+    "ai": {
+      "title": "Grade10 AI",
+      "text": "即时查询卡牌，提供最新动态报价与市场分析。",
+      "badge": "app.grade10.com"
+    }
+  },
+  "indexes": {
+    "eyebrow": "市场指数",
+    "title": "实时掌握卡牌市场趋势",
+    "lede": "首创追踪市场高流动性卡牌价格走势的专属指数——涵盖“戴灰毡帽的皮卡丘（Pikachu with Grey Felt Hat Card）”单卡，以至宝可梦（Pokémon）与航海王（One Piece）等大盘指标。",
+    "tabs": "市场指数",
+    "weekly": "每周",
+    "beta": "BETA版",
+    "facts": {
+      "components": "成分卡牌",
+      "frequency": "更新频率",
+      "rebalance": "成分调整",
+      "grade": "评级",
+      "baseDate": "基准日",
+      "launched": "推出日期",
+      "status": "状态",
+      "game": "游戏"
+    },
+    "values": {
+      "daily": "每日",
+      "quarterly": "每季度",
+      "onePiece": "航海王（One Piece）"
+    },
+    "hpi": {
+      "name": "Hat Price Index",
+      "updated": "Hat Price Index（HPI），更新于{date}",
+      "change": "较上周上涨 {change}%",
+      "signal": "降温：12 周 Z 值 {z}",
+      "chart": "HPI 过去 52 周走势，介于 {low} 至 {high}",
+      "window": "过去 52 周",
+      "text": "追踪 PSA 10“戴灰毡帽的皮卡丘（Pikachu with Grey Felt Hat Card）”的单一资产文化指数，每周发布。",
+      "cta": "查看指数"
+    },
+    "ptcg100": {
+      "label": "PTCG100 指数",
+      "title": "宝可梦卡牌的全球基准",
+      "text": "全球首创的大盘基准指数，追踪 100 张最具代表性的 PSA 10 宝可梦（Pokémon）卡牌。指数以实际成交数据编制，摒弃主观估值，客观反映市场趋势。",
+      "cta": "查看 PTCG100"
+    },
+    "ptcg500": {
+      "label": "PTCG500 指数",
+      "title": "更广阔的宝可梦市场",
+      "text": "追踪 500 张最具代表性的 PSA 10 宝可梦（Pokémon）卡牌的市场基准指数。",
+      "cta": "查看 PTCG500"
+    },
+    "opcg100": {
+      "label": "OPCG100 指数",
+      "title": "航海王卡牌的基准",
+      "text": "追踪 100 张最具代表性的航海王（One Piece）集换式卡牌的市场基准指数。",
+      "cta": "查看 OPCG100"
+    }
+  },
+  "news": {
+    "eyebrow": "新闻稿",
+    "title": "最新消息",
+    "all": "所有新闻稿",
+    "items": {
+      "cantonFair": "迷策略（HKEX：2440）与内地卡界龙头卡乐携手“CARDJOY x Grade10”卡展盛会登陆广交会展馆",
+      "ganaArt": "Grade10进一步拓展亚洲收藏卡及收藏品市场 与国际知名艺术中心Gana Art将成立合资企业 瞄准韩国近百亿港元市场潜力 构建收藏品生态圈进军高端市场",
+      "benchmarkIndices": "Grade10发布全球首创集换式卡牌市场指数系列 确立另类资产机构级定价新标准 引领集换式卡牌迈向数据化时代",
+      "seoulAuction": "Grade10卡牌业务再下一城 正式进军韩国市场 与国际顶级拍卖行Seoul Auction合办宝可梦卡牌展览及销售活动",
+      "festConcludes": "迷策略（HKEX：2440）旗下亚洲著名收藏卡盛事《Grade10 FEST Summer 2026》圆满落幕 三天吸引超2.5万人次参与 汇聚超120家海内外参展商",
+      "festOpening": "香港最大藏卡盛事《Grade10 FEST Summer 2026》今日盛大开幕 庆祝宝可梦30周年 全港最大型Pokémon主题怀旧展！宝可梦珍藏卡震撼亮相 合计估值达数千万港元",
+      "financeLaunch": "迷策略（HKEX：2440）：亚洲首家上市公司推出收藏卡融资服务“Grade10 Finance” 解锁收藏卡流动性 打造亚洲收藏品金融生态圈"
+    }
+  }
+}

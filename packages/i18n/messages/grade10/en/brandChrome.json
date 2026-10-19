@@ -1,0 +1,47 @@
+{
+  "home": "Grade10 home",
+  "division": "A division of MemeStrategy (HKEX: 2440)",
+  "divisionLockup": "<line>A division of MemeStrategy</line><line>(HKEX: 2440)</line>",
+  "localeCode": {
+    "en": "EN",
+    "zh-Hant": "繁",
+    "zh-Hans": "简"
+  },
+  "language": "Language: {name}",
+  "menu": {
+    "open": "Open menu",
+    "close": "Close menu"
+  },
+  "nav": {
+    "label": "Main",
+    "shows": "Shows",
+    "retail": "Retail",
+    "finance": "Finance",
+    "vault": "Vault",
+    "solutions": "Solutions",
+    "index": "Index",
+    "press": "Press",
+    "about": "About"
+  },
+  "footer": {
+    "label": "Footer",
+    "tagline": "Asia’s home for trading cards & collectibles",
+    "address": "Unit 2602, 28 Stanley Street, Central, Hong Kong",
+    "copyright": "© 2026 Grade10. All rights reserved.",
+    "wordmark": "Grade10",
+    "explore": "Explore",
+    "company": "Company",
+    "indexes": "Market indexes",
+    "follow": "Follow",
+    "pressReleases": "Press releases",
+    "mediaCoverage": "Media coverage",
+    "contact": "Contact",
+    "hatPriceIndex": "Hat Price Index",
+    "ptcg100": "PTCG100",
+    "ptcg500": "PTCG500",
+    "opcg100": "OPCG100",
+    "instagram": "Instagram",
+    "threads": "Threads",
+    "facebook": "Facebook"
+  }
+}

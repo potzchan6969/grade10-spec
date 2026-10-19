@@ -24,6 +24,38 @@
     "title": "隐私政策 — Grade10",
     "description": "Grade10 记录收藏者的哪些资料、为何保存，以及收藏者可以要求什么。"
   },
+  "about": {
+    "title": "Grade10－亚洲著名收藏卡平台",
+    "description": "自 2023 年创立以来，Grade10 连结香港活跃的卡牌市场与广大藏家。透过这个平台，我们将交流、交易、收藏展示与稀有发掘深度整合，带领藏家共同探索卡牌生态圈的全新版图。"
+  },
+  "aboutCompany": {
+    "title": "关于Grade10－亚洲著名收藏卡平台",
+    "description": "深入了解Grade10、迷策略MemeStrategy，以及亚洲著名收藏卡平台团队。我们的服务涵盖卡牌盛事、AI 智能工具及博物馆级保管库服务。"
+  },
+  "aboutShows": {
+    "title": "Grade10 活动－卡牌盛事",
+    "description": "Grade10 卡牌盛事汇聚亚洲各地的收藏家、参展商与合作伙伴，共同呈现稀有卡牌的顶尖盛宴。"
+  },
+  "aboutRetail": {
+    "title": "Grade10 零售－即将登场",
+    "description": "Grade10 零售即将登场，为单卡、原盒产品及藏家必备品打造的专属空间。"
+  },
+  "aboutFinance": {
+    "title": "Grade10 Finance－解锁收藏卡流动性",
+    "description": "Grade10 Finance 是专为高价值卡牌藏家设计的卡牌融资平台，目前正处于筹备阶段，由 Grade10 Finance Limited 营运。"
+  },
+  "aboutVault": {
+    "title": "Grade10 保管库－博物馆级卡牌保管库服务",
+    "description": "为集换式卡牌提供博物馆级的保管库保管服务。卡牌安全存放于 Crown Fine Art，配备 24/7 全天候监控、精密恒温控湿系统及独立审计机制，并结合 Solana 区块链实现拥有权代币化。本服务由 Grade10 打造，隶属于迷策略 MemeStrategy（港交所股份代号：2440）。"
+  },
+  "aboutPress": {
+    "title": "新闻稿－Grade10",
+    "description": "Grade10 与迷策略MemeStrategy 官方新闻稿：深度聚焦卡牌盛事、保管库服务与藏家文化。"
+  },
+  "aboutMediaCoverage": {
+    "title": "传媒报导－Grade10",
+    "description": "媒体报导与各界评论，深入解析 Grade10、迷策略MemeStrategy、集换式卡牌文化及收藏品金融领域。"
+  },
   "product": {
     "title": "{name} — 交易市集 | Grade10",
     "description": "{name}，于 Grade10 商店上架。"

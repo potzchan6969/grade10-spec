@@ -1,0 +1,20 @@
+{
+  "title": "<line>Asia’s home for</line><line>trading cards & collectibles</line>",
+  "tagline": "From passion to portfolio",
+  "division": "A division of MemeStrategy (HKEX: 2440)",
+  "wordmark": "Grade10",
+  "story": {
+    "label": "About Grade10",
+    "lede": "Backed by MemeStrategy (HKEX: 2440) and powered by 9GAG, Grade10 is expanding from Hong Kong into Mainland China, Korea and beyond, building a connected trading card ecosystem across grading, vaulting, financing, retail and live events.",
+    "events": "Explore Events",
+    "ecosystem": "See the Ecosystem"
+  },
+  "cards": {
+    "grail": "Grey Felt Hat Pikachu (Pokémon x Van Gogh), PSA-graded",
+    "charizard": "1996 Charizard holo, PSA-graded",
+    "mewtwo": "Mewtwo gold star, PSA-graded",
+    "megaCharizard": "Mega Charizard poncho Pikachu, PSA-graded",
+    "rayquaza": "Rayquaza poncho Pikachu, PSA-graded"
+  },
+  "press": "As featured in"
+}
