@@ -5,7 +5,7 @@ icon: moon
 
 ZZZ is the platform's second brand. It runs on the same code as grade10 and is
 otherwise a separate world: its own domain, its own auth worker, its own users,
-its own databases, its own email sender, and its own language. A person with a
+its own database, its own email sender, and its own language. A person with a
 grade10 account has no ZZZ account, and sessions never cross.
 
 ## Code and theme

@@ -36,27 +36,28 @@ Three layers gate every admin surface, all fail-closed: role permissions, a seco
 
 ### First admin (bootstrap runbook)
 
-`set-role` requires an admin, so a product's first admin cannot come from the API. Locally the dev sign-in widget (or `POST /dev/login` with `role: "admin"`) covers this. Staging and production both need a one-time raw write, once per product — staging runs no dev endpoints, and it still demands TOTP enrollment before any admin call succeeds. Substitute the environment's own database for the `prd-` one below:
+`set-role` requires an admin, so a product's first admin cannot come from the API. Locally the dev sign-in widget (or `POST /dev/login` with `role: "admin"`) covers this. Staging and production both need a one-time raw write, once per brand — staging runs no dev endpoints, and it still demands TOTP enrollment before any admin call succeeds. Substitute the environment's own project for the `prd-` one below:
 
-1. Have the person sign in to the product once (magic link or Google), so their `users` row exists in that product's identity database.
-2. Connect to that database — the registry names it (`prd-grade10-auth`, `prd-zzz-auth`):
+1. Have the person sign in to the product once (magic link or Google), so their `users` row exists in that brand's auth wall.
+2. Connect to the brand's database as `neondb_owner` - the registry names the project (`prd-grade10`, `prd-zzz`) and the database is the brand (`grade10`, `zzz`):
 
    ```bash
    source neondb/registry.sh
-   psql "$(neonctl cs --project-id "$(neondb_project_id prd-grade10-auth)" --database-name grade10_auth)"
+   psql "$(neonctl cs --project-id "$(neondb_project_id prd-grade10)" --database-name grade10 --role-name neondb_owner)"
    ```
 
-3. Run the single accepted raw role write, then verify:
+3. Take the auth wall's owner role, run the single accepted raw role write, then verify:
 
    ```sql
-   UPDATE users SET role = 'admin' WHERE email = '<owner-email>';
-   SELECT email, role FROM users WHERE role LIKE '%admin%';
+   SET ROLE grade10_auth_owner;
+   UPDATE auth.users SET role = 'admin' WHERE email = '<owner-email>';
+   SELECT email, role FROM auth.users WHERE role LIKE '%admin%';
    ```
 
 4. Sign in to that brand's admin panel (`admin.<brand>`). The 2FA gate opens immediately — enroll TOTP and store the backup codes before anything else.
 5. Grant every further operator through the Users section's Roles editor, with the scoped role that matches their job.
 
-The bootstrap write bypasses the audit chain, which is exactly why it is accepted once per product database and never again: any later raw role write counts as tampering that the chain and the offsite backups exist to catch. The one other accepted raw write is lockout recovery: an operator who loses both authenticator and backup codes gets their `two_factors` row deleted — they re-enroll at their next admin call — recorded as an incident, never routine.
+The bootstrap write bypasses the audit chain, which is exactly why it is accepted once per brand and never again: any later raw role write counts as tampering that the chain and the offsite backups exist to catch. The one other accepted raw write is lockout recovery: an operator who loses both authenticator and backup codes gets their `two_factors` row deleted — they re-enroll at their next admin call — recorded as an incident, never routine.
 
 ## Dev endpoints
 
@@ -140,7 +141,7 @@ That module holds one predicate per decision, because a single "is this dev?" bo
 
 ### Each app with an admin surface owns an `audit_logs` table
 
-- In its own database: `createAuditLogsTable` from `@grade10/postgres/audit`, instantiated inside the app's pg schema
+- In its own schema: `createAuditLogsTable` from `@grade10/postgres/audit`, instantiated inside the app's pg schema
 - The auth worker appends admin mutations and 2FA lifecycle events through the same chain
 
 ### Prevention and proof, separated

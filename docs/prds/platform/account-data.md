@@ -19,7 +19,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - 🚧 The store keeps the name a member chose for the shop, empty until they choose one. The profile, the till, the pass and the membership page show one name: that name, else the account name in auth, else the address before the `@`
 - 🚧 The store keeps the avatar a member chose for the shop: its key on the profile, the image in the store's own bucket
 - While auth cannot be reached, a member with no name chosen for the shop shows as 會員 at the till, and their pass stays as it was until a later refresh
-- The verified record - for a person, legal name, date of birth, document type, masked number, expiry, and the photograph of the document; for a business, its legal name, registration, country, address, the people it names and its registration document - lives in `grade10-e-kyc-service`: its own worker, its own Neon project, its own R2 bucket. It has no gateway route and no `ServiceId`, so no browser reaches it; a product reaches it over a `KYC_SERVICE` binding
+- The verified record - for a person, legal name, date of birth, document type, masked number, expiry, and the photograph of the document; for a business, its legal name, registration, country, address, the people it names and its registration document - lives in `grade10-e-kyc-service`: its own worker, its own wall in the `grade10` database, its own R2 bucket. It has no gateway route and no `ServiceId`, so no browser reaches it; a product reaches it over a `KYC_SERVICE` binding
 - Writes and case bindings are scoped to the calling product, by the entrypoint its binding names. Reading a person's verification is not: the same human is the same human, so a second product binds the check the first recorded instead of photographing the passport again
 - The store and the vault hold bindings: the store one per account for the person and one for the business, the vault one per case
 - The store keeps an account's verification requests - what is asked, the reason, who asked and when - beside its own identity cases; erasing the account deletes them
@@ -35,9 +35,21 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 
 ### Postgres by default
 
-- One shared Neon project per brand and environment (`stg-grade10`, `prd-grade10`); a database and role per service inside it, reached through Hyperdrive
-- Auth (per brand), the KYC service, finance and the vault are their own projects — walls around PII and money, so a leaked app credential cannot reach them and each restores on its own clock
-- The KYC service is the widest of those walls: it holds the legal name, the birth date and the document photograph of every customer of every product, so nothing else shares a credential with it
+- One Neon project and one Postgres database per brand and environment: `stg-grade10` holds `grade10`, `prd-zzz` holds `zzz`. Each service keeps its tables in its own pg schema
+- A wall is a set of schemas behind its own Postgres roles and its own Hyperdrive config. Its runtime role is the only one that signs in; an owner role nobody signs in as owns the tables
+- A worker reaches only its own wall's schemas, capped in connections and statement time
+
+| Wall | Holds | Brands |
+| --- | --- | --- |
+| Commerce | store, auction, loyalty, appointment, inventory, consignment, documents, grading | Grade10; ZZZ holds the store only |
+| Auth | sign-in identity | Grade10, ZZZ |
+| Vault | cases, custody and their money | Grade10 |
+| KYC service | the verified record of every customer of every brand | Grade10 only, serving every brand |
+
+- Finance gets a wall of its own when it lands
+- The KYC service is the widest wall: it holds the legal name, the birth date and the document photograph of every customer of every product, so nothing else shares a role with it
+- A wall stops a compromised or buggy worker. It does not stop CI, ops and deploy credentials or Neon console users, which reach every wall
+- Walls share what one database shares: every role can read the names of other walls' tables and functions, and the walls share one compute, one point-in-time history and one nightly offsite dump
 
 ### Tables
 
@@ -136,7 +148,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - Profiles purge
 - Orders, ledgers, and bids anonymize
 - A kept transfer proof is flagged for review at the brand's agreements window, **2,555** days for Grade10, and never deleted by the clock
-- A verified identity is released rather than swept: it lives in another service's database, so the owning product drops its case binding and the store purges the record and its capture once no binding is left. The capture delete is queued in the purge's own transaction and the release fails until the bytes are gone, so a retried erasure finishes rather than reporting done over a leftover photograph
+- A verified identity is released rather than swept: it lives in another service's wall, so the owning product drops its case binding and the store purges the record and its capture once no binding is left. The capture delete is queued in the purge's own transaction and the release fails until the bytes are gone, so a retried erasure finishes rather than reporting done over a leftover photograph
 
 ### Open
 
@@ -150,7 +162,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 
 ### Isolated from day one
 
-- Own Neon project and roles; own Cloudflare account if compliance asks
+- Own wall, with its own roles and Hyperdrive config; own Cloudflare account if compliance asks
 - Sign-in and the verified identity record stay shared: a residency requirement on either means a second deployment of that service, and retrofitting one is a migration
 
 ### Session identifies, never authorizes
@@ -181,8 +193,13 @@ Where account data lives and how apps reach it. Applies to every brand; examples
   - No — https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/
 - Why Postgres and not D1?
   - Account data needs interactive transactions, real joins, and constraints; one engine across apps beats two. Dev and tests use docker Postgres and pglite, never another dialect.
-- Why one shared Neon project?
-  - One warm compute, one restore story, one bill; a database and role per service keeps ownership enforceable — Postgres cannot even join across databases. Co-tenants share restore blast radius — fine everywhere except the four walled projects: auth, the KYC service, finance and the vault.
+- Why one database per brand?
+  - One warm compute, one restore story, one bill. Roles keep ownership enforceable: a worker's role has no grant on another wall's schemas, so it cannot read or join them.
+- Why walls of roles, not a project per wall?
+  - Hong Kong's PDPO (DPP4) asks for security in proportion to the harm a leak would do, not for separate databases.
+  - The PCPD's code on ID card numbers and its guidance on biometric data make identity documents the highest-harm data here, so the KYC service keeps a wall. Credentials and money keep walls too: auth, the vault and finance.
+  - Ordinary contact data shares the commerce wall. That includes a signer's name, email and phone in the documents service, which keeps only a masked ID number.
+  - Hyperdrive allows 25 configs per Cloudflare account, and one config is one database as one role. So a wall is a class of data, not a service.
 - Is Neon fast enough?
   - Single-region; the first query after idle costs ~0.5–2 s. Hot session-free reads use the cached tRPC procedure; admin tolerates cold starts.
 - Why not make a DO the source of truth?

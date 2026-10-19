@@ -10,7 +10,7 @@ auditor — somebody holding that role and nothing else — filters and pages ba
 through what operators did and can run a verification that walks each product's
 chain and names the exact row where it breaks.
 
-It is not one log. Each service owns its own table in its own database, because
+It is not one log. Each service owns its own table in its own schema, because
 each service owns its own data. What makes them one surface is a shared table
 shape, a shared read contract, and a console that merges the chains in the
 browser and sorts them by time.
