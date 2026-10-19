@@ -60,7 +60,7 @@ const hangzhouPhotos = [
 ].map((p) => photos("cardjoy-hangzhou-2026", p));
 
 /** A numbered upcoming entry in the hero card. */
-type LatestShow = {
+type UpcomingShow = {
   readonly month: string;
   readonly year: string;
   readonly title: string;
@@ -128,8 +128,8 @@ const SHOWS_PAGE = {
     explore: "Explore Shows",
     press: "Press Releases",
     pressHref: "/press-releases",
-    latestLabel: "Latest Shows",
-    latestShows: [
+    upcomingLabel: "Upcoming Shows",
+    upcomingShows: [
       {
         month: "August",
         year: "2026",
@@ -143,12 +143,18 @@ const SHOWS_PAGE = {
         city: "Guangzhou",
       },
       {
+        month: "October",
+        year: "2026",
+        title: "Card Festa Asia Halloween Edition",
+        city: "Hong Kong",
+      },
+      {
         month: "November",
         year: "2026",
         title: "Seoul Auction × Gana Art Premium Private Sale",
         city: "Seoul",
       },
-    ] satisfies readonly LatestShow[],
+    ] satisfies readonly UpcomingShow[],
   },
   eventScale: {
     eyebrow: "Event Scale",
@@ -320,5 +326,5 @@ const SHOWS_PAGE = {
   },
 };
 
-export type { LatestShow, ShowChapter, ShowEdition, ShowRecord, ShowStat };
+export type { ShowChapter, ShowEdition, ShowRecord, ShowStat, UpcomingShow };
 export { SHOWS_PAGE };

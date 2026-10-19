@@ -65,8 +65,9 @@ export const Default: Story = {
       }
     }
 
-    // Latest-shows card rows: only shows whose month has not passed
-    // render — past entries never read as upcoming.
+    // Upcoming-shows card rows: only shows whose month has not passed
+    // render — past entries never read as upcoming, and an empty list
+    // removes the card.
     const MONTHS = [
       "January",
       "February",
@@ -83,15 +84,15 @@ export const Default: Story = {
     ];
     const now = new Date();
     const thisMonth = new Date(now.getFullYear(), now.getMonth());
-    const upcoming = SHOWS_PAGE.hero.latestShows.filter(
+    const upcoming = SHOWS_PAGE.hero.upcomingShows.filter(
       (show) =>
         new Date(Number(show.year), MONTHS.indexOf(show.month)) >= thisMonth,
     );
-    const past = SHOWS_PAGE.hero.latestShows.filter(
+    const past = SHOWS_PAGE.hero.upcomingShows.filter(
       (show) =>
         new Date(Number(show.year), MONTHS.indexOf(show.month)) < thisMonth,
     );
-    const card = canvas.getByText(SHOWS_PAGE.hero.latestLabel)
+    const card = canvas.getByText(SHOWS_PAGE.hero.upcomingLabel)
       .parentElement as HTMLElement;
     const rows = within(card).getAllByRole("listitem");
     expect(rows).toHaveLength(upcoming.length);

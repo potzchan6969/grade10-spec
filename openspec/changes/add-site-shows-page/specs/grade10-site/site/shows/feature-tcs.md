@@ -37,7 +37,8 @@ None.
 **Expected Results:**
 
 * "Asia’s card shows, at full scale." is the page's
-  top-level heading beside a Latest Shows card.
+  top-level heading beside an Upcoming Shows card listing only shows
+  whose month has not passed.
 * An Event Scale section headed "Real Trends. In the Room." holds three
   statistic cards: 25,000+ visitors at Grade10 FEST Summer 2026, 120+
   exhibitors, millions in industry revenue.
@@ -72,7 +73,7 @@ None.
 
 **Expected Results:**
 
-* The hero sits beside the Latest Shows card.
+* The hero sits beside the Upcoming Shows card.
 * The statistics sit beside the event-scale photo.
 * Editions sit two per row inside their chapter.
 * Each record lays its image beside its text.

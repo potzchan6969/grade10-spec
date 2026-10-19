@@ -14,8 +14,8 @@ answers without a session, like any public surface —
 
 - 🚧 **Hero** — Grade10 Shows over "Asia’s card shows, at full scale.",
   an Explore Shows jump into the formats and a
-  Press Releases link to `/press-releases`, beside a Latest Shows card
-  listing the upcoming dates
+  Press Releases link to `/press-releases`, beside an Upcoming Shows card
+  listing the upcoming dates — hidden when no show is current or upcoming
 - 🚧 **Event scale** — Real Trends. In the Room. over a show-floor photo
   and three statistic cards: 25,000+ visitors per show, 120+ exhibitors,
   millions in industry revenue
@@ -56,9 +56,9 @@ it sends to `/press-releases` and its press articles.
 | --- | --- | --- | --- |
 | Chapter tab semantics | Decided | The pill list is jump navigation over stacked chapters — a click scrolls to the chapter, a scroll-spy moves the active link; it is not exclusive panels. | Product |
 | Seoul Auction partner name | Decided | ZZZ is the real partner name — the record reads Seoul Auction × ZZZ × Grade10. | Product |
-| Latest Shows entries | Decided | The card lists shows whose month has not passed; an entry that has run out drops off rather than reads as upcoming. | Product |
+| Upcoming Shows entries | Decided | The card lists shows whose month has not passed; an entry that has run out drops off rather than reads as upcoming, and the card leaves the hero when none remain. | Product |
 | Grade10 Festival 2025 date | ❓ Open | The frame dates the edition card NOV 2026 while the live page shows November 2025; the page carries the frame's text until design confirms. | Design |
-| Hero card label | ❓ Open | The frame reads LATEST SHOWS while the live page reads "Upcoming Shows"; the page carries the frame's text. | Design |
+| Hero card label | Decided | "Upcoming Shows" — the live page's label; the frame's LATEST SHOWS described the row, not its rule. | Product |
 | Video and poster provenance | ❓ Open | The YouTube ids and poster images are taken from the live page, not annotated in the frame. | Design |
 | Navigation entry | ❓ Open | Where Shows sits in the chrome is undecided; the header marks no item current for the page today. | Product |
 :::
