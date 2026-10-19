@@ -73,6 +73,46 @@ into checkable requirements.
 - **Vendor is the brand** — the shop's vendor field names who a card's
   product is by, the word a search engine's own brand facet reads
 
+## What Each Surface Calls Itself
+
+The names live in the message catalogs — `head.json`, once per language, in
+`packages/i18n/messages/grade10/`. The table mirrors the English ones so a
+reader sees them without opening the catalog; where a row and the catalog
+disagree, the catalog is right. The auction's two rows, the two legal pages
+and not-found answer on every lane today; the rest wait behind their own
+gates or their builds — [Carried Surfaces](/p/grade10-site/site/carried-surfaces).
+Session-shaped surfaces — sign-in, the profile, a collector's orders and
+cases — keep off this list.
+
+| Surface | Address | Catalog key | Title | Description | Share image |
+| --- | --- | --- | --- | --- | --- |
+| Front door | `/` | `marketing` | Grade10 — graded cards, bought and sold in one place | Buy graded slabs outright from the Grade10 store, or bid on the ones that only come up once. One account carries your profile, your orders, and your bids. | none |
+| Auction | `/auction` | `auction` | Auctions — Grade10 | Every published Grade10 sale and the lots under it, with the top bid on each. Browsing needs no account; bidding does. | none |
+| Auction lot | `/auction/listings/{slug}` | `auctionListing` | {name} — Auction \| Grade10 | {name}, up for auction at Grade10. | ❓ none — a lot's share tags name no image today |
+| Store | `/store` | `store` | Marketplace — Grade10 | Sealed boxes, singles and graded slabs, priced and ready to ship. Start from a collection, or bid on the cards that only come up once. | none |
+| Collections | `/store/collections` | `storeCollections` | All collections — Grade10 | Graded slabs at a fixed price, each listed with its grade. Browse every collection the Grade10 store carries and check out when you are ready. | none |
+| Product | `/store/products/{handle}` | `product` | {name} — Marketplace \| Grade10 | {name}, listed at the Grade10 store. | the card's first catalogue image, at 1200×630 |
+| Terms | `/terms` | `terms` | Terms of Service — Grade10 | The terms you agree to when you buy, bid, grade or vault a card with Grade10. | none |
+| Privacy | `/privacy` | `privacy` | Privacy Policy — Grade10 | What Grade10 records about a collector, why it is kept, and what a collector can ask for it. | none |
+| About | `/about` | `about` | About — Grade10 | Grade10 is backed by MemeStrategy and 9GAG. It buys, sells, grades, vaults and finances graded cards. | none |
+| Press | `/press-releases` | `press` | Press releases — Grade10 | Every press release Grade10 has published, newest first. | none |
+| Press article | `/press-releases/{slug}` | `pressArticle` | {title} — Press \| Grade10 | {title}, a Grade10 press release. | none |
+| Shows | `/shows` | `shows` | Shows — Grade10 | The shows where the Grade10 community gathers — what's coming up, and the record of past editions. | none |
+| Media coverage | `/media-coverage` | `mediaCoverage` | Media coverage — Grade10 | What the press says about Grade10: stories on its events, the collectibles market, vaulting, finance and trading cards. | none |
+| Book a visit | `/book` | `book` | Book a visit — Grade10 | Pick a service, a shop and a time to bring a card in. No account needed. | none |
+| Manage a visit | `/book/manage` | `bookManage` | Your visit — Grade10 | See, move or cancel a visit you booked with Grade10. | none |
+| Your visits | `/book/mine` | `bookMine` | Your visits — Grade10 | Every visit booked with Grade10 under your email address. | none |
+| Walk-in | ❓ under `/book` | `bookWalkIn` | Walk in — Grade10 | Today's walk-in wait and hours at a Grade10 shop. | none |
+| Walk-in ticket | ❓ under `/book` | `bookTicket` | Your ticket — Grade10 | Follow your place in the walk-in line at a Grade10 shop. | none |
+| Grading | `/grading` | `grading` | Card grading — Grade10 | Get your cards graded by PSA, CGC or BGS. Plan your list and see the fees, hand it in at the shop, and collect your slabs there. | none |
+| Store Locator | `/store-locator` | `storeLocator` | Store Locator — Grade10 | Where to find the Grade10 shop in Causeway Bay, Hong Kong, and when it is open. | none |
+| Membership | `/membership` | `membership` | Membership — Grade10 | The Grade10 membership programme: points on every order, tiers and member rewards. | none |
+| Join | `/join` | `join` | Join the programme — Grade10 | Join Grade10's membership programme: earn points on every order and move up tiers for better rewards. | none |
+| Not found | any address the site does not hold | `notFound` | Nothing is here — Grade10 | The link may be wrong, or the page may have moved. | none |
+
+Only a card's page carries a share image today; no brand-level `og:image`
+asset exists, so every other surface names its card shape and no image.
+
 ## One Address, Every Language
 
 - **A canonical link matches the share address** — the same address `og:url`
@@ -144,6 +184,7 @@ refund policy unlocks listing on.
 | Identity is shared, never per channel | Decided | A seller or a shop has one address for the whole site. A copy per channel would divide what is known about one seller by the number of channels they sell in. | Product |
 | Marketplace and seller pages | ❓ Open | Neither is built, and nobody has settled what a seller's page holds or which channel a marketplace would be. The rules above already bind both; the pages themselves need their own decision. | Product |
 | Merchant SEO words override the catalogue's | Decided | A merchant's own SEO title and description win over the catalogue's when they set them, because the words closest to the sale are the ones most worth trusting a search result to show. | Product |
+| Item templates name their channel | Decided | A product's title template reads `{name} — Marketplace \| Grade10` and a lot's `{name} — Auction \| Grade10`, because the two previously shared one template and a card's page could answer under a lot's name. | Product |
 | Structured data restates, never invents | Decided | Structured data carries only what the page itself shows — a price, an image, a trail — so a rich result can never claim something a collector opening the page would not also see. | Engineering |
 | Locale tags follow the shop's territory | Decided | A language's share locale names the territory the shop trades from rather than its script, because that is what a preview fetcher and a search engine route a result by. | Product |
 | Refund policy copy | ❓ Open | A shopping engine refuses to list the shop's products until it publishes an approved refund and return policy; today's page is an unapproved placeholder kept off every stage. Legal owns supplying the real wording before the surface can go live. | Product |

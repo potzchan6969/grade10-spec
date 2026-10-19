@@ -60,3 +60,27 @@ describe("what Store Locator says it is", () => {
     },
   );
 });
+
+describe("what every public surface says it is", () => {
+  /* Scenario: grade10-site-site-crawlable-pages-SC-04 - Two surfaces, two
+     names — held across the whole head, so a new surface cannot arrive
+     answering under another surface's name. */
+  it.each(localesOf("grade10"))(
+    "names every surface apart from the rest for grade10 in %s",
+    (locale) => {
+      const { head } = getMessages("grade10", locale);
+      const { site: _site, ...surfaces } = head;
+      const entries = Object.values(surfaces);
+      for (const surface of entries) {
+        expect(surface.title.trim()).not.toBe("");
+        expect(surface.description.trim()).not.toBe("");
+      }
+      for (const [a, b] of entries.flatMap((a, i) =>
+        entries.slice(i + 1).map((b) => [a, b] as const),
+      )) {
+        expect(a.title).not.toBe(b.title);
+        expect(a.description).not.toBe(b.description);
+      }
+    },
+  );
+});

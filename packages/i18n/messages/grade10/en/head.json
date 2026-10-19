@@ -25,11 +25,11 @@
     "description": "What Grade10 records about a collector, why it is kept, and what a collector can ask for it."
   },
   "product": {
-    "title": "{name} — Grade10",
+    "title": "{name} — Marketplace | Grade10",
     "description": "{name}, listed at the Grade10 store."
   },
   "auctionListing": {
-    "title": "{name} — Grade10",
+    "title": "{name} — Auction | Grade10",
     "description": "{name}, up for auction at Grade10."
   },
   "book": {
@@ -59,5 +59,37 @@
   "storeLocator": {
     "title": "Store Locator — Grade10",
     "description": "Where to find the Grade10 shop in Causeway Bay, Hong Kong, and when it is open."
+  },
+  "about": {
+    "title": "About — Grade10",
+    "description": "Grade10 is backed by MemeStrategy and 9GAG. It buys, sells, grades, vaults and finances graded cards."
+  },
+  "press": {
+    "title": "Press releases — Grade10",
+    "description": "Every press release Grade10 has published, newest first."
+  },
+  "pressArticle": {
+    "title": "{title} — Press | Grade10",
+    "description": "{title}, a Grade10 press release."
+  },
+  "shows": {
+    "title": "Shows — Grade10",
+    "description": "The shows where the Grade10 community gathers — what's coming up, and the record of past editions."
+  },
+  "mediaCoverage": {
+    "title": "Media coverage — Grade10",
+    "description": "What the press says about Grade10: stories on its events, the collectibles market, vaulting, finance and trading cards."
+  },
+  "membership": {
+    "title": "Membership — Grade10",
+    "description": "The Grade10 membership programme: points on every order, tiers and member rewards."
+  },
+  "join": {
+    "title": "Join the programme — Grade10",
+    "description": "Join Grade10's membership programme: earn points on every order and move up tiers for better rewards."
+  },
+  "notFound": {
+    "title": "Nothing is here — Grade10",
+    "description": "The link may be wrong, or the page may have moved."
   }
 }
