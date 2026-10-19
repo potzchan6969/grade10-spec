@@ -1,0 +1,119 @@
+{
+  "example": true,
+  "title": "Main Branch Digest",
+  "page": "digest",
+  "reason": "3 site pages proposed, the Accounts pages rewritten, and the company site catalogs added",
+  "stamp": {
+    "repo": "9gag/grade10-spec",
+    "branch": "main",
+    "from": "bf24369",
+    "commit": "94346cc",
+    "date": "2026-10-19"
+  },
+  "changes": [
+    {
+      "id": "site-pages-proposed",
+      "kind": "new",
+      "phase": "Planning",
+      "who": ["Product", "Design"],
+      "title": "Press, Media Coverage and Shows pages are proposed",
+      "now": "Each change carries its decisions, journeys, UI design, cases and tasks",
+      "picture": {
+        "kind": "table",
+        "caption": "OpenSpec changes that moved",
+        "columns": ["Change", "Moved to"],
+        "rows": [
+          ["add-site-press-page", "Proposed, with tasks"],
+          ["add-site-press-article-page", "Proposed, with tasks"],
+          ["add-site-media-coverage-page", "Proposed, with tasks"],
+          ["add-staging-auth-test-door", "Cases reconciled"],
+          ["separate-site-and-admin-sessions", "Decisions edited"]
+        ]
+      }
+    },
+    {
+      "id": "session-one-week",
+      "kind": "changed",
+      "phase": "Product pages",
+      "who": ["Members"],
+      "title": "A site session lasts one week",
+      "before": "The Accounts pages left the session length open",
+      "now": "A site session lasts one week and refreshes while the member is active",
+      "picture": {
+        "kind": "flow",
+        "caption": "How a member meets the Accounts pages now",
+        "steps": [
+          { "who": "Member", "text": "Signs in" },
+          {
+            "who": "Site",
+            "text": "Holds the session",
+            "arrow": "up to 1 week"
+          },
+          {
+            "who": "Member",
+            "text": "Returns",
+            "arrow": "refreshes on use",
+            "tone": "ok"
+          }
+        ]
+      }
+    },
+    {
+      "id": "about-catalogs",
+      "kind": "new",
+      "phase": "Copy",
+      "who": ["Visitors"],
+      "title": "The company site's About pages have their words",
+      "now": "33 catalog files gained 2,562 lines; news titles now come from press",
+      "picture": {
+        "kind": "table",
+        "caption": "A sample of the new keys",
+        "columns": ["Key", "Words"],
+        "rows": [
+          ["about.eyebrow", "About Grade10"],
+          ["about.title", "Asia's premier trading card venture"]
+        ]
+      }
+    },
+    {
+      "id": "where-it-moved",
+      "phase": "Overall",
+      "title": "Where the work landed",
+      "now": "66 commits from 4 authors, most in OpenSpec changes and product pages",
+      "picture": {
+        "kind": "bars",
+        "unit": " lines",
+        "caption": "Lines added per area",
+        "items": [
+          { "label": "OpenSpec changes", "value": 3493 },
+          { "label": "Copy", "value": 2562 },
+          { "label": "Product pages", "value": 2311 },
+          { "label": "Stories and pages", "value": 1639 }
+        ]
+      }
+    }
+  ],
+  "followups": [
+    {
+      "id": "press-pages-accept",
+      "title": "Accept the 3 proposed site page changes",
+      "why": "Their tasks are written and wait on acceptance",
+      "owner": "Product"
+    }
+  ],
+  "engineers": {
+    "commits": [
+      {
+        "sha": "94346cc",
+        "subject": "Merge pull request #1248 from 9gag/feat/about-page"
+      },
+      {
+        "sha": "e339411",
+        "subject": "Merge pull request #1241 from 9gag/claude/tender-cannon-3fdozf"
+      }
+    ],
+    "notes": [
+      "Drawn from `node .claude/skills/checkpoint-digest/scripts/checkpoint.mjs facts`"
+    ]
+  }
+}

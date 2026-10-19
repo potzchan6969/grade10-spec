@@ -1,0 +1,3 @@
+interface:
+  display_name: "Checkpoint Digest"
+  short_description: "Post what moved on a branch since its last checkpoint to Slack, drawn as pictures"

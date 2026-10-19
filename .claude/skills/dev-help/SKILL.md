@@ -63,6 +63,13 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | --- | --- | --- |
 | `/email-templating` | Compose or revise a React Email template, shared email component, preheader, CTA, or email-safe styling. | "Draft the outbid email for the auction notification." |
 
+## Hand over
+
+| Invoke | When | Example |
+| --- | --- | --- |
+| `/handoff-page` | Finished or blocked work goes to a person as one page linked from its PR: the verdict, what changed in pictures, proof, and the decisions they owe. | "Hand off the press page blocks for review." |
+| `/checkpoint-digest` | A push or a schedule tells Slack what moved on a branch since its last checkpoint, then moves the checkpoint. | "Post the main digest since the last checkpoint." |
+
 A contract change found this way is still an OpenSpec change: name the exact exports and the consuming applications, then rejoin at `/planning-pm`.
 
 ## Suggest
