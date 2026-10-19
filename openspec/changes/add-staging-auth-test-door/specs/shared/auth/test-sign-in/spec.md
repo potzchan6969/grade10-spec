@@ -257,6 +257,22 @@ Which addresses the test endpoint acts on, and what it creates to act on one.
 - **THEN** the mail is sent the ordinary way
 - **AND** the test endpoint neither skips nor replaces that send
 
+
+#### Scenario: shared-auth-test-sign-in-SC-99 - Staging names four testers and a plus-tag of one
+**Serves:** Testers - the named testers
+
+- **GIVEN** a staging run
+- **WHEN** it acts on each named tester, and on a plus-tag of the collector
+- **THEN** the endpoint carries out each action
+- **AND** an address that is neither a named tester nor a generated plus-tag is refused
+
+#### Scenario: shared-auth-test-sign-in-SC-100 - Uat takes every action
+**Serves:** Where it opens - staging and uat, every action
+
+- **GIVEN** a uat run of the test endpoint's workflow
+- **WHEN** it captures, expires, bans, grants, sets a scoped role or clears for a named tester
+- **THEN** the endpoint carries out that action
+
 ### Requirement: Capture returns the last sign-in mail for the address named
 
 What the test endpoint hands back in place of a mailbox.
@@ -518,6 +534,30 @@ shut beside it.
 - **WHEN** anyone calls the disposable `/dev` endpoint on staging
 - **THEN** the call is refused
 - **AND** no session is created
+
+
+#### Scenario: shared-auth-test-sign-in-SC-101 - Production refuses expire, grant and a scoped role
+**Serves:** Where it opens - production, capture and clear for the collector alone
+
+- **GIVEN** a production run of the test endpoint's workflow
+- **WHEN** it expires a link, grants `admin` or sets a scoped role
+- **THEN** the endpoint refuses the call
+- **AND** nothing is changed
+
+#### Scenario: shared-auth-test-sign-in-SC-102 - Preview captures the collector's link
+**Serves:** Where it opens - preview runs the production backends
+
+- **GIVEN** a preview run of the test endpoint's workflow
+- **WHEN** it captures the collector's last sign-in mail
+- **THEN** the endpoint returns that mail's link
+
+#### Scenario: shared-auth-test-sign-in-SC-103 - Local stacks open no action
+**Serves:** Closed - local stacks open no action
+
+- **GIVEN** a local stack
+- **WHEN** any caller calls the test endpoint
+- **THEN** the endpoint refuses the call
+- **AND** nothing is changed
 
 ### Requirement: The test endpoint makes no action beyond those six
 

@@ -27,3 +27,42 @@ SHALL NOT run, the same as any identity write.
 
 - **WHEN** the QA token captures a tester's last sign-in mail
 - **THEN** the trail holds no entry for the call
+
+#### Scenario: shared-auth-audit-SC-40 - A test-endpoint grant of admin is on the trail
+**Serves:** Identity writes - a grant of admin
+
+- **WHEN** the workflow grants `admin` to a tester address
+- **THEN** the trail holds one entry naming `test-endpoint-workflow`, the grant, and the subject's user id
+- **AND** the entry carries no email and no token
+
+#### Scenario: shared-auth-audit-SC-41 - A test-endpoint scoped role is on the trail
+**Serves:** Identity writes - a scoped role
+
+- **WHEN** the workflow sets a scoped role on a generated plus-tag
+- **THEN** the trail holds one entry naming `test-endpoint-workflow`, the role, and the subject's user id
+
+#### Scenario: shared-auth-audit-SC-42 - An account the test endpoint creates is on the trail
+**Serves:** Identity writes - an account created for a tester
+
+- **WHEN** a ban or a grant creates the account for an address that never signed in
+- **THEN** the trail holds one entry naming the caller's kind and the new user id
+
+#### Scenario: shared-auth-audit-SC-43 - A refused test-endpoint ban is on the trail
+**Serves:** Refusals - a refused ban is recorded
+
+- **WHEN** the QA token attempts a ban and the endpoint refuses it
+- **THEN** the trail holds one entry naming `test-endpoint-qa-token` and the refusal
+
+#### Scenario: shared-auth-audit-SC-44 - A grant that changes nothing is on the trail
+**Serves:** Identity writes - every grant is recorded
+
+- **GIVEN** an address that already holds `admin`
+- **WHEN** the workflow grants `admin` again
+- **THEN** the trail holds one entry for the grant, as the requirement states
+
+#### Scenario: shared-auth-audit-SC-45 - Expire and clear write no entry
+**Serves:** Identity writes - no entry for expire or clear
+
+- **WHEN** the QA token expires a link or clears the sign-in limits
+- **THEN** the trail holds no entry for the call
+
