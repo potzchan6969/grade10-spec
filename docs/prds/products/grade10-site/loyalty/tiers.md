@@ -114,7 +114,7 @@ We have a cron sweep to render the record for analytics purposes.
 - **No end date** — it holds until it is revoked
 - **Refused** — a grant naming a tier the programme does not have, or Silver,
   records nothing
-- 🎨 **Live invitations listed** — each with its member, tier, reason and end
+- **Live invitations listed** — each with its member, tier, reason and end
   date, so an operator can find one and revoke it
 - **Its end is observed, not scheduled** — the member stops holding Black the
   instant the date passes, and the history records it at the next evaluation

@@ -27,7 +27,7 @@ takes the permission that grants an invitation. Product confirms.
   operator may do; one who may only read members sees no section that moves
   points, restarts the expiry, grants invitations, edits rewards, removes a
   tier, cancels a redemption or shows the log
-- 🎨 **Second factor** — every action needs a verified second factor on the
+- **Second factor** — every action needs a verified second factor on the
   session; an operator without one is taken to verify, and the action
   completes after
 - **On the record** — every change is written to an operator log that cannot
@@ -36,7 +36,7 @@ takes the permission that grants an invitation. Product confirms.
 
 ## Reading a Member
 
-- 🎨 **Find and read** — a member's tier, balance, activity, and what they lost
+- **Find and read** — a member's tier, balance, activity, and what they lost
   to expiry; the log and its check sit beside them
 - **Member link** — the address of a member's view opens the same member for
   whoever it is shared with
@@ -44,7 +44,7 @@ takes the permission that grants an invitation. Product confirms.
   permission and a second factor, never through a loyalty permission alone,
   and never kept by the programme. The log records who read which members and
   how many, never the names
-- 🎨 **Identity unreachable** — the console says so, and shows no member with a
+- **Identity unreachable** — the console says so, and shows no member with a
   blank name
 
 ## Moving Points
@@ -61,7 +61,7 @@ part on one question: do the points count toward the tier?
   already has; where nothing is live they lapse on the later of twelve months
   from their own day and the day still running —
   [Points](/p/grade10-site/loyalty/points#expiry)
-- 🎨 **The form states the date** — before the operator writes, it names the
+- **The form states the date** — before the operator writes, it names the
   day the points will lapse, and says when they start the member's window
   rather than join one
 - **Both carry a reason** — what the operator types goes to the audit trail;
@@ -86,7 +86,7 @@ An operator gives a balance more time without the member buying or redeeming.
 
 ## Authoring a Reward
 
-🎨 An operator writes a reward's whole definition in the console's reward form,
+An operator writes a reward's whole definition in the console's reward form,
 with no call to the admin API. The form offers three choices, each saved as
 one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-types).
 
@@ -105,9 +105,9 @@ one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-ty
   collection keeps how it is handed over, unchanged, while the fields beside
   it are edited, until the operator picks one of the three choices; a
   duplicate of it opens as Money off
-- 🎨 **Missing parts** - nothing is saved while the choice lacks a part it
+- **Missing parts** - nothing is saved while the choice lacks a part it
   needs, or the window ends before it starts; the form names what is missing
-- 🎨 **Basket check** - beside the form, the operator builds a basket by search
+- **Basket check** - beside the form, the operator builds a basket by search
   and reads what the coupon would take off it, or why it would not apply,
   before saving
 - **Currency mark** - `HKD` in front of a money field, as console tables

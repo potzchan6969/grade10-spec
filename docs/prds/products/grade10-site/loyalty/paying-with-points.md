@@ -79,10 +79,10 @@ The debit follows what the shop applied, not what was promised.
 ## At the Till
 
 - **Rung up** — the shopkeeper rings the products up in Shopify POS
-- 🎨 **Identified** — the shopkeeper opens the Grade10 extension and scans the
+- **Identified** — the shopkeeper opens the Grade10 extension and scans the
   member card's QR, from the site or a wallet pass, or types the 8-letter
   short code, the email, or picks the customer already on the cart
-- 🎨 **Applied** — the shopkeeper chooses points and/or coupons and taps Apply;
+- **Applied** — the shopkeeper chooses points and/or coupons and taps Apply;
   the extension writes the store's order id on the cart, puts the points
   discount on the sale, and shows the points spent, the money still due and
   the balance after; no code is minted for the points, and a repeated tap
@@ -90,16 +90,16 @@ The debit follows what the shop applied, not what was promised.
 - 🚧 **Applied again** — a resumed sale puts its points discount back under
   the title [Rules](/p/grade10-site/loyalty/paying-with-points#rules) names,
   whatever title it carried
-- 🎨 **Beside the shop's offer** — points go on beside an automatic offer,
+- **Beside the shop's offer** — points go on beside an automatic offer,
   capped at what the offers leave of the goods; a staff order discount on
   the sale refuses the spend until staff take it off
-- 🚧 🎨 **A discount staff keyed** — a points title on a sale the extension
+- 🚧 **A discount staff keyed** — a points title on a sale the extension
   never marked is someone else's discount; the panel offers no points, no
   coupon and no Apply until staff take it off
 - **Paid** — the shopkeeper takes payment
 - **Debited** — when the paid sale lands, the same way as online; clearing
   the discounts before payment undoes the promise, and nothing was debited
-- 🎨 **Member told once it lands** — when the sale is paid, or trimmed to what
+- **Member told once it lands** — when the sale is paid, or trimmed to what
   landed, the member is notified of the points, the amount and the
   location, never a code; a sale abandoned after that notice sends a
   correction

@@ -54,7 +54,7 @@ variant alone, so a coupon scoped to named products or a filter is online only
 What a member can buy right now: in stock, inside its window, not archived.
 Stock reads as a yes or no, never a count.
 
-- 🎨 **Read signed out** - cost and coupon validity, never stock or edits
+- **Read signed out** - cost and coupon validity, never stock or edits
 - **One debit** - a single debit of the balance, oldest points first
 - **All or nothing** - a balance short of the cost is refused whole, never
   part paid
@@ -66,7 +66,7 @@ Stock reads as a yes or no, never a count.
 
 ::story{id="loyalty-rewards-blocks-rewardmenu--coupon-limits-are-stated" title="What a coupon needs, on the menu"}
 
-- 🚧 🎨 **Online only on the menu** - a reward scoped to named products or a
+- 🚧 **Online only on the menu** - a reward scoped to named products or a
   catalog filter reads online only, whatever channels it names
 - 🚧 **Twice costs once** - a redemption sent again, reload or not, records one
 - **A collection window** - a reward collected in person states the window it
@@ -102,7 +102,7 @@ carrying the definition it was bought under.
   checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
   lines
-- 🎨 **Applied at the counter** — for a scope the till can match, inside the
+- **Applied at the counter** — for a scope the till can match, inside the
   till session: staff apply it from the member's panel, or the member opens
   it on their phone and the till scans it; a product coupon's code is minted
   when chosen, for that sale alone, never shown as the coupon, and a gift

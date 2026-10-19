@@ -49,9 +49,9 @@ Apple code identifies and moves nothing.
 
 ## On the Pass
 
-- 🎨 **Shows** — the member's name, the tier they hold, and the points they can
+- **Shows** — the member's name, the tier they hold, and the points they can
   spend
-- 🎨 **As of** — the pass says when what it shows was current
+- **As of** — the pass says when what it shows was current
 - **Name** — the one the site shows: the name chosen for the shop, else the
   account name, else the address before the `@`; carried whole, and the wallet
   app lays it out
@@ -64,11 +64,11 @@ Apple code identifies and moves nothing.
 - **Language** — the membership page's own words, in every language the site
   speaks; the phone picks, and a phone set to none of them reads the brand's
   default, English for Grade10
-- 🎨 **Google pass artwork** — the class's logo, the issuer's name, the
+- **Google pass artwork** — the class's logo, the issuer's name, the
   programme's name and one background colour; none is drawn yet
-- 🎨 **Apple pass artwork** — the icon and logo at every scale, the
+- **Apple pass artwork** — the icon and logo at every scale, the
   programme's name, and the background and label colours; none is drawn yet
-- 🎨 **Apple note** — the pass says "Identifies you at the counter. Points are
+- **Apple note** — the pass says "Identifies you at the counter. Points are
   spent from this page.", so a pass that identifies and cannot spend never
   reads as broken
 
@@ -90,7 +90,7 @@ Apple code identifies and moves nothing.
 
 ::story{id="loyalty-wallet-member-card-blocks-walletpasslinks--vendor-artwork" title="Each wallet's own save action"}
 
-- 🎨 **Apple's badge** — the save action draws a marked placeholder until
+- **Apple's badge** — the save action draws a marked placeholder until
   Apple's licensed "Add to Apple Wallet" badge replaces it, downloaded by a
   person under the Wallet Marketing Agreement
 
@@ -113,7 +113,7 @@ Apple code identifies and moves nothing.
   copy is discharged by the sweep
 - **Removing it is not ending** — deleting the pass from the phone's wallet
   app changes nothing about the membership
-- 🚧 🎨 **Operator ending** - for a member whose phone is gone. An operator
+- 🚧 **Operator ending** - for a member whose phone is gone. An operator
   holding `store:write` ends one wallet's pass from the member's record, which
   names the wallets the member holds, and confirms the wallet first; declined,
   it ends nothing. The other wallet's pass stays live. It ends
@@ -127,7 +127,7 @@ Apple code identifies and moves nothing.
   forbidden, never as though no pass existed; the pass stays live. A
   record whose wallets cannot be read says so and offers no ending, never that
   the member holds none
-- 🎨 **Welcome message** — carries no save action, in either wallet
+- **Welcome message** — carries no save action, in either wallet
 - **Erasure** — the pass identifies nobody from that moment, whatever the
   phone shows, and a device fetching it sees nobody. Google is told until it
   confirms; Apple keeps no copy, and its phones are forgotten

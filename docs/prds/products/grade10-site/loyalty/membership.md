@@ -97,7 +97,7 @@ The refund came first, and is replayed after the earn, in the order it happened.
 
 ::story{id="loyalty-membership-screens-membership--default" title="The membership page"}
 
-- 🎨 **Tier & Benefits** — the page the whole card opens; it has no design yet
+- **Tier & Benefits** — the page the whole card opens; it has no design yet
 - 🚧 **No expiry line on the card** — the whole balance lapses on one shared
   inactivity date, never in parts, so a partial-expiry reminder has nothing
   to say here
@@ -114,7 +114,7 @@ The refund came first, and is replayed after the earn, in the order it happened.
   not in it
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
-- 🎨 **Each section loads on its own** — a catalog that failed to load is no
+- **Each section loads on its own** — a catalog that failed to load is no
   reason to hide a balance
 - **A pass in a wallet** — the page names the wallet the card is carried in,
   with that pass's ending beside it —
@@ -193,7 +193,7 @@ The same pass can be added to a phone wallet —
 
 ::story{id="loyalty-membership-blocks-activitylist--channel-is-named" title="The member's activity"}
 
-- 🎨 **Notified** — every identification the member did not show a code for —
+- **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
   once
 - **Archived reward** — an entry for a reward since archived still names it

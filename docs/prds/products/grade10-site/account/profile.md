@@ -21,7 +21,7 @@ own account page and shown to nobody else. Grade10 and ZZZ show the same page.
 
 - **Length** - counted as the field counts it: a Chinese character is one, an
   emoji can be two
-- 🎨 **Avatar file** - any image the browser can read, whatever its type or
+- **Avatar file** - any image the browser can read, whatever its type or
   size, is made square at **512 px** before it is sent; a file the browser
   cannot read is refused
 - **Avatar address** - anyone holding the image's address can open it,
@@ -67,7 +67,7 @@ for.
 
 - **Avatar apart** - the avatar is saved on its own, so a refused name never
   undoes an accepted image
-- 🎨 **Avatar first** - a refused or failed image saves nothing else; the form
+- **Avatar first** - a refused or failed image saves nothing else; the form
   keeps the typed text and the chosen image for one retry
 - **Replaced or removed** - the old image stops answering at its address,
   and storage deletes it once it is a day old
