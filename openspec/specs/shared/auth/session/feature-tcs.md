@@ -1,6 +1,6 @@
 # shared/auth/session Test Cases
 
-**Status:** pending-review · 9/49
+**Status:** reopened · 9/53
 **Drafts styled:** 2026-10-06, tcs-rules r4
 
 ## Background
@@ -839,6 +839,118 @@ Runs once per row of **Test data**.
 * The session arriving in tab A does not open the console.
 
 ---
+
+### shared-auth-session-US4-TC12-1: A tab that cannot reach the service keeps showing the person signed in
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Open tabs
+
+**Pre-conditions:**
+
+* `<collector account>` is signed in on a tab of `<grade10 store url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector account | An account with no console access |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+
+**Steps:**
+
+1. Cut the tab's connection to the auth service.
+2. Return to the tab so it reads the session.
+3. Restore the connection.
+
+**Expected Results:**
+
+* Step 2 still shows `<collector account>` signed in.
+* Step 2 shows no signed-out state.
+
+### shared-auth-session-US4-TC13-1: Signing in on one brand leaves the other brand's tab signed out
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Open tabs
+
+**Pre-conditions:**
+
+* A tab of `<grade10 store url>` and a tab of `<zzz store url>` are open in one browser, both signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector account | An account with no console access |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| zzz store url | The ZZZ storefront URL in the test environment; bind its URL only |
+
+**Steps:**
+
+1. Sign `<collector account>` in on the Grade10 tab.
+2. Return to the ZZZ tab.
+
+**Expected Results:**
+
+* Step 1 shows `<collector account>` signed in on the Grade10 tab.
+* Step 2 still shows the ZZZ tab signed out.
+
+### shared-auth-session-US4-TC14-1: Signing in in one browser leaves another browser's tab signed out
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Open tabs
+
+**Pre-conditions:**
+
+* A tab of `<grade10 store url>` is open and signed out in `<first browser>`, and another in `<second browser>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| collector account | An account with no console access |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| first browser | One browser profile |
+| second browser | A different browser profile, or another device |
+
+**Steps:**
+
+1. Sign `<collector account>` in on the tab in `<first browser>`.
+2. Return to the tab in `<second browser>`.
+
+**Expected Results:**
+
+* Step 1 shows `<collector account>` signed in in `<first browser>`.
+* Step 2 still shows the tab in `<second browser>` signed out.
 
 ## shared-auth-session-US5: Collector returns to a tab they left and it knows they signed out
 
@@ -1981,6 +2093,42 @@ Runs once per row of **Test data**.
 * `<target account>` is unchanged.
 
 ---
+
+### shared-auth-session-US7-TC10-1: A site session presented to the console as its own names no one
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Surface sessions
+
+**Pre-conditions:**
+
+* `<operator account>` holds console access and is signed in on `<grade10 store url>` only.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| operator account | An account holding console access |
+| grade10 store url | The Grade10 storefront URL in the test environment; bind its URL only |
+| grade10 admin console url | The Grade10 admin console URL in the test environment; bind its URL only |
+
+**Steps:**
+
+1. Take the site session's credentials from `<grade10 store url>`.
+2. Present them to `<grade10 admin console url>` as the console's own session and ask who is calling.
+
+**Expected Results:**
+
+* Step 2 receives no person.
 
 ## shared-auth-session-US8: Operator signs in to the console once more after release
 
