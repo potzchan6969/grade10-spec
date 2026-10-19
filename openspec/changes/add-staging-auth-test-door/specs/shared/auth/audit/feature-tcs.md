@@ -3,13 +3,13 @@
 **Status:** pending-review · 0/8
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
-## shared-auth-audit-US-01: Operator's identity action is recorded
+## shared-auth-audit-US1: Operator's identity action is recorded
 
 **As an** operator,
 **I want** a ban, unban, set-role, or revoke — including a refusal — on the identity trail,
 **so that** a dispute can name who did what, by user id, without secrets.
 
-### shared-auth-audit.US1-TC1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
+### shared-auth-audit-US1-TC7-1: Test-endpoint ban, grant and scoped role are on the trail under the caller's kind
 
 Runs once per row of **Test data**.
 
@@ -56,7 +56,7 @@ Runs once per row of **Test data**.
 * The new entry records `<action>`.
 * The new entry names `<caller kind>` in place of a user id.
 
-### shared-auth-audit.US1-TC2: Test-endpoint capture, expire and clear write no entry
+### shared-auth-audit-US1-TC8-1: Test-endpoint capture, expire and clear write no entry
 
 Runs once per row of **Test data**.
 
@@ -103,7 +103,7 @@ Runs once per row of **Test data**.
 * Step 2 succeeds.
 * The trail holds the same number of entries as in Step 1.
 
-### shared-auth-audit.US1-TC3: Test-endpoint entries carry no token, address or email
+### shared-auth-audit-US1-TC9-1: Test-endpoint entries carry no token, address or email
 
 **Classification:**
 
@@ -147,7 +147,7 @@ Runs once per row of **Test data**.
 * No field of either entry holds the tester address.
 * No field of either entry holds an email address.
 
-### shared-auth-audit.US1-TC4: A refused test-endpoint ban is on the trail under the caller's kind
+### shared-auth-audit-US1-TC10-1: A refused test-endpoint ban is on the trail under the caller's kind
 
 **Classification:**
 
@@ -186,13 +186,13 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-auth-audit-US-02: Auditor reads the identity trail
+## shared-auth-audit-US2: Auditor reads the identity trail
 
 **As an** auditor,
 **I want** to read the trail and check it is consistent,
 **so that** I can answer whether the record holds without being shown the proof.
 
-### shared-auth-audit.US2-TC1: An auditor reads test-endpoint entries and the consistency check passes
+### shared-auth-audit-US2-TC4-1: An auditor reads test-endpoint entries and the consistency check passes
 
 **Classification:**
 
@@ -232,13 +232,13 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-auth-audit-US-03: Operator cannot act off the trail
+## shared-auth-audit-US3: Operator cannot act off the trail
 
 **As an** operator,
 **I want** an action that cannot be recorded to be refused,
 **so that** the trail is not a best-effort log of what already happened.
 
-### shared-auth-audit.US3-TC1: A test-endpoint action the trail cannot record does not run
+### shared-auth-audit-US3-TC4-1: A test-endpoint action the trail cannot record does not run
 
 Runs once per row of **Test data**.
 
@@ -284,7 +284,7 @@ Runs once per row of **Test data**.
 * The state read in Step 3 is the same as the state read in Step 1.
 * The identity trail holds no new entry.
 
-### shared-auth-audit.US3-TC2: A test-endpoint entry cannot be rewritten
+### shared-auth-audit-US3-TC5-1: A test-endpoint entry cannot be rewritten
 
 **Classification:**
 
@@ -322,13 +322,13 @@ Runs once per row of **Test data**.
 
 ---
 
-## shared-auth-audit-US-04: Auditor traces an account lifecycle write
+## shared-auth-audit-US4: Auditor traces an account lifecycle write
 
 **As an** auditor,
 **I want** a new user id, a verify that flips, and an account deletion on the identity trail,
 **so that** a dispute can name how that user id appeared or left, without the email.
 
-### shared-auth-audit.US4-TC1: A test-endpoint account create is on the trail as created under the caller's kind
+### shared-auth-audit-US4-TC8-1: A test-endpoint account create is on the trail as created under the caller's kind
 
 Runs once per row of **Test data**.
 
@@ -377,24 +377,24 @@ Runs once per row of **Test data**.
 
 **Run:** QA2, fresh context. Read: this file, the change's `specs/shared/auth/audit/spec.md` delta, the durable `openspec/specs/shared/auth/audit/spec.md` for the requirements the cases cite, and the change's `decisions.md`. Denied: everything else, including the archive.
 
-**Covers:** Delta scenarios SC-38 to SC-45 only. Fully covered: shared-auth-audit-SC-39 and shared-auth-audit-SC-45, by US-01-TC2.
+**Covers:** Delta scenarios SC-38 to SC-45 only. Fully covered: shared-auth-audit-SC-39 and shared-auth-audit-SC-45, by US1-TC8-1.
 
 **Scenarios no case covers:**
 
 * shared-auth-audit-SC-38 and shared-auth-audit-SC-40: naming and action are asserted, but no case asserts the subject's user id, and the no-secret clause sits in TC3 only.
 * shared-auth-audit-SC-41: no case asserts the role or the subject's user id.
 * shared-auth-audit-SC-42: no case asserts the new user id.
-* shared-auth-audit-SC-43: no case has the QA token attempt a ban. US-01-TC4 is the workflow's refusal.
+* shared-auth-audit-SC-43: no case has the QA token attempt a ban. US1-TC10-1 is the workflow's refusal.
 * shared-auth-audit-SC-44: no case grants `admin` to an address that already holds it.
 
-**Over-claimed cases:** US-02-TC1 (the "no names" clause), US-04-TC2 (its create-or-find action).
+**Over-claimed cases:** US2-TC4-1 (the "no names" clause), US-04-TC2 (its create-or-find action).
 
-**Outcomes no scenario states:** US-01-TC4 (a refused workflow ban, Q46), US-01-TC2's workflow rows (Q45), US-03-TC1 and US-03-TC2 (the requirement sentence and the durable append-only rule).
+**Outcomes no scenario states:** US1-TC10-1 (a refused workflow ban, Q46), US1-TC8-1's workflow rows (Q45), US3-TC4-1 and US3-TC5-1 (the requirement sentence and the durable append-only rule).
 
 **Contradictions:**
 
-* Q50, repaired: US-01-TC1, US-01-TC3, US-03-TC1, US-04-TC1 (the QA token ban, grant, scoped role and create rows).
-* Q47, repaired: US-01-TC3, US-03-TC1, US-04-TC1 (the create action).
+* Q50, repaired: US1-TC7-1, US1-TC9-1, US3-TC4-1, US4-TC8-1 (the QA token ban, grant, scoped role and create rows).
+* Q47, repaired: US1-TC9-1, US3-TC4-1, US4-TC8-1 (the create action).
 * Q47, not repaired: US-04-TC2, which is Blocked.
-* Undecided, raised in `decisions.md` under Raised: US-02-TC1 "no names"; US-04-TC1's action `ban` or `created`; US-04-TC2's find.
-* Not on the repair list, left as written: US-01-TC2's capture, expire and clear steps name no address, against Q9 and Q35.
+* Undecided, raised in `decisions.md` under Raised: US2-TC4-1 "no names"; US4-TC8-1's action `ban` or `created`; US-04-TC2's find.
+* Not on the repair list, left as written: US1-TC8-1's capture, expire and clear steps name no address, against Q9 and Q35.
