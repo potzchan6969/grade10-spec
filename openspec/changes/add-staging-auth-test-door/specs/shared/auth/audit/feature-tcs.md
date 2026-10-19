@@ -26,6 +26,10 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-01
 
+**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` rows are removed, because Q50 lets the token capture, expire and clear only. The case does not assert the subject's user id or the absence of an email or token, so it fully covers no scenario; see TC3.
+
+**QA2 covers:** none
+
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `<caller kind>`.
@@ -36,11 +40,8 @@ Runs once per row of **Test data**.
 | Action | Caller kind |
 | --- | --- |
 | ban | test-endpoint-workflow |
-| ban | test-endpoint-qa-token |
 | grant | test-endpoint-workflow |
-| grant | test-endpoint-qa-token |
 | scoped role | test-endpoint-workflow |
-| scoped role | test-endpoint-qa-token |
 
 **Steps:**
 
@@ -71,6 +72,10 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-01
+
+**QA2 disposition:** kept. The QA-token rows fully assert SC-39 and SC-45. The workflow rows rest on the requirement sentence that capture, expire and clear write no entry, and on Q45.
+
+**QA2 covers:** shared-auth-audit-SC-39, shared-auth-audit-SC-45
 
 **Pre-conditions:**
 
@@ -113,9 +118,13 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-01
 
+**QA2 disposition:** kept with a note. Repaired: the caller changes from `test-endpoint-qa-token` to `test-endpoint-workflow`, because Q50 refuses the token any ban or grant; the create step is removed, because Q47 gives the endpoint no create action; the entries are counted as two. The case asserts the no-token, no-address and no-email clauses of SC-38 and SC-40, not their naming or action clauses, so it fully covers no scenario.
+
+**QA2 covers:** none
+
 **Pre-conditions:**
 
-* The caller holds the test-endpoint kind `test-endpoint-qa-token`, presented with the QA token `<qa token>`.
+* The caller holds the test-endpoint kind `test-endpoint-workflow`.
 * `<target user id>` is an account that is not banned.
 
 **Test data:**
@@ -129,15 +138,14 @@ Runs once per row of **Test data**.
 
 1. Call the test endpoint to ban `<target user id>`.
 2. Call the test endpoint to grant `<scope>` to `<target user id>`.
-3. Call the test endpoint to create an account for the tester address.
-4. Read the three entries written by Steps 1 to 3.
+3. Read the two entries written by Steps 1 and 2.
 
 **Expected Results:**
 
-* Each of the three entries names `test-endpoint-qa-token` in place of a user id.
-* No field of any of the three entries holds the QA token.
-* No field of any of the three entries holds the tester address.
-* No field of any of the three entries holds an email address.
+* Each of the two entries names `test-endpoint-workflow` in place of a user id.
+* No field of either entry holds the QA token.
+* No field of either entry holds the tester address.
+* No field of either entry holds an email address.
 
 ### shared-auth-audit-US-01-TC4: A refused test-endpoint ban is on the trail under the caller's kind
 
@@ -153,6 +161,10 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-01
+
+**QA2 disposition:** kept with a note. The refused call is by the workflow, and Q46 puts a refused endpoint ban on the trail. No scenario states this route: SC-43 covers the QA-token attempt only.
+
+**QA2 covers:** none
 
 **Pre-conditions:**
 
@@ -194,6 +206,10 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-02
+
+**QA2 disposition:** over-claimed. The clause "The auditor sees no names" is stated by no scenario or decision; see Raised. The rest rests on the durable read and consistency scenarios and names the workflow's entry, which SC-38 states only in part.
+
+**QA2 covers:** none
 
 **Pre-conditions:**
 
@@ -239,6 +255,10 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-03
 
+**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` grant and account-create rows are removed (Q50 and Q47), and the account-create wording is removed from Steps 1 and 3. The ban and scoped-role rows rest on the requirement sentence that an action the trail cannot record does not run; no scenario states it.
+
+**QA2 covers:** none
+
 **Pre-conditions:**
 
 * The test environment makes the identity trail refuse its next write.
@@ -250,15 +270,13 @@ Runs once per row of **Test data**.
 | Action | Caller kind |
 | --- | --- |
 | ban | test-endpoint-workflow |
-| grant | test-endpoint-qa-token |
 | scoped role | test-endpoint-workflow |
-| account create for `<tester address>` | test-endpoint-qa-token |
 
 **Steps:**
 
-1. Read the state of `<target user id>`, or for an account create, confirm that no account exists for `<tester address>`.
+1. Read the state of `<target user id>`.
 2. Call the test endpoint to `<action>` as `<caller kind>`.
-3. Read the state of `<target user id>`, or for an account create, confirm that no account exists for `<tester address>`, and read the identity trail.
+3. Read the state of `<target user id>`, and read the identity trail.
 
 **Expected Results:**
 
@@ -280,6 +298,10 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-03
+
+**QA2 disposition:** kept with a note. It rests on the durable append-only requirement, which the delta makes apply to test-endpoint entries as identity writes. No delta scenario states it.
+
+**QA2 covers:** none
 
 **Pre-conditions:**
 
@@ -323,6 +345,10 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-04
 
+**QA2 disposition:** kept with a note. Repaired: the `test-endpoint-qa-token` row is removed (Q50). The create step is now a ban, because Q47 gives the endpoint no create action and Q20 has a ban create the account. The expected action is `ban`, not `created`; that choice is raised. The case names no new user id, so it fully covers no scenario.
+
+**QA2 covers:** none
+
 **Pre-conditions:**
 
 * No account exists for `<tester address>`.
@@ -333,19 +359,18 @@ Runs once per row of **Test data**.
 | Caller kind |
 | --- |
 | test-endpoint-workflow |
-| test-endpoint-qa-token |
 
 **Steps:**
 
 1. Note the number of entries on the identity trail.
-2. Call the test endpoint to create an account for `<tester address>` as `<caller kind>`.
+2. Call the test endpoint to ban `<tester address>` as `<caller kind>`, which creates its account.
 3. Read the newest entry on the identity trail.
 
 **Expected Results:**
 
 * Step 2 creates an account for `<tester address>`.
 * The trail holds one more entry than in Step 1.
-* The new entry records `created`.
+* The new entry records `ban`.
 * The new entry names `<caller kind>` in place of a user id.
 
 ### shared-auth-audit-US-04-TC2: A test-endpoint find of an existing account with no change writes no entry
@@ -364,6 +389,12 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-audit-US-04
+
+**QA2 disposition:** over-claimed. Its only action is "create or find", and Q47 gives the test endpoint no create action. Q49 records every grant, so a grant cannot be the no-change find either. No scenario states the outcome for the endpoint.
+
+**QA2 covers:** none
+
+**Blocked:** product manager, on Q47 and Q49: no test-endpoint step reaches a no-change find, so the case stays draft until a find action is decided.
 
 **Pre-conditions:**
 
@@ -388,3 +419,31 @@ Runs once per row of **Test data**.
 * Step 2 returns the existing account.
 * The trail holds the same number of entries as in Step 1.
 * The account's verification status is the same as before Step 2.
+
+---
+
+## Reconciliation
+
+**Run:** QA2, fresh context. Read: this file, the change's `specs/shared/auth/audit/spec.md` delta, the durable `openspec/specs/shared/auth/audit/spec.md` for the requirements the cases cite, and the change's `decisions.md`. Denied: everything else, including the archive.
+
+**Covers:** Delta scenarios SC-38 to SC-45 only. Fully covered: shared-auth-audit-SC-39 and shared-auth-audit-SC-45, by US-01-TC2.
+
+**Scenarios no case covers:**
+
+* shared-auth-audit-SC-38 and shared-auth-audit-SC-40: naming and action are asserted, but no case asserts the subject's user id, and the no-secret clause sits in TC3 only.
+* shared-auth-audit-SC-41: no case asserts the role or the subject's user id.
+* shared-auth-audit-SC-42: no case asserts the new user id.
+* shared-auth-audit-SC-43: no case has the QA token attempt a ban. US-01-TC4 is the workflow's refusal.
+* shared-auth-audit-SC-44: no case grants `admin` to an address that already holds it.
+
+**Over-claimed cases:** US-02-TC1 (the "no names" clause), US-04-TC2 (its create-or-find action).
+
+**Outcomes no scenario states:** US-01-TC4 (a refused workflow ban, Q46), US-01-TC2's workflow rows (Q45), US-03-TC1 and US-03-TC2 (the requirement sentence and the durable append-only rule).
+
+**Contradictions:**
+
+* Q50, repaired: US-01-TC1, US-01-TC3, US-03-TC1, US-04-TC1 (the QA token ban, grant, scoped role and create rows).
+* Q47, repaired: US-01-TC3, US-03-TC1, US-04-TC1 (the create action).
+* Q47, not repaired: US-04-TC2, which is Blocked.
+* Undecided, raised in `decisions.md` under Raised: US-02-TC1 "no names"; US-04-TC1's action `ban` or `created`; US-04-TC2's find.
+* Not on the repair list, left as written: US-01-TC2's capture, expire and clear steps name no address, against Q9 and Q35.
