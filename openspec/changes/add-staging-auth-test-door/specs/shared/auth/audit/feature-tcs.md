@@ -125,7 +125,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<target user id>` is an account that is not banned.
+* `<tester address>` is a tester address whose account is not banned.
 
 **Test data:**
 
@@ -136,8 +136,8 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Call the test endpoint to ban `<target user id>`.
-2. Call the test endpoint to grant `<scope>` to `<target user id>`.
+1. Call the test endpoint to ban `<tester address>`.
+2. Call the test endpoint to grant `<scope>` to `<tester address>`.
 3. Read the two entries written by Steps 1 and 2.
 
 **Expected Results:**

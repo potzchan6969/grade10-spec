@@ -458,7 +458,7 @@ Runs once per row of **Test data**.
 
 * Every action in step 2 is accepted on the row's environment.
 
-**QA2 disposition:** kept with a note - the scoped role is on a plus-tag, as Q42 settles; SC-100 names a named tester (see Reconciliation).
+**QA2 disposition:** kept with a note - the scoped role is on a plus-tag, as Q42 settles; SC-100 names no scoped role.
 
 **QA2 covers:** none.
 
@@ -953,8 +953,8 @@ Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenar
 
 **Over-claimed** - TC5 (unique plus-tag per run), TC14 (non-tester row via the QA token), TC17 (wrong-token and customer-session rows). Each states behaviour no scenario states; fold into spec.md.
 
-**Contradictions** - SC-100 says uat sets a scoped role for a named tester. The requirement "Grant a scoped role" and SC-96 refuse that, and Q42 settles it: never a named tester. TC12 already uses a plus-tag. Dev corrects SC-100.
+**Contradictions** - None open. SC-100 once set a scoped role for a named tester, against Q42; it now names capture, expire, ban, grant `admin` and clear only.
 
 **Repairs** - None. No case contradicts a settled decision.
 
-**Raised** - None unsettled; `decisions.md` is unchanged. Q48 and Q51 cite TC30 and TC13, which this suite no longer holds.
+**Raised** - None unsettled; `decisions.md` is unchanged.

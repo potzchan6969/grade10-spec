@@ -162,13 +162,13 @@ QA walks sign-in on the hosted stacks through a gated endpoint. Collectors never
 
 ### Where It Opens
 
-- **Staging and uat** — every action, for the named testers and a unique plus-tag of one
+- **Staging and uat** — every action, for the named testers. A unique plus-tag of a named tester takes capture, expire and clear; ban, grant and a scoped role take a plus-tag of the collector alone
 - **Production and preview** — capture and clear, for the collector alone, by the workflow only
 
 ### Testers
 
 - **Named testers** — staging and uat each name four: a collector, a plus-tag sibling, a ban-only address and an admin-only address. Production names its collector alone. They are written into the code, so a new tester is a commit
-- **A generated plus-tag** — on staging and uat, a run generates a unique plus-tag of a named tester, so a test that needs an unused address gets one. Production takes no plus-tag
+- **A generated plus-tag** — on staging and uat, a run generates a unique plus-tag of a named tester, so a test that needs an unused address gets one. Ban, grant and a scoped role take a plus-tag of the collector only. Production takes no plus-tag
 - **Removing** — accounts for generated plus-tags build up on staging and uat. Each is removed in the next cleanup after the run that generated it
 
 ### What the Workflow May Do
@@ -215,7 +215,6 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | A device still waiting | Decided | It ends its own wait with a message and gains no session. Whether an address has a session is never revealed. | Product |
 | Trusted product entry | Decided | A trusted product creates or enters an account only from an address its own email check has verified. A ban still refuses the sign-in, and entry never changes the account's roles. Staging QA can walk it with a plus-tag address. | Product |
 | Google One Tap | Decided | It yields to the sign-in dialog, is offered wherever Google sign-in is brand-offered, ships to all eligible traffic at merge with no flag, and stays suppressed for the rest of a visit after a decline. | Product |
-| --- | --- | --- | --- |
 | Where the test endpoint is open | Decided | Staging and uat, every action. Production and preview, capture and clear for the collector alone. | Product |
 | Who may call | Decided | One workflow, from main, on a reviewed dispatch, and a QA agent walking a manual pass on staging. Proving the repository alone is not enough. | Product |
 | How a QA agent proves itself | Decided | A staging-only QA token committed to the repository, for capture, expire and clear on a tester address. Anyone who reads the repository can sign in as a tester on staging. That is accepted for an easy setup. | Product |
