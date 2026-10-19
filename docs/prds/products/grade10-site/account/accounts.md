@@ -59,6 +59,6 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | Shape | Decided | Shaped by brand, not product. One contract serves grade10 and ZZZ alike, so a collector and an operator meet the same rules. | Product |
 | Operator grants | Decided | Permissions are reviewed code. A person's roles are data, so an operator account cannot invent a grant. | Product |
 | Closing bound | Decided | 70 seconds on every read. Under a minute needs sessions off the edge session store, so it is not offered. | Engineering |
-| Session lifetime | ❓ Proposed | Site session one week, with a refresh. Console session 8 hours, or 30 minutes idle, as proposed. | Product |
+| Session lifetime | ❓ Proposed | Site and console sessions one week each, with a refresh. | Product |
 | Standing of a new account | Decided | Unverified until the person proves the address. | Product |
 :::

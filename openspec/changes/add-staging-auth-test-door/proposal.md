@@ -25,9 +25,10 @@ preview, and production are refused.
   staging captures a tester's link through the same door, with a
   staging-only QA token committed to the repository: capture, age and
   clear only (Q38, Q39).
-- **A tester domain.** Any address under one domain Ops names, minted per
-  run, with a catch-all inbox so nothing bounces. Ban and prepare create the
-  account when the address has never signed in.
+- **Named testers.** Each environment names its own testers in the code: four on
+  staging and uat, the collector alone on production. On staging and uat a run
+  mints a unique plus-tag of one. Ban and prepare create the account when the
+  address has never signed in (decisions Q40).
 - **Closed everywhere else.** Preview, production, and `/dev` on staging stay
   closed. The job does not mint a session without following the mail, and it
   does not unban.
@@ -85,10 +86,8 @@ No platform impact: no path crosses a product.
 
 ## Open questions
 
-- **The tester domain, and its catch-all** — Ops. Until they land, the door
-  has no subjects. ❓ on [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/test-sign-in.md#testers).
-- **Sweeping tester accounts** — Ops. A run leaves one account per test
-  behind. ❓ on [Sign-In Tests · Testers](../../../docs/prds/products/grade10-site/account/test-sign-in.md#testers).
+None. The tester addresses are named in the code (Q40), and a minted plus-tag's
+account is removed in the next sweep after the run that minted it (Q21).
 
 ## References
 
