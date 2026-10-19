@@ -189,7 +189,8 @@ type WinnerOrderSetupDialogProps = {
   cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>;
   /**
    * Settlement currencies offered at Payment Method. One entry fixes the
-   * currency and hides the choice; a choice preselects HKD with Card.
+   * currency and reads `Pay in {currency}`; a choice preselects HKD. The
+   * first offered method is always preselected.
    */
   settlementCurrencies?: readonly WinnerOrderSettlementCurrency[];
   /** Called when the winner finishes all setup steps. */
@@ -287,15 +288,17 @@ function defaultSettlementCurrency(
   return currencies.length === 1 ? (currencies[0] ?? null) : null;
 }
 
-/** Card is preselected where the currency offers it; otherwise nothing is. */
+/** The first offered method for the currency is preselected. */
 function defaultPaymentMethod(
   currency: WinnerOrderSettlementCurrency | null,
   cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>,
 ): WinnerOrderSetupPaymentMethod | null {
-  return currency != null &&
-    paymentMethodIsAvailable(currency, "card", cardFeePercentages)
-    ? "card"
-    : null;
+  if (currency == null) return null;
+  return (
+    paymentMethodsForCurrency(currency).find((method) =>
+      paymentMethodIsAvailable(currency, method, cardFeePercentages),
+    ) ?? null
+  );
 }
 
 function paymentMethodsForCurrency(
@@ -900,14 +903,16 @@ function WinnerOrderSetupDialog({
                 <DialogDescription>
                   Choose how you’ll pay. The exact amount is on the invoice.
                 </DialogDescription>
-                {showSettlementPicker ? (
-                  <div className="flex w-full flex-col gap-2">
-                    <span
-                      className="text-sm font-medium text-foreground"
-                      id={settlementCurrencyLabelId}
-                    >
-                      Pay in
-                    </span>
+                <div className="flex w-full flex-col gap-2">
+                  <span
+                    className="text-sm font-medium text-foreground"
+                    id={settlementCurrencyLabelId}
+                  >
+                    {showSettlementPicker
+                      ? "Pay in"
+                      : `Pay in ${settlementCurrency}`}
+                  </span>
+                  {showSettlementPicker ? (
                     <SegmentedControl
                       aria-labelledby={settlementCurrencyLabelId}
                       className="w-fit self-start"
@@ -938,8 +943,8 @@ function WinnerOrderSetupDialog({
                         </SegmentedControlItem>
                       ))}
                     </SegmentedControl>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
                 {settlementCurrency != null ? (
                   <RadioList
                     aria-label="Payment method"

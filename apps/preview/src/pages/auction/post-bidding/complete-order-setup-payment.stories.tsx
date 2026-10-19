@@ -174,7 +174,13 @@ export const UsdOnly: Story = {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "Payment Method");
     const modal = within(dialog);
-    expect(modal.queryByText("Pay in")).not.toBeInTheDocument();
+    expect(modal.getByText("Pay in USD")).toBeVisible();
+    expect(
+      modal.queryByRole("button", { name: "USD" }),
+    ).not.toBeInTheDocument();
+    expect(
+      modal.queryByRole("button", { name: "HKD" }),
+    ).not.toBeInTheDocument();
     expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
     expect(modal.getByRole("radio", { name: /^HK Local\b/ })).toBeVisible();
     expect(
