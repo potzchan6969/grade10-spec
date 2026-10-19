@@ -103,7 +103,7 @@ function EventVideo({ video }: { video: NonNullable<ShowChapter["video"]> }) {
             loading="lazy"
             src={video.poster}
           />
-          <Badge className="absolute right-4 bottom-4 sm:right-6 sm:bottom-6">
+          <Badge className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
             {video.badge}
           </Badge>
           <div className="absolute inset-0 grid place-items-center">
