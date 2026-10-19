@@ -81,7 +81,6 @@ A push or a schedule runs this skill in a session or a CI job. The session needs
 The Checkpoint digest workflow needs, in the repository's settings:
 
 - **`E2E_REPORTS_R2_*`** - the secrets the Handoff page workflow already uses
-- **`SLACK_BOT_TOKEN`** - the bot the weekly digest already uses, with `chat:write`, invited to the channel
-- **`vars.CHECKPOINT_DIGEST_SLACK_CHANNEL`** - the channel id, such as `C0123456789`
+- **`SLACK_BOT_TOKEN`** and **`vars.SLACK_CHANNEL_ID`** - the bot and channel the Manual and Storybook workflows already post with
 
 The workflow runs one digest per branch at a time and refuses a run whose secrets or channel are missing. On a push to the branch, pass the branch with `--branch`; the head of the checkout is `to`. A schedule that finds no commits posts nothing.

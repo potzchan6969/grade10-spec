@@ -41,7 +41,7 @@ jobs:
       AWS_DEFAULT_REGION: auto
       R2_ACCOUNT_ID: ${{ secrets.E2E_REPORTS_R2_ACCOUNT_ID }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      SLACK_CHANNEL: ${{ vars.CHECKPOINT_DIGEST_SLACK_CHANNEL }}
+      SLACK_CHANNEL: ${{ vars.SLACK_CHANNEL_ID }}
       GH_TOKEN: ${{ github.token }}
       BRANCH: ${{ inputs.branch }}
     steps:
@@ -66,7 +66,7 @@ jobs:
           missing=""
           [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ] && [ -n "$R2_ACCOUNT_ID" ] || missing="$missing E2E_REPORTS_R2_*"
           [ -n "$SLACK_BOT_TOKEN" ] || missing="$missing SLACK_BOT_TOKEN"
-          [ -n "$SLACK_CHANNEL" ] || missing="$missing vars.CHECKPOINT_DIGEST_SLACK_CHANNEL"
+          [ -n "$SLACK_CHANNEL" ] || missing="$missing vars.SLACK_CHANNEL_ID"
           if [ -n "$missing" ]; then
             echo "::error::Not configured:$missing"
             exit 1
