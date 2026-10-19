@@ -98,6 +98,10 @@ A session belongs to the browser, not to one tab. Every tab of the same site or 
 - **Account key** — account data is filed under the user id, and nothing else. An email is an attribute, so changing an address changes data, not the key
 - **Analytics** — a signed-in event names the person by user id. An anonymous event names the device. Signing in links the device to the person, so one visit does not look like two strangers. Each product decides which events it records
 
+:::detail{title="Session test cases" for="qa"}
+::cases{id="shared/auth/session"}
+:::
+
 ## Sign-Out
 
 
@@ -116,6 +120,10 @@ A session belongs to the browser, not to one tab. Every tab of the same site or 
 ### Where the Button Is
 
 The control's place, and what a surface clears afterwards, belong to the surface. On the grade10 site, the profile offers sign-out. So does the header account menu, when a collector is signed in — [Page Shell](/p/grade10-site/site/page-shell).
+
+:::detail{title="Sign-out test cases" for="qa"}
+::cases{id="shared/auth/sign-out"}
+:::
 
 ## Screens
 
