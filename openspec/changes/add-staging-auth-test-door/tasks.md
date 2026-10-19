@@ -15,7 +15,7 @@
 - [ ] 2.8 Verify the QA token is refused off staging on uat, preview and production (`shared-auth-test-sign-in-SC-98`) — shipped as `qaTokenTestDoorMoves` returning no actions outside staging (decisions Q44); confirm with `pnpm run test:backend`
 - [x] 2.9 Admit the committed QA token for capture, expire and clear on staging alone, refusing it every other action and a rotated token (`shared-auth-test-sign-in-SC-94`, `shared-auth-test-sign-in-SC-95`, decisions Q39, Q50) — shipped as `testDoorQaTokenOr` and `qaTokenTestDoorMoves`
 - [x] 2.10 Mount each environment's actions and testers: staging and uat every action for their four named testers, production and preview capture and clear for production's named testers, local stacks none (`shared-auth-test-sign-in-SC-99` to `shared-auth-test-sign-in-SC-103`, decisions Q40, Q41) — shipped as `testDoorMoves` and `grade10TestDoorEmails`
-- [ ] 2.11 Answer every call the access check refuses — a wrong caller, an action the environment does not mount, a QA-token call outside its three actions — as the worker answers a path it does not have (decisions Q23) — not shipped: an unmounted action answers 404 and a wrong caller 403
+- [ ] 2.11 Answer every refusal as the worker answers a path it does not have — a wrong caller, an action the environment does not mount, a QA-token call outside its three actions, and every refusal after the access check — and read a refusal by status alone in the e2e seam (decisions Q23, Q48) — not shipped: an unmounted action answers 404, a wrong caller 403, and an admitted refusal `{ error }`
 
 ## 3. The five actions (grade10)
 

@@ -168,9 +168,9 @@ the lane documents (Q42).
 the scoped role call `appendAuditLog` from `@grade10/postgres/audit` in the
 same transaction as the write, as the operator's own identity writes do. Only
 the workflow can make these writes, so the actor is `test-endpoint-workflow` in
-place of a user id (Q45). A ban, grant or scoped role refused after the access
-check — an address that is no tester, a scoped role on a named tester, or
-`admin` asked as a scoped role — writes a refused entry the same way, naming no
+place of a user id (Q45). Every ban, grant or scoped role refused after the access
+check — no address, an address that is no tester, a scoped role on a named
+tester, or a role outside the five — writes a refused entry the same way, naming no
 subject when the address holds no account (Q46). A ban that creates the account writes one entry naming `ban` and the new
 user id (Q53). Capture, expire
 and clear write nothing. The entry holds no token, address or email. A write
@@ -279,8 +279,8 @@ No data migration. Tasks 2.6, 2.7, 2.11 and 3.9 ship on the deployed endpoint:
    were meant to hold.
 2. Deploy the trail entries. An endpoint write that cannot record its entry
    stops running, so check the trail's write path on staging first.
-3. Deploy the refusals as a missing path. Nothing an admitted caller does
-   changes.
+3. Deploy the refusals as a missing path. An admitted caller now reads 404
+   where it read `{ error }`, so the e2e seam reads a refusal by status alone.
 4. Deploy the plus-tag cleanup on staging, then uat.
 
 Rollback for any step is the previous worker; none changes data in place.

@@ -66,7 +66,7 @@ same as any identity write.
 #### Scenario: shared-auth-audit-SC-43 - A refused test-endpoint ban is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
-- **WHEN** the test endpoint's workflow asks to ban an address that is not a tester, and the endpoint refuses it
+- **WHEN** the test endpoint's workflow asks to ban an address that is not a tester and holds no account, and the endpoint refuses it
 - **THEN** the trail holds one entry naming `test-endpoint-workflow`, the ban, and the refusal
 - **AND** the entry names no subject and carries no address
 

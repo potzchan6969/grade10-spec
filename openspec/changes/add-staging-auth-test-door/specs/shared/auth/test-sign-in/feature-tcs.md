@@ -981,7 +981,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenarios, `decisions.md` (Q1 to Q54) and the procedure. Nothing else. Case steps and expected results are unchanged.
+Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenarios, `decisions.md` (Q1 to Q54) and the procedure. Nothing else. TC25 was added on 2026-10-19; no other case's steps or expected results changed.
 
 **Covered in full** - SC-01 (TC1), SC-06 (TC10), SC-07 (TC18), SC-12 (TC6), SC-19 (TC8), SC-20 (TC9), SC-21 (TC11), SC-25 (TC23), SC-26, SC-27, SC-28 (TC24), SC-94 (TC3), SC-101 (TC21), SC-103 (TC22), SC-104 (TC25, added 2026-10-19). SC-NN is shared-auth-test-sign-in-SC-NN.
 
@@ -993,4 +993,4 @@ Run: QA2, 2026-10-19. Read the blind cases above, this change's `spec.md` scenar
 
 **Repairs** - None. No case contradicts a settled decision.
 
-**Raised** - None unsettled; `decisions.md` is unchanged.
+**Raised** - None unsettled.

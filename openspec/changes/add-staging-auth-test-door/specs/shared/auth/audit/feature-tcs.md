@@ -170,7 +170,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<other address>` is not a tester address of the environment.
+* `<other address>` is not a tester address of the environment and holds no account.
 
 **Steps:**
 
