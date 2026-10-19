@@ -12,8 +12,9 @@ means staging auth tests need a real mailbox, or they do not run.
 mailbox.
 
 **Acceptance signal:** the test endpoint's own workflow captures the last sign-in link
-for a tester address and follows it; any other caller, any other address,
-preview, and production are refused.
+for a tester address and follows it; on production and preview it does so for
+production's named testers alone; any other caller and any other address are
+refused.
 
 ## What Changes
 
@@ -29,8 +30,11 @@ preview, and production are refused.
   staging and uat, the collector alone on production. On staging and uat a run
   generates a unique plus-tag of one. Ban and grant create the account when the
   address has never signed in (decisions Q40).
-- **Closed everywhere else.** Preview, production, and `/dev` on staging stay
-  closed. The workflow does not generate a session without following the mail, and it
+- **Production and preview, for smoke tests.** The workflow alone may capture
+  and clear for production's named testers, today the collector, so a smoke
+  test can sign in there (Q41). No ban, grant or role.
+- **Closed everywhere else.** Local stacks, and `/dev` on staging, uat and
+  production, stay closed. The workflow does not generate a session without following the mail, and it
   does not unban.
 
 ## Non-Goals
@@ -51,7 +55,8 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Impact
 
-- **Auth worker (staging)** — the gated endpoint; `/dev` stays 403.
+- **Auth worker (staging, uat, production)** — the gated endpoint; `/dev` stays 403.
+- **Identity trail** — the endpoint's bans, grants and scoped roles are recorded under the caller's kind ([Audit Log](../../../docs/prds/products/grade10-site/account/audit.md#what-lands-on-the-trail)).
 - **Sign-in send (staging)** — record the last mail for a tester address so
   the workflow can capture it; Resend still delivers.
 - **Sign-in limits (staging)** — unchanged for every caller, and clearable for
@@ -69,10 +74,9 @@ No platform impact: no path crosses a product.
 
 - A dedicated disposable stack, branched from staging, for the full suite
   that still generates a new address per test.
-- An anonymous smoke lane against `preview.grade10.com`, on the same label and
-  dispatch as this one. Preview is the production backend, so that lane never
-  signs in and never gains this endpoint; what it covers is what a signed-out
-  visitor sees on the production candidate.
+- A smoke lane against production and `preview.grade10.com`, on the same
+  dispatch as this one, that signs in as production's named testers through
+  capture and clear, so a release can be checked before collectors meet it.
 - PR previews under the staging base domain, so an unmerged frontend can hold
   a staging session. Nothing publishes a PR preview today, and the
   `workers.dev` host in `packages/app-env/src/origins.ts` is cross-site, so no

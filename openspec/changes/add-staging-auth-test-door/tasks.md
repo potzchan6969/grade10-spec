@@ -25,6 +25,7 @@ Needs group 2 landed: every task here sits behind that gate and cannot be verifi
 - [x] 3.5 Grant the named address to hold `admin`, creating its account when it has never signed in, so the session a later follow creates holds the role (`shared-auth-test-sign-in-SC-10`, `shared-auth-test-sign-in-SC-20`) — with a sixth action, a scoped role on a generated collector plus-tag (decisions Q42)
 - [x] 3.6 Clear the sign-in limits for the named address and for the caller — the wait between two mails and the count a caller may ask for — leaving another address's wait and another caller's count standing (`shared-auth-test-sign-in-SC-21`, `shared-auth-test-sign-in-SC-22`, `shared-auth-test-sign-in-SC-33`)
 - [x] 3.7 Hold the test endpoint to those five actions: no unban, no session generate, no store or auction seed, and no route to enable later (`shared-auth-test-sign-in-SC-26`, `shared-auth-test-sign-in-SC-27`, `shared-auth-test-sign-in-SC-28`) — six actions, per decisions Q42
+- [ ] 3.9 Remove a generated plus-tag's account in the next cleanup after the run that generated it, and never a named tester's (`shared-auth-test-sign-in-SC-104`, decisions Q21) — not shipped: nothing removes them today
 - [x] 3.8 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:backend`
 
 ## 4. The staging E2E lane (grade10)

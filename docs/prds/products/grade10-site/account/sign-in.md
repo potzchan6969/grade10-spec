@@ -156,20 +156,20 @@ QA walks sign-in on the hosted stacks through a gated endpoint. Collectors never
 - **The lane's own workflow** — one workflow, from main, opens the test endpoint in an environment a reviewer approves. Proving the repository is not enough. A run a pull request starts is refused
 - **A QA agent** — an agent walking a manual pass on staging captures a tester's sign-in link through the test endpoint, so it signs in without a mailbox — [Manual QA Passes](https://github.com/9gag/grade10-spec/blob/main/docs/governance/manual-qa-passes.md)
 - **The QA token** — the agent proves itself with one token, committed to the repository so a pass needs no setup. Staging alone accepts it, and only for a tester address
-- **What the token may do** — capture, expire and clear on a tester address, and on staging alone. Never ban or grant. A holder can sign in as any tester on staging except the admin-only one
+- **What the token may do** — capture, expire and clear on a tester address, and on staging alone. Never ban, grant or set a role. A holder can sign in as any tester on staging
 - 🚧 **The admin-only tester** — the token never reaches it, on any environment. Its link is followed by the workflow, which grants its `admin` before the follow
 - **Rotating it** — a commit replaces the token, and the old one is refused from that deploy on. Anyone who reads the repository gets the new token too, so rotation cuts off only copies made earlier
 
 ### Where It Opens
 
 - **Staging and uat** — every action, for the named testers. A unique plus-tag of a named tester takes capture, expire and clear; ban, grant and a scoped role take a plus-tag of the collector alone
-- **Production and preview** — capture and clear, for the collector alone, by the workflow only
+- **Production and preview** — capture and clear, for production's named testers alone, by the workflow only, so a smoke test can sign in there
 
 ### Testers
 
-- **Named testers** — staging and uat each name four: a collector, a plus-tag sibling, a ban-only address and an admin-only address. Production names its collector alone. They are written into the code, so a new tester is a commit
+- **Named testers** — staging and uat each name four: a collector, a plus-tag sibling, a ban-only address and an admin-only address. Production names its own smoke testers, today the collector alone. They are written into the code, so each is easy to identify and a new tester is a commit
 - **A generated plus-tag** — on staging and uat, a run generates a unique plus-tag of a named tester, so a test that needs an unused address gets one. Ban, grant and a scoped role take a plus-tag of the collector only. Production takes no plus-tag
-- **Removing** — accounts for generated plus-tags build up on staging and uat. Each is removed in the next cleanup after the run that generated it
+- 🚧 **Removing** — accounts for generated plus-tags build up on staging and uat. Each is removed in the next cleanup after the run that generated it
 
 ### What the Workflow May Do
 
@@ -186,7 +186,7 @@ Ban and grant answer for an address that has never signed in. The account is cre
 
 ### Closed
 
-- **Production** — capture and clear only, for the collector. Preview runs the production backends and answers the same
+- **Production** — capture and clear only, for its named testers. Preview runs the production backends and answers the same
 - **Everywhere else** — local stacks open no action, and the disposable `/dev` endpoint stays closed on staging, uat and production. The workflow does not generate a session without following the mail, does not unban, and does not seed store or auction data here
 
 :::detail{title="Code map" for="engineer"}
@@ -215,7 +215,7 @@ Measured on the share of email sign-ins that end in a session, from the send to 
 | A device still waiting | Decided | It ends its own wait with a message and gains no session. Whether an address has a session is never revealed. | Product |
 | Trusted product entry | Decided | A trusted product creates or enters an account only from an address its own email check has verified. A ban still refuses the sign-in, and entry never changes the account's roles. Staging QA can walk it with a plus-tag address. | Product |
 | Google One Tap | Decided | It yields to the sign-in dialog, is offered wherever Google sign-in is brand-offered, ships to all eligible traffic at merge with no flag, and stays suppressed for the rest of a visit after a decline. | Product |
-| Where the test endpoint is open | Decided | Staging and uat, every action. Production and preview, capture and clear for the collector alone. | Product |
+| Where the test endpoint is open | Decided | Staging and uat, every action. Production and preview, capture and clear for production's named testers alone, so a smoke test can sign in there. | Product |
 | Who may call | Decided | One workflow, from main, on a reviewed dispatch, and a QA agent walking a manual pass on staging. Proving the repository alone is not enough. | Product |
 | How a QA agent proves itself | Decided | A staging-only QA token committed to the repository, for capture, expire and clear on a tester address. Anyone who reads the repository can sign in as a tester on staging. That is accepted for an easy setup. | Product |
 | The admin-only tester and the QA token | Decided | Refused on every environment. The token never reaches it, so a reader of the repository cannot sign in as `admin`. | Product |

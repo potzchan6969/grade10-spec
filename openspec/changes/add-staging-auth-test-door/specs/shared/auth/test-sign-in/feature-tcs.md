@@ -1,6 +1,6 @@
 # shared/auth/test-sign-in Test Cases
 
-**Status:** pending-review · 0/24
+**Status:** pending-review · 0/25
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
 ## g10.shared-test-sign-in.US1: Sign-in without the /dev endpoint
@@ -942,6 +942,38 @@ Runs once per row of **Test data**.
 **QA2 disposition:** kept.
 
 **QA2 covers:** shared-auth-test-sign-in-SC-26, shared-auth-test-sign-in-SC-27, shared-auth-test-sign-in-SC-28.
+
+### g10.shared-test-sign-in.US1-TC25: A generated plus-tag's account is gone after the next cleanup
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Testers
+
+**Pre-conditions:**
+
+* A run of the test-endpoint workflow is approved on staging.
+
+**Steps:**
+
+1. From that run, generate a unique plus-tag `<plus-tag address>` of the collector and ban it.
+2. Read the account for `<plus-tag address>` on staging.
+3. Wait for the next cleanup after the run to finish.
+4. Read the account for `<plus-tag address>`, and for each named tester, on staging.
+
+**Expected Results:**
+
+* Step 2 finds an account for `<plus-tag address>`.
+* Step 4 finds no account for `<plus-tag address>`.
+* Step 4 finds every named tester's account.
 
 ## Reconciliation
 
