@@ -56,14 +56,12 @@ nearest your task and keep it open while you draft.
     sits where a reader can act on it. The mark leads its line, its bullet
     or its cell, after the key term at most, or opens a sentence of its own:
     one written further into a sentence is read as words and pooled nowhere
-  - 🚧 starts a line for a confirmed, accepted outcome whose implementation
-    is planned or in progress. Its active change carries the accepted
-    requirement, and the mark comes off when implementation is verified. The
-    mark does not mean the outcome is already available to users; availability
-    is recorded separately. A line still open is never 🚧. One line per
-    outcome the reader can see; the scenarios that prove it are the spec's. A 🚧 inside a flow
-    step, a sub-step or mid-sentence is a scenario wearing a mark: lift it
-    to its section as one outcome, or drop it
+  - 🚧 starts a line for a decided outcome not yet live in production. It
+    comes off once a release carries it and every id on the line passes. A
+    line still open is never 🚧. One line per outcome the reader can see;
+    the tests that prove it cite its id. A 🚧 inside a flow step, a
+    sub-step or mid-sentence is a test case wearing a mark: lift it to its
+    section as one outcome, or drop it
 
 ## Voice
 
@@ -127,12 +125,9 @@ nearest your task and keep it open while you draft.
   architecture doc, as names and links, nothing else. Ledger kinds, keys,
   locks, metrics, columns and what was tried are deleted; the architecture
   docs and the code hold them
-- **The page states what runs, and what is accepted for delivery** — unmarked
-  lines describe the product contract; 🚧 marks a confirmed outcome accepted
-  for implementation and not yet verified complete. Whether an outcome is
-  available in a deployed application is recorded separately. A warning that the spec, the
-  durable text or the code says otherwise is deleted; the gap is a change
-  proposal. A `warning` callout nobody signed with `author` and
+- **The page states what runs, and what is decided next** — unmarked lines
+  run in production; 🚧 marks a decided outcome not yet live. A warning that
+  the code says otherwise is deleted; the gap is a bug or a 🚧 line. A `warning` callout nobody signed with `author` and
   `date` is that warning: what it knows becomes a 🚧 or ❓ line in its
   section
 - **One flow per topic** — the steps between systems are walked once, on
@@ -199,14 +194,13 @@ Read the draft once as the least-informed reader who has to act on it.
 8. **Sentences** — none carries a metaphor, a twist or a second fact
 9. **Drift** — no note that the spec or the code says otherwise, no
    unsigned `warning` callout, no list of what is built against what is
-   decided; a decided and accepted outcome awaiting implementation is a 🚧 line in its section
+   decided; a decided outcome not yet live is a 🚧 line in its section
 10. **Engineer block** — names and links only
 11. **Ownership** — nothing left that is the spec's statement, an embedded
     spec, a sibling's rule or a flow a sibling walks; nothing about this
     page's topic still on a sibling
-12. **Marks** — everything unconfirmed is ❓ or `TBC`; 🚧 only on a confirmed
-    outcome accepted for implementation and not yet verified complete, one
-    line per outcome
+12. **Marks** — everything unconfirmed is ❓ or `TBC`; 🚧 only on a decided
+    outcome not yet live in production, one line per outcome
 
 A draft that fails one line is rewritten.
 
@@ -214,7 +208,7 @@ A draft that fails one line is rewritten.
 
 | Held by | What |
 | --- | --- |
-| `pnpm check:manual` refuses | canonical form, block attributes, a block id that resolves nothing, an example ledger whose balance does not add up, a flow whose cases cannot be told apart, a 🚧 line no accepted change delivers |
+| `pnpm check:manual` refuses | canonical form, block attributes, a block id that resolves nothing, an example ledger whose balance does not add up, a flow whose cases cannot be told apart |
 | `pnpm check:manual` warns | a spec whose requirements changed meaning after the page embedding it was last committed, cleared by the edit the page needs or by a dated `reviewed:` in its frontmatter when it needs none; a prose reference naming nothing or two things; a ledger written as a table outside an example; a ❓ or `TBC` inside a sentence, read as words (`prose`); and `dense`, below. A warning asks for the rewrite and never blocks a fold |
 | Review | voice and shape, the way code is held to the spec |
 | The `writing-style` skill | loaded before drafting; it points here |
