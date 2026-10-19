@@ -18,11 +18,11 @@ The page's own examples are cases too, cited by their ids: `pay-online`,
 | cap-after-code | $300 of goods, a $50 code, 500 points held | the member asks for 300 points | trimmed to 250 | |
 | cap-balance | $300 of goods, 80 points held | the member asks for 100 | trimmed to 80 | |
 | spend-is-activity | a balance lapsing 2027/01/03 | the member pays 10 points on 2026/06/01 | the balance now lapses 2027/06/01 | |
-| auction-no-points | a member with points | they try to pay an auction purchase with points | refused | building |
+| auction-no-points | a member with points | they try to pay an auction purchase with points | refused | |
 | till-switch-off | a manager turns off the till's points spending | a member is at the till | the sale completes as an ordinary sale; an attached member still earns | |
 | email-switch-off | a manager turns off typed-email spending | staff identify a member by card | points still spend | |
-| deduction-title | a member spends points online or at the till | the order is paid | its discount reads "Deduction from Points" | building |
-| old-points-title | a paid order whose points discount is titled "Points" | it lands | the balance is debited once, for that discount | building |
+| deduction-title | a member spends points online or at the till | the order is paid | its discount reads "Deduction from Points" | |
+| old-points-title | a paid order whose points discount is titled "Points" | it lands | the balance is debited once, for that discount | |
 
 ## Online
 
@@ -30,7 +30,7 @@ The page's own examples are cases too, cited by their ids: `pay-online`,
 | --- | --- | --- | --- | --- |
 | debit-once | a paid order delivered twice | it lands | the balance is debited once | smoke |
 | balance-fell | 100 points promised; the balance falls to 70 before payment | the order is paid | 70 points are debited; the shortfall is alerted | |
-| no-points-title | 100 points promised; the paid order's discounts carry no points title | it lands | the debit is the applied total less every other discount, never over 100 | building |
+| no-points-title | 100 points promised; the paid order's discounts carry no points title | it lands | the debit is the applied total less every other discount, never over 100 | |
 
 ## At the Till
 
@@ -39,8 +39,8 @@ The page's own examples are cases too, cited by their ids: `pay-online`,
 | double-tap | staff tap Apply twice | the spend lands | one spend, both taps answer the same | smoke |
 | read-back | staff apply 100 points | before it commits | the member sees points spent, money due, balance after and points this sale will earn | |
 | staff-order-discount | a staff order discount on the sale | staff try to spend points | refused until staff take it off | |
-| keyed-points-title | a sale with no store order id and a discount staff keyed "Points" | staff open the member's panel | no points, no coupon and no Apply until staff remove it | building |
-| resumed-sale-title | a parked sale carrying a "Points" discount | staff resume it and apply again | one discount, titled "Deduction from Points" | building |
+| keyed-points-title | a sale with no store order id and a discount staff keyed "Points" | staff open the member's panel | no points, no coupon and no Apply until staff remove it | |
+| resumed-sale-title | a parked sale carrying a "Points" discount | staff resume it and apply again | one discount, titled "Deduction from Points" | |
 | undo-before-paid | points applied | staff clear the discounts before payment | nothing is debited | |
 | member-notified | a till spend | the sale is paid | the member is notified of points, amount and location, never a code | |
 | notice-corrected | a member told a spend landed | the sale is abandoned unpaid | a correction notice is sent | |

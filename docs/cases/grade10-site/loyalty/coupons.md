@@ -14,10 +14,10 @@ Cite one as `grade10-site/loyalty/coupons#<id>`.
 | --- | --- | --- | --- | --- |
 | one-use | a coupon spent by a paid order | the member tries it again | refused as Not standing | smoke |
 | expired-no-return | a coupon past its end, unused | the member reads their balance | the points stay spent; the coupon is counted as breakage | |
-| own-clock | a coupon with 20 days left | the member's balance lapses | the coupon still runs its 20 days | building |
-| coupon-states | a member holding an available, a used, a void and an expired coupon | they read their coupons | each reads its own state | building |
+| own-clock | a coupon with 20 days left | the member's balance lapses | the coupon still runs its 20 days | |
+| coupon-states | a member holding an available, a used, a void and an expired coupon | they read their coupons | each reads its own state | |
 | no-code-shown | a reward coupon and a store coupon | the member reads their list | the store coupon shows its code; the reward coupon shows none | |
-| auction-refused | a member with a coupon | they try it on an auction purchase | refused | building |
+| auction-refused | a member with a coupon | they try it on an auction purchase | refused | |
 | codes-masked | a surface that must not show codes | it lists the member's coupons | every code is masked with the same word | |
 
 ## Applying one
@@ -43,7 +43,7 @@ Cite one as `grade10-site/loyalty/coupons#<id>`.
 | --- | --- | --- | --- | --- |
 | not-held | a code bound to another member | it is applied | answered as a code nobody minted | |
 | till-online-only-panel | a coupon good online only | staff open the member's panel | it reads online only and cannot be applied | |
-| till-online-only-phone | a coupon scoped to named products, naming the till | the member presents it from their phone | `This coupon cannot be used on this sale.`; the price is unchanged | building |
+| till-online-only-phone | a coupon scoped to named products, naming the till | the member presents it from their phone | `This coupon cannot be used on this sale.`; the price is unchanged | |
 | written-too-late | a sale whose order is written over a minute after its claim | it is submitted | refused; the member reads it took too long and to submit again; the coupon is back in the wallet | |
 | gift-already-held | a gift whose variant the basket already carries | it is applied | refused as Gift already held | |
 | wrong-currency | a basket in USD | a coupon is applied | refused as Wrong currency | |

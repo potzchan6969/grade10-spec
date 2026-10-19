@@ -29,8 +29,8 @@ example walks. Cite one as `grade10-site/loyalty/rewards#<id>`.
 | shop-last-unit | one unit left of a stocked reward | two members buy it at once | one gets it; the other is refused as out of stock | |
 | shop-oldest-first | a balance from two earns | the member buys a reward | one debit, taken from the oldest points first | |
 | shop-repriced | a member bought a reward at 500 points | the reward is repriced to 700 | the earlier redemption still reads 500 | smoke |
-| shop-menu-online-only | a reward scoped to named products, naming the till too | a member reads the menu | it reads online only, before any points go | building |
-| shop-twice-costs-once | a member buying a reward | the same redemption is sent twice, with a reload between | one redemption, one debit | building |
+| shop-menu-online-only | a reward scoped to named products, naming the till too | a member reads the menu | it reads online only, before any points go | |
+| shop-twice-costs-once | a member buying a reward | the same redemption is sent twice, with a reload between | one redemption, one debit | |
 | one-unit | a member who wants two of a reward | they redeem | the menu offers no quantity; they redeem twice, paying the cost each time | |
 | collection-window | a reward collected in person and a money-off reward | the member reads the menu | the first states its collection window; the second states its validity | |
 | redeem-refused | a redemption refused | the member reads the menu | the refused row says why and can be pressed again; the other rows stay pressable | |
@@ -42,7 +42,7 @@ example walks. Cite one as `grade10-site/loyalty/rewards#<id>`.
 | coupon-at-once | a member with enough points | they buy a reward | the coupon and its validity are in their list at once | smoke |
 | till-code-once | a product coupon applied at the till | the same sale is planned again | it keeps the coupon and mints no second code | |
 | till-gift-no-code | a gift coupon applied at the till | the sale is planned | the gift goes on as its own line at nothing, with no code | |
-| free-item-not-added | a free item coupon, a basket without that variant | it is applied online | refused as Nothing matches; no line added, total unchanged | building |
+| free-item-not-added | a free item coupon, a basket without that variant | it is applied online | refused as Nothing matches; no line added, total unchanged | |
 | refund-keeps-coupon-used | a paid order that spent a coupon and points as a discount | it is refunded in full | the coupon stays used and its points stay spent; the discount points come back | |
 | physical-reward-sale | a physical reward's coupon at the till | staff ring the item up | the coupon takes 100% off and the order goes through at nothing | |
 
@@ -65,5 +65,5 @@ example walks. Cite one as `grade10-site/loyalty/rewards#<id>`.
 | reverse-running-day | a balance brought to 0 by a redemption | it is reversed | the points come back under the day the balance still runs to | |
 | reverse-tier-untouched | a member at Gold | a redemption is reversed | tier progress is unchanged | |
 | reverse-no-member-way | a member holding an unused coupon | they look for a way to get their points back | no member surface offers one | |
-| reverse-on-record | an operator reverses a redemption | the log is read | it names who and why | building |
-| reverse-unlimited-stock | a redemption of an unlimited reward | it is reversed | no stock is returned | building |
+| reverse-on-record | an operator reverses a redemption | the log is read | it names who and why | |
+| reverse-unlimited-stock | a redemption of an unlimited reward | it is reversed | no stock is returned | |

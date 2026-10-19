@@ -113,6 +113,15 @@ one of the two kinds on [Reward Types](/p/grade10-site/loyalty/rewards#reward-ty
 - **Currency mark** - `HKD` in front of a money field, as console tables
   name the currency
 
+## Always
+
+- **A service connection is not a permission** - a service connected to the
+  identity system reads no names or emails without an operator session that
+  carries the identity permission {#identity-needs-operator}
+- **Never in a shared cache** - a response carrying names or emails is marked
+  as its caller's alone and is never stored in a shared cache
+  {#identity-not-cached}
+
 :::detail{title="Code map" for="engineer"}
 - **Design record** -
   [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)

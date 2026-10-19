@@ -125,3 +125,12 @@ We have a cron sweep to render the record for analytics purposes.
 - ❓ **Annual cap and approval** — the owner's draft asks for both; neither is
   fixed and the programme enforces neither, so an invitation with no end date
   holds until revoked. The owner's call
+
+## Always
+
+- **A broken ladder never starts** - the product refuses to start, naming
+  what it found, on a repeated tier, other than one entry tier, an entry tier
+  that is not the lowest, an earned tier asking no more points than the one
+  below, earned tiers counted over different windows, a retention threshold
+  above its tier's own, a validity period or an inactivity window of zero or
+  less, or a time zone that does not exist {#ladder-refused-at-start}

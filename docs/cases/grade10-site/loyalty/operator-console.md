@@ -54,12 +54,12 @@ as `grade10-site/loyalty/operator-console#<id>`.
 | --- | --- | --- | --- | --- |
 | money-off-from-console | the reward form | an operator saves Money off with a discount, a scope and a combine setting | the reward is saved with that definition, with no admin API call | smoke |
 | gift-from-console | the reward form | an operator saves Gift with a purchase with one variant and a minimum spend | it is saved as a gift for that variant | |
-| free-item-saved | the reward form | an operator chooses Free item, picks one variant and saves | saved as a product coupon at 100%, no maximum, on that variant | building |
-| free-item-reopens | a stored product coupon at 100%, no maximum, on one variant, $500 minimum | an operator opens or duplicates it | Free item is chosen, the variant picked, $500 the minimum | building |
+| free-item-saved | the reward form | an operator chooses Free item, picks one variant and saves | saved as a product coupon at 100%, no maximum, on that variant | |
+| free-item-reopens | a stored product coupon at 100%, no maximum, on one variant, $500 minimum | an operator opens or duplicates it | Free item is chosen, the variant picked, $500 the minimum | |
 | capped-stays-money-off | a stored 100% coupon with a maximum, or on two variants, or on one product | an operator opens it | Money off is chosen, with that discount and scope | |
 | choice-opens-empty | Free item chosen with a variant picked | the operator moves to Money off, then back | Money off has no amount and no scope picked; Free item has no variant picked | |
-| online-only-scope | a new Money off reward | the operator scopes it to named products or a filter and saves | the form shows online only and offers no till channel; it saves online alone | building |
-| online-only-stored | a stored reward on named products for online and the till | the operator saves it unchanged | it saves online alone; moving the scope to named variants first shows both channels again | building |
+| online-only-scope | a new Money off reward | the operator scopes it to named products or a filter and saves | the form shows online only and offers no till channel; it saves online alone | |
+| online-only-stored | a stored reward on named products for online and the till | the operator saves it unchanged | it saves online alone; moving the scope to named variants first shows both channels again | |
 | retired-handover-kept | a stored manual handover or counter collection | the operator renames it and saves | no choice is made, and the handover is unchanged | |
 | retired-handover-duplicate | a stored manual handover | the operator duplicates it | the copy opens on Money off | |
 | missing-part-refused | a gift with no minimum spend, a free item with no variant, Money off with no amount or empty scope, or a window ending before it starts | the operator saves | nothing is saved, and the form names what is missing | |

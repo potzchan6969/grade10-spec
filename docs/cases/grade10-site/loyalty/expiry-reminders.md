@@ -34,7 +34,7 @@ example walks. Cite one as `grade10-site/loyalty/expiry-reminders#<id>`.
 | account-deleted | a member owed a reminder | they delete their account | no reminder owed to them from that moment | |
 | lapse-unread | a reminder nothing has ever read | the day passes | it is no longer owed | |
 | lead-taken-out | a programme with leads of 30 and 7 days, a member owed both | it starts again with the 7 taken out | no reminder naming 7; the one naming 30 is the same as before | |
-| points-returned-owed-again | a member owed a reminder, brought to nothing, the day 20 days off | a redemption is reversed, or points paid at checkout come back by a refund or an operator | the same reminder is owed again, never a second one | building |
+| points-returned-owed-again | a member owed a reminder, brought to nothing, the day 20 days off | a redemption is reversed, or points paid at checkout come back by a refund or an operator | the same reminder is owed again, never a second one | |
 
 ## What a Reminder Holds
 
