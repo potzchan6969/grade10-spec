@@ -10,7 +10,7 @@ its visual standard and its account table are
 belong to the products behind them — [audit](/p/grade10-admin/audit),
 [inventory](/p/grade10-admin/inventory), [auction](/p/grade10-admin/auction),
 [vault](/p/grade10-admin/vault),
-[appointments](/p/grade10-admin/appointment). This product is what the Grade10
+[appointments](/p/grade10-admin/appointment), [press](/p/grade10-admin/press). This product is what the Grade10
 console carries that neither supplies.
 
 - **API docs** — the procedure record every Grade10 backend already declares,

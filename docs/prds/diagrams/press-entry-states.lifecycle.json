@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A press entry's states",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      980,
+      640
+    ]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Entry"
+    },
+    {
+      "id": "waiting",
+      "label": "Edited"
+    },
+    {
+      "id": "terminal",
+      "label": "Gone"
+    }
+  ],
+  "states": [
+    {
+      "id": "new",
+      "type": "start",
+      "label": "New release",
+      "sublabel": "slug, day, English title",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "draft",
+      "type": "active",
+      "label": "Draft",
+      "sublabel": "nothing on the site",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "live",
+      "type": "success",
+      "label": "Live",
+      "sublabel": "the site shows the draft",
+      "lane": "main",
+      "col": 4
+    },
+    {
+      "id": "changed",
+      "type": "waiting",
+      "label": "Live with changes",
+      "sublabel": "the site shows an older draft",
+      "lane": "waiting",
+      "col": 2
+    },
+    {
+      "id": "deleted",
+      "type": "neutral",
+      "label": "Deleted",
+      "sublabel": "the draft and its slug removed",
+      "lane": "terminal",
+      "col": 0
+    }
+  ],
+  "transitions": [
+    {
+      "id": "create",
+      "from": "new",
+      "to": "draft",
+      "label": "created",
+      "variant": "emphasis"
+    },
+    {
+      "id": "publish",
+      "from": "draft",
+      "to": "live",
+      "label": "publish",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save-change",
+      "from": "live",
+      "to": "changed",
+      "label": "save a change",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        710,
+        222
+      ]
+    },
+    {
+      "id": "publish-changes",
+      "from": "changed",
+      "to": "live",
+      "label": "publish changes",
+      "variant": "emphasis",
+      "route": "right-channel",
+      "fromSide": "right",
+      "toSide": "right",
+      "channelX": 810
+    },
+    {
+      "id": "unpublish-live",
+      "from": "live",
+      "to": "draft",
+      "label": "unpublish",
+      "variant": "dashed",
+      "route": "top-channel",
+      "fromSide": "top",
+      "toSide": "top",
+      "channelY": 104
+    },
+    {
+      "id": "unpublish-changed",
+      "from": "changed",
+      "to": "draft",
+      "label": "unpublish",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "bottom"
+    },
+    {
+      "id": "delete",
+      "from": "draft",
+      "to": "deleted",
+      "label": "delete",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 40
+    }
+  ]
+}
