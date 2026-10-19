@@ -1,0 +1,23 @@
+{
+  "index": {
+    "eyebrow": "最新消息",
+    "title": "新聞稿",
+    "lede": "Grade10的官方記錄——從卡牌盛事、保管庫、合作夥伴關係，以至亞洲集換卡市場的成長歷程。",
+    "empty": "暫時未有新聞稿。"
+  },
+  "release": {
+    "headTitle": "{name} — Grade10",
+    "eyebrow": "新聞稿",
+    "back": "回到新聞稿",
+    "sidebar": "新聞稿",
+    "highlights": "重點",
+    "englishOnly": "此新聞稿暫只提供英文版本。"
+  },
+  "media": {
+    "eyebrow": "新聞中心",
+    "title": "傳媒報導",
+    "lede": "各界媒體對 Grade10 卡牌盛會、收藏市場、保管庫服務、金融及整體集換式卡牌生態圈的專題報導。",
+    "newTab": "於新分頁開啟",
+    "empty": "暫時未有傳媒報導。"
+  }
+}

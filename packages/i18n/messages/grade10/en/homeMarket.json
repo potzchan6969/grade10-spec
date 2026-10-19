@@ -1,0 +1,77 @@
+{
+  "solutions": {
+    "eyebrow": "The Grade10 suite",
+    "title": "Solutions for the collector journey",
+    "finance": {
+      "title": "Grade10 Finance",
+      "text": "Card-backed liquidity for premium collections, without selling.",
+      "badge": "Planned for Q4 2026"
+    },
+    "vault": {
+      "title": "Grade10 Vault",
+      "text": "Museum-grade storage with digital ownership records.",
+      "badge": "Invite-only launch"
+    },
+    "ai": {
+      "title": "Grade10 AI",
+      "text": "Instant card lookup, live pricing and market context.",
+      "badge": "app.grade10.com"
+    }
+  },
+  "indexes": {
+    "eyebrow": "Market indexes",
+    "title": "A real-time pulse of the card market",
+    "lede": "The first indexes to track price movement across the market’s most liquid cards, from the Grey Felt Hat Pikachu to broad Pokémon and One Piece benchmarks.",
+    "tabs": "Indexes",
+    "weekly": "Weekly",
+    "beta": "Beta",
+    "facts": {
+      "components": "Components",
+      "frequency": "Frequency",
+      "rebalance": "Rebalance",
+      "grade": "Grade",
+      "baseDate": "Base date",
+      "launched": "Launched",
+      "status": "Status",
+      "game": "Game"
+    },
+    "values": {
+      "daily": "Daily",
+      "quarterly": "Quarterly",
+      "onePiece": "One Piece"
+    },
+    "hpi": {
+      "name": "Hat Price Index",
+      "updated": "Hat Price Index (HPI), updated {date}",
+      "change": "Up {change}% on last week",
+      "signal": "Cooling: 12-week Z of {z}",
+      "chart": "HPI over the last 52 weeks, between {low} and {high}",
+      "window": "Last 52 weeks",
+      "text": "A single-asset cultural index tracking the PSA 10 Grey Felt Hat Pikachu, published weekly.",
+      "cta": "View the Index"
+    },
+    "ptcg100": {
+      "label": "PTCG100 Index",
+      "title": "The global benchmark for Pokémon cards",
+      "text": "The world’s first broad-market benchmark index, tracking the 100 most representative PSA 10 Pokémon cards. It is grounded in actual transaction data to remove subjective valuation and reflect market trends objectively.",
+      "cta": "View PTCG100"
+    },
+    "ptcg500": {
+      "label": "PTCG500 Index",
+      "title": "The wider Pokémon market",
+      "text": "A market benchmark index tracking the 500 most representative PSA 10 Pokémon cards.",
+      "cta": "View PTCG500"
+    },
+    "opcg100": {
+      "label": "OPCG100 Index",
+      "title": "The One Piece benchmark",
+      "text": "A market benchmark index tracking the 100 most representative One Piece trading cards.",
+      "cta": "View OPCG100"
+    }
+  },
+  "news": {
+    "eyebrow": "Press releases",
+    "title": "Latest news",
+    "all": "All Press Releases"
+  }
+}

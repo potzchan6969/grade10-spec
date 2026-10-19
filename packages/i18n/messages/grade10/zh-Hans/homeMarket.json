@@ -1,0 +1,77 @@
+{
+  "solutions": {
+    "eyebrow": "Grade10 专属方案",
+    "title": "为收藏家打造的完整生态解决方案",
+    "finance": {
+      "title": "Grade10 Finance",
+      "text": "无需割爱珍藏，凭卡牌即可灵活释放资产流动性。",
+      "badge": "预计 2026 年第四季度推出"
+    },
+    "vault": {
+      "title": "Grade10 保管库",
+      "text": "博物馆级藏卡保管服务，并配备数字所有权凭证。",
+      "badge": "上线初期仅限受邀"
+    },
+    "ai": {
+      "title": "Grade10 AI",
+      "text": "即时查询卡牌，提供最新动态报价与市场分析。",
+      "badge": "app.grade10.com"
+    }
+  },
+  "indexes": {
+    "eyebrow": "市场指数",
+    "title": "实时掌握卡牌市场趋势",
+    "lede": "首创追踪市场高流动性卡牌价格走势的专属指数——涵盖“戴灰毡帽的皮卡丘（Pikachu with Grey Felt Hat Card）”单卡，以至宝可梦（Pokémon）与航海王（One Piece）等大盘指标。",
+    "tabs": "市场指数",
+    "weekly": "每周",
+    "beta": "BETA版",
+    "facts": {
+      "components": "成分卡牌",
+      "frequency": "更新频率",
+      "rebalance": "成分调整",
+      "grade": "评级",
+      "baseDate": "基准日",
+      "launched": "推出日期",
+      "status": "状态",
+      "game": "游戏"
+    },
+    "values": {
+      "daily": "每日",
+      "quarterly": "每季度",
+      "onePiece": "航海王（One Piece）"
+    },
+    "hpi": {
+      "name": "Hat Price Index",
+      "updated": "Hat Price Index（HPI），更新于{date}",
+      "change": "较上周上涨 {change}%",
+      "signal": "降温：12 周 Z 值 {z}",
+      "chart": "HPI 过去 52 周走势，介于 {low} 至 {high}",
+      "window": "过去 52 周",
+      "text": "追踪 PSA 10“戴灰毡帽的皮卡丘（Pikachu with Grey Felt Hat Card）”的单一资产文化指数，每周发布。",
+      "cta": "查看指数"
+    },
+    "ptcg100": {
+      "label": "PTCG100 指数",
+      "title": "宝可梦卡牌的全球基准",
+      "text": "全球首创的大盘基准指数，追踪 100 张最具代表性的 PSA 10 宝可梦（Pokémon）卡牌。指数以实际成交数据编制，摒弃主观估值，客观反映市场趋势。",
+      "cta": "查看 PTCG100"
+    },
+    "ptcg500": {
+      "label": "PTCG500 指数",
+      "title": "更广阔的宝可梦市场",
+      "text": "追踪 500 张最具代表性的 PSA 10 宝可梦（Pokémon）卡牌的市场基准指数。",
+      "cta": "查看 PTCG500"
+    },
+    "opcg100": {
+      "label": "OPCG100 指数",
+      "title": "航海王卡牌的基准",
+      "text": "追踪 100 张最具代表性的航海王（One Piece）集换式卡牌的市场基准指数。",
+      "cta": "查看 OPCG100"
+    }
+  },
+  "news": {
+    "eyebrow": "新闻稿",
+    "title": "最新消息",
+    "all": "所有新闻稿"
+  }
+}

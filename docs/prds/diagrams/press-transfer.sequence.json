@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Press moves from staging to production",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      980,
+      760
+    ]
+  },
+  "participants": [
+    {
+      "id": "staging-admin",
+      "type": "frontend",
+      "label": "Staging admin",
+      "sublabel": "Transfer · Export"
+    },
+    {
+      "id": "staging-press",
+      "type": "backend",
+      "label": "Staging press",
+      "sublabel": "worker, D1, bucket"
+    },
+    {
+      "id": "bundle",
+      "type": "external",
+      "label": "Bundle",
+      "sublabel": "one JSON file"
+    },
+    {
+      "id": "production-admin",
+      "type": "frontend",
+      "label": "Production admin",
+      "sublabel": "Transfer · Import"
+    },
+    {
+      "id": "production-press",
+      "type": "backend",
+      "label": "Production press",
+      "sublabel": "worker and bucket"
+    },
+    {
+      "id": "production-entries",
+      "type": "database",
+      "label": "Production entries",
+      "sublabel": "its own D1 database"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 340,
+      "label": "Export on staging"
+    },
+    {
+      "from": 356,
+      "to": 634,
+      "label": "Import on production"
+    }
+  ],
+  "messages": [
+    {
+      "id": "staging-admin-exports-what-the-site-shows",
+      "from": "staging-admin",
+      "to": "staging-press",
+      "y": 196,
+      "label": "export what the site shows",
+      "variant": "default"
+    },
+    {
+      "id": "staging-admin-exports-what-the-site-shows_answer",
+      "from": "staging-press",
+      "to": "staging-admin",
+      "y": 228,
+      "label": "the published documents",
+      "variant": "return"
+    },
+    {
+      "id": "staging-admin-reads-each-image",
+      "from": "staging-admin",
+      "to": "staging-press",
+      "y": 260,
+      "label": "each image they name, as the original",
+      "variant": "default"
+    },
+    {
+      "id": "staging-admin-reads-each-image_bytes",
+      "from": "staging-press",
+      "to": "staging-admin",
+      "y": 292,
+      "label": "the bytes",
+      "variant": "return"
+    },
+    {
+      "id": "staging-admin-saves-the-bundle",
+      "from": "staging-admin",
+      "to": "bundle",
+      "y": 324,
+      "label": "press-staging-2026-10-19.json",
+      "variant": "emphasis"
+    },
+    {
+      "id": "production-admin-reads-the-file",
+      "from": "bundle",
+      "to": "production-admin",
+      "y": 384,
+      "label": "chosen, read in the browser",
+      "variant": "default"
+    },
+    {
+      "id": "production-admin-previews-the-import",
+      "from": "production-admin",
+      "to": "production-press",
+      "y": 416,
+      "label": "preview the entries",
+      "variant": "default"
+    },
+    {
+      "id": "production-admin-previews-the-import_answer",
+      "from": "production-press",
+      "to": "production-admin",
+      "y": 448,
+      "label": "new · changed · unchanged · revisions · missing images",
+      "variant": "return"
+    },
+    {
+      "id": "production-admin-uploads-missing-images",
+      "from": "production-admin",
+      "to": "production-press",
+      "y": 480,
+      "label": "upload each missing image",
+      "variant": "default"
+    },
+    {
+      "id": "production-admin-uploads-missing-images_key",
+      "from": "production-press",
+      "to": "production-admin",
+      "y": 512,
+      "label": "its key, which must equal the bundle's",
+      "variant": "return"
+    },
+    {
+      "id": "production-admin-imports",
+      "from": "production-admin",
+      "to": "production-press",
+      "y": 544,
+      "label": "import at the revisions read · publish or not",
+      "variant": "emphasis"
+    },
+    {
+      "id": "production-press-writes-in-one-batch",
+      "from": "production-press",
+      "to": "production-entries",
+      "y": 576,
+      "label": "one batch: all of it or none",
+      "variant": "security"
+    },
+    {
+      "id": "production-press-writes-in-one-batch_answer",
+      "from": "production-press",
+      "to": "production-admin",
+      "y": 608,
+      "label": "written · already the same · published",
+      "variant": "return"
+    }
+  ]
+}

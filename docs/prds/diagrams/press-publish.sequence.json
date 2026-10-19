@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "A release reaches the site",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [
+      980,
+      760
+    ]
+  },
+  "participants": [
+    {
+      "id": "editor",
+      "type": "frontend",
+      "label": "Release editor",
+      "sublabel": "in the admin"
+    },
+    {
+      "id": "press",
+      "type": "backend",
+      "label": "Press",
+      "sublabel": "its own worker"
+    },
+    {
+      "id": "bucket",
+      "type": "database",
+      "label": "Press images",
+      "sublabel": "its own bucket"
+    },
+    {
+      "id": "entries",
+      "type": "database",
+      "label": "Entries",
+      "sublabel": "its own D1 database"
+    },
+    {
+      "id": "site",
+      "type": "frontend",
+      "label": "Company site",
+      "sublabel": "rendered per request"
+    },
+    {
+      "id": "reader",
+      "type": "external",
+      "label": "Reader",
+      "sublabel": "anywhere"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 316,
+      "label": "Save"
+    },
+    {
+      "from": 330,
+      "to": 472,
+      "label": "Publish"
+    },
+    {
+      "from": 486,
+      "to": 660,
+      "label": "The next request"
+    }
+  ],
+  "messages": [
+    {
+      "id": "editor-saves-the-draft",
+      "from": "editor",
+      "to": "press",
+      "y": 196,
+      "label": "save the draft, at the revision read",
+      "variant": "emphasis"
+    },
+    {
+      "id": "press-checks-the-images",
+      "from": "press",
+      "to": "bucket",
+      "y": 228,
+      "label": "is every image it names stored?",
+      "variant": "default"
+    },
+    {
+      "id": "press-writes-at-the-next-revision",
+      "from": "press",
+      "to": "entries",
+      "y": 260,
+      "label": "write at revision + 1 · refused if the row moved",
+      "variant": "security"
+    },
+    {
+      "id": "editor-saves-the-draft_answer",
+      "from": "press",
+      "to": "editor",
+      "y": 292,
+      "label": "saved · or someone changed it",
+      "variant": "return"
+    },
+    {
+      "id": "editor-publishes",
+      "from": "editor",
+      "to": "press",
+      "y": 352,
+      "label": "publish, at the revision read",
+      "variant": "emphasis"
+    },
+    {
+      "id": "press-checks-the-images_again",
+      "from": "press",
+      "to": "bucket",
+      "y": 384,
+      "label": "is every image still stored?",
+      "variant": "default"
+    },
+    {
+      "id": "editor-publishes_copy",
+      "from": "press",
+      "to": "entries",
+      "y": 416,
+      "label": "published = draft",
+      "variant": "emphasis"
+    },
+    {
+      "id": "editor-publishes_answer",
+      "from": "press",
+      "to": "editor",
+      "y": 448,
+      "label": "Live",
+      "variant": "return"
+    },
+    {
+      "id": "reader-opens-the-release",
+      "from": "reader",
+      "to": "site",
+      "y": 508,
+      "label": "opens the release",
+      "variant": "default"
+    },
+    {
+      "id": "site-reads-what-is-published",
+      "from": "site",
+      "to": "press",
+      "y": 540,
+      "label": "the published release, uncached",
+      "variant": "default"
+    },
+    {
+      "id": "site-reads-what-is-published_entries",
+      "from": "press",
+      "to": "entries",
+      "y": 572,
+      "label": "published only",
+      "variant": "default"
+    },
+    {
+      "id": "site-reads-what-is-published_answer",
+      "from": "press",
+      "to": "site",
+      "y": 604,
+      "label": "the release · or none",
+      "variant": "return"
+    },
+    {
+      "id": "site-answers-the-page",
+      "from": "site",
+      "to": "reader",
+      "y": 636,
+      "label": "the page · or not found",
+      "variant": "emphasis"
+    }
+  ]
+}

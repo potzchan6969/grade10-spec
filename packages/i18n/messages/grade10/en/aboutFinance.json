@@ -1,0 +1,121 @@
+{
+  "comingSoon": {
+    "eyebrow": "Finance · Coming Soon",
+    "title": "Unlock Liquidity from Your Premium Assets.",
+    "body": "Grade10 Finance is a planned card-backed financing desk for high-value collectors - built around authenticity review, market context, and secure custody. Planned for Q4 2026, subject to final Product Terms and Conditions.",
+    "cta": {
+      "home": "Back home",
+      "vault": "Explore the Vault"
+    }
+  },
+  "hero": {
+    "eyebrow": "Grade10 Finance",
+    "title": "Unlock Liquidity from Your Premium Assets",
+    "sub": "A planned card-backed financing desk for high-value collectors, built around authenticity review, market context, and compliant pre-launch interest.",
+    "cta": {
+      "access": "Request early access",
+      "how": "How it works"
+    },
+    "note": "Planned for Q4 2026."
+  },
+  "disclaimer": {
+    "terms": "Service availability, eligibility, interest rates, fees, and terms remain subject to final Product Terms and Conditions.",
+    "website": "Please refer to Grade10 Finance website for details. The website is expected to be launched in Q4 2026, please stay tuned."
+  },
+  "warning": {
+    "repayment": "Warning: You have to repay your loans. Don't pay any intermediaries."
+  },
+  "liquidity": {
+    "eyebrow": "Liquidity structure",
+    "title": "Built for Card-Backed Liquidity",
+    "sub": "Compact, specialist-led review for collectors who need a finance conversation shaped around collectible assets.",
+    "funding": {
+      "title": "Flexible Funding",
+      "text": "Designed for collectors who want to explore liquidity without immediately selling prized assets.",
+      "meta": "Capital needs"
+    },
+    "retain": {
+      "title": "Retain Collection",
+      "text": "Card-backed discussion keeps the collectible as the core reference point throughout the review.",
+      "meta": "Asset-led"
+    },
+    "review": {
+      "title": "Specialist Review",
+      "text": "Grade10 evaluates authenticity, market context, condition signals, and collection composition.",
+      "meta": "Collector market"
+    },
+    "categories": {
+      "title": "High-Value Categories",
+      "text": "Initial interest focuses on Pokemon, One Piece, sports cards, and other liquid collectible segments.",
+      "meta": "Selected assets"
+    }
+  },
+  "how": {
+    "eyebrow": "Underwriting ledger",
+    "title": "How It Works",
+    "sub": "A staged review path for pre-launch interest. It is not a live application, approval process, or published loan offer.",
+    "register": {
+      "title": "Register Interest",
+      "text": "Share contact details and a non-binding overview of the cards or portfolio you would like reviewed."
+    },
+    "submit": {
+      "title": "Digital Submission",
+      "text": "Submit the requested portfolio and card details through the planned Grade10 Finance digital channel after launch."
+    },
+    "appraise": {
+      "title": "Expert Appraisal",
+      "text": "Grade10 reviews authenticity, grading details, comparable market signals, and collection context."
+    },
+    "vault": {
+      "title": "Secure Vaulting",
+      "text": "Eligible assets are expected to follow secure custody requirements before any financing discussion proceeds."
+    },
+    "fund": {
+      "title": "Execute & Fund",
+      "text": "Any execution and funding discussion remains subject to final Product Terms and Conditions at launch."
+    }
+  },
+  "compliance": {
+    "eyebrow": "Compliance notice",
+    "title": "Preparatory Phase Only",
+    "body": "Grade10 Finance is in a preparatory and testing phase. Launch date, eligibility, interest rates, fees, custody requirements, and all financing terms remain subject to final Product Terms and Conditions.",
+    "entity": {
+      "label": "Entity",
+      "value": "Grade10 Finance Limited"
+    },
+    "licence": {
+      "label": "Licence",
+      "value": "Money Lender's Licence No. 17/2026"
+    },
+    "hotline": {
+      "label": "Complaint Hotline",
+      "value": "+852 2436 6166"
+    }
+  },
+  "access": {
+    "eyebrow": "Early Access",
+    "title": "Be First When We Launch",
+    "body": "Grade10 Finance is expected to launch in Q4 2026. Leave your details and we'll reach out before it goes live.",
+    "cta": "Request early access"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Before Product Launch",
+    "live": {
+      "q": "Is Grade10 Finance live today?",
+      "a": "No. The service is in a preparatory and testing phase. Please refer to Grade10 Finance website for details. The website is expected to be launched in Q4 2026, please stay tuned."
+    },
+    "offer": {
+      "q": "Will the form provide an instant offer?",
+      "a": "No. The portfolio preview is non-binding and does not publish rates, loan amounts, approval criteria, or eligibility terms."
+    },
+    "cards": {
+      "q": "Which cards can be reviewed?",
+      "a": "Initial review interest focuses on high-value graded Pokemon, One Piece, sports cards, and other selected collectible categories."
+    },
+    "terms": {
+      "q": "When will final terms be available?",
+      "a": "Launch date, eligibility, interest rates, fees, custody requirements, and all terms remain subject to final Product Terms and Conditions."
+    }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "hero": {
+    "eyebrow": "Grade10 Shows",
+    "title": "Where Cards Come Alive. Where Collectors Belong.",
+    "lede": "Events are where the ecosystem becomes visible: collectors, exhibitors, partners, rare cards, and regional demand in one place."
+  },
+  "upcoming": {
+    "title": "Upcoming Shows",
+    "shows": {
+      "seoul": {
+        "date": "November <year>2026</year>",
+        "event": "Seoul Auction x Gana Art Premium Private Sale"
+      }
+    }
+  },
+  "scale": {
+    "eyebrow": "Event Scale",
+    "title": "Real Trends. In the Room.",
+    "lede": "Grade10's strongest proof is physical: crowds, exhibitors, repeat activations, and partner participation across Hong Kong, South Korea, Mainland China and beyond.",
+    "photo": "Thousands of collectors packing the Grade10 FEST Summer 2026 ballroom floor.",
+    "stats": {
+      "visitors": {
+        "value": "25,000+",
+        "label": "Visitors per show"
+      },
+      "exhibitors": {
+        "value": "120+",
+        "label": "Exhibitors from around the world"
+      },
+      "revenue": {
+        "value": "Millions",
+        "label": "In revenue generated for the industry"
+      }
+    }
+  },
+  "formats": {
+    "eyebrow": "Event Formats",
+    "title": "Three Platforms. One Community.",
+    "play": "Play {title} highlights",
+    "photo": "{title} photo {number} of {count}",
+    "previous": "Previous {title} photo",
+    "next": "Next {title} photo",
+    "pick": "Show photo {number} of {count}",
+    "photos": "{title} photo selector",
+    "chapters": {
+      "festival": {
+        "region": "Hong Kong",
+        "title": "Grade10 FEST HK",
+        "dek": "Asia's largest card show - five editions and counting, drawing 25,000+ collectors each time.",
+        "caption": "Grade10 FEST 2026",
+        "poster": "Grade10 FEST HK highlights"
+      },
+      "seoul": {
+        "region": "OVERSEAS PARTNERSHIP",
+        "title": "Seoul Auction x Gana Art",
+        "dek": "Partnered with Korea's premium auction house to position cards as fine art, driving ongoing auctions and private sales for high-end collectors.",
+        "poster": "The Seoul Auction x ZZZ x Grade10 trading card exhibition floor with the premium Pokemon card wall."
+      },
+      "cardjoy": {
+        "region": "Chinese Mainland",
+        "title": "CARDJOY × Grade10",
+        "dek": "The largest TCG card show in Mainland China, held across Hangzhou and Shanghai.",
+        "caption": "CARDJOY × Grade10 Shanghai",
+        "poster": "CARDJOY × Grade10 highlights"
+      }
+    },
+    "editions": {
+      "summer2026": {
+        "date": "Jun 2026",
+        "title": "Grade10 FEST Summer 2026",
+        "desc": "A three-day Pokemon 30th Anniversary show at Hopewell Hotel with 25,000+ attendees and 120+ exhibitors."
+      },
+      "festival2025": {
+        "date": "Nov 2025",
+        "title": "Grade10 Festival 2025",
+        "desc": "A record-setting Grade10 Festival anchored by the Van Gogh Pikachu showcase and Hong Kong's collector community."
+      },
+      "privateSale2026": {
+        "date": "Jul 2026",
+        "title": "Seoul Auction Private Sale & Exhibition",
+        "desc": "The first-ever fine art presentation of trading cards in Asia."
+      },
+      "shanghai2026": {
+        "date": "Jun 2026",
+        "title": "CARDJOY x Grade10 Shanghai",
+        "desc": "An expanded 5,000 sq m Shanghai show with 200+ exhibitors and cross-market collector momentum."
+      },
+      "hangzhou2026": {
+        "date": "Mar 2026",
+        "title": "CARDJOY x Grade10 Hangzhou",
+        "desc": "The first national CARDJOY x Grade10 show drew 10,000+ visitors and 100+ exhibitors in Hangzhou."
+      }
+    }
+  },
+  "record": {
+    "eyebrow": "Event Record",
+    "title": "Every Show. A Milestone.",
+    "items": {
+      "privateSale2026": {
+        "title": "Seoul Auction Private Sale & Exhibition",
+        "desc": "Seoul Auction × ZZZ × Grade10 - a trading card exhibition and private sales event hosted by the prestigious Seoul Auction, ZZZ, and Grade10. The first-ever fine art presentation of trading cards in Asia.",
+        "photo": "The Seoul Auction x ZZZ x Grade10 trading card exhibition floor with the premium Pokemon card wall.",
+        "facts": "Gana Art | Fine Art | Seoul"
+      },
+      "summer2026": {
+        "title": "Grade10 FEST Summer 2026",
+        "desc": "A three-day Pokemon 30th Anniversary show at Hopewell Hotel, Wan Chai, drawing 25,000+ attendees and 120+ exhibitors.",
+        "photo": "A crowded Grade10 Festival show floor with attendees around trading card tables.",
+        "facts": "25K+ attendees | 120+ exhibitors | Hong Kong"
+      },
+      "shanghai2026": {
+        "title": "CARDJOY × Grade10 Shanghai",
+        "desc": "An expanded 5,000 sqm Shanghai show with POKECOLOR, 200+ exhibitors, and cross-market collector momentum.",
+        "photo": "Collectors queueing inside the Card Joy and Grade10 card show.",
+        "facts": "5,000 sqm | 200+ exhibitors | Shanghai"
+      },
+      "hangzhou2026": {
+        "title": "CARDJOY × Grade10 Hangzhou",
+        "desc": "The first national CARDJOY × Grade10 show, drawing 10,000+ visitors and 100+ exhibitors to Hangzhou.",
+        "photo": "Collectors arriving outside a Card Joy and Grade10 event venue.",
+        "facts": "10K+ visitors | 100+ exhibitors | Hangzhou"
+      },
+      "festival2025": {
+        "title": "Grade10 Festival 2025",
+        "desc": "The platform's breakout Hong Kong show, led by the Van Gogh Pikachu showcase and 23,000+ visitors.",
+        "photo": "Grade10 Festival partners standing in front of the main festival backdrop.",
+        "facts": "23K+ visitors | Van Gogh Pikachu | Hong Kong"
+      }
+    }
+  },
+  "past": {
+    "eyebrow": "Past Events",
+    "title": "Every edition, on the record",
+    "latest": "Latest",
+    "events": {
+      "summer2026": {
+        "date": "Jun 2026",
+        "city": "Hong Kong",
+        "title": "Grade10 FEST Summer 2026",
+        "recap": "Three-day Pokémon 30th Anniversary show with 25,000+ attendees."
+      },
+      "shanghai2026": {
+        "date": "Jun 2026",
+        "city": "Shanghai",
+        "title": "CARDJOY × Grade10 Shanghai",
+        "recap": "Expanded 5,000 sqm floor with 200+ exhibitors and cross-market momentum."
+      },
+      "hangzhou2026": {
+        "date": "Mar 2026",
+        "city": "Hangzhou",
+        "title": "CARDJOY × Grade10 Hangzhou",
+        "recap": "China's first CARDJOY × Grade10 - 10,000+ visitors, 100+ exhibitors."
+      },
+      "festival2025": {
+        "date": "Nov 2025",
+        "city": "Hong Kong",
+        "title": "Grade10 Festival 2025",
+        "recap": "Record-setting Hong Kong show, led by the Van Gogh Pikachu showcase."
+      }
+    }
+  },
+  "pressRelease": "Press release"
+}

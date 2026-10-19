@@ -24,6 +24,38 @@
     "title": "Privacy Policy — Grade10",
     "description": "What Grade10 records about a collector, why it is kept, and what a collector can ask for it."
   },
+  "about": {
+    "title": "Grade10 — Asia’s premier trading card venture",
+    "description": "Grade10, founded in 2023, unites Hong Kong’s thriving trading card industry and passionate collectors — a platform to connect, trade, showcase collections, discover rare finds, and explore new horizons together."
+  },
+  "aboutCompany": {
+    "title": "About Grade10 — Asia’s premier trading card venture",
+    "description": "Learn about Grade10, MemeStrategy, and the team building Asia’s premier trading card venture across card shows, AI tools and professional vaulting."
+  },
+  "aboutShows": {
+    "title": "Grade10 Events — Trading card shows",
+    "description": "Grade10 events bring collectors, exhibitors, partners, and rare card showcases together across Asia."
+  },
+  "aboutRetail": {
+    "title": "Grade10 Retail — Coming soon",
+    "description": "Grade10 Retail is on the way — a dedicated home for cards, sealed product, and collector essentials."
+  },
+  "aboutFinance": {
+    "title": "Grade10 Finance — Card-backed liquidity",
+    "description": "Grade10 Finance is a planned card-backed financing desk for high-value trading card collectors, operated by Grade10 Finance Limited."
+  },
+  "aboutVault": {
+    "title": "Grade10 Vault — Museum-grade vaults for trading cards",
+    "description": "Museum-grade vaulting for trading cards, secured at Crown Fine Art with 24/7 surveillance, climate control, independent audits, and tokenized ownership on Solana. Built by Grade10, a division of MemeStrategy (HKEX: 2440)."
+  },
+  "aboutPress": {
+    "title": "Press Releases — Grade10",
+    "description": "Official Grade10 and MemeStrategy press releases across events, vaulting, and collector culture."
+  },
+  "aboutMediaCoverage": {
+    "title": "Media Coverage — Grade10",
+    "description": "Selected media coverage and external reporting on Grade10, MemeStrategy, trading card culture, and collectible finance."
+  },
   "product": {
     "title": "{name} — Marketplace | Grade10",
     "description": "{name}, listed at the Grade10 store."
