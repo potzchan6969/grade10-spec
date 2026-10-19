@@ -169,8 +169,8 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | Nothing preselected |
-| Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | Nothing preselected |
+| Settlement currency | **USD** or **HKD**; fixed once the invoice is sent — [Settling in HKD](#settling-in-hkd) | 🚧 **HKD** preselected |
+| Payment method or bank rail | **HKD**: Card, FPS or HK Local; **USD**: Card, HK Local or International via SWIFT - [Payment Methods by Currency](#payment-methods-by-currency) | 🚧 The first offered method preselected |
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 
 - **Form** — Personal or Company; first and last name, phone (country and
@@ -700,7 +700,7 @@ a second payment provider, and changes to the bid-time rules.
 | One-time address persistence | 🚧 In flight | An unsaved one-time address stays on the order until the winner confirms or the setup deadline passes, so leaving to check something never loses it. Chosen over clearing it on leaving. | Product (@tangconst) |
 | Payment fee wording | 🚧 In flight | Card reads `Card fee about {configured percentage}% + a fixed amount`; bank transfer reads `Bank fee set on your invoice`, with no amount since the operator sets it. | Product (@tangconst) |
 | USD card rule | 🚧 In flight | Finance configures a USD card fee rule before launch; the same configured percentage and fixed-amount rule applies to USD card invoices. | Finance |
-| Settlement currency | Decided | The winner picks USD or HKD at order setup, nothing preselected, fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
+| Settlement currency | Decided | The winner picks USD or HKD at order setup — 🚧 HKD preselected where both are offered, the sole currency where one is — fixed once the invoice is sent. The invoice, order total, fees, payments, refunds and letters carry it. Chosen over a fixed HKD order and over the lot's currency, so a winner pays in the money they hold. | Product |
 | HKD conversion | Decided | One fixed rate, 7.85 HKD to 1 USD, rounded up, named only in the note under the HKD Order Summary's total; the USD winning bid is not printed on an HKD invoice or receipt. Chosen over a live or locked rate, since the pair is stable and a fixed rate needs no source, lock or refresh. | Product |
 | Rounding | Decided | Whole HK$, any fraction up (`100.01` and `100.1` read `101`), each line converted and rounded, then summed. Chosen over the first decimal and over converting the total once, which would leave invoice lines that do not add up. | Product |
 | Payment methods by currency | Decided | HKD offers Card, FPS and HK Local; USD offers Card, HK Local and International via SWIFT. The winner chooses one method or rail. The invoice and bank-details dialog show only the selected rail, with no tabs or copy controls. | Product |

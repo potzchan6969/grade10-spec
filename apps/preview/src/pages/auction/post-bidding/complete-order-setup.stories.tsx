@@ -66,14 +66,12 @@ export const FinishSetup: Story = {
     await waitFor(() => {
       expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
-    // The winner must select both currency and payment method.
-    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+    // HKD and Card are preselected; the winner can continue directly.
     expect(modal.getByRole("button", { name: "HKD" })).toHaveAttribute(
       "aria-pressed",
-      "false",
+      "true",
     );
-    await userEvent.click(modal.getByRole("button", { name: "HKD" }));
-    await userEvent.click(modal.getByRole("radio", { name: /^Card\b/i }));
+    expect(modal.getByRole("radio", { name: /^Card\b/i })).toBeChecked();
     expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
     await waitFor(() => {

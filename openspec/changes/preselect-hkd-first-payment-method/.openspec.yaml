@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-10-19
+promoted_by: "@tangconst"
+depends_on:
+  - usd-lot-currency-winner-settlement-choice
+hands:
+  dev: "@tangconst"
+ui_waived: "@tangconst waived ui-design on 2026-10-19; the Complete Order Setup payment stories draw the preselected step and the `Pay in {currency}` single-currency read as the design reference."
+design_waived: "@tangconst waived tech-design on 2026-10-19; the change is a default-selection rule — the preview dialog already implements it and the grade10 consumption task names the surfaces."

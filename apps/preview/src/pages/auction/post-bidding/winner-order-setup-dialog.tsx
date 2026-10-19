@@ -189,7 +189,8 @@ type WinnerOrderSetupDialogProps = {
   cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>;
   /**
    * Settlement currencies offered at Payment Method. One entry fixes the
-   * currency and hides the choice; two show an unselected Pay in picker.
+   * currency and reads `Pay in {currency}`; a choice preselects HKD. The
+   * first offered method is always preselected.
    */
   settlementCurrencies?: readonly WinnerOrderSettlementCurrency[];
   /** Called when the winner finishes all setup steps. */
@@ -279,11 +280,25 @@ function CountryRegionField({
 
 const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 
-/** A single offered currency is fixed; a choice between currencies starts empty. */
+/** HKD is preselected when offered; a single offered currency is fixed. */
 function defaultSettlementCurrency(
   currencies: readonly WinnerOrderSettlementCurrency[],
 ): WinnerOrderSettlementCurrency | null {
+  if (currencies.includes("HKD")) return "HKD";
   return currencies.length === 1 ? (currencies[0] ?? null) : null;
+}
+
+/** The first offered method for the currency is preselected. */
+function defaultPaymentMethod(
+  currency: WinnerOrderSettlementCurrency | null,
+  cardFeePercentages?: Partial<Record<WinnerOrderSettlementCurrency, number>>,
+): WinnerOrderSetupPaymentMethod | null {
+  if (currency == null) return null;
+  return (
+    paymentMethodsForCurrency(currency).find((method) =>
+      paymentMethodIsAvailable(currency, method, cardFeePercentages),
+    ) ?? null
+  );
 }
 
 function paymentMethodsForCurrency(
@@ -431,7 +446,12 @@ function WinnerOrderSetupDialog({
       defaultSettlementCurrency(settlementCurrencies),
     );
   const [paymentMethod, setPaymentMethod] =
-    useState<WinnerOrderSetupPaymentMethod | null>(null);
+    useState<WinnerOrderSetupPaymentMethod | null>(() =>
+      defaultPaymentMethod(
+        defaultSettlementCurrency(settlementCurrencies),
+        cardFeePercentages,
+      ),
+    );
   const [sameAsDelivery, setSameAsDelivery] = useState(true);
   const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
   const [saveForFuture, setSaveForFuture] = useState(
@@ -463,7 +483,12 @@ function WinnerOrderSetupDialog({
         : null;
     setDeliverySnapshot(seeded);
     setSettlementCurrency(defaultSettlementCurrency(settlementCurrencies));
-    setPaymentMethod(null);
+    setPaymentMethod(
+      defaultPaymentMethod(
+        defaultSettlementCurrency(settlementCurrencies),
+        cardFeePercentages,
+      ),
+    );
     setSameAsDelivery(true);
     setStep(initialStep);
     setNewAddressOpen(initialNewAddressOpen);
@@ -878,14 +903,16 @@ function WinnerOrderSetupDialog({
                 <DialogDescription>
                   Choose how you’ll pay. The exact amount is on the invoice.
                 </DialogDescription>
-                {showSettlementPicker ? (
-                  <div className="flex w-full flex-col gap-2">
-                    <span
-                      className="text-sm font-medium text-foreground"
-                      id={settlementCurrencyLabelId}
-                    >
-                      Pay in
-                    </span>
+                <div className="flex w-full flex-col gap-2">
+                  <span
+                    className="text-sm font-medium text-foreground"
+                    id={settlementCurrencyLabelId}
+                  >
+                    {showSettlementPicker
+                      ? "Pay in"
+                      : `Pay in ${settlementCurrency}`}
+                  </span>
+                  {showSettlementPicker ? (
                     <SegmentedControl
                       aria-labelledby={settlementCurrencyLabelId}
                       className="w-fit self-start"
@@ -916,8 +943,8 @@ function WinnerOrderSetupDialog({
                         </SegmentedControlItem>
                       ))}
                     </SegmentedControl>
-                  </div>
-                ) : null}
+                  ) : null}
+                </div>
                 {settlementCurrency != null ? (
                   <RadioList
                     aria-label="Payment method"
