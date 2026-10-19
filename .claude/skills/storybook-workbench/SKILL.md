@@ -19,14 +19,14 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
 ## Steps
 
 1. **Find the feature** — its manual page under
-   `docs/prds/products/grade10-site/<domain>/<feature>.md` (or `shared/auth/`),
-   and the active change on it, if any. No page: stop and ask for one; never
+   `docs/prds/products/grade10-site/<domain>/<feature>.md` (or `shared/auth/`).
+   No page: stop and ask for one; never
    invent a domain or feature
 2. **Read what exists** — the feature's folder in `apps/preview/src/pages/`,
    its Blocks in the sidebar (`pnpm storybook`, or the Storybook MCP's
-   `get-stories-by-component`), the change's `ui-design.md` States table, the
-   `user-journeys.md` beside each spec the page names, and
-   `pnpm storybook:coverage --gaps` for what the feature still owes
+   `get-stories-by-component`), the 🚧 lines `pnpm pages:board <page> --design`
+   lists with `none`, and `pnpm storybook:coverage --gaps` for what the
+   feature still owes
 3. **Pick the kind** — a whole screen or its state is a story under `Screens`; a
    journey walked screen to screen is a click-through; an outcome that turns
    on what staging is set to is the Screen's Scenario; a screen not yet designed is a
@@ -35,8 +35,8 @@ in. A designer asks in three plain parts — the feature, the kind, the state:
    Block story, beside the block. A new block, variant or token is the
    designer's call and Design Override's; say so rather than adding one
 4. **Name it** — the title from the grammar; each state story named with the
-   State column's words. A state the table lacks goes into `ui-design.md`
-   first, and a rule found while drawing onto the manual page, marked 🚧 or ❓
+   page's words for it. A rule found while drawing goes onto the manual page
+   first, marked 🚧 or ❓, and the story is cited under its line with `::story`
 5. **Build it** — compose existing blocks and primitives; content and stand-in
    data in the feature's `*-content.ts`; screens fullscreen; a journey's
    buttons open the next screen's story through `workbench-story-nav.ts`,

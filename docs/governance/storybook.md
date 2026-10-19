@@ -36,8 +36,8 @@ Published from `main` at
   `KYC`
 - **Feature** — a page file in that folder: `booking.md` is `Booking`. A
   feature with no manual page gets one first
-- **Screen** — the name at the top of the screen, or in the change's
-  `ui-design.md` Screens; no `Page` suffix. A dialog open on a screen is an
+- **Screen** — the name at the top of the screen, or the page section it
+  serves; no `Page` suffix. A dialog open on a screen is an
   aspect of it: `Vault/Portfolio/Screens/Asset Detail/Retrieval Dialog`
 - **Component** — the meta's `component`, or the file's name in PascalCase.
   A part promoted to `@grade10/ui` swaps `Parts` for `Blocks` and nothing else
@@ -76,8 +76,8 @@ Storybook holds it.
 
 ## States
 
-- **One story per state** — named with the words of the State column in the
-  change's `ui-design.md`: `No slots this month`, `Retrieval requested`
+- **One story per state** — named with the words the page uses for it: `No
+  slots this month`, `Retrieval requested`
 - **On what it dresses** — a state of a whole screen is a story on the
   screen; a state of one block is a story on the block
 - **Whole pages** — a screen story renders the page a collector sees, header
@@ -163,7 +163,7 @@ Scenario's settings.
 ## Product Details
 
 A rule found while drawing goes to the manual page first, marked 🚧 or ❓; a
-state goes to the change's `ui-design.md`. Motion and words are worked on the
+state lives in its story, cited with `::story` under the line it dresses. Motion and words are worked on the
 story in place with `/animate`, `/transitions-polish` and `/ux-copy`.
 
 ## Agents
