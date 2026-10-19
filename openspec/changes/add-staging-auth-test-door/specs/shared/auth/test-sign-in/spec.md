@@ -52,7 +52,9 @@ Which run the test endpoint acts for, and what a refused call leaves behind.
 - **Anyone else** — a call from a laptop, a fork, or another repository that
   carries no current QA token SHALL be refused
 - **A refused call** — a call the test endpoint refuses SHALL change nothing: no
-  account, no role, no ban, no link, no limit
+  account, no role, no ban, no link, no limit; a refused ban, grant or scoped role
+  from an admitted caller is still recorded on the identity trail
+  (`shared/auth/audit`)
 
 <!-- trace:scenario id=g10.shared-test-sign-in.SC-xog rev=1 -->
 #### Scenario: shared-auth-test-sign-in-SC-01 - The test endpoint acts for its own workflow

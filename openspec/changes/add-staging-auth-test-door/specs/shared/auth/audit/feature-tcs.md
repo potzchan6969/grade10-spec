@@ -1,6 +1,6 @@
 # shared/auth/audit Test Cases
 
-**Status:** pending-review · 0/8
+**Status:** pending-review · 0/9
 **Drafts styled:** 2026-10-19, tcs-rules r6
 
 ## shared-auth-audit-US1: Operator's identity action is recorded
@@ -169,20 +169,52 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The caller holds the test-endpoint kind `test-endpoint-workflow`.
-* `<target user id>` is already banned, so a further ban is refused.
+* `<other address>` is not a tester address of the environment.
 
 **Steps:**
 
-1. Note the number of entries on the identity trail and the state of `<target user id>`.
-2. Call the test endpoint to ban `<target user id>` as `test-endpoint-workflow`.
-3. Read the identity trail and the state of `<target user id>`.
+1. Note the number of entries on the identity trail.
+2. Call the test endpoint to ban `<other address>` as `test-endpoint-workflow`.
+3. Read the identity trail.
 
 **Expected Results:**
 
 * Step 2 is refused.
 * The trail holds one more entry than in Step 1.
 * The new entry records a refused ban and names `test-endpoint-workflow` in place of a user id.
-* The state of `<target user id>` is the same as in Step 1.
+* No field of the new entry holds `<other address>`.
+
+
+### shared-auth-audit-US1-TC11-1: A ban the access check refuses writes no entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-audit-US-01
+
+**Pre-conditions:**
+
+* The caller carries only the staging QA token.
+* `<tester address>` is a tester address on staging.
+
+**Steps:**
+
+1. Note the number of entries on the identity trail.
+2. Call the test endpoint to ban `<tester address>` with only the QA token.
+3. Read the identity trail.
+
+**Expected Results:**
+
+* Step 2 is refused.
+* The trail holds the same number of entries as in Step 1.
 
 ---
 
@@ -328,7 +360,7 @@ Runs once per row of **Test data**.
 **I want** a new user id, a verify that flips, and an account deletion on the identity trail,
 **so that** a dispute can name how that user id appeared or left, without the email.
 
-### shared-auth-audit-US4-TC8-1: A test-endpoint account create is on the trail as created under the caller's kind
+### shared-auth-audit-US4-TC8-1: A ban that creates an account is one ban entry under the caller's kind
 
 Runs once per row of **Test data**.
 
